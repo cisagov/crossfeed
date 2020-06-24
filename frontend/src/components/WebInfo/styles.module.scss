@@ -1,0 +1,51 @@
+.root {
+  padding: 1rem;
+  margin: 2rem 0;
+  background-color: #fff;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+  position: relative;
+
+  @media screen and (min-width: 640px) {
+    padding: 2rem;
+  }
+
+  .item {
+    padding: 0.5rem 0;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    font-size: 1rem;
+    flex-wrap: wrap;
+
+    @media screen and (min-width: 640px) {
+      font-size: 1.2rem;
+    }
+
+    .content {
+      flex: 1 1 auto;
+      word-break: break-all;
+      word-wrap: break-word;
+    }
+
+    label {
+      font-weight: bolder;
+      display: flex;
+      align-items: center;
+      flex: 1 0 100%;
+      padding: 0.5rem 0;
+
+      @media screen and (min-width: 1024px) {
+        flex: 0 0 200px;
+        padding: 0;
+      }
+    }
+
+    span {
+      display: block;
+      flex: 1 1 auto;
+      word-break: break-all;
+      word-wrap: break-word;
+    }
+  }
+}

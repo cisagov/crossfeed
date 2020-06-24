@@ -1,0 +1,19 @@
+{
+  "env": { "es6": true, "node": true },
+  "parser": "@typescript-eslint/parser",
+  "extends":
+    [
+      "plugin:prettier/recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+    ],
+  "plugins": ["prettier", "@typescript-eslint"],
+  "parserOptions": { "ecmaVersion": 2018, "sourceType": "module" },
+  "rules":
+    {
+      "prettier/prettier": "error",
+      "react/prop-types": 0,
+      "react/display-name": 0,
+    },
+  "settings": { "react": { "version": "detect" } },
+  "globals": { "Atomics": "readonly", "SharedArrayBuffer": "readonly" },
+}

@@ -1,0 +1,49 @@
+.root {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  padding: 0;
+
+  @media screen and (min-width: 30rem) {
+    position: relative;
+    padding: 4rem 3rem;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 1.5rem;
+
+    @media screen and (min-width: 640px) {
+      font-size: 2rem;
+    }
+  }
+
+  .form {
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    max-width: 32rem;
+    padding: 3rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+
+    :global .usa-label,
+    :global .usa-input {
+      width: 100%;
+    }
+
+    @media screen and (min-width: 480px) {
+      padding: 3rem 1.5rem;
+      max-width: 33rem;
+    }
+
+    @media screen and (min-width: 640px) {
+      padding: 3rem;
+      max-width: 36rem;
+    }
+  }
+}

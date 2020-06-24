@@ -1,0 +1,84 @@
+name: Backend Pipeline
+
+on:
+  push:
+    branches:
+      - master
+      - production
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend.yml"
+
+  pull_request:
+    branches:
+      - master
+      - production
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend.yml"
+
+defaults:
+  run:
+    working-directory: ./backend
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.14"
+
+      - name: Restore npm cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Security
+        run: npm audit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Ensure domain existis - Staging
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npx sls create_domain --stage=staging
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          SLS_DEBUG: "*"
+
+
+      - name: Deploy backend - Staging
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npx sls deploy --stage=staging
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          SLS_DEBUG: "*"
+
+      - name: Ensure domain existis - Production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/production'
+        run: npx sls create_domain --stage=prod
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          SLS_DEBUG: "*"
+
+      - name: Deploy backend - Production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/production'
+        run: npx sls deploy --stage=prod
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          SLS_DEBUG: "*"

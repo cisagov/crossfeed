@@ -1,0 +1,55 @@
+healthCheck:
+  handler: src/api/healthcheck.handler
+  events:
+    - http:
+        path: /
+        method: get
+        cors: true
+
+preSignUp:
+  handler: src/api/auth.preSignUp
+  events:
+    - cognitoUserPool:
+        pool: crossfeed-stage-users
+        trigger: PreSignUp
+        existing: true
+
+listDomains:
+  handler: src/api/domains.list
+  events:
+    - http:
+        path: /domain/search
+        method: post
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+getDomain:
+  handler: src/api/domains.get
+  events:
+    - http:
+        path: /domain/{domainId}
+        method: get
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+listReports:
+  handler: src/api/reports.list
+  events:
+    - http:
+        path: /report/search
+        method: post
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+getReport:
+  handler: src/api/reports.get
+  events:
+    - http:
+        path: /report/{reportId}
+        method: get
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn

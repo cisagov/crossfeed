@@ -1,0 +1,21 @@
+@import "~@trussworks/react-uswds/lib/index.css";
+$theme-font-path: "~uswds/dist/fonts";
+$theme-image-path: "~uswds/dist/img";
+$theme-show-notifications: false;
+
+// Import required global packages
+@import "~uswds/dist/scss/packages/required";
+@import "~uswds/dist/scss/packages/global";
+
+@import "~uswds/dist/scss/packages/uswds-utilities";
+@import "~uswds/dist/scss/packages/usa-banner";
+@import "~uswds/dist/scss/packages/usa-header";
+@import "~uswds/dist/scss/packages/usa-table";
+@import "~uswds/dist/scss/packages/usa-alert";
+@import "~uswds/dist/scss/packages/form-controls";
+
+html,
+body {
+  box-sizing: border-box;
+  background-color: color("base-lightest");
+}

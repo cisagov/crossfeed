@@ -1,0 +1,32 @@
+service: crossfeed
+
+custom:
+  serverless-offline:
+    noPrependStageInUrl: true
+    useChildProcesses: true
+    #useWorkerThreads: true
+
+  customDomain:
+    domainName: ${file(./env.yml):${self:provider.stage}.DOMAIN, ''}
+    basePath: ""
+    certificateName: ${file(./env.yml):${self:provider.stage}.DOMAIN, ''}
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+
+provider:
+  name: aws
+  region: us-west-2
+  runtime: nodejs12.x
+  timeout: 30
+  stage: ${opt:stage, 'dev'}
+  environment: ${file(env.yml):${self:provider.stage}}
+  vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
+
+functions:
+  - ${file(./src/tasks/functions.yml)}
+  - ${file(./src/api/functions.yml)}
+
+plugins:
+  - serverless-domain-manager
+  - serverless-plugin-typescript
+  - serverless-offline

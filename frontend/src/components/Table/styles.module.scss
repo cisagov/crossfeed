@@ -1,0 +1,39 @@
+.root {
+  :global .usa-table {
+    width: 100%;
+    margin: 0;
+  }
+
+  .tableWrapper {
+    width: 100%;
+    position: relative;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+    margin: 2rem 0;
+
+    @media screen and (min-width: 640px) {
+      padding: 2rem;
+    }
+    .tableInner {
+      overflow-x: auto;
+    }
+  }
+}
+
+.td {
+  background-color: #f0f0f0;
+  border-color: white;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subComponentTd {
+  background-color: white;
+  border-color: white;
+}
+
+.th {
+  vertical-align: top;
+}

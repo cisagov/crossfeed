@@ -1,0 +1,10 @@
+bitdiscovery:
+  handler: src/tasks/bitdiscovery.handler
+  timeout: 900
+
+hackerone:
+  handler: src/tasks/hackerone.handler
+  timeout: 900
+
+syncdb:
+  handler: src/tasks/syncdb.handler

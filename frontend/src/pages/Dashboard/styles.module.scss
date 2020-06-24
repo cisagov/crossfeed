@@ -1,0 +1,39 @@
+.root {
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media screen and (min-width: 480px) {
+    padding: 0 1rem;
+  }
+  @media screen and (min-width: 640px) {
+    padding: 0 1.5rem;
+  }
+  @media screen and (min-width: 1024px) {
+    padding: 0 2rem;
+  }
+}
+
+.filter {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  :global .usa-label {
+    font-weight: 700;
+    margin: 0 1.5rem 0 0;
+  }
+
+  :global .usa-input,
+  :global .usa-input:active,
+  :global .usa-input:focus {
+    outline: none;
+    margin-top: 0;
+  }
+
+  :global .usa-button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    height: 40px;
+  }
+}

@@ -1,0 +1,27 @@
+version: "3.4"
+
+services:
+  db:
+    image: postgres:latest
+    env_file:
+      - ./.env
+
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend/src:/app/src
+    ports:
+      - "80:3000"
+    env_file:
+      - ./.env
+
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend/src:/app/src
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.env
+    depends_on:
+      - db

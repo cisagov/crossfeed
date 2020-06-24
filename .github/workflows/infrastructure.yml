@@ -1,0 +1,57 @@
+name: Deploy Infrastructure
+
+on:
+  push:
+    branches:
+      - master
+      - production
+    paths:
+      - "infrastructure/**"
+      - ".github/workflows/infrastructure.yml"
+
+defaults:
+  run:
+    working-directory: ./infrastructure
+
+jobs:
+  terraform_apply:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Install Terraform
+      run: |
+        wget https://releases.hashicorp.com/terraform/0.12.26/terraform_0.12.26_linux_amd64.zip
+        unzip terraform_0.12.26_linux_amd64.zip
+        sudo mv terraform /usr/local/bin
+
+    - name: Terraform Init - Staging
+      if: github.ref != 'refs/heads/production'
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      run: terraform init -backend-config=stage.config -input=false
+
+    - name: Terraform Init - Prod
+      if: github.ref == 'refs/heads/production'
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      run: terraform init -backend-config=prod.config -input=false
+
+    - name: Terraform validation
+      run: terraform validate
+
+    - name: Terraform apply - Staging
+      if: github.ref != 'refs/heads/production'
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      run: terraform apply -auto-approve -input=false -var-file=stage.tfvars
+
+    - name: Terraform apply - Prod
+      if: github.ref == 'refs/heads/production'
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      run: terraform apply -auto-approve -input=false -var-file=prod.tfvars

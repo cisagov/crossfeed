@@ -1,0 +1,27 @@
+.root {
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media screen and (min-width: 480px) {
+    padding: 0 1rem;
+  }
+  @media screen and (min-width: 640px) {
+    padding: 0 1.5rem;
+  }
+  @media screen and (min-width: 1024px) {
+    padding: 0 2rem;
+  }
+}
+
+.expandedRoot {
+  width: 100%;
+
+  h4 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .banner {
+    padding: 1rem;
+  }
+}

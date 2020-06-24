@@ -1,0 +1,44 @@
+{
+  "name": "crossfeed-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "db.js",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "class-transformer": "^0.2.3",
+    "class-validator": "^0.12.2",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.2.1",
+    "serverless": "^1.72.0",
+    "typeorm": "^0.2.25",
+    "uuid": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.53",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/node": "^14.0.11",
+    "@types/uuid": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^3.1.0",
+    "@typescript-eslint/parser": "^3.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
+    "serverless-domain-manager": "^4.1.1",
+    "serverless-offline": "^6.3.1",
+    "serverless-plugin-typescript": "^1.1.9",
+    "typescript": "^3.9.5"
+  },
+  "scripts": {
+    "test": "jest --passWithNoTests",
+    "lint": "eslint '**/*.{ts,tsx,js,jsx}'",
+    "lint:fix": "eslint '**/*.{ts,tsx,js,jsx}' --fix",
+    "preinstall": "npx npm-force-resolutions"
+  },
+  "resolutions": {
+    "debug": "3.1.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
