@@ -1,16 +1,12 @@
-![Deploy Backend](https://github.com/cisagov/crossfeed/workflows/Deploy%20Backend/badge.svg?branch=master)
-![Deploy Frontend](https://github.com/cisagov/crossfeed/workflows/Deploy%20Frontend/badge.svg?branch=master)
+![Deploy Backend](https://github.com/cisagov/crossfeed/workflows/Backend%20Pipeline/badge.svg?branch=master)
+![Deploy Frontend](https://github.com/cisagov/crossfeed/workflows/Frontend%20Pipeline/badge.svg?branch=master)
 ![Deploy Infrastructure](https://github.com/cisagov/crossfeed/workflows/Deploy%20Infrastructure/badge.svg?branch=master)
 [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-# crossfeed
+# Crossfeed
 
-Order that stanup needs to happen:
-
-1.  infrastructure
-2.  frontend
-3.  backend
+External monitoring for organization assets
 
 ## development environment
 
@@ -27,9 +23,12 @@ Order that stanup needs to happen:
 4.  Navigate to [localhost](http://localhost) in a browser
 
 5.  Hot reloading for source files is enabled, but after changes to non-source code files stopping and starting docker compose is required. The following are examples of changes that will require restarting the environment:
+
     - frontend or backend dependency changes
     - backend `serverless.yml` or `env.yml`
     - environment variables in root `.env`
+
+6.  Generate DB schema: `docker-compose exec backend npx sls invoke local -f syncdb` (`-d dangerouslyforce` to drop and recreate)
 
 ## running non-http lambdas locally
 

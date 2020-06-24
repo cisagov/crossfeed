@@ -89,6 +89,24 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     [prepareInit]
   );
 
+  const apiDelete = useCallback(
+    async <T extends object = {}>(path: string, init: any = {}) => {
+      const options = await prepareInit(init);
+      const result = await API.del("crossfeed", path, options);
+      return result as T;
+    },
+    [prepareInit]
+  );
+
+  const apiPut = useCallback(
+    async <T extends object = {}>(path: string, init: any) => {
+      const options = await prepareInit(init);
+      const result = await API.put("crossfeed", path, options);
+      return result as T;
+    },
+    [prepareInit]
+  );
+
   return (
     <AuthContext.Provider
       value={{
@@ -99,6 +117,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         completePassword: unverifiedUser ? completePassword : undefined,
         apiGet,
         apiPost,
+        apiPut,
+        apiDelete,
       }}
     >
       {children}

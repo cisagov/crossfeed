@@ -1,15 +1,226 @@
-import React from "react";
-import classes from "./Scans.module.css";
+import classes from "./Scans.module.scss";
+import React, { useCallback, useState } from "react";
+import { Button, TextInput, Label, Dropdown, ModalContainer, Overlay, Modal } from "@trussworks/react-uswds";
+import { Query } from "types";
+import { Table, ColumnFilter } from "components";
+import { Column } from "react-table";
+import { Scan } from "types";
+import { FaTimes } from "react-icons/fa";
+import { createColumns } from "../Dashboard/columns";
+import { useAuthContext } from "context";
 
+interface Errors extends Partial<Scan> {
+  global?: string;
+}
 
-const Scans: React.FC = () => {
+export const Scans: React.FC = () => {
+  const { apiGet, apiPost, apiDelete } = useAuthContext();
+  const [showModal, setShowModal] = useState<Boolean>(false);
+  const [selectedRow, setSelectedRow] = useState<number>(0);
+  const [scans, setScans] = useState<Scan[]>([]);
+  const [validCommands, setValidCommands] = useState<Array<string>>([]);
+
+  const columns: Column<Scan>[] = [
+    {
+      Header: "Command",
+      accessor: "command",
+      width: 200,
+      id: "command",
+      disableFilters: true,
+    },
+    {
+      Header: "Arguments",
+      accessor: (args: Scan) => JSON.stringify(args.arguments),
+      width: 150,
+      minWidth: 150,
+      id: "arguments",
+      disableFilters: true,
+    },
+    {
+      Header: "Frequency",
+      accessor: "frequency",
+      width: 200,
+      id: "frequency",
+      disableFilters: true,
+    },
+    {
+      Header: "Last Run",
+      accessor: (args: Scan) => {
+        return !args.lastRun || new Date(args.lastRun).getTime() === new Date(0).getTime() ? "Never" : args.lastRun;
+      },
+      width: 200,
+      id: "lastRun",
+      disableFilters: true,
+    },
+    {
+      Header: "Delete",
+      id: "delete",
+      Cell: ({ row }: { row: { index: number } }) => (
+        <span
+          onClick={() => {
+            setShowModal(true);
+            setSelectedRow(row.index);
+          }}
+        >
+          <FaTimes />
+        </span>
+      ),
+      disableFilters: true,
+    }
+  ];
+  const [errors, setErrors] = useState<Errors>({});
+
+  const [values, setValues] = useState<Scan>({
+    id: 0,
+    command: "scan-ports",
+    arguments: "{}",
+    frequency: 0,
+    lastRun: ""
+  });
+
+  React.useEffect(() => {
+    apiGet<Array<string>>("/api/scans/validCommands/")
+      .then((validCommands) => {
+        setValidCommands(validCommands);
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
+    document.addEventListener("keyup", (e) => {
+      //Escape
+      if (e.keyCode === 27) {
+        setShowModal(false);
+      }
+    });
+  }, [apiGet]);
+
+  const fetchScans = useCallback(
+    async (query: Query<Scan>) => {
+      try {
+        let rows = await apiGet<Scan[]>("/api/scans/");
+        setScans(rows);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [apiGet]
+  );
+
+  const deleteRow = async (index: number) => {
+    try {
+      let row = scans[index];
+      await apiDelete(`/api/scans/${row.id}`);
+      setScans(scans.filter((scan) => scan.id !== row.id));
+    } catch (e) {
+      setErrors({
+        global: e.status === 422 ? "Unable to delete scan" : e.message ?? e.toString()
+      });
+      console.log(e);
+    }
+  };
+
+  const onSubmit: React.FormEventHandler = async (e) => {
+    e.preventDefault();
+    try {
+      // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
+      values.arguments = JSON.parse(values.arguments);
+      await apiPost("/api/scans/", {
+        body: JSON.stringify(values)
+      });
+      setScans(scans.concat(values));
+    } catch (e) {
+      setErrors({
+        global: e.status === 422 ? "Please specify a valid command for the scan." : e.message ?? e.toString()
+      });
+      console.log(e);
+    }
+  };
+
+  const onChange: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement> = (e) => {
+    e.persist();
+    setValues((values) => ({
+      ...values,
+      [e.target.name]: e.target.value
+    }));
+  };
 
   return (
-
     <div className={classes.root}>
-      <h1>This is an example page for scans</h1>
-    </div>
+      <h1>Scans</h1>
+      <Table<Scan> columns={columns} data={scans} fetchData={fetchScans} />
+      <h2>Add a scan</h2>
+      <form onSubmit={onSubmit} className={classes.form}>
+        {errors.global && <p className={classes.error}>{errors.global}</p>}
+        <Label htmlFor="command">Command</Label>
+        <Dropdown required id="command" name="command" className={classes.textField} onChange={onChange}>
+          {validCommands.map((i) => {
+            return (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            );
+          })}
+        </Dropdown>
 
+        <Label htmlFor="arguments">Arguments</Label>
+        <TextInput
+          required
+          id="arguments"
+          name="arguments"
+          className={classes.textField}
+          type="text"
+          onChange={onChange}
+        />
+        <Label htmlFor="frequency">Frequency</Label>
+        <TextInput
+          required
+          id="frequency"
+          name="frequency"
+          className={classes.textField}
+          type="number"
+          onChange={onChange}
+        />
+        <br></br>
+        <Button type="submit">Create Scan</Button>
+      </form>
+
+      {showModal && (
+        <div>
+          <Overlay />
+          <ModalContainer>
+            <Modal
+              actions={
+                <>
+                  <Button
+                    outline
+                    type="button"
+                    onClick={() => {
+                      setShowModal(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      deleteRow(selectedRow);
+                      setShowModal(false);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </>
+              }
+              title={<h2>Delete scan?</h2>}
+            >
+              <p>
+                Are you sure you would like to delete the <code>{scans[selectedRow].command}</code> scan?
+              </p>
+            </Modal>
+          </ModalContainer>
+        </div>
+      )}
+    </div>
   );
 };
 

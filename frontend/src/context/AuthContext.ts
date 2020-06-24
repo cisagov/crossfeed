@@ -14,6 +14,8 @@ export interface AuthContextType {
   completePassword?(password: string): Promise<void>;
   apiGet<T extends object = any>(path: string, init?: any): Promise<T>;
   apiPost<T extends object = any>(path: string, init: any): Promise<T>;
+  apiPut<T extends object = any>(path: string, init: any): Promise<T>;
+  apiDelete<T extends object = any>(path: string, init?: any): Promise<T>;
   user?: User | null;
 }
 
@@ -24,6 +26,8 @@ export const defaultAuthContext: AuthContextType = {
   resetPassword: async () => {},
   apiGet: async <T>() => ({} as T),
   apiPost: async <T>() => ({} as T),
+  apiPut: async <T>() => ({} as T),
+  apiDelete: async <T>() => ({} as T),
 };
 
 export const AuthContext = React.createContext<AuthContextType>(
