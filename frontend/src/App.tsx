@@ -1,7 +1,7 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Amplify from "aws-amplify";
-import { AuthContextProvider } from "context";
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Amplify from 'aws-amplify';
+import { AuthContextProvider } from 'context';
 import {
   Alerts,
   Dashboard,
@@ -17,20 +17,20 @@ import {
   Settings,
   Vulnerabilities,
   AuthCreatePassword
-} from "pages";
-import { AuthRoute, AuthRedirectRoute, Layout } from "components";
-import "./styles.scss";
+} from 'pages';
+import { AuthRoute, AuthRedirectRoute, Layout } from 'components';
+import './styles.scss';
 
 Amplify.configure({
   Auth: {
-    region: "us-west-2",
+    region: 'us-west-2',
     userPoolId: process.env.REACT_APP_USER_POOL_ID,
     userPoolWebClientId: process.env.REACT_APP_USER_POOL_WEB_CLIENT_ID
   },
   API: {
     endpoints: [
       {
-        name: "crossfeed",
+        name: 'crossfeed',
         endpoint: process.env.REACT_APP_API_URL
       }
     ]
