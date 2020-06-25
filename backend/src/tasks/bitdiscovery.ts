@@ -1,15 +1,15 @@
-import { Handler } from "aws-lambda";
-import axios from "axios";
+import { Handler } from 'aws-lambda';
+import axios from 'axios';
 import {
   connectToDatabase,
   Domain,
   Service,
   SSLInfo,
-  WebInfo,
-} from "../models";
-import * as uuid from "uuid";
-import { InsertResult } from "typeorm";
-import { isNotEmpty } from "class-validator";
+  WebInfo
+} from '../models';
+import * as uuid from 'uuid';
+import { InsertResult } from 'typeorm';
+import { isNotEmpty } from 'class-validator';
 
 interface FetchDataOpts {
   limit: number;
@@ -17,36 +17,36 @@ interface FetchDataOpts {
 }
 
 interface BDAsset {
-  "bd.ip_address": string;
-  "bd.original_hostname"?: string;
-  "bd.hostname": string;
-  "ipgeo.country"?: string;
+  'bd.ip_address': string;
+  'bd.original_hostname'?: string;
+  'bd.hostname': string;
+  'ipgeo.country'?: string;
   asn_number?: string;
-  "screenshot.screenshot"?: string;
+  'screenshot.screenshot'?: string;
 
-  "ports.ports": number[];
-  "ports.lastseen": string[];
-  "ports.services": string[];
+  'ports.ports': number[];
+  'ports.lastseen': string[];
+  'ports.services': string[];
 
-  "ssl.protocol"?: string;
-  "ssl.valid_to"?: string;
-  "ssl.valid_from"?: string;
-  "ssl.issuer_O"?: string;
-  "ssl.issuer_CN"?: string;
-  "ssl.subjectaltname"?: string[];
-  "ssl.bits"?: number;
-  "ssl.fingerprint"?: string;
+  'ssl.protocol'?: string;
+  'ssl.valid_to'?: string;
+  'ssl.valid_from'?: string;
+  'ssl.issuer_O'?: string;
+  'ssl.issuer_CN'?: string;
+  'ssl.subjectaltname'?: string[];
+  'ssl.bits'?: number;
+  'ssl.fingerprint'?: string;
 
-  "wtech.Web Frameworks"?: string[];
-  "wtech.Content Management Systems"?: string[];
-  "wtech.Widgets"?: string[];
-  "wtech.Font Scripts"?: string[];
-  "wtech.Analytics"?: string[];
-  "wtech.Javascript Frameworks"?: string[];
-  "wtech.Web Servers"?: string[];
-  "wtech.Operating Systems"?: string[];
-  "wtech.socialurls"?: string[];
-  "wtech.gakeys"?: string[];
+  'wtech.Web Frameworks'?: string[];
+  'wtech.Content Management Systems'?: string[];
+  'wtech.Widgets'?: string[];
+  'wtech.Font Scripts'?: string[];
+  'wtech.Analytics'?: string[];
+  'wtech.Javascript Frameworks'?: string[];
+  'wtech.Web Servers'?: string[];
+  'wtech.Operating Systems'?: string[];
+  'wtech.socialurls'?: string[];
+  'wtech.gakeys'?: string[];
 }
 
 interface BDAPIResponse {
@@ -56,7 +56,7 @@ interface BDAPIResponse {
 
 const joinOrNull = (value?: (string | null)[] | null) => {
   if (value) {
-    return value.filter(isNotEmpty).join(",");
+    return value.filter(isNotEmpty).join(',');
   }
   return null;
 };
@@ -65,25 +65,25 @@ const fetchBitdisoveryData = async (opts: FetchDataOpts) => {
   const { limit, offset } = opts;
   console.log(`[bitdiscovery] fetching at offset ${offset}`);
   const { data, status } = await axios({
-    url: "https://bitdiscovery.com/api/1.0/inventory",
+    url: 'https://bitdiscovery.com/api/1.0/inventory',
     params: {
       limit,
       offset,
-      inventory: true,
+      inventory: true
     },
-    method: "POST",
+    method: 'POST',
     headers: {
       Authorization: process.env.BD_API_KEY,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
     data: [
       {
-        column: "bd.original_hostname",
-        type: "ends with",
-        value: ".mil",
+        column: 'bd.original_hostname',
+        type: 'ends with',
+        value: '.mil'
       },
-      { column: "ports.ports", type: "has any value" },
-    ],
+      { column: 'ports.ports', type: 'has any value' }
+    ]
   });
   console.log(`[bitdiscovery] status code ${status}`);
   return data as BDAPIResponse;
@@ -92,25 +92,25 @@ const fetchBitdisoveryData = async (opts: FetchDataOpts) => {
 const parseDomainFromAsset = (asset: BDAsset) => {
   const domain = new Domain();
   domain.id = uuid.v4();
-  domain.ip = asset["bd.ip_address"];
-  domain.name = asset["bd.original_hostname"] ?? asset["bd.hostname"];
-  domain.asn = asset["asn_number"] ? asset["asn_number"].toString() : null;
-  domain.country = asset["ipgeo.country"] ?? null;
-  const bdScreenshot = asset["screenshot.screenshot"];
-  const screenshot = bdScreenshot !== "no" ? bdScreenshot : null;
+  domain.ip = asset['bd.ip_address'];
+  domain.name = asset['bd.original_hostname'] ?? asset['bd.hostname'];
+  domain.asn = asset['asn_number'] ? asset['asn_number'].toString() : null;
+  domain.country = asset['ipgeo.country'] ?? null;
+  const bdScreenshot = asset['screenshot.screenshot'];
+  const screenshot = bdScreenshot !== 'no' ? bdScreenshot : null;
   domain.screenshot = screenshot ?? null;
 
   return domain;
 };
 
 const parseServicesFromAsset = (asset: BDAsset, domain: Domain): Service[] => {
-  return asset["ports.ports"].map((port, idx) => {
+  return asset['ports.ports'].map((port, idx) => {
     const service = new Service();
     service.domain = domain;
     service.port = port.toString();
-    service.lastSeen = asset["ports.lastseen"][idx] ?? null;
-    service.banner = asset["ports.banners"][idx] || null;
-    service.service = asset["ports.services"][idx] || null;
+    service.lastSeen = asset['ports.lastseen'][idx] ?? null;
+    service.banner = asset['ports.banners'][idx] || null;
+    service.service = asset['ports.services'][idx] || null;
     return service;
   });
 };
@@ -120,17 +120,17 @@ const parseSSLInfoFromAsset = (
   domain: Domain
 ): SSLInfo | null => {
   const info = new SSLInfo();
-  info.protocol = asset["ssl.protocol"] ?? null;
+  info.protocol = asset['ssl.protocol'] ?? null;
   if (!info.protocol) {
     return null;
   }
-  info.issuerOrg = asset["ssl.issuer_O"] ?? null;
-  info.issuerCN = asset["ssl.issuer_CN"] ?? null;
-  info.validTo = asset["ssl.valid_to"] ?? null;
-  info.validFrom = asset["ssl.valid_from"] ?? null;
-  info.bits = asset["ssl.bits"] ? asset["ssl.bits"].toString() : null;
-  info.fingerprint = asset["ssl.fingerprint"] ?? null;
-  info.altNames = joinOrNull(asset["ssl.subjectaltname"]);
+  info.issuerOrg = asset['ssl.issuer_O'] ?? null;
+  info.issuerCN = asset['ssl.issuer_CN'] ?? null;
+  info.validTo = asset['ssl.valid_to'] ?? null;
+  info.validFrom = asset['ssl.valid_from'] ?? null;
+  info.bits = asset['ssl.bits'] ? asset['ssl.bits'].toString() : null;
+  info.fingerprint = asset['ssl.fingerprint'] ?? null;
+  info.altNames = joinOrNull(asset['ssl.subjectaltname']);
   info.domain = domain;
   return info;
 };
@@ -142,17 +142,17 @@ const parseWebInfoFromAsset = (
   const info = new WebInfo();
   info.domain = domain;
   info.frameworks = joinOrNull([
-    joinOrNull(asset["wtech.gakeys.wtech.Web Frameworks"]),
-    joinOrNull(asset["wtech.Javascript Frameworks"]),
+    joinOrNull(asset['wtech.gakeys.wtech.Web Frameworks']),
+    joinOrNull(asset['wtech.Javascript Frameworks'])
   ]);
-  info.cms = joinOrNull(asset["wtech.Content Management Systems"]);
-  info.widgets = joinOrNull(asset["wtech.Widgets"]);
-  info.fonts = joinOrNull(asset["wtech.Font Scripts"]);
-  info.analytics = joinOrNull(asset["wtech.Analytics"]);
-  info.webServers = joinOrNull(asset["wtech.Web Servers"]);
-  info.operatingSystems = joinOrNull(asset["wtech.Operating Systems"]);
-  info.socialUrls = joinOrNull(asset["wtech.socialurls"]);
-  info.gaKeys = joinOrNull(asset["wtech.gakeys"]);
+  info.cms = joinOrNull(asset['wtech.Content Management Systems']);
+  info.widgets = joinOrNull(asset['wtech.Widgets']);
+  info.fonts = joinOrNull(asset['wtech.Font Scripts']);
+  info.analytics = joinOrNull(asset['wtech.Analytics']);
+  info.webServers = joinOrNull(asset['wtech.Web Servers']);
+  info.operatingSystems = joinOrNull(asset['wtech.Operating Systems']);
+  info.socialUrls = joinOrNull(asset['wtech.socialurls']);
+  info.gaKeys = joinOrNull(asset['wtech.gakeys']);
   if (info.frameworks || info.cms || info.analytics || info.webServers) {
     return info;
   }
@@ -263,7 +263,7 @@ export const handler: Handler = async (event) => {
   while (offset < totalCount && offset < maxCount) {
     const { assets, total } = await fetchBitdisoveryData({
       limit,
-      offset,
+      offset
     });
 
     for (const asset of assets) {

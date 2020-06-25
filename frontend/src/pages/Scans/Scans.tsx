@@ -1,13 +1,20 @@
-import classes from "./Scans.module.scss";
-import React, { useCallback, useState } from "react";
-import { Button, TextInput, Label, Dropdown, ModalContainer, Overlay, Modal } from "@trussworks/react-uswds";
-import { Query } from "types";
-import { Table, ColumnFilter } from "components";
-import { Column } from "react-table";
-import { Scan } from "types";
-import { FaTimes } from "react-icons/fa";
-import { createColumns } from "../Dashboard/columns";
-import { useAuthContext } from "context";
+import classes from './Scans.module.scss';
+import React, { useCallback, useState } from 'react';
+import {
+  Button,
+  TextInput,
+  Label,
+  Dropdown,
+  ModalContainer,
+  Overlay,
+  Modal
+} from '@trussworks/react-uswds';
+import { Query } from 'types';
+import { Table } from 'components';
+import { Column } from 'react-table';
+import { Scan } from 'types';
+import { FaTimes } from 'react-icons/fa';
+import { useAuthContext } from 'context';
 
 interface Errors extends Partial<Scan> {
   global?: string;
@@ -22,39 +29,42 @@ export const Scans: React.FC = () => {
 
   const columns: Column<Scan>[] = [
     {
-      Header: "Command",
-      accessor: "command",
+      Header: 'Name',
+      accessor: 'name',
       width: 200,
-      id: "command",
-      disableFilters: true,
+      id: 'name',
+      disableFilters: true
     },
     {
-      Header: "Arguments",
+      Header: 'Arguments',
       accessor: (args: Scan) => JSON.stringify(args.arguments),
       width: 150,
       minWidth: 150,
-      id: "arguments",
-      disableFilters: true,
+      id: 'arguments',
+      disableFilters: true
     },
     {
-      Header: "Frequency",
-      accessor: "frequency",
+      Header: 'Frequency',
+      accessor: 'frequency',
       width: 200,
-      id: "frequency",
-      disableFilters: true,
+      id: 'frequency',
+      disableFilters: true
     },
     {
-      Header: "Last Run",
+      Header: 'Last Run',
       accessor: (args: Scan) => {
-        return !args.lastRun || new Date(args.lastRun).getTime() === new Date(0).getTime() ? "Never" : args.lastRun;
+        return !args.lastRun ||
+          new Date(args.lastRun).getTime() === new Date(0).getTime()
+          ? 'Never'
+          : args.lastRun;
       },
       width: 200,
-      id: "lastRun",
-      disableFilters: true,
+      id: 'lastRun',
+      disableFilters: true
     },
     {
-      Header: "Delete",
-      id: "delete",
+      Header: 'Delete',
+      id: 'delete',
       Cell: ({ row }: { row: { index: number } }) => (
         <span
           onClick={() => {
@@ -65,28 +75,31 @@ export const Scans: React.FC = () => {
           <FaTimes />
         </span>
       ),
-      disableFilters: true,
+      disableFilters: true
     }
   ];
   const [errors, setErrors] = useState<Errors>({});
 
-  const [values, setValues] = useState<Scan>({
-    id: 0,
-    command: "scan-ports",
-    arguments: "{}",
-    frequency: 0,
-    lastRun: ""
+  const [values, setValues] = useState<{
+    name: string;
+    arguments: string;
+    frequency: number;
+  }>({
+    name: 'amass',
+    arguments: '{}',
+    frequency: 0
   });
 
   React.useEffect(() => {
-    apiGet<Array<string>>("/api/scans/validCommands/")
-      .then((validCommands) => {
+    setValidCommands(['amass', 'censys']);
+    apiGet<Array<string>>('/scans/validCommands/')
+      .then(validCommands => {
         setValidCommands(validCommands);
       })
-      .catch((e) => {
+      .catch(e => {
         console.log(e.message);
       });
-    document.addEventListener("keyup", (e) => {
+    document.addEventListener('keyup', e => {
       //Escape
       if (e.keyCode === 27) {
         setShowModal(false);
@@ -97,7 +110,7 @@ export const Scans: React.FC = () => {
   const fetchScans = useCallback(
     async (query: Query<Scan>) => {
       try {
-        let rows = await apiGet<Scan[]>("/api/scans/");
+        let rows = await apiGet<Scan[]>('/scans/');
         setScans(rows);
       } catch (e) {
         console.error(e);
@@ -109,38 +122,44 @@ export const Scans: React.FC = () => {
   const deleteRow = async (index: number) => {
     try {
       let row = scans[index];
-      await apiDelete(`/api/scans/${row.id}`);
-      setScans(scans.filter((scan) => scan.id !== row.id));
+      await apiDelete(`/scans/${row.id}`);
+      setScans(scans.filter(scan => scan.id !== row.id));
     } catch (e) {
       setErrors({
-        global: e.status === 422 ? "Unable to delete scan" : e.message ?? e.toString()
+        global:
+          e.status === 422 ? 'Unable to delete scan' : e.message ?? e.toString()
       });
       console.log(e);
     }
   };
 
-  const onSubmit: React.FormEventHandler = async (e) => {
+  const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
     try {
       // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
       values.arguments = JSON.parse(values.arguments);
-      await apiPost("/api/scans/", {
-        body: JSON.stringify(values)
+      const scan = await apiPost('/scans/', {
+        body: values
       });
-      setScans(scans.concat(values));
+      setScans(scans.concat(scan));
     } catch (e) {
       setErrors({
-        global: e.status === 422 ? "Please specify a valid command for the scan." : e.message ?? e.toString()
+        global: e.message ?? e.toString()
       });
       console.log(e);
     }
   };
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement> = (e) => {
+  const onChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLSelectElement
+  > = e => {
     e.persist();
-    setValues((values) => ({
+    setValues(values => ({
       ...values,
-      [e.target.name]: e.target.value
+      [e.target.name]:
+        e.target.name === 'frequency'
+          ? parseInt(e.target.value)
+          : e.target.value
     }));
   };
 
@@ -151,9 +170,15 @@ export const Scans: React.FC = () => {
       <h2>Add a scan</h2>
       <form onSubmit={onSubmit} className={classes.form}>
         {errors.global && <p className={classes.error}>{errors.global}</p>}
-        <Label htmlFor="command">Command</Label>
-        <Dropdown required id="command" name="command" className={classes.textField} onChange={onChange}>
-          {validCommands.map((i) => {
+        <Label htmlFor="name">Name</Label>
+        <Dropdown
+          required
+          id="name"
+          name="name"
+          className={classes.textField}
+          onChange={onChange}
+        >
+          {validCommands.map(i => {
             return (
               <option key={i} value={i}>
                 {i}
@@ -214,7 +239,8 @@ export const Scans: React.FC = () => {
               title={<h2>Delete scan?</h2>}
             >
               <p>
-                Are you sure you would like to delete the <code>{scans[selectedRow].command}</code> scan?
+                Are you sure you would like to delete the{' '}
+                <code>{scans[selectedRow].name}</code> scan?
               </p>
             </Modal>
           </ModalContainer>

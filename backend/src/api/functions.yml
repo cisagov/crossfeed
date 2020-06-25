@@ -53,3 +53,83 @@ getReport:
         cors: true
         authorizer:
           arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+listScans:
+  handler: src/api/scans.list
+  events:
+    - http:
+        path: /scans
+        method: get
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+createScan:
+  handler: src/api/scans.create
+  events:
+    - http:
+        path: /scans
+        method: post
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+updateScan:
+  handler: src/api/scans.update
+  events:
+    - http:
+        path: /scans/{scanId}
+        method: put
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+deleteScan:
+  handler: src/api/scans.del
+  events:
+    - http:
+        path: /scans/{scanId}
+        method: delete
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+listOrganizations:
+  handler: src/api/organizations.list
+  events:
+    - http:
+        path: /organizations
+        method: get
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+createOrganization:
+  handler: src/api/organizations.create
+  events:
+    - http:
+        path: /organizations
+        method: post
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+updateOrganization:
+  handler: src/api/organizations.update
+  events:
+    - http:
+        path: /organizations/{organizationId}
+        method: put
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+deleteOrganization:
+  handler: src/api/organizations.del
+  events:
+    - http:
+        path: /organizations/{organizationId}
+        method: delete
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn

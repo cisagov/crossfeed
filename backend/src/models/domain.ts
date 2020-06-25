@@ -8,16 +8,16 @@ import {
   CreateDateColumn,
   BaseEntity,
   OneToOne,
-  BeforeInsert,
-} from "typeorm";
-import { Service } from "./service";
-import { SSLInfo } from "./sslinfo";
-import { WebInfo } from "./webinfo";
+  BeforeInsert
+} from 'typeorm';
+import { Service } from './service';
+import { SSLInfo } from './sslinfo';
+import { WebInfo } from './webinfo';
 
 @Entity()
-@Index(["ip", "name"], { unique: true })
+@Index(['ip', 'name'], { unique: true })
 export class Domain extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @CreateDateColumn()
@@ -30,12 +30,12 @@ export class Domain extends BaseEntity {
   ip: string;
 
   @Column({
-    length: 512,
+    length: 512
   })
   reverseName: string;
 
   @Column({
-    length: 512,
+    length: 512
   })
   name: string;
 
@@ -43,41 +43,41 @@ export class Domain extends BaseEntity {
   services: Service[];
 
   @OneToOne((type) => SSLInfo, (sslinfo) => sslinfo.domain, {
-    nullable: true,
+    nullable: true
   })
   ssl: SSLInfo;
 
   @OneToOne((type) => WebInfo, (webinfo) => webinfo.domain, {
-    nullable: true,
+    nullable: true
   })
   web: WebInfo;
 
   @Column({
     length: 512,
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   screenshot: string | null;
 
   @Column({
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   country: string | null;
 
   @Column({
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   asn: string | null;
 
   @Column({
-    default: false,
+    default: false
   })
   cloudHosted: boolean;
 
   @BeforeInsert()
   setReverseName() {
-    this.reverseName = this.name.split(".").reverse().join(".");
+    this.reverseName = this.name.split('.').reverse().join('.');
   }
 }

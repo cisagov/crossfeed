@@ -1,7 +1,7 @@
 export interface Scan {
   id: number;
-  command: string;
-  arguments: string;
+  name: string;
+  arguments: Object;
   frequency: number;
   lastRun: string;
 }
