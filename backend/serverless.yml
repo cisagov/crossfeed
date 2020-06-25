@@ -8,7 +8,7 @@ custom:
 
   customDomain:
     domainName: ${file(./env.yml):${self:provider.stage}.DOMAIN, ''}
-    basePath: ""
+    basePath: ''
     certificateName: ${file(./env.yml):${self:provider.stage}.DOMAIN, ''}
     stage: ${self:provider.stage}
     createRoute53Record: true
@@ -30,3 +30,9 @@ plugins:
   - serverless-domain-manager
   - serverless-plugin-typescript
   - serverless-offline
+
+layers:
+  amass:
+    path: layers/amass
+  findomain:
+    path: layers/findomain
