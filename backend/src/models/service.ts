@@ -4,18 +4,18 @@ import {
   Index,
   PrimaryGeneratedColumn,
   ManyToOne,
-  BaseEntity,
-} from "typeorm";
-import { Domain } from "./domain";
+  BaseEntity
+} from 'typeorm';
+import { Domain } from './domain';
 
 @Entity()
-@Index(["port", "domain"], { unique: true })
+@Index(['port', 'domain'], { unique: true })
 export class Service extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne((type) => Domain, (domain) => domain.services, {
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE'
   })
   domain: Domain;
 
@@ -24,19 +24,19 @@ export class Service extends BaseEntity {
 
   @Column({
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   service: string | null;
 
   @Column({
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   lastSeen: string | null;
 
   @Column({
     nullable: true,
-    type: "text",
+    type: 'text'
   })
   banner: string | null;
 }

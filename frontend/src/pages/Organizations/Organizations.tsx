@@ -1,20 +1,19 @@
-import classes from "./Organizations.module.scss";
-import React, { useCallback, useState } from "react";
+import classes from './Organizations.module.scss';
+import React, { useCallback, useState } from 'react';
 import {
   Button,
   TextInput,
   Label,
-  Dropdown,
   ModalContainer,
   Overlay,
-  Modal,
-} from "@trussworks/react-uswds";
-import { Query } from "types";
-import { Table } from "components";
-import { Column } from "react-table";
-import { Organization } from "types";
-import { FaTimes } from "react-icons/fa";
-import { useAuthContext } from "context";
+  Modal
+} from '@trussworks/react-uswds';
+import { Query } from 'types';
+import { Table } from 'components';
+import { Column } from 'react-table';
+import { Organization } from 'types';
+import { FaTimes } from 'react-icons/fa';
+import { useAuthContext } from 'context';
 
 interface Errors extends Partial<Organization> {
   global?: string;
@@ -28,30 +27,30 @@ export const Organizations: React.FC = () => {
 
   const columns: Column<Organization>[] = [
     {
-      Header: "Name",
-      accessor: "name",
+      Header: 'Name',
+      accessor: 'name',
       width: 200,
       disableFilters: true,
-      id: "name",
+      id: 'name'
     },
     {
-      Header: "Root Domains",
+      Header: 'Root Domains',
       accessor: (args: Organization) => JSON.stringify(args.rootDomains),
       width: 150,
       minWidth: 150,
-      id: "rootDomains",
-      disableFilters: true,
+      id: 'rootDomains',
+      disableFilters: true
     },
     {
-      Header: "IP Blocks",
-      accessor: "ipBlocks",
-      id: "ipBlocks",
+      Header: 'IP Blocks',
+      accessor: 'ipBlocks',
+      id: 'ipBlocks',
       width: 200,
-      disableFilters: true,
+      disableFilters: true
     },
     {
-      Header: "Delete",
-      id: "delete",
+      Header: 'Delete',
+      id: 'delete',
       Cell: ({ row }: { row: { index: number } }) => (
         <span
           onClick={() => {
@@ -62,22 +61,25 @@ export const Organizations: React.FC = () => {
           <FaTimes />
         </span>
       ),
-      disableFilters: true,
-    },
+      disableFilters: true
+    }
   ];
   const [errors, setErrors] = useState<Errors>({});
 
-  const [values, setValues] = useState<Organization>({
-    id: 0,
-    name: "CISA",
-    rootDomains: ["cisa.gov"],
-    ipBlocks: ["127.0.0.0/24"],
+  const [values, setValues] = useState<{
+    name: string;
+    rootDomains: string;
+    ipBlocks: string;
+  }>({
+    name: '',
+    rootDomains: '',
+    ipBlocks: ''
   });
 
   const fetchOrganizations = useCallback(
     async (query: Query<Organization>) => {
       try {
-        let rows = await apiGet<Organization[]>("/api/organizations/");
+        let rows = await apiGet<Organization[]>('/organizations/');
         setOrganizations(rows);
       } catch (e) {
         console.error(e);
@@ -89,34 +91,40 @@ export const Organizations: React.FC = () => {
   const deleteRow = async (index: number) => {
     try {
       let row = organizations[index];
-      await apiDelete(`/api/organizations/${row.id}`);
+      await apiDelete(`/organizations/${row.id}`);
       setOrganizations(
-        organizations.filter((organization) => organization.id !== row.id)
+        organizations.filter(organization => organization.id !== row.id)
       );
     } catch (e) {
       setErrors({
         global:
           e.status === 422
-            ? "Unable to delete organization"
-            : e.message ?? e.toString(),
+            ? 'Unable to delete organization'
+            : e.message ?? e.toString()
       });
       console.log(e);
     }
   };
 
-  const onSubmit: React.FormEventHandler = async (e) => {
+  const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
     try {
-      await apiPost("/api/organizations/", {
-        body: JSON.stringify(values),
+      let body = {
+        rootDomains:
+          values.rootDomains == '' ? [] : values.rootDomains.split(','),
+        ipBlocks: values.ipBlocks == '' ? [] : values.ipBlocks.split(','),
+        name: values.name
+      };
+      const org = await apiPost('/organizations/', {
+        body
       });
-      setOrganizations(organizations.concat(values));
+      setOrganizations(organizations.concat(org));
     } catch (e) {
       setErrors({
         global:
           e.status === 422
-            ? "Error when submitting organization entry."
-            : e.message ?? e.toString(),
+            ? 'Error when submitting organization entry.'
+            : e.message ?? e.toString()
       });
       console.log(e);
     }
@@ -124,11 +132,11 @@ export const Organizations: React.FC = () => {
 
   const onChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
-  > = (e) => {
+  > = e => {
     e.persist();
-    setValues((values) => ({
+    setValues(values => ({
       ...values,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
 
@@ -203,7 +211,7 @@ export const Organizations: React.FC = () => {
               title={<h2>Delete organization?</h2>}
             >
               <p>
-                Are you sure you would like to delete the{" "}
+                Are you sure you would like to delete the{' '}
                 <code>{organizations[selectedRow].name}</code> organization?
               </p>
             </Modal>

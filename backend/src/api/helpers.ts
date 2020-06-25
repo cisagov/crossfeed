@@ -1,26 +1,26 @@
 import {
   APIGatewayProxyHandler,
   APIGatewayProxyEvent,
-  APIGatewayProxyResult,
-} from "aws-lambda";
+  APIGatewayProxyResult
+} from 'aws-lambda';
 import {
   ValidationOptions,
   validateOrReject,
-  ValidationError,
-} from "class-validator";
-import { ClassType } from "class-transformer/ClassTransformer";
-import { plainToClass } from "class-transformer";
+  ValidationError
+} from 'class-validator';
+import { ClassType } from 'class-transformer/ClassTransformer';
+import { plainToClass } from 'class-transformer';
 
 export const validateBody = async <T>(
   obj: ClassType<T>,
   body: string | null,
   validateOptions?: ValidationOptions
 ): Promise<T> => {
-  const raw: T = plainToClass(obj, JSON.parse(body ?? "{}"));
+  const raw: T = plainToClass(obj, JSON.parse(body ?? '{}'));
   await validateOrReject(raw, {
     ...validateOptions,
     whitelist: true,
-    forbidUnknownValues: true,
+    forbidUnknownValues: true
   });
   return raw;
 };
@@ -29,15 +29,15 @@ export const makeResponse = (
   event: APIGatewayProxyEvent,
   opts: Partial<APIGatewayProxyResult>
 ): APIGatewayProxyResult => {
-  const origin = event.headers?.origin || "*";
+  const origin = event.headers?.origin || '*';
   const { body, statusCode = 200, ...rest } = opts;
   return {
     statusCode,
     headers: {
-      "Access-Control-Allow-Origin": origin,
+      'Access-Control-Allow-Origin': origin
     },
-    body: body ?? "",
-    ...rest,
+    body: body ?? '',
+    ...rest
   };
 };
 
@@ -59,12 +59,12 @@ export const wrapHandler: WrapHandler = (handler) => async (
   } catch (e) {
     console.log(e);
     return makeResponse(event, {
-      statusCode: Array.isArray(e) ? 400 : 500,
+      statusCode: Array.isArray(e) ? 400 : 500
     });
   }
 };
 
 export const NotFound: APIGatewayProxyResult = {
   statusCode: 404,
-  body: "",
+  body: ''
 };

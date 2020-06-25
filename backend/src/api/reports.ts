@@ -6,14 +6,14 @@ import {
   ValidateNested,
   isUUID,
   IsOptional,
-  IsObject,
-} from "class-validator";
-import { Type } from "class-transformer";
-import { Report, connectToDatabase } from "../models";
-import { validateBody, wrapHandler, NotFound } from "./helpers";
-import { SelectQueryBuilder } from "typeorm";
+  IsObject
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { Report, connectToDatabase } from '../models';
+import { validateBody, wrapHandler, NotFound } from './helpers';
+import { SelectQueryBuilder } from 'typeorm';
 
-const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? "") || 25;
+const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
 class ReportFilters {
   @IsString()
@@ -39,13 +39,13 @@ class ReportSearch {
   page: number = 1;
 
   @IsString()
-  @IsIn(["title", "created", "severity", "state"])
+  @IsIn(['title', 'created', 'severity', 'state'])
   @IsOptional()
-  sort: string = "name";
+  sort: string = 'name';
 
   @IsString()
-  @IsIn(["ASC", "DESC"])
-  order: "ASC" | "DESC" = "DESC";
+  @IsIn(['ASC', 'DESC'])
+  order: 'ASC' | 'DESC' = 'DESC';
 
   @Type(() => ReportFilters)
   @ValidateNested()
@@ -55,28 +55,28 @@ class ReportSearch {
 
   filterResultQueryset(qs: SelectQueryBuilder<Report>) {
     if (this.filters?.title) {
-      qs.andWhere("report.title ILIKE :title", {
-        title: `%${this.filters.title}%`,
+      qs.andWhere('report.title ILIKE :title', {
+        title: `%${this.filters.title}%`
       });
     }
     if (this.filters?.severity) {
-      qs.andWhere("report.severity=:severity", {
-        severity: this.filters.severity,
+      qs.andWhere('report.severity=:severity', {
+        severity: this.filters.severity
       });
     }
     if (this.filters?.state) {
-      qs.andWhere("report.state=:state", { state: this.filters.state });
+      qs.andWhere('report.state=:state', { state: this.filters.state });
     }
     if (this.filters?.desc) {
-      qs.andWhere("report.desc ILIKE :desc", {
-        desc: `%${this.filters.desc}%`,
+      qs.andWhere('report.desc ILIKE :desc', {
+        desc: `%${this.filters.desc}%`
       });
     }
     return qs;
   }
 
   async getResults() {
-    const qs = Report.createQueryBuilder("report")
+    const qs = Report.createQueryBuilder('report')
       .orderBy(`report.${this.sort}`, this.order)
       .offset(PAGE_SIZE * (this.page - 1))
       .limit(PAGE_SIZE);
@@ -94,8 +94,8 @@ export const list = wrapHandler(async (event) => {
     statusCode: 200,
     body: JSON.stringify({
       result,
-      count,
-    }),
+      count
+    })
   };
 });
 
@@ -110,6 +110,6 @@ export const get = wrapHandler(async (event) => {
 
   return {
     statusCode: result ? 200 : 404,
-    body: result ? JSON.stringify(result) : "",
+    body: result ? JSON.stringify(result) : ''
   };
 });

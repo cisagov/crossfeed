@@ -8,70 +8,70 @@ import {
   CreateDateColumn,
   BaseEntity,
   OneToOne,
-  JoinColumn,
-} from "typeorm";
+  JoinColumn
+} from 'typeorm';
 
 @Entity()
-@Index(["report_id"], { unique: true })
+@Index(['report_id'], { unique: true })
 export class Report extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({
-    length: 100,
+    length: 100
   })
   report_id: string;
 
   @Column({
     length: 512,
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   title: string;
 
   @Column({
-    type: "varchar",
+    type: 'varchar'
   })
   created: string;
 
   @Column({
-    type: "text",
+    type: 'text'
   })
   desc: string;
 
   @Column({
-    type: "varchar",
-    nullable: true,
+    type: 'varchar',
+    nullable: true
   })
   triaged: string | null;
 
   @Column({
-    type: "varchar",
-    nullable: true,
+    type: 'varchar',
+    nullable: true
   })
   reported: string | null;
 
   @Column({
-    type: "varchar",
-    nullable: true,
+    type: 'varchar',
+    nullable: true
   })
   last_program_activity: string | null;
 
   @Column({
-    type: "varchar",
-    nullable: true,
+    type: 'varchar',
+    nullable: true
   })
   last_reporter_activity: string | null;
 
   @Column({
-    type: "varchar",
-    nullable: true,
+    type: 'varchar',
+    nullable: true
   })
   severity: string | null;
 
   @Column({
-    type: "varchar",
-    nullable: true,
+    type: 'varchar',
+    nullable: true
   })
   state: string | null;
 }

@@ -4,74 +4,74 @@ import {
   PrimaryGeneratedColumn,
   BaseEntity,
   OneToOne,
-  JoinColumn,
-} from "typeorm";
-import { Domain } from "./domain";
+  JoinColumn
+} from 'typeorm';
+import { Domain } from './domain';
 
 @Entity()
 export class WebInfo extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @OneToOne((type) => Domain, (domain) => domain.ssl, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   })
   @JoinColumn()
   domain: Domain | null;
 
   @Column({
     nullable: true,
-    type: "varchar",
-    length: 512,
+    type: 'varchar',
+    length: 512
   })
   frameworks: string | null;
 
   @Column({
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   cms: string | null;
 
   @Column({
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   widgets: string | null;
 
   @Column({
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   fonts: string | null;
 
   @Column({
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   analytics: string | null;
 
   @Column({
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   webServers: string | null;
 
   @Column({
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   operatingSystems: string | null;
 
   @Column({
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   socialUrls: string | null;
 
   @Column({
     nullable: true,
-    type: "varchar",
+    type: 'varchar'
   })
   gaKeys: string | null;
 }
