@@ -1,4 +1,4 @@
-import { SortingRule, Filters } from "react-table";
+import { SortingRule, Filters } from 'react-table';
 
 export interface Query<T extends object> {
   sort: SortingRule<T>[];
@@ -22,6 +22,9 @@ export interface Domain {
   updatedAt: string;
   services: string;
   ports: string;
+  web: WebInfo | null;
+  web_frameworks: string | null;
+  ssl: SSLInfo | null;
 }
 
 export interface SSLInfo {

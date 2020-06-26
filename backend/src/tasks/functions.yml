@@ -22,5 +22,9 @@ portscanner:
   handler: src/tasks/portscanner.handler
   timeout: 900
 
+wappalyzer:
+  handler: src/tasks/wappalyzer.handler
+  timeout: 900
+
 syncdb:
   handler: src/tasks/syncdb.handler

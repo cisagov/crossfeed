@@ -77,12 +77,13 @@ class DomainSearch {
 
   async getResults() {
     const qs = Domain.createQueryBuilder('domain')
-      .select(['domain.id as id', 'ip', 'name', '"updatedAt"'])
+      .select(['domain.id as id', 'ip', 'name', '"updatedAt"', 'web as web'])
       .addSelect("string_agg(services.port, ', ')", 'ports')
       .addSelect("string_agg(services.service, ', ')", 'services')
       .leftJoin('domain.services', 'services')
+      .leftJoinAndSelect('domain.web', 'web')
       .orderBy(`domain.${this.sort}`, this.order)
-      .groupBy('domain.id, domain.ip, domain.name')
+      .groupBy('domain.id, domain.ip, domain.name, web.id')
       .offset(PAGE_SIZE * (this.page - 1))
       .limit(PAGE_SIZE);
 

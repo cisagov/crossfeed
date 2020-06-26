@@ -99,8 +99,8 @@ export const Table = <T extends object>({
         {renderPagination && renderPagination(instance)}
         {count ? (
           <p className="text-center">
-            Showing {pageIndex * (count / pageCount) + 1}-
-            {Math.min(count, (pageIndex + 1) * (count / pageCount))} of {count}
+            Showing {pageIndex * pageSize + 1}-
+            {Math.min(count, (pageIndex + 1) * pageSize)} of {count}
           </p>
         ) : (
           ''
