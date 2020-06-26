@@ -85,20 +85,12 @@ export const Scans: React.FC = () => {
     arguments: string;
     frequency: number;
   }>({
-    name: 'amass',
+    name: 'censys',
     arguments: '{}',
     frequency: 0
   });
 
   React.useEffect(() => {
-    setValidCommands(['amass', 'censys']);
-    apiGet<Array<string>>('/scans/validCommands/')
-      .then(validCommands => {
-        setValidCommands(validCommands);
-      })
-      .catch(e => {
-        console.log(e.message);
-      });
     document.addEventListener('keyup', e => {
       //Escape
       if (e.keyCode === 27) {
@@ -110,8 +102,11 @@ export const Scans: React.FC = () => {
   const fetchScans = useCallback(
     async (query: Query<Scan>) => {
       try {
-        let rows = await apiGet<Scan[]>('/scans/');
-        setScans(rows);
+        let { scans, schema } = await apiGet<{ scans: Scan[]; schema: Object }>(
+          '/scans/'
+        );
+        setScans(scans);
+        setValidCommands(Object.keys(schema));
       } catch (e) {
         console.error(e);
       }

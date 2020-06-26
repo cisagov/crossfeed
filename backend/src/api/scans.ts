@@ -11,7 +11,8 @@ import { validateBody, wrapHandler, NotFound } from './helpers';
 
 const SCAN_SCHEMA = {
   censys: {},
-  amass: {}
+  amass: {},
+  findomain: {}
 };
 
 class NewScan {
@@ -77,6 +78,9 @@ export const list = wrapHandler(async (event) => {
   const result = await Scan.find();
   return {
     statusCode: 200,
-    body: JSON.stringify(result)
+    body: JSON.stringify({
+      scans: result,
+      schema: SCAN_SCHEMA
+    })
   };
 });

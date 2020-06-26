@@ -8,8 +8,13 @@ import {
   WebInfo
 } from '../models';
 import * as uuid from 'uuid';
-import { InsertResult } from 'typeorm';
 import { isNotEmpty } from 'class-validator';
+import {
+  saveDomainToDb,
+  saveServicesToDb,
+  saveSSLInfosToDb,
+  saveWebInfoToDb
+} from './helpers';
 
 interface FetchDataOpts {
   limit: number;
@@ -158,75 +163,6 @@ const parseWebInfoFromAsset = (
   }
   return null;
 };
-
-const saveDomainToDb = async (domain: Domain): Promise<Domain> => {
-  const { generatedMaps } = await Domain.createQueryBuilder()
-    .insert()
-    .values(domain)
-    .onConflict(
-      `
-      ("name","ip") DO UPDATE 
-      SET "screenshot" = excluded."screenshot",
-          "asn" = excluded."asn",
-          "country" = excluded."country",
-          "updatedAt" = now()
-    `
-    )
-    .execute();
-  return generatedMaps[0] as Domain;
-};
-
-const saveServicesToDb = (services: Service[]): Promise<InsertResult> =>
-  Service.createQueryBuilder()
-    .insert()
-    .values(services)
-    .onConflict(
-      `
-      ("domainId","port") DO UPDATE
-      SET "lastSeen" = excluded."lastSeen",
-          "banner" = excluded."banner",
-          "service" = excluded."service"
-    `
-    )
-    .execute();
-
-const saveSSLInfosToDb = (info: SSLInfo): Promise<InsertResult> =>
-  SSLInfo.createQueryBuilder()
-    .insert()
-    .values(info)
-    .onConflict(
-      `
-      ("domainId") DO UPDATE
-      SET "protocol" = excluded."protocol",
-          "issuerOrg" = excluded."issuerOrg",
-          "issuerCN" = excluded."issuerCN",
-          "validFrom" = excluded."validFrom",
-          "validTo" = excluded."validTo",
-          "altNames" = excluded."altNames",
-          "fingerprint" = excluded."fingerprint"
-    `
-    )
-    .execute();
-
-const saveWebInfoToDb = (info: WebInfo): Promise<InsertResult> =>
-  WebInfo.createQueryBuilder()
-    .insert()
-    .values(info)
-    .onConflict(
-      `
-      ("domainId") DO UPDATE
-        SET "frameworks" = excluded."frameworks",
-            "cms" = excluded."cms",
-            "widgets" = excluded."widgets",
-            "fonts" = excluded."fonts",
-            "analytics" = excluded."analytics",
-            "webServers" = excluded."webServers",
-            "operatingSystems" = excluded."operatingSystems",
-            "socialUrls" = excluded."socialUrls",
-            "gaKeys" = excluded."gaKeys"
-    `
-    )
-    .execute();
 
 const saveAsset = async (asset: BDAsset) => {
   const parsedDomain = parseDomainFromAsset(asset);

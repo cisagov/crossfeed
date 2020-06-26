@@ -111,8 +111,8 @@ export const Organizations: React.FC = () => {
     try {
       let body = {
         rootDomains:
-          values.rootDomains == '' ? [] : values.rootDomains.split(','),
-        ipBlocks: values.ipBlocks == '' ? [] : values.ipBlocks.split(','),
+          values.rootDomains === '' ? [] : values.rootDomains.split(','),
+        ipBlocks: values.ipBlocks === '' ? [] : values.ipBlocks.split(','),
         name: values.name
       };
       const org = await apiPost('/organizations/', {
@@ -139,6 +139,15 @@ export const Organizations: React.FC = () => {
       [e.target.name]: e.target.value
     }));
   };
+
+  React.useEffect(() => {
+    document.addEventListener('keyup', e => {
+      //Escape
+      if (e.keyCode === 27) {
+        setShowModal(false);
+      }
+    });
+  }, [apiGet]);
 
   return (
     <div className={classes.root}>

@@ -1,4 +1,5 @@
-FROM node:lts
+# Needed for local development for certain binaries
+FROM node:current-buster
 
 WORKDIR /app
 COPY ./package* ./
