@@ -9,6 +9,7 @@
     "class-validator": "^0.12.2",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.2.1",
+    "portscanner": "^2.2.0",
     "serverless": "^1.72.0",
     "typeorm": "^0.2.25",
     "uuid": "^8.1.0"

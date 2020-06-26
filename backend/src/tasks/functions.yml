@@ -18,5 +18,9 @@ findomain:
   layers:
     - { Ref: FindomainLambdaLayer }
 
+portscanner:
+  handler: src/tasks/portscanner.handler
+  timeout: 900
+
 syncdb:
   handler: src/tasks/syncdb.handler
