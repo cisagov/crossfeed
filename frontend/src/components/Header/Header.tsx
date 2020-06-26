@@ -1,21 +1,21 @@
-import React, { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import {
   Header as UsaHeader,
   NavMenuButton,
   Title,
-  PrimaryNav,
-} from "@trussworks/react-uswds";
-import logo from "./dds.png";
-import classes from "./styles.module.scss";
-import { useAuthContext } from "context";
+  PrimaryNav
+} from '@trussworks/react-uswds';
+import logo from './dds.png';
+import classes from './styles.module.scss';
+import { useAuthContext } from 'context';
 
 export const Header: React.FC = () => {
   const { user } = useAuthContext();
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
-  const onExpandMobile: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    setMobileExpanded((expanded) => !expanded);
+  const onExpandMobile: React.MouseEventHandler<HTMLButtonElement> = e => {
+    setMobileExpanded(expanded => !expanded);
   };
 
   const authNavItems = [
@@ -27,14 +27,6 @@ export const Header: React.FC = () => {
       className="usa-nav__link"
     >
       <span>Dashboard</span>
-    </NavLink>,
-    <NavLink
-      activeClassName="usa-current"
-      to="/vulnerabilities"
-      key="home"
-      className="usa-nav__link"
-    >
-      <span>Vulnerabilities</span>
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
@@ -67,7 +59,7 @@ export const Header: React.FC = () => {
       className="usa-nav__link"
     >
       <span>Settings</span>
-    </NavLink>,
+    </NavLink>
   ];
 
   return (
