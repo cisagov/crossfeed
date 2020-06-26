@@ -136,7 +136,7 @@ const parseSSLInfoFromAsset = (
   info.bits = asset['ssl.bits'] ? asset['ssl.bits'].toString() : null;
   info.fingerprint = asset['ssl.fingerprint'] ?? null;
   info.altNames = joinOrNull(asset['ssl.subjectaltname']);
-  info.domain = domain;
+  info.domain = [domain];
   return info;
 };
 

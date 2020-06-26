@@ -36,18 +36,7 @@ export const saveSSLInfosToDb = (info: SSLInfo): Promise<InsertResult> =>
   SSLInfo.createQueryBuilder()
     .insert()
     .values(info)
-    .onConflict(
-      `
-        ("domainId") DO UPDATE
-        SET "protocol" = excluded."protocol",
-            "issuerOrg" = excluded."issuerOrg",
-            "issuerCN" = excluded."issuerCN",
-            "validFrom" = excluded."validFrom",
-            "validTo" = excluded."validTo",
-            "altNames" = excluded."altNames",
-            "fingerprint" = excluded."fingerprint"
-      `
-    )
+    .onConflict(`("fingerprint") DO NOTHING`)
     .execute();
 
 export const saveWebInfoToDb = (info: WebInfo): Promise<InsertResult> =>

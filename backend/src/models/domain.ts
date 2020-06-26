@@ -42,10 +42,10 @@ export class Domain extends BaseEntity {
   @OneToMany((type) => Service, (service) => service.domain)
   services: Service[];
 
-  @OneToOne((type) => SSLInfo, (sslinfo) => sslinfo.domain, {
+  @OneToMany((type) => SSLInfo, (sslinfo) => sslinfo.domain, {
     nullable: true
   })
-  ssl: SSLInfo;
+  ssl: SSLInfo[];
 
   @OneToOne((type) => WebInfo, (webinfo) => webinfo.domain, {
     nullable: true

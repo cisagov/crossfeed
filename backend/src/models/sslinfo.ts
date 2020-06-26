@@ -3,22 +3,24 @@ import {
   Column,
   PrimaryGeneratedColumn,
   BaseEntity,
-  OneToOne,
-  JoinColumn
+  JoinColumn,
+  OneToMany,
+  Index
 } from 'typeorm';
 import { Domain } from './domain';
 
 @Entity()
+@Index(['fingerprint'], { unique: true })
 export class SSLInfo extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne((type) => Domain, (domain) => domain.ssl, {
+  @OneToMany((type) => Domain, (domain) => domain.ssl, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   })
   @JoinColumn()
-  domain: Domain | null;
+  domain: Domain[];
 
   @Column({
     nullable: true,
