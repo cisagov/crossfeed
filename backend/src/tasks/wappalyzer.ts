@@ -38,5 +38,5 @@ export const handler: Handler = async (event) => {
     }
   }
 
-  console.log(`Wappalyzer updated for ${count} new services`);
+  console.log(`Wappalyzer finished for ${count} services`);
 };

@@ -30,5 +30,5 @@ export const handler: Handler = async (event) => {
 
   await saveServicesToDb(services);
 
-  console.log(`Portscan updated for ${services.length} new services`);
+  console.log(`Portscan finished for ${services.length} services`);
 };
