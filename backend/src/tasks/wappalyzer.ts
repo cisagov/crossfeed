@@ -1,19 +1,15 @@
 import { Handler } from 'aws-lambda';
-import { connectToDatabase, Domain, Service, WebInfo } from '../models';
-import { saveServicesToDb, saveWebInfoToDb, getLiveWebsites } from './helpers';
+import { connectToDatabase, Service, WebInfo } from '../models';
+import { saveWebInfoToDb, getLiveWebsites } from './helpers';
 import { plainToClass } from 'class-transformer';
-import { Like } from 'typeorm';
 import * as wappalyzer from 'simple-wappalyzer';
 import axios from 'axios';
-import { length } from 'class-validator';
-import { catchClause } from '@babel/types';
 
 export const handler: Handler = async (event) => {
   await connectToDatabase();
 
   const domains = await getLiveWebsites();
   const services: Service[] = [];
-  let count = 0;
   for (const domain of domains) {
     const url =
       (domain.ports.includes('443') ? 'https://' : 'http://') + domain.name;
@@ -32,11 +28,10 @@ export const handler: Handler = async (event) => {
           technologies: result
         })
       );
-      count++;
     } catch (e) {
       continue;
     }
   }
 
-  console.log(`Wappalyzer finished for ${count} services`);
+  console.log(`Wappalyzer finished for ${services.length} services`);
 };
