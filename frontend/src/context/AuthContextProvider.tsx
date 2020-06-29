@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { Auth, API } from "aws-amplify";
-import { AuthContext, User } from "./AuthContext";
-import { useHistory } from "react-router-dom";
+import React, { useState, useCallback, useEffect } from 'react';
+import { Auth, API } from 'aws-amplify';
+import { AuthContext, User } from './AuthContext';
+import { useHistory } from 'react-router-dom';
 
 // to be added to every request
 const baseHeaders: HeadersInit = {
-  "Content-Type": "application/json",
-  Accept: "application/json",
+  'Content-Type': 'application/json',
+  Accept: 'application/json'
 };
 
 export const AuthContextProvider: React.FC = ({ children }) => {
@@ -19,7 +19,14 @@ export const AuthContextProvider: React.FC = ({ children }) => {
       const existing = await Auth.currentAuthenticatedUser();
       setUser(existing);
     } catch (e) {
-      setUser(null);
+      if (process.env.NODE_ENV === 'development')
+        setUser({
+          email: '',
+          email_verified: true,
+          phone_number: '',
+          phone_number_verified: true
+        });
+      else setUser(null);
     }
   };
 
@@ -29,9 +36,9 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
   const login = async (username: string, password: string) => {
     const user = await Auth.signIn(username, password);
-    if (user.challengeName === "NEW_PASSWORD_REQUIRED") {
+    if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
       setUnverifiedUser(user);
-      history.push("/create-password");
+      history.push('/create-password');
     } else {
       setUser(user);
     }
@@ -59,22 +66,27 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
   const prepareInit = useCallback(async (init: any) => {
     const { headers, ...rest } = init;
-    const session = await Auth.currentSession();
-    const token = await session.getIdToken().getJwtToken();
+    let token;
+    if (process.env.NODE_ENV === 'development') {
+      token = '';
+    } else {
+      const session = await Auth.currentSession();
+      token = await session.getIdToken().getJwtToken();
+    }
     return {
       ...rest,
       headers: {
         ...headers,
         ...baseHeaders,
-        Authorization: token,
-      },
+        Authorization: token
+      }
     };
   }, []);
 
   const apiGet = useCallback(
     async <T extends object = {}>(path: string, init: any = {}) => {
       const options = await prepareInit(init);
-      const result = await API.get("crossfeed", path, options);
+      const result = await API.get('crossfeed', path, options);
       return result as T;
     },
     [prepareInit]
@@ -83,7 +95,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const apiPost = useCallback(
     async <T extends object = {}>(path: string, init: any) => {
       const options = await prepareInit(init);
-      const result = await API.post("crossfeed", path, options);
+      const result = await API.post('crossfeed', path, options);
       return result as T;
     },
     [prepareInit]
@@ -92,7 +104,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const apiDelete = useCallback(
     async <T extends object = {}>(path: string, init: any = {}) => {
       const options = await prepareInit(init);
-      const result = await API.del("crossfeed", path, options);
+      const result = await API.del('crossfeed', path, options);
       return result as T;
     },
     [prepareInit]
@@ -101,7 +113,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const apiPut = useCallback(
     async <T extends object = {}>(path: string, init: any) => {
       const options = await prepareInit(init);
-      const result = await API.put("crossfeed", path, options);
+      const result = await API.put('crossfeed', path, options);
       return result as T;
     },
     [prepareInit]
@@ -118,7 +130,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         apiGet,
         apiPost,
         apiPut,
-        apiDelete,
+        apiDelete
       }}
     >
       {children}
