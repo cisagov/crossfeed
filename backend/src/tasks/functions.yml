@@ -26,5 +26,11 @@ wappalyzer:
   handler: src/tasks/wappalyzer.handler
   timeout: 900
 
+scheduler:
+  handler: src/tasks/scheduler.handler
+  timeout: 900
+  events:
+    - schedule: rate(1 minute)
+
 syncdb:
   handler: src/tasks/syncdb.handler

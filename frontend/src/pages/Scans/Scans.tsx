@@ -7,7 +7,9 @@ import {
   Dropdown,
   ModalContainer,
   Overlay,
-  Modal
+  Modal,
+  Form,
+  Fieldset
 } from '@trussworks/react-uswds';
 import { Query } from 'types';
 import { Table } from 'components';
@@ -45,7 +47,20 @@ export const Scans: React.FC = () => {
     },
     {
       Header: 'Frequency',
-      accessor: 'frequency',
+      accessor: ({ frequency }) => {
+        let val, unit;
+        if (frequency < 60 * 60) {
+          val = frequency / 60;
+          unit = 'minute';
+        } else if (frequency < 60 * 60 * 24) {
+          val = frequency / (60 * 60);
+          unit = 'hour';
+        } else {
+          val = frequency / (60 * 60 * 24);
+          unit = 'day';
+        }
+        return `Every ${val} ${unit}${val === 1 ? '' : 's'}`;
+      },
       width: 200,
       id: 'frequency',
       disableFilters: true
@@ -84,10 +99,12 @@ export const Scans: React.FC = () => {
     name: string;
     arguments: string;
     frequency: number;
+    frequencyUnit: string;
   }>({
     name: 'censys',
     arguments: '{}',
-    frequency: 0
+    frequency: 0,
+    frequencyUnit: 'minute'
   });
 
   React.useEffect(() => {
@@ -132,9 +149,13 @@ export const Scans: React.FC = () => {
     e.preventDefault();
     try {
       // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
-      values.arguments = JSON.parse(values.arguments);
+      let body = values;
+      body.arguments = JSON.parse(values.arguments);
+      if (values.frequencyUnit == 'minute') body.frequency *= 60;
+      else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
+      else body.frequency *= 60 * 60 * 24;
       const scan = await apiPost('/scans/', {
-        body: values
+        body
       });
       setScans(scans.concat(scan));
     } catch (e) {
@@ -163,7 +184,7 @@ export const Scans: React.FC = () => {
       <h1>Scans</h1>
       <Table<Scan> columns={columns} data={scans} fetchData={fetchScans} />
       <h2>Add a scan</h2>
-      <form onSubmit={onSubmit} className={classes.form}>
+      <Form onSubmit={onSubmit} className={classes.form}>
         {errors.global && <p className={classes.error}>{errors.global}</p>}
         <Label htmlFor="name">Name</Label>
         <Dropdown
@@ -181,7 +202,6 @@ export const Scans: React.FC = () => {
             );
           })}
         </Dropdown>
-
         <Label htmlFor="arguments">Arguments</Label>
         <TextInput
           required
@@ -191,18 +211,36 @@ export const Scans: React.FC = () => {
           type="text"
           onChange={onChange}
         />
-        <Label htmlFor="frequency">Frequency</Label>
-        <TextInput
-          required
-          id="frequency"
-          name="frequency"
-          className={classes.textField}
-          type="number"
-          onChange={onChange}
-        />
+        <br></br>
+        <div className="form-group form-inline">
+          <label style={{ marginRight: '10px' }} htmlFor="frequency">
+            Run every
+          </label>
+          <TextInput
+            id="frequency"
+            name="frequency"
+            type="number"
+            style={{
+              display: 'inline-block',
+              width: '150px',
+              marginRight: '15px'
+            }}
+            onChange={onChange}
+          />
+          <Dropdown
+            id="frequencyUnit"
+            name="frequencyUnit"
+            onChange={onChange}
+            style={{ display: 'inline-block', width: '150px' }}
+          >
+            <option value="minute">Minute(s)</option>
+            <option value="hour">Hour(s)</option>
+            <option value="day">Day(s)</option>
+          </Dropdown>
+        </div>
         <br></br>
         <Button type="submit">Create Scan</Button>
-      </form>
+      </Form>
 
       {showModal && (
         <div>
