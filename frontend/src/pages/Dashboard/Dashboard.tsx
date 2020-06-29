@@ -19,6 +19,7 @@ export const Dashboard: React.FC = () => {
   const [pageCount, setPageCount] = useState(0);
 
   const columns = useMemo(() => createColumns(), []);
+  const PAGE_SIZE = 25;
 
   const fetchDomains = useCallback(
     async (query: Query<Domain>) => {
@@ -40,9 +41,10 @@ export const Dashboard: React.FC = () => {
               )
           }
         });
+        console.log(result[0].web);
         setDomains(result);
         setCount(count);
-        setPageCount(Math.ceil(count / 25));
+        setPageCount(Math.ceil(count / PAGE_SIZE));
       } catch (e) {
         console.error(e);
       }
@@ -64,6 +66,7 @@ export const Dashboard: React.FC = () => {
         pageCount={pageCount}
         fetchData={fetchDomains}
         count={count}
+        pageSize={PAGE_SIZE}
       />
     </div>
   );

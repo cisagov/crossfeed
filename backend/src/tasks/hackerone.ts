@@ -1,3 +1,4 @@
+// This is a reference script for a HackerOne implementation. Not currently used.
 import { Handler } from 'aws-lambda';
 import axios from 'axios';
 import { connectToDatabase, Report } from '../models';

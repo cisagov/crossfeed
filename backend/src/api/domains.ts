@@ -81,8 +81,10 @@ class DomainSearch {
       .addSelect("string_agg(services.port, ', ')", 'ports')
       .addSelect("string_agg(services.service, ', ')", 'services')
       .leftJoin('domain.services', 'services')
+      .leftJoin('domain.web', 'domain.web')
+      .addSelect('domain.web.technologies', 'technologies')
       .orderBy(`domain.${this.sort}`, this.order)
-      .groupBy('domain.id, domain.ip, domain.name')
+      .groupBy('domain.id, domain.ip, domain.name, technologies')
       .offset(PAGE_SIZE * (this.page - 1))
       .limit(PAGE_SIZE);
 
