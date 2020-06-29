@@ -57,15 +57,22 @@ export const saveWebInfoToDb = (info: WebInfo): Promise<InsertResult> =>
     .onConflict(
       `
         ("domainId") DO UPDATE
-          SET "frameworks" = excluded."frameworks",
-              "cms" = excluded."cms",
-              "widgets" = excluded."widgets",
-              "fonts" = excluded."fonts",
-              "analytics" = excluded."analytics",
-              "webServers" = excluded."webServers",
-              "operatingSystems" = excluded."operatingSystems",
-              "socialUrls" = excluded."socialUrls",
-              "gaKeys" = excluded."gaKeys"
+          SET "technologies" = excluded."technologies"
       `
     )
     .execute();
+
+// Helper function to fetch all live websites (port 80 or 443)
+export const getLiveWebsites = async (): Promise<any[]> => {
+  const qs = Domain.createQueryBuilder('domain')
+    .select(['domain.id as id', 'ip', 'name', '"updatedAt"'])
+    .addSelect('array_agg(services.port)', 'ports')
+    .leftJoin('domain.services', 'services')
+    .groupBy('domain.id, domain.ip, domain.name');
+
+  qs.andHaving(
+    "COUNT(CASE WHEN services.port = '443' OR services.port = '80' THEN 1 END) >= 1"
+  );
+
+  return await qs.getRawMany();
+};

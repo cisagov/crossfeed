@@ -18,8 +18,9 @@ export const handler: Handler = async (event) => {
   }
 
   const organizations = await Organization.find();
-  const allDomains: string[] = [];
-  for (const org of organizations) allDomains.concat(org.rootDomains);
+  let allDomains: string[] = [];
+  for (const org of organizations)
+    allDomains = allDomains.concat(org.rootDomains);
 
   let count = 0;
   for (const rootDomain of allDomains) {

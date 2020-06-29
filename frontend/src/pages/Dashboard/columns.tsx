@@ -39,7 +39,9 @@ export const createColumns: CreateColumns = () => [
     Header: 'Services',
     id: 'services',
     disableSortBy: true,
-    accessor: 'web_frameworks', //For now show web frameworks until we get services
+    accessor: ({ technologies }) =>
+      technologies &&
+      technologies.map(technology => technology.name).join(', '),
     Filter: ColumnFilter
   },
   {

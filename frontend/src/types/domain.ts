@@ -22,8 +22,8 @@ export interface Domain {
   updatedAt: string;
   services: string;
   ports: string;
+  technologies: Technology[] | null;
   web: WebInfo | null;
-  web_frameworks: string | null;
   ssl: SSLInfo | null;
 }
 
@@ -40,15 +40,21 @@ export interface SSLInfo {
 
 export interface WebInfo {
   id: string;
-  frameworks: string | null;
-  cms: string | null;
-  widgets: string | null;
-  fonts: string | null;
-  analytics: string | null;
-  webServers: string | null;
-  operatingSystems: string | null;
-  socialUrls: string | null;
-  gaKeys: string | null;
+  technologies: Technology[];
+}
+
+export interface Technology {
+  name: string;
+  slug: string;
+  version: string;
+  icon: string;
+  website: string;
+  confidence: number;
+  categories: {
+    name: string;
+    slug: string;
+    id: number;
+  }[];
 }
 
 export interface FullDomain {

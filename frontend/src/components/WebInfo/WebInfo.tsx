@@ -1,19 +1,26 @@
-import React from "react";
-import classes from "./styles.module.scss";
-import { WebInfo as WebInfoType } from "types";
-import { Item } from "./Item";
+import React from 'react';
+import classes from './styles.module.scss';
+import { WebInfo as WebInfoType, Technology } from 'types';
+import { Item } from './Item';
 
-export const WebInfo: React.FC<WebInfoType> = (props) => {
+export const WebInfo: React.FC<WebInfoType> = props => {
+  let categoriesToTechnologies: { [name: string]: Technology[] } = {};
+  for (let technology of props.technologies) {
+    for (let cat of technology.categories) {
+      if (categoriesToTechnologies[cat.name])
+        categoriesToTechnologies[cat.name].push(technology);
+      else categoriesToTechnologies[cat.name] = [technology];
+    }
+  }
+
   return (
     <div className={classes.root}>
-      <Item title="Frameworks" value={props.frameworks} />
-      <Item title="Analytics" value={props.analytics} />
-      <Item title="GA Keys" value={props.gaKeys} />
-      <Item title="Operating Systems" value={props.operatingSystems} />
-      <Item title="Web Servers" value={props.webServers} />
-      <Item title="CMS" value={props.cms} />
-      <Item title="Fonts" value={props.fonts} />
-      <Item title="Social Links" value={props.socialUrls} />
+      {Object.entries(categoriesToTechnologies).map(entry => (
+        <Item
+          title={entry[0]}
+          value={entry[1].map(technology => technology.name).join(',')}
+        ></Item>
+      ))}
     </div>
   );
 };

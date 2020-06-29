@@ -20,58 +20,21 @@ export class WebInfo extends BaseEntity {
   @JoinColumn()
   domain: Domain | null;
 
+  // Wappalyzer output
   @Column({
-    nullable: true,
-    type: 'varchar',
-    length: 512
+    type: 'jsonb'
   })
-  frameworks: string | null;
-
-  @Column({
-    nullable: true,
-    type: 'varchar'
-  })
-  cms: string | null;
-
-  @Column({
-    nullable: true,
-    type: 'varchar'
-  })
-  widgets: string | null;
-
-  @Column({
-    nullable: true,
-    type: 'varchar'
-  })
-  fonts: string | null;
-
-  @Column({
-    nullable: true,
-    type: 'varchar'
-  })
-  analytics: string | null;
-
-  @Column({
-    nullable: true,
-    type: 'varchar'
-  })
-  webServers: string | null;
-
-  @Column({
-    nullable: true,
-    type: 'varchar'
-  })
-  operatingSystems: string | null;
-
-  @Column({
-    nullable: true,
-    type: 'varchar'
-  })
-  socialUrls: string | null;
-
-  @Column({
-    nullable: true,
-    type: 'varchar'
-  })
-  gaKeys: string | null;
+  technologies: {
+    name: string;
+    slug: string;
+    version: string;
+    icon: string;
+    website: string;
+    confidence: number;
+    categories: {
+      name: string;
+      slug: string;
+      id: number;
+    }[];
+  }[];
 }

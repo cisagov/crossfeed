@@ -35,7 +35,7 @@ export const Organizations: React.FC = () => {
     },
     {
       Header: 'Root Domains',
-      accessor: (args: Organization) => JSON.stringify(args.rootDomains),
+      accessor: (args: Organization) => args.rootDomains.join(', '),
       width: 150,
       minWidth: 150,
       id: 'rootDomains',

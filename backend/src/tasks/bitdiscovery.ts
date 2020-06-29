@@ -1,3 +1,4 @@
+// This is a reference script for a BitDiscovery implementation. Not currently used.
 import { Handler } from 'aws-lambda';
 import axios from 'axios';
 import {
@@ -146,21 +147,6 @@ const parseWebInfoFromAsset = (
 ): WebInfo | null => {
   const info = new WebInfo();
   info.domain = domain;
-  info.frameworks = joinOrNull([
-    joinOrNull(asset['wtech.gakeys.wtech.Web Frameworks']),
-    joinOrNull(asset['wtech.Javascript Frameworks'])
-  ]);
-  info.cms = joinOrNull(asset['wtech.Content Management Systems']);
-  info.widgets = joinOrNull(asset['wtech.Widgets']);
-  info.fonts = joinOrNull(asset['wtech.Font Scripts']);
-  info.analytics = joinOrNull(asset['wtech.Analytics']);
-  info.webServers = joinOrNull(asset['wtech.Web Servers']);
-  info.operatingSystems = joinOrNull(asset['wtech.Operating Systems']);
-  info.socialUrls = joinOrNull(asset['wtech.socialurls']);
-  info.gaKeys = joinOrNull(asset['wtech.gakeys']);
-  if (info.frameworks || info.cms || info.analytics || info.webServers) {
-    return info;
-  }
   return null;
 };
 

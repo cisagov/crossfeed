@@ -16,7 +16,6 @@ export const handler: Handler = async (event) => {
   for (const domain of domains) {
     for (const port of [21, 22, 80, 443, 3000, 8080, 8443]) {
       const status = await portscanner.checkPortStatus(port, domain.ip);
-      console.log(status);
       if (status == 'open') {
         services.push(
           plainToClass(Service, {
