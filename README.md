@@ -8,7 +8,7 @@
 
 External monitoring for organization assets
 
-## development environment
+## Development Environment
 
 1.  Copy root `dev.env.example` file to a `.env`
 
@@ -29,6 +29,8 @@ External monitoring for organization assets
     - environment variables in root `.env`
 
 6.  Generate DB schema: `docker-compose exec backend npx sls invoke local -f syncdb` (`-d dangerouslyforce` to drop and recreate)
+
+7. Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save
 
 ## running non-http lambdas locally
 
