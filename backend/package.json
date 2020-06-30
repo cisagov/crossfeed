@@ -4,6 +4,7 @@
   "description": "",
   "main": "db.js",
   "dependencies": {
+    "aws-sdk": "^2.707.0",
     "axios": "^0.19.2",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",

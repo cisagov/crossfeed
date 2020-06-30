@@ -8,8 +8,7 @@ import {
   ModalContainer,
   Overlay,
   Modal,
-  Form,
-  Fieldset
+  Form
 } from '@trussworks/react-uswds';
 import { Query } from 'types';
 import { Table } from 'components';
@@ -17,6 +16,7 @@ import { Column } from 'react-table';
 import { Scan } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 
 interface Errors extends Partial<Scan> {
   global?: string;
@@ -71,7 +71,7 @@ export const Scans: React.FC = () => {
         return !args.lastRun ||
           new Date(args.lastRun).getTime() === new Date(0).getTime()
           ? 'Never'
-          : args.lastRun;
+          : `${formatDistanceToNow(parseISO(args.lastRun))} ago`;
       },
       width: 200,
       id: 'lastRun',
@@ -151,7 +151,7 @@ export const Scans: React.FC = () => {
       // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
       let body = values;
       body.arguments = JSON.parse(values.arguments);
-      if (values.frequencyUnit == 'minute') body.frequency *= 60;
+      if (values.frequencyUnit === 'minute') body.frequency *= 60;
       else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
       else body.frequency *= 60 * 60 * 24;
       const scan = await apiPost('/scans/', {

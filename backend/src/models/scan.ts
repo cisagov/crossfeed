@@ -24,6 +24,7 @@ export class Scan extends BaseEntity {
   @Column('json')
   arguments: Object;
 
+  /** How often the scan is run, in seconds */
   @Column()
   frequency: number;
 
