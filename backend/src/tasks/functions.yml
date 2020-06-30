@@ -6,6 +6,10 @@ hackerone:
   handler: src/tasks/hackerone.handler
   timeout: 900
 
+censys:
+  handler: src/tasks/censys.handler
+  timeout: 900
+
 amass:
   handler: src/tasks/amass.handler
   timeout: 900

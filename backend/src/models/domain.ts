@@ -15,7 +15,7 @@ import { SSLInfo } from './sslinfo';
 import { WebInfo } from './webinfo';
 
 @Entity()
-@Index(['ip', 'name'], { unique: true })
+@Index(['name'], { unique: true })
 export class Domain extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -26,7 +26,9 @@ export class Domain extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({})
+  @Column({
+    nullable: true
+  })
   ip: string;
 
   @Column({
