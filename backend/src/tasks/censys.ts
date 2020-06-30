@@ -40,7 +40,6 @@ const sleep = (milliseconds) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
-// TODO Run below for each root domain of each organization
 const fetchCensysData = async (rootDomain, page) => {
   console.log(`[censys] fetching certs for domain ${rootDomain}, page ${page}`);
   const { data, status } = await axios({
@@ -60,7 +59,7 @@ const fetchCensysData = async (rootDomain, page) => {
     }
   });
   console.log('[censys] status code: ' + status);
-  console.log(JSON.stringify(data));
+  // console.log(JSON.stringify(data));
   return data as CensysAPIResponse;
 };
 
@@ -73,52 +72,40 @@ export const handler: Handler = async (event) => {
 
   for (const org of organizations) {
     for (const domain of org.rootDomains) allDomains.add(domain);
-    console.log('[censys] added ' + org.rootDomains);
+    console.log('[censys] scanning root domains: ' + org.rootDomains);
   }
 
   for (const rootDomain of allDomains) {
     let pages = 1;
     for (let page = 1; page <= pages; page++) {
       const data = await fetchCensysData(rootDomain, page);
-      console.log('[censys] full response was: ' + String(data));
+      // console.log('[censys] full response was: ' + String(data));
       pages = data.metadata.pages;
-      console.log('[censys] found ' + pages + 'pages...');
+      console.log('[censys] found ' + pages + ' pages...');
       for (const result of data.results) {
         const names = result['parsed.names'];
-        console.log('[censys] found names: ' + names);
         for (const name of names) foundDomains.add(name);
       }
 
       console.log('[censys] done running for page ' + page);
       await sleep(1000); // Wait for rate limit
     }
-
-    console.log('[censys] final list of names was: ' + foundDomains);
-
-    // TODO Can we just grab the cert the site is presenting, and store that?
-    // Censys (probably doesn't know who's presenting it)
-    // SSLyze (fetches the cert), Project Sonar (has SSL certs, but not sure how pulls domains -- from IPs)
-    // Project Sonar has forward & reverse DNS for finding subdomains
-
-    // TODO for Censys:
-    // Censys: just create new domain records for each parsed.names
-    // Don't create a domain record if it already exists (Amass, saveDomainToDB helper)
   }
 
-  // while (offset < totalCount && offset < maxCount) {
-  //   const { assets, total } = await fetchBitdisoveryData({
-  //     limit,
-  //     offset
-  //   });
-  //
-  //   for (const asset of assets) {
-  //     await saveAsset(asset);
-  //   }
-  //
-  //   totalCount = total;
-  //   offset += limit;
-  //   console.log(
-  //     `[bitdiscovery] fetched and parsed ${offset}/${total} bitdiscovery assets`
-  //   );
-  // }
+  // LATER: Can we just grab the cert the site is presenting, and store that?
+  // Censys (probably doesn't know who's presenting it)
+  // SSLyze (fetches the cert), Project Sonar (has SSL certs, but not sure how pulls domains -- from IPs)
+  // Project Sonar has forward & reverse DNS for finding subdomains
+
+  // TODO for Censys:
+  // Censys: just create new domain records for each parsed.names
+  // Don't create a domain record if it already exists (Amass, saveDomainToDB helper)
+
+  console.log(
+    '[censys] final set of found domains was: ' +
+      Array.from(foundDomains).join(' ')
+  );
+
+  // Save domains to database
+
 };
