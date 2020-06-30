@@ -29,8 +29,8 @@ const fetchCensysData = async (rootDomain, page) => {
     url: 'https://censys.io/api/v1/search/certificates',
     method: 'POST',
     auth: {
-      username: String(process.env.CE_API_ID),
-      password: String(process.env.CE_API_SECRET)
+      username: String(process.env.CENSYS_API_ID),
+      password: String(process.env.CENSYS_API_SECRET)
     },
     headers: {
       'Content-Type': 'application/json'
@@ -41,7 +41,6 @@ const fetchCensysData = async (rootDomain, page) => {
       fields: ['parsed.names']
     }
   });
-  console.log(`[censys] status code ${status}`);
   return data as CensysAPIResponse;
 };
 
