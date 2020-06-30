@@ -7,7 +7,7 @@ export const saveDomainToDb = async (domain: Domain): Promise<Domain> => {
     .values(domain)
     .onConflict(
       `
-        ("name","ip") DO UPDATE 
+        ("name") DO UPDATE 
         SET "screenshot" = excluded."screenshot",
             "asn" = excluded."asn",
             "country" = excluded."country",
