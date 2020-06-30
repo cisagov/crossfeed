@@ -62,7 +62,10 @@ export const handler: Handler = async () => {
       pages = data.metadata.pages;
       for (const result of data.results) {
         const names = result['parsed.names'];
-        for (const name of names) foundDomains.add(name);
+        for (const name of names) {
+          if (name.endsWith(rootDomain))
+            foundDomains.add(name.replace('*.', ''));
+        }
       }
 
       await sleep(1000); // Wait for rate limit
