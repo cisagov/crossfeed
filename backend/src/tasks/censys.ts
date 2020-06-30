@@ -1,21 +1,8 @@
 import { Handler } from 'aws-lambda';
 import axios from 'axios';
-import {
-  connectToDatabase,
-  Domain,
-  Organization,
-  Service,
-  SSLInfo,
-  WebInfo
-} from '../models';
-import * as uuid from 'uuid';
-import { isNotEmpty } from 'class-validator';
-import {
-  saveDomainToDb,
-  saveServicesToDb,
-  saveSSLInfosToDb,
-  saveWebInfoToDb
-} from './helpers';
+import { connectToDatabase, Domain, Organization } from '../models';
+import { saveDomainToDb } from './helpers';
+import { plainToClass } from 'class-transformer';
 
 interface CensysAPIResponse {
   status: string;
@@ -29,19 +16,14 @@ interface CensysAPIResponse {
   };
 }
 
-const joinOrNull = (value?: (string | null)[] | null) => {
-  if (value) {
-    return value.filter(isNotEmpty).join(',');
-  }
-  return null;
-};
-
 const sleep = (milliseconds) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
 const fetchCensysData = async (rootDomain, page) => {
-  console.log(`[censys] fetching certs for domain ${rootDomain}, page ${page}`);
+  console.log(
+    `[censys] fetching certificates for query "${rootDomain}", page ${page}`
+  );
   const { data, status } = await axios({
     url: 'https://censys.io/api/v1/search/certificates',
     method: 'POST',
@@ -58,12 +40,11 @@ const fetchCensysData = async (rootDomain, page) => {
       fields: ['parsed.names']
     }
   });
-  console.log('[censys] status code: ' + status);
+  console.log(`[censys] status code ${status}`);
   // console.log(JSON.stringify(data));
   return data as CensysAPIResponse;
 };
 
-// See saveAsset, other helpers in bitdiscovery.ts
 export const handler: Handler = async (event) => {
   await connectToDatabase();
   const organizations = await Organization.find();
@@ -72,22 +53,18 @@ export const handler: Handler = async (event) => {
 
   for (const org of organizations) {
     for (const domain of org.rootDomains) allDomains.add(domain);
-    console.log('[censys] scanning root domains: ' + org.rootDomains);
   }
 
   for (const rootDomain of allDomains) {
     let pages = 1;
     for (let page = 1; page <= pages; page++) {
       const data = await fetchCensysData(rootDomain, page);
-      // console.log('[censys] full response was: ' + String(data));
       pages = data.metadata.pages;
-      console.log('[censys] found ' + pages + ' pages...');
       for (const result of data.results) {
         const names = result['parsed.names'];
         for (const name of names) foundDomains.add(name);
       }
 
-      console.log('[censys] done running for page ' + page);
       await sleep(1000); // Wait for rate limit
     }
   }
@@ -101,11 +78,16 @@ export const handler: Handler = async (event) => {
   // Censys: just create new domain records for each parsed.names
   // Don't create a domain record if it already exists (Amass, saveDomainToDB helper)
 
-  console.log(
-    '[censys] final set of found domains was: ' +
-      Array.from(foundDomains).join(' ')
-  );
-
   // Save domains to database
-
+  console.log('[censys] saving domains to database...');
+  for (const domain of foundDomains) {
+    await saveDomainToDb(
+      plainToClass(Domain, {
+        ip: null, // Can resolve these later
+        name: domain,
+        asn: null
+      })
+    );
+  }
+  console.log(`[censys] done, saved or updated ${foundDomains.size} domains`);
 };
