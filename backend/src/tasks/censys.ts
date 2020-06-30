@@ -41,11 +41,10 @@ const fetchCensysData = async (rootDomain, page) => {
     }
   });
   console.log(`[censys] status code ${status}`);
-  // console.log(JSON.stringify(data));
   return data as CensysAPIResponse;
 };
 
-export const handler: Handler = async (event) => {
+export const handler: Handler = async () => {
   await connectToDatabase();
   const organizations = await Organization.find();
   const allDomains = new Set<string>();
@@ -73,10 +72,6 @@ export const handler: Handler = async (event) => {
   // Censys (probably doesn't know who's presenting it)
   // SSLyze (fetches the cert), Project Sonar (has SSL certs, but not sure how pulls domains -- from IPs)
   // Project Sonar has forward & reverse DNS for finding subdomains
-
-  // TODO for Censys:
-  // Censys: just create new domain records for each parsed.names
-  // Don't create a domain record if it already exists (Amass, saveDomainToDB helper)
 
   // Save domains to database
   console.log('[censys] saving domains to database...');
