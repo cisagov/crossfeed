@@ -3,6 +3,7 @@ import axios from 'axios';
 import { connectToDatabase, Domain, Organization } from '../models';
 import { saveDomainToDb } from './helpers';
 import { plainToClass } from 'class-transformer';
+import * as dns from 'dns';
 
 interface CensysAPIResponse {
   status: string;
@@ -76,11 +77,17 @@ export const handler: Handler = async () => {
   // Save domains to database
   console.log('[censys] saving domains to database...');
   for (const domain of foundDomains) {
+    let ip: string | null;
+    try {
+      ip = (await dns.promises.lookup(domain)).address;
+    } catch {
+      // IP not found
+      ip = null;
+    }
     await saveDomainToDb(
       plainToClass(Domain, {
-        ip: null, // Can resolve these later
-        name: domain,
-        asn: null
+        ip: ip,
+        name: domain
       })
     );
   }

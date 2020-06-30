@@ -2,17 +2,20 @@ import { Domain, Service, SSLInfo, WebInfo } from '../models';
 import { InsertResult } from 'typeorm';
 
 export const saveDomainToDb = async (domain: Domain): Promise<Domain> => {
+  const updatedValues = Object.keys(domain).filter(
+    (key) => domain[key] !== null && key !== 'name'
+  );
   const { generatedMaps } = await Domain.createQueryBuilder()
     .insert()
     .values(domain)
     .onConflict(
       `
-        ("name") DO UPDATE 
-        SET "screenshot" = excluded."screenshot",
-            "asn" = excluded."asn",
-            "country" = excluded."country",
-            "updatedAt" = now()
-      `
+          ("name") DO UPDATE
+          SET ${updatedValues
+            .map((val) => `"${val}" = excluded."${val}",`)
+            .join('\n')}
+              "updatedAt" = now()
+        `
     )
     .execute();
   return generatedMaps[0] as Domain;
