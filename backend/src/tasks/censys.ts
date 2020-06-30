@@ -17,6 +17,18 @@ import {
   saveWebInfoToDb
 } from './helpers';
 
+interface CensysAPIResponse {
+  status: string;
+  results: {
+    'parsed.names': string[];
+  }[];
+  metadata: {
+    count: number;
+    page: number;
+    pages: number;
+  };
+}
+
 const joinOrNull = (value?: (string | null)[] | null) => {
   if (value) {
     return value.filter(isNotEmpty).join(',');
@@ -30,9 +42,7 @@ const sleep = (milliseconds) => {
 
 // TODO Run below for each root domain of each organization
 const fetchCensysData = async (rootDomain, page) => {
-  console.log(
-    `[censys] fetching certs for domain ${rootDomain}, page ${page}`
-  );
+  console.log(`[censys] fetching certs for domain ${rootDomain}, page ${page}`);
   const { data, status } = await axios({
     url: 'https://censys.io/api/v1/search/certificates',
     method: 'POST',
@@ -50,7 +60,8 @@ const fetchCensysData = async (rootDomain, page) => {
     }
   });
   console.log('[censys] status code: ' + status);
-  return data;
+  console.log(JSON.stringify(data));
+  return data as CensysAPIResponse;
 };
 
 // See saveAsset, other helpers in bitdiscovery.ts
@@ -68,13 +79,16 @@ export const handler: Handler = async (event) => {
   for (const rootDomain of allDomains) {
     let pages = 1;
     for (let page = 1; page <= pages; page++) {
-      const { data, status } = await fetchCensysData(rootDomain, page);
+      const data = await fetchCensysData(rootDomain, page);
       console.log('[censys] full response was: ' + String(data));
-      pages = data['metadata']['pages'];
+      pages = data.metadata.pages;
       console.log('[censys] found ' + pages + 'pages...');
-      const names = data['parsed']['names'];
-      console.log('[censys] found names: ' + names);
-      for (const name of names) foundDomains.add(name);
+      for (const result of data.results) {
+        const names = result['parsed.names'];
+        console.log('[censys] found names: ' + names);
+        for (const name of names) foundDomains.add(name);
+      }
+
       console.log('[censys] done running for page ' + page);
       await sleep(1000); // Wait for rate limit
     }
