@@ -1,4 +1,4 @@
-version: "3.4"
+version: '3.4'
 
 services:
   db:
@@ -11,7 +11,7 @@ services:
     volumes:
       - ./frontend/src:/app/src
     ports:
-      - "80:3000"
+      - '80:3000'
     env_file:
       - ./.env
 
@@ -20,7 +20,7 @@ services:
     volumes:
       - ./backend/src:/app/src
     ports:
-      - "3000:3000"
+      - '3000:3000'
     env_file:
       - ./.env
     depends_on:

@@ -20,7 +20,7 @@ export class WebInfo extends BaseEntity {
   @JoinColumn()
   domain: Domain | null;
 
-  // Wappalyzer output
+  /** Wappalyzer output */
   @Column({
     type: 'jsonb'
   })

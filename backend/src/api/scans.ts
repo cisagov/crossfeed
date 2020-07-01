@@ -12,7 +12,9 @@ import { validateBody, wrapHandler, NotFound } from './helpers';
 const SCAN_SCHEMA = {
   censys: {},
   amass: {},
-  findomain: {}
+  findomain: {},
+  portscanner: {},
+  wappalyzer: {}
 };
 
 class NewScan {
