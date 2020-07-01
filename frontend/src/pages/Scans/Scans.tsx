@@ -166,16 +166,14 @@ export const Scans: React.FC = () => {
     }
   };
 
-  const onChange: React.ChangeEventHandler<
+  const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
-  > = e => {
-    e.persist();
+  > = e => onChange(e.target.name, e.target.value);
+
+  const onChange = (name: string, value: any) => {
     setValues(values => ({
       ...values,
-      [e.target.name]:
-        e.target.name === 'frequency'
-          ? parseInt(e.target.value)
-          : e.target.value
+      [name]: value
     }));
   };
 
@@ -192,7 +190,7 @@ export const Scans: React.FC = () => {
           id="name"
           name="name"
           className={classes.textField}
-          onChange={onChange}
+          onChange={onTextChange}
           value={values.name}
         >
           {validCommands.map(i => {
@@ -211,7 +209,7 @@ export const Scans: React.FC = () => {
           className={classes.textField}
           type="text"
           value={values.arguments}
-          onChange={onChange}
+          onChange={onTextChange}
         />
         <br></br>
         <div className="form-group form-inline">
@@ -228,12 +226,14 @@ export const Scans: React.FC = () => {
               marginRight: '15px'
             }}
             value={values.frequency}
-            onChange={onChange}
+            onChange={e => {
+              onChange(e.target.name, e.target.valueAsNumber);
+            }}
           />
           <Dropdown
             id="frequencyUnit"
             name="frequencyUnit"
-            onChange={onChange}
+            onChange={onTextChange}
             value={values.frequencyUnit}
             style={{ display: 'inline-block', width: '150px' }}
           >

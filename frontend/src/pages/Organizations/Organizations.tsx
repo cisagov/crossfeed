@@ -6,7 +6,8 @@ import {
   Label,
   ModalContainer,
   Overlay,
-  Modal
+  Modal,
+  Checkbox
 } from '@trussworks/react-uswds';
 import { Query } from 'types';
 import { Table } from 'components';
@@ -35,7 +36,7 @@ export const Organizations: React.FC = () => {
     },
     {
       Header: 'Root Domains',
-      accessor: (args: Organization) => args.rootDomains.join(', '),
+      accessor: ({ rootDomains }) => rootDomains.join(', '),
       width: 150,
       minWidth: 150,
       id: 'rootDomains',
@@ -43,9 +44,16 @@ export const Organizations: React.FC = () => {
     },
     {
       Header: 'IP Blocks',
-      accessor: 'ipBlocks',
+      accessor: ({ ipBlocks }) => ipBlocks.join(', '),
       id: 'ipBlocks',
       width: 200,
+      disableFilters: true
+    },
+    {
+      Header: 'Passive',
+      accessor: ({ isPassive }) => (isPassive ? 'Yes' : 'No'),
+      id: 'isPassive',
+      width: 100,
       disableFilters: true
     },
     {
@@ -70,10 +78,12 @@ export const Organizations: React.FC = () => {
     name: string;
     rootDomains: string;
     ipBlocks: string;
+    isPassive: boolean;
   }>({
     name: '',
     rootDomains: '',
-    ipBlocks: ''
+    ipBlocks: '',
+    isPassive: false
   });
 
   const fetchOrganizations = useCallback(
@@ -109,11 +119,13 @@ export const Organizations: React.FC = () => {
   const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
     try {
+      console.log(values);
       let body = {
         rootDomains:
           values.rootDomains === '' ? [] : values.rootDomains.split(','),
         ipBlocks: values.ipBlocks === '' ? [] : values.ipBlocks.split(','),
-        name: values.name
+        name: values.name,
+        isPassive: values.isPassive
       };
       const org = await apiPost('/organizations/', {
         body
@@ -130,13 +142,14 @@ export const Organizations: React.FC = () => {
     }
   };
 
-  const onChange: React.ChangeEventHandler<
+  const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
-  > = e => {
-    e.persist();
+  > = e => onChange(e.target.name, e.target.value);
+
+  const onChange = (name: string, value: any) => {
     setValues(values => ({
       ...values,
-      [e.target.name]: e.target.value
+      [name]: value
     }));
   };
 
@@ -168,7 +181,7 @@ export const Organizations: React.FC = () => {
           className={classes.textField}
           type="text"
           value={values.name}
-          onChange={onChange}
+          onChange={onTextChange}
         />
         <Label htmlFor="rootDomains">Root Domains</Label>
         <TextInput
@@ -178,7 +191,7 @@ export const Organizations: React.FC = () => {
           className={classes.textField}
           type="text"
           value={values.rootDomains}
-          onChange={onChange}
+          onChange={onTextChange}
         />
         <Label htmlFor="ipBlocks">IP Blocks (Optional)</Label>
         <TextInput
@@ -187,7 +200,17 @@ export const Organizations: React.FC = () => {
           className={classes.textField}
           type="text"
           value={values.ipBlocks}
-          onChange={onChange}
+          onChange={onTextChange}
+        />
+        <br></br>
+        <Checkbox
+          id="isPassive"
+          name="isPassive"
+          label="Passive operation"
+          checked={values.isPassive}
+          onChange={e => {
+            onChange(e.target.name, e.target.checked);
+          }}
         />
         <br></br>
         <Button type="submit">Create Organization</Button>

@@ -28,4 +28,7 @@ export class Organization extends BaseEntity {
 
   @Column('varchar', { array: true })
   ipBlocks: string[];
+
+  @Column()
+  isPassive: boolean;
 }
