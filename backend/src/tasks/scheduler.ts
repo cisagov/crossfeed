@@ -1,17 +1,18 @@
 import { Handler } from 'aws-lambda';
 import { connectToDatabase, Scan } from '../models';
-import { Lambda, config } from 'aws-sdk';
+import { Lambda, Credentials } from 'aws-sdk';
 
 export const handler: Handler = async (event) => {
-  let lambda;
+  let args = {};
   if (process.env.IS_OFFLINE) {
-    lambda = new Lambda({
+    args = {
       apiVersion: '2015-03-31',
-      endpoint: 'http://backend:3002'
-    });
-  } else {
-    lambda = new Lambda();
+      endpoint: 'http://backend:3002',
+      credentials: new Credentials({ accessKeyId: '', secretAccessKey: '' })
+    };
   }
+
+  const lambda = new Lambda(args);
 
   await connectToDatabase();
 
@@ -19,13 +20,9 @@ export const handler: Handler = async (event) => {
   for (let scan of scans) {
     if (
       !scan.lastRun ||
-      scan.lastRun.getTime() < new Date().getTime() - 1000 * scan.frequency ||
-      true
+      scan.lastRun.getTime() < new Date().getTime() - 1000 * scan.frequency
     ) {
       try {
-        console.log(
-          process.env.AWS_LAMBDA_FUNCTION_NAME!.replace('scheduler', scan.name)
-        );
         let res = await lambda
           .invoke({
             FunctionName: process.env.AWS_LAMBDA_FUNCTION_NAME!.replace(
@@ -35,7 +32,6 @@ export const handler: Handler = async (event) => {
             Payload: JSON.stringify(scan.arguments)
           })
           .promise();
-        console.log(res);
         console.log(`Successfully invoked ${scan.name} scan.`);
         scan.lastRun = new Date();
         scan.save();
