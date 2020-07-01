@@ -23,13 +23,15 @@ export const handler: Handler = async (event) => {
       scan.lastRun.getTime() < new Date().getTime() - 1000 * scan.frequency
     ) {
       try {
-        let res = await lambda
+        // Asynchronously invoke the function
+        await lambda
           .invoke({
             FunctionName: process.env.AWS_LAMBDA_FUNCTION_NAME!.replace(
               'scheduler',
               scan.name
             ),
-            Payload: JSON.stringify(scan.arguments)
+            Payload: JSON.stringify(scan.arguments),
+            InvocationType: 'Event'
           })
           .promise();
         console.log(`Successfully invoked ${scan.name} scan.`);
@@ -40,6 +42,5 @@ export const handler: Handler = async (event) => {
         console.error(error);
       }
     }
-    break;
   }
 };

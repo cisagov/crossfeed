@@ -9,7 +9,6 @@ export const handler: Handler = async (event) => {
   await connectToDatabase();
 
   const domains = await getLiveWebsites();
-  const services: Service[] = [];
   for (const domain of domains) {
     const url =
       (domain.ports.includes('443') ? 'https://' : 'http://') + domain.name;
@@ -33,5 +32,5 @@ export const handler: Handler = async (event) => {
     }
   }
 
-  console.log(`Wappalyzer finished for ${services.length} services`);
+  console.log(`Wappalyzer finished for ${domains.length} domains`);
 };
