@@ -78,7 +78,7 @@ class DomainSearch {
   async getResults() {
     const qs = Domain.createQueryBuilder('domain')
       .select(['domain.id as id', 'ip', 'name', '"updatedAt"'])
-      .addSelect("string_agg(services.port, ', ')", 'ports')
+      .addSelect("string_agg(services.port::text, ', ')", 'ports')
       .addSelect("string_agg(services.service, ', ')", 'services')
       .leftJoin('domain.services', 'services')
       .leftJoin('domain.web', 'domain.web')
