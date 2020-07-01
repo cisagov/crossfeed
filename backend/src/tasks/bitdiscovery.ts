@@ -113,8 +113,8 @@ const parseServicesFromAsset = (asset: BDAsset, domain: Domain): Service[] => {
   return asset['ports.ports'].map((port, idx) => {
     const service = new Service();
     service.domain = domain;
-    service.port = port.toString();
-    service.lastSeen = asset['ports.lastseen'][idx] ?? null;
+    service.port = port;
+    // service.lastSeen = asset['ports.lastseen'][idx] ?? null;
     service.banner = asset['ports.banners'][idx] || null;
     service.service = asset['ports.services'][idx] || null;
     return service;

@@ -20,7 +20,7 @@ export class Service extends BaseEntity {
   domain: Domain;
 
   @Column()
-  port: string;
+  port: number;
 
   @Column({
     nullable: true,
@@ -30,9 +30,9 @@ export class Service extends BaseEntity {
 
   @Column({
     nullable: true,
-    type: 'varchar'
+    type: 'timestamp'
   })
-  lastSeen: string | null;
+  lastSeen: Date | null;
 
   @Column({
     nullable: true,
