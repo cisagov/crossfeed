@@ -1,14 +1,13 @@
 import { Handler } from 'aws-lambda';
 import { connectToDatabase, Scan } from '../models';
-import { Lambda, Credentials } from 'aws-sdk';
+import { Lambda, config } from 'aws-sdk';
 
 export const handler: Handler = async (event) => {
-  console.log(process.env);
   let lambda;
-  if (process.env.IS_LOCAL) {
+  if (process.env.IS_OFFLINE) {
     lambda = new Lambda({
-      endpoint: 'http://localhost:3002',
-      credentials: new Credentials({ accessKeyId: '', secretAccessKey: '' })
+      apiVersion: '2015-03-31',
+      endpoint: 'http://backend:3002'
     });
   } else {
     lambda = new Lambda();
@@ -24,6 +23,9 @@ export const handler: Handler = async (event) => {
       true
     ) {
       try {
+        console.log(
+          process.env.AWS_LAMBDA_FUNCTION_NAME!.replace('scheduler', scan.name)
+        );
         let res = await lambda
           .invoke({
             FunctionName: process.env.AWS_LAMBDA_FUNCTION_NAME!.replace(
@@ -42,5 +44,6 @@ export const handler: Handler = async (event) => {
         console.error(error);
       }
     }
+    break;
   }
 };

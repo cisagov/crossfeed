@@ -167,6 +167,7 @@ export const Organizations: React.FC = () => {
           name="name"
           className={classes.textField}
           type="text"
+          value={values.name}
           onChange={onChange}
         />
         <Label htmlFor="rootDomains">Root Domains</Label>
@@ -176,6 +177,7 @@ export const Organizations: React.FC = () => {
           name="rootDomains"
           className={classes.textField}
           type="text"
+          value={values.rootDomains}
           onChange={onChange}
         />
         <Label htmlFor="ipBlocks">IP Blocks (Optional)</Label>
@@ -184,6 +186,7 @@ export const Organizations: React.FC = () => {
           name="ipBlocks"
           className={classes.textField}
           type="text"
+          value={values.ipBlocks}
           onChange={onChange}
         />
         <br></br>

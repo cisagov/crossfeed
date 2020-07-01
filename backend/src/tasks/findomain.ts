@@ -5,13 +5,13 @@ import { readFileSync } from 'fs';
 import { saveDomainToDb } from './helpers';
 import { plainToClass } from 'class-transformer';
 
-const LAYER_PATH = process.env.IS_LOCAL ? '/app/layers' : '/opt';
-const OUT_PATH = process.env.IS_LOCAL ? 'out.json' : '/tmp/out.json';
+const LAYER_PATH = process.env.IS_OFFLINE ? '/app/layers' : '/opt';
+const OUT_PATH = process.env.IS_OFFLINE ? 'out.json' : '/tmp/out.json';
 
 export const handler: Handler = async (event) => {
   await connectToDatabase();
 
-  if (process.env.IS_LOCAL) {
+  if (process.env.IS_OFFLINE) {
     spawnSync('chmod', ['+x', LAYER_PATH + '/findomain/findomain'], {
       stdio: 'pipe'
     });

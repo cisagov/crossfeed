@@ -21,7 +21,6 @@ services:
       - ./backend/src:/app/src
     ports:
       - '3000:3000'
-      - '3002:3002'
     env_file:
       - ./.env
     depends_on:

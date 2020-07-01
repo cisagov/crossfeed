@@ -22,10 +22,11 @@ provider:
   environment: ${file(env.yml):${self:provider.stage}}
   vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
   iamRoleStatements:
-	  Effect: Allow
-	  Action:
-	      - lambda:InvokeFunction
-	  Resource: "*"
+    - Effect: Allow
+      Action:
+        - lambda:InvokeAsync
+        - lambda:InvokeFunction
+      Resource: '*'
 
 functions:
   - ${file(./src/tasks/functions.yml)}

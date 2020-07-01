@@ -149,7 +149,7 @@ export const Scans: React.FC = () => {
     e.preventDefault();
     try {
       // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
-      let body = values;
+      let body = Object.assign({}, values);
       body.arguments = JSON.parse(values.arguments);
       if (values.frequencyUnit === 'minute') body.frequency *= 60;
       else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
@@ -193,6 +193,7 @@ export const Scans: React.FC = () => {
           name="name"
           className={classes.textField}
           onChange={onChange}
+          value={values.name}
         >
           {validCommands.map(i => {
             return (
@@ -209,6 +210,7 @@ export const Scans: React.FC = () => {
           name="arguments"
           className={classes.textField}
           type="text"
+          value={values.arguments}
           onChange={onChange}
         />
         <br></br>
@@ -225,12 +227,14 @@ export const Scans: React.FC = () => {
               width: '150px',
               marginRight: '15px'
             }}
+            value={values.frequency}
             onChange={onChange}
           />
           <Dropdown
             id="frequencyUnit"
             name="frequencyUnit"
             onChange={onChange}
+            value={values.frequencyUnit}
             style={{ display: 'inline-block', width: '150px' }}
           >
             <option value="minute">Minute(s)</option>
