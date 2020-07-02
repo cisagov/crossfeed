@@ -8,10 +8,10 @@ import axios from 'axios';
 export const handler: Handler = async (event) => {
   await connectToDatabase();
 
-  const domains = await getLiveWebsites();
+  const domains = await getLiveWebsites(false);
   for (const domain of domains) {
     const url =
-      (domain.ports.includes('443') ? 'https://' : 'http://') + domain.name;
+      (domain.ports.includes(443) ? 'https://' : 'http://') + domain.name;
     try {
       const { data, status, headers } = await axios.get(url, {
         validateStatus: function () {

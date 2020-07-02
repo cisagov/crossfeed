@@ -13,7 +13,8 @@ export const handler: Handler = async (event) => {
 
   const domains = await Domain.find({
     reverseName: Like('gov.cisa%'),
-    ip: Not(IsNull())
+    ip: Not(IsNull()),
+    isPassive: false
   });
   const services: Service[] = [];
   for (const domain of domains) {

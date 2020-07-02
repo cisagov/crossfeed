@@ -78,6 +78,16 @@ export class Domain extends BaseEntity {
   })
   cloudHosted: boolean;
 
+  @Column({
+    default: false
+  })
+  isPassive: boolean;
+
+  @BeforeInsert()
+  setLowerCase() {
+    this.name = this.name.toLowerCase();
+  }
+
   @BeforeInsert()
   setReverseName() {
     this.reverseName = this.name.split('.').reverse().join('.');

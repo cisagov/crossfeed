@@ -2,25 +2,24 @@ import { Handler } from 'aws-lambda';
 import { connectToDatabase, Organization, Domain } from '../models';
 import { spawnSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
-import { saveDomainToDb } from './helpers';
+import { saveDomainToDb, getRootDomains } from './helpers';
 import { readFileSync } from 'fs';
 
-const LAYER_PATH = process.env.IS_OFFLINE ? '/app/layers' : '/opt';
-const OUT_PATH = process.env.IS_OFFLINE ? 'out.json' : '/tmp/out.json';
+const LAYER_PATH =
+  process.env.IS_OFFLINE || process.env.IS_LOCAL ? '/app/layers' : '/opt';
+const OUT_PATH =
+  process.env.IS_OFFLINE || process.env.IS_LOCAL ? 'out.json' : '/tmp/out.json';
 
 export const handler: Handler = async (event) => {
   await connectToDatabase();
 
-  const organizations = await Organization.find();
-  let allDomains: string[] = [];
-  for (const org of organizations)
-    allDomains = allDomains.concat(org.rootDomains);
+  const allDomains = await getRootDomains(false);
 
   let count = 0;
   for (const rootDomain of allDomains) {
     spawnSync(
       LAYER_PATH + '/amass/amass',
-      ['enum', '-ip', '-active', '-d', rootDomain, '-json', OUT_PATH],
+      ['enum', '-ip', '-active', '-d', rootDomain.name, '-json', OUT_PATH],
       { stdio: 'inherit' }
     );
 
@@ -33,7 +32,8 @@ export const handler: Handler = async (event) => {
         plainToClass(Domain, {
           ip: parsed.addresses[0].ip, //TODO: store multiple IPs per domain
           name: parsed.name,
-          asn: parsed.addresses[0].asn
+          asn: parsed.addresses[0].asn,
+          isPassive: rootDomain.isPassive
         })
       );
       count++;

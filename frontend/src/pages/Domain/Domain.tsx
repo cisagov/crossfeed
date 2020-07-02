@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import { useAuthContext } from "context";
-import classes from "./styles.module.scss";
-import { FullDomain } from "types";
-import noImage from "./no-image.png";
-import { FaGlobe, FaNetworkWired, FaCloud } from "react-icons/fa";
-import { ServicesTable, SSLInfo, WebInfo } from "components";
+import React, { useEffect, useState, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAuthContext } from 'context';
+import classes from './styles.module.scss';
+import { FullDomain } from 'types';
+import noImage from './no-image.png';
+import { FaGlobe, FaNetworkWired, FaCloud, FaClock } from 'react-icons/fa';
+import { ServicesTable, SSLInfo, WebInfo } from 'components';
 
 export const Domain: React.FC = () => {
   const { domainId } = useParams();
@@ -55,14 +55,22 @@ export const Domain: React.FC = () => {
                     <FaCloud />
                     Cloud Hosted
                   </label>
-                  <span>{domain.cloudHosted ? "Yes" : "No"}</span>
+                  <span>{domain.cloudHosted ? 'Yes' : 'No'}</span>
+                </div>
+
+                <div className={classes.headerRow}>
+                  <label>
+                    <FaClock />
+                    Passive Mode
+                  </label>
+                  <span>{domain.isPassive ? 'Yes' : 'No'}</span>
                 </div>
               </div>
               <div className={classes.imgWrapper}>
                 <img
                   src={domain.screenshot || noImage}
                   alt={
-                    domain.screenshot ? domain.name : "no screenshot available"
+                    domain.screenshot ? domain.name : 'no screenshot available'
                   }
                 />
               </div>

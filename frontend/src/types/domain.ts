@@ -68,5 +68,6 @@ export interface FullDomain {
   country: string | null;
   asn: string | null;
   cloudHosted: boolean;
+  isPassive: boolean;
   services: Service[];
 }
