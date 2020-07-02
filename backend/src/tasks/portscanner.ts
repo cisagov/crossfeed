@@ -12,7 +12,6 @@ export const handler: Handler = async (event) => {
   await connectToDatabase();
 
   const domains = await Domain.find({
-    reverseName: Like('gov.cisa%'),
     ip: Not(IsNull()),
     isPassive: false
   });
