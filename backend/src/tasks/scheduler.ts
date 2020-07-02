@@ -17,7 +17,7 @@ export const handler: Handler = async (event) => {
   await connectToDatabase();
 
   const scans = await Scan.find();
-  for (let scan of scans) {
+  for (const scan of scans) {
     if (
       !scan.lastRun ||
       scan.lastRun.getTime() < new Date().getTime() - 1000 * scan.frequency

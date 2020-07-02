@@ -6,7 +6,7 @@ import {
   Title,
   PrimaryNav
 } from '@trussworks/react-uswds';
-import logo from './dds.png';
+import logo from './cisa_logo.png';
 import classes from './styles.module.scss';
 import { useAuthContext } from 'context';
 
