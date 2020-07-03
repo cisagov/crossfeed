@@ -5,8 +5,6 @@ import { readFileSync } from 'fs';
 import { saveDomainToDb } from './helpers';
 import { plainToClass } from 'class-transformer';
 
-process.env.IS_OFFLINE = "1";
-
 const LAYER_PATH = process.env.IS_OFFLINE ? '/app/layers' : '/opt';
 const OUT_PATH = process.env.IS_OFFLINE ? 'out.json' : '/tmp/out.json';
 
