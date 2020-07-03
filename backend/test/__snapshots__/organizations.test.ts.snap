@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`organizations add new organization 1`] = `
+Object {
+  "createdAt": Any<String>,
+  "id": Any<String>,
+  "ipBlocks": Array [],
+  "name": "cisa-test-8697283f-8f04-4b99-8caf-4270da0e678c",
+  "rootDomains": Array [
+    "cisa.gov",
+  ],
+  "updatedAt": Any<String>,
+}
+`;
+
+exports[`organizations can't add organization with the same name 1`] = `""`;
