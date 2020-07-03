@@ -1,0 +1,1 @@
+To open the architecture, use [https://app.diagrams.net/](https://app.diagrams.net/) or the desktop app.
