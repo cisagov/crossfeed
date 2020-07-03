@@ -74,6 +74,7 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: npm ci
+      - run: cp dev.env.example .env
       - name: Run locally
         run: docker-compose up --build -d
         working-directory: ./
