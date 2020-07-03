@@ -32,13 +32,17 @@ External monitoring for organization assets
 
 7. Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save
 
-## running non-http lambdas locally
+## Running non-http lambdas locally
 
 Some of the lambdas are set to run on an interval or in response to non-http events. To run one of these, for example to populate initial data from a data source, use the following command:
 
 - `docker-compose run backend npx serverless invoke local -f [function name]`
-- ex. `docker-compose run backend npx serverless invoke local -f bitdiscovery`
+- ex. `docker-compose run backend npx serverless invoke local -f findomain`
 
 If the function takes an input, it can be provided with `-d`. For example, the bitdiscovery task provides an optional input for a max count of assets to fetch.
 
 - ex. `docker-compose run backend npx serverless invoke local -f bitdiscovery -d 500`
+
+## Architecture
+
+![](https://github.com/cisagov/crossfeed/blob/master/docs/architecture.png)
