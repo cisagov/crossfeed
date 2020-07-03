@@ -76,7 +76,7 @@ jobs:
         run: npm ci
       - name: Test
         run: npm run test
-  deploy_staging:
+  deploy:
     needs: [security, lint, test]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/production')
