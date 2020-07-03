@@ -227,7 +227,7 @@ export const Scans: React.FC = () => {
             }}
             value={values.frequency}
             onChange={e => {
-              onChange(e.target.name, e.target.valueAsNumber);
+              onChange(e.target.name, Number(e.target.value));
             }}
           />
           <Dropdown
