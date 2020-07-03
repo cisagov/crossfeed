@@ -45,7 +45,7 @@ If the function takes an input, it can be provided with `-d`. For example, the b
 
 ## Running tests
 
-To run tests, first make sure you have Docker running, then clear the database with the `syncdb` command. Then run:
+To run tests, first make sure you have Docker running. Then run:
 
 ```
 cd backend
