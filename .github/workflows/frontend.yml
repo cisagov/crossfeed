@@ -22,14 +22,13 @@ defaults:
     working-directory: ./frontend
 
 jobs:
-  frontend:
+  security:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
           node-version: "12.14"
-
       - name: Restore npm cache
         uses: actions/cache@v1
         with:
@@ -37,21 +36,66 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
       - name: Install dependencies
         run: npm ci
-
       - name: Security
         run: npm audit
-
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.14"
+      - name: Restore npm cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
       - name: Lint
         run: npm run lint
-
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.14"
+      - name: Restore npm cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
       - name: Test
         run: npm run test
-
+  deploy:
+    needs: [security, lint, test]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/production')
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.14"
+      - name: Restore npm cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
       - name: Build Staging
-        if: github.event_name == 'push' &&  github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         run: npm run build
         env:
           REACT_APP_API_URL: https://stage.api.crossfeed2.dds.mil
@@ -60,7 +104,7 @@ jobs:
           REACT_APP_RECAPTCHA_CLIENT_KEY: 6LdE76gZAAAAAHVYhKyorCbfPMfIxrwl7G5MzxtA
 
       - name: Build Production
-        if: github.event_name == 'push' &&  github.ref == 'refs/heads/production'
+        if: github.ref == 'refs/heads/production'
         run: npm run build
         env:
           REACT_APP_API_URL: https://api.crossfeed2.dds.mil
@@ -68,35 +112,35 @@ jobs:
           REACT_APP_USER_POOL_WEB_CLIENT_ID: 65uf7k8kb865f0haliltf6h99n
 
       - name: Deploy Staging
-        if: github.event_name == 'push' &&  github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         run: aws s3 sync build/ s3://stage.crossfeed2.dds.mil/ --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Deploy Production
-        if: github.event_name == 'push' &&  github.ref == 'refs/heads/production'
+        if: github.ref == 'refs/heads/production'
         run: aws s3 sync build/ s3://crossfeed2.dds.mil/ --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Invalidate Old Cache - Staging
-        if: github.event_name == 'push' &&  github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         run: aws cloudfront create-invalidation --distribution-id E1L9ZZ6QDXV2NQ --paths "/index.html"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Invalidate Old Cache - Production
-        if: github.event_name == 'push' &&  github.ref == 'refs/heads/production'
+        if: github.ref == 'refs/heads/production'
         run: aws cloudfront create-invalidation --distribution-id E1L9ZZ6QDXV2NQ --paths "/index.html"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Invalidate Old Cache - Production
-        if: github.event_name == 'push' &&  github.ref == 'refs/heads/production'
+        if: github.ref == 'refs/heads/production'
         run: aws cloudfront create-invalidation --distribution-id E3F1VQXKJQD68D --paths "/index.html"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
