@@ -74,12 +74,13 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: npm ci
-      - run: cp dev.env.example .env
-      - name: Run locally
-        run: docker-compose up --build -d
+      - name: Run site locally
+        run: |
+          cp dev.env.example .env
+          docker-compose up --build -d
+          npm install -g wait-port
+          wait-port -t 5000 80
         working-directory: ./
-      - name: Wait for local site to start
-        run: npm install -g wait-port && wait-port -t 5000 80
       - name: Sync database
         run: docker-compose exec backend npx sls invoke local -f syncdb -d dangerouslyforce
         working-directory: ./
