@@ -5,8 +5,8 @@ import { plainToClass } from 'class-transformer';
 import { saveDomainToDb } from './helpers';
 import { readFileSync } from 'fs';
 
-const LAYER_PATH = process.env.IS_OFFLINE ? '/app/layers' : '/opt';
-const OUT_PATH = process.env.IS_OFFLINE ? 'out.json' : '/tmp/out.json';
+const LAYER_PATH = process.env.IS_LOCAL ? '/app/layers' : '/opt';
+const OUT_PATH = process.env.IS_LOCAL ? 'out.json' : '/tmp/out.json';
 
 export const handler: Handler = async (event) => {
   await connectToDatabase();

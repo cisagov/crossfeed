@@ -4,7 +4,7 @@ import { Lambda, Credentials } from 'aws-sdk';
 
 export const handler: Handler = async (event) => {
   let args = {};
-  if (process.env.IS_OFFLINE) {
+  if (process.env.IS_LOCAL) {
     args = {
       apiVersion: '2015-03-31',
       endpoint: 'http://backend:3002',
