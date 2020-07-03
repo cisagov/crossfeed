@@ -4,7 +4,7 @@ FROM node:current-buster
 WORKDIR /app
 COPY ./package* ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
