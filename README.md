@@ -43,6 +43,17 @@ If the function takes an input, it can be provided with `-d`. For example, the b
 
 - ex. `docker-compose run backend npx serverless invoke local -f bitdiscovery -d 500`
 
+## Running tests
+
+To run tests, first make sure you have already started crossfeed with `docker-compose`. Then run:
+
+```
+cd backend
+npm test
+```
+
+To update snapshots, run `npm test -- -u`.
+
 ## Architecture
 
 ![](https://github.com/cisagov/crossfeed/blob/master/docs/architecture.png)
