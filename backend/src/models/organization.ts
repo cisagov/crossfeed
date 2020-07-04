@@ -5,8 +5,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   CreateDateColumn,
-  BaseEntity
+  BaseEntity,
+  ManyToOne,
+  OneToMany
 } from 'typeorm';
+import { Domain } from './domain';
 
 @Entity()
 @Index(['name'], { unique: true })
@@ -31,4 +34,10 @@ export class Organization extends BaseEntity {
 
   @Column()
   isPassive: boolean;
+
+  @OneToMany((type) => Domain, (domain) => domain.id, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  domains: Domain[];
 }

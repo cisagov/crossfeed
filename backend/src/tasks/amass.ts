@@ -30,10 +30,10 @@ export const handler: Handler = async (event) => {
       const parsed = JSON.parse(line);
       await saveDomainToDb(
         plainToClass(Domain, {
-          ip: parsed.addresses[0].ip, //TODO: store multiple IPs per domain
+          ip: parsed.addresses[0].ip,
           name: parsed.name,
           asn: parsed.addresses[0].asn,
-          isPassive: rootDomain.isPassive
+          organization: rootDomain.organization
         })
       );
       count++;

@@ -11,10 +11,12 @@ import * as portscanner from 'portscanner';
 export const handler: Handler = async (event) => {
   await connectToDatabase();
 
-  const domains = await Domain.find({
-    ip: Not(IsNull()),
-    isPassive: false
-  });
+  const domains = await Domain.createQueryBuilder('domain')
+    .leftJoinAndSelect('domain.organization', 'organization')
+    .andWhere('NOT organization."isPassive"')
+    .andWhere('ip IS NOT NULL')
+    .getMany();
+
   const services: Service[] = [];
   for (const domain of domains) {
     for (const port of [21, 22, 80, 443, 3000, 8080, 8443]) {

@@ -77,19 +77,18 @@ class DomainSearch {
 
   async getResults() {
     const qs = Domain.createQueryBuilder('domain')
-      .select(['domain.id as id', 'ip', 'name', '"updatedAt"'])
-      .addSelect("string_agg(services.port::text, ', ')", 'ports')
-      .addSelect("string_agg(services.service, ', ')", 'services')
-      .leftJoin('domain.services', 'services')
-      .leftJoin('domain.web', 'domain.web')
-      .addSelect('domain.web.technologies', 'technologies')
+      .leftJoinAndSelect('domain.services', 'services')
+      .leftJoinAndSelect('domain.organization', 'organization')
+      .leftJoinAndSelect('domain.web', 'web')
       .orderBy(`domain.${this.sort}`, this.order)
-      .groupBy('domain.id, domain.ip, domain.name, technologies')
+      .groupBy(
+        'domain.id, domain.ip, domain.name, organization.id, web.id, services.id'
+      )
       .offset(PAGE_SIZE * (this.page - 1))
       .limit(PAGE_SIZE);
 
     this.filterResultQueryset(qs);
-    return await qs.getRawMany();
+    return await qs.getMany();
   }
 
   filterCountQueryset(qs: SelectQueryBuilder<Domain>) {
@@ -147,7 +146,7 @@ export const get = wrapHandler(async (event) => {
   }
 
   const result = await Domain.findOne(id, {
-    relations: ['services', 'ssl', 'web']
+    relations: ['services', 'ssl', 'web', 'organization']
   });
 
   return {

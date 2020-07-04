@@ -248,6 +248,7 @@ export const Organizations: React.FC = () => {
               <p>
                 Are you sure you would like to delete the{' '}
                 <code>{organizations[selectedRow].name}</code> organization?
+                This will irreversibly delete all associated domains.
               </p>
             </Modal>
           </ModalContainer>

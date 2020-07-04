@@ -2,20 +2,26 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { FullDomain } from 'types';
+import { Domain as DomainType } from 'types';
 import noImage from './no-image.png';
-import { FaGlobe, FaNetworkWired, FaCloud, FaClock } from 'react-icons/fa';
+import {
+  FaGlobe,
+  FaNetworkWired,
+  FaCloud,
+  FaClock,
+  FaBuilding
+} from 'react-icons/fa';
 import { ServicesTable, SSLInfo, WebInfo } from 'components';
 
 export const Domain: React.FC = () => {
   const { domainId } = useParams();
   const { apiGet } = useAuthContext();
-  const [domain, setDomain] = useState<FullDomain>();
+  const [domain, setDomain] = useState<DomainType>();
 
   const fetchDomain = useCallback(async () => {
     try {
       setDomain(undefined);
-      const domain = await apiGet<FullDomain>(`/domain/${domainId}`);
+      const domain = await apiGet<DomainType>(`/domain/${domainId}`);
       setDomain(domain);
     } catch (e) {
       console.error(e);
@@ -57,13 +63,21 @@ export const Domain: React.FC = () => {
                   </label>
                   <span>{domain.cloudHosted ? 'Yes' : 'No'}</span>
                 </div>
+                <hr></hr>
+                <div className={classes.headerRow}>
+                  <label>
+                    <FaBuilding />
+                    Organization
+                  </label>
+                  <span>{domain.organization.name}</span>
+                </div>
 
                 <div className={classes.headerRow}>
                   <label>
                     <FaClock />
                     Passive Mode
                   </label>
-                  <span>{domain.isPassive ? 'Yes' : 'No'}</span>
+                  <span>{domain.organization.isPassive ? 'Yes' : 'No'}</span>
                 </div>
               </div>
               <div className={classes.imgWrapper}>

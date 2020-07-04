@@ -50,7 +50,7 @@ export const handler: Handler = async () => {
   const allDomains = await getRootDomains(true);
   const foundDomains = new Set<{
     name: string;
-    isPassive: boolean;
+    organization: Organization;
   }>();
 
   for (const rootDomain of allDomains) {
@@ -65,7 +65,7 @@ export const handler: Handler = async () => {
           if (name.endsWith(rootDomain.name)) {
             foundDomains.add({
               name: name.replace('*.', ''),
-              isPassive: rootDomain.isPassive
+              organization: rootDomain.organization
             });
           }
         }
@@ -94,7 +94,7 @@ export const handler: Handler = async () => {
       plainToClass(Domain, {
         ip: ip,
         name: domain.name,
-        isPassive: domain.isPassive
+        organization: domain.organization
       })
     );
   }

@@ -2,9 +2,13 @@ import { Domain, Service, SSLInfo, WebInfo, Organization } from '../models';
 import { InsertResult } from 'typeorm';
 
 export const saveDomainToDb = async (domain: Domain): Promise<Domain> => {
-  const updatedValues = Object.keys(domain).filter(
-    (key) => domain[key] !== null && key !== 'name'
-  );
+  const updatedValues = Object.keys(domain)
+    .map((key) => {
+      if (key == 'name') return '';
+      else if (key == 'organization') return 'organizationId';
+      return domain[key] !== null ? key : '';
+    })
+    .filter((key) => key !== '');
   const { generatedMaps } = await Domain.createQueryBuilder()
     .insert()
     .values(domain)
@@ -68,22 +72,21 @@ export const saveWebInfoToDb = (info: WebInfo): Promise<InsertResult> =>
 /** Helper function to fetch all live websites (port 80 or 443) */
 export const getLiveWebsites = async (
   includePassive: boolean
-): Promise<(Domain & { ports: number[] })[]> => {
+): Promise<Domain[]> => {
   const qs = Domain.createQueryBuilder('domain')
-    .select(['domain.id as id', 'ip', 'name', '"updatedAt"'])
-    .addSelect('array_agg(services.port)', 'ports')
-    .leftJoin('domain.services', 'services')
-    .groupBy('domain.id, domain.ip, domain.name');
+    .leftJoinAndSelect('domain.services', 'services')
+    .leftJoinAndSelect('domain.organization', 'organization')
+    .groupBy('domain.id, domain.ip, domain.name, organization.id, services.id');
 
   qs.andHaving(
     "COUNT(CASE WHEN services.port = '443' OR services.port = '80' THEN 1 END) >= 1"
   );
 
   if (!includePassive) {
-    qs.andHaving('NOT domain.isPassive');
+    qs.andHaving('NOT organization."isPassive"');
   }
 
-  return await qs.getRawMany();
+  return await qs.getMany();
 };
 
 /** Helper function to return all root domains for all organizations */
@@ -92,19 +95,19 @@ export const getRootDomains = async (
 ): Promise<
   {
     name: string;
-    isPassive: boolean;
+    organization: Organization;
   }[]
 > => {
   const organizations = await Organization.find();
   const allDomains: {
     name: string;
-    isPassive: boolean;
+    organization: Organization;
   }[] = [];
 
   for (const org of organizations) {
     if (includePassive || !org.isPassive) {
       for (const domain of org.rootDomains)
-        allDomains.push({ name: domain, isPassive: org.isPassive });
+        allDomains.push({ name: domain, organization: org });
     }
   }
   return allDomains;

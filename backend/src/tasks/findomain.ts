@@ -37,7 +37,7 @@ export const handler: Handler = async (event) => {
         plainToClass(Domain, {
           name: split[0],
           ip: split[1],
-          isPassive: rootDomain.isPassive
+          organization: rootDomain.organization
         })
       );
       count++;
