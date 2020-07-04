@@ -41,7 +41,6 @@ export const Dashboard: React.FC = () => {
               )
           }
         });
-        console.log(result[0].web);
         setDomains(result);
         setCount(count);
         setPageCount(Math.ceil(count / PAGE_SIZE));
