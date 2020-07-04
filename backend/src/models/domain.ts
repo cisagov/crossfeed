@@ -8,11 +8,13 @@ import {
   CreateDateColumn,
   BaseEntity,
   OneToOne,
-  BeforeInsert
+  BeforeInsert,
+  ManyToOne
 } from 'typeorm';
 import { Service } from './service';
 import { SSLInfo } from './sslinfo';
 import { WebInfo } from './webinfo';
+import { Organization } from './organization';
 
 @Entity()
 @Index(['name'], { unique: true })
@@ -54,6 +56,9 @@ export class Domain extends BaseEntity {
   })
   web: WebInfo;
 
+  @ManyToOne((type) => Organization, { onDelete: 'CASCADE' })
+  organization: Organization;
+
   @Column({
     length: 512,
     nullable: true,
@@ -77,6 +82,11 @@ export class Domain extends BaseEntity {
     default: false
   })
   cloudHosted: boolean;
+
+  @BeforeInsert()
+  setLowerCase() {
+    this.name = this.name.toLowerCase();
+  }
 
   @BeforeInsert()
   setReverseName() {

@@ -5,7 +5,8 @@ import {
   IsIn,
   isUUID,
   IsObject,
-  IsArray
+  IsArray,
+  IsBoolean
 } from 'class-validator';
 import { Organization, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
@@ -46,13 +47,16 @@ export const update = wrapHandler(async (event) => {
 
 class NewOrganization {
   @IsString()
-  name: string = 'name';
+  name: string;
 
   @IsArray()
-  rootDomains: string[] = [];
+  rootDomains: string[];
 
   @IsArray()
-  ipBlocks: string[] = [];
+  ipBlocks: string[];
+
+  @IsBoolean()
+  isPassive: boolean;
 }
 
 export const create = wrapHandler(async (event) => {

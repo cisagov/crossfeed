@@ -32,16 +32,18 @@ export const createColumns: CreateColumns = () => [
     Header: 'Ports',
     id: 'port',
     disableSortBy: true,
-    accessor: 'ports',
+    accessor: ({ services }) =>
+      services.map(service => service.port).join(', '),
     Filter: ColumnFilter
   },
   {
     Header: 'Services',
     id: 'services',
     disableSortBy: true,
-    accessor: ({ technologies }) =>
-      technologies &&
-      technologies.map(technology => technology.name).join(', '),
+    accessor: ({ web }) =>
+      web &&
+      web.technologies &&
+      web.technologies.map(technology => technology.name).join(', '),
     Filter: ColumnFilter
   },
   {

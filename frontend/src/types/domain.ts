@@ -1,4 +1,5 @@
 import { SortingRule, Filters } from 'react-table';
+import { Organization } from './organization';
 
 export interface Query<T extends object> {
   sort: SortingRule<T>[];
@@ -15,16 +16,18 @@ export interface Service {
 }
 
 export interface Domain {
-  id: number;
+  id: string;
   name: string;
-  reverseName: string;
   ip: string;
   updatedAt: string;
-  services: string;
-  ports: string;
-  technologies: Technology[] | null;
-  web: WebInfo | null;
   ssl: SSLInfo | null;
+  web: WebInfo | null;
+  screenshot: string | null;
+  country: string | null;
+  asn: string | null;
+  cloudHosted: boolean;
+  services: Service[];
+  organization: Organization;
 }
 
 export interface SSLInfo {
@@ -55,18 +58,4 @@ export interface Technology {
     slug: string;
     id: number;
   }[];
-}
-
-export interface FullDomain {
-  id: string;
-  name: string;
-  ip: string;
-  updatedAt: string;
-  ssl: SSLInfo | null;
-  web: WebInfo | null;
-  screenshot: string | null;
-  country: string | null;
-  asn: string | null;
-  cloudHosted: boolean;
-  services: Service[];
 }

@@ -5,18 +5,23 @@ import { Handler } from 'aws-lambda';
 import { connectToDatabase, Domain, Service } from '../models';
 import { saveServicesToDb } from './helpers';
 import { plainToClass } from 'class-transformer';
-import { Like } from 'typeorm';
+import { Like, IsNull, Not } from 'typeorm';
 import * as portscanner from 'portscanner';
 
 export const handler: Handler = async (event) => {
   await connectToDatabase();
 
-  const domains = await Domain.find({ reverseName: Like('gov.cisa%') });
+  const domains = await Domain.createQueryBuilder('domain')
+    .leftJoinAndSelect('domain.organization', 'organization')
+    .andWhere('NOT organization."isPassive"')
+    .andWhere('ip IS NOT NULL')
+    .getMany();
+
   const services: Service[] = [];
   for (const domain of domains) {
     for (const port of [21, 22, 80, 443, 3000, 8080, 8443]) {
       const status = await portscanner.checkPortStatus(port, domain.ip);
-      if (status == 'open') {
+      if (status === 'open') {
         services.push(
           plainToClass(Service, {
             domain: domain,

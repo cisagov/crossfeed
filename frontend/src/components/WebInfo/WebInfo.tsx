@@ -15,12 +15,15 @@ export const WebInfo: React.FC<WebInfoType> = props => {
 
   return (
     <div className={classes.root}>
-      {Object.entries(categoriesToTechnologies).map(entry => (
-        <Item
-          title={entry[0]}
-          value={entry[1].map(technology => technology.name).join(',')}
-        ></Item>
-      ))}
+      {Object.entries(categoriesToTechnologies).map(
+        ([name, technologies], index) => (
+          <Item
+            key={index}
+            title={name}
+            value={technologies.map(technology => technology.name).join(', ')}
+          ></Item>
+        )
+      )}
     </div>
   );
 };

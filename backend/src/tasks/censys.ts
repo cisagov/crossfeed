@@ -1,14 +1,14 @@
 import { Handler } from 'aws-lambda';
 import axios from 'axios';
 import { connectToDatabase, Domain, Organization } from '../models';
-import { saveDomainToDb } from './helpers';
+import { saveDomainToDb, getRootDomains } from './helpers';
 import { plainToClass } from 'class-transformer';
 import * as dns from 'dns';
 
 interface CensysAPIResponse {
   status: string;
   results: {
-    'parsed.names': string[];
+    'parsed.names'?: string[];
   }[];
   metadata: {
     count: number;
@@ -21,7 +21,7 @@ const sleep = (milliseconds) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
-const fetchCensysData = async (rootDomain, page) => {
+const fetchCensysData = async (rootDomain: string, page: number) => {
   console.log(
     `[censys] fetching certificates for query "${rootDomain}", page ${page}`
   );
@@ -46,24 +46,28 @@ const fetchCensysData = async (rootDomain, page) => {
 
 export const handler: Handler = async () => {
   await connectToDatabase();
-  const organizations = await Organization.find();
-  const allDomains = new Set<string>();
-  const foundDomains = new Set<string>();
 
-  for (const org of organizations) {
-    for (const domain of org.rootDomains) allDomains.add(domain);
-  }
+  const allDomains = await getRootDomains(true);
+  const foundDomains = new Set<{
+    name: string;
+    organization: Organization;
+  }>();
 
   for (const rootDomain of allDomains) {
     let pages = 1;
     for (let page = 1; page <= pages; page++) {
-      const data = await fetchCensysData(rootDomain, page);
+      const data = await fetchCensysData(rootDomain.name, page);
       pages = data.metadata.pages;
       for (const result of data.results) {
         const names = result['parsed.names'];
+        if (!names) continue;
         for (const name of names) {
-          if (name.endsWith(rootDomain))
-            foundDomains.add(name.replace('*.', ''));
+          if (name.endsWith(rootDomain.name)) {
+            foundDomains.add({
+              name: name.replace('*.', ''),
+              organization: rootDomain.organization
+            });
+          }
         }
       }
 
@@ -81,7 +85,7 @@ export const handler: Handler = async () => {
   for (const domain of foundDomains) {
     let ip: string | null;
     try {
-      ip = (await dns.promises.lookup(domain)).address;
+      ip = (await dns.promises.lookup(domain.name)).address;
     } catch {
       // IP not found
       ip = null;
@@ -89,7 +93,8 @@ export const handler: Handler = async () => {
     await saveDomainToDb(
       plainToClass(Domain, {
         ip: ip,
-        name: domain
+        name: domain.name,
+        organization: domain.organization
       })
     );
   }
