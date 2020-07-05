@@ -84,6 +84,8 @@ jobs:
       - name: Sync database
         run: docker-compose exec backend npx sls invoke local -f syncdb -d dangerouslyforce
         working-directory: ./
+        env:
+          COMPOSE_INTERACTIVE_NO_CLI: 1
       - name: Test
         run: npm run test
   deploy:
