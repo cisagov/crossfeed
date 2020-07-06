@@ -12,8 +12,6 @@ import {
   ManyToOne
 } from 'typeorm';
 import { Service } from './service';
-import { SSLInfo } from './sslinfo';
-import { WebInfo } from './webinfo';
 import { Organization } from './organization';
 
 @Entity()
@@ -46,16 +44,6 @@ export class Domain extends BaseEntity {
   @OneToMany((type) => Service, (service) => service.domain)
   services: Service[];
 
-  @OneToOne((type) => SSLInfo, (sslinfo) => sslinfo.domain, {
-    nullable: true
-  })
-  ssl: SSLInfo;
-
-  @OneToOne((type) => WebInfo, (webinfo) => webinfo.domain, {
-    nullable: true
-  })
-  web: WebInfo;
-
   @ManyToOne((type) => Organization, { onDelete: 'CASCADE' })
   organization: Organization;
 
@@ -82,6 +70,41 @@ export class Domain extends BaseEntity {
     default: false
   })
   cloudHosted: boolean;
+
+  /** Wappalyzer output */
+  @Column({
+    type: 'jsonb',
+    default: []
+  })
+  webTechnologies: {
+    name: string;
+    slug: string;
+    version: string;
+    icon: string;
+    website: string;
+    confidence: number;
+    categories: {
+      name: string;
+      slug: string;
+      id: number;
+    }[];
+  }[];
+
+  /** SSL Certificate information  */
+  @Column({
+    type: 'jsonb',
+    nullable: true
+  })
+  ssl: {
+    issuerOrg: string;
+    issuerCN: string;
+    validFrom: string;
+    validTo: string;
+    protocol: string;
+    altNames: string;
+    bits: string;
+    fingerprint: string;
+  } | null;
 
   @BeforeInsert()
   setLowerCase() {

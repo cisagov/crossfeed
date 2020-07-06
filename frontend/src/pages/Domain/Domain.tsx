@@ -101,10 +101,10 @@ export const Domain: React.FC = () => {
                 <SSLInfo {...domain.ssl} />
               </div>
             )}
-            {domain.web && (
+            {domain.webTechnologies && (
               <div className={classes.section}>
                 <h3>Known Web Technologies</h3>
-                <WebInfo {...domain.web} />
+                <WebInfo webTechnologies={domain.webTechnologies} />
               </div>
             )}
           </>

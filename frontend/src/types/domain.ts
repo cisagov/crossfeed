@@ -20,14 +20,14 @@ export interface Domain {
   name: string;
   ip: string;
   updatedAt: string;
-  ssl: SSLInfo | null;
-  web: WebInfo | null;
   screenshot: string | null;
   country: string | null;
   asn: string | null;
   cloudHosted: boolean;
   services: Service[];
   organization: Organization;
+  webTechnologies: Technology[];
+  ssl: SSLInfo | null;
 }
 
 export interface SSLInfo {
@@ -39,11 +39,6 @@ export interface SSLInfo {
   protocol: string | null;
   fingerprint: string | null;
   bits: string | null;
-}
-
-export interface WebInfo {
-  id: string;
-  technologies: Technology[];
 }
 
 export interface Technology {
