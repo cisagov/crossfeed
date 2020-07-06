@@ -82,7 +82,7 @@ jobs:
           wait-port -t 5000 80
         working-directory: ./
       - name: Sync database
-        run: docker-compose exec backend npx sls invoke local -f syncdb -d dangerouslyforce
+        run: docker-compose exec -T backend npx sls invoke local -f syncdb -d dangerouslyforce
         working-directory: ./
       - name: Test
         run: npm run test
