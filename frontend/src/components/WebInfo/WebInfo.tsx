@@ -1,11 +1,13 @@
 import React from 'react';
 import classes from './styles.module.scss';
-import { WebInfo as WebInfoType, Technology } from 'types';
+import { Technology } from 'types';
 import { Item } from './Item';
 
-export const WebInfo: React.FC<WebInfoType> = props => {
+export const WebInfo: React.FC<{ webTechnologies: Technology[] }> = ({
+  webTechnologies
+}) => {
   let categoriesToTechnologies: { [name: string]: Technology[] } = {};
-  for (let technology of props.technologies) {
+  for (let technology of webTechnologies) {
     for (let cat of technology.categories) {
       if (categoriesToTechnologies[cat.name])
         categoriesToTechnologies[cat.name].push(technology);

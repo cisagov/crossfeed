@@ -1,4 +1,4 @@
-import { Domain, Service, SSLInfo, WebInfo, Organization } from '../models';
+import { Domain, Service, Organization } from '../models';
 import { InsertResult } from 'typeorm';
 
 export const saveDomainToDb = async (domain: Domain): Promise<Domain> => {
@@ -35,36 +35,6 @@ export const saveServicesToDb = (services: Service[]): Promise<InsertResult> =>
         SET "lastSeen" = excluded."lastSeen",
             "banner" = excluded."banner",
             "service" = excluded."service"
-      `
-    )
-    .execute();
-
-export const saveSSLInfosToDb = (info: SSLInfo): Promise<InsertResult> =>
-  SSLInfo.createQueryBuilder()
-    .insert()
-    .values(info)
-    .onConflict(
-      `
-        ("domainId") DO UPDATE
-        SET "protocol" = excluded."protocol",
-            "issuerOrg" = excluded."issuerOrg",
-            "issuerCN" = excluded."issuerCN",
-            "validFrom" = excluded."validFrom",
-            "validTo" = excluded."validTo",
-            "altNames" = excluded."altNames",
-            "fingerprint" = excluded."fingerprint"
-      `
-    )
-    .execute();
-
-export const saveWebInfoToDb = (info: WebInfo): Promise<InsertResult> =>
-  WebInfo.createQueryBuilder()
-    .insert()
-    .values(info)
-    .onConflict(
-      `
-        ("domainId") DO UPDATE
-          SET "technologies" = excluded."technologies"
       `
     )
     .execute();

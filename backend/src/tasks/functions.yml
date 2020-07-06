@@ -1,11 +1,3 @@
-bitdiscovery:
-  handler: src/tasks/bitdiscovery.handler
-  timeout: 900
-
-hackerone:
-  handler: src/tasks/hackerone.handler
-  timeout: 900
-
 censys:
   handler: src/tasks/censys.handler
   timeout: 900

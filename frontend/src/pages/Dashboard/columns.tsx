@@ -40,10 +40,9 @@ export const createColumns: CreateColumns = () => [
     Header: 'Services',
     id: 'services',
     disableSortBy: true,
-    accessor: ({ web }) =>
-      web &&
-      web.technologies &&
-      web.technologies.map(technology => technology.name).join(', '),
+    accessor: ({ webTechnologies }) =>
+      webTechnologies &&
+      webTechnologies.map(technology => technology.name).join(', '),
     Filter: ColumnFilter
   },
   {
