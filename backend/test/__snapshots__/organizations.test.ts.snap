@@ -5,7 +5,8 @@ Object {
   "createdAt": Any<String>,
   "id": Any<String>,
   "ipBlocks": Array [],
-  "name": "cisa-test-8697283f-8f04-4b99-8caf-4270da0e678c",
+  "isPassive": false,
+  "name": Any<String>,
   "rootDomains": Array [
     "cisa.gov",
   ],
