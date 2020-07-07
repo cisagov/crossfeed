@@ -1,36 +1,53 @@
-import { CognitoUserPoolTriggerHandler } from 'aws-lambda';
-import axios from 'axios';
+import loginGov from './login-gov';
 
-const ALLOWED_EMAIL_DOMAINS = ['gov', 'mil'];
-
-export const preSignUp: CognitoUserPoolTriggerHandler = async (event) => {
-  const email = event.request.userAttributes.email;
-  console.log('registration attempt: ', email);
-
-  // verify recaptcha
-  try {
-    const recaptchaToken = event.request.clientMetadata?.recaptchaToken;
-    const res = await axios({
-      url: 'https://www.google.com/recaptcha/api/siteverify',
-      method: 'POST',
-      params: {
-        secret: process.env.RECAPTCHA_SECRET_KEY,
-        response: recaptchaToken
-      }
-    });
-    if (!res.data.success || res.data.action !== 'register') {
-      throw new Error();
+export const login = async (event, context, callback) => {
+  const url = await loginGov.login();
+  callback(null, {
+    statusCode: 302,
+    headers: {
+      Location: url
     }
-    console.log('recaptcha verified.');
-  } catch (e) {
-    throw new Error('Recaptcha verification failed');
-  }
+  });
+};
 
-  // verify valid TLD
-  const tld = email.split('.').pop();
-  if (!(tld && ALLOWED_EMAIL_DOMAINS.includes(tld))) {
-    throw new Error('Invalid email address provided');
-  }
+export const callback = async (event) => {
+  await loginGov.callback(event);
+};
 
-  return event;
+// Policy helper function
+const generatePolicy = (userId, effect, resource, context) => {
+  return {
+    principalId: userId,
+    policyDocument: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Action: 'execute-api:Invoke',
+          Effect: effect,
+          Resource: '*' // #2
+        }
+      ]
+    },
+    context
+  };
+};
+
+export const authorize = async (event, context, callback) => {
+  console.log('event', event);
+  console.log('event', event.authorizationToken);
+  // if (!event.authorizationToken) {
+  //   return callback('Unauthorized');
+  // }
+  try {
+    const effect = 'Allow';
+    const userId = '123';
+    const authorizerContext = { name: 'user' };
+    return callback(
+      null,
+      generatePolicy(userId, effect, event.methodArn, authorizerContext)
+    );
+  } catch (err) {
+    console.log('catch error. Invalid token', err);
+    return callback('Unauthorized');
+  }
 };

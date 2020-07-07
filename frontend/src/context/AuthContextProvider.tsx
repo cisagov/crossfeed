@@ -19,14 +19,15 @@ export const AuthContextProvider: React.FC = ({ children }) => {
       const existing = await Auth.currentAuthenticatedUser();
       setUser(existing);
     } catch (e) {
-      if (process.env.NODE_ENV === 'development')
-        setUser({
-          email: '',
-          email_verified: true,
-          phone_number: '',
-          phone_number_verified: true
-        });
-      else setUser(null);
+      // if (process.env.NODE_ENV === 'development')
+      //   setUser({
+      //     email: '',
+      //     email_verified: true,
+      //     phone_number: '',
+      //     phone_number_verified: true
+      //   });
+      // else setUser(null);
+      setUser(null);
     }
   };
 
