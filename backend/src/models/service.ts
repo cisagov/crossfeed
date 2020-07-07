@@ -15,7 +15,8 @@ export class Service extends BaseEntity {
   id: number;
 
   @ManyToOne((type) => Domain, (domain) => domain.services, {
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   })
   domain: Domain;
 

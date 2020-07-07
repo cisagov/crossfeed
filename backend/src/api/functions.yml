@@ -133,3 +133,53 @@ deleteOrganization:
         cors: true
         authorizer:
           arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+listUsers:
+  handler: src/api/users.list
+  events:
+    - http:
+        path: /users
+        method: get
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+getMe:
+  handler: src/api/users.me
+  events:
+    - http:
+        path: /users/me
+        method: get
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+inviteUser:
+  handler: src/api/users.invite
+  events:
+    - http:
+        path: /users
+        method: post
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+updateUser:
+  handler: src/api/users.update
+  events:
+    - http:
+        path: /users/{userId}
+        method: put
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+
+deleteUser:
+  handler: src/api/users.del
+  events:
+    - http:
+        path: /users/{userId}
+        method: delete
+        cors: true
+        authorizer:
+          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn

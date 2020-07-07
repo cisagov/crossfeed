@@ -1,4 +1,4 @@
-import classes from './Organizations.module.scss';
+import classes from './Users.module.scss';
 import React, { useCallback, useState } from 'react';
 import {
   Button,
@@ -6,27 +6,26 @@ import {
   Label,
   ModalContainer,
   Overlay,
-  Modal,
-  Checkbox
+  Modal
 } from '@trussworks/react-uswds';
-import { Query } from 'types';
+import { Query, Organization } from 'types';
 import { Table } from 'components';
 import { Column } from 'react-table';
-import { Organization } from 'types';
+import { User } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 
-interface Errors extends Partial<Organization> {
+interface Errors extends Partial<User> {
   global?: string;
 }
 
-export const Organizations: React.FC = () => {
+export const Users: React.FC = () => {
   const { apiGet, apiPost, apiDelete } = useAuthContext();
   const [showModal, setShowModal] = useState<Boolean>(false);
   const [selectedRow, setSelectedRow] = useState<number>(0);
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
-  const columns: Column<Organization>[] = [
+  const columns: Column<User>[] = [
     {
       Header: 'Name',
       accessor: 'name',
@@ -35,25 +34,19 @@ export const Organizations: React.FC = () => {
       id: 'name'
     },
     {
-      Header: 'Root Domains',
-      accessor: ({ rootDomains }) => rootDomains.join(', '),
+      Header: 'Email',
+      accessor: 'email',
       width: 150,
       minWidth: 150,
-      id: 'rootDomains',
+      id: 'email',
       disableFilters: true
     },
     {
-      Header: 'IP Blocks',
-      accessor: ({ ipBlocks }) => ipBlocks.join(', '),
-      id: 'ipBlocks',
+      Header: 'Organizations',
+      accessor: ({ roles }) =>
+        roles && roles.map(role => role.organization.name).join(', '),
+      id: 'organizations',
       width: 200,
-      disableFilters: true
-    },
-    {
-      Header: 'Passive',
-      accessor: ({ isPassive }) => (isPassive ? 'Yes' : 'No'),
-      id: 'isPassive',
-      width: 100,
       disableFilters: true
     },
     {
@@ -76,21 +69,20 @@ export const Organizations: React.FC = () => {
 
   const [values, setValues] = useState<{
     name: string;
-    rootDomains: string;
-    ipBlocks: string;
-    isPassive: boolean;
+    email: string;
+    organization?: Organization;
+    role: string;
   }>({
     name: '',
-    rootDomains: '',
-    ipBlocks: '',
-    isPassive: false
+    email: '',
+    role: ''
   });
 
-  const fetchOrganizations = useCallback(
-    async (query: Query<Organization>) => {
+  const fetchUsers = useCallback(
+    async (query: Query<User>) => {
       try {
-        let rows = await apiGet<Organization[]>('/organizations/');
-        setOrganizations(rows);
+        let rows = await apiGet<User[]>('/users/');
+        setUsers(rows);
       } catch (e) {
         console.error(e);
       }
@@ -100,17 +92,13 @@ export const Organizations: React.FC = () => {
 
   const deleteRow = async (index: number) => {
     try {
-      let row = organizations[index];
-      await apiDelete(`/organizations/${row.id}`);
-      setOrganizations(
-        organizations.filter(organization => organization.id !== row.id)
-      );
+      let row = users[index];
+      await apiDelete(`/users/${row.id}`);
+      setUsers(users.filter(user => user.id !== row.id));
     } catch (e) {
       setErrors({
         global:
-          e.status === 422
-            ? 'Unable to delete organization'
-            : e.message ?? e.toString()
+          e.status === 422 ? 'Unable to delete user' : e.message ?? e.toString()
       });
       console.log(e);
     }
@@ -120,21 +108,19 @@ export const Organizations: React.FC = () => {
     e.preventDefault();
     try {
       let body = {
-        rootDomains:
-          values.rootDomains === '' ? [] : values.rootDomains.split(','),
-        ipBlocks: values.ipBlocks === '' ? [] : values.ipBlocks.split(','),
         name: values.name,
-        isPassive: values.isPassive
+        email: values.email,
+        role: values.role
       };
-      const org = await apiPost('/organizations/', {
+      const org = await apiPost('/users/', {
         body
       });
-      setOrganizations(organizations.concat(org));
+      setUsers(users.concat(org));
     } catch (e) {
       setErrors({
         global:
           e.status === 422
-            ? 'Error when submitting organization entry.'
+            ? 'Error when submitting user entry.'
             : e.message ?? e.toString()
       });
       console.log(e);
@@ -163,13 +149,9 @@ export const Organizations: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <h1>Organizations</h1>
-      <Table<Organization>
-        columns={columns}
-        data={organizations}
-        fetchData={fetchOrganizations}
-      />
-      <h2>Add an organization</h2>
+      <h1>Users</h1>
+      <Table<User> columns={columns} data={users} fetchData={fetchUsers} />
+      <h2>Invite a user</h2>
       <form onSubmit={onSubmit} className={classes.form}>
         {errors.global && <p className={classes.error}>{errors.global}</p>}
         <Label htmlFor="name">Name</Label>
@@ -182,37 +164,28 @@ export const Organizations: React.FC = () => {
           value={values.name}
           onChange={onTextChange}
         />
-        <Label htmlFor="rootDomains">Root Domains</Label>
+        <Label htmlFor="email">Email</Label>
         <TextInput
           required
-          id="rootDomains"
-          name="rootDomains"
+          id="email"
+          name="email"
           className={classes.textField}
           type="text"
-          value={values.rootDomains}
+          value={values.email}
           onChange={onTextChange}
         />
-        <Label htmlFor="ipBlocks">IP Blocks (Optional)</Label>
+        <Label htmlFor="role">Role</Label>
         <TextInput
-          id="ipBlocks"
-          name="ipBlocks"
+          required
+          id="role"
+          name="role"
           className={classes.textField}
           type="text"
-          value={values.ipBlocks}
+          value={values.role}
           onChange={onTextChange}
         />
         <br></br>
-        <Checkbox
-          id="isPassive"
-          name="isPassive"
-          label="Passive operation"
-          checked={values.isPassive}
-          onChange={e => {
-            onChange(e.target.name, e.target.checked);
-          }}
-        />
-        <br></br>
-        <Button type="submit">Create Organization</Button>
+        <Button type="submit">Invite User</Button>
       </form>
 
       {showModal && (
@@ -242,12 +215,12 @@ export const Organizations: React.FC = () => {
                   </Button>
                 </>
               }
-              title={<h2>Delete organization?</h2>}
+              title={<h2>Delete user?</h2>}
             >
               <p>
                 Are you sure you would like to delete the{' '}
-                <code>{organizations[selectedRow].name}</code> organization?
-                This will irreversibly delete all associated domains.
+                <code>{users[selectedRow].name}</code> user? This will
+                irreversibly delete all associated domains.
               </p>
             </Modal>
           </ModalContainer>
@@ -257,4 +230,4 @@ export const Organizations: React.FC = () => {
   );
 };
 
-export default Organizations;
+export default Users;
