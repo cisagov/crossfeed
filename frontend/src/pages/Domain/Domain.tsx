@@ -9,14 +9,26 @@ import {
   FaNetworkWired,
   FaCloud,
   FaClock,
-  FaBuilding
+  FaBuilding,
+  FaBolt
 } from 'react-icons/fa';
 import { ServicesTable, SSLInfo, WebInfo } from 'components';
+import {
+  Button,
+  PrimaryNav,
+  Menu,
+  Search,
+  NavMenuButton,
+  Overlay,
+  ModalContainer,
+  Modal
+} from '@trussworks/react-uswds';
 
 export const Domain: React.FC = () => {
   const { domainId } = useParams();
   const { apiGet } = useAuthContext();
   const [domain, setDomain] = useState<DomainType>();
+  const [showReviewModal, setShowReviewModal] = useState<Boolean>(false);
 
   const fetchDomain = useCallback(async () => {
     try {
@@ -63,7 +75,7 @@ export const Domain: React.FC = () => {
                   </label>
                   <span>{domain.cloudHosted ? 'Yes' : 'No'}</span>
                 </div>
-                <hr></hr>
+
                 <div className={classes.headerRow}>
                   <label>
                     <FaBuilding />
@@ -81,6 +93,14 @@ export const Domain: React.FC = () => {
                 </div>
               </div>
               <div className={classes.imgWrapper}>
+                <div style={{ float: 'right', marginBottom: '20px' }}>
+                  <Button
+                    type="button"
+                    onClick={() => setShowReviewModal(true)}
+                  >
+                    Request Quick Review <FaBolt></FaBolt>
+                  </Button>
+                </div>
                 <img
                   src={domain.screenshot || noImage}
                   alt={
@@ -110,6 +130,43 @@ export const Domain: React.FC = () => {
           </>
         )}
       </div>
+      {showReviewModal && (
+        <div>
+          <Overlay />
+          <ModalContainer>
+            <Modal
+              actions={
+                <>
+                  <Button
+                    outline
+                    type="button"
+                    onClick={() => {
+                      setShowReviewModal(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      setShowReviewModal(false);
+                    }}
+                  >
+                    Request Review
+                  </Button>
+                </>
+              }
+              title={<h2>Request review?</h2>}
+            >
+              <p>
+                This will request a quick 1-hour manual security review of this
+                asset by CISA. By clicking "Submit", you opt in for CISA to
+                review the asset and report any vulnerabilities found.
+              </p>
+            </Modal>
+          </ModalContainer>
+        </div>
+      )}
     </div>
   );
 };
