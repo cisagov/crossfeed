@@ -49,7 +49,7 @@ loginGov.callback = async function (body) {
       {
         code: body.code,
         state: body.state
-      }
+      },
       {
         state: body.origState,
         nonce: body.nonce
