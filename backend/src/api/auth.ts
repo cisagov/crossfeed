@@ -10,8 +10,15 @@ export const login = async (event, context, callback) => {
   });
 };
 
-export const callback = async (event) => {
-  await loginGov.callback(event);
+export const callback = async (event, context, callback) => {
+  const user = await loginGov.callback(event);
+  // TODO: validate user, create if needed, and sign session
+  callback(null, {
+    statusCode: 302,
+    headers: {
+      Location: 'http://localhost/'
+    }
+  });
 };
 
 // Policy helper function
