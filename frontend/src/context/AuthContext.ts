@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
 export interface User {
   email: string;
@@ -10,8 +10,6 @@ export interface User {
 export interface AuthContextType {
   login(username: string, password: string): Promise<any>;
   logout(): Promise<void>;
-  resetPassword(current: string, newpass: string): Promise<void>;
-  completePassword?(password: string): Promise<void>;
   apiGet<T extends object = any>(path: string, init?: any): Promise<T>;
   apiPost<T extends object = any>(path: string, init: any): Promise<T>;
   apiPut<T extends object = any>(path: string, init: any): Promise<T>;
@@ -23,11 +21,10 @@ export interface AuthContextType {
 export const defaultAuthContext: AuthContextType = {
   login: async () => {},
   logout: async () => {},
-  resetPassword: async () => {},
   apiGet: async <T>() => ({} as T),
   apiPost: async <T>() => ({} as T),
   apiPut: async <T>() => ({} as T),
-  apiDelete: async <T>() => ({} as T),
+  apiDelete: async <T>() => ({} as T)
 };
 
 export const AuthContext = React.createContext<AuthContextType>(

@@ -1,30 +1,35 @@
 import React, { useState } from 'react';
-import { useHistory, Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AuthForm } from 'components';
-import { Button, TextInput, Label } from '@trussworks/react-uswds';
-import { useAuthContext } from 'context/AuthContext';
+import { Button } from '@trussworks/react-uswds';
+import { useAuthContext } from 'context';
 
 interface Errors extends Partial<FormData> {
   global?: string;
 }
 
-interface LocationState {
-  message?: string;
-}
-
 export const AuthLogin: React.FC = () => {
-  const history = useHistory();
-  const location = useLocation<LocationState>();
+  const { apiPost } = useAuthContext();
+  const [errors, setErrors] = useState<Errors>({});
 
   const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
-    window.location.href = `${process.env.REACT_APP_API_URL}/auth/login`;
+    try {
+      const { redirectUrl, state, nonce } = await apiPost('/auth/login', {});
+      localStorage.setItem('state', state);
+      localStorage.setItem('nonce', nonce);
+      window.location.href = redirectUrl;
+    } catch (e) {
+      setErrors({
+        global: 'Something went wrong logging in.'
+      });
+    }
   };
 
   return (
     <AuthForm onSubmit={onSubmit}>
       <h1>Welcome to Crossfeed</h1>
-      {location.state?.message && <p>{location.state.message}</p>}
+      {errors.global && <p className="text-error">{errors.global}</p>}
       <Button type="submit" size="big">
         Login with Login.gov
       </Button>

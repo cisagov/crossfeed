@@ -14,14 +14,14 @@ login:
   events:
     - http:
         path: /auth/login
-        method: get
+        method: post
 
 authCallback:
   handler: src/api/auth.callback
   events:
     - http:
         path: /auth/callback
-        method: get
+        method: post
 
 listDomains:
   handler: src/api/domains.list

@@ -11,12 +11,12 @@ const baseHeaders: HeadersInit = {
 
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>();
-  const [unverifiedUser, setUnverifiedUser] = useState<any>();
   const history = useHistory();
 
   const refreshUser = async () => {
     try {
       const existing = await Auth.currentAuthenticatedUser();
+      console.log(existing);
       setUser(existing);
     } catch (e) {
       if (process.env.NODE_ENV === 'development')
@@ -37,7 +37,6 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const login = async (username: string, password: string) => {
     const user = await Auth.signIn(username, password);
     if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-      setUnverifiedUser(user);
       history.push('/create-password');
     } else {
       setUser(user);
@@ -48,20 +47,6 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const logout = async () => {
     await Auth.signOut();
     setUser(null);
-  };
-
-  const resetPassword = async (
-    currentpassword: string,
-    newpassword: string
-  ) => {
-    const user = await Auth.currentAuthenticatedUser();
-    await Auth.changePassword(user, currentpassword, newpassword);
-  };
-
-  const completePassword = async (password: string) => {
-    const result = await Auth.completeNewPassword(unverifiedUser, password, {});
-    setUnverifiedUser(undefined);
-    setUser(result);
   };
 
   const prepareInit = useCallback(async (init: any) => {
@@ -125,8 +110,6 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         user,
         login,
         logout,
-        resetPassword,
-        completePassword: unverifiedUser ? completePassword : undefined,
         apiGet,
         apiPost,
         apiPut,

@@ -1,8 +1,7 @@
 export * from './AuthLogin';
+export * from './AuthCallback';
 export * from './AuthRegister';
 export * from './AuthRegisterConfirm';
-export * from './AuthPasswordReset';
-export * from './AuthCreatePassword';
 export * from './Dashboard';
 export * from './Domain';
 export { default as Vulnerabilities } from './Vulnerabilities';

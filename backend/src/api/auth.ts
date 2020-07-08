@@ -1,23 +1,23 @@
 import loginGov from './login-gov';
 
 export const login = async (event, context, callback) => {
-  const url = await loginGov.login();
+  const { url, state, nonce } = await loginGov.login();
   callback(null, {
-    statusCode: 302,
-    headers: {
-      Location: url
-    }
+    statusCode: 200,
+    body: JSON.stringify({
+      redirectUrl: url,
+      state: state,
+      nonce: nonce
+    })
   });
 };
 
 export const callback = async (event, context, callback) => {
-  const user = await loginGov.callback(event);
+  const user = await loginGov.callback(JSON.parse(event.body));
   // TODO: validate user, create if needed, and sign session
   callback(null, {
-    statusCode: 302,
-    headers: {
-      Location: 'http://localhost/'
-    }
+    statusCode: 200,
+    body: JSON.stringify(user)
   });
 };
 
