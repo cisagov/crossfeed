@@ -4,6 +4,7 @@ import { AuthForm } from 'components';
 import { Button, TextInput, Label } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
 import { AuthLogin } from 'pages/AuthLogin';
+import { User } from 'types';
 
 interface FormData {
   firstName: string;
@@ -23,7 +24,7 @@ export const AuthCreateAccount: React.FC = () => {
     organization: ''
   });
   const [errors, setErrors] = useState<Errors>({});
-  const { user, apiPost } = useAuthContext();
+  const { user, login, apiPut } = useAuthContext();
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     e.persist();
@@ -36,13 +37,12 @@ export const AuthCreateAccount: React.FC = () => {
   const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
     try {
-      const user = await apiPost('/auth/register', {
-        body: {
-          token: localStorage.getItem('token'),
-          ...values
-        }
+      if (!user) throw 'Unable to register';
+      const updated: User = await apiPut(`/users/${user.id}`, {
+        body: values
       });
-      localStorage.setItem('user', JSON.stringify(user));
+
+      login(localStorage.getItem('token')!, updated);
       history.push('/', {
         message: 'Your account has been successfully created.'
       });

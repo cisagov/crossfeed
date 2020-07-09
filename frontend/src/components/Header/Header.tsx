@@ -85,7 +85,7 @@ export const Header: React.FC = () => {
         <PrimaryNav
           mobileExpanded={mobileExpanded}
           onToggleMobileNav={onExpandMobile}
-          items={user ? authNavItems : []}
+          items={user && user.isRegistered ? authNavItems : []}
         />
       </div>
     </UsaHeader>

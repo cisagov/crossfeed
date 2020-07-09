@@ -14,8 +14,7 @@ import {
   Organizations,
   Users,
   Settings,
-  Vulnerabilities,
-  AuthCallback
+  Vulnerabilities
 } from 'pages';
 import { AuthRoute, AuthRedirectRoute, Layout } from 'components';
 import './styles.scss';
@@ -43,7 +42,6 @@ const App: React.FC = () => (
             unauthComponent={AuthLogin}
           />
 
-          <Route exact path="/callback" component={AuthCallback} />
           <Route exact path="/create-account" component={AuthCreateAccount} />
 
           <AuthRedirectRoute path="/domain/:domainId" component={Domain} />

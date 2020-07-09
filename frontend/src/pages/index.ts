@@ -1,5 +1,4 @@
 export * from './AuthLogin';
-export * from './AuthCallback';
 export * from './AuthCreateAccount';
 export * from './Dashboard';
 export * from './Domain';

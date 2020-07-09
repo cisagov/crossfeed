@@ -28,7 +28,7 @@ export const Users: React.FC = () => {
   const columns: Column<User>[] = [
     {
       Header: 'Name',
-      accessor: 'name',
+      accessor: 'fullName',
       width: 200,
       disableFilters: true,
       id: 'name'
@@ -68,12 +68,14 @@ export const Users: React.FC = () => {
   const [errors, setErrors] = useState<Errors>({});
 
   const [values, setValues] = useState<{
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     organization?: Organization;
     role: string;
   }>({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     role: ''
   });
@@ -108,7 +110,8 @@ export const Users: React.FC = () => {
     e.preventDefault();
     try {
       let body = {
-        name: values.name,
+        firstName: values.firstName,
+        lastName: values.firstName,
         email: values.email,
         role: values.role
       };
@@ -154,14 +157,24 @@ export const Users: React.FC = () => {
       <h2>Invite a user</h2>
       <form onSubmit={onSubmit} className={classes.form}>
         {errors.global && <p className={classes.error}>{errors.global}</p>}
-        <Label htmlFor="name">Name</Label>
+        <Label htmlFor="firstName">First Name</Label>
         <TextInput
           required
-          id="name"
-          name="name"
+          id="firstName"
+          name="firstName"
           className={classes.textField}
           type="text"
-          value={values.name}
+          value={values.firstName}
+          onChange={onTextChange}
+        />
+        <Label htmlFor="lastName">Last Name</Label>
+        <TextInput
+          required
+          id="lastName"
+          name="lastName"
+          className={classes.textField}
+          type="text"
+          value={values.lastName}
           onChange={onTextChange}
         />
         <Label htmlFor="email">Email</Label>
@@ -219,7 +232,7 @@ export const Users: React.FC = () => {
             >
               <p>
                 Are you sure you would like to delete the{' '}
-                <code>{users[selectedRow].name}</code> user? This will
+                <code>{users[selectedRow].fullName}</code> user? This will
                 irreversibly delete all associated domains.
               </p>
             </Modal>

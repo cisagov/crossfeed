@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Auth, API } from 'aws-amplify';
-import { AuthContext, User } from './AuthContext';
+import { AuthContext, AuthUser } from './AuthContext';
 import { useHistory } from 'react-router-dom';
+import { User } from 'types';
 
 // to be added to every request
 const baseHeaders: HeadersInit = {
@@ -10,7 +11,7 @@ const baseHeaders: HeadersInit = {
 };
 
 export const AuthContextProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState<User | null>();
+  const [user, setUser] = useState<AuthUser | null>();
 
   const refreshUser = async () => {
     const user = localStorage.getItem('user');
@@ -30,9 +31,13 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   };
 
   const login = async (token: string, user: User) => {
+    let userCopy: AuthUser = {
+      isRegistered: user.firstName !== '',
+      ...user
+    };
     localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
-    setUser(user);
+    localStorage.setItem('user', JSON.stringify(userCopy));
+    setUser(userCopy);
   };
 
   const prepareInit = useCallback(async (init: any) => {

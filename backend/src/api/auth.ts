@@ -2,6 +2,7 @@ import loginGov from './login-gov';
 import { User, connectToDatabase } from '../models';
 import { JWT, JWK } from 'jose';
 
+/** Returns redirect url to initiate login.gov OIDC flow */
 export const login = async (event, context, callback) => {
   const { url, state, nonce } = await loginGov.login();
   callback(null, {
@@ -14,30 +15,41 @@ export const login = async (event, context, callback) => {
   });
 };
 
+/** Processes login.gov OIDC callback and returns user token */
 export const callback = async (event, context, callback) => {
   let userInfo;
   try {
     userInfo = await loginGov.callback(JSON.parse(event.body));
-  } catch {
-    callback(null, {
+  } catch (e) {
+    return callback(null, {
       statusCode: 500,
       body: ''
     });
   }
 
   if (!userInfo.email_verified) {
-    callback(null, {
+    return callback(null, {
       statusCode: 403,
       body: ''
     });
-    return;
   }
 
-  // Look up user by uuid
+  // Look up user by email
   await connectToDatabase();
-  const user = await User.findOne({
-    id: userInfo.sub
+  let user = await User.findOne({
+    email: userInfo.email
   });
+
+  // If user does not exist, create it
+  if (!user) {
+    user = User.create({
+      email: userInfo.email,
+      loginGovId: userInfo.sub,
+      firstName: '',
+      lastName: ''
+    });
+    await user.save();
+  }
 
   const token = JWT.sign(
     {
@@ -56,9 +68,8 @@ export const callback = async (event, context, callback) => {
   callback(null, {
     statusCode: 200,
     body: JSON.stringify({
-      existing: !!user,
       token: token,
-      user: userInfo
+      user: user
     })
   });
 };
@@ -81,13 +92,14 @@ const generatePolicy = (userId, effect, resource, context) => {
   };
 };
 
+/** Confirms that a user is authorized */
+// TODO: Add access controls per API function
 export const authorize = async (event, context, callback) => {
-  console.log('event', event);
-  console.log('event', event.authorizationToken);
-  // if (!event.authorizationToken) {
-  //   return callback('Unauthorized');
-  // }
   try {
+    const parsed = JWT.verify(
+      event.authorizationToken,
+      JWK.asKey(process.env.JWT_KEY!)
+    );
     const effect = 'Allow';
     const userId = '123';
     const authorizerContext = { name: 'user' };
@@ -95,36 +107,7 @@ export const authorize = async (event, context, callback) => {
       null,
       generatePolicy(userId, effect, event.methodArn, authorizerContext)
     );
-  } catch (err) {
-    console.log('catch error. Invalid token', err);
+  } catch {
     return callback('Unauthorized');
-  }
-};
-
-export const register = async (event, context, callback) => {
-  try {
-    console.log(event.body);
-    const { token, firstName, lastName } = JSON.parse(event.body);
-    const parsed: any = JWT.verify(token, JWK.asKey(process.env.JWT_KEY!));
-
-    console.log(parsed);
-    await connectToDatabase();
-    const user = await User.insert({
-      firstName,
-      lastName,
-      email: parsed.email,
-      id: parsed.id,
-      fullName: ''
-    });
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(user)
-    });
-  } catch (e) {
-    console.log(e);
-    callback(null, {
-      statusCode: 500,
-      body: ''
-    });
   }
 };

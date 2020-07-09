@@ -7,15 +7,21 @@ import {
   BaseEntity,
   OneToMany,
   PrimaryColumn,
-  BeforeInsert
+  BeforeInsert,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { Role } from './';
 
 @Entity()
-@Index(['email'], { unique: true })
 export class User extends BaseEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Index({ unique: true })
+  @Column({
+    nullable: true
+  })
+  loginGovId: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -32,9 +38,20 @@ export class User extends BaseEntity {
   @Column()
   fullName: string;
 
+  @Index({ unique: true })
   @Column()
   email: string;
 
+  /** Whether the user's invite is pending */
+  @Column({ default: false })
+  invitePending: boolean;
+
+  /** The user's type. globalView allows access to all organizations
+   * while globalAdmin allows universally administering Crossfeed */
+  @Column('text', { default: 'standard' })
+  userType: 'standard' | 'globalView' | 'globalAdmin';
+
+  /** The roles for organizations which the user belongs to */
   @OneToMany((type) => Role, (role) => role.user, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'

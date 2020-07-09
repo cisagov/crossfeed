@@ -1,6 +1,6 @@
-import React from "react";
-import { RouteProps, Redirect, Route } from "react-router-dom";
-import { useAuthContext } from "context";
+import React from 'react';
+import { RouteProps, Redirect, Route } from 'react-router-dom';
+import { useAuthContext } from 'context';
 
 interface AuthRedirectRouteProps extends RouteProps {
   redirectUrl?: string;
@@ -8,7 +8,7 @@ interface AuthRedirectRouteProps extends RouteProps {
 }
 
 export const AuthRedirectRoute: React.FC<AuthRedirectRouteProps> = ({
-  redirectUrl = "/",
+  redirectUrl = '/',
   component,
   ...rest
 }) => {
@@ -21,7 +21,12 @@ export const AuthRedirectRoute: React.FC<AuthRedirectRouteProps> = ({
   const RedirectComponent = () => (
     <Redirect to={{ pathname: redirectUrl, state: { authRequired: true } }} />
   );
-  return <Route {...rest} component={user ? component : RedirectComponent} />;
+  return (
+    <Route
+      {...rest}
+      component={user && user.isRegistered ? component : RedirectComponent}
+    />
+  );
 };
 
 interface AuthRouteProps extends RouteProps {

@@ -15,7 +15,7 @@ const clientOptions: ClientMetadata = {
   token_endpoint_auth_method: 'private_key_jwt',
   id_token_signed_response_alg: 'RS256',
   key: 'client_id',
-  redirect_uris: ['http://localhost/callback'],
+  redirect_uris: ['http://localhost/'],
   token_endpoint: 'https://idp.int.identitysandbox.gov/api/openid_connect/token'
 };
 
@@ -32,7 +32,7 @@ loginGov.login = async function (): Promise<{
     response_type: 'code',
     acr_values: `http://idmanagement.gov/ns/assurance/loa/1`,
     scope: 'openid email',
-    redirect_uri: `http://localhost/callback`,
+    redirect_uri: `http://localhost/`,
     nonce: nonce,
     state: state,
     prompt: 'select_account'
@@ -44,7 +44,7 @@ loginGov.callback = async function (body) {
   const issuer = await Issuer.discover(loginGov.discoveryUrl);
   const client = new issuer.Client(clientOptions, jwkSet);
   const tokenSet = await client.callback(
-    'http://localhost/callback',
+    'http://localhost/',
     {
       code: body.code,
       state: body.state

@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
+import { User } from 'types';
 
-export interface User {
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  fullName?: string;
+export interface AuthUser extends User {
+  isRegistered: boolean;
 }
 
 export interface AuthContextType {
@@ -14,7 +12,7 @@ export interface AuthContextType {
   apiPost<T extends object = any>(path: string, init: any): Promise<T>;
   apiPut<T extends object = any>(path: string, init: any): Promise<T>;
   apiDelete<T extends object = any>(path: string, init?: any): Promise<T>;
-  user?: User | null;
+  user?: AuthUser | null;
 }
 
 /* istanbul ignore next */
