@@ -34,6 +34,9 @@ export class Organization extends BaseEntity {
   @Column()
   isPassive: boolean;
 
+  @Column({ default: true })
+  inviteOnly: boolean;
+
   @OneToMany((type) => Domain, (domain) => domain.organization, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'

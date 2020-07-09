@@ -9,10 +9,6 @@ import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
 
-interface Errors extends Partial<FormData> {
-  global?: string;
-}
-
 interface ApiResponse {
   result: Domain[];
   count: number;
@@ -27,10 +23,9 @@ export const Dashboard: React.FC = () => {
   const columns = useMemo(() => createColumns(), []);
   const PAGE_SIZE = 25;
   const history = useHistory();
-  const [errors, setErrors] = useState<Errors>({});
 
   // Called to sign in the user
-  const callback = async () => {
+  const callback = useCallback(async () => {
     const parsed = parse(window.location.search);
     if (!parsed.state || !parsed.code) {
       return;
@@ -54,14 +49,14 @@ export const Dashboard: React.FC = () => {
     } catch {
       history.push('/');
     }
-  };
+  }, [apiPost, history, login]);
 
   React.useEffect(() => {
     if (user && user.firstName === '') {
       history.push('/create-account');
     }
     callback();
-  }, []);
+  }, [callback, history, user]);
 
   const fetchDomains = useCallback(
     async (query: Query<Domain>) => {
@@ -100,7 +95,6 @@ export const Dashboard: React.FC = () => {
   return (
     <div className={classes.root}>
       <h1>Dashboard</h1>{' '}
-      {errors.global && <p className="text-error">{errors.global}</p>}
       <Table<Domain>
         renderPagination={renderPagination}
         columns={columns}

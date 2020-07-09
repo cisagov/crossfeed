@@ -12,6 +12,7 @@ import {
   Logs,
   Risk,
   Organizations,
+  Organization,
   Users,
   Settings,
   Vulnerabilities
@@ -53,6 +54,10 @@ const App: React.FC = () => (
           <AuthRedirectRoute path="/alerts" component={Alerts} />
           <AuthRedirectRoute path="/scans" component={Scans} />
           <AuthRedirectRoute path="/organizations" component={Organizations} />
+          <AuthRedirectRoute
+            path="/organization/:organizationId"
+            component={Organization}
+          />
           <AuthRedirectRoute path="/users" component={Users} />
           <AuthRedirectRoute path="/logs" component={Logs} />
           <AuthRedirectRoute path="/settings" component={Settings} />

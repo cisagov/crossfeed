@@ -13,8 +13,9 @@ import { Query } from 'types';
 import { Table } from 'components';
 import { Column } from 'react-table';
 import { Organization } from 'types';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaEdit } from 'react-icons/fa';
 import { useAuthContext } from 'context';
+import { Link } from 'react-router-dom';
 
 interface Errors extends Partial<Organization> {
   global?: string;
@@ -53,7 +54,28 @@ export const Organizations: React.FC = () => {
       Header: 'Passive',
       accessor: ({ isPassive }) => (isPassive ? 'Yes' : 'No'),
       id: 'isPassive',
-      width: 100,
+      width: 50,
+      disableFilters: true
+    },
+    {
+      Header: 'Invite Only',
+      accessor: ({ inviteOnly }) => (inviteOnly ? 'Yes' : 'No'),
+      id: 'inviteOnly',
+      width: 50,
+      disableFilters: true
+    },
+    {
+      Header: 'Manage',
+      id: 'manage',
+      Cell: ({ row }: { row: { index: number } }) => (
+        <Link
+          style={{ color: 'black' }}
+          to={`/organization/${organizations[row.index].id}`}
+        >
+          <FaEdit className="margin-x-auto display-block" />
+        </Link>
+      ),
+      width: 50,
       disableFilters: true
     },
     {
@@ -66,9 +88,10 @@ export const Organizations: React.FC = () => {
             setSelectedRow(row.index);
           }}
         >
-          <FaTimes />
+          <FaTimes className="margin-x-auto display-block" />
         </span>
       ),
+      width: 50,
       disableFilters: true
     }
   ];
@@ -79,11 +102,13 @@ export const Organizations: React.FC = () => {
     rootDomains: string;
     ipBlocks: string;
     isPassive: boolean;
+    inviteOnly: boolean;
   }>({
     name: '',
     rootDomains: '',
     ipBlocks: '',
-    isPassive: false
+    isPassive: false,
+    inviteOnly: false
   });
 
   const fetchOrganizations = useCallback(
@@ -121,10 +146,16 @@ export const Organizations: React.FC = () => {
     try {
       let body = {
         rootDomains:
-          values.rootDomains === '' ? [] : values.rootDomains.split(','),
-        ipBlocks: values.ipBlocks === '' ? [] : values.ipBlocks.split(','),
+          values.rootDomains === ''
+            ? []
+            : values.rootDomains.split(',').map(domain => domain.trim()),
+        ipBlocks:
+          values.ipBlocks === ''
+            ? []
+            : values.ipBlocks.split(',').map(ip => ip.trim()),
         name: values.name,
-        isPassive: values.isPassive
+        isPassive: values.isPassive,
+        inviteOnly: values.inviteOnly
       };
       const org = await apiPost('/organizations/', {
         body
@@ -207,6 +238,16 @@ export const Organizations: React.FC = () => {
           name="isPassive"
           label="Passive operation"
           checked={values.isPassive}
+          onChange={e => {
+            onChange(e.target.name, e.target.checked);
+          }}
+        />
+        <br></br>
+        <Checkbox
+          id="inviteOnly"
+          name="inviteOnly"
+          label="Invite only"
+          checked={values.inviteOnly}
           onChange={e => {
             onChange(e.target.name, e.target.checked);
           }}

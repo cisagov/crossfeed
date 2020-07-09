@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { AuthForm } from 'components';
 import { Button, TextInput, Label } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
-import { AuthLogin } from 'pages/AuthLogin';
 import { User } from 'types';
 
 interface FormData {
@@ -37,7 +36,7 @@ export const AuthCreateAccount: React.FC = () => {
   const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
     try {
-      if (!user) throw 'Unable to register';
+      if (!user) throw Error('Unable to register');
       const updated: User = await apiPut(`/users/${user.id}`, {
         body: values
       });

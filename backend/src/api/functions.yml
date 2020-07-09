@@ -104,6 +104,24 @@ listOrganizations:
         cors: true
         authorizer: authorize
 
+listPublicOrganizations:
+  handler: src/api/organizations.listPublicNames
+  events:
+    - http:
+        path: /organizations/public
+        method: get
+        cors: true
+        authorizer: authorize
+
+getOrganizations:
+  handler: src/api/organizations.get
+  events:
+    - http:
+        path: /organizations/{organizationId}
+        method: get
+        cors: true
+        authorizer: authorize
+
 createOrganization:
   handler: src/api/organizations.create
   events:

@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Auth, API } from 'aws-amplify';
+import { API } from 'aws-amplify';
 import { AuthContext, AuthUser } from './AuthContext';
-import { useHistory } from 'react-router-dom';
 import { User } from 'types';
 
 // to be added to every request

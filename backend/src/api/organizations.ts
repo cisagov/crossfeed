@@ -31,15 +31,20 @@ export const update = wrapHandler(async (event) => {
     return NotFound;
   }
   const body = await validateBody(NewOrganization, event.body);
-  const org = await Organization.findOne({
-    id: id
-  });
+  const org = await Organization.findOne(
+    {
+      id
+    },
+    {
+      relations: ['userRoles']
+    }
+  );
   if (org) {
     Organization.merge(org, body);
     const res = await Organization.save(org);
     return {
       statusCode: 200,
-      body: JSON.stringify(res)
+      body: JSON.stringify(org)
     };
   }
   return NotFound;
@@ -57,6 +62,9 @@ class NewOrganization {
 
   @IsBoolean()
   isPassive: boolean;
+
+  @IsBoolean()
+  inviteOnly: boolean;
 }
 
 export const create = wrapHandler(async (event) => {
@@ -73,6 +81,37 @@ export const create = wrapHandler(async (event) => {
 export const list = wrapHandler(async (event) => {
   await connectToDatabase();
   const result = await Organization.find();
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result)
+  };
+});
+
+export const get = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const id = event.pathParameters?.organizationId;
+  if (!isUUID(id)) {
+    return NotFound;
+  }
+
+  const result = await Organization.findOne(id, {
+    relations: ['userRoles']
+  });
+
+  return {
+    statusCode: result ? 200 : 404,
+    body: result ? JSON.stringify(result) : ''
+  };
+});
+
+export const listPublicNames = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const result = await Organization.find({
+    select: ['name'],
+    where: {
+      inviteOnly: false
+    }
+  });
   return {
     statusCode: 200,
     body: JSON.stringify(result)

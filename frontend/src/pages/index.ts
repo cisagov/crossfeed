@@ -2,6 +2,7 @@ export * from './AuthLogin';
 export * from './AuthCreateAccount';
 export * from './Dashboard';
 export * from './Domain';
+export { default as Organization } from './Organization';
 export { default as Vulnerabilities } from './Vulnerabilities';
 export { default as Risk } from './Risk';
 export { default as Alerts } from './Alerts';

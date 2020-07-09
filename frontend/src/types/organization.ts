@@ -5,6 +5,7 @@ export interface Organization {
   name: string;
   rootDomains: string[];
   ipBlocks: string[];
-  isPassive: boolean;
   userRoles: Role[];
+  isPassive: boolean;
+  inviteOnly: boolean;
 }
