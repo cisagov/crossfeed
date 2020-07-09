@@ -109,7 +109,7 @@ const generatePolicy = (userId, effect, resource, context) => {
 /** Confirms that a user is authorized */
 export const authorize = async (event, context, callback) => {
   try {
-    let parsed: any = JWT.verify(
+    const parsed: any = JWT.verify(
       event.authorizationToken,
       JWK.asKey(process.env.JWT_KEY!)
     );
