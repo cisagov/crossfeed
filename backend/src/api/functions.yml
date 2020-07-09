@@ -140,6 +140,24 @@ updateOrganization:
         cors: true
         authorizer: authorize
 
+approveRole:
+  handler: src/api/organizations.approveRole
+  events:
+    - http:
+        path: /organizations/{organizationId}/roles/{roleId}/approve
+        method: post
+        cors: true
+        authorizer: authorize
+
+removeRole:
+  handler: src/api/organizations.removeRole
+  events:
+    - http:
+        path: /organizations/{organizationId}/roles/{roleId}/remove
+        method: post
+        cors: true
+        authorizer: authorize
+
 deleteOrganization:
   handler: src/api/organizations.del
   events:

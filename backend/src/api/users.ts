@@ -7,9 +7,10 @@ import {
   IsObject,
   IsArray,
   IsBoolean,
-  IsOptional
+  IsOptional,
+  IsUUID
 } from 'class-validator';
-import { User, connectToDatabase } from '../models';
+import { User, connectToDatabase, Role } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 
 export const del = wrapHandler(async (event) => {
@@ -40,6 +41,16 @@ export const update = wrapHandler(async (event) => {
     user.lastName = body.lastName ?? user.lastName;
     user.fullName = user.firstName + ' ' + user.lastName;
     await User.save(user);
+
+    if (body.organization) {
+      // Create pending role if organization supplied
+      await Role.insert({
+        user: user,
+        organization: { id: body.organization },
+        approved: false,
+        role: 'user'
+      });
+    }
     return {
       statusCode: 200,
       body: JSON.stringify(user)
@@ -58,6 +69,10 @@ class NewUser {
   @IsString()
   @IsOptional()
   email: string;
+
+  @IsUUID()
+  @IsOptional()
+  organization: string;
 }
 
 export const invite = wrapHandler(async (event) => {

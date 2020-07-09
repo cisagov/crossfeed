@@ -8,7 +8,7 @@ import {
   IsArray,
   IsBoolean
 } from 'class-validator';
-import { Organization, connectToDatabase } from '../models';
+import { Organization, connectToDatabase, Role } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 
 export const del = wrapHandler(async (event) => {
@@ -95,7 +95,7 @@ export const get = wrapHandler(async (event) => {
   }
 
   const result = await Organization.findOne(id, {
-    relations: ['userRoles']
+    relations: ['userRoles', 'userRoles.user']
   });
 
   return {
@@ -104,10 +104,44 @@ export const get = wrapHandler(async (event) => {
   };
 });
 
+export const approveRole = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const id = event.pathParameters?.roleId;
+  if (!isUUID(id)) {
+    return NotFound;
+  }
+
+  const role = await Role.findOne(id);
+  if (role) {
+    role.approved = true;
+    const result = await role.save();
+    return {
+      statusCode: result ? 200 : 404,
+      body: JSON.stringify({})
+    };
+  }
+
+  return NotFound;
+});
+
+export const removeRole = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const id = event.pathParameters?.roleId;
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+
+  const result = await Role.delete(id);
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result)
+  };
+});
+
 export const listPublicNames = wrapHandler(async (event) => {
   await connectToDatabase();
   const result = await Organization.find({
-    select: ['name'],
+    select: ['name', 'id'],
     where: {
       inviteOnly: false
     }

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AuthForm } from 'components';
-import { Button, TextInput, Label } from '@trussworks/react-uswds';
+import { Button, TextInput, Label, Dropdown } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
 import { User } from 'types';
 
@@ -23,13 +23,33 @@ export const AuthCreateAccount: React.FC = () => {
     organization: ''
   });
   const [errors, setErrors] = useState<Errors>({});
-  const { user, login, apiPut } = useAuthContext();
+  const [publicOrgs, setPublicOrgs] = useState<{ name: string; id: string }[]>(
+    []
+  );
+  const { user, login, apiGet, apiPut } = useAuthContext();
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-    e.persist();
+  const fetchPublicOrgs = useCallback(async () => {
+    const publicOrgs = await apiGet('/organizations/public');
+    setPublicOrgs(publicOrgs);
+    if (publicOrgs.length > 0)
+      setValues(values => ({
+        ...values,
+        organization: publicOrgs[0].id
+      }));
+  }, [apiGet, setValues]);
+
+  useEffect(() => {
+    fetchPublicOrgs();
+  }, [fetchPublicOrgs]);
+
+  const onTextChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLSelectElement
+  > = e => onChange(e.target.name, e.target.value);
+
+  const onChange = (name: string, value: any) => {
     setValues(values => ({
       ...values,
-      [e.target.name]: e.target.value
+      [name]: value
     }));
   };
 
@@ -67,7 +87,7 @@ export const AuthCreateAccount: React.FC = () => {
         name="firstName"
         type="text"
         value={values.firstName}
-        onChange={onChange}
+        onChange={onTextChange}
       />
       <Label htmlFor="lastName">Last Name</Label>
       <TextInput
@@ -76,7 +96,7 @@ export const AuthCreateAccount: React.FC = () => {
         name="lastName"
         type="text"
         value={values.lastName}
-        onChange={onChange}
+        onChange={onTextChange}
       />
       <Label htmlFor="email">Email</Label>
       <TextInput
@@ -86,14 +106,25 @@ export const AuthCreateAccount: React.FC = () => {
         type="text"
         value={user ? user.email : ''}
       />
-      <Label htmlFor="organization">Organization</Label>
-      <TextInput
+      <Label htmlFor="organization">
+        Select an organization to join. Your request will need to be approved
+        before joining.
+      </Label>
+      <Dropdown
+        required
         id="organization"
         name="organization"
-        type="text"
+        onChange={onTextChange}
         value={values.organization}
-        onChange={onChange}
-      />
+      >
+        {publicOrgs.map(org => {
+          return (
+            <option key={org.id} value={org.id}>
+              {org.name}
+            </option>
+          );
+        })}
+      </Dropdown>
       <div className="width-full display-flex flex-justify-start">
         {errors.global && <p className="text-error">{errors.global}</p>}
       </div>

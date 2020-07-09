@@ -22,8 +22,15 @@ export class Role extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
-  role: string;
+  @Column({
+    default: 'user'
+  })
+  role: 'user' | 'admin';
+
+  @Column({
+    default: false
+  })
+  approved: boolean;
 
   @ManyToOne((type) => User, (user) => user.roles, {
     onDelete: 'CASCADE',

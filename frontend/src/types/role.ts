@@ -5,7 +5,8 @@ export interface Role {
   id: string;
   createdAt: string;
   updatedAt: string;
-  role: string;
+  role: 'user' | 'admin';
   user: User;
   organization: Organization;
+  approved: boolean;
 }

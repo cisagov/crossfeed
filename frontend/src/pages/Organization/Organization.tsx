@@ -1,15 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { Organization as OrganizationType, Role } from 'types';
-import {
-  FaGlobe,
-  FaNetworkWired,
-  FaClock,
-  FaCheck,
-  FaUsers
-} from 'react-icons/fa';
+import { FaGlobe, FaNetworkWired, FaClock, FaUsers } from 'react-icons/fa';
 import { Column } from 'react-table';
 import { Table } from 'components';
 import { Label, TextInput, Checkbox, Button } from '@trussworks/react-uswds';
@@ -20,8 +14,9 @@ interface Errors extends Partial<OrganizationType> {
 
 export const Organization: React.FC = () => {
   const { organizationId } = useParams();
-  const { apiGet, apiPut } = useAuthContext();
+  const { apiGet, apiPut, apiPost } = useAuthContext();
   const [organization, setOrganization] = useState<OrganizationType>();
+  const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
 
@@ -56,13 +51,36 @@ export const Organization: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Approve',
-      id: 'approve',
-      Cell: ({ row }: { row: { index: number } }) => (
-        <span onClick={() => {}}>
-          <FaCheck />
-        </span>
-      ),
+      Header: 'Status',
+      accessor: ({ approved }) => (approved ? 'Member' : 'Pending approval'),
+      width: 50,
+      minWidth: 50,
+      id: 'approved',
+      disableFilters: true
+    },
+    {
+      Header: 'Action',
+      id: 'action',
+      Cell: ({ row }: { row: { index: number } }) =>
+        organization?.userRoles[row.index].approved ? (
+          <Link
+            to="#"
+            onClick={() => {
+              removeUser(row.index);
+            }}
+          >
+            <p>Remove</p>
+          </Link>
+        ) : (
+          <Link
+            to="#"
+            onClick={() => {
+              approveUser(row.index);
+            }}
+          >
+            <p>Approve</p>
+          </Link>
+        ),
       disableFilters: true
     }
   ];
@@ -73,6 +91,7 @@ export const Organization: React.FC = () => {
         `/organizations/${organizationId}`
       );
       setOrganization(organization);
+      setUserRoles(organization.userRoles);
       setValues({
         name: organization.name,
         rootDomains: organization.rootDomains.join(', '),
@@ -84,6 +103,34 @@ export const Organization: React.FC = () => {
       console.error(e);
     }
   }, [organizationId, apiGet, setOrganization]);
+
+  const approveUser = async (user: number) => {
+    try {
+      await apiPost(
+        `/organizations/${organization?.id}/roles/${organization?.userRoles[user].id}/approve`,
+        {}
+      );
+      const copy = userRoles.map((role, id) =>
+        id == user ? { ...role, approved: true } : role
+      );
+      setUserRoles(copy);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const removeUser = async (user: number) => {
+    try {
+      await apiPost(
+        `/organizations/${organization?.id}/roles/${organization?.userRoles[user].id}/remove`,
+        {}
+      );
+      const copy = userRoles.filter((_, ind) => ind !== user);
+      setUserRoles(copy);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const updateOrganization: React.FormEventHandler = async e => {
     e.preventDefault();
@@ -175,7 +222,7 @@ export const Organization: React.FC = () => {
               </div>
             </div>
             <h1>Organization Users</h1>
-            <Table<Role> columns={columns} data={organization.userRoles} />
+            <Table<Role> columns={columns} data={userRoles} />
             <h2>Update Organization</h2>
             <form onSubmit={updateOrganization} className={classes.form}>
               {errors.global && (
