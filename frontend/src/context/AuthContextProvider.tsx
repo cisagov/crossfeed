@@ -27,6 +27,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
   const logout = async () => {
     setUser(null);
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
   };
 
   const login = async (token: string, user: User) => {

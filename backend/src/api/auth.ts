@@ -1,6 +1,7 @@
 import loginGov from './login-gov';
 import { User, connectToDatabase } from '../models';
 import { JWT, JWK } from 'jose';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 
 /** Returns redirect url to initiate login.gov OIDC flow */
 export const login = async (event, context, callback) => {
@@ -36,9 +37,14 @@ export const callback = async (event, context, callback) => {
 
   // Look up user by email
   await connectToDatabase();
-  let user = await User.findOne({
-    email: userInfo.email
-  });
+  let user = await User.findOne(
+    {
+      email: userInfo.email
+    },
+    {
+      relations: ['roles', 'roles.organization']
+    }
+  );
 
   // If user does not exist, create it
   if (!user) {
@@ -46,7 +52,8 @@ export const callback = async (event, context, callback) => {
       email: userInfo.email,
       loginGovId: userInfo.sub,
       firstName: '',
-      lastName: ''
+      lastName: '',
+      userType: process.env.IS_OFFLINE ? 'globalAdmin' : 'standard'
     });
     await user.save();
   }
@@ -54,7 +61,14 @@ export const callback = async (event, context, callback) => {
   const token = JWT.sign(
     {
       id: userInfo.sub,
-      email: userInfo.email
+      email: userInfo.email,
+      userType: user.userType,
+      roles: user.roles
+        .filter((role) => role.approved)
+        .map((role) => ({
+          org: role.organization.id,
+          role: role.role
+        }))
     },
     JWK.asKey(process.env.JWT_KEY!),
     {
@@ -84,7 +98,7 @@ const generatePolicy = (userId, effect, resource, context) => {
         {
           Action: 'execute-api:Invoke',
           Effect: effect,
-          Resource: '*' // #2
+          Resource: '*'
         }
       ]
     },
@@ -93,21 +107,62 @@ const generatePolicy = (userId, effect, resource, context) => {
 };
 
 /** Confirms that a user is authorized */
-// TODO: Add access controls per API function
 export const authorize = async (event, context, callback) => {
   try {
-    const parsed = JWT.verify(
+    let parsed: any = JWT.verify(
       event.authorizationToken,
       JWK.asKey(process.env.JWT_KEY!)
     );
-    const effect = 'Allow';
-    const userId = '123';
-    const authorizerContext = { name: 'user' };
     return callback(
       null,
-      generatePolicy(userId, effect, event.methodArn, authorizerContext)
+      generatePolicy(parsed.id, 'Allow', event.methodArn, parsed)
     );
   } catch {
     return callback('Unauthorized');
   }
+};
+
+/** Check if a user has global write admin permissions */
+export const isGlobalWriteAdmin = (event: APIGatewayProxyEvent) => {
+  return (
+    event.requestContext.authorizer &&
+    event.requestContext.authorizer.userType === 'globalAdmin'
+  );
+};
+
+/** Check if a user has global view permissions */
+export const isGlobalViewAdmin = (event: APIGatewayProxyEvent) => {
+  return (
+    event.requestContext.authorizer &&
+    (event.requestContext.authorizer.userType === 'globalView' ||
+      event.requestContext.authorizer.userType === 'globalAdmin')
+  );
+};
+
+/** Checks if a user is allowed to access (modify) a user */
+export const canAccessUser = (event: APIGatewayProxyEvent, userId?: string) => {
+  return userId && (userId === getUserId(event) || isGlobalWriteAdmin(event));
+};
+
+/** Checks if a user is an admin of the given organization */
+export const isOrgAdmin = (
+  event: APIGatewayProxyEvent,
+  organizationId?: string
+) => {
+  if (!organizationId || !event.requestContext.authorizer) return false;
+  for (const role of event.requestContext.authorizer.roles) {
+    if (role.org === organizationId && role.role === 'admin') return true;
+  }
+  return isGlobalWriteAdmin(event);
+};
+
+/** Returns the organizations a user is a member of */
+export const getOrgMemberships = (event: APIGatewayProxyEvent) => {
+  if (!event.requestContext.authorizer) return [];
+  return event.requestContext.authorizer.roles.map((role) => role.org);
+};
+
+/** Returns a user's id */
+export const getUserId = (event: APIGatewayProxyEvent): string => {
+  return event.requestContext.authorizer!.id;
 };

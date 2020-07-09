@@ -111,7 +111,7 @@ export const Organization: React.FC = () => {
         {}
       );
       const copy = userRoles.map((role, id) =>
-        id == user ? { ...role, approved: true } : role
+        id === user ? { ...role, approved: true } : role
       );
       setUserRoles(copy);
     } catch (e) {

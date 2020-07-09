@@ -18,7 +18,43 @@ export const Header: React.FC = () => {
     setMobileExpanded(expanded => !expanded);
   };
 
-  const authNavItems = [
+  const userNav = [
+    <NavLink
+      activeClassName="usa-current"
+      to="/"
+      exact
+      key="home"
+      className="usa-nav__link"
+    >
+      <span>Dashboard</span>
+    </NavLink>,
+    <NavLink
+      activeClassName="usa-current"
+      to="/risk"
+      key="home"
+      className="usa-nav__link"
+    >
+      <span>Risk Summary</span>
+    </NavLink>,
+    <NavLink
+      activeClassName="usa-current"
+      to="/organizations"
+      key="home"
+      className="usa-nav__link"
+    >
+      <span>My Organizations</span>
+    </NavLink>,
+    <NavLink
+      activeClassName="usa-current"
+      to="/settings"
+      key="home"
+      className="usa-nav__link"
+    >
+      <span>My Account</span>
+    </NavLink>
+  ];
+
+  const adminNav = [
     <NavLink
       activeClassName="usa-current"
       to="/"
@@ -66,9 +102,15 @@ export const Header: React.FC = () => {
       key="home"
       className="usa-nav__link"
     >
-      <span>Settings</span>
+      <span>My Account</span>
     </NavLink>
   ];
+
+  let nav: JSX.Element[] = [];
+  if (user && user.isRegistered) {
+    if (user.userType === 'standard') nav = userNav;
+    else nav = adminNav;
+  }
 
   return (
     <UsaHeader basic className={classes.root}>
@@ -85,7 +127,7 @@ export const Header: React.FC = () => {
         <PrimaryNav
           mobileExpanded={mobileExpanded}
           onToggleMobileNav={onExpandMobile}
-          items={user && user.isRegistered ? authNavItems : []}
+          items={nav}
         />
       </div>
     </UsaHeader>

@@ -44,7 +44,11 @@ export const Users: React.FC = () => {
     {
       Header: 'Organizations',
       accessor: ({ roles }) =>
-        roles && roles.map(role => role.organization.name).join(', '),
+        roles &&
+        roles
+          .filter(role => role.approved)
+          .map(role => role.organization.name)
+          .join(', '),
       id: 'organizations',
       width: 200,
       disableFilters: true

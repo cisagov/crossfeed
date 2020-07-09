@@ -45,5 +45,16 @@ export const AuthRoute: React.FC<AuthRouteProps> = ({
     return null;
   }
 
-  return <Route {...rest} component={user ? authComponent : unauthComponent} />;
+  return (
+    <Route
+      {...rest}
+      component={
+        user ||
+        (window.location.search.includes('code') &&
+          window.location.search.includes('state'))
+          ? authComponent
+          : unauthComponent
+      }
+    />
+  );
 };

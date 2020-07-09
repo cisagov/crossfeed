@@ -34,7 +34,9 @@ export const AuthLogin: React.FC = () => {
         Login with Login.gov
       </Button>
       <br></br>
-      <Link to="/register">New to Crossfeed? Register with Login.gov</Link>
+      <Link to="#" onClick={onSubmit}>
+        New to Crossfeed? Register with Login.gov
+      </Link>
     </AuthForm>
   );
 };

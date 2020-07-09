@@ -11,9 +11,11 @@ import {
   IsUUID
 } from 'class-validator';
 import { User, connectToDatabase, Role } from '../models';
-import { validateBody, wrapHandler, NotFound } from './helpers';
+import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
+import { isGlobalWriteAdmin, getUserId, canAccessUser } from './auth';
 
 export const del = wrapHandler(async (event) => {
+  if (!canAccessUser(event, event.pathParameters?.userId)) return Unauthorized;
   await connectToDatabase();
   const id = event.pathParameters?.userId;
   if (!id || !isUUID(id)) {
@@ -27,15 +29,21 @@ export const del = wrapHandler(async (event) => {
 });
 
 export const update = wrapHandler(async (event) => {
+  if (!canAccessUser(event, event.pathParameters?.userId)) return Unauthorized;
   await connectToDatabase();
   const id = event.pathParameters?.userId;
   if (!id || !isUUID(id)) {
     return NotFound;
   }
   const body = await validateBody(NewUser, event.body);
-  const user = await User.findOne({
-    id: id
-  });
+  const user = await User.findOne(
+    {
+      id: id
+    },
+    {
+      relations: ['roles', 'roles.organization']
+    }
+  );
   if (user) {
     user.firstName = body.firstName ?? user.firstName;
     user.lastName = body.lastName ?? user.lastName;
@@ -76,8 +84,9 @@ class NewUser {
 }
 
 export const invite = wrapHandler(async (event) => {
-  await connectToDatabase();
+  // TODO: associate this with an organization
   const body = await validateBody(NewUser, event.body);
+  await connectToDatabase();
   const scan = await User.create({
     invitePending: true,
     ...body
@@ -91,7 +100,9 @@ export const invite = wrapHandler(async (event) => {
 
 export const me = wrapHandler(async (event) => {
   await connectToDatabase();
-  const result = await User.find();
+  const result = await User.findOne(getUserId(event), {
+    relations: ['roles', 'roles.organization']
+  });
   return {
     statusCode: 200,
     body: JSON.stringify(result)
@@ -99,8 +110,11 @@ export const me = wrapHandler(async (event) => {
 });
 
 export const list = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
-  const result = await User.find();
+  const result = await User.find({
+    relations: ['roles', 'roles.organization']
+  });
   return {
     statusCode: 200,
     body: JSON.stringify(result)

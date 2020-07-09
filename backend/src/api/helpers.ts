@@ -68,3 +68,8 @@ export const NotFound: APIGatewayProxyResult = {
   statusCode: 404,
   body: ''
 };
+
+export const Unauthorized: APIGatewayProxyResult = {
+  statusCode: 403,
+  body: ''
+};
