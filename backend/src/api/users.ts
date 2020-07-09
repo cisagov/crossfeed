@@ -36,8 +36,8 @@ export const update = wrapHandler(async (event) => {
   });
   if (user) {
     User.merge(user, body);
-    user.email = body.email ?? user.email;
-    user.name = body.name ?? user.name;
+    user.firstName = body.firstName ?? user.firstName;
+    user.firstName = body.lastName ?? user.lastName;
     const res = await User.save(user);
     return {
       statusCode: 200,
@@ -49,10 +49,10 @@ export const update = wrapHandler(async (event) => {
 
 class NewUser {
   @IsString()
-  name: string;
+  firstName: string;
 
   @IsString()
-  email: string;
+  lastName: string;
 }
 
 export const invite = wrapHandler(async (event) => {

@@ -7,8 +7,7 @@ import {
   Dashboard,
   Domain,
   AuthLogin,
-  AuthRegister,
-  AuthRegisterConfirm,
+  AuthCreateAccount,
   Scans,
   Logs,
   Risk,
@@ -22,11 +21,6 @@ import { AuthRoute, AuthRedirectRoute, Layout } from 'components';
 import './styles.scss';
 
 Amplify.configure({
-  Auth: {
-    region: 'us-west-2',
-    userPoolId: process.env.REACT_APP_USER_POOL_ID,
-    userPoolWebClientId: process.env.REACT_APP_USER_POOL_WEB_CLIENT_ID
-  },
   API: {
     endpoints: [
       {
@@ -50,12 +44,7 @@ const App: React.FC = () => (
           />
 
           <Route exact path="/callback" component={AuthCallback} />
-          <Route exact path="/register" component={AuthRegister} />
-          <Route
-            exact
-            path="/register-confirm"
-            component={AuthRegisterConfirm}
-          />
+          <Route exact path="/create-account" component={AuthCreateAccount} />
 
           <AuthRedirectRoute path="/domain/:domainId" component={Domain} />
           <AuthRedirectRoute

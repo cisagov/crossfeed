@@ -41,26 +41,21 @@ loginGov.login = async function (): Promise<{
 };
 
 loginGov.callback = async function (body) {
-  try {
-    const issuer = await Issuer.discover(loginGov.discoveryUrl);
-    const client = new issuer.Client(clientOptions, jwkSet);
-    const tokenSet = await client.callback(
-      'http://localhost/callback',
-      {
-        code: body.code,
-        state: body.state
-      },
-      {
-        state: body.origState,
-        nonce: body.nonce
-      }
-    );
-    const userInfo = await client.userinfo(tokenSet);
-    return userInfo;
-  } catch (e) {
-    console.log('an error occurred');
-    console.log(e);
-  }
+  const issuer = await Issuer.discover(loginGov.discoveryUrl);
+  const client = new issuer.Client(clientOptions, jwkSet);
+  const tokenSet = await client.callback(
+    'http://localhost/callback',
+    {
+      code: body.code,
+      state: body.state
+    },
+    {
+      state: body.origState,
+      nonce: body.nonce
+    }
+  );
+  const userInfo = await client.userinfo(tokenSet);
+  return userInfo;
 };
 
 loginGov.randomString = function (length) {

@@ -1,42 +1,53 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { AuthForm } from 'components';
-import { Button } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
 import { parse } from 'query-string';
+import { useHistory } from 'react-router-dom';
 
 interface Errors extends Partial<FormData> {
   global?: string;
 }
 
 export const AuthCallback: React.FC = () => {
-  const { apiPost } = useAuthContext();
+  const { login, apiPost } = useAuthContext();
   const [errors, setErrors] = useState<Errors>({});
+  const history = useHistory();
 
-  React.useEffect(() => {
+  const callback = async () => {
+    console.log('called');
     const parsed = parse(window.location.search);
-    if (!parsed.state || !parsed.code) {
+    if (errors.global || !parsed.state || !parsed.code) {
       setErrors({
         global: 'Something went wrong logging in.'
       });
       return;
     }
     try {
-      apiPost('/auth/callback', {
+      const { existing, token, user } = await apiPost('/auth/callback', {
         body: {
           state: parsed.state,
           code: parsed.code,
           nonce: localStorage.getItem('nonce'),
           origState: localStorage.getItem('state')
         }
-      }).then(result => {
-        console.log(result);
       });
+      login(token, user);
+      console.log(existing);
+
+      if (existing) {
+        history.push('/');
+      } else {
+        history.push('/create-account');
+      }
     } catch (e) {
       setErrors({
         global: 'Something went wrong logging in.'
       });
     }
+  };
+
+  React.useEffect(() => {
+    callback();
   }, []);
 
   return (

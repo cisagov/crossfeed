@@ -1,4 +1,6 @@
 import loginGov from './login-gov';
+import { User, connectToDatabase } from '../models';
+import { JWT, JWK } from 'jose';
 
 export const login = async (event, context, callback) => {
   const { url, state, nonce } = await loginGov.login();
@@ -13,11 +15,51 @@ export const login = async (event, context, callback) => {
 };
 
 export const callback = async (event, context, callback) => {
-  const user = await loginGov.callback(JSON.parse(event.body));
-  // TODO: validate user, create if needed, and sign session
+  let userInfo;
+  try {
+    userInfo = await loginGov.callback(JSON.parse(event.body));
+  } catch {
+    callback(null, {
+      statusCode: 500,
+      body: ''
+    });
+  }
+
+  if (!userInfo.email_verified) {
+    callback(null, {
+      statusCode: 403,
+      body: ''
+    });
+    return;
+  }
+
+  // Look up user by uuid
+  await connectToDatabase();
+  const user = await User.findOne({
+    id: userInfo.sub
+  });
+
+  const token = JWT.sign(
+    {
+      id: userInfo.sub,
+      email: userInfo.email
+    },
+    JWK.asKey(process.env.JWT_KEY!),
+    {
+      expiresIn: '30 days',
+      header: {
+        typ: 'JWT'
+      }
+    }
+  );
+
   callback(null, {
     statusCode: 200,
-    body: JSON.stringify(user)
+    body: JSON.stringify({
+      existing: !!user,
+      token: token,
+      user: userInfo
+    })
   });
 };
 
@@ -56,5 +98,33 @@ export const authorize = async (event, context, callback) => {
   } catch (err) {
     console.log('catch error. Invalid token', err);
     return callback('Unauthorized');
+  }
+};
+
+export const register = async (event, context, callback) => {
+  try {
+    console.log(event.body);
+    const { token, firstName, lastName } = JSON.parse(event.body);
+    const parsed: any = JWT.verify(token, JWK.asKey(process.env.JWT_KEY!));
+
+    console.log(parsed);
+    await connectToDatabase();
+    const user = await User.insert({
+      firstName,
+      lastName,
+      email: parsed.email,
+      id: parsed.id,
+      fullName: ''
+    });
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify(user)
+    });
+  } catch (e) {
+    console.log(e);
+    callback(null, {
+      statusCode: 500,
+      body: ''
+    });
   }
 };

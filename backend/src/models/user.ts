@@ -2,20 +2,19 @@ import {
   Entity,
   Index,
   Column,
-  PrimaryGeneratedColumn,
   UpdateDateColumn,
   CreateDateColumn,
   BaseEntity,
-  ManyToOne,
   OneToMany,
-  OneToOne
+  PrimaryColumn,
+  BeforeInsert
 } from 'typeorm';
 import { Role } from './';
 
 @Entity()
 @Index(['email'], { unique: true })
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
 
   @CreateDateColumn()
@@ -25,7 +24,13 @@ export class User extends BaseEntity {
   updatedAt: Date;
 
   @Column()
-  name: string;
+  firstName: string;
+
+  @Column()
+  lastName: string;
+
+  @Column()
+  fullName: string;
 
   @Column()
   email: string;
@@ -35,4 +40,9 @@ export class User extends BaseEntity {
     onUpdate: 'CASCADE'
   })
   roles: Role[];
+
+  @BeforeInsert()
+  setFullName() {
+    this.fullName = this.firstName + ' ' + this.lastName;
+  }
 }

@@ -2,13 +2,13 @@ import React, { useContext } from 'react';
 
 export interface User {
   email: string;
-  email_verified: boolean;
-  phone_number: string;
-  phone_number_verified: boolean;
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
 }
 
 export interface AuthContextType {
-  login(username: string, password: string): Promise<any>;
+  login(token: string, user: User): Promise<any>;
   logout(): Promise<void>;
   apiGet<T extends object = any>(path: string, init?: any): Promise<T>;
   apiPost<T extends object = any>(path: string, init: any): Promise<T>;

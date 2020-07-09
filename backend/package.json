@@ -12,7 +12,6 @@
     "node-jose": "^1.1.4",
     "openid-client": "^3.15.6",
     "passport": "^0.4.1",
-    "pem-jwk": "^2.0.0",
     "pg": "^8.2.1",
     "portscanner": "^2.2.0",
     "serverless": "^1.72.0",

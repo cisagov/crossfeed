@@ -16,6 +16,13 @@ login:
         path: /auth/login
         method: post
 
+register:
+  handler: src/api/auth.register
+  events:
+    - http:
+        path: /auth/register
+        method: post
+
 authCallback:
   handler: src/api/auth.callback
   events:

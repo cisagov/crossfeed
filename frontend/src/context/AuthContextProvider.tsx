@@ -11,22 +11,13 @@ const baseHeaders: HeadersInit = {
 
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>();
-  const history = useHistory();
 
   const refreshUser = async () => {
-    try {
-      const existing = await Auth.currentAuthenticatedUser();
-      console.log(existing);
-      setUser(existing);
-    } catch (e) {
-      if (process.env.NODE_ENV === 'development')
-        setUser({
-          email: '',
-          email_verified: true,
-          phone_number: '',
-          phone_number_verified: true
-        });
-      else setUser(null);
+    const user = localStorage.getItem('user');
+    if (user) {
+      setUser(JSON.parse(user));
+    } else {
+      setUser(null);
     }
   };
 
@@ -34,36 +25,24 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     refreshUser();
   }, []);
 
-  const login = async (username: string, password: string) => {
-    const user = await Auth.signIn(username, password);
-    if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-      history.push('/create-password');
-    } else {
-      setUser(user);
-    }
-    return user;
+  const logout = async () => {
+    setUser(null);
   };
 
-  const logout = async () => {
-    await Auth.signOut();
-    setUser(null);
+  const login = async (token: string, user: User) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    setUser(user);
   };
 
   const prepareInit = useCallback(async (init: any) => {
     const { headers, ...rest } = init;
-    let token;
-    if (process.env.NODE_ENV === 'development') {
-      token = '';
-    } else {
-      const session = await Auth.currentSession();
-      token = await session.getIdToken().getJwtToken();
-    }
     return {
       ...rest,
       headers: {
         ...headers,
         ...baseHeaders,
-        Authorization: token
+        Authorization: localStorage.getItem('token')
       }
     };
   }, []);
