@@ -11,8 +11,5 @@ ssm_db_name       = "/crossfeed/prod/DATABASE_NAME"
 ssm_db_host       = "/crossfeed/prod/DATABASE_HOST"
 ssm_db_username   = "/crossfeed/prod/DATABASE_USER"
 ssm_db_password   = "/crossfeed/prod/DATABASE_PASSWORD"
-ssm_user_pool     = "/crossfeed/prod/USER_POOL"
 cloudfront_name   = "Crossfeed Prod Frontend"
 db_group_name     = "crossfeed-prod-db-group"
-
-user_pool = { name = "crossfeed-users", domain = "crossfeed", app_name = "prod_auth" }

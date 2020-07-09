@@ -63,11 +63,6 @@ variable ssm_db_password {
   default = "/crossfeed/staging/DATABASE_PASSWORD"
 }
 
-variable ssm_user_pool {
-  type    = string
-  default = "/crossfeed/prod/USER_POOL"
-}
-
 variable cloudfront_name {
   type    = string
   default = "Crossfeed Staging Frontend"
@@ -76,13 +71,4 @@ variable cloudfront_name {
 variable db_group_name {
   type    = string
   default = "crossfeed-db-group"
-}
-
-variable user_pool {
-  type = map
-  default = {
-    name     = "crossfeed-stage-users"
-    domain   = "crossfeed-stage"
-    app_name = "stage-auth"
-  }
 }
