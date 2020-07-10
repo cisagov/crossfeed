@@ -1,0 +1,21 @@
+[
+  {
+    "name": "first",
+    "image": "870467738435.dkr.ecr.us-east-1.amazonaws.com/crossfeed-worker:latest",
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 80,
+        "hostPort": 80
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+          "awslogs-group": "crossfeed",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "worker"
+      }
+    }
+  }
+]
