@@ -2,12 +2,9 @@ import classes from './Organizations.module.scss';
 import React, { useCallback, useState } from 'react';
 import {
   Button,
-  TextInput,
-  Label,
   ModalContainer,
   Overlay,
-  Modal,
-  Checkbox
+  Modal
 } from '@trussworks/react-uswds';
 import { Query } from 'types';
 import { Table } from 'components';
@@ -16,10 +13,7 @@ import { Organization } from 'types';
 import { FaTimes, FaEdit } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { Link } from 'react-router-dom';
-import {
-  OrganizationForm,
-  OrganizationFormValues
-} from 'components/OrganizationForm';
+import { OrganizationForm } from 'components/OrganizationForm';
 
 interface Errors extends Partial<Organization> {
   global?: string;

@@ -6,7 +6,6 @@ import { Organization as OrganizationType, Role } from 'types';
 import { FaGlobe, FaNetworkWired, FaClock, FaUsers } from 'react-icons/fa';
 import { Column } from 'react-table';
 import { Table } from 'components';
-import { Label, TextInput, Checkbox, Button } from '@trussworks/react-uswds';
 import { OrganizationForm } from 'components/OrganizationForm';
 
 interface Errors extends Partial<OrganizationType> {
@@ -20,20 +19,6 @@ export const Organization: React.FC = () => {
   const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
-
-  const [values, setValues] = useState<{
-    name: string;
-    rootDomains: string;
-    ipBlocks: string;
-    isPassive: boolean;
-    inviteOnly: boolean;
-  }>({
-    name: '',
-    rootDomains: '',
-    ipBlocks: '',
-    isPassive: false,
-    inviteOnly: false
-  });
 
   const columns: Column<Role>[] = [
     {
@@ -93,13 +78,6 @@ export const Organization: React.FC = () => {
       );
       setOrganization(organization);
       setUserRoles(organization.userRoles);
-      setValues({
-        name: organization.name,
-        rootDomains: organization.rootDomains.join(', '),
-        ipBlocks: organization.ipBlocks.join(', '),
-        isPassive: organization.isPassive,
-        inviteOnly: organization.inviteOnly
-      });
     } catch (e) {
       console.error(e);
     }
@@ -149,17 +127,6 @@ export const Organization: React.FC = () => {
       });
       console.error(e);
     }
-  };
-
-  const onTextChange: React.ChangeEventHandler<
-    HTMLInputElement | HTMLSelectElement
-  > = e => onChange(e.target.name, e.target.value);
-
-  const onChange = (name: string, value: any) => {
-    setValues({
-      ...values,
-      [name]: value
-    });
   };
 
   useEffect(() => {
