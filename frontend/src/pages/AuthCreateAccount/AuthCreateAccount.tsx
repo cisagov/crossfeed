@@ -8,7 +8,7 @@ import { User } from 'types';
 interface FormData {
   firstName: string;
   lastName: string;
-  organization: string;
+  organization?: string;
 }
 
 interface Errors extends Partial<FormData> {
@@ -20,7 +20,7 @@ export const AuthCreateAccount: React.FC = () => {
   const [values, setValues] = useState<FormData>({
     firstName: '',
     lastName: '',
-    organization: ''
+    organization: undefined
   });
   const [errors, setErrors] = useState<Errors>({});
   const [publicOrgs, setPublicOrgs] = useState<{ name: string; id: string }[]>(
@@ -111,7 +111,6 @@ export const AuthCreateAccount: React.FC = () => {
         before joining.
       </Label>
       <Dropdown
-        required
         id="organization"
         name="organization"
         onChange={onTextChange}
