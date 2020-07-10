@@ -9,7 +9,7 @@ First, run `cp stage.config .env` and change the variables in `.env` to use a bu
 Then run:
 
 ```bash
-npm i -g dotenv
+npm i -g dotenv-cli
 make init
 ```
 
