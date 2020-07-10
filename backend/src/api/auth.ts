@@ -1,36 +1,177 @@
-import { CognitoUserPoolTriggerHandler } from 'aws-lambda';
-import axios from 'axios';
+import loginGov from './login-gov';
+import { User, connectToDatabase } from '../models';
+import * as jwt from 'jsonwebtoken';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 
-const ALLOWED_EMAIL_DOMAINS = ['gov', 'mil'];
+interface UserToken {
+  email: string;
+  id: string;
+  userType: 'standard' | 'globalView' | 'globalAdmin';
+  roles: {
+    org: string;
+    role: 'user' | 'admin';
+  }[];
+}
 
-export const preSignUp: CognitoUserPoolTriggerHandler = async (event) => {
-  const email = event.request.userAttributes.email;
-  console.log('registration attempt: ', email);
+/** Returns redirect url to initiate login.gov OIDC flow */
+export const login = async (event, context, callback) => {
+  const { url, state, nonce } = await loginGov.login();
+  callback(null, {
+    statusCode: 200,
+    body: JSON.stringify({
+      redirectUrl: url,
+      state: state,
+      nonce: nonce
+    })
+  });
+};
 
-  // verify recaptcha
+/** Processes login.gov OIDC callback and returns user token */
+export const callback = async (event, context, callback) => {
+  let userInfo;
   try {
-    const recaptchaToken = event.request.clientMetadata?.recaptchaToken;
-    const res = await axios({
-      url: 'https://www.google.com/recaptcha/api/siteverify',
-      method: 'POST',
-      params: {
-        secret: process.env.RECAPTCHA_SECRET_KEY,
-        response: recaptchaToken
-      }
-    });
-    if (!res.data.success || res.data.action !== 'register') {
-      throw new Error();
-    }
-    console.log('recaptcha verified.');
+    userInfo = await loginGov.callback(JSON.parse(event.body));
   } catch (e) {
-    throw new Error('Recaptcha verification failed');
+    return callback(null, {
+      statusCode: 500,
+      body: ''
+    });
   }
 
-  // verify valid TLD
-  const tld = email.split('.').pop();
-  if (!(tld && ALLOWED_EMAIL_DOMAINS.includes(tld))) {
-    throw new Error('Invalid email address provided');
+  if (!userInfo.email_verified) {
+    return callback(null, {
+      statusCode: 403,
+      body: ''
+    });
   }
 
-  return event;
+  // Look up user by email
+  await connectToDatabase();
+  let user = await User.findOne(
+    {
+      email: userInfo.email
+    },
+    {
+      relations: ['roles', 'roles.organization']
+    }
+  );
+
+  // If user does not exist, create it
+  if (!user) {
+    user = User.create({
+      email: userInfo.email,
+      loginGovId: userInfo.sub,
+      firstName: '',
+      lastName: '',
+      userType: process.env.IS_OFFLINE ? 'globalAdmin' : 'standard'
+    });
+    await user.save();
+  }
+
+  const tokenBody: UserToken = {
+    id: userInfo.sub,
+    email: userInfo.email,
+    userType: user.userType,
+    roles: user.roles
+      .filter((role) => role.approved)
+      .map((role) => ({
+        org: role.organization.id,
+        role: role.role
+      }))
+  };
+
+  const token = jwt.sign(tokenBody, process.env.JWT_SECRET!, {
+    expiresIn: '1 day',
+    header: {
+      typ: 'JWT'
+    }
+  });
+
+  callback(null, {
+    statusCode: 200,
+    body: JSON.stringify({
+      token: token,
+      user: user
+    })
+  });
+};
+
+// Policy helper function
+const generatePolicy = (userId, effect, resource, context) => {
+  return {
+    principalId: userId,
+    policyDocument: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Action: 'execute-api:Invoke',
+          Effect: effect,
+          Resource: resource
+        }
+      ]
+    },
+    context
+  };
+};
+
+/** Confirms that a user is authorized */
+export const authorize = async (event, context, callback) => {
+  try {
+    const parsed: UserToken = jwt.verify(
+      event.authorizationToken,
+      process.env.JWT_SECRET!
+    ) as any;
+    return callback(
+      null,
+      generatePolicy(parsed.id, 'Allow', event.methodArn, parsed)
+    );
+  } catch (e) {
+    console.error(e);
+    return callback('Unauthorized');
+  }
+};
+
+/** Check if a user has global write admin permissions */
+export const isGlobalWriteAdmin = (event: APIGatewayProxyEvent) => {
+  return (
+    event.requestContext.authorizer &&
+    event.requestContext.authorizer.userType === 'globalAdmin'
+  );
+};
+
+/** Check if a user has global view permissions */
+export const isGlobalViewAdmin = (event: APIGatewayProxyEvent) => {
+  return (
+    event.requestContext.authorizer &&
+    (event.requestContext.authorizer.userType === 'globalView' ||
+      event.requestContext.authorizer.userType === 'globalAdmin')
+  );
+};
+
+/** Checks if the current user is allowed to access (modify) a user with id userId */
+export const canAccessUser = (event: APIGatewayProxyEvent, userId?: string) => {
+  return userId && (userId === getUserId(event) || isGlobalWriteAdmin(event));
+};
+
+/** Checks if a user is an admin of the given organization */
+export const isOrgAdmin = (
+  event: APIGatewayProxyEvent,
+  organizationId?: string
+) => {
+  if (!organizationId || !event.requestContext.authorizer) return false;
+  for (const role of event.requestContext.authorizer.roles) {
+    if (role.org === organizationId && role.role === 'admin') return true;
+  }
+  return isGlobalWriteAdmin(event);
+};
+
+/** Returns the organizations a user is a member of */
+export const getOrgMemberships = (event: APIGatewayProxyEvent) => {
+  if (!event.requestContext.authorizer) return [];
+  return event.requestContext.authorizer.roles.map((role) => role.org);
+};
+
+/** Returns a user's id */
+export const getUserId = (event: APIGatewayProxyEvent): string => {
+  return event.requestContext.authorizer!.id;
 };

@@ -11,7 +11,8 @@ import {
 import { Type } from 'class-transformer';
 import { Domain, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
-import { SelectQueryBuilder } from 'typeorm';
+import { SelectQueryBuilder, In } from 'typeorm';
+import { isGlobalViewAdmin, getOrgMemberships } from './auth';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
@@ -75,7 +76,7 @@ class DomainSearch {
     return qs;
   }
 
-  async getResults() {
+  async getResults(event) {
     const qs = Domain.createQueryBuilder('domain')
       .leftJoinAndSelect('domain.services', 'services')
       .leftJoinAndSelect('domain.organization', 'organization')
@@ -85,6 +86,12 @@ class DomainSearch {
       )
       .offset(PAGE_SIZE * (this.page - 1))
       .limit(PAGE_SIZE);
+
+    if (!isGlobalViewAdmin(event)) {
+      qs.andHaving('domain.organization IN (:...orgs)', {
+        orgs: getOrgMemberships(event)
+      });
+    }
 
     this.filterResultQueryset(qs);
     return await qs.getMany();
@@ -111,11 +118,16 @@ class DomainSearch {
     }
   }
 
-  async getCount() {
+  async getCount(event) {
     const qs = Domain.createQueryBuilder('domain').leftJoin(
       'domain.services',
       'services'
     );
+    if (!isGlobalViewAdmin(event)) {
+      qs.andWhere('domain.organization IN (:...orgs)', {
+        orgs: getOrgMemberships(event)
+      });
+    }
     this.filterCountQueryset(qs);
     return await qs.getCount();
   }
@@ -125,8 +137,8 @@ export const list = wrapHandler(async (event) => {
   await connectToDatabase();
   const search = await validateBody(DomainSearch, event.body);
   const [result, count] = await Promise.all([
-    search.getResults(),
-    search.getCount()
+    search.getResults(event),
+    search.getCount(event)
   ]);
   return {
     statusCode: 200,
@@ -138,15 +150,24 @@ export const list = wrapHandler(async (event) => {
 });
 
 export const get = wrapHandler(async (event) => {
+  let where = {};
+  if (isGlobalViewAdmin(event)) {
+    where = {};
+  } else {
+    where = { organization: In(getOrgMemberships(event)) };
+  }
   await connectToDatabase();
   const id = event.pathParameters?.domainId;
   if (!isUUID(id)) {
     return NotFound;
   }
 
-  const result = await Domain.findOne(id, {
-    relations: ['services', 'organization']
-  });
+  const result = await Domain.findOne(
+    { id, ...where },
+    {
+      relations: ['services', 'organization']
+    }
+  );
 
   return {
     statusCode: result ? 200 : 404,

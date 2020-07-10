@@ -7,7 +7,6 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   BaseEntity,
-  OneToOne,
   BeforeInsert,
   ManyToOne
 } from 'typeorm';

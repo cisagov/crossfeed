@@ -11,11 +11,12 @@ import { Domain } from './domain';
 @Entity()
 @Index(['port', 'domain'], { unique: true })
 export class Service extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ManyToOne((type) => Domain, (domain) => domain.services, {
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   })
   domain: Domain;
 

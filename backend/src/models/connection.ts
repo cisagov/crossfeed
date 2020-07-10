@@ -1,5 +1,5 @@
 import { createConnection, Connection } from 'typeorm';
-import { Domain, Service, Report, Scan, Organization } from '.';
+import { Domain, Service, Report, Scan, Organization, User, Role } from '.';
 
 let connection: Connection | null = null;
 
@@ -11,7 +11,7 @@ const connectDb = async (logging?: boolean) => {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    entities: [Domain, Service, Report, Scan, Organization],
+    entities: [Domain, Service, Report, Scan, Organization, User, Role],
     synchronize: false,
     name: 'default',
     dropSchema: false,
