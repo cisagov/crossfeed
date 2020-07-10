@@ -72,3 +72,23 @@ variable db_group_name {
   type    = string
   default = "crossfeed-db-group"
 }
+
+variable worker_ecs_repository_name {
+  type    = string
+  default = "crossfeed-worker-staging"
+}
+
+variable worker_ecs_cluster_name {
+  type    = string
+  default = "crossfeed-worker-staging"
+}
+
+variable worker_ecs_task_definition_family {
+  type    = string
+  default = "crossfeed-worker-staging"
+}
+
+variable worker_ecs_log_group_name {
+  type    = string
+  default = "crossfeed-worker-staging"
+}

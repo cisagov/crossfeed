@@ -1,9 +1,5 @@
-provider "aws" {
-  profile                 = "default"
-  region                  = "us-west-2"
-}
-resource "aws_ecr_repository" "main" {
-  name                = "crossfeed-worker"
+resource "aws_ecr_repository" "worker" {
+  name                = var.worker_ecs_repository_name
   image_scanning_configuration {
     scan_on_push = true
   }
@@ -13,14 +9,30 @@ data "aws_iam_role" "ecs_task_execution_role" {
   name = "ecsTaskExecutionRole"
 }
 
-resource "aws_ecs_cluster" "fargate" {
-  name = "crossfeed-worker"
+resource "aws_ecs_cluster" "worker" {
+  name = var.worker_ecs_cluster_name
   capacity_providers = ["FARGATE"]
 }
 
-resource "aws_ecs_task_definition" "main" {
-  family                = "crossfeed-worker"
-  container_definitions = file("task-definitions/service.json")
+resource "aws_ecs_task_definition" "worker" {
+  family                = var.worker_ecs_task_definition_family
+  container_definitions = <<EOF
+[
+  {
+    "name": "main",
+    "image": "${aws_ecr_repository.worker.repository_url}:latest",
+    "essential": true,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+          "awslogs-group": "${var.worker_ecs_log_group_name}",
+          "awslogs-region": "${var.aws_region}",
+          "awslogs-stream-prefix": "worker"
+      }
+    }
+  }
+]
+  EOF
   requires_compatibilities = ["FARGATE"]
   network_mode          = "awsvpc"
   execution_role_arn       = data.aws_iam_role.ecs_task_execution_role.arn
@@ -40,6 +52,6 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 resource "aws_cloudwatch_log_group" "worker" {
-  name = "crossfeed-worker" # should match awslogs-group in service.json
+  name = var.worker_ecs_log_group_name # should match awslogs-group in service.json
 }
 
