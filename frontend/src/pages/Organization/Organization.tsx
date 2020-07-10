@@ -7,6 +7,7 @@ import { FaGlobe, FaNetworkWired, FaClock, FaUsers } from 'react-icons/fa';
 import { Column } from 'react-table';
 import { Table } from 'components';
 import { Label, TextInput, Checkbox, Button } from '@trussworks/react-uswds';
+import { OrganizationForm } from 'components/OrganizationForm';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
@@ -132,22 +133,8 @@ export const Organization: React.FC = () => {
     }
   };
 
-  const updateOrganization: React.FormEventHandler = async e => {
-    e.preventDefault();
+  const updateOrganization = async (body: Object) => {
     try {
-      let body = {
-        rootDomains:
-          values.rootDomains === ''
-            ? []
-            : values.rootDomains.split(',').map(domain => domain.trim()),
-        ipBlocks:
-          values.ipBlocks === ''
-            ? []
-            : values.ipBlocks.split(',').map(ip => ip.trim()),
-        name: values.name,
-        isPassive: values.isPassive,
-        inviteOnly: values.inviteOnly
-      };
       const org = await apiPut('/organizations/' + organization?.id, {
         body
       });
@@ -160,7 +147,7 @@ export const Organization: React.FC = () => {
             ? 'Error when submitting organization entry.'
             : e.message ?? e.toString()
       });
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -223,63 +210,13 @@ export const Organization: React.FC = () => {
             <h1>Organization Users</h1>
             <Table<Role> columns={columns} data={userRoles} />
             <h2>Update Organization</h2>
-            <form onSubmit={updateOrganization} className={classes.form}>
-              {errors.global && (
-                <p className={classes.error}>{errors.global}</p>
-              )}
-              {message && <p>{message}</p>}
-              <Label htmlFor="name">Name</Label>
-              <TextInput
-                required
-                id="name"
-                name="name"
-                className={classes.textField}
-                type="text"
-                value={values.name}
-                onChange={onTextChange}
-              />
-              <Label htmlFor="rootDomains">Root Domains</Label>
-              <TextInput
-                required
-                id="rootDomains"
-                name="rootDomains"
-                className={classes.textField}
-                type="text"
-                value={values.rootDomains}
-                onChange={onTextChange}
-              />
-              <Label htmlFor="ipBlocks">IP Blocks (Optional)</Label>
-              <TextInput
-                id="ipBlocks"
-                name="ipBlocks"
-                className={classes.textField}
-                type="text"
-                value={values.ipBlocks}
-                onChange={onTextChange}
-              />
-              <br></br>
-              <Checkbox
-                id="isPassive"
-                name="isPassive"
-                label="Passive mode"
-                checked={values.isPassive}
-                onChange={e => {
-                  onChange(e.target.name, e.target.checked);
-                }}
-              />
-              <br></br>
-              <Checkbox
-                id="inviteOnly"
-                name="inviteOnly"
-                label="Invite only"
-                checked={values.inviteOnly}
-                onChange={e => {
-                  onChange(e.target.name, e.target.checked);
-                }}
-              />
-              <br></br>
-              <Button type="submit">Update Organization</Button>
-            </form>
+            {errors.global && <p className={classes.error}>{errors.global}</p>}
+            {message && <p>{message}</p>}
+            <OrganizationForm
+              onSubmit={updateOrganization}
+              organization={organization}
+              type="update"
+            ></OrganizationForm>
           </>
         )}
       </div>

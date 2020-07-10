@@ -16,6 +16,10 @@ import { Organization } from 'types';
 import { FaTimes, FaEdit } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { Link } from 'react-router-dom';
+import {
+  OrganizationForm,
+  OrganizationFormValues
+} from 'components/OrganizationForm';
 
 interface Errors extends Partial<Organization> {
   global?: string;
@@ -97,20 +101,6 @@ export const Organizations: React.FC = () => {
   ];
   const [errors, setErrors] = useState<Errors>({});
 
-  const [values, setValues] = useState<{
-    name: string;
-    rootDomains: string;
-    ipBlocks: string;
-    isPassive: boolean;
-    inviteOnly: boolean;
-  }>({
-    name: '',
-    rootDomains: '',
-    ipBlocks: '',
-    isPassive: false,
-    inviteOnly: false
-  });
-
   const fetchOrganizations = useCallback(
     async (query: Query<Organization>) => {
       try {
@@ -141,22 +131,8 @@ export const Organizations: React.FC = () => {
     }
   };
 
-  const onSubmit: React.FormEventHandler = async e => {
-    e.preventDefault();
+  const onSubmit = async (body: Object) => {
     try {
-      let body = {
-        rootDomains:
-          values.rootDomains === ''
-            ? []
-            : values.rootDomains.split(',').map(domain => domain.trim()),
-        ipBlocks:
-          values.ipBlocks === ''
-            ? []
-            : values.ipBlocks.split(',').map(ip => ip.trim()),
-        name: values.name,
-        isPassive: values.isPassive,
-        inviteOnly: values.inviteOnly
-      };
       const org = await apiPost('/organizations/', {
         body
       });
@@ -168,19 +144,8 @@ export const Organizations: React.FC = () => {
             ? 'Error when submitting organization entry.'
             : e.message ?? e.toString()
       });
-      console.log(e);
+      console.error(e);
     }
-  };
-
-  const onTextChange: React.ChangeEventHandler<
-    HTMLInputElement | HTMLSelectElement
-  > = e => onChange(e.target.name, e.target.value);
-
-  const onChange = (name: string, value: any) => {
-    setValues(values => ({
-      ...values,
-      [name]: value
-    }));
   };
 
   React.useEffect(() => {
@@ -201,61 +166,8 @@ export const Organizations: React.FC = () => {
         fetchData={fetchOrganizations}
       />
       <h2>Add an organization</h2>
-      <form onSubmit={onSubmit} className={classes.form}>
-        {errors.global && <p className={classes.error}>{errors.global}</p>}
-        <Label htmlFor="name">Name</Label>
-        <TextInput
-          required
-          id="name"
-          name="name"
-          className={classes.textField}
-          type="text"
-          value={values.name}
-          onChange={onTextChange}
-        />
-        <Label htmlFor="rootDomains">Root Domains</Label>
-        <TextInput
-          required
-          id="rootDomains"
-          name="rootDomains"
-          className={classes.textField}
-          type="text"
-          value={values.rootDomains}
-          onChange={onTextChange}
-        />
-        <Label htmlFor="ipBlocks">IP Blocks (Optional)</Label>
-        <TextInput
-          id="ipBlocks"
-          name="ipBlocks"
-          className={classes.textField}
-          type="text"
-          value={values.ipBlocks}
-          onChange={onTextChange}
-        />
-        <br></br>
-        <Checkbox
-          id="isPassive"
-          name="isPassive"
-          label="Passive mode"
-          checked={values.isPassive}
-          onChange={e => {
-            onChange(e.target.name, e.target.checked);
-          }}
-        />
-        <br></br>
-        <Checkbox
-          id="inviteOnly"
-          name="inviteOnly"
-          label="Invite only"
-          checked={values.inviteOnly}
-          onChange={e => {
-            onChange(e.target.name, e.target.checked);
-          }}
-        />
-        <br></br>
-        <Button type="submit">Create Organization</Button>
-      </form>
-
+      {errors.global && <p className={classes.error}>{errors.global}</p>}
+      <OrganizationForm onSubmit={onSubmit} type="create"></OrganizationForm>
       {showModal && (
         <div>
           <Overlay />
