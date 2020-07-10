@@ -13,6 +13,7 @@ class ECSClient {
 
   constructor() {
     this.isLocal = (process.env.IS_OFFLINE || process.env.IS_LOCAL) ? true : false;
+    this.isLocal = false;
     if (this.isLocal) {
       this.docker = new Docker();
     } else {
@@ -28,11 +29,14 @@ class ECSClient {
     if (this.isLocal) {
       await this.docker!.run("crossfeed-worker", command);
       return {
-        tasks: []
+        tasks: [
+          {}
+        ]
       };
     }
+    // TODO: specify a cluster, so the default cluster isn't just used.
     return this.ecs!.runTask({
-      taskDefinition: "crossfeed-worker",
+      taskDefinition: "crossfeed-worker:latest",
       overrides: {
         containerOverrides: [
           {
@@ -40,7 +44,7 @@ class ECSClient {
           }
         ]
       }
-    });
+    }).promise();
   }
 }
 

@@ -16,9 +16,10 @@ export const handler: Handler = async (event) => {
   const lambda = new Lambda(args);
 
   let ecsClient = new ECSClient();
-  await ecsClient.runCommand(["findomain",
+  const result = await ecsClient.runCommand(["findomain",
     "-t",
     "google.com"]);
+  console.error(result.tasks);
   return;
 
   await connectToDatabase();
