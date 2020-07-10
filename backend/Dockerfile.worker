@@ -1,6 +1,18 @@
-FROM node:14-buster-slim
+FROM node:14-buster-slim as build
 
-WORKDIR /tmp
+WORKDIR /app
+
+COPY ./package* ./
+
+RUN npm ci
+
+COPY . .
+
+RUN npx webpack
+
+FROM node:14-buster-slim as deps
+
+WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
     wget \
@@ -11,10 +23,21 @@ RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/download/1.7.0/
 
 RUN wget --quiet https://github.com/OWASP/Amass/releases/download/v3.7.3/amass_linux_i386.zip -O amass.zip && unzip -q amass.zip && cp amass_linux_i386/amass /usr/bin && chmod +x /usr/bin/amass
 
+FROM node:14-buster-slim
+
 WORKDIR /app
 
-RUN findomain --version
+COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
+
+COPY --from=deps /usr/bin/findomain /usr/bin/findomain
+COPY --from=deps /usr/bin/amass /usr/bin/amass
+
+RUN echo "HI"
+
+RUN CROSSFEED_COMMAND_OPTIONS={"A":"B"} node worker.bundle.js
 
 RUN amass --version
 
-CMD ["amass", "--version"]
+RUN findomain --version
+
+CMD ["node", "worker.bundle.js"]

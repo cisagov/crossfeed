@@ -16,39 +16,42 @@ export const handler: Handler = async (event) => {
   const lambda = new Lambda(args);
 
   let ecsClient = new ECSClient();
-  const result = await ecsClient.runCommand(["findomain",
-    "-t",
-    "google.com"]);
+  const result = await ecsClient.runCommand({
+    organizationId: "organizationId",
+    organizationName: "organizationName",
+    scanId: "scanId",
+    scanName: "scanName"
+  });
   console.error(result.tasks);
   return;
 
-  await connectToDatabase();
+  // await connectToDatabase();
 
-  const scans = await Scan.find();
-  for (const scan of scans) {
-    if (
-      !scan.lastRun ||
-      scan.lastRun.getTime() < new Date().getTime() - 1000 * scan.frequency
-    ) {
-      try {
-        // Asynchronously invoke the function
-        await lambda
-          .invoke({
-            FunctionName: process.env.AWS_LAMBDA_FUNCTION_NAME!.replace(
-              'scheduler',
-              scan.name
-            ),
-            Payload: JSON.stringify(scan.arguments),
-            InvocationType: 'Event'
-          })
-          .promise();
-        console.log(`Successfully invoked ${scan.name} scan.`);
-        scan.lastRun = new Date();
-        scan.save();
-      } catch (error) {
-        console.log(`Error invoking ${scan.name} scan:`);
-        console.error(error);
-      }
-    }
-  }
+  // const scans = await Scan.find();
+  // for (const scan of scans) {
+  //   if (
+  //     !scan.lastRun ||
+  //     scan.lastRun.getTime() < new Date().getTime() - 1000 * scan.frequency
+  //   ) {
+  //     try {
+  //       // Asynchronously invoke the function
+  //       await lambda
+  //         .invoke({
+  //           FunctionName: process.env.AWS_LAMBDA_FUNCTION_NAME!.replace(
+  //             'scheduler',
+  //             scan.name
+  //           ),
+  //           Payload: JSON.stringify(scan.arguments),
+  //           InvocationType: 'Event'
+  //         })
+  //         .promise();
+  //       console.log(`Successfully invoked ${scan.name} scan.`);
+  //       scan.lastRun = new Date();
+  //       scan.save();
+  //     } catch (error) {
+  //       console.log(`Error invoking ${scan.name} scan:`);
+  //       console.error(error);
+  //     }
+  //   }
+  // }
 };
