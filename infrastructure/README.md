@@ -4,7 +4,7 @@ Terraform infrastructure
 
 Make sure you set the default AWS profile, or set the `AWS_PROFILE` environment variable.
 
-First, change the variables in `stage.config` to use a bucket you have access to to store state.
+First, run `cp stage.config .env` and change the variables in `.env` to use a bucket you have access to to store state.
 
 Then run:
 

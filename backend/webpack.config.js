@@ -11,6 +11,9 @@ module.exports = {
         path: path.join(__dirname, "dist"),
         filename: "[name].bundle.js"
     },
+    optimization: {
+        minimize: false
+    },
     target: 'node',
     // mode: slsw.lib.webpack.isLocal ? "development" : "production",
     mode: "production",

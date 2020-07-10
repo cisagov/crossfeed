@@ -1,30 +1,30 @@
 import { Handler } from 'aws-lambda';
-import { connectToDatabase, Domain, Organization } from '../models';
+import { connectToDatabase, Domain, Organization, Scan } from '../models';
 import { spawnSync } from 'child_process';
 import { readFileSync } from 'fs';
 import { saveDomainToDb, getRootDomains } from './helpers';
 import { plainToClass } from 'class-transformer';
+import { CommandOptions } from './ecs-client';
 
-const LAYER_PATH =
-  process.env.IS_OFFLINE || process.env.IS_LOCAL ? '/app/layers' : '/opt';
-const OUT_PATH =
-  process.env.IS_OFFLINE || process.env.IS_LOCAL ? 'out.json' : '/tmp/out.json';
+const OUT_PATH = 'out.txt';
 
-export const handler: Handler = async (event) => {
+export default async (commandOptions: CommandOptions) => {
   await connectToDatabase();
 
-  if (process.env.IS_OFFLINE || process.env.IS_LOCAL) {
-    spawnSync('chmod', ['+x', LAYER_PATH + '/findomain/findomain'], {
-      stdio: 'pipe'
-    });
-  }
+  const { organizationId, organizationName } = commandOptions;
 
-  const allDomains = await getRootDomains(true);
-  let count = 0;
-  for (const rootDomain of allDomains) {
+  console.log("Running findomain on organization ", organizationName);
+
+  const organization = await Organization.findOne(organizationId);
+  const { rootDomains } = organization!;
+  
+  for (let rootDomain of rootDomains) {
+    let count = 0;
+    const args = ['-it', rootDomain, '-u', OUT_PATH];
+    console.log("Running findomain with args", args);
     spawnSync(
-      LAYER_PATH + '/findomain/findomain',
-      ['-it', rootDomain.name, '-u', OUT_PATH],
+      'findomain',
+      args,
       { stdio: 'pipe' }
     );
 
@@ -37,11 +37,11 @@ export const handler: Handler = async (event) => {
         plainToClass(Domain, {
           name: split[0],
           ip: split[1],
-          organization: rootDomain.organization
+          organization: organization
         })
       );
       count++;
     }
+    console.log(`Findomain created/updated ${count} new domains`);
   }
-  console.log(`Findomain created/updated ${count} new domains`);
 };

@@ -2,8 +2,8 @@ import { ECS } from "aws-sdk";
 import * as Docker from "dockerode";
 
 export interface CommandOptions {
-  organizationId: String,
-  organizationName: String,
+  organizationId: string,
+  organizationName: string,
   scanId: string,
   scanName: string
 }
@@ -36,7 +36,16 @@ class ECSClient {
     if (this.isLocal) {
       const container = await this.docker!.createContainer({
         Image: "crossfeed-worker",
-        Env: ["CROSSFEED_COMMAND_OPTIONS=" + JSON.stringify(commandOptions)]
+        Env: [
+          `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
+          `DB_DIALECT=${process.env.DB_DIALECT}`,
+          `DB_HOST=localhost`,
+          `DB_PORT=${process.env.DB_PORT}`,
+          `DB_NAME=${process.env.DB_NAME}`,
+          `DB_USERNAME=${process.env.DB_USERNAME}`,
+          `DB_PASSWORD=${process.env.DB_PASSWORD}`,
+        ],
+        NetworkMode: "host"
       });
       await container.start();
       return {
