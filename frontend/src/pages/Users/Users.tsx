@@ -54,6 +54,19 @@ export const Users: React.FC = () => {
       disableFilters: true
     },
     {
+      Header: 'User type',
+      accessor: ({ userType }) =>
+        userType === 'standard'
+          ? 'Standard'
+          : userType === 'globalView'
+          ? 'Global View'
+          : 'Global Admin',
+      width: 50,
+      minWidth: 50,
+      id: 'userType',
+      disableFilters: true
+    },
+    {
       Header: 'Delete',
       id: 'delete',
       Cell: ({ row }: { row: { index: number } }) => (
@@ -235,9 +248,8 @@ export const Users: React.FC = () => {
               title={<h2>Delete user?</h2>}
             >
               <p>
-                Are you sure you would like to delete the{' '}
-                <code>{users[selectedRow].fullName}</code> user? This will
-                irreversibly delete all associated domains.
+                Are you sure you would like to delete{' '}
+                <code>{users[selectedRow].fullName}</code>?
               </p>
             </Modal>
           </ModalContainer>

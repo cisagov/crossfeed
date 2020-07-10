@@ -23,7 +23,7 @@ export const Header: React.FC = () => {
       activeClassName="usa-current"
       to="/"
       exact
-      key="home"
+      key="dashboard"
       className="usa-nav__link"
     >
       <span>Dashboard</span>
@@ -31,7 +31,7 @@ export const Header: React.FC = () => {
     <NavLink
       activeClassName="usa-current"
       to="/risk"
-      key="home"
+      key="risk"
       className="usa-nav__link"
     >
       <span>Risk Summary</span>
@@ -39,7 +39,7 @@ export const Header: React.FC = () => {
     <NavLink
       activeClassName="usa-current"
       to="/organizations"
-      key="home"
+      key="organizations"
       className="usa-nav__link"
     >
       <span>My Organizations</span>
@@ -47,7 +47,7 @@ export const Header: React.FC = () => {
     <NavLink
       activeClassName="usa-current"
       to="/settings"
-      key="home"
+      key="settings"
       className="usa-nav__link"
     >
       <span>My Account</span>
@@ -59,7 +59,7 @@ export const Header: React.FC = () => {
       activeClassName="usa-current"
       to="/"
       exact
-      key="home"
+      key="dashboard"
       className="usa-nav__link"
     >
       <span>Dashboard</span>
@@ -67,7 +67,7 @@ export const Header: React.FC = () => {
     <NavLink
       activeClassName="usa-current"
       to="/risk"
-      key="home"
+      key="risk"
       className="usa-nav__link"
     >
       <span>Risk Summary</span>
@@ -75,7 +75,7 @@ export const Header: React.FC = () => {
     <NavLink
       activeClassName="usa-current"
       to="/scans"
-      key="home"
+      key="scans"
       className="usa-nav__link"
     >
       <span>Scans</span>
@@ -83,7 +83,7 @@ export const Header: React.FC = () => {
     <NavLink
       activeClassName="usa-current"
       to="/organizations"
-      key="home"
+      key="organizations"
       className="usa-nav__link"
     >
       <span>Organizations</span>
@@ -91,7 +91,7 @@ export const Header: React.FC = () => {
     <NavLink
       activeClassName="usa-current"
       to="/users"
-      key="home"
+      key="users"
       className="usa-nav__link"
     >
       <span>Users</span>
@@ -99,7 +99,7 @@ export const Header: React.FC = () => {
     <NavLink
       activeClassName="usa-current"
       to="/settings"
-      key="home"
+      key="settings"
       className="usa-nav__link"
     >
       <span>My Account</span>

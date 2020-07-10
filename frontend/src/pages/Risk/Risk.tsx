@@ -5,6 +5,7 @@ import { ResponsiveBar, BarDatum } from '@nivo/bar';
 import { Table } from '@trussworks/react-uswds';
 import { FaInfoCircle } from 'react-icons/fa';
 
+// TODO: Pull in actual data to render charts
 const pieData = [
   {
     id: 'java',

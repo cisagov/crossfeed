@@ -3,11 +3,11 @@ import { Issuer, ClientMetadata } from 'openid-client';
 
 const loginGov: any = {
   discoveryUrl:
-    process.env.DISCOVERY_URL || 'https://idp.int.identitysandbox.gov'
+    process.env.LOGIN_GOV_BASE_URL + '/.well-known/openid-configuration'
 };
 
 const jwkSet = {
-  keys: [JSON.parse(process.env.JWT_KEY!)]
+  keys: [JSON.parse(process.env.LOGIN_GOV_JWT_KEY!)]
 };
 
 const clientOptions: ClientMetadata = {
@@ -16,7 +16,7 @@ const clientOptions: ClientMetadata = {
   id_token_signed_response_alg: 'RS256',
   key: 'client_id',
   redirect_uris: [process.env.LOGIN_GOV_REDIRECT_URI!],
-  token_endpoint: 'https://idp.int.identitysandbox.gov/api/openid_connect/token'
+  token_endpoint: process.env.LOGIN_GOV_BASE_URL + '/api/openid_connect/token'
 };
 
 loginGov.login = async function (): Promise<{

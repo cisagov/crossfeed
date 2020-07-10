@@ -145,6 +145,7 @@ export const Domain: React.FC = () => {
                   <Button
                     type="button"
                     onClick={() => {
+                      // TODO: Implement backend logic for requesting review
                       setShowReviewModal(false);
                     }}
                   >
@@ -155,9 +156,9 @@ export const Domain: React.FC = () => {
               title={<h2>Request review?</h2>}
             >
               <p>
-                This will request a quick 1-hour manual security review of this
-                asset by CISA. By clicking "Submit", you opt in for CISA to
-                review the asset and report any vulnerabilities found.
+                This will request a quick manual security review of this asset
+                by CISA. By clicking "Submit", you opt in for CISA to review the
+                asset and report any vulnerabilities found.
               </p>
             </Modal>
           </ModalContainer>

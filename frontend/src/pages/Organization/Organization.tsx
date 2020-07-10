@@ -151,7 +151,6 @@ export const Organization: React.FC = () => {
       const org = await apiPut('/organizations/' + organization?.id, {
         body
       });
-      console.log(org);
       setOrganization(org);
       setMessage('Organization successfully updated');
     } catch (e) {
@@ -262,7 +261,7 @@ export const Organization: React.FC = () => {
               <Checkbox
                 id="isPassive"
                 name="isPassive"
-                label="Passive operation"
+                label="Passive mode"
                 checked={values.isPassive}
                 onChange={e => {
                   onChange(e.target.name, e.target.checked);

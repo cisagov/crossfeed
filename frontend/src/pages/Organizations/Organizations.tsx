@@ -236,7 +236,7 @@ export const Organizations: React.FC = () => {
         <Checkbox
           id="isPassive"
           name="isPassive"
-          label="Passive operation"
+          label="Passive mode"
           checked={values.isPassive}
           onChange={e => {
             onChange(e.target.name, e.target.checked);

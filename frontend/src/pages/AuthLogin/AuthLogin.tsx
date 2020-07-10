@@ -20,6 +20,7 @@ export const AuthLogin: React.FC = () => {
       localStorage.setItem('nonce', nonce);
       window.location.href = redirectUrl;
     } catch (e) {
+      console.error(e);
       setErrors({
         global: 'Something went wrong logging in.'
       });

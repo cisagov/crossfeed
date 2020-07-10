@@ -20,7 +20,12 @@ import { In } from 'typeorm';
 
 export const del = wrapHandler(async (event) => {
   const id = event.pathParameters?.organizationId;
-  if (!id || !isOrgAdmin(event, id)) return Unauthorized;
+
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+
+  if (!isOrgAdmin(event, id)) return Unauthorized;
 
   await connectToDatabase();
   const result = await Organization.delete(id);
@@ -32,7 +37,12 @@ export const del = wrapHandler(async (event) => {
 
 export const update = wrapHandler(async (event) => {
   const id = event.pathParameters?.organizationId;
-  if (!id || !isOrgAdmin(event, id)) return Unauthorized;
+
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+
+  if (!isOrgAdmin(event, id)) return Unauthorized;
 
   const body = await validateBody(NewOrganization, event.body);
   await connectToDatabase();

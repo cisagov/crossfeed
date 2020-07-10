@@ -12,7 +12,7 @@ import {
 } from 'class-validator';
 import { User, connectToDatabase, Role } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
-import { isGlobalWriteAdmin, getUserId, canAccessUser } from './auth';
+import { getUserId, canAccessUser, isGlobalViewAdmin } from './auth';
 
 export const del = wrapHandler(async (event) => {
   if (!canAccessUser(event, event.pathParameters?.userId)) return Unauthorized;
@@ -110,7 +110,7 @@ export const me = wrapHandler(async (event) => {
 });
 
 export const list = wrapHandler(async (event) => {
-  if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  if (!isGlobalViewAdmin(event)) return Unauthorized;
   await connectToDatabase();
   const result = await User.find({
     relations: ['roles', 'roles.organization']

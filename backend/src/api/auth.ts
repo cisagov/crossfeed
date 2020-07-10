@@ -1,7 +1,17 @@
 import loginGov from './login-gov';
 import { User, connectToDatabase } from '../models';
-import { JWT, JWK } from 'jose';
+import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
+
+interface UserToken {
+  email: string;
+  id: string;
+  userType: 'standard' | 'globalView' | 'globalAdmin';
+  roles: {
+    org: string;
+    role: 'user' | 'admin';
+  }[];
+}
 
 /** Returns redirect url to initiate login.gov OIDC flow */
 export const login = async (event, context, callback) => {
@@ -58,26 +68,24 @@ export const callback = async (event, context, callback) => {
     await user.save();
   }
 
-  const token = JWT.sign(
-    {
-      id: userInfo.sub,
-      email: userInfo.email,
-      userType: user.userType,
-      roles: user.roles
-        .filter((role) => role.approved)
-        .map((role) => ({
-          org: role.organization.id,
-          role: role.role
-        }))
-    },
-    JWK.asKey(process.env.JWT_KEY!),
-    {
-      expiresIn: '30 days',
-      header: {
-        typ: 'JWT'
-      }
+  const tokenBody: UserToken = {
+    id: userInfo.sub,
+    email: userInfo.email,
+    userType: user.userType,
+    roles: user.roles
+      .filter((role) => role.approved)
+      .map((role) => ({
+        org: role.organization.id,
+        role: role.role
+      }))
+  };
+
+  const token = jwt.sign(tokenBody, process.env.JWT_SECRET!, {
+    expiresIn: '1 day',
+    header: {
+      typ: 'JWT'
     }
-  );
+  });
 
   callback(null, {
     statusCode: 200,
@@ -98,7 +106,7 @@ const generatePolicy = (userId, effect, resource, context) => {
         {
           Action: 'execute-api:Invoke',
           Effect: effect,
-          Resource: '*'
+          Resource: resource
         }
       ]
     },
@@ -109,15 +117,16 @@ const generatePolicy = (userId, effect, resource, context) => {
 /** Confirms that a user is authorized */
 export const authorize = async (event, context, callback) => {
   try {
-    const parsed: any = JWT.verify(
+    const parsed: UserToken = jwt.verify(
       event.authorizationToken,
-      JWK.asKey(process.env.JWT_KEY!)
-    );
+      process.env.JWT_SECRET!
+    ) as any;
     return callback(
       null,
       generatePolicy(parsed.id, 'Allow', event.methodArn, parsed)
     );
-  } catch {
+  } catch (e) {
+    console.error(e);
     return callback('Unauthorized');
   }
 };
@@ -139,7 +148,7 @@ export const isGlobalViewAdmin = (event: APIGatewayProxyEvent) => {
   );
 };
 
-/** Checks if a user is allowed to access (modify) a user */
+/** Checks if the current user is allowed to access (modify) a user with id userId */
 export const canAccessUser = (event: APIGatewayProxyEvent, userId?: string) => {
   return userId && (userId === getUserId(event) || isGlobalWriteAdmin(event));
 };

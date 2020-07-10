@@ -41,6 +41,10 @@ export const Dashboard: React.FC = () => {
       });
 
       login(token, user);
+
+      localStorage.removeItem('nonce');
+      localStorage.removeItem('state');
+
       if (user.firstName !== '') {
         history.push('/');
       } else {
