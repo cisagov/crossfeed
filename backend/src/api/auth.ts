@@ -72,7 +72,7 @@ export const callback = async (event, context, callback) => {
     id: userInfo.sub,
     email: userInfo.email,
     userType: user.userType,
-    roles: user.roles
+    roles: (user.roles || [])
       .filter((role) => role.approved)
       .map((role) => ({
         org: role.organization.id,
