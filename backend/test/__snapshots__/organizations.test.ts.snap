@@ -4,6 +4,7 @@ exports[`organizations add new organization 1`] = `
 Object {
   "createdAt": Any<String>,
   "id": Any<String>,
+  "inviteOnly": true,
   "ipBlocks": Array [],
   "isPassive": false,
   "name": Any<String>,

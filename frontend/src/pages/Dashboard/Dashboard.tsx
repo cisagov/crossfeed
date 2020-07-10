@@ -6,6 +6,8 @@ import { Domain } from 'types';
 import { createColumns } from './columns';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
+import { useHistory } from 'react-router-dom';
+import { parse } from 'query-string';
 
 interface ApiResponse {
   result: Domain[];
@@ -13,13 +15,52 @@ interface ApiResponse {
 }
 
 export const Dashboard: React.FC = () => {
-  const { apiPost } = useAuthContext();
+  const { user, login, apiPost } = useAuthContext();
   const [domains, setDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
 
   const columns = useMemo(() => createColumns(), []);
   const PAGE_SIZE = 25;
+  const history = useHistory();
+
+  // Called to sign in the user
+  const callback = useCallback(async () => {
+    const parsed = parse(window.location.search);
+    if (!parsed.state || !parsed.code) {
+      return;
+    }
+    try {
+      const { token, user } = await apiPost('/auth/callback', {
+        body: {
+          state: parsed.state,
+          code: parsed.code,
+          nonce: localStorage.getItem('nonce'),
+          origState: localStorage.getItem('state')
+        }
+      });
+
+      login(token, user);
+
+      localStorage.removeItem('nonce');
+      localStorage.removeItem('state');
+
+      if (user.firstName !== '') {
+        history.push('/');
+      } else {
+        history.push('/create-account');
+      }
+    } catch {
+      history.push('/');
+    }
+  }, [apiPost, history, login]);
+
+  React.useEffect(() => {
+    if (user && user.firstName === '') {
+      history.push('/create-account');
+    }
+    callback();
+  }, [callback, history, user]);
 
   const fetchDomains = useCallback(
     async (query: Query<Domain>) => {
@@ -57,7 +98,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <h1>Dashboard</h1>
+      <h1>Dashboard</h1>{' '}
       <Table<Domain>
         renderPagination={renderPagination}
         columns={columns}

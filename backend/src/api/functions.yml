@@ -6,13 +6,22 @@ healthCheck:
         method: get
         cors: true
 
-preSignUp:
-  handler: src/api/auth.preSignUp
+authorize:
+  handler: src/api/auth.authorize
+
+login:
+  handler: src/api/auth.login
   events:
-    - cognitoUserPool:
-        pool: crossfeed-stage-users
-        trigger: PreSignUp
-        existing: true
+    - http:
+        path: /auth/login
+        method: post
+
+authCallback:
+  handler: src/api/auth.callback
+  events:
+    - http:
+        path: /auth/callback
+        method: post
 
 listDomains:
   handler: src/api/domains.list
@@ -21,8 +30,7 @@ listDomains:
         path: /domain/search
         method: post
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+        authorizer: authorize
 
 getDomain:
   handler: src/api/domains.get
@@ -31,8 +39,7 @@ getDomain:
         path: /domain/{domainId}
         method: get
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+        authorizer: authorize
 
 listReports:
   handler: src/api/reports.list
@@ -41,8 +48,7 @@ listReports:
         path: /report/search
         method: post
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+        authorizer: authorize
 
 getReport:
   handler: src/api/reports.get
@@ -51,8 +57,7 @@ getReport:
         path: /report/{reportId}
         method: get
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+        authorizer: authorize
 
 listScans:
   handler: src/api/scans.list
@@ -61,8 +66,7 @@ listScans:
         path: /scans
         method: get
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+        authorizer: authorize
 
 createScan:
   handler: src/api/scans.create
@@ -71,8 +75,7 @@ createScan:
         path: /scans
         method: post
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+        authorizer: authorize
 
 updateScan:
   handler: src/api/scans.update
@@ -81,8 +84,7 @@ updateScan:
         path: /scans/{scanId}
         method: put
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+        authorizer: authorize
 
 deleteScan:
   handler: src/api/scans.del
@@ -91,8 +93,7 @@ deleteScan:
         path: /scans/{scanId}
         method: delete
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+        authorizer: authorize
 
 listOrganizations:
   handler: src/api/organizations.list
@@ -101,8 +102,25 @@ listOrganizations:
         path: /organizations
         method: get
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+        authorizer: authorize
+
+listPublicOrganizations:
+  handler: src/api/organizations.listPublicNames
+  events:
+    - http:
+        path: /organizations/public
+        method: get
+        cors: true
+        authorizer: authorize
+
+getOrganizations:
+  handler: src/api/organizations.get
+  events:
+    - http:
+        path: /organizations/{organizationId}
+        method: get
+        cors: true
+        authorizer: authorize
 
 createOrganization:
   handler: src/api/organizations.create
@@ -111,8 +129,7 @@ createOrganization:
         path: /organizations
         method: post
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+        authorizer: authorize
 
 updateOrganization:
   handler: src/api/organizations.update
@@ -121,8 +138,25 @@ updateOrganization:
         path: /organizations/{organizationId}
         method: put
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+        authorizer: authorize
+
+approveRole:
+  handler: src/api/organizations.approveRole
+  events:
+    - http:
+        path: /organizations/{organizationId}/roles/{roleId}/approve
+        method: post
+        cors: true
+        authorizer: authorize
+
+removeRole:
+  handler: src/api/organizations.removeRole
+  events:
+    - http:
+        path: /organizations/{organizationId}/roles/{roleId}/remove
+        method: post
+        cors: true
+        authorizer: authorize
 
 deleteOrganization:
   handler: src/api/organizations.del
@@ -131,5 +165,49 @@ deleteOrganization:
         path: /organizations/{organizationId}
         method: delete
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-west-2:321940898149:userpool/us-west-2_jFr7nh5qn
+        authorizer: authorize
+
+listUsers:
+  handler: src/api/users.list
+  events:
+    - http:
+        path: /users
+        method: get
+        cors: true
+        authorizer: authorize
+
+getMe:
+  handler: src/api/users.me
+  events:
+    - http:
+        path: /users/me
+        method: get
+        cors: true
+        authorizer: authorize
+
+inviteUser:
+  handler: src/api/users.invite
+  events:
+    - http:
+        path: /users
+        method: post
+        cors: true
+        authorizer: authorize
+
+updateUser:
+  handler: src/api/users.update
+  events:
+    - http:
+        path: /users/{userId}
+        method: put
+        cors: true
+        authorizer: authorize
+
+deleteUser:
+  handler: src/api/users.del
+  events:
+    - http:
+        path: /users/{userId}
+        method: delete
+        cors: true
+        authorizer: authorize

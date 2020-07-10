@@ -7,7 +7,8 @@ import {
   IsObject
 } from 'class-validator';
 import { Scan, connectToDatabase } from '../models';
-import { validateBody, wrapHandler, NotFound } from './helpers';
+import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
+import { isGlobalWriteAdmin } from './auth';
 
 const SCAN_SCHEMA = {
   censys: {},
@@ -31,6 +32,7 @@ class NewScan {
 }
 
 export const del = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
   const id = event.pathParameters?.scanId;
   if (!id || !isUUID(id)) {
@@ -44,6 +46,7 @@ export const del = wrapHandler(async (event) => {
 });
 
 export const update = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
   const id = event.pathParameters?.scanId;
   if (!id || !isUUID(id)) {
@@ -65,6 +68,7 @@ export const update = wrapHandler(async (event) => {
 });
 
 export const create = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
   const body = await validateBody(NewScan, event.body);
   const scan = await Scan.create(body);
@@ -76,6 +80,7 @@ export const create = wrapHandler(async (event) => {
 });
 
 export const list = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
   const result = await Scan.find();
   return {

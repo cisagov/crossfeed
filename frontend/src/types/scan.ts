@@ -1,5 +1,5 @@
 export interface Scan {
-  id: number;
+  id: string;
   name: string;
   arguments: Object;
   frequency: number;

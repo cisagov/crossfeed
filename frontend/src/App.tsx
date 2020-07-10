@@ -7,26 +7,20 @@ import {
   Dashboard,
   Domain,
   AuthLogin,
-  AuthRegister,
-  AuthRegisterConfirm,
-  AuthPasswordReset,
+  AuthCreateAccount,
   Scans,
   Logs,
   Risk,
   Organizations,
+  Organization,
+  Users,
   Settings,
-  Vulnerabilities,
-  AuthCreatePassword
+  Vulnerabilities
 } from 'pages';
 import { AuthRoute, AuthRedirectRoute, Layout } from 'components';
 import './styles.scss';
 
 Amplify.configure({
-  Auth: {
-    region: 'us-west-2',
-    userPoolId: process.env.REACT_APP_USER_POOL_ID,
-    userPoolWebClientId: process.env.REACT_APP_USER_POOL_WEB_CLIENT_ID
-  },
   API: {
     endpoints: [
       {
@@ -49,14 +43,7 @@ const App: React.FC = () => (
             unauthComponent={AuthLogin}
           />
 
-          <Route exact path="/register" component={AuthRegister} />
-          <Route
-            exact
-            path="/register-confirm"
-            component={AuthRegisterConfirm}
-          />
-          <Route exact path="/reset-password" component={AuthPasswordReset} />
-          <Route exact path="/create-password" component={AuthCreatePassword} />
+          <Route exact path="/create-account" component={AuthCreateAccount} />
 
           <AuthRedirectRoute path="/domain/:domainId" component={Domain} />
           <AuthRedirectRoute
@@ -67,6 +54,11 @@ const App: React.FC = () => (
           <AuthRedirectRoute path="/alerts" component={Alerts} />
           <AuthRedirectRoute path="/scans" component={Scans} />
           <AuthRedirectRoute path="/organizations" component={Organizations} />
+          <AuthRedirectRoute
+            path="/organization/:organizationId"
+            component={Organization}
+          />
+          <AuthRedirectRoute path="/users" component={Users} />
           <AuthRedirectRoute path="/logs" component={Logs} />
           <AuthRedirectRoute path="/settings" component={Settings} />
         </Switch>

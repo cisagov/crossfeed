@@ -5,6 +5,8 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@nivo/bar": "^0.62.0",
+    "@nivo/pie": "^0.62.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -29,6 +31,7 @@
     "material-table": "^1.63.1",
     "node-sass": "^4.13.1",
     "prettier": "1.19.1",
+    "query-string": "^6.13.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-icons": "^3.10.0",
