@@ -14,7 +14,8 @@
     "strictPropertyInitialization": false,
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "skipLibCheck": true
   },
   "include": ["./**/*"]
 }
