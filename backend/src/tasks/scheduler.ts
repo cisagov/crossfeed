@@ -1,6 +1,7 @@
 import { Handler } from 'aws-lambda';
 import { connectToDatabase, Scan } from '../models';
 import { Lambda, Credentials } from 'aws-sdk';
+import ECSClient from './ecs-client';
 
 export const handler: Handler = async (event) => {
   let args = {};
@@ -13,6 +14,12 @@ export const handler: Handler = async (event) => {
   }
 
   const lambda = new Lambda(args);
+
+  let ecsClient = new ECSClient();
+  await ecsClient.runCommand(["findomain",
+    "-t",
+    "google.com"]);
+  return;
 
   await connectToDatabase();
 
