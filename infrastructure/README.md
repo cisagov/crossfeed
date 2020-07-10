@@ -9,7 +9,7 @@ First, change the variables in `stage.config` to use a bucket you have access to
 Then run:
 
 ```bash
-npm i -g dotenv
+npm i -g dotenv-cli
 make init
 ```
 
