@@ -1,8 +1,7 @@
-import { Handler } from 'aws-lambda';
-import { connectToDatabase, Domain, Organization, Scan } from '../models';
+import { connectToDatabase, Domain, Organization } from '../models';
 import { spawnSync } from 'child_process';
 import { readFileSync } from 'fs';
-import { saveDomainToDb, getRootDomains } from './helpers';
+import { saveDomainToDb } from './helpers';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 
@@ -13,7 +12,7 @@ export default async (commandOptions: CommandOptions) => {
 
   const { organizationId, organizationName } = commandOptions;
 
-  console.log("Running findomain on organization ", organizationName);
+  console.log("Running findomain on organization", organizationName);
 
   const organization = await Organization.findOne(organizationId);
   const { rootDomains } = organization!;
