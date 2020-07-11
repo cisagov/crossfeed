@@ -105,30 +105,6 @@ class ECSClient {
               {
                 name: 'CROSSFEED_COMMAND_OPTIONS',
                 value: JSON.stringify(commandOptions)
-              },
-              {
-                name: 'DB_DIALECT',
-                value: process.env.DB_DIALECT
-              },
-              {
-                name: 'DB_HOST',
-                value: process.env.DB_HOST
-              },
-              {
-                name: 'DB_PORT',
-                value: process.env.DB_PORT
-              },
-              {
-                name: 'DB_NAME',
-                value: process.env.DB_NAME
-              },
-              {
-                name: 'DB_USERNAME',
-                value: process.env.DB_USERNAME
-              },
-              {
-                name: 'DB_PASSWORD',
-                value: process.env.DB_PASSWORD
               }
             ]
           }
