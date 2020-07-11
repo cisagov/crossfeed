@@ -1,8 +1,8 @@
 import { CommandOptions } from './tasks/ecs-client';
 import { connectToDatabase } from './models';
-import {handler as amass} from './tasks/amass';
-import {handler as findomain} from './tasks/findomain';
-import {handler as portscanner} from './tasks/portscanner';
+import { handler as amass } from './tasks/amass';
+import { handler as findomain } from './tasks/findomain';
+import { handler as portscanner } from './tasks/portscanner';
 
 /**
  * Worker entrypoint.

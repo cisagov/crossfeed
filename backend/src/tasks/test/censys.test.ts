@@ -1,4 +1,4 @@
-import {handler as censys} from '../censys';
+import { handler as censys } from '../censys';
 jest.mock('../helpers/getRootDomains');
 jest.mock('../helpers/saveDomainsToDb');
 

@@ -1,4 +1,4 @@
-import {handler as wappalyzer} from '../wappalyzer';
+import { handler as wappalyzer } from '../wappalyzer';
 jest.mock('../helpers/getLiveWebsites');
 jest.mock('../helpers/saveDomainsToDb');
 
