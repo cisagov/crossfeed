@@ -4,7 +4,7 @@ import { plainToClass } from 'class-transformer';
 import * as dns from 'dns';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
-import getDomains from './helpers/getDomains';
+import getRootDomains from './helpers/getRootDomains';
 
 interface CensysAPIResponse {
   status: string;
@@ -50,7 +50,7 @@ export default async (commandOptions: CommandOptions) => {
 
   console.log("Running censys on organization", organizationName);
 
-  const rootDomains = await getDomains(organizationId);
+  const rootDomains = await getRootDomains(organizationId);
   const foundDomains = new Set<{
     name: string;
     organization: string;

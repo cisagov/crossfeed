@@ -1,5 +1,5 @@
 import findomain from "../findomain";
-jest.mock("../helpers/getDomains");
+jest.mock("../helpers/getRootDomains");
 jest.mock("../helpers/saveDomainsToDb");
 
 describe("findomain", () => {

@@ -1,5 +1,5 @@
 import censys from "../censys";
-jest.mock("../helpers/getDomains");
+jest.mock("../helpers/getRootDomains");
 jest.mock("../helpers/saveDomainsToDb");
 
 describe("censys", () => {

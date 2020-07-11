@@ -1,5 +1,5 @@
 import { plainToClass } from 'class-transformer';
-import { Domain, Service } from '../../../models';
+import { Domain } from '../../../models';
 
 export default async () => {
   return [plainToClass(Domain, {

@@ -3,17 +3,17 @@ import { spawnSync } from 'child_process';
 import { readFileSync, unlinkSync } from 'fs';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
-import getDomains from './helpers/getDomains';
+import getRootDomains from './helpers/getRootDomains';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 
-const OUT_PATH = 'out.txt';
+const OUT_PATH = 'out-' + Math.random() + '.txt';
 
 export default async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
   console.log("Running amass on organization", organizationName);
 
-  const rootDomains = await getDomains(organizationId);
+  const rootDomains = await getRootDomains(organizationId);
   
   for (let rootDomain of rootDomains) {
     const args = ['enum', '-ip', '-active', '-d', rootDomain, '-json', OUT_PATH];

@@ -1,5 +1,5 @@
 import amass from "../amass";
-jest.mock("../helpers/getDomains");
+jest.mock("../helpers/getRootDomains");
 jest.mock("../helpers/saveDomainsToDb");
 
 describe("amass", () => {
