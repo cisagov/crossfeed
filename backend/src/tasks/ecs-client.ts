@@ -8,6 +8,8 @@ export interface CommandOptions {
   scanName: string;
 }
 
+const toSnakeCase = input => input.replace(/ /g, "-");
+
 /**
  * ECS Client. Normally, submits jobs to ECS.
  * When the app is running locally, runs a
@@ -44,7 +46,7 @@ class ECSClient {
       try {
         const container = await this.docker!.createContainer({
           // We need to create unique container names to avoid conflicts.
-          name: `crossfeed_worker_${organizationName}_${scanName}_` + (Math.floor(Math.random() * 100000)),
+          name: toSnakeCase(`crossfeed_worker_${organizationName}_${scanName}_` + (Math.floor(Math.random() * 100000))),
           Image: 'crossfeed-worker',
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
