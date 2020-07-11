@@ -1,6 +1,6 @@
 import { Domain } from '../models';
 import { spawnSync } from 'child_process';
-import { readFileSync, unlinkSync } from 'fs';
+import { readFileSync } from 'fs';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import getRootDomains from './helpers/getRootDomains';
@@ -30,6 +30,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     spawnSync('amass', args, { stdio: 'pipe' });
 
     const output = String(readFileSync(OUT_PATH));
+    console.error(output);
     const lines = output.split('\n');
     const domains: Domain[] = [];
     for (const line of lines) {
@@ -46,6 +47,5 @@ export const handler = async (commandOptions: CommandOptions) => {
     }
     await saveDomainsToDb(domains);
     console.log(`amass created/updated ${domains.length} new domains`);
-    unlinkSync(OUT_PATH);
   }
 };

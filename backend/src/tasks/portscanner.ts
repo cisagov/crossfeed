@@ -24,7 +24,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           plainToClass(Service, {
             domain: domain,
             port: port,
-            lastSeen: new Date()
+            lastSeen: new Date(Date.now())
           })
         );
       }

@@ -3,14 +3,14 @@
 exports[`amass basic test: helpers.saveDomainsToDb 1`] = `
 Array [
   Domain {
-    "asn": 20940,
-    "ip": "2600:1402:a:495::447a",
+    "asn": 6762,
+    "ip": "2a02:26f0:7a00:195::447a",
     "name": "filedrop.cisa.gov",
     "organization": "organizationId",
   },
   Domain {
-    "asn": 20940,
-    "ip": "2600:1402:a:490::447a",
+    "asn": 6762,
+    "ip": "2a02:26f0:7a00:188::447a",
     "name": "www.filedrop.cisa.gov",
     "organization": "organizationId",
   },
