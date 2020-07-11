@@ -6,7 +6,9 @@ COPY ./package* ./
 
 RUN npm ci
 
-COPY . .
+COPY tsconfig.json ./tsconfig.json
+COPY webpack.config.js ./webpack.config.js
+COPY src ./src
 
 RUN npx webpack
 

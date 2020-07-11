@@ -6,6 +6,7 @@ export interface CommandOptions {
   organizationName: string;
   scanId: string;
   scanName: string;
+  scanTaskId: string;
 }
 
 const toSnakeCase = (input) => input.replace(/ /g, '-');

@@ -1,4 +1,5 @@
 import { Role } from './role';
+import { ScanTask } from './scan-task';
 
 export interface Organization {
   id: string;
@@ -6,6 +7,7 @@ export interface Organization {
   rootDomains: string[];
   ipBlocks: string[];
   userRoles: Role[];
+  scanTasks: ScanTask[];
   isPassive: boolean;
   inviteOnly: boolean;
 }

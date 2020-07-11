@@ -8,7 +8,8 @@ describe('findomain', () => {
       organizationId: 'organizationId',
       organizationName: 'organizationName',
       scanId: 'scanId',
-      scanName: 'scanName'
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
     });
   });
 });

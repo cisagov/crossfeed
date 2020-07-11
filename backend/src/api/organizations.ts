@@ -119,7 +119,7 @@ export const get = wrapHandler(async (event) => {
 
   await connectToDatabase();
   const result = await Organization.findOne(id, {
-    relations: ['userRoles', 'userRoles.user']
+    relations: ['userRoles', 'userRoles.user', 'scanTasks']
   });
 
   return {

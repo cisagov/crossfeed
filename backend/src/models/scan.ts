@@ -4,8 +4,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   CreateDateColumn,
-  BaseEntity
+  BaseEntity,
+  OneToMany
 } from 'typeorm';
+import { ScanTask } from './scan-task';
 
 @Entity()
 export class Scan extends BaseEntity {
@@ -33,4 +35,10 @@ export class Scan extends BaseEntity {
     nullable: true
   })
   lastRun: Date | null;
+
+  @OneToMany((type) => ScanTask, (scanTask) => scanTask.scan, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  scanTasks: ScanTask[];
 }
