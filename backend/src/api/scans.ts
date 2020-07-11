@@ -14,24 +14,30 @@ interface ScanSchema {
   [x: string]: {
     // Scan type
     type: 'lambda' | 'fargate';
+    isPassive: boolean;
   };
 }
 
 export const SCAN_SCHEMA: ScanSchema = {
   censys: {
-    type: 'fargate'
+    type: 'fargate',
+    isPassive: true
   },
   amass: {
-    type: 'fargate'
+    type: 'fargate',
+    isPassive: false
   },
   findomain: {
-    type: 'fargate'
+    type: 'fargate',
+    isPassive: false
   },
   portscanner: {
-    type: 'fargate'
+    type: 'fargate',
+    isPassive: false
   },
   wappalyzer: {
-    type: 'fargate'
+    type: 'fargate',
+    isPassive: true
   }
 };
 

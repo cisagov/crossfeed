@@ -24,11 +24,15 @@ export const handler: Handler = async (event) => {
   const organizations = await Organization.find();
   for (const organization of organizations) {
     for (const scan of scans) {
+      const { type, isPassive } = SCAN_SCHEMA[scan.name];
+      // Don't run non-passive scans on passive organizations.
+      if (organization.isPassive && !isPassive) {
+        continue;
+      }
       if (
         !scan.lastRun ||
         scan.lastRun.getTime() < new Date().getTime() - 1000 * scan.frequency
       ) {
-        const { type } = SCAN_SCHEMA[scan.name];
         try {
           if (type === 'fargate') {
             const result = await ecsClient.runCommand({
