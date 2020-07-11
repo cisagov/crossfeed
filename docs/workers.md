@@ -67,3 +67,7 @@ handler itself; it just requires deployment of the appropriate function in the `
 
 Note that currently, although switching a task to Lambda will work, updating the `ScanTask` status
 has not yet been implemented for Lambda tasks. This is why all tasks are using Fargate.
+
+## Building Docker images
+
+For more information on how to build and publish the Fargate Docker images, see `backend/README.md`.
