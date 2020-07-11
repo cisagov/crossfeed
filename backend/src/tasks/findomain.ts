@@ -5,8 +5,9 @@ import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import getRootDomains from './helpers/getRootDomains';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
+import path from "path";
 
-const OUT_PATH = 'out-' + Math.random() + '.txt';
+const OUT_PATH = path.join(__dirname, 'out-' + Math.random() + '.txt');
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
