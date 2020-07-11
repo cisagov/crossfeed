@@ -34,9 +34,16 @@ class ECSClient {
    * @param command Command to run (array of strings)
    */
   async runCommand(commandOptions: CommandOptions) {
+    const {
+      scanId,
+      scanName,
+      organizationId,
+      organizationName
+    } = commandOptions;
     if (this.isLocal) {
       try {
         const container = await this.docker!.createContainer({
+          name: `crossfeed_worker_${organizationName}_${scanName}`,
           Image: 'crossfeed-worker',
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
@@ -64,12 +71,6 @@ class ECSClient {
         };
       }
     }
-    const {
-      scanId,
-      scanName,
-      organizationId,
-      organizationName
-    } = commandOptions;
     return this.ecs!.runTask({
       cluster: 'crossfeed-staging-worker', // aws_ecs_cluster.worker.name
       taskDefinition: 'crossfeed-staging-worker', // aws_ecs_task_definition.worker.name
