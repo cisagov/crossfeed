@@ -13,7 +13,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   console.log('Running portscanner on organization', organizationName);
 
-  const domainsWithIPs = await getIps();
+  const domainsWithIPs = await getIps(organizationId);
 
   const services: Service[] = [];
   for (const domain of domainsWithIPs) {
