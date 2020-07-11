@@ -22,58 +22,63 @@ export const handler: Handler = async (event) => {
 
   const scans = await Scan.find();
   const organizations = await Organization.find();
-  for (const organization of organizations) {
-    for (const scan of scans) {
+  for (const scan of scans) {
+    if (
+      scan.lastRun &&
+      scan.lastRun.getTime() >= new Date().getTime() - 1000 * scan.frequency
+    ) {
+      continue;
+    }
+    let scanRanSuccessfully = true;
+    for (const organization of organizations) {
       const { type, isPassive } = SCAN_SCHEMA[scan.name];
       // Don't run non-passive scans on passive organizations.
       if (organization.isPassive && !isPassive) {
         continue;
       }
-      if (
-        !scan.lastRun ||
-        scan.lastRun.getTime() < new Date().getTime() - 1000 * scan.frequency
-      ) {
-        try {
-          if (type === 'fargate') {
-            const result = await ecsClient.runCommand({
-              organizationId: organization.id,
-              organizationName: organization.name,
-              scanId: scan.id,
-              scanName: scan.name
-            });
-            if (result.tasks!.length === 0) {
-              console.error(result.failures);
-              throw new Error(
-                `Failed to start fargate task for scan ${scan.name} -- got ${
-                  result.failures!.length
-                } failures.`
-              );
-            }
-            console.log(result.tasks);
-            console.log(`Successfully invoked ${scan.name} scan with fargate.`);
-          } else if (type === 'lambda') {
-            // Asynchronously invoke the function
-            await lambda
-              .invoke({
-                FunctionName: process.env.AWS_LAMBDA_FUNCTION_NAME!.replace(
-                  'scheduler',
-                  scan.name
-                ),
-                Payload: JSON.stringify(scan.arguments),
-                InvocationType: 'Event'
-              })
-              .promise();
-            console.log(`Successfully invoked ${scan.name} scan with lambda.`);
-          } else {
-            throw new Error('Invalid type ' + type);
+      try {
+        if (type === 'fargate') {
+          const result = await ecsClient.runCommand({
+            organizationId: organization.id,
+            organizationName: organization.name,
+            scanId: scan.id,
+            scanName: scan.name
+          });
+          if (result.tasks!.length === 0) {
+            console.error(result.failures);
+            throw new Error(
+              `Failed to start fargate task for scan ${scan.name} -- got ${
+                result.failures!.length
+              } failures.`
+            );
           }
-          scan.lastRun = new Date();
-          scan.save();
-        } catch (error) {
-          console.error(`Error invoking ${scan.name} scan.`);
-          console.error(error);
+          console.log(result.tasks);
+          console.log(`Successfully invoked ${scan.name} scan with fargate.`);
+        } else if (type === 'lambda') {
+          // Asynchronously invoke the function
+          await lambda
+            .invoke({
+              FunctionName: process.env.AWS_LAMBDA_FUNCTION_NAME!.replace(
+                'scheduler',
+                scan.name
+              ),
+              Payload: JSON.stringify(scan.arguments),
+              InvocationType: 'Event'
+            })
+            .promise();
+          console.log(`Successfully invoked ${scan.name} scan with lambda.`);
+        } else {
+          throw new Error('Invalid type ' + type);
         }
+      } catch (error) {
+        console.error(`Error invoking ${scan.name} scan.`);
+        console.error(error);
+        scanRanSuccessfully = false;
       }
+    }
+    if (scanRanSuccessfully) {
+      scan.lastRun = new Date();
+      scan.save();
     }
   }
 };
