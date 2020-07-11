@@ -1,24 +1,21 @@
-import { connectToDatabase, Domain, Organization } from '../models';
+import { connectToDatabase, Domain } from '../models';
 import { spawnSync } from 'child_process';
-import { readFileSync } from 'fs';
-import { saveDomainToDb } from './helpers';
+import { readFileSync, unlinkSync } from 'fs';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
+import getDomains from './helpers/getDomains';
+import saveDomainsToDb from './helpers/saveDomainsToDb';
 
 const OUT_PATH = 'out.txt';
 
 export default async (commandOptions: CommandOptions) => {
-  await connectToDatabase();
-
   const { organizationId, organizationName } = commandOptions;
 
   console.log("Running findomain on organization", organizationName);
 
-  const organization = await Organization.findOne(organizationId);
-  const { rootDomains } = organization!;
+  const rootDomains = await getDomains(organizationId);
   
   for (let rootDomain of rootDomains) {
-    let count = 0;
     const args = ['-it', rootDomain, '-u', OUT_PATH];
     console.log("Running findomain with args", args);
     spawnSync(
@@ -29,18 +26,18 @@ export default async (commandOptions: CommandOptions) => {
 
     const output = String(readFileSync(OUT_PATH));
     const lines = output.split('\n');
+    const domains: Domain[] = [];
     for (const line of lines) {
       if (line == '') continue;
       const split = line.split(',');
-      await saveDomainToDb(
-        plainToClass(Domain, {
-          name: split[0],
-          ip: split[1],
-          organization: organization
-        })
-      );
-      count++;
+      domains.push(plainToClass(Domain, {
+        name: split[0],
+        ip: split[1],
+        organization: organizationId
+      }));
     }
-    console.log(`Findomain created/updated ${count} new domains`);
+    await saveDomainsToDb(domains);
+    console.log(`Findomain created/updated ${domains.length} new domains`);
+    unlinkSync(OUT_PATH);
   }
 };

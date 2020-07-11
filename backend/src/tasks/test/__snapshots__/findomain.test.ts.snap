@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`findomain basic test: helpers.saveDomainsToDb 1`] = `
+Array [
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "connect-presidentscup.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.105.159",
+    "name": "edit-preview.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "23.209.137.45",
+    "name": "edit-staging.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "23.209.137.45",
+    "name": "edit-testint.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.105.159",
+    "name": "edit.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "engine-presidentscup.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "files-presidentscup.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "id-presidentscup.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "presidentscup.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "preview.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "solo-presidentscup.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "23.193.7.67",
+    "name": "staging.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "team-presidentscup.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "23.209.137.45",
+    "name": "testint.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "us-cert.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": "organizationId",
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.us-cert.cisa.gov",
+    "organization": "organizationId",
+  },
+]
+`;
