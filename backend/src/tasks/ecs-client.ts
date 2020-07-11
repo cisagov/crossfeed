@@ -31,7 +31,7 @@ class ECSClient {
 
   /**
    * Launches an ECS task with the given command.
-   * @param command Command to run (array of strings)
+   * @param commandOptions Command options
    */
   async runCommand(commandOptions: CommandOptions) {
     const {
@@ -43,7 +43,8 @@ class ECSClient {
     if (this.isLocal) {
       try {
         const container = await this.docker!.createContainer({
-          name: `crossfeed_worker_${organizationName}_${scanName}`,
+          // We need to create unique container names to avoid conflicts.
+          name: `crossfeed_worker_${organizationName}_${scanName}_` + (Math.floor(Math.random() * 100000)),
           Image: 'crossfeed-worker',
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
@@ -56,6 +57,11 @@ class ECSClient {
             `CENSYS_API_ID=${process.env.CENSYS_API_ID}`,
             `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`
           ],
+          // Since the ECSClient is itself running in the backend Docker container,
+          // we launch a Docker container from the host Docker daemon. This means that
+          // we cannot the host name "db" to access the database from the
+          // crossfeed-worker image; instead, we set NetworkMode to "host" and
+          // connect to "localhost."
           NetworkMode: 'host'
         });
         await container.start();
@@ -71,6 +77,7 @@ class ECSClient {
         };
       }
     }
+    // TODO: retrieve these values from SSM.
     return this.ecs!.runTask({
       cluster: 'crossfeed-staging-worker', // aws_ecs_cluster.worker.name
       taskDefinition: 'crossfeed-staging-worker', // aws_ecs_task_definition.worker.name
