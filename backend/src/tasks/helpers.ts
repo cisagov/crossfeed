@@ -39,26 +39,6 @@ export const saveServicesToDb = (services: Service[]): Promise<InsertResult> =>
     )
     .execute();
 
-/** Helper function to fetch all live websites (port 80 or 443) */
-export const getLiveWebsites = async (
-  includePassive: boolean
-): Promise<Domain[]> => {
-  const qs = Domain.createQueryBuilder('domain')
-    .leftJoinAndSelect('domain.services', 'services')
-    .leftJoinAndSelect('domain.organization', 'organization')
-    .groupBy('domain.id, domain.ip, domain.name, organization.id, services.id');
-
-  qs.andHaving(
-    "COUNT(CASE WHEN services.port = '443' OR services.port = '80' THEN 1 END) >= 1"
-  );
-
-  if (!includePassive) {
-    qs.andHaving('NOT organization."isPassive"');
-  }
-
-  return await qs.getMany();
-};
-
 /** Helper function to return all root domains for all organizations */
 export const getRootDomains = async (
   includePassive: boolean
