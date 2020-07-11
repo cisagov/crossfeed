@@ -8,7 +8,7 @@ import {
   IsArray,
   IsBoolean
 } from 'class-validator';
-import { Organization, connectToDatabase, Role } from '../models';
+import { Organization, connectToDatabase, Role, ScanTask } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
   isOrgAdmin,
@@ -119,8 +119,20 @@ export const get = wrapHandler(async (event) => {
 
   await connectToDatabase();
   const result = await Organization.findOne(id, {
-    relations: ['userRoles', 'userRoles.user', 'scanTasks']
+    relations: ['userRoles', 'userRoles.user']
   });
+
+  if (result) {
+    result.scanTasks = await ScanTask.find({
+      where: {
+        organization: { id }
+      },
+      take: 10,
+      order: {
+        createdAt: 'DESC'
+      }
+    });
+  }
 
   return {
     statusCode: result ? 200 : 404,

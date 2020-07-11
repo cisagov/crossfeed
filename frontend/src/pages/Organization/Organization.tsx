@@ -230,7 +230,7 @@ export const Organization: React.FC = () => {
             <Table<Role> columns={userRoleColumns} data={userRoles} />
 
             <h1>Organization Scan Tasks</h1>
-            <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} />
+            <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} initialSortBy={[{id: "createdAt", desc: true}]} />
             <h2>Update Organization</h2>
             {errors.global && <p className={classes.error}>{errors.global}</p>}
             {message && <p>{message}</p>}
