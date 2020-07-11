@@ -3,7 +3,7 @@ import { Domain, connectToDatabase } from '../../models';
 export default async (domains: Domain[]): Promise<void> => {
   await connectToDatabase();
 
-  for (let domain of domains) {
+  for (const domain of domains) {
     const updatedValues = Object.keys(domain)
       .map((key) => {
         if (key == 'name') return '';

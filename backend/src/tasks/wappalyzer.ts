@@ -9,7 +9,7 @@ import saveDomainsToDb from './helpers/saveDomainsToDb';
 export default async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
-  console.log("Running wappalyzer on organization", organizationName);
+  console.log('Running wappalyzer on organization', organizationName);
 
   const liveWebsites = await getLiveWebsites(true); // organizationId);
   const domains: Domain[] = [];
@@ -27,7 +27,8 @@ export default async (commandOptions: CommandOptions) => {
       });
       const result = await wappalyzer({ url, data, status, headers });
       if (result.length == 0) continue;
-      domains.push(plainToClass(Domain, {
+      domains.push(
+        plainToClass(Domain, {
           name: domain.name,
           webTechnologies: result
         })

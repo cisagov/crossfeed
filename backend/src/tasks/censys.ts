@@ -48,7 +48,7 @@ const fetchCensysData = async (rootDomain: string, page: number) => {
 export default async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
-  console.log("Running censys on organization", organizationName);
+  console.log('Running censys on organization', organizationName);
 
   const rootDomains = await getRootDomains(organizationId);
   const foundDomains = new Set<{
@@ -94,11 +94,13 @@ export default async (commandOptions: CommandOptions) => {
       // IP not found
       ip = null;
     }
-    domains.push(plainToClass(Domain, {
-      ip: ip,
-      name: domain.name,
-      organization: domain.organization
-    }));
+    domains.push(
+      plainToClass(Domain, {
+        ip: ip,
+        name: domain.name,
+        organization: domain.organization
+      })
+    );
   }
   saveDomainsToDb(domains);
   console.log(`[censys] done, saved or updated ${domains.length} domains`);

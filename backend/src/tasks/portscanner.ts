@@ -11,7 +11,7 @@ import saveServicesToDb from './helpers/saveServicesToDb';
 export default async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
-  console.log("Running portscanner on organization", organizationName);
+  console.log('Running portscanner on organization', organizationName);
 
   const domainsWithIPs = await getIps();
 

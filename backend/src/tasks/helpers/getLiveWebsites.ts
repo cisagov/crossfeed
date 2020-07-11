@@ -1,11 +1,8 @@
-import { Domain, connectToDatabase } from "../../models";
+import { Domain, connectToDatabase } from '../../models';
 
 /** Helper function to fetch all live websites (port 80 or 443) */
 // TODO: make this per-organization specific.
-export default async (
-  includePassive: boolean
-): Promise<Domain[]> => {
-
+export default async (includePassive: boolean): Promise<Domain[]> => {
   await connectToDatabase();
 
   const qs = Domain.createQueryBuilder('domain')

@@ -13,25 +13,25 @@ import { isGlobalWriteAdmin } from './auth';
 interface ScanSchema {
   [x: string]: {
     // Scan type
-    type: "lambda" | "fargate"
-  }
+    type: 'lambda' | 'fargate';
+  };
 }
 
 export const SCAN_SCHEMA: ScanSchema = {
   censys: {
-    type: "fargate"
+    type: 'fargate'
   },
   amass: {
-    type: "fargate"
+    type: 'fargate'
   },
   findomain: {
-    type: "fargate"
+    type: 'fargate'
   },
   portscanner: {
-    type: "fargate"
+    type: 'fargate'
   },
   wappalyzer: {
-    type: "fargate"
+    type: 'fargate'
   }
 };
 

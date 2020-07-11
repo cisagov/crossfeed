@@ -16,7 +16,7 @@ export const handler: Handler = async (event) => {
 
   const lambda = new Lambda(args);
 
-  let ecsClient = new ECSClient();
+  const ecsClient = new ECSClient();
 
   await connectToDatabase();
 
@@ -30,20 +30,24 @@ export const handler: Handler = async (event) => {
       ) {
         const { type } = SCAN_SCHEMA[scan.name];
         try {
-          if (type === "fargate") {
+          if (type === 'fargate') {
             const result = await ecsClient.runCommand({
               organizationId: organization.id,
               organizationName: organization.name,
               scanId: scan.id,
-              scanName: scan.name,
+              scanName: scan.name
             });
             if (result.tasks!.length === 0) {
               console.error(result.failures);
-              throw new Error(`Failed to start fargate task for scan ${scan.name} -- got ${result.failures!.length} failures.`);
+              throw new Error(
+                `Failed to start fargate task for scan ${scan.name} -- got ${
+                  result.failures!.length
+                } failures.`
+              );
             }
             console.log(result.tasks);
             console.log(`Successfully invoked ${scan.name} scan with fargate.`);
-          } else if (type === "lambda") {
+          } else if (type === 'lambda') {
             // Asynchronously invoke the function
             await lambda
               .invoke({
@@ -55,9 +59,9 @@ export const handler: Handler = async (event) => {
                 InvocationType: 'Event'
               })
               .promise();
-              console.log(`Successfully invoked ${scan.name} scan with lambda.`);
+            console.log(`Successfully invoked ${scan.name} scan with lambda.`);
           } else {
-            throw new Error("Invalid type " + type);
+            throw new Error('Invalid type ' + type);
           }
           scan.lastRun = new Date();
           scan.save();
