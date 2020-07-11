@@ -5,8 +5,60 @@ resource "aws_ecr_repository" "worker" {
   }
 }
 
-data "aws_iam_role" "ecs_task_execution_role" {
-  name = "ecsTaskExecutionRole"
+resource "aws_iam_role" "worker_task_execution_role" {
+  name = var.worker_ecs_role_name
+  assume_role_policy = <<EOF
+{
+  "Version": "2008-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+  EOF
+}
+
+resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
+  name_prefix = var.worker_ecs_role_name
+  role = aws_iam_role.worker_task_execution_role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    },
+    {
+        "Effect": "Allow",
+        "Action": [
+            "ssm:GetParameters"
+        ],
+        "Resource": [
+          "${aws_ssm_parameter.crossfeed_send_db_host.arn}",
+          "${aws_ssm_parameter.crossfeed_send_db_name.arn}",
+          "${data.aws_ssm_parameter.db_username.arn}",
+          "${data.aws_ssm_parameter.db_password.arn}"
+        ]
+    }
+  ]
+}
+EOF
 }
 
 resource "aws_ecs_cluster" "worker" {
@@ -29,21 +81,41 @@ resource "aws_ecs_task_definition" "worker" {
           "awslogs-region": "${var.aws_region}",
           "awslogs-stream-prefix": "worker"
       }
-    }
+    },
+    "environment": [
+      {
+        "name": "DB_DIALECT",
+        "value": "postgres"
+      },
+      {
+        "name": "DB_PORT",
+        "value": "${var.db_port}"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "DB_HOST",
+        "valueFrom": "${aws_ssm_parameter.crossfeed_send_db_host.arn}"
+      },
+      {
+        "name": "DB_NAME",
+        "valueFrom": "${aws_ssm_parameter.crossfeed_send_db_name.arn}"
+      },
+      {
+        "name": "DB_USERNAME",
+        "valueFrom": "${data.aws_ssm_parameter.db_username.arn}"
+      },
+      {
+        "name": "DB_PASSWORD",
+        "valueFrom": "${data.aws_ssm_parameter.db_password.arn}"
+      }
+    ]
   }
 ]
   EOF
   requires_compatibilities = ["FARGATE"]
   network_mode          = "awsvpc"
-  execution_role_arn       = data.aws_iam_role.ecs_task_execution_role.arn
-
-  # TODO: add these in the container definition for database credentials:
-  #   "secrets": [
-  #   {
-  #       "name": "environment_variable_name",
-  #       "valueFrom": "arn:aws:ssm:region:aws_account_id:parameter/parameter_name"
-  #   }
-  # ]
+  execution_role_arn       = aws_iam_role.worker_task_execution_role.arn
 
   # CPU and memory values: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
   

@@ -92,3 +92,8 @@ variable worker_ecs_log_group_name {
   type    = string
   default = "crossfeed-worker-staging"
 }
+
+variable worker_ecs_role_name {
+  type    = string
+  default = "crossfeed-worker-staging"
+}
