@@ -5,7 +5,7 @@ import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import getRootDomains from './helpers/getRootDomains';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
-import path from "path";
+import * as path from "path";
 
 const OUT_PATH = path.join(__dirname, 'out-' + Math.random() + '.txt');
 
