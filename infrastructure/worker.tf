@@ -113,6 +113,7 @@ resource "aws_ecs_task_definition" "worker" {
   }
 ]
   EOF
+  # TODO: ADD CENSYS_API_ID, CENSYS_API_SECRET
   requires_compatibilities = ["FARGATE"]
   network_mode          = "awsvpc"
   execution_role_arn       = aws_iam_role.worker_task_execution_role.arn
