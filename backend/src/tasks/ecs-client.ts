@@ -34,25 +34,32 @@ class ECSClient {
    */
   async runCommand(commandOptions: CommandOptions) {
     if (this.isLocal) {
-      const container = await this.docker!.createContainer({
-        Image: "crossfeed-worker",
-        Env: [
-          `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
-          `DB_DIALECT=${process.env.DB_DIALECT}`,
-          `DB_HOST=localhost`,
-          `DB_PORT=${process.env.DB_PORT}`,
-          `DB_NAME=${process.env.DB_NAME}`,
-          `DB_USERNAME=${process.env.DB_USERNAME}`,
-          `DB_PASSWORD=${process.env.DB_PASSWORD}`,
-        ],
-        NetworkMode: "host"
-      });
-      await container.start();
-      return {
-        tasks: [
-          {}
-        ]
-      };
+      try {
+        const container = await this.docker!.createContainer({
+          Image: "crossfeed-worker",
+          Env: [
+            `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
+            `DB_DIALECT=${process.env.DB_DIALECT}`,
+            `DB_HOST=localhost`,
+            `DB_PORT=${process.env.DB_PORT}`,
+            `DB_NAME=${process.env.DB_NAME}`,
+            `DB_USERNAME=${process.env.DB_USERNAME}`,
+            `DB_PASSWORD=${process.env.DB_PASSWORD}`,
+          ],
+          NetworkMode: "host"
+        });
+        await container.start();
+        return {
+          tasks: [{}],
+          failures: []
+        };
+      } catch (e) {
+        console.error(e);
+        return {
+          tasks: [],
+          failures: [{}]
+        }
+      }
     }
     const { scanId, scanName, organizationId, organizationName } = commandOptions;
     return this.ecs!.runTask({

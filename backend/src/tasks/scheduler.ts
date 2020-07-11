@@ -2,6 +2,7 @@ import { Handler } from 'aws-lambda';
 import { connectToDatabase, Scan, Organization } from '../models';
 import { Lambda, Credentials } from 'aws-sdk';
 import ECSClient from './ecs-client';
+import { SCAN_SCHEMA } from 'src/api/scans';
 
 export const handler: Handler = async (event) => {
   let args = {};
@@ -27,17 +28,22 @@ export const handler: Handler = async (event) => {
         !scan.lastRun ||
         scan.lastRun.getTime() < new Date().getTime() - 1000 * scan.frequency
       ) {
+        const { type } = SCAN_SCHEMA[scan.name];
         try {
-          if (scan.name === "findomain") {
+          if (type === "fargate") {
             const result = await ecsClient.runCommand({
               organizationId: organization.id,
               organizationName: organization.name,
               scanId: scan.id,
               scanName: scan.name,
             });
-            console.error(result.tasks);
+            if (result.tasks!.length === 0) {
+              console.error(result.failures);
+              throw new Error(`Failed to start fargate task for scan ${scan.name} -- got ${result.failures!.length} failures.`);
+            }
+            console.log(result.tasks);
             console.log(`Successfully invoked ${scan.name} scan with fargate.`);
-          } else {
+          } else if (type === "lambda") {
             // Asynchronously invoke the function
             await lambda
               .invoke({
@@ -50,11 +56,13 @@ export const handler: Handler = async (event) => {
               })
               .promise();
               console.log(`Successfully invoked ${scan.name} scan with lambda.`);
+          } else {
+            throw new Error("Invalid type " + type);
           }
           scan.lastRun = new Date();
           scan.save();
         } catch (error) {
-          console.log(`Error invoking ${scan.name} scan:`);
+          console.error(`Error invoking ${scan.name} scan.`);
           console.error(error);
         }
       }
