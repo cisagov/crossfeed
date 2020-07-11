@@ -1,4 +1,4 @@
-import amass from '../amass';
+import {handler as amass} from '../amass';
 jest.mock('../helpers/getRootDomains');
 jest.mock('../helpers/saveDomainsToDb');
 

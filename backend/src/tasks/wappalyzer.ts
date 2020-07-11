@@ -6,7 +6,7 @@ import { CommandOptions } from './ecs-client';
 import getLiveWebsites from './helpers/getLiveWebsites';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 
-export default async (commandOptions: CommandOptions) => {
+export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
   console.log('Running wappalyzer on organization', organizationName);

@@ -8,7 +8,7 @@ import saveDomainsToDb from './helpers/saveDomainsToDb';
 
 const OUT_PATH = 'out-' + Math.random() + '.txt';
 
-export default async (commandOptions: CommandOptions) => {
+export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
   console.log('Running findomain on organization', organizationName);

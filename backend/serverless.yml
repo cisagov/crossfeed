@@ -41,9 +41,3 @@ plugins:
   - serverless-domain-manager
   - serverless-plugin-typescript
   - serverless-offline
-
-layers:
-  amass:
-    path: layers/amass
-  findomain:
-    path: layers/findomain

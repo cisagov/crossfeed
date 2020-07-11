@@ -45,7 +45,7 @@ const fetchCensysData = async (rootDomain: string, page: number) => {
   return data as CensysAPIResponse;
 };
 
-export default async (commandOptions: CommandOptions) => {
+export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
   console.log('Running censys on organization', organizationName);

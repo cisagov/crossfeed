@@ -1,4 +1,4 @@
-import portscanner from '../portscanner';
+import {handler as portscanner} from '../portscanner';
 jest.mock('../helpers/getIps');
 jest.mock('../helpers/saveServicesToDb');
 

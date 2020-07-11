@@ -8,7 +8,7 @@ import getIps from './helpers/getIps';
 import { CommandOptions } from './ecs-client';
 import saveServicesToDb from './helpers/saveServicesToDb';
 
-export default async (commandOptions: CommandOptions) => {
+export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
   console.log('Running portscanner on organization', organizationName);

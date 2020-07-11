@@ -1,4 +1,4 @@
-import findomain from '../findomain';
+import {handler as findomain} from '../findomain';
 jest.mock('../helpers/getRootDomains');
 jest.mock('../helpers/saveDomainsToDb');
 

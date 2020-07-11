@@ -1,10 +1,8 @@
 import { CommandOptions } from './tasks/ecs-client';
 import { connectToDatabase } from './models';
-import amass from './tasks/amass';
-import censys from './tasks/censys';
-import findomain from './tasks/findomain';
-import portscanner from './tasks/portscanner';
-import wappalyzer from './tasks/wappalyzer';
+import {handler as amass} from './tasks/amass';
+import {handler as findomain} from './tasks/findomain';
+import {handler as portscanner} from './tasks/portscanner';
 
 /**
  * Worker entrypoint.
@@ -19,7 +17,7 @@ async function main() {
 
   const { scanName } = commandOptions;
 
-  const scanFn = { amass, censys, findomain, portscanner, wappalyzer }[scanName];
+  const scanFn = { amass, findomain, portscanner }[scanName];
 
   if (!scanFn) {
     throw new Error('Invalid scan name ' + scanName);
