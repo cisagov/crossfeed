@@ -20,7 +20,7 @@ interface ScanSchema {
 
 export const SCAN_SCHEMA: ScanSchema = {
   censys: {
-    type: 'lambda',
+    type: 'fargate',
     isPassive: true
   },
   amass: {
@@ -36,7 +36,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     isPassive: false
   },
   wappalyzer: {
-    type: 'lambda',
+    type: 'fargate',
     isPassive: true
   }
 };
