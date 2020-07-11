@@ -1,3 +1,3 @@
 export default async () => {
-  return ["cisa.gov"];
+  return ["filedrop.cisa.gov"];
 }

@@ -1,44 +1,44 @@
-import { Handler } from 'aws-lambda';
-import { connectToDatabase, Organization, Domain } from '../models';
+import { connectToDatabase, Domain } from '../models';
 import { spawnSync } from 'child_process';
+import { readFileSync, unlinkSync } from 'fs';
 import { plainToClass } from 'class-transformer';
-import { saveDomainToDb, getRootDomains } from './helpers';
-import { readFileSync } from 'fs';
+import { CommandOptions } from './ecs-client';
+import getDomains from './helpers/getDomains';
+import saveDomainsToDb from './helpers/saveDomainsToDb';
 
-const LAYER_PATH =
-  process.env.IS_OFFLINE || process.env.IS_LOCAL ? '/app/layers' : '/opt';
-const OUT_PATH =
-  process.env.IS_OFFLINE || process.env.IS_LOCAL ? 'out.json' : '/tmp/out.json';
+const OUT_PATH = 'out.txt';
 
-export const handler: Handler = async (event) => {
-  await connectToDatabase();
+export default async (commandOptions: CommandOptions) => {
+  const { organizationId, organizationName } = commandOptions;
 
-  const allDomains = await getRootDomains(false);
+  console.log("Running amass on organization", organizationName);
 
-  let count = 0;
-  for (const rootDomain of allDomains) {
+  const rootDomains = await getDomains(organizationId);
+  
+  for (let rootDomain of rootDomains) {
+    const args = ['enum', '-ip', '-active', '-d', rootDomain, '-json', OUT_PATH];
+    console.log("Running amass with args", args);
     spawnSync(
-      LAYER_PATH + '/amass/amass',
-      ['enum', '-ip', '-active', '-d', rootDomain.name, '-json', OUT_PATH],
-      { stdio: 'inherit' }
+      'amass',
+      args,
+      { stdio: 'pipe' }
     );
 
     const output = String(readFileSync(OUT_PATH));
     const lines = output.split('\n');
+    const domains: Domain[] = [];
     for (const line of lines) {
       if (line == '') continue;
       const parsed = JSON.parse(line);
-      await saveDomainToDb(
-        plainToClass(Domain, {
-          ip: parsed.addresses[0].ip,
-          name: parsed.name,
-          asn: parsed.addresses[0].asn,
-          organization: rootDomain.organization
-        })
-      );
-      count++;
-      console.log('Saved ' + parsed.name);
+      domains.push(plainToClass(Domain, {
+        ip: parsed.addresses[0].ip,
+        name: parsed.name,
+        asn: parsed.addresses[0].asn,
+        organization: organizationId
+      }));
     }
+    await saveDomainsToDb(domains);
+    console.log(`amass created/updated ${domains.length} new domains`);
+    unlinkSync(OUT_PATH);
   }
-  console.log(`Amass created/updated ${count} new domains`);
 };

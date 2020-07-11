@@ -1,10 +1,10 @@
-import findomain from "../findomain";
+import amass from "../amass";
 jest.mock("../helpers/getDomains");
 jest.mock("../helpers/saveDomainsToDb");
 
-describe("findomain", () => {
+describe("amass", () => {
   test("basic test", async () => {
-    await findomain({
+    await amass({
       organizationId: "organizationId",
       organizationName: "organizationName",
       scanId: "scanId",
