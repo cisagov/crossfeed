@@ -45,7 +45,9 @@ class ECSClient {
             `DB_PORT=${process.env.DB_PORT}`,
             `DB_NAME=${process.env.DB_NAME}`,
             `DB_USERNAME=${process.env.DB_USERNAME}`,
-            `DB_PASSWORD=${process.env.DB_PASSWORD}`
+            `DB_PASSWORD=${process.env.DB_PASSWORD}`,
+            `CENSYS_API_ID=${process.env.CENSYS_API_ID}`,
+            `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`
           ],
           NetworkMode: 'host'
         });

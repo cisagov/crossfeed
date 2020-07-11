@@ -32,12 +32,4 @@ COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 COPY --from=deps /usr/bin/findomain /usr/bin/findomain
 COPY --from=deps /usr/bin/amass /usr/bin/amass
 
-RUN echo "HI"
-
-RUN CROSSFEED_COMMAND_OPTIONS={"A":"B"} node worker.bundle.js
-
-RUN amass --version
-
-RUN findomain --version
-
 CMD ["node", "worker.bundle.js"]

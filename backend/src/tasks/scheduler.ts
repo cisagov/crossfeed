@@ -2,7 +2,7 @@ import { Handler } from 'aws-lambda';
 import { connectToDatabase, Scan, Organization } from '../models';
 import { Lambda, Credentials } from 'aws-sdk';
 import ECSClient from './ecs-client';
-import { SCAN_SCHEMA } from 'src/api/scans';
+import { SCAN_SCHEMA } from '../api/scans';
 
 export const handler: Handler = async (event) => {
   let args = {};
