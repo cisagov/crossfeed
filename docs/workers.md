@@ -5,11 +5,11 @@ A scan can be of multiple types -- for example, `amass`, or `findomain`.
 
 First, add an organization:
 
-![add organization](img/add organization.png)
+![add organization](https://github.com/cisagov/crossfeed/raw/62b27371d4a33f104452967dde1a85d1946da6c8/docs/img/add organization.png)
 
 Then, add a scan:
 
-![add scan](img/add scan.png)
+![add scan](https://github.com/cisagov/crossfeed/raw/62b27371d4a33f104452967dde1a85d1946da6c8/docs/img/add scan.png)
 
 ## Scheduling
 
@@ -26,7 +26,7 @@ task to run are specified in the task configuration through Terraform.
 
 The entry point for the Fargate task is at `backend/src/worker.ts`.
 
-![fargate task](img/fargate task.png)
+![fargate task](https://github.com/cisagov/crossfeed/raw/62b27371d4a33f104452967dde1a85d1946da6c8/docs/img/fargate task.png)
 
 ### Local runs
 
@@ -34,7 +34,7 @@ When running Crossfeed locally, each worker is launched through a Docker contain
 
 To inspect tasks that are running (and have recently finished), do `docker ps -a > out` and inspect the contents of `out`:
 
-![docker ps](img/docker ps.png)
+![docker ps](https://github.com/cisagov/crossfeed/raw/62b27371d4a33f104452967dde1a85d1946da6c8/docs/img/docker ps.png)
 
 Note that each Docker container is identified by organization name and scan name.
 
@@ -47,7 +47,7 @@ and errors, if any, of that particular task.
 
 You can view the most recent Scan Tasks on the organization page:
 
-![scan tasks](img/scan tasks.png)
+![scan tasks](https://github.com/cisagov/crossfeed/raw/62b27371d4a33f104452967dde1a85d1946da6c8/docs/img/scan tasks.png)
 
 ### ScanTask status reference
 
