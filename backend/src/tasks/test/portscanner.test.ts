@@ -4,7 +4,7 @@ jest.mock('../helpers/saveServicesToDb');
 
 jest.mock('portscanner', () => ({
   checkPortStatus: (port, ip) => {
-    return (port === 443 || port === 80) ? "open": "closed";
+    return port === 443 || port === 80 ? 'open' : 'closed';
   }
 }));
 
@@ -19,7 +19,6 @@ describe('portscanner', () => {
     global.Date = RealDate;
   });
   test('basic test', async () => {
-
     await portscanner({
       organizationId: 'organizationId',
       organizationName: 'organizationName',

@@ -3,7 +3,8 @@ jest.mock('../helpers/getRootDomains');
 jest.mock('../helpers/saveDomainsToDb');
 
 jest.mock('fs', () => ({
-  readFileSync: () => `filedrop.cisa.gov,104.84.119.215\nwww.filedrop.cisa.gov,104.84.119.215`,
+  readFileSync: () =>
+    `filedrop.cisa.gov,104.84.119.215\nwww.filedrop.cisa.gov,104.84.119.215`,
   unlinkSync: () => null
 }));
 jest.mock('child_process', () => ({
