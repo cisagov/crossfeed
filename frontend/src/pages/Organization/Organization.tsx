@@ -106,13 +106,13 @@ export const Organization: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Started At',
-      accessor: "startedAt",
+      Header: 'Requested At',
+      accessor: "requestedAt",
       disableFilters: true
     },
     {
-      Header: 'Requested At',
-      accessor: "requestedAt",
+      Header: 'Started At',
+      accessor: "startedAt",
       disableFilters: true
     },
     {
