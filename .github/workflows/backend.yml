@@ -60,7 +60,7 @@ jobs:
         run: npm run lint
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v2.3.1
       - uses: actions/setup-node@v2.1.0
@@ -89,7 +89,7 @@ jobs:
         run: npm run test
   build_worker:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v2.3.1
       - uses: actions/setup-node@v2.1.0
