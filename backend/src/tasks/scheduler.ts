@@ -30,16 +30,19 @@ export const handler: Handler = async (event) => {
       if (organization.isPassive && !isPassive) {
         continue;
       }
-      const runningScanTask = await ScanTask.findOne({
-        organization: { id: organization.id },
-        scan: { id: scan.id },
-        status: In(['requested', 'started'])
-      });
-      if (runningScanTask) {
-        // Don't run another task if a task is already running.
-        continue;
-      }
-      const lastRunScanTask = await ScanTask.findOne(
+      const lastRunningScanTask = await ScanTask.findOne(
+        {
+          organization: { id: organization.id },
+          scan: { id: scan.id },
+          status: In(['requested', 'started'])
+        },
+        {
+          order: {
+            createdAt: 'DESC'
+          }
+        }
+      );
+      const lastFinishedScanTask = await ScanTask.findOne(
         {
           organization: { id: organization.id },
           scan: { id: scan.id },
@@ -51,10 +54,19 @@ export const handler: Handler = async (event) => {
           }
         }
       );
+      if (lastRunningScanTask) {
+        // Don't run another task if the latest task is already running.
+        if (
+          !lastFinishedScanTask ||
+          lastRunningScanTask.createdAt > lastFinishedScanTask.createdAt
+        ) {
+          continue;
+        }
+      }
       if (
-        lastRunScanTask &&
-        lastRunScanTask.finishedAt &&
-        lastRunScanTask.finishedAt.getTime() >=
+        lastFinishedScanTask &&
+        lastFinishedScanTask.finishedAt &&
+        lastFinishedScanTask.finishedAt.getTime() >=
           new Date().getTime() - 1000 * scan.frequency
       ) {
         continue;
