@@ -30,7 +30,6 @@ export const handler = async (commandOptions: CommandOptions) => {
     spawnSync('amass', args, { stdio: 'pipe' });
 
     const output = String(readFileSync(OUT_PATH));
-    console.error(output);
     const lines = output.split('\n');
     const domains: Domain[] = [];
     for (const line of lines) {
