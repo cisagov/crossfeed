@@ -34,7 +34,7 @@ export const handler: Handler = async (event) => {
         {
           organization: { id: organization.id },
           scan: { id: scan.id },
-          status: In(['requested', 'started'])
+          status: In(['created', 'requested', 'started'])
         },
         {
           order: {
