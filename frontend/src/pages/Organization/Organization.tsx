@@ -119,6 +119,11 @@ export const Organization: React.FC = () => {
       Header: 'Finished At',
       accessor: "finishedAt",
       disableFilters: true
+    },
+    {
+      Header: 'Output',
+      accessor: "output",
+      disableFilters: true
     }
   ];
 
