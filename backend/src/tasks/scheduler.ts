@@ -3,6 +3,7 @@ import { connectToDatabase, Scan, Organization, ScanTask } from '../models';
 import { Lambda, Credentials } from 'aws-sdk';
 import ECSClient from './ecs-client';
 import { SCAN_SCHEMA } from '../api/scans';
+import { In } from 'typeorm';
 
 export const handler: Handler = async (event) => {
   let args = {};
@@ -27,6 +28,15 @@ export const handler: Handler = async (event) => {
       const { type, isPassive } = SCAN_SCHEMA[scan.name];
       // Don't run non-passive scans on passive organizations.
       if (organization.isPassive && !isPassive) {
+        continue;
+      }
+      const runningScanTask = await ScanTask.findOne({
+        organization: { id: organization.id },
+        scan: { id: scan.id },
+        status: In(['requested', 'started'])
+      });
+      if (runningScanTask) {
+        // Don't run another task if a task is already running.
         continue;
       }
       const lastRunScanTask = await ScanTask.findOne(
