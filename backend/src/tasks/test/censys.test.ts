@@ -3,6 +3,12 @@ import * as nock from 'nock';
 jest.mock('../helpers/getRootDomains');
 jest.mock('../helpers/saveDomainsToDb');
 
+jest.mock('dns', () => ({
+  promises: {
+    lookup: async (domainName) => ({ address: '104.84.119.215' })
+  }
+}));
+
 describe('censys', () => {
   test('basic test', async () => {
     nock('https://censys.io')
