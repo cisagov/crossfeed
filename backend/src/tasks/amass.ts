@@ -40,7 +40,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           ip: parsed.addresses[0].ip,
           name: parsed.name,
           asn: parsed.addresses[0].asn,
-          organization: organizationId
+          organization: { id: organizationId }
         })
       );
     }

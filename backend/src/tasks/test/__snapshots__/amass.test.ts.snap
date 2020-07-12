@@ -6,13 +6,17 @@ Array [
     "asn": 6762,
     "ip": "2a02:26f0:7a00:195::447a",
     "name": "filedrop.cisa.gov",
-    "organization": "organizationId",
+    "organization": Object {
+      "id": "organizationId",
+    },
   },
   Domain {
     "asn": 6762,
     "ip": "2a02:26f0:7a00:188::447a",
     "name": "www.filedrop.cisa.gov",
-    "organization": "organizationId",
+    "organization": Object {
+      "id": "organizationId",
+    },
   },
 ]
 `;

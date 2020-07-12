@@ -24,7 +24,7 @@ class ECSClient {
   constructor() {
     this.isLocal =
       process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false;
-    // this.isLocal = false;
+    this.isLocal = false;
     if (this.isLocal) {
       this.docker = new Docker();
     } else {
@@ -55,7 +55,8 @@ class ECSClient {
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
             `DB_DIALECT=${process.env.DB_DIALECT}`,
-            `DB_HOST=localhost`,
+            // `DB_HOST=localhost`,
+            `DB_HOST=${process.env.DB_HOST}`,
             `DB_PORT=${process.env.DB_PORT}`,
             `DB_NAME=${process.env.DB_NAME}`,
             `DB_USERNAME=${process.env.DB_USERNAME}`,
@@ -90,7 +91,7 @@ class ECSClient {
       networkConfiguration: {
         awsvpcConfiguration: {
           securityGroups: ['sg-088b4691e1cafd8c0'], // lambda sg id
-          subnets: ['subnet-005633f93180b0beb'] // subnet id
+          subnets: ['subnet-005633f93180b0beb'] // ['subnet-005633f93180b0beb'] // // subnet id
         }
       },
       platformVersion: '1.4.0',
@@ -121,6 +122,30 @@ class ECSClient {
               {
                 name: 'CROSSFEED_COMMAND_OPTIONS',
                 value: JSON.stringify(commandOptions)
+              },
+              {
+                name: 'DB_HOST',
+                value: process.env.DB_HOST
+              },
+              {
+                name: 'DB_PORT',
+                value: process.env.DB_PORT
+              },
+              {
+                name: 'DB_USERNAME',
+                value: process.env.DB_USERNAME
+              },
+              {
+                name: 'DB_PASSWORD',
+                value: process.env.DB_PASSWORD
+              },
+              {
+                name: 'CENSYS_API_ID',
+                value: process.env.CENSYS_API_ID
+              },
+              {
+                name: 'CENSYS_API_SECRET',
+                value: process.env.CENSYS_API_SECRET
               }
             ]
           }

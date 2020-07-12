@@ -31,7 +31,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         plainToClass(Domain, {
           name: split[0],
           ip: split[1],
-          organization: organizationId
+          organization: { id: organizationId }
         })
       );
     }

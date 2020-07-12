@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Domain } from '../models';
+import { Domain, Organization } from '../models';
 import { plainToClass } from 'class-transformer';
 import * as dns from 'dns';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
@@ -53,7 +53,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   const rootDomains = await getRootDomains(organizationId);
   const foundDomains = new Set<{
     name: string;
-    organization: string;
+    organization: { id: string };
   }>();
 
   for (const rootDomain of rootDomains) {
@@ -68,7 +68,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           if (name.endsWith(rootDomain)) {
             foundDomains.add({
               name: name.replace('*.', ''),
-              organization: organizationId
+              organization: { id: organizationId }
             });
           }
         }

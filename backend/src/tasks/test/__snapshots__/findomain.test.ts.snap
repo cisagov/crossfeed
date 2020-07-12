@@ -5,12 +5,16 @@ Array [
   Domain {
     "ip": "104.84.119.215",
     "name": "filedrop.cisa.gov",
-    "organization": "organizationId",
+    "organization": Object {
+      "id": "organizationId",
+    },
   },
   Domain {
     "ip": "104.84.119.215",
     "name": "www.filedrop.cisa.gov",
-    "organization": "organizationId",
+    "organization": Object {
+      "id": "organizationId",
+    },
   },
 ]
 `;
