@@ -2,9 +2,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { API } from 'aws-amplify';
 import { AuthContext, AuthUser } from './AuthContext';
 import { User } from 'types';
-import loader from "../img/loader.svg";
-
-const Loading = () => <img src={loader} className="cisa-crossfeed-loading" />
 
 // to be added to every request
 const baseHeaders: HeadersInit = {
@@ -133,7 +130,12 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         apiDelete
       }}
     >
-      {loading > 0 && <Loading />}
+      {loading > 0 && (
+        <div className="cisa-crossfeed-loading">
+          <div></div>
+          <div></div>
+        </div>
+      )}
       {children}
     </AuthContext.Provider>
   );
