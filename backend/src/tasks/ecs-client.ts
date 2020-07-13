@@ -23,7 +23,6 @@ class ECSClient {
   constructor() {
     this.isLocal =
       process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false;
-    this.isLocal = false;
     if (this.isLocal) {
       const Docker = require('dockerode');
       this.docker = new Docker();
