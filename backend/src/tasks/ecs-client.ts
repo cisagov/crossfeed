@@ -1,5 +1,4 @@
 import { ECS } from 'aws-sdk';
-import * as Docker from 'dockerode';
 
 export interface CommandOptions {
   organizationId: string;
@@ -26,6 +25,7 @@ class ECSClient {
       process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false;
     this.isLocal = false;
     if (this.isLocal) {
+      const Docker = require('dockerode');
       this.docker = new Docker();
     } else {
       this.ecs = new ECS();
