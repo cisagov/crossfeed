@@ -2,6 +2,9 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { API } from 'aws-amplify';
 import { AuthContext, AuthUser } from './AuthContext';
 import { User } from 'types';
+import loader from "../img/loader.svg";
+
+const Loading = () => <img src={loader} className="cisa-crossfeed-loading" />
 
 // to be added to every request
 const baseHeaders: HeadersInit = {
@@ -11,6 +14,7 @@ const baseHeaders: HeadersInit = {
 
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>();
+  const [loading, setLoading] = useState(0);
 
   const refreshUser = async () => {
     const user = localStorage.getItem('user');
@@ -55,36 +59,64 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
   const apiGet = useCallback(
     async <T extends object = {}>(path: string, init: any = {}) => {
-      const options = await prepareInit(init);
-      const result = await API.get('crossfeed', path, options);
-      return result as T;
+      try {
+        setLoading(l => l + 1);
+        const options = await prepareInit(init);
+        const result = await API.get('crossfeed', path, options);
+        setLoading(l => l - 1);
+        return result as T;
+      } catch (e) {
+        setLoading(l => l - 1);
+        throw e;
+      }
     },
     [prepareInit]
   );
 
   const apiPost = useCallback(
     async <T extends object = {}>(path: string, init: any) => {
-      const options = await prepareInit(init);
-      const result = await API.post('crossfeed', path, options);
-      return result as T;
+      try {
+        setLoading(l => l + 1);
+        const options = await prepareInit(init);
+        const result = await API.post('crossfeed', path, options);
+        setLoading(l => l - 1);
+        return result as T;
+      } catch (e) {
+        setLoading(l => l - 1);
+        throw e;
+      }
     },
     [prepareInit]
   );
 
   const apiDelete = useCallback(
     async <T extends object = {}>(path: string, init: any = {}) => {
-      const options = await prepareInit(init);
-      const result = await API.del('crossfeed', path, options);
-      return result as T;
+      try {
+        setLoading(l => l + 1);
+        const options = await prepareInit(init);
+        const result = await API.del('crossfeed', path, options);
+        setLoading(l => l - 1);
+        return result as T;
+      } catch (e) {
+        setLoading(l => l - 1);
+        throw e;
+      }
     },
     [prepareInit]
   );
 
   const apiPut = useCallback(
     async <T extends object = {}>(path: string, init: any) => {
-      const options = await prepareInit(init);
-      const result = await API.put('crossfeed', path, options);
-      return result as T;
+      try {
+        setLoading(l => l + 1);
+        const options = await prepareInit(init);
+        const result = await API.put('crossfeed', path, options);
+        setLoading(l => l - 1);
+        return result as T;
+      } catch (e) {
+        setLoading(l => l - 1);
+        throw e;
+      }
     },
     [prepareInit]
   );
@@ -101,6 +133,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         apiDelete
       }}
     >
+      {loading > 0 && <Loading />}
       {children}
     </AuthContext.Provider>
   );
