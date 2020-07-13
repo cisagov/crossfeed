@@ -8,7 +8,7 @@ import {
   BaseEntity,
   OneToMany
 } from 'typeorm';
-import { Domain, Role } from '.';
+import { Domain, Role, ScanTask } from '.';
 
 @Entity()
 @Index(['name'], { unique: true })
@@ -48,4 +48,10 @@ export class Organization extends BaseEntity {
     onUpdate: 'CASCADE'
   })
   userRoles: Role[];
+
+  @OneToMany((type) => ScanTask, (scanTask) => scanTask.organization, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  scanTasks: ScanTask[];
 }

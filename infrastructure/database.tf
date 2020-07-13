@@ -12,7 +12,7 @@ resource "aws_db_subnet_group" "default" {
 
 resource "aws_db_instance" "db" {
   identifier            = var.db_name
-  instance_class        = "db.t2.small"
+  instance_class        = "db.t3.micro" # "db.t2.small"
   allocated_storage     = 20
   max_allocated_storage = 1000
   storage_type          = "gp2"

@@ -1,9 +1,10 @@
-import { Handler } from 'aws-lambda';
 import axios from 'axios';
-import { connectToDatabase, Domain, Organization } from '../models';
-import { saveDomainToDb, getRootDomains } from './helpers';
+import { Domain, Organization } from '../models';
 import { plainToClass } from 'class-transformer';
 import * as dns from 'dns';
+import saveDomainsToDb from './helpers/saveDomainsToDb';
+import { CommandOptions } from './ecs-client';
+import getRootDomains from './helpers/getRootDomains';
 
 interface CensysAPIResponse {
   status: string;
@@ -44,28 +45,30 @@ const fetchCensysData = async (rootDomain: string, page: number) => {
   return data as CensysAPIResponse;
 };
 
-export const handler: Handler = async () => {
-  await connectToDatabase();
+export const handler = async (commandOptions: CommandOptions) => {
+  const { organizationId, organizationName } = commandOptions;
 
-  const allDomains = await getRootDomains(true);
+  console.log('Running censys on organization', organizationName);
+
+  const rootDomains = await getRootDomains(organizationId);
   const foundDomains = new Set<{
     name: string;
-    organization: Organization;
+    organization: { id: string };
   }>();
 
-  for (const rootDomain of allDomains) {
+  for (const rootDomain of rootDomains) {
     let pages = 1;
     for (let page = 1; page <= pages; page++) {
-      const data = await fetchCensysData(rootDomain.name, page);
+      const data = await fetchCensysData(rootDomain, page);
       pages = data.metadata.pages;
       for (const result of data.results) {
         const names = result['parsed.names'];
         if (!names) continue;
         for (const name of names) {
-          if (name.endsWith(rootDomain.name)) {
+          if (name.endsWith(rootDomain)) {
             foundDomains.add({
               name: name.replace('*.', ''),
-              organization: rootDomain.organization
+              organization: { id: organizationId }
             });
           }
         }
@@ -82,6 +85,7 @@ export const handler: Handler = async () => {
 
   // Save domains to database
   console.log('[censys] saving domains to database...');
+  const domains: Domain[] = [];
   for (const domain of foundDomains) {
     let ip: string | null;
     try {
@@ -90,7 +94,7 @@ export const handler: Handler = async () => {
       // IP not found
       ip = null;
     }
-    await saveDomainToDb(
+    domains.push(
       plainToClass(Domain, {
         ip: ip,
         name: domain.name,
@@ -98,5 +102,6 @@ export const handler: Handler = async () => {
       })
     );
   }
-  console.log(`[censys] done, saved or updated ${foundDomains.size} domains`);
+  saveDomainsToDb(domains);
+  console.log(`[censys] done, saved or updated ${domains.length} domains`);
 };

@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wappalyzer basic test: helpers.saveDomainsToDb 1`] = `
+Array [
+  Domain {
+    "name": "www.cisa.gov",
+    "webTechnologies": Array [
+      Object {
+        "categories": Array [
+          Object {
+            "id": 1,
+            "name": "CMS",
+            "priority": 1,
+            "slug": "cms",
+          },
+        ],
+        "confidence": 100,
+        "cpe": "cpe:/a:drupal:drupal",
+        "icon": "Drupal.svg",
+        "name": "Drupal",
+        "slug": "drupal",
+        "version": "8",
+        "website": "https://drupal.org",
+      },
+      Object {
+        "categories": Array [
+          Object {
+            "id": 22,
+            "name": "Web servers",
+            "priority": 8,
+            "slug": "web-servers",
+          },
+        ],
+        "confidence": 100,
+        "cpe": "cpe:/a:apache:http_server",
+        "icon": "Apache.svg",
+        "name": "Apache",
+        "slug": "apache",
+        "version": "",
+        "website": "http://apache.org",
+      },
+      Object {
+        "categories": Array [
+          Object {
+            "id": 27,
+            "name": "Programming languages",
+            "priority": 5,
+            "slug": "programming-languages",
+          },
+        ],
+        "confidence": 100,
+        "cpe": "cpe:/a:php:php",
+        "icon": "PHP.svg",
+        "name": "PHP",
+        "slug": "php",
+        "version": "",
+        "website": "http://php.net",
+      },
+    ],
+  },
+]
+`;

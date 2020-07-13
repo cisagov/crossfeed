@@ -1,15 +1,19 @@
-import { Handler } from 'aws-lambda';
-import { connectToDatabase, Domain } from '../models';
-import { getLiveWebsites, saveDomainToDb } from './helpers';
+import { Domain } from '../models';
 import { plainToClass } from 'class-transformer';
 import * as wappalyzer from 'simple-wappalyzer';
 import axios from 'axios';
+import { CommandOptions } from './ecs-client';
+import getLiveWebsites from './helpers/getLiveWebsites';
+import saveDomainsToDb from './helpers/saveDomainsToDb';
 
-export const handler: Handler = async (event) => {
-  await connectToDatabase();
+export const handler = async (commandOptions: CommandOptions) => {
+  const { organizationId, organizationName } = commandOptions;
 
-  const domains = await getLiveWebsites(false);
-  for (const domain of domains) {
+  console.log('Running wappalyzer on organization', organizationName);
+
+  const liveWebsites = await getLiveWebsites(organizationId);
+  const domains: Domain[] = [];
+  for (const domain of liveWebsites) {
     const url =
       (domain.services.map((service) => service.port).includes(443)
         ? 'https://'
@@ -23,16 +27,17 @@ export const handler: Handler = async (event) => {
       });
       const result = await wappalyzer({ url, data, status, headers });
       if (result.length == 0) continue;
-      await saveDomainToDb(
+      domains.push(
         plainToClass(Domain, {
           name: domain.name,
           webTechnologies: result
         })
       );
     } catch (e) {
+      console.error(e);
       continue;
     }
   }
-
+  saveDomainsToDb(domains);
   console.log(`Wappalyzer finished for ${domains.length} domains`);
 };

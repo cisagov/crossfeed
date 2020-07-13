@@ -22,10 +22,15 @@ provider:
   environment: ${file(env.yml):${self:provider.stage}}
   vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
   iamRoleStatements:
+    # TODO: make the resources more specific.
     - Effect: Allow
       Action:
         - lambda:InvokeAsync
         - lambda:InvokeFunction
+      Resource: '*'
+    - Effect: Allow
+      Action:
+        - ecs:RunTask
       Resource: '*'
 
 functions:
@@ -36,9 +41,3 @@ plugins:
   - serverless-domain-manager
   - serverless-plugin-typescript
   - serverless-offline
-
-layers:
-  amass:
-    path: layers/amass
-  findomain:
-    path: layers/findomain

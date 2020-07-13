@@ -1,7 +1,7 @@
-data "aws_route53_zone" "zone" {
-  name         = "dds.mil."
-  private_zone = false
-}
+# data "aws_route53_zone" "zone" {
+#   name         = "dds.mil."
+#   private_zone = false
+# }
 
 data "aws_availability_zones" "available" {
   state = "available"

@@ -10,12 +10,35 @@ import { Scan, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { isGlobalWriteAdmin } from './auth';
 
-const SCAN_SCHEMA = {
-  censys: {},
-  amass: {},
-  findomain: {},
-  portscanner: {},
-  wappalyzer: {}
+interface ScanSchema {
+  [name: string]: {
+    // Scan type
+    type: 'lambda' | 'fargate';
+    isPassive: boolean;
+  };
+}
+
+export const SCAN_SCHEMA: ScanSchema = {
+  censys: {
+    type: 'fargate',
+    isPassive: true
+  },
+  amass: {
+    type: 'fargate',
+    isPassive: false
+  },
+  findomain: {
+    type: 'fargate',
+    isPassive: true
+  },
+  portscanner: {
+    type: 'fargate',
+    isPassive: false
+  },
+  wappalyzer: {
+    type: 'fargate',
+    isPassive: false
+  }
 };
 
 class NewScan {

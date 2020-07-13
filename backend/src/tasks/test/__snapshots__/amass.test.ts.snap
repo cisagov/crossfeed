@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`amass basic test: helpers.saveDomainsToDb 1`] = `
+Array [
+  Domain {
+    "asn": 6762,
+    "ip": "2a02:26f0:7a00:195::447a",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "asn": 6762,
+    "ip": "2a02:26f0:7a00:188::447a",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+]
+`;

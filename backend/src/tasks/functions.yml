@@ -2,22 +2,6 @@ censys:
   handler: src/tasks/censys.handler
   timeout: 900
 
-amass:
-  handler: src/tasks/amass.handler
-  timeout: 900
-  layers:
-    - { Ref: AmassLambdaLayer }
-
-findomain:
-  handler: src/tasks/findomain.handler
-  timeout: 900
-  layers:
-    - { Ref: FindomainLambdaLayer }
-
-portscanner:
-  handler: src/tasks/portscanner.handler
-  timeout: 900
-
 wappalyzer:
   handler: src/tasks/wappalyzer.handler
   timeout: 900

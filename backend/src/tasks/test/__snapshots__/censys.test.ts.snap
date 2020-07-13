@@ -1,0 +1,286 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`censys basic test: helpers.saveDomainsToDb 1`] = `
+Array [
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+  Domain {
+    "ip": "104.84.119.215",
+    "name": "www.filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+  },
+]
+`;

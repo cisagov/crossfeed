@@ -1,47 +1,41 @@
-import { Handler } from 'aws-lambda';
-import { connectToDatabase, Domain, Organization } from '../models';
+import { Domain } from '../models';
 import { spawnSync } from 'child_process';
 import { readFileSync } from 'fs';
-import { saveDomainToDb, getRootDomains } from './helpers';
 import { plainToClass } from 'class-transformer';
+import { CommandOptions } from './ecs-client';
+import getRootDomains from './helpers/getRootDomains';
+import saveDomainsToDb from './helpers/saveDomainsToDb';
+import * as path from 'path';
 
-const LAYER_PATH =
-  process.env.IS_OFFLINE || process.env.IS_LOCAL ? '/app/layers' : '/opt';
-const OUT_PATH =
-  process.env.IS_OFFLINE || process.env.IS_LOCAL ? 'out.json' : '/tmp/out.json';
+const OUT_PATH = path.join(__dirname, 'out-' + Math.random() + '.txt');
 
-export const handler: Handler = async (event) => {
-  await connectToDatabase();
+export const handler = async (commandOptions: CommandOptions) => {
+  const { organizationId, organizationName } = commandOptions;
 
-  if (process.env.IS_OFFLINE || process.env.IS_LOCAL) {
-    spawnSync('chmod', ['+x', LAYER_PATH + '/findomain/findomain'], {
-      stdio: 'pipe'
-    });
-  }
+  console.log('Running findomain on organization', organizationName);
 
-  const allDomains = await getRootDomains(true);
-  let count = 0;
-  for (const rootDomain of allDomains) {
-    spawnSync(
-      LAYER_PATH + '/findomain/findomain',
-      ['-it', rootDomain.name, '-u', OUT_PATH],
-      { stdio: 'pipe' }
-    );
+  const rootDomains = await getRootDomains(organizationId);
+
+  for (const rootDomain of rootDomains) {
+    const args = ['-it', rootDomain, '-u', OUT_PATH];
+    console.log('Running findomain with args', args);
+    spawnSync('findomain', args, { stdio: 'pipe' });
 
     const output = String(readFileSync(OUT_PATH));
     const lines = output.split('\n');
+    const domains: Domain[] = [];
     for (const line of lines) {
       if (line == '') continue;
       const split = line.split(',');
-      await saveDomainToDb(
+      domains.push(
         plainToClass(Domain, {
           name: split[0],
           ip: split[1],
-          organization: rootDomain.organization
+          organization: { id: organizationId }
         })
       );
-      count++;
     }
+    await saveDomainsToDb(domains);
+    console.log(`Findomain created/updated ${domains.length} new domains`);
   }
-  console.log(`Findomain created/updated ${count} new domains`);
 };

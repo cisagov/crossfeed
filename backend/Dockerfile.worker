@@ -1,0 +1,37 @@
+FROM node:14-buster-slim as build
+
+WORKDIR /app
+
+COPY ./package* ./
+
+RUN npm ci
+
+COPY tsconfig.json ./tsconfig.json
+COPY webpack.config.js ./webpack.config.js
+COPY src ./src
+
+RUN npx webpack
+
+FROM node:14-buster-slim as deps
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/download/1.7.0/findomain-linux -O /usr/bin/findomain && chmod +x /usr/bin/findomain
+
+RUN wget --quiet https://github.com/OWASP/Amass/releases/download/v3.7.3/amass_linux_i386.zip -O amass.zip && unzip -q amass.zip && cp amass_linux_i386/amass /usr/bin && chmod +x /usr/bin/amass
+
+FROM node:14-buster-slim
+
+WORKDIR /app
+
+COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
+
+COPY --from=deps /usr/bin/findomain /usr/bin/findomain
+COPY --from=deps /usr/bin/amass /usr/bin/amass
+
+CMD ["node", "worker.bundle.js"]

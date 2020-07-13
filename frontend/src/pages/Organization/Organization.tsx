@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { Organization as OrganizationType, Role } from 'types';
+import { Organization as OrganizationType, Role, ScanTask } from 'types';
 import { FaGlobe, FaNetworkWired, FaClock, FaUsers } from 'react-icons/fa';
 import { Column } from 'react-table';
 import { Table } from 'components';
@@ -17,10 +17,11 @@ export const Organization: React.FC = () => {
   const { apiGet, apiPut, apiPost } = useAuthContext();
   const [organization, setOrganization] = useState<OrganizationType>();
   const [userRoles, setUserRoles] = useState<Role[]>([]);
+  const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
 
-  const columns: Column<Role>[] = [
+  const userRoleColumns: Column<Role>[] = [
     {
       Header: 'Name',
       accessor: ({ user }) => user.fullName,
@@ -71,6 +72,61 @@ export const Organization: React.FC = () => {
     }
   ];
 
+  const scanTaskColumns: Column<ScanTask>[] = [
+    {
+      Header: "ID",
+      accessor: 'id',
+      disableFilters: true
+    },
+    {
+      Header: 'Status',
+      accessor: 'status',
+      disableFilters: true
+    },
+    {
+      Header: 'Type',
+      accessor: "type",
+      disableFilters: true
+    },
+    // {
+    //   Header: 'Input',
+    //   accessor: "input",
+    //   width: 150,
+    //   disableFilters: true
+    // },
+    // {
+    //   Header: 'Output',
+    //   width: 150,
+    //   accessor: "output",
+    //   disableFilters: true
+    // },
+    {
+      Header: 'Created At',
+      accessor: "createdAt",
+      disableFilters: true
+    },
+    {
+      Header: 'Requested At',
+      accessor: "requestedAt",
+      disableFilters: true
+    },
+    {
+      Header: 'Started At',
+      accessor: "startedAt",
+      disableFilters: true
+    },
+    {
+      Header: 'Finished At',
+      accessor: "finishedAt",
+      disableFilters: true
+    },
+    {
+      Header: 'Output',
+      accessor: "output",
+      disableFilters: true
+    }
+  ];
+
   const fetchOrganization = useCallback(async () => {
     try {
       const organization = await apiGet<OrganizationType>(
@@ -78,6 +134,7 @@ export const Organization: React.FC = () => {
       );
       setOrganization(organization);
       setUserRoles(organization.userRoles);
+      setScanTasks(organization.scanTasks);
     } catch (e) {
       console.error(e);
     }
@@ -175,7 +232,10 @@ export const Organization: React.FC = () => {
               </div>
             </div>
             <h1>Organization Users</h1>
-            <Table<Role> columns={columns} data={userRoles} />
+            <Table<Role> columns={userRoleColumns} data={userRoles} />
+
+            <h1>Organization Scan Tasks</h1>
+            <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} initialSortBy={[{id: "createdAt", desc: true}]} />
             <h2>Update Organization</h2>
             {errors.global && <p className={classes.error}>{errors.global}</p>}
             {message && <p>{message}</p>}

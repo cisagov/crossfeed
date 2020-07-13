@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`portscanner basic test: helpers.saveServicesToDb 1`] = `
+Array [
+  Service {
+    "domain": Domain {
+      "ip": "104.84.119.215",
+      "name": "www.cisa.gov",
+      "services": Array [
+        Object {
+          "port": 80,
+        },
+        Object {
+          "port": 443,
+        },
+      ],
+    },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "port": 80,
+  },
+  Service {
+    "domain": Domain {
+      "ip": "104.84.119.215",
+      "name": "www.cisa.gov",
+      "services": Array [
+        Object {
+          "port": 80,
+        },
+        Object {
+          "port": 443,
+        },
+      ],
+    },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "port": 443,
+  },
+]
+`;
