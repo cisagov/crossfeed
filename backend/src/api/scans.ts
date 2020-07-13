@@ -11,7 +11,7 @@ import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { isGlobalWriteAdmin } from './auth';
 
 interface ScanSchema {
-  [x: string]: {
+  [name: string]: {
     // Scan type
     type: 'lambda' | 'fargate';
     isPassive: boolean;
@@ -29,7 +29,7 @@ export const SCAN_SCHEMA: ScanSchema = {
   },
   findomain: {
     type: 'fargate',
-    isPassive: false
+    isPassive: true
   },
   portscanner: {
     type: 'fargate',
@@ -37,7 +37,7 @@ export const SCAN_SCHEMA: ScanSchema = {
   },
   wappalyzer: {
     type: 'fargate',
-    isPassive: true
+    isPassive: false
   }
 };
 
