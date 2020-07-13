@@ -136,7 +136,7 @@ export const Organization: React.FC = () => {
 
   const fetchOrganization = useCallback(async () => {
     try {
-      let organization = await apiGet<OrganizationType>(
+      const organization = await apiGet<OrganizationType>(
         `/organizations/${organizationId}`
       );
       organization.scanTasks.sort(
