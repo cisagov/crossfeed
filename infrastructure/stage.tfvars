@@ -1,7 +1,7 @@
-aws_region      = "us-west-2"
+aws_region      = "us-east-1"
 project         = "Crossfeed"
-frontend_domain = "ashwin-stage.crossfeed2.dds.mil"
-api_domain      = "ashwin-stage.api.crossfeed2.dds.mil"
+frontend_domain = "stage.crossfeed.cisa.gov"
+api_domain      = "stage.api.crossfeed.cisa.gov"
 db_name         = "crossfeed-stage-db"
 db_port         = 5432
 db_table_name     = "cfstagingdb"

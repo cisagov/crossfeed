@@ -1,7 +1,7 @@
-aws_region        = "us-west-2"
+aws_region        = "us-east-1"
 project           = "Crossfeed"
-frontend_domain   = "crossfeed2.dds.mil"
-api_domain        = "api.crossfeed2.dds.mil"
+frontend_domain   = "crossfeed.cisa.gov"
+api_domain        = "api.crossfeed.cisa.gov"
 db_name           = "crossfeed-prod-db"
 db_port           = 5432
 db_table_name     = "cfproddb"
