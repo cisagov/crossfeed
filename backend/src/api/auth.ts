@@ -63,7 +63,8 @@ export const callback = async (event, context, callback) => {
       loginGovId: userInfo.sub,
       firstName: '',
       lastName: '',
-      userType: process.env.IS_OFFLINE ? 'globalAdmin' : 'standard'
+      userType: process.env.IS_OFFLINE ? 'globalAdmin' : 'standard',
+      roles: []
     });
     await user.save();
   }
@@ -120,13 +121,12 @@ export const authorize = async (event, context, callback) => {
     const parsed: UserToken = jwt.verify(
       event.authorizationToken,
       process.env.JWT_SECRET!
-    ) as any;
+    ) as UserToken;
     return callback(
       null,
       generatePolicy(parsed.id, 'Allow', event.methodArn, parsed)
     );
   } catch (e) {
-    console.error(e);
     return callback('Unauthorized');
   }
 };
