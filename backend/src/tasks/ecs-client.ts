@@ -24,7 +24,6 @@ class ECSClient {
   constructor() {
     this.isLocal =
       process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false;
-    this.isLocal = false;
     if (this.isLocal) {
       this.docker = new Docker();
     } else {
