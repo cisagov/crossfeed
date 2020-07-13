@@ -27,7 +27,7 @@ export const Dashboard: React.FC = () => {
   // Called to sign in the user
   const callback = useCallback(async () => {
     const parsed = parse(window.location.search);
-    if (!parsed.state || !parsed.code) {
+    if ((user && user.firstName !== '') || !parsed.state || !parsed.code) {
       return;
     }
     try {
@@ -40,13 +40,13 @@ export const Dashboard: React.FC = () => {
         }
       });
 
-      login(token, user);
+      await login(token, user);
 
       localStorage.removeItem('nonce');
       localStorage.removeItem('state');
 
       if (user.firstName !== '') {
-        history.push('/');
+        window.location.reload();
       } else {
         history.push('/create-account');
       }
