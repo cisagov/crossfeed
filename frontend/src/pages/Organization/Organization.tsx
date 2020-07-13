@@ -7,6 +7,7 @@ import { FaGlobe, FaNetworkWired, FaClock, FaUsers } from 'react-icons/fa';
 import { Column } from 'react-table';
 import { Table } from 'components';
 import { OrganizationForm } from 'components/OrganizationForm';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
@@ -20,6 +21,12 @@ export const Organization: React.FC = () => {
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
+
+  const dateAccessor = (date?: string) => {
+    return !date || new Date(date).getTime() === new Date(0).getTime()
+      ? 'Never'
+      : `${formatDistanceToNow(parseISO(date))} ago`;
+  };
 
   const userRoleColumns: Column<Role>[] = [
     {
@@ -74,7 +81,7 @@ export const Organization: React.FC = () => {
 
   const scanTaskColumns: Column<ScanTask>[] = [
     {
-      Header: "ID",
+      Header: 'ID',
       accessor: 'id',
       disableFilters: true
     },
@@ -85,44 +92,44 @@ export const Organization: React.FC = () => {
     },
     {
       Header: 'Type',
-      accessor: "type",
+      accessor: 'type',
       disableFilters: true
     },
-    // {
-    //   Header: 'Input',
-    //   accessor: "input",
-    //   width: 150,
-    //   disableFilters: true
-    // },
-    // {
-    //   Header: 'Output',
-    //   width: 150,
-    //   accessor: "output",
-    //   disableFilters: true
-    // },
+    {
+      Header: 'Name',
+      accessor: ({ input }) => {
+        if (!input) return;
+        return JSON.parse(input).scanName;
+      },
+      disableFilters: true
+    },
     {
       Header: 'Created At',
-      accessor: "createdAt",
-      disableFilters: true
+      accessor: ({ createdAt }) => dateAccessor(createdAt),
+      disableFilters: true,
+      disableSortBy: true
     },
     {
       Header: 'Requested At',
-      accessor: "requestedAt",
-      disableFilters: true
+      accessor: ({ requestedAt }) => dateAccessor(requestedAt),
+      disableFilters: true,
+      disableSortBy: true
     },
     {
       Header: 'Started At',
-      accessor: "startedAt",
-      disableFilters: true
+      accessor: ({ startedAt }) => dateAccessor(startedAt),
+      disableFilters: true,
+      disableSortBy: true
     },
     {
       Header: 'Finished At',
-      accessor: "finishedAt",
-      disableFilters: true
+      accessor: ({ finishedAt }) => dateAccessor(finishedAt),
+      disableFilters: true,
+      disableSortBy: true
     },
     {
       Header: 'Output',
-      accessor: "output",
+      accessor: 'output',
       disableFilters: true
     }
   ];
@@ -131,6 +138,10 @@ export const Organization: React.FC = () => {
     try {
       const organization = await apiGet<OrganizationType>(
         `/organizations/${organizationId}`
+      );
+      organization.scanTasks.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
       setOrganization(organization);
       setUserRoles(organization.userRoles);
@@ -235,7 +246,7 @@ export const Organization: React.FC = () => {
             <Table<Role> columns={userRoleColumns} data={userRoles} />
 
             <h1>Organization Scan Tasks</h1>
-            <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} initialSortBy={[{id: "createdAt", desc: true}]} />
+            <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} />
             <h2>Update Organization</h2>
             {errors.global && <p className={classes.error}>{errors.global}</p>}
             {message && <p>{message}</p>}
