@@ -8,14 +8,13 @@ on:
     paths:
       - 'backend/**'
       - '.github/workflows/backend.yml'
-
-  pull_request:
-    branches:
-      - master
-      - production
-    paths:
-      - 'backend/**'
-      - '.github/workflows/backend.yml'
+  # pull_request:
+  #   branches:
+  #     - master
+  #     - production
+  #   paths:
+  #     - 'backend/**'
+  #     - '.github/workflows/backend.yml'
 
 defaults:
   run:
