@@ -39,6 +39,7 @@ body {
   opacity: 1;
   border-radius: 50%;
   animation: cisa-crossfeed-loading 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  border: 4px solid color('base-dark');
 }
 
 .cisa-crossfeed-loading div:nth-child(2) {
