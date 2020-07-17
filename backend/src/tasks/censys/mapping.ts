@@ -1,7 +1,6 @@
 import { CensysIpv4Data } from "../../models/generated/censysIpv4";
-import smtp from "../services/smtp";
 
-type BannerMap = {
+type Mapping = {
   [x in keyof CensysIpv4Data]: (service: CensysIpv4Data[x]) => {
     banner?: string | null,
     censysMetadata?: {
@@ -29,7 +28,7 @@ const vncMap = (e: CensysIpv4Data["p5900"]) => ({
   censysMetadata: e?.vnc?.banner?.metadata,
 });
 
-const bannerMap: BannerMap = {
+export const mapping: Mapping = {
   p80: httpMap,
   p8888: httpMap,
   p8080: httpMap,
@@ -64,10 +63,6 @@ const bannerMap: BannerMap = {
     banner: e?.smtp?.starttls?.banner,
     censysMetadata: e?.smtp?.starttls?.metadata
   }),
-  p3306: e => ({
-    banner: null,
-    censysMetadata: e?.mysql?.banner?.metadata
-  }),
   p102: e => ({
     banner: null,
     censysMetadata: e?.s7?.szl?.metadata
@@ -87,10 +82,6 @@ const bannerMap: BannerMap = {
   p445: e => ({
     banner: null,
     censysMetadata: e?.smb?.banner?.metadata
-  }),
-  p502: e => ({
-    banner: null,
-    censysMetadata: e?.modbus?.device_id?.metadata
   }),
   p502: e => ({
     banner: null,
@@ -201,4 +192,3 @@ const bannerMap: BannerMap = {
     censysMetadata: e?.bacnet?.device_id?.metadata
   }),
 }
-export default bannerMap;

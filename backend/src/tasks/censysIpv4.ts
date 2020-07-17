@@ -1,14 +1,13 @@
 import axios from 'axios';
 import { Domain, Organization, Service } from '../models';
 import { plainToClass } from 'class-transformer';
-import * as dns from 'dns';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
 import getCensysBannerData from './helpers/getCensysIpv4Data';
 import getCensysIpv4Data from './helpers/__mocks__/getCensysIpv4Data';
 import { CensysIpv4Data } from 'src/models/generated/censysIpv4';
-import { getServices } from "./censys/services";
-
+import { mapping } from './censys/mapping';
+import saveServicesToDb from './helpers/saveServicesToDb';
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
@@ -31,25 +30,19 @@ export const handler = async (commandOptions: CommandOptions) => {
         lastSeen: new Date(Date.now())
       })
     );
-    services = [...services, ...Array.from(getServices(item)).map(e => plainToClass(Service, e))];
+    for (let key in item) {
+      if (key.startsWith("p") && mapping[key]) {
+        services.push(
+          plainToClass(Service, {
+            ...mapping[key](item[key]),
+            port: Number(key.slice(1)),
+            domain: null, // TODO: find domain.
+          })
+        );
+      }
+    }
   }
-
-  // for (const domain of foundDomains) {
-  //   let ip: string | null;
-  //   try {
-  //     ip = (await dns.promises.lookup(domain.name)).address;
-  //   } catch {
-  //     // IP not found
-  //     ip = null;
-  //   }
-  //   domains.push(
-  //     plainToClass(Domain, {
-  //       ip: ip,
-  //       name: domain.name,
-  //       organization: domain.organization
-  //     })
-  //   );
-  // }
-  // saveDomainsToDb(domains);
+  saveDomainsToDb(domains);
+  saveServicesToDb(services);
   // console.log(`[censys] done, saved or updated ${domains.length} domains`);
 };
