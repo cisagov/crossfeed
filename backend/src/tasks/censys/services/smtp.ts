@@ -2,7 +2,7 @@ import { CensysIpv4Data } from "../../../models/generated/censysIpv4";
 
 function* smtp(item: CensysIpv4Data) {
   if (item.p25?.smtp) {
-    return {
+    yield {
       port: 25,
       service: "smtp",
       banner: item.p25?.smtp?.starttls?.banner,
@@ -10,7 +10,7 @@ function* smtp(item: CensysIpv4Data) {
     };
   }
   if (item.p465?.smtp) {
-    return {
+    yield {
       port: 465,
       service: "smtp",
       banner: item.p465?.smtp?.tls?.banner,
@@ -18,7 +18,7 @@ function* smtp(item: CensysIpv4Data) {
     };
   }
   if (item.p587?.smtp) {
-    return {
+    yield {
       port: 587,
       service: "smtp",
       banner: item.p587?.smtp?.starttls?.banner,

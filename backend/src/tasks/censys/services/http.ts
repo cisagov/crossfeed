@@ -2,7 +2,7 @@ import { CensysIpv4Data } from "../../../models/generated/censysIpv4";
 
 function *http(item: CensysIpv4Data) {
   if (item.p8080?.http?.get) {
-   return {
+    yield {
       port: 8080,
       service: "http",
       banner: item.p8080.http.get?.body,
