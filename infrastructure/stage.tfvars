@@ -1,7 +1,7 @@
 aws_region      = "us-east-1"
 project         = "Crossfeed"
-frontend_domain = "stage.crossfeed.cisa.gov"
-api_domain      = "stage.api.crossfeed.cisa.gov"
+frontend_domain = "staging.crossfeed.cyber.dhs.gov"
+api_domain      = "api.staging.crossfeed.cyber.dhs.gov"
 db_name         = "crossfeed-stage-db"
 db_port         = 5432
 db_table_name     = "cfstagingdb"
