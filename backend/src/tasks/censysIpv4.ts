@@ -6,7 +6,7 @@ import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
 import getCensysBannerData from './helpers/getCensysIpv4Data';
 import getCensysIpv4Data from './helpers/__mocks__/getCensysIpv4Data';
-import { CensysIpv4Data } from './censysIpv4.d';
+import { CensysIpv4Data } from 'src/models/generated/censysIpv4';
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;

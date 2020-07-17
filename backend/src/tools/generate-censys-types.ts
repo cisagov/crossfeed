@@ -20,19 +20,20 @@ function convertToJSONSchema(data) {
 
   let schema;
   if (data.repeated) {
-    schema = { type: "array", items: {} };
+    schema = { type: "array", items: {}, description: data.doc };
     schema.items = convertToJSONSchema({...data, repeated: false});
   }
   if (data.fields) {
-    schema = { type: "object", properties: {} };
+    schema = { type: "object", properties: {}, description: data.doc };
     for (let fieldName of Object.keys(data.fields)) {
       schema.properties[fieldName] = convertToJSONSchema(data.fields[fieldName]);
     }
   } else {
     if (!typeMap[data.type]) {
-      throw data;
+      console.error(data.type);
+      throw new Error("Unrecognized type" + data.type);
     }
-    schema = { type: typeMap[data.type] };
+    schema = { type: typeMap[data.type], description: data.doc };
   }
   return schema;
 }
