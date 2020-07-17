@@ -7,19 +7,14 @@ import { CommandOptions } from './ecs-client';
 import getCensysBannerData from './helpers/getCensysIpv4Data';
 import getCensysIpv4Data from './helpers/__mocks__/getCensysIpv4Data';
 import { CensysIpv4Data } from 'src/models/generated/censysIpv4';
-import services from "./censys/services";
+import { getServices } from "./censys/services";
 
-
-function* getServices(item: CensysIpv4Data) {
-  yield * services.http( item );
-
-}
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
   // console.log('Running censys on organization', organizationName);
-  
+
   const data: CensysIpv4Data[] = await getCensysIpv4Data();
 
   // schema: https://censys.io/help/bigquery/ipv4
@@ -36,7 +31,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         lastSeen: new Date(Date.now())
       })
     );
-    services = [...services, ...Array.from(getServices(item)).map(e => plainToClass(Service, e)) ];
+    services = [...services, ...Array.from(getServices(item)).map(e => plainToClass(Service, e))];
   }
 
   // for (const domain of foundDomains) {
