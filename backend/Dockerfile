@@ -9,5 +9,3 @@ RUN npm ci
 COPY . .
 
 CMD ["npx", "ts-node-dev", "src/api/dev.ts"]
-
-# CMD [ "npx", "serverless", "offline", "--host", "0.0.0.0", "--httpPort", "3000", "--printOutput" ]
