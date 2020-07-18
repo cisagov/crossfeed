@@ -32,9 +32,11 @@ export const handler = async (commandOptions: CommandOptions) => {
     );
     for (let key in item) {
       if (key.startsWith("p") && mapping[key]) {
+        const service = Object.keys(item[key] as any)[0];
         services.push(
           plainToClass(Service, {
             ...mapping[key](item[key]),
+            service,
             port: Number(key.slice(1)),
             domain: null, // TODO: find domain.
           })
