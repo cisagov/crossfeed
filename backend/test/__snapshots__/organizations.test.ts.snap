@@ -15,4 +15,4 @@ Object {
 }
 `;
 
-exports[`organizations can't add organization with the same name 1`] = `""`;
+exports[`organizations can't add organization with the same name 1`] = `Object {}`;

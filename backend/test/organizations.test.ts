@@ -1,29 +1,14 @@
 import * as request from 'supertest';
-import { BACKEND_URL, JWT_SECRET } from './constants';
-import * as jwt from 'jsonwebtoken';
+import app from '../src/api/app';
+import { createUserToken } from './util';
 
-const token = jwt.sign(
-  {
-    id: '123',
-    email: 'user@example.com',
-    userType: 'globalAdmin',
-    roles: []
-  },
-  JWT_SECRET,
-  {
-    expiresIn: '1 day',
-    header: {
-      typ: 'JWT'
-    }
-  }
-);
 
 describe('organizations', () => {
   it('add new organization', async () => {
     const name = 'cisa-test-' + Math.random();
-    const response = await request(BACKEND_URL)
+    const response = await request(app)
       .post('/organizations/')
-      .set('Authorization', token)
+      .set('Authorization', createUserToken())
       .send({
         ipBlocks: [],
         name,
@@ -42,9 +27,9 @@ describe('organizations', () => {
   });
   it("can't add organization with the same name", async () => {
     const name = 'cisa-test-' + Math.random();
-    await request(BACKEND_URL)
+    await request(app)
       .post('/organizations/')
-      .set('Authorization', token)
+      .set('Authorization', createUserToken())
       .send({
         ipBlocks: [],
         name,
@@ -53,9 +38,9 @@ describe('organizations', () => {
         inviteOnly: true
       })
       .expect(200);
-    const response = await request(BACKEND_URL)
+    const response = await request(app)
       .post('/organizations/')
-      .set('Authorization', token)
+      .set('Authorization', createUserToken())
       .send({
         ipBlocks: [],
         name,
