@@ -33,9 +33,9 @@ app.post("/auth/login", handlerToExpress(auth.login));
 app.post("/auth/callback", handlerToExpress(auth.callback));
 
 const authenticatedRoute = express.Router();
-authenticatedRoute.use((req, res, next) => {
+authenticatedRoute.use(async (req, res, next) => {
   req.requestContext = {
-    authorizer: auth.authorize({ authorizationToken: req.headers["Authorization"] })
+    authorizer: await auth.authorize({ authorizationToken: req.headers.authorization })
   };
   if (!req.requestContext.authorizer.id || req.requestContext.authorizer.id === "cisa:crossfeed:anonymous") {
     return res.status(403).send("Not logged in");
@@ -61,8 +61,8 @@ authenticatedRoute.post("/organizations/:organizationId/roles/:roleId/remove", h
 authenticatedRoute.get("/users", handlerToExpress(users.list));
 authenticatedRoute.get("/users/me", handlerToExpress(users.me));
 authenticatedRoute.post("/users/invite", handlerToExpress(users.invite));
-authenticatedRoute.put("/users/update", handlerToExpress(users.update));
-authenticatedRoute.put("/users/delete", handlerToExpress(users.del));
+authenticatedRoute.put("/users/:userId", handlerToExpress(users.update));
+authenticatedRoute.put("/users/:userId", handlerToExpress(users.del));
 
 app.use(authenticatedRoute);
 
