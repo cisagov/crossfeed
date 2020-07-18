@@ -1,7 +1,7 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
 import { createUserToken } from './util';
-import { Organization, connectToDatabase } from '../src/models';
+import { Organization, Role, connectToDatabase } from '../src/models';
 
 
 describe('organizations', () => {
@@ -220,6 +220,38 @@ describe('organizations', () => {
       expect(response.body[0].id).toEqual(organization.id);
     });
   });
+  describe('listPublicNames', () => {
+    it('listPublicNames by non-org member should succeed', async () => {
+      const organization = await Organization.create({
+        name: "test-" + Math.random(),
+        rootDomains: ["test-" + Math.random()],
+        ipBlocks: [],
+        isPassive: false,
+        inviteOnly: false
+      }).save();
+      const response = await request(app)
+        .get(`/organizations/public`)
+        .set('Authorization', createUserToken({
+        }))
+        .expect(200);
+      expect(response.body.length).toBeGreaterThanOrEqual(1);
+      expect(response.body.map(e => e.id).indexOf(organization.id)).toBeGreaterThanOrEqual(1);
+    });
+    it('listPublicNames with bad auth key should fail', async () => {
+      const organization = await Organization.create({
+        name: "test-" + Math.random(),
+        rootDomains: ["test-" + Math.random()],
+        ipBlocks: [],
+        isPassive: false,
+        inviteOnly: false,
+      }).save();
+      const response = await request(app)
+        .get(`/organizations/public`)
+        .set('Authorization', '')
+        .expect(403);
+      expect(response.body).toEqual({});
+    });
+  });
   describe('get', () => {
     it('get by globalView should fail - TODO should we change this?', async () => {
       const organization = await Organization.create({
@@ -304,10 +336,188 @@ describe('organizations', () => {
       expect(response.body).toEqual({});
     });
   });
-  describe.skip('approveRole - todo', () => {
-
+  describe('approveRole', () => {
+    it('approveRole by globalAdmin should work', async () => {
+      const organization = await Organization.create({
+        name: "test-" + Math.random(),
+        rootDomains: ["test-" + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      let role = await Role.create({
+        role: 'user',
+        approved: false,
+        organization
+      }).save();
+      const response = await request(app)
+        .post(`/organizations/${organization.id}/roles/${role.id}/approve`)
+        .set('Authorization', createUserToken({
+          userType: 'globalAdmin',
+        }))
+        .expect(200);
+      expect(response.body).toEqual({});
+    });
+    it('approveRole by globalView should fail', async () => {
+      const organization = await Organization.create({
+        name: "test-" + Math.random(),
+        rootDomains: ["test-" + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      let role = await Role.create({
+        role: 'user',
+        approved: false,
+        organization
+      }).save();
+      const response = await request(app)
+        .post(`/organizations/${organization.id}/roles/${role.id}/approve`)
+        .set('Authorization', createUserToken({
+          userType: 'globalView',
+        }))
+        .expect(403);
+      expect(response.body).toEqual({});
+    });
+    it('approveRole by org admin should work', async () => {
+      const organization = await Organization.create({
+        name: "test-" + Math.random(),
+        rootDomains: ["test-" + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      let role = await Role.create({
+        role: 'user',
+        approved: false,
+        organization
+      }).save();
+      const response = await request(app)
+        .post(`/organizations/${organization.id}/roles/${role.id}/approve`)
+        .set('Authorization', createUserToken({
+          roles: [
+            {
+              org: organization.id,
+              role: 'admin'
+            }
+          ]
+        }))
+        .expect(200);
+      expect(response.body).toEqual({});
+    });
+    it('approveRole by org user should fail', async () => {
+      const organization = await Organization.create({
+        name: "test-" + Math.random(),
+        rootDomains: ["test-" + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      let role = await Role.create({
+        role: 'user',
+        approved: false,
+        organization
+      }).save();
+      const response = await request(app)
+        .post(`/organizations/${organization.id}/roles/${role.id}/approve`)
+        .set('Authorization', createUserToken({
+          roles: [
+            {
+              org: organization.id,
+              role: 'user'
+            }
+          ]
+        }))
+        .expect(403);
+      expect(response.body).toEqual({});
+    });
   });
-  describe.skip('removeRole - todo', () => {
-
+  describe('removeRole', () => {
+    it('removeRole by globalAdmin should work', async () => {
+      const organization = await Organization.create({
+        name: "test-" + Math.random(),
+        rootDomains: ["test-" + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      let role = await Role.create({
+        role: 'user',
+        approved: false,
+        organization
+      }).save();
+      const response = await request(app)
+        .post(`/organizations/${organization.id}/roles/${role.id}/remove`)
+        .set('Authorization', createUserToken({
+          userType: 'globalAdmin',
+        }))
+        .expect(200);
+      expect(response.body.affected).toEqual(1);
+    });
+    it('removeRole by globalView should fail', async () => {
+      const organization = await Organization.create({
+        name: "test-" + Math.random(),
+        rootDomains: ["test-" + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      let role = await Role.create({
+        role: 'user',
+        approved: false,
+        organization
+      }).save();
+      const response = await request(app)
+        .post(`/organizations/${organization.id}/roles/${role.id}/remove`)
+        .set('Authorization', createUserToken({
+          userType: 'globalView',
+        }))
+        .expect(403);
+      expect(response.body).toEqual({});
+    });
+    it('removeRole by org admin should work', async () => {
+      const organization = await Organization.create({
+        name: "test-" + Math.random(),
+        rootDomains: ["test-" + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      let role = await Role.create({
+        role: 'user',
+        approved: false,
+        organization
+      }).save();
+      const response = await request(app)
+        .post(`/organizations/${organization.id}/roles/${role.id}/remove`)
+        .set('Authorization', createUserToken({
+          roles: [
+            {
+              org: organization.id,
+              role: 'admin'
+            }
+          ]
+        }))
+        .expect(200);
+      expect(response.body.affected).toEqual(1);
+    });
+    it('removeRole by org user should fail', async () => {
+      const organization = await Organization.create({
+        name: "test-" + Math.random(),
+        rootDomains: ["test-" + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      let role = await Role.create({
+        role: 'user',
+        approved: false,
+        organization
+      }).save();
+      const response = await request(app)
+        .post(`/organizations/${organization.id}/roles/${role.id}/remove`)
+        .set('Authorization', createUserToken({
+          roles: [
+            {
+              org: organization.id,
+              role: 'user'
+            }
+          ]
+        }))
+        .expect(403);
+      expect(response.body).toEqual({});
+    });
   });
 });
