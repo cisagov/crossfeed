@@ -3,7 +3,7 @@ import { User, connectToDatabase } from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 
-interface UserToken {
+export interface UserToken {
   email: string;
   id: string;
   userType: 'standard' | 'globalView' | 'globalAdmin';

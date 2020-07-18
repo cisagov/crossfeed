@@ -1,12 +1,12 @@
 import * as jwt from 'jsonwebtoken';
+import { UserToken } from '../src/api/auth';
 
-export function createUserToken(user = {}) {
+export function createUserToken(user: Partial<UserToken> = {}) {
   const token = jwt.sign(
     {
-      id: '123',
-      email: 'user@example.com',
-      userType: 'globalAdmin',
       roles: [],
+      id: "cisa:crossfeed:testuser",
+      userType: 'standard',
       ...user
     },
     process.env.JWT_SECRET!,

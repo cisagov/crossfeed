@@ -1,6 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`organizations add new organization 1`] = `
+exports[`organizations create can't add organization with the same name 1`] = `Object {}`;
+
+exports[`organizations create create by globalAdmin should succeed 1`] = `
 Object {
   "createdAt": Any<String>,
   "id": Any<String>,
@@ -14,5 +16,3 @@ Object {
   "updatedAt": Any<String>,
 }
 `;
-
-exports[`organizations can't add organization with the same name 1`] = `Object {}`;
