@@ -30,7 +30,7 @@ loginGov.login = async function (): Promise<{
   const state = loginGov.randomString(32);
   const url = client.authorizationUrl({
     response_type: 'code',
-    acr_values: `http://idmanagement.gov/ns/assurance/ial/1`,
+    acr_values: `http://idmanagement.gov/ns/assurance/loa/1`,
     scope: 'openid email',
     redirect_uri: process.env.LOGIN_GOV_REDIRECT_URI,
     nonce: nonce,

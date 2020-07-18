@@ -9,8 +9,8 @@ import {
   IsObject
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Domain, connectToDatabase } from '../models';
-import { validateBody, wrapHandler, NotFound } from './helpers';
+import { Domain, connectToDatabase } from '../../models';
+import { validateBody, wrapHandler, NotFound } from '../helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
 import { isGlobalViewAdmin, getOrgMemberships } from './auth';
 

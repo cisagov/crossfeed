@@ -10,8 +10,8 @@ import {
   IsOptional,
   IsUUID
 } from 'class-validator';
-import { User, connectToDatabase, Role } from '../models';
-import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
+import { User, connectToDatabase, Role } from '../../models';
+import { validateBody, wrapHandler, NotFound, Unauthorized } from '../helpers';
 import { getUserId, canAccessUser, isGlobalViewAdmin } from './auth';
 
 export const del = wrapHandler(async (event) => {
