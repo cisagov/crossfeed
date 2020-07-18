@@ -3,7 +3,7 @@ import app from '../src/api/app';
 import { User, Domain, connectToDatabase, Organization } from '../src/models';
 import { createUserToken } from './util';
 
-describe('domain', () => {
+describe('domains', () => {
   let organization;
   beforeAll(async () => {
     await connectToDatabase();

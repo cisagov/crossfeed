@@ -235,7 +235,7 @@ describe('organizations', () => {
         }))
         .expect(200);
       expect(response.body.length).toBeGreaterThanOrEqual(1);
-      expect(response.body.map(e => e.id).indexOf(organization.id)).toBeGreaterThanOrEqual(1);
+      expect(response.body.map(e => e.id).indexOf(organization.id)).not.toEqual(-1);
     });
     it('listPublicNames with bad auth key should fail', async () => {
       const organization = await Organization.create({
