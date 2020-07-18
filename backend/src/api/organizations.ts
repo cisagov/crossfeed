@@ -8,8 +8,8 @@ import {
   IsArray,
   IsBoolean
 } from 'class-validator';
-import { Organization, connectToDatabase, Role, ScanTask } from '../../models';
-import { validateBody, wrapHandler, NotFound, Unauthorized } from '../helpers';
+import { Organization, connectToDatabase, Role, ScanTask } from '../models';
+import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
   isOrgAdmin,
   isGlobalWriteAdmin,

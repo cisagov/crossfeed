@@ -8,4 +8,4 @@ RUN npm ci
 
 COPY . .
 
-CMD ["npx", "ts-node-dev", "src/api/dev.ts"]
+CMD ["npx", "ts-node-dev", "src/api-dev.ts"]

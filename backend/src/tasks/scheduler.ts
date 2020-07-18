@@ -2,7 +2,7 @@ import { Handler } from 'aws-lambda';
 import { connectToDatabase, Scan, Organization, ScanTask } from '../models';
 import { Lambda, Credentials } from 'aws-sdk';
 import ECSClient from './ecs-client';
-import { SCAN_SCHEMA } from '../api/routes/scans';
+import { SCAN_SCHEMA } from '../api/scans';
 import { In } from 'typeorm';
 
 export const handler: Handler = async (event) => {

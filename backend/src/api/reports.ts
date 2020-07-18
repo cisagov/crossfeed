@@ -9,8 +9,8 @@ import {
   IsObject
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Report, connectToDatabase } from '../../models';
-import { validateBody, wrapHandler, NotFound } from '../helpers';
+import { Report, connectToDatabase } from '../models';
+import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder } from 'typeorm';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;

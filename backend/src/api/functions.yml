@@ -1,5 +1,5 @@
 api:
-  handler: src/api/index.handler
+  handler: src/api.handler
   events:
     - http:
         path: / # this matches the base path

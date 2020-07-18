@@ -1,5 +1,5 @@
 import loginGov from './login-gov';
-import { User, connectToDatabase } from '../../models';
+import { User, connectToDatabase } from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 

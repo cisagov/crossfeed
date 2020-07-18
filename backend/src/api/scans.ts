@@ -6,8 +6,8 @@ import {
   isUUID,
   IsObject
 } from 'class-validator';
-import { Scan, connectToDatabase } from '../../models';
-import { validateBody, wrapHandler, NotFound, Unauthorized } from '../helpers';
+import { Scan, connectToDatabase } from '../models';
+import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { isGlobalWriteAdmin } from './auth';
 
 interface ScanSchema {

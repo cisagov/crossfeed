@@ -1,14 +1,14 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import { handler as healthcheck } from './routes/healthcheck';
-import * as auth from './routes/auth';
-import { login } from './routes/auth';
-import * as domains from './routes/domains';
-import * as reports from './routes/reports';
-import * as organizations from './routes/organizations';
-import * as scans from './routes/scans';
-import * as users from './routes/users';
+import { handler as healthcheck } from './healthcheck';
+import * as auth from './auth';
+import { login } from './auth';
+import * as domains from './domains';
+import * as reports from './reports';
+import * as organizations from './organizations';
+import * as scans from './scans';
+import * as users from './users';
 
 const handlerToExpress = handler => async (req, res, next) => {
   const { statusCode, body } = await handler({
@@ -17,10 +17,7 @@ const handlerToExpress = handler => async (req, res, next) => {
     body: JSON.stringify(req.body || "{}"),
     headers: req.headers
   }, {});
-  res.status(statusCode);
-  if (body) {
-    res.send(body);
-  }
+  res.status(statusCode).send(body);
 }
 
 const app = express();
@@ -43,26 +40,27 @@ authenticatedRoute.use(async (req, res, next) => {
   return next();
 })
 
-authenticatedRoute.get("/domain/search", handlerToExpress(domains.list));
+authenticatedRoute.post("/domain/search", handlerToExpress(domains.list));
 authenticatedRoute.get("/domain/:domainId", handlerToExpress(domains.get));
-authenticatedRoute.get("/report/search", handlerToExpress(reports.list));
+authenticatedRoute.post("/report/search", handlerToExpress(reports.list));
 authenticatedRoute.get("/report/:reportId", handlerToExpress(reports.get));
-authenticatedRoute.post("/scans/:scanId", handlerToExpress(scans.create));
+authenticatedRoute.get("/scans", handlerToExpress(scans.list));
+authenticatedRoute.post("/scans", handlerToExpress(scans.create));
 authenticatedRoute.put("/scans/:scanId", handlerToExpress(scans.update));
 authenticatedRoute.delete("/scans/:scanId", handlerToExpress(scans.del));
 authenticatedRoute.get("/organizations", handlerToExpress(organizations.list));
 authenticatedRoute.get("/organizations/public", handlerToExpress(organizations.listPublicNames));
 authenticatedRoute.get("/organizations/:organizationId", handlerToExpress(organizations.get));
-authenticatedRoute.post("/organizations/:organizationId", handlerToExpress(organizations.create));
+authenticatedRoute.post("/organizations", handlerToExpress(organizations.create));
 authenticatedRoute.put("/organizations/:organizationId", handlerToExpress(organizations.update));
 authenticatedRoute.delete("/organizations/:organizationId", handlerToExpress(organizations.del));
 authenticatedRoute.post("/organizations/:organizationId/roles/:roleId/approve", handlerToExpress(organizations.approveRole));
 authenticatedRoute.post("/organizations/:organizationId/roles/:roleId/remove", handlerToExpress(organizations.removeRole));
 authenticatedRoute.get("/users", handlerToExpress(users.list));
 authenticatedRoute.get("/users/me", handlerToExpress(users.me));
-authenticatedRoute.post("/users/invite", handlerToExpress(users.invite));
+authenticatedRoute.post("/users", handlerToExpress(users.invite));
 authenticatedRoute.put("/users/:userId", handlerToExpress(users.update));
-authenticatedRoute.put("/users/:userId", handlerToExpress(users.del));
+authenticatedRoute.delete("/users/:userId", handlerToExpress(users.del));
 
 app.use(authenticatedRoute);
 
