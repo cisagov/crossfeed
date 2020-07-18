@@ -36,7 +36,7 @@ External monitoring for organization assets
 
 8.  Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save
 
-## Running non-http lambdas locally
+## Running the scheduler lambda function locally
 
 The scheduler lambda function is set to run on an interval or in response to non-http events. To run it manually, run the following command:
 
