@@ -8,6 +8,7 @@ import getCensysIpv4Data from './helpers/__mocks__/getCensysIpv4Data';
 import { CensysIpv4Data } from 'src/models/generated/censysIpv4';
 import { mapping } from './censys/mapping';
 import saveServicesToDb from './helpers/saveServicesToDb';
+import getAllDomains from './helpers/getAllDomains';
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
@@ -18,29 +19,39 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   // schema: https://censys.io/help/bigquery/ipv4
 
+  const allDomains = await getAllDomains();
+  const allDomainIps = allDomains.map(e => e.ip);
   const domains: Domain[] = [];
   let services: Service[] = [];
   for (let item of data) {
-    domains.push(
-      plainToClass(Domain, {
-        // domain: domain,
-        asn: item.autonomous_system?.asn,
-        ip: item.ip,
-        country: item.location?.country_code,
-        lastSeen: new Date(Date.now())
-      })
-    );
-    for (let key in item) {
-      if (key.startsWith("p") && mapping[key]) {
-        const service = Object.keys(item[key] as any)[0];
-        services.push(
-          plainToClass(Service, {
-            ...mapping[key](item[key]),
-            service,
-            port: Number(key.slice(1)),
-            domain: null, // TODO: find domain.
-          })
-        );
+    if (!item.ip) {
+      continue;
+    }
+    // We could have multiple matching domains (virtual hosts)
+    // TODO: include IPs without an associated domain.
+    const matchingDomains = allDomains.filter(e => e.ip === item.ip);
+    for (let matchingDomain of matchingDomains) {
+      domains.push(
+        plainToClass(Domain, {
+          name: matchingDomain.name,
+          asn: item.autonomous_system?.asn,
+          ip: item.ip,
+          country: item.location?.country_code,
+          lastSeen: new Date(Date.now())
+        })
+      );
+      for (let key in item) {
+        if (key.startsWith("p") && mapping[key]) {
+          const service = Object.keys(item[key] as any)[0];
+          services.push(
+            plainToClass(Service, {
+              ...mapping[key](item[key]),
+              service,
+              port: Number(key.slice(1)),
+              domain: matchingDomain
+            })
+          );
+        }
       }
     }
   }
