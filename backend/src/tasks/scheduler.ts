@@ -26,7 +26,7 @@ export const handler: Handler = async (event) => {
   for (const scan of scans) {
     for (const organization of organizations) {
       if (!SCAN_SCHEMA[scan.name]) {
-        console.error("Invalid scan name ", scan.name);
+        console.error('Invalid scan name ', scan.name);
         continue;
       }
       const { type, isPassive } = SCAN_SCHEMA[scan.name];

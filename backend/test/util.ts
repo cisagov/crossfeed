@@ -5,7 +5,7 @@ export function createUserToken(user: Partial<UserToken> = {}) {
   const token = jwt.sign(
     {
       roles: [],
-      id: "cisa:crossfeed:testuser",
+      id: 'cisa:crossfeed:testuser',
       userType: 'standard',
       ...user
     },

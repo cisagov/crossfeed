@@ -107,7 +107,7 @@ export const authorize = async (event) => {
     ) as UserToken;
     return parsed;
   } catch (e) {
-    const parsed = {"id": "cisa:crossfeed:anonymous"};
+    const parsed = { id: 'cisa:crossfeed:anonymous' };
     return parsed;
   }
 };
