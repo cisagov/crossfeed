@@ -40,4 +40,4 @@ functions:
 plugins:
   - serverless-domain-manager
   - serverless-plugin-typescript
-  - serverless-offline
+  - serverless-offline-scheduler

@@ -23,10 +23,20 @@ services:
     build: ./backend
     volumes:
       - ./backend/src:/app/src
-      # During local development, Docker containers launched from backend will run from the host machine Docker daemon
-      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - '3000:3000'
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+  scheduler:
+    build: ./backend
+    command: ["npx", "sls", "schedule"]
+    volumes:
+      - ./backend/src:/app/src
+      # During local development, Docker containers launched from scheduler will run from the host machine Docker daemon
+      - /var/run/docker.sock:/var/run/docker.sock
     env_file:
       - ./.env
     depends_on:
