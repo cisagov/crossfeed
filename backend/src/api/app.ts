@@ -15,9 +15,16 @@ const handlerToExpress = handler => async (req, res, next) => {
     pathParameters: req.params,
     requestContext: req.requestContext,
     body: JSON.stringify(req.body || "{}"),
-    headers: req.headers
+    headers: req.headers,
+    path: req.originalUrl
   }, {});
-  res.status(statusCode).send(body);
+  try {
+    let parsedBody = JSON.parse(body);
+    res.status(statusCode).json(parsedBody);
+  } catch (e) {
+    // Not a JSON body
+    res.status(statusCode).send(body);
+  }
 }
 
 const app = express();
