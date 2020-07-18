@@ -5,15 +5,8 @@ import { Organization, connectToDatabase } from '../src/models';
 
 
 describe('organizations', () => {
-  let organization;
   beforeAll(async () => {
     await connectToDatabase();
-    organization = await Organization.create({
-      name: "test-" + Math.random(),
-      rootDomains: ["test-" + Math.random()],
-      ipBlocks: [],
-      isPassive: false
-    }).save();
   });
   describe('create', () => {
     it('create by globalAdmin should succeed', async () => {

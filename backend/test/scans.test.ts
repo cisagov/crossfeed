@@ -4,15 +4,8 @@ import { User, Scan, connectToDatabase, Organization } from '../src/models';
 import { createUserToken } from './util';
 
 describe('scan', () => {
-  let organization;
   beforeAll(async () => {
     await connectToDatabase();
-    organization = await Organization.create({
-      name: "test-" + Math.random(),
-      rootDomains: ["test-" + Math.random()],
-      ipBlocks: [],
-      isPassive: false
-    }).save();
   });
   describe('list', () => {
     it('list by globalAdmin should return all scans', async () => {
