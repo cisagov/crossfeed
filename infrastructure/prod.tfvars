@@ -2,6 +2,7 @@ aws_region        = "us-east-1"
 project           = "Crossfeed"
 frontend_domain   = "crossfeed.cisa.gov"
 api_domain        = "api.crossfeed.cisa.gov"
+frontend_cert_arn = "arn:aws:acm:us-east-1:563873274798:certificate/7c6a5980-80e3-47a4-9f21-cbda44b6f34c"
 db_name           = "crossfeed-prod-db"
 db_port           = 5432
 db_table_name     = "cfproddb"
