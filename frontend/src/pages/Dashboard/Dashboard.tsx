@@ -60,7 +60,8 @@ export const Dashboard: React.FC = () => {
       history.push('/create-account');
     }
     callback();
-  }, [callback, history, user]);
+    // eslint-disable-next-line
+  }, []);
 
   const fetchDomains = useCallback(
     async (query: Query<Domain>) => {
