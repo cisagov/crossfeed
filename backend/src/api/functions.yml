@@ -15,6 +15,7 @@ login:
     - http:
         path: /auth/login
         method: post
+        cors: true
 
 authCallback:
   handler: src/api/auth.callback
@@ -22,6 +23,7 @@ authCallback:
     - http:
         path: /auth/callback
         method: post
+        cors: true
 
 listDomains:
   handler: src/api/domains.list

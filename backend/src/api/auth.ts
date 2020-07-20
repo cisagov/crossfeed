@@ -2,6 +2,7 @@ import loginGov from './login-gov';
 import { User, connectToDatabase } from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
+import { wrapHandler } from './helpers';
 
 interface UserToken {
   email: string;
@@ -14,35 +15,35 @@ interface UserToken {
 }
 
 /** Returns redirect url to initiate login.gov OIDC flow */
-export const login = async (event, context, callback) => {
+export const login = wrapHandler(async (event) => {
   const { url, state, nonce } = await loginGov.login();
-  callback(null, {
+  return {
     statusCode: 200,
     body: JSON.stringify({
       redirectUrl: url,
       state: state,
       nonce: nonce
     })
-  });
-};
+  };
+});
 
 /** Processes login.gov OIDC callback and returns user token */
-export const callback = async (event, context, callback) => {
+export const callback = wrapHandler(async (event) => {
   let userInfo;
   try {
-    userInfo = await loginGov.callback(JSON.parse(event.body));
+    userInfo = await loginGov.callback(JSON.parse(event.body!));
   } catch (e) {
-    return callback(null, {
+    return {
       statusCode: 500,
       body: ''
-    });
+    };
   }
 
   if (!userInfo.email_verified) {
-    return callback(null, {
+    return {
       statusCode: 403,
       body: ''
-    });
+    };
   }
 
   // Look up user by email
@@ -88,14 +89,14 @@ export const callback = async (event, context, callback) => {
     }
   });
 
-  callback(null, {
+  return {
     statusCode: 200,
     body: JSON.stringify({
       token: token,
       user: user
     })
-  });
-};
+  };
+});
 
 // Policy helper function
 const generatePolicy = (userId, effect, resource, context) => {

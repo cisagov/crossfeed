@@ -1,9 +1,10 @@
-aws_region      = "us-east-1"
-project         = "Crossfeed"
-frontend_domain = "stage.crossfeed.cisa.gov"
-api_domain      = "stage.api.crossfeed.cisa.gov"
-db_name         = "crossfeed-stage-db"
-db_port         = 5432
+aws_region        = "us-east-1"
+project           = "Crossfeed"
+frontend_domain   = "staging.crossfeed.cyber.dhs.gov"
+api_domain        = "api.staging.crossfeed.cyber.dhs.gov"
+frontend_cert_arn = "arn:aws:acm:us-east-1:563873274798:certificate/7c6a5980-80e3-47a4-9f21-cbda44b6f34c"
+db_name           = "crossfeed-stage-db"
+db_port           = 5432
 db_table_name     = "cfstagingdb"
 ssm_lambda_subnet = "/crossfeed/staging/SUBNET_ID"
 ssm_lambda_sg     = "/crossfeed/staging/SG_ID"
