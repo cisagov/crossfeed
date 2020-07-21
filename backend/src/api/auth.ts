@@ -26,6 +26,18 @@ export const login = async (event, context) => {
   };
 };
 
+const userTokenBody = (user): UserToken => ({
+  id: user.id,
+  email: user.email,
+  userType: user.userType,
+  roles: user.roles
+    .filter((role) => role.approved)
+    .map((role) => ({
+      org: role.organization.id,
+      role: role.role
+    }))
+});
+
 /** Processes login.gov OIDC callback and returns user token */
 export const callback = async (event, context) => {
   let userInfo;
@@ -70,19 +82,7 @@ export const callback = async (event, context) => {
     await user.save();
   }
 
-  const tokenBody: UserToken = {
-    id: user.id,
-    email: userInfo.email,
-    userType: user.userType,
-    roles: user.roles
-      .filter((role) => role.approved)
-      .map((role) => ({
-        org: role.organization.id,
-        role: role.role
-      }))
-  };
-
-  const token = jwt.sign(tokenBody, process.env.JWT_SECRET!, {
+  const token = jwt.sign(userTokenBody(user), process.env.JWT_SECRET!, {
     expiresIn: '1 day',
     header: {
       typ: 'JWT'
@@ -105,8 +105,18 @@ export const authorize = async (event) => {
       event.authorizationToken,
       process.env.JWT_SECRET!
     ) as UserToken;
-    return parsed;
+    await connectToDatabase();
+    const user = await User.findOne(
+      {
+        id: parsed.id
+      },
+      {
+        relations: ['roles', 'roles.organization']
+      }
+    );
+    return userTokenBody(user);
   } catch (e) {
+    console.error(e);
     const parsed = { id: 'cisa:crossfeed:anonymous' };
     return parsed;
   }
