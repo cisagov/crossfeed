@@ -3,6 +3,18 @@
 exports[`censys ipv4 basic test: helpers.saveDomainsToDb 1`] = `
 Array [
   Domain {
+    "asn": "9121",
+    "country": "TR",
+    "ip": "1.1.1.1",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "second_file_testdomain1",
+  },
+]
+`;
+
+exports[`censys ipv4 basic test: helpers.saveDomainsToDb 2`] = `
+Array [
+  Domain {
     "asn": "7684",
     "country": "JP",
     "ip": "153.126.148.60",
@@ -82,19 +94,22 @@ Array [
 ]
 `;
 
-exports[`censys ipv4 basic test: helpers.saveDomainsToDb 2`] = `
+exports[`censys ipv4 basic test: helpers.saveServicesToDb 1`] = `
 Array [
-  Domain {
-    "asn": "9121",
-    "country": "TR",
-    "ip": "1.1.1.1",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
-    "name": "second_file_testdomain1",
+  Service {
+    "banner": null,
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "1.1.1.1",
+      "name": "second_file_testdomain1",
+    },
+    "port": 53,
+    "service": "dns",
   },
 ]
 `;
 
-exports[`censys ipv4 basic test: helpers.saveServicesToDb 1`] = `
+exports[`censys ipv4 basic test: helpers.saveServicesToDb 2`] = `
 Array [
   Service {
     "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\"><html><head><title>401 Unauthorized</title></head><body><h1>Authorization Required</h1><p>This server could not verify that you are authorized to access the document requested.  Either you supplied the wrong credentials (e.g., bad password), or your browser doesn't understand how to supply the credentials required</p><hr></body></html>",
@@ -1678,21 +1693,6 @@ on this server.</p>
     },
     "port": 5900,
     "service": "vnc",
-  },
-]
-`;
-
-exports[`censys ipv4 basic test: helpers.saveServicesToDb 2`] = `
-Array [
-  Service {
-    "banner": null,
-    "censysMetadata": undefined,
-    "domain": Domain {
-      "ip": "1.1.1.1",
-      "name": "second_file_testdomain1",
-    },
-    "port": 53,
-    "service": "dns",
   },
 ]
 `;
