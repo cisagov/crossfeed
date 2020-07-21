@@ -9,7 +9,9 @@ export default async (organizationId?: String): Promise<Domain[]> => {
     .andWhere('ip IS NOT NULL');
 
   if (organizationId) {
-    domains = domains.andWhere('domain.organization=:org', { org: organizationId })
+    domains = domains.andWhere('domain.organization=:org', {
+      org: organizationId
+    });
   }
 
   return domains.getMany();

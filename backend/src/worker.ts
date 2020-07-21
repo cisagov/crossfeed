@@ -26,9 +26,14 @@ async function main() {
   await scanTask.save();
 
   try {
-    const scanFn = { amass, censys, censysIpv4, findomain, portscanner, wappalyzer }[
-      scanName
-    ];
+    const scanFn = {
+      amass,
+      censys,
+      censysIpv4,
+      findomain,
+      portscanner,
+      wappalyzer
+    }[scanName];
     if (!scanFn) {
       throw new Error('Invalid scan name ' + scanName);
     }
