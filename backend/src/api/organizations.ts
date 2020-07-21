@@ -95,6 +95,12 @@ export const create = wrapHandler(async (event) => {
 });
 
 export const list = wrapHandler(async (event) => {
+  if (getOrgMemberships(event).length === 0) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify([])
+    };
+  }
   await connectToDatabase();
   let where = {};
   if (isGlobalViewAdmin(event)) {

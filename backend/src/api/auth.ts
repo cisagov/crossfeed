@@ -71,7 +71,7 @@ export const callback = async (event, context) => {
   }
 
   const tokenBody: UserToken = {
-    id: userInfo.sub,
+    id: user.id,
     email: userInfo.email,
     userType: user.userType,
     roles: user.roles

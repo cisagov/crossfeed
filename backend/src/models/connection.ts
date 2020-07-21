@@ -33,7 +33,7 @@ const connectDb = async (logging?: boolean) => {
     synchronize: false,
     name: 'default',
     dropSchema: false,
-    logging: logging ?? false
+    logging: true
   });
   return connection;
 };
