@@ -8,6 +8,7 @@ import { Column } from 'react-table';
 import { Table } from 'components';
 import { OrganizationForm } from 'components/OrganizationForm';
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import { PrimaryNav, Header } from '@trussworks/react-uswds';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
@@ -19,6 +20,7 @@ export const Organization: React.FC = () => {
   const [organization, setOrganization] = useState<OrganizationType>();
   const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
+  const [currentView, setCurrentView] = useState<number>(0);
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
 
@@ -201,62 +203,171 @@ export const Organization: React.FC = () => {
     fetchOrganization();
   }, [fetchOrganization]);
 
+  if (!organization) return <div></div>;
+
+  const views = [
+    <>
+      <div className={classes.headerRow}>
+        <label>
+          <FaNetworkWired />
+          Root Domains
+        </label>
+        <span>{organization.rootDomains.join(', ')}</span>
+      </div>
+
+      <div className={classes.headerRow}>
+        <label>
+          <FaGlobe />
+          IP Blocks
+        </label>
+        <span>{organization.ipBlocks.join(', ')}</span>
+      </div>
+
+      <div className={classes.headerRow}>
+        <label>
+          <FaClock />
+          Passive Mode
+        </label>
+        <span>{organization.isPassive ? 'Yes' : 'No'}</span>
+      </div>
+
+      <div className={classes.headerRow}>
+        <label>
+          <FaUsers />
+          Invite Only
+        </label>
+        <span>{organization.inviteOnly ? 'Yes' : 'No'}</span>
+      </div>
+    </>,
+    <>
+      {' '}
+      <h1>Organization Users</h1>
+      <Table<Role> columns={userRoleColumns} data={userRoles} />
+      <h2>Invite a user</h2>
+      {/* <form onSubmit={onSubmit} className={classes.form}>
+        {errors.global && (
+          <p className={classes.error}>{errors.global}</p>
+        )}
+        <Label htmlFor="firstName">First Name</Label>
+        <TextInput
+          required
+          id="firstName"
+          name="firstName"
+          className={classes.textField}
+          type="text"
+          value={values.firstName}
+          onChange={onTextChange}
+        />
+        <Label htmlFor="lastName">Last Name</Label>
+        <TextInput
+          required
+          id="lastName"
+          name="lastName"
+          className={classes.textField}
+          type="text"
+          value={values.lastName}
+          onChange={onTextChange}
+        />
+        <Label htmlFor="email">Email</Label>
+        <TextInput
+          required
+          id="email"
+          name="email"
+          className={classes.textField}
+          type="text"
+          value={values.email}
+          onChange={onTextChange}
+        />
+        <Label htmlFor="role">Role</Label>
+        <TextInput
+          required
+          id="role"
+          name="role"
+          className={classes.textField}
+          type="text"
+          value={values.role}
+          onChange={onTextChange}
+        />
+        <br></br>
+        <Button type="submit">Invite User</Button>
+      </form> */}
+    </>,
+    <>
+      <h1>Organization Scan Tasks</h1>
+      <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} />
+    </>,
+
+    <>
+      <h1>Update Organization</h1>
+      {errors.global && <p className={classes.error}>{errors.global}</p>}
+      {message && <p>{message}</p>}
+      <OrganizationForm
+        onSubmit={updateOrganization}
+        organization={organization}
+        type="update"
+      ></OrganizationForm>
+    </>
+  ];
+
   return (
     <div className={classes.root}>
       <div className={classes.inner}>
-        {organization && (
-          <>
-            <div className={classes.header}>
-              <div className={classes.headerDetails}>
-                <h1>{organization.name}</h1>
-                <div className={classes.headerRow}>
-                  <label>
-                    <FaNetworkWired />
-                    Root Domains
-                  </label>
-                  <span>{organization.rootDomains.join(', ')}</span>
+        <>
+          <div className={classes.header}>
+            <div className={classes.headerDetails}>
+              <Header>
+                <div className="usa-nav-container">
+                  <div className="usa-navbar">
+                    <h1>{organization.name}</h1>
+                  </div>
+                  <PrimaryNav
+                    items={[
+                      <a
+                        key="one"
+                        href="#"
+                        onClick={() => {
+                          setCurrentView(0);
+                        }}
+                        className="usa-nav__link"
+                      >
+                        <span>Overview</span>
+                      </a>,
+                      <a
+                        key="two"
+                        href="#"
+                        onClick={() => {
+                          setCurrentView(1);
+                        }}
+                      >
+                        <span>Manage Users</span>
+                      </a>,
+                      <a
+                        key="three"
+                        href="#"
+                        onClick={() => {
+                          setCurrentView(2);
+                        }}
+                      >
+                        <span>Manage Scans</span>
+                      </a>,
+                      <a
+                        key="four"
+                        href="#"
+                        onClick={() => {
+                          setCurrentView(3);
+                        }}
+                      >
+                        <span>Update organization</span>
+                      </a>
+                    ]}
+                    onToggleMobileNav={function noRefCheck() {}}
+                  />
                 </div>
-
-                <div className={classes.headerRow}>
-                  <label>
-                    <FaGlobe />
-                    IP Blocks
-                  </label>
-                  <span>{organization.ipBlocks.join(', ')}</span>
-                </div>
-
-                <div className={classes.headerRow}>
-                  <label>
-                    <FaClock />
-                    Passive Mode
-                  </label>
-                  <span>{organization.isPassive ? 'Yes' : 'No'}</span>
-                </div>
-
-                <div className={classes.headerRow}>
-                  <label>
-                    <FaUsers />
-                    Invite Only
-                  </label>
-                  <span>{organization.inviteOnly ? 'Yes' : 'No'}</span>
-                </div>
-              </div>
+              </Header>
             </div>
-            <h1>Organization Users</h1>
-            <Table<Role> columns={userRoleColumns} data={userRoles} />
-
-            <h1>Organization Scan Tasks</h1>
-            <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} />
-            <h2>Update Organization</h2>
-            {errors.global && <p className={classes.error}>{errors.global}</p>}
-            {message && <p>{message}</p>}
-            <OrganizationForm
-              onSubmit={updateOrganization}
-              organization={organization}
-              type="update"
-            ></OrganizationForm>
-          </>
-        )}
+          </div>
+          {views[currentView]}
+        </>
       </div>
     </div>
   );
