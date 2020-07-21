@@ -24,7 +24,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -38,7 +38,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -52,7 +52,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -66,7 +66,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -80,7 +80,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -94,7 +94,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -108,7 +108,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -124,7 +124,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -132,7 +132,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -145,7 +145,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -181,7 +181,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -195,7 +195,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -211,7 +211,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -222,7 +222,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -237,7 +237,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -251,7 +251,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -264,7 +264,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -352,11 +352,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -413,7 +413,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -544,7 +544,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -558,7 +558,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -572,7 +572,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -586,7 +586,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -600,7 +600,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -614,7 +614,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -628,7 +628,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -644,7 +644,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -652,7 +652,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -665,7 +665,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -701,7 +701,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -715,7 +715,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -731,7 +731,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -742,7 +742,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -757,7 +757,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -771,7 +771,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -784,7 +784,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -838,11 +838,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -899,7 +899,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -997,7 +997,7 @@ export interface CensysIpv4Data {
         /**
          * 8-bit unsigned integer representing the server's protocol version sent in the initial HandshakePacket from the server.
          */
-        protocol_version?: number;
+        protocol_version?: string;
         /**
          * The friendly name for the error code as defined at https://dev.mysql.com/doc/refman/8.0/en/error-messages-server.html, or UNKNOWN.
          */
@@ -1005,7 +1005,7 @@ export interface CensysIpv4Data {
         /**
          * Only set if there is an error returned by the server, for example if the scanner is not on the allowed hosts list.
          */
-        error_code?: number;
+        error_code?: string;
         /**
          * The specific server version returned in the initial HandshakePacket. Often in the form x.y.z, but not always.
          */
@@ -1043,7 +1043,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1057,7 +1057,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1071,7 +1071,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1085,7 +1085,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1099,7 +1099,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1113,7 +1113,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1127,7 +1127,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1143,7 +1143,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -1151,7 +1151,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -1164,7 +1164,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -1200,7 +1200,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -1214,7 +1214,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -1230,7 +1230,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -1241,7 +1241,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -1256,7 +1256,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -1270,7 +1270,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -1283,7 +1283,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -1371,11 +1371,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -1432,7 +1432,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -1479,7 +1479,7 @@ export interface CensysIpv4Data {
           /**
            * 1.3.6.1.2.1.1.3 - 1/100ths of sec
            */
-          uptime?: number;
+          uptime?: string;
           /**
            * 1.3.6.1.2.1.1.5 - Name, usually FQDN
            */
@@ -1577,7 +1577,7 @@ export interface CensysIpv4Data {
           /**
            * 1.3.6.1.2.1.2.1 - Number of network interfaces
            */
-          num_interfaces?: number;
+          num_interfaces?: string;
           [k: string]: unknown;
         };
         metadata?: {
@@ -1830,7 +1830,7 @@ export interface CensysIpv4Data {
         /**
          * The HTTP status code (e.g. 200, 404, 503).
          */
-        status_code?: number;
+        status_code?: string;
         /**
          * The contents of the first TITLE tag in the body (stripped of any surrounding whitespace and truncated to 1024 characters).
          */
@@ -1910,7 +1910,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1924,7 +1924,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1938,7 +1938,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1952,7 +1952,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1966,7 +1966,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1980,7 +1980,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -1994,7 +1994,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -2010,7 +2010,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -2018,7 +2018,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -2031,7 +2031,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -2067,7 +2067,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -2081,7 +2081,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -2097,7 +2097,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -2108,7 +2108,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -2123,7 +2123,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -2137,7 +2137,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -2150,7 +2150,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -2204,11 +2204,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -2265,7 +2265,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -2341,7 +2341,7 @@ export interface CensysIpv4Data {
           /**
            * The integer value of the telnet option.
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         /**
@@ -2355,7 +2355,7 @@ export interface CensysIpv4Data {
           /**
            * The integer value of the telnet option.
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         /**
@@ -2369,7 +2369,7 @@ export interface CensysIpv4Data {
           /**
            * The integer value of the telnet option.
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         /**
@@ -2391,7 +2391,7 @@ export interface CensysIpv4Data {
           /**
            * The integer value of the telnet option.
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         /**
@@ -2412,11 +2412,11 @@ export interface CensysIpv4Data {
     };
     [k: string]: unknown;
   };
-  zdb_version?: number;
+  zdb_version?: string;
   /**
    * Integer value of IP address in host order
    */
-  ipint?: number;
+  ipint?: string;
   p21?: {
     ftp?: {
       banner?: {
@@ -2678,7 +2678,7 @@ export interface CensysIpv4Data {
         /**
          * The HTTP status code (e.g. 200, 404, 503).
          */
-        status_code?: number;
+        status_code?: string;
         /**
          * The contents of the first TITLE tag in the body (stripped of any surrounding whitespace and truncated to 1024 characters).
          */
@@ -2723,7 +2723,7 @@ export interface CensysIpv4Data {
           /**
            * The integer value of the telnet option.
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         /**
@@ -2737,7 +2737,7 @@ export interface CensysIpv4Data {
           /**
            * The integer value of the telnet option.
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         /**
@@ -2751,7 +2751,7 @@ export interface CensysIpv4Data {
           /**
            * The integer value of the telnet option.
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         /**
@@ -2773,7 +2773,7 @@ export interface CensysIpv4Data {
           /**
            * The integer value of the telnet option.
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         /**
@@ -2818,7 +2818,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -2832,7 +2832,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -2846,7 +2846,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -2860,7 +2860,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -2874,7 +2874,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -2888,7 +2888,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -2902,7 +2902,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -2926,7 +2926,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -2940,7 +2940,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -2956,7 +2956,7 @@ export interface CensysIpv4Data {
               /**
                * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                */
-              id?: number;
+              id?: string;
               /**
                * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                */
@@ -2967,7 +2967,7 @@ export interface CensysIpv4Data {
              * TLS key exchange parameters for ECDH keys.
              */
             server_private?: {
-              length?: number;
+              length?: string;
               value?: string;
               [k: string]: unknown;
             };
@@ -2982,7 +2982,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -2996,7 +2996,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -3009,7 +3009,7 @@ export interface CensysIpv4Data {
              * TLS key exchange parameters for ECDH keys.
              */
             client_private?: {
-              length?: number;
+              length?: string;
               value?: string;
               [k: string]: unknown;
             };
@@ -3136,7 +3136,7 @@ export interface CensysIpv4Data {
             /**
              * Bit-length of modulus.
              */
-            length?: number;
+            length?: string;
             /**
              * The RSA key's modulus (n) in big-endian encoding.
              */
@@ -3144,7 +3144,7 @@ export interface CensysIpv4Data {
             /**
              * The RSA key's public exponent (e).
              */
-            exponent?: number;
+            exponent?: string;
             [k: string]: unknown;
           };
           /**
@@ -3201,7 +3201,7 @@ export interface CensysIpv4Data {
               /**
                * The length of time, in seconds, that the certificate is valid.
                */
-              length?: number;
+              length?: string;
               /**
                * Timestamp of when certificate expires. Timezone is UTC.
                */
@@ -3227,7 +3227,7 @@ export interface CensysIpv4Data {
                 /**
                  * Bit-length of modulus.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The RSA key's modulus (n) in big-endian encoding.
                  */
@@ -3235,7 +3235,7 @@ export interface CensysIpv4Data {
                 /**
                  * The RSA key's public exponent (e).
                  */
-                exponent?: number;
+                exponent?: string;
                 [k: string]: unknown;
               };
               /**
@@ -3255,7 +3255,7 @@ export interface CensysIpv4Data {
                 gy?: string;
                 n?: string;
                 p?: string;
-                length?: number;
+                length?: string;
                 pub?: string;
                 y?: string;
                 x?: string;
@@ -3314,7 +3314,7 @@ export interface CensysIpv4Data {
                 /**
                  * Bit-length of modulus.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The RSA key's modulus (n) in big-endian encoding.
                  */
@@ -3322,7 +3322,7 @@ export interface CensysIpv4Data {
                 /**
                  * The RSA key's public exponent (e).
                  */
-                exponent?: number;
+                exponent?: string;
                 [k: string]: unknown;
               };
               fingerprint_sha256?: string;
@@ -3340,7 +3340,7 @@ export interface CensysIpv4Data {
                 gy?: string;
                 n?: string;
                 p?: string;
-                length?: number;
+                length?: string;
                 pub?: string;
                 y?: string;
                 x?: string;
@@ -3382,7 +3382,7 @@ export interface CensysIpv4Data {
             gy?: string;
             n?: string;
             p?: string;
-            length?: number;
+            length?: string;
             pub?: string;
             y?: string;
             x?: string;
@@ -3439,15 +3439,15 @@ export interface CensysIpv4Data {
           /**
            * The earliest version of the wire protocol that this server can use.
            */
-          min_wire_version?: number;
+          min_wire_version?: string;
           /**
            * The latest version of the wire protocol that this server can use.
            */
-          max_wire_version?: number;
+          max_wire_version?: string;
           /**
            * The time in minutes that a session remains active after its most recent use
            */
-          logical_session_timeout_minutes?: number;
+          logical_session_timeout_minutes?: string;
           /**
            * Indicates if this node is writable.
            */
@@ -3455,15 +3455,15 @@ export interface CensysIpv4Data {
           /**
            * The maximum number of writes in a single write batch.
            */
-          max_write_batch_size?: number;
+          max_write_batch_size?: string;
           /**
            * The maximum size (in bytes) of a BSON wire protocol message.
            */
-          max_message_size_bytes?: number;
+          max_message_size_bytes?: string;
           /**
            * The maximum size (in bytes) of a BSON object.
            */
-          max_bson_object_size?: number;
+          max_bson_object_size?: string;
           [k: string]: unknown;
         };
         /**
@@ -3477,7 +3477,7 @@ export interface CensysIpv4Data {
           /**
            * DEPRECATED.
            */
-          max_wire_version?: number;
+          max_wire_version?: string;
           /**
            * Version of mongodb server
            */
@@ -3568,11 +3568,11 @@ export interface CensysIpv4Data {
     /**
      * The ASNs of the autonomous systems between a fixed starting point and the host.
      */
-    path?: number;
+    path?: string;
     /**
      * The ASN (autonomous system number) of the host's autonomous system.
      */
-    asn?: number;
+    asn?: string;
     /**
      * Brief description of the autonomous system.
      */
@@ -3598,7 +3598,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -3612,7 +3612,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -3626,7 +3626,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -3640,7 +3640,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -3654,7 +3654,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -3668,7 +3668,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -3682,7 +3682,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -3698,7 +3698,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -3706,7 +3706,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -3719,7 +3719,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -3755,7 +3755,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -3769,7 +3769,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -3785,7 +3785,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -3796,7 +3796,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -3811,7 +3811,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -3825,7 +3825,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -3838,7 +3838,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -3909,11 +3909,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -3970,7 +3970,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -4018,7 +4018,7 @@ export interface CensysIpv4Data {
           /**
            * Raw connect status value
            */
-          raw?: number;
+          raw?: string;
           /**
            * Connection status
            */
@@ -4047,58 +4047,58 @@ export interface CensysIpv4Data {
          */
         connection_fail_reason?: string;
         screen?: {
-          framebuffer_width?: number;
+          framebuffer_width?: string;
           server_pixel_format?: {
             /**
              * If false, color maps are used
              */
-            true_color_flag?: number;
+            true_color_flag?: string;
             /**
              * Max value of red pixel
              */
-            red_max?: number;
+            red_max?: string;
             /**
              * Max value of blue pixel
              */
-            blue_max?: number;
+            blue_max?: string;
             /**
              * how many bits to right shift a pixel datum to get red bits in lsb
              */
-            blue_shift?: number;
-            padding_byte_3?: number;
-            padding_byte_2?: number;
-            padding_byte_1?: number;
+            blue_shift?: string;
+            padding_byte_3?: string;
+            padding_byte_2?: string;
+            padding_byte_1?: string;
             /**
              * how many bits to right shift a pixel datum to get red bits in lsb
              */
-            red_shift?: number;
+            red_shift?: string;
             /**
              * Color depth
              */
-            depth?: number;
+            depth?: string;
             /**
              * How many bits in a single full pixel datum. Valid values are: 8, 16, 32
              */
-            bits_per_pixel?: number;
+            bits_per_pixel?: string;
             /**
              * If pixel RGB data are in big-endian
              */
-            big_endian_flag?: number;
+            big_endian_flag?: string;
             /**
              * how many bits to right shift a pixel datum to get red bits in lsb
              */
-            green_shift?: number;
+            green_shift?: string;
             /**
              * Max value of green pixel
              */
-            green_max?: number;
+            green_max?: string;
             [k: string]: unknown;
           };
           /**
            * Server advertised desktop name length
            */
-          desktop_name_len?: number;
-          framebuffer_height?: number;
+          desktop_name_len?: string;
+          framebuffer_height?: string;
           [k: string]: unknown;
         };
         /**
@@ -4113,14 +4113,14 @@ export interface CensysIpv4Data {
           /**
            * binary value of server-preferred pixel encoding
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         framebuffer_grab_stats?: {
           /**
            * Number of pixel bytes received
            */
-          bytes_received?: number;
+          bytes_received?: string;
           /**
            * True if a framebuffer grab was saved
            */
@@ -4128,11 +4128,11 @@ export interface CensysIpv4Data {
           /**
            * Full frames received.  Currently capped at 1
            */
-          full_frames_received?: number;
+          full_frames_received?: string;
           /**
            * Number of rects sent to re-assemble for one full frame
            */
-          rects_received?: number;
+          rects_received?: string;
           [k: string]: unknown;
         };
         security_types?: {
@@ -4143,7 +4143,7 @@ export interface CensysIpv4Data {
           /**
            * binary value of server-specified security option
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         server_protocol_version?: {
@@ -4154,11 +4154,11 @@ export interface CensysIpv4Data {
           /**
            * Version minor
            */
-          version_minor?: number;
+          version_minor?: string;
           /**
            * Version major
            */
-          version_major?: number;
+          version_major?: string;
           [k: string]: unknown;
         };
         /**
@@ -4187,58 +4187,58 @@ export interface CensysIpv4Data {
          */
         connection_fail_reason?: string;
         screen?: {
-          framebuffer_width?: number;
+          framebuffer_width?: string;
           server_pixel_format?: {
             /**
              * If false, color maps are used
              */
-            true_color_flag?: number;
+            true_color_flag?: string;
             /**
              * Max value of red pixel
              */
-            red_max?: number;
+            red_max?: string;
             /**
              * Max value of blue pixel
              */
-            blue_max?: number;
+            blue_max?: string;
             /**
              * how many bits to right shift a pixel datum to get red bits in lsb
              */
-            blue_shift?: number;
-            padding_byte_3?: number;
-            padding_byte_2?: number;
-            padding_byte_1?: number;
+            blue_shift?: string;
+            padding_byte_3?: string;
+            padding_byte_2?: string;
+            padding_byte_1?: string;
             /**
              * how many bits to right shift a pixel datum to get red bits in lsb
              */
-            red_shift?: number;
+            red_shift?: string;
             /**
              * Color depth
              */
-            depth?: number;
+            depth?: string;
             /**
              * How many bits in a single full pixel datum. Valid values are: 8, 16, 32
              */
-            bits_per_pixel?: number;
+            bits_per_pixel?: string;
             /**
              * If pixel RGB data are in big-endian
              */
-            big_endian_flag?: number;
+            big_endian_flag?: string;
             /**
              * how many bits to right shift a pixel datum to get red bits in lsb
              */
-            green_shift?: number;
+            green_shift?: string;
             /**
              * Max value of green pixel
              */
-            green_max?: number;
+            green_max?: string;
             [k: string]: unknown;
           };
           /**
            * Server advertised desktop name length
            */
-          desktop_name_len?: number;
-          framebuffer_height?: number;
+          desktop_name_len?: string;
+          framebuffer_height?: string;
           [k: string]: unknown;
         };
         /**
@@ -4253,14 +4253,14 @@ export interface CensysIpv4Data {
           /**
            * binary value of server-preferred pixel encoding
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         framebuffer_grab_stats?: {
           /**
            * Number of pixel bytes received
            */
-          bytes_received?: number;
+          bytes_received?: string;
           /**
            * True if a framebuffer grab was saved
            */
@@ -4268,11 +4268,11 @@ export interface CensysIpv4Data {
           /**
            * Full frames received.  Currently capped at 1
            */
-          full_frames_received?: number;
+          full_frames_received?: string;
           /**
            * Number of rects sent to re-assemble for one full frame
            */
-          rects_received?: number;
+          rects_received?: string;
           [k: string]: unknown;
         };
         security_types?: {
@@ -4283,7 +4283,7 @@ export interface CensysIpv4Data {
           /**
            * binary value of server-specified security option
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         server_protocol_version?: {
@@ -4294,11 +4294,11 @@ export interface CensysIpv4Data {
           /**
            * Version minor
            */
-          version_minor?: number;
+          version_minor?: string;
           /**
            * Version major
            */
-          version_major?: number;
+          version_major?: string;
           [k: string]: unknown;
         };
         /**
@@ -4327,58 +4327,58 @@ export interface CensysIpv4Data {
          */
         connection_fail_reason?: string;
         screen?: {
-          framebuffer_width?: number;
+          framebuffer_width?: string;
           server_pixel_format?: {
             /**
              * If false, color maps are used
              */
-            true_color_flag?: number;
+            true_color_flag?: string;
             /**
              * Max value of red pixel
              */
-            red_max?: number;
+            red_max?: string;
             /**
              * Max value of blue pixel
              */
-            blue_max?: number;
+            blue_max?: string;
             /**
              * how many bits to right shift a pixel datum to get red bits in lsb
              */
-            blue_shift?: number;
-            padding_byte_3?: number;
-            padding_byte_2?: number;
-            padding_byte_1?: number;
+            blue_shift?: string;
+            padding_byte_3?: string;
+            padding_byte_2?: string;
+            padding_byte_1?: string;
             /**
              * how many bits to right shift a pixel datum to get red bits in lsb
              */
-            red_shift?: number;
+            red_shift?: string;
             /**
              * Color depth
              */
-            depth?: number;
+            depth?: string;
             /**
              * How many bits in a single full pixel datum. Valid values are: 8, 16, 32
              */
-            bits_per_pixel?: number;
+            bits_per_pixel?: string;
             /**
              * If pixel RGB data are in big-endian
              */
-            big_endian_flag?: number;
+            big_endian_flag?: string;
             /**
              * how many bits to right shift a pixel datum to get red bits in lsb
              */
-            green_shift?: number;
+            green_shift?: string;
             /**
              * Max value of green pixel
              */
-            green_max?: number;
+            green_max?: string;
             [k: string]: unknown;
           };
           /**
            * Server advertised desktop name length
            */
-          desktop_name_len?: number;
-          framebuffer_height?: number;
+          desktop_name_len?: string;
+          framebuffer_height?: string;
           [k: string]: unknown;
         };
         /**
@@ -4393,14 +4393,14 @@ export interface CensysIpv4Data {
           /**
            * binary value of server-preferred pixel encoding
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         framebuffer_grab_stats?: {
           /**
            * Number of pixel bytes received
            */
-          bytes_received?: number;
+          bytes_received?: string;
           /**
            * True if a framebuffer grab was saved
            */
@@ -4408,11 +4408,11 @@ export interface CensysIpv4Data {
           /**
            * Full frames received.  Currently capped at 1
            */
-          full_frames_received?: number;
+          full_frames_received?: string;
           /**
            * Number of rects sent to re-assemble for one full frame
            */
-          rects_received?: number;
+          rects_received?: string;
           [k: string]: unknown;
         };
         security_types?: {
@@ -4423,7 +4423,7 @@ export interface CensysIpv4Data {
           /**
            * binary value of server-specified security option
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         server_protocol_version?: {
@@ -4434,11 +4434,11 @@ export interface CensysIpv4Data {
           /**
            * Version minor
            */
-          version_minor?: number;
+          version_minor?: string;
           /**
            * Version major
            */
-          version_major?: number;
+          version_major?: string;
           [k: string]: unknown;
         };
         /**
@@ -4467,58 +4467,58 @@ export interface CensysIpv4Data {
          */
         connection_fail_reason?: string;
         screen?: {
-          framebuffer_width?: number;
+          framebuffer_width?: string;
           server_pixel_format?: {
             /**
              * If false, color maps are used
              */
-            true_color_flag?: number;
+            true_color_flag?: string;
             /**
              * Max value of red pixel
              */
-            red_max?: number;
+            red_max?: string;
             /**
              * Max value of blue pixel
              */
-            blue_max?: number;
+            blue_max?: string;
             /**
              * how many bits to right shift a pixel datum to get red bits in lsb
              */
-            blue_shift?: number;
-            padding_byte_3?: number;
-            padding_byte_2?: number;
-            padding_byte_1?: number;
+            blue_shift?: string;
+            padding_byte_3?: string;
+            padding_byte_2?: string;
+            padding_byte_1?: string;
             /**
              * how many bits to right shift a pixel datum to get red bits in lsb
              */
-            red_shift?: number;
+            red_shift?: string;
             /**
              * Color depth
              */
-            depth?: number;
+            depth?: string;
             /**
              * How many bits in a single full pixel datum. Valid values are: 8, 16, 32
              */
-            bits_per_pixel?: number;
+            bits_per_pixel?: string;
             /**
              * If pixel RGB data are in big-endian
              */
-            big_endian_flag?: number;
+            big_endian_flag?: string;
             /**
              * how many bits to right shift a pixel datum to get red bits in lsb
              */
-            green_shift?: number;
+            green_shift?: string;
             /**
              * Max value of green pixel
              */
-            green_max?: number;
+            green_max?: string;
             [k: string]: unknown;
           };
           /**
            * Server advertised desktop name length
            */
-          desktop_name_len?: number;
-          framebuffer_height?: number;
+          desktop_name_len?: string;
+          framebuffer_height?: string;
           [k: string]: unknown;
         };
         /**
@@ -4533,14 +4533,14 @@ export interface CensysIpv4Data {
           /**
            * binary value of server-preferred pixel encoding
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         framebuffer_grab_stats?: {
           /**
            * Number of pixel bytes received
            */
-          bytes_received?: number;
+          bytes_received?: string;
           /**
            * True if a framebuffer grab was saved
            */
@@ -4548,11 +4548,11 @@ export interface CensysIpv4Data {
           /**
            * Full frames received.  Currently capped at 1
            */
-          full_frames_received?: number;
+          full_frames_received?: string;
           /**
            * Number of rects sent to re-assemble for one full frame
            */
-          rects_received?: number;
+          rects_received?: string;
           [k: string]: unknown;
         };
         security_types?: {
@@ -4563,7 +4563,7 @@ export interface CensysIpv4Data {
           /**
            * binary value of server-specified security option
            */
-          value?: number;
+          value?: string;
           [k: string]: unknown;
         };
         server_protocol_version?: {
@@ -4574,11 +4574,11 @@ export interface CensysIpv4Data {
           /**
            * Version minor
            */
-          version_minor?: number;
+          version_minor?: string;
           /**
            * Version major
            */
-          version_major?: number;
+          version_major?: string;
           [k: string]: unknown;
         };
         /**
@@ -4624,7 +4624,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -4638,7 +4638,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -4652,7 +4652,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -4666,7 +4666,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -4680,7 +4680,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -4694,7 +4694,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -4708,7 +4708,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -4724,7 +4724,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -4732,7 +4732,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -4745,7 +4745,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -4781,7 +4781,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -4795,7 +4795,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -4811,7 +4811,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -4822,7 +4822,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -4837,7 +4837,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -4851,7 +4851,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -4864,7 +4864,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -4918,11 +4918,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -4979,7 +4979,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -5022,7 +5022,7 @@ export interface CensysIpv4Data {
         /**
          * The protocol version number from the Accept packet.
          */
-        accept_version?: number;
+        accept_version?: string;
         /**
          * The parsed connect descriptor returned by the server in the redirect packet, if one is sent. Otherwise, omitted. The parsed descriptor is a list of objects with key and value, where the keys strings like 'DESCRIPTION.CONNECT_DATA.SERVICE_NAME'.
          */
@@ -5170,7 +5170,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -5184,7 +5184,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -5198,7 +5198,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -5212,7 +5212,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -5226,7 +5226,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -5240,7 +5240,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -5254,7 +5254,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -5270,7 +5270,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -5278,7 +5278,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -5291,7 +5291,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -5327,7 +5327,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -5341,7 +5341,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -5357,7 +5357,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -5368,7 +5368,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -5383,7 +5383,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -5397,7 +5397,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -5410,7 +5410,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -5481,11 +5481,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -5542,7 +5542,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -5583,7 +5583,7 @@ export interface CensysIpv4Data {
           /**
            * Set for both error and success. 0 = PROTOCOL_RDP.
            */
-          raw_value?: number;
+          raw_value?: string;
           rdstls?: boolean;
           standard_rdp?: boolean;
           error_hybrid_required?: boolean;
@@ -5599,16 +5599,16 @@ export interface CensysIpv4Data {
           [k: string]: unknown;
         };
         connect_response?: {
-          connect_id?: number;
+          connect_id?: string;
           domain_parameters?: {
-            max_mcspdu_size?: number;
-            max_user_id_channels?: number;
-            min_octets_per_second?: number;
-            domain_protocol_ver?: number;
-            tcs_per_mcs?: number;
-            max_token_ids?: number;
-            max_provider_height?: number;
-            max_channel_ids?: number;
+            max_mcspdu_size?: string;
+            max_user_id_channels?: string;
+            min_octets_per_second?: string;
+            domain_protocol_ver?: string;
+            tcs_per_mcs?: string;
+            max_token_ids?: string;
+            max_provider_height?: string;
+            max_channel_ids?: string;
             [k: string]: unknown;
           };
           [k: string]: unknown;
@@ -5618,9 +5618,9 @@ export interface CensysIpv4Data {
          */
         supported?: boolean;
         version?: {
-          raw_value?: number;
-          major?: number;
-          minor?: number;
+          raw_value?: string;
+          major?: string;
+          minor?: string;
           [k: string]: unknown;
         };
         protocol_supported_flags?: {
@@ -5658,11 +5658,11 @@ export interface CensysIpv4Data {
           /**
            * The version. This scanner supports version 6.
            */
-          version?: number;
+          version?: string;
           /**
            * Reserved for future use. 0 for version 6.
            */
-          reserved?: number;
+          reserved?: string;
           /**
            * The class of the message
            */
@@ -5674,15 +5674,15 @@ export interface CensysIpv4Data {
             /**
              * The raw message class byte.
              */
-            raw?: number;
+            raw?: string;
             /**
              * Reserved. Omitted if 0.
              */
-            reserved?: number;
+            reserved?: string;
             /**
              * Just the class part of the byte (lower 5 bits of raw)
              */
-            class?: number;
+            class?: string;
             /**
              * The human-readable name of the message class
              */
@@ -5692,7 +5692,7 @@ export interface CensysIpv4Data {
           /**
            * Sequence number of this packet in the session.
            */
-          sequence_number?: number;
+          sequence_number?: string;
           [k: string]: unknown;
         };
         /**
@@ -5710,7 +5710,7 @@ export interface CensysIpv4Data {
             /**
              * The raw completion code
              */
-            raw?: number;
+            raw?: string;
             /**
              * The human-readable name of the code
              */
@@ -5736,11 +5736,11 @@ export interface CensysIpv4Data {
             /**
              * The reserved bits. Omitted if zero.
              */
-            reserved?: number;
+            reserved?: string;
             /**
              * The raw byte, with the bit mask etc
              */
-            raw?: number;
+            raw?: string;
             /**
              * True if the MD2 AuthType is supported. Omitted otherwise.
              */
@@ -5758,11 +5758,11 @@ export interface CensysIpv4Data {
           /**
            * The OEM-specific data
            */
-          oem_data?: number;
+          oem_data?: string;
           /**
            * The response channel number
            */
-          channel_number?: number;
+          channel_number?: string;
           /**
            * The 3-byte OEM identifier
            */
@@ -5778,7 +5778,7 @@ export interface CensysIpv4Data {
             /**
              * Reserved. Omitted if 0.
              */
-            reserved?: number;
+            reserved?: string;
             /**
              * True if IPMI v2.0 is supported
              */
@@ -5804,7 +5804,7 @@ export interface CensysIpv4Data {
             /**
              * Reserved. Omitted if zero.
              */
-            reserved?: number;
+            reserved?: string;
             /**
              * The KG field. true if present, otherwise omitted.
              */
@@ -5836,11 +5836,11 @@ export interface CensysIpv4Data {
             /**
              * The raw value of the auth_type
              */
-            raw?: number;
+            raw?: string;
             /**
              * Reserved. Omitted if zero.
              */
-            reserved?: number;
+            reserved?: string;
             /**
              * The human-readable name of the auth type.
              */
@@ -5848,21 +5848,21 @@ export interface CensysIpv4Data {
             /**
              * Just the auth type (reserved bits omitted)
              */
-            type?: number;
+            type?: string;
             [k: string]: unknown;
           };
           /**
            * The expected length of the IPMI payload. Omitted if zero.
            */
-          length?: number;
+          length?: string;
           /**
            * The ID of this session; omitted if zero.
            */
-          session_id?: number;
+          session_id?: string;
           /**
            * The session sequence number of this packet in the session
            */
-          sequence_number?: number;
+          sequence_number?: string;
           /**
            * The 16-byte authentication code; not present if auth_type is None
            */
@@ -5880,7 +5880,7 @@ export interface CensysIpv4Data {
             /**
              * The raw value of the (NetFn << 2) | LUN
              */
-            raw?: number;
+            raw?: string;
             /**
              * The parsed NetFn value (the upper 6 bits of raw)
              */
@@ -5900,11 +5900,11 @@ export interface CensysIpv4Data {
               /**
                * The normalized value of the NetFn (i.e. raw & 0xfe, so it is always even)
                */
-              value?: number;
+              value?: string;
               /**
                * The raw value of the NetFn (6 bits, least significant indicates request/response)
                */
-              raw?: number;
+              raw?: string;
               [k: string]: unknown;
             };
             /**
@@ -5914,7 +5914,7 @@ export interface CensysIpv4Data {
               /**
                * The value of the LUN (3 bits)
                */
-              raw?: number;
+              raw?: string;
               /**
                * The human-readable name of the LUN
                */
@@ -5934,7 +5934,7 @@ export interface CensysIpv4Data {
             /**
              * The raw value of the cmd value
              */
-            raw?: number;
+            raw?: string;
             /**
              * The human-readable name of the cmd + NetFn
              */
@@ -5944,15 +5944,15 @@ export interface CensysIpv4Data {
           /**
            * The chk1 field (chk1 = -((RsAddr + NetFn) & 0xff)
            */
-          chk1?: number;
+          chk1?: string;
           /**
            * The chk2 field (chk2 = -((rq_addr + rq_seq + cmd + data[:]) & 0xff)
            */
-          chk2?: number;
+          chk2?: string;
           /**
            * The request sequence number.
            */
-          rq_seq?: number;
+          rq_seq?: string;
           /**
            * The response address
            */
@@ -5960,7 +5960,7 @@ export interface CensysIpv4Data {
             /**
              * The raw address byte (including the slave/software_id bit)
              */
-            raw?: number;
+            raw?: string;
             /**
              * Indicates that the address refers to a software identifier. Set to true if the least significant bit of raw is one, otherwise absent.
              */
@@ -5972,7 +5972,7 @@ export interface CensysIpv4Data {
             /**
              * The address, with the slave/software_id bit removed.
              */
-            address?: number;
+            address?: string;
             [k: string]: unknown;
           };
           /**
@@ -5982,7 +5982,7 @@ export interface CensysIpv4Data {
             /**
              * The raw address byte (including the slave/software_id bit)
              */
-            raw?: number;
+            raw?: string;
             /**
              * Indicates that the address refers to a software identifier. Set to true if the least significant bit of raw is one, otherwise absent.
              */
@@ -5994,7 +5994,7 @@ export interface CensysIpv4Data {
             /**
              * The address, with the slave/software_id bit removed.
              */
-            address?: number;
+            address?: string;
             [k: string]: unknown;
           };
           /**
@@ -6253,7 +6253,7 @@ export interface CensysIpv4Data {
         /**
          * The HTTP status code (e.g. 200, 404, 503).
          */
-        status_code?: number;
+        status_code?: string;
         /**
          * The contents of the first TITLE tag in the body (stripped of any surrounding whitespace and truncated to 1024 characters).
          */
@@ -6399,7 +6399,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6413,7 +6413,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6427,7 +6427,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6441,7 +6441,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6455,7 +6455,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6469,7 +6469,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6483,7 +6483,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6499,7 +6499,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -6507,7 +6507,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -6520,7 +6520,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -6556,7 +6556,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -6570,7 +6570,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -6586,7 +6586,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -6597,7 +6597,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -6612,7 +6612,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -6626,7 +6626,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -6639,7 +6639,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -6693,11 +6693,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -6754,7 +6754,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -6839,7 +6839,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6853,7 +6853,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6867,7 +6867,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6881,7 +6881,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6895,7 +6895,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6909,7 +6909,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6923,7 +6923,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -6939,7 +6939,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -6947,7 +6947,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -6960,7 +6960,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -6996,7 +6996,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -7010,7 +7010,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -7026,7 +7026,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -7037,7 +7037,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -7052,7 +7052,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -7066,7 +7066,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -7079,7 +7079,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -7150,11 +7150,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -7211,7 +7211,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -7251,7 +7251,7 @@ export interface CensysIpv4Data {
           /**
            * Protocol ID
            */
-          id?: number;
+          id?: string;
           /**
            * Decoded protocol ID
            */
@@ -7262,15 +7262,15 @@ export interface CensysIpv4Data {
           /**
            * version major
            */
-          major?: number;
+          major?: string;
           /**
            * version minor
            */
-          minor?: number;
+          minor?: string;
           /**
            * version revision
            */
-          revision?: number;
+          revision?: string;
           [k: string]: unknown;
         };
         metadata?: {
@@ -7306,7 +7306,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -7320,7 +7320,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -7334,7 +7334,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -7348,7 +7348,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -7362,7 +7362,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -7376,7 +7376,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -7390,7 +7390,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -7406,7 +7406,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -7414,7 +7414,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -7427,7 +7427,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -7463,7 +7463,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -7477,7 +7477,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -7493,7 +7493,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -7504,7 +7504,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -7519,7 +7519,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -7533,7 +7533,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -7546,7 +7546,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -7634,11 +7634,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -7695,7 +7695,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -7837,7 +7837,7 @@ export interface CensysIpv4Data {
                   /**
                    * port on which Kubelet is listening
                    */
-                  port?: number;
+                  port?: string;
                   [k: string]: unknown;
                 };
                 [k: string]: unknown;
@@ -7932,7 +7932,7 @@ export interface CensysIpv4Data {
               ports?: {
                 protocol?: string;
                 name?: string;
-                port?: number;
+                port?: string;
                 [k: string]: unknown;
               };
               [k: string]: unknown;
@@ -7984,7 +7984,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -7998,7 +7998,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8012,7 +8012,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8026,7 +8026,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8040,7 +8040,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8054,7 +8054,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8068,7 +8068,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8084,7 +8084,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -8092,7 +8092,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -8105,7 +8105,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -8141,7 +8141,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -8155,7 +8155,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -8171,7 +8171,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -8182,7 +8182,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -8197,7 +8197,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -8211,7 +8211,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -8224,7 +8224,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -8278,11 +8278,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -8339,7 +8339,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -8427,7 +8427,7 @@ export interface CensysIpv4Data {
         host_id?: string;
         station_name?: string;
         app_version?: string;
-        id?: number;
+        id?: string;
         metadata?: {
           product?: string;
           revision?: string;
@@ -8461,7 +8461,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8475,7 +8475,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8489,7 +8489,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8503,7 +8503,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8517,7 +8517,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8531,7 +8531,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8545,7 +8545,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8561,7 +8561,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -8569,7 +8569,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -8582,7 +8582,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -8618,7 +8618,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -8632,7 +8632,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -8648,7 +8648,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -8659,7 +8659,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -8674,7 +8674,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -8688,7 +8688,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -8701,7 +8701,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -8772,11 +8772,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -8833,7 +8833,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -8881,7 +8881,7 @@ export interface CensysIpv4Data {
           /**
            * Raw connect status value
            */
-          raw?: number;
+          raw?: string;
           /**
            * Connection status
            */
@@ -8964,7 +8964,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8978,7 +8978,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -8992,7 +8992,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -9006,7 +9006,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -9020,7 +9020,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -9034,7 +9034,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -9048,7 +9048,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -9064,7 +9064,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -9072,7 +9072,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -9085,7 +9085,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -9121,7 +9121,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -9135,7 +9135,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -9151,7 +9151,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -9162,7 +9162,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -9177,7 +9177,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -9191,7 +9191,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -9204,7 +9204,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -9258,11 +9258,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -9319,7 +9319,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -9621,7 +9621,7 @@ export interface CensysIpv4Data {
         /**
          * The HTTP status code (e.g. 200, 404, 503).
          */
-        status_code?: number;
+        status_code?: string;
         /**
          * The contents of the first TITLE tag in the body (stripped of any surrounding whitespace and truncated to 1024 characters).
          */
@@ -9742,7 +9742,7 @@ export interface CensysIpv4Data {
       device_id?: {
         vendor?: {
           reported_name?: string;
-          id?: number;
+          id?: string;
           official_name?: string;
           [k: string]: unknown;
         };
@@ -9753,7 +9753,7 @@ export interface CensysIpv4Data {
          */
         timestamp?: string;
         support?: boolean;
-        instance_number?: number;
+        instance_number?: string;
         object_name?: string;
         location?: string;
         application_software_revision?: string;
@@ -9778,7 +9778,7 @@ export interface CensysIpv4Data {
         /**
          * Major is the version's major number.
          */
-        major?: number;
+        major?: string;
         /**
          * If true, Redis was detected on this machine.
          */
@@ -9798,7 +9798,7 @@ export interface CensysIpv4Data {
         /**
          * The total number of bytes allocated by Redis using its allocator.
          */
-        used_memory?: number;
+        used_memory?: string;
         /**
          * The response from the NONEXISTENT command.
          */
@@ -9810,7 +9810,7 @@ export interface CensysIpv4Data {
         /**
          * The total number of commands processed by the server.
          */
-        total_commands_processed?: number;
+        total_commands_processed?: string;
         /**
          * The response from the INFO command. Should be a series of key:value pairs separated by CRLFs.
          */
@@ -9818,7 +9818,7 @@ export interface CensysIpv4Data {
         /**
          * Minor is the version's minor number.
          */
-        minor?: number;
+        minor?: string;
         /**
          * The mode the Redis server is running (standalone or cluster), read from the the info_response (if available).
          */
@@ -9826,7 +9826,7 @@ export interface CensysIpv4Data {
         /**
          * The total number of connections accepted by the server.
          */
-        total_connections_received?: number;
+        total_connections_received?: string;
         /**
          * The response to the QUIT command.
          */
@@ -9851,7 +9851,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -9865,7 +9865,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -9879,7 +9879,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -9893,7 +9893,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -9907,7 +9907,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -9921,7 +9921,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -9935,7 +9935,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -9951,7 +9951,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -9959,7 +9959,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -9972,7 +9972,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -10008,7 +10008,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -10022,7 +10022,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -10038,7 +10038,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -10049,7 +10049,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -10064,7 +10064,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -10078,7 +10078,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -10091,7 +10091,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -10179,11 +10179,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -10240,7 +10240,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -10283,7 +10283,7 @@ export interface CensysIpv4Data {
         /**
          * The number of seconds since Redis server start.
          */
-        uptime_in_seconds?: number;
+        uptime_in_seconds?: string;
         /**
          * The response from the PING command; should either be "PONG" or an authentication error.
          */
@@ -10303,7 +10303,7 @@ export interface CensysIpv4Data {
         /**
          * Patchlevel is the version's patchlevel number.
          */
-        patchlevel?: number;
+        patchlevel?: string;
         [k: string]: unknown;
       };
       [k: string]: unknown;
@@ -10332,7 +10332,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -10346,7 +10346,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -10360,7 +10360,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -10374,7 +10374,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -10388,7 +10388,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -10402,7 +10402,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -10416,7 +10416,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -10432,7 +10432,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -10440,7 +10440,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -10453,7 +10453,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -10489,7 +10489,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -10503,7 +10503,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -10519,7 +10519,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -10530,7 +10530,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -10545,7 +10545,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -10559,7 +10559,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -10572,7 +10572,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -10626,11 +10626,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -10687,7 +10687,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -10724,8 +10724,8 @@ export interface CensysIpv4Data {
           [k: string]: unknown;
         };
         backend_key_data?: {
-          secret_key?: number;
-          process_id?: number;
+          secret_key?: string;
+          process_id?: string;
           [k: string]: unknown;
         };
         /**
@@ -10804,7 +10804,7 @@ export interface CensysIpv4Data {
         /**
          * Requested function type; see http://www.modbus.org/docs/Modbus_Application_Protocol_V1_1b.pdf
          */
-        function_code?: number;
+        function_code?: string;
         /**
          * Indicates whether the server supports modbus.
          */
@@ -10841,7 +10841,7 @@ export interface CensysIpv4Data {
           /**
            * Identification conformity level of the device and type of supported access
            */
-          conformity_level?: number;
+          conformity_level?: string;
           [k: string]: unknown;
         };
         [k: string]: unknown;
@@ -11098,7 +11098,7 @@ export interface CensysIpv4Data {
         /**
          * The HTTP status code (e.g. 200, 404, 503).
          */
-        status_code?: number;
+        status_code?: string;
         /**
          * The contents of the first TITLE tag in the body (stripped of any surrounding whitespace and truncated to 1024 characters).
          */
@@ -11129,7 +11129,7 @@ export interface CensysIpv4Data {
     };
     [k: string]: unknown;
   };
-  ports?: number;
+  ports?: string;
   p993?: {
     imaps?: {
       tls?: {
@@ -11149,7 +11149,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11163,7 +11163,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11177,7 +11177,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11191,7 +11191,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11205,7 +11205,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11219,7 +11219,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11233,7 +11233,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11249,7 +11249,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -11257,7 +11257,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -11270,7 +11270,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -11306,7 +11306,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -11320,7 +11320,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -11336,7 +11336,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -11347,7 +11347,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -11362,7 +11362,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -11376,7 +11376,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -11389,7 +11389,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -11443,11 +11443,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -11504,7 +11504,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -11581,7 +11581,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11595,7 +11595,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11609,7 +11609,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11623,7 +11623,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11637,7 +11637,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11651,7 +11651,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11665,7 +11665,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -11681,7 +11681,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -11689,7 +11689,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -11702,7 +11702,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -11738,7 +11738,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -11752,7 +11752,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -11768,7 +11768,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -11779,7 +11779,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -11794,7 +11794,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -11808,7 +11808,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -11821,7 +11821,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -11875,11 +11875,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -11936,7 +11936,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -12017,7 +12017,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -12031,7 +12031,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -12045,7 +12045,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -12059,7 +12059,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -12073,7 +12073,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -12087,7 +12087,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -12101,7 +12101,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -12117,7 +12117,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -12125,7 +12125,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -12138,7 +12138,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -12174,7 +12174,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -12188,7 +12188,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -12204,7 +12204,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -12215,7 +12215,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -12230,7 +12230,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -12244,7 +12244,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -12257,7 +12257,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -12328,11 +12328,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -12389,7 +12389,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -12428,7 +12428,7 @@ export interface CensysIpv4Data {
         nodes_info?: {
           cluster?: {
             status?: string;
-            timestamp?: number;
+            timestamp?: string;
             uuid?: string;
             name?: string;
             filesystem?: {
@@ -12439,11 +12439,11 @@ export interface CensysIpv4Data {
               /**
                * Total size in bytes
                */
-              total_in_bytes?: number;
+              total_in_bytes?: string;
               /**
                * Free size in bytes
                */
-              free_in_bytes?: number;
+              free_in_bytes?: string;
               /**
                * Human-friendly free size
                */
@@ -12455,7 +12455,7 @@ export interface CensysIpv4Data {
               /**
                * Available size in bytes
                */
-              available_in_bytes?: number;
+              available_in_bytes?: string;
               [k: string]: unknown;
             };
             [k: string]: unknown;
@@ -12490,10 +12490,10 @@ export interface CensysIpv4Data {
               };
               thread_pool_list?: {
                 thread_name?: string;
-                min?: number;
-                max?: number;
+                min?: string;
+                max?: string;
                 keep_alive?: string;
-                queue_size?: number;
+                queue_size?: string;
                 type?: string;
                 [k: string]: unknown;
               };
@@ -12517,7 +12517,7 @@ export interface CensysIpv4Data {
                 };
                 [k: string]: unknown;
               };
-              total_indexing_buffer?: number;
+              total_indexing_buffer?: string;
               host?: string;
               version?: string;
               jvm?: {
@@ -12529,18 +12529,18 @@ export interface CensysIpv4Data {
                 vm_vendor?: string;
                 version?: string;
                 memory_pools?: string;
-                start_time_in_millis?: number;
+                start_time_in_millis?: string;
                 [k: string]: unknown;
               };
               build_hash?: string;
               os?: {
                 name?: string;
                 pretty_name?: string;
-                allocated_processors?: number;
+                allocated_processors?: string;
                 version?: string;
                 arch?: string;
-                refresh_interval_in_millis?: number;
-                available_processors?: number;
+                refresh_interval_in_millis?: string;
+                available_processors?: string;
                 [k: string]: unknown;
               };
               build_type?: string;
@@ -12647,7 +12647,7 @@ export interface CensysIpv4Data {
             [k: string]: unknown;
           };
           status_line?: string;
-          status_code?: number;
+          status_code?: string;
           [k: string]: unknown;
         };
         metadata?: {
@@ -12900,7 +12900,7 @@ export interface CensysIpv4Data {
         /**
          * The HTTP status code (e.g. 200, 404, 503).
          */
-        status_code?: number;
+        status_code?: string;
         /**
          * The contents of the first TITLE tag in the body (stripped of any surrounding whitespace and truncated to 1024 characters).
          */
@@ -12953,7 +12953,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -12967,7 +12967,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -12981,7 +12981,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -12995,7 +12995,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -13009,7 +13009,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -13023,7 +13023,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -13037,7 +13037,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -13053,7 +13053,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -13061,7 +13061,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -13074,7 +13074,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -13110,7 +13110,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -13124,7 +13124,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -13140,7 +13140,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -13151,7 +13151,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -13166,7 +13166,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -13180,7 +13180,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -13193,7 +13193,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -13247,11 +13247,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -13308,7 +13308,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -13355,7 +13355,7 @@ export interface CensysIpv4Data {
         /**
          * Major component of IPP version listed in the Server header of a response to an IPP get-printer-attributes request.
          */
-        version_major?: number;
+        version_major?: string;
         /**
          * The CUPS version, if any, specified in the list of attributes returned in a get-printer-attributes response or CUPS-get-printers response. Generally in the form 'x.y.z'.
          */
@@ -13376,7 +13376,7 @@ export interface CensysIpv4Data {
          * All IPP attributes included in any contentful responses obtained. Each has a name, list of values (potentially only one), and a tag denoting how the value should be interpreted.
          */
         attributes?: {
-          tag?: number;
+          tag?: string;
           values?: {
             memberAttrName?: string;
             octetString?: string;
@@ -13392,7 +13392,7 @@ export interface CensysIpv4Data {
             boolean?: boolean;
             endCollection?: string;
             mimeMediaType?: string;
-            integer?: number;
+            integer?: string;
             naturalLanguage?: string;
             textWithLanguage?: string;
             resolution?: string;
@@ -13407,7 +13407,7 @@ export interface CensysIpv4Data {
         /**
          * Minor component of IPP version listed in the Server header of a response to an IPP get-printer-attributes request.
          */
-        version_minor?: number;
+        version_minor?: string;
         metadata?: {
           product?: string;
           revision?: string;
@@ -13441,7 +13441,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -13455,7 +13455,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -13469,7 +13469,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -13483,7 +13483,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -13497,7 +13497,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -13511,7 +13511,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -13525,7 +13525,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -13541,7 +13541,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -13549,7 +13549,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -13562,7 +13562,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -13598,7 +13598,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -13612,7 +13612,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -13628,7 +13628,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -13639,7 +13639,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -13654,7 +13654,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -13668,7 +13668,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -13681,7 +13681,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -13735,11 +13735,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -13796,7 +13796,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -13863,25 +13863,25 @@ export interface CensysIpv4Data {
          */
         supported?: boolean;
         negotiation_log?: {
-          status?: number;
-          security_mode?: number;
-          system_time?: number;
-          server_start_time?: number;
+          status?: string;
+          security_mode?: string;
+          system_time?: string;
+          server_start_time?: string;
           protocol_id?: string;
-          capabilities?: number;
+          capabilities?: string;
           server_guid?: string;
-          credits?: number;
-          dialect_revision?: number;
-          command?: number;
+          credits?: string;
+          dialect_revision?: string;
+          command?: string;
           authentication_types?: string;
-          flags?: number;
+          flags?: string;
           [k: string]: unknown;
         };
         smb_version?: {
           /**
            * Major version
            */
-          major?: number;
+          major?: string;
           /**
            * Full SMB Version String
            */
@@ -13889,22 +13889,22 @@ export interface CensysIpv4Data {
           /**
            * Minor version
            */
-          minor?: number;
+          minor?: string;
           /**
            * Protocol Revision
            */
-          revision?: number;
+          revision?: string;
           [k: string]: unknown;
         };
         session_setup_log?: {
-          status?: number;
+          status?: string;
           protocol_id?: string;
           target_name?: string;
-          negotiate_flags?: number;
-          setup_flags?: number;
-          credits?: number;
-          command?: number;
-          flags?: number;
+          negotiate_flags?: string;
+          setup_flags?: string;
+          credits?: string;
+          command?: string;
+          flags?: string;
           [k: string]: unknown;
         };
         /**
@@ -13974,7 +13974,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -13988,7 +13988,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -14002,7 +14002,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -14016,7 +14016,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -14030,7 +14030,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -14044,7 +14044,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -14058,7 +14058,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -14074,7 +14074,7 @@ export interface CensysIpv4Data {
             /**
              * Bit-length of modulus.
              */
-            length?: number;
+            length?: string;
             /**
              * The RSA key's modulus (n) in big-endian encoding.
              */
@@ -14082,7 +14082,7 @@ export interface CensysIpv4Data {
             /**
              * The RSA key's public exponent (e).
              */
-            exponent?: number;
+            exponent?: string;
             [k: string]: unknown;
           };
           signature?: {
@@ -14095,7 +14095,7 @@ export interface CensysIpv4Data {
               /**
                * The TLS version identifier.
                */
-              value?: number;
+              value?: string;
               [k: string]: unknown;
             };
             valid?: boolean;
@@ -14131,7 +14131,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -14145,7 +14145,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -14161,7 +14161,7 @@ export interface CensysIpv4Data {
               /**
                * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                */
-              id?: number;
+              id?: string;
               /**
                * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                */
@@ -14172,7 +14172,7 @@ export interface CensysIpv4Data {
              * TLS key exchange parameters for ECDH keys.
              */
             server_private?: {
-              length?: number;
+              length?: string;
               value?: string;
               [k: string]: unknown;
             };
@@ -14187,7 +14187,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -14201,7 +14201,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -14214,7 +14214,7 @@ export interface CensysIpv4Data {
              * TLS key exchange parameters for ECDH keys.
              */
             client_private?: {
-              length?: number;
+              length?: string;
               value?: string;
               [k: string]: unknown;
             };
@@ -14268,11 +14268,11 @@ export interface CensysIpv4Data {
           /**
            * The length of the session ticket, in bytes.
            */
-          length?: number;
+          length?: string;
           /**
            * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
            */
-          lifetime_hint?: number;
+          lifetime_hint?: string;
           /**
            * The session ticket (an opaque binary blob).
            */
@@ -14329,7 +14329,7 @@ export interface CensysIpv4Data {
           /**
            * Version of the protocol to which the SCT conforms.
            */
-          version?: number;
+          version?: string;
           /**
            * For future extensions to the protocol.
            */
@@ -14385,7 +14385,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14399,7 +14399,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14413,7 +14413,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14427,7 +14427,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14441,7 +14441,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14455,7 +14455,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14469,7 +14469,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14722,7 +14722,7 @@ export interface CensysIpv4Data {
         /**
          * The HTTP status code (e.g. 200, 404, 503).
          */
-        status_code?: number;
+        status_code?: string;
         /**
          * The contents of the first TITLE tag in the body (stripped of any surrounding whitespace and truncated to 1024 characters).
          */
@@ -14769,7 +14769,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14783,7 +14783,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14797,7 +14797,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14811,7 +14811,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14825,7 +14825,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14839,7 +14839,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14853,7 +14853,7 @@ export interface CensysIpv4Data {
             /**
              * The length of the parameter.
              */
-            length?: number;
+            length?: string;
             /**
              * The value of the parameter.
              */
@@ -14943,7 +14943,7 @@ export interface CensysIpv4Data {
           /**
            * Bit-length of modulus.
            */
-          length?: number;
+          length?: string;
           /**
            * The RSA key's modulus (n) in big-endian encoding.
            */
@@ -14951,7 +14951,7 @@ export interface CensysIpv4Data {
           /**
            * The RSA key's public exponent (e).
            */
-          exponent?: number;
+          exponent?: string;
           [k: string]: unknown;
         };
         metadata?: {
@@ -14984,7 +14984,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -14998,7 +14998,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -15014,7 +15014,7 @@ export interface CensysIpv4Data {
             /**
              * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
              */
-            id?: number;
+            id?: string;
             /**
              * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
              */
@@ -15025,7 +15025,7 @@ export interface CensysIpv4Data {
            * TLS key exchange parameters for ECDH keys.
            */
           server_private?: {
-            length?: number;
+            length?: string;
             value?: string;
             [k: string]: unknown;
           };
@@ -15040,7 +15040,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -15054,7 +15054,7 @@ export interface CensysIpv4Data {
               /**
                * The length of the parameter.
                */
-              length?: number;
+              length?: string;
               /**
                * The value of the parameter.
                */
@@ -15067,7 +15067,7 @@ export interface CensysIpv4Data {
            * TLS key exchange parameters for ECDH keys.
            */
           client_private?: {
-            length?: number;
+            length?: string;
             value?: string;
             [k: string]: unknown;
           };
@@ -15126,7 +15126,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15140,7 +15140,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15154,7 +15154,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15168,7 +15168,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15182,7 +15182,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15196,7 +15196,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15210,7 +15210,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15226,7 +15226,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -15234,7 +15234,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -15247,7 +15247,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -15283,7 +15283,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -15297,7 +15297,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -15313,7 +15313,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -15324,7 +15324,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -15339,7 +15339,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -15353,7 +15353,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -15366,7 +15366,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -15454,11 +15454,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -15515,7 +15515,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */
@@ -15627,7 +15627,7 @@ export interface CensysIpv4Data {
           /**
            * Status code received from hitting /api/v1/targets
            */
-          status_code?: number;
+          status_code?: string;
           [k: string]: unknown;
         };
         /**
@@ -15776,7 +15776,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15790,7 +15790,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15804,7 +15804,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15818,7 +15818,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15832,7 +15832,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15846,7 +15846,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15860,7 +15860,7 @@ export interface CensysIpv4Data {
                 /**
                  * The length of the parameter.
                  */
-                length?: number;
+                length?: string;
                 /**
                  * The value of the parameter.
                  */
@@ -15876,7 +15876,7 @@ export interface CensysIpv4Data {
               /**
                * Bit-length of modulus.
                */
-              length?: number;
+              length?: string;
               /**
                * The RSA key's modulus (n) in big-endian encoding.
                */
@@ -15884,7 +15884,7 @@ export interface CensysIpv4Data {
               /**
                * The RSA key's public exponent (e).
                */
-              exponent?: number;
+              exponent?: string;
               [k: string]: unknown;
             };
             signature?: {
@@ -15897,7 +15897,7 @@ export interface CensysIpv4Data {
                 /**
                  * The TLS version identifier.
                  */
-                value?: number;
+                value?: string;
                 [k: string]: unknown;
               };
               valid?: boolean;
@@ -15933,7 +15933,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -15947,7 +15947,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -15963,7 +15963,7 @@ export interface CensysIpv4Data {
                 /**
                  * The numeric value of the curve identifier. See http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-8
                  */
-                id?: number;
+                id?: string;
                 /**
                  * The name of the curve algorithm (e.g. sect163kr1, secp192r1). Unrecognized curves are 'unknown'.
                  */
@@ -15974,7 +15974,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               server_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -15989,7 +15989,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -16003,7 +16003,7 @@ export interface CensysIpv4Data {
                   /**
                    * The length of the parameter.
                    */
-                  length?: number;
+                  length?: string;
                   /**
                    * The value of the parameter.
                    */
@@ -16016,7 +16016,7 @@ export interface CensysIpv4Data {
                * TLS key exchange parameters for ECDH keys.
                */
               client_private?: {
-                length?: number;
+                length?: string;
                 value?: string;
                 [k: string]: unknown;
               };
@@ -16087,11 +16087,11 @@ export interface CensysIpv4Data {
             /**
              * The length of the session ticket, in bytes.
              */
-            length?: number;
+            length?: string;
             /**
              * A hint from the server as to how long the ticket should be stored (in seconds relative to when the ticket is received).
              */
-            lifetime_hint?: number;
+            lifetime_hint?: string;
             /**
              * The session ticket (an opaque binary blob).
              */
@@ -16148,7 +16148,7 @@ export interface CensysIpv4Data {
             /**
              * Version of the protocol to which the SCT conforms.
              */
-            version?: number;
+            version?: string;
             /**
              * For future extensions to the protocol.
              */

@@ -10,9 +10,9 @@ import * as path from "path";
 function convertToJSONSchema(data) {
   const typeMap = {
     "STRING": "string",
-    "INTEGER": "integer",
     "BOOLEAN": "boolean",
-    "NUMBER": "number",
+    "INTEGER": "string", // number types are rendered as strings in the JSON data
+    "NUMBER": "string",
     "TIMESTAMP": "string",
     "DATETIME": "string",
     "FLOAT": "number",
