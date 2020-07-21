@@ -54,9 +54,6 @@
     "preinstall": "npx npm-force-resolutions",
     "codegen": "ts-node src/tools/generate-censys-types.ts"
   },
-  "resolutions": {
-    "debug": "3.1.0"
-  },
   "author": "",
   "license": "ISC"
 }
