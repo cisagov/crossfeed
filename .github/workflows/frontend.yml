@@ -98,31 +98,31 @@ jobs:
         if: github.ref == 'refs/heads/master'
         run: npm run build
         env:
-          REACT_APP_API_URL: https://stage.api.crossfeed.cisa.gov
+          REACT_APP_API_URL: https://api.staging.crossfeed.cyber.dhs.gov
 
       - name: Build Production
         if: github.ref == 'refs/heads/production'
         run: npm run build
         env:
-          REACT_APP_API_URL: https://api.crossfeed.cisa.gov
+          REACT_APP_API_URL: https://api.crossfeed.cyber.dhs.gov
 
       - name: Deploy Staging
         if: github.ref == 'refs/heads/master'
-        run: aws s3 sync build/ s3://stage.crossfeed.cisa.gov/ --delete
+        run: aws s3 sync build/ s3://staging.crossfeed.cyber.dhs.gov/ --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Deploy Production
         if: github.ref == 'refs/heads/production'
-        run: aws s3 sync build/ s3://crossfeed.cisa.gov/ --delete
+        run: aws s3 sync build/ s3://crossfeed.cyber.dhs.gov/ --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Invalidate Old Cache - Staging
         if: github.ref == 'refs/heads/master'
-        run: aws cloudfront create-invalidation --distribution-id E1L9ZZ6QDXV2NQ --paths "/index.html"
+        run: aws cloudfront create-invalidation --distribution-id ELM2YU1N4NV9M --paths "/index.html"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}

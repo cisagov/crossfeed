@@ -3,10 +3,16 @@ version: '3.4'
 services:
   db:
     image: postgres:latest
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./backend/db-init:/docker-entrypoint-initdb.d
     ports:
       - '5432:5432'
     env_file:
       - ./.env
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
 
   frontend:
     build: ./frontend
@@ -21,11 +27,24 @@ services:
     build: ./backend
     volumes:
       - ./backend/src:/app/src
-      # During local development, Docker containers launched from backend will run from the host machine Docker daemon
-      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - '3000:3000'
     env_file:
       - ./.env
     depends_on:
       - db
+
+  scheduler:
+    build: ./backend
+    command: ['npx', 'sls', 'schedule']
+    volumes:
+      - ./backend/src:/app/src
+      # During local development, Docker containers launched from scheduler will run from the host machine Docker daemon
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+volumes:
+  postgres-data:

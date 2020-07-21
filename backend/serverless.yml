@@ -5,7 +5,6 @@ custom:
     noPrependStageInUrl: true
     useChildProcesses: true
     #useWorkerThreads: true
-
   customDomain:
     domainName: ${file(./env.yml):${self:provider.stage}.DOMAIN, ''}
     basePath: ''
@@ -15,7 +14,7 @@ custom:
 
 provider:
   name: aws
-  region: us-west-2
+  region: us-east-1
   runtime: nodejs12.x
   timeout: 30
   stage: ${opt:stage, 'dev'}
@@ -40,4 +39,4 @@ functions:
 plugins:
   - serverless-domain-manager
   - serverless-plugin-typescript
-  - serverless-offline
+  - serverless-offline-scheduler

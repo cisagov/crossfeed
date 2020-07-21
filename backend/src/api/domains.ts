@@ -134,6 +134,15 @@ class DomainSearch {
 }
 
 export const list = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        result: [],
+        count: 0
+      })
+    };
+  }
   await connectToDatabase();
   const search = await validateBody(DomainSearch, event.body);
   const [result, count] = await Promise.all([

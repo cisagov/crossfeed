@@ -1,9 +1,9 @@
 import * as request from 'supertest';
-import { BACKEND_URL } from './constants';
+import app from '../src/api/app';
 
 describe('GET /', () => {
   it('should return 200', async () => {
-    const response = await request(BACKEND_URL).get('/').expect(200);
+    const response = await request(app).get('/').expect(200);
     expect(response.body).toMatchSnapshot();
   });
 });

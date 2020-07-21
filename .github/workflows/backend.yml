@@ -79,7 +79,7 @@ jobs:
           cp dev.env.example .env
           docker-compose up --build -d
           npm install -g wait-port
-          wait-port -t 5000 80
+          wait-port -t 3000 80 5432
         working-directory: ./
       - name: Sync database
         run: docker-compose exec -T backend npx sls invoke local -f syncdb -d dangerouslyforce
@@ -124,7 +124,7 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: npm ci
-      - name: Ensure domain existis - Staging
+      - name: Ensure domain exists - Staging
         if: github.ref == 'refs/heads/master'
         run: npx sls create_domain --stage=staging
         env:
@@ -140,7 +140,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           SLS_DEBUG: '*'
 
-      - name: Ensure domain existis - Production
+      - name: Ensure domain exists - Production
         if: github.ref == 'refs/heads/production'
         run: npx sls create_domain --stage=prod
         env:
