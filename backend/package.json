@@ -55,7 +55,8 @@
     "test": "jest",
     "lint": "eslint '**/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint '**/*.{ts,tsx,js,jsx}' --fix",
-    "preinstall": "npx npm-force-resolutions"
+    "preinstall": "npx npm-force-resolutions",
+    "deploy-worker": "./tools/deploy-worker.sh"
   },
   "resolutions": {
     "debug": "3.1.0"
