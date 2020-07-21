@@ -1,95 +1,184 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`censys banners basic test: helpers.saveDomainsToDb 1`] = `
+exports[`censys ipv4 basic test: helpers.saveDomainsToDb 1`] = `
 Array [
   Domain {
     "asn": "7684",
     "country": "JP",
     "ip": "153.126.148.60",
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "name": "testdomain1",
+    "name": "first_file_testdomain1",
   },
   Domain {
     "asn": "16509",
     "country": "SG",
     "ip": "52.74.149.117",
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "name": "testdomain10",
+    "name": "first_file_testdomain10",
   },
   Domain {
     "asn": "48347",
     "country": "RU",
     "ip": "31.134.10.156",
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "name": "testdomain11",
+    "name": "first_file_testdomain11",
   },
   Domain {
     "asn": "48347",
     "country": "RU",
     "ip": "31.134.10.156",
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "name": "testdomain2",
+    "name": "first_file_testdomain2",
   },
   Domain {
     "asn": "7684",
     "country": "JP",
     "ip": "153.126.148.60",
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "name": "testdomain3",
+    "name": "first_file_testdomain3",
   },
   Domain {
     "asn": "8473",
     "country": "SE",
     "ip": "85.24.146.152",
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "name": "testdomain4",
+    "name": "first_file_testdomain4",
   },
   Domain {
     "asn": "63949",
     "country": "US",
     "ip": "45.79.207.117",
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "name": "testdomain5",
+    "name": "first_file_testdomain5",
   },
   Domain {
     "asn": "26484",
     "country": "US",
     "ip": "156.249.159.119",
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "name": "testdomain6",
+    "name": "first_file_testdomain6",
   },
   Domain {
     "asn": undefined,
     "country": undefined,
     "ip": "221.10.15.220",
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "name": "testdomain7",
+    "name": "first_file_testdomain7",
   },
   Domain {
     "asn": "2856",
     "country": "GB",
     "ip": "81.141.166.145",
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "name": "testdomain8",
+    "name": "first_file_testdomain8",
   },
   Domain {
     "asn": "6327",
     "country": "CA",
     "ip": "24.65.82.187",
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "name": "testdomain9",
+    "name": "first_file_testdomain9",
   },
 ]
 `;
 
-exports[`censys banners basic test: helpers.saveServicesToDb 1`] = `
+exports[`censys ipv4 basic test: helpers.saveDomainsToDb 2`] = `
+Array [
+  Domain {
+    "asn": "7684",
+    "country": "JP",
+    "ip": "153.126.148.60",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "first_file_testdomain1",
+  },
+  Domain {
+    "asn": "16509",
+    "country": "SG",
+    "ip": "52.74.149.117",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "first_file_testdomain10",
+  },
+  Domain {
+    "asn": "48347",
+    "country": "RU",
+    "ip": "31.134.10.156",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "first_file_testdomain11",
+  },
+  Domain {
+    "asn": "48347",
+    "country": "RU",
+    "ip": "31.134.10.156",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "first_file_testdomain2",
+  },
+  Domain {
+    "asn": "7684",
+    "country": "JP",
+    "ip": "153.126.148.60",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "first_file_testdomain3",
+  },
+  Domain {
+    "asn": "8473",
+    "country": "SE",
+    "ip": "85.24.146.152",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "first_file_testdomain4",
+  },
+  Domain {
+    "asn": "63949",
+    "country": "US",
+    "ip": "45.79.207.117",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "first_file_testdomain5",
+  },
+  Domain {
+    "asn": "26484",
+    "country": "US",
+    "ip": "156.249.159.119",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "first_file_testdomain6",
+  },
+  Domain {
+    "asn": undefined,
+    "country": undefined,
+    "ip": "221.10.15.220",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "first_file_testdomain7",
+  },
+  Domain {
+    "asn": "2856",
+    "country": "GB",
+    "ip": "81.141.166.145",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "first_file_testdomain8",
+  },
+  Domain {
+    "asn": "6327",
+    "country": "CA",
+    "ip": "24.65.82.187",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "first_file_testdomain9",
+  },
+  Domain {
+    "asn": "9121",
+    "country": "TR",
+    "ip": "1.1.1.1",
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "name": "second_file_testdomain1",
+  },
+]
+`;
+
+exports[`censys ipv4 basic test: helpers.saveServicesToDb 1`] = `
 Array [
   Service {
     "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\"><html><head><title>401 Unauthorized</title></head><body><h1>Authorization Required</h1><p>This server could not verify that you are authorized to access the document requested.  Either you supplied the wrong credentials (e.g., bad password), or your browser doesn't understand how to supply the credentials required</p><hr></body></html>",
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "24.65.82.187",
-      "name": "testdomain9",
+      "name": "first_file_testdomain9",
     },
     "port": 7547,
     "service": "cwmp",
@@ -99,7 +188,7 @@ Array [
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "81.141.166.145",
-      "name": "testdomain8",
+      "name": "first_file_testdomain8",
     },
     "port": 7547,
     "service": "cwmp",
@@ -109,7 +198,7 @@ Array [
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "221.10.15.220",
-      "name": "testdomain7",
+      "name": "first_file_testdomain7",
     },
     "port": 53,
     "service": "dns",
@@ -161,7 +250,7 @@ Array [
     },
     "domain": Domain {
       "ip": "52.74.149.117",
-      "name": "testdomain10",
+      "name": "first_file_testdomain10",
     },
     "port": 80,
     "service": "http",
@@ -183,7 +272,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain1",
+      "name": "first_file_testdomain1",
     },
     "port": 80,
     "service": "http",
@@ -205,7 +294,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain3",
+      "name": "first_file_testdomain3",
     },
     "port": 80,
     "service": "http",
@@ -229,7 +318,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "31.134.10.156",
-      "name": "testdomain2",
+      "name": "first_file_testdomain2",
     },
     "port": 80,
     "service": "http",
@@ -253,7 +342,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "31.134.10.156",
-      "name": "testdomain11",
+      "name": "first_file_testdomain11",
     },
     "port": 80,
     "service": "http",
@@ -336,7 +425,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "45.79.207.117",
-      "name": "testdomain5",
+      "name": "first_file_testdomain5",
     },
     "port": 80,
     "service": "http",
@@ -382,7 +471,7 @@ a img {
     },
     "domain": Domain {
       "ip": "156.249.159.119",
-      "name": "testdomain6",
+      "name": "first_file_testdomain6",
     },
     "port": 80,
     "service": "http",
@@ -1411,7 +1500,7 @@ a img {
     },
     "domain": Domain {
       "ip": "52.74.149.117",
-      "name": "testdomain10",
+      "name": "first_file_testdomain10",
     },
     "port": 443,
     "service": "https",
@@ -1433,7 +1522,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain1",
+      "name": "first_file_testdomain1",
     },
     "port": 443,
     "service": "https",
@@ -1455,7 +1544,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain3",
+      "name": "first_file_testdomain3",
     },
     "port": 443,
     "service": "https",
@@ -1476,7 +1565,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "156.249.159.119",
-      "name": "testdomain6",
+      "name": "first_file_testdomain6",
     },
     "port": 443,
     "service": "https",
@@ -1489,7 +1578,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain1",
+      "name": "first_file_testdomain1",
     },
     "port": 143,
     "service": "imap",
@@ -1502,7 +1591,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain3",
+      "name": "first_file_testdomain3",
     },
     "port": 143,
     "service": "imap",
@@ -1512,7 +1601,7 @@ on this server.</p>
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain1",
+      "name": "first_file_testdomain1",
     },
     "port": 993,
     "service": "imaps",
@@ -1522,7 +1611,7 @@ on this server.</p>
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain3",
+      "name": "first_file_testdomain3",
     },
     "port": 993,
     "service": "imaps",
@@ -1532,7 +1621,7 @@ on this server.</p>
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "52.74.149.117",
-      "name": "testdomain10",
+      "name": "first_file_testdomain10",
     },
     "port": 27017,
     "service": "mongodb",
@@ -1545,7 +1634,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain1",
+      "name": "first_file_testdomain1",
     },
     "port": 110,
     "service": "pop3",
@@ -1558,7 +1647,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain3",
+      "name": "first_file_testdomain3",
     },
     "port": 110,
     "service": "pop3",
@@ -1568,7 +1657,7 @@ on this server.</p>
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain1",
+      "name": "first_file_testdomain1",
     },
     "port": 995,
     "service": "pop3s",
@@ -1578,7 +1667,7 @@ on this server.</p>
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain3",
+      "name": "first_file_testdomain3",
     },
     "port": 995,
     "service": "pop3s",
@@ -1588,7 +1677,7 @@ on this server.</p>
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain1",
+      "name": "first_file_testdomain1",
     },
     "port": 465,
     "service": "smtp",
@@ -1598,7 +1687,7 @@ on this server.</p>
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain1",
+      "name": "first_file_testdomain1",
     },
     "port": 25,
     "service": "smtp",
@@ -1608,7 +1697,7 @@ on this server.</p>
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain1",
+      "name": "first_file_testdomain1",
     },
     "port": 587,
     "service": "smtp",
@@ -1618,7 +1707,7 @@ on this server.</p>
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain3",
+      "name": "first_file_testdomain3",
     },
     "port": 465,
     "service": "smtp",
@@ -1628,7 +1717,7 @@ on this server.</p>
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain3",
+      "name": "first_file_testdomain3",
     },
     "port": 25,
     "service": "smtp",
@@ -1638,7 +1727,7 @@ on this server.</p>
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "testdomain3",
+      "name": "first_file_testdomain3",
     },
     "port": 587,
     "service": "smtp",
@@ -1652,7 +1741,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "52.74.149.117",
-      "name": "testdomain10",
+      "name": "first_file_testdomain10",
     },
     "port": 22,
     "service": "ssh",
@@ -1662,7 +1751,1605 @@ on this server.</p>
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "85.24.146.152",
-      "name": "testdomain4",
+      "name": "first_file_testdomain4",
+    },
+    "port": 5900,
+    "service": "vnc",
+  },
+]
+`;
+
+exports[`censys ipv4 basic test: helpers.saveServicesToDb 2`] = `
+Array [
+  Service {
+    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\"><html><head><title>401 Unauthorized</title></head><body><h1>Authorization Required</h1><p>This server could not verify that you are authorized to access the document requested.  Either you supplied the wrong credentials (e.g., bad password), or your browser doesn't understand how to supply the credentials required</p><hr></body></html>",
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "24.65.82.187",
+      "name": "first_file_testdomain9",
+    },
+    "port": 7547,
+    "service": "cwmp",
+  },
+  Service {
+    "banner": undefined,
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "81.141.166.145",
+      "name": "first_file_testdomain8",
+    },
+    "port": 7547,
+    "service": "cwmp",
+  },
+  Service {
+    "banner": null,
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "221.10.15.220",
+      "name": "first_file_testdomain7",
+    },
+    "port": 53,
+    "service": "dns",
+  },
+  Service {
+    "banner": null,
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "1.1.1.1",
+      "name": "second_file_testdomain1",
+    },
+    "port": 53,
+    "service": "dns",
+  },
+  Service {
+    "banner": "<!DOCTYPE html>
+<html lang=\\"en\\" ng-app=\\"cloudautom.landing\\">
+
+<!-- <head ng-include=\\"'components/welcome/landing_page_head_tag_content.html'\\"> -->
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src=\\"https://www.googletagmanager.com/gtag/js?id=UA-102490754-2\\"></script>
+	<base href=\\"/\\">
+	<meta charset=\\"utf-8\\">
+	<meta http-equiv=\\"X-UA-Compatible\\" content=\\"IE=edge\\">
+	<title ng-bind=\\"app.name + ' | Testing Simplified'\\"></title>
+	<meta name=\\"description\\" content=\\"{{app.name}} simplifies product test operations with seamless integration of STLC management modules combining the experience of Excel. Get-Set-Test! Pace The Race with {{app.name}}!\\">
+	<meta name=\\"keywords\\" content=\\"qutrix solution,qa,assurance,quality,service,solution,development,cloudautom,cloud autom,qutrix,automation,test,script,taas,aaas,saas,stlc,sdlc,bug,defect,storage,network,data-center,r&d,qc,jira,agile\\">
+	<meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1\\">
+	<link rel=\\"icon\\" href=\\"storage/images/header_logo.bmp\\">
+	<link rel=\\"stylesheet\\" href=\\"build/vendor/vendor.min.css\\">
+	<link rel=\\"stylesheet\\" href=\\"components/welcome/welcome.min.css\\">
+</head>
+
+<body id=\\"home\\" ng-controller=\\"LandingCtrl as landing\\">
+
+	<div class=\\"navbar-wrapper\\" ng-include=\\"'components/welcome/landing_page_navbar.html'\\"></div>
+	<div style=\\"margin-top: 55px\\"></div>
+	<ui-view></ui-view>
+	<div ng-include=\\"'components/welcome/login_modal.html'\\"></div>
+	<div ng-include=\\"'components/welcome/register_modal.html'\\"></div>
+	<div ng-include=\\"'components/welcome/demo_captcha_modal.html'\\"></div>
+	<div ng-include=\\"'components/welcome/reset_password.html'\\"></div>
+	<div ng-include=\\"'components/welcome/user_queries_modal.html'\\"></div>
+
+	<!-- Include YT library and this directive -->
+	<script src=\\"https://www.youtube.com/iframe_api\\"></script>
+	<script src=\\"build/vendor/vendor.min.js\\"></script>	
+	<script src=\\"env.js\\"></script>
+	<script src=\\"components/welcome/welcome.min.js\\"></script>
+
+</body>
+</html>",
+    "censysMetadata": Object {
+      "description": "Apache httpd 2.4.18",
+      "manufacturer": "Apache",
+      "product": "httpd",
+      "version": "2.4.18",
+    },
+    "domain": Domain {
+      "ip": "52.74.149.117",
+      "name": "first_file_testdomain10",
+    },
+    "port": 80,
+    "service": "http",
+  },
+  Service {
+    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access /
+on this server.</p>
+</body></html>
+",
+    "censysMetadata": Object {
+      "description": "Apache httpd",
+      "manufacturer": "Apache",
+      "product": "httpd",
+    },
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain1",
+    },
+    "port": 80,
+    "service": "http",
+  },
+  Service {
+    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access /
+on this server.</p>
+</body></html>
+",
+    "censysMetadata": Object {
+      "description": "Apache httpd",
+      "manufacturer": "Apache",
+      "product": "httpd",
+    },
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain3",
+    },
+    "port": 80,
+    "service": "http",
+  },
+  Service {
+    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL was not found on this server.</p>
+<hr>
+<address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>
+</body></html>
+",
+    "censysMetadata": Object {
+      "description": "Apache httpd 2.4.38",
+      "manufacturer": "Apache",
+      "product": "httpd",
+      "version": "2.4.38",
+    },
+    "domain": Domain {
+      "ip": "31.134.10.156",
+      "name": "first_file_testdomain2",
+    },
+    "port": 80,
+    "service": "http",
+  },
+  Service {
+    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL was not found on this server.</p>
+<hr>
+<address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>
+</body></html>
+",
+    "censysMetadata": Object {
+      "description": "Apache httpd 2.4.38",
+      "manufacturer": "Apache",
+      "product": "httpd",
+      "version": "2.4.38",
+    },
+    "domain": Domain {
+      "ip": "31.134.10.156",
+      "name": "first_file_testdomain11",
+    },
+    "port": 80,
+    "service": "http",
+  },
+  Service {
+    "banner": "<html>
+  <head>
+    <meta charset=\\"utf-8\\">
+    <link href=\\"https://cdn.auth0.com/styleguide/latest/index.min.css\\" rel=\\"stylesheet\\" />
+    <link rel=\\"stylesheet\\" href=\\"https://cdn.auth0.com/backend-templates/main.css\\">
+    <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1\\">
+    <title>Mindvalley</title>
+  </head>
+  <body>
+    <div class=\\"unhandled-error-cont tenant-error-cont has-logo\\">
+      <div class=\\"error-header\\">
+        <span class=\\"error-icon\\">
+          
+          <span class=\\"error-logo\\" style=\\"background-image: url('https://assets.mindvalley.com/api/v1/assets/e65ae7f0-3886-4b55-a067-05f14a2e8d39.png');\\"></span>
+          
+        </span>
+        <h3 class=\\"error-title\\">Mindvalley</h3>
+        
+          <h3 class=\\"error-subtitle\\">Oops!, something went wrong</h3>
+        
+      </div>
+      <div class=\\"error-body\\">
+        <p class=\\"error-message\\">
+          
+          Callback URL mismatch.<br/>
+          The provided redirect_uri is not in the list of allowed callback URLs.<br/>
+          Please go to the <a target=\\"_new\\" href=\\"https://manage.auth0.com/#/applications/OaAEsHvSvZbs15WsyEGJJ6SemaoA2Zo6/settings\\">Application Settings page</a> and make sure you are sending a valid callback url from your application.
+          
+        </p>
+      </div>
+      <div class=\\"error-footer\\">
+        <div class=\\"footer-groups cf\\">
+          <span class=\\"footer-group\\">
+            <i class=\\"footer-group-icon read-docs\\"></i>
+            <h4 class=\\"footer-group-title\\">TECHNICAL DETAILS</h4>
+            <a href=\\"#\\" class=\\"toggle-details\\">See details for this error</a>
+          </span>
+          <span class=\\"footer-group\\">
+            <h4 class=\\"footer-group-title\\">SUPPORT</h4>
+            
+              
+              <a href=\\"https://support.mindvalley.com/en/\\" class=\\"footer-group-link has-icon customer-support\\">Get Help</a>
+              
+              
+              <a href=\\"mailto:support@mindvalley.com\\" class=\\"footer-group-link has-icon mail\\">support@mindvalley.com</a>
+              
+            
+          </span>
+        </div>
+        <div class=\\"error-details\\">
+          <p class=\\"error-status\\">
+            
+            <strong>unauthorized_client</strong>: Callback URL mismatch. http://45.79.207.117/auth/mindvalley/callback?origin=http%3A%2F%2F45.79.207.117%2F is not in the list of allowed callback URLs
+            
+          </p>
+          
+          <a href=\\"https://manage.auth0.com/#/logs/\\" target=\\"_new\\" class=\\"view-logs-btn\\">VIEW LOG</a>
+          
+
+          
+          <span class=\\"error-id\\">
+            <span class=\\"error-id-title\\">TRACKING ID: </span><span class=\\"error-id-content\\">54463be5f6a5f27cd315</span>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+    <script src=\\"https://cdn.auth0.com/backend-templates/main.js?v=1\\"></script>
+  </body>
+</html>
+",
+    "censysMetadata": Object {
+      "description": "nginx",
+      "product": "nginx",
+    },
+    "domain": Domain {
+      "ip": "45.79.207.117",
+      "name": "first_file_testdomain5",
+    },
+    "port": 80,
+    "service": "http",
+  },
+  Service {
+    "banner": "<!DOCTYPE html PUBLIC \\"-//W3C//DTD XHTML 1.0 Strict//EN\\" \\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\\">
+<html xmlns=\\"http://www.w3.org/1999/xhtml\\">
+<head>
+<meta http-equiv=\\"Content-Type\\" content=\\"text/html; charset=iso-8859-1\\" />
+<title>IIS7</title>
+<style type=\\"text/css\\">
+<!--
+body {
+	color:#000000;
+	background-color:#B3B3B3;
+	margin:0;
+}
+
+#container {
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;
+	}
+
+a img {
+	border:none;
+}
+
+-->
+</style>
+</head>
+<body>
+<div id=\\"container\\">
+<a href=\\"http://go.microsoft.com/fwlink/?linkid=66138&amp;clcid=0x409\\"><img src=\\"welcome.png\\" alt=\\"IIS7\\" width=\\"571\\" height=\\"411\\" /></a>
+</div>
+</body>
+</html>",
+    "censysMetadata": Object {
+      "description": "Microsoft IIS 7.5",
+      "manufacturer": "Microsoft",
+      "product": "IIS",
+      "version": "7.5",
+    },
+    "domain": Domain {
+      "ip": "156.249.159.119",
+      "name": "first_file_testdomain6",
+    },
+    "port": 80,
+    "service": "http",
+  },
+  Service {
+    "banner": "
+<html lang=\\"en\\">
+<head>
+
+  <meta charset=\\"utf-8\\">
+  <title>Qutrix | Redefining Quality</title>
+  <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1\\">
+  <meta name=\\"description\\" content=\\"Qutrix Solution | Your next-generation software engineering quality partner. Specialized in R&D data-center product development and testing. Get the quality you deserve and grow your business world non-stop!\\">
+  <meta name=\\"keywords\\" content=\\"qa,assurance,quality,service,solution,development,cloudautom,autom,qutrix,automation,test,script,taas,aaas,saas,stlc,sdlc,bug,defect,storage,network,data-center,r&d,qc,jira,qaas\\">
+
+  <!-- Favicons -->
+  <link rel=\\"icon\\" href=\\"img/qutrix_short.png\\">
+
+  <!-- Google Fonts -->
+  <link href=\\"https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700\\" rel=\\"stylesheet\\">
+
+  <!-- Bootstrap CSS File -->
+  <link href=\\"lib/bootstrap/css/bootstrap.min.css\\" rel=\\"stylesheet\\">
+
+  <!-- Libraries CSS Files -->
+  <link href=\\"lib/font-awesome/css/font-awesome.min.css\\" rel=\\"stylesheet\\">
+  <link href=\\"lib/animate/animate.min.css\\" rel=\\"stylesheet\\">
+  <link href=\\"lib/ionicons/css/ionicons.min.css\\" rel=\\"stylesheet\\">
+  <link href=\\"lib/owlcarousel/assets/owl.carousel.min.css\\" rel=\\"stylesheet\\">
+  <link href=\\"lib/lightbox/css/lightbox.min.css\\" rel=\\"stylesheet\\">
+
+  <!-- Main Stylesheet File -->
+  <link href=\\"css/style.css\\" rel=\\"stylesheet\\">
+
+</head>
+
+<body>
+
+  <!--==========================
+    Header
+  ============================-->
+  <header id=\\"header\\">
+    <div class=\\"container-fluid\\">
+
+      <div id=\\"logo\\" class=\\"pull-left\\">
+        <!-- <h1><a href=\\"#intro\\" class=\\"scrollto\\">Qutrix Solution</a></h1> -->
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <h1><a href=\\"#intro\\" class=\\"scrollto\\"><img src=\\"img/QutrixLogo.png\\" alt=\\"cloudautom logo\\" title=\\"\\" width=\\"100px\\"/></a></h1>
+      </div>
+
+      <nav id=\\"nav-menu-container\\">
+        <ul class=\\"nav-menu\\">
+          <li class=\\"menu-active\\"><a href=\\"#intro\\">Home</a></li>
+          <li class=\\"menu-has-children\\"><a href=\\"#\\">Products</a>
+            <ul>
+              <li><a href=\\"#product-qaasbox\\">QaaSBox</a></li>
+              <li><a href=\\"#product-cloudautom\\">CloudAuTOM</a></li>
+            </ul>
+          </li>
+          <li><a href=\\"#services\\">Solutions</a></li>
+          <li><a href=\\"#portfolio\\">Academia</a></li>
+          <li><a href=\\"#skills\\">Quotient</a></li>
+          <!-- <li><a href=\\"#team\\">Team</a></li> -->
+          <li class=\\"menu-has-children\\"><a href=\\"#\\">company</a>
+            <ul>
+              <li><a href=\\"#about\\">About Us</a></li>
+              <li><a href=\\"#team\\">Team</a></li>
+              <li><a href=\\"#career\\">Career</a></li>
+              <li><a href=\\"#testimonials\\">SSR</a></li>
+              <li><a href=\\"#contact\\">Contact</a></li>
+            </ul>
+          </li>
+          <!-- <li><a href=\\"#contact\\">Contact</a></li> -->
+        </ul>
+      </nav>
+      <!-- #nav-menu-container -->
+    </div>
+  </header>
+  <!-- #header -->
+
+  <!--==========================
+    Home Section
+  ============================-->
+  <section id=\\"intro\\">
+    <div class=\\"intro-container\\">
+      <div id=\\"introCarousel\\" class=\\"carousel  slide carousel-fade\\" data-ride=\\"carousel\\">
+
+        <ol class=\\"carousel-indicators\\"></ol>
+
+        <div class=\\"carousel-inner\\" role=\\"listbox\\">
+
+          <div class=\\"carousel-item active\\">
+            <div class=\\"carousel-background\\"><img src=\\"img/intro-carousel/1.jpg\\" alt=\\"\\"></div>
+            <div class=\\"carousel-container\\">
+              <div class=\\"carousel-content\\">
+                <h2> <br> <br> Get The Quality You Deserve...</h2>
+                <p>For every data-center product development or testing challenges in R&D engineering, there are many solutions. Experience the best with Qutrix Solution for the quality matrix you deserve.</p>
+                <a href=\\"#about\\" class=\\"btn-get-started scrollto\\">Go Qutrix</a>
+              </div>
+            </div>
+          </div>
+
+          <div class=\\"carousel-item\\">
+            <div class=\\"carousel-background\\"><img src=\\"img/intro-carousel/2.jpg\\" alt=\\"\\"></div>
+            <div class=\\"carousel-container\\">
+              <div class=\\"carousel-content\\">
+                <h2> <br> <br> DevTestOps, STLC, Test Automation </h2>
+                <p>QaaSBox & CloudAuTOM - Pace The Race with our next-generation framework and solution for all your product test operations and test automation requirements. Get-Set-Test!</p>
+                <a href=\\"#product-qaasbox\\" class=\\"btn-get-started scrollto\\">Simplify It!</a>
+              </div>
+            </div>
+          </div>
+
+          <div class=\\"carousel-item\\">
+            <div class=\\"carousel-background\\"><img src=\\"img/intro-carousel/3.jpg\\" alt=\\"\\"></div>
+            <div class=\\"carousel-container\\">
+              <div class=\\"carousel-content\\">
+                <h2> <br> <br> Software Solutions, Services</h2>
+                <p>The uniqueness of our offerings comes from the DNA of blending product company's innovation with excellence of service company's commitment. Grow your business world non-stop.</p>
+                <a href=\\"#services\\" class=\\"btn-get-started scrollto\\">At Your Service</a>
+              </div>
+            </div>
+          </div>
+
+          <div class=\\"carousel-item\\">
+            <div class=\\"carousel-background\\"><img src=\\"img/intro-carousel/4.jpg\\" alt=\\"\\"></div>
+            <div class=\\"carousel-container\\">
+              <div class=\\"carousel-content\\">
+                <h2> <br> <br> Building, Nurturing Talent Pool</h2>
+                <p>Evergrowing data-center industry needs fresh talent in India and nurturing of skills. Qutrix Academia invests time in identifying and building talent pool through efficient inhouse workshops.</p>
+                <a href=\\"#portfolio\\" class=\\"btn-get-started scrollto\\">Build Talent</a>
+              </div>
+            </div>
+          </div>
+
+          <div class=\\"carousel-item\\">
+            <div class=\\"carousel-background\\"><img src=\\"img/intro-carousel/5.jpg\\" alt=\\"\\"></div>
+            <div class=\\"carousel-container\\">
+              <div class=\\"carousel-content\\">
+                <h2> <br> <br> Beyond Auditing, Certification</h2>
+                <p>Qutrix Quality Quotient assessment program provides you blueprint of your engineering quotient beyond any auditing or certification programs offer. Have a WILL to know? This is the WAY. </p>
+                <a href=\\"#skills\\" class=\\"btn-get-started scrollto\\">Quotient'ify</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <a class=\\"carousel-control-prev\\" href=\\"#introCarousel\\" role=\\"button\\" data-slide=\\"prev\\">
+          <span class=\\"carousel-control-prev-icon ion-chevron-left\\" aria-hidden=\\"true\\"></span>
+          <span class=\\"sr-only\\">Previous</span>
+        </a>
+
+        <a class=\\"carousel-control-next\\" href=\\"#introCarousel\\" role=\\"button\\" data-slide=\\"next\\">
+          <span class=\\"carousel-control-next-icon ion-chevron-right\\" aria-hidden=\\"true\\"></span>
+          <span class=\\"sr-only\\">Next</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+  <!-- End Home Section -->
+  <!-- Main Container -->
+  <main id=\\"main\\">
+
+    <!--==========================
+      Featured Services Section
+    ============================-->
+    <section id=\\"featured-services\\">
+      <div class=\\"container\\">
+        <div class=\\"row\\">
+
+          <div class=\\"col-lg-4 box\\">
+            <i class=\\"ion-ios-heart-outline\\"></i>
+            <h4 class=\\"title\\"><a>DEARER TO R&D OPEX</a></h4>
+            <p class=\\"description\\">Beat your target with better value for investment when you engage us in your SDLC, STLC phases.</p>
+          </div>
+
+          <div class=\\"col-lg-4 box box-bg\\">
+            <i class=\\"ion-ios-stopwatch-outline\\"></i>
+            <h4 class=\\"title\\"><a>GTM AT EASE</a></h4>
+            <p class=\\"description\\">Go-To-Market at ease. Eliminate 11th hour blocker product defects. Tame your fast ticking clock.</p>
+          </div>
+
+          <div class=\\"col-lg-4 box\\">
+            <i class=\\"ion-ios-bookmarks-outline\\"></i>
+            <h4 class=\\"title\\"><a>REDEFINE QUALITY</a></h4>
+            <p class=\\"description\\">A quality partner to rely on. Start the journey to redefine your product quality to newer heights.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <!-- End Featured-services -->
+
+    <!--==========================
+      Products Section
+    ============================-->
+    <section id=\\"product-qaasbox\\" class=\\"wow fadeIn\\">
+      <div class=\\"container\\">
+    
+        <header class=\\"section-header\\">
+          <h3>QaaSBox, Quality Testing Simplified </h3>
+          <p>Unbox Quality-As-A-Solution software and a platform for your product that empowers your product management, development and test experts to adapt STLC at ease for achieving quality testing. QaaSBox enables the users gain competitive advantage and achieve faster go-to-market cycle. <br>
+	  <b> Sign Up Today & Avail Benefits As Beta User! </b> </p>
+        </header>
+
+        <div class=\\"facts-img\\">
+          <!-- <img src=\\"img/facts-img.png\\" alt=\\"\\" class=\\"img-fluid\\"> -->
+          <img src=\\"img/qb_products_home.png\\" alt=\\"\\" class=\\"img-fluid\\" height=\\"1000px\\">
+    
+        </div>
+    
+        <!--==========================
+              Call To Action Section
+            ============================-->
+        <section id=\\"call-to-action\\" class=\\"wow fadeIn\\">
+          <div class=\\"container text-center\\">
+            <h3>Product Test Management</h3>
+            <p> Come and join to access the get-set-go* tests or create your own online collaboration team or setup enterprise QaaS edition. Explore our innovative and niche offerings for you. System Softwares or Enterprise Products or Mobile/Web Apps - QaaSBox is your new TestOps Compass. </p>
+            <a class=\\"cta-btn\\" href=\\"https://qaas.qutrix.io\\" target=\\"_blank\\">Explore More </a>
+          </div>
+        </section>
+        <!-- #call-to-action -->
+    
+      </div>
+    </section>
+
+    <section id=\\"product-cloudautom\\" class=\\"wow fadeIn\\">
+      <div class=\\"container\\">
+
+        <header class=\\"section-header\\">
+          <h3>CloudAuTOM, Test Automation Solution</h3>
+          <p>We offer custom-build Test Automation SaaS and AaaS products with integrated STLC management modules, which enable our partners gain competitive advantage and achieve faster go-to-market cycle. As subject matter experts, we understand the domain and micro-aspects of complexity involved in building an effective product test automation eco-system for your R&D engineering operations. </p>
+        </header>
+
+        <div class=\\"row counters\\">
+
+          <div class=\\"col-lg-3 col-6 text-center\\">
+            <span data-toggle=\\"counter-up\\">3</span>
+            <p>Superior Frameworks</p>
+          </div>
+
+          <div class=\\"col-lg-3 col-6 text-center\\">
+            <span data-toggle=\\"counter-up\\">18</span>
+            <p>Powerful Features</p>
+          </div>
+
+          <div class=\\"col-lg-3 col-6 text-center\\">
+            <span data-toggle=\\"counter-up\\">45</span>
+            <p>*Minutes To Deploy AaaS Cloud</p>
+          </div>
+
+          <div class=\\"col-lg-3 col-6 text-center\\">
+            <span data-toggle=\\"counter-up\\">1010</span>
+            <p>Man Days Crafted (*Ticking)</p>
+          </div>
+
+        </div>
+
+        <div class=\\"facts-img\\">
+          <!-- <img src=\\"img/facts-img.png\\" alt=\\"\\" class=\\"img-fluid\\"> -->
+          <img src=\\"img/ca_products_home.png\\" alt=\\"\\" class=\\"img-fluid\\" height=\\"1000px\\">
+
+        </div>
+
+        <!--==========================
+          Call To Action Section
+        ============================-->
+        <section id=\\"call-to-action\\" class=\\"wow fadeIn\\">
+          <div class=\\"container text-center\\">
+            <h3>Product Test Automation</h3>
+            <p> There are 8 unique ways to revolutionize the operations of your R&D Product Engineering Development and Testing. We customize test automation solutions and help our customers by creating private or hybrid cloud ecosystem for data-center product testing of Servers, Adapters, Controllers, Drives, Flash, Arrays, Modules and many more. Explore our innovative and niche offerings for you. </p>
+            <a class=\\"cta-btn\\" href=\\"https://qaas.qutrix.io\\" target=\\"_blank\\">Explore More </a>
+          </div>
+        </section>
+        <!-- #call-to-action -->
+
+      </div>
+    </section>
+    
+    <!-- End Products Section-->
+    <!--==========================
+      Services Section
+    ============================-->
+    <section id=\\"services\\">
+      <div class=\\"container\\">
+        <header class=\\"section-header wow fadeInUp\\">
+          <h3 class=\\"section-title\\">Software Solutions, Services</h3>
+          <p>Experience a highly reliable solution or outstanding service when you engage us for your R&D software engineering development and testing requirements of STORAGE, NETWORK products. Quality is just a consequence of our relentless effort. Our success is to make you succeed. </p>
+        </header>
+
+        <div class=\\"video-container\\">
+          <iframe src=\\"https://www.youtube.com/embed/tBtsUgD6FAE\\">
+          </iframe>
+          <br><br>
+        </div>
+
+        <div class=\\"container\\">
+          <center> <h4 class=\\"title\\"> <b> Engineering Development Services, Solutions</b></h4> <hr>
+          <p> <i> Respecting talent and balancing your RoI are essential. Find a new genre of business strategist in us. Access the true developers! </i></p>
+          </center>
+        </div>
+
+        <div class=\\"row\\">
+
+          <div class=\\"col-lg-4 col-md-6 box wow bounceInUp\\" data-wow-duration=\\"1.4s\\">
+            <div class=\\"icon\\"><i class=\\"ion-ios-people-outline\\"></i></div>
+            <h4 class=\\"title\\"><a>ENG Dev</a></h4>
+            <p class=\\"description\\">Whether offshore development or demand basis engagement model, our business SLAs might reveal unexplored possibilities. </p>
+            </p>
+          </div>
+
+          <div class=\\"col-lg-4 col-md-6 box wow bounceInUp\\" data-wow-duration=\\"1.4s\\">
+            <div class=\\"icon\\"><i class=\\"ion-ios-barcode-outline\\"></i></div>
+            <h4 class=\\"title\\"><a>ENG Tools</a></h4>
+            <p class=\\"description\\">Offload the hassles of developing tools or utilites for your day-to-day SW engineering activities in any programming languages. </p>
+          </div>
+
+          <div class=\\"col-lg-4 col-md-6 box wow bounceInUp\\" data-wow-duration=\\"1.4s\\">
+            <div class=\\"icon\\"><i class=\\"ion-ios-world-outline\\"></i></div>
+            <h4 class=\\"title\\"><a>ENG Web</a></h4>
+            <p class=\\"description\\">Build your powerful intranet sites while you design core products. We know pulse of software engineering and art of app.</p>
+          </div>
+
+
+        </div>
+
+        <div class=\\"container\\">
+          <center> <h4 class=\\"title\\"> <b> Product Test Automation Services, Solutions</b></h4> <hr>
+          <p> <i> In software engineering, test automation is an unique breed of thinking. Testers in Breaking! Developers in Logic! Hackers in Approach! </i> </p>
+        </center>
+        </div>
+
+        <div class=\\"row\\">
+
+          <div class=\\"col-lg-4 col-md-6 box wow bounceInUp\\" data-wow-delay=\\"0.1s\\" data-wow-duration=\\"1.4s\\">
+            <div class=\\"icon\\"><i class=\\"ion-gear-b\\"></i></div>
+            <h4 class=\\"title\\"><a>AuTOM-Creator</a></h4>
+            <p class=\\"description\\">Creating test automation framework for data-center products is synonymous to us. Get it created from the scratch. </p>
+            </p>
+          </div>
+
+          <div class=\\"col-lg-4 col-md-6 box wow bounceInUp\\" data-wow-delay=\\"0.1s\\" data-wow-duration=\\"1.4s\\">
+            <div class=\\"icon\\"><i class=\\"ion-ios-lightbulb\\"></i></div>
+            <h4 class=\\"title\\"><a>AuTOM-Developer</a></h4>
+            <p class=\\"description\\">Optimizing/developing existing framework and library is totally a different skill. We also enhance your proprietary framework. </p>
+          </div>
+
+          <div class=\\"col-lg-4 col-md-6 box wow bounceInUp\\" data-wow-delay=\\"0.1s\\" data-wow-duration=\\"1.4s\\">
+            <div class=\\"icon\\"><i class=\\"ion-nuclear\\"></i></div>
+            <h4 class=\\"title\\"><a>AuTOM-Maintainer</a></h4>
+            <p class=\\"description\\">At times, test automation regression is underestimated. Maintenance is a quality and not a mere work. We never overlook. </p>
+            </p>
+          </div>
+        </div>
+
+        <div class=\\"container\\">
+          <center> <h4 class=\\"title\\"> <b> Testing/Quality Assurance Services, Solutions</b></h4> <hr>
+          <p> <i> Feel the subtle differences of business minds running technology projects vs subject matter experts running business in technology. </i> </p>
+          </center>
+        </div>
+
+        <div class=\\"row\\">
+
+          <div class=\\"col-lg-4 col-md-6 box wow bounceInUp\\" data-wow-delay=\\"0.2s\\" data-wow-duration=\\"1.4s\\">
+            <div class=\\"icon\\"><i class=\\"ion-cube\\"></i></div>
+            <h4 class=\\"title\\"><a>ArchiTest</a></h4>
+            <p class=\\"description\\">Engage subject matter expert Test Architects on full-time or flexible terms. Their influence on product is multi-fold.</p>
+          </div>
+
+          <div class=\\"col-lg-4 col-md-6 box wow bounceInUp\\" data-wow-delay=\\"0.2s\\" data-wow-duration=\\"1.4s\\">
+            <div class=\\"icon\\"><i class=\\"ion-ios-speedometer-outline\\"></i></div>
+            <h4 class=\\"title\\"><a>Q-Bench</a></h4>
+            <p class=\\"description\\">Benchmark Desk: Get deeper insights of your product performance, benchmarking metrics dissected and analyzed. </p>
+            </p>
+          </div>
+
+          <div class=\\"col-lg-4 col-md-6 box wow bounceInUp\\" data-wow-delay=\\"0.2s\\" data-wow-duration=\\"1.4s\\">
+            <div class=\\"icon\\"><i class=\\"ion-bug\\"></i></div>
+            <h4 class=\\"title\\"><a>IndepTest</a></h4>
+            <p class=\\"description\\">Offers End-To-End independent and indepth testing services/solution for all your data-center product validation. </p>
+          </div>
+
+        </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- End Services Section-->
+
+    <!--==========================
+    Portfolio Section
+    ============================-->
+    <section id=\\"portfolio\\"  class=\\"section-bg\\" >
+      <div class=\\"container\\">
+
+        <header class=\\"section-header\\">
+          <h3 class=\\"section-title\\"> Academia Workshops</h3>
+          <p class=\\"title\\" style=\\"text-align:justify\\"> Only less than 5% of engineers graduating in India are employable for software start-ups and IT product companies (Source: Industry, Media, Expert Reports). Qutrix academia designed career awareness workshop programs in data-center domain for college students, fresh graduates in an attempt to find the hidden-gems from the left-out 95% for the benefit of national and international talent needs. </p>
+          <p class=\\"title\\" style=\\"text-align:justify;color:green\\"> <b> Did You Know? </b> It just takes less than 1/4th of a second for your social-networking Likes or Posts to reach your friend in USA from India? It's time you learn HOW! Come, explore, learn the magnitude and sophistication involved behind your Internet World - conceptually and practically. THE ONLY THING THAT CAN STOP YOU IS YOUR OWN APPETITE TO DEEP-DIVE!!!  </p>
+          <center> <h4 class=\\"title\\"> <b>Career Workshop Programs - Learn From Experts</b></h4> </center>
+        </header>
+
+        <div class=\\"row portfolio-container\\">
+
+          <div class=\\"col-md-4 portfolio-item wow fadeInUp\\">
+            <div class=\\"portfolio-wrap\\">
+              <figure>
+                <img src=\\"img/server_cables.jpg\\" class=\\"img-fluid\\" alt=\\"\\">
+                <!-- <a href=\\"img/server_cables.jpg\\" data-lightbox=\\"portfolio\\" data-title=\\"App 1\\" class=\\"link-preview\\" title=\\"Preview\\"><i class=\\"ion ion-eye\\"></i></a> -->
+                <!-- <a href=\\"#\\" class=\\"link-details\\" title=\\"More Details\\"><i class=\\"ion ion-android-open\\"></i></a> -->
+              </figure>
+
+              <div class=\\"portfolio-info\\">
+                <h6><b>#1 Domain/Technology Awareness</b></h6>
+                <p>Conceptual + Hands-On Exposure </p>
+              </div>
+            </div>
+          </div>
+
+          <div class=\\"col-md-4 portfolio-item wow fadeInUp\\" data-wow-delay=\\"0.1s\\">
+            <div class=\\"portfolio-wrap\\">
+              <figure>
+                <img src=\\"img/test.jpg\\" class=\\"img-fluid\\" alt=\\"\\">
+                <!-- <a href=\\"img/test.jpg\\" class=\\"link-preview\\" data-lightbox=\\"portfolio\\" data-title=\\"Web 3\\" title=\\"Preview\\"><i class=\\"ion ion-eye\\"></i></a> -->
+                <!-- <a href=\\"#\\" class=\\"link-details\\" title=\\"More Details\\"><i class=\\"ion ion-android-open\\"></i></a> -->
+              </figure>
+
+              <div class=\\"portfolio-info\\">
+                <h6><b>#2 Data-Center Test Expertise</b></h6>
+                <p>Architectural Testing Exposure</p>
+              </div>
+            </div>
+          </div>
+
+          <div class=\\"col-md-4 portfolio-item wow fadeInUp\\" data-wow-delay=\\"0.2s\\">
+            <div class=\\"portfolio-wrap\\">
+              <figure>
+                <img src=\\"img/ai.jpg\\" class=\\"img-fluid\\" alt=\\"\\">
+                <!-- <a href=\\"img/ai.jpg\\" class=\\"link-preview\\" data-lightbox=\\"portfolio\\" data-title=\\"App 2\\" title=\\"Preview\\"><i class=\\"ion ion-eye\\"></i></a> -->
+                <!-- <a href=\\"#\\" class=\\"link-details\\" title=\\"More Details\\"><i class=\\"ion ion-android-open\\"></i></a> -->
+              </figure>
+
+              <div class=\\"portfolio-info\\">
+                <h6><b>#3 Data-Center Test Automation</b></h6>
+                <p>Product Test Automation Exposure </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- #portfolio -->
+
+    <!--==========================
+    Skills Section
+    ============================-->
+
+    <section id=\\"skills\\">
+      <div class=\\"container\\">
+
+        <header class=\\"section-header\\">
+          <h3>Assess Engineering Quotient</h3>
+          <p> Enroll for Qutrix Quality Quotient (Q-Cube) assessment program and benefit immensely from the insightful data on your R&D Engineering Operations. Q-Cube assessment is offerred in TWO modes. <b> a) Team Mode </b> (Basic Method) <b> b) Expert Mode </b> (Advance Method) </p>
+        </header>
+
+        <div class=\\"skills-content\\">
+
+          <p> <center> <b> Sample Report With 52.9 Points Scored Based On 10x10 (100-Scale) Point Assessment Model: </b> <hr> </center> </p>
+
+          <div class=\\"progress\\">
+            <div class=\\"progress-bar bg-danger\\" role=\\"progressbar\\" aria-valuenow=\\"25\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">
+              <span class=\\"skill\\">Hiring Quotient <i class=\\"val\\">25%</i></span>
+            </div>
+          </div>
+
+          <div class=\\"progress\\">
+            <div class=\\"progress-bar bg-info\\" role=\\"progressbar\\" aria-valuenow=\\"39\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">
+              <span class=\\"skill\\">Talent Quotient <i class=\\"val\\">39%</i></span>
+            </div>
+          </div>
+
+          <div class=\\"progress\\">
+            <div class=\\"progress-bar bg-warning\\" role=\\"progressbar\\" aria-valuenow=\\"39\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">
+              <span class=\\"skill\\">Domain Quotient <i class=\\"val\\">39%</i></span>
+            </div>
+          </div>
+
+          <div class=\\"progress\\">
+            <div class=\\"progress-bar bg-danger\\" role=\\"progressbar\\" aria-valuenow=\\"24\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">
+              <span class=\\"skill\\">Product Quotient <i class=\\"val\\">24%</i></span>
+            </div>
+          </div>
+
+          <div class=\\"progress\\">
+            <div class=\\"progress-bar bg-warning\\" role=\\"progressbar\\" aria-valuenow=\\"39\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">
+              <span class=\\"skill\\">Process Quotient <i class=\\"val\\">39%</i></span>
+            </div>
+          </div>
+
+          <div class=\\"progress\\">
+            <div class=\\"progress-bar bg-warning\\" role=\\"progressbar\\" aria-valuenow=\\"42\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">
+              <span class=\\"skill\\">Development Quotient <i class=\\"val\\">42%</i></span>
+            </div>
+          </div>
+
+          <div class=\\"progress\\">
+            <div class=\\"progress-bar bg-info\\" role=\\"progressbar\\" aria-valuenow=\\"75\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">
+              <span class=\\"skill\\">Testing Quotient <i class=\\"val\\">75%</i></span>
+            </div>
+          </div>
+
+          <div class=\\"progress\\">
+            <div class=\\"progress-bar bg-success\\" role=\\"progressbar\\" aria-valuenow=\\"90\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">
+              <span class=\\"skill\\">Synergy Quotient <i class=\\"val\\">90%</i></span>
+            </div>
+          </div>
+
+          <div class=\\"progress\\">
+            <div class=\\"progress-bar bg-success\\" role=\\"progressbar\\" aria-valuenow=\\"90\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">
+              <span class=\\"skill\\">Innovation Quotient <i class=\\"val\\">90%</i></span>
+            </div>
+          </div>
+
+          <div class=\\"progress\\">
+            <div class=\\"progress-bar bg-info\\" role=\\"progressbar\\" aria-valuenow=\\"66\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">
+              <span class=\\"skill\\">Operations Quotient <i class=\\"val\\">66%</i></span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- End Skills Section -->
+
+    <!--==========================
+      About Us Section
+    ============================-->
+    <section id=\\"about\\">
+      <div class=\\"container\\">
+
+        <header class=\\"section-header\\">
+          <h3>About Qutrix</h3>
+          <p>Qutrix is a private limited company established in Bangalore, Silicon Valley Of India. Our culture is built upon the values of product company's innovation and service company's commitment. We offer world-class experience to our customers partnering with us. Our success stories have all the compelling reasons to scale up the business operations with the blessings of satisfied customers. </p>
+        </header>
+
+        <div class=\\"row about-cols\\">
+
+          <div class=\\"col-md-4 wow fadeInUp\\">
+            <div class=\\"about-col\\">
+              <div class=\\"img\\">
+                <img src=\\"img/about-mission.jpg\\" alt=\\"\\" class=\\"img-fluid\\">
+                <div class=\\"icon\\"><i class=\\"ion-ios-eye-outline\\"></i></div>
+              </div>
+              <h2 class=\\"title\\"><a href=\\"#\\">Qutrix Mission</a></h2>
+              <p>
+              <center> To accomplish a purposeful existence in the industry, <br> <br>
+		By creating employment opportunity for deserving, 
+		By treating suppliers as valuable as customers,
+		By partnering with visionary customers & investors
+	      </center>
+              </p>
+            </div>
+          </div>
+
+          <div class=\\"col-md-4 wow fadeInUp\\" data-wow-delay=\\"0.1s\\">
+            <div class=\\"about-col\\">
+              <div class=\\"img\\">
+                <img src=\\"img/about-vision.jpg\\" alt=\\"\\" class=\\"img-fluid\\">
+                <div class=\\"icon\\"><i class=\\"ion-ios-speedometer-outline\\"></i></div>
+              </div>
+              <h2 class=\\"title\\"><a href=\\"#\\">Qutrix Vision</a></h2>
+              <p>
+              <center> To be your next generation business partner with perfection in every step we take with our creative minds at work </center>
+              </p>
+            </div>
+          </div>
+
+          <div class=\\"col-md-4 wow fadeInUp\\" data-wow-delay=\\"0.2s\\">
+            <div class=\\"about-col\\">
+              <div class=\\"img\\">
+                <img src=\\"img/about-plan.jpg\\" alt=\\"\\" class=\\"img-fluid\\">
+                <div class=\\"icon\\"><i class=\\"ion-ios-list-outline\\"></i></div>
+              </div>
+              <h2 class=\\"title\\"><a href=\\"#\\">Qutrix Commitment</a></h2>
+              <p>
+              <center>  Our commitment to grow your business is essentially built over 9 pillars of traits: <br> <br>
+                  Creativity and Innovation<br>
+                  Trust and Transperancy<br>
+                  Commitment and Ethics<br>
+                  Quality and Excellence<br>
+                  Business Continuity<br>
+              </center>
+              </p>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+    </section>
+    <!-- End Aboutus Section -->
+
+    <!--==========================
+      Clients Section
+    ============================
+    <section id=\\"clients\\" class=\\"wow fadeInUp\\">
+      <div class=\\"container\\">
+
+        <header class=\\"section-header\\">
+          <h3>Our Clients</h3>
+        </header>
+
+        <div class=\\"owl-carousel clients-carousel\\">
+          <img src=\\"img/clients/client-1.png\\" alt=\\"\\">
+          <img src=\\"img/clients/client-2.png\\" alt=\\"\\">
+          <img src=\\"img/clients/client-3.png\\" alt=\\"\\">
+          <img src=\\"img/clients/client-4.png\\" alt=\\"\\">
+          <img src=\\"img/clients/client-5.png\\" alt=\\"\\">
+          <img src=\\"img/clients/client-6.png\\" alt=\\"\\">
+          <img src=\\"img/clients/client-7.png\\" alt=\\"\\">
+          <img src=\\"img/clients/client-8.png\\" alt=\\"\\">
+        </div>
+
+      </div>
+    </section>
+    -->
+
+    <!--==========================
+      Team Section
+    ============================-->
+    <section id=\\"team\\">
+      <div class=\\"container\\">
+        <div class=\\"section-header wow fadeInUp\\">
+          <h3>Our Team</h3>
+          <p>Meet our passionate team working towards building every atom of the company. Start-up in energy and attitude! Corporate in focus and execution! </p>
+        </div>
+
+        <div class=\\"row\\">
+
+          <div class=\\"col-lg-4 col-md-6 wow fadeInUp\\">
+            <div class=\\"member\\">
+            <!--  <img src=\\"img/team/\\" class=\\"img-fluid img-circle\\" alt=\\"\\"> -->
+              <div class=\\"member-info\\">
+                <div class=\\"member-info-content\\">
+                  <h4> </h4>
+                  <span> </span>
+                  <div class=\\"social\\">
+                    <a href=\\"\\"><i class=\\"fa fa-twitter\\"></i></a>
+                    <a href=\\"\\"><i class=\\"fa fa-facebook\\"></i></a>
+                    <a href=\\"\\"><i class=\\"fa fa-linkedin\\"></i></a>
+                    <!-- <a href=\\"\\"><i class=\\"fa fa-google-plus\\"></i></a> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class=\\"col-lg-4 col-md-6 wow\\">
+            <div class=\\"member\\">
+              <img src=\\"img/team/vijay.jpg\\" class=\\"img-fluid img-circle\\" alt=\\"\\">
+              <div class=\\"member-info\\">
+                <div class=\\"member-info-content\\">
+                  <h4>Vijay Koteeswaran </h4>
+                  <span>Founder Director</span>
+                  <div class=\\"social\\">
+                    <!-- <a href=\\"\\"><i class=\\"fa fa-twitter\\"></i></a> -->
+                    <!-- <a href=\\"\\"><i class=\\"fa fa-facebook\\"></i></a> -->
+                    <a href=\\"https://in.linkedin.com/in/vijaykoteeswaran\\" target=\\"_blank\\"><i class=\\"fa fa-linkedin\\"></i></a>
+                    <!-- <a href=\\"\\"><i class=\\"fa fa-google-plus\\"></i></a> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <center>
+          <h6> <a href=\\"https://in.linkedin.com/in/vijaykoteeswaran\\" target=\\"_blank\\"> <b> Vijay Koteeswaran </b> </a>
+            <br> Founder Director
+          </h6>
+          <p> A Stanford IGNITE'd technology entrepreneur with deep expertise in storage and networking domains. Holds Masters Degree in Information Science and Application. Created strong foot-prints in key roles like Test Intrapreneur, Global Test Architect, Product Test and Project Manager. With 19 Years of data-center industry experience, played significant roles in many global companies like Broadcom, LSI, Cisco, Wipro and many associated clients. </p>
+          </center>
+
+          <div class=\\"col-lg-4 col-md-6 wow fadeInUp\\">
+            <div class=\\"member\\">
+              <!--  <img src=\\"img/team/\\" class=\\"img-fluid img-circle\\" alt=\\"\\"> -->
+              <div class=\\"member-info\\">
+                <div class=\\"member-info-content\\">
+                  <h4></h4>
+                  <span></span>
+                  <div class=\\"social\\">
+                    <a href=\\"\\"><i class=\\"fa fa-twitter\\"></i></a>
+                    <a href=\\"\\"><i class=\\"fa fa-facebook\\"></i></a>
+                    <a href=\\"\\"><i class=\\"fa fa-linkedin\\"></i></a>
+                    <!-- <a href=\\"\\"><i class=\\"fa fa-google-plus\\"></i></a> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class=\\"container\\">
+
+        <center> <h4 class=\\"title\\"> <b> Team Qutrix </b> </h4>
+        <p> Our vibrant team having fun after coding & business hours. We Are Qutrixians! </p>
+        </center>
+        <div class=\\"owl-carousel clients-carousel\\">
+          <img src=\\"img/team/team1.jpg\\" alt=\\"\\">
+          <img src=\\"img/team/team2.jpg\\" alt=\\"\\">
+          <img src=\\"img/team/team3.jpg\\" alt=\\"\\">
+          <img src=\\"img/team/team4.jpg\\" alt=\\"\\">
+          <img src=\\"img/team/team5.jpg\\" alt=\\"\\">
+          <img src=\\"img/team/team6.jpg\\" alt=\\"\\">
+          <img src=\\"img/team/team7.jpg\\" alt=\\"\\">
+          <img src=\\"img/team/team8.jpg\\" alt=\\"\\">
+        </div>
+        <center>
+        <p> <i> *Ex-Qutrixians are also shown in the team pictures. </i> </p>
+        </center>
+
+      </div>
+    </section>
+
+    <!-- End Team Section -->
+    <!--==========================
+      Careers Section
+    ============================-->
+    <section id=\\"career\\" class=\\"section-bg wow fadeInUp\\">
+      <div class=\\"container\\">
+        <header class=\\"section-header\\">
+          <h3>Career Path</h3>
+          <p> Nothing fancy about working for start-up unless you think your growth and knowledge matter to you. Dare to build the wall together? Please Apply. </p>
+        </header>
+
+        <div class=\\"row\\">
+          <div class=\\"table-responsive \\">
+            <img src=\\"img/startup_wall.jpg\\" alt=\\"career image\\">
+            <table class=\\"table col-md-12 col-sm-12 col-lg-12 table-bordered table-condensed\\">
+              <thead>
+                <tr align=\\"center\\">
+                  <th>Job ID</th>
+                  <th> Title</th>
+                  <th> Type </th>
+                  <th> Job Role</th>
+                  <th>Apply</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>QJR1801</td>
+                  <td>IC R&amp;D Engineer (Level 1-3)</td>
+                  <td>
+                    Full-Time or Part-Time
+                  </td>
+                  <td>
+                    Web &amp; Database Architecture/Programming</td>
+                  <td><a href=\\"mailto:career@qutrixsolution.com\\"> Mailto: career@qutrixsolution.com</a></td>
+                </tr>
+                <tr>
+                  <td>QJR1802</td>
+                  <td>
+                    IC R&amp;D Engineer (Level 1-3)</td>
+                  <td>Full-Time or Part-Time
+                  </td>
+                  <td>Test Automation Designing/Programming </td>
+                  <td><a href=\\"mailto:career@qutrixsolution.com\\"> Mailto: career@qutrixsolution.com</a></td>
+                </tr>
+                <tr>
+                  <td>QJR1803</td>
+                  <td>
+                    Business Development Executive </td>
+                  <td>Full-Time or Part-Time
+                  </td>
+                  <td>Product & Service Business Development </td>
+                  <td><a href=\\"mailto:career@qutrixsolution.com\\"> Mailto: career@qutrixsolution.com</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <br>
+          <div class=\\"text-dark\\">
+            <p class=\\"career-note\\"> <i> Note: Internship opportunities are available. Interested candidates can mail their profiles to <mark>career@qutrixsolution.com</mark> </i> </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- End Careers Section -->
+    <!--==========================
+      SSR Section
+    ============================-->
+    <section id=\\"testimonials\\" class=\\"section-bg wow fadeInUp\\">
+      <div class=\\"container\\">
+
+        <header class=\\"section-header\\">
+          <h3>Startup Social Responsibility (SSR)</h3>
+          <img src=\\"img/ssr_logo.png\\"  alt=\\"ssr image\\">
+        </header>
+
+        <h4 class=\\"title\\"><b>SSR Initiatives</b></h4>
+        <p>We believe that engaging in social responsibility activities even in startup stage is good for setting up the culture of the company. This creates ample opportunity for employees to look aspects beyond business goals and lead a difference in human's life however small it may be. We dedicate half a day every month in programs listed below. Qutrix SSR plans to increase the list of activities over the time. </p>
+        <div class=\\"row\\">
+
+            <div class=\\"col-lg-5 col-md-6 box wow bounceInUp\\" data-wow-duration=\\"1.4s\\">
+              <h5 class=\\"title\\">Program</h5>
+              <p class=\\"description\\">Fun Day @ Old-Age Homes</p>
+              <p class=\\"description\\">Celebration @ Children Homes</p>
+              <p class=\\"description\\">Career Insights & Guidance </p>
+
+            </div>
+
+            <div class=\\"col-lg-7 col-md-6 box wow bounceInUp\\" data-wow-duration=\\"1.4s\\">
+              <h5 class=\\"title\\">Description</h5>
+              <p class=\\"description\\">Celebrate life with old-age citizens to cheer them up with fun-filled activities</p>
+              <p class=\\"description\\">Birthday celebration for underprivileged kids and games to cheer them up</p>
+              <p class=\\"description\\">Career guidance program to empower women engineering & managment graduates</p>
+
+            </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- End SSR Section -->
+    <!--==========================
+      Contact Section
+    ============================-->
+    <section id=\\"contact\\" class=\\"section-bg wow fadeInUp\\">
+      <div class=\\"container\\">
+
+        <div class=\\"section-header\\">
+          <h3>Contact Us</h3>
+          <p>Thank you for your interest in Qutrix. Engaging with us is just a ping away. </p>
+        </div>
+
+        <div class=\\"row contact-info\\">
+
+          <div class=\\"col-md-4\\">
+            <div class=\\"contact-email\\">
+              <i class=\\"ion-ios-email-outline\\"></i>
+              <h3>Email</h3>
+              <p><a href=\\"mailto:info@qutrixsolution.com\\">info@qutrixsolution.com</a></p>
+            </div>
+          </div>
+
+          <div class=\\"col-md-4\\">
+            <div class=\\"contact-address\\">
+              <i class=\\"ion-ios-location-outline\\"></i>
+              <h3>Address</h3>
+              <address><a href=\\"https://goo.gl/maps/z5ix6WHPruKcBjvW7\\" target=\\"_blank\\">
+              Qutrix Solution Private Limited<br>
+              Synerge II Workspace, Bangalore. INDIA<br>
+              </a>
+              </address>
+            </div>
+          </div>
+
+          <div class=\\"col-md-4\\">
+            <div class=\\"contact-phone\\">
+              <i class=\\"ion-ios-telephone-outline\\"></i>
+              <h3>Phone Number</h3>
+              <p>India: +91 984 530 7360</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!--
+        <div class=\\"form\\">
+          <div id=\\"sendmessage\\">Your message has been sent. Thank you!</div>
+          <div id=\\"errormessage\\"></div>
+          <form action=\\"\\" method=\\"post\\" role=\\"form\\" class=\\"contactForm\\">
+            <div class=\\"form-row\\">
+              <div class=\\"form-group col-md-6\\">
+                <input type=\\"text\\" name=\\"name\\" class=\\"form-control\\" id=\\"name\\" placeholder=\\"Your Name\\" data-rule=\\"minlen:4\\" data-msg=\\"Please enter at least 4 chars\\" />
+                <div class=\\"validation\\"></div>
+              </div>
+              <div class=\\"form-group col-md-6\\">
+                <input type=\\"email\\" class=\\"form-control\\" name=\\"email\\" id=\\"email\\" placeholder=\\"Your Email\\" data-rule=\\"email\\" data-msg=\\"Please enter a valid email\\" />
+                <div class=\\"validation\\"></div>
+              </div>
+            </div>
+            <div class=\\"form-group\\">
+              <input type=\\"text\\" class=\\"form-control\\" name=\\"subject\\" id=\\"subject\\" placeholder=\\"Subject\\" data-rule=\\"minlen:4\\" data-msg=\\"Please enter at least 8 chars of subject\\" />
+              <div class=\\"validation\\"></div>
+            </div>
+            <div class=\\"form-group\\">
+              <textarea class=\\"form-control\\" name=\\"message\\" rows=\\"5\\" data-rule=\\"required\\" data-msg=\\"Please write something for us\\" placeholder=\\"Message\\"></textarea>
+              <div class=\\"validation\\"></div>
+            </div>
+            <div class=\\"text-center\\"><button type=\\"submit\\">Send Message</button></div>
+          </form>
+        </div>
+      -->
+
+      </div>
+    </section>
+    <!-- End Contactus Section -->
+
+  </main>
+  <!-- End Main Container -->
+
+  <!--==========================
+    Footer
+  ============================-->
+  <footer id=\\"footer\\">
+    <div class=\\"footer-top\\">
+      <div class=\\"container\\">
+        <div class=\\"row\\">
+
+          <div class=\\"col-lg-4 col-md-6 footer-info\\">
+            <!-- <h2><a href=\\"#intro\\" class=\\"scrollto\\"><img src=\\"img/QutrixLogo.png\\" alt=\\"cloudautom logo\\" title=\\"\\" width=\\"200px\\" height=\\"40px\\" style=\\"background:white\\"/></a></h2> -->
+             <h3>Qutrix Solution</h3>
+            <p>Qutrix emanated from Quality Matrix as we envision to redefine your product quality to greater heights with our creative minds at work and innovative products lined up for you.</p>
+          </div>
+
+          <div class=\\"col-lg-4 col-md-6 footer-links\\">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class=\\"ion-ios-arrow-right\\"></i> <a href=\\"#about\\">About us</a></li>
+              <li><i class=\\"ion-ios-arrow-right\\"></i> <a href=\\"#team\\">Team</a></li>
+              <li><i class=\\"ion-ios-arrow-right\\"></i> <a href=\\"#career\\">Career</a></li>
+              <li><i class=\\"ion-ios-arrow-right\\"></i> <a href=\\"#\\">Terms of service</a></li>
+              <li><i class=\\"ion-ios-arrow-right\\"></i> <a href=\\"#\\">Privacy policy</a></li>
+            </ul>
+          </div>
+
+          <div class=\\"col-lg-4 col-md-6 footer-contact\\">
+            <h4>Contact Us</h4>
+            <p>
+              Qutrix Solution Private Limited<br>
+              Synerge II Workspace,<br>
+              #362/7, 2nd Floor, 16th Main Rd,<br>
+              4th T Block East, Jayanagar,<br>
+              Bangalore - 560 041,<br>
+              KA, INDIA.<br>
+              <strong>Phone:</strong> +91 984 530 7360<br>
+              <strong>Email:</strong> info@qutrixsolution.com<br>
+            </p>
+
+            <div class=\\"social-links\\">
+              <a href=\\"https://www.linkedin.com/company/qutrix\\" class=\\"linkedin\\" target=\\"_blank\\"><i class=\\"fa fa-linkedin\\"></i></a>
+              <a href=\\"https://www.twitter.com/qutrixsolution\\" class=\\"twitter\\" target=\\"_blank\\"><i class=\\"fa fa-twitter\\"></i></a>
+              <a href=\\"https://www.facebook.com/qutrixsolution\\" target=\\"_blank\\" class=\\"facebook\\"><i class=\\"fa fa-facebook\\"></i></a>
+              <!-- <a href=\\"#\\" class=\\"instagram\\"><i class=\\"fa fa-instagram\\"></i></a> -->
+              <!-- <a href=\\"#\\" class=\\"google-plus\\" target=\\"_blank\\"><i class=\\"fa fa-google-plus\\"></i></a> -->
+            </div>
+
+          </div>
+
+          <!-- <div class=\\"col-lg-3 col-md-6 footer-newsletter\\">
+            <h4>Our Newsletter</h4>
+            <p>We value your time and privacy. Our newsletter describes the offerings of Qutrix. We have better business than spam and scam.</p>
+            <form action=\\"\\" method=\\"post\\">
+              <input type=\\"email\\" name=\\"email\\"><input type=\\"submit\\"  value=\\"Subscribe\\">
+            </form>
+          </div> -->
+
+        </div>
+      </div>
+    </div>
+
+    <div class=\\"container\\">
+      <div class=\\"copyright\\">
+        &copy; 2018-19 Qutrix Solution Private Limited. All Rights Reserved.
+      </div>
+
+    </div>
+
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src=\\"https://www.googletagmanager.com/gtag/js?id=UA-79964405-2\\"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-79964405-2');
+  </script>
+
+</footer>
+<!-- #footer -->
+
+  <a href=\\"#\\" class=\\"back-to-top\\"><i class=\\"fa fa-chevron-up\\"></i></a>
+
+  <!-- JavaScript Libraries -->
+  <script src=\\"lib/jquery/jquery.min.js\\"></script>
+  <script src=\\"lib/jquery/jquery-migrate.min.js\\"></script>
+  <script src=\\"lib/bootstrap/js/bootstrap.bundle.min.js\\"></script>
+  <script src=\\"lib/easing/easing.min.js\\"></script>
+  <script src=\\"lib/superfish/hoverIntent.js\\"></script>
+  <script src=\\"lib/superfish/superfish.min.js\\"></script>
+  <script src=\\"lib/wow/wow.min.js\\"></script>
+  <script src=\\"lib/waypoints/waypoints.min.js\\"></script>
+  <script src=\\"lib/counterup/counterup.min.js\\"></script>
+  <script src=\\"lib/owlcarousel/owl.carousel.min.js\\"></script>
+  <script src=\\"lib/isotope/isotope.pkgd.min.js\\"></script>
+  <script src=\\"lib/lightbox/js/lightbox.min.js\\"></script>
+  <script src=\\"lib/touchSwipe/jquery.touchSwipe.min.js\\"></script>
+  <!-- Contact Form JavaScript File -->
+  <script src=\\"contactform/contactform.js\\"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src=\\"js/main.js\\"></script>
+
+</body>
+</html>
+",
+    "censysMetadata": Object {
+      "description": "Apache httpd 2.4.18",
+      "manufacturer": "Apache",
+      "product": "httpd",
+      "version": "2.4.18",
+    },
+    "domain": Domain {
+      "ip": "52.74.149.117",
+      "name": "first_file_testdomain10",
+    },
+    "port": 443,
+    "service": "https",
+  },
+  Service {
+    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access /
+on this server.</p>
+</body></html>
+",
+    "censysMetadata": Object {
+      "description": "Apache httpd",
+      "manufacturer": "Apache",
+      "product": "httpd",
+    },
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain1",
+    },
+    "port": 443,
+    "service": "https",
+  },
+  Service {
+    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access /
+on this server.</p>
+</body></html>
+",
+    "censysMetadata": Object {
+      "description": "Apache httpd",
+      "manufacturer": "Apache",
+      "product": "httpd",
+    },
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain3",
+    },
+    "port": 443,
+    "service": "https",
+  },
+  Service {
+    "banner": "<!DOCTYPE HTML PUBLIC \\"-//W3C//DTD HTML 4.01//EN\\"\\"http://www.w3.org/TR/html4/strict.dtd\\">
+<HTML><HEAD><TITLE>Not Found</TITLE>
+<META HTTP-EQUIV=\\"Content-Type\\" Content=\\"text/html; charset=us-ascii\\"></HEAD>
+<BODY><h2>Not Found</h2>
+<hr><p>HTTP Error 404. The requested resource is not found.</p>
+</BODY></HTML>
+",
+    "censysMetadata": Object {
+      "description": "Microsoft HTTPAPI 2.0",
+      "manufacturer": "Microsoft",
+      "product": "HTTPAPI",
+      "version": "2.0",
+    },
+    "domain": Domain {
+      "ip": "156.249.159.119",
+      "name": "first_file_testdomain6",
+    },
+    "port": 443,
+    "service": "https",
+  },
+  Service {
+    "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
+    "censysMetadata": Object {
+      "description": "Dovecot",
+      "product": "Dovecot",
+    },
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain1",
+    },
+    "port": 143,
+    "service": "imap",
+  },
+  Service {
+    "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
+    "censysMetadata": Object {
+      "description": "Dovecot",
+      "product": "Dovecot",
+    },
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain3",
+    },
+    "port": 143,
+    "service": "imap",
+  },
+  Service {
+    "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain1",
+    },
+    "port": 993,
+    "service": "imaps",
+  },
+  Service {
+    "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain3",
+    },
+    "port": 993,
+    "service": "imaps",
+  },
+  Service {
+    "banner": null,
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "52.74.149.117",
+      "name": "first_file_testdomain10",
+    },
+    "port": 27017,
+    "service": "mongodb",
+  },
+  Service {
+    "banner": "+OK Dovecot ready.",
+    "censysMetadata": Object {
+      "description": "Dovecot",
+      "product": "Dovecot",
+    },
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain1",
+    },
+    "port": 110,
+    "service": "pop3",
+  },
+  Service {
+    "banner": "+OK Dovecot ready.",
+    "censysMetadata": Object {
+      "description": "Dovecot",
+      "product": "Dovecot",
+    },
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain3",
+    },
+    "port": 110,
+    "service": "pop3",
+  },
+  Service {
+    "banner": "+OK Dovecot ready.",
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain1",
+    },
+    "port": 995,
+    "service": "pop3s",
+  },
+  Service {
+    "banner": "+OK Dovecot ready.",
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain3",
+    },
+    "port": 995,
+    "service": "pop3s",
+  },
+  Service {
+    "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain1",
+    },
+    "port": 465,
+    "service": "smtp",
+  },
+  Service {
+    "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain1",
+    },
+    "port": 25,
+    "service": "smtp",
+  },
+  Service {
+    "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain1",
+    },
+    "port": 587,
+    "service": "smtp",
+  },
+  Service {
+    "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain3",
+    },
+    "port": 465,
+    "service": "smtp",
+  },
+  Service {
+    "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain3",
+    },
+    "port": 25,
+    "service": "smtp",
+  },
+  Service {
+    "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain3",
+    },
+    "port": 587,
+    "service": "smtp",
+  },
+  Service {
+    "banner": "SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.8",
+    "censysMetadata": Object {
+      "description": "OpenSSH 7.2p2",
+      "product": "OpenSSH",
+      "version": "7.2p2",
+    },
+    "domain": Domain {
+      "ip": "52.74.149.117",
+      "name": "first_file_testdomain10",
+    },
+    "port": 22,
+    "service": "ssh",
+  },
+  Service {
+    "banner": null,
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "85.24.146.152",
+      "name": "first_file_testdomain4",
     },
     "port": 5900,
     "service": "vnc",
