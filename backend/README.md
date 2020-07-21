@@ -12,7 +12,7 @@ docker run crossfeed-worker "findomain"
 To run the scheduler:
 
 ```bash
-docker-compose exec backend npx serverless invoke local -f scheduler && docker ps -a | head -n 2
+docker-compose exec scheduler npx serverless invoke local -f scheduler && docker ps -a | head -n 2
 docker logs happy_lovelace
 ```
 

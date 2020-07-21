@@ -25,6 +25,10 @@ export const handler: Handler = async (event) => {
   const organizations = await Organization.find();
   for (const scan of scans) {
     for (const organization of organizations) {
+      if (!SCAN_SCHEMA[scan.name]) {
+        console.error('Invalid scan name ', scan.name);
+        continue;
+      }
       const { type, isPassive } = SCAN_SCHEMA[scan.name];
       // Don't run non-passive scans on passive organizations.
       if (organization.isPassive && !isPassive) {

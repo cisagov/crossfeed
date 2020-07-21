@@ -2,9 +2,8 @@ import loginGov from './login-gov';
 import { User, connectToDatabase } from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { wrapHandler } from './helpers';
 
-interface UserToken {
+export interface UserToken {
   email: string;
   id: string;
   userType: 'standard' | 'globalView' | 'globalAdmin';
@@ -15,7 +14,7 @@ interface UserToken {
 }
 
 /** Returns redirect url to initiate login.gov OIDC flow */
-export const login = wrapHandler(async (event) => {
+export const login = async (event, context) => {
   const { url, state, nonce } = await loginGov.login();
   return {
     statusCode: 200,
@@ -25,14 +24,15 @@ export const login = wrapHandler(async (event) => {
       nonce: nonce
     })
   };
-});
+};
 
 /** Processes login.gov OIDC callback and returns user token */
-export const callback = wrapHandler(async (event) => {
+export const callback = async (event, context) => {
   let userInfo;
   try {
-    userInfo = await loginGov.callback(JSON.parse(event.body!));
+    userInfo = await loginGov.callback(JSON.parse(event.body));
   } catch (e) {
+    console.error(e);
     return {
       statusCode: 500,
       body: ''
@@ -71,7 +71,7 @@ export const callback = wrapHandler(async (event) => {
   }
 
   const tokenBody: UserToken = {
-    id: userInfo.sub,
+    id: user.id,
     email: userInfo.email,
     userType: user.userType,
     roles: user.roles
@@ -96,39 +96,19 @@ export const callback = wrapHandler(async (event) => {
       user: user
     })
   };
-});
-
-// Policy helper function
-const generatePolicy = (userId, effect, resource, context) => {
-  return {
-    principalId: userId,
-    policyDocument: {
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Action: 'execute-api:Invoke',
-          Effect: effect,
-          Resource: resource
-        }
-      ]
-    },
-    context
-  };
 };
 
 /** Confirms that a user is authorized */
-export const authorize = async (event, context, callback) => {
+export const authorize = async (event) => {
   try {
     const parsed: UserToken = jwt.verify(
       event.authorizationToken,
       process.env.JWT_SECRET!
     ) as UserToken;
-    return callback(
-      null,
-      generatePolicy(parsed.id, 'Allow', event.methodArn, parsed)
-    );
+    return parsed;
   } catch (e) {
-    return callback('Unauthorized');
+    const parsed = { id: 'cisa:crossfeed:anonymous' };
+    return parsed;
   }
 };
 

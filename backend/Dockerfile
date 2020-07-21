@@ -8,4 +8,6 @@ RUN npm ci
 
 COPY . .
 
-CMD [ "npx", "serverless", "offline", "--host", "0.0.0.0", "--httpPort", "3000" ]
+ENV IS_OFFLINE "true"
+
+CMD ["npx", "ts-node-dev", "src/api-dev.ts"]
