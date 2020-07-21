@@ -60,7 +60,8 @@
     "lint": "eslint '**/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint '**/*.{ts,tsx,js,jsx}' --fix",
     "preinstall": "npx npm-force-resolutions",
-    "codegen": "ts-node src/tools/generate-censys-types.ts"
+    "codegen": "ts-node src/tools/generate-censys-types.ts",
+    "worker": "docker build -t crossfeed-worker -f Dockerfile.worker . && docker tag crossfeed-worker:latest 563873274798.dkr.ecr.us-east-1.amazonaws.com/crossfeed-staging-worker:latest && docker push 563873274798.dkr.ecr.us-east-1.amazonaws.com/crossfeed-staging-worker:latest"
   },
   "author": "",
   "license": "ISC"

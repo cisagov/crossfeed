@@ -35,7 +35,6 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
     // readInterface lets us stream the JSON file line-by-line
     readInterface.on('line', function (line) {
       const item: CensysIpv4Data = JSON.parse(line);
-      item.ip === "1.1.1.1" && console.log(allDomains.map(e => e.ip));
       const matchingDomains = allDomains.filter((e) => e.ip === item.ip);
       for (const matchingDomain of matchingDomains) {
         domains.push(
@@ -69,12 +68,16 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
   });
   console.log(`i: ${i} of ${numFiles}: got ${domains.length} domains and ${services.length} services`);
 
-  await saveDomainsToDb(domains);
-  await saveServicesToDb(services);
+  // await saveDomainsToDb(domains);
+  // await saveServicesToDb(services);
 }
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { organizationId, organizationName } = commandOptions;
+  const { chunkNumber, numChunks } = commandOptions;
+
+  if (chunkNumber === undefined || numChunks === undefined) {
+    throw new Error("Chunks not specified.");
+  }
 
   const {
     data: { results }
@@ -84,22 +87,25 @@ export const handler = async (commandOptions: CommandOptions) => {
     data: { files }
   } = await axios.get(results.latest.details_url, { auth });
 
-  const allDomains = await getAllDomains();
-  // const allDomains = [
-  //   plainToClass(Domain, {
-  //     name: 'first_file_testdomain1',
-  //     ip: '104.84.119.215'
-  //   })
-  // ];
+  // const allDomains = await getAllDomains();
+  const allDomains = [
+    plainToClass(Domain, {
+      name: 'first_file_testdomain1',
+      ip: '104.84.119.215'
+    })
+  ];
 
   const queue = new PQueue({ concurrency: 10 });
 
-  let i = 0;
   const numFiles = Object.keys(files).length;
+  const fileNames = Object.keys(files).sort();
   const jobs: Promise<void>[] = [];
-  for (const fileName in files) {
-    i++;
-    jobs.push(queue.add(() => downloadPath(files[fileName].download_path, allDomains, i, numFiles)));
+  let startIndex = Math.floor(1.0 * chunkNumber / numChunks * numFiles);
+  let endIndex = Math.floor(1.0 * (chunkNumber + 1) / numChunks * numFiles) - 1;
+  for (let i = startIndex; i <= endIndex; i++) {
+    let idx = i;
+    let fileName = fileNames[idx];
+    jobs.push(queue.add(() => downloadPath(files[fileName].download_path, allDomains, idx, numFiles)));
   }
   console.log(`censysipv4: scheduled all tasks`);
   await Promise.all(jobs);

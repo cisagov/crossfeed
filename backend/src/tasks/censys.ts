@@ -50,7 +50,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   console.log('Running censys on organization', organizationName);
 
-  const rootDomains = await getRootDomains(organizationId);
+  const rootDomains = await getRootDomains(organizationId!);
   const foundDomains = new Set<{
     name: string;
     organization: { id: string };
@@ -68,7 +68,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           if (name.endsWith(rootDomain)) {
             foundDomains.add({
               name: name.replace('*.', ''),
-              organization: { id: organizationId }
+              organization: { id: organizationId! }
             });
           }
         }

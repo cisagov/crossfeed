@@ -5,134 +5,141 @@ import ECSClient from './ecs-client';
 import { SCAN_SCHEMA } from '../api/scans';
 import { In } from 'typeorm';
 
-export const handler: Handler = async (event) => {
-  let args = {};
-  if (process.env.IS_OFFLINE || process.env.IS_LOCAL) {
-    args = {
-      apiVersion: '2015-03-31',
-      endpoint: 'http://backend:3002',
-      credentials: new Credentials({ accessKeyId: '', secretAccessKey: '' })
+const launchScanTask = async ({ organization = undefined, scan, chunkNumber, numChunks }: { organization?: Organization, scan: Scan, chunkNumber?: number, numChunks?: number }) => {
+  const { type, global } = SCAN_SCHEMA[scan.name];
+  const ecsClient = new ECSClient();
+  const scanTask = await ScanTask.save(
+    ScanTask.create({
+      organization: global ? undefined: organization,
+      scan,
+      type,
+      status: 'created'
+    })
+  );
+  try {
+    const commandOptions = {
+      organizationId: organization?.id,
+      organizationName: organization?.name,
+      scanId: scan.id,
+      scanName: scan.name,
+      scanTaskId: scanTask.id,
+      numChunks,
+      chunkNumber
     };
+    if (type === 'fargate') {
+      const result = await ecsClient.runCommand(commandOptions);
+      if (result.tasks!.length === 0) {
+        console.error(result.failures);
+        throw new Error(
+          `Failed to start fargate task for scan ${scan.name} -- got ${
+            result.failures!.length
+          } failures.`
+        );
+      }
+      console.log(`Successfully invoked ${scan.name} scan with fargate.`);
+    } else {
+      throw new Error('Invalid type ' + type);
+    }
+    scanTask.input = JSON.stringify(commandOptions);
+    scanTask.status = 'requested';
+    scanTask.requestedAt = new Date();
+  } catch (error) {
+    console.error(`Error invoking ${scan.name} scan.`);
+    console.error(error);
+    scanTask.output = JSON.stringify(error);
+    scanTask.status = 'failed';
+  } finally {
+    await scanTask.save();
+  }
+}
+
+const shouldRunScan = async ({ organization, scan }: { organization?: Organization, scan: Scan }) => {
+  const { isPassive, global } = SCAN_SCHEMA[scan.name];
+  // Don't run non-passive scans on passive organizations.
+  if (organization?.isPassive && !isPassive) {
+    return false;
+  }
+  const lastRunningScanTask = await ScanTask.findOne(
+    {
+      organization: global ? undefined: { id: organization?.id },
+      scan: { id: scan.id },
+      status: In(['created', 'requested', 'started'])
+    },
+    {
+      order: {
+        createdAt: 'DESC'
+      }
+    }
+  );
+  const lastFinishedScanTask = await ScanTask.findOne(
+    {
+      organization: global ? undefined: { id: organization?.id },
+      scan: { id: scan.id },
+      status: 'finished'
+    },
+    {
+      order: {
+        finishedAt: 'DESC'
+      }
+    }
+  );
+  if (lastRunningScanTask) {
+    // Don't run another task if the latest task is already running.
+    if (
+      !lastFinishedScanTask ||
+      lastRunningScanTask.createdAt > lastFinishedScanTask.createdAt
+    ) {
+      return false;
+    }
+  }
+  if (
+    lastFinishedScanTask &&
+    lastFinishedScanTask.finishedAt &&
+    lastFinishedScanTask.finishedAt.getTime() >=
+      new Date().getTime() - 1000 * scan.frequency
+  ) {
+    return false;
   }
 
-  const lambda = new Lambda(args);
+  return true;
+}
 
-  const ecsClient = new ECSClient();
+export const handler: Handler = async (event) => {
 
   await connectToDatabase();
 
   const scans = await Scan.find();
   const organizations = await Organization.find();
   for (const scan of scans) {
-    for (const organization of organizations) {
-      const { type, isPassive, global } = SCAN_SCHEMA[scan.name];
-      if (!SCAN_SCHEMA[scan.name]) {
-        console.error('Invalid scan name ', scan.name);
+    if (!SCAN_SCHEMA[scan.name]) {
+      console.error('Invalid scan name ', scan.name);
+      continue;
+    }
+    const { global, numChunks } = SCAN_SCHEMA[scan.name];
+
+    if (global) {
+      // Global scans are not associated with an organization.
+      if (typeof event !== 'string') { // Skip these checks (always run the scan) if invoking scans directly from the command line.
         continue;
-      }
-      // Don't run non-passive scans on passive organizations.
-      if (organization.isPassive && !isPassive) {
-        continue;
-      }
-      const lastRunningScanTask = await ScanTask.findOne(
-        {
-          organization: { id: organization.id },
-          scan: { id: scan.id },
-          status: In(['created', 'requested', 'started'])
-        },
-        {
-          order: {
-            createdAt: 'DESC'
-          }
-        }
-      );
-      const lastFinishedScanTask = await ScanTask.findOne(
-        {
-          organization: { id: organization.id },
-          scan: { id: scan.id },
-          status: 'finished'
-        },
-        {
-          order: {
-            finishedAt: 'DESC'
-          }
-        }
-      );
-      if (lastRunningScanTask) {
-        // Don't run another task if the latest task is already running.
-        if (
-          !lastFinishedScanTask ||
-          lastRunningScanTask.createdAt > lastFinishedScanTask.createdAt
-        ) {
+        if (!(await shouldRunScan({ scan }))) {
           continue;
         }
       }
-      if (
-        lastFinishedScanTask &&
-        lastFinishedScanTask.finishedAt &&
-        lastFinishedScanTask.finishedAt.getTime() >=
-          new Date().getTime() - 1000 * scan.frequency
-      ) {
-        continue;
-      }
-      const scanTask = await ScanTask.save(
-        ScanTask.create({
-          organization,
-          scan,
-          type,
-          status: 'created'
-        })
-      );
-      try {
-        const commandOptions = {
-          organizationId: organization.id,
-          organizationName: organization.name,
-          scanId: scan.id,
-          scanName: scan.name,
-          scanTaskId: scanTask.id
-        };
-        if (type === 'fargate') {
-          const result = await ecsClient.runCommand(commandOptions);
-          if (result.tasks!.length === 0) {
-            console.error(result.failures);
-            throw new Error(
-              `Failed to start fargate task for scan ${scan.name} -- got ${
-                result.failures!.length
-              } failures.`
-            );
-          }
-          console.log(result.tasks);
-          console.log(`Successfully invoked ${scan.name} scan with fargate.`);
-        } else if (type === 'lambda') {
-          // Asynchronously invoke the function
-          await lambda
-            .invoke({
-              FunctionName: process.env.AWS_LAMBDA_FUNCTION_NAME!.replace(
-                'scheduler',
-                scan.name
-              ),
-              Payload: JSON.stringify(commandOptions),
-              InvocationType: 'Event'
-            })
-            .promise();
-          console.log(`Successfully invoked ${scan.name} scan with lambda.`);
-        } else {
-          throw new Error('Invalid type ' + type);
+      if (numChunks) {
+        for (let chunkNumber = 0; chunkNumber < numChunks; chunkNumber++) {
+          await launchScanTask({ scan, chunkNumber, numChunks: numChunks });
         }
-        scanTask.input = JSON.stringify(commandOptions);
-        scanTask.status = 'requested';
-        scanTask.requestedAt = new Date();
-      } catch (error) {
-        console.error(`Error invoking ${scan.name} scan.`);
-        console.error(error);
-        scanTask.output = JSON.stringify(error);
-        scanTask.status = 'failed';
-      } finally {
-        await scanTask.save();
+      } else {
+        await launchScanTask({ scan });
       }
-      if (global) {
-        // Run global scans only once.
-        break;
+    } else {
+      for (const organization of organizations) {
+        if (typeof event !== 'string') { // Skip these checks (always run the scan) if invoking scans directly from the command line.
+          if (!(await shouldRunScan({ organization, scan }))) {
+            continue;
+          }
+        }
+        await launchScanTask({ organization, scan });
       }
     }
     scan.lastRun = new Date();

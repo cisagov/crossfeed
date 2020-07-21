@@ -11,7 +11,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   console.log('Running wappalyzer on organization', organizationName);
 
-  const liveWebsites = await getLiveWebsites(organizationId);
+  const liveWebsites = await getLiveWebsites(organizationId!);
   const domains: Domain[] = [];
   for (const domain of liveWebsites) {
     const url =

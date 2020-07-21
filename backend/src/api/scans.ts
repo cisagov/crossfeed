@@ -18,6 +18,10 @@ interface ScanSchema {
     isPassive: boolean;
     // Whether scan is global (should be run once for all organizations / domains).
     global: boolean;
+
+    cpu?: string;
+    memory?: string;
+    numChunks?: number;
   };
 }
 
@@ -50,7 +54,10 @@ export const SCAN_SCHEMA: ScanSchema = {
   censysIpv4: {
     type: 'fargate',
     isPassive: true,
-    global: true
+    global: true,
+    cpu: "1024",
+    memory: "4096",
+    numChunks: 20
   }
 };
 

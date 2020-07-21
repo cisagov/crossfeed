@@ -1,11 +1,14 @@
 import { ECS } from 'aws-sdk';
+import { SCAN_SCHEMA } from '../api/scans';
 
 export interface CommandOptions {
-  organizationId: string;
-  organizationName: string;
+  organizationId?: string;
+  organizationName?: string;
   scanId: string;
   scanName: string;
   scanTaskId: string;
+  chunkNumber?: number;
+  numChunks?: number;
 }
 
 const toSnakeCase = (input) => input.replace(/ /g, '-');
@@ -23,11 +26,12 @@ class ECSClient {
   constructor() {
     this.isLocal =
       process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false;
+    this.isLocal = false;
     if (this.isLocal) {
       const Docker = require('dockerode');
       this.docker = new Docker();
     } else {
-      this.ecs = new ECS();
+      this.ecs = new ECS({ region: 'us-east-1' });
     }
   }
 
@@ -40,7 +44,9 @@ class ECSClient {
       scanId,
       scanName,
       organizationId,
-      organizationName
+      organizationName,
+      numChunks,
+      chunkNumber
     } = commandOptions;
     if (this.isLocal) {
       try {
@@ -82,37 +88,56 @@ class ECSClient {
         };
       }
     }
+    const { cpu, memory } = SCAN_SCHEMA[scanName];
+    const tags =  [
+      {
+        key: 'scanId',
+        value: scanId
+      },
+      {
+        key: 'scanName',
+        value: scanName
+      }
+    ];
+    if (organizationName && organizationId) {
+      tags.push({
+        key: 'organizationId',
+        value: organizationId
+      });
+      tags.push({
+        key: 'organizationName',
+        value: organizationName
+      });
+    }
+    if (numChunks !== undefined && chunkNumber !== undefined) {
+      tags.push({
+        key: 'numChunks',
+        value: String(numChunks)
+      });
+      tags.push(      {
+        key: 'chunkNumber',
+        value: String(chunkNumber)
+      });
+    }
     // TODO: retrieve these values from SSM.
     return this.ecs!.runTask({
       cluster: 'crossfeed-staging-worker', // aws_ecs_cluster.worker.name
       taskDefinition: 'crossfeed-staging-worker', // aws_ecs_task_definition.worker.name
       networkConfiguration: {
         awsvpcConfiguration: {
-          securityGroups: ['sg-088b4691e1cafd8c0'], // lambda sg id
-          subnets: ['subnet-005633f93180b0beb'] // ['subnet-005633f93180b0beb'] // // subnet id
+          assignPublicIp: 'ENABLED',
+          securityGroups: ['sg-05c9168f323c60ade'], // lambda sg id
+          subnets: ['subnet-02b249dd78cef0faf'] // ['subnet-005633f93180b0beb'] // // subnet id
         }
       },
       platformVersion: '1.4.0',
       launchType: 'FARGATE',
-      tags: [
-        {
-          key: 'scanId',
-          value: scanId
-        },
-        {
-          key: 'scanName',
-          value: scanName
-        },
-        {
-          key: 'organizationId',
-          value: organizationId
-        },
-        {
-          key: 'organizationName',
-          value: organizationName
-        }
-      ],
+      tags,
       overrides: {
+        // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
+        // https://stormforger.com/blog/aws-fargate-network-performance/
+        cpu,
+        memory,
         containerOverrides: [
           {
             name: 'main', // from task definition
