@@ -14,3 +14,6 @@ scheduler:
 
 syncdb:
   handler: src/tasks/syncdb.handler
+
+makeGlobalAdmin:
+  handler: src/tasks/makeGlobalAdmin.handler
