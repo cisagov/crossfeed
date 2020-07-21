@@ -14,30 +14,43 @@ interface ScanSchema {
   [name: string]: {
     // Scan type
     type: 'lambda' | 'fargate';
+    // Whether scan is passive (not allowed to hit the domain).
     isPassive: boolean;
+    // Whether scan is global (should be run once for all organizations / domains).
+    global: boolean;
   };
 }
 
 export const SCAN_SCHEMA: ScanSchema = {
   censys: {
     type: 'fargate',
-    isPassive: true
+    isPassive: true,
+    global: false
   },
   amass: {
     type: 'fargate',
-    isPassive: false
+    isPassive: false,
+    global: false
   },
   findomain: {
     type: 'fargate',
-    isPassive: true
+    isPassive: true,
+    global: false
   },
   portscanner: {
     type: 'fargate',
-    isPassive: false
+    isPassive: false,
+    global: false
   },
   wappalyzer: {
     type: 'fargate',
-    isPassive: false
+    isPassive: false,
+    global: false
+  },
+  censysIpv4: {
+    type: 'fargate',
+    isPassive: true,
+    global: true
   }
 };
 

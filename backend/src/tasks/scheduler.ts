@@ -25,7 +25,7 @@ export const handler: Handler = async (event) => {
   const organizations = await Organization.find();
   for (const scan of scans) {
     for (const organization of organizations) {
-      const { type, isPassive } = SCAN_SCHEMA[scan.name];
+      const { type, isPassive, global } = SCAN_SCHEMA[scan.name];
       // Don't run non-passive scans on passive organizations.
       if (organization.isPassive && !isPassive) {
         continue;
@@ -125,6 +125,10 @@ export const handler: Handler = async (event) => {
         scanTask.status = 'failed';
       } finally {
         await scanTask.save();
+      }
+      if (global) {
+        // Run global scans only once.
+        break;
       }
     }
     scan.lastRun = new Date();
