@@ -88,7 +88,7 @@ class ECSClient {
       taskDefinition: 'crossfeed-staging-worker', // aws_ecs_task_definition.worker.name
       networkConfiguration: {
         awsvpcConfiguration: {
-          assignPublicIp: "ENABLED",
+          assignPublicIp: 'ENABLED',
           securityGroups: ['sg-05c9168f323c60ade'], // output.lambda_sg_id
           subnets: ['subnet-02b249dd78cef0faf'] // output.lambda_subnet_public_id
         }
