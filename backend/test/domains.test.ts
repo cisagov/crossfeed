@@ -28,7 +28,7 @@ describe('domains', () => {
         .post('/domain/search')
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             roles: [
               {
                 org: organization.id,
@@ -56,7 +56,7 @@ describe('domains', () => {
         .post('/domain/search')
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalView'
           })
         )
@@ -78,7 +78,7 @@ describe('domains', () => {
         .get(`/domain/${domain.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             roles: [
               {
                 org: organization.id,
@@ -99,7 +99,7 @@ describe('domains', () => {
         .get(`/domain/${domain.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             roles: [
               {
                 org: organization.id,
@@ -120,7 +120,7 @@ describe('domains', () => {
         .get(`/domain/${domain.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalView'
           })
         )

@@ -24,7 +24,7 @@ describe('scan', () => {
         .get('/scans')
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -47,7 +47,7 @@ describe('scan', () => {
         .get('/scans')
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalView'
           })
         )
@@ -63,7 +63,7 @@ describe('scan', () => {
         .post('/scans')
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -86,7 +86,7 @@ describe('scan', () => {
         .post('/scans')
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalView'
           })
         )
@@ -113,7 +113,7 @@ describe('scan', () => {
         .put(`/scans/${scan.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -141,7 +141,7 @@ describe('scan', () => {
         .put(`/scans/${scan.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalView'
           })
         )
@@ -165,7 +165,7 @@ describe('scan', () => {
         .del(`/scans/${scan.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -183,7 +183,7 @@ describe('scan', () => {
         .del(`/scans/${scan.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalView'
           })
         )

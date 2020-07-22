@@ -24,7 +24,7 @@ describe('user', () => {
         .post('/users')
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             roles: [
               {
                 org: organization.id,
@@ -56,7 +56,7 @@ describe('user', () => {
         .get('/users/me')
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             id: user.id
           })
         )
@@ -75,7 +75,7 @@ describe('user', () => {
         .get('/users')
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalView'
           })
         )
@@ -91,7 +91,7 @@ describe('user', () => {
       }).save();
       const response = await request(app)
         .get('/users')
-        .set('Authorization', await createUserToken({}))
+        .set('Authorization', createUserToken({}))
         .expect(403);
       expect(response.body).toEqual({});
     });
@@ -107,7 +107,7 @@ describe('user', () => {
         .del(`/users/${user.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -124,7 +124,7 @@ describe('user', () => {
         .del(`/users/${user.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalView'
           })
         )
@@ -139,7 +139,7 @@ describe('user', () => {
       }).save();
       const response = await request(app)
         .del(`/users/${user.id}`)
-        .set('Authorization', await createUserToken({}))
+        .set('Authorization', createUserToken({}))
         .expect(403);
       expect(response.body).toEqual({});
     });
@@ -153,7 +153,7 @@ describe('user', () => {
         .del(`/users/${user.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             id: user.id
           })
         )
@@ -178,7 +178,7 @@ describe('user', () => {
         .put(`/users/${user.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -199,7 +199,7 @@ describe('user', () => {
         .put(`/users/${user.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             userType: 'globalView'
           })
         )
@@ -210,7 +210,7 @@ describe('user', () => {
     it('update by regular user should not work', async () => {
       const response = await request(app)
         .put(`/users/${user.id}`)
-        .set('Authorization', await createUserToken({}))
+        .set('Authorization', createUserToken({}))
         .send({ firstName, lastName, organization: orgId })
         .expect(403);
       expect(response.body).toEqual({});
@@ -220,7 +220,7 @@ describe('user', () => {
         .put(`/users/${user.id}`)
         .set(
           'Authorization',
-          await createUserToken({
+          createUserToken({
             id: user.id
           })
         )
