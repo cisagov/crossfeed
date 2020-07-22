@@ -14,7 +14,7 @@ describe('organizations', () => {
         .post('/organizations/')
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -40,7 +40,7 @@ describe('organizations', () => {
         .post('/organizations/')
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -56,7 +56,7 @@ describe('organizations', () => {
         .post('/organizations/')
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -76,7 +76,7 @@ describe('organizations', () => {
         .post('/organizations/')
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalView'
           })
         )
@@ -108,7 +108,7 @@ describe('organizations', () => {
         .put(`/organizations/${organization.id}`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -142,7 +142,7 @@ describe('organizations', () => {
         .put(`/organizations/${organization.id}`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalView'
           })
         )
@@ -169,7 +169,7 @@ describe('organizations', () => {
         .delete(`/organizations/${organization.id}`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -187,7 +187,7 @@ describe('organizations', () => {
         .delete(`/organizations/${organization.id}`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalView'
           })
         )
@@ -207,7 +207,7 @@ describe('organizations', () => {
         .get(`/organizations`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalView'
           })
         )
@@ -232,7 +232,7 @@ describe('organizations', () => {
         .get(`/organizations`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             roles: [
               {
                 org: organization.id,
@@ -257,7 +257,7 @@ describe('organizations', () => {
       }).save();
       const response = await request(app)
         .get(`/organizations/public`)
-        .set('Authorization', createUserToken({}))
+        .set('Authorization', await createUserToken({}))
         .expect(200);
       expect(response.body.length).toBeGreaterThanOrEqual(1);
       expect(
@@ -291,7 +291,7 @@ describe('organizations', () => {
         .get(`/organizations/${organization.id}`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalView'
           })
         )
@@ -309,7 +309,7 @@ describe('organizations', () => {
         .get(`/organizations/${organization.id}`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             roles: [
               {
                 org: organization.id,
@@ -338,7 +338,7 @@ describe('organizations', () => {
         .get(`/organizations/${organization2.id}`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             roles: [
               {
                 org: organization.id,
@@ -361,7 +361,7 @@ describe('organizations', () => {
         .get(`/organizations/${organization.id}`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             roles: [
               {
                 org: organization.id,
@@ -391,7 +391,7 @@ describe('organizations', () => {
         .post(`/organizations/${organization.id}/roles/${role.id}/approve`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -414,7 +414,7 @@ describe('organizations', () => {
         .post(`/organizations/${organization.id}/roles/${role.id}/approve`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalView'
           })
         )
@@ -437,7 +437,7 @@ describe('organizations', () => {
         .post(`/organizations/${organization.id}/roles/${role.id}/approve`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             roles: [
               {
                 org: organization.id,
@@ -465,7 +465,7 @@ describe('organizations', () => {
         .post(`/organizations/${organization.id}/roles/${role.id}/approve`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             roles: [
               {
                 org: organization.id,
@@ -495,7 +495,7 @@ describe('organizations', () => {
         .post(`/organizations/${organization.id}/roles/${role.id}/remove`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalAdmin'
           })
         )
@@ -518,7 +518,7 @@ describe('organizations', () => {
         .post(`/organizations/${organization.id}/roles/${role.id}/remove`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             userType: 'globalView'
           })
         )
@@ -541,7 +541,7 @@ describe('organizations', () => {
         .post(`/organizations/${organization.id}/roles/${role.id}/remove`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             roles: [
               {
                 org: organization.id,
@@ -569,7 +569,7 @@ describe('organizations', () => {
         .post(`/organizations/${organization.id}/roles/${role.id}/remove`)
         .set(
           'Authorization',
-          createUserToken({
+          await createUserToken({
             roles: [
               {
                 org: organization.id,
