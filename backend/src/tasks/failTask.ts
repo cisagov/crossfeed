@@ -5,9 +5,7 @@ export const handler: Handler = async (event) => {
   const connection = await connectToDatabase(true);
   console.log(event);
   if (event.email) {
-    const scanTask = await ScanTask.findOne({
-      id: event.id
-    });
+    const scanTask = await ScanTask.findOne(event.id);
     if (scanTask) {
       scanTask.status = 'failed';
       scanTask.output = 'Manually stopped at ' + new Date();
