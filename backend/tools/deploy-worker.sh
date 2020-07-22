@@ -4,7 +4,9 @@
 
 set -e
 
+AWS_ECR_DOMAIN=563873274798.dkr.ecr.us-east-1.amazonaws.com
+
 docker build -t crossfeed-worker -f Dockerfile.worker .
-$(aws ecr get-login --no-include-email --region us-east-1)
-docker tag crossfeed-worker:latest 563873274798.dkr.ecr.us-east-1.amazonaws.com/crossfeed-staging-worker:latest
-docker push 563873274798.dkr.ecr.us-east-1.amazonaws.com/crossfeed-staging-worker:latest
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_ECR_DOMAIN
+docker tag crossfeed-worker:latest $AWS_ECR_DOMAIN/crossfeed-staging-worker:latest
+docker push $AWS_ECR_DOMAIN/crossfeed-staging-worker:latest
