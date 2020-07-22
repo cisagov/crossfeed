@@ -17,3 +17,6 @@ syncdb:
 
 makeGlobalAdmin:
   handler: src/tasks/makeGlobalAdmin.handler
+
+failTask:
+  handler: src/tasks/failTask.handler
