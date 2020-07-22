@@ -30,6 +30,7 @@ provider:
     - Effect: Allow
       Action:
         - ecs:RunTask
+        - iam:PassRole
       Resource: '*'
 
 functions:
