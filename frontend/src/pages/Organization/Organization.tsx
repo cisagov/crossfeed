@@ -8,7 +8,14 @@ import { Column } from 'react-table';
 import { Table } from 'components';
 import { OrganizationForm } from 'components/OrganizationForm';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { PrimaryNav, Header } from '@trussworks/react-uswds';
+import {
+  PrimaryNav,
+  Header,
+  Label,
+  TextInput,
+  Button,
+  Dropdown
+} from '@trussworks/react-uswds';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
@@ -23,6 +30,18 @@ export const Organization: React.FC = () => {
   const [currentView, setCurrentView] = useState<number>(0);
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
+  const [newUserValues, setNewUserValues] = useState<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    organization?: OrganizationType;
+    role: string;
+  }>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    role: ''
+  });
 
   const dateAccessor = (date?: string) => {
     return !date || new Date(date).getTime() === new Date(0).getTime()
@@ -48,7 +67,12 @@ export const Organization: React.FC = () => {
     },
     {
       Header: 'Status',
-      accessor: ({ approved }) => (approved ? 'Member' : 'Pending approval'),
+      accessor: ({ approved, role }) =>
+        approved
+          ? role === 'admin'
+            ? 'Administrator'
+            : 'Member'
+          : 'Pending approval',
       width: 50,
       minWidth: 50,
       id: 'approved',
@@ -203,6 +227,43 @@ export const Organization: React.FC = () => {
     fetchOrganization();
   }, [fetchOrganization]);
 
+  const onInviteUserSubmit: React.FormEventHandler = async e => {
+    e.preventDefault();
+    try {
+      console.log(newUserValues.role);
+      let body = {
+        firstName: newUserValues.firstName,
+        lastName: newUserValues.lastName,
+        email: newUserValues.email,
+        organization: organization?.id,
+        organizationAdmin: newUserValues.role === 'admin'
+      };
+      const user = await apiPost('/users/', {
+        body
+      });
+      setUserRoles(userRoles.concat(user));
+    } catch (e) {
+      setErrors({
+        global:
+          e.status === 422
+            ? 'Error when submitting user entry.'
+            : e.message ?? e.toString()
+      });
+      console.log(e);
+    }
+  };
+
+  const onInviteUserTextChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLSelectElement
+  > = e => onInviteUserChange(e.target.name, e.target.value);
+
+  const onInviteUserChange = (name: string, value: any) => {
+    setNewUserValues(values => ({
+      ...values,
+      [name]: value
+    }));
+  };
+
   if (!organization) return <div></div>;
 
   const views = [
@@ -244,10 +305,8 @@ export const Organization: React.FC = () => {
       <h1>Organization Users</h1>
       <Table<Role> columns={userRoleColumns} data={userRoles} />
       <h2>Invite a user</h2>
-      {/* <form onSubmit={onSubmit} className={classes.form}>
-        {errors.global && (
-          <p className={classes.error}>{errors.global}</p>
-        )}
+      <form onSubmit={onInviteUserSubmit} className={classes.form}>
+        {errors.global && <p className={classes.error}>{errors.global}</p>}
         <Label htmlFor="firstName">First Name</Label>
         <TextInput
           required
@@ -255,8 +314,8 @@ export const Organization: React.FC = () => {
           name="firstName"
           className={classes.textField}
           type="text"
-          value={values.firstName}
-          onChange={onTextChange}
+          value={newUserValues.firstName}
+          onChange={onInviteUserTextChange}
         />
         <Label htmlFor="lastName">Last Name</Label>
         <TextInput
@@ -265,8 +324,8 @@ export const Organization: React.FC = () => {
           name="lastName"
           className={classes.textField}
           type="text"
-          value={values.lastName}
-          onChange={onTextChange}
+          value={newUserValues.lastName}
+          onChange={onInviteUserTextChange}
         />
         <Label htmlFor="email">Email</Label>
         <TextInput
@@ -275,22 +334,28 @@ export const Organization: React.FC = () => {
           name="email"
           className={classes.textField}
           type="text"
-          value={values.email}
-          onChange={onTextChange}
+          value={newUserValues.email}
+          onChange={onInviteUserTextChange}
         />
-        <Label htmlFor="role">Role</Label>
-        <TextInput
+        <Label htmlFor="role">Organization Role</Label>
+        <Dropdown
           required
           id="role"
           name="role"
           className={classes.textField}
-          type="text"
-          value={values.role}
-          onChange={onTextChange}
-        />
+          onChange={onInviteUserTextChange}
+          value={newUserValues.role}
+        >
+          <option key="standard" value="standard">
+            Standard
+          </option>
+          <option key="admin" value="admin">
+            Administrator
+          </option>
+        </Dropdown>
         <br></br>
         <Button type="submit">Invite User</Button>
-      </form> */}
+      </form>
     </>,
     <>
       <h1>Organization Scan Tasks</h1>
@@ -311,64 +376,56 @@ export const Organization: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.inner}>
-        <>
-          <div className={classes.header}>
-            <div className={classes.headerDetails}>
-              <Header>
-                <div className="usa-nav-container">
-                  <div className="usa-navbar">
-                    <h1>{organization.name}</h1>
-                  </div>
-                  <PrimaryNav
-                    items={[
-                      <a
-                        key="one"
-                        href="#"
-                        onClick={() => {
-                          setCurrentView(0);
-                        }}
-                        className="usa-nav__link"
-                      >
-                        <span>Overview</span>
-                      </a>,
-                      <a
-                        key="two"
-                        href="#"
-                        onClick={() => {
-                          setCurrentView(1);
-                        }}
-                      >
-                        <span>Manage Users</span>
-                      </a>,
-                      <a
-                        key="three"
-                        href="#"
-                        onClick={() => {
-                          setCurrentView(2);
-                        }}
-                      >
-                        <span>Manage Scans</span>
-                      </a>,
-                      <a
-                        key="four"
-                        href="#"
-                        onClick={() => {
-                          setCurrentView(3);
-                        }}
-                      >
-                        <span>Update organization</span>
-                      </a>
-                    ]}
-                    onToggleMobileNav={function noRefCheck() {}}
-                  />
-                </div>
-              </Header>
-            </div>
+      <Header>
+        <div className="usa-nav-container">
+          <div className="usa-navbar">
+            <h1>{organization.name}</h1>
           </div>
-          {views[currentView]}
-        </>
-      </div>
+          <PrimaryNav
+            items={[
+              <a
+                key="one"
+                href="#"
+                onClick={() => {
+                  setCurrentView(0);
+                }}
+                className="usa-nav__link"
+              >
+                <span>Overview</span>
+              </a>,
+              <a
+                key="two"
+                href="#"
+                onClick={() => {
+                  setCurrentView(1);
+                }}
+              >
+                <span>Manage Users</span>
+              </a>,
+              <a
+                key="three"
+                href="#"
+                onClick={() => {
+                  setCurrentView(2);
+                }}
+              >
+                <span>Manage Scans</span>
+              </a>,
+              <a
+                key="four"
+                href="#"
+                onClick={() => {
+                  setCurrentView(3);
+                }}
+              >
+                <span>Update organization</span>
+              </a>
+            ]}
+            onToggleMobileNav={function noRefCheck() {}}
+          />
+        </div>
+      </Header>
+      {views[currentView]}
     </div>
   );
 };

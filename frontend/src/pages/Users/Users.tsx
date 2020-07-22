@@ -128,14 +128,14 @@ export const Users: React.FC = () => {
     try {
       let body = {
         firstName: values.firstName,
-        lastName: values.firstName,
+        lastName: values.lastName,
         email: values.email,
         role: values.role
       };
-      const org = await apiPost('/users/', {
+      const user = await apiPost('/users/', {
         body
       });
-      setUsers(users.concat(org));
+      setUsers(users.concat(user));
     } catch (e) {
       setErrors({
         global:
