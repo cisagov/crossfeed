@@ -88,8 +88,8 @@ class ECSClient {
       taskDefinition: 'crossfeed-staging-worker', // aws_ecs_task_definition.worker.name
       networkConfiguration: {
         awsvpcConfiguration: {
-          securityGroups: ['sg-088b4691e1cafd8c0'], // lambda sg id
-          subnets: ['subnet-005633f93180b0beb'] // ['subnet-005633f93180b0beb'] // // subnet id
+          securityGroups: ['sg-05c9168f323c60ade'], // output.lambda_sg_id
+          subnets: ['subnet-02b249dd78cef0faf'] // output.lambda_subnet_public_id
         }
       },
       platformVersion: '1.4.0',
