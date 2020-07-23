@@ -10,20 +10,27 @@ import { Query } from 'types';
 import { Table } from 'components';
 import { Column } from 'react-table';
 import { Organization } from 'types';
-import { FaTimes, FaEdit } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
-import { Link } from 'react-router-dom';
 import { OrganizationForm } from 'components/OrganizationForm';
+import { useHistory } from 'react-router-dom';
 
 interface Errors extends Partial<Organization> {
   global?: string;
 }
 
 export const Organizations: React.FC = () => {
-  const { apiGet, apiPost, apiDelete } = useAuthContext();
+  const {
+    user,
+    setOrganization,
+    apiGet,
+    apiPost,
+    apiDelete
+  } = useAuthContext();
   const [showModal, setShowModal] = useState<Boolean>(false);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const history = useHistory();
 
   const columns: Column<Organization>[] = [
     {
@@ -63,15 +70,19 @@ export const Organizations: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Manage',
-      id: 'manage',
+      Header: 'Make Current',
+      id: 'makeCurrent',
       Cell: ({ row }: { row: { index: number } }) => (
-        <Link
+        <a
           style={{ color: 'black' }}
-          to={`/organization/${organizations[row.index].id}`}
+          href="#"
+          onClick={() => {
+            setOrganization(organizations[row.index]);
+            history.push('/organization');
+          }}
         >
-          <FaEdit className="margin-x-auto display-block" />
-        </Link>
+          Make Current
+        </a>
       ),
       width: 50,
       disableFilters: true
@@ -159,9 +170,16 @@ export const Organizations: React.FC = () => {
         data={organizations}
         fetchData={fetchOrganizations}
       />
-      <h2>Add an organization</h2>
-      {errors.global && <p className={classes.error}>{errors.global}</p>}
-      <OrganizationForm onSubmit={onSubmit} type="create"></OrganizationForm>
+      {user?.userType === 'globalAdmin' && (
+        <>
+          <h2>Add an organization</h2>
+          {errors.global && <p className={classes.error}>{errors.global}</p>}
+          <OrganizationForm
+            onSubmit={onSubmit}
+            type="create"
+          ></OrganizationForm>
+        </>
+      )}
       {showModal && (
         <div>
           <Overlay />

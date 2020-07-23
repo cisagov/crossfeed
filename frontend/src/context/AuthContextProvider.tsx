@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { API } from 'aws-amplify';
 import { AuthContext, AuthUser } from './AuthContext';
-import { User } from 'types';
+import { User, Organization } from 'types';
 
 // to be added to every request
 const baseHeaders: HeadersInit = {
@@ -11,19 +11,35 @@ const baseHeaders: HeadersInit = {
 
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>();
+  const [currentOrganization, setCurrentOrganization] = useState<
+    Organization
+  >();
   const [loading, setLoading] = useState(0);
 
-  const refreshUser = async () => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      setUser(JSON.parse(user));
+  const refreshState = async () => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     } else {
       setUser(null);
     }
+
+    const organization = localStorage.getItem('organization');
+    if (organization) {
+      setCurrentOrganization(JSON.parse(organization));
+    } else if (user && user.roles.length > 0) {
+      setOrganization(user.roles[0].organization);
+    }
+  };
+
+  const setOrganization = async (organization: Organization) => {
+    localStorage.setItem('organization', JSON.stringify(organization));
+    setCurrentOrganization(organization);
   };
 
   useEffect(() => {
-    refreshUser();
+    refreshState();
+    // eslint-disable-next-line
   }, []);
 
   const logout = async () => {
@@ -121,7 +137,9 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        setOrganization,
         user,
+        currentOrganization,
         login,
         logout,
         apiGet,

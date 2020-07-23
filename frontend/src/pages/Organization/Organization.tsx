@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { Organization as OrganizationType, Role, ScanTask } from 'types';
@@ -22,8 +22,7 @@ interface Errors extends Partial<OrganizationType> {
 }
 
 export const Organization: React.FC = () => {
-  const { organizationId } = useParams();
-  const { apiGet, apiPut, apiPost } = useAuthContext();
+  const { currentOrganization, apiGet, apiPut, apiPost } = useAuthContext();
   const [organization, setOrganization] = useState<OrganizationType>();
   const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
@@ -161,9 +160,12 @@ export const Organization: React.FC = () => {
   ];
 
   const fetchOrganization = useCallback(async () => {
+    if (!currentOrganization) {
+      return;
+    }
     try {
       const organization = await apiGet<OrganizationType>(
-        `/organizations/${organizationId}`
+        `/organizations/${currentOrganization.id}`
       );
       organization.scanTasks.sort(
         (a, b) =>
@@ -175,7 +177,7 @@ export const Organization: React.FC = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [organizationId, apiGet, setOrganization]);
+  }, [apiGet, setOrganization, currentOrganization]);
 
   const approveUser = async (user: number) => {
     try {
@@ -230,7 +232,6 @@ export const Organization: React.FC = () => {
   const onInviteUserSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
     try {
-      console.log(newUserValues.role);
       let body = {
         firstName: newUserValues.firstName,
         lastName: newUserValues.lastName,
