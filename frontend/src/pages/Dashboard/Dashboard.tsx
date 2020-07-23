@@ -46,7 +46,12 @@ export const Dashboard: React.FC = () => {
       localStorage.removeItem('state');
 
       if (user.firstName !== '') {
-        window.location.reload();
+        history.push('/');
+        fetchDomains({
+          page: 0,
+          sort: [{ id: 'name', desc: false }],
+          filters: []
+        });
       } else {
         history.push('/create-account');
       }
@@ -65,6 +70,9 @@ export const Dashboard: React.FC = () => {
 
   const fetchDomains = useCallback(
     async (query: Query<Domain>) => {
+      if (!user) {
+        return;
+      }
       const { page, sort, filters } = query;
       try {
         const { result, count } = await apiPost<ApiResponse>('/domain/search', {
@@ -90,7 +98,7 @@ export const Dashboard: React.FC = () => {
         console.error(e);
       }
     },
-    [apiPost]
+    [apiPost, user]
   );
 
   const renderPagination = (table: TableInstance<Domain>) => (

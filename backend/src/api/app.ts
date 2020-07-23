@@ -50,7 +50,7 @@ authenticatedRoute.use(async (req, res, next) => {
     !req.requestContext.authorizer.id ||
     req.requestContext.authorizer.id === 'cisa:crossfeed:anonymous'
   ) {
-    return res.status(403).send('Not logged in');
+    return res.status(401).send('Not logged in');
   }
   return next();
 });
