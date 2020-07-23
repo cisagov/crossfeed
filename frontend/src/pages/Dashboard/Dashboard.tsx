@@ -24,50 +24,6 @@ export const Dashboard: React.FC = () => {
   const PAGE_SIZE = 25;
   const history = useHistory();
 
-  // Called to sign in the user
-  const callback = useCallback(async () => {
-    const parsed = parse(window.location.search);
-    if ((user && user.firstName !== '') || !parsed.state || !parsed.code) {
-      return;
-    }
-    try {
-      const { token, user } = await apiPost('/auth/callback', {
-        body: {
-          state: parsed.state,
-          code: parsed.code,
-          nonce: localStorage.getItem('nonce'),
-          origState: localStorage.getItem('state')
-        }
-      });
-
-      await login(token, user);
-
-      localStorage.removeItem('nonce');
-      localStorage.removeItem('state');
-
-      if (user.firstName !== '') {
-        history.push('/');
-        fetchDomains({
-          page: 0,
-          sort: [{ id: 'name', desc: false }],
-          filters: []
-        });
-      } else {
-        history.push('/create-account');
-      }
-    } catch {
-      history.push('/');
-    }
-  }, [apiPost, history, login, user]);
-
-  React.useEffect(() => {
-    if (user && user.firstName === '') {
-      history.push('/create-account');
-    }
-    callback();
-    // eslint-disable-next-line
-  }, []);
-
   const fetchDomains = useCallback(
     async (query: Query<Domain>) => {
       if (!user) {
@@ -100,6 +56,50 @@ export const Dashboard: React.FC = () => {
     },
     [apiPost, user]
   );
+
+  // Called to sign in the user
+  const callback = useCallback(async () => {
+    const parsed = parse(window.location.search);
+    if ((user && user.firstName !== '') || !parsed.state || !parsed.code) {
+      return;
+    }
+    try {
+      const { token, user } = await apiPost('/auth/callback', {
+        body: {
+          state: parsed.state,
+          code: parsed.code,
+          nonce: localStorage.getItem('nonce'),
+          origState: localStorage.getItem('state')
+        }
+      });
+
+      await login(token, user);
+
+      localStorage.removeItem('nonce');
+      localStorage.removeItem('state');
+
+      if (user.firstName !== '') {
+        history.push('/');
+        fetchDomains({
+          page: 0,
+          sort: [],
+          filters: []
+        });
+      } else {
+        history.push('/create-account');
+      }
+    } catch {
+      history.push('/');
+    }
+  }, [apiPost, history, login, user, fetchDomains]);
+
+  React.useEffect(() => {
+    if (user && user.firstName === '') {
+      history.push('/create-account');
+    }
+    callback();
+    // eslint-disable-next-line
+  }, []);
 
   const renderPagination = (table: TableInstance<Domain>) => (
     <Paginator table={table} />
