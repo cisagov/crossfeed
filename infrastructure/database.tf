@@ -3,7 +3,7 @@ data "aws_ssm_parameter" "db_username" { name = var.ssm_db_username }
 
 resource "aws_db_subnet_group" "default" {
   name       = var.db_group_name
-  subnet_ids = [aws_subnet.db.id]
+  subnet_ids = [aws_subnet.db_1.id, aws_subnet.db_2.id]
 
   tags = {
     Project = var.project
