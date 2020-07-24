@@ -8,11 +8,19 @@ import {
   IsArray,
   IsBoolean,
   IsOptional,
-  IsUUID
+  IsUUID,
+  IsEnum,
+  IsEmail
 } from 'class-validator';
 import { User, connectToDatabase, Role } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
-import { getUserId, canAccessUser, isGlobalViewAdmin } from './auth';
+import {
+  getUserId,
+  canAccessUser,
+  isGlobalViewAdmin,
+  isOrgAdmin,
+  isGlobalWriteAdmin
+} from './auth';
 
 export const del = wrapHandler(async (event) => {
   if (!canAccessUser(event, event.pathParameters?.userId)) return Unauthorized;
@@ -74,27 +82,60 @@ class NewUser {
   @IsString()
   lastName: string;
 
-  @IsString()
+  @IsEmail()
   @IsOptional()
   email: string;
 
-  @IsUUID()
+  @IsString()
   @IsOptional()
   organization: string;
+
+  @IsBoolean()
+  @IsOptional()
+  organizationAdmin: string;
 }
 
 export const invite = wrapHandler(async (event) => {
-  // TODO: associate this with an organization
   const body = await validateBody(NewUser, event.body);
+  // Invoker must be either an organization or global admin
+  if (body.organization) {
+    if (!isOrgAdmin(event, body.organization)) return Unauthorized;
+  } else {
+    if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  }
+
   await connectToDatabase();
-  const scan = await User.create({
+  const user = await User.create({
     invitePending: true,
     ...body
   });
-  const res = await User.save(scan);
+
+  const res = await User.save(user);
+  if (body.organization) {
+    // Create approved role if organization supplied
+    const role = Role.create({
+      user: user,
+      organization: { id: body.organization },
+      approved: true,
+      role: body.organizationAdmin ? 'admin' : 'user'
+    });
+
+    await role.save();
+  }
+
+  // TODO: Send invite email via SES
+
+  const updated = await User.findOne(
+    {
+      id: user.id
+    },
+    {
+      relations: ['roles']
+    }
+  );
   return {
     statusCode: 200,
-    body: JSON.stringify(res)
+    body: JSON.stringify(updated)
   };
 });
 

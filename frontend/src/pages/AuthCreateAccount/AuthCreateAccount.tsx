@@ -30,6 +30,10 @@ export const AuthCreateAccount: React.FC = () => {
 
   const fetchPublicOrgs = useCallback(async () => {
     const publicOrgs = await apiGet('/organizations/public');
+    publicOrgs.unshift({
+      name: 'None',
+      id: ''
+    });
     setPublicOrgs(publicOrgs);
     if (publicOrgs.length > 0)
       setValues(values => ({
@@ -74,62 +78,75 @@ export const AuthCreateAccount: React.FC = () => {
 
   return (
     <AuthForm onSubmit={onSubmit}>
-      <h1>Finish Creating Account</h1>
+      <h2>Crossfeed is currently in private beta.</h2>
       <p>
-        We need just a few more details from you in order to finish creating
-        your account.
+        Your organization admininistrator will need to invite you to Crossfeed
+        in order for you to begin using it.
       </p>
+      <p>
+        Is your organization not yet on Crossfeed? Contact{' '}
+        <a href="#">crossfeed@example.gov</a> to learn more.
+      </p>
+      {process.env.NODE_ENV === 'development' && (
+        <>
+          <h1>[DEVELOPMENT] Finish Creating Account</h1>
+          <p>
+            We need just a few more details from you in order to finish creating
+            your account.
+          </p>
 
-      <Label htmlFor="firstName">First Name</Label>
-      <TextInput
-        required
-        id="firstName"
-        name="firstName"
-        type="text"
-        value={values.firstName}
-        onChange={onTextChange}
-      />
-      <Label htmlFor="lastName">Last Name</Label>
-      <TextInput
-        required
-        id="lastName"
-        name="lastName"
-        type="text"
-        value={values.lastName}
-        onChange={onTextChange}
-      />
-      <Label htmlFor="email">Email</Label>
-      <TextInput
-        disabled
-        id="email"
-        name="email"
-        type="text"
-        value={user ? user.email : ''}
-      />
-      <Label htmlFor="organization">
-        Select an organization to join. Your request will need to be approved
-        before joining.
-      </Label>
-      <Dropdown
-        id="organization"
-        name="organization"
-        onChange={onTextChange}
-        value={values.organization}
-      >
-        {publicOrgs.map(org => {
-          return (
-            <option key={org.id} value={org.id}>
-              {org.name}
-            </option>
-          );
-        })}
-      </Dropdown>
-      <div className="width-full display-flex flex-justify-start">
-        {errors.global && <p className="text-error">{errors.global}</p>}
-      </div>
-      <div className="display-flex flex-justify-start flex-align-center width-full margin-top-3">
-        <Button type="submit">Submit</Button>
-      </div>
+          <Label htmlFor="firstName">First Name</Label>
+          <TextInput
+            required
+            id="firstName"
+            name="firstName"
+            type="text"
+            value={values.firstName}
+            onChange={onTextChange}
+          />
+          <Label htmlFor="lastName">Last Name</Label>
+          <TextInput
+            required
+            id="lastName"
+            name="lastName"
+            type="text"
+            value={values.lastName}
+            onChange={onTextChange}
+          />
+          <Label htmlFor="email">Email</Label>
+          <TextInput
+            disabled
+            id="email"
+            name="email"
+            type="text"
+            value={user ? user.email : ''}
+          />
+          <Label htmlFor="organization">
+            Select an organization to join. Your request will need to be
+            approved before joining.
+          </Label>
+          <Dropdown
+            id="organization"
+            name="organization"
+            onChange={onTextChange}
+            value={values.organization}
+          >
+            {publicOrgs.map(org => {
+              return (
+                <option key={org.id} value={org.id}>
+                  {org.name}
+                </option>
+              );
+            })}
+          </Dropdown>
+          <div className="width-full display-flex flex-justify-start">
+            {errors.global && <p className="text-error">{errors.global}</p>}
+          </div>
+          <div className="display-flex flex-justify-start flex-align-center width-full margin-top-3">
+            <Button type="submit">Submit</Button>
+          </div>
+        </>
+      )}
     </AuthForm>
   );
 };

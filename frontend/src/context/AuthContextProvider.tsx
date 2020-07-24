@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { API } from 'aws-amplify';
-import { AuthContext, AuthUser } from './AuthContext';
-import { User } from 'types';
+import { AuthContext, AuthUser, CurrentOrganization } from './AuthContext';
+import { User, Organization } from 'types';
 import { useHistory } from 'react-router-dom';
 
 // to be added to every request
@@ -12,20 +12,44 @@ const baseHeaders: HeadersInit = {
 
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>();
+  const [currentOrganization, setCurrentOrganization] = useState<
+    CurrentOrganization
+  >();
   const [loading, setLoading] = useState(0);
   const history = useHistory();
 
-  const refreshUser = async () => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      setUser(JSON.parse(user));
+  const refreshState = async () => {
+    const storedUser = localStorage.getItem('user');
+    const organization = localStorage.getItem('organization');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     } else {
       setUser(null);
     }
+
+    if (organization) {
+      setCurrentOrganization(JSON.parse(organization));
+    } else if (storedUser) {
+      const parsed = JSON.parse(storedUser);
+      if (parsed.roles.length > 0) {
+        setOrganization(parsed.roles[0].organization);
+      }
+    }
+  };
+
+  const setOrganization = async (organization: Organization) => {
+    let extendedOrg: CurrentOrganization = organization;
+    extendedOrg.userIsAdmin =
+      user?.userType === 'globalAdmin' ||
+      user?.roles.find(role => role.organization.id === currentOrganization?.id)
+        ?.role === 'admin';
+    localStorage.setItem('organization', JSON.stringify(extendedOrg));
+    setCurrentOrganization(extendedOrg);
   };
 
   useEffect(() => {
-    refreshUser();
+    refreshState();
+    // eslint-disable-next-line
   }, []);
 
   const logout = async () => {
@@ -138,7 +162,9 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        setOrganization,
         user,
+        currentOrganization,
         login,
         logout,
         apiGet,

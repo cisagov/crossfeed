@@ -15,7 +15,7 @@ interface ApiResponse {
 }
 
 export const Dashboard: React.FC = () => {
-  const { user, login, apiPost } = useAuthContext();
+  const { user, currentOrganization, login, apiPost } = useAuthContext();
   const [domains, setDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
@@ -107,7 +107,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <h1>Dashboard</h1>{' '}
+      <h1>{currentOrganization?.name} Dashboard</h1>{' '}
       <Table<Domain>
         renderPagination={renderPagination}
         columns={columns}
