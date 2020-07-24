@@ -38,7 +38,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const setOrganization = async (organization: Organization) => {
     let extendedOrg: CurrentOrganization = organization;
     extendedOrg.userIsAdmin =
-      user?.userType == 'globalAdmin' ||
+      user?.userType === 'globalAdmin' ||
       user?.roles.find(role => role.organization.id === currentOrganization?.id)
         ?.role === 'admin';
     localStorage.setItem('organization', JSON.stringify(extendedOrg));

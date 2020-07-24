@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { Organization as OrganizationType, Role, ScanTask } from 'types';
+import { Organization as OrganizationType, Role, ScanTask, User } from 'types';
 import { FaGlobe, FaNetworkWired, FaClock, FaUsers } from 'react-icons/fa';
 import { Column } from 'react-table';
 import { Table } from 'components';
@@ -86,8 +86,11 @@ export const Organization: React.FC = () => {
     {
       Header: 'Action',
       id: 'action',
-      Cell: ({ row }: { row: { index: number } }) =>
-        organization?.userRoles[row.index].approved ? (
+      Cell: ({ row }: { row: { index: number } }) => {
+        const isApproved =
+          !organization?.userRoles[row.index] ||
+          organization?.userRoles[row.index].approved;
+        return isApproved ? (
           <Link
             to="#"
             onClick={() => {
@@ -105,7 +108,8 @@ export const Organization: React.FC = () => {
           >
             <p>Approve</p>
           </Link>
-        ),
+        );
+      },
       disableFilters: true
     }
   ];
@@ -203,7 +207,7 @@ export const Organization: React.FC = () => {
   const removeUser = async (user: number) => {
     try {
       await apiPost(
-        `/organizations/${organization?.id}/roles/${organization?.userRoles[user].id}/remove`,
+        `/organizations/${organization?.id}/roles/${userRoles[user].id}/remove`,
         {}
       );
       const copy = userRoles.filter((_, ind) => ind !== user);
@@ -245,10 +249,12 @@ export const Organization: React.FC = () => {
         organization: organization?.id,
         organizationAdmin: newUserValues.role === 'admin'
       };
-      const user = await apiPost('/users/', {
+      const user: User = await apiPost('/users/', {
         body
       });
-      setUserRoles(userRoles.concat(user));
+      let role = user.roles[user.roles.length - 1];
+      role.user = user;
+      setUserRoles(userRoles.concat([role]));
     } catch (e) {
       setErrors({
         global:

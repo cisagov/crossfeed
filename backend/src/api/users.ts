@@ -121,18 +121,21 @@ export const invite = wrapHandler(async (event) => {
     });
 
     await role.save();
-    role.user = user;
-    return {
-      statusCode: 200,
-      body: JSON.stringify(role)
-    };
   }
 
   // TODO: Send invite email via SES
 
+  const updated = await User.findOne(
+    {
+      id: user.id
+    },
+    {
+      relations: ['roles']
+    }
+  );
   return {
     statusCode: 200,
-    body: JSON.stringify(user)
+    body: JSON.stringify(updated)
   };
 });
 
