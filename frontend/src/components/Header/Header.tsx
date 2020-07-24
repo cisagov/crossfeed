@@ -169,7 +169,6 @@ export const Header: React.FC = () => {
     } else {
       nav = globalAdminNav;
     }
-    nav = orgAdminNav;
   }
 
   return (

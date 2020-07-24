@@ -18,17 +18,20 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
   const refreshState = async () => {
     const storedUser = localStorage.getItem('user');
+    const organization = localStorage.getItem('organization');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     } else {
       setUser(null);
     }
 
-    const organization = localStorage.getItem('organization');
     if (organization) {
       setCurrentOrganization(JSON.parse(organization));
-    } else if (user && user.roles.length > 0) {
-      setOrganization(user.roles[0].organization);
+    } else if (storedUser) {
+      const parsed = JSON.parse(storedUser);
+      if (parsed.roles.length > 0) {
+        setOrganization(parsed.roles[0].organization);
+      }
     }
   };
 
