@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { API } from 'aws-amplify';
 import { AuthContext, AuthUser, CurrentOrganization } from './AuthContext';
 import { User, Organization } from 'types';
+import { useHistory } from 'react-router-dom';
 
 // to be added to every request
 const baseHeaders: HeadersInit = {
@@ -15,6 +16,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     CurrentOrganization
   >();
   const [loading, setLoading] = useState(0);
+  const history = useHistory();
 
   const refreshState = async () => {
     const storedUser = localStorage.getItem('user');
@@ -56,6 +58,17 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     localStorage.removeItem('token');
   };
 
+  const handleError = useCallback(
+    async (e: Error) => {
+      if (e.message.includes('401')) {
+        // Unauthorized, log out user
+        await logout();
+        history.push('/');
+      }
+    },
+    [history]
+  );
+
   const login = async (token: string, user: User) => {
     let userCopy: AuthUser = {
       isRegistered: user.firstName !== '',
@@ -88,10 +101,11 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         return result as T;
       } catch (e) {
         setLoading(l => l - 1);
+        await handleError(e);
         throw e;
       }
     },
-    [prepareInit]
+    [prepareInit, handleError]
   );
 
   const apiPost = useCallback(
@@ -104,10 +118,11 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         return result as T;
       } catch (e) {
         setLoading(l => l - 1);
+        await handleError(e);
         throw e;
       }
     },
-    [prepareInit]
+    [prepareInit, handleError]
   );
 
   const apiDelete = useCallback(
@@ -120,10 +135,11 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         return result as T;
       } catch (e) {
         setLoading(l => l - 1);
+        await handleError(e);
         throw e;
       }
     },
-    [prepareInit]
+    [prepareInit, handleError]
   );
 
   const apiPut = useCallback(
@@ -136,10 +152,11 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         return result as T;
       } catch (e) {
         setLoading(l => l - 1);
+        await handleError(e);
         throw e;
       }
     },
-    [prepareInit]
+    [prepareInit, handleError]
   );
 
   return (

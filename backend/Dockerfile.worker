@@ -7,10 +7,10 @@ COPY ./package* ./
 RUN npm ci
 
 COPY tsconfig.json ./tsconfig.json
-COPY webpack.config.js ./webpack.config.js
+COPY webpack.worker.config.js ./webpack.worker.config.js
 COPY src ./src
 
-RUN npx webpack
+RUN npx webpack --config webpack.worker.config.js
 
 FROM node:14-buster-slim as deps
 

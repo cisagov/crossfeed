@@ -89,7 +89,7 @@ export const callback = async (event, context) => {
   }
 
   const token = jwt.sign(userTokenBody(user), process.env.JWT_SECRET!, {
-    expiresIn: '1 day',
+    expiresIn: '7 days',
     header: {
       typ: 'JWT'
     }
@@ -120,6 +120,10 @@ export const authorize = async (event) => {
         relations: ['roles', 'roles.organization']
       }
     );
+    // For running tests, ignore if user does not exist
+    if (process.env.NODE_ENV === 'test' && !user) {
+      return parsed;
+    }
     if (!user) throw Error('User does not exist');
     return userTokenBody(user);
   } catch (e) {

@@ -88,30 +88,33 @@ class ECSClient {
       taskDefinition: 'crossfeed-staging-worker', // aws_ecs_task_definition.worker.name
       networkConfiguration: {
         awsvpcConfiguration: {
-          securityGroups: ['sg-088b4691e1cafd8c0'], // lambda sg id
-          subnets: ['subnet-005633f93180b0beb'] // ['subnet-005633f93180b0beb'] // // subnet id
+          assignPublicIp: 'ENABLED',
+          securityGroups: ['sg-05c9168f323c60ade'], // output.lambda_sg_id
+          subnets: ['subnet-02b249dd78cef0faf'] // output.lambda_subnet_public_id
         }
       },
       platformVersion: '1.4.0',
       launchType: 'FARGATE',
-      tags: [
-        {
-          key: 'scanId',
-          value: scanId
-        },
-        {
-          key: 'scanName',
-          value: scanName
-        },
-        {
-          key: 'organizationId',
-          value: organizationId
-        },
-        {
-          key: 'organizationName',
-          value: organizationName
-        }
-      ],
+      // TODO: enable tags when we are able to opt in to the new ARN format for the lambda IAM role.
+      // See https://aws.amazon.com/blogs/compute/migrating-your-amazon-ecs-deployment-to-the-new-arn-and-resource-id-format-2/
+      // tags: [
+      //   {
+      //     key: 'scanId',
+      //     value: scanId
+      //   },
+      //   {
+      //     key: 'scanName',
+      //     value: scanName
+      //   },
+      //   {
+      //     key: 'organizationId',
+      //     value: organizationId
+      //   },
+      //   {
+      //     key: 'organizationName',
+      //     value: organizationName
+      //   }
+      // ],
       overrides: {
         containerOverrides: [
           {
