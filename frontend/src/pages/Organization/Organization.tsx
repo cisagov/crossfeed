@@ -398,7 +398,7 @@ export const Organization: React.FC = () => {
             items={[
               <a
                 key="one"
-                href="#"
+                href="# "
                 onClick={() => {
                   setCurrentView(0);
                 }}
@@ -408,7 +408,7 @@ export const Organization: React.FC = () => {
               </a>,
               <a
                 key="two"
-                href="#"
+                href="# "
                 onClick={() => {
                   setCurrentView(1);
                 }}
@@ -417,7 +417,7 @@ export const Organization: React.FC = () => {
               </a>,
               <a
                 key="three"
-                href="#"
+                href="# "
                 onClick={() => {
                   setCurrentView(2);
                 }}
@@ -426,7 +426,7 @@ export const Organization: React.FC = () => {
               </a>,
               <a
                 key="four"
-                href="#"
+                href="# "
                 onClick={() => {
                   setCurrentView(3);
                 }}

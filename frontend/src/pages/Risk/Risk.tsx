@@ -171,6 +171,10 @@ const Risk: React.FC = () => {
   return (
     <div className={classes.root}>
       <h1>{currentOrganization?.name} Risk Dashboard</h1>
+      <h2>
+        Note: this data is demo data and not currently pulled from the database.
+        We plan on implementing this next week.
+      </h2>
       <h2>Total domains: 24</h2>
       <h1>Top Action Items</h1>
       <Table bordered>

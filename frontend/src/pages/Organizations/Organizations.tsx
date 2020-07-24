@@ -76,7 +76,7 @@ export const Organizations: React.FC = () => {
       Cell: ({ row }: { row: { index: number } }) => (
         <a
           style={{ color: 'black' }}
-          href="#"
+          href="# "
           onClick={() => {
             setOrganization(organizations[row.index]);
             if (currentOrganization?.userIsAdmin) {
