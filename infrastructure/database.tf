@@ -59,6 +59,28 @@ resource "aws_ssm_parameter" "lambda_subnet_id" {
   }
 }
 
+resource "aws_ssm_parameter" "worker_sg_id" {
+  name      = var.ssm_worker_sg
+  type      = "String"
+  value     = aws_security_group.backend.id
+  overwrite = true
+
+  tags = {
+    Project = var.project
+  }
+}
+
+resource "aws_ssm_parameter" "worker_subnet_id" {
+  name      = var.ssm_worker_subnet
+  type      = "String"
+  value     = aws_subnet.worker.id
+  overwrite = true
+
+  tags = {
+    Project = var.project
+  }
+}
+
 
 resource "aws_ssm_parameter" "crossfeed_send_db_host" {
   name      = var.ssm_db_host

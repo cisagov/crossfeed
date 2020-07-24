@@ -36,6 +36,16 @@ resource "aws_subnet" "backend" {
   }
 }
 
+resource "aws_subnet" "worker" {
+  availability_zone = data.aws_availability_zones.available.names[1]
+  vpc_id            = aws_vpc.crossfeed_vpc.id
+  cidr_block        = "10.0.3.0/24"
+
+  tags = {
+    Project = var.project
+  }
+}
+
 resource "aws_route_table" "r" {
   vpc_id = aws_vpc.crossfeed_vpc.id
 
@@ -45,6 +55,14 @@ resource "aws_route_table" "r" {
 }
 
 resource "aws_route_table" "r2" {
+  vpc_id = aws_vpc.crossfeed_vpc.id
+
+  tags = {
+    Project = var.project
+  }
+}
+
+resource "aws_route_table" "worker" {
   vpc_id = aws_vpc.crossfeed_vpc.id
 
   tags = {
@@ -67,6 +85,11 @@ resource "aws_route_table_association" "r_assoc_backend" {
   subnet_id      = aws_subnet.backend.id
 }
 
+resource "aws_route_table_association" "r_assoc_worker" {
+  route_table_id = aws_route_table.worker.id
+  subnet_id      = aws_subnet.worker.id
+}
+
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.crossfeed_vpc.id
 
@@ -76,13 +99,28 @@ resource "aws_internet_gateway" "gw" {
 }
 
 resource "aws_route" "public_route" {
-  route_table_id         = aws_route_table.r2.id
+  route_table_id         = aws_route_table.worker.id
   gateway_id             = aws_internet_gateway.gw.id
   destination_cidr_block = "0.0.0.0/0"
 }
 
 resource "aws_eip" "nat_eip" {
 
+}
+
+resource "aws_nat_gateway" "nat" {	
+  allocation_id = aws_eip.nat_eip.id	
+  subnet_id     = aws_subnet.backend.id	
+
+  tags = {	
+    Project = var.project	
+  }	
+}	
+
+resource "aws_route" "nat_gw_rt" {	
+  route_table_id         = aws_route_table.r2.id	
+  nat_gateway_id         = aws_nat_gateway.nat.id	
+  destination_cidr_block = "0.0.0.0/0"	
 }
 
 resource "aws_security_group" "allow_internal" {
