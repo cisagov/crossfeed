@@ -86,7 +86,7 @@ class NewUser {
   @IsOptional()
   email: string;
 
-  @IsUUID()
+  @IsString()
   @IsOptional()
   organization: string;
 
@@ -103,11 +103,13 @@ export const invite = wrapHandler(async (event) => {
   } else {
     if (!isGlobalWriteAdmin(event)) return Unauthorized;
   }
+
   await connectToDatabase();
   const user = await User.create({
     invitePending: true,
     ...body
   });
+
   const res = await User.save(user);
   if (body.organization) {
     // Create approved role if organization supplied
@@ -117,6 +119,7 @@ export const invite = wrapHandler(async (event) => {
       approved: true,
       role: body.organizationAdmin ? 'admin' : 'user'
     });
+
     await role.save();
     role.user = user;
     return {
@@ -124,6 +127,9 @@ export const invite = wrapHandler(async (event) => {
       body: JSON.stringify(role)
     };
   }
+
+  // TODO: Send invite email via SES
+
   return {
     statusCode: 200,
     body: JSON.stringify(user)
