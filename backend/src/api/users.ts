@@ -111,7 +111,6 @@ export const invite = wrapHandler(async (event) => {
   const res = await User.save(user);
   if (body.organization) {
     // Create approved role if organization supplied
-    console.log(body.organizationAdmin);
     const role = Role.create({
       user: user,
       organization: { id: body.organization },

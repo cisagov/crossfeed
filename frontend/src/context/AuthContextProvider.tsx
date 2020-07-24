@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { API } from 'aws-amplify';
-import { AuthContext, AuthUser } from './AuthContext';
+import { AuthContext, AuthUser, CurrentOrganization } from './AuthContext';
 import { User, Organization } from 'types';
 
 // to be added to every request
@@ -12,7 +12,7 @@ const baseHeaders: HeadersInit = {
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>();
   const [currentOrganization, setCurrentOrganization] = useState<
-    Organization
+    CurrentOrganization
   >();
   const [loading, setLoading] = useState(0);
 
@@ -33,8 +33,13 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   };
 
   const setOrganization = async (organization: Organization) => {
-    localStorage.setItem('organization', JSON.stringify(organization));
-    setCurrentOrganization(organization);
+    let extendedOrg: CurrentOrganization = organization;
+    extendedOrg.userIsAdmin =
+      user?.userType == 'globalAdmin' ||
+      user?.roles.find(role => role.organization.id === currentOrganization?.id)
+        ?.role === 'admin';
+    localStorage.setItem('organization', JSON.stringify(extendedOrg));
+    setCurrentOrganization(extendedOrg);
   };
 
   useEffect(() => {

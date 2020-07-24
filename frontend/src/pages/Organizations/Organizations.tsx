@@ -21,6 +21,7 @@ interface Errors extends Partial<Organization> {
 
 export const Organizations: React.FC = () => {
   const {
+    currentOrganization,
     user,
     setOrganization,
     apiGet,
@@ -78,7 +79,11 @@ export const Organizations: React.FC = () => {
           href="#"
           onClick={() => {
             setOrganization(organizations[row.index]);
-            history.push('/organization');
+            if (currentOrganization?.userIsAdmin) {
+              history.push('/organization');
+            } else {
+              history.push('/');
+            }
           }}
         >
           Make Current

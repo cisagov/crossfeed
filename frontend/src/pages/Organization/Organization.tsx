@@ -66,12 +66,18 @@ export const Organization: React.FC = () => {
     },
     {
       Header: 'Status',
-      accessor: ({ approved, role }) =>
-        approved
-          ? role === 'admin'
-            ? 'Administrator'
-            : 'Member'
-          : 'Pending approval',
+      accessor: ({ approved, role, user }) => {
+        if (approved) {
+          if (user.invitePending) {
+            return 'Invite pending';
+          } else if (role === 'admin') {
+            return 'Administrator';
+          } else {
+            return 'Member';
+          }
+        }
+        return 'Pending approval';
+      },
       width: 50,
       minWidth: 50,
       id: 'approved',

@@ -5,6 +5,10 @@ export interface AuthUser extends User {
   isRegistered: boolean;
 }
 
+export interface CurrentOrganization extends Organization {
+  userIsAdmin?: boolean | null;
+}
+
 export interface AuthContextType {
   login(token: string, user: User): Promise<any>;
   logout(): Promise<void>;
@@ -13,8 +17,8 @@ export interface AuthContextType {
   apiPut<T extends object = any>(path: string, init: any): Promise<T>;
   apiDelete<T extends object = any>(path: string, init?: any): Promise<T>;
   user?: AuthUser | null;
-  currentOrganization?: Organization | null;
-  setOrganization: (organization: Organization) => Promise<void>;
+  currentOrganization?: CurrentOrganization | null;
+  setOrganization: (organization: CurrentOrganization) => Promise<void>;
 }
 
 /* istanbul ignore next */
@@ -25,7 +29,7 @@ export const defaultAuthContext: AuthContextType = {
   apiPost: async <T>() => ({} as T),
   apiPut: async <T>() => ({} as T),
   apiDelete: async <T>() => ({} as T),
-  setOrganization: <T>(organization: Organization) => ({} as T)
+  setOrganization: <T>(organization: CurrentOrganization) => ({} as T)
 };
 
 export const AuthContext = React.createContext<AuthContextType>(

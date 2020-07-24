@@ -82,6 +82,12 @@ export const callback = async (event, context) => {
     await user.save();
   }
 
+  // Update user status if accepting invite
+  if (user.invitePending) {
+    user.invitePending = false;
+    await user.save();
+  }
+
   const token = jwt.sign(userTokenBody(user), process.env.JWT_SECRET!, {
     expiresIn: '1 day',
     header: {
@@ -114,6 +120,7 @@ export const authorize = async (event) => {
         relations: ['roles', 'roles.organization']
       }
     );
+    if (!user) throw Error('User does not exist');
     return userTokenBody(user);
   } catch (e) {
     console.error(e);

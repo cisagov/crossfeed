@@ -161,11 +161,7 @@ export const Header: React.FC = () => {
   let nav: JSX.Element[] = [];
   if (user && user.isRegistered) {
     if (user.userType === 'standard') {
-      if (
-        currentOrganization &&
-        user.roles.find(role => role.organization.id === currentOrganization.id)
-          ?.role === 'admin'
-      ) {
+      if (currentOrganization?.userIsAdmin) {
         nav = orgAdminNav;
       } else {
         nav = orgUserNav;
@@ -173,6 +169,7 @@ export const Header: React.FC = () => {
     } else {
       nav = globalAdminNav;
     }
+    nav = orgAdminNav;
   }
 
   return (
