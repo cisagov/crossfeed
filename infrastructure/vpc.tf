@@ -6,7 +6,7 @@ resource "aws_vpc" "crossfeed_vpc" {
   }
 }
 
-resource "aws_subnet" "lambda_subnet" {
+resource "aws_subnet" "db" {
   availability_zone = data.aws_availability_zones.available.names[0]
   vpc_id            = aws_vpc.crossfeed_vpc.id
   cidr_block        = "10.0.1.0/24"
@@ -16,7 +16,7 @@ resource "aws_subnet" "lambda_subnet" {
   }
 }
 
-resource "aws_subnet" "lambda_subnet2" {
+resource "aws_subnet" "backend" {
   availability_zone = data.aws_availability_zones.available.names[1]
   vpc_id            = aws_vpc.crossfeed_vpc.id
   cidr_block        = "10.0.2.0/24"
@@ -44,12 +44,12 @@ resource "aws_route_table" "r2" {
 
 resource "aws_route_table_association" "r_assoc" {
   route_table_id = aws_route_table.r.id
-  subnet_id      = aws_subnet.lambda_subnet.id
+  subnet_id      = aws_subnet.db.id
 }
 
 resource "aws_route_table_association" "r_assoc2" {
   route_table_id = aws_route_table.r2.id
-  subnet_id      = aws_subnet.lambda_subnet2.id
+  subnet_id      = aws_subnet.backend.id
 }
 
 resource "aws_internet_gateway" "gw" {
@@ -70,21 +70,6 @@ resource "aws_eip" "nat_eip" {
 
 }
 
-resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.lambda_subnet2.id
-
-  tags = {
-    Project = var.project
-  }
-}
-
-resource "aws_route" "nat_gw_rt" {
-  route_table_id         = aws_route_table.r.id
-  nat_gateway_id         = aws_nat_gateway.nat.id
-  destination_cidr_block = "0.0.0.0/0"
-}
-
 resource "aws_security_group" "allow_internal" {
   name        = "allow-internal"
   description = "Allow All VPC Internal Traffic"
@@ -97,6 +82,23 @@ resource "aws_security_group" "allow_internal" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Project = var.project
+  }
+}
+
+resource "aws_security_group" "backend" {
+  name        = "backend"
+  description = "Backend"
+  vpc_id      = aws_vpc.crossfeed_vpc.id
 
   egress {
     from_port   = 0

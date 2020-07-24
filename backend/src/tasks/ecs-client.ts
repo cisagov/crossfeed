@@ -89,8 +89,8 @@ class ECSClient {
       networkConfiguration: {
         awsvpcConfiguration: {
           assignPublicIp: 'ENABLED',
-          securityGroups: ['sg-05c9168f323c60ade'], // output.lambda_sg_id
-          subnets: ['subnet-02b249dd78cef0faf'] // output.lambda_subnet_public_id
+          securityGroups: [process.env.FARGATE_SG_ID!],
+          subnets: [process.env.FARGATE_SUBNET_ID!]
         }
       },
       platformVersion: '1.4.0',

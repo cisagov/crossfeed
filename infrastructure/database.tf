@@ -3,7 +3,7 @@ data "aws_ssm_parameter" "db_username" { name = var.ssm_db_username }
 
 resource "aws_db_subnet_group" "default" {
   name       = var.db_group_name
-  subnet_ids = [aws_subnet.lambda_subnet.id, aws_subnet.lambda_subnet2.id]
+  subnet_ids = [aws_subnet.db.id]
 
   tags = {
     Project = var.project
@@ -40,7 +40,7 @@ resource "aws_db_instance" "db" {
 resource "aws_ssm_parameter" "lambda_sg_id" {
   name      = var.ssm_lambda_sg
   type      = "String"
-  value     = aws_security_group.allow_internal.id
+  value     = aws_security_group.backend.id
   overwrite = true
 
   tags = {
@@ -51,7 +51,7 @@ resource "aws_ssm_parameter" "lambda_sg_id" {
 resource "aws_ssm_parameter" "lambda_subnet_id" {
   name      = var.ssm_lambda_subnet
   type      = "String"
-  value     = aws_subnet.lambda_subnet.id
+  value     = aws_subnet.backend.id
   overwrite = true
 
   tags = {
