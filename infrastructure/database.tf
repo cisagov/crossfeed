@@ -40,7 +40,7 @@ resource "aws_db_instance" "db" {
 resource "aws_ssm_parameter" "lambda_sg_id" {
   name      = var.ssm_lambda_sg
   type      = "String"
-  value     = aws_security_group.backend.id
+  value     = aws_security_group.allow_internal.id
   overwrite = true
 
   tags = {
@@ -62,7 +62,7 @@ resource "aws_ssm_parameter" "lambda_subnet_id" {
 resource "aws_ssm_parameter" "worker_sg_id" {
   name      = var.ssm_worker_sg
   type      = "String"
-  value     = aws_security_group.backend.id
+  value     = aws_security_group.worker.id
   overwrite = true
 
   tags = {

@@ -110,7 +110,7 @@ resource "aws_eip" "nat_eip" {
 
 resource "aws_nat_gateway" "nat" {	
   allocation_id = aws_eip.nat_eip.id	
-  subnet_id     = aws_subnet.backend.id	
+  subnet_id     = aws_subnet.worker.id	
 
   tags = {	
     Project = var.project	
@@ -151,6 +151,24 @@ resource "aws_security_group" "allow_internal" {
 resource "aws_security_group" "backend" {
   name        = "backend"
   description = "Backend"
+  vpc_id      = aws_vpc.crossfeed_vpc.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Project = var.project
+  }
+}
+
+
+resource "aws_security_group" "worker" {
+  name        = "worker"
+  description = "Worker"
   vpc_id      = aws_vpc.crossfeed_vpc.id
 
   egress {
