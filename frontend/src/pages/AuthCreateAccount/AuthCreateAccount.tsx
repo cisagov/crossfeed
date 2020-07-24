@@ -87,7 +87,7 @@ export const AuthCreateAccount: React.FC = () => {
         Is your organization not yet on Crossfeed? Contact{' '}
         <a href="# ">crossfeed@example.gov</a> to learn more.
       </p>
-      {process.env.NODE_ENV === 'development' && (
+      {process.env.NODE_ENV === 'development' || (user && user.userType === 'globalAdmin') && (
         <>
           <h1>[DEVELOPMENT] Finish Creating Account</h1>
           <p>
