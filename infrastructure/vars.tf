@@ -53,6 +53,14 @@ variable ssm_lambda_subnet {
   default = "/crossfeed/staging/SUBNET_ID"
 }
 
+variable ssm_worker_sg {
+  type    = string
+}
+
+variable ssm_worker_subnet {
+  type    = string
+}
+
 variable db_table_name {
   type    = string
   default = "cfstagedb"
