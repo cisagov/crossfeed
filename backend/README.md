@@ -4,9 +4,7 @@
 ## Running locally
 
 ```bash
-docker build -t crossfeed-worker -f Dockerfile.worker .
-docker run crossfeed-worker "amass"
-docker run crossfeed-worker "findomain"
+npm run build-worker
 ```
 
 To run the scheduler:

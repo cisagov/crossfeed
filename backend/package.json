@@ -61,6 +61,7 @@
     "lint:fix": "eslint '**/*.{ts,tsx,js,jsx}' --fix",
     "preinstall": "npx npm-force-resolutions",
     "codegen": "ts-node src/tools/generate-censys-types.ts",
+    "build-worker": "./tools/build-worker.sh",
     "deploy-worker": "./tools/deploy-worker.sh"
   },
   "author": "",
