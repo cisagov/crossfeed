@@ -1,10 +1,8 @@
 service: crossfeed
 
 custom:
-  serverless-offline:
-    noPrependStageInUrl: true
-    useChildProcesses: true
-    #useWorkerThreads: true
+  webpack:
+    webpackConfig: 'webpack.backend.config.js'
   customDomain:
     domainName: ${file(./env.yml):${self:provider.stage}.DOMAIN, ''}
     basePath: ''
@@ -30,6 +28,7 @@ provider:
     - Effect: Allow
       Action:
         - ecs:RunTask
+        - iam:PassRole
       Resource: '*'
 
 functions:
@@ -38,5 +37,5 @@ functions:
 
 plugins:
   - serverless-domain-manager
-  - serverless-plugin-typescript
+  - serverless-webpack
   - serverless-offline-scheduler

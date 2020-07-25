@@ -4,6 +4,7 @@ import { ResponsivePie, PieDatum } from '@nivo/pie';
 import { ResponsiveBar, BarDatum } from '@nivo/bar';
 import { Table } from '@trussworks/react-uswds';
 import { FaInfoCircle } from 'react-icons/fa';
+import { useAuthContext } from 'context';
 
 // TODO: Pull in actual data to render charts
 const pieData = [
@@ -165,9 +166,15 @@ const MyResponsiveBar = ({ data }: { data: BarDatum[] }) => (
 );
 
 const Risk: React.FC = () => {
+  const { currentOrganization } = useAuthContext();
+
   return (
     <div className={classes.root}>
-      <h1>Risk Dashboard: cisa.gov</h1>
+      <h1>{currentOrganization?.name} Risk Dashboard</h1>
+      <h2>
+        Note: this data is demo data and not currently pulled from the database.
+        We plan on implementing this next week.
+      </h2>
       <h2>Total domains: 24</h2>
       <h1>Top Action Items</h1>
       <Table bordered>

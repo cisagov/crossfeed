@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.1
-      - uses: actions/setup-node@v2.1.0
+      - uses: actions/setup-node@v2.1.1
         with:
           node-version: '12.14'
       - name: Restore npm cache
@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.1
-      - uses: actions/setup-node@v2.1.0
+      - uses: actions/setup-node@v2.1.1
         with:
           node-version: '12.14'
       - name: Restore npm cache
@@ -62,7 +62,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v2.3.1
-      - uses: actions/setup-node@v2.1.0
+      - uses: actions/setup-node@v2.1.1
         with:
           node-version: '12.14'
       - name: Restore npm cache
@@ -91,7 +91,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v2.3.1
-      - uses: actions/setup-node@v2.1.0
+      - uses: actions/setup-node@v2.1.1
         with:
           node-version: '12.14'
       - name: Restore npm cache
@@ -112,7 +112,7 @@ jobs:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/production')
     steps:
       - uses: actions/checkout@v2.3.1
-      - uses: actions/setup-node@v2.1.0
+      - uses: actions/setup-node@v2.1.1
         with:
           node-version: '12.14'
       - name: Restore npm cache
@@ -139,7 +139,14 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           SLS_DEBUG: '*'
-
+      
+      - name: Deploy worker - Staging
+        run: npm run deploy-worker
+        working-directory: backend
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      
       - name: Ensure domain exists - Production
         if: github.ref == 'refs/heads/production'
         run: npx sls create_domain --stage=prod

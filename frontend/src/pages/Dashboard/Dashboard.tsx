@@ -15,7 +15,7 @@ interface ApiResponse {
 }
 
 export const Dashboard: React.FC = () => {
-  const { user, login, apiPost } = useAuthContext();
+  const { user, currentOrganization, login, apiPost } = useAuthContext();
   const [domains, setDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
@@ -24,47 +24,11 @@ export const Dashboard: React.FC = () => {
   const PAGE_SIZE = 25;
   const history = useHistory();
 
-  // Called to sign in the user
-  const callback = useCallback(async () => {
-    const parsed = parse(window.location.search);
-    if ((user && user.firstName !== '') || !parsed.state || !parsed.code) {
-      return;
-    }
-    try {
-      const { token, user } = await apiPost('/auth/callback', {
-        body: {
-          state: parsed.state,
-          code: parsed.code,
-          nonce: localStorage.getItem('nonce'),
-          origState: localStorage.getItem('state')
-        }
-      });
-
-      await login(token, user);
-
-      localStorage.removeItem('nonce');
-      localStorage.removeItem('state');
-
-      if (user.firstName !== '') {
-        window.location.reload();
-      } else {
-        history.push('/create-account');
-      }
-    } catch {
-      history.push('/');
-    }
-  }, [apiPost, history, login, user]);
-
-  React.useEffect(() => {
-    if (user && user.firstName === '') {
-      history.push('/create-account');
-    }
-    callback();
-    // eslint-disable-next-line
-  }, []);
-
   const fetchDomains = useCallback(
     async (query: Query<Domain>) => {
+      if (!user) {
+        return;
+      }
       const { page, sort, filters } = query;
       try {
         const { result, count } = await apiPost<ApiResponse>('/domain/search', {
@@ -90,8 +54,52 @@ export const Dashboard: React.FC = () => {
         console.error(e);
       }
     },
-    [apiPost]
+    [apiPost, user]
   );
+
+  // Called to sign in the user
+  const callback = useCallback(async () => {
+    const parsed = parse(window.location.search);
+    if ((user && user.firstName !== '') || !parsed.state || !parsed.code) {
+      return;
+    }
+    try {
+      const { token, user } = await apiPost('/auth/callback', {
+        body: {
+          state: parsed.state,
+          code: parsed.code,
+          nonce: localStorage.getItem('nonce'),
+          origState: localStorage.getItem('state')
+        }
+      });
+
+      await login(token, user);
+
+      localStorage.removeItem('nonce');
+      localStorage.removeItem('state');
+
+      if (user.firstName !== '') {
+        history.push('/');
+        fetchDomains({
+          page: 0,
+          sort: [],
+          filters: []
+        });
+      } else {
+        history.push('/create-account');
+      }
+    } catch {
+      history.push('/');
+    }
+  }, [apiPost, history, login, user, fetchDomains]);
+
+  React.useEffect(() => {
+    if (user && user.firstName === '') {
+      history.push('/create-account');
+    }
+    callback();
+    // eslint-disable-next-line
+  }, []);
 
   const renderPagination = (table: TableInstance<Domain>) => (
     <Paginator table={table} />
@@ -99,7 +107,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <h1>Dashboard</h1>{' '}
+      <h1>{currentOrganization?.name} Dashboard</h1>{' '}
       <Table<Domain>
         renderPagination={renderPagination}
         columns={columns}

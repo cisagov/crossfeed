@@ -1,8 +1,12 @@
 import React, { useContext } from 'react';
-import { User } from 'types';
+import { User, Organization } from 'types';
 
 export interface AuthUser extends User {
   isRegistered: boolean;
+}
+
+export interface CurrentOrganization extends Organization {
+  userIsAdmin?: boolean | null;
 }
 
 export interface AuthContextType {
@@ -13,6 +17,8 @@ export interface AuthContextType {
   apiPut<T extends object = any>(path: string, init: any): Promise<T>;
   apiDelete<T extends object = any>(path: string, init?: any): Promise<T>;
   user?: AuthUser | null;
+  currentOrganization?: CurrentOrganization | null;
+  setOrganization: (organization: CurrentOrganization) => Promise<void>;
 }
 
 /* istanbul ignore next */
@@ -22,7 +28,8 @@ export const defaultAuthContext: AuthContextType = {
   apiGet: async <T>() => ({} as T),
   apiPost: async <T>() => ({} as T),
   apiPut: async <T>() => ({} as T),
-  apiDelete: async <T>() => ({} as T)
+  apiDelete: async <T>() => ({} as T),
+  setOrganization: <T>(organization: CurrentOrganization) => ({} as T)
 };
 
 export const AuthContext = React.createContext<AuthContextType>(

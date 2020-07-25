@@ -275,7 +275,7 @@ describe('organizations', () => {
       const response = await request(app)
         .get(`/organizations/public`)
         .set('Authorization', '')
-        .expect(403);
+        .expect(401);
       expect(response.body).toEqual({});
     });
   });

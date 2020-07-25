@@ -126,12 +126,14 @@ class ECSClient {
       networkConfiguration: {
         awsvpcConfiguration: {
           assignPublicIp: 'ENABLED',
-          securityGroups: ['sg-05c9168f323c60ade'], // lambda sg id
-          subnets: ['subnet-02b249dd78cef0faf'] // ['subnet-005633f93180b0beb'] // // subnet id
+          securityGroups: [process.env.FARGATE_SG_ID!],
+          subnets: [process.env.FARGATE_SUBNET_ID!]
         }
       },
       platformVersion: '1.4.0',
       launchType: 'FARGATE',
+      // TODO: enable tags when we are able to opt in to the new ARN format for the lambda IAM role.
+      // See https://aws.amazon.com/blogs/compute/migrating-your-amazon-ecs-deployment-to-the-new-arn-and-resource-id-format-2/
       tags,
       overrides: {
         // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html

@@ -15,7 +15,7 @@ describe('user', () => {
     }).save();
   });
   describe('invite', () => {
-    it('invite by a regular user should work', async () => {
+    it('invite by a regular user should not work', async () => {
       const name = 'test-' + Math.random();
       const firstName = 'first name';
       const lastName = 'last name';
@@ -38,11 +38,7 @@ describe('user', () => {
           lastName,
           email
         })
-        .expect(200);
-      expect(response.body.firstName).toEqual(firstName);
-      expect(response.body.lastName).toEqual(lastName);
-      expect(response.body.email).toEqual(email);
-      expect(response.body.invitePending).toEqual(true);
+        .expect(403);
     });
   });
   describe('me', () => {

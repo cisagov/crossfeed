@@ -94,7 +94,7 @@ export const Domain: React.FC = () => {
                     type="button"
                     onClick={() => setShowReviewModal(true)}
                   >
-                    Request Quick Review <FaBolt></FaBolt>
+                    Request Active Scan <FaBolt></FaBolt>
                   </Button>
                 </div>
                 <img
@@ -149,16 +149,15 @@ export const Domain: React.FC = () => {
                       setShowReviewModal(false);
                     }}
                   >
-                    Request Review
+                    Request Active Scan
                   </Button>
                 </>
               }
-              title={<h2>Request review?</h2>}
+              title={<h2>Request active scan [DEMO]?</h2>}
             >
               <p>
-                This will request a quick manual security review of this asset
-                by CISA. By clicking "Submit", you opt in for CISA to review the
-                asset and report any vulnerabilities found.
+                This will request an active scan of this asset. This is a demo
+                customer-facing functionality and does not do anything.
               </p>
             </Modal>
           </ModalContainer>

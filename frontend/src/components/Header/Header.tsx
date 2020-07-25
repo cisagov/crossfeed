@@ -11,14 +11,14 @@ import classes from './styles.module.scss';
 import { useAuthContext } from 'context';
 
 export const Header: React.FC = () => {
-  const { user } = useAuthContext();
+  const { currentOrganization, user } = useAuthContext();
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
   const onExpandMobile: React.MouseEventHandler<HTMLButtonElement> = e => {
     setMobileExpanded(expanded => !expanded);
   };
 
-  const userNav = [
+  const orgUserNav = [
     <NavLink
       activeClassName="usa-current"
       to="/"
@@ -54,7 +54,7 @@ export const Header: React.FC = () => {
     </NavLink>
   ];
 
-  const adminNav = [
+  const orgAdminNav = [
     <NavLink
       activeClassName="usa-current"
       to="/"
@@ -74,11 +74,11 @@ export const Header: React.FC = () => {
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
-      to="/scans"
-      key="scans"
+      to="/organization"
+      key="organization"
       className="usa-nav__link"
     >
-      <span>Scans</span>
+      <span>Organization Settings</span>
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
@@ -86,7 +86,59 @@ export const Header: React.FC = () => {
       key="organizations"
       className="usa-nav__link"
     >
-      <span>Organizations</span>
+      <span>My Organizations</span>
+    </NavLink>,
+    <NavLink
+      activeClassName="usa-current"
+      to="/settings"
+      key="settings"
+      className="usa-nav__link"
+    >
+      <span>My Account</span>
+    </NavLink>
+  ];
+
+  const globalAdminNav = [
+    <NavLink
+      activeClassName="usa-current"
+      to="/"
+      exact
+      key="dashboard"
+      className="usa-nav__link"
+    >
+      <span>Dashboard</span>
+    </NavLink>,
+    <NavLink
+      activeClassName="usa-current"
+      to="/risk"
+      key="risk"
+      className="usa-nav__link"
+    >
+      <span>Risk Summary</span>
+    </NavLink>,
+    <NavLink
+      activeClassName="usa-current"
+      to="/organization"
+      key="organization"
+      className="usa-nav__link"
+    >
+      <span>Organization Settings</span>
+    </NavLink>,
+    <NavLink
+      activeClassName="usa-current"
+      to="/scans"
+      key="scans"
+      className="usa-nav__link"
+    >
+      <span>Global Scans</span>
+    </NavLink>,
+    <NavLink
+      activeClassName="usa-current"
+      to="/organizations"
+      key="organizations"
+      className="usa-nav__link"
+    >
+      <span>Manage Organizations</span>
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
@@ -94,7 +146,7 @@ export const Header: React.FC = () => {
       key="users"
       className="usa-nav__link"
     >
-      <span>Users</span>
+      <span>Manage Users</span>
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
@@ -108,8 +160,15 @@ export const Header: React.FC = () => {
 
   let nav: JSX.Element[] = [];
   if (user && user.isRegistered) {
-    if (user.userType === 'standard') nav = userNav;
-    else nav = adminNav;
+    if (user.userType === 'standard') {
+      if (currentOrganization?.userIsAdmin) {
+        nav = orgAdminNav;
+      } else {
+        nav = orgUserNav;
+      }
+    } else {
+      nav = globalAdminNav;
+    }
   }
 
   return (
