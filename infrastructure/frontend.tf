@@ -2,8 +2,9 @@ resource "aws_s3_bucket" "frontend_bucket" {
   bucket = var.frontend_domain
   acl    = "private"
 
-  tags = {
-    Project = "Crossfeed"
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
   }
 }
 
@@ -19,33 +20,6 @@ resource "aws_s3_bucket_policy" "b" {
 
   policy = data.template_file.policy_file.rendered
 }
-
-# resource "aws_acm_certificate" "frontend_cert" {
-#   domain_name       = var.frontend_domain
-#   provider          = aws.virginia #cert needs to be in us-east-1 for cloudfront
-#   validation_method = "DNS"
-#   tags = {
-#     Project = "Crossfeed"
-#   }
-#   lifecycle {
-#     create_before_destroy = true
-#   }
-# }
-
-# resource "aws_route53_record" "frontend_cert_validation" {
-#   name            = aws_acm_certificate.frontend_cert.domain_validation_options.0.resource_record_name
-#   type            = aws_acm_certificate.frontend_cert.domain_validation_options.0.resource_record_type
-#   zone_id         = data.aws_route53_zone.zone.id
-#   records         = [aws_acm_certificate.frontend_cert.domain_validation_options.0.resource_record_value]
-#   ttl             = 60
-#   allow_overwrite = true
-# }
-
-# resource "aws_acm_certificate_validation" "frontend_cert" {
-#   provider                = aws.virginia
-#   certificate_arn         = aws_acm_certificate.frontend_cert.arn
-#   validation_record_fqdns = [aws_route53_record.frontend_cert_validation.fqdn]
-# }
 
 locals {
   s3_origin_id = "myS3Origin"
@@ -83,8 +57,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     max_ttl                = 86400
   }
 
-  tags = {
-    Project = "Crossfeed"
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
   }
 
   restrictions {
@@ -111,17 +86,3 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     minimum_protocol_version = "TLSv1"
   }
 }
-
-# resource "aws_route53_record" "frontend_domain" {
-#   name            = aws_acm_certificate.frontend_cert.domain_name
-#   type            = "A"
-#   zone_id         = data.aws_route53_zone.zone.id
-#   allow_overwrite = true
-
-
-#   alias {
-#     name                   = aws_cloudfront_distribution.s3_distribution.domain_name
-#     zone_id                = aws_cloudfront_distribution.s3_distribution.hosted_zone_id
-#     evaluate_target_health = true
-#   }
-# }

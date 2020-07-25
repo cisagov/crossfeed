@@ -8,6 +8,11 @@ variable project {
   default = "Crossfeed"
 }
 
+variable stage {
+  type    = string
+  default = "staging"
+}
+
 variable db_port {
   type    = number
   default = 5432
