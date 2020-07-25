@@ -26,3 +26,11 @@ npm run deploy-worker
 ```
 
 If the `worker_ecs_repository_url` output from Terraform changes, you will need to modify `./src/tools/deploy-worker.sh`.
+
+## Generating censys types
+
+To re-generate the censysipv4 type file, run:
+
+```
+npm run codegen
+```
