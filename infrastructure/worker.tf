@@ -3,6 +3,11 @@ resource "aws_ecr_repository" "worker" {
   image_scanning_configuration {
     scan_on_push = true
   }
+
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
+  }
 }
 
 resource "aws_iam_role" "worker_task_execution_role" {
@@ -22,6 +27,11 @@ resource "aws_iam_role" "worker_task_execution_role" {
   ]
 }
   EOF
+
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
+  }
 }
 
 resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
@@ -64,6 +74,11 @@ EOF
 resource "aws_ecs_cluster" "worker" {
   name = var.worker_ecs_cluster_name
   capacity_providers = ["FARGATE"]
+
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
+  }
 }
 
 resource "aws_ecs_task_definition" "worker" {
@@ -122,9 +137,18 @@ resource "aws_ecs_task_definition" "worker" {
   
   cpu = 256 # .25 vCPU
   memory = 512 # 512 MB
+
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
+  }
 }
 
 resource "aws_cloudwatch_log_group" "worker" {
   name = var.worker_ecs_log_group_name # should match awslogs-group in service.json
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
+  }
 }
 

@@ -1,10 +1,10 @@
-Terraform infrastructure
+# Terraform infrastructure
 
-# Setup
-
-Make sure you set the default AWS profile, or set the `AWS_PROFILE` environment variable.
+## Setup
 
 First, run `cp stage.config .env` and change the variables in `.env` to use a bucket you have access to to store state.
+
+Make sure you configure the default AWS profile using `aws configure`, or set the `AWS_PROFILE` environment variable in `.env`.
 
 Then run:
 
@@ -14,7 +14,7 @@ make init
 ```
 
 
-# Deployment to staging
+## Deployment to staging
 
 Run:
 

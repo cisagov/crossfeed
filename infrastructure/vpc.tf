@@ -41,32 +41,36 @@ resource "aws_subnet" "worker" {
   vpc_id            = aws_vpc.crossfeed_vpc.id
   cidr_block        = "10.0.3.0/24"
 
-  tags = {
-    Project = var.project
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
   }
 }
 
 resource "aws_route_table" "r" {
   vpc_id = aws_vpc.crossfeed_vpc.id
 
-  tags = {
-    Project = var.project
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
   }
 }
 
 resource "aws_route_table" "r2" {
   vpc_id = aws_vpc.crossfeed_vpc.id
 
-  tags = {
-    Project = var.project
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
   }
 }
 
 resource "aws_route_table" "worker" {
   vpc_id = aws_vpc.crossfeed_vpc.id
 
-  tags = {
-    Project = var.project
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
   }
 }
 
@@ -105,7 +109,10 @@ resource "aws_route" "public_route" {
 }
 
 resource "aws_eip" "nat_eip" {
-
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
+  }	
 }
 
 resource "aws_nat_gateway" "nat" {	
@@ -114,6 +121,7 @@ resource "aws_nat_gateway" "nat" {
 
   tags = {	
     Project = var.project	
+    Stage   = var.stage
   }	
 }	
 
@@ -143,11 +151,15 @@ resource "aws_security_group" "allow_internal" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Project = var.project
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
   }
 }
 
+# TODO: remove this security group. We can't remove it right now because
+# AWS created an ENI in this security group that can't be deleted at the moment.
+# See https://www.reddit.com/r/aws/comments/4fncrl/dangling_enis_after_deleting_an_invpc_lambda_with/
 resource "aws_security_group" "backend" {
   name        = "backend"
   description = "Backend"
@@ -160,8 +172,9 @@ resource "aws_security_group" "backend" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Project = var.project
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
   }
 }
 
@@ -178,7 +191,8 @@ resource "aws_security_group" "worker" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Project = var.project
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
   }
 }
