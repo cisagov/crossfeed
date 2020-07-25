@@ -95,7 +95,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     })
   ];
 
-  const queue = new PQueue({ concurrency: 10 });
+  const queue = new PQueue({ concurrency: 5 });
 
   const numFiles = Object.keys(files).length;
   const fileNames = Object.keys(files).sort();
