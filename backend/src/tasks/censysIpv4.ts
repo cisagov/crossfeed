@@ -43,8 +43,7 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
             name: matchingDomain.name,
             asn: item.autonomous_system?.asn,
             ip: item.ip,
-            country: item.location?.country_code,
-            lastSeen: new Date(Date.now())
+            country: item.location?.country_code
           })
         );
         for (const key in item) {
@@ -55,7 +54,8 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
                 ...mapping[key](item[key]),
                 service,
                 port: Number(key.slice(1)),
-                domain: matchingDomain
+                domain: matchingDomain,
+                lastSeen: new Date(Date.now())
               })
             );
           }
