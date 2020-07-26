@@ -53,4 +53,13 @@ export class Service extends BaseEntity {
     version: string;
     manufacturer: string;
   } | null;
+
+  /** Censys Ipv4 results */
+  @Column({
+    type: 'jsonb',
+    default: {}
+  })
+  censysIpv4Results: {
+    [x: string]: any;
+  };
 }

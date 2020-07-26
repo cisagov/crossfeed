@@ -35,7 +35,7 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
       const item: CensysIpv4Data = JSON.parse(line);
       // For local testing: just match the first entry.
       const matchingDomains = process.env.IS_LOCAL
-        ? allDomains.filter((e, i) => Math.random() < 0.0001)
+        ? allDomains.filter((e, i) => Math.random() < 0.00001)
         : allDomains.filter((e) => e.ip === item.ip);
       for (const matchingDomain of matchingDomains) {
         domains.push(
@@ -54,7 +54,8 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
               service,
               port: Number(key.slice(1)),
               domain: matchingDomain,
-              lastSeen: new Date(Date.now())
+              lastSeen: new Date(Date.now()),
+              censysIpv4Results: item[key]
             };
             for (const k in s) {
               // Sometimes, a field might contain null characters, but we can't store null
