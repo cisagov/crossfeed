@@ -10,3 +10,11 @@
     padding: 1rem;
   }
 }
+
+.codeBlock {
+  background-color: rgb(238, 238, 238);
+  max-height: 300px;
+  overflow: auto;
+  padding: 15px;
+  max-width: 1100px;
+}
