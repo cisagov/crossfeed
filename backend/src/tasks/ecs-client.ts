@@ -137,8 +137,6 @@ class ECSClient {
       // See https://aws.amazon.com/blogs/compute/migrating-your-amazon-ecs-deployment-to-the-new-arn-and-resource-id-format-2/
       // tags,
       overrides: {
-        // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
-        // https://stormforger.com/blog/aws-fargate-network-performance/
         cpu,
         memory,
         containerOverrides: [
