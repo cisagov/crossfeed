@@ -35,7 +35,7 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
       const item: CensysIpv4Data = JSON.parse(line);
       // For local testing: just match the first entry.
       const matchingDomains = process.env.IS_LOCAL
-        ? allDomains.filter((e, i) => Math.random() < 0.005)
+        ? allDomains.filter((e, i) => Math.random() < 0.0001)
         : allDomains.filter((e) => e.ip === item.ip);
       for (const matchingDomain of matchingDomains) {
         domains.push(
