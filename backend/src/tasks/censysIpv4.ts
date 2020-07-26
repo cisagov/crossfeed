@@ -61,7 +61,7 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
               // characters in a string field in PostgreSQL. For example, a site might have
               // a banner ending with "</body>\r\n</html>\u0000".
               // TODO(Ashwin): add a test for this.
-              if (typeof k === 'string') {
+              if (typeof s[k] === 'string') {
                 s[k] = s[k].replace(/\0/g, '');
               }
             }
