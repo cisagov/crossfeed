@@ -1,6 +1,3 @@
-# data "aws_ssm_parameter" "censys_api_id" { name = var.ssm_censys_api_id }
-# data "aws_ssm_parameter" "censys_api_secret" { name = var.ssm_censys_api_secret }
-
 resource "aws_ecr_repository" "worker" {
   name                = var.worker_ecs_repository_name
   image_scanning_configuration {

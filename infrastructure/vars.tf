@@ -78,14 +78,6 @@ variable ssm_db_password {
   default = "/crossfeed/staging/DATABASE_PASSWORD"
 }
 
-variable ssm_censys_api_id {
-  type    = string
-}
-
-variable ssm_censys_api_secret {
-  type    = string
-}
-
 variable cloudfront_name {
   type    = string
   default = "Crossfeed Staging Frontend"
