@@ -30,7 +30,7 @@ class ECSClient {
       const Docker = require('dockerode');
       this.docker = new Docker();
     } else {
-      this.ecs = new ECS({ region: 'us-east-1' });
+      this.ecs = new ECS();
     }
   }
 
