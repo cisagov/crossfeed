@@ -26,4 +26,8 @@ export const columns: Column<Service>[] = [
     Header: "Service",
     accessor: "service",
   },
+  {
+    Header: "Censys Metadata",
+    accessor: e => JSON.stringify(e.censysMetadata)
+  }
 ];

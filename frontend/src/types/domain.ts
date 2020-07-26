@@ -13,6 +13,7 @@ export interface Service {
   id: number;
   lastSeen: string | null;
   banner: string | null;
+  censysMetadata: any;
 }
 
 export interface Domain {
