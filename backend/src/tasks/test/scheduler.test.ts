@@ -39,8 +39,10 @@ describe('scheduler', () => {
       })
     );
 
-    const scanTask = await ScanTask.findOne(runCommand.mock.calls[0][0].scanTaskId);
-    expect(scanTask?.status).toEqual("requested");
+    const scanTask = await ScanTask.findOne(
+      runCommand.mock.calls[0][0].scanTaskId
+    );
+    expect(scanTask?.status).toEqual('requested');
   });
   test('should not run a scan when a scantask for that scan and organization is already in progress', async () => {
     const scan = await Scan.create({
@@ -119,7 +121,7 @@ describe('scheduler', () => {
       scan,
       type: 'fargate',
       status: 'finished',
-      finishedAt: new Date(),
+      finishedAt: new Date()
     }).save();
 
     await scheduler(
@@ -209,12 +211,12 @@ describe('scheduler', () => {
 
     await scheduler(
       {
-        scanId: scan.id,
+        scanId: scan.id
       },
       {} as any,
       () => void 0
     );
-    
+
     // Calls scan in chunks
     expect(runCommand).toHaveBeenCalledTimes(100);
     expect(runCommand).toHaveBeenCalledWith(
@@ -225,8 +227,10 @@ describe('scheduler', () => {
       })
     );
 
-    const scanTask = await ScanTask.findOne(runCommand.mock.calls[0][0].scanTaskId);
-    expect(scanTask?.status).toEqual("requested");
+    const scanTask = await ScanTask.findOne(
+      runCommand.mock.calls[0][0].scanTaskId
+    );
+    expect(scanTask?.status).toEqual('requested');
     expect(scanTask?.organization).toBeUndefined();
   });
   test('should not run a global scan when a scantask for it is already in progress', async () => {
@@ -243,7 +247,7 @@ describe('scheduler', () => {
 
     await scheduler(
       {
-        scanId: scan.id,
+        scanId: scan.id
       },
       {} as any,
       () => void 0

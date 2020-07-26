@@ -56,7 +56,7 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
               domain: matchingDomain,
               lastSeen: new Date(Date.now())
             };
-            for (let k in s) {
+            for (const k in s) {
               // Sometimes, a field might contain null characters, but we can't store null
               // characters in a string field in PostgreSQL. For example, a site might have
               // a banner ending with "</body>\r\n</html>\u0000".
