@@ -200,6 +200,7 @@ describe('scheduler', () => {
     expect(runCommand).toHaveBeenCalledTimes(1);
   });
   test('should run a global scan for the first time', async () => {
+    jest.setTimeout(30000);
     const scan = await Scan.create({
       name: 'censysIpv4',
       arguments: {},
@@ -213,8 +214,9 @@ describe('scheduler', () => {
       {} as any,
       () => void 0
     );
-
-    expect(runCommand).toHaveBeenCalledTimes(1);
+    
+    // Calls scan in chunks
+    expect(runCommand).toHaveBeenCalledTimes(100);
     expect(runCommand).toHaveBeenCalledWith(
       expect.objectContaining({
         organizationId: undefined,

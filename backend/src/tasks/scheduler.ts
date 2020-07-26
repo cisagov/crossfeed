@@ -5,7 +5,7 @@ import ECSClient from './ecs-client';
 import { SCAN_SCHEMA } from '../api/scans';
 import { In } from 'typeorm';
 
-const launchScanTask = async ({
+const launchSingleScanTask = async ({
   organization = undefined,
   scan,
   chunkNumber,
@@ -17,6 +17,7 @@ const launchScanTask = async ({
   numChunks?: number;
 }) => {
   const { type, global } = SCAN_SCHEMA[scan.name];
+
   const ecsClient = new ECSClient();
   const scanTask = await ScanTask.create({
     organization: global ? undefined : organization,
@@ -44,7 +45,7 @@ const launchScanTask = async ({
           } failures.`
         );
       }
-      console.log(`Successfully invoked ${scan.name} scan with fargate.`);
+      console.log(`Successfully invoked ${scan.name} scan with fargate. ` + (numChunks ? ` Chunk ${chunkNumber}/${numChunks}`: ""));
     } else {
       throw new Error('Invalid type ' + type);
     }
@@ -60,6 +61,27 @@ const launchScanTask = async ({
     await scanTask.save();
   }
 };
+
+const launchScanTask = async ({
+  organization = undefined,
+  scan,
+}: {
+  organization?: Organization;
+  scan: Scan;
+}) => {
+  let { numChunks } = SCAN_SCHEMA[scan.name];
+  if (numChunks) {
+    if (typeof jest === "undefined" && process.env.IS_LOCAL) {
+      // For running server on localhost -- doesn't apply in jest tests, though.
+      numChunks = 1;
+    }
+    for (let chunkNumber = 0; chunkNumber < numChunks; chunkNumber++) {
+      await launchSingleScanTask({ organization, scan, chunkNumber, numChunks: numChunks });
+    }
+  } else {
+    await launchSingleScanTask({ organization, scan });
+  }
+}
 
 const shouldRunScan = async ({
   organization,
@@ -136,24 +158,13 @@ export const handler: Handler<Event> = async (event) => {
       continue;
     }
     const { global } = SCAN_SCHEMA[scan.name];
-    let { numChunks } = SCAN_SCHEMA[scan.name];
 
     if (global) {
       // Global scans are not associated with an organization.
       if (!(await shouldRunScan({ scan }))) {
         continue;
       }
-      if (numChunks) {
-        if (process.env.IS_LOCAL) {
-          // For local testing.
-          numChunks = 1;
-        }
-        for (let chunkNumber = 0; chunkNumber < numChunks; chunkNumber++) {
-          await launchScanTask({ scan, chunkNumber, numChunks: numChunks });
-        }
-      } else {
-        await launchScanTask({ scan });
-      }
+      await launchScanTask({ scan });
     } else {
       for (const organization of organizations) {
         if (!(await shouldRunScan({ organization, scan }))) {
