@@ -85,7 +85,7 @@ class DomainSearch {
         'domain.id, domain.ip, domain.name, organization.id, services.id'
       )
       .offset(PAGE_SIZE * (this.page - 1))
-      .limit(PAGE_SIZE);
+      .take(PAGE_SIZE);
 
     if (!isGlobalViewAdmin(event)) {
       qs.andHaving('domain.organization IN (:...orgs)', {
