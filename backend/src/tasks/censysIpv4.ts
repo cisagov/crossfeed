@@ -18,8 +18,6 @@ const auth = {
 };
 const CENSYS_IPV4_ENDPOINT = 'https://censys.io/api/v1/data/ipv4_2018/';
 
-// schema: https://censys.io/help/bigquery/ipv4
-
 const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
   console.log(`i: ${i} of ${numFiles}: starting download of url ${path}`);
 
@@ -28,14 +26,17 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
   const gunzip = zlib.createGunzip();
   // TODO: use stream.pipeline instead, since .pipe doesn't forward errors.
   const unzipped = got.stream.get(path, { ...auth }).pipe(gunzip);
+  // readInterface lets us stream the JSON file line-by-line
   const readInterface = readline.createInterface({
     input: unzipped
   });
   await new Promise((resolve, reject) => {
-    // readInterface lets us stream the JSON file line-by-line
     readInterface.on('line', function (line) {
       const item: CensysIpv4Data = JSON.parse(line);
-      const matchingDomains = allDomains.filter((e) => e.ip === item.ip);
+      // For local testing: just match the first entry.
+      const matchingDomains = process.env.IS_LOCAL
+        ? allDomains.filter((e, i) => Math.random() < 0.01)
+        : allDomains.filter((e) => e.ip === item.ip);
       for (const matchingDomain of matchingDomains) {
         domains.push(
           plainToClass(Domain, {
@@ -66,17 +67,19 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
     readInterface.on('SIGCONT', reject);
     readInterface.on('SIGTSTP', reject);
   });
-  console.log(`i: ${i} of ${numFiles}: got ${domains.length} domains and ${services.length} services`);
+  console.log(
+    `i: ${i} of ${numFiles}: got ${domains.length} domains and ${services.length} services`
+  );
 
   // await saveDomainsToDb(domains);
   // await saveServicesToDb(services);
-}
+};
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { chunkNumber, numChunks } = commandOptions;
 
   if (chunkNumber === undefined || numChunks === undefined) {
-    throw new Error("Chunks not specified.");
+    throw new Error('Chunks not specified.');
   }
 
   const {
@@ -100,12 +103,25 @@ export const handler = async (commandOptions: CommandOptions) => {
   const numFiles = Object.keys(files).length;
   const fileNames = Object.keys(files).sort();
   const jobs: Promise<void>[] = [];
-  let startIndex = Math.floor(1.0 * chunkNumber / numChunks * numFiles);
-  let endIndex = Math.floor(1.0 * (chunkNumber + 1) / numChunks * numFiles) - 1;
+
+  let startIndex = Math.floor(((1.0 * chunkNumber) / numChunks) * numFiles);
+  let endIndex =
+    Math.floor(((1.0 * (chunkNumber + 1)) / numChunks) * numFiles) - 1;
+
+  if (process.env.IS_LOCAL) {
+    // For local testing.
+    startIndex = 0;
+    endIndex = 1;
+  }
+
   for (let i = startIndex; i <= endIndex; i++) {
-    let idx = i;
-    let fileName = fileNames[idx];
-    jobs.push(queue.add(() => downloadPath(files[fileName].download_path, allDomains, idx, numFiles)));
+    const idx = i;
+    const fileName = fileNames[idx];
+    jobs.push(
+      queue.add(() =>
+        downloadPath(files[fileName].download_path, allDomains, idx, numFiles)
+      )
+    );
   }
   console.log(`censysipv4: scheduled all tasks`);
   await Promise.all(jobs);

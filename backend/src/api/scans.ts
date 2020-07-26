@@ -12,12 +12,12 @@ import { isGlobalWriteAdmin } from './auth';
 
 interface ScanSchema {
   [name: string]: {
-    // Scan type
-    type: 'lambda' | 'fargate';
-    
+    // Scan type. Only Fargate is supported.
+    type: 'fargate';
+
     // Whether scan is passive (not allowed to hit the domain).
     isPassive: boolean;
-    
+
     // Whether scan is global. GLobal scans run once for all organizations, as opposed
     // to non-global scans, which are run for each organization.
     global: boolean;
@@ -66,9 +66,9 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: true,
-    cpu: "1024",
-    memory: "4096",
-    numChunks: 20
+    cpu: '1024',
+    memory: '4096',
+    numChunks: 100
   }
 };
 

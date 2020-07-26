@@ -26,7 +26,6 @@ class ECSClient {
   constructor() {
     this.isLocal =
       process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false;
-    this.isLocal = false;
     if (this.isLocal) {
       const Docker = require('dockerode');
       this.docker = new Docker();
@@ -48,19 +47,22 @@ class ECSClient {
       numChunks,
       chunkNumber
     } = commandOptions;
+    const { cpu, memory, global } = SCAN_SCHEMA[scanName];
     if (this.isLocal) {
       try {
         const container = await this.docker!.createContainer({
           // We need to create unique container names to avoid conflicts.
           name: toSnakeCase(
-            `crossfeed_worker_${organizationName}_${scanName}_` +
-              Math.floor(Math.random() * 10000000)
+            `crossfeed_worker_${
+              global ? 'global' : organizationName
+            }_${scanName}_` + Math.floor(Math.random() * 10000000)
           ),
           Image: 'crossfeed-worker',
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
             `DB_DIALECT=${process.env.DB_DIALECT}`,
             `DB_HOST=localhost`,
+            `IS_LOCAL=true`,
             `DB_PORT=${process.env.DB_PORT}`,
             `DB_NAME=${process.env.DB_NAME}`,
             `DB_USERNAME=${process.env.DB_USERNAME}`,
@@ -88,8 +90,7 @@ class ECSClient {
         };
       }
     }
-    const { cpu, memory } = SCAN_SCHEMA[scanName];
-    const tags =  [
+    const tags = [
       {
         key: 'scanId',
         value: scanId
@@ -114,7 +115,7 @@ class ECSClient {
         key: 'numChunks',
         value: String(numChunks)
       });
-      tags.push(      {
+      tags.push({
         key: 'chunkNumber',
         value: String(chunkNumber)
       });
