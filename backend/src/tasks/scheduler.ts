@@ -45,8 +45,11 @@ const launchSingleScanTask = async ({
           } failures.`
         );
       }
-      if (typeof jest === "undefined") {
-        console.log(`Successfully invoked ${scan.name} scan with fargate. ` + (numChunks ? ` Chunk ${chunkNumber}/${numChunks}`: ""));
+      if (typeof jest === 'undefined') {
+        console.log(
+          `Successfully invoked ${scan.name} scan with fargate. ` +
+            (numChunks ? ` Chunk ${chunkNumber}/${numChunks}` : '')
+        );
       }
     } else {
       throw new Error('Invalid type ' + type);
@@ -66,24 +69,29 @@ const launchSingleScanTask = async ({
 
 const launchScanTask = async ({
   organization = undefined,
-  scan,
+  scan
 }: {
   organization?: Organization;
   scan: Scan;
 }) => {
   let { numChunks } = SCAN_SCHEMA[scan.name];
   if (numChunks) {
-    if (typeof jest === "undefined" && process.env.IS_LOCAL) {
+    if (typeof jest === 'undefined' && process.env.IS_LOCAL) {
       // For running server on localhost -- doesn't apply in jest tests, though.
       numChunks = 1;
     }
     for (let chunkNumber = 0; chunkNumber < numChunks; chunkNumber++) {
-      await launchSingleScanTask({ organization, scan, chunkNumber, numChunks: numChunks });
+      await launchSingleScanTask({
+        organization,
+        scan,
+        chunkNumber,
+        numChunks: numChunks
+      });
     }
   } else {
     await launchSingleScanTask({ organization, scan });
   }
-}
+};
 
 const shouldRunScan = async ({
   organization,

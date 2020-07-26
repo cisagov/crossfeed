@@ -1,5 +1,5 @@
 import { CommandOptions } from './tasks/ecs-client';
-// import { connectToDatabase, ScanTask } from './models';
+import { connectToDatabase, ScanTask } from './models';
 import { handler as amass } from './tasks/amass';
 import { handler as censys } from './tasks/censys';
 import { handler as findomain } from './tasks/findomain';
@@ -11,7 +11,7 @@ import { handler as censysIpv4 } from './tasks/censysIpv4';
  * Worker entrypoint.
  */
 async function main() {
-  // await connectToDatabase();
+  await connectToDatabase();
 
   const commandOptions: CommandOptions = JSON.parse(
     process.env.CROSSFEED_COMMAND_OPTIONS || '{}'
@@ -19,11 +19,11 @@ async function main() {
   console.log('commandOptions are', commandOptions);
 
   const { scanName, scanTaskId } = commandOptions;
-  // const scanTask = await ScanTask.findOneOrFail(scanTaskId);
+  const scanTask = await ScanTask.findOneOrFail(scanTaskId);
 
-  // scanTask.status = 'started';
-  // scanTask.startedAt = new Date();
-  // await scanTask.save();
+  scanTask.status = 'started';
+  scanTask.startedAt = new Date();
+  await scanTask.save();
 
   try {
     const scanFn = {
@@ -38,14 +38,14 @@ async function main() {
       throw new Error('Invalid scan name ' + scanName);
     }
     await scanFn(commandOptions);
-    // scanTask.status = 'finished';
+    scanTask.status = 'finished';
   } catch (e) {
     console.error(e);
-    // scanTask.status = 'failed';
-    // scanTask.output = JSON.stringify(e);
+    scanTask.status = 'failed';
+    scanTask.output = JSON.stringify(e);
   } finally {
-    // scanTask.finishedAt = new Date();
-    // await scanTask.save();
+    scanTask.finishedAt = new Date();
+    await scanTask.save();
   }
 }
 

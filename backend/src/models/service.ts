@@ -44,7 +44,7 @@ export class Service extends BaseEntity {
   /** Censys Metadata */
   @Column({
     type: 'jsonb',
-    nullable: true
+    default: {}
   })
   censysMetadata: {
     product: string;

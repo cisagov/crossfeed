@@ -35,7 +35,7 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
       const item: CensysIpv4Data = JSON.parse(line);
       // For local testing: just match the first entry.
       const matchingDomains = process.env.IS_LOCAL
-        ? allDomains.filter((e, i) => Math.random() < 0.01)
+        ? allDomains.filter((e, i) => Math.random() < 0.005)
         : allDomains.filter((e) => e.ip === item.ip);
       for (const matchingDomain of matchingDomains) {
         domains.push(
@@ -49,15 +49,23 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
         for (const key in item) {
           if (key.startsWith('p') && mapping[key]) {
             const service = Object.keys(item[key] as any)[0];
-            services.push(
-              plainToClass(Service, {
-                ...mapping[key](item[key]),
-                service,
-                port: Number(key.slice(1)),
-                domain: matchingDomain,
-                lastSeen: new Date(Date.now())
-              })
-            );
+            const s = {
+              ...mapping[key](item[key]),
+              service,
+              port: Number(key.slice(1)),
+              domain: matchingDomain,
+              lastSeen: new Date(Date.now())
+            };
+            for (let k in s) {
+              // Sometimes, a field might contain null characters, but we can't store null
+              // characters in a string field in PostgreSQL. For example, a site might have
+              // a banner ending with "</body>\r\n</html>\u0000".
+              // TODO(Ashwin): add a test for this.
+              if (typeof k === 'string') {
+                s[k] = s[k].replace(/\0/g, '');
+              }
+            }
+            services.push(plainToClass(Service, s));
           }
         }
       }
@@ -90,13 +98,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     data: { files }
   } = await axios.get(results.latest.details_url, { auth });
 
-  // const allDomains = await getAllDomains();
-  const allDomains = [
-    plainToClass(Domain, {
-      name: 'first_file_testdomain1',
-      ip: '104.84.119.215'
-    })
-  ];
+  const allDomains = await getAllDomains();
 
   const queue = new PQueue({ concurrency: 5 });
 
