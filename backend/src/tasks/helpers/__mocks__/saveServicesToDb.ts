@@ -5,12 +5,13 @@ export default async (services: Service[]) => {
     (a.service || '').localeCompare(b.service || '')
   );
   services.forEach((service) => {
-    expect(service.censysIpv4Results).toBeTruthy();
-    // Create a smaller snapshot, rather than storing the entire ipv4 result data.
-    service.censysIpv4Results = {
-      TEST_SNAPSHOT:
-        JSON.stringify(service.censysIpv4Results).substring(0, 100) + '...'
-    };
+    if (service.censysIpv4Results) {
+      // Create a smaller snapshot, rather than storing the entire ipv4 result data.
+      service.censysIpv4Results = {
+        TEST_SNAPSHOT:
+          JSON.stringify(service.censysIpv4Results).substring(0, 100) + '...'
+      };
+    }
   });
   expect(services).toMatchSnapshot('helpers.saveServicesToDb');
 };
