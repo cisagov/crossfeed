@@ -33,10 +33,14 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
   await new Promise((resolve, reject) => {
     readInterface.on('line', function (line) {
       const item: CensysIpv4Data = JSON.parse(line);
-      // For local testing: just match the first entry.
-      const matchingDomains = process.env.IS_LOCAL
-        ? allDomains.filter((e, i) => Math.random() < 0.00001)
-        : allDomains.filter((e) => e.ip === item.ip);
+
+      let matchingDomains = allDomains.filter((e) => e.ip === item.ip);
+      if (process.env.IS_LOCAL && typeof jest === 'undefined') {
+        // For local development: just randomly match domains
+        // (this behavior is not present when running tests
+        // through jest, though).
+        matchingDomains = allDomains.filter(() => Math.random() < 0.00001);
+      }
       for (const matchingDomain of matchingDomains) {
         domains.push(
           plainToClass(Domain, {

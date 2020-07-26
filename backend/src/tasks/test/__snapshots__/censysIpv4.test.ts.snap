@@ -6,7 +6,6 @@ Array [
     "asn": "9121",
     "country": "TR",
     "ip": "1.1.1.1",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
     "name": "second_file_testdomain1",
   },
 ]
@@ -18,77 +17,66 @@ Array [
     "asn": "7684",
     "country": "JP",
     "ip": "153.126.148.60",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
     "name": "first_file_testdomain1",
   },
   Domain {
     "asn": "16509",
     "country": "SG",
     "ip": "52.74.149.117",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
     "name": "first_file_testdomain10",
   },
   Domain {
     "asn": "48347",
     "country": "RU",
     "ip": "31.134.10.156",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
     "name": "first_file_testdomain11",
   },
   Domain {
     "asn": "48347",
     "country": "RU",
     "ip": "31.134.10.156",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
     "name": "first_file_testdomain2",
   },
   Domain {
     "asn": "7684",
     "country": "JP",
     "ip": "153.126.148.60",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
     "name": "first_file_testdomain3",
   },
   Domain {
     "asn": "8473",
     "country": "SE",
     "ip": "85.24.146.152",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
     "name": "first_file_testdomain4",
   },
   Domain {
     "asn": "63949",
     "country": "US",
     "ip": "45.79.207.117",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
     "name": "first_file_testdomain5",
   },
   Domain {
     "asn": "26484",
     "country": "US",
     "ip": "156.249.159.119",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
     "name": "first_file_testdomain6",
   },
   Domain {
     "asn": undefined,
     "country": undefined,
     "ip": "221.10.15.220",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
     "name": "first_file_testdomain7",
   },
   Domain {
     "asn": "2856",
     "country": "GB",
     "ip": "81.141.166.145",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
     "name": "first_file_testdomain8",
   },
   Domain {
     "asn": "6327",
     "country": "CA",
     "ip": "24.65.82.187",
-    "lastSeen": 2019-04-22T10:20:30.000Z,
     "name": "first_file_testdomain9",
   },
 ]
@@ -98,11 +86,15 @@ exports[`censys ipv4 basic test: helpers.saveServicesToDb 1`] = `
 Array [
   Service {
     "banner": null,
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"dns\\":{\\"lookup\\":{\\"errors\\":false,\\"open_resolver\\":false,\\"questions\\":[{\\"name\\":\\"c.afekv.com\\",\\"type\\":\\"A\\"...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "1.1.1.1",
       "name": "second_file_testdomain1",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 53,
     "service": "dns",
   },
@@ -113,31 +105,43 @@ exports[`censys ipv4 basic test: helpers.saveServicesToDb 2`] = `
 Array [
   Service {
     "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\"><html><head><title>401 Unauthorized</title></head><body><h1>Authorization Required</h1><p>This server could not verify that you are authorized to access the document requested.  Either you supplied the wrong credentials (e.g., bad password), or your browser doesn't understand how to supply the credentials required</p><hr></body></html>",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"cwmp\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\"><html><head><title>401 U...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "24.65.82.187",
       "name": "first_file_testdomain9",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 7547,
     "service": "cwmp",
   },
   Service {
     "banner": undefined,
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"cwmp\\":{\\"get\\":{\\"headers\\":{\\"content_length\\":\\"0\\",\\"server\\":\\"gSOAP/2.7\\"},\\"status_code\\":\\"404\\",\\"status_li...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "81.141.166.145",
       "name": "first_file_testdomain8",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 7547,
     "service": "cwmp",
   },
   Service {
     "banner": null,
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"dns\\":{\\"lookup\\":{\\"answers\\":[{\\"name\\":\\"c.afekv.com\\",\\"response\\":\\"221.10.58.54\\",\\"type\\":\\"A\\"},{\\"name\\":\\"c....",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "221.10.15.220",
       "name": "first_file_testdomain7",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 53,
     "service": "dns",
   },
@@ -180,6 +184,9 @@ Array [
 
 </body>
 </html>",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE html>\\\\n<html lang=\\\\\\"en\\\\\\" ng-app=\\\\\\"cloudautom.landing\\\\\\">\\\\n\\\\n<!-- <h...",
+    },
     "censysMetadata": Object {
       "description": "Apache httpd 2.4.18",
       "manufacturer": "Apache",
@@ -190,6 +197,7 @@ Array [
       "ip": "52.74.149.117",
       "name": "first_file_testdomain10",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
     "service": "http",
   },
@@ -203,6 +211,9 @@ Array [
 on this server.</p>
 </body></html>
 ",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>4...",
+    },
     "censysMetadata": Object {
       "description": "Apache httpd",
       "manufacturer": "Apache",
@@ -212,6 +223,7 @@ on this server.</p>
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
     "service": "http",
   },
@@ -225,6 +237,9 @@ on this server.</p>
 on this server.</p>
 </body></html>
 ",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>4...",
+    },
     "censysMetadata": Object {
       "description": "Apache httpd",
       "manufacturer": "Apache",
@@ -234,6 +249,7 @@ on this server.</p>
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
     "service": "http",
   },
@@ -248,6 +264,9 @@ on this server.</p>
 <address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>
 </body></html>
 ",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>4...",
+    },
     "censysMetadata": Object {
       "description": "Apache httpd 2.4.38",
       "manufacturer": "Apache",
@@ -258,6 +277,7 @@ on this server.</p>
       "ip": "31.134.10.156",
       "name": "first_file_testdomain2",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
     "service": "http",
   },
@@ -272,6 +292,9 @@ on this server.</p>
 <address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>
 </body></html>
 ",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>4...",
+    },
     "censysMetadata": Object {
       "description": "Apache httpd 2.4.38",
       "manufacturer": "Apache",
@@ -282,6 +305,7 @@ on this server.</p>
       "ip": "31.134.10.156",
       "name": "first_file_testdomain11",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
     "service": "http",
   },
@@ -357,6 +381,9 @@ on this server.</p>
   </body>
 </html>
 ",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<html>\\\\n  <head>\\\\n    <meta charset=\\\\\\"utf-8\\\\\\">\\\\n    <link href=\\\\\\"https://cdn...",
+    },
     "censysMetadata": Object {
       "description": "nginx",
       "product": "nginx",
@@ -365,6 +392,7 @@ on this server.</p>
       "ip": "45.79.207.117",
       "name": "first_file_testdomain5",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
     "service": "http",
   },
@@ -401,6 +429,9 @@ a img {
 </div>
 </body>
 </html>",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE html PUBLIC \\\\\\"-//W3C//DTD XHTML 1.0 Strict//EN\\\\\\" \\\\\\"http://www.w3.o...",
+    },
     "censysMetadata": Object {
       "description": "Microsoft IIS 7.5",
       "manufacturer": "Microsoft",
@@ -411,6 +442,7 @@ a img {
       "ip": "156.249.159.119",
       "name": "first_file_testdomain6",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
     "service": "http",
   },
@@ -1430,6 +1462,9 @@ a img {
 </body>
 </html>
 ",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"authority_info_access\\":{\\"issuer_urls\\":[\\"htt...",
+    },
     "censysMetadata": Object {
       "description": "Apache httpd 2.4.18",
       "manufacturer": "Apache",
@@ -1440,6 +1475,7 @@ a img {
       "ip": "52.74.149.117",
       "name": "first_file_testdomain10",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 443,
     "service": "https",
   },
@@ -1453,6 +1489,9 @@ a img {
 on this server.</p>
 </body></html>
 ",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{\\"is_ca\\":false},\\"key_usa...",
+    },
     "censysMetadata": Object {
       "description": "Apache httpd",
       "manufacturer": "Apache",
@@ -1462,6 +1501,7 @@ on this server.</p>
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 443,
     "service": "https",
   },
@@ -1475,6 +1515,9 @@ on this server.</p>
 on this server.</p>
 </body></html>
 ",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{\\"is_ca\\":false},\\"key_usa...",
+    },
     "censysMetadata": Object {
       "description": "Apache httpd",
       "manufacturer": "Apache",
@@ -1484,6 +1527,7 @@ on this server.</p>
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 443,
     "service": "https",
   },
@@ -1495,6 +1539,9 @@ on this server.</p>
 <hr><p>HTTP Error 404. The requested resource is not found.</p>
 </BODY></HTML>
 ",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"extended_key_usage\\":{\\"server_auth\\":true},\\"k...",
+    },
     "censysMetadata": Object {
       "description": "Microsoft HTTPAPI 2.0",
       "manufacturer": "Microsoft",
@@ -1505,11 +1552,15 @@ on this server.</p>
       "ip": "156.249.159.119",
       "name": "first_file_testdomain6",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 443,
     "service": "https",
   },
   Service {
     "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"imap\\":{\\"starttls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE...",
+    },
     "censysMetadata": Object {
       "description": "Dovecot",
       "product": "Dovecot",
@@ -1518,11 +1569,15 @@ on this server.</p>
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 143,
     "service": "imap",
   },
   Service {
     "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"imap\\":{\\"starttls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE...",
+    },
     "censysMetadata": Object {
       "description": "Dovecot",
       "product": "Dovecot",
@@ -1531,41 +1586,57 @@ on this server.</p>
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 143,
     "service": "imap",
   },
   Service {
     "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"imaps\\":{\\"tls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDL...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 993,
     "service": "imaps",
   },
   Service {
     "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"imaps\\":{\\"tls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDL...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 993,
     "service": "imaps",
   },
   Service {
     "banner": null,
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"mongodb\\":{\\"banner\\":{\\"build_info\\":{\\"build_environment\\":{\\"cc\\":\\"/opt/mongodbtoolchain/v2/bin/gcc: gcc...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "52.74.149.117",
       "name": "first_file_testdomain10",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 27017,
     "service": "mongodb",
   },
   Service {
     "banner": "+OK Dovecot ready.",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"pop3\\":{\\"starttls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"metadata\\":{\\"description\\":\\"Dovecot\\",\\"product\\":\\"Do...",
+    },
     "censysMetadata": Object {
       "description": "Dovecot",
       "product": "Dovecot",
@@ -1574,11 +1645,15 @@ on this server.</p>
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 110,
     "service": "pop3",
   },
   Service {
     "banner": "+OK Dovecot ready.",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"pop3\\":{\\"starttls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"metadata\\":{\\"description\\":\\"Dovecot\\",\\"product\\":\\"Do...",
+    },
     "censysMetadata": Object {
       "description": "Dovecot",
       "product": "Dovecot",
@@ -1587,91 +1662,127 @@ on this server.</p>
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 110,
     "service": "pop3",
   },
   Service {
     "banner": "+OK Dovecot ready.",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"pop3s\\":{\\"tls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 995,
     "service": "pop3s",
   },
   Service {
     "banner": "+OK Dovecot ready.",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"pop3s\\":{\\"tls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 995,
     "service": "pop3s",
   },
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"tls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.c...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 465,
     "service": "smtp",
   },
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonka...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 25,
     "service": "smtp",
   },
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonka...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 587,
     "service": "smtp",
   },
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"tls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.c...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 465,
     "service": "smtp",
   },
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonka...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 25,
     "service": "smtp",
   },
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonka...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 587,
     "service": "smtp",
   },
   Service {
     "banner": "SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.8",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"ssh\\":{\\"v2\\":{\\"banner\\":{\\"comment\\":\\"Ubuntu-4ubuntu2.8\\",\\"raw\\":\\"SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.8...",
+    },
     "censysMetadata": Object {
       "description": "OpenSSH 7.2p2",
       "product": "OpenSSH",
@@ -1681,16 +1792,21 @@ on this server.</p>
       "ip": "52.74.149.117",
       "name": "first_file_testdomain10",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 22,
     "service": "ssh",
   },
   Service {
     "banner": null,
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"vnc\\":{\\"banner\\":{\\"security_types\\":[{\\"name\\":\\"Apple Inc.\\",\\"value\\":\\"30\\"},{\\"name\\":\\"Apple Inc.\\",\\"value\\":...",
+    },
     "censysMetadata": undefined,
     "domain": Domain {
       "ip": "85.24.146.152",
       "name": "first_file_testdomain4",
     },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 5900,
     "service": "vnc",
   },

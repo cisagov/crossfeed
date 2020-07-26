@@ -111,7 +111,9 @@ describe('censys ipv4', () => {
       organizationName: 'organizationName',
       scanId: 'scanId',
       scanName: 'scanName',
-      scanTaskId: 'scanTaskId'
+      scanTaskId: 'scanTaskId',
+      chunkNumber: 0,
+      numChunks: 1
     });
   });
 });
