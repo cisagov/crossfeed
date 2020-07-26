@@ -135,7 +135,7 @@ class ECSClient {
       launchType: 'FARGATE',
       // TODO: enable tags when we are able to opt in to the new ARN format for the lambda IAM role.
       // See https://aws.amazon.com/blogs/compute/migrating-your-amazon-ecs-deployment-to-the-new-arn-and-resource-id-format-2/
-      tags,
+      // tags,
       overrides: {
         // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
         // https://stormforger.com/blog/aws-fargate-network-performance/
