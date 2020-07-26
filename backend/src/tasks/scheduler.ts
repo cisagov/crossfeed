@@ -45,7 +45,9 @@ const launchSingleScanTask = async ({
           } failures.`
         );
       }
-      console.log(`Successfully invoked ${scan.name} scan with fargate. ` + (numChunks ? ` Chunk ${chunkNumber}/${numChunks}`: ""));
+      if (typeof jest === "undefined") {
+        console.log(`Successfully invoked ${scan.name} scan with fargate. ` + (numChunks ? ` Chunk ${chunkNumber}/${numChunks}`: ""));
+      }
     } else {
       throw new Error('Invalid type ' + type);
     }

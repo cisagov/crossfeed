@@ -71,8 +71,8 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
     `i: ${i} of ${numFiles}: got ${domains.length} domains and ${services.length} services`
   );
 
-  // await saveDomainsToDb(domains);
-  // await saveServicesToDb(services);
+  await saveDomainsToDb(domains);
+  await saveServicesToDb(services);
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
