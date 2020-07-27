@@ -1,8 +1,8 @@
 scheduler:
   handler: src/tasks/scheduler.handler
-  timeout: 900
+  timeout: 300
   events:
-    - schedule: rate(1 minute)
+    - schedule: rate(5 minutes)
 
 syncdb:
   handler: src/tasks/syncdb.handler
