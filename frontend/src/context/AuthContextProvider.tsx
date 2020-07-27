@@ -31,8 +31,6 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   };
 
   const setOrganization = async (organization: Organization) => {
-    console.log(user);
-    console.log('hi');
     let extendedOrg: CurrentOrganization = organization;
     extendedOrg.userIsAdmin =
       user?.userType === 'globalAdmin' ||
