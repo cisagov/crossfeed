@@ -47,6 +47,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     refreshState();
+    // eslint-disable-next-line
   }, [user]);
 
   const logout = async () => {

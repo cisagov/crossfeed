@@ -99,7 +99,7 @@ export const Dashboard: React.FC = () => {
     } catch {
       history.push('/');
     }
-  }, [apiPost, history, login, user, fetchDomains]);
+  }, [apiPost, history, login, user, fetchDomains, refreshUser]);
 
   React.useEffect(() => {
     if (user && user.firstName === '') {
