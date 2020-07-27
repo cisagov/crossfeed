@@ -1,3 +1,5 @@
+import { Scan } from './scan';
+
 export interface ScanTask {
   id: string;
   status: string;
@@ -8,4 +10,5 @@ export interface ScanTask {
   startedAt: string;
   requestedAt: string;
   finishedAt: string;
+  scan: Scan;
 }

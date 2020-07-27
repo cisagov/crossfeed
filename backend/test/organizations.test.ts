@@ -1,7 +1,13 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
 import { createUserToken } from './util';
-import { Organization, Role, connectToDatabase } from '../src/models';
+import {
+  Organization,
+  Role,
+  connectToDatabase,
+  Scan,
+  ScanTask
+} from '../src/models';
 
 describe('organizations', () => {
   beforeAll(async () => {
@@ -372,6 +378,43 @@ describe('organizations', () => {
         )
         .expect(403);
       expect(response.body).toEqual({});
+    });
+    it('get by an org admin user should return associated scantasks', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const scan = await Scan.create({
+        name: 'censys',
+        arguments: {},
+        frequency: 999999
+      }).save();
+      const scanTask = await ScanTask.create({
+        scan,
+        status: 'created',
+        type: 'fargate',
+        organization
+      }).save();
+      const response = await request(app)
+        .get(`/organizations/${organization.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .expect(200);
+      expect(response.body.name).toEqual(organization.name);
+      expect(response.body.scanTasks.length).toEqual(1);
+      expect(response.body.scanTasks[0].id).toEqual(scanTask.id);
+      expect(response.body.scanTasks[0].scan.id).toEqual(scan.id);
     });
   });
   describe('approveRole', () => {

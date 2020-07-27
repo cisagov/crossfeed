@@ -136,7 +136,8 @@ export const get = wrapHandler(async (event) => {
       take: 10,
       order: {
         createdAt: 'DESC'
-      }
+      },
+      relations: ['scan']
     });
   }
 
