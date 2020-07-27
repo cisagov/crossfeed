@@ -12,7 +12,13 @@ export const AuthRedirectRoute: React.FC<AuthRedirectRouteProps> = ({
   component,
   ...rest
 }) => {
+  const token = localStorage.getItem('token');
+
   const { user } = useAuthContext();
+
+  if (token && !user) {
+    return null;
+  }
 
   const RedirectComponent = () => (
     <Redirect to={{ pathname: redirectUrl, state: { authRequired: true } }} />
