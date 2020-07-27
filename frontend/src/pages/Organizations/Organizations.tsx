@@ -73,22 +73,26 @@ export const Organizations: React.FC = () => {
     {
       Header: 'Make Current',
       id: 'makeCurrent',
-      Cell: ({ row }: { row: { index: number } }) => (
-        <a
-          style={{ color: 'black' }}
-          href="# "
-          onClick={() => {
-            setOrganization(organizations[row.index]);
-            if (currentOrganization?.userIsAdmin) {
-              history.push('/organization');
-            } else {
-              history.push('/');
-            }
-          }}
-        >
-          Make Current
-        </a>
-      ),
+      Cell: ({ row }: { row: { index: number } }) =>
+        currentOrganization &&
+        currentOrganization.id === organizations[row.index].id ? (
+          <p>Current</p>
+        ) : (
+          <a
+            style={{ color: 'black' }}
+            href="# "
+            onClick={() => {
+              setOrganization(organizations[row.index]);
+              if (currentOrganization?.userIsAdmin) {
+                history.push('/organization');
+              } else {
+                history.push('/');
+              }
+            }}
+          >
+            Make Current
+          </a>
+        ),
       width: 50,
       disableFilters: true
     },

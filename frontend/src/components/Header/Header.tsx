@@ -18,6 +18,9 @@ export const Header: React.FC = () => {
     setMobileExpanded(expanded => !expanded);
   };
 
+  const dashboardTitle =
+    'Dashboard' + (currentOrganization ? ' - ' + currentOrganization.name : '');
+
   const orgUserNav = [
     <NavLink
       activeClassName="usa-current"
@@ -26,7 +29,7 @@ export const Header: React.FC = () => {
       key="dashboard"
       className="usa-nav__link"
     >
-      <span>Dashboard</span>
+      <span>{dashboardTitle}</span>
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
@@ -62,7 +65,7 @@ export const Header: React.FC = () => {
       key="dashboard"
       className="usa-nav__link"
     >
-      <span>Dashboard</span>
+      <span>{dashboardTitle}</span>
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
@@ -90,6 +93,14 @@ export const Header: React.FC = () => {
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
+      to="/scans"
+      key="scans"
+      className="usa-nav__link"
+    >
+      <span>Scans</span>
+    </NavLink>,
+    <NavLink
+      activeClassName="usa-current"
       to="/settings"
       key="settings"
       className="usa-nav__link"
@@ -106,7 +117,7 @@ export const Header: React.FC = () => {
       key="dashboard"
       className="usa-nav__link"
     >
-      <span>Dashboard</span>
+      <span>{dashboardTitle}</span>
     </NavLink>,
     <NavLink
       activeClassName="usa-current"

@@ -12,9 +12,11 @@ export const AuthRedirectRoute: React.FC<AuthRedirectRouteProps> = ({
   component,
   ...rest
 }) => {
+  const token = localStorage.getItem('token');
+
   const { user } = useAuthContext();
 
-  if (user === undefined) {
+  if (token && !user) {
     return null;
   }
 
@@ -40,10 +42,6 @@ export const AuthRoute: React.FC<AuthRouteProps> = ({
   ...rest
 }) => {
   const { user } = useAuthContext();
-
-  if (user === undefined) {
-    return null;
-  }
 
   return (
     <Route

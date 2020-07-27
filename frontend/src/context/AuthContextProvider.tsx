@@ -19,20 +19,13 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const history = useHistory();
 
   const refreshState = async () => {
-    const storedUser = localStorage.getItem('user');
     const organization = localStorage.getItem('organization');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else {
-      setUser(null);
-    }
 
     if (organization) {
-      setCurrentOrganization(JSON.parse(organization));
-    } else if (storedUser) {
-      const parsed = JSON.parse(storedUser);
-      if (parsed.roles.length > 0) {
-        setOrganization(parsed.roles[0].organization);
+      setOrganization(JSON.parse(organization));
+    } else if (user) {
+      if (user.roles.length > 0) {
+        setOrganization(user.roles[0].organization);
       }
     }
   };
@@ -48,9 +41,13 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    refreshState();
+    refreshUser();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    refreshState();
+  }, [user]);
 
   const logout = async () => {
     setUser(null);
@@ -75,6 +72,19 @@ export const AuthContextProvider: React.FC = ({ children }) => {
       ...user
     };
     localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userCopy));
+    setUser(userCopy);
+  };
+
+  const refreshUser = async () => {
+    if (!localStorage.getItem('token')) {
+      return;
+    }
+    const user: User = await apiGet('/users/me');
+    const userCopy: AuthUser = {
+      isRegistered: user.firstName !== '',
+      ...user
+    };
     localStorage.setItem('user', JSON.stringify(userCopy));
     setUser(userCopy);
   };
@@ -163,6 +173,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     <AuthContext.Provider
       value={{
         setOrganization,
+        refreshUser,
         user,
         currentOrganization,
         login,

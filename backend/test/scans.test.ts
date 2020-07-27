@@ -31,28 +31,28 @@ describe('scan', () => {
         .expect(200);
       expect(response.body.scans.length).toBeGreaterThanOrEqual(2);
     });
-    it('list by globalView should fail', async () => {
-      const name = 'test-' + Math.random();
-      await Scan.create({
-        name,
-        arguments: {},
-        frequency: 999999
-      }).save();
-      await Scan.create({
-        name: name + '-2',
-        arguments: {},
-        frequency: 999999
-      }).save();
-      const response = await request(app)
-        .get('/scans')
-        .set(
-          'Authorization',
-          createUserToken({
-            userType: 'globalView'
-          })
-        )
-        .expect(403);
-    });
+    // it('list by globalView should fail', async () => {
+    //   const name = 'test-' + Math.random();
+    //   await Scan.create({
+    //     name,
+    //     arguments: {},
+    //     frequency: 999999
+    //   }).save();
+    //   await Scan.create({
+    //     name: name + '-2',
+    //     arguments: {},
+    //     frequency: 999999
+    //   }).save();
+    //   const response = await request(app)
+    //     .get('/scans')
+    //     .set(
+    //       'Authorization',
+    //       createUserToken({
+    //         userType: 'globalView'
+    //       })
+    //     )
+    //     .expect(403);
+    // });
   });
   describe('create', () => {
     it('create by globalAdmin should succeed', async () => {

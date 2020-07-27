@@ -277,7 +277,12 @@ export const Organization: React.FC = () => {
     }));
   };
 
-  if (!organization) return <div></div>;
+  if (!organization)
+    return (
+      <div className={classes.root}>
+        <h1>No current organization</h1>
+      </div>
+    );
 
   const views = [
     <>
