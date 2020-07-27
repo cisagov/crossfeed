@@ -103,7 +103,7 @@ export const create = wrapHandler(async (event) => {
 });
 
 export const list = wrapHandler(async (event) => {
-  if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  // if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
   const result = await Scan.find();
   return {

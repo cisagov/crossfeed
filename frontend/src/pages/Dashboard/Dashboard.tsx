@@ -15,7 +15,13 @@ interface ApiResponse {
 }
 
 export const Dashboard: React.FC = () => {
-  const { user, currentOrganization, login, apiPost } = useAuthContext();
+  const {
+    user,
+    refreshUser,
+    currentOrganization,
+    login,
+    apiPost
+  } = useAuthContext();
   const [domains, setDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
@@ -78,6 +84,8 @@ export const Dashboard: React.FC = () => {
       localStorage.removeItem('nonce');
       localStorage.removeItem('state');
 
+      await refreshUser();
+
       if (user.firstName !== '') {
         history.push('/');
         fetchDomains({
@@ -107,7 +115,9 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <h1>{currentOrganization?.name} Dashboard</h1>{' '}
+      <h1>
+        Dashboard{currentOrganization ? ' - ' + currentOrganization.name : ''}
+      </h1>{' '}
       <Table<Domain>
         renderPagination={renderPagination}
         columns={columns}

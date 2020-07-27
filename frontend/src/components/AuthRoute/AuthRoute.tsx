@@ -14,10 +14,6 @@ export const AuthRedirectRoute: React.FC<AuthRedirectRouteProps> = ({
 }) => {
   const { user } = useAuthContext();
 
-  if (user === undefined) {
-    return null;
-  }
-
   const RedirectComponent = () => (
     <Redirect to={{ pathname: redirectUrl, state: { authRequired: true } }} />
   );
@@ -40,10 +36,6 @@ export const AuthRoute: React.FC<AuthRouteProps> = ({
   ...rest
 }) => {
   const { user } = useAuthContext();
-
-  if (user === undefined) {
-    return null;
-  }
 
   return (
     <Route
