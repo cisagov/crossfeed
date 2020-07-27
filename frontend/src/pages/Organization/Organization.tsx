@@ -132,10 +132,7 @@ export const Organization: React.FC = () => {
     },
     {
       Header: 'Name',
-      accessor: ({ input }) => {
-        if (!input) return;
-        return JSON.parse(input).scanName;
-      },
+      accessor: ({ scan }) => scan?.name,
       disableFilters: true
     },
     {
