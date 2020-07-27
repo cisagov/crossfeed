@@ -1,11 +1,3 @@
-censys:
-  handler: src/tasks/censys.handler
-  timeout: 900
-
-wappalyzer:
-  handler: src/tasks/wappalyzer.handler
-  timeout: 900
-
 scheduler:
   handler: src/tasks/scheduler.handler
   timeout: 900
