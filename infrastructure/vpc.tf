@@ -59,6 +59,11 @@ resource "aws_route_table" "r" {
 resource "aws_route_table" "r2" {
   vpc_id = aws_vpc.crossfeed_vpc.id
 
+  route {	
+    nat_gateway_id = aws_nat_gateway.nat.id	
+    cidr_block     = "0.0.0.0/0"	
+  }
+
   tags = {	
     Project = var.project	
     Stage   = var.stage
@@ -67,6 +72,11 @@ resource "aws_route_table" "r2" {
 
 resource "aws_route_table" "worker" {
   vpc_id = aws_vpc.crossfeed_vpc.id
+
+  route {
+    gateway_id = aws_internet_gateway.gw.id
+    cidr_block = "0.0.0.0/0"
+  }
 
   tags = {	
     Project = var.project	
@@ -102,12 +112,6 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 
-resource "aws_route" "public_route" {
-  route_table_id         = aws_route_table.worker.id
-  gateway_id             = aws_internet_gateway.gw.id
-  destination_cidr_block = "0.0.0.0/0"
-}
-
 resource "aws_eip" "nat_eip" {
   tags = {	
     Project = var.project	
@@ -123,12 +127,6 @@ resource "aws_nat_gateway" "nat" {
     Project = var.project	
     Stage   = var.stage
   }	
-}	
-
-resource "aws_route" "nat_gw_rt" {	
-  route_table_id         = aws_route_table.r2.id	
-  nat_gateway_id         = aws_nat_gateway.nat.id	
-  destination_cidr_block = "0.0.0.0/0"	
 }
 
 resource "aws_security_group" "allow_internal" {
