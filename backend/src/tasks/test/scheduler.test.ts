@@ -218,7 +218,7 @@ describe('scheduler', () => {
     );
 
     // Calls scan in chunks
-    expect(runCommand).toHaveBeenCalledTimes(100);
+    expect(runCommand).toHaveBeenCalledTimes(20);
     expect(runCommand).toHaveBeenCalledWith(
       expect.objectContaining({
         organizationId: undefined,
