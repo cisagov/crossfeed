@@ -4,7 +4,7 @@
 [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-<p align="center" style="background: #122d5d">
+<p align="center">
 <img alt="Crossfeed logo" src="frontend/src/components/Header/cisa_logo.png">
 </p>
 
