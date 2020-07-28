@@ -5,9 +5,16 @@ import { createUserToken } from './util';
 
 describe('user', () => {
   let organization;
+  let organization2;
   beforeAll(async () => {
     await connectToDatabase();
     organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    organization2 = await Organization.create({
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
@@ -39,6 +46,68 @@ describe('user', () => {
           email
         })
         .expect(403);
+    });
+    it('invite by a organization admin should work', async () => {
+      const firstName = 'first name';
+      const lastName = 'last name';
+      const email = 'crossfeeduser@crossfeed.cisa.gov';
+      const response = await request(app)
+        .post('/users')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .send({
+          firstName,
+          lastName,
+          email,
+          organization: organization.id,
+          organizationAdmin: false
+        })
+        .expect(200);
+      expect(response.body.email).toEqual(email);
+      expect(response.body.firstName).toEqual(firstName);
+      expect(response.body.lastName).toEqual(lastName);
+      expect(response.body.roles[0].approved).toEqual(true);
+      expect(response.body.roles[0].role).toEqual('user');
+    });
+    it('invite existing user by a different organization admin should work', async () => {
+      const firstName = 'first name';
+      const lastName = 'last name';
+      const email = 'crossfeeduser@crossfeed.cisa.gov';
+      const response = await request(app)
+        .post('/users')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization2.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .send({
+          firstName,
+          lastName,
+          email,
+          organization: organization2.id,
+          organizationAdmin: false
+        })
+        .expect(200);
+      expect(response.body.email).toEqual(email);
+      expect(response.body.firstName).toEqual(firstName);
+      expect(response.body.lastName).toEqual(lastName);
+      expect(response.body.roles[1].approved).toEqual(true);
+      expect(response.body.roles[1].role).toEqual('user');
     });
   });
   describe('me', () => {
