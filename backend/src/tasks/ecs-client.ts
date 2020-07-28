@@ -1,11 +1,14 @@
 import { ECS } from 'aws-sdk';
+import { SCAN_SCHEMA } from '../api/scans';
 
 export interface CommandOptions {
-  organizationId: string;
-  organizationName: string;
+  organizationId?: string;
+  organizationName?: string;
   scanId: string;
   scanName: string;
   scanTaskId: string;
+  chunkNumber?: number;
+  numChunks?: number;
 }
 
 const toSnakeCase = (input) => input.replace(/ /g, '-');
@@ -40,21 +43,26 @@ class ECSClient {
       scanId,
       scanName,
       organizationId,
-      organizationName
+      organizationName,
+      numChunks,
+      chunkNumber
     } = commandOptions;
+    const { cpu, memory, global } = SCAN_SCHEMA[scanName];
     if (this.isLocal) {
       try {
         const container = await this.docker!.createContainer({
           // We need to create unique container names to avoid conflicts.
           name: toSnakeCase(
-            `crossfeed_worker_${organizationName}_${scanName}_` +
-              Math.floor(Math.random() * 10000000)
+            `crossfeed_worker_${
+              global ? 'global' : organizationName
+            }_${scanName}_` + Math.floor(Math.random() * 10000000)
           ),
           Image: 'crossfeed-worker',
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
             `DB_DIALECT=${process.env.DB_DIALECT}`,
             `DB_HOST=localhost`,
+            `IS_LOCAL=true`,
             `DB_PORT=${process.env.DB_PORT}`,
             `DB_NAME=${process.env.DB_NAME}`,
             `DB_USERNAME=${process.env.DB_USERNAME}`,
@@ -82,6 +90,36 @@ class ECSClient {
         };
       }
     }
+    const tags = [
+      {
+        key: 'scanId',
+        value: scanId
+      },
+      {
+        key: 'scanName',
+        value: scanName
+      }
+    ];
+    if (organizationName && organizationId) {
+      tags.push({
+        key: 'organizationId',
+        value: organizationId
+      });
+      tags.push({
+        key: 'organizationName',
+        value: organizationName
+      });
+    }
+    if (numChunks !== undefined && chunkNumber !== undefined) {
+      tags.push({
+        key: 'numChunks',
+        value: String(numChunks)
+      });
+      tags.push({
+        key: 'chunkNumber',
+        value: String(chunkNumber)
+      });
+    }
     // TODO: retrieve these values from SSM.
     return this.ecs!.runTask({
       cluster: 'crossfeed-staging-worker', // aws_ecs_cluster.worker.name
@@ -97,25 +135,10 @@ class ECSClient {
       launchType: 'FARGATE',
       // TODO: enable tags when we are able to opt in to the new ARN format for the lambda IAM role.
       // See https://aws.amazon.com/blogs/compute/migrating-your-amazon-ecs-deployment-to-the-new-arn-and-resource-id-format-2/
-      // tags: [
-      //   {
-      //     key: 'scanId',
-      //     value: scanId
-      //   },
-      //   {
-      //     key: 'scanName',
-      //     value: scanName
-      //   },
-      //   {
-      //     key: 'organizationId',
-      //     value: organizationId
-      //   },
-      //   {
-      //     key: 'organizationName',
-      //     value: organizationName
-      //   }
-      // ],
+      // tags,
       overrides: {
+        cpu,
+        memory,
         containerOverrides: [
           {
             name: 'main', // from task definition

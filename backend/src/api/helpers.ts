@@ -54,7 +54,9 @@ export const wrapHandler: WrapHandler = (handler) => async (
       callback
     )) as APIGatewayProxyResult;
     const resp = makeResponse(event, result);
-    console.log(`=> ${resp.statusCode} ${event.path} `);
+    if (typeof jest === 'undefined') {
+      console.log(`=> ${resp.statusCode} ${event.path} `);
+    }
     return resp;
   } catch (e) {
     console.log(e);

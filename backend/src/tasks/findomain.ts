@@ -14,7 +14,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   console.log('Running findomain on organization', organizationName);
 
-  const rootDomains = await getRootDomains(organizationId);
+  const rootDomains = await getRootDomains(organizationId!);
 
   for (const rootDomain of rootDomains) {
     const args = ['-it', rootDomain, '-u', OUT_PATH];

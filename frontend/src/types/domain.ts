@@ -13,6 +13,14 @@ export interface Service {
   id: number;
   lastSeen: string | null;
   banner: string | null;
+  censysMetadata: {
+    product: string;
+    revision: string;
+    description: string;
+    version: string;
+    manufacturer: string;
+  } | null;
+  censysIpv4Results: any;
 }
 
 export interface Domain {
