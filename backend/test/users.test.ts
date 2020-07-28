@@ -1,6 +1,6 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { User, connectToDatabase, Organization } from '../src/models';
+import { User, connectToDatabase, Organization, Role } from '../src/models';
 import { createUserToken } from './util';
 
 describe('user', () => {
@@ -47,10 +47,10 @@ describe('user', () => {
         })
         .expect(403);
     });
-    it('invite by a organization admin should work', async () => {
+    it('invite by an organization admin should work', async () => {
       const firstName = 'first name';
       const lastName = 'last name';
-      const email = 'crossfeeduser@crossfeed.cisa.gov';
+      const email = Math.random() + '@crossfeed.cisa.gov';
       const response = await request(app)
         .post('/users')
         .set(
@@ -73,15 +73,27 @@ describe('user', () => {
         })
         .expect(200);
       expect(response.body.email).toEqual(email);
+      expect(response.body.invitePending).toEqual(true);
       expect(response.body.firstName).toEqual(firstName);
       expect(response.body.lastName).toEqual(lastName);
       expect(response.body.roles[0].approved).toEqual(true);
       expect(response.body.roles[0].role).toEqual('user');
     });
-    it('invite existing user by a different organization admin should work', async () => {
+    it('invite existing user by a different organization admin should work, and should not modify other user details', async () => {
       const firstName = 'first name';
       const lastName = 'last name';
-      const email = 'crossfeeduser@crossfeed.cisa.gov';
+      const email = Math.random() + '@crossfeed.cisa.gov';
+      const user = await User.create({
+        firstName: 'original first name',
+        lastName: 'original last name',
+        email
+      }).save();
+      await Role.create({
+        role: 'user',
+        approved: false,
+        organization,
+        user
+      }).save();
       const response = await request(app)
         .post('/users')
         .set(
@@ -103,9 +115,11 @@ describe('user', () => {
           organizationAdmin: false
         })
         .expect(200);
+      expect(response.body.id).toEqual(user.id);
       expect(response.body.email).toEqual(email);
-      expect(response.body.firstName).toEqual(firstName);
-      expect(response.body.lastName).toEqual(lastName);
+      expect(response.body.invitePending).toEqual(false);
+      expect(response.body.firstName).toEqual('original first name');
+      expect(response.body.lastName).toEqual('original last name');
       expect(response.body.roles[1].approved).toEqual(true);
       expect(response.body.roles[1].role).toEqual('user');
     });
