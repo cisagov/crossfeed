@@ -12,13 +12,22 @@ import * as readline from 'readline';
 import got from 'got';
 import PQueue from 'p-queue';
 
+interface IpToDomainsMap {
+  [ip: string]: Domain[];
+}
+
 const auth = {
   username: process.env.CENSYS_API_ID!,
   password: process.env.CENSYS_API_SECRET!
 };
 const CENSYS_IPV4_ENDPOINT = 'https://censys.io/api/v1/data/ipv4_2018/';
 
-const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
+const downloadPath = async (
+  path: string,
+  ipToDomainsMap: IpToDomainsMap,
+  i: number,
+  numFiles: number
+): Promise<void> => {
   console.log(`i: ${i} of ${numFiles}: starting download of url ${path}`);
 
   const domains: Domain[] = [];
@@ -34,12 +43,14 @@ const downloadPath = async (path, allDomains, i, numFiles): Promise<void> => {
     readInterface.on('line', function (line) {
       const item: CensysIpv4Data = JSON.parse(line);
 
-      let matchingDomains = allDomains.filter((e) => e.ip === item.ip);
+      let matchingDomains = ipToDomainsMap[item.ip!] || [];
       if (process.env.IS_LOCAL && typeof jest === 'undefined') {
         // For local development: just randomly match domains
         // (this behavior is not present when running tests
         // through jest, though).
-        matchingDomains = allDomains.filter(() => Math.random() < 0.00001);
+        matchingDomains = [].concat
+          .apply([], Object.values(ipToDomainsMap)) // get a list of all domains in the domain map
+          .filter(() => Math.random() < 0.00001);
       }
       for (const matchingDomain of matchingDomains) {
         domains.push(
@@ -121,12 +132,28 @@ export const handler = async (commandOptions: CommandOptions) => {
     endIndex = 1;
   }
 
+  let ipToDomainsMap: IpToDomainsMap = allDomains.reduce<IpToDomainsMap>(
+    (map: IpToDomainsMap, domain: Domain) => {
+      if (!map[domain.ip]) {
+        map[domain.ip] = [];
+      }
+      map[domain.ip].push(domain);
+      return map;
+    },
+    {}
+  );
+
   for (let i = startIndex; i <= endIndex; i++) {
     const idx = i;
     const fileName = fileNames[idx];
     jobs.push(
       queue.add(() =>
-        downloadPath(files[fileName].download_path, allDomains, idx, numFiles)
+        downloadPath(
+          files[fileName].download_path,
+          ipToDomainsMap,
+          idx,
+          numFiles
+        )
       )
     );
   }
