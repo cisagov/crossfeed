@@ -18,7 +18,7 @@ interface ScanSchema {
     // Whether scan is passive (not allowed to hit the domain).
     isPassive: boolean;
 
-    // Whether scan is global. GLobal scans run once for all organizations, as opposed
+    // Whether scan is global. Global scans run once for all organizations, as opposed
     // to non-global scans, which are run for each organization.
     global: boolean;
 
