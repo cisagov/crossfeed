@@ -84,7 +84,7 @@ class DomainSearch {
       .groupBy(
         'domain.id, domain.ip, domain.name, organization.id, services.id'
       )
-      .offset(PAGE_SIZE * (this.page - 1))
+      .skip(PAGE_SIZE * (this.page - 1))
       .take(PAGE_SIZE);
 
     if (!isGlobalViewAdmin(event)) {
