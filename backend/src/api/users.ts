@@ -105,12 +105,20 @@ export const invite = wrapHandler(async (event) => {
   }
 
   await connectToDatabase();
-  const user = await User.create({
-    invitePending: true,
-    ...body
+
+  // Check if user already exists
+  let user = await User.findOne({
+    email: body.email
   });
 
-  const res = await User.save(user);
+  if (!user) {
+    user = await User.create({
+      invitePending: true,
+      ...body
+    });
+    await User.save(user);
+  }
+
   if (body.organization) {
     // Create approved role if organization supplied
     const role = Role.create({
