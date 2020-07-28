@@ -4,7 +4,7 @@ import { Domain, connectToDatabase } from '../../models';
 export default async (): Promise<Domain[]> => {
   await connectToDatabase();
 
-  const qs = Domain.createQueryBuilder('domain');
+  const qs = Domain.createQueryBuilder('domain').select('name', 'ip');
 
   return await qs.getMany();
 };
