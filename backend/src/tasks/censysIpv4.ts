@@ -91,8 +91,13 @@ const downloadPath = async (
     readInterface.on('SIGCONT', reject);
     readInterface.on('SIGTSTP', reject);
   });
+  if (!domains.length) {
+    console.log(
+      `censysipv4 - processed file ${i} of ${numFiles}: got no results`
+    );
+  }
   console.log(
-    `i: ${i} of ${numFiles}: got ${domains.length} domains and ${services.length} services`
+    `censysipv4 - processed file ${i} of ${numFiles}: got some results: ${domains.length} domains and ${services.length} services`
   );
 
   await saveDomainsToDb(domains);
