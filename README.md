@@ -32,19 +32,19 @@ Crossfeed is a collaboration between the [Cybersecurity and Infrastructure Secur
     - frontend or backend dependency changes
     - backend `serverless.yml` or `env.yml`
     - environment variables in root `.env`
-8.  Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save.
+1.  Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save.
 
 ### Running the scheduler lambda function locally
 
 The scheduler lambda function is set to run on an interval or in response to non-http events. To run it manually, run the following command:
 
-* `docker-compose exec scheduler npx serverless invoke local -f scheduler`
+- `docker-compose exec scheduler npx serverless invoke local -f scheduler`
 
 ### Running tests
 
 To run tests, first make sure you have already started crossfeed with `docker-compose` . Then run:
 
-``` bash
+```bash
 cd backend
 npm test
 ```
