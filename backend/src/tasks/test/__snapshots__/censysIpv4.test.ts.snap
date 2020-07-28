@@ -98,6 +98,22 @@ Array [
     "port": 53,
     "service": "dns",
   },
+  Service {
+    "banner": "﻿<!DOCTYPE html PUBLIC \\"-//W3C//DTD XHTML 1.0 Transitional//EN\\" \\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\\">
+<html xmlns=\\"http://www.w3.org/1999/xhtml\\">
+",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"﻿<!DOCTYPE html PUBLIC \\\\\\"-//W3C//DTD XHTML 1.0 Transitional//EN\\\\\\" \\\\\\"http://w...",
+    },
+    "censysMetadata": undefined,
+    "domain": Domain {
+      "ip": "1.1.1.1",
+      "name": "second_file_testdomain1",
+    },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "port": 8080,
+    "service": "http",
+  },
 ]
 `;
 

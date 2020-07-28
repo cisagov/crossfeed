@@ -81,8 +81,8 @@ describe('censys ipv4', () => {
         name: 'TTNET',
         path: ['7018', '3320', '9121']
       },
-      ports: ['53'],
-      protocols: ['53/dns'],
+      ports: ['53', '8080'],
+      protocols: ['53/dns', '8080/http'],
       ipinteger: '31041870',
       version: '0',
       p53: {
@@ -94,6 +94,14 @@ describe('censys ipv4', () => {
             resolves_correctly: false,
             support: true,
             timestamp: '2020-07-05T15:41:45Z'
+          }
+        }
+      },
+      p8080: {
+        http: {
+          get: {
+            body:
+              '﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\r\n<html xmlns="http://www.w3.org/1999/xhtml">\r'
           }
         }
       },
