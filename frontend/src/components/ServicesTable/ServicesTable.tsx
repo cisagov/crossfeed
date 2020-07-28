@@ -24,14 +24,15 @@ export const ServicesTable: React.FC<Props> = ({ services }) => {
             <CodeBlock>{original.banner}</CodeBlock>
           </>
         )}
-        {original.censysIpv4Results && (
-          <>
-            <h4>Censys IPv4 Results</h4>
-            <CodeBlock>
-              {JSON.stringify(original.censysIpv4Results, null, 2)}
-            </CodeBlock>
-          </>
-        )}
+        {original.censysIpv4Results &&
+          Object.keys(original.censysIpv4Results)?.length === 0 && (
+            <>
+              <h4>Censys IPv4 Results</h4>
+              <CodeBlock>
+                {JSON.stringify(original.censysIpv4Results, null, 2)}
+              </CodeBlock>
+            </>
+          )}
       </div>
     );
   }, []);
