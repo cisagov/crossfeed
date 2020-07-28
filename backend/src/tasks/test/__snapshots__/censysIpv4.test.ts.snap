@@ -99,11 +99,12 @@ Array [
     "service": "dns",
   },
   Service {
-    "banner": "﻿<!DOCTYPE html PUBLIC \\"-//W3C//DTD XHTML 1.0 Transitional//EN\\" \\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\\">
-<html xmlns=\\"http://www.w3.org/1999/xhtml\\">
-",
+    "banner": "these character should not show up in the snapshot:
+              null: 
+              badly formed null: \\\\u0000
+              ",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"﻿<!DOCTYPE html PUBLIC \\\\\\"-//W3C//DTD XHTML 1.0 Transitional//EN\\\\\\" \\\\\\"http://w...",
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"these character should not show up in the snapshot:\\\\n              null: \\\\u0...",
     },
     "censysMetadata": undefined,
     "domain": Domain {

@@ -100,8 +100,10 @@ describe('censys ipv4', () => {
       p8080: {
         http: {
           get: {
-            body:
-              '﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\r\n<html xmlns="http://www.w3.org/1999/xhtml">\r'
+            body: `these characters should not show up in the snapshot:
+              null: \u0000
+              badly formed null: \\u0000
+              `
           }
         }
       },
