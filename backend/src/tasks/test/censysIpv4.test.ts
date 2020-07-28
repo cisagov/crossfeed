@@ -102,7 +102,8 @@ describe('censys ipv4', () => {
           get: {
             body: `these characters should not show up in the snapshot:
               null: \u0000
-              badly formed null: \\u0000
+              another null: \0
+              another null: \\u0000
               `
           }
         }

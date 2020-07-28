@@ -75,10 +75,9 @@ const downloadPath = async (
             for (const k in s) {
               // Sometimes, a field might contain null characters, but we can't store null
               // characters in a string field in PostgreSQL. For example, a site might have
-              // a banner ending with "</body>\r\n</html>\u0000".
-              // TODO(Ashwin): add a test for this.
+              // a banner ending with "</body>\r\n</html>\u0000" or "\\u0000".
               if (typeof s[k] === 'string') {
-                s[k] = s[k].replace(/\0/g, '');
+                s[k] = s[k].replace(/\\u0000/g, '').replace(/\0/g, '');
               }
             }
             services.push(plainToClass(Service, s));

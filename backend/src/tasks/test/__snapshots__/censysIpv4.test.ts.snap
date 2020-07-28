@@ -101,7 +101,8 @@ Array [
   Service {
     "banner": "these characters should not show up in the snapshot:
               null: 
-              badly formed null: \\\\u0000
+              another null: 
+              another null: 
               ",
     "censysIpv4Results": Object {
       "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"these characters should not show up in the snapshot:\\\\n              null: \\\\u...",
