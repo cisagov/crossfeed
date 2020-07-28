@@ -40,4 +40,26 @@ export class Service extends BaseEntity {
     type: 'text'
   })
   banner: string | null;
+
+  /** Censys Metadata */
+  @Column({
+    type: 'jsonb',
+    default: {}
+  })
+  censysMetadata: {
+    product: string;
+    revision: string;
+    description: string;
+    version: string;
+    manufacturer: string;
+  } | null;
+
+  /** Censys Ipv4 results */
+  @Column({
+    type: 'jsonb',
+    default: {}
+  })
+  censysIpv4Results: {
+    [x: string]: any;
+  };
 }

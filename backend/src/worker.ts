@@ -5,6 +5,7 @@ import { handler as censys } from './tasks/censys';
 import { handler as findomain } from './tasks/findomain';
 import { handler as portscanner } from './tasks/portscanner';
 import { handler as wappalyzer } from './tasks/wappalyzer';
+import { handler as censysIpv4 } from './tasks/censysIpv4';
 
 /**
  * Worker entrypoint.
@@ -25,9 +26,14 @@ async function main() {
   await scanTask.save();
 
   try {
-    const scanFn = { amass, censys, findomain, portscanner, wappalyzer }[
-      scanName
-    ];
+    const scanFn = {
+      amass,
+      censys,
+      censysIpv4,
+      findomain,
+      portscanner,
+      wappalyzer
+    }[scanName];
     if (!scanFn) {
       throw new Error('Invalid scan name ' + scanName);
     }
