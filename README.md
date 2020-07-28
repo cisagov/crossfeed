@@ -4,15 +4,9 @@
 [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-<p align="center">
-<img alt="Crossfeed logo" src="frontend/src/components/Header/cisa_logo.png">
-</p>
-
 # Crossfeed
 
-External monitoring for organization assets.
-
-Crossfeed allows you to add a list of domains for each organization and periodically schedule passive or active scanning on them. Users of each organization can monitor their own assets through a self-service portal, and access to resources can be managed through RBAC.
+Crossfeed is a tool that continuously enumerates and monitors an organization's public-facing attack surface in order to discover assets and flag potential security flaws. By operating in either passive or active scanning modes, Crossfeed collects data from a variety of open source tools and data feeds to provide actionable information about organization assets. Crossfeed is offered as a self-service portal and allows customers to view reports and customize scans performed.
 
 Crossfeed is a collaboration between the [Cybersecurity and Infrastructure Security Agency](https://www.cisa.gov/) and the [Defense Digital Service](https://dds.mil/).
 
