@@ -68,7 +68,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: true,
     cpu: '1024',
     memory: '4096',
-    numChunks: 100
+    numChunks: 20
   }
 };
 
