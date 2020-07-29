@@ -1,11 +1,9 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { TableInstance, Column } from 'react-table';
 import { Query } from 'types';
-import { Table, Paginator } from 'components';
+import { Table, Paginator, ColumnFilter, selectFilter } from 'components';
 import { ScanTask } from 'types';
 import { useAuthContext } from 'context';
-import { useHistory } from 'react-router-dom';
-import { parse } from 'query-string';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 
 interface ApiResponse {
@@ -29,50 +27,77 @@ export const ScanTasksView: React.FC = () => {
     {
       Header: 'ID',
       accessor: 'id',
+      Filter: ColumnFilter,
+      disableSortBy: true,
       disableFilters: true
     },
     {
       Header: 'Status',
       accessor: 'status',
-      disableFilters: true
-    },
-    {
-      Header: 'Type',
-      accessor: 'type',
-      disableFilters: true
+      Filter: selectFilter([
+        'created',
+        'requested',
+        'started',
+        'finished',
+        'failed'
+      ]),
+      disableSortBy: true
     },
     {
       Header: 'Name',
+      id: 'name',
       accessor: ({ scan }) => scan?.name,
-      disableFilters: true
+      Filter: selectFilter([
+        'censys',
+        'amass',
+        'findomain',
+        'portscanner',
+        'wappalyzer',
+        'censysIpv4'
+      ]),
+      disableSortBy: true
     },
     {
       Header: 'Created At',
+      id: 'createdAt',
       accessor: ({ createdAt }) => dateAccessor(createdAt),
-      disableFilters: true,
-      disableSortBy: true
-    },
-    {
-      Header: 'Requested At',
-      accessor: ({ requestedAt }) => dateAccessor(requestedAt),
-      disableFilters: true,
-      disableSortBy: true
-    },
-    {
-      Header: 'Started At',
-      accessor: ({ startedAt }) => dateAccessor(startedAt),
-      disableFilters: true,
-      disableSortBy: true
+      disableFilters: true
     },
     {
       Header: 'Finished At',
+      id: 'finishedAt',
       accessor: ({ finishedAt }) => dateAccessor(finishedAt),
-      disableFilters: true,
-      disableSortBy: true
+      disableFilters: true
     },
     {
       Header: 'Output',
       accessor: 'output',
+      disableFilters: true,
+      maxWidth: 200,
+      Cell: ({ value }: { value: string }) => (
+        <pre
+          style={{
+            maxWidth: 200,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}
+        >
+          {value}
+        </pre>
+      )
+    },
+    {
+      Header: 'Actions',
+      id: 'actions',
+      Cell: ({ row }: { row: { index: number; original: ScanTask } }) => (
+        <>
+          {row.original.status !== 'finished' && (
+            <a href="#" onClick={() => null}>
+              Kill
+            </a>
+          )}
+        </>
+      ),
       disableFilters: true
     }
   ];
@@ -87,7 +112,7 @@ export const ScanTasksView: React.FC = () => {
           {
             body: {
               page,
-              sort: sort[0]?.id ?? 'name',
+              sort: sort[0]?.id ?? 'createdAt',
               order: sort[0]?.desc ? 'DESC' : 'ASC',
               filters: filters
                 .filter(f => Boolean(f.value))

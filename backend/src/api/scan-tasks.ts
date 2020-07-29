@@ -20,6 +20,10 @@ class ScanTaskFilters {
   @IsString()
   @IsOptional()
   name?: string;
+
+  @IsString()
+  @IsOptional()
+  status?: string;
 }
 
 class ScanTaskSearch {
@@ -28,8 +32,8 @@ class ScanTaskSearch {
   page: number = 1;
 
   @IsString()
-  @IsIn(['name'])
-  sort: string = 'name';
+  @IsIn(['createdAt', 'finishedAt'])
+  sort: string = 'createdAt';
 
   @IsString()
   @IsIn(['ASC', 'DESC'])
@@ -47,12 +51,18 @@ class ScanTaskSearch {
         name: `%${this.filters?.name}%`
       });
     }
+    if (this.filters?.status) {
+      qs.andWhere('scan_task.status ILIKE :status', {
+        status: `%${this.filters?.status}%`
+      });
+    }
     return qs;
   }
 
   async getResults(event) {
     const qs = ScanTask.createQueryBuilder('scan_task')
       .leftJoinAndSelect('scan_task.scan', 'scan')
+      .orderBy(`scan_task.${this.sort}`, this.order)
       .skip(PAGE_SIZE * (this.page - 1))
       .take(PAGE_SIZE);
 
@@ -61,11 +71,7 @@ class ScanTaskSearch {
   }
 
   filterCountQueryset(qs: SelectQueryBuilder<ScanTask>) {
-    if (this.filters?.name) {
-      qs.andWhere('scan.name ILIKE :name', {
-        name: `%${this.filters?.name}%`
-      });
-    }
+    return this.filterResultQueryset(qs);
   }
 
   async getCount(event) {
