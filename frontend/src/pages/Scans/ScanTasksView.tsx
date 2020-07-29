@@ -28,7 +28,7 @@ export const ScanTasksView: React.FC = () => {
   const columns: Column<ScanTask>[] = [
     {
       Header: 'ID',
-      accessor: 'id'
+      accessor: 'id',
       disableFilters: true
     },
     {
