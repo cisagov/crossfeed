@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Domain, Service } from '../models';
 import { plainToClass } from 'class-transformer';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
