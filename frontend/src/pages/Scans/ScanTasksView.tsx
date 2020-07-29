@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState } from 'react';
 import { TableInstance, Column } from 'react-table';
 import { Query } from 'types';
 import { Table, Paginator, ColumnFilter, selectFilter } from 'components';

@@ -11,7 +11,7 @@ import {
 import { Type } from 'class-transformer';
 import { ScanTask, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
-import { SelectQueryBuilder, In } from 'typeorm';
+import { SelectQueryBuilder } from 'typeorm';
 import { isGlobalViewAdmin, isGlobalWriteAdmin } from './auth';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
