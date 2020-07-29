@@ -127,4 +127,93 @@ describe('censys ipv4', () => {
       numChunks: 1
     });
   });
+
+  test('http failure should retry', async () => {
+    nock('https://censys.io')
+      .get('/api/v1/data/ipv4_2018/')
+      .reply(200, {
+        results: {
+          latest: {
+            details_url: 'https://censys.io/api/v1/data/ipv4_2018/20200719'
+          }
+        }
+      });
+    nock('https://censys.io')
+      .get('/api/v1/data/ipv4_2018/20200719')
+      .reply(200, {
+        files: {
+          'failed_file.json.gz': {
+            file_type: 'json',
+            compressed_size: 2568162,
+            compression_type: 'gzip',
+            compressed_md5_fingerprint: '334183d35efade2336033b38c4c528a6',
+            download_path:
+              'https://data-01.censys.io/snapshots/ipv4/20200719/failed_file.json.gz'
+          }
+        }
+      });
+
+    nock('https://data-01.censys.io')
+      .get('/snapshots/ipv4/20200719/failed_file.json.gz')
+      .reply(429, 'too many requests');
+
+    nock('https://data-01.censys.io')
+      .get('/snapshots/ipv4/20200719/failed_file.json.gz')
+      .reply(200, zlib.gzipSync(JSON.stringify({})));
+
+    jest.setTimeout(30000);
+    await censysIpv4({
+      organizationId: 'organizationId',
+      organizationName: 'organizationName',
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId',
+      chunkNumber: 0,
+      numChunks: 1
+    });
+  });
+
+  test('repeated http failures should throw an error', async () => {
+    nock('https://censys.io')
+      .get('/api/v1/data/ipv4_2018/')
+      .reply(200, {
+        results: {
+          latest: {
+            details_url: 'https://censys.io/api/v1/data/ipv4_2018/20200719'
+          }
+        }
+      });
+    nock('https://censys.io')
+      .get('/api/v1/data/ipv4_2018/20200719')
+      .reply(200, {
+        files: {
+          'failed_file_2.json.gz': {
+            file_type: 'json',
+            compressed_size: 2568162,
+            compression_type: 'gzip',
+            compressed_md5_fingerprint: '334183d35efade2336033b38c4c528a6',
+            download_path:
+              'https://data-01.censys.io/snapshots/ipv4/20200719/failed_file_2.json.gz'
+          }
+        }
+      });
+
+    nock('https://data-01.censys.io')
+      .persist()
+      .get('/snapshots/ipv4/20200719/failed_file_2.json.gz')
+      .reply(429, 'too many requests');
+
+    jest.setTimeout(30000);
+    await expect(
+      censysIpv4({
+        organizationId: 'organizationId',
+        organizationName: 'organizationName',
+        scanId: 'scanId',
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 0,
+        numChunks: 1
+      })
+    ).rejects.toThrow('Response code 429');
+  });
 });

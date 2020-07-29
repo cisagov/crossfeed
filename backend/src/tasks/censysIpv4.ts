@@ -11,6 +11,7 @@ import * as zlib from 'zlib';
 import * as readline from 'readline';
 import got from 'got';
 import PQueue from 'p-queue';
+import pRetry from 'p-retry';
 
 interface IpToDomainsMap {
   [ip: string]: Domain[];
@@ -33,13 +34,14 @@ const downloadPath = async (
   const domains: Domain[] = [];
   const services: Service[] = [];
   const gunzip = zlib.createGunzip();
-  // TODO: use stream.pipeline instead, since .pipe doesn't forward errors.
-  const unzipped = got.stream.get(path, { ...auth }).pipe(gunzip);
+  const downloadStream = got.stream.get(path, { ...auth });
+  const unzippedStream = downloadStream.pipe(gunzip);
   // readInterface lets us stream the JSON file line-by-line
   const readInterface = readline.createInterface({
-    input: unzipped
+    input: unzippedStream
   });
   await new Promise((resolve, reject) => {
+    downloadStream.on('error', reject);
     readInterface.on('line', function (line) {
       const item: CensysIpv4Data = JSON.parse(line);
 
@@ -131,7 +133,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   let endIndex =
     Math.floor(((1.0 * (chunkNumber + 1)) / numChunks) * numFiles) - 1;
 
-  if (process.env.IS_LOCAL) {
+  if (process.env.IS_LOCAL && typeof jest === 'undefined') {
     // For local testing.
     startIndex = 0;
     endIndex = 1;
@@ -153,11 +155,19 @@ export const handler = async (commandOptions: CommandOptions) => {
     const fileName = fileNames[idx];
     jobs.push(
       queue.add(() =>
-        downloadPath(
-          files[fileName].download_path,
-          ipToDomainsMap,
-          idx,
-          numFiles
+        pRetry(
+          () =>
+            downloadPath(
+              files[fileName].download_path,
+              ipToDomainsMap,
+              idx,
+              numFiles
+            ),
+          {
+            // Perform less retries on jest to make tests faster
+            retries: typeof jest === 'undefined' ? 5 : 2,
+            randomize: true
+          }
         )
       )
     );

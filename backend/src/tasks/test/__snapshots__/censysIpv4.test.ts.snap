@@ -1830,3 +1830,7 @@ on this server.</p>
   },
 ]
 `;
+
+exports[`censys ipv4 http failure should retry: helpers.saveDomainsToDb 1`] = `Array []`;
+
+exports[`censys ipv4 http failure should retry: helpers.saveServicesToDb 1`] = `Array []`;
