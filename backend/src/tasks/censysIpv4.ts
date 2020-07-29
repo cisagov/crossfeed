@@ -113,13 +113,9 @@ export const handler = async (commandOptions: CommandOptions) => {
     throw new Error('Chunks not specified.');
   }
 
-  const {
-    data: { results }
-  } = await axios.get(CENSYS_IPV4_ENDPOINT, { auth });
+  const { results } = await got(CENSYS_IPV4_ENDPOINT, { ...auth }).json();
 
-  const {
-    data: { files }
-  } = await axios.get(results.latest.details_url, { auth });
+  const { files } = await got(results.latest.details_url, { ...auth }).json();
 
   const allDomains = await getAllDomains();
 
