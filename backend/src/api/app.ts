@@ -65,6 +65,10 @@ authenticatedRoute.post('/scans', handlerToExpress(scans.create));
 authenticatedRoute.put('/scans/:scanId', handlerToExpress(scans.update));
 authenticatedRoute.delete('/scans/:scanId', handlerToExpress(scans.del));
 authenticatedRoute.post('/scan-tasks/search', handlerToExpress(scanTasks.list));
+authenticatedRoute.post(
+  '/scan-tasks/:scanTaskId/kill',
+  handlerToExpress(scanTasks.kill)
+);
 
 authenticatedRoute.get('/organizations', handlerToExpress(organizations.list));
 authenticatedRoute.get(

@@ -12,7 +12,7 @@ import { Type } from 'class-transformer';
 import { ScanTask, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
-import { isGlobalViewAdmin, getOrgMemberships } from './auth';
+import { isGlobalViewAdmin, isGlobalWriteAdmin } from './auth';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
@@ -100,5 +100,36 @@ export const list = wrapHandler(async (event) => {
       result,
       count
     })
+  };
+});
+
+export const kill = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) {
+    return Unauthorized;
+  }
+  const id = event.pathParameters?.scanTaskId;
+
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+  await connectToDatabase();
+  const scanTask = await ScanTask.findOne(id);
+  if (!scanTask) {
+    return NotFound;
+  }
+  if (scanTask.status === 'failed' || scanTask.status === 'finished') {
+    return {
+      statusCode: 400,
+      body: 'ScanTask has already finished.'
+    };
+  }
+  if (scanTask) {
+    scanTask.status = 'failed';
+    scanTask.output = 'Manually stopped at ' + new Date().toISOString();
+    await ScanTask.save(scanTask);
+  }
+  return {
+    statusCode: 200,
+    body: JSON.stringify({})
   };
 });

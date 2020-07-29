@@ -5,10 +5,15 @@ import { Table, Paginator, ColumnFilter, selectFilter } from 'components';
 import { ScanTask } from 'types';
 import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import classes from './Scans.module.scss';
 
 interface ApiResponse {
   result: ScanTask[];
   count: number;
+}
+
+interface Errors {
+  global?: string;
 }
 
 const dateAccessor = (date?: string) => {
@@ -22,6 +27,28 @@ export const ScanTasksView: React.FC = () => {
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+  const [errors, setErrors] = useState<Errors>({});
+
+  const killScanTask = async (index: number) => {
+    try {
+      let row = scanTasks[index];
+      await apiPost(`/scan-tasks/${row.id}/kill`, {});
+      setScanTasks(
+        Object.assign([], scanTasks, {
+          [index]: {
+            ...row,
+            status: 'failed'
+          }
+        })
+      );
+    } catch (e) {
+      setErrors({
+        global:
+          e.status === 422 ? 'Unable to kill scan' : e.message ?? e.toString()
+      });
+      console.log(e);
+    }
+  };
 
   const columns: Column<ScanTask>[] = [
     {
@@ -91,11 +118,18 @@ export const ScanTasksView: React.FC = () => {
       id: 'actions',
       Cell: ({ row }: { row: { index: number; original: ScanTask } }) => (
         <>
-          {row.original.status !== 'finished' && (
-            <a href="#" onClick={() => null}>
-              Kill
-            </a>
-          )}
+          {row.original.status !== 'finished' &&
+            row.original.status !== 'failed' && (
+              <a
+                href="#"
+                onClick={e => {
+                  e.preventDefault();
+                  killScanTask(row.index);
+                }}
+              >
+                Kill
+              </a>
+            )}
         </>
       ),
       disableFilters: true
@@ -142,6 +176,7 @@ export const ScanTasksView: React.FC = () => {
 
   return (
     <>
+      {errors.global && <p className={classes.error}>{errors.global}</p>}
       <Table<ScanTask>
         renderPagination={renderPagination}
         columns={columns}

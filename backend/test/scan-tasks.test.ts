@@ -42,8 +42,8 @@ describe('domains', () => {
           createUserToken({
             userType: 'globalView'
           })
-        );
-      .expect(200);
+        )
+        .expect(200);
       expect(response.body.count).toBeGreaterThanOrEqual(1);
       expect(response.body.result.length).toBeGreaterThanOrEqual(1);
       expect(
@@ -92,17 +92,11 @@ describe('domains', () => {
       expect(
         response.body.result.map((e) => e.id).indexOf(scanTask.id)
       ).toBeGreaterThan(-1);
-      expect(
-        response.body.result.map((e) => e.id).indexOf(scanTask2.id)
-      ).toBe(-1);
+      expect(response.body.result.map((e) => e.id).indexOf(scanTask2.id)).toBe(
+        -1
+      );
     });
-    it('list by regular user should be unauthorized', async () => {
-      const scan = await Scan.create({
-        name: 'findomain',
-        arguments: {},
-        frequency: 100
-      }).save();
-
+    it('list by regular user should fail', async () => {
       const response = await request(app)
         .post('/scan-tasks/search')
         .set(
@@ -114,6 +108,80 @@ describe('domains', () => {
                 role: 'user'
               }
             ]
+          })
+        )
+        .expect(403);
+      expect(response.body).toEqual({});
+    });
+  });
+  describe('kill', () => {
+    it('kill by globalAdmin should kill the scantask', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 100
+      }).save();
+      const scanTask = await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'created'
+      }).save();
+
+      const response = await request(app)
+        .post(`/scan-tasks/${scanTask.id}/kill`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalAdmin'
+          })
+        )
+        .expect(200);
+      expect(response.body).toEqual({});
+    });
+    it(`kill by globalAdmin should not work on a finished scantask`, async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 100
+      }).save();
+      const scanTask = await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'finished'
+      }).save();
+
+      const response = await request(app)
+        .post(`/scan-tasks/${scanTask.id}/kill`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalAdmin'
+          })
+        )
+        .expect(400);
+      expect(response.text).toContain('already finished');
+    });
+    it('kill by globalView should fail', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 100
+      }).save();
+      const scanTask = await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'created'
+      }).save();
+
+      const response = await request(app)
+        .post(`/scan-tasks/${scanTask.id}/kill`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalView'
           })
         )
         .expect(403);
