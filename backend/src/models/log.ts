@@ -6,7 +6,7 @@ import {
   BaseEntity,
   ManyToOne
 } from 'typeorm';
-import { Organization, User } from './';
+import { Organization, User, Role } from './';
 
 @Entity()
 export class Log extends BaseEntity {
@@ -27,21 +27,37 @@ export class Log extends BaseEntity {
     | 'CreateScan'
     | 'DeleteScan';
 
+  // Who performed the action.
   @ManyToOne((type) => User, (user) => user.roles, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   })
   subject: User;
 
-  @ManyToOne((type) => User, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
+  // What value the action was called with.
+  @Column({
+    type: 'jsonb',
+    default: {}
   })
-  user: User;
+  value: {
+    [x: string]: any;
+  };
+
+  @ManyToOne((type) => User, {
+    onDelete: 'SET NULL',
+    onUpdate: 'SET NULL'
+  })
+  targetUser: User;
+
+  @ManyToOne((type) => Role, {
+    onDelete: 'SET NULL',
+    onUpdate: 'SET NULL'
+  })
+  targetRole: Role;
 
   @ManyToOne((type) => Organization, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
+    onDelete: 'SET NULL',
+    onUpdate: 'SET NULL'
   })
-  organization: Organization;
+  targetOrganization: Organization;
 }
