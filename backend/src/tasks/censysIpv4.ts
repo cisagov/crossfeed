@@ -11,6 +11,7 @@ import * as readline from 'readline';
 import got from 'got';
 import PQueue from 'p-queue';
 import pRetry from 'p-retry';
+import axios from 'axios';
 
 interface IpToDomainsMap {
   [ip: string]: Domain[];
@@ -20,6 +21,7 @@ const auth = {
   username: process.env.CENSYS_API_ID!,
   password: process.env.CENSYS_API_SECRET!
 };
+
 const CENSYS_IPV4_ENDPOINT = 'https://censys.io/api/v1/data/ipv4_2018/';
 
 const downloadPath = async (
@@ -96,10 +98,11 @@ const downloadPath = async (
     console.log(
       `censysipv4 - processed file ${i} of ${numFiles}: got no results`
     );
+  } else {
+    console.log(
+      `censysipv4 - processed file ${i} of ${numFiles}: got some results: ${domains.length} domains and ${services.length} services`
+    );
   }
-  console.log(
-    `censysipv4 - processed file ${i} of ${numFiles}: got some results: ${domains.length} domains and ${services.length} services`
-  );
 
   await saveDomainsToDb(domains);
   await saveServicesToDb(services);
@@ -112,9 +115,13 @@ export const handler = async (commandOptions: CommandOptions) => {
     throw new Error('Chunks not specified.');
   }
 
-  const { results } = await got(CENSYS_IPV4_ENDPOINT, { ...auth }).json();
+  const {
+    data: { results }
+  } = await axios.get(CENSYS_IPV4_ENDPOINT, { auth });
 
-  const { files } = await got(results.latest.details_url, { ...auth }).json();
+  const {
+    data: { files }
+  } = await axios.get(results.latest.details_url, { auth });
 
   const allDomains = await getAllDomains();
 
