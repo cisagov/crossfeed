@@ -15,13 +15,13 @@ subnav:
 
 <!--
 
-To modify the architecture, use [https://app.diagrams.net/](https://app.diagrams.net/) or the desktop app
+To edit this graph, view this page in a browser, click on the graph, and click the "edit" button to view it in draw.io.
 
-to open architecture.drawio.
+Once you've made changes, click File -> Embed -> HTML to get the new architecture HTML code, then put it in architecture-diagram.md.
 
 -->
 
-![Architecture](../architecture.png)
+{% include_relative architecture-diagram.md %}
 
 ## Worker architecture
 
