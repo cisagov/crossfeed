@@ -29,6 +29,7 @@ jobs:
           restore-keys: |
             gems-
       - run: bundle config path vendor/bundle
+      - run: gem install bundler:2.1.4
       - run: bundle install --jobs 4 --retry 3
         working-directory: ./docs
       - run: bundle exec jekyll build
