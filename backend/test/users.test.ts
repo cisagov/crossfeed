@@ -84,8 +84,8 @@ describe('user', () => {
       const lastName = 'last name';
       const email = Math.random() + '@crossfeed.cisa.gov';
       const user = await User.create({
-        firstName: 'original first name',
-        lastName: 'original last name',
+        firstName: '',
+        lastName: '',
         email
       }).save();
       await Role.create({
