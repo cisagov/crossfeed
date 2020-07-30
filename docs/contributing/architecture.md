@@ -21,7 +21,7 @@ to open architecture.drawio.
 
 -->
 
-![Architecture](/contributing/architecture.png)
+![Architecture](../architecture.png)
 
 ## Worker architecture
 
