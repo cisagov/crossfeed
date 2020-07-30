@@ -20,9 +20,10 @@ primary:
     href: /contributing/
 
 usage:
-  - text: Sidenav Documentation
+  - text: Getting Started
     href: /usage/
-  - text: Sidenav Navigation section
+  - text: Administration
+    href: /usage/administration/
 
 contributing:
   - text: Contribution Guidelines

@@ -23,8 +23,6 @@ to open architecture.drawio.
 
 ![Architecture](/contributing/architecture.png)
 
-Additional documentation on system design can be found in the [docs folder](/docs).
-
 ## Worker architecture
 
 The `Scan` model represents a scheduled scan that is run on all organizations.

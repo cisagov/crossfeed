@@ -10,15 +10,9 @@ Crossfeed is a tool that continuously enumerates and monitors an organization's 
 
 Crossfeed is a collaboration between the [Cybersecurity and Infrastructure Security Agency](https://www.cisa.gov/) and the [Defense Digital Service](https://dds.mil/).
 
-## Contributing
+## Documentation
 
-To start a local instance of Crossfeed and develop on it locally, see [CONTRIBUTING.md](docs/CONTRIBUTING.md).
-
-## Architecture
-
-![](https://github.com/cisagov/crossfeed/blob/master/docs/architecture.png)
-
-Additional documentation on system design can be found in the [docs folder](/docs).
+See [https://cisagov.github.io/crossfeed/](https://cisagov.github.io/crossfeed/) for documentation on both how to use Crossfeed and how to contribute to it.
 
 ## Public domain
 
