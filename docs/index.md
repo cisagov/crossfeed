@@ -13,9 +13,9 @@ Crossfeed is a collaboration between the [Cybersecurity and Infrastructure Secur
 
 ## Getting Started
 
-- If you want to learn how to use Crossfeed, see the [User Guide](/usage/).
+- If you want to learn how to use Crossfeed, see the [User Guide](./usage/).
 
-- If you interested in developing with Crossfeed or setting up an instance for your own organization, see [Contributing](/contributing/)).
+- If you interested in developing with Crossfeed or setting up an instance for your own organization, see [Contributing](./contributing/)).
 
 ## Source code
 
