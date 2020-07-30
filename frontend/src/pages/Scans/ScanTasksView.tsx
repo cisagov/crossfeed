@@ -121,7 +121,7 @@ export const ScanTasksView: React.FC = () => {
           {row.original.status !== 'finished' &&
             row.original.status !== 'failed' && (
               <a
-                href="#"
+                href="# "
                 onClick={e => {
                   e.preventDefault();
                   killScanTask(row.index);
