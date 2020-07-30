@@ -33,6 +33,8 @@ jobs:
         working-directory: ./docs
       - run: bundle exec jekyll build
         working-directory: ./docs
+        env:
+          JEKYLL_ENV: producation
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: crazy-max/ghaction-github-pages@v1.4.0
