@@ -116,11 +116,12 @@ export const invite = wrapHandler(async (event) => {
       invitePending: true,
       ...body
     });
+    await User.save(user);
   } else if (!user.firstName && !user.lastName) {
     user.firstName = body.firstName;
     user.lastName = body.lastName;
+    await User.save(user);
   }
-  await User.save(user);
 
   if (body.organization) {
     // Create approved role if organization supplied
