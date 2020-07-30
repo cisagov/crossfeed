@@ -9,6 +9,7 @@ import * as reports from './reports';
 import * as organizations from './organizations';
 import * as scans from './scans';
 import * as users from './users';
+import * as scanTasks from './scan-tasks';
 
 const handlerToExpress = (handler) => async (req, res, next) => {
   const { statusCode, body } = await handler(
@@ -63,6 +64,12 @@ authenticatedRoute.get('/scans', handlerToExpress(scans.list));
 authenticatedRoute.post('/scans', handlerToExpress(scans.create));
 authenticatedRoute.put('/scans/:scanId', handlerToExpress(scans.update));
 authenticatedRoute.delete('/scans/:scanId', handlerToExpress(scans.del));
+authenticatedRoute.post('/scan-tasks/search', handlerToExpress(scanTasks.list));
+authenticatedRoute.post(
+  '/scan-tasks/:scanTaskId/kill',
+  handlerToExpress(scanTasks.kill)
+);
+
 authenticatedRoute.get('/organizations', handlerToExpress(organizations.list));
 authenticatedRoute.get(
   '/organizations/public',
