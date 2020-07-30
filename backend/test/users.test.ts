@@ -118,8 +118,8 @@ describe('user', () => {
       expect(response.body.id).toEqual(user.id);
       expect(response.body.email).toEqual(email);
       expect(response.body.invitePending).toEqual(false);
-      expect(response.body.firstName).toEqual('original first name');
-      expect(response.body.lastName).toEqual('original last name');
+      expect(response.body.firstName).toEqual('first name');
+      expect(response.body.lastName).toEqual('last name');
       expect(response.body.roles[1].approved).toEqual(true);
       expect(response.body.roles[1].role).toEqual('user');
     });
