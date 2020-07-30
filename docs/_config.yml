@@ -4,8 +4,8 @@ description: Crossfeed
 # GitHub information
 # This is used for adding an edit this page link to the footer
 github_info:
-  organization: 18F
-  repository: uswds-jekyll
+  organization: cisagov
+  repository: crossfeed
   default_branch: master
 
 # site_width: wide
