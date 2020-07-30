@@ -1,16 +1,16 @@
 import React from 'react';
 import { Column, CellProps } from 'react-table';
-import { Report } from 'types';
+import { Vulnerability } from 'types';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ColumnFilter, selectFilter } from 'components';
 
-type CreateColumns = () => Column<Report>[];
+type CreateColumns = () => Column<Vulnerability>[];
 
 export const createColumns: CreateColumns = () => [
   {
     Header: 'Details',
-    Cell: ({ row }: CellProps<Report>) => (
+    Cell: ({ row }: CellProps<Vulnerability>) => (
       <span
         {...row.getToggleRowExpandedProps()}
         className="text-center display-block"

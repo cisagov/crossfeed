@@ -33,6 +33,14 @@ export const Header: React.FC = () => {
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
+      to="/vulnerabilities"
+      key="vulnerabilities"
+      className="usa-nav__link"
+    >
+      <span>Vulnerabilities</span>
+    </NavLink>,
+    <NavLink
+      activeClassName="usa-current"
       to="/risk"
       key="risk"
       className="usa-nav__link"
@@ -66,6 +74,14 @@ export const Header: React.FC = () => {
       className="usa-nav__link"
     >
       <span>{dashboardTitle}</span>
+    </NavLink>,
+    <NavLink
+      activeClassName="usa-current"
+      to="/vulnerabilities"
+      key="vulnerabilities"
+      className="usa-nav__link"
+    >
+      <span>Vulnerabilities</span>
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
@@ -121,11 +137,11 @@ export const Header: React.FC = () => {
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
-      to="/risk"
-      key="risk"
+      to="/vulnerabilities"
+      key="vulnerabilities"
       className="usa-nav__link"
     >
-      <span>Risk Summary</span>
+      <span>Vulnerabilities</span>
     </NavLink>,
     <NavLink
       activeClassName="usa-current"

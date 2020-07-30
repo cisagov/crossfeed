@@ -5,7 +5,7 @@ import { handler as healthcheck } from './healthcheck';
 import * as auth from './auth';
 import { login } from './auth';
 import * as domains from './domains';
-import * as reports from './reports';
+import * as vulnerabilities from './vulnerabilities';
 import * as organizations from './organizations';
 import * as scans from './scans';
 import * as users from './users';
@@ -58,8 +58,14 @@ authenticatedRoute.use(async (req, res, next) => {
 
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
-authenticatedRoute.post('/report/search', handlerToExpress(reports.list));
-authenticatedRoute.get('/report/:reportId', handlerToExpress(reports.get));
+authenticatedRoute.post(
+  '/vulnerabilities/search',
+  handlerToExpress(vulnerabilities.list)
+);
+authenticatedRoute.get(
+  '/vulnerabilities/:reportId',
+  handlerToExpress(vulnerabilities.get)
+);
 authenticatedRoute.get('/scans', handlerToExpress(scans.list));
 authenticatedRoute.post('/scans', handlerToExpress(scans.create));
 authenticatedRoute.put('/scans/:scanId', handlerToExpress(scans.update));

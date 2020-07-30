@@ -1,5 +1,5 @@
 export * from './domain';
-export * from './report';
+export * from './vulnerability';
 export * from './scan';
 export * from './organization';
 export * from './user';

@@ -9,13 +9,13 @@ import {
   IsObject
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Report, connectToDatabase } from '../models';
+import { Vulnerability, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder } from 'typeorm';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
-class ReportFilters {
+class VulnerabilityFilters {
   @IsString()
   @IsOptional()
   title?: string;
@@ -33,7 +33,7 @@ class ReportFilters {
   desc?: string;
 }
 
-class ReportSearch {
+class Vulnerabilitiesearch {
   @IsInt()
   @IsPositive()
   page: number = 1;
@@ -47,28 +47,28 @@ class ReportSearch {
   @IsIn(['ASC', 'DESC'])
   order: 'ASC' | 'DESC' = 'DESC';
 
-  @Type(() => ReportFilters)
+  @Type(() => VulnerabilityFilters)
   @ValidateNested()
   @IsObject()
   @IsOptional()
-  filters?: ReportFilters;
+  filters?: VulnerabilityFilters;
 
-  filterResultQueryset(qs: SelectQueryBuilder<Report>) {
+  filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>) {
     if (this.filters?.title) {
-      qs.andWhere('report.title ILIKE :title', {
+      qs.andWhere('vulnerability.title ILIKE :title', {
         title: `%${this.filters.title}%`
       });
     }
     if (this.filters?.severity) {
-      qs.andWhere('report.severity=:severity', {
+      qs.andWhere('vulnerability.severity=:severity', {
         severity: this.filters.severity
       });
     }
     if (this.filters?.state) {
-      qs.andWhere('report.state=:state', { state: this.filters.state });
+      qs.andWhere('vulnerability.state=:state', { state: this.filters.state });
     }
     if (this.filters?.desc) {
-      qs.andWhere('report.desc ILIKE :desc', {
+      qs.andWhere('vulnerability.desc ILIKE :desc', {
         desc: `%${this.filters.desc}%`
       });
     }
@@ -76,8 +76,8 @@ class ReportSearch {
   }
 
   async getResults() {
-    const qs = Report.createQueryBuilder('report')
-      .orderBy(`report.${this.sort}`, this.order)
+    const qs = Vulnerability.createQueryBuilder('vulnerability')
+      .orderBy(`vulnerability.${this.sort}`, this.order)
       .offset(PAGE_SIZE * (this.page - 1))
       .limit(PAGE_SIZE);
 
@@ -88,7 +88,7 @@ class ReportSearch {
 
 export const list = wrapHandler(async (event) => {
   await connectToDatabase();
-  const search = await validateBody(ReportSearch, event.body);
+  const search = await validateBody(Vulnerabilitiesearch, event.body);
   const [result, count] = await search.getResults();
   return {
     statusCode: 200,
@@ -101,12 +101,12 @@ export const list = wrapHandler(async (event) => {
 
 export const get = wrapHandler(async (event) => {
   await connectToDatabase();
-  const id = event.pathParameters?.reportId;
+  const id = event.pathParameters?.vulnerabilityId;
   if (!isUUID(id)) {
     return NotFound;
   }
 
-  const result = await Report.findOne(id);
+  const result = await Vulnerability.findOne(id);
 
   return {
     statusCode: result ? 200 : 404,
