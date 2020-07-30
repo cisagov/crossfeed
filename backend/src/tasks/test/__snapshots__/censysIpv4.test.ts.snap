@@ -105,7 +105,7 @@ Array [
               another null: 
               ",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"these characters should not show up in the snapshot:\\\\n              null: \\\\u...",
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"these characters should not show up in the snapshot:\\\\n              null: \\\\n...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
