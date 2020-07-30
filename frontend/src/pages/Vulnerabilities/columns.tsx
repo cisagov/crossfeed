@@ -1,15 +1,15 @@
-import React from "react";
-import { Column, CellProps } from "react-table";
-import { Report } from "types";
-import { FaMinus, FaPlus } from "react-icons/fa";
-import { formatDistanceToNow, parseISO } from "date-fns";
-import { ColumnFilter, selectFilter } from "components";
+import React from 'react';
+import { Column, CellProps } from 'react-table';
+import { Report } from 'types';
+import { FaMinus, FaPlus } from 'react-icons/fa';
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { ColumnFilter, selectFilter } from 'components';
 
 type CreateColumns = () => Column<Report>[];
 
 export const createColumns: CreateColumns = () => [
   {
-    Header: "Details",
+    Header: 'Details',
     Cell: ({ row }: CellProps<Report>) => (
       <span
         {...row.getToggleRowExpandedProps()}
@@ -18,47 +18,47 @@ export const createColumns: CreateColumns = () => [
         {row.isExpanded ? <FaMinus /> : <FaPlus />}
       </span>
     ),
-    disableFilters: true,
+    disableFilters: true
   },
   {
-    Header: "Created",
-    id: "created",
+    Header: 'Created',
+    id: 'created',
     accessor: ({ created }) => `${formatDistanceToNow(parseISO(created))} ago`,
     width: 250,
-    disableFilters: true,
+    disableFilters: true
   },
   {
-    Header: "Severity",
-    accessor: "severity",
+    Header: 'Severity',
+    accessor: 'severity',
     width: 100,
     Filter: selectFilter([
-      "low",
-      "medium",
-      "high",
-      "critical",
-      "none",
-      "unknown",
-    ]),
+      'low',
+      'medium',
+      'high',
+      'critical',
+      'none',
+      'unknown'
+    ])
   },
   {
-    Header: "State",
-    accessor: "state",
+    Header: 'State',
+    accessor: 'state',
     width: 100,
     Filter: selectFilter([
-      "duplicate",
-      "informative",
-      "needs-more-info",
-      "new",
-      "not-applicable",
-      "resolved",
-      "spam",
-      "triaged",
-    ]),
+      'duplicate',
+      'informative',
+      'needs-more-info',
+      'new',
+      'not-applicable',
+      'resolved',
+      'spam',
+      'triaged'
+    ])
   },
   {
-    Header: "Title",
-    accessor: "title",
+    Header: 'Title',
+    accessor: 'title',
     width: 800,
-    Filter: ColumnFilter,
-  },
+    Filter: ColumnFilter
+  }
 ];
