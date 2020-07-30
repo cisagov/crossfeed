@@ -5,6 +5,8 @@ permalink: /
 layout: home
 ---
 
+# Crossfeed Documentation
+
 Crossfeed is a tool that continuously enumerates and monitors an organization's public-facing attack surface in order to discover assets and flag potential security flaws. By operating in either passive or active scanning modes, Crossfeed collects data from a variety of open source tools and data feeds to provide actionable information about organization assets. Crossfeed is offered as a self-service portal and allows customers to view reports and customize scans performed.
 
 Crossfeed is a collaboration between the [Cybersecurity and Infrastructure Security Agency](https://www.cisa.gov/) and the [Defense Digital Service](https://dds.mil/).
@@ -21,7 +23,7 @@ The source code for Crossfeed is available at [https://github.com/cisagov/crossf
 
 ## Public domain
 
-This project is in the worldwide [public domain](LICENSE.md).
+This project is in the worldwide [public domain](https://github.com/cisagov/crossfeed/blob/master/LICENSE).
 
 This project is in the public domain within the United States, and
 copyright and related rights in the work worldwide are waived through

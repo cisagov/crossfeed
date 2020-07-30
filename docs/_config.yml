@@ -14,3 +14,13 @@ theme: uswds-jekyll
 
 sass:
   style: compressed
+
+highlighter: rouge
+
+minify_html: false
+
+exclude:
+  - _site
+  - .bundle-cache
+  - .jekyll-cache
+  - .sass-cache

@@ -1,18 +1,17 @@
 ---
-title: Contributing
+title: Contribution Guidelines
 permalink: /contributing/
 
 layout: post
 sidenav: contributing
-subnav:
-  - text: Getting Started
-    href: '#section-one'
-  - text: Section two
-    href: '#section-two'
 ---
 
-## Architecture
-
-![](https://github.com/cisagov/crossfeed/blob/master/docs/architecture.png)
-
-Additional documentation on system design can be found in the [docs folder](/docs).
+- Submit a pull request with your changes.
+- Add automated tests to your code, especially if they involve backend or API changes.
+- This project is in the public domain within the United States, and
+  copyright and related rights in the work worldwide are waived through
+  the [CC0 1.0 Universal public domain
+  dedication](https://creativecommons.org/publicdomain/zero/1.0/).
+  All contributions to this project will be released under the CC0
+  dedication. By submitting a pull request, you are agreeing to comply
+  with this waiver of copyright interest.
