@@ -4,6 +4,13 @@ permalink: /usage/administration/
 
 layout: post
 sidenav: usage
+subnav:
+  - text: Access control
+    href: '#access-control'
+  - text: Global admins
+    href: '#global-admins'
+  - text: Organization admins
+    href: '#organization-admins'
 ---
 
 ## Access control
@@ -42,11 +49,3 @@ The following functionality is available to organization admins.
 ### Organization settings
 
 This tab lets an admin invite users to their organization or update their organization settings.
-
-## Normal users
-
-Normal users that are part of an organization have access to the following functionality:
-
-### Dashboard
-
-The dashboard shows all domains and subdomains pertaining to the current organization and shows the detected services for each domain.
