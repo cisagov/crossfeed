@@ -104,7 +104,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build worker container
-        run: docker build -t crossfeed-worker -f Dockerfile.worker .
+        run: npm run build-worker
         working-directory: ./backend
   deploy:
     needs: [security, build_worker, lint, test]
