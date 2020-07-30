@@ -1,0 +1,16 @@
+title: Crossfeed
+description: Crossfeed
+
+# GitHub information
+# This is used for adding an edit this page link to the footer
+github_info:
+  organization: 18F
+  repository: uswds-jekyll
+  default_branch: master
+
+# site_width: wide
+
+theme: uswds-jekyll
+
+sass:
+  style: compressed
