@@ -48,12 +48,12 @@ class ScanTaskSearch {
   filterResultQueryset(qs: SelectQueryBuilder<ScanTask>) {
     if (this.filters?.name) {
       qs.andWhere('scan.name ILIKE :name', {
-        name: `%${this.filters?.name}%`
+        name: `${this.filters?.name}`
       });
     }
     if (this.filters?.status) {
       qs.andWhere('scan_task.status ILIKE :status', {
-        status: `%${this.filters?.status}%`
+        status: `${this.filters?.status}`
       });
     }
     return qs;
