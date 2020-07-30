@@ -1,0 +1,44 @@
+name: Docs
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "docs/**"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "docs/**"
+      - ".github/workflows/docs.yml"
+
+jobs:
+  build:
+    name: Build docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: "2.6"
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: gems-${{ hashFiles('**/docs/Gemfile.lock') }}
+          restore-keys: |
+            gems-
+      - run: bundle config path vendor/bundle
+      - run: bundle install --jobs 4 --retry 3
+        working-directory: ./docs
+      - run: bundle exec jekyll build
+        working-directory: ./docs
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: crazy-max/ghaction-github-pages@v1.4.0
+        with:
+          keep_history: true
+          target-branch: gh-pages
+          build_dir: docs/_site
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
