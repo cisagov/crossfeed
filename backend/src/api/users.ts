@@ -116,7 +116,7 @@ export const invite = wrapHandler(async (event) => {
       invitePending: true,
       ...body
     });
-  } else {
+  } else if (!user.firstName && !user.lastName) {
     user.firstName = body.firstName;
     user.lastName = body.lastName;
   }
