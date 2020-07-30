@@ -79,7 +79,7 @@ describe('user', () => {
       expect(response.body.roles[0].approved).toEqual(true);
       expect(response.body.roles[0].role).toEqual('user');
     });
-    it('invite existing user by a different organization admin should work, and should not modify other user details', async () => {
+    it('invite existing user by a different organization admin should work, and should modify other user details', async () => {
       const firstName = 'first name';
       const lastName = 'last name';
       const email = Math.random() + '@crossfeed.cisa.gov';
