@@ -84,8 +84,8 @@ describe('user', () => {
       const lastName = 'last name';
       const email = Math.random() + '@crossfeed.cisa.gov';
       const user = await User.create({
-        firstName: '',
-        lastName: '',
+        firstName,
+        lastName,
         email
       }).save();
       await Role.create({
@@ -108,8 +108,8 @@ describe('user', () => {
           })
         )
         .send({
-          firstName,
-          lastName,
+          firstName: 'new first name',
+          lastName: 'new last name',
           email,
           organization: organization2.id,
           organizationAdmin: false
@@ -124,8 +124,6 @@ describe('user', () => {
       expect(response.body.roles[1].role).toEqual('user');
     });
     it('invite existing user by a different organization admin should work, and should modify user name if user name is initially blank', async () => {
-      const firstName = '';
-      const lastName = '';
       const email = Math.random() + '@crossfeed.cisa.gov';
       const user = await User.create({
         firstName: '',
@@ -152,8 +150,8 @@ describe('user', () => {
           })
         )
         .send({
-          firstName,
-          lastName,
+          firstName: 'new first name',
+          lastName: 'new last name',
           email,
           organization: organization2.id,
           organizationAdmin: false
@@ -162,8 +160,8 @@ describe('user', () => {
       expect(response.body.id).toEqual(user.id);
       expect(response.body.email).toEqual(email);
       expect(response.body.invitePending).toEqual(false);
-      expect(response.body.firstName).toEqual('first name');
-      expect(response.body.lastName).toEqual('last name');
+      expect(response.body.firstName).toEqual('new first name');
+      expect(response.body.lastName).toEqual('new last name');
       expect(response.body.roles[1].approved).toEqual(true);
       expect(response.body.roles[1].role).toEqual('user');
     });
