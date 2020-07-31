@@ -1,6 +1,6 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { User, Scan, connectToDatabase, Organization } from '../src/models';
+import { Scan, connectToDatabase, ScanTask } from '../src/models';
 import { createUserToken } from './util';
 
 describe('scan', () => {
@@ -172,6 +172,30 @@ describe('scan', () => {
         .expect(200);
 
       expect(response.body.affected).toEqual(1);
+    });
+    it('delete by globalAdmin should not delete associated scanTasks', async () => {
+      let scan = await Scan.create({
+        name: 'censys',
+        arguments: {},
+        frequency: 999999
+      }).save();
+      let scanTask = await ScanTask.create({
+        scan,
+        type: 'fargate',
+        status: 'created'
+      }).save();
+      expect(await ScanTask.count({ scan: { id: scan.id } })).toEqual(1);
+      const response = await request(app)
+        .del(`/scans/${scan.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalAdmin'
+          })
+        )
+        .expect(200);
+      expect(await Scan.count({ id: scan.id })).toEqual(0);
+      expect(await ScanTask.count({ scan: { id: scan.id } })).toEqual(1);
     });
     it('delete by globalView should fail', async () => {
       const scan = await Scan.create({
