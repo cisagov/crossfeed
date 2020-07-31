@@ -37,7 +37,7 @@ export class Scan extends BaseEntity {
   lastRun: Date | null;
 
   @OneToMany((type) => ScanTask, (scanTask) => scanTask.scan, {
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
   })
   scanTasks: ScanTask[];
