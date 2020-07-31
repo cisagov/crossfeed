@@ -80,7 +80,8 @@ export const ScanTasksView: React.FC = () => {
         'findomain',
         'portscanner',
         'wappalyzer',
-        'censysIpv4'
+        'censysIpv4',
+        'hibp'
       ]),
       disableSortBy: true
     },

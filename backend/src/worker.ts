@@ -6,6 +6,7 @@ import { handler as findomain } from './tasks/findomain';
 import { handler as portscanner } from './tasks/portscanner';
 import { handler as wappalyzer } from './tasks/wappalyzer';
 import { handler as censysIpv4 } from './tasks/censysIpv4';
+import { handler as hibp } from './tasks/censysIpv4';
 
 /**
  * Worker entrypoint.
@@ -32,7 +33,8 @@ async function main() {
       censysIpv4,
       findomain,
       portscanner,
-      wappalyzer
+      wappalyzer,
+      hibp
     }[scanName];
     if (!scanFn) {
       throw new Error('Invalid scan name ' + scanName);
