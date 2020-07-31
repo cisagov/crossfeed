@@ -27,7 +27,7 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
     breach.IsVerified === true &&
     breach.BreachDate > '2016-01-01';
 
-  for (let email in results) {
+  for (const email in results) {
     const filtered = (results[email] || []).filter((e) =>
       shouldCountBreach(breachesDict[e])
     );
