@@ -25,13 +25,14 @@ RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/download/1.7.0/
 
 RUN wget --quiet https://github.com/OWASP/Amass/releases/download/v3.7.3/amass_linux_i386.zip -O amass.zip && unzip -q amass.zip && cp amass_linux_i386/amass /usr/bin && chmod +x /usr/bin/amass
 
+RUN wget --quiet https://github.com/facebookincubator/nvdtools/releases/download/v0.1.3/nvdtools-0.1.3-linux-arm64.tar.gz -O nvdtools.tar.gz && tar -xf nvdtools.tar.gz && cp nvdtools-0.1.3/bin/csv2cpe nvdtools-0.1.3/bin/nvdsync nvdtools-0.1.3/bin/cpe2cve /usr/bin && chmod +x /usr/bin/csv2cpe /usr/bin/nvdsync /usr/bin/cpe2cve
+
 FROM node:14-buster-slim
 
 WORKDIR /app
 
 COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 
-COPY --from=deps /usr/bin/findomain /usr/bin/findomain
-COPY --from=deps /usr/bin/amass /usr/bin/amass
+COPY --from=deps /usr/bin/findomain /usr/bin/amass /usr/bin/csv2cpe /usr/bin/nvdsync /usr/bin/cpe2cve /usr/bin/
 
 CMD ["node", "worker.bundle.js"]
