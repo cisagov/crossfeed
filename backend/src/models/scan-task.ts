@@ -29,7 +29,7 @@ export class ScanTask extends BaseEntity {
 
   @ManyToOne((type) => Scan, (scan) => scan.scanTasks, {
     onDelete: 'SET NULL',
-    onUpdate: 'SET NULL'
+    onUpdate: 'CASCADE'
   })
   @JoinColumn()
   scan: Scan;
