@@ -50,6 +50,6 @@ export const get = wrapHandler(async (event) => {
 
   return {
     statusCode: 200,
-    body: alerts ? JSON.stringify(alerts) : ''
+    body: JSON.stringify(alerts)
   };
 });
