@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, Route } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { Organization as OrganizationType, Role, ScanTask, User } from 'types';
@@ -26,7 +26,6 @@ export const Organization: React.FC = () => {
   const [organization, setOrganization] = useState<OrganizationType>();
   const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
-  const [currentView, setCurrentView] = useState<number>(0);
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
   const [newUserValues, setNewUserValues] = useState<{
@@ -386,6 +385,9 @@ export const Organization: React.FC = () => {
         organization={organization}
         type="update"
       ></OrganizationForm>
+    </>,
+    <>
+      <h1>Approve domains</h1>
     </>
   ];
 
@@ -398,49 +400,31 @@ export const Organization: React.FC = () => {
           </div>
           <PrimaryNav
             items={[
-              <a
-                key="one"
-                href="# "
-                onClick={() => {
-                  setCurrentView(0);
-                }}
-                className="usa-nav__link"
-              >
+              <NavLink to="/organization" className="usa-nav__link">
                 <span>Overview</span>
-              </a>,
-              <a
-                key="two"
-                href="# "
-                onClick={() => {
-                  setCurrentView(1);
-                }}
-              >
+              </NavLink>,
+              <NavLink to="/organization/users" className="usa-nav__link">
                 <span>Manage Users</span>
-              </a>,
-              <a
-                key="three"
-                href="# "
-                onClick={() => {
-                  setCurrentView(2);
-                }}
-              >
+              </NavLink>,
+              <NavLink to="/organization/scans" className="usa-nav__link">
                 <span>Manage Scans</span>
-              </a>,
-              <a
-                key="four"
-                href="# "
-                onClick={() => {
-                  setCurrentView(3);
-                }}
-              >
+              </NavLink>,
+              <NavLink to="/organization/edit" className="usa-nav__link">
                 <span>Update organization</span>
-              </a>
+              </NavLink>,
+              <NavLink to="/organization/approve" className="usa-nav__link">
+                <span>Approve Domains</span>
+              </NavLink>
             ]}
             onToggleMobileNav={function noRefCheck() {}}
           />
         </div>
       </Header>
-      {views[currentView]}
+      <Route path="/organization" exact component={() => views[0]} />
+      <Route path="/organization/users" component={() => views[1]} />
+      <Route path="/organization/scans" component={() => views[2]} />
+      <Route path="/organization/edit" component={() => views[3]} />
+      <Route path="/organization/approve" component={() => views[4]} />
     </div>
   );
 };
