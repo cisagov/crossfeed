@@ -6,7 +6,7 @@ import arrow from './arrow-both.svg';
 const DropdownIndicator: React.FC<any> = props => {
   return (
     <components.DropdownIndicator {...props}>
-      <img src={arrow} style={{ width: 8, marginRight: 3 }} />
+      <img src={arrow} alt="Expand" style={{ width: 8, marginRight: 3 }} />
     </components.DropdownIndicator>
   );
 };

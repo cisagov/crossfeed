@@ -8,7 +8,8 @@ import {
   ModalContainer,
   Overlay,
   Modal,
-  Form
+  Form,
+  Checkbox
 } from '@trussworks/react-uswds';
 import { Table } from 'components';
 import { Column } from 'react-table';
@@ -109,12 +110,14 @@ const ScansView: React.FC = () => {
     arguments: string;
     frequency: number;
     frequencyUnit: string;
+    isGranular: boolean;
   }>({
     name: 'censys',
     arguments: '{}',
     organizations: [],
     frequency: 0,
-    frequencyUnit: 'minute'
+    frequencyUnit: 'minute',
+    isGranular: false
   });
 
   React.useEffect(() => {
@@ -161,13 +164,15 @@ const ScansView: React.FC = () => {
     e.preventDefault();
     try {
       // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
-      let body = Object.assign({}, values);
+      let body: typeof values = Object.assign({}, values);
       body.arguments = JSON.parse(values.arguments);
       if (values.frequencyUnit === 'minute') body.frequency *= 60;
       else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
       else body.frequency *= 60 * 60 * 24;
+
       const scan = await apiPost('/scans/', {
-        body
+        ...body,
+        organizations: body.organizations.map(e => e.value)
       });
       setScans(scans.concat(scan));
     } catch (e) {
@@ -221,13 +226,25 @@ const ScansView: React.FC = () => {
           value={values.arguments}
           onChange={onTextChange}
         />
-        <Label htmlFor="organizations">Enabled Organizations</Label>
-        <MultiSelect
-          name="organizations"
-          options={[{ label: 'All', value: 'all' }, ...organizationOptions]}
-          value={values.organizations}
-          onChange={e => onChange('organizations', e)}
+        <br />
+        <Checkbox
+          id="isGranular"
+          label="Granular"
+          name="isGranular"
+          checked={values.isGranular}
+          onChange={e => onChange('isGranular', e.target.checked)}
         />
+        {values.isGranular && (
+          <>
+            <Label htmlFor="organizations">Enabled Organizations</Label>
+            <MultiSelect
+              name="organizations"
+              options={organizationOptions}
+              value={values.organizations}
+              onChange={e => onChange('organizations', e)}
+            />
+          </>
+        )}
         <br />
         <div className="form-group form-inline">
           <label style={{ marginRight: '10px' }} htmlFor="frequency">

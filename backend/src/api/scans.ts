@@ -4,7 +4,11 @@ import {
   IsString,
   IsIn,
   isUUID,
-  IsObject
+  IsObject,
+  IsBoolean,
+  IsArray,
+  IsUUID,
+  ValidateNested
 } from 'class-validator';
 import { Scan, connectToDatabase, Organization } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
@@ -83,6 +87,12 @@ class NewScan {
   @IsInt()
   @IsPositive()
   frequency: number = 1;
+
+  @IsBoolean()
+  isGranular: boolean;
+
+  @IsUUID('all', { each: true })
+  organizations: string[];
 }
 
 export const del = wrapHandler(async (event) => {
@@ -111,7 +121,10 @@ export const update = wrapHandler(async (event) => {
     id: id
   });
   if (scan) {
-    Scan.merge(scan, body);
+    Scan.merge(scan, {
+      ...body,
+      organizations: body.organizations.map((id) => ({ id }))
+    });
     const res = await Scan.save(scan);
     return {
       statusCode: 200,
@@ -125,7 +138,10 @@ export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
   const body = await validateBody(NewScan, event.body);
-  const scan = await Scan.create(body);
+  const scan = await Scan.create({
+    ...body,
+    organizations: body.organizations.map((id) => ({ id }))
+  });
   const res = await Scan.save(scan);
   return {
     statusCode: 200,
