@@ -8,6 +8,7 @@ import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
+import Alerts from '../Alerts';
 
 interface ApiResponse {
   result: Domain[];
@@ -115,6 +116,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className={classes.root}>
+      <Alerts />
       <h1>
         Dashboard{currentOrganization ? ' - ' + currentOrganization.name : ''}
       </h1>{' '}

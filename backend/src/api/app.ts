@@ -10,10 +10,12 @@ import * as organizations from './organizations';
 import * as scans from './scans';
 import * as users from './users';
 import * as scanTasks from './scan-tasks';
+import * as alerts from './alerts';
 
 const handlerToExpress = (handler) => async (req, res, next) => {
   const { statusCode, body } = await handler(
     {
+      queryStringParameters: req.query,
       pathParameters: req.params,
       requestContext: req.requestContext,
       body: JSON.stringify(req.body || '{}'),
@@ -99,6 +101,7 @@ authenticatedRoute.post(
   '/organizations/:organizationId/roles/:roleId/remove',
   handlerToExpress(organizations.removeRole)
 );
+authenticatedRoute.get('/alerts', handlerToExpress(alerts.get));
 authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.get('/users/me', handlerToExpress(users.me));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));

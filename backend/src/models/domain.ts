@@ -46,6 +46,9 @@ export class Domain extends BaseEntity {
   @ManyToOne((type) => Organization, { onDelete: 'CASCADE' })
   organization: Organization;
 
+  @Column({ default: 'pending' })
+  status: 'pending' | 'approved' | 'disavowed';
+
   @Column({
     length: 512,
     nullable: true,

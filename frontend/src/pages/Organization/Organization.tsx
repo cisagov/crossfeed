@@ -16,6 +16,7 @@ import {
   Button,
   Dropdown
 } from '@trussworks/react-uswds';
+import ReviewDomains from './ReviewDomains';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
@@ -386,9 +387,7 @@ export const Organization: React.FC = () => {
         type="update"
       ></OrganizationForm>
     </>,
-    <>
-      <h1>Approve domains</h1>
-    </>
+    <ReviewDomains />
   ];
 
   return (
@@ -412,8 +411,11 @@ export const Organization: React.FC = () => {
               <NavLink to="/organization/edit" className="usa-nav__link">
                 <span>Update organization</span>
               </NavLink>,
-              <NavLink to="/organization/approve" className="usa-nav__link">
-                <span>Approve Domains</span>
+              <NavLink
+                to="/organization/review-domains"
+                className="usa-nav__link"
+              >
+                <span>Review Domains</span>
               </NavLink>
             ]}
             onToggleMobileNav={function noRefCheck() {}}
@@ -424,7 +426,7 @@ export const Organization: React.FC = () => {
       <Route path="/organization/users" component={() => views[1]} />
       <Route path="/organization/scans" component={() => views[2]} />
       <Route path="/organization/edit" component={() => views[3]} />
-      <Route path="/organization/approve" component={() => views[4]} />
+      <Route path="/organization/review-domains" component={() => views[4]} />
     </div>
   );
 };

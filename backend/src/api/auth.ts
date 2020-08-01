@@ -167,6 +167,18 @@ export const isOrgAdmin = (
   return isGlobalWriteAdmin(event);
 };
 
+/** Checks if a user is an member of the given organization */
+export const isOrgMember = (
+  event: APIGatewayProxyEvent,
+  organizationId?: string
+) => {
+  if (!organizationId || !event.requestContext.authorizer) return false;
+  for (const role of event.requestContext.authorizer.roles) {
+    if (role.org === organizationId) return true;
+  }
+  return isGlobalWriteAdmin(event);
+};
+
 /** Returns the organizations a user is a member of */
 export const getOrgMemberships = (event: APIGatewayProxyEvent) => {
   if (!event.requestContext.authorizer) return [];
