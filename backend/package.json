@@ -64,7 +64,8 @@
     "codegen": "ts-node src/tools/generate-censys-types.ts",
     "build-worker": "./tools/build-worker.sh",
     "deploy-worker": "./tools/deploy-worker.sh",
-    "syncdb": "docker-compose exec backend npx sls invoke local -f syncdb"
+    "syncdb": "docker-compose exec backend npx sls invoke local -f syncdb",
+    "scheduler": "docker-compose exec backend npx sls invoke local -f scheduler"
   },
   "author": "",
   "license": "ISC"
