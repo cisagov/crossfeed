@@ -6,7 +6,7 @@ import {
   isUUID,
   IsObject
 } from 'class-validator';
-import { Scan, connectToDatabase } from '../models';
+import { Scan, connectToDatabase, Organization } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { isGlobalWriteAdmin } from './auth';
 
@@ -137,11 +137,16 @@ export const list = wrapHandler(async (event) => {
   // if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
   const result = await Scan.find();
+  const organizations = await Organization.find();
   return {
     statusCode: 200,
     body: JSON.stringify({
       scans: result,
-      schema: SCAN_SCHEMA
+      schema: SCAN_SCHEMA,
+      organizations: organizations.map((e) => ({
+        name: e.name,
+        id: e.id
+      }))
     })
   };
 });

@@ -12,13 +12,19 @@ import {
 } from '@trussworks/react-uswds';
 import { Table } from 'components';
 import { Column } from 'react-table';
-import { Scan } from 'types';
+import { Scan, Organization } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import MultiSelect from './MultiSelect';
 
 interface Errors extends Partial<Scan> {
   global?: string;
+}
+
+interface OrganizationOption {
+  label: string;
+  value: string;
 }
 
 const ScansView: React.FC = () => {
@@ -26,6 +32,9 @@ const ScansView: React.FC = () => {
   const [showModal, setShowModal] = useState<Boolean>(false);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [scans, setScans] = useState<Scan[]>([]);
+  const [organizationOptions, setOrganizationOptions] = useState<
+    OrganizationOption[]
+  >([]);
   const [validCommands, setValidCommands] = useState<Array<string>>([]);
 
   const columns: Column<Scan>[] = [
@@ -96,12 +105,14 @@ const ScansView: React.FC = () => {
 
   const [values, setValues] = useState<{
     name: string;
+    organizations: OrganizationOption[];
     arguments: string;
     frequency: number;
     frequencyUnit: string;
   }>({
     name: 'censys',
     arguments: '{}',
+    organizations: [],
     frequency: 0,
     frequencyUnit: 'minute'
   });
@@ -117,11 +128,16 @@ const ScansView: React.FC = () => {
 
   const fetchScans = useCallback(async () => {
     try {
-      let { scans, schema } = await apiGet<{ scans: Scan[]; schema: Object }>(
-        '/scans/'
-      );
+      let { scans, organizations, schema } = await apiGet<{
+        scans: Scan[];
+        organizations: Organization[];
+        schema: Object;
+      }>('/scans/');
       setScans(scans);
       setValidCommands(Object.keys(schema));
+      setOrganizationOptions(
+        organizations.map(e => ({ label: e.name, value: e.id }))
+      );
     } catch (e) {
       console.error(e);
     }
@@ -205,7 +221,14 @@ const ScansView: React.FC = () => {
           value={values.arguments}
           onChange={onTextChange}
         />
-        <br></br>
+        <Label htmlFor="organizations">Enabled Organizations</Label>
+        <MultiSelect
+          name="organizations"
+          options={[{ label: 'All', value: 'all' }, ...organizationOptions]}
+          value={values.organizations}
+          onChange={e => onChange('organizations', e)}
+        />
+        <br />
         <div className="form-group form-inline">
           <label style={{ marginRight: '10px' }} htmlFor="frequency">
             Run every
@@ -236,7 +259,8 @@ const ScansView: React.FC = () => {
             <option value="day">Day(s)</option>
           </Dropdown>
         </div>
-        <br></br>
+        <br />
+
         <Button type="submit">Create Scan</Button>
       </Form>
 
