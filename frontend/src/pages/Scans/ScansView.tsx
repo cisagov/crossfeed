@@ -198,8 +198,10 @@ const ScansView: React.FC = () => {
       else body.frequency *= 60 * 60 * 24;
 
       const scan = await apiPost('/scans/', {
-        ...body,
-        organizations: body.organizations.map(e => e.value)
+        body: {
+          ...body,
+          organizations: body.organizations.map(e => e.value)
+        }
       });
       setScans(scans.concat(scan));
     } catch (e) {
