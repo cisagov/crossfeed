@@ -86,7 +86,7 @@ export default ({
         suggestions={suggestions}
         onSuggestionsFetchRequested={({ value }) => {
           setSuggestions(
-            fuse.search(value).map((e: any) => ({
+            fuse.search(value, { limit: 10 }).map((e: any) => ({
               ...e.item,
               __matches: e.matches
             }))
