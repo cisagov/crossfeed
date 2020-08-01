@@ -65,7 +65,7 @@
     "build-worker": "./tools/build-worker.sh",
     "deploy-worker": "./tools/deploy-worker.sh",
     "syncdb": "docker-compose exec backend npx sls invoke local -f syncdb",
-    "scheduler": "docker-compose exec backend npx sls invoke local -f scheduler"
+    "scheduler": "docker-compose exec scheduler npx sls invoke local -f scheduler"
   },
   "author": "",
   "license": "ISC"
