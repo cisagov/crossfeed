@@ -133,6 +133,38 @@ class DomainSearch {
   }
 }
 
+export const suggest = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        result: [],
+        count: 0
+      })
+    };
+  }
+  await connectToDatabase();
+
+  const qs = Domain.createQueryBuilder('domain').select([
+    'domain.id',
+    'domain.name'
+  ]);
+
+  if (!isGlobalViewAdmin(event)) {
+    qs.andHaving('domain.organization IN (:...orgs)', {
+      orgs: getOrgMemberships(event)
+    });
+  }
+  const result = await qs.getMany();
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      result
+    })
+  };
+});
+
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
     return {

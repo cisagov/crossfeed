@@ -8,6 +8,7 @@ import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
+import Search from './Search';
 
 interface ApiResponse {
   result: Domain[];
@@ -118,6 +119,23 @@ export const Dashboard: React.FC = () => {
       <h1>
         Dashboard{currentOrganization ? ' - ' + currentOrganization.name : ''}
       </h1>{' '}
+      <Search
+        onSubmit={e => {
+          fetchDomains({
+            filters: [
+              {
+                id: 'reverseName',
+                value: e
+              }
+            ],
+            sort: [{ id: 'name', desc: true }],
+            page: 1
+          });
+        }}
+        onSelect={e => {
+          history.push('/domain/' + e.id);
+        }}
+      />
       <Table<Domain>
         renderPagination={renderPagination}
         columns={columns}

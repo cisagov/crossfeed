@@ -56,6 +56,7 @@ authenticatedRoute.use(async (req, res, next) => {
   return next();
 });
 
+authenticatedRoute.get('/domain/suggest', handlerToExpress(domains.suggest));
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
 authenticatedRoute.post('/report/search', handlerToExpress(reports.list));

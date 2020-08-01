@@ -21,7 +21,7 @@ export const createColumns: CreateColumns = () => [
     Header: 'Domain',
     accessor: 'name',
     id: 'reverseName',
-    Filter: ColumnFilter
+    disableFilters: true
   },
   {
     Header: 'IP',
