@@ -46,6 +46,7 @@ export class Scan extends BaseEntity {
 
   /** Whether the scan is granular. Granular scans
    * are only run on specified organizations.
+   * Global scans cannot be granular scans.
    */
   @Column({
     type: 'boolean',
