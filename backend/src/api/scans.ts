@@ -6,9 +6,7 @@ import {
   isUUID,
   IsObject,
   IsBoolean,
-  IsArray,
-  IsUUID,
-  ValidateNested
+  IsUUID
 } from 'class-validator';
 import { Scan, connectToDatabase, Organization } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';

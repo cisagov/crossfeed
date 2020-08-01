@@ -7,7 +7,6 @@ import {
   CreateDateColumn,
   BaseEntity,
   OneToMany,
-  ManyToOne,
   ManyToMany
 } from 'typeorm';
 import { Domain, Role, Scan, ScanTask } from '.';
