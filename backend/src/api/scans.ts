@@ -69,6 +69,11 @@ export const SCAN_SCHEMA: ScanSchema = {
     cpu: '1024',
     memory: '4096',
     numChunks: 20
+  },
+  cve: {
+    type: 'fargate',
+    isPassive: true,
+    global: true
   }
 };
 

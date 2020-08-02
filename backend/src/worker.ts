@@ -6,6 +6,7 @@ import { handler as findomain } from './tasks/findomain';
 import { handler as portscanner } from './tasks/portscanner';
 import { handler as wappalyzer } from './tasks/wappalyzer';
 import { handler as censysIpv4 } from './tasks/censysIpv4';
+import { handler as cve } from './tasks/cve';
 
 /**
  * Worker entrypoint.
@@ -30,6 +31,7 @@ async function main() {
       amass,
       censys,
       censysIpv4,
+      cve,
       findomain,
       portscanner,
       wappalyzer

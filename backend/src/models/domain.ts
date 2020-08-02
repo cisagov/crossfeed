@@ -82,6 +82,7 @@ export class Domain extends BaseEntity {
     icon: string;
     website: string;
     confidence: number;
+    cpe?: string;
     categories: {
       name: string;
       slug: string;
