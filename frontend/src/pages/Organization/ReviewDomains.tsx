@@ -36,7 +36,6 @@ const ReviewDomains = () => {
             }
           }
         });
-        console.error(result);
         setDomains(result);
         setCount(count);
         setPageCount(Math.ceil(count / PAGE_SIZE));
@@ -56,9 +55,21 @@ const ReviewDomains = () => {
         }
       });
       // Remove domains from table
-      setDomains(domains!.filter((e, i) => indexes.indexOf(i) === -1));
+      const remainingDomains = domains!.filter(
+        (e, i) => indexes.indexOf(i) === -1
+      );
+      if (remainingDomains.length === 0 && count > pageCount) {
+        // If we clicked "Approve all" but there are more pages, we should fetch domains from the other pages.
+        await fetchDomains({
+          page: 1,
+          sort: [{ id: 'name', desc: false }],
+          filters: []
+        });
+      } else {
+        setDomains(remainingDomains);
+      }
     },
-    [apiPost, domains, setDomains]
+    [apiPost, domains, setDomains, fetchDomains, count, pageCount]
   );
 
   const approveDomains = async (indexes: number[]) =>
@@ -146,7 +157,7 @@ const ReviewDomains = () => {
         size="small"
         onClick={() => approveDomains(allIndexes)}
       >
-        Approve all
+        Approve all on this page
       </Button>
       <Button
         type="button"
@@ -154,7 +165,7 @@ const ReviewDomains = () => {
         size="small"
         onClick={() => disavowDomains(allIndexes)}
       >
-        Disavow all
+        Disavow all on this page
       </Button>
       <Table<Domain>
         renderPagination={renderPagination}
