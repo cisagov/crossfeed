@@ -10,7 +10,7 @@ import {
   Modal,
   Form
 } from '@trussworks/react-uswds';
-import { Table } from 'components';
+import { Table, ImportExport } from 'components';
 import { Column } from 'react-table';
 import { Scan } from 'types';
 import { FaTimes } from 'react-icons/fa';
@@ -239,6 +239,35 @@ const ScansView: React.FC = () => {
         <br></br>
         <Button type="submit">Create Scan</Button>
       </Form>
+      <ImportExport<Scan>
+        name="scans"
+        fieldsToExport={['name', 'arguments', 'frequency']}
+        onImport={async results => {
+          // TODO: use a batch call here instead.
+          let createdScans = [];
+          for (let result of results) {
+            createdScans.push(
+              await apiPost('/scans/', {
+                body: {
+                  ...result,
+                  // These fields are initially parsed as strings, so they need
+                  // to be converted to objects.
+                  arguments: JSON.parse(
+                    ((result.arguments as unknown) as string) || ''
+                  )
+                }
+              })
+            );
+          }
+          setScans(scans.concat(...createdScans));
+        }}
+        getDataToExport={() =>
+          scans.map(scan => ({
+            ...scan,
+            arguments: JSON.stringify(scan.arguments)
+          }))
+        }
+      />
 
       {showModal && (
         <div>

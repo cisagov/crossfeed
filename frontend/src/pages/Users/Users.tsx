@@ -6,24 +6,21 @@ import {
   Label,
   ModalContainer,
   Overlay,
-  Modal,
-  FormGroup
+  Modal
 } from '@trussworks/react-uswds';
-import { Query, Organization } from 'types';
-import { Table, FileInput } from 'components';
+import { Organization } from 'types';
+import { Table, ImportExport } from 'components';
 import { Column } from 'react-table';
 import { User } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
-import Papa from 'papaparse';
-import * as FileSaver from 'file-saver';
 
 interface Errors extends Partial<User> {
   global?: string;
 }
 
 export const Users: React.FC = () => {
-  const { apiGet, apiPost, apiDelete, setLoading } = useAuthContext();
+  const { apiGet, apiPost, apiDelete } = useAuthContext();
   const [showModal, setShowModal] = useState<Boolean>(false);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [users, setUsers] = useState<User[]>([]);
@@ -100,17 +97,14 @@ export const Users: React.FC = () => {
     role: ''
   });
 
-  const fetchUsers = useCallback(
-    async (query: Query<User>) => {
-      try {
-        let rows = await apiGet<User[]>('/users/');
-        setUsers(rows);
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    [apiGet]
-  );
+  const fetchUsers = useCallback(async () => {
+    try {
+      let rows = await apiGet<User[]>('/users/');
+      setUsers(rows);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet]);
 
   const deleteRow = async (index: number) => {
     try {
@@ -170,56 +164,10 @@ export const Users: React.FC = () => {
     });
   }, [apiGet]);
 
-  const downloadCSV = (filename: string) => {
-    const csv = Papa.unparse({
-      fields: ['firstName', 'lastName', 'email', 'userType'],
-      data: users
-    });
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-    FileSaver.saveAs(blob, `${filename}.csv`);
-  };
-
-  const parseCSV = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files || !event.target.files.length) {
-      return;
-    }
-    setLoading(l => l + 1);
-    const results: User[] = await new Promise((resolve, reject) =>
-      Papa.parse(event.target.files![0], {
-        header: true,
-        complete: ({ data, errors }) =>
-          errors.length ? reject(errors) : resolve(data as User[])
-      })
-    );
-    setLoading(l => l - 1);
-    // TODO: use a batch call here instead.
-    let createdUsers = [];
-    for (let result of results) {
-      createdUsers.push(
-        await apiPost('/users/', {
-          body: result
-        })
-      );
-    }
-    setUsers(users.concat(...createdUsers));
-  };
-
   return (
     <div className={classes.root}>
       <h1>Users</h1>
       <Table<User> columns={columns} data={users} fetchData={fetchUsers} />
-      <h2>Export users</h2>
-      <Button type="button" outline onClick={e => downloadCSV('users')}>
-        Export as CSV
-      </Button>
-      <h2>Import users</h2>
-      <FormGroup>
-        <Label htmlFor="import">
-          File must be in a CSV format, with the same header as the exported
-          file.
-        </Label>
-        <FileInput id="import" accept=".csv" onChange={e => parseCSV(e)} />
-      </FormGroup>
       <h2>Invite a user</h2>
       <form onSubmit={onSubmit} className={classes.form}>
         {errors.global && <p className={classes.error}>{errors.global}</p>}
@@ -266,6 +214,23 @@ export const Users: React.FC = () => {
         <br></br>
         <Button type="submit">Invite User</Button>
       </form>
+      <ImportExport<User>
+        name="users"
+        fieldsToExport={['firstName', 'lastName', 'email', 'userType']}
+        onImport={async results => {
+          // TODO: use a batch call here instead.
+          let createdUsers = [];
+          for (let result of results) {
+            createdUsers.push(
+              await apiPost('/users/', {
+                body: result
+              })
+            );
+          }
+          setUsers(users.concat(...createdUsers));
+        }}
+        getDataToExport={() => users}
+      />
 
       {showModal && (
         <div>
