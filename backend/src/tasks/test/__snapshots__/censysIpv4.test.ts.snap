@@ -87,7 +87,7 @@ Array [
   Service {
     "banner": null,
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"dns\\":{\\"lookup\\":{\\"errors\\":false,\\"open_resolver\\":false,\\"questions\\":[{\\"name\\":\\"c.afekv.com\\",\\"type\\":\\"A\\"...",
+      "TEST_SNAPSHOT": "{\\"dns\\":{\\"lookup\\":{\\"errors\\":false,\\"open_resolver\\":false,\\"questions\\":[{\\"name\\":\\"c.afekv.com\\",\\"type\\":\\"A\\"}],\\"resolves_correctly\\":false,\\"support\\":true,\\"timestamp\\":\\"2020-07-05T15:41:45Z\\"}}}...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -105,7 +105,7 @@ Array [
               another null: 
               ",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"these characters should not show up in the snapshot:\\\\n              null: \\\\n...",
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"these characters should not show up in the snapshot:\\\\n              null: \\\\n              another null: \\\\n              another null: \\\\\\\\n              \\"}}}...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -124,7 +124,7 @@ Array [
   Service {
     "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\"><html><head><title>401 Unauthorized</title></head><body><h1>Authorization Required</h1><p>This server could not verify that you are authorized to access the document requested.  Either you supplied the wrong credentials (e.g., bad password), or your browser doesn't understand how to supply the credentials required</p><hr></body></html>",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"cwmp\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\"><html><head><title>401 U...",
+      "TEST_SNAPSHOT": "{\\"cwmp\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\"><html><head><title>401 Unauthorized</title></head><body><h1>Authorization Required</h1><p>This server could not verify that you are authorized to access the document requested.  Either you supplied the wrong credentials (e.g...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -138,7 +138,7 @@ Array [
   Service {
     "banner": undefined,
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"cwmp\\":{\\"get\\":{\\"headers\\":{\\"content_length\\":\\"0\\",\\"server\\":\\"gSOAP/2.7\\"},\\"status_code\\":\\"404\\",\\"status_li...",
+      "TEST_SNAPSHOT": "{\\"cwmp\\":{\\"get\\":{\\"headers\\":{\\"content_length\\":\\"0\\",\\"server\\":\\"gSOAP/2.7\\"},\\"status_code\\":\\"404\\",\\"status_line\\":\\"404 Not Found\\",\\"timestamp\\":\\"2020-07-15T04:07:26Z\\"}}}...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -152,7 +152,7 @@ Array [
   Service {
     "banner": null,
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"dns\\":{\\"lookup\\":{\\"answers\\":[{\\"name\\":\\"c.afekv.com\\",\\"response\\":\\"221.10.58.54\\",\\"type\\":\\"A\\"},{\\"name\\":\\"c....",
+      "TEST_SNAPSHOT": "{\\"dns\\":{\\"lookup\\":{\\"answers\\":[{\\"name\\":\\"c.afekv.com\\",\\"response\\":\\"221.10.58.54\\",\\"type\\":\\"A\\"},{\\"name\\":\\"c.afekv.com\\",\\"response\\":\\"192.150.186.1\\",\\"type\\":\\"A\\"}],\\"errors\\":false,\\"open_resolver\\":true,\\"questions\\":[{\\"name\\":\\"c.afekv.com\\",\\"type\\":\\"A\\"}],\\"resolves_correctly\\":true,\\"support\\":true,\\"timestamp\\":\\"2020-06-11T...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -203,7 +203,7 @@ Array [
 </body>
 </html>",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE html>\\\\n<html lang=\\\\\\"en\\\\\\" ng-app=\\\\\\"cloudautom.landing\\\\\\">\\\\n\\\\n<!-- <h...",
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE html>\\\\n<html lang=\\\\\\"en\\\\\\" ng-app=\\\\\\"cloudautom.landing\\\\\\">\\\\n\\\\n<!-- <head ng-include=\\\\\\"'components/welcome/landing_page_head_tag_content.html'\\\\\\"> -->\\\\n<head>\\\\n\\\\t<!-- Global site tag (gtag.js) - Google Analytics -->\\\\n\\\\t<script async src=\\\\\\"https://www.googletagmanager.com...",
     },
     "censysMetadata": Object {
       "description": "Apache httpd 2.4.18",
@@ -230,7 +230,7 @@ on this server.</p>
 </body></html>
 ",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>4...",
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>403 Forbidden</title>\\\\n</head><body>\\\\n<h1>Forbidden</h1>\\\\n<p>You don't have permission to access /\\\\non this server.</p>\\\\n</body></html>\\\\n\\",\\"body_sha256\\":\\"e6134491cb1cd3e211b94d20b48482caeec46813007e918...",
     },
     "censysMetadata": Object {
       "description": "Apache httpd",
@@ -256,7 +256,7 @@ on this server.</p>
 </body></html>
 ",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>4...",
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>403 Forbidden</title>\\\\n</head><body>\\\\n<h1>Forbidden</h1>\\\\n<p>You don't have permission to access /\\\\non this server.</p>\\\\n</body></html>\\\\n\\",\\"body_sha256\\":\\"e6134491cb1cd3e211b94d20b48482caeec46813007e918...",
     },
     "censysMetadata": Object {
       "description": "Apache httpd",
@@ -283,7 +283,7 @@ on this server.</p>
 </body></html>
 ",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>4...",
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>404 Not Found</title>\\\\n</head><body>\\\\n<h1>Not Found</h1>\\\\n<p>The requested URL was not found on this server.</p>\\\\n<hr>\\\\n<address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>\\\\n</body...",
     },
     "censysMetadata": Object {
       "description": "Apache httpd 2.4.38",
@@ -311,7 +311,7 @@ on this server.</p>
 </body></html>
 ",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>4...",
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>404 Not Found</title>\\\\n</head><body>\\\\n<h1>Not Found</h1>\\\\n<p>The requested URL was not found on this server.</p>\\\\n<hr>\\\\n<address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>\\\\n</body...",
     },
     "censysMetadata": Object {
       "description": "Apache httpd 2.4.38",
@@ -400,7 +400,7 @@ on this server.</p>
 </html>
 ",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<html>\\\\n  <head>\\\\n    <meta charset=\\\\\\"utf-8\\\\\\">\\\\n    <link href=\\\\\\"https://cdn...",
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<html>\\\\n  <head>\\\\n    <meta charset=\\\\\\"utf-8\\\\\\">\\\\n    <link href=\\\\\\"https://cdn.auth0.com/styleguide/latest/index.min.css\\\\\\" rel=\\\\\\"stylesheet\\\\\\" />\\\\n    <link rel=\\\\\\"stylesheet\\\\\\" href=\\\\\\"https://cdn.auth0.com/backend-templates/main.css\\\\\\">\\\\n    <meta name=\\\\\\"viewport\\\\\\" content=\\\\\\"width...",
     },
     "censysMetadata": Object {
       "description": "nginx",
@@ -448,7 +448,7 @@ a img {
 </body>
 </html>",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE html PUBLIC \\\\\\"-//W3C//DTD XHTML 1.0 Strict//EN\\\\\\" \\\\\\"http://www.w3.o...",
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE html PUBLIC \\\\\\"-//W3C//DTD XHTML 1.0 Strict//EN\\\\\\" \\\\\\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\\\\\\">\\\\r\\\\n<html xmlns=\\\\\\"http://www.w3.org/1999/xhtml\\\\\\">\\\\r\\\\n<head>\\\\r\\\\n<meta http-equiv=\\\\\\"Content-Type\\\\\\" content=\\\\\\"text/html; charset=iso-8859-1\\\\\\" />\\\\r\\\\n<title>IIS7</title...",
     },
     "censysMetadata": Object {
       "description": "Microsoft IIS 7.5",
@@ -1481,7 +1481,7 @@ a img {
 </html>
 ",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"authority_info_access\\":{\\"issuer_urls\\":[\\"htt...",
+      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"authority_info_access\\":{\\"issuer_urls\\":[\\"http://cert.int-x3.letsencrypt.org/\\"],\\"ocsp_urls\\":[\\"http://ocsp.int-x3.letsencrypt.org\\"]},\\"authority_key_id\\":\\"a84a6a63047dddbae6d139b7a64565eff3a8eca1\\",\\"basic_constraints\\":{\\"is_ca\\":false},\\"certificate_po...",
     },
     "censysMetadata": Object {
       "description": "Apache httpd 2.4.18",
@@ -1508,7 +1508,7 @@ on this server.</p>
 </body></html>
 ",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{\\"is_ca\\":false},\\"key_usa...",
+      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{\\"is_ca\\":false},\\"key_usage\\":{\\"content_commitment\\":true,\\"digital_signature\\":true,\\"key_encipherment\\":true,\\"value\\":\\"7\\"}},\\"fingerprint_md5\\":\\"9b29ecc02f7ae02b752aed672b40a840\\",\\"fingerprint_sha1\\":\\"f66395f114727c71daec03acf99d3de5e...",
     },
     "censysMetadata": Object {
       "description": "Apache httpd",
@@ -1534,7 +1534,7 @@ on this server.</p>
 </body></html>
 ",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{\\"is_ca\\":false},\\"key_usa...",
+      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{\\"is_ca\\":false},\\"key_usage\\":{\\"content_commitment\\":true,\\"digital_signature\\":true,\\"key_encipherment\\":true,\\"value\\":\\"7\\"}},\\"fingerprint_md5\\":\\"9b29ecc02f7ae02b752aed672b40a840\\",\\"fingerprint_sha1\\":\\"f66395f114727c71daec03acf99d3de5e...",
     },
     "censysMetadata": Object {
       "description": "Apache httpd",
@@ -1558,7 +1558,7 @@ on this server.</p>
 </BODY></HTML>
 ",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"extended_key_usage\\":{\\"server_auth\\":true},\\"k...",
+      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"extended_key_usage\\":{\\"server_auth\\":true},\\"key_usage\\":{\\"data_encipherment\\":true,\\"digital_signature\\":true,\\"key_encipherment\\":true,\\"value\\":\\"13\\"}},\\"fingerprint_md5\\":\\"355a2a4731bb4efffbce243be3d68948\\",\\"fingerprint_sha1\\":\\"d840933627a82b2cfa55f2a05ca...",
     },
     "censysMetadata": Object {
       "description": "Microsoft HTTPAPI 2.0",
@@ -1577,7 +1577,7 @@ on this server.</p>
   Service {
     "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"imap\\":{\\"starttls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE...",
+      "TEST_SNAPSHOT": "{\\"imap\\":{\\"starttls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN] Dovecot ready.\\",\\"metadata\\":{\\"description\\":\\"Dovecot\\",\\"product\\":\\"Dovecot\\"},\\"starttls\\":\\"a001 OK Begin TLS negotiation now.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerpr...",
     },
     "censysMetadata": Object {
       "description": "Dovecot",
@@ -1594,7 +1594,7 @@ on this server.</p>
   Service {
     "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"imap\\":{\\"starttls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE...",
+      "TEST_SNAPSHOT": "{\\"imap\\":{\\"starttls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN] Dovecot ready.\\",\\"metadata\\":{\\"description\\":\\"Dovecot\\",\\"product\\":\\"Dovecot\\"},\\"starttls\\":\\"a001 OK Begin TLS negotiation now.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerpr...",
     },
     "censysMetadata": Object {
       "description": "Dovecot",
@@ -1611,7 +1611,7 @@ on this server.</p>
   Service {
     "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"imaps\\":{\\"tls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDL...",
+      "TEST_SNAPSHOT": "{\\"imaps\\":{\\"tls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75a9c8c50cd65b0d20ff590ec16720bc\\",\\"fingerprint_sha1\\":\\"316f85e231f9e623dc746ec837f69ba21605efb9\\",\\"fingerprint...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -1625,7 +1625,7 @@ on this server.</p>
   Service {
     "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"imaps\\":{\\"tls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDL...",
+      "TEST_SNAPSHOT": "{\\"imaps\\":{\\"tls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75a9c8c50cd65b0d20ff590ec16720bc\\",\\"fingerprint_sha1\\":\\"316f85e231f9e623dc746ec837f69ba21605efb9\\",\\"fingerprint...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -1639,7 +1639,7 @@ on this server.</p>
   Service {
     "banner": null,
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"mongodb\\":{\\"banner\\":{\\"build_info\\":{\\"build_environment\\":{\\"cc\\":\\"/opt/mongodbtoolchain/v2/bin/gcc: gcc...",
+      "TEST_SNAPSHOT": "{\\"mongodb\\":{\\"banner\\":{\\"build_info\\":{\\"build_environment\\":{\\"cc\\":\\"/opt/mongodbtoolchain/v2/bin/gcc: gcc (GCC) 5.4.0\\",\\"cc_flags\\":\\"-fno-omit-frame-pointer -fno-strict-aliasing -ggdb -pthread -Wall -Wsign-compare -Wno-unknown-pragmas -Winvalid-pch -Werror -O2 -Wno-unused-local-typedefs -Wno-unused-functio...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -1653,7 +1653,7 @@ on this server.</p>
   Service {
     "banner": "+OK Dovecot ready.",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"pop3\\":{\\"starttls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"metadata\\":{\\"description\\":\\"Dovecot\\",\\"product\\":\\"Do...",
+      "TEST_SNAPSHOT": "{\\"pop3\\":{\\"starttls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"metadata\\":{\\"description\\":\\"Dovecot\\",\\"product\\":\\"Dovecot\\"},\\"starttls\\":\\"+OK Begin TLS negotiation now.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75a9c8c50cd65b0d20ff590ec16720bc\\",\\"fingerprint_sha1\\":\\"316f85e231f9e623dc746ec837f69ba21605efb9\\",\\"...",
     },
     "censysMetadata": Object {
       "description": "Dovecot",
@@ -1670,7 +1670,7 @@ on this server.</p>
   Service {
     "banner": "+OK Dovecot ready.",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"pop3\\":{\\"starttls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"metadata\\":{\\"description\\":\\"Dovecot\\",\\"product\\":\\"Do...",
+      "TEST_SNAPSHOT": "{\\"pop3\\":{\\"starttls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"metadata\\":{\\"description\\":\\"Dovecot\\",\\"product\\":\\"Dovecot\\"},\\"starttls\\":\\"+OK Begin TLS negotiation now.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75a9c8c50cd65b0d20ff590ec16720bc\\",\\"fingerprint_sha1\\":\\"316f85e231f9e623dc746ec837f69ba21605efb9\\",\\"...",
     },
     "censysMetadata": Object {
       "description": "Dovecot",
@@ -1687,7 +1687,7 @@ on this server.</p>
   Service {
     "banner": "+OK Dovecot ready.",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"pop3s\\":{\\"tls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75...",
+      "TEST_SNAPSHOT": "{\\"pop3s\\":{\\"tls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75a9c8c50cd65b0d20ff590ec16720bc\\",\\"fingerprint_sha1\\":\\"316f85e231f9e623dc746ec837f69ba21605efb9\\",\\"fingerprint_sha256\\":\\"2fc1e7271275a9000cd30a120082532b8d5d829df0f43e424ea984283a8561ca\\",\\"issuer\\":{\\"common_...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -1701,7 +1701,7 @@ on this server.</p>
   Service {
     "banner": "+OK Dovecot ready.",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"pop3s\\":{\\"tls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75...",
+      "TEST_SNAPSHOT": "{\\"pop3s\\":{\\"tls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75a9c8c50cd65b0d20ff590ec16720bc\\",\\"fingerprint_sha1\\":\\"316f85e231f9e623dc746ec837f69ba21605efb9\\",\\"fingerprint_sha256\\":\\"2fc1e7271275a9000cd30a120082532b8d5d829df0f43e424ea984283a8561ca\\",\\"issuer\\":{\\"common_...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -1715,7 +1715,7 @@ on this server.</p>
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"tls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.c...",
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"tls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -1729,7 +1729,7 @@ on this server.</p>
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonka...",
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-STARTTLS\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"starttls\\":\\"220 2.0.0 Ready to start TLS\\",\\"tls...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -1743,7 +1743,7 @@ on this server.</p>
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonka...",
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-STARTTLS\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"starttls\\":\\"220 2.0.0 Ready to start TLS\\",\\"tls...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -1757,7 +1757,7 @@ on this server.</p>
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"tls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.c...",
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"tls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -1771,7 +1771,7 @@ on this server.</p>
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonka...",
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-STARTTLS\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"starttls\\":\\"220 2.0.0 Ready to start TLS\\",\\"tls...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -1785,7 +1785,7 @@ on this server.</p>
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonka...",
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-STARTTLS\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"starttls\\":\\"220 2.0.0 Ready to start TLS\\",\\"tls...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
@@ -1799,7 +1799,7 @@ on this server.</p>
   Service {
     "banner": "SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.8",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"ssh\\":{\\"v2\\":{\\"banner\\":{\\"comment\\":\\"Ubuntu-4ubuntu2.8\\",\\"raw\\":\\"SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.8...",
+      "TEST_SNAPSHOT": "{\\"ssh\\":{\\"v2\\":{\\"banner\\":{\\"comment\\":\\"Ubuntu-4ubuntu2.8\\",\\"raw\\":\\"SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.8\\",\\"software\\":\\"OpenSSH_7.2p2\\",\\"version\\":\\"2.0\\"},\\"key_exchange\\":{\\"curve25519_sha256_params\\":{\\"server_public\\":\\"dBq0WRs9WsHGNqAt31aCy1XXMrUqJAWxEELH/d/m8Ts=\\"}},\\"metadata\\":{\\"description\\":\\"OpenSSH 7.2p2\\",\\"pr...",
     },
     "censysMetadata": Object {
       "description": "OpenSSH 7.2p2",
@@ -1817,7 +1817,7 @@ on this server.</p>
   Service {
     "banner": null,
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"vnc\\":{\\"banner\\":{\\"security_types\\":[{\\"name\\":\\"Apple Inc.\\",\\"value\\":\\"30\\"},{\\"name\\":\\"Apple Inc.\\",\\"value\\":...",
+      "TEST_SNAPSHOT": "{\\"vnc\\":{\\"banner\\":{\\"security_types\\":[{\\"name\\":\\"Apple Inc.\\",\\"value\\":\\"30\\"},{\\"name\\":\\"Apple Inc.\\",\\"value\\":\\"33\\"},{\\"name\\":\\"Unknown\\",\\"value\\":\\"36\\"},{\\"name\\":\\"Apple Inc.\\",\\"value\\":\\"35\\"}],\\"server_protocol_version\\":{\\"version_major\\":\\"3\\",\\"version_minor\\":\\"121\\",\\"version_string\\":\\"RFB 003.889\\"},\\"supported\\":true,\\"timesta...",
     },
     "censysMetadata": undefined,
     "domain": Domain {
