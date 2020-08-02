@@ -33,25 +33,29 @@ export const Dashboard: React.FC = () => {
 
   const fetchDomains = useCallback(
     async (query: Query<Domain>) => {
-      if (!user) {
+      if (!user || !currentOrganization) {
         return;
       }
       const { page, sort, filters } = query;
       try {
+        const tableFilters = filters
+          .filter(f => Boolean(f.value))
+          .reduce(
+            (accum, next) => ({
+              ...accum,
+              [next.id]: next.value
+            }),
+            {}
+          );
         const { result, count } = await apiPost<ApiResponse>('/domain/search', {
           body: {
             page,
             sort: sort[0]?.id ?? 'name',
             order: sort[0]?.desc ? 'DESC' : 'ASC',
-            filters: filters
-              .filter(f => Boolean(f.value))
-              .reduce(
-                (accum, next) => ({
-                  ...accum,
-                  [next.id]: next.value
-                }),
-                {}
-              )
+            filters: {
+              ...tableFilters,
+              organization: currentOrganization.id
+            }
           }
         });
         setDomains(result);
@@ -61,7 +65,7 @@ export const Dashboard: React.FC = () => {
         console.error(e);
       }
     },
-    [apiPost, user]
+    [apiPost, user, currentOrganization]
   );
 
   // Called to sign in the user
