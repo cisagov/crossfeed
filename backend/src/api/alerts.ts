@@ -1,7 +1,6 @@
-import { Organization, connectToDatabase, Domain } from '../models';
-import { wrapHandler, NotFound } from './helpers';
+import { connectToDatabase, Domain } from '../models';
+import { wrapHandler } from './helpers';
 import { isOrgAdmin } from './auth';
-import { In } from 'typeorm';
 
 // Sync with frontend type
 interface Alerts {
@@ -22,7 +21,7 @@ export const get = wrapHandler(async (event) => {
 
   await connectToDatabase();
 
-  let alerts: Alerts = {
+  const alerts: Alerts = {
     pendingDomains: null
   };
 

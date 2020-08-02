@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { Table, Paginator, ColumnFilter } from 'components';
+import React, { useState, useCallback } from 'react';
+import { Table, Paginator } from 'components';
 import { Domain } from 'types';
-import { parseISO, format, formatDistanceToNow, isAfter } from 'date-fns';
+import { parseISO, formatDistanceToNow } from 'date-fns';
 import { CellProps, Column, TableInstance } from 'react-table';
 import { Link } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
@@ -23,7 +23,7 @@ const ReviewDomains = () => {
 
   const fetchDomains = useCallback(
     async (query: Query<Domain>) => {
-      const { page, sort, filters } = query;
+      const { page, sort } = query;
       try {
         const { result, count } = await apiPost<ApiResponse>('/domain/search', {
           body: {
@@ -99,7 +99,7 @@ const ReviewDomains = () => {
       id: 'actions',
       disableFilters: true,
       disableSortBy: true,
-      accessor: e => null,
+      accessor: () => null,
       Cell: ({ row }: { row: { index: number; original: Domain } }) => (
         <>
           <Button
