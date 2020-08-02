@@ -6,13 +6,19 @@ import {
   ValidateNested,
   isUUID,
   IsOptional,
-  IsObject
+  IsObject,
+  IsUUID,
+  IsArray
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Domain, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
-import { isGlobalViewAdmin, getOrgMemberships } from './auth';
+import {
+  isGlobalViewAdmin,
+  getOrgMemberships,
+  isGlobalWriteAdmin
+} from './auth';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
@@ -32,6 +38,14 @@ class DomainFilters {
   @IsString()
   @IsOptional()
   ip?: string;
+
+  @IsUUID()
+  @IsOptional()
+  organization?: string;
+
+  @IsString()
+  @IsOptional()
+  status?: 'pending' | 'approved' | 'disavowed';
 }
 
 class DomainSearch {
@@ -40,7 +54,7 @@ class DomainSearch {
   page: number = 1;
 
   @IsString()
-  @IsIn(['name', 'reverseName', 'ip', 'updatedAt', 'id'])
+  @IsIn(['name', 'reverseName', 'ip', 'updatedAt', 'id', 'createdAt'])
   sort: string = 'name';
 
   @IsString()
@@ -72,6 +86,14 @@ class DomainSearch {
         'COUNT(CASE WHEN services.service ILIKE :service THEN 1 END) >= 1',
         { service: `%${this.filters?.service}%` }
       );
+    }
+    if (this.filters?.organization) {
+      qs.andWhere('domain.organization IN (:...orgs)', {
+        orgs: [this.filters.organization]
+      });
+    }
+    if (this.filters?.status) {
+      qs.andWhere('domain.status = :status', { status: this.filters.status });
     }
     return qs;
   }
@@ -116,6 +138,14 @@ class DomainSearch {
         service: `%${this.filters?.service}%`
       });
     }
+    if (this.filters?.organization) {
+      qs.andWhere('domain.organization IN (:...orgs)', {
+        orgs: [this.filters.organization]
+      });
+    }
+    if (this.filters?.status) {
+      qs.andWhere('domain.status = :status', { status: this.filters.status });
+    }
   }
 
   async getCount(event) {
@@ -131,6 +161,16 @@ class DomainSearch {
     this.filterCountQueryset(qs);
     return await qs.getCount();
   }
+}
+
+class DomainsUpdateStatus {
+  @IsArray()
+  @IsUUID('all', { each: true })
+  ids: string[];
+
+  @IsString()
+  @IsOptional()
+  status: 'pending' | 'approved' | 'disavowed';
 }
 
 export const list = wrapHandler(async (event) => {
@@ -181,5 +221,31 @@ export const get = wrapHandler(async (event) => {
   return {
     statusCode: result ? 200 : 404,
     body: result ? JSON.stringify(result) : ''
+  };
+});
+
+export const updateStatus = wrapHandler(async (event) => {
+  const body = await validateBody(DomainsUpdateStatus, event.body);
+
+  let where = {};
+  if (isGlobalWriteAdmin(event)) {
+    where = {
+      id: In(body.ids)
+    };
+  } else {
+    where = {
+      id: In(body.ids),
+      organization: In(getOrgMemberships(event))
+    };
+  }
+  await connectToDatabase();
+
+  const result = await Domain.update(where, {
+    status: body.status
+  });
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result)
   };
 });

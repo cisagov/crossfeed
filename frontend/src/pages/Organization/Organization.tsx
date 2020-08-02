@@ -386,8 +386,7 @@ export const Organization: React.FC = () => {
         organization={organization}
         type="update"
       ></OrganizationForm>
-    </>,
-    <ReviewDomains />
+    </>
   ];
 
   return (
@@ -426,7 +425,7 @@ export const Organization: React.FC = () => {
       <Route path="/organization/users" component={() => views[1]} />
       <Route path="/organization/scans" component={() => views[2]} />
       <Route path="/organization/edit" component={() => views[3]} />
-      <Route path="/organization/review-domains" component={() => views[4]} />
+      <Route path="/organization/review-domains" component={ReviewDomains} />
     </div>
   );
 };

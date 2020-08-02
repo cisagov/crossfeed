@@ -59,6 +59,10 @@ authenticatedRoute.use(async (req, res, next) => {
 });
 
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
+authenticatedRoute.post(
+  '/domain/update-status',
+  handlerToExpress(domains.updateStatus)
+);
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
 authenticatedRoute.post('/report/search', handlerToExpress(reports.list));
 authenticatedRoute.get('/report/:reportId', handlerToExpress(reports.get));

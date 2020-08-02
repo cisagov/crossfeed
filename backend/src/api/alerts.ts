@@ -11,10 +11,9 @@ interface Alerts {
 }
 
 export const get = wrapHandler(async (event) => {
-  const id = event.queryStringParameters?.organizationId;
+  const organizationId = event.queryStringParameters?.organizationId;
 
-  if (!isOrgAdmin(event, id)) {
-    console.error(id);
+  if (!isOrgAdmin(event, organizationId)) {
     return {
       statusCode: 200,
       body: JSON.stringify({})
@@ -22,15 +21,6 @@ export const get = wrapHandler(async (event) => {
   }
 
   await connectToDatabase();
-  const organization = await Organization.findOne(id, {
-    loadRelationIds: {
-      relations: ['domains']
-    }
-  });
-
-  if (!organization) {
-    return NotFound;
-  }
 
   let alerts: Alerts = {
     pendingDomains: null
@@ -38,7 +28,9 @@ export const get = wrapHandler(async (event) => {
 
   const numPendingDomains = await Domain.count({
     where: {
-      id: In(organization.domains),
+      organization: {
+        id: organizationId
+      },
       status: 'pending'
     }
   });

@@ -27,6 +27,7 @@ export interface Domain {
   id: string;
   name: string;
   ip: string;
+  createdAt: string;
   updatedAt: string;
   screenshot: string | null;
   country: string | null;
@@ -36,6 +37,7 @@ export interface Domain {
   organization: Organization;
   webTechnologies: Technology[];
   ssl: SSLInfo | null;
+  status: string;
 }
 
 export interface SSLInfo {
