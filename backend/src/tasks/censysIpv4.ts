@@ -51,6 +51,7 @@ const downloadPath = async (
         // For local development: just randomly match domains
         // (this behavior is not present when running tests
         // through jest, though).
+        // eslint-disable-next-line prefer-spread
         matchingDomains = [].concat
           .apply([], Object.values(ipToDomainsMap)) // get a list of all domains in the domain map
           .filter(() => Math.random() < 0.00001);
