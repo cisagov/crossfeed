@@ -142,7 +142,7 @@ export const invite = wrapHandler(async (event) => {
       id: user.id
     },
     {
-      relations: ['roles']
+      relations: ['roles', 'roles.organization']
     }
   );
   return {
