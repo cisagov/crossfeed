@@ -42,8 +42,8 @@ const Alerts = () => {
           }
         >
           {alerts.pendingDomains.count} new subdomains have been found for your
-          organization. Please review and approve them so that they can show up
-          in Crossfeed.
+          organization. Please review and confirm that you would like these
+          domains to remain on Crossfeed.
         </Alert>
       )}
     </div>
