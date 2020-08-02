@@ -204,7 +204,6 @@ export const Users: React.FC = () => {
     setUsers(users.concat(...createdUsers));
   };
 
-  console.log('users', users);
   return (
     <div className={classes.root}>
       <h1>Users</h1>
