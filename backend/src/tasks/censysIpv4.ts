@@ -46,15 +46,14 @@ const downloadPath = async (
     readInterface.on('line', function (line) {
       const item: CensysIpv4Data = JSON.parse(line);
 
-      const matchingDomains = ipToDomainsMap[item.ip!] || [];
+      let matchingDomains = ipToDomainsMap[item.ip!] || [];
       if (process.env.IS_LOCAL && typeof jest === 'undefined') {
         // For local development: just randomly match domains
         // (this behavior is not present when running tests
         // through jest, though).
-        const matchingDomainsArr = Object.values(ipToDomainsMap) // get a list of all domains in the domain map
+        matchingDomains = [].concat
+          .apply([], Object.values(ipToDomainsMap)) // get a list of all domains in the domain map
           .filter(() => Math.random() < 0.00001);
-        for (const domain of matchingDomainsArr)
-          matchingDomains.concat(...domain);
       }
       for (const matchingDomain of matchingDomains) {
         domains.push(
