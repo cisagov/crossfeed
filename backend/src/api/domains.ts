@@ -151,7 +151,7 @@ export const suggest = wrapHandler(async (event) => {
   ]);
 
   if (!isGlobalViewAdmin(event)) {
-    qs.andHaving('domain.organization IN (:...orgs)', {
+    qs.andWhere('domain.organization IN (:...orgs)', {
       orgs: getOrgMemberships(event)
     });
   }

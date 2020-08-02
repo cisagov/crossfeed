@@ -67,6 +67,60 @@ describe('domains', () => {
       expect(response.body.count).toEqual(2);
     });
   });
+  describe('suggest', () => {
+    it('suggest by org user should return only domains from that org', async () => {
+      const name = 'test-' + Math.random();
+      const domain1 = await Domain.create({
+        name,
+        organization
+      }).save();
+      const domain2 = await Domain.create({
+        name: name + '-2'
+      }).save();
+      const response = await request(app)
+        .get('/domain/suggest')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'user'
+              }
+            ]
+          })
+        )
+        .expect(200);
+      expect(
+        response.body.result.map((e) => e.id).indexOf(domain1.id)
+      ).toBeGreaterThan(-1);
+    });
+    it('suggest by globalView should return domains from all orgs', async () => {
+      const name = 'test-' + Math.random();
+      const domain1 = await Domain.create({
+        name,
+        organization
+      }).save();
+      const domain2 = await Domain.create({
+        name: name + '-2'
+      }).save();
+      const response = await request(app)
+        .get('/domain/suggest')
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalView'
+          })
+        )
+        .expect(200);
+      expect(
+        response.body.result.map((e) => e.id).indexOf(domain1.id)
+      ).toBeGreaterThan(-1);
+      expect(
+        response.body.result.map((e) => e.id).indexOf(domain2.id)
+      ).toBeGreaterThan(-1);
+    });
+  });
   describe('get', () => {
     it("get by org user should work for domain in the user's org", async () => {
       const name = 'test-' + Math.random();
