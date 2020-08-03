@@ -1,10 +1,8 @@
-import { Domain, connectToDatabase } from '../models';
-import { spawn, spawnSync, execSync } from 'child_process';
-import { readFileSync } from 'fs';
+import { Domain, connectToDatabase, Vulnerability } from '../models';
+import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
-import getRootDomains from './helpers/getRootDomains';
-import saveDomainsToDb from './helpers/saveDomainsToDb';
+import saveVulnerabilityToDb from './helpers/saveVulnerabilityToDb';
 import * as path from 'path';
 
 const OUT_PATH = path.join(__dirname, 'out-' + Math.random() + '.txt');
@@ -80,9 +78,19 @@ export const handler = async (commandOptions: CommandOptions) => {
   for (const line of split) {
     const parts = line.split(' ');
     if (parts.length < 5) continue;
+    const domain = hostsToCheck[parseInt(parts[0])].domain;
 
-    console.log(
-      'creating vulnerability for cve ' + parts[1] + ' with cvss ' + parts[3]
-    );
+    const vulnerability = plainToClass(Vulnerability, {
+      domain: domain,
+      lastSeen: new Date(Date.now()),
+      title: parts[1],
+      cve: parts[1],
+      cwe: parts[4],
+      cpe: parts[2],
+      cvss: parseFloat(parts[3]),
+      state: 'open'
+    });
+    console.log(vulnerability);
+    await saveVulnerabilityToDb(vulnerability);
   }
 };
