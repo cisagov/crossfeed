@@ -184,6 +184,6 @@ export const handler: Handler<Event> = async (event) => {
       }
     }
     scan.lastRun = new Date();
-    scan.save();
+    await scan.save();
   }
 };
