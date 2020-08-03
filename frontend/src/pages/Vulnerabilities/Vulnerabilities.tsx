@@ -28,7 +28,7 @@ export const Vulnerabilities: React.FC = () => {
           {
             body: {
               page,
-              sort: sort[0]?.id ?? 'created',
+              sort: sort[0]?.id ?? 'createdAt',
               order: sort[0]?.desc ? 'DESC' : 'ASC',
               filters: filters
                 .filter(f => Boolean(f.value))
@@ -60,11 +60,7 @@ export const Vulnerabilities: React.FC = () => {
     return (
       <div className={classes.expandedRoot}>
         <h4>Description</h4>
-        <div className={classes.desc}>
-          {original.desc?.split(/(?:\\n|\\r)+/gm).map(d => (
-            <div>{d}</div>
-          ))}
-        </div>
+        <div className={classes.desc}>{original.title}</div>
       </div>
     );
   }, []);

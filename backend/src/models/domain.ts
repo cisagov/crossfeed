@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { Service } from './service';
 import { Organization } from './organization';
+import { Vulnerability } from './vulnerability';
 
 @Entity()
 @Index(['name'], { unique: true })
@@ -42,6 +43,9 @@ export class Domain extends BaseEntity {
 
   @OneToMany((type) => Service, (service) => service.domain)
   services: Service[];
+
+  @OneToMany((type) => Vulnerability, (vulnerability) => vulnerability.domain)
+  vulnerabilities: Service[];
 
   @ManyToOne((type) => Organization, { onDelete: 'CASCADE' })
   organization: Organization;

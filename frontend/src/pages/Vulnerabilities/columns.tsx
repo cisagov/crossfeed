@@ -23,37 +23,30 @@ export const createColumns: CreateColumns = () => [
   {
     Header: 'Created',
     id: 'created',
-    accessor: ({ created }) => `${formatDistanceToNow(parseISO(created))} ago`,
+    accessor: ({ createdAt }) =>
+      `${formatDistanceToNow(parseISO(createdAt))} ago`,
     width: 250,
     disableFilters: true
   },
   {
     Header: 'Severity',
-    accessor: 'severity',
+    accessor: 'cvss',
     width: 100,
-    Filter: selectFilter([
-      'low',
-      'medium',
-      'high',
-      'critical',
-      'none',
-      'unknown'
-    ])
+    disableFilters: true
+    // Filter: selectFilter([
+    //   'low',
+    //   'medium',
+    //   'high',
+    //   'critical',
+    //   'none',
+    //   'unknown'
+    // ])
   },
   {
     Header: 'State',
     accessor: 'state',
     width: 100,
-    Filter: selectFilter([
-      'duplicate',
-      'informative',
-      'needs-more-info',
-      'new',
-      'not-applicable',
-      'resolved',
-      'spam',
-      'triaged'
-    ])
+    Filter: selectFilter(['open', 'closed'])
   },
   {
     Header: 'Title',

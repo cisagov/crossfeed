@@ -6,7 +6,8 @@ import {
   ValidateNested,
   isUUID,
   IsOptional,
-  IsObject
+  IsObject,
+  IsNumber
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Vulnerability, connectToDatabase } from '../models';
@@ -20,26 +21,26 @@ class VulnerabilityFilters {
   @IsOptional()
   title?: string;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  severity?: string;
+  cvssLowerBound?: number;
+
+  @IsNumber()
+  @IsOptional()
+  cvssUpperBound?: number;
 
   @IsString()
   @IsOptional()
   state?: string;
-
-  @IsString()
-  @IsOptional()
-  desc?: string;
 }
 
-class Vulnerabilitiesearch {
+class VulnerabilitySearch {
   @IsInt()
   @IsPositive()
   page: number = 1;
 
   @IsString()
-  @IsIn(['title', 'created', 'severity', 'state'])
+  @IsIn(['title', 'createdAt', 'cvss', 'state'])
   @IsOptional()
   sort: string = 'name';
 
@@ -59,17 +60,19 @@ class Vulnerabilitiesearch {
         title: `%${this.filters.title}%`
       });
     }
-    if (this.filters?.severity) {
-      qs.andWhere('vulnerability.severity=:severity', {
-        severity: this.filters.severity
+    if (this.filters?.cvssLowerBound) {
+      qs.andWhere('vulnerability.cvss>=:cvssLowerBound', {
+        cvssLowerBound: this.filters.cvssLowerBound
+      });
+    }
+    if (this.filters?.cvssUpperBound) {
+      qs.andWhere('vulnerability.cvss<=:cvssUpperBound', {
+        cvssUpperBound: this.filters.cvssUpperBound
       });
     }
     if (this.filters?.state) {
-      qs.andWhere('vulnerability.state=:state', { state: this.filters.state });
-    }
-    if (this.filters?.desc) {
-      qs.andWhere('vulnerability.desc ILIKE :desc', {
-        desc: `%${this.filters.desc}%`
+      qs.andWhere('vulnerability.state=:state', {
+        state: this.filters.state
       });
     }
     return qs;
@@ -77,9 +80,10 @@ class Vulnerabilitiesearch {
 
   async getResults() {
     const qs = Vulnerability.createQueryBuilder('vulnerability')
+      .leftJoinAndSelect('vulnerability.domain', 'domain')
       .orderBy(`vulnerability.${this.sort}`, this.order)
-      .offset(PAGE_SIZE * (this.page - 1))
-      .limit(PAGE_SIZE);
+      .skip(PAGE_SIZE * (this.page - 1))
+      .take(PAGE_SIZE);
 
     this.filterResultQueryset(qs);
     return await qs.getManyAndCount();
@@ -88,7 +92,7 @@ class Vulnerabilitiesearch {
 
 export const list = wrapHandler(async (event) => {
   await connectToDatabase();
-  const search = await validateBody(Vulnerabilitiesearch, event.body);
+  const search = await validateBody(VulnerabilitySearch, event.body);
   const [result, count] = await search.getResults();
   return {
     statusCode: 200,
