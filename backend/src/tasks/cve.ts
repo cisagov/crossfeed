@@ -1,5 +1,5 @@
 import { Domain, connectToDatabase } from '../models';
-import { spawn, spawnSync } from 'child_process';
+import { spawn, spawnSync, execSync } from 'child_process';
 import { readFileSync } from 'fs';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
@@ -55,41 +55,34 @@ export const handler = async (commandOptions: CommandOptions) => {
       });
   }
 
-  spawnSync('nvdsync', ['-cve_feed', 'cve-1.1.json.gz', '.']);
+  const ps = spawnSync('nvdsync', ['-cve_feed', 'cve-1.1.json.gz', '.'], {
+    stdio: [process.stdin, process.stdout, process.stderr]
+  });
 
-  const child = spawn(
-    'cpe2cve',
-    [
-      '-d',
-      '" "',
-      '-d2',
-      ',',
-      '-o',
-      '" "',
-      '-o2',
-      ',',
-      '-cpe',
-      '2',
-      '-e',
-      '2',
-      '-matches',
-      '3',
-      '-cve',
-      '2',
-      '-require_version',
-      'nvdcve-1.1-*.json.gz'
-    ],
-    { stdio: 'pipe' }
-  );
+  // debug - ls
+  const ls = spawnSync('ls', [], {
+    stdio: [process.stdin, process.stdout, process.stderr]
+  });
 
-  console.log(hostsToCheck);
+  let input = '';
   for (const [index, host] of hostsToCheck.entries()) {
-    child.stdin.write(`${index} ${host.cpes.join(',')}`);
+    input += `${index} ${host.cpes.join(',')}\n`;
+    console.log(`${index} ${host.cpes.join(',')}`);
   }
 
-  child.stdin.end();
+  // Should change this to spawnSync
+  const res = execSync(
+    "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 nvdcve-1.1-2008.json.gz",
+    { input: input }
+  );
 
-  for await (const data of child.stdout) {
-    console.log(`stdout from the child: ${data}`);
+  const split = String(res).split('\n');
+  for (const line of split) {
+    const parts = line.split(' ');
+    if (parts.length < 5) continue;
+
+    console.log(
+      'creating vulnerability for cve ' + parts[1] + ' with cvss ' + parts[3]
+    );
   }
 };

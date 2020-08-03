@@ -26,7 +26,7 @@ RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/download/1.7.0/
 
 RUN wget --quiet https://github.com/OWASP/Amass/releases/download/v3.7.3/amass_linux_i386.zip -O amass.zip && unzip -q amass.zip && cp amass_linux_i386/amass /usr/bin && chmod +x /usr/bin/amass
 
-RUN wget --quiet https://github.com/facebookincubator/nvdtools/releases/download/v0.1.3/nvdtools-0.1.3-linux-arm64.tar.gz -O nvdtools.tar.gz && tar -xf nvdtools.tar.gz && cp nvdtools-0.1.3/bin/csv2cpe nvdtools-0.1.3/bin/nvdsync nvdtools-0.1.3/bin/cpe2cve /usr/bin && chmod +x /usr/bin/csv2cpe /usr/bin/nvdsync /usr/bin/cpe2cve
+RUN wget --quiet https://github.com/cablej/nvdtools/releases/download/v0.1.4/nvdtools-tip-linux-arm64.tar.gz -O nvdtools.tar.gz && tar -xf nvdtools.tar.gz && cp nvdtools-tip/bin/csv2cpe nvdtools-tip/bin/nvdsync nvdtools-tip/bin/cpe2cve /usr/bin && chmod +x /usr/bin/csv2cpe /usr/bin/nvdsync /usr/bin/cpe2cve
 
 FROM node:14-buster-slim
 
