@@ -34,6 +34,8 @@ interface ScanSchema {
     // Scan type. Only Fargate is supported.
     type: 'fargate';
 
+    description: string;
+
     // Whether scan is passive (not allowed to hit the domain).
     isPassive: boolean;
 
@@ -138,13 +140,15 @@ const ScansView: React.FC = () => {
     frequency: number;
     frequencyUnit: string;
     isGranular: boolean;
+    description: string;
   }>({
     name: 'censys',
     arguments: '{}',
     organizations: [],
     frequency: 0,
     frequencyUnit: 'minute',
-    isGranular: false
+    isGranular: false,
+    description: ''
   });
 
   React.useEffect(() => {
@@ -196,11 +200,15 @@ const ScansView: React.FC = () => {
       if (values.frequencyUnit === 'minute') body.frequency *= 60;
       else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
       else body.frequency *= 60 * 60 * 24;
+      body.description = scanSchema[values.name].description;
 
+      // There's a bug here... description is always set to null in the request
       const scan = await apiPost('/scans/', {
         body: {
           ...body,
-          organizations: body.organizations.map(e => e.value)
+          organizations: body.organizations
+            ? body.organizations.map(e => e.value)
+            : []
         }
       });
       setScans(scans.concat(scan));
@@ -262,7 +270,7 @@ const ScansView: React.FC = () => {
         {!selectedScan.global && (
           <Checkbox
             id="isGranular"
-            label="Granular"
+            label="Limit enabled organizations"
             name="isGranular"
             checked={values.isGranular}
             onChange={e => onChange('isGranular', e.target.checked)}

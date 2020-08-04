@@ -61,6 +61,7 @@ authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
 authenticatedRoute.post('/report/search', handlerToExpress(reports.list));
 authenticatedRoute.get('/report/:reportId', handlerToExpress(reports.get));
 authenticatedRoute.get('/scans', handlerToExpress(scans.list));
+authenticatedRoute.get('/granularScans', handlerToExpress(scans.listGranular));
 authenticatedRoute.post('/scans', handlerToExpress(scans.create));
 authenticatedRoute.put('/scans/:scanId', handlerToExpress(scans.update));
 authenticatedRoute.delete('/scans/:scanId', handlerToExpress(scans.del));

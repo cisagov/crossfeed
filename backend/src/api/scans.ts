@@ -17,6 +17,8 @@ interface ScanSchema {
     // Scan type. Only Fargate is supported.
     type: 'fargate';
 
+    description: string;
+
     // Whether scan is passive (not allowed to hit the domain).
     isPassive: boolean;
 
@@ -42,27 +44,35 @@ export const SCAN_SCHEMA: ScanSchema = {
   censys: {
     type: 'fargate',
     isPassive: true,
-    global: false
+    global: false,
+    description: 'Passively discovery subdomains from public certificates'
   },
   amass: {
     type: 'fargate',
     isPassive: false,
-    global: false
+    global: false,
+    description:
+      'Open source tool that integrates passive APIs and active subdomain enumeration in order to discover target subdomains'
   },
   findomain: {
     type: 'fargate',
     isPassive: true,
-    global: false
+    global: false,
+    description:
+      'Open source tool that integrates passive APIs in order to discover target subdomains'
   },
   portscanner: {
     type: 'fargate',
     isPassive: false,
-    global: false
+    global: false,
+    description: ''
   },
   wappalyzer: {
     type: 'fargate',
     isPassive: false,
-    global: false
+    global: false,
+    description:
+      'Open source tool that fingerprints web technologies based on HTTP responses'
   },
   censysIpv4: {
     type: 'fargate',
@@ -70,7 +80,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: true,
     cpu: '1024',
     memory: '4096',
-    numChunks: 20
+    numChunks: 20,
+    description: ''
   }
 };
 
@@ -162,5 +173,19 @@ export const list = wrapHandler(async (event) => {
         id: e.id
       }))
     })
+  };
+});
+
+export const listGranular = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const scans = await Scan.find({
+    select: ['id', 'name', 'isGranular'],
+    where: {
+      isGranular: true
+    }
+  });
+  return {
+    statusCode: 200,
+    body: JSON.stringify(scans)
   };
 });

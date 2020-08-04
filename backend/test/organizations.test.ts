@@ -29,7 +29,8 @@ describe('organizations', () => {
           name,
           rootDomains: ['cisa.gov'],
           isPassive: false,
-          inviteOnly: true
+          inviteOnly: true,
+          granularScans: []
         })
         .expect(200);
       expect(response.body).toMatchSnapshot({
@@ -55,7 +56,8 @@ describe('organizations', () => {
           name,
           rootDomains: ['cisa.gov'],
           isPassive: false,
-          inviteOnly: true
+          inviteOnly: true,
+          granularScans: []
         })
         .expect(200);
       const response = await request(app)
@@ -71,7 +73,8 @@ describe('organizations', () => {
           name,
           rootDomains: ['cisa.gov'],
           isPassive: false,
-          inviteOnly: true
+          inviteOnly: true,
+          granularScans: []
         })
         .expect(500);
       expect(response.body).toMatchSnapshot();
@@ -91,7 +94,8 @@ describe('organizations', () => {
           name,
           rootDomains: ['cisa.gov'],
           isPassive: false,
-          inviteOnly: true
+          inviteOnly: true,
+          granularScans: []
         })
         .expect(403);
       expect(response.body).toEqual({});
@@ -103,7 +107,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const name = 'test-' + Math.random();
       const rootDomains = ['test-' + Math.random()];
@@ -123,7 +128,8 @@ describe('organizations', () => {
           rootDomains,
           ipBlocks,
           isPassive,
-          inviteOnly
+          inviteOnly,
+          granularScans: []
         })
         .expect(200);
       expect(response.body.name).toEqual(name);
@@ -137,7 +143,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const name = 'test-' + Math.random();
       const rootDomains = ['test-' + Math.random()];
@@ -157,7 +164,8 @@ describe('organizations', () => {
           rootDomains,
           ipBlocks,
           isPassive,
-          inviteOnly
+          inviteOnly,
+          granularScans: []
         })
         .expect(403);
       expect(response.body).toEqual({});
@@ -169,7 +177,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const response = await request(app)
         .delete(`/organizations/${organization.id}`)
@@ -187,7 +196,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const response = await request(app)
         .delete(`/organizations/${organization.id}`)
@@ -207,7 +217,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const response = await request(app)
         .get(`/organizations`)
@@ -225,14 +236,16 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       // this org should not show up in the response
       await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const response = await request(app)
         .get(`/organizations`)
@@ -259,7 +272,8 @@ describe('organizations', () => {
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
         isPassive: false,
-        inviteOnly: false
+        inviteOnly: false,
+        granularScans: []
       }).save();
       const response = await request(app)
         .get(`/organizations/public`)
@@ -276,7 +290,8 @@ describe('organizations', () => {
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
         isPassive: false,
-        inviteOnly: false
+        inviteOnly: false,
+        granularScans: []
       }).save();
       const response = await request(app)
         .get(`/organizations/public`)
@@ -291,7 +306,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const response = await request(app)
         .get(`/organizations/${organization.id}`)
@@ -309,7 +325,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const response = await request(app)
         .get(`/organizations/${organization.id}`)
@@ -332,13 +349,15 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const organization2 = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const response = await request(app)
         .get(`/organizations/${organization2.id}`)
@@ -361,7 +380,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const response = await request(app)
         .get(`/organizations/${organization.id}`)
@@ -384,7 +404,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const scan = await Scan.create({
         name: 'censys',
@@ -423,7 +444,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const role = await Role.create({
         role: 'user',
@@ -446,7 +468,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const role = await Role.create({
         role: 'user',
@@ -469,7 +492,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const role = await Role.create({
         role: 'user',
@@ -497,7 +521,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const role = await Role.create({
         role: 'user',
@@ -527,7 +552,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const role = await Role.create({
         role: 'user',
@@ -550,7 +576,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const role = await Role.create({
         role: 'user',
@@ -573,7 +600,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const role = await Role.create({
         role: 'user',
@@ -601,7 +629,8 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        granularScans: []
       }).save();
       const role = await Role.create({
         role: 'user',

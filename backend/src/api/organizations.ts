@@ -8,7 +8,13 @@ import {
   IsArray,
   IsBoolean
 } from 'class-validator';
-import { Organization, connectToDatabase, Role, ScanTask } from '../models';
+import {
+  Organization,
+  connectToDatabase,
+  Role,
+  ScanTask,
+  Scan
+} from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
   isOrgAdmin,
@@ -51,10 +57,11 @@ export const update = wrapHandler(async (event) => {
       id
     },
     {
-      relations: ['userRoles']
+      relations: ['userRoles', 'granularScans']
     }
   );
   if (org) {
+    console.log(body.granularScans);
     Organization.merge(org, body);
     await Organization.save(org);
     return {
@@ -80,6 +87,9 @@ class NewOrganization {
 
   @IsBoolean()
   inviteOnly: boolean;
+
+  @IsArray()
+  granularScans: Scan[];
 }
 
 export const create = wrapHandler(async (event) => {
@@ -125,7 +135,7 @@ export const get = wrapHandler(async (event) => {
 
   await connectToDatabase();
   const result = await Organization.findOne(id, {
-    relations: ['userRoles', 'userRoles.user']
+    relations: ['userRoles', 'userRoles.user', 'granularScans']
   });
 
   if (result) {

@@ -2,7 +2,13 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { Organization as OrganizationType, Role, ScanTask, User } from 'types';
+import {
+  Organization as OrganizationType,
+  Role,
+  ScanTask,
+  User,
+  Scan
+} from 'types';
 import { FaGlobe, FaNetworkWired, FaClock, FaUsers } from 'react-icons/fa';
 import { Column } from 'react-table';
 import { Table } from 'components';
@@ -16,6 +22,7 @@ import {
   Button,
   Dropdown
 } from '@trussworks/react-uswds';
+import { columns } from 'components/ServicesTable/columns';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
@@ -26,6 +33,7 @@ export const Organization: React.FC = () => {
   const [organization, setOrganization] = useState<OrganizationType>();
   const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
+  const [scans, setScans] = useState<Scan[]>([]);
   const [currentView, setCurrentView] = useState<number>(0);
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
@@ -114,6 +122,55 @@ export const Organization: React.FC = () => {
     }
   ];
 
+  const scanColumns: Column<Scan>[] = [
+    {
+      Header: 'Name',
+      accessor: 'name',
+      width: 150,
+      id: 'name',
+      disableFilters: true
+    },
+    {
+      Header: 'Description',
+      accessor: 'description',
+      width: 200,
+      minWidth: 200,
+      id: 'description',
+      disableFilters: true
+    },
+    {
+      Header: 'Action',
+      id: 'action',
+      maxWidth: 100,
+      Cell: ({ row }: { row: { index: number } }) => {
+        if (!organization) return;
+        const enabled = organization.granularScans.find(
+          scan => scan.id === scans[row.index].id
+        );
+        return (
+          <Button
+            type="button"
+            onClick={() => {
+              const updatedGranularScans = enabled
+                ? organization.granularScans.filter(
+                    scan => scan.id !== scans[row.index].id
+                  )
+                : organization.granularScans.concat([scans[row.index]]);
+              console.log(updatedGranularScans);
+              updateOrganization({
+                ...organization,
+                granularScans: updatedGranularScans
+              });
+            }}
+          >
+            {enabled ? 'Disable' : 'Enable'}
+          </Button>
+        );
+      },
+      disableFilters: true
+    }
+  ];
+
   const scanTaskColumns: Column<ScanTask>[] = [
     {
       Header: 'ID',
@@ -178,6 +235,7 @@ export const Organization: React.FC = () => {
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
+      console.log(organization.granularScans);
       setOrganization(organization);
       setUserRoles(organization.userRoles);
       setScanTasks(organization.scanTasks);
@@ -185,6 +243,15 @@ export const Organization: React.FC = () => {
       console.error(e);
     }
   }, [apiGet, setOrganization, currentOrganization]);
+
+  const fetchScans = useCallback(async () => {
+    try {
+      let scans = await apiGet<Scan[]>('/granularScans/');
+      setScans(scans);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet]);
 
   const approveUser = async (user: number) => {
     try {
@@ -214,8 +281,11 @@ export const Organization: React.FC = () => {
     }
   };
 
-  const updateOrganization = async (body: Object) => {
+  const updateOrganization = async (body: any) => {
     try {
+      if (!body.granularScans) {
+        body.granularScans = organization?.granularScans;
+      }
       const org = await apiPut('/organizations/' + organization?.id, {
         body
       });
@@ -373,7 +443,9 @@ export const Organization: React.FC = () => {
       </form>
     </>,
     <>
-      <h1>Organization Scan Tasks</h1>
+      <h1>Customize Scans</h1>
+      <Table<Scan> columns={scanColumns} data={scans} fetchData={fetchScans} />
+      <h1>Organization Scan History</h1>
       <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} />
     </>,
 
