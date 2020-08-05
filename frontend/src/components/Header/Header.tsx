@@ -141,7 +141,7 @@ export const Header: React.FC = () => {
       key="scans"
       className="usa-nav__link"
     >
-      <span>Global Scans</span>
+      <span>All Scans</span>
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
