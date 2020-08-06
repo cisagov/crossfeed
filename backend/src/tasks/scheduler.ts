@@ -130,7 +130,7 @@ const shouldRunScan = async ({
       }
     }
   );
-  if (lastRunningScanTask && !lastFinishedScanTask) {
+  if (lastRunningScanTask) {
     // Don't run another task if there's already a running task.
     return false;
   }
