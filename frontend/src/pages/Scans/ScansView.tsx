@@ -47,7 +47,7 @@ const ScansView: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Granular',
+      Header: 'Run per organization',
       accessor: ({ isGranular }) => (isGranular ? 'Yes' : 'No'),
       width: 150,
       minWidth: 150,
@@ -246,7 +246,7 @@ const ScansView: React.FC = () => {
         {!selectedScan.global && (
           <Checkbox
             id="isGranular"
-            label="Granular (limit enabled organizations and allow organization admins to configure)"
+            label="Run per organization"
             name="isGranular"
             checked={values.isGranular}
             onChange={e => onChange('isGranular', e.target.checked)}
