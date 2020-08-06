@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { TableInstance } from 'react-table';
 import { Query } from 'types';
-import { Table, Paginator } from 'components';
+import { Table, Paginator, Export } from 'components';
 import { Domain } from 'types';
 import { createColumns } from './columns';
 import { useAuthContext } from 'context';
@@ -25,34 +25,51 @@ export const Dashboard: React.FC = () => {
   const [domains, setDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+  const [query, setQuery] = useState<Query<Domain>>({
+    page: 1,
+    sort: [{ id: 'name', desc: true }],
+    filters: []
+  });
 
   const columns = useMemo(() => createColumns(), []);
   const PAGE_SIZE = 25;
   const history = useHistory();
 
+  const doDomainQuery = async ({
+    q,
+    pageSize = PAGE_SIZE
+  }: {
+    q: Query<Domain>;
+    pageSize?: number;
+  }) => {
+    const { page, sort, filters } = q;
+    return apiPost<ApiResponse>('/domain/search', {
+      body: {
+        pageSize,
+        page,
+        sort: sort[0]?.id ?? 'name',
+        order: sort[0]?.desc ? 'DESC' : 'ASC',
+        filters: filters
+          .filter(f => Boolean(f.value))
+          .reduce(
+            (accum, next) => ({
+              ...accum,
+              [next.id]: next.value
+            }),
+            {}
+          )
+      }
+    });
+  };
+
   const fetchDomains = useCallback(
-    async (query: Query<Domain>) => {
+    async (q: Query<Domain>) => {
       if (!user) {
         return;
       }
-      const { page, sort, filters } = query;
       try {
-        const { result, count } = await apiPost<ApiResponse>('/domain/search', {
-          body: {
-            page,
-            sort: sort[0]?.id ?? 'name',
-            order: sort[0]?.desc ? 'DESC' : 'ASC',
-            filters: filters
-              .filter(f => Boolean(f.value))
-              .reduce(
-                (accum, next) => ({
-                  ...accum,
-                  [next.id]: next.value
-                }),
-                {}
-              )
-          }
-        });
+        const { result, count } = await doDomainQuery({ q });
+        setQuery(query);
         setDomains(result);
         setCount(count);
         setPageCount(Math.ceil(count / PAGE_SIZE));
@@ -126,6 +143,26 @@ export const Dashboard: React.FC = () => {
         fetchData={fetchDomains}
         count={count}
         pageSize={PAGE_SIZE}
+      />
+      <Export<Domain>
+        name="domains"
+        fieldsToExport={[
+          'name',
+          'id',
+          'services',
+          'country',
+          'asn',
+          'cloudHosted',
+          'updatedAt'
+        ]}
+        getDataToExport={async () => {
+          // TODO: export the user's actual filtered data.
+          const { result } = await doDomainQuery({ q: query, pageSize: -1 });
+          return result.map(domain => ({
+            ...domain,
+            services: domain.services.map(service => service.service) as any
+          }));
+        }}
       />
     </div>
   );
