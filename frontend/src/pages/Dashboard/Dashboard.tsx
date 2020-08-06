@@ -3,7 +3,7 @@ import { TableInstance } from 'react-table';
 import { Query } from 'types';
 import { Table, Paginator, Export } from 'components';
 import { Domain } from 'types';
-import { createColumns } from './columns';
+import { createColumns, getServiceNames } from './columns';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
@@ -35,7 +35,7 @@ export const Dashboard: React.FC = () => {
   const PAGE_SIZE = 25;
   const history = useHistory();
 
-  const doDomainQuery = async ({
+  const queryDomains = async ({
     q,
     pageSize = PAGE_SIZE
   }: {
@@ -62,13 +62,13 @@ export const Dashboard: React.FC = () => {
     });
   };
 
-  const fetchDomains = useCallback(
+  const fetchDomainTable = useCallback(
     async (q: Query<Domain>) => {
       if (!user) {
         return;
       }
       try {
-        const { result, count } = await doDomainQuery({ q });
+        const { result, count } = await queryDomains({ q });
         setQuery(q);
         setDomains(result);
         setCount(count);
@@ -105,7 +105,7 @@ export const Dashboard: React.FC = () => {
 
       if (user.firstName !== '') {
         history.push('/');
-        fetchDomains({
+        fetchDomainTable({
           page: 0,
           sort: [],
           filters: []
@@ -116,7 +116,7 @@ export const Dashboard: React.FC = () => {
     } catch {
       history.push('/');
     }
-  }, [apiPost, history, login, user, fetchDomains, refreshUser]);
+  }, [apiPost, history, login, user, queryDomains, refreshUser]);
 
   React.useEffect(() => {
     if (user && user.firstName === '') {
@@ -140,15 +140,21 @@ export const Dashboard: React.FC = () => {
         columns={columns}
         data={domains}
         pageCount={pageCount}
-        fetchData={fetchDomains}
+        fetchData={fetchDomainTable}
         count={count}
         pageSize={PAGE_SIZE}
       />
-      <Export<Domain>
+      <Export<
+        | Domain
+        | {
+            services: string;
+          }
+      >
         name="domains"
         fieldsToExport={[
           'name',
           'id',
+          'ports',
           'services',
           'country',
           'asn',
@@ -157,10 +163,11 @@ export const Dashboard: React.FC = () => {
         ]}
         getDataToExport={async () => {
           // TODO: export the user's actual filtered data.
-          const { result } = await doDomainQuery({ q: query, pageSize: -1 });
+          const { result } = await queryDomains({ q: query, pageSize: -1 });
           return result.map(domain => ({
             ...domain,
-            services: domain.services.map(service => service.service) as any
+            ports: domain.services.map(service => service.port).join(','),
+            services: getServiceNames(domain)
           }));
         }}
       />
