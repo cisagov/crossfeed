@@ -64,6 +64,39 @@ describe('scan', () => {
     //     .expect(403);
     // });
   });
+  describe('listGranular', () => {
+    it('list by regular user should return all granular scans', async () => {
+      const name = 'test-' + Math.random();
+      const scan1 = await Scan.create({
+        name,
+        arguments: {},
+        frequency: 999999,
+        isGranular: false
+      }).save();
+      const scan2 = await Scan.create({
+        name: name + '-2',
+        arguments: {},
+        frequency: 999999,
+        isGranular: true
+      }).save();
+      const response = await request(app)
+        .get('/granularScans')
+        .set(
+          'Authorization',
+          createUserToken({
+            
+          })
+        )
+        .expect(200);
+      expect(response.body.scans.length).toBeGreaterThanOrEqual(1);
+      expect(
+        response.body.scans.map((e) => e.id).indexOf(scan1.id)
+      ).toEqual(-1);
+      expect(
+        response.body.scans.map((e) => e.id).indexOf(scan2.id)
+      ).toBeGreaterThanOrEqual(-1);
+    });
+  })
   describe('create', () => {
     it('create by globalAdmin should succeed', async () => {
       const name = 'censys';
