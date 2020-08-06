@@ -117,6 +117,10 @@ const shouldRunScan = async ({
       }
     }
   );
+  if (lastRunningScanTask) {
+    // Don't run another task if there's already a running task.
+    return false;
+  }
   const lastFinishedScanTask = await ScanTask.findOne(
     {
       scan: { id: scan.id },
@@ -129,10 +133,6 @@ const shouldRunScan = async ({
       }
     }
   );
-  if (lastRunningScanTask && !lastFinishedScanTask) {
-    // Don't run another task if there's already a running task.
-    return false;
-  }
   if (
     lastFinishedScanTask &&
     lastFinishedScanTask.finishedAt &&
@@ -194,6 +194,6 @@ export const handler: Handler<Event> = async (event) => {
       }
     }
     scan.lastRun = new Date();
-    scan.save();
+    await scan.save();
   }
 };

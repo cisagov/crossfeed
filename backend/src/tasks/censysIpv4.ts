@@ -24,6 +24,12 @@ const auth = {
 
 const CENSYS_IPV4_ENDPOINT = 'https://censys.io/api/v1/data/ipv4_2018/';
 
+// Sometimes, a field might contain null characters, but we can't store null
+// characters in a string field in PostgreSQL. For example, a site might have
+// a banner ending with "</body>\r\n</html>\u0000" or "\\u0000".
+const sanitizeStringField = (input) =>
+  input.replace(/\\u0000/g, '').replace(/\0/g, '');
+
 const downloadPath = async (
   path: string,
   ipToDomainsMap: IpToDomainsMap,
@@ -46,15 +52,15 @@ const downloadPath = async (
     readInterface.on('line', function (line) {
       const item: CensysIpv4Data = JSON.parse(line);
 
-      const matchingDomains = ipToDomainsMap[item.ip!] || [];
+      let matchingDomains = ipToDomainsMap[item.ip!] || [];
       if (process.env.IS_LOCAL && typeof jest === 'undefined') {
         // For local development: just randomly match domains
         // (this behavior is not present when running tests
         // through jest, though).
-        const matchingDomainsArr = Object.values(ipToDomainsMap) // get a list of all domains in the domain map
+        // eslint-disable-next-line prefer-spread
+        matchingDomains = [].concat
+          .apply([], Object.values(ipToDomainsMap)) // get a list of all domains in the domain map
           .filter(() => Math.random() < 0.00001);
-        for (const domain of matchingDomainsArr)
-          matchingDomains.concat(...domain);
       }
       for (const matchingDomain of matchingDomains) {
         domains.push(
@@ -74,14 +80,13 @@ const downloadPath = async (
               port: Number(key.slice(1)),
               domain: matchingDomain,
               lastSeen: new Date(Date.now()),
-              censysIpv4Results: item[key]
+              censysIpv4Results: JSON.parse(
+                sanitizeStringField(JSON.stringify(item[key]))
+              )
             };
             for (const k in s) {
-              // Sometimes, a field might contain null characters, but we can't store null
-              // characters in a string field in PostgreSQL. For example, a site might have
-              // a banner ending with "</body>\r\n</html>\u0000" or "\\u0000".
               if (typeof s[k] === 'string') {
-                s[k] = s[k].replace(/\\u0000/g, '').replace(/\0/g, '');
+                s[k] = sanitizeStringField(s[k]);
               }
             }
             services.push(plainToClass(Service, s));

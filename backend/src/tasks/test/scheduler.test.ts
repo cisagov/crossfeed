@@ -320,4 +320,39 @@ describe('scheduler', () => {
       expect(runCommand).toHaveBeenCalledTimes(0);
     });
   });
+  test('should not run a global scan when a scantask for it is already in progress, even if scantasks have finished before / after it', async () => {
+    const scan = await Scan.create({
+      name: 'censysIpv4',
+      arguments: {},
+      frequency: 999
+    }).save();
+    await ScanTask.create({
+      scan,
+      type: 'fargate',
+      status: 'finished',
+      createdAt: '2000-08-03T13:58:31.634Z'
+    }).save();
+    await ScanTask.create({
+      scan,
+      type: 'fargate',
+      status: 'created',
+      createdAt: '2000-05-03T13:58:31.634Z'
+    }).save();
+    await ScanTask.create({
+      scan,
+      type: 'fargate',
+      status: 'finished',
+      createdAt: '2000-01-03T13:58:31.634Z'
+    }).save();
+
+    await scheduler(
+      {
+        scanId: scan.id
+      },
+      {} as any,
+      () => void 0
+    );
+
+    expect(runCommand).toHaveBeenCalledTimes(0);
+  });
 });
