@@ -151,18 +151,8 @@ export const Dashboard: React.FC = () => {
           }
       >
         name="domains"
-        fieldsToExport={[
-          'name',
-          'id',
-          'ports',
-          'services',
-          'country',
-          'asn',
-          'cloudHosted',
-          'updatedAt'
-        ]}
+        fieldsToExport={['name', 'ip', 'id', 'ports', 'services', 'updatedAt']}
         getDataToExport={async () => {
-          // TODO: export the user's actual filtered data.
           const { result } = await queryDomains({ q: query, pageSize: -1 });
           return result.map(domain => ({
             ...domain,
