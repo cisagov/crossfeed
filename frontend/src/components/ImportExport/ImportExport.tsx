@@ -98,7 +98,6 @@ export const ImportExport = <T extends object>(props: ImportExportProps<T>) => {
         fieldsToExport={fieldsToExport}
         getDataToExport={getDataToExport}
       />
-      ;
     </>
   );
 };
