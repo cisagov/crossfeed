@@ -62,7 +62,6 @@ export const update = wrapHandler(async (event) => {
     }
   );
   if (org) {
-    console.log(body.granularScans);
     Organization.merge(org, body);
     await Organization.save(org);
     return {
@@ -88,10 +87,6 @@ class NewOrganization {
 
   @IsBoolean()
   inviteOnly: boolean;
-
-  @IsArray()
-  @IsOptional()
-  granularScans: Scan[];
 }
 
 export const create = wrapHandler(async (event) => {
