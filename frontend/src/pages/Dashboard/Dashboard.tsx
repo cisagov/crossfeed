@@ -69,7 +69,7 @@ export const Dashboard: React.FC = () => {
       }
       try {
         const { result, count } = await doDomainQuery({ q });
-        setQuery(query);
+        setQuery(q);
         setDomains(result);
         setCount(count);
         setPageCount(Math.ceil(count / PAGE_SIZE));
