@@ -47,11 +47,11 @@ const ScansView: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Global',
-      accessor: ({ isGranular }) => (isGranular ? 'No' : 'Yes'),
+      Header: 'Granular',
+      accessor: ({ isGranular }) => (isGranular ? 'Yes' : 'No'),
       width: 150,
       minWidth: 150,
-      id: 'global',
+      id: 'granular',
       disableFilters: true
     },
     {
