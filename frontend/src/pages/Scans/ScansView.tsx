@@ -8,17 +8,24 @@ import {
   ModalContainer,
   Overlay,
   Modal,
-  Form
+  Form,
+  Checkbox
 } from '@trussworks/react-uswds';
 import { Table } from 'components';
 import { Column } from 'react-table';
-import { Scan } from 'types';
+import { Scan, Organization, ScanSchema } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import MultiSelect from './MultiSelect';
 
 interface Errors extends Partial<Scan> {
   global?: string;
+}
+
+interface OrganizationOption {
+  label: string;
+  value: string;
 }
 
 const ScansView: React.FC = () => {
@@ -26,7 +33,10 @@ const ScansView: React.FC = () => {
   const [showModal, setShowModal] = useState<Boolean>(false);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [scans, setScans] = useState<Scan[]>([]);
-  const [validCommands, setValidCommands] = useState<Array<string>>([]);
+  const [organizationOptions, setOrganizationOptions] = useState<
+    OrganizationOption[]
+  >([]);
+  const [scanSchema, setScanSchema] = useState<ScanSchema>({});
 
   const columns: Column<Scan>[] = [
     {
@@ -37,11 +47,20 @@ const ScansView: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Arguments',
-      accessor: (args: Scan) => JSON.stringify(args.arguments),
+      Header: 'Run per organization',
+      accessor: ({ isGranular }) => (isGranular ? 'Yes' : 'No'),
       width: 150,
       minWidth: 150,
-      id: 'arguments',
+      id: 'granular',
+      disableFilters: true
+    },
+    {
+      Header: 'Mode',
+      accessor: ({ name }) =>
+        scanSchema[name] && scanSchema[name].isPassive ? 'Passive' : 'Active',
+      width: 150,
+      minWidth: 150,
+      id: 'mode',
       disableFilters: true
     },
     {
@@ -96,14 +115,18 @@ const ScansView: React.FC = () => {
 
   const [values, setValues] = useState<{
     name: string;
+    organizations: OrganizationOption[];
     arguments: string;
     frequency: number;
     frequencyUnit: string;
+    isGranular: boolean;
   }>({
     name: 'censys',
     arguments: '{}',
+    organizations: [],
     frequency: 0,
-    frequencyUnit: 'minute'
+    frequencyUnit: 'minute',
+    isGranular: false
   });
 
   React.useEffect(() => {
@@ -117,11 +140,16 @@ const ScansView: React.FC = () => {
 
   const fetchScans = useCallback(async () => {
     try {
-      let { scans, schema } = await apiGet<{ scans: Scan[]; schema: Object }>(
-        '/scans/'
-      );
+      let { scans, organizations, schema } = await apiGet<{
+        scans: Scan[];
+        organizations: Organization[];
+        schema: ScanSchema;
+      }>('/scans/');
       setScans(scans);
-      setValidCommands(Object.keys(schema));
+      setScanSchema(schema);
+      setOrganizationOptions(
+        organizations.map(e => ({ label: e.name, value: e.id }))
+      );
     } catch (e) {
       console.error(e);
     }
@@ -145,13 +173,19 @@ const ScansView: React.FC = () => {
     e.preventDefault();
     try {
       // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
-      let body = Object.assign({}, values);
+      let body: typeof values = Object.assign({}, values);
       body.arguments = JSON.parse(values.arguments);
       if (values.frequencyUnit === 'minute') body.frequency *= 60;
       else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
       else body.frequency *= 60 * 60 * 24;
+
       const scan = await apiPost('/scans/', {
-        body
+        body: {
+          ...body,
+          organizations: body.organizations
+            ? body.organizations.map(e => e.value)
+            : []
+        }
       });
       setScans(scans.concat(scan));
     } catch (e) {
@@ -172,6 +206,9 @@ const ScansView: React.FC = () => {
       [name]: value
     }));
   };
+
+  const selectedScan = scanSchema[values.name] || {};
+
   return (
     <>
       <Table<Scan> columns={columns} data={scans} fetchData={fetchScans} />
@@ -187,7 +224,7 @@ const ScansView: React.FC = () => {
           onChange={onTextChange}
           value={values.name}
         >
-          {validCommands.map(i => {
+          {Object.keys(scanSchema).map(i => {
             return (
               <option key={i} value={i}>
                 {i}
@@ -205,7 +242,28 @@ const ScansView: React.FC = () => {
           value={values.arguments}
           onChange={onTextChange}
         />
-        <br></br>
+        <br />
+        {!selectedScan.global && (
+          <Checkbox
+            id="isGranular"
+            label="Run per organization"
+            name="isGranular"
+            checked={values.isGranular}
+            onChange={e => onChange('isGranular', e.target.checked)}
+          />
+        )}
+        {values.isGranular && (
+          <>
+            <Label htmlFor="organizations">Enabled Organizations</Label>
+            <MultiSelect
+              name="organizations"
+              options={organizationOptions}
+              value={values.organizations}
+              onChange={e => onChange('organizations', e)}
+            />
+          </>
+        )}
+        <br />
         <div className="form-group form-inline">
           <label style={{ marginRight: '10px' }} htmlFor="frequency">
             Run every
@@ -236,7 +294,8 @@ const ScansView: React.FC = () => {
             <option value="day">Day(s)</option>
           </Dropdown>
         </div>
-        <br></br>
+        <br />
+
         <Button type="submit">Create Scan</Button>
       </Form>
 
