@@ -7,7 +7,8 @@ import {
   Role,
   ScanTask,
   User,
-  Scan
+  Scan,
+  ScanSchema
 } from 'types';
 import { FaGlobe, FaNetworkWired, FaClock, FaUsers } from 'react-icons/fa';
 import { Column } from 'react-table';
@@ -34,6 +35,7 @@ export const Organization: React.FC = () => {
   const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
   const [scans, setScans] = useState<Scan[]>([]);
+  const [scanSchema, setScanSchema] = useState<ScanSchema>({});
   const [currentView, setCurrentView] = useState<number>(0);
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
@@ -132,10 +134,19 @@ export const Organization: React.FC = () => {
     },
     {
       Header: 'Description',
-      accessor: 'description',
+      accessor: ({ name }) => scanSchema[name] && scanSchema[name].description,
       width: 200,
       minWidth: 200,
       id: 'description',
+      disableFilters: true
+    },
+    {
+      Header: 'Mode',
+      accessor: ({ name }) =>
+        scanSchema[name] && scanSchema[name].isPassive ? 'Passive' : 'Active',
+      width: 150,
+      minWidth: 150,
+      id: 'mode',
       disableFilters: true
     },
     {
@@ -246,8 +257,13 @@ export const Organization: React.FC = () => {
 
   const fetchScans = useCallback(async () => {
     try {
-      let scans = await apiGet<Scan[]>('/granularScans/');
+      const { scans, schema } = await apiGet<{
+        scans: Scan[];
+        schema: ScanSchema;
+      }>('/granularScans/');
+
       setScans(scans);
+      setScanSchema(schema);
     } catch (e) {
       console.error(e);
     }

@@ -25,12 +25,6 @@ export class Scan extends BaseEntity {
   @Column()
   name: string;
 
-  @Column({
-    type: 'text',
-    nullable: true
-  })
-  description: string | null;
-
   @Column('json')
   arguments: Object;
 

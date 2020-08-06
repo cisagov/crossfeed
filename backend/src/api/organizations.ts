@@ -6,7 +6,8 @@ import {
   isUUID,
   IsObject,
   IsArray,
-  IsBoolean
+  IsBoolean,
+  IsOptional
 } from 'class-validator';
 import {
   Organization,
@@ -89,6 +90,7 @@ class NewOrganization {
   inviteOnly: boolean;
 
   @IsArray()
+  @IsOptional()
   granularScans: Scan[];
 }
 

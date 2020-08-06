@@ -13,7 +13,7 @@ import {
 } from '@trussworks/react-uswds';
 import { Table } from 'components';
 import { Column } from 'react-table';
-import { Scan, Organization } from 'types';
+import { Scan, Organization, ScanSchema } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
@@ -26,35 +26,6 @@ interface Errors extends Partial<Scan> {
 interface OrganizationOption {
   label: string;
   value: string;
-}
-
-// ScanSchema. TODO: synchronize this with the ScanSchema type in the backend.
-interface ScanSchema {
-  [name: string]: {
-    // Scan type. Only Fargate is supported.
-    type: 'fargate';
-
-    description: string;
-
-    // Whether scan is passive (not allowed to hit the domain).
-    isPassive: boolean;
-
-    // Whether scan is global. Global scans run once for all organizations, as opposed
-    // to non-global scans, which are run for each organization.
-    global: boolean;
-
-    // CPU and memory for the scan. See this page for more information:
-    // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
-    cpu?: string;
-    memory?: string;
-
-    // A scan is "chunked" if its work is divided and run in parallel by multiple workers.
-    // To make a scan chunked, make sure it is a global scan and specify the "numChunks" variable,
-    // which corresponds to the number of workers that will be created to run the task.
-    // Chunked scans can only be run on scans whose implementation takes into account the
-    // chunkNumber and numChunks parameters specified in commandOptions.
-    numChunks?: number;
-  };
 }
 
 const ScansView: React.FC = () => {
@@ -76,11 +47,20 @@ const ScansView: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Arguments',
-      accessor: (args: Scan) => JSON.stringify(args.arguments),
+      Header: 'Global',
+      accessor: ({ isGranular }) => (isGranular ? 'No' : 'Yes'),
       width: 150,
       minWidth: 150,
-      id: 'arguments',
+      id: 'global',
+      disableFilters: true
+    },
+    {
+      Header: 'Mode',
+      accessor: ({ name }) =>
+        scanSchema[name] && scanSchema[name].isPassive ? 'Passive' : 'Active',
+      width: 150,
+      minWidth: 150,
+      id: 'mode',
       disableFilters: true
     },
     {
@@ -140,15 +120,13 @@ const ScansView: React.FC = () => {
     frequency: number;
     frequencyUnit: string;
     isGranular: boolean;
-    description: string;
   }>({
     name: 'censys',
     arguments: '{}',
     organizations: [],
     frequency: 0,
     frequencyUnit: 'minute',
-    isGranular: false,
-    description: ''
+    isGranular: false
   });
 
   React.useEffect(() => {
@@ -200,9 +178,7 @@ const ScansView: React.FC = () => {
       if (values.frequencyUnit === 'minute') body.frequency *= 60;
       else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
       else body.frequency *= 60 * 60 * 24;
-      body.description = scanSchema[values.name].description;
 
-      // There's a bug here... description is always set to null in the request
       const scan = await apiPost('/scans/', {
         body: {
           ...body,

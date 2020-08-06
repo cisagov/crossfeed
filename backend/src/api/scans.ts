@@ -186,6 +186,9 @@ export const listGranular = wrapHandler(async (event) => {
   });
   return {
     statusCode: 200,
-    body: JSON.stringify(scans)
+    body: JSON.stringify({
+      scans,
+      schema: SCAN_SCHEMA
+    })
   };
 });
