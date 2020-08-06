@@ -11,5 +11,14 @@ module.exports = {
   testEnvironment: 'node',
   modulePathIgnorePatterns: ['<rootDir>/.build/'],
   globalSetup: '<rootDir>/test/setup.ts',
-  clearMocks: true
+  clearMocks: true,
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '.*report.*' // Remove this when we enable report / vulnerability functionality
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 50
+    }
+  }
 };
