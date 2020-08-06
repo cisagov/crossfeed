@@ -308,7 +308,7 @@ export const Organization: React.FC = () => {
     try {
       if (!organization) return;
       await apiPost(
-        `/organizations/${organization?.id}/scans/${scan.id}/update`,
+        `/organizations/${organization?.id}/granularScans/${scan.id}/update`,
         {
           body: {
             enabled

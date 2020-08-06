@@ -431,7 +431,7 @@ describe('organizations', () => {
         frequency: 999999
       }).save();
       const response = await request(app)
-        .post(`/organizations/${organization.id}/scans/${scan.id}/update`)
+        .post(`/organizations/${organization.id}/granularScans/${scan.id}/update`)
         .set(
           'Authorization',
           createUserToken({
@@ -479,7 +479,7 @@ describe('organizations', () => {
         organizations: [organization]
       }).save();
       const response = await request(app)
-        .post(`/organizations/${organization.id}/scans/${scan.id}/update`)
+        .post(`/organizations/${organization.id}/granularScans/${scan.id}/update`)
         .set(
           'Authorization',
           createUserToken({
@@ -519,7 +519,7 @@ describe('organizations', () => {
         frequency: 999999
       }).save();
       const response = await request(app)
-        .post(`/organizations/${organization.id}/scans/${scan.id}/update`)
+        .post(`/organizations/${organization.id}/granularScans/${scan.id}/update`)
         .set(
           'Authorization',
           createUserToken({
@@ -549,7 +549,7 @@ describe('organizations', () => {
         frequency: 999999
       }).save();
       const response = await request(app)
-        .post(`/organizations/${organization.id}/scans/${scan.id}/update`)
+        .post(`/organizations/${organization.id}/granularScans/${scan.id}/update`)
         .set(
           'Authorization',
           createUserToken({

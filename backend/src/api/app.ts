@@ -101,7 +101,7 @@ authenticatedRoute.post(
   handlerToExpress(organizations.removeRole)
 );
 authenticatedRoute.post(
-  '/organizations/:organizationId/scans/:scanId/update',
+  '/organizations/:organizationId/granularScans/:scanId/update',
   handlerToExpress(organizations.updateScan)
 );
 authenticatedRoute.get('/users', handlerToExpress(users.list));
