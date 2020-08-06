@@ -148,7 +148,9 @@ export const Dashboard: React.FC = () => {
           </h1>{' '}
         </Grid>
         <Grid tablet={{ col: true }}>
-          {user?.roles && user.roles.length > 0 && (
+          {((user?.roles && user.roles.length > 0) ||
+            user?.userType === 'globalView' ||
+            user?.userType === 'globalAdmin') && (
             <>
               <Label htmlFor="organization">Select organization</Label>
               <Dropdown
