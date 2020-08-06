@@ -43,6 +43,23 @@ export const del = wrapHandler(async (event) => {
   };
 });
 
+class NewOrganization {
+  @IsString()
+  name: string;
+
+  @IsArray()
+  rootDomains: string[];
+
+  @IsArray()
+  ipBlocks: string[];
+
+  @IsBoolean()
+  isPassive: boolean;
+
+  @IsBoolean()
+  inviteOnly: boolean;
+}
+
 export const update = wrapHandler(async (event) => {
   const id = event.pathParameters?.organizationId;
 
@@ -137,23 +154,6 @@ export const get = wrapHandler(async (event) => {
     body: result ? JSON.stringify(result) : ''
   };
 });
-
-class NewOrganization {
-  @IsString()
-  name: string;
-
-  @IsArray()
-  rootDomains: string[];
-
-  @IsArray()
-  ipBlocks: string[];
-
-  @IsBoolean()
-  isPassive: boolean;
-
-  @IsBoolean()
-  inviteOnly: boolean;
-}
 
 class UpdateBody {
   @IsBoolean()
