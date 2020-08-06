@@ -428,10 +428,13 @@ describe('organizations', () => {
       const scan = await Scan.create({
         name: 'censys',
         arguments: {},
-        frequency: 999999
+        frequency: 999999,
+        isGranular: true
       }).save();
       const response = await request(app)
-        .post(`/organizations/${organization.id}/granularScans/${scan.id}/update`)
+        .post(
+          `/organizations/${organization.id}/granularScans/${scan.id}/update`
+        )
         .set(
           'Authorization',
           createUserToken({
@@ -476,10 +479,13 @@ describe('organizations', () => {
         name: 'censys',
         arguments: {},
         frequency: 999999,
-        organizations: [organization]
+        organizations: [organization],
+        isGranular: true
       }).save();
       const response = await request(app)
-        .post(`/organizations/${organization.id}/granularScans/${scan.id}/update`)
+        .post(
+          `/organizations/${organization.id}/granularScans/${scan.id}/update`
+        )
         .set(
           'Authorization',
           createUserToken({
@@ -519,7 +525,9 @@ describe('organizations', () => {
         frequency: 999999
       }).save();
       const response = await request(app)
-        .post(`/organizations/${organization.id}/granularScans/${scan.id}/update`)
+        .post(
+          `/organizations/${organization.id}/granularScans/${scan.id}/update`
+        )
         .set(
           'Authorization',
           createUserToken({
@@ -546,10 +554,13 @@ describe('organizations', () => {
       const scan = await Scan.create({
         name: 'censys',
         arguments: {},
-        frequency: 999999
+        frequency: 999999,
+        isGranular: true
       }).save();
       const response = await request(app)
-        .post(`/organizations/${organization.id}/granularScans/${scan.id}/update`)
+        .post(
+          `/organizations/${organization.id}/granularScans/${scan.id}/update`
+        )
         .set(
           'Authorization',
           createUserToken({
