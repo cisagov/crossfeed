@@ -100,6 +100,10 @@ authenticatedRoute.post(
   '/organizations/:organizationId/roles/:roleId/remove',
   handlerToExpress(organizations.removeRole)
 );
+authenticatedRoute.post(
+  '/organizations/:organizationId/scans/:scanId/update',
+  handlerToExpress(organizations.updateScan)
+);
 authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.get('/users/me', handlerToExpress(users.me));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));

@@ -24,6 +24,7 @@ import {
   isGlobalViewAdmin
 } from './auth';
 import { In } from 'typeorm';
+import { plainToClass } from 'class-transformer';
 
 export const del = wrapHandler(async (event) => {
   const id = event.pathParameters?.organizationId;
@@ -71,23 +72,6 @@ export const update = wrapHandler(async (event) => {
   }
   return NotFound;
 });
-
-class NewOrganization {
-  @IsString()
-  name: string;
-
-  @IsArray()
-  rootDomains: string[];
-
-  @IsArray()
-  ipBlocks: string[];
-
-  @IsBoolean()
-  isPassive: boolean;
-
-  @IsBoolean()
-  inviteOnly: boolean;
-}
 
 export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
@@ -152,6 +136,73 @@ export const get = wrapHandler(async (event) => {
     statusCode: result ? 200 : 404,
     body: result ? JSON.stringify(result) : ''
   };
+});
+
+class NewOrganization {
+  @IsString()
+  name: string;
+
+  @IsArray()
+  rootDomains: string[];
+
+  @IsArray()
+  ipBlocks: string[];
+
+  @IsBoolean()
+  isPassive: boolean;
+
+  @IsBoolean()
+  inviteOnly: boolean;
+}
+
+class UpdateBody {
+  @IsBoolean()
+  enabled: boolean;
+}
+
+export const updateScan = wrapHandler(async (event) => {
+  const organizationId = event.pathParameters?.organizationId;
+
+  if (!organizationId || !isUUID(organizationId)) {
+    return NotFound;
+  }
+
+  if (!isOrgAdmin(event, organizationId)) return Unauthorized;
+
+  await connectToDatabase();
+  const scanId = event.pathParameters?.scanId;
+  if (!scanId || !isUUID(scanId)) {
+    return NotFound;
+  }
+  const scan = await Scan.findOne(
+    {
+      id: scanId
+    },
+    {
+      relations: ['organizations']
+    }
+  );
+  if (scan) {
+    const body = await validateBody(UpdateBody, event.body);
+    const existing = scan.organizations.find(
+      (org) => org.id === organizationId
+    );
+    if (body.enabled && !existing) {
+      scan.organizations.push(
+        plainToClass(Organization, { id: organizationId })
+      );
+    } else if (!body.enabled && existing) {
+      scan.organizations = scan.organizations.filter(
+        (org) => org.id !== organizationId
+      );
+    }
+    const res = await Scan.save(scan);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(res)
+    };
+  }
+  return NotFound;
 });
 
 export const approveRole = wrapHandler(async (event) => {

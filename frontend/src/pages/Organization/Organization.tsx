@@ -23,7 +23,6 @@ import {
   Button,
   Dropdown
 } from '@trussworks/react-uswds';
-import { columns } from 'components/ServicesTable/columns';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
@@ -162,16 +161,7 @@ export const Organization: React.FC = () => {
           <Button
             type="button"
             onClick={() => {
-              const updatedGranularScans = enabled
-                ? organization.granularScans.filter(
-                    scan => scan.id !== scans[row.index].id
-                  )
-                : organization.granularScans.concat([scans[row.index]]);
-              console.log(updatedGranularScans);
-              updateOrganization({
-                ...organization,
-                granularScans: updatedGranularScans
-              });
+              updateScan(scans[row.index], !enabled);
             }}
           >
             {enabled ? 'Disable' : 'Enable'}
@@ -246,7 +236,6 @@ export const Organization: React.FC = () => {
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
-      console.log(organization.granularScans);
       setOrganization(organization);
       setUserRoles(organization.userRoles);
       setScanTasks(organization.scanTasks);
@@ -299,9 +288,6 @@ export const Organization: React.FC = () => {
 
   const updateOrganization = async (body: any) => {
     try {
-      if (!body.granularScans) {
-        body.granularScans = organization?.granularScans;
-      }
       const org = await apiPut('/organizations/' + organization?.id, {
         body
       });
@@ -312,6 +298,36 @@ export const Organization: React.FC = () => {
         global:
           e.status === 422
             ? 'Error when submitting organization entry.'
+            : e.message ?? e.toString()
+      });
+      console.error(e);
+    }
+  };
+
+  const updateScan = async (scan: Scan, enabled: boolean) => {
+    try {
+      if (!organization) return;
+      await apiPost(
+        `/organizations/${organization?.id}/scans/${scan.id}/update`,
+        {
+          body: {
+            enabled
+          }
+        }
+      );
+      let copy = organization;
+      copy.granularScans = enabled
+        ? organization.granularScans.concat([scan])
+        : organization.granularScans.filter(
+            granularScan => granularScan.id !== scan.id
+          );
+      console.log(copy);
+      setOrganization(copy);
+    } catch (e) {
+      setErrors({
+        global:
+          e.status === 422
+            ? 'Error when updating scan.'
             : e.message ?? e.toString()
       });
       console.error(e);
