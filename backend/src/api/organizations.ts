@@ -167,7 +167,7 @@ export const updateScan = wrapHandler(async (event) => {
     return NotFound;
   }
 
-  if (!isOrgAdmin(event, organizationId)) return Unauthorized;
+  if (!isOrgAdmin(event, organizationId) && !isGlobalWriteAdmin(event)) return Unauthorized;
 
   await connectToDatabase();
   const scanId = event.pathParameters?.scanId;
