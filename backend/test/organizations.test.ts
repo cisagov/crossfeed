@@ -417,7 +417,7 @@ describe('organizations', () => {
       expect(response.body.scanTasks[0].scan.id).toEqual(scan.id);
     });
   });
-    describe('update', () => {
+  describe('update', () => {
     it('enabling a scan by org admin for an organization should succeed', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
@@ -446,8 +446,8 @@ describe('organizations', () => {
         .send({
           enabled: true
         })
-        // .expect(200);
-      console.error(response);
+        .expect(200);
+      expect(response.body.granularScans.length).toEqual(1);
       const updated = (await Organization.findOne(
         {
           id: organization.id
@@ -560,23 +560,23 @@ describe('organizations', () => {
           enabled: true
         })
         .expect(200);
-        const updated = (await Organization.findOne(
-          {
-            id: organization.id
-          },
-          {
-            relations: ['granularScans']
-          }
-        )) as Organization;
-        expect(updated.name).toEqual(organization.name);
-        expect(updated.granularScans).toEqual(
-          expect.arrayContaining([
-            expect.objectContaining({
-              id: scan.id
-            })
-          ])
-        );
-      });
+      const updated = (await Organization.findOne(
+        {
+          id: organization.id
+        },
+        {
+          relations: ['granularScans']
+        }
+      )) as Organization;
+      expect(updated.name).toEqual(organization.name);
+      expect(updated.granularScans).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: scan.id
+          })
+        ])
+      );
+    });
   });
   describe('approveRole', () => {
     it('approveRole by globalAdmin should work', async () => {

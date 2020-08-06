@@ -167,42 +167,45 @@ export const updateScan = wrapHandler(async (event) => {
     return NotFound;
   }
 
-  if (!isOrgAdmin(event, organizationId) && !isGlobalWriteAdmin(event)) return Unauthorized;
+  if (!isOrgAdmin(event, organizationId) && !isGlobalWriteAdmin(event))
+    return Unauthorized;
 
   await connectToDatabase();
   const scanId = event.pathParameters?.scanId;
   if (!scanId || !isUUID(scanId)) {
     return NotFound;
   }
-  const scan = await Scan.findOne(
+  const scan = await Scan.findOne({
+    id: scanId
+  });
+  const organization = await Organization.findOne(
     {
-      id: scanId
+      id: organizationId
     },
     {
-      relations: ['organizations']
+      relations: ['granularScans']
     }
   );
-  if (scan) {
-    const body = await validateBody(UpdateBody, event.body);
-    const existing = scan.organizations.find(
-      (org) => org.id === organizationId
-    );
-    if (body.enabled && !existing) {
-      scan.organizations.push(
-        plainToClass(Organization, { id: organizationId })
-      );
-    } else if (!body.enabled && existing) {
-      scan.organizations = scan.organizations.filter(
-        (org) => org.id !== organizationId
-      );
-    }
-    const res = await Scan.save(scan);
-    return {
-      statusCode: 200,
-      body: JSON.stringify(res)
-    };
+  if (!scan || !organization) {
+    return NotFound;
   }
-  return NotFound;
+  const body = await validateBody(UpdateBody, event.body);
+  if (body.enabled) {
+    organization?.granularScans.push();
+  }
+  const existing = organization?.granularScans.find((s) => s.id === scanId);
+  if (body.enabled && !existing) {
+    organization.granularScans.push(plainToClass(Scan, { id: scanId }));
+  } else if (!body.enabled && existing) {
+    organization.granularScans = organization.granularScans.filter(
+      (s) => s.id !== scanId
+    );
+  }
+  const res = await Organization.save(organization);
+  return {
+    statusCode: 200,
+    body: JSON.stringify(res)
+  };
 });
 
 export const approveRole = wrapHandler(async (event) => {

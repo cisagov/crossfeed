@@ -81,22 +81,17 @@ describe('scan', () => {
       }).save();
       const response = await request(app)
         .get('/granularScans')
-        .set(
-          'Authorization',
-          createUserToken({
-            
-          })
-        )
+        .set('Authorization', createUserToken({}))
         .expect(200);
       expect(response.body.scans.length).toBeGreaterThanOrEqual(1);
-      expect(
-        response.body.scans.map((e) => e.id).indexOf(scan1.id)
-      ).toEqual(-1);
+      expect(response.body.scans.map((e) => e.id).indexOf(scan1.id)).toEqual(
+        -1
+      );
       expect(
         response.body.scans.map((e) => e.id).indexOf(scan2.id)
       ).toBeGreaterThanOrEqual(-1);
     });
-  })
+  });
   describe('create', () => {
     it('create by globalAdmin should succeed', async () => {
       const name = 'censys';
