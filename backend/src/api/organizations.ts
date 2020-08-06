@@ -176,7 +176,8 @@ export const updateScan = wrapHandler(async (event) => {
     return NotFound;
   }
   const scan = await Scan.findOne({
-    id: scanId
+    id: scanId,
+    isGranular: true
   });
   const organization = await Organization.findOne(
     {
