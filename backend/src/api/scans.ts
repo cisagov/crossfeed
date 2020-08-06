@@ -45,7 +45,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
-    description: 'Passively discovery subdomains from public certificates'
+    description: 'Passive discovery of subdomains from public certificates'
   },
   amass: {
     type: 'fargate',
