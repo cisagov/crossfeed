@@ -246,7 +246,7 @@ const ScansView: React.FC = () => {
         {!selectedScan.global && (
           <Checkbox
             id="isGranular"
-            label="Limit enabled organizations"
+            label="Granular (limit enabled organizations and allow organization owners to configure)"
             name="isGranular"
             checked={values.isGranular}
             onChange={e => onChange('isGranular', e.target.checked)}
