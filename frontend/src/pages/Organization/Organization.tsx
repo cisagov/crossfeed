@@ -315,14 +315,14 @@ export const Organization: React.FC = () => {
           }
         }
       );
-      let copy = organization;
-      copy.granularScans = enabled
-        ? organization.granularScans.concat([scan])
-        : organization.granularScans.filter(
-            granularScan => granularScan.id !== scan.id
-          );
-      console.log(copy);
-      setOrganization(copy);
+      setOrganization({
+        ...organization,
+        granularScans: enabled
+          ? organization.granularScans.concat([scan])
+          : organization.granularScans.filter(
+              granularScan => granularScan.id !== scan.id
+            )
+      });
     } catch (e) {
       setErrors({
         global:
