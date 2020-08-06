@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { TableInstance } from 'react-table';
-import { Query } from 'types';
+import { Query, Organization } from 'types';
 import { Table, Paginator, Export } from 'components';
 import { Domain } from 'types';
 import { createColumns } from './columns';
@@ -8,6 +8,7 @@ import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
+import { Dropdown } from '@trussworks/react-uswds';
 
 interface ApiResponse {
   result: Domain[];
@@ -18,6 +19,7 @@ export const Dashboard: React.FC = () => {
   const {
     user,
     refreshUser,
+    setOrganization,
     currentOrganization,
     login,
     apiPost
@@ -30,37 +32,41 @@ export const Dashboard: React.FC = () => {
     sort: [{ id: 'name', desc: true }],
     filters: []
   });
-
+  const [filteredOrganizationId, setFilteredOrganizationId] = useState<string>(currentOrganization?.id || "All");
   const columns = useMemo(() => createColumns(), []);
   const PAGE_SIZE = 25;
   const history = useHistory();
 
-  const doDomainQuery = async ({
+  const doDomainQuery = useCallback(async ({
     q,
-    pageSize = PAGE_SIZE
+    pageSize = PAGE_SIZE,
   }: {
     q: Query<Domain>;
     pageSize?: number;
   }) => {
     const { page, sort, filters } = q;
+    const tableFilters = filters
+    .filter(f => Boolean(f.value))
+    .reduce(
+      (accum, next) => ({
+        ...accum,
+        [next.id]: next.value
+      }),
+      {}
+    );
     return apiPost<ApiResponse>('/domain/search', {
       body: {
         pageSize,
         page,
         sort: sort[0]?.id ?? 'name',
         order: sort[0]?.desc ? 'DESC' : 'ASC',
-        filters: filters
-          .filter(f => Boolean(f.value))
-          .reduce(
-            (accum, next) => ({
-              ...accum,
-              [next.id]: next.value
-            }),
-            {}
-          )
+        filters: {
+          ...tableFilters,
+          organization: (filteredOrganizationId === "All" ? undefined : filteredOrganizationId)
+        }
       }
     });
-  };
+  }, [filteredOrganizationId]);
 
   const fetchDomains = useCallback(
     async (q: Query<Domain>) => {
@@ -135,6 +141,26 @@ export const Dashboard: React.FC = () => {
       <h1>
         Dashboard{currentOrganization ? ' - ' + currentOrganization.name : ''}
       </h1>{' '}
+      {user?.roles && user.roles.length > 0 && <Dropdown
+          id="organization"
+          name="organization"
+          className={classes.textField}
+          onChange={e => {
+            setFilteredOrganizationId(e.target.value);
+          }}
+          value={filteredOrganizationId}
+        >
+          <option key={"All"} value={"All"}>
+            All
+          </option>
+          {user?.roles.map(role => {
+            return (
+              <option key={role.organization?.id} value={role.organization?.id}>
+                {role.organization?.name}
+              </option>
+            );
+          })}
+        </Dropdown>}
       <Table<Domain>
         renderPagination={renderPagination}
         columns={columns}
@@ -143,6 +169,7 @@ export const Dashboard: React.FC = () => {
         fetchData={fetchDomains}
         count={count}
         pageSize={PAGE_SIZE}
+        key={"domain-table-org-" + filteredOrganizationId}
       />
       <Export<Domain>
         name="domains"
