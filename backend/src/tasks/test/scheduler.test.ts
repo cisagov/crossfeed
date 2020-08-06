@@ -265,19 +265,19 @@ describe('scheduler', () => {
       scan,
       type: 'fargate',
       status: 'finished',
-      createdAt: "2000-08-03T13:58:31.634Z"
+      createdAt: '2000-08-03T13:58:31.634Z'
     }).save();
     await ScanTask.create({
       scan,
       type: 'fargate',
       status: 'created',
-      createdAt: "2000-05-03T13:58:31.634Z"
+      createdAt: '2000-05-03T13:58:31.634Z'
     }).save();
     await ScanTask.create({
       scan,
       type: 'fargate',
       status: 'finished',
-      createdAt: "2000-01-03T13:58:31.634Z"
+      createdAt: '2000-01-03T13:58:31.634Z'
     }).save();
 
     await scheduler(
