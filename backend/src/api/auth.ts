@@ -11,7 +11,7 @@ export interface UserToken {
     org: string;
     role: 'user' | 'admin';
   }[];
-  dateAcceptedTerms: string | undefined;
+  dateAcceptedTerms: Date | undefined;
 }
 
 /** Returns redirect url to initiate login.gov OIDC flow */

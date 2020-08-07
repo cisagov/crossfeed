@@ -3,7 +3,6 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import { handler as healthcheck } from './healthcheck';
 import * as auth from './auth';
-import { login } from './auth';
 import * as domains from './domains';
 import * as reports from './reports';
 import * as organizations from './organizations';
@@ -40,8 +39,7 @@ app.get('/', handlerToExpress(healthcheck));
 app.post('/auth/login', handlerToExpress(auth.login));
 app.post('/auth/callback', handlerToExpress(auth.callback));
 
-const authenticatedRoute = express.Router();
-authenticatedRoute.use(async (req, res, next) => {
+const checkUserLoggedIn = async (req, res, next) => {
   req.requestContext = {
     authorizer: await auth.authorize({
       authorizationToken: req.headers.authorization
@@ -54,7 +52,31 @@ authenticatedRoute.use(async (req, res, next) => {
     return res.status(401).send('Not logged in');
   }
   return next();
-});
+};
+
+const checkUserSignedTerms = (req, res, next) => {
+  if (
+    !req.requestContext.authorizer.dateAcceptedTerms
+  ) {
+    return res.status(403).send('User must accept terms of use');
+  }
+  return next();
+}
+
+// Routes that require an authenticated user, without
+// needing to sign the terms of service yet
+const authenticatedNoTermsRoute = express.Router();
+authenticatedNoTermsRoute.use(checkUserLoggedIn);
+authenticatedNoTermsRoute.get('/users/me', handlerToExpress(users.me));
+authenticatedNoTermsRoute.post('/users/me/acceptTerms', handlerToExpress(users.meAcceptTerms));
+
+app.use(authenticatedNoTermsRoute);
+
+// Routes that require an authenticated user that has
+// signed the terms of service
+const authenticatedRoute = express.Router();
+authenticatedRoute.use(checkUserLoggedIn);
+authenticatedRoute.use(checkUserSignedTerms);
 
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
@@ -105,8 +127,6 @@ authenticatedRoute.post(
   handlerToExpress(organizations.updateScan)
 );
 authenticatedRoute.get('/users', handlerToExpress(users.list));
-authenticatedRoute.get('/users/me', handlerToExpress(users.me));
-authenticatedRoute.post('/users/me/acceptTerms', handlerToExpress(users.meAcceptTerms));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.put('/users/:userId', handlerToExpress(users.update));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));

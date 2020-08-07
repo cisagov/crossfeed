@@ -294,7 +294,7 @@ describe('user', () => {
       const user = await User.create({
         firstName: '',
         lastName: '',
-        email: Math.random() + '@crossfeed.cisa.gov'
+        email: Math.random() + '@crossfeed.cisa.gov',
       }).save();
       const response = await request(app)
         .del(`/users/${user.id}`)
@@ -306,14 +306,15 @@ describe('user', () => {
       const user = await User.create({
         firstName: '',
         lastName: '',
-        email: Math.random() + '@crossfeed.cisa.gov'
+        email: Math.random() + '@crossfeed.cisa.gov',
+        dateAcceptedTerms: new Date("2020-08-03T13:58:31.715Z"),
       }).save();
       const response = await request(app)
         .del(`/users/${user.id}`)
         .set(
           'Authorization',
           createUserToken({
-            id: user.id
+            id: user.id,
           })
         )
         .expect(200);
@@ -326,7 +327,8 @@ describe('user', () => {
       user = await User.create({
         firstName: '',
         lastName: '',
-        email: Math.random() + '@crossfeed.cisa.gov'
+        email: Math.random() + '@crossfeed.cisa.gov',
+        dateAcceptedTerms: new Date("2020-08-03T13:58:31.715Z"),
       }).save();
       firstName = 'new first name';
       lastName = 'new last name';
