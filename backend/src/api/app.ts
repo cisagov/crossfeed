@@ -70,6 +70,7 @@ authenticatedNoTermsRoute.post(
   '/users/me/acceptTerms',
   handlerToExpress(users.meAcceptTerms)
 );
+authenticatedNoTermsRoute.put('/users/:userId', handlerToExpress(users.update));
 
 app.use(authenticatedNoTermsRoute);
 
@@ -129,7 +130,6 @@ authenticatedRoute.post(
 );
 authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
-authenticatedRoute.put('/users/:userId', handlerToExpress(users.update));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
 
 app.use(authenticatedRoute);
