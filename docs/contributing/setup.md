@@ -50,6 +50,10 @@ npm test
 
 To update snapshots, run `npm test -- -u`.
 
+To view a code coverage report (a minimum code coverage threshold is checked in CI), run `npm test -- --collectCoverage`.
+
+You can then view a HTML coverage report in the `coverage/lcov-report` directory.
+
 ## Fargate worker
 
 In order to run scans locally or work on scanning infrastructure,

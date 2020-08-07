@@ -78,6 +78,7 @@ describe('user', () => {
       expect(response.body.lastName).toEqual(lastName);
       expect(response.body.roles[0].approved).toEqual(true);
       expect(response.body.roles[0].role).toEqual('user');
+      expect(response.body.roles[0].organization.id).toEqual(organization.id);
     });
     it('invite existing user by a different organization admin should work, and should not modify other user details', async () => {
       const firstName = 'first name';

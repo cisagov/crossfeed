@@ -7,7 +7,7 @@ import {
   Modal
 } from '@trussworks/react-uswds';
 import { Query } from 'types';
-import { Table } from 'components';
+import { Table, ImportExport } from 'components';
 import { Column } from 'react-table';
 import { Organization } from 'types';
 import { FaTimes } from 'react-icons/fa';
@@ -188,6 +188,39 @@ export const Organizations: React.FC = () => {
             onSubmit={onSubmit}
             type="create"
           ></OrganizationForm>
+          <ImportExport<Organization>
+            name="organizations"
+            fieldsToExport={[
+              'name',
+              'rootDomains',
+              'ipBlocks',
+              'isPassive',
+              'inviteOnly'
+            ]}
+            onImport={async results => {
+              // TODO: use a batch call here instead.
+              let createdOrganizations = [];
+              for (let result of results) {
+                createdOrganizations.push(
+                  await apiPost('/organizations/', {
+                    body: {
+                      ...result,
+                      // These fields are initially parsed as strings, so they need
+                      // to be converted to arrays.
+                      ipBlocks: (
+                        ((result.ipBlocks as unknown) as string) || ''
+                      ).split(','),
+                      rootDomains: (
+                        ((result.rootDomains as unknown) as string) || ''
+                      ).split(',')
+                    }
+                  })
+                );
+              }
+              setOrganizations(organizations.concat(...createdOrganizations));
+            }}
+            getDataToExport={() => organizations}
+          />
         </>
       )}
       {showModal && (
