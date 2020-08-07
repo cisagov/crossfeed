@@ -75,6 +75,8 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: npm ci
+      - name: Build
+        run: npm run build
       - name: Test
         run: npm run test
   deploy:
