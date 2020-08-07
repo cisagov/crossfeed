@@ -7,7 +7,7 @@
     "aws-sdk": "^2.716.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
