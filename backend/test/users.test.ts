@@ -185,6 +185,44 @@ describe('user', () => {
       expect(response.body.email).toEqual(user.email);
     });
   });
+  describe('meAcceptTerms', () => {
+    it("me accept terms by a regular user should accept terms", async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov'
+      }).save();
+      const response = await request(app)
+        .post('/users/me/acceptTerms')
+        .set(
+          'Authorization',
+          createUserToken({
+            id: user.id
+          })
+        )
+        .expect(200);
+      expect(response.body.email).toEqual(user.email);
+      expect(response.body.dateAcceptedTerms).toBeTruthy();
+    });
+    it("can't accept terms twice", async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        dateAcceptedTerms: new Date("2020-08-03T13:58:31.715Z")
+      }).save();
+      const response = await request(app)
+        .post('/users/me/acceptTerms')
+        .set(
+          'Authorization',
+          createUserToken({
+            id: user.id
+          })
+        )
+        .expect(422);
+      expect(response.text).toContain('already accepted')
+    });
+  })
   describe('list', () => {
     it('list by globalView should give all users', async () => {
       const user = await User.create({

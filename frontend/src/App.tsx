@@ -15,7 +15,8 @@ import {
   Organization,
   Users,
   Settings,
-  Vulnerabilities
+  Vulnerabilities,
+  TermsOfUse
 } from 'pages';
 import { AuthRoute, AuthRedirectRoute, Layout } from 'components';
 import './styles.scss';
@@ -44,6 +45,8 @@ const App: React.FC = () => (
           />
 
           <Route exact path="/create-account" component={AuthCreateAccount} />
+
+          <Route exact path="/terms" component={TermsOfUse} />
 
           <AuthRedirectRoute path="/domain/:domainId" component={Domain} />
           <AuthRedirectRoute

@@ -106,6 +106,7 @@ authenticatedRoute.post(
 );
 authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.get('/users/me', handlerToExpress(users.me));
+authenticatedRoute.post('/users/me/acceptTerms', handlerToExpress(users.meAcceptTerms));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.put('/users/:userId', handlerToExpress(users.update));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));

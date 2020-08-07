@@ -11,4 +11,5 @@ export interface User {
   userType: 'standard' | 'globalView' | 'globalAdmin';
   email: string;
   roles: Role[];
+  dateAcceptedTerms: Date;
 }

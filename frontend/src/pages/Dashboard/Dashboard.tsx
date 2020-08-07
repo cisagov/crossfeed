@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { TableInstance } from 'react-table';
-import { Query } from 'types';
+import { Query, User } from 'types';
 import { Table, Paginator } from 'components';
 import { Domain } from 'types';
 import { createColumns } from './columns';
@@ -70,7 +70,7 @@ export const Dashboard: React.FC = () => {
       return;
     }
     try {
-      const { token, user } = await apiPost('/auth/callback', {
+      const { token, user } = await apiPost<{token: string, user: User}>('/auth/callback', {
         body: {
           state: parsed.state,
           code: parsed.code,
@@ -86,15 +86,17 @@ export const Dashboard: React.FC = () => {
 
       await refreshUser();
 
-      if (user.firstName !== '') {
+      if (user.firstName === '') {
+        history.push('/create-account');
+      } else if (!user.dateAcceptedTerms) {
+        history.push('/create-account');
+      } else {
         history.push('/');
         fetchDomains({
           page: 0,
           sort: [],
           filters: []
         });
-      } else {
-        history.push('/create-account');
       }
     } catch {
       history.push('/');
@@ -102,8 +104,12 @@ export const Dashboard: React.FC = () => {
   }, [apiPost, history, login, user, fetchDomains, refreshUser]);
 
   React.useEffect(() => {
-    if (user && user.firstName === '') {
-      history.push('/create-account');
+    if (user) {
+      if (user.firstName === '') {
+        history.push('/create-account');
+      } else if (!user.dateAcceptedTerms) {
+        history.push('/terms');
+      }
     }
     callback();
     // eslint-disable-next-line

@@ -162,6 +162,26 @@ export const me = wrapHandler(async (event) => {
   };
 });
 
+export const meAcceptTerms = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const user = await User.findOne(getUserId(event));
+  if (!user) {
+    return NotFound;
+  }
+  if (user.dateAcceptedTerms) {
+    return {
+      statusCode: 422,
+      body: 'User has already accepted terms.'
+    }
+  }
+  user.dateAcceptedTerms = new Date();
+  await user.save();
+  return {
+    statusCode: 200,
+    body: JSON.stringify(user)
+  };
+});
+
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) return Unauthorized;
   await connectToDatabase();

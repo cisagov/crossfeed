@@ -11,6 +11,7 @@ export interface UserToken {
     org: string;
     role: 'user' | 'admin';
   }[];
+  dateAcceptedTerms: string | undefined;
 }
 
 /** Returns redirect url to initiate login.gov OIDC flow */
@@ -30,6 +31,7 @@ const userTokenBody = (user): UserToken => ({
   id: user.id,
   email: user.email,
   userType: user.userType,
+  dateAcceptedTerms: user.dateAcceptedTerms,
   roles: user.roles
     .filter((role) => role.approved)
     .map((role) => ({
