@@ -80,9 +80,10 @@ class DomainSearch {
     const qs = Domain.createQueryBuilder('domain')
       .leftJoinAndSelect('domain.services', 'services')
       .leftJoinAndSelect('domain.organization', 'organization')
+      .leftJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
       .orderBy(`domain.${this.sort}`, this.order)
       .groupBy(
-        'domain.id, domain.ip, domain.name, organization.id, services.id'
+        'domain.id, domain.ip, domain.name, organization.id, services.id, vulnerabilities.id'
       )
       .skip(PAGE_SIZE * (this.page - 1))
       .take(PAGE_SIZE);
@@ -174,7 +175,7 @@ export const get = wrapHandler(async (event) => {
   const result = await Domain.findOne(
     { id, ...where },
     {
-      relations: ['services', 'organization']
+      relations: ['services', 'organization', 'vulnerabilities']
     }
   );
 

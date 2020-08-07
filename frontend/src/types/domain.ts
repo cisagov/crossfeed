@@ -34,7 +34,7 @@ export interface Domain {
   asn: string | null;
   cloudHosted: boolean;
   services: Service[];
-  vulnerabilites: Vulnerability[];
+  vulnerabilities: Vulnerability[];
   organization: Organization;
   webTechnologies: Technology[];
   ssl: SSLInfo | null;
