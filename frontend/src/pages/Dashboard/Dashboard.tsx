@@ -35,32 +35,35 @@ export const Dashboard: React.FC = () => {
   const PAGE_SIZE = 25;
   const history = useHistory();
 
-  const queryDomains = async ({
-    q,
-    pageSize = PAGE_SIZE
-  }: {
-    q: Query<Domain>;
-    pageSize?: number;
-  }) => {
-    const { page, sort, filters } = q;
-    return apiPost<ApiResponse>('/domain/search', {
-      body: {
-        pageSize,
-        page,
-        sort: sort[0]?.id ?? 'name',
-        order: sort[0]?.desc ? 'DESC' : 'ASC',
-        filters: filters
-          .filter(f => Boolean(f.value))
-          .reduce(
-            (accum, next) => ({
-              ...accum,
-              [next.id]: next.value
-            }),
-            {}
-          )
-      }
-    });
-  };
+  const queryDomains = useCallback(
+    async ({
+      q,
+      pageSize = PAGE_SIZE
+    }: {
+      q: Query<Domain>;
+      pageSize?: number;
+    }) => {
+      const { page, sort, filters } = q;
+      return apiPost<ApiResponse>('/domain/search', {
+        body: {
+          pageSize,
+          page,
+          sort: sort[0]?.id ?? 'name',
+          order: sort[0]?.desc ? 'DESC' : 'ASC',
+          filters: filters
+            .filter(f => Boolean(f.value))
+            .reduce(
+              (accum, next) => ({
+                ...accum,
+                [next.id]: next.value
+              }),
+              {}
+            )
+        }
+      });
+    },
+    [apiPost]
+  );
 
   const fetchDomainTable = useCallback(
     async (q: Query<Domain>) => {
@@ -77,7 +80,7 @@ export const Dashboard: React.FC = () => {
         console.error(e);
       }
     },
-    [apiPost, user]
+    [queryDomains, user]
   );
 
   // Called to sign in the user
@@ -116,7 +119,7 @@ export const Dashboard: React.FC = () => {
     } catch {
       history.push('/');
     }
-  }, [apiPost, history, login, user, queryDomains, refreshUser]);
+  }, [apiPost, history, login, user, refreshUser, fetchDomainTable]);
 
   React.useEffect(() => {
     if (user && user.firstName === '') {
