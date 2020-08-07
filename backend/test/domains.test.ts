@@ -66,6 +66,68 @@ describe('domains', () => {
         .expect(200);
       expect(response.body.count).toEqual(2);
     });
+    it('list by org user with custom pageSize should work', async () => {
+      const name = 'test-' + Math.random();
+      await Domain.create({
+        name: name + '-1',
+        organization
+      }).save();
+      await Domain.create({
+        name: name + '-2',
+        organization
+      }).save();
+      const response = await request(app)
+        .post('/domain/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'user'
+              }
+            ]
+          })
+        )
+        .send({
+          filters: { reverseName: name },
+          pageSize: 1
+        })
+        .expect(200);
+      expect(response.body.count).toEqual(2);
+      expect(response.body.result.length).toEqual(1);
+    });
+    it('list by org user with pageSize of -1 should return all domains', async () => {
+      const name = 'test-' + Math.random();
+      await Domain.create({
+        name: name + '-1',
+        organization
+      }).save();
+      await Domain.create({
+        name: name + '-2',
+        organization
+      }).save();
+      const response = await request(app)
+        .post('/domain/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'user'
+              }
+            ]
+          })
+        )
+        .send({
+          filters: { reverseName: name },
+          pageSize: -1
+        })
+        .expect(200);
+      expect(response.body.count).toEqual(2);
+      expect(response.body.result.length).toEqual(2);
+    });
   });
   describe('get', () => {
     it("get by org user should work for domain in the user's org", async () => {

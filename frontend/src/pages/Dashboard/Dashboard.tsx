@@ -1,9 +1,9 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { TableInstance } from 'react-table';
 import { Query } from 'types';
-import { Table, Paginator } from 'components';
+import { Table, Paginator, Export } from 'components';
 import { Domain } from 'types';
-import { createColumns } from './columns';
+import { createColumns, getServiceNames } from './columns';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
@@ -25,34 +25,51 @@ export const Dashboard: React.FC = () => {
   const [domains, setDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+  const [query, setQuery] = useState<Query<Domain>>({
+    page: 1,
+    sort: [{ id: 'name', desc: true }],
+    filters: []
+  });
 
   const columns = useMemo(() => createColumns(), []);
   const PAGE_SIZE = 25;
   const history = useHistory();
 
-  const fetchDomains = useCallback(
-    async (query: Query<Domain>) => {
+  const queryDomains = async ({
+    q,
+    pageSize = PAGE_SIZE
+  }: {
+    q: Query<Domain>;
+    pageSize?: number;
+  }) => {
+    const { page, sort, filters } = q;
+    return apiPost<ApiResponse>('/domain/search', {
+      body: {
+        pageSize,
+        page,
+        sort: sort[0]?.id ?? 'name',
+        order: sort[0]?.desc ? 'DESC' : 'ASC',
+        filters: filters
+          .filter(f => Boolean(f.value))
+          .reduce(
+            (accum, next) => ({
+              ...accum,
+              [next.id]: next.value
+            }),
+            {}
+          )
+      }
+    });
+  };
+
+  const fetchDomainTable = useCallback(
+    async (q: Query<Domain>) => {
       if (!user) {
         return;
       }
-      const { page, sort, filters } = query;
       try {
-        const { result, count } = await apiPost<ApiResponse>('/domain/search', {
-          body: {
-            page,
-            sort: sort[0]?.id ?? 'name',
-            order: sort[0]?.desc ? 'DESC' : 'ASC',
-            filters: filters
-              .filter(f => Boolean(f.value))
-              .reduce(
-                (accum, next) => ({
-                  ...accum,
-                  [next.id]: next.value
-                }),
-                {}
-              )
-          }
-        });
+        const { result, count } = await queryDomains({ q });
+        setQuery(q);
         setDomains(result);
         setCount(count);
         setPageCount(Math.ceil(count / PAGE_SIZE));
@@ -88,7 +105,7 @@ export const Dashboard: React.FC = () => {
 
       if (user.firstName !== '') {
         history.push('/');
-        fetchDomains({
+        fetchDomainTable({
           page: 0,
           sort: [],
           filters: []
@@ -99,7 +116,7 @@ export const Dashboard: React.FC = () => {
     } catch {
       history.push('/');
     }
-  }, [apiPost, history, login, user, fetchDomains, refreshUser]);
+  }, [apiPost, history, login, user, queryDomains, refreshUser]);
 
   React.useEffect(() => {
     if (user && user.firstName === '') {
@@ -123,9 +140,26 @@ export const Dashboard: React.FC = () => {
         columns={columns}
         data={domains}
         pageCount={pageCount}
-        fetchData={fetchDomains}
+        fetchData={fetchDomainTable}
         count={count}
         pageSize={PAGE_SIZE}
+      />
+      <Export<
+        | Domain
+        | {
+            services: string;
+          }
+      >
+        name="domains"
+        fieldsToExport={['name', 'ip', 'id', 'ports', 'services', 'updatedAt']}
+        getDataToExport={async () => {
+          const { result } = await queryDomains({ q: query, pageSize: -1 });
+          return result.map(domain => ({
+            ...domain,
+            ports: domain.services.map(service => service.port).join(','),
+            services: getServiceNames(domain)
+          }));
+        }}
       />
     </div>
   );
