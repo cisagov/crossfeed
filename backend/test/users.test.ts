@@ -186,7 +186,7 @@ describe('user', () => {
     });
   });
   describe('meAcceptTerms', () => {
-    it("me accept terms by a regular user should accept terms", async () => {
+    it('me accept terms by a regular user should accept terms', async () => {
       const user = await User.create({
         firstName: '',
         lastName: '',
@@ -209,7 +209,7 @@ describe('user', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        dateAcceptedTerms: new Date("2020-08-03T13:58:31.715Z")
+        dateAcceptedTerms: new Date('2020-08-03T13:58:31.715Z')
       }).save();
       const response = await request(app)
         .post('/users/me/acceptTerms')
@@ -220,9 +220,9 @@ describe('user', () => {
           })
         )
         .expect(422);
-      expect(response.text).toContain('already accepted')
+      expect(response.text).toContain('already accepted');
     });
-  })
+  });
   describe('list', () => {
     it('list by globalView should give all users', async () => {
       const user = await User.create({
@@ -294,7 +294,7 @@ describe('user', () => {
       const user = await User.create({
         firstName: '',
         lastName: '',
-        email: Math.random() + '@crossfeed.cisa.gov',
+        email: Math.random() + '@crossfeed.cisa.gov'
       }).save();
       const response = await request(app)
         .del(`/users/${user.id}`)
@@ -307,14 +307,14 @@ describe('user', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        dateAcceptedTerms: new Date("2020-08-03T13:58:31.715Z"),
+        dateAcceptedTerms: new Date('2020-08-03T13:58:31.715Z')
       }).save();
       const response = await request(app)
         .del(`/users/${user.id}`)
         .set(
           'Authorization',
           createUserToken({
-            id: user.id,
+            id: user.id
           })
         )
         .expect(200);
@@ -328,7 +328,7 @@ describe('user', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        dateAcceptedTerms: new Date("2020-08-03T13:58:31.715Z"),
+        dateAcceptedTerms: new Date('2020-08-03T13:58:31.715Z')
       }).save();
       firstName = 'new first name';
       lastName = 'new last name';

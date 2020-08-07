@@ -55,20 +55,21 @@ const checkUserLoggedIn = async (req, res, next) => {
 };
 
 const checkUserSignedTerms = (req, res, next) => {
-  if (
-    !req.requestContext.authorizer.dateAcceptedTerms
-  ) {
+  if (!req.requestContext.authorizer.dateAcceptedTerms) {
     return res.status(403).send('User must accept terms of use');
   }
   return next();
-}
+};
 
 // Routes that require an authenticated user, without
 // needing to sign the terms of service yet
 const authenticatedNoTermsRoute = express.Router();
 authenticatedNoTermsRoute.use(checkUserLoggedIn);
 authenticatedNoTermsRoute.get('/users/me', handlerToExpress(users.me));
-authenticatedNoTermsRoute.post('/users/me/acceptTerms', handlerToExpress(users.meAcceptTerms));
+authenticatedNoTermsRoute.post(
+  '/users/me/acceptTerms',
+  handlerToExpress(users.meAcceptTerms)
+);
 
 app.use(authenticatedNoTermsRoute);
 

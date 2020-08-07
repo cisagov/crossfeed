@@ -66,7 +66,7 @@ describe('domains', () => {
         .expect(200);
       expect(response.body.count).toEqual(2);
     });
-    it('list by org user that hasn\'t signed the terms should fail', async () => {
+    it("list by org user that hasn't signed the terms should fail", async () => {
       const name = 'test-' + Math.random();
       await Domain.create({
         name,
@@ -84,7 +84,7 @@ describe('domains', () => {
             roles: [
               {
                 org: organization.id,
-                role: 'user',
+                role: 'user'
               }
             ]
           })

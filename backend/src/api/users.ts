@@ -172,7 +172,7 @@ export const meAcceptTerms = wrapHandler(async (event) => {
     return {
       statusCode: 422,
       body: 'User has already accepted terms.'
-    }
+    };
   }
   user.dateAcceptedTerms = new Date();
   await user.save();
