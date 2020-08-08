@@ -8,7 +8,7 @@ import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
-import { Dropdown, Grid, Label } from '@trussworks/react-uswds';
+import { Dropdown, Grid, Label, Checkbox } from '@trussworks/react-uswds';
 
 interface ApiResponse {
   result: Domain[];
@@ -151,23 +151,14 @@ export const Dashboard: React.FC = () => {
           {((user?.roles && user.roles.length > 0) ||
             user?.userType === 'globalView' ||
             user?.userType === 'globalAdmin') && (
-            <>
-              <Label htmlFor="organization">Select organization</Label>
-              <Dropdown
-                id="organization"
-                name="organization"
-                className={classes.textField}
-                onChange={e => {
-                  setShowAll(e.target.value === 'true' ? true : false);
-                }}
-                value={showAll ? 'true' : 'false'}
-              >
-                <option value={'true'}>All</option>
-                {currentOrganization && (
-                  <option value={'false'}>{currentOrganization.name}</option>
-                )}
-              </Dropdown>
-            </>
+      <Checkbox
+        id="showAll"
+        name="showAll"
+        label="Show all organizations"
+        checked={showAll}
+        onChange={e => setShowAll(e.target.checked)}
+        className={classes.showAll}
+      />
           )}
         </Grid>
       </Grid>
