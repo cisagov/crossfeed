@@ -16,10 +16,7 @@ module.exports = {
     '/node_modules/',
     '.*report.*' // Remove this when we enable report / vulnerability functionality
   ],
-  testPathIgnorePatterns: [
-    '/e2e/',
-    '/node_modules/'
-  ],
+  testPathIgnorePatterns: ['/e2e/', '/node_modules/'],
   coverageThreshold: {
     global: {
       branches: 50
