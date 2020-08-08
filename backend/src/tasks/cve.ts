@@ -2,7 +2,7 @@ import { Domain, connectToDatabase, Vulnerability } from '../models';
 import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
-import saveVulnerabilityToDb from './helpers/saveVulnerabilityToDb';
+import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import * as path from 'path';
 
 const OUT_PATH = path.join(__dirname, 'out-' + Math.random() + '.txt');
@@ -53,14 +53,13 @@ export const handler = async (commandOptions: CommandOptions) => {
       });
   }
 
-  const ps = spawnSync('nvdsync', ['-cve_feed', 'cve-1.1.json.gz', '.'], {
-    stdio: [process.stdin, process.stdout, process.stderr]
-  });
-
-  // debug - ls
-  const ls = spawnSync('ls', [], {
-    stdio: [process.stdin, process.stdout, process.stderr]
-  });
+  const ps = spawnSync(
+    'nvdsync',
+    ['-cve_feed', 'cve-1.1.json.gz', 'nvd-dump'],
+    {
+      stdio: [process.stdin, process.stdout, process.stderr]
+    }
+  );
 
   let input = '';
   for (const [index, host] of hostsToCheck.entries()) {
@@ -70,27 +69,29 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   // Should change this to spawnSync
   const res = execSync(
-    "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 nvdcve-1.1-2008.json.gz",
+    "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 nvd-dump/nvdcve-1.1-2*.json.gz",
     { input: input }
   );
 
   const split = String(res).split('\n');
+  const vulnerabilities: Vulnerability[] = [];
   for (const line of split) {
     const parts = line.split(' ');
     if (parts.length < 5) continue;
     const domain = hostsToCheck[parseInt(parts[0])].domain;
 
-    const vulnerability = plainToClass(Vulnerability, {
-      domain: domain,
-      lastSeen: new Date(Date.now()),
-      title: parts[1],
-      cve: parts[1],
-      cwe: parts[4],
-      cpe: parts[2],
-      cvss: parseFloat(parts[3]),
-      state: 'open'
-    });
-    console.log(vulnerability);
-    await saveVulnerabilityToDb(vulnerability);
+    vulnerabilities.push(
+      plainToClass(Vulnerability, {
+        domain: domain,
+        lastSeen: new Date(Date.now()),
+        title: parts[1],
+        cve: parts[1],
+        cwe: parts[4],
+        cpe: parts[2],
+        cvss: parseFloat(parts[3]),
+        state: 'open'
+      })
+    );
   }
+  await saveVulnerabilitiesToDb(vulnerabilities);
 };
