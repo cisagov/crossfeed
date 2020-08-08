@@ -5,9 +5,11 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   BaseEntity,
-  OneToMany
+  OneToMany,
+  ManyToMany,
+  JoinTable
 } from 'typeorm';
-import { ScanTask } from './scan-task';
+import { ScanTask, Organization } from '.';
 
 @Entity()
 export class Scan extends BaseEntity {
@@ -41,4 +43,29 @@ export class Scan extends BaseEntity {
     onUpdate: 'CASCADE'
   })
   scanTasks: ScanTask[];
+
+  /** Whether the scan is granular. Granular scans
+   * are only run on specified organizations.
+   * Global scans cannot be granular scans.
+   */
+  @Column({
+    type: 'boolean',
+    default: false
+  })
+  isGranular: boolean;
+
+  /**
+   * If the scan is granular, specifies organizations that the
+   * scan will run on.
+   */
+  @ManyToMany(
+    (type) => Organization,
+    (organization) => organization.granularScans,
+    {
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    }
+  )
+  @JoinTable()
+  organizations: Organization[];
 }

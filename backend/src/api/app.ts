@@ -67,6 +67,7 @@ authenticatedRoute.get(
   handlerToExpress(vulnerabilities.get)
 );
 authenticatedRoute.get('/scans', handlerToExpress(scans.list));
+authenticatedRoute.get('/granularScans', handlerToExpress(scans.listGranular));
 authenticatedRoute.post('/scans', handlerToExpress(scans.create));
 authenticatedRoute.put('/scans/:scanId', handlerToExpress(scans.update));
 authenticatedRoute.delete('/scans/:scanId', handlerToExpress(scans.del));
@@ -104,6 +105,10 @@ authenticatedRoute.post(
 authenticatedRoute.post(
   '/organizations/:organizationId/roles/:roleId/remove',
   handlerToExpress(organizations.removeRole)
+);
+authenticatedRoute.post(
+  '/organizations/:organizationId/granularScans/:scanId/update',
+  handlerToExpress(organizations.updateScan)
 );
 authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.get('/users/me', handlerToExpress(users.me));

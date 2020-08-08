@@ -1,6 +1,5 @@
 import { Handler } from 'aws-lambda';
 import { connectToDatabase, Scan, Organization, ScanTask } from '../models';
-import { Lambda, Credentials } from 'aws-sdk';
 import ECSClient from './ecs-client';
 import { SCAN_SCHEMA } from '../api/scans';
 import { In } from 'typeorm';
@@ -118,6 +117,10 @@ const shouldRunScan = async ({
       }
     }
   );
+  if (lastRunningScanTask) {
+    // Don't run another task if there's already a running task.
+    return false;
+  }
   const lastFinishedScanTask = await ScanTask.findOne(
     {
       scan: { id: scan.id },
@@ -130,10 +133,6 @@ const shouldRunScan = async ({
       }
     }
   );
-  if (lastRunningScanTask && !lastFinishedScanTask) {
-    // Don't run another task if there's already a running task.
-    return false;
-  }
   if (
     lastFinishedScanTask &&
     lastFinishedScanTask.finishedAt &&
@@ -146,6 +145,7 @@ const shouldRunScan = async ({
   return true;
 };
 
+// These two arguments are currently used only for testing purposes.
 interface Event {
   // If specified, limits scheduling to a particular scan
   scanId?: string;
@@ -158,7 +158,10 @@ interface Event {
 export const handler: Handler<Event> = async (event) => {
   await connectToDatabase();
 
-  const scans = await Scan.find(event.scanId ? { id: event.scanId } : {});
+  const scans = await Scan.find({
+    where: event.scanId ? { id: event.scanId } : {},
+    relations: ['organizations']
+  });
   const organizations = await Organization.find(
     event.organizationId ? { id: event.organizationId } : {}
   );
@@ -175,6 +178,13 @@ export const handler: Handler<Event> = async (event) => {
         continue;
       }
       await launchScanTask({ scan });
+    } else if (scan.isGranular) {
+      for (const organization of scan.organizations) {
+        if (!(await shouldRunScan({ organization, scan }))) {
+          continue;
+        }
+        await launchScanTask({ organization, scan });
+      }
     } else {
       for (const organization of organizations) {
         if (!(await shouldRunScan({ organization, scan }))) {
@@ -184,6 +194,6 @@ export const handler: Handler<Event> = async (event) => {
       }
     }
     scan.lastRun = new Date();
-    scan.save();
+    await scan.save();
   }
 };

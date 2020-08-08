@@ -78,14 +78,15 @@ describe('user', () => {
       expect(response.body.lastName).toEqual(lastName);
       expect(response.body.roles[0].approved).toEqual(true);
       expect(response.body.roles[0].role).toEqual('user');
+      expect(response.body.roles[0].organization.id).toEqual(organization.id);
     });
     it('invite existing user by a different organization admin should work, and should not modify other user details', async () => {
       const firstName = 'first name';
       const lastName = 'last name';
       const email = Math.random() + '@crossfeed.cisa.gov';
       const user = await User.create({
-        firstName: 'original first name',
-        lastName: 'original last name',
+        firstName,
+        lastName,
         email
       }).save();
       await Role.create({
@@ -108,8 +109,8 @@ describe('user', () => {
           })
         )
         .send({
-          firstName,
-          lastName,
+          firstName: 'new first name',
+          lastName: 'new last name',
           email,
           organization: organization2.id,
           organizationAdmin: false
@@ -118,8 +119,50 @@ describe('user', () => {
       expect(response.body.id).toEqual(user.id);
       expect(response.body.email).toEqual(email);
       expect(response.body.invitePending).toEqual(false);
-      expect(response.body.firstName).toEqual('original first name');
-      expect(response.body.lastName).toEqual('original last name');
+      expect(response.body.firstName).toEqual('first name');
+      expect(response.body.lastName).toEqual('last name');
+      expect(response.body.roles[1].approved).toEqual(true);
+      expect(response.body.roles[1].role).toEqual('user');
+    });
+    it('invite existing user by a different organization admin should work, and should modify user name if user name is initially blank', async () => {
+      const email = Math.random() + '@crossfeed.cisa.gov';
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email
+      }).save();
+      await Role.create({
+        role: 'user',
+        approved: false,
+        organization,
+        user
+      }).save();
+      const response = await request(app)
+        .post('/users')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization2.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .send({
+          firstName: 'new first name',
+          lastName: 'new last name',
+          email,
+          organization: organization2.id,
+          organizationAdmin: false
+        })
+        .expect(200);
+      expect(response.body.id).toEqual(user.id);
+      expect(response.body.email).toEqual(email);
+      expect(response.body.invitePending).toEqual(false);
+      expect(response.body.firstName).toEqual('new first name');
+      expect(response.body.lastName).toEqual('new last name');
       expect(response.body.roles[1].approved).toEqual(true);
       expect(response.body.roles[1].role).toEqual('user');
     });

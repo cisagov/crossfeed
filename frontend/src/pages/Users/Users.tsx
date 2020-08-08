@@ -8,8 +8,8 @@ import {
   Overlay,
   Modal
 } from '@trussworks/react-uswds';
-import { Query, Organization } from 'types';
-import { Table } from 'components';
+import { Organization } from 'types';
+import { Table, ImportExport } from 'components';
 import { Column } from 'react-table';
 import { User } from 'types';
 import { FaTimes } from 'react-icons/fa';
@@ -97,17 +97,14 @@ export const Users: React.FC = () => {
     role: ''
   });
 
-  const fetchUsers = useCallback(
-    async (query: Query<User>) => {
-      try {
-        let rows = await apiGet<User[]>('/users/');
-        setUsers(rows);
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    [apiGet]
-  );
+  const fetchUsers = useCallback(async () => {
+    try {
+      let rows = await apiGet<User[]>('/users/');
+      setUsers(rows);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet]);
 
   const deleteRow = async (index: number) => {
     try {
@@ -217,6 +214,53 @@ export const Users: React.FC = () => {
         <br></br>
         <Button type="submit">Invite User</Button>
       </form>
+      <ImportExport<
+        | User
+        | {
+            roles: string;
+          }
+      >
+        name="users"
+        fieldsToExport={['firstName', 'lastName', 'email', 'roles', 'userType']}
+        onImport={async results => {
+          // TODO: use a batch call here instead.
+          let createdUsers = [];
+          for (let result of results) {
+            const parsedRoles: {
+              organization: string;
+              role: string;
+            }[] = JSON.parse(result.roles as string);
+            const body: any = result;
+            // For now, just create role with the first organization
+            if (parsedRoles.length > 0) {
+              body.organization = parsedRoles[0].organization;
+              body.organizationAdmin = parsedRoles[0].role === 'admin';
+            }
+            try {
+              createdUsers.push(
+                await apiPost('/users/', {
+                  body
+                })
+              );
+            } catch (e) {
+              // Just continue when an error occurs
+              console.error(e);
+            }
+          }
+          setUsers(users.concat(...createdUsers));
+        }}
+        getDataToExport={() =>
+          users.map(user => ({
+            ...user,
+            roles: JSON.stringify(
+              user.roles.map(role => ({
+                organization: role.organization.id,
+                role: role.role
+              }))
+            )
+          }))
+        }
+      />
 
       {showModal && (
         <div>

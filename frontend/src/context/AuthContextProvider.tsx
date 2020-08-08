@@ -182,7 +182,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         apiGet,
         apiPost,
         apiPut,
-        apiDelete
+        apiDelete,
+        setLoading
       }}
     >
       {loading > 0 && (

@@ -59,7 +59,7 @@ export const wrapHandler: WrapHandler = (handler) => async (
     }
     return resp;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return makeResponse(event, {
       statusCode: Array.isArray(e) ? 400 : 500
     });

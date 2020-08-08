@@ -8,6 +8,18 @@ import { Domain } from 'types';
 
 type CreateColumns = () => Column<Domain>[];
 
+export const getServiceNames = (domain: Domain) => {
+  const allServices = new Set(
+    domain.webTechnologies &&
+      domain.webTechnologies.map(technology => technology.name)
+  );
+  for (const service of domain.services) {
+    if (service.censysMetadata && service.censysMetadata.product)
+      allServices.add(service.censysMetadata?.product);
+  }
+  return Array.from(allServices).join(', ');
+};
+
 export const createColumns: CreateColumns = () => [
   {
     Header: 'Details',
@@ -40,9 +52,7 @@ export const createColumns: CreateColumns = () => [
     Header: 'Services',
     id: 'services',
     disableSortBy: true,
-    accessor: ({ webTechnologies }) =>
-      webTechnologies &&
-      webTechnologies.map(technology => technology.name).join(', '),
+    accessor: domain => getServiceNames(domain),
     Filter: ColumnFilter
   },
   {

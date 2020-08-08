@@ -2,7 +2,14 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { Organization as OrganizationType, Role, ScanTask, User } from 'types';
+import {
+  Organization as OrganizationType,
+  Role,
+  ScanTask,
+  User,
+  Scan,
+  ScanSchema
+} from 'types';
 import { FaGlobe, FaNetworkWired, FaClock, FaUsers } from 'react-icons/fa';
 import { Column } from 'react-table';
 import { Table } from 'components';
@@ -26,6 +33,8 @@ export const Organization: React.FC = () => {
   const [organization, setOrganization] = useState<OrganizationType>();
   const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
+  const [scans, setScans] = useState<Scan[]>([]);
+  const [scanSchema, setScanSchema] = useState<ScanSchema>({});
   const [currentView, setCurrentView] = useState<number>(0);
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
@@ -114,6 +123,55 @@ export const Organization: React.FC = () => {
     }
   ];
 
+  const scanColumns: Column<Scan>[] = [
+    {
+      Header: 'Name',
+      accessor: 'name',
+      width: 150,
+      id: 'name',
+      disableFilters: true
+    },
+    {
+      Header: 'Description',
+      accessor: ({ name }) => scanSchema[name] && scanSchema[name].description,
+      width: 200,
+      minWidth: 200,
+      id: 'description',
+      disableFilters: true
+    },
+    {
+      Header: 'Mode',
+      accessor: ({ name }) =>
+        scanSchema[name] && scanSchema[name].isPassive ? 'Passive' : 'Active',
+      width: 150,
+      minWidth: 150,
+      id: 'mode',
+      disableFilters: true
+    },
+    {
+      Header: 'Action',
+      id: 'action',
+      maxWidth: 100,
+      Cell: ({ row }: { row: { index: number } }) => {
+        if (!organization) return;
+        const enabled = organization.granularScans.find(
+          scan => scan.id === scans[row.index].id
+        );
+        return (
+          <Button
+            type="button"
+            onClick={() => {
+              updateScan(scans[row.index], !enabled);
+            }}
+          >
+            {enabled ? 'Disable' : 'Enable'}
+          </Button>
+        );
+      },
+      disableFilters: true
+    }
+  ];
+
   const scanTaskColumns: Column<ScanTask>[] = [
     {
       Header: 'ID',
@@ -186,6 +244,20 @@ export const Organization: React.FC = () => {
     }
   }, [apiGet, setOrganization, currentOrganization]);
 
+  const fetchScans = useCallback(async () => {
+    try {
+      const { scans, schema } = await apiGet<{
+        scans: Scan[];
+        schema: ScanSchema;
+      }>('/granularScans/');
+
+      setScans(scans);
+      setScanSchema(schema);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet]);
+
   const approveUser = async (user: number) => {
     try {
       await apiPost(
@@ -214,7 +286,7 @@ export const Organization: React.FC = () => {
     }
   };
 
-  const updateOrganization = async (body: Object) => {
+  const updateOrganization = async (body: any) => {
     try {
       const org = await apiPut('/organizations/' + organization?.id, {
         body
@@ -226,6 +298,36 @@ export const Organization: React.FC = () => {
         global:
           e.status === 422
             ? 'Error when submitting organization entry.'
+            : e.message ?? e.toString()
+      });
+      console.error(e);
+    }
+  };
+
+  const updateScan = async (scan: Scan, enabled: boolean) => {
+    try {
+      if (!organization) return;
+      await apiPost(
+        `/organizations/${organization?.id}/granularScans/${scan.id}/update`,
+        {
+          body: {
+            enabled
+          }
+        }
+      );
+      setOrganization({
+        ...organization,
+        granularScans: enabled
+          ? organization.granularScans.concat([scan])
+          : organization.granularScans.filter(
+              granularScan => granularScan.id !== scan.id
+            )
+      });
+    } catch (e) {
+      setErrors({
+        global:
+          e.status === 422
+            ? 'Error when updating scan.'
             : e.message ?? e.toString()
       });
       console.error(e);
@@ -373,7 +475,9 @@ export const Organization: React.FC = () => {
       </form>
     </>,
     <>
-      <h1>Organization Scan Tasks</h1>
+      <h1>Customize Scans</h1>
+      <Table<Scan> columns={scanColumns} data={scans} fetchData={fetchScans} />
+      <h1>Organization Scan History</h1>
       <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} />
     </>,
 

@@ -20,6 +20,7 @@ export interface AuthContextType {
   currentOrganization?: CurrentOrganization | null;
   setOrganization: (organization: CurrentOrganization) => Promise<void>;
   refreshUser: () => Promise<void>;
+  setLoading: React.Dispatch<React.SetStateAction<number>>;
 }
 
 /* istanbul ignore next */
@@ -31,7 +32,8 @@ export const defaultAuthContext: AuthContextType = {
   apiPut: async <T>() => ({} as T),
   apiDelete: async <T>() => ({} as T),
   setOrganization: <T>(organization: CurrentOrganization) => ({} as T),
-  refreshUser: async <T>() => ({} as T)
+  refreshUser: async <T>() => ({} as T),
+  setLoading: () => null
 };
 
 export const AuthContext = React.createContext<AuthContextType>(
