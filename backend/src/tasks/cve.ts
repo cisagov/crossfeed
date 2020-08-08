@@ -5,13 +5,11 @@ import { CommandOptions } from './ecs-client';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import * as path from 'path';
 
-
 /**
  * The CVE scan finds vulnerable CVEs affecting domains based on CPEs identified
  */
 
 export const handler = async (commandOptions: CommandOptions) => {
-
   console.log('Running cve detection globally');
 
   await connectToDatabase();
@@ -51,13 +49,9 @@ export const handler = async (commandOptions: CommandOptions) => {
       });
   }
 
-  spawnSync(
-    'nvdsync',
-    ['-cve_feed', 'cve-1.1.json.gz', 'nvd-dump'],
-    {
-      stdio: [process.stdin, process.stdout, process.stderr]
-    }
-  );
+  spawnSync('nvdsync', ['-cve_feed', 'cve-1.1.json.gz', 'nvd-dump'], {
+    stdio: [process.stdin, process.stdout, process.stderr]
+  });
 
   let input = '';
   for (const [index, host] of hostsToCheck.entries()) {
