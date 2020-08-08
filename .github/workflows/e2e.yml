@@ -1,0 +1,49 @@
+name: E2E tests
+
+on:
+  push:
+    branches:
+      - master
+      - production
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+      - '.github/workflows/e2e.yml'
+  pull_request:
+    branches:
+      - master
+      - production
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+      - '.github/workflows/e2e.yml'
+
+defaults:
+  run:
+    working-directory: ./backend
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v2.3.1
+      - uses: actions/setup-node@v2.1.1
+        with:
+          node-version: '12.14'
+      - name: Restore npm cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+      - name: Setup e2e tests
+        run: |
+          npm run setup-e2e -- -d
+          wait-port -t 3000 80 5432
+        working-directory: ./
+      - name: Run e2e tests
+        run: npm run e2e
