@@ -1,5 +1,5 @@
 import { handler as syncdb } from '../src/tasks/syncdb';
-import * as setup from "jest-environment-puppeteer/setup";
+import * as setup from 'jest-environment-puppeteer/setup';
 
 export default async () => {
   await setup();
