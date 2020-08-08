@@ -1,5 +1,22 @@
 import { handler as cve } from '../cve';
-import { Organization, Domain, connectToDatabase, Service, Vulnerability } from '../../models';
+import {
+  Organization,
+  Domain,
+  connectToDatabase,
+  Service,
+  Vulnerability
+} from '../../models';
+
+jest.mock('child_process', () => ({
+  spawnSync: () => null,
+  execSync: (cmd, { input }) => {
+    expect(input).toMatchSnapshot('execSync.input');
+    return [
+      '0 CVE-2019-10866 cpe:/a:10web:form_maker:1.0.0 9.8 CWE-89',
+      '0 CVE-2019-11590 cpe:/a:10web:form_maker:1.0.0 8.8 CWE-352'
+    ].join('\n');
+  }
+}));
 
 const RealDate = Date;
 
@@ -14,8 +31,7 @@ describe('cve', () => {
   afterEach(() => {
     global.Date = RealDate;
   });
-  test('end-to-end test', async () => {
-    jest.setTimeout(200000);
+  test('simple test', async () => {
     const organization = await Organization.create({
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
@@ -46,11 +62,14 @@ describe('cve', () => {
       domain
     });
     expect(vulnerabilities.length).toEqual(2);
-    for (let vulnerability of vulnerabilities) {
-      expect(vulnerability).toMatchSnapshot({
-        id: expect.any(String),
-        createdAt: expect.any(Date)
-      });
+    for (const vulnerability of vulnerabilities) {
+      expect(vulnerability).toMatchSnapshot(
+        {
+          id: expect.any(String),
+          createdAt: expect.any(Date)
+        },
+        'vulnerability'
+      );
     }
   });
 });

@@ -1,6 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`cve end-to-end test 1`] = `
+exports[`cve simple test: execSync.input 1`] = `
+"0 cpe:/a:10web:form_maker:1.0.0
+"
+`;
+
+exports[`cve simple test: vulnerability 1`] = `
 Object {
   "cpe": "cpe:/a:10web:form_maker:1.0.0",
   "createdAt": Any<Date>,
@@ -15,7 +20,7 @@ Object {
 }
 `;
 
-exports[`cve end-to-end test 2`] = `
+exports[`cve simple test: vulnerability 2`] = `
 Object {
   "cpe": "cpe:/a:10web:form_maker:1.0.0",
   "createdAt": Any<Date>,
