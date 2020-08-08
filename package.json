@@ -1,0 +1,21 @@
+{
+  "name": "crossfeed",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "setup-e2e": "REACT_APP_E2E=true DB_NAME=crossfeed_test docker-compose up --build",
+    "start": "docker-compose up --build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cisagov/crossfeed.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/cisagov/crossfeed/issues"
+  },
+  "homepage": "https://github.com/cisagov/crossfeed#readme"
+}

@@ -54,6 +54,25 @@ To view a code coverage report (a minimum code coverage threshold is checked in 
 
 You can then view a HTML coverage report in the `coverage/lcov-report` directory.
 
+#### End-to-end tests
+
+The end-to-end tests test both the frontend and backend together in some common,
+but important, user scenarios.
+
+To run end-to-end tests, run the following:
+
+```bash
+npm run setup-e2e
+cd backend
+npm run e2e
+```
+
+To debug end-to-end tests by running them in a browser, run:
+
+```
+npm run e2e-debug
+```
+
 ## Fargate worker
 
 In order to run scans locally or work on scanning infrastructure,

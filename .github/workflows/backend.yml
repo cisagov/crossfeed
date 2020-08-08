@@ -82,11 +82,16 @@ jobs:
           npm install -g wait-port
           wait-port -t 3000 80 5432
         working-directory: ./
-      - name: Sync database
-        run: docker-compose exec -T backend npx sls invoke local -f syncdb -d dangerouslyforce
-        working-directory: ./
       - name: Test
         run: npm run test -- --collectCoverage
+      - name: Setup e2e tests
+        run: |
+          docker-compose down
+          npm run setup-e2e -- -d
+          wait-port -t 3000 80 5432
+      - name: Run e2e tests
+        run: npm run e2e
+
   build_worker:
     runs-on: ubuntu-latest
     timeout-minutes: 5

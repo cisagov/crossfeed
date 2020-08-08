@@ -81,13 +81,18 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     if (!localStorage.getItem('token')) {
       return;
     }
-    const user: User = await apiGet('/users/me');
-    const userCopy: AuthUser = {
-      isRegistered: user.firstName !== '',
-      ...user
-    };
-    localStorage.setItem('user', JSON.stringify(userCopy));
-    setUser(userCopy);
+    try {
+      const user = await apiGet<User>('/users/me');
+      const userCopy: AuthUser = {
+        isRegistered: user.firstName !== '',
+        ...user
+      };
+      localStorage.setItem('user', JSON.stringify(userCopy));
+      setUser(userCopy);
+    } catch (e) {
+      console.error(e);
+      return;
+    }
   };
 
   const prepareInit = useCallback(async (init: any) => {

@@ -22,6 +22,8 @@ services:
       - "80:3000"
     env_file:
       - ./.env
+    environment:
+      - REACT_APP_E2E
 
   backend:
     build: ./backend
@@ -29,6 +31,8 @@ services:
       - ./backend/src:/app/src
     ports:
       - "3000:3000"
+    environment:
+      - DB_NAME
     env_file:
       - ./.env
     depends_on:
