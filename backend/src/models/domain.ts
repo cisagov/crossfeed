@@ -45,7 +45,7 @@ export class Domain extends BaseEntity {
   services: Service[];
 
   @OneToMany((type) => Vulnerability, (vulnerability) => vulnerability.domain)
-  vulnerabilities: Service[];
+  vulnerabilities: Vulnerability[];
 
   @ManyToOne((type) => Organization, { onDelete: 'CASCADE' })
   organization: Organization;
