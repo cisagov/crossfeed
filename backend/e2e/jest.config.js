@@ -16,5 +16,6 @@ const config = Object.assign(ts_preset, puppeteer_preset);
 module.exports = {
   ...config,
   testPathIgnorePatterns: ['/test/', '/node_modules/'],
-  testTimeout: 300000
+  testTimeout: 300000,
+  globalSetup: '<rootDir>/setup.ts'
 };
