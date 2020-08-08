@@ -22,6 +22,9 @@ export const setToken = async (page, token: string | null) => {
  * so that the resulting file is read and returned.
  */
 export const downloadAndReadFile = async (page, downloadFunction: Function) => {
+  if (!fs.existsSync(path.resolve(__dirname, 'downloaded'))){
+    fs.mkdirSync(path.resolve(__dirname, 'downloaded'));
+  }
   const downloadPath = fs.mkdtempSync(
     path.resolve(__dirname, 'downloaded') + '/'
   );
