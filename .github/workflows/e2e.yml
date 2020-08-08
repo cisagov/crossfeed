@@ -42,7 +42,9 @@ jobs:
         run: npm ci
       - name: Setup e2e tests
         run: |
+          cp dev.env.example .env
           npm run setup-e2e -- -d
+          npm install -g wait-port
           wait-port -t 3000 80 5432
         working-directory: ./
       - name: Run e2e tests
