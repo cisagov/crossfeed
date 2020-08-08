@@ -3,7 +3,7 @@ import { TableInstance } from 'react-table';
 import { Query } from 'types';
 import { Table, Paginator, Export } from 'components';
 import { Domain } from 'types';
-import { createColumns } from './columns';
+import { createColumns, getServiceNames } from './columns';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
@@ -36,7 +36,7 @@ export const Dashboard: React.FC = () => {
   const PAGE_SIZE = 25;
   const history = useHistory();
 
-  const doDomainQuery = useCallback(
+  const queryDomains = useCallback(
     async ({
       q,
       pageSize = PAGE_SIZE
@@ -60,23 +60,23 @@ export const Dashboard: React.FC = () => {
           page,
           sort: sort[0]?.id ?? 'name',
           order: sort[0]?.desc ? 'DESC' : 'ASC',
-          filters: {
-            ...tableFilters,
-            organization: showAll ? undefined : currentOrganization?.id
-          }
+filters: {
+  ...tableFilters,
+  organization: showAll ? undefined : currentOrganization?.id
+}
         }
       });
     },
-    [showAll]
+    [apiPost]
   );
 
-  const fetchDomains = useCallback(
+  const fetchDomainTable = useCallback(
     async (q: Query<Domain>) => {
       if (!user) {
         return;
       }
       try {
-        const { result, count } = await doDomainQuery({ q });
+        const { result, count } = await queryDomains({ q });
         setQuery(q);
         setDomains(result);
         setCount(count);
@@ -85,7 +85,7 @@ export const Dashboard: React.FC = () => {
         console.error(e);
       }
     },
-    [apiPost, user, showAll]
+    [queryDomains, user]
   );
 
   // Called to sign in the user
@@ -113,7 +113,7 @@ export const Dashboard: React.FC = () => {
 
       if (user.firstName !== '') {
         history.push('/');
-        fetchDomains({
+        fetchDomainTable({
           page: 0,
           sort: [],
           filters: []
@@ -124,7 +124,7 @@ export const Dashboard: React.FC = () => {
     } catch {
       history.push('/');
     }
-  }, [apiPost, history, login, user, fetchDomains, refreshUser]);
+  }, [apiPost, history, login, user, refreshUser, fetchDomainTable]);
 
   React.useEffect(() => {
     if (user && user.firstName === '') {
@@ -176,27 +176,24 @@ export const Dashboard: React.FC = () => {
         columns={columns}
         data={domains}
         pageCount={pageCount}
-        fetchData={fetchDomains}
+        fetchData={fetchDomainTable}
         count={count}
         pageSize={PAGE_SIZE}
       />
-      <Export<Domain>
+      <Export<
+        | Domain
+        | {
+            services: string;
+          }
+      >
         name="domains"
-        fieldsToExport={[
-          'name',
-          'id',
-          'services',
-          'country',
-          'asn',
-          'cloudHosted',
-          'updatedAt'
-        ]}
+        fieldsToExport={['name', 'ip', 'id', 'ports', 'services', 'updatedAt']}
         getDataToExport={async () => {
-          // TODO: export the user's actual filtered data.
-          const { result } = await doDomainQuery({ q: query, pageSize: -1 });
+          const { result } = await queryDomains({ q: query, pageSize: -1 });
           return result.map(domain => ({
             ...domain,
-            services: domain.services.map(service => service.service) as any
+            ports: domain.services.map(service => service.port).join(','),
+            services: getServiceNames(domain)
           }));
         }}
       />

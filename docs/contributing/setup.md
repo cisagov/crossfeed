@@ -22,9 +22,8 @@ subnav:
 1.  Start entire environment from root using Docker Compose
     - `docker-compose up --build`
 1.  Generate DB schema:
-
-    - `docker-compose exec backend npx sls invoke local -f syncdb`
-    - (append `-d dangerouslyforce` to drop and recreate)
+    - `cd backend && npm run syncdb`
+    - (run `npm run syncdb -- -d dangerouslyforce` to drop and recreate)
 
 1.  Navigate to [localhost](http://localhost) in a browser.
 
@@ -38,11 +37,11 @@ subnav:
 
 The scheduler lambda function is set to run on an interval or in response to non-http events. To run it manually, run the following command:
 
-- `docker-compose exec scheduler npx serverless invoke local -f scheduler`
+- `cd backend && npm run scheduler`
 
 ### Running tests
 
-To run tests, first make sure you have already started crossfeed with `docker-compose` . Then run:
+To run tests, first make sure you have already started crossfeed with `docker-compose`. Then run:
 
 ```bash
 cd backend
@@ -50,6 +49,10 @@ npm test
 ```
 
 To update snapshots, run `npm test -- -u`.
+
+To view a code coverage report (a minimum code coverage threshold is checked in CI), run `npm test -- --collectCoverage`.
+
+You can then view a HTML coverage report in the `coverage/lcov-report` directory.
 
 ## Fargate worker
 

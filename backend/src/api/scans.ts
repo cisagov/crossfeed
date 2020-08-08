@@ -4,9 +4,11 @@ import {
   IsString,
   IsIn,
   isUUID,
-  IsObject
+  IsObject,
+  IsBoolean,
+  IsUUID
 } from 'class-validator';
-import { Scan, connectToDatabase } from '../models';
+import { Scan, connectToDatabase, Organization } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { isGlobalWriteAdmin } from './auth';
 
@@ -14,6 +16,8 @@ interface ScanSchema {
   [name: string]: {
     // Scan type. Only Fargate is supported.
     type: 'fargate';
+
+    description: string;
 
     // Whether scan is passive (not allowed to hit the domain).
     isPassive: boolean;
@@ -40,27 +44,35 @@ export const SCAN_SCHEMA: ScanSchema = {
   censys: {
     type: 'fargate',
     isPassive: true,
-    global: false
+    global: false,
+    description: 'Passive discovery of subdomains from public certificates'
   },
   amass: {
     type: 'fargate',
     isPassive: false,
-    global: false
+    global: false,
+    description:
+      'Open source tool that integrates passive APIs and active subdomain enumeration in order to discover target subdomains'
   },
   findomain: {
     type: 'fargate',
     isPassive: true,
-    global: false
+    global: false,
+    description:
+      'Open source tool that integrates passive APIs in order to discover target subdomains'
   },
   portscanner: {
     type: 'fargate',
     isPassive: false,
-    global: false
+    global: false,
+    description: ''
   },
   wappalyzer: {
     type: 'fargate',
     isPassive: false,
-    global: false
+    global: false,
+    description:
+      'Open source tool that fingerprints web technologies based on HTTP responses'
   },
   censysIpv4: {
     type: 'fargate',
@@ -68,7 +80,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: true,
     cpu: '1024',
     memory: '4096',
-    numChunks: 20
+    numChunks: 20,
+    description: ''
   }
 };
 
@@ -83,6 +96,12 @@ class NewScan {
   @IsInt()
   @IsPositive()
   frequency: number = 1;
+
+  @IsBoolean()
+  isGranular: boolean;
+
+  @IsUUID('all', { each: true })
+  organizations: string[];
 }
 
 export const del = wrapHandler(async (event) => {
@@ -111,7 +130,10 @@ export const update = wrapHandler(async (event) => {
     id: id
   });
   if (scan) {
-    Scan.merge(scan, body);
+    Scan.merge(scan, {
+      ...body,
+      organizations: body.organizations.map((id) => ({ id }))
+    });
     const res = await Scan.save(scan);
     return {
       statusCode: 200,
@@ -125,7 +147,10 @@ export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
   const body = await validateBody(NewScan, event.body);
-  const scan = await Scan.create(body);
+  const scan = await Scan.create({
+    ...body,
+    organizations: body.organizations.map((id) => ({ id }))
+  });
   const res = await Scan.save(scan);
   return {
     statusCode: 200,
@@ -137,10 +162,32 @@ export const list = wrapHandler(async (event) => {
   // if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
   const result = await Scan.find();
+  const organizations = await Organization.find();
   return {
     statusCode: 200,
     body: JSON.stringify({
       scans: result,
+      schema: SCAN_SCHEMA,
+      organizations: organizations.map((e) => ({
+        name: e.name,
+        id: e.id
+      }))
+    })
+  };
+});
+
+export const listGranular = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const scans = await Scan.find({
+    select: ['id', 'name', 'isGranular'],
+    where: {
+      isGranular: true
+    }
+  });
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      scans,
       schema: SCAN_SCHEMA
     })
   };

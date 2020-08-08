@@ -214,22 +214,52 @@ export const Users: React.FC = () => {
         <br></br>
         <Button type="submit">Invite User</Button>
       </form>
-      <ImportExport<User>
+      <ImportExport<
+        | User
+        | {
+            roles: string;
+          }
+      >
         name="users"
-        fieldsToExport={['firstName', 'lastName', 'email', 'userType']}
+        fieldsToExport={['firstName', 'lastName', 'email', 'roles', 'userType']}
         onImport={async results => {
           // TODO: use a batch call here instead.
           let createdUsers = [];
           for (let result of results) {
-            createdUsers.push(
-              await apiPost('/users/', {
-                body: result
-              })
-            );
+            const parsedRoles: {
+              organization: string;
+              role: string;
+            }[] = JSON.parse(result.roles as string);
+            const body: any = result;
+            // For now, just create role with the first organization
+            if (parsedRoles.length > 0) {
+              body.organization = parsedRoles[0].organization;
+              body.organizationAdmin = parsedRoles[0].role === 'admin';
+            }
+            try {
+              createdUsers.push(
+                await apiPost('/users/', {
+                  body
+                })
+              );
+            } catch (e) {
+              // Just continue when an error occurs
+              console.error(e);
+            }
           }
           setUsers(users.concat(...createdUsers));
         }}
-        getDataToExport={() => users}
+        getDataToExport={() =>
+          users.map(user => ({
+            ...user,
+            roles: JSON.stringify(
+              user.roles.map(role => ({
+                organization: role.organization.id,
+                role: role.role
+              }))
+            )
+          }))
+        }
       />
 
       {showModal && (

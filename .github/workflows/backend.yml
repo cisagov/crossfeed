@@ -86,7 +86,7 @@ jobs:
         run: docker-compose exec -T backend npx sls invoke local -f syncdb -d dangerouslyforce
         working-directory: ./
       - name: Test
-        run: npm run test
+        run: npm run test -- --collectCoverage
   build_worker:
     runs-on: ubuntu-latest
     timeout-minutes: 5

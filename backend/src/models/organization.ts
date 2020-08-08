@@ -6,9 +6,10 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   BaseEntity,
-  OneToMany
+  OneToMany,
+  ManyToMany
 } from 'typeorm';
-import { Domain, Role, ScanTask } from '.';
+import { Domain, Role, Scan, ScanTask } from '.';
 
 @Entity()
 @Index(['name'], { unique: true })
@@ -54,4 +55,10 @@ export class Organization extends BaseEntity {
     onUpdate: 'CASCADE'
   })
   scanTasks: ScanTask[];
+
+  @ManyToMany((type) => Scan, (scan) => scan.organizations, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  granularScans: Scan[];
 }
