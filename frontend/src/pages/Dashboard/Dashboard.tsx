@@ -60,14 +60,14 @@ export const Dashboard: React.FC = () => {
           page,
           sort: sort[0]?.id ?? 'name',
           order: sort[0]?.desc ? 'DESC' : 'ASC',
-filters: {
-  ...tableFilters,
-  organization: showAll ? undefined : currentOrganization?.id
-}
+          filters: {
+            ...tableFilters,
+            organization: showAll ? undefined : currentOrganization?.id
+          }
         }
       });
     },
-    [apiPost]
+    [apiPost, currentOrganization, showAll]
   );
 
   const fetchDomainTable = useCallback(
