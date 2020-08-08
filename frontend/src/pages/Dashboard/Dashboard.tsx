@@ -8,7 +8,7 @@ import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
-import { Dropdown, Grid, Label, Checkbox } from '@trussworks/react-uswds';
+import { Grid, Checkbox } from '@trussworks/react-uswds';
 
 interface ApiResponse {
   result: Domain[];
