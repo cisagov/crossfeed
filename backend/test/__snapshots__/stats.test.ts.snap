@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`stats get get by globalView should filter domains to a single org if specified 1`] = `
+Object {
+  "domains": Object {
+    "numVulnerabilities": Array [
+      Object {
+        "id": Any<String>,
+        "label": Any<String>,
+        "value": 1,
+      },
+    ],
+    "ports": Array [
+      Object {
+        "id": "80",
+        "label": "80",
+        "value": 1,
+      },
+    ],
+    "services": Array [
+      Object {
+        "id": "http",
+        "label": "http",
+        "value": 1,
+      },
+    ],
+    "total": 1,
+  },
+  "vulnerabilities": Object {
+    "severity": Array [
+      Object {
+        "id": "9",
+        "label": "9",
+        "value": 1,
+      },
+    ],
+  },
+}
+`;
+
+exports[`stats get get by org user should return only domains from that org 1`] = `
+Object {
+  "domains": Object {
+    "numVulnerabilities": Array [
+      Object {
+        "id": Any<String>,
+        "label": Any<String>,
+        "value": 1,
+      },
+    ],
+    "ports": Array [
+      Object {
+        "id": "80",
+        "label": "80",
+        "value": 1,
+      },
+    ],
+    "services": Array [
+      Object {
+        "id": "http",
+        "label": "http",
+        "value": 1,
+      },
+    ],
+    "total": 1,
+  },
+  "vulnerabilities": Object {
+    "severity": Array [
+      Object {
+        "id": "9",
+        "label": "9",
+        "value": 1,
+      },
+    ],
+  },
+}
+`;
