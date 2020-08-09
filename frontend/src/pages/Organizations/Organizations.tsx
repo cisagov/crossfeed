@@ -148,8 +148,7 @@ export const Organizations: React.FC = () => {
   const onSubmit = async (body: Object) => {
     try {
       const org = await apiPost('/organizations/', {
-        ...body,
-        granularScans: []
+        body
       });
       setOrganizations(organizations.concat(org));
     } catch (e) {
