@@ -100,10 +100,10 @@ class VulnerabilitySearch {
       .leftJoinAndSelect('vulnerability.domain', 'domain')
       .leftJoinAndSelect('domain.organization', 'organization')
       .orderBy(`vulnerability.${this.sort}`, this.order);
-    
-      if (pageSize !== -1) {
-        qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
-      }
+
+    if (pageSize !== -1) {
+      qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
+    }
 
     this.filterResultQueryset(qs);
     if (!isGlobalViewAdmin(event)) {

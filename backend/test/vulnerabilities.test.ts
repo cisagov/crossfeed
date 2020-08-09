@@ -1,6 +1,12 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { User, Domain, connectToDatabase, Organization, Vulnerability } from '../src/models';
+import {
+  User,
+  Domain,
+  connectToDatabase,
+  Organization,
+  Vulnerability
+} from '../src/models';
 import { createUserToken } from './util';
 
 describe('vulnerabilities', () => {
@@ -24,15 +30,15 @@ describe('vulnerabilities', () => {
         domain
       }).save();
       const domain2 = await Domain.create({
-        name: 'test-' + Math.random(),
+        name: 'test-' + Math.random()
       }).save();
       const vulnerability2 = await Vulnerability.create({
         title: 'test-' + Math.random(),
         domain: domain2
       }).save();
       const response = await request(app)
-      .post('/vulnerabilities/search')
-      .set(
+        .post('/vulnerabilities/search')
+        .set(
           'Authorization',
           createUserToken({
             roles: [
@@ -43,8 +49,7 @@ describe('vulnerabilities', () => {
             ]
           })
         )
-        .send({
-        })
+        .send({})
         .expect(200);
       expect(response.body.count).toEqual(1);
       expect(response.body.result[0].id).toEqual(vulnerability.id);
@@ -62,14 +67,14 @@ describe('vulnerabilities', () => {
       }).save();
       const title = 'test-' + Math.random();
       const vulnerability = await Vulnerability.create({
-        title: title + "-1",
+        title: title + '-1',
         domain
       }).save();
       const domain2 = await Domain.create({
-        name: 'test-' + Math.random(),
+        name: 'test-' + Math.random()
       }).save();
       const vulnerability2 = await Vulnerability.create({
-        title: title + "-2",
+        title: title + '-2',
         domain: domain2
       }).save();
       const response = await request(app)
@@ -77,7 +82,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: "globalView"
+            userType: 'globalView'
           })
         )
         .send({
@@ -240,7 +245,7 @@ describe('vulnerabilities', () => {
     });
     it('get by globalView should work for any vulnerability', async () => {
       const domain = await Domain.create({
-        name: 'test-' + Math.random(),
+        name: 'test-' + Math.random()
       }).save();
       const vulnerability = await Vulnerability.create({
         title: 'test-' + Math.random(),
