@@ -1,139 +1,31 @@
-import React from 'react';
-import classes from './Risk.module.css';
-import { ResponsivePie, PieDatum } from '@nivo/pie';
-import { ResponsiveBar, BarDatum } from '@nivo/bar';
-import { Table } from '@trussworks/react-uswds';
-import { FaInfoCircle } from 'react-icons/fa';
+import React, { useCallback, useState, useEffect } from 'react';
+import classes from './Risk.module.scss';
+import { ResponsivePie } from '@nivo/pie';
+import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
 
-// TODO: Pull in actual data to render charts
-const pieData = [
-  {
-    id: 'java',
-    label: 'Java',
-    value: 12,
-    color: 'hsl(275, 70%, 50%)'
-  },
-  {
-    id: 'akamai',
-    label: 'Akamai',
-    value: 107,
-    color: 'hsl(278, 70%, 50%)'
-  },
-  {
-    id: 'apache',
-    label: 'Apache',
-    value: 0,
-    color: 'hsl(177, 70%, 50%)'
-  },
-  {
-    id: 'drupal',
-    label: 'Drupal',
-    value: 138,
-    color: 'hsl(50, 70%, 50%)'
-  },
-  {
-    id: 'wordpress',
-    label: 'Wordpress',
-    value: 267,
-    color: 'hsl(159, 70%, 50%)'
+const MyResponsivePie = ({ data }: { data: Point[] }) => {
+  if (!data.length) {
+    return <div>No data found.</div>;
   }
-];
-const pieData2 = [
-  {
-    id: 'low',
-    label: 'Low',
-    value: 5,
-    color: 'hsl(275, 70%, 50%)'
-  },
-  {
-    id: 'medium',
-    label: 'Medium',
-    value: 3,
-    color: 'hsl(50, 70%, 50%)'
-  },
-  {
-    id: 'high',
-    label: 'High',
-    value: 1,
-    color: 'hsl(177, 70%, 50%)'
-  },
-  {
-    id: 'critical',
-    label: 'Critical',
-    value: 1,
-    color: 'hsl(278, 70%, 50%)'
-  }
-];
-const MyResponsivePie = ({ data }: { data: PieDatum[] }) => (
-  <ResponsivePie
-    data={data}
+  return (<ResponsivePie
+    data={data as any}
     margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
     innerRadius={0.5}
     padAngle={0.7}
-  />
-);
+    radialLabelsSkipAngle={10}
+    slicesLabelsSkipAngle={10}
+  />);
+};
 
-const barData = [
-  {
-    port: '443',
-    count: 18,
-    color: 'hsl(275, 70%, 50%)'
-  },
-  {
-    port: '80',
-    count: 16,
-    color: 'hsl(278, 70%, 50%)'
-  },
-  {
-    port: '22',
-    count: 5,
-    color: 'hsl(177, 70%, 50%)'
-  },
-  {
-    port: '21',
-    count: 2,
-    color: 'hsl(50, 70%, 50%)'
-  },
-  {
-    port: '8080',
-    count: 2,
-    color: 'hsl(159, 70%, 50%)'
+const MyResponsiveBar = ({ data }: { data: Point[] }) => {
+  if (!data.length) {
+    return <div>No data found.</div>;
   }
-];
-const barData2 = [
-  {
-    port: '443',
-    count: 18,
-    color: 'hsl(275, 70%, 50%)'
-  },
-  {
-    port: '80',
-    count: 16,
-    color: 'hsl(278, 70%, 50%)'
-  },
-  {
-    port: '22',
-    count: 5,
-    color: 'hsl(177, 70%, 50%)'
-  },
-  {
-    port: '21',
-    count: 2,
-    color: 'hsl(50, 70%, 50%)'
-  },
-  {
-    port: '8080',
-    count: 2,
-    color: 'hsl(159, 70%, 50%)'
-  }
-];
-
-const MyResponsiveBar = ({ data }: { data: BarDatum[] }) => (
-  <ResponsiveBar
-    data={data}
-    keys={['count']}
-    indexBy="port"
+  return (<ResponsiveBar
+    data={data as any}
+    keys={['value']}
+    indexBy="label"
     margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
     padding={0.3}
     colors={{ scheme: 'nivo' }}
@@ -162,11 +54,53 @@ const MyResponsiveBar = ({ data }: { data: BarDatum[] }) => (
     animate={true}
     motionStiffness={90}
     motionDamping={15}
-  />
-);
+  />);
+}
+
+interface Point {
+  id: string;
+  label: string;
+  value: number;
+}
+
+interface Stats {
+  domains: {
+    services: Point[];
+    ports: Point[];
+    numVulnerabilities: Point[];
+    total: number;
+  };
+  vulnerabilities: {
+    severity: Point[];
+  };
+}
+
+interface ApiResponse {
+  result: Stats;
+}
 
 const Risk: React.FC = () => {
-  const { currentOrganization } = useAuthContext();
+  const { currentOrganization, apiPost } = useAuthContext();
+
+  const [stats, setStats] = useState<Stats | undefined>(undefined);
+  const [showAll] = useState<boolean>(false);
+
+  const fetchStats = useCallback(async () => {
+    const { result } = await apiPost<ApiResponse>('/stats', {
+      body: {
+        filters: showAll
+          ? {}
+          : {
+              organization: currentOrganization?.id
+            }
+      }
+    });
+    setStats(result);
+  }, [showAll, apiPost]);
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -174,12 +108,8 @@ const Risk: React.FC = () => {
         Risk Dashboard
         {currentOrganization ? ' - ' + currentOrganization.name : ''}
       </h1>
-      <h2>
-        Note: this data is demo data and not currently pulled from the database.
-        We plan on implementing this this week.
-      </h2>
-      <h2>Total domains: 24</h2>
-      <h1>Top Action Items</h1>
+      {stats && <h2>Total domains: {stats.domains.total}</h2>}
+      {/* <h1>Top Action Items</h1>
       <Table bordered>
         <React.Fragment key=".0">
           <thead>
@@ -209,53 +139,43 @@ const Risk: React.FC = () => {
             </tr>
           </tbody>
         </React.Fragment>
-      </Table>
-      <h1>Technology Breakdown</h1>
-      <div>
-        <div
-          style={{
-            width: '500px',
-            height: '500px',
-            display: 'inline-block',
-            marginRight: '100px'
-          }}
-        >
-          <h3>Most common services</h3>
-          <MyResponsivePie data={pieData} />
-        </div>
+      </Table> */}
+      {stats && (
+        <>
+          <h1>Technology Breakdown</h1>
+          <div>
+          <div
+              className={classes.chart}
+            >
+              <h3>Most common services</h3>
+              <MyResponsivePie data={stats.domains.services} />
+            </div>
 
-        <div
-          style={{ width: '500px', height: '500px', display: 'inline-block' }}
-        >
-          <h3>Most common ports</h3>
-          <MyResponsiveBar data={barData} />
-        </div>
-      </div>
-      <h1>Vulnerabilities Breakdown</h1>
-      <div>
-        <div
-          style={{
-            width: '500px',
-            height: '500px',
-            display: 'inline-block',
-            marginRight: '100px'
-          }}
-        >
-          <h3>Severity Levels</h3>
-          <MyResponsivePie data={pieData2} />
-        </div>
+            <div
+              className={classes.chart}
+            >
+              <h3>Most common ports</h3>
+              <MyResponsiveBar data={stats.domains.ports} />
+            </div>
+          </div>
+          <h1>Vulnerabilities Breakdown</h1>
+          <div>
+            <div
+              className={classes.chart}
+            >
+              <h3>Severity Levels</h3>
+              <MyResponsivePie data={stats.vulnerabilities.severity} />
+            </div>
 
-        <div
-          style={{ width: '500px', height: '500px', display: 'inline-block' }}
-        >
-          <h3>Open Vulnerabilities by Domain</h3>
-          <MyResponsiveBar data={barData2} />
-        </div>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-      </div>
+            <div
+              className={classes.chart}
+            >
+              <h3>Open Vulnerabilities by Domain</h3>
+              <MyResponsiveBar data={stats.domains.numVulnerabilities} />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

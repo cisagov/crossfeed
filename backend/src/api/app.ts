@@ -10,6 +10,7 @@ import * as organizations from './organizations';
 import * as scans from './scans';
 import * as users from './users';
 import * as scanTasks from './scan-tasks';
+import * as stats from './stats';
 
 const handlerToExpress = (handler) => async (req, res, next) => {
   const { statusCode, body } = await handler(
@@ -110,6 +111,7 @@ authenticatedRoute.post(
   '/organizations/:organizationId/granularScans/:scanId/update',
   handlerToExpress(organizations.updateScan)
 );
+authenticatedRoute.post('/stats', handlerToExpress(stats.get));
 authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.get('/users/me', handlerToExpress(users.me));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
