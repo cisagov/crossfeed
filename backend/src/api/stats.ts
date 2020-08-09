@@ -96,12 +96,14 @@ export const get = wrapHandler(async (event) => {
       });
     }
 
-    return (await qs.getRawMany()).map(e => ({
+    return (await qs.getRawMany()).map((e) => ({
       id: String(e.id),
       value: Number(e.value),
       label: String(e.id)
-    })) as {id: string, value: number, label: string}[];
+    })) as { id: string; value: number; label: string }[];
   };
+
+  const MAX = 25;
 
   const services = await performQuery(
     Domain.createQueryBuilder('domain')
@@ -109,6 +111,8 @@ export const get = wrapHandler(async (event) => {
       .innerJoinAndSelect('domain.services', 'services')
       .select('services.service as id, count(*) as value')
       .groupBy('services.service')
+      .orderBy('value', 'DESC')
+      .take(MAX)
   );
   const ports = await performQuery(
     Domain.createQueryBuilder('domain')
@@ -116,7 +120,8 @@ export const get = wrapHandler(async (event) => {
       .innerJoinAndSelect('domain.services', 'services')
       .select('services.port as id, count(*) as value')
       .groupBy('services.port')
-      .orderBy('services.port', 'DESC')
+      .orderBy('value', 'DESC')
+      .take(MAX)
   );
   const numVulnerabilities = await performQuery(
     Domain.createQueryBuilder('domain')
@@ -125,6 +130,7 @@ export const get = wrapHandler(async (event) => {
       .select('domain.name as id, count(*) as value')
       .groupBy('domain.id')
       .orderBy('value', 'DESC')
+      .take(MAX)
   );
   const severity = await performQuery(
     Vulnerability.createQueryBuilder('vulnerability')
@@ -136,14 +142,14 @@ export const get = wrapHandler(async (event) => {
   );
   const total = await performQuery(
     Domain.createQueryBuilder('domain')
-    .innerJoinAndSelect('domain.organization', 'organization')
-    .select("count(*) as value")
-  )
+      .innerJoinAndSelect('domain.organization', 'organization')
+      .select('count(*) as value')
+  );
   const result: Stats = {
     domains: {
       services,
-      ports,
-      numVulnerabilities,
+      ports: ports,
+      numVulnerabilities: numVulnerabilities,
       total: total[0].value
     },
     vulnerabilities: {

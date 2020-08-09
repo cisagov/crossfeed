@@ -5,10 +5,12 @@ import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
 import { Checkbox } from '@trussworks/react-uswds';
 
+const getColor = ({ index }: { index: number}) => {
+  const colors = ["rgb(232, 193, 160)", "rgb(244, 117, 96)", "rgb(241, 225, 91)", "rgb(232, 168, 56)", "rgb(97, 205, 187)", "rgb(151, 227, 213"];
+  return colors[index % colors.length];
+}
+
 const MyResponsivePie = ({ data }: { data: Point[] }) => {
-  if (!data.length) {
-    return <div>No data found.</div>;
-  }
   return (
     <ResponsivePie
       data={data as any}
@@ -21,28 +23,26 @@ const MyResponsivePie = ({ data }: { data: Point[] }) => {
   );
 };
 
-const MyResponsiveBar = ({ data }: { data: Point[] }) => {
-  if (!data.length) {
-    return <div>No data found.</div>;
-  }
+const MyResponsiveBar = ({ data, xLabel, longXValues = false }: { data: Point[], xLabel: string, longXValues?: boolean }) => {
   return (
     <ResponsiveBar
-      data={data as any}
-      keys={['value']}
+      data={data.map(e => ({...e, [xLabel]: e.value })) as any}
+      keys={[xLabel]}
       indexBy="label"
-      margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+      margin={{ top: 50, right: 130, bottom: longXValues ? 250:50, left: 60 }}
       padding={0.3}
-      colors={{ scheme: 'nivo' }}
+      colors={getColor}
+      // colors={{ scheme: 'nivo' }}
       borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
       axisTop={null}
       axisRight={null}
       axisBottom={{
         tickSize: 5,
         tickPadding: 5,
-        tickRotation: 0,
-        legend: 'Port',
+        tickRotation: longXValues ? 90: 0,
+        legend: longXValues ? "": xLabel,
         legendPosition: 'middle',
-        legendOffset: 32
+        legendOffset: 40
       }}
       axisLeft={{
         tickSize: 5,
@@ -58,6 +58,7 @@ const MyResponsiveBar = ({ data }: { data: Point[] }) => {
       animate={true}
       motionStiffness={90}
       motionDamping={15}
+      // isInteractive={false}
     />
   );
 };
@@ -161,27 +162,35 @@ const Risk: React.FC = () => {
         <>
           <h1>Technology Breakdown</h1>
           <div>
-            <div className={classes.chart}>
-              <h3>Most common services</h3>
-              <MyResponsivePie data={stats.domains.services} />
-            </div>
+            {stats.domains.services.length > 0 && (
+              <div className={classes.chart}>
+                <h3>Most common services</h3>
+                <MyResponsivePie data={stats.domains.services} />
+              </div>
+            )}
 
-            <div className={classes.chart}>
-              <h3>Most common ports</h3>
-              <MyResponsiveBar data={stats.domains.ports} />
-            </div>
+            {stats.domains.ports.length > 0 && (
+              <div className={classes.chart}>
+                <h3>Most common ports</h3>
+                <MyResponsiveBar data={stats.domains.ports} xLabel={"Port"} />
+              </div>
+            )}
           </div>
           <h1>Vulnerabilities Breakdown</h1>
           <div>
-            <div className={classes.chart}>
-              <h3>Severity Levels</h3>
-              <MyResponsivePie data={stats.vulnerabilities.severity} />
-            </div>
+            {stats.vulnerabilities.severity.length > 0 && (
+              <div className={classes.chart}>
+                <h3>Severity Levels</h3>
+                <MyResponsivePie data={stats.vulnerabilities.severity} />
+              </div>
+            )}
 
-            <div className={classes.chart}>
-              <h3>Open Vulnerabilities by Domain</h3>
-              <MyResponsiveBar data={stats.domains.numVulnerabilities} />
-            </div>
+            {stats.domains.numVulnerabilities.length > 0 && (
+              <div className={classes.chart}>
+                <h3>Domains with the Most Open Vulnerabilities</h3>
+                <MyResponsiveBar data={stats.domains.numVulnerabilities} xLabel={"Domain"} longXValues={true} />
+              </div>
+            )}
           </div>
         </>
       )}

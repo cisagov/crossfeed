@@ -55,17 +55,19 @@ describe('stats', () => {
           })
         )
         .expect(200);
-      expect(response.body.result).toMatchSnapshot(({
+      expect(response.body.result).toMatchSnapshot({
         domains: {
           numVulnerabilities: [
             {
               id: expect.any(String),
-              label: expect.any(String),
+              label: expect.any(String)
             }
           ]
         }
-      }));
-      expect(response.body.result.domains.numVulnerabilities[0].id).toEqual(domain.name);
+      });
+      expect(response.body.result.domains.numVulnerabilities[0].id).toEqual(
+        domain.name
+      );
     });
     it('get by globalView should filter domains to a single org if specified', async () => {
       const organization = await Organization.create({
@@ -107,24 +109,26 @@ describe('stats', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: "globalView"
+            userType: 'globalView'
           })
         )
         .send({
           filters: { organization: organization.id }
         })
         .expect(200);
-        expect(response.body.result).toMatchSnapshot(({
-          domains: {
-            numVulnerabilities: [
-              {
-                id: expect.any(String),
-                label: expect.any(String),
-              }
-            ]
-          }
-        }));
-        expect(response.body.result.domains.numVulnerabilities[0].id).toEqual(domain.name);
+      expect(response.body.result).toMatchSnapshot({
+        domains: {
+          numVulnerabilities: [
+            {
+              id: expect.any(String),
+              label: expect.any(String)
+            }
+          ]
+        }
+      });
+      expect(response.body.result.domains.numVulnerabilities[0].id).toEqual(
+        domain.name
+      );
     });
   });
 });
