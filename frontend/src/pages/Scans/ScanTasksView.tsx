@@ -75,12 +75,14 @@ export const ScanTasksView: React.FC = () => {
       id: 'name',
       accessor: ({ scan }) => scan?.name,
       Filter: selectFilter([
+        // TODO: sync this with the SCAN_SCHEMA
         'censys',
         'amass',
         'findomain',
         'portscanner',
         'wappalyzer',
-        'censysIpv4'
+        'censysIpv4',
+        'cve'
       ]),
       disableSortBy: true
     },

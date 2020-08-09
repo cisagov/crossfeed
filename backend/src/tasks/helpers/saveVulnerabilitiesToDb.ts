@@ -1,0 +1,24 @@
+import { connectToDatabase, Vulnerability } from '../../models';
+
+export default async (vulnerabilities: Vulnerability[]): Promise<void> => {
+  await connectToDatabase();
+
+  for (const vulnerability of vulnerabilities) {
+    await Vulnerability.createQueryBuilder()
+      .insert()
+      .values(vulnerability)
+      .onConflict(
+        `
+          ("domainId", "title") DO UPDATE
+          SET "lastSeen" = excluded."lastSeen",
+              "cvss" = excluded."cvss",
+              "description" = excluded."description",
+              "cve" = excluded."cve",
+              "cwe" = excluded."cwe",
+              "cpe" = excluded."cpe",
+              "state" = excluded."state"
+      `
+      )
+      .execute();
+  }
+};
