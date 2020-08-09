@@ -81,7 +81,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     cpu: '1024',
     memory: '4096',
     numChunks: 20,
-    description: ''
+    description: 'Reads from censys ipv4 dataset'
+  },
+  cve: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    description: 'Matches detected software versions to CVEs'
   }
 };
 

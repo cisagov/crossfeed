@@ -56,6 +56,14 @@ export const createColumns: CreateColumns = () => [
     Filter: ColumnFilter
   },
   {
+    Header: 'Vulnerabilities',
+    id: 'vulnerabilities',
+    accessor: domain =>
+      domain.vulnerabilities &&
+      domain.vulnerabilities.map(vulnerability => vulnerability.cve).join(', '),
+    Filter: ColumnFilter
+  },
+  {
     Header: 'Updated',
     id: 'updatedAt',
     accessor: ({ updatedAt }) =>

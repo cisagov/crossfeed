@@ -19,11 +19,14 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     wget \
     unzip \
+    ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
 RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/download/1.7.0/findomain-linux -O /usr/bin/findomain && chmod +x /usr/bin/findomain
 
 RUN wget --quiet https://github.com/OWASP/Amass/releases/download/v3.7.3/amass_linux_i386.zip -O amass.zip && unzip -q amass.zip && cp amass_linux_i386/amass /usr/bin && chmod +x /usr/bin/amass
+
+RUN wget --quiet https://github.com/cablej/nvdtools/releases/download/v0.1.4/nvdtools-tip-linux-arm64.tar.gz -O nvdtools.tar.gz && tar -xf nvdtools.tar.gz && cp nvdtools-tip/bin/csv2cpe nvdtools-tip/bin/nvdsync nvdtools-tip/bin/cpe2cve /usr/bin && chmod +x /usr/bin/csv2cpe /usr/bin/nvdsync /usr/bin/cpe2cve
 
 FROM node:14-buster-slim
 
@@ -31,7 +34,8 @@ WORKDIR /app
 
 COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 
-COPY --from=deps /usr/bin/findomain /usr/bin/findomain
-COPY --from=deps /usr/bin/amass /usr/bin/amass
+COPY --from=deps /usr/bin/findomain /usr/bin/amass /usr/bin/csv2cpe /usr/bin/nvdsync /usr/bin/cpe2cve /usr/bin/
+
+COPY --from=deps /etc/ssl/certs /etc/ssl/certs
 
 CMD ["node", "worker.bundle.js"]

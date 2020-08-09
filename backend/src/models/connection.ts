@@ -2,7 +2,7 @@ import { createConnection, Connection } from 'typeorm';
 import {
   Domain,
   Service,
-  Report,
+  Vulnerability,
   Scan,
   Organization,
   User,
@@ -23,7 +23,7 @@ const connectDb = async (logging?: boolean) => {
     entities: [
       Domain,
       Service,
-      Report,
+      Vulnerability,
       Scan,
       Organization,
       User,
