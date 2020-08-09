@@ -63,7 +63,7 @@ authenticatedRoute.post(
   handlerToExpress(vulnerabilities.list)
 );
 authenticatedRoute.get(
-  '/vulnerabilities/:reportId',
+  '/vulnerabilities/:vulnerabilityId',
   handlerToExpress(vulnerabilities.get)
 );
 authenticatedRoute.get('/scans', handlerToExpress(scans.list));

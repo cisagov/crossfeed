@@ -3,7 +3,6 @@ import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
-import * as path from 'path';
 
 /**
  * The CVE scan finds vulnerable CVEs affecting domains based on CPEs identified

@@ -16,7 +16,7 @@ export const createColumns: CreateColumns = () => [
   },
   {
     Header: 'Domain',
-    accessor: ({ domain }) => domain.name,
+    accessor: ({ domain }) => domain?.name,
     width: 800,
     Filter: ColumnFilter
   },

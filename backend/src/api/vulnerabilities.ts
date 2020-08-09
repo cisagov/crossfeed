@@ -12,7 +12,8 @@ import {
 import { Type } from 'class-transformer';
 import { Vulnerability, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
-import { SelectQueryBuilder } from 'typeorm';
+import { SelectQueryBuilder, In } from 'typeorm';
+import { getOrgMemberships, isGlobalViewAdmin } from './auth';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
@@ -42,7 +43,7 @@ class VulnerabilitySearch {
   @IsString()
   @IsIn(['title', 'createdAt', 'cvss', 'state'])
   @IsOptional()
-  sort: string = 'name';
+  sort: string = 'createdAt';
 
   @IsString()
   @IsIn(['ASC', 'DESC'])
@@ -53,6 +54,11 @@ class VulnerabilitySearch {
   @IsObject()
   @IsOptional()
   filters?: VulnerabilityFilters;
+
+  @IsInt()
+  @IsOptional()
+  // If set to -1, returns all results.
+  pageSize?: number;
 
   filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>) {
     if (this.filters?.title) {
@@ -78,14 +84,23 @@ class VulnerabilitySearch {
     return qs;
   }
 
-  async getResults() {
-    const qs = Vulnerability.createQueryBuilder('vulnerability')
+  async getResults(event) {
+    const pageSize = this.pageSize || PAGE_SIZE;
+    let qs = Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
-      .orderBy(`vulnerability.${this.sort}`, this.order)
-      .skip(PAGE_SIZE * (this.page - 1))
-      .take(PAGE_SIZE);
+      .leftJoinAndSelect('domain.organization', 'organization')
+      .orderBy(`vulnerability.${this.sort}`, this.order);
+    
+      if (pageSize !== -1) {
+        qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
+      }
 
     this.filterResultQueryset(qs);
+    if (!isGlobalViewAdmin(event)) {
+      qs.andWhere('organization.id IN (:...orgs)', {
+        orgs: getOrgMemberships(event)
+      });
+    }
     return await qs.getManyAndCount();
   }
 }
@@ -93,7 +108,7 @@ class VulnerabilitySearch {
 export const list = wrapHandler(async (event) => {
   await connectToDatabase();
   const search = await validateBody(VulnerabilitySearch, event.body);
-  const [result, count] = await search.getResults();
+  const [result, count] = await search.getResults(event);
   return {
     statusCode: 200,
     body: JSON.stringify({
@@ -105,12 +120,16 @@ export const list = wrapHandler(async (event) => {
 
 export const get = wrapHandler(async (event) => {
   await connectToDatabase();
+  let where = isGlobalViewAdmin(event) ? {}: { domain: { organization: In(getOrgMemberships(event)) } };
+
   const id = event.pathParameters?.vulnerabilityId;
   if (!isUUID(id)) {
     return NotFound;
   }
 
-  const result = await Vulnerability.findOne(id);
+  const result = await Vulnerability.findOne(id, {
+    where
+  });
 
   return {
     statusCode: result ? 200 : 404,
