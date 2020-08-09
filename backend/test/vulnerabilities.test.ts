@@ -166,7 +166,7 @@ describe('vulnerabilities', () => {
     });
   });
   describe('get', () => {
-    it("get by org user should work for item in the user's org", async () => {
+    it("get by org user should work for vulnerability in the user's org", async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
@@ -178,6 +178,10 @@ describe('vulnerabilities', () => {
         organization
       }).save();
       const vulnerability = await Vulnerability.create({
+        title: 'test-' + Math.random(),
+        domain
+      }).save();
+      const vulnerability2 = await Vulnerability.create({
         title: 'test-' + Math.random(),
         domain
       }).save();
@@ -197,7 +201,7 @@ describe('vulnerabilities', () => {
         .expect(200);
       expect(response.body.id).toEqual(vulnerability.id);
     });
-    it("get by org user should not work for item not in the user's org", async () => {
+    it("get by org user should not work for vulnerability not in the user's org", async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
@@ -234,7 +238,7 @@ describe('vulnerabilities', () => {
         .expect(404);
       expect(response.body).toEqual({});
     });
-    it('get by globalView should work for any item', async () => {
+    it('get by globalView should work for any vulnerability', async () => {
       const domain = await Domain.create({
         name: 'test-' + Math.random(),
       }).save();

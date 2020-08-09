@@ -7,7 +7,8 @@ import {
   isUUID,
   IsOptional,
   IsObject,
-  IsNumber
+  IsNumber,
+  IsUUID
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Vulnerability, connectToDatabase } from '../models';
@@ -18,6 +19,10 @@ import { getOrgMemberships, isGlobalViewAdmin } from './auth';
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
 class VulnerabilityFilters {
+  @IsUUID()
+  @IsOptional()
+  id?: string;
+
   @IsString()
   @IsOptional()
   title?: string;
@@ -61,6 +66,11 @@ class VulnerabilitySearch {
   pageSize?: number;
 
   filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>) {
+    if (this.filters?.id) {
+      qs.andWhere('vulnerability.id = :id', {
+        id: this.filters.id
+      });
+    }
     if (this.filters?.title) {
       qs.andWhere('vulnerability.title ILIKE :title', {
         title: `%${this.filters.title}%`
@@ -120,19 +130,20 @@ export const list = wrapHandler(async (event) => {
 
 export const get = wrapHandler(async (event) => {
   await connectToDatabase();
-  let where = isGlobalViewAdmin(event) ? {}: { domain: { organization: In(getOrgMemberships(event)) } };
-
   const id = event.pathParameters?.vulnerabilityId;
   if (!isUUID(id)) {
     return NotFound;
   }
 
-  const result = await Vulnerability.findOne(id, {
-    where
-  });
+  // Need to use QueryBuilder because typeorm doesn't support nested
+  // relations filtering -- see https://github.com/typeorm/typeorm/issues/3890
+  const search = new VulnerabilitySearch();
+  search.filters = new VulnerabilityFilters();
+  search.filters.id = id;
+  const [result] = await search.getResults(event);
 
   return {
-    statusCode: result ? 200 : 404,
-    body: result ? JSON.stringify(result) : ''
+    statusCode: result.length ? 200 : 404,
+    body: result.length ? JSON.stringify(result[0]) : ''
   };
 });
