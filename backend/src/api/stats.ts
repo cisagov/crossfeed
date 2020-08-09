@@ -96,12 +96,11 @@ export const get = wrapHandler(async (event) => {
       });
     }
 
-    return (await qs.getRawMany()).map((e) => ({
-      id: e.id,
+    return (await qs.getRawMany()).map(e => ({
+      id: String(e.id),
       value: Number(e.value),
-      label: e.id,
-      ...e
-    }));
+      label: String(e.id)
+    })) as {id: string, value: number, label: string}[];
   };
 
   const services = await performQuery(
@@ -135,12 +134,17 @@ export const get = wrapHandler(async (event) => {
       .groupBy('vulnerability.cvss')
       .orderBy('vulnerability.cvss', 'ASC')
   );
+  const total = await performQuery(
+    Domain.createQueryBuilder('domain')
+    .innerJoinAndSelect('domain.organization', 'organization')
+    .select("count(*) as value")
+  )
   const result: Stats = {
     domains: {
       services,
       ports,
       numVulnerabilities,
-      total: await Domain.count({})
+      total: total[0].value
     },
     vulnerabilities: {
       severity
