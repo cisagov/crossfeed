@@ -5,10 +5,17 @@ import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
 import { Checkbox } from '@trussworks/react-uswds';
 
-const getColor = ({ index }: { index: number}) => {
-  const colors = ["rgb(232, 193, 160)", "rgb(244, 117, 96)", "rgb(241, 225, 91)", "rgb(232, 168, 56)", "rgb(97, 205, 187)", "rgb(151, 227, 213"];
+const getColor = ({ index }: { index: number }) => {
+  const colors = [
+    'rgb(232, 193, 160)',
+    'rgb(244, 117, 96)',
+    'rgb(241, 225, 91)',
+    'rgb(232, 168, 56)',
+    'rgb(97, 205, 187)',
+    'rgb(151, 227, 213'
+  ];
   return colors[index % colors.length];
-}
+};
 
 const MyResponsivePie = ({ data }: { data: Point[] }) => {
   return (
@@ -23,13 +30,21 @@ const MyResponsivePie = ({ data }: { data: Point[] }) => {
   );
 };
 
-const MyResponsiveBar = ({ data, xLabel, longXValues = false }: { data: Point[], xLabel: string, longXValues?: boolean }) => {
+const MyResponsiveBar = ({
+  data,
+  xLabel,
+  longXValues = false
+}: {
+  data: Point[];
+  xLabel: string;
+  longXValues?: boolean;
+}) => {
   return (
     <ResponsiveBar
-      data={data.map(e => ({...e, [xLabel]: e.value })) as any}
+      data={data.map(e => ({ ...e, [xLabel]: e.value })) as any}
       keys={[xLabel]}
       indexBy="label"
-      margin={{ top: 50, right: 130, bottom: longXValues ? 250:50, left: 60 }}
+      margin={{ top: 50, right: 130, bottom: longXValues ? 250 : 50, left: 60 }}
       padding={0.3}
       colors={getColor}
       // colors={{ scheme: 'nivo' }}
@@ -39,8 +54,8 @@ const MyResponsiveBar = ({ data, xLabel, longXValues = false }: { data: Point[],
       axisBottom={{
         tickSize: 5,
         tickPadding: 5,
-        tickRotation: longXValues ? 90: 0,
-        legend: longXValues ? "": xLabel,
+        tickRotation: longXValues ? 90 : 0,
+        legend: longXValues ? '' : xLabel,
         legendPosition: 'middle',
         legendOffset: 40
       }}
@@ -101,6 +116,7 @@ const Risk: React.FC = () => {
             }
       }
     });
+    console.log(result);
     setStats(result);
   }, [showAll, apiPost, currentOrganization]);
 
@@ -172,7 +188,7 @@ const Risk: React.FC = () => {
             {stats.domains.ports.length > 0 && (
               <div className={classes.chart}>
                 <h3>Most common ports</h3>
-                <MyResponsiveBar data={stats.domains.ports} xLabel={"Port"} />
+                <MyResponsiveBar data={stats.domains.ports} xLabel={'Port'} />
               </div>
             )}
           </div>
@@ -188,7 +204,11 @@ const Risk: React.FC = () => {
             {stats.domains.numVulnerabilities.length > 0 && (
               <div className={classes.chart}>
                 <h3>Domains with the Most Open Vulnerabilities</h3>
-                <MyResponsiveBar data={stats.domains.numVulnerabilities} xLabel={"Domain"} longXValues={true} />
+                <MyResponsiveBar
+                  data={stats.domains.numVulnerabilities}
+                  xLabel={'Domain'}
+                  longXValues={true}
+                />
               </div>
             )}
           </div>

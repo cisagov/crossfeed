@@ -11,8 +11,6 @@ import { validateBody, wrapHandler } from './helpers';
 import { SelectQueryBuilder } from 'typeorm';
 import { isGlobalViewAdmin, getOrgMemberships } from './auth';
 
-const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
-
 interface Point {
   id: string;
   label: string;
@@ -43,41 +41,6 @@ class StatsSearch {
   @IsObject()
   @IsOptional()
   filters?: StatsFilters;
-
-  @IsInt()
-  @IsOptional()
-  // If set to -1, returns all results.
-  pageSize?: number;
-
-  filterResultQueryset(qs: SelectQueryBuilder<Domain>) {
-    return qs;
-  }
-
-  async getResults() {
-    // let qs = Service.createQueryBuilder('domain')
-    //   .leftJoinAndSelect('domain.services', 'services')
-    //   .groupBy("services.")
-    //   .leftJoinAndSelect('domain.organization', 'organization')
-    //   .leftJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
-    //   .orderBy(`domain.${this.sort}`, this.order)
-    //   .groupBy(
-    //     'domain.id, domain.ip, domain.name, organization.id, services.id, vulnerabilities.id'
-    //   );
-    // if (pageSize !== -1) {
-    //   qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
-    // }
-
-    // if (!isGlobalViewAdmin(event)) {
-    //   qs.andHaving('domain.organization IN (:...orgs)', {
-    //     orgs: getOrgMemberships(event)
-    //   });
-    // }
-
-    // this.filterResultQueryset(qs);
-    // return await qs.getMany();
-
-    return {};
-  }
 }
 
 export const get = wrapHandler(async (event) => {
@@ -103,8 +66,6 @@ export const get = wrapHandler(async (event) => {
     })) as { id: string; value: number; label: string }[];
   };
 
-  const MAX = 25;
-
   const services = await performQuery(
     Domain.createQueryBuilder('domain')
       .innerJoinAndSelect('domain.organization', 'organization')
@@ -112,7 +73,6 @@ export const get = wrapHandler(async (event) => {
       .select('services.service as id, count(*) as value')
       .groupBy('services.service')
       .orderBy('value', 'DESC')
-      .take(MAX)
   );
   const ports = await performQuery(
     Domain.createQueryBuilder('domain')
@@ -121,7 +81,6 @@ export const get = wrapHandler(async (event) => {
       .select('services.port as id, count(*) as value')
       .groupBy('services.port')
       .orderBy('value', 'DESC')
-      .take(MAX)
   );
   const numVulnerabilities = await performQuery(
     Domain.createQueryBuilder('domain')
@@ -130,7 +89,6 @@ export const get = wrapHandler(async (event) => {
       .select('domain.name as id, count(*) as value')
       .groupBy('domain.id')
       .orderBy('value', 'DESC')
-      .take(MAX)
   );
   const severity = await performQuery(
     Vulnerability.createQueryBuilder('vulnerability')
