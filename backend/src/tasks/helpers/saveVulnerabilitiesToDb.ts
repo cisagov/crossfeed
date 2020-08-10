@@ -12,6 +12,7 @@ export default async (vulnerabilities: Vulnerability[]): Promise<void> => {
           ("domainId", "title") DO UPDATE
           SET "lastSeen" = excluded."lastSeen",
               "cvss" = excluded."cvss",
+              "severity" = excluded."severity",
               "description" = excluded."description",
               "cve" = excluded."cve",
               "cwe" = excluded."cwe",
