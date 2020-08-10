@@ -23,6 +23,16 @@ variable db_name {
   default = "crossfeed-stage-db"
 }
 
+variable db_instance_class {
+  type    = string
+  default = "db.t3.micro"
+}
+
+variable db_storage_encrypted {
+  type    = bool
+  default = false
+}
+
 variable api_domain {
   type    = string
   default = "stage.api.crossfeed2.dds.mil"
