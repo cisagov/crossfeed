@@ -1,10 +1,4 @@
-import {
-  IsInt,
-  ValidateNested,
-  IsOptional,
-  IsObject,
-  IsUUID
-} from 'class-validator';
+import { ValidateNested, IsOptional, IsObject, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Domain, connectToDatabase, Vulnerability } from '../models';
 import { validateBody, wrapHandler } from './helpers';
