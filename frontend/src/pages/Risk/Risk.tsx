@@ -3,7 +3,7 @@ import classes from './Risk.module.scss';
 import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
-import { Checkbox } from '@trussworks/react-uswds';
+import { Checkbox, Grid } from '@trussworks/react-uswds';
 
 const getColor = ({ index }: { index: number }) => {
   const colors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
@@ -96,7 +96,14 @@ const Risk: React.FC = () => {
   const { currentOrganization, user, apiPost } = useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
-  const [showAll, setShowAll] = useState<boolean>(false);
+  const [showAll, setShowAll] = useState<boolean>(
+    JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
+  );
+
+  const updateShowAll = (state: boolean) => {
+    setShowAll(state);
+    localStorage.setItem('showGlobal', JSON.stringify(state));
+  };
 
   const fetchStats = useCallback(async () => {
     const { result } = await apiPost<ApiResponse>('/stats', {
@@ -118,22 +125,28 @@ const Risk: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <h1>
-        Risk Dashboard
-        {currentOrganization ? ' - ' + currentOrganization.name : ''}
-      </h1>
-      {((user?.roles && user.roles.length > 0) ||
-        user?.userType === 'globalView' ||
-        user?.userType === 'globalAdmin') && (
-        <Checkbox
-          id="showAll"
-          name="showAll"
-          label="Show all organizations"
-          checked={showAll}
-          onChange={e => setShowAll(e.target.checked)}
-          className={classes.showAll}
-        />
-      )}
+      <Grid row>
+        <Grid tablet={{ col: true }}>
+          <h1>
+            Risk Dashboard
+            {currentOrganization ? ' - ' + currentOrganization.name : ''}
+          </h1>
+        </Grid>
+        <Grid style={{ float: 'right' }}>
+          {((user?.roles && user.roles.length > 1) ||
+            user?.userType === 'globalView' ||
+            user?.userType === 'globalAdmin') && (
+            <Checkbox
+              id="showAll"
+              name="showAll"
+              label="Show all organizations"
+              checked={showAll}
+              onChange={e => updateShowAll(e.target.checked)}
+              className={classes.showAll}
+            />
+          )}
+        </Grid>
+      </Grid>
       {stats && <h2>Total domains: {stats.domains.total}</h2>}
       {/* <h1>Top Action Items</h1>
       <Table bordered>
