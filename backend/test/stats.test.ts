@@ -31,7 +31,8 @@ describe('stats', () => {
       await Vulnerability.create({
         title: 'vuln title',
         domain,
-        cvss: 9
+        cvss: 9,
+        severity: 'High'
       }).save();
       await Service.create({
         service: 'http',
@@ -84,7 +85,8 @@ describe('stats', () => {
       await Vulnerability.create({
         title: 'vuln title',
         domain,
-        cvss: 9
+        cvss: 9,
+        severity: 'High'
       }).save();
       await Service.create({
         service: 'http',
@@ -97,7 +99,8 @@ describe('stats', () => {
       await Vulnerability.create({
         title: 'vuln title 2',
         domain: domain2,
-        cvss: 1
+        cvss: 1,
+        severity: 'Low'
       }).save();
       await Service.create({
         service: 'https',

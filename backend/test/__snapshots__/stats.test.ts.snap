@@ -29,8 +29,8 @@ Object {
   "vulnerabilities": Object {
     "severity": Array [
       Object {
-        "id": "9",
-        "label": "9",
+        "id": "High",
+        "label": "High",
         "value": 1,
       },
     ],
@@ -67,8 +67,8 @@ Object {
   "vulnerabilities": Object {
     "severity": Array [
       Object {
-        "id": "9",
-        "label": "9",
+        "id": "High",
+        "label": "High",
         "value": 1,
       },
     ],
