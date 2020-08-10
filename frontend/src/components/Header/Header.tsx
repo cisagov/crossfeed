@@ -18,8 +18,7 @@ export const Header: React.FC = () => {
     setMobileExpanded(expanded => !expanded);
   };
 
-  const dashboardTitle =
-    'Dashboard' + (currentOrganization ? ' - ' + currentOrganization.name : '');
+  const dashboardTitle = 'Dashboard';
 
   const orgUserNav = [
     <NavLink

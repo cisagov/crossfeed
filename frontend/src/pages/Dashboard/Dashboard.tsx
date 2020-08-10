@@ -144,21 +144,25 @@ export const Dashboard: React.FC = () => {
         <Grid tablet={{ col: true }}>
           <h1>
             Dashboard
-            {currentOrganization ? ' - ' + currentOrganization.name : ''}
+            {showAll
+              ? ' - Global'
+              : currentOrganization
+              ? ' - ' + currentOrganization.name
+              : ''}
           </h1>{' '}
         </Grid>
-        <Grid tablet={{ col: true }}>
-          {((user?.roles && user.roles.length > 0) ||
+        <Grid style={{ float: 'right' }}>
+          {((user?.roles && user.roles.length > 1) ||
             user?.userType === 'globalView' ||
             user?.userType === 'globalAdmin') && (
-      <Checkbox
-        id="showAll"
-        name="showAll"
-        label="Show all organizations"
-        checked={showAll}
-        onChange={e => setShowAll(e.target.checked)}
-        className={classes.showAll}
-      />
+            <Checkbox
+              id="showAll"
+              name="showAll"
+              label="Show all organizations"
+              checked={showAll}
+              onChange={e => setShowAll(e.target.checked)}
+              className={classes.showAll}
+            />
           )}
         </Grid>
       </Grid>
