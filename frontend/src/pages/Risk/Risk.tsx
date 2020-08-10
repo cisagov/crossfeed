@@ -6,14 +6,7 @@ import { useAuthContext } from 'context';
 import { Checkbox } from '@trussworks/react-uswds';
 
 const getColor = ({ index }: { index: number }) => {
-  const colors = [
-    'rgb(232, 193, 160)',
-    'rgb(244, 117, 96)',
-    'rgb(241, 225, 91)',
-    'rgb(232, 168, 56)',
-    'rgb(97, 205, 187)',
-    'rgb(151, 227, 213'
-  ];
+  const colors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
   return colors[index % colors.length];
 };
 
@@ -47,7 +40,6 @@ const MyResponsiveBar = ({
       margin={{ top: 50, right: 130, bottom: longXValues ? 250 : 50, left: 60 }}
       padding={0.3}
       colors={getColor}
-      // colors={{ scheme: 'nivo' }}
       borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
       axisTop={null}
       axisRight={null}
