@@ -70,6 +70,7 @@ export const get = wrapHandler(async (event) => {
     Domain.createQueryBuilder('domain')
       .innerJoinAndSelect('domain.organization', 'organization')
       .innerJoinAndSelect('domain.services', 'services')
+      .where('services.service IS NOT NULL')
       .select('services.service as id, count(*) as value')
       .groupBy('services.service')
       .orderBy('value', 'DESC')
@@ -85,7 +86,7 @@ export const get = wrapHandler(async (event) => {
   const numVulnerabilities = await performQuery(
     Domain.createQueryBuilder('domain')
       .innerJoinAndSelect('domain.organization', 'organization')
-      .innerJoinAndSelect('domain.services', 'services')
+      .innerJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
       .select('domain.name as id, count(*) as value')
       .groupBy('domain.id')
       .orderBy('value', 'DESC')
