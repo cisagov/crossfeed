@@ -100,9 +100,9 @@ export const get = wrapHandler(async (event) => {
     Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
       .leftJoinAndSelect('domain.organization', 'organization')
-      .select('vulnerability.cvss as id, count(*) as value')
-      .groupBy('vulnerability.cvss')
-      .orderBy('vulnerability.cvss', 'ASC')
+      .select('vulnerability.severity as id, count(*) as value')
+      .groupBy('vulnerability.severity')
+      .orderBy('vulnerability.severity', 'ASC')
   );
   const total = await performQuery(
     Domain.createQueryBuilder('domain')

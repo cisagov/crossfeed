@@ -22,18 +22,7 @@ export const createColumns: CreateColumns = () => [
   },
   {
     Header: 'Severity',
-    accessor: ({ cvss }) => {
-      if (!cvss) return;
-      if (cvss < 4) {
-        return 'Low';
-      } else if (cvss < 7) {
-        return 'Medium';
-      } else if (cvss < 9) {
-        return 'High';
-      } else {
-        return 'Critical';
-      }
-    },
+    accessor: ({ severity }) => severity,
     width: 100,
     disableFilters: true
     // Filter: selectFilter([
