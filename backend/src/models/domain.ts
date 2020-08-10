@@ -15,7 +15,7 @@ import { Organization } from './organization';
 import { Vulnerability } from './vulnerability';
 
 @Entity()
-@Index(['name'], { unique: true })
+@Index(['name', 'organization'], { unique: true })
 export class Domain extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
