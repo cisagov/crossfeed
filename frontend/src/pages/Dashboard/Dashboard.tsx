@@ -31,10 +31,17 @@ export const Dashboard: React.FC = () => {
     sort: [{ id: 'name', desc: true }],
     filters: []
   });
-  const [showAll, setShowAll] = useState<boolean>(false);
+  const [showAll, setShowAll] = useState<boolean>(
+    JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
+  );
   const columns = useMemo(() => createColumns(), []);
   const PAGE_SIZE = 25;
   const history = useHistory();
+
+  const updateShowAll = (state: boolean) => {
+    setShowAll(state);
+    localStorage.setItem('showGlobal', JSON.stringify(state));
+  };
 
   const queryDomains = useCallback(
     async ({
@@ -160,7 +167,7 @@ export const Dashboard: React.FC = () => {
               name="showAll"
               label="Show all organizations"
               checked={showAll}
-              onChange={e => setShowAll(e.target.checked)}
+              onChange={e => updateShowAll(e.target.checked)}
               className={classes.showAll}
             />
           )}
