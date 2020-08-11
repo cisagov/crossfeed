@@ -67,7 +67,7 @@ describe('domains', () => {
       expect(response.body.count).toEqual(2);
     });
     it('list by globalView with org filter should only return domains from that org', async () => {
-      let organization = await Organization.create({
+      const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
