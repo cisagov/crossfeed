@@ -6,6 +6,7 @@ import { Table, Paginator } from 'components';
 import { createColumns } from './columns';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
+import { Grid, Checkbox } from '@trussworks/react-uswds';
 
 export interface ApiResponse {
   result: Vulnerability[];
@@ -13,16 +14,32 @@ export interface ApiResponse {
 }
 
 export const Vulnerabilities: React.FC = () => {
-  const { apiPost } = useAuthContext();
+  const { user, currentOrganization, apiPost } = useAuthContext();
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
   const [pageCount, setPageCount] = useState(0);
-
   const columns = useMemo(() => createColumns(), []);
+  const [showAll, setShowAll] = useState<boolean>(
+    JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
+  );
 
-  const fetchDomains = useCallback(
+  const updateShowAll = (state: boolean) => {
+    setShowAll(state);
+    localStorage.setItem('showGlobal', JSON.stringify(state));
+  };
+
+  const fetchVulnerabilities = useCallback(
     async (query: Query<Vulnerability>) => {
       const { page, sort, filters } = query;
       try {
+        const tableFilters = filters
+          .filter(f => Boolean(f.value))
+          .reduce(
+            (accum, next) => ({
+              ...accum,
+              [next.id]: next.value
+            }),
+            {}
+          );
         const { result, count } = await apiPost<ApiResponse>(
           '/vulnerabilities/search',
           {
@@ -30,15 +47,10 @@ export const Vulnerabilities: React.FC = () => {
               page,
               sort: sort[0]?.id ?? 'createdAt',
               order: sort[0]?.desc ? 'DESC' : 'ASC',
-              filters: filters
-                .filter(f => Boolean(f.value))
-                .reduce(
-                  (accum, next) => ({
-                    ...accum,
-                    [next.id]: next.value
-                  }),
-                  {}
-                )
+              filters: {
+                ...tableFilters,
+                organization: showAll ? undefined : currentOrganization?.id
+              }
             }
           }
         );
@@ -48,7 +60,7 @@ export const Vulnerabilities: React.FC = () => {
         console.error(e);
       }
     },
-    [apiPost]
+    [apiPost, showAll]
   );
 
   const renderPagination = (table: TableInstance<Vulnerability>) => (
@@ -76,13 +88,38 @@ export const Vulnerabilities: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <h1>Vulnerabilities</h1>
+      <Grid row>
+        <Grid tablet={{ col: true }}>
+          <h1>
+            Vulnerabilities
+            {showAll
+              ? ' - Global'
+              : currentOrganization
+              ? ' - ' + currentOrganization.name
+              : ''}
+          </h1>
+        </Grid>
+        <Grid style={{ float: 'right' }}>
+          {((user?.roles && user.roles.length > 1) ||
+            user?.userType === 'globalView' ||
+            user?.userType === 'globalAdmin') && (
+            <Checkbox
+              id="showAll"
+              name="showAll"
+              label="Show all organizations"
+              checked={showAll}
+              onChange={e => updateShowAll(e.target.checked)}
+              className={classes.showAll}
+            />
+          )}
+        </Grid>
+      </Grid>
       <Table<Vulnerability>
         renderPagination={renderPagination}
         columns={columns}
         data={vulnerabilities}
         pageCount={pageCount}
-        fetchData={fetchDomains}
+        fetchData={fetchVulnerabilities}
         renderExpanded={renderExpanded}
       />
     </div>
