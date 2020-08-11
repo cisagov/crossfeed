@@ -89,14 +89,14 @@ export const Domain: React.FC = () => {
                 </div>
               </div>
               <div className={classes.imgWrapper}>
-                <div style={{ float: 'right', marginBottom: '20px' }}>
+                {/* <div style={{ float: 'right', marginBottom: '20px' }}>
                   <Button
                     type="button"
                     onClick={() => setShowReviewModal(true)}
                   >
                     Request Active Scan <FaBolt></FaBolt>
                   </Button>
-                </div>
+                </div> */}
                 <img
                   src={domain.screenshot || noImage}
                   alt={

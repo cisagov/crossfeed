@@ -59,8 +59,17 @@ export const Vulnerabilities: React.FC = () => {
     const { original } = row;
     return (
       <div className={classes.expandedRoot}>
-        <h4>Description</h4>
-        <div className={classes.desc}>{original.title}</div>
+        <h4>Details</h4>
+        <div className={classes.desc}>
+          {original.cve && (
+            <a
+              href={`https://nvd.nist.gov/vuln/detail/${original.cve}`}
+              target="_blank"
+            >
+              View vulnerability description
+            </a>
+          )}
+        </div>
       </div>
     );
   }, []);
