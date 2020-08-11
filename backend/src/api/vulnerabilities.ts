@@ -38,6 +38,10 @@ class VulnerabilityFilters {
   @IsString()
   @IsOptional()
   state?: string;
+
+  @IsUUID()
+  @IsOptional()
+  organization?: string;
 }
 
 class VulnerabilitySearch {
@@ -89,6 +93,11 @@ class VulnerabilitySearch {
     if (this.filters?.state) {
       qs.andWhere('vulnerability.state=:state', {
         state: this.filters.state
+      });
+    }
+    if (this.filters?.organization) {
+      qs.andWhere('organization.id IN (:...orgs)', {
+        orgs: [this.filters.organization]
       });
     }
     return qs;
