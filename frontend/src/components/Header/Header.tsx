@@ -144,6 +144,14 @@ export const Header: React.FC = () => {
     </NavLink>,
     <NavLink
       activeClassName="usa-current"
+      to="/risk"
+      key="risk"
+      className="usa-nav__link"
+    >
+      <span>Risk Summary</span>
+    </NavLink>,
+    <NavLink
+      activeClassName="usa-current"
       to="/organization"
       key="organization"
       className="usa-nav__link"

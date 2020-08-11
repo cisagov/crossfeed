@@ -71,6 +71,15 @@ export const handler = async (commandOptions: CommandOptions) => {
     if (parts.length < 5) continue;
     const domain = hostsToCheck[parseInt(parts[0])].domain;
 
+    const cvss = parseFloat(parts[3]);
+    let severity: string;
+
+    if (cvss === 0) severity = 'None';
+    else if (cvss < 4) severity = 'Low';
+    else if (cvss < 7) severity = 'Medium';
+    else if (cvss < 9) severity = 'High';
+    else severity = 'Critical';
+
     vulnerabilities.push(
       plainToClass(Vulnerability, {
         domain: domain,
@@ -79,7 +88,8 @@ export const handler = async (commandOptions: CommandOptions) => {
         cve: parts[1],
         cwe: parts[4],
         cpe: parts[2],
-        cvss: parseFloat(parts[3]),
+        cvss,
+        severity,
         state: 'open'
       })
     );

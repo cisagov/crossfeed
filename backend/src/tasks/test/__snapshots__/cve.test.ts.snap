@@ -15,6 +15,7 @@ Object {
   "description": "",
   "id": Any<String>,
   "lastSeen": 2019-04-22T10:20:30.000Z,
+  "severity": "Critical",
   "state": "open",
   "title": "CVE-2019-10866",
 }
@@ -30,6 +31,7 @@ Object {
   "description": "",
   "id": Any<String>,
   "lastSeen": 2019-04-22T10:20:30.000Z,
+  "severity": "High",
   "state": "open",
   "title": "CVE-2019-11590",
 }
