@@ -14,7 +14,7 @@ describe('vulnerabilities', () => {
     await connectToDatabase();
   });
   describe('list', () => {
-    it('list by org user should return only domains from that org', async () => {
+    it('list by org user should only return vulnerabilities from that org', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
@@ -54,7 +54,7 @@ describe('vulnerabilities', () => {
       expect(response.body.count).toEqual(1);
       expect(response.body.result[0].id).toEqual(vulnerability.id);
     });
-    it('list by globalView should return domains from all orgs', async () => {
+    it('list by globalView should return vulnerabilities from all orgs', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
@@ -90,6 +90,44 @@ describe('vulnerabilities', () => {
         })
         .expect(200);
       expect(response.body.count).toEqual(2);
+    });
+    it('list by globalView with org filter should work', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const domain = await Domain.create({
+        name: 'test-' + Math.random(),
+        organization
+      }).save();
+      const title = 'test-' + Math.random();
+      const vulnerability = await Vulnerability.create({
+        title: title + '-1',
+        domain
+      }).save();
+      const domain2 = await Domain.create({
+        name: 'test-' + Math.random()
+      }).save();
+      const vulnerability2 = await Vulnerability.create({
+        title: title + '-2',
+        domain: domain2
+      }).save();
+      const response = await request(app)
+        .post('/vulnerabilities/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalView'
+          })
+        )
+        .send({
+          filters: { organization: organization.id }
+        })
+        .expect(200);
+      expect(response.body.count).toEqual(1);
+      expect(response.body.result[0].id).toEqual(vulnerability.id);
     });
     it('list by org user with custom pageSize should work', async () => {
       const organization = await Organization.create({

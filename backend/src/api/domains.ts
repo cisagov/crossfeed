@@ -6,7 +6,8 @@ import {
   ValidateNested,
   isUUID,
   IsOptional,
-  IsObject
+  IsObject,
+  IsUUID
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Domain, connectToDatabase } from '../models';
@@ -32,6 +33,10 @@ class DomainFilters {
   @IsString()
   @IsOptional()
   ip?: string;
+
+  @IsUUID()
+  @IsOptional()
+  organization?: string;
 }
 
 class DomainSearch {
@@ -78,6 +83,11 @@ class DomainSearch {
         { service: `%${this.filters?.service}%` }
       );
     }
+    if (this.filters?.organization) {
+      qs.andWhere('domain.organization = :org', {
+        org: this.filters.organization
+      });
+    }
     return qs;
   }
 
@@ -122,6 +132,11 @@ class DomainSearch {
     if (this.filters?.service) {
       qs.andWhere('services.service ILIKE :service', {
         service: `%${this.filters?.service}%`
+      });
+    }
+    if (this.filters?.organization) {
+      qs.andWhere('domain.organization = :org', {
+        org: this.filters.organization
       });
     }
   }
