@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import classes from './Risk.module.scss';
-import { ResponsivePie, PieDatum } from '@nivo/pie';
+import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
 import { Checkbox, Grid } from '@trussworks/react-uswds';
