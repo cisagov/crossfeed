@@ -12,7 +12,7 @@ COPY src ./src
 
 RUN npx webpack --config webpack.worker.config.js
 
-FROM node:14-buster-slim as deps
+FROM golang:1.14.6-buster as deps
 
 WORKDIR /app
 
@@ -26,7 +26,9 @@ RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/download/1.7.0/
 
 RUN wget --quiet https://github.com/OWASP/Amass/releases/download/v3.7.3/amass_linux_i386.zip -O amass.zip && unzip -q amass.zip && cp amass_linux_i386/amass /usr/bin && chmod +x /usr/bin/amass
 
-RUN wget --quiet https://github.com/cablej/nvdtools/releases/download/v0.1.4/nvdtools-tip-linux-arm64.tar.gz -O nvdtools.tar.gz && tar -xf nvdtools.tar.gz && cp nvdtools-tip/bin/csv2cpe nvdtools-tip/bin/nvdsync nvdtools-tip/bin/cpe2cve /usr/bin && chmod +x /usr/bin/csv2cpe /usr/bin/nvdsync /usr/bin/cpe2cve
+RUN go mod init crossfeed-worker
+
+RUN go get github.com/facebookincubator/nvdtools/...@v0.1.4
 
 FROM node:14-buster-slim
 
@@ -34,7 +36,7 @@ WORKDIR /app
 
 COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 
-COPY --from=deps /usr/bin/findomain /usr/bin/amass /usr/bin/csv2cpe /usr/bin/nvdsync /usr/bin/cpe2cve /usr/bin/
+COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsync /go/bin/cpe2cve /usr/bin/
 
 COPY --from=deps /etc/ssl/certs /etc/ssl/certs
 
