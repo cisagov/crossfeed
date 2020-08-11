@@ -84,8 +84,8 @@ class DomainSearch {
       );
     }
     if (this.filters?.organization) {
-      qs.andWhere('domain.organization IN (:...orgs)', {
-        orgs: [this.filters.organization]
+      qs.andWhere('domain.organization = :org', {
+        org: this.filters.organization
       });
     }
     return qs;

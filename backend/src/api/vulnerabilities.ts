@@ -96,8 +96,8 @@ class VulnerabilitySearch {
       });
     }
     if (this.filters?.organization) {
-      qs.andWhere('organization.id IN (:...orgs)', {
-        orgs: [this.filters.organization]
+      qs.andWhere('organization.id = :org', {
+        org: this.filters.organization
       });
     }
     return qs;
