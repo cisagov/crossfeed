@@ -60,7 +60,7 @@ export const Vulnerabilities: React.FC = () => {
         console.error(e);
       }
     },
-    [apiPost, showAll]
+    [apiPost, showAll, currentOrganization]
   );
 
   const renderPagination = (table: TableInstance<Vulnerability>) => (
@@ -77,6 +77,7 @@ export const Vulnerabilities: React.FC = () => {
             <a
               href={`https://nvd.nist.gov/vuln/detail/${original.cve}`}
               target="_blank"
+              rel="noopener noreferrer"
             >
               View vulnerability description
             </a>

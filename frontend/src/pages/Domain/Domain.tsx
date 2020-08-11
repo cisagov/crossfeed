@@ -9,8 +9,7 @@ import {
   FaNetworkWired,
   FaCloud,
   FaClock,
-  FaBuilding,
-  FaBolt
+  FaBuilding
 } from 'react-icons/fa';
 import { ServicesTable, SSLInfo, WebInfo } from 'components';
 import {
