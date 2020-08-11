@@ -1,16 +1,25 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import classes from './Risk.module.scss';
-import { ResponsivePie } from '@nivo/pie';
+import { ResponsivePie, PieDatum } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
 import { Checkbox, Grid } from '@trussworks/react-uswds';
 
+const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
+
 const getColor = ({ index }: { index: number }) => {
-  const colors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
-  return colors[index % colors.length];
+  return allColors[index % allColors.length];
 };
 
-const MyResponsivePie = ({ data }: { data: Point[] }) => {
+const getSeverityColor = ({ id }: { id: string }) => {
+  if (id === 'None') return 'rgb(255, 255, 255)';
+  else if (id === 'Low') return 'rgb(194, 244, 255)';
+  else if (id === 'Medium') return 'rgb(0, 185, 227)';
+  else if (id === 'High') return 'rgb(0, 111, 162)';
+  else if (id === 'Critical') return 'rgb(0, 73, 121)';
+};
+
+const MyResponsivePie = ({ data, colors }: { data: Point[]; colors: any }) => {
   return (
     <ResponsivePie
       data={data as any}
@@ -19,6 +28,7 @@ const MyResponsivePie = ({ data }: { data: Point[] }) => {
       padAngle={0.7}
       radialLabelsSkipAngle={10}
       slicesLabelsSkipAngle={10}
+      colors={colors}
     />
   );
 };
@@ -115,7 +125,6 @@ const Risk: React.FC = () => {
             }
       }
     });
-    console.log(result);
     setStats(result);
   }, [showAll, apiPost, currentOrganization]);
 
@@ -128,8 +137,12 @@ const Risk: React.FC = () => {
       <Grid row>
         <Grid tablet={{ col: true }}>
           <h1>
-            Risk Dashboard
-            {currentOrganization ? ' - ' + currentOrganization.name : ''}
+            Risk Summary
+            {showAll
+              ? ' - Global'
+              : currentOrganization
+              ? ' - ' + currentOrganization.name
+              : ''}
           </h1>
         </Grid>
         <Grid style={{ float: 'right' }}>
@@ -186,7 +199,10 @@ const Risk: React.FC = () => {
             {stats.domains.services.length > 0 && (
               <div className={classes.chart}>
                 <h3>Most common services</h3>
-                <MyResponsivePie data={stats.domains.services} />
+                <MyResponsivePie
+                  data={stats.domains.services}
+                  colors={allColors}
+                />
               </div>
             )}
 
@@ -202,7 +218,10 @@ const Risk: React.FC = () => {
             {stats.vulnerabilities.severity.length > 0 && (
               <div className={classes.chart}>
                 <h3>Severity Levels</h3>
-                <MyResponsivePie data={stats.vulnerabilities.severity} />
+                <MyResponsivePie
+                  data={stats.vulnerabilities.severity}
+                  colors={getSeverityColor}
+                />
               </div>
             )}
 
