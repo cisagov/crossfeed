@@ -34,18 +34,16 @@ const filterEmpty = <T>(value: T | undefined | null): value is T => {
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
+
+  console.log('Running wappalyzer on organization', organizationName);
+
   const liveWebsites = await getLiveWebsites(organizationId!);
-
   const queue = new PQueue({ concurrency: 5 });
-
   const results: (Domain | undefined)[] = await Promise.all(
     liveWebsites.map((site) => queue.add(() => wappalyze(site)))
   );
   const domains = results.filter(filterEmpty);
 
-  console.log('Running wappalyzer on organization', organizationName);
-
-  // const domains = await Promise.all
   await saveDomainsToDb(domains);
   console.log(`Wappalyzer finished for ${domains.length} domains`);
 };

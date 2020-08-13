@@ -27,12 +27,6 @@ httpsService.port = 443;
 const httpService = new Service();
 httpService.port = 80;
 
-const apiResponse = {
-  data: 'testdata',
-  status: 200,
-  headers: {}
-};
-
 const wappalyzerResponse = [
   {
     name: 'Drupal',
