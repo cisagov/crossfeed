@@ -5,6 +5,9 @@ import axios from 'axios';
 import { CommandOptions } from './ecs-client';
 import getLiveWebsites from './helpers/getLiveWebsites';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
+import * as pLimit from 'p-limit';
+
+const maxConcurrency = pLimit(500);
 
 const wappalyze = async (domain: Domain): Promise<Domain | undefined> => {
   const ports = domain.services.map((service) => service.port);
@@ -38,7 +41,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   const liveWebsites = await getLiveWebsites(organizationId!);
   const wappalyzeResults: (Domain | undefined)[] = await Promise.all(
-    liveWebsites.map(wappalyze)
+    liveWebsites.map(site => maxConcurrency(() => wappalyze(site)))
   );
   const domains: Domain[] = wappalyzeResults.filter(filterEmpty);
 
