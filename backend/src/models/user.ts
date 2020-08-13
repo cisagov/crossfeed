@@ -6,9 +6,9 @@ import {
   CreateDateColumn,
   BaseEntity,
   OneToMany,
-  PrimaryColumn,
   BeforeInsert,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  BeforeUpdate
 } from 'typeorm';
 import { Role } from './';
 
@@ -59,6 +59,7 @@ export class User extends BaseEntity {
   roles: Role[];
 
   @BeforeInsert()
+  @BeforeUpdate()
   setFullName() {
     this.fullName = this.firstName + ' ' + this.lastName;
   }

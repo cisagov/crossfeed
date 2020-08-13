@@ -125,14 +125,22 @@ export const invite = wrapHandler(async (event) => {
 
   if (body.organization) {
     // Create approved role if organization supplied
-    const role = Role.create({
-      user: user,
-      organization: { id: body.organization },
-      approved: true,
-      role: body.organizationAdmin ? 'admin' : 'user'
-    });
-
-    await role.save();
+    await Role.createQueryBuilder()
+      .insert()
+      .values({
+        user: user,
+        organization: { id: body.organization },
+        approved: true,
+        role: body.organizationAdmin ? 'admin' : 'user'
+      })
+      .onConflict(
+        `
+      ("userId", "organizationId") DO UPDATE
+      SET "role" = excluded."role",
+          "approved" = excluded."approved"
+    `
+      )
+      .execute();
   }
 
   // TODO: Send invite email via SES
