@@ -5,9 +5,7 @@ import axios from 'axios';
 import { CommandOptions } from './ecs-client';
 import getLiveWebsites from './helpers/getLiveWebsites';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
-import * as pLimit from 'p-limit';
-
-const maxConcurrency = pLimit(500);
+import PQueue from 'p-queue';
 
 const wappalyze = async (domain: Domain): Promise<Domain | undefined> => {
   const ports = domain.services.map((service) => service.port);
@@ -36,15 +34,18 @@ const filterEmpty = <T>(value: T | undefined | null): value is T => {
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
+  const liveWebsites = await getLiveWebsites(organizationId!);
+
+  const queue = new PQueue({ concurrency: 5 });
+
+  const results: (Domain | undefined)[] = await Promise.all(
+    liveWebsites.map((site) => queue.add(() => wappalyze(site)))
+  );
+  const domains = results.filter(filterEmpty);
 
   console.log('Running wappalyzer on organization', organizationName);
 
-  const liveWebsites = await getLiveWebsites(organizationId!);
-  const wappalyzeResults: (Domain | undefined)[] = await Promise.all(
-    liveWebsites.map(site => maxConcurrency(() => wappalyze(site)))
-  );
-  const domains: Domain[] = wappalyzeResults.filter(filterEmpty);
-
+  // const domains = await Promise.all
   await saveDomainsToDb(domains);
   console.log(`Wappalyzer finished for ${domains.length} domains`);
 };

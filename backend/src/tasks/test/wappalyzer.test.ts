@@ -1,14 +1,11 @@
 import { mocked } from 'ts-jest/utils';
-import axios from 'axios';
 import getLiveWebsites from '../helpers/getLiveWebsites';
 import wappalyzer from 'simple-wappalyzer';
 import { Domain, Service } from '../../models';
 import { CommandOptions } from '../ecs-client';
 import { handler } from '../wappalyzer';
 import saveDomainsToDb from '../helpers/saveDomainsToDb';
-
-jest.mock('axios');
-const axiosMock = mocked(axios, true);
+import * as nock from 'nock';
 
 jest.mock('../helpers/getLiveWebsites');
 const getLiveWebsitesMock = mocked(getLiveWebsites);
@@ -67,7 +64,6 @@ describe('wappalyzer', () => {
   beforeEach(() => {
     testDomain = new Domain();
     testDomain.name = 'example.com';
-    axiosMock.get.mockResolvedValue(apiResponse);
     getLiveWebsitesMock.mockResolvedValue([]);
     wappalyzer.mockResolvedValue([]);
     logSpy.mockImplementation(() => {});
@@ -75,10 +71,10 @@ describe('wappalyzer', () => {
   });
 
   afterEach(() => {
-    axiosMock.get.mockReset();
     getLiveWebsitesMock.mockReset();
     wappalyzer.mockReset();
     saveDomainsToDbMock.mockReset();
+    nock.cleanAll();
   });
 
   afterAll(() => {
@@ -105,20 +101,31 @@ describe('wappalyzer', () => {
   test('calls https for domain with port 443', async () => {
     testDomain.services = [httpsService];
     getLiveWebsitesMock.mockResolvedValue([testDomain]);
-    const res = await handler(commandOptions);
-    expect(axiosMock.get).toHaveBeenCalledTimes(1);
-    expect(axiosMock.get.mock.calls[0][0]).toEqual('https://example.com');
+    const scope = nock('https://example.com')
+      .get('/')
+      .times(1)
+      .reply(200, 'somedata');
+    await handler(commandOptions);
+    scope.done();
   });
 
   test('calls http for domains without port 443', async () => {
     testDomain.services = [httpService];
     getLiveWebsitesMock.mockResolvedValue([testDomain]);
+    const scope = nock('http://example.com')
+      .get('/')
+      .times(1)
+      .reply(200, 'somedata');
     await handler(commandOptions);
-    expect(axiosMock.get).toHaveBeenCalledTimes(1);
-    expect(axiosMock.get.mock.calls[0][0]).toEqual('http://example.com');
+    scope.done();
   });
 
   test('saves domains to database that have a result', async () => {
+    const scope = nock(/https?:\/\/example2?\.com/)
+      .persist()
+      .get('/')
+      .times(2)
+      .reply(200, 'somedata');
     const testDomains = [
       {
         ...testDomain,
@@ -134,11 +141,10 @@ describe('wappalyzer', () => {
     wappalyzer
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce(wappalyzerResponse);
+
     await handler(commandOptions);
-    expect(axiosMock.get).toHaveBeenCalledTimes(2);
-    const calledUrls = axiosMock.get.mock.calls.map((call) => call[0]);
-    expect(calledUrls).toContain('http://example2.com');
-    expect(calledUrls).toContain('https://example.com');
+    scope.done();
+    expect(wappalyzer).toHaveBeenCalledTimes(2);
     expect(saveDomainsToDbMock).toHaveBeenCalledTimes(1);
     // only the domain with results was saved
     expect(saveDomainsToDbMock.mock.calls).toHaveLength(1);
@@ -150,20 +156,23 @@ describe('wappalyzer', () => {
   test('logs error on wappalyzer failure', async () => {
     testDomain.services = [];
     getLiveWebsitesMock.mockResolvedValue([testDomain]);
+    const scope = nock('http://example.com').get('/').reply(200, 'somedata');
     const err = new Error('testerror');
     wappalyzer.mockRejectedValue(err);
     await handler(commandOptions);
+    scope.done();
     expect(errSpy).toHaveBeenCalledTimes(1);
     expect(errSpy).toHaveBeenCalledWith(err);
   });
 
   test('logs error on axios failure', async () => {
     testDomain.services = [];
+    const scope = nock('http://example.com')
+      .get('/')
+      .replyWithError('network error');
     getLiveWebsitesMock.mockResolvedValue([testDomain]);
-    const err = new Error('testerror');
-    axiosMock.get.mockRejectedValue(err);
     await handler(commandOptions);
+    scope.done();
     expect(errSpy).toHaveBeenCalledTimes(1);
-    expect(errSpy).toHaveBeenCalledWith(err);
   });
 });
