@@ -109,6 +109,14 @@ const ScansView: React.FC = () => {
         </span>
       ),
       disableFilters: true
+    },
+    {
+      Header: 'Description',
+      accessor: ({ name }) => scanSchema[name]?.description,
+      width: 200,
+      maxWidth: 200,
+      id: 'description',
+      disableFilters: true
     }
   ];
   const [errors, setErrors] = useState<Errors>({});
@@ -225,9 +233,10 @@ const ScansView: React.FC = () => {
           value={values.name}
         >
           {Object.keys(scanSchema).map(i => {
+            const description = scanSchema[i].description;
             return (
               <option key={i} value={i}>
-                {i}
+                {i}{description ? `: ${description}`: ""}
               </option>
             );
           })}
