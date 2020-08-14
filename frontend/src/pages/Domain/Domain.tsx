@@ -125,7 +125,7 @@ export const Domain: React.FC = () => {
                     <FaBuilding />
                     Organization
                   </label>
-                  <span>{domain.organization.name}</span>
+                  <span>{domain.organization?.name}</span>
                 </div>
 
                 <div className={classes.headerRow}>
@@ -133,7 +133,7 @@ export const Domain: React.FC = () => {
                     <FaClock />
                     Passive Mode
                   </label>
-                  <span>{domain.organization.isPassive ? 'Yes' : 'No'}</span>
+                  <span>{domain.organization?.isPassive ? 'Yes' : 'No'}</span>
                 </div>
               </div>
               <div className={classes.imgWrapper}>
