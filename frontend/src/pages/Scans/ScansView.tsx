@@ -236,12 +236,13 @@ const ScansView: React.FC = () => {
             const description = scanSchema[i].description;
             return (
               <option key={i} value={i}>
-                {i}{description ? `: ${description}`: ""}
+                {i}
               </option>
             );
           })}
         </Dropdown>
-        <Label htmlFor="arguments">Arguments</Label>
+        <p>{selectedScan.description}</p>
+        {/* <Label htmlFor="arguments">Arguments</Label>
         <TextInput
           required
           id="arguments"
@@ -250,8 +251,7 @@ const ScansView: React.FC = () => {
           type="text"
           value={values.arguments}
           onChange={onTextChange}
-        />
-        <br />
+        /> */}
         {!selectedScan.global && (
           <Checkbox
             id="isGranular"
@@ -270,9 +270,9 @@ const ScansView: React.FC = () => {
               value={values.organizations}
               onChange={e => onChange('organizations', e)}
             />
+            <br />
           </>
         )}
-        <br />
         <div className="form-group form-inline">
           <label style={{ marginRight: '10px' }} htmlFor="frequency">
             Run every
