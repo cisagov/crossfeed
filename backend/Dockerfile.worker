@@ -40,4 +40,4 @@ COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsy
 
 COPY --from=deps /etc/ssl/certs /etc/ssl/certs
 
-CMD ["node", "worker.bundle.js"]
+CMD ["node", "--unhandled-rejections=strict", "worker.bundle.js"]

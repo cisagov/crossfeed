@@ -49,6 +49,7 @@ const launchSingleScanTask = async ({
           `Successfully invoked ${scan.name} scan with fargate. ` +
             (numChunks ? ` Chunk ${chunkNumber}/${numChunks}` : '')
         );
+        console.log(result.tasks);
       }
     } else {
       throw new Error('Invalid type ' + type);
