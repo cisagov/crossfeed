@@ -163,6 +163,7 @@ describe('user', () => {
       expect(response.body.invitePending).toEqual(false);
       expect(response.body.firstName).toEqual('new first name');
       expect(response.body.lastName).toEqual('new last name');
+      expect(response.body.fullName).toEqual('new first name new last name');
       expect(response.body.roles[1].approved).toEqual(true);
       expect(response.body.roles[1].role).toEqual('user');
     });
