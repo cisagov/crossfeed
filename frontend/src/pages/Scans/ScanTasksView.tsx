@@ -187,6 +187,12 @@ export const ScanTasksView: React.FC = () => {
         fetchData={fetchScanTasks}
         count={count}
         pageSize={PAGE_SIZE}
+        initialSortBy={[
+          {
+            id: 'createdAt',
+            desc: true
+          }
+        ]}
       />
     </>
   );
