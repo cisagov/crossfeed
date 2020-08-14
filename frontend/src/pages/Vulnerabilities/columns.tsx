@@ -4,6 +4,7 @@ import { Vulnerability } from 'types';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ColumnFilter, selectFilter } from 'components';
+import { Link } from 'react-router-dom';
 
 type CreateColumns = () => Column<Vulnerability>[];
 
@@ -16,23 +17,19 @@ export const createColumns: CreateColumns = () => [
   },
   {
     Header: 'Domain',
-    accessor: ({ domain }) => domain?.name,
+    id: 'domain',
+    accessor: ({ domain }) => (
+      <Link to={`/domain/${domain.id}`}>{domain?.name}</Link>
+    ),
     width: 800,
     Filter: ColumnFilter
   },
   {
     Header: 'Severity',
+    id: 'severity',
     accessor: ({ severity }) => severity,
     width: 100,
-    disableFilters: true
-    // Filter: selectFilter([
-    //   'low',
-    //   'medium',
-    //   'high',
-    //   'critical',
-    //   'none',
-    //   'unknown'
-    // ])
+    Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
   },
   {
     Header: 'Created',
@@ -44,6 +41,7 @@ export const createColumns: CreateColumns = () => [
   },
   {
     Header: 'State',
+    id: 'state',
     accessor: 'state',
     width: 100,
     Filter: selectFilter(['open', 'closed'])

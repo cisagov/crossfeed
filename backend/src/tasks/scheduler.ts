@@ -171,18 +171,21 @@ export const handler: Handler<Event> = async (event) => {
       continue;
     }
     const { global } = SCAN_SCHEMA[scan.name];
+    let launchedScan = false;
 
     if (global) {
       // Global scans are not associated with an organization.
       if (!(await shouldRunScan({ scan }))) {
         continue;
       }
+      launchedScan = true;
       await launchScanTask({ scan });
     } else if (scan.isGranular) {
       for (const organization of scan.organizations) {
         if (!(await shouldRunScan({ organization, scan }))) {
           continue;
         }
+        launchedScan = true;
         await launchScanTask({ organization, scan });
       }
     } else {
@@ -190,10 +193,13 @@ export const handler: Handler<Event> = async (event) => {
         if (!(await shouldRunScan({ organization, scan }))) {
           continue;
         }
+        launchedScan = true;
         await launchScanTask({ organization, scan });
       }
     }
-    scan.lastRun = new Date();
-    await scan.save();
+    if (launchedScan) {
+      scan.lastRun = new Date();
+      await scan.save();
+    }
   }
 };
