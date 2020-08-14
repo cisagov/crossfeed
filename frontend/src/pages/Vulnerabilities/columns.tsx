@@ -16,23 +16,17 @@ export const createColumns: CreateColumns = () => [
   },
   {
     Header: 'Domain',
+    id: 'domain',
     accessor: ({ domain }) => domain?.name,
     width: 800,
     Filter: ColumnFilter
   },
   {
     Header: 'Severity',
+    id: 'severity',
     accessor: ({ severity }) => severity,
     width: 100,
-    disableFilters: true
-    // Filter: selectFilter([
-    //   'low',
-    //   'medium',
-    //   'high',
-    //   'critical',
-    //   'none',
-    //   'unknown'
-    // ])
+    Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
   },
   {
     Header: 'Created',
@@ -44,6 +38,7 @@ export const createColumns: CreateColumns = () => [
   },
   {
     Header: 'State',
+    id: 'state',
     accessor: 'state',
     width: 100,
     Filter: selectFilter(['open', 'closed'])

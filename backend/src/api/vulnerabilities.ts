@@ -27,13 +27,13 @@ class VulnerabilityFilters {
   @IsOptional()
   title?: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  cvssLowerBound?: number;
+  domain?: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  cvssUpperBound?: number;
+  severity?: string;
 
   @IsString()
   @IsOptional()
@@ -66,6 +66,7 @@ class VulnerabilitySearch {
   pageSize?: number;
 
   filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>) {
+    console.log(this.filters);
     if (this.filters?.id) {
       qs.andWhere('vulnerability.id = :id', {
         id: this.filters.id
@@ -76,14 +77,14 @@ class VulnerabilitySearch {
         title: `%${this.filters.title}%`
       });
     }
-    if (this.filters?.cvssLowerBound) {
-      qs.andWhere('vulnerability.cvss>=:cvssLowerBound', {
-        cvssLowerBound: this.filters.cvssLowerBound
+    if (this.filters?.domain) {
+      qs.andWhere('domain.name ILIKE :name', {
+        name: `%${this.filters.domain}%`
       });
     }
-    if (this.filters?.cvssUpperBound) {
-      qs.andWhere('vulnerability.cvss<=:cvssUpperBound', {
-        cvssUpperBound: this.filters.cvssUpperBound
+    if (this.filters?.severity) {
+      qs.andWhere('vulnerability.severity=:severity', {
+        severity: this.filters.severity
       });
     }
     if (this.filters?.state) {
