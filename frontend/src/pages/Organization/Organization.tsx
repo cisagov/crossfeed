@@ -351,9 +351,15 @@ export const Organization: React.FC = () => {
       const user: User = await apiPost('/users/', {
         body
       });
-      let role = user.roles[user.roles.length - 1];
-      role.user = user;
-      setUserRoles(userRoles.concat([role]));
+      let newRole = user.roles[user.roles.length - 1];
+      newRole.user = user;
+      if (userRoles.find(role => role.user.id === user.id)) {
+        setUserRoles(
+          userRoles.map(role => (role.user.id === user.id ? newRole : role))
+        );
+      } else {
+        setUserRoles(userRoles.concat([newRole]));
+      }
     } catch (e) {
       setErrors({
         global:
