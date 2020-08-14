@@ -13,13 +13,7 @@ import {
   FaMinus,
   FaPlus
 } from 'react-icons/fa';
-import {
-  ServicesTable,
-  SSLInfo,
-  WebInfo,
-  ColumnFilter,
-  selectFilter
-} from 'components';
+import { ServicesTable, SSLInfo, WebInfo } from 'components';
 import {
   Button,
   Overlay,
