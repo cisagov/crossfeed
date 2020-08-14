@@ -233,7 +233,6 @@ const ScansView: React.FC = () => {
           value={values.name}
         >
           {Object.keys(scanSchema).map(i => {
-            const description = scanSchema[i].description;
             return (
               <option key={i} value={i}>
                 {i}
