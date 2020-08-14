@@ -46,7 +46,7 @@ jobs:
           npm run setup-e2e -- -d
           npm install -g wait-port
           wait-port -t 3000 80 5432
-          curl --retry 20 http://localhost
+          curl --retry-all-errors 20 http://localhost
         working-directory: ./
       - name: Run e2e tests
         run: npm run e2e
