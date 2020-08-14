@@ -78,6 +78,11 @@ variable ssm_worker_subnet {
   default = ""
 }
 
+variable ssm_worker_arn {
+  type    = string
+  default = ""
+}
+
 variable db_table_name {
   type    = string
   default = "cfstagedb"

@@ -9,3 +9,16 @@ syncdb:
 
 makeGlobalAdmin:
   handler: src/tasks/makeGlobalAdmin.handler
+
+updateScanTaskStatus:
+  handler: src/tasks/updateScanTaskStatus.handler
+  events:
+    - eventBridge:
+        pattern:
+          source:
+            - aws.ecs
+          detail-type:
+            - ECS Task State Change
+          detail:
+            clusterArn:
+              - ${file(../env.yml):${self:provider.stage}-ecs-cluster, ''}
