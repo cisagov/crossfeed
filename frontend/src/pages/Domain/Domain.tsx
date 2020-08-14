@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { Domain as DomainType } from 'types';
+import { Domain as DomainType, Vulnerability } from 'types';
 import noImage from './no-image.png';
 import {
   FaGlobe,
@@ -10,7 +10,8 @@ import {
   FaCloud,
   FaClock,
   FaBuilding,
-  FaBolt
+  FaMinus,
+  FaPlus
 } from 'react-icons/fa';
 import { ServicesTable, SSLInfo, WebInfo } from 'components';
 import {
@@ -19,6 +20,10 @@ import {
   ModalContainer,
   Modal
 } from '@trussworks/react-uswds';
+import { Table } from 'components';
+import { Column, CellProps } from 'react-table';
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { renderExpandedVulnerability } from '../Vulnerabilities/Vulnerabilities';
 
 export const Domain: React.FC = () => {
   const { domainId } = useParams();
@@ -39,6 +44,49 @@ export const Domain: React.FC = () => {
   useEffect(() => {
     fetchDomain();
   }, [fetchDomain]);
+
+  const vulnerabilityColumns: Column<Vulnerability>[] = [
+    {
+      Header: 'Title',
+      accessor: 'title',
+      width: 800,
+      disableFilters: true
+    },
+    {
+      Header: 'Severity',
+      id: 'severity',
+      accessor: ({ severity }) => severity,
+      width: 100,
+      disableFilters: true
+    },
+    {
+      Header: 'Created',
+      id: 'created',
+      accessor: ({ createdAt }) =>
+        `${formatDistanceToNow(parseISO(createdAt))} ago`,
+      width: 250,
+      disableFilters: true
+    },
+    {
+      Header: 'State',
+      id: 'state',
+      accessor: 'state',
+      width: 100,
+      disableFilters: true
+    },
+    {
+      Header: 'Details',
+      Cell: ({ row }: CellProps<Vulnerability>) => (
+        <span
+          {...row.getToggleRowExpandedProps()}
+          className="text-center display-block"
+        >
+          {row.isExpanded ? <FaMinus /> : <FaPlus />}
+        </span>
+      ),
+      disableFilters: true
+    }
+  ];
 
   return (
     <div className={classes.root}>
@@ -89,14 +137,14 @@ export const Domain: React.FC = () => {
                 </div>
               </div>
               <div className={classes.imgWrapper}>
-                <div style={{ float: 'right', marginBottom: '20px' }}>
+                {/* <div style={{ float: 'right', marginBottom: '20px' }}>
                   <Button
                     type="button"
                     onClick={() => setShowReviewModal(true)}
                   >
                     Request Active Scan <FaBolt></FaBolt>
                   </Button>
-                </div>
+                </div> */}
                 <img
                   src={domain.screenshot || noImage}
                   alt={
@@ -121,6 +169,23 @@ export const Domain: React.FC = () => {
               <div className={classes.section}>
                 <h3>Known Web Technologies</h3>
                 <WebInfo webTechnologies={domain.webTechnologies} />
+              </div>
+            )}
+            {domain.vulnerabilities && (
+              <div className={classes.section}>
+                <h3>Vulnerabilities</h3>
+
+                <Table<Vulnerability>
+                  columns={vulnerabilityColumns}
+                  data={domain.vulnerabilities}
+                  renderExpanded={renderExpandedVulnerability}
+                  initialSortBy={[
+                    {
+                      id: 'created',
+                      desc: false
+                    }
+                  ]}
+                />
               </div>
             )}
           </>
