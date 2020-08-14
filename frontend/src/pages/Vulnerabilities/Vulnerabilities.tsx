@@ -13,6 +13,26 @@ export interface ApiResponse {
   count: number;
 }
 
+export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
+  const { original } = row;
+  return (
+    <div className={classes.expandedRoot}>
+      <h4>Details</h4>
+      <div className={classes.desc}>
+        {original.cve && (
+          <a
+            href={`https://nvd.nist.gov/vuln/detail/${original.cve}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View vulnerability description
+          </a>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export const Vulnerabilities: React.FC = () => {
   const { user, currentOrganization, apiPost } = useAuthContext();
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
@@ -67,26 +87,6 @@ export const Vulnerabilities: React.FC = () => {
     <Paginator table={table} />
   );
 
-  const renderExpanded = useCallback((row: Row<Vulnerability>) => {
-    const { original } = row;
-    return (
-      <div className={classes.expandedRoot}>
-        <h4>Details</h4>
-        <div className={classes.desc}>
-          {original.cve && (
-            <a
-              href={`https://nvd.nist.gov/vuln/detail/${original.cve}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View vulnerability description
-            </a>
-          )}
-        </div>
-      </div>
-    );
-  }, []);
-
   return (
     <div className={classes.root}>
       <Grid row>
@@ -121,7 +121,7 @@ export const Vulnerabilities: React.FC = () => {
         data={vulnerabilities}
         pageCount={pageCount}
         fetchData={fetchVulnerabilities}
-        renderExpanded={renderExpanded}
+        renderExpanded={renderExpandedVulnerability}
       />
     </div>
   );
