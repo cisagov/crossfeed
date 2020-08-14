@@ -65,11 +65,11 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: false,
     global: false,
-    description: ''
+    description: 'Active port scan of common ports'
   },
   wappalyzer: {
     type: 'fargate',
-    isPassive: false,
+    isPassive: true,
     global: false,
     description:
       'Open source tool that fingerprints web technologies based on HTTP responses'
@@ -81,13 +81,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     cpu: '1024',
     memory: '4096',
     numChunks: 20,
-    description: 'Reads from censys ipv4 dataset'
+    description: 'Fetch passive port and banner data from censys ipv4 dataset'
   },
   cve: {
     type: 'fargate',
     isPassive: true,
     global: true,
-    description: 'Matches detected software versions to CVEs'
+    description: 'Matches detected software versions to CVEs from NIST NVD'
   }
 };
 
