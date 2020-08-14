@@ -14,7 +14,7 @@ import {
 import { Table, ImportExport } from 'components';
 import { Column } from 'react-table';
 import { Scan, Organization, ScanSchema } from 'types';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaEdit } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import MultiSelect from './MultiSelect';
@@ -93,6 +93,21 @@ const ScansView: React.FC = () => {
       },
       width: 200,
       id: 'lastRun',
+      disableFilters: true
+    },
+    {
+      Header: 'Edit',
+      id: 'edit',
+      Cell: ({ row }: { row: { index: number } }) => (
+        <span
+          onClick={() => {
+            setShowModal(true);
+            setSelectedRow(row.index);
+          }}
+        >
+          <FaEdit />
+        </span>
+      ),
       disableFilters: true
     },
     {
@@ -367,7 +382,7 @@ const ScansView: React.FC = () => {
             >
               <p>
                 Are you sure you would like to delete the{' '}
-                <code>{scans[selectedRow].name}</code> scan?
+                <code>{scans[selectedRow].name}</code> scan? This will delete all ScanTasks and history associated with the scan.
               </p>
             </Modal>
           </ModalContainer>

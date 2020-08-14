@@ -9,6 +9,7 @@ import {
   AuthLogin,
   AuthCreateAccount,
   Scans,
+  Scan,
   Logs,
   Risk,
   Organizations,
@@ -52,6 +53,7 @@ const App: React.FC = () => (
           />
           <AuthRedirectRoute path="/risk" component={Risk} />
           <AuthRedirectRoute path="/alerts" component={Alerts} />
+          <AuthRedirectRoute path="/scans/:scanId" component={Scan} />
           <AuthRedirectRoute path="/scans" component={Scans} />
           <AuthRedirectRoute path="/organizations" component={Organizations} />
           <AuthRedirectRoute path="/organization" component={Organization} />
