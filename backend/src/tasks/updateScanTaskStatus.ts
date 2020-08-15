@@ -1,6 +1,7 @@
 import { Handler } from 'aws-lambda';
 import { connectToDatabase, User, Scan, ScanTask } from '../models';
 import { Task } from 'aws-sdk/clients/ecs';
+import pRetry from 'p-retry';
 
 export type EventBridgeEvent = {
   detail: Task & {
@@ -27,9 +28,12 @@ export const handler: Handler<EventBridgeEvent> = async (
   const taskArn = event.detail.taskArn;
   const lastStatus = event.detail.lastStatus as FargateTaskStatus;
   await connectToDatabase();
-  const scanTask = await ScanTask.findOne({
-    fargateTaskArn: taskArn!
-  });
+  const scanTask = await pRetry(
+    () =>
+      ScanTask.findOne({
+        fargateTaskArn: taskArn!
+      }), { retries: 3 }
+  );
   if (!scanTask) {
     throw new Error(`Couldn't find scan with task arn ${taskArn}.`);
   }
