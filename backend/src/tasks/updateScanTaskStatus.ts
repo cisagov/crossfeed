@@ -1,6 +1,45 @@
 import { Handler } from 'aws-lambda';
-import { connectToDatabase, User } from '../models';
+import { connectToDatabase, User, Scan, ScanTask } from '../models';
+import { Task } from 'aws-sdk/clients/ecs';
 
-export const handler: Handler = async (event) => {
-  console.log(JSON.stringify(event, null, 2));
+export type EventBridgeEvent = {
+  detail: Task & {
+    stopCode?: string;
+    stoppedReason?: string;
+    taskArn: string;
+    lastStatus: FargateTaskStatus,
+    containers: {
+      exitCode?: number
+    }[]
+  }
+};
+
+type FargateTaskStatus = "PROVISIONING" | "PENDING" | "RUNNING" | "DEPROVISIONING" | "STOPPED";
+
+export const handler: Handler<EventBridgeEvent> = async (event: EventBridgeEvent) => {
+  const taskArn = event.detail.taskArn;
+  const lastStatus = event.detail.lastStatus as FargateTaskStatus;
+  await connectToDatabase();
+  const scanTask = await ScanTask.findOne({
+    fargateTaskArn: taskArn!
+  });
+  if (!scanTask) {
+    throw new Error(`Couldn't find scan with task arn ${taskArn}.`);
+  }
+  const oldStatus = scanTask.status;
+  if (lastStatus === "RUNNING") {
+    scanTask.status = "started";
+  } else if (lastStatus === "STOPPED") {
+    if (event.detail.containers![0]?.exitCode === 0) {
+      scanTask.status = "finished";
+    } else {
+      scanTask.status = "failed";
+    }
+    scanTask.output = `${event.detail.stopCode}: ${event.detail.stoppedReason}`;
+    scanTask.finishedAt = new Date();
+  } else {
+    return;
+  }
+  console.log(`Updating status of ScanTask ${scanTask.id} from ${oldStatus} to ${scanTask.status}.`);
+  await scanTask.save();
 };

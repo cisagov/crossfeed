@@ -152,3 +152,5 @@ PENDING
 RUNNING
 DEPROVISIONING
 STOPPED
+
+TODO: logs: https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/crossfeed-staging-worker/log-events/worker$252Fmain$252F0b9c67e2-3a92-49bb-87b3-62adb7cf0451

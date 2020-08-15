@@ -44,12 +44,13 @@ const launchSingleScanTask = async ({
           } failures.`
         );
       }
+      const taskArn = result.tasks![0].taskArn;
+      scanTask.fargateTaskArn = taskArn;
       if (typeof jest === 'undefined') {
         console.log(
-          `Successfully invoked ${scan.name} scan with fargate. ` +
+          `Successfully invoked ${scan.name} scan with fargate, with ECS task ARN ${taskArn}. ` +
             (numChunks ? ` Chunk ${chunkNumber}/${numChunks}` : '')
         );
-        console.log(result.tasks);
       }
     } else {
       throw new Error('Invalid type ' + type);
