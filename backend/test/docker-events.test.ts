@@ -8,13 +8,21 @@ jest.mock('../src/tasks/updateScanTaskStatus', () => ({
 }));
 
 let event;
+let stream: Readable;
 jest.mock('dockerode', () => {
   class MockDockerode {
     async getEvents() {
-      return Readable.from([JSON.stringify(event)]);
+      stream = Readable.from([JSON.stringify(event)]);
+      return stream;
     }
   }
   return MockDockerode;
+});
+
+afterEach(() => {
+  if (stream) {
+    stream.destroy();
+  }
 });
 
 test('should listen to a start event', async () => {
