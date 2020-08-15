@@ -1,5 +1,5 @@
 import { Handler } from 'aws-lambda';
-import { connectToDatabase, User, Scan, ScanTask } from '../models';
+import { connectToDatabase, ScanTask } from '../models';
 import { Task } from 'aws-sdk/clients/ecs';
 import pRetry from 'p-retry';
 

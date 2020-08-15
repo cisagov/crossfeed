@@ -1,5 +1,4 @@
 import { CommandOptions } from './tasks/ecs-client';
-import { connectToDatabase, ScanTask } from './models';
 import { handler as amass } from './tasks/amass';
 import { handler as censys } from './tasks/censys';
 import { handler as findomain } from './tasks/findomain';
