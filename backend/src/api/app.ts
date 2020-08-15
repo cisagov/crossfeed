@@ -12,7 +12,10 @@ import * as scanTasks from './scan-tasks';
 import * as stats from './stats';
 import { listenForDockerEvents } from './docker-events';
 
-if (process.env.IS_OFFLINE || process.env.IS_LOCAL) {
+if (
+  (process.env.IS_OFFLINE || process.env.IS_LOCAL) &&
+  typeof jest === 'undefined'
+) {
   listenForDockerEvents();
 }
 
