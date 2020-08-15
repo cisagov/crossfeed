@@ -10,87 +10,10 @@ import * as scans from './scans';
 import * as users from './users';
 import * as scanTasks from './scan-tasks';
 import * as stats from './stats';
-import * as Docker from 'dockerode';
-import { handler as updateScanTaskStatus, EventBridgeEvent } from '../tasks/updateScanTaskStatus';
+import { listenForDockerEvents } from './docker-events';
 
 if (process.env.IS_OFFLINE || process.env.IS_LOCAL) {
-  (async () => {
-    const docker = new Docker();
-    const stream = await docker.getEvents();
-    /**
-     * backend_1    | {
-backend_1    |   status: 'start',
-backend_1    |   id: '9385a49c58efef1983ba56f5711b16b176f27b973252110e756e408894b3d0e9',
-backend_1    |   from: 'crossfeed-worker',
-backend_1    |   Type: 'container',
-backend_1    |   Action: 'start',
-backend_1    |   Actor: {
-backend_1    |     ID: '9385a49c58efef1983ba56f5711b16b176f27b973252110e756e408894b3d0e9',
-backend_1    |     Attributes: {
-backend_1    |       image: 'crossfeed-worker',
-backend_1    |       name: 'crossfeed_worker_cisa_censys_2681225'
-backend_1    |     }
-backend_1    |   },
-backend_1    |   scope: 'local',
-backend_1    |   time: 1597458556,
-backend_1    |   timeNano: 1597458556898095000
-backend_1    | }
-{
-backend_1    |   status: 'die',
-backend_1    |   id: '9385a49c58efef1983ba56f5711b16b176f27b973252110e756e408894b3d0e9',
-backend_1    |   from: 'crossfeed-worker',
-backend_1    |   Type: 'container',
-backend_1    |   Action: 'die',
-backend_1    |   Actor: {
-backend_1    |     ID: '9385a49c58efef1983ba56f5711b16b176f27b973252110e756e408894b3d0e9',
-backend_1    |     Attributes: {
-backend_1    |       exitCode: '0',
-backend_1    |       image: 'crossfeed-worker',
-backend_1    |       name: 'crossfeed_worker_cisa_censys_2681225'
-backend_1    |     }
-backend_1    |   },
-backend_1    |   scope: 'local',
-backend_1    |   time: 1597458571,
-backend_1    |   timeNano: 1597458571266194000
-backend_1    | }
-     */
-    stream.on('data', async (chunk: any) => {
-      const message = JSON.parse(Buffer.from(chunk).toString("utf-8"));
-      if (message.from !== "crossfeed-worker") {
-        return;
-      }
-      let payload: EventBridgeEvent;
-      if (message.status === "start") {
-        payload = {
-          detail: {
-            stopCode: "",
-            stoppedReason: "",
-            taskArn: message.Actor.Attributes.name,
-            lastStatus: "RUNNING",
-            containers: [{}]
-          }
-        };
-      } else if (message.status === "die") {
-        payload = {
-          detail: {
-            stopCode: "EssentialContainerExited",
-            stoppedReason: "Essential container in task exited",
-            taskArn: message.Actor.Attributes.name,
-            lastStatus: "STOPPED",
-            containers:
-              [
-                {
-                  exitCode: Number(message.Actor.Attributes.exitCode),
-                }
-              ]
-          }
-        };
-      } else {
-        return;
-      }
-      await updateScanTaskStatus(payload, {} as any, () => null);
-    });
-  })();
+  listenForDockerEvents();
 }
 
 
