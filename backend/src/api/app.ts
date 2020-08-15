@@ -16,7 +16,6 @@ if (process.env.IS_OFFLINE || process.env.IS_LOCAL) {
   listenForDockerEvents();
 }
 
-
 const handlerToExpress = (handler) => async (req, res, next) => {
   const { statusCode, body } = await handler(
     {

@@ -80,9 +80,11 @@ class ECSClient {
         } as any);
         await container.start();
         return {
-          tasks: [{
-            taskArn: containerName
-          }],
+          tasks: [
+            {
+              taskArn: containerName
+            }
+          ],
           failures: []
         };
       } catch (e) {

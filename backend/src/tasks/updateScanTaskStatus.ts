@@ -7,16 +7,23 @@ export type EventBridgeEvent = {
     stopCode?: string;
     stoppedReason?: string;
     taskArn: string;
-    lastStatus: FargateTaskStatus,
+    lastStatus: FargateTaskStatus;
     containers: {
-      exitCode?: number
-    }[]
-  }
+      exitCode?: number;
+    }[];
+  };
 };
 
-type FargateTaskStatus = "PROVISIONING" | "PENDING" | "RUNNING" | "DEPROVISIONING" | "STOPPED";
+type FargateTaskStatus =
+  | 'PROVISIONING'
+  | 'PENDING'
+  | 'RUNNING'
+  | 'DEPROVISIONING'
+  | 'STOPPED';
 
-export const handler: Handler<EventBridgeEvent> = async (event: EventBridgeEvent) => {
+export const handler: Handler<EventBridgeEvent> = async (
+  event: EventBridgeEvent
+) => {
   const taskArn = event.detail.taskArn;
   const lastStatus = event.detail.lastStatus as FargateTaskStatus;
   await connectToDatabase();
@@ -27,19 +34,21 @@ export const handler: Handler<EventBridgeEvent> = async (event: EventBridgeEvent
     throw new Error(`Couldn't find scan with task arn ${taskArn}.`);
   }
   const oldStatus = scanTask.status;
-  if (lastStatus === "RUNNING") {
-    scanTask.status = "started";
-  } else if (lastStatus === "STOPPED") {
+  if (lastStatus === 'RUNNING') {
+    scanTask.status = 'started';
+  } else if (lastStatus === 'STOPPED') {
     if (event.detail.containers![0]?.exitCode === 0) {
-      scanTask.status = "finished";
+      scanTask.status = 'finished';
     } else {
-      scanTask.status = "failed";
+      scanTask.status = 'failed';
     }
     scanTask.output = `${event.detail.stopCode}: ${event.detail.stoppedReason}`;
     scanTask.finishedAt = new Date();
   } else {
     return;
   }
-  console.log(`Updating status of ScanTask ${scanTask.id} from ${oldStatus} to ${scanTask.status}.`);
+  console.log(
+    `Updating status of ScanTask ${scanTask.id} from ${oldStatus} to ${scanTask.status}.`
+  );
   await scanTask.save();
 };

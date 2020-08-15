@@ -31,7 +31,7 @@ async function main() {
   if (!scanFn) {
     throw new Error('Invalid scan name ' + scanName);
   }
-  
+
   await scanFn(commandOptions);
 }
 
