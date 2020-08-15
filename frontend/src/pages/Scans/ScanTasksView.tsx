@@ -118,9 +118,9 @@ export const ScanTasksView: React.FC = () => {
     {
       Header: 'Actions',
       id: 'actions',
-      Cell: ({ row }: CellProps<ScanTask> ) => (
+      Cell: ({ row }: CellProps<ScanTask>) => (
         <>
-        {row.original.fargateTaskArn && <><a target="_blank" href={`https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/${process.env.FARGATE_LOG_GROUP!}/log-events/worker$252Fmain$252F${row.original.fargateTaskArn}`}>Logs</a>&nbsp;</>}
+          {row.original.fargateTaskArn && <><a target="_blank" rel="noopener noreferrer" href={`https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/${process.env.FARGATE_LOG_GROUP!}/log-events/worker$252Fmain$252F${row.original.fargateTaskArn}`}>Logs</a>&nbsp;</>}
           {row.original.status !== 'finished' &&
             row.original.status !== 'failed' && (
               <a

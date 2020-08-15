@@ -32,7 +32,8 @@ export const handler: Handler<EventBridgeEvent> = async (
     () =>
       ScanTask.findOne({
         fargateTaskArn: taskArn!
-      }), { retries: 3 }
+      }),
+    { retries: 3 }
   );
   if (!scanTask) {
     throw new Error(`Couldn't find scan with task arn ${taskArn}.`);
