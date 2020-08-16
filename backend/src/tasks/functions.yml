@@ -21,4 +21,4 @@ updateScanTaskStatus:
             - ECS Task State Change
           detail:
             clusterArn:
-              - ${file(../env.yml):${self:provider.stage}-ecs-cluster, ''}
+              - ${file(env.yml):${self:provider.stage}-ecs-cluster, ''}
