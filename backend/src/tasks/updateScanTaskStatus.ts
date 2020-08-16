@@ -25,13 +25,12 @@ type FargateTaskStatus =
 export const handler: Handler<EventBridgeEvent> = async (
   event: EventBridgeEvent
 ) => {
-  const taskArn = event.detail.taskArn;
-  const lastStatus = event.detail.lastStatus as FargateTaskStatus;
+  const {taskArn, lastStatus} = event.detail;
   await connectToDatabase();
   const scanTask = await pRetry(
     () =>
       ScanTask.findOne({
-        fargateTaskArn: taskArn!
+        fargateTaskArn: taskArn
       }),
     { retries: 3 }
   );

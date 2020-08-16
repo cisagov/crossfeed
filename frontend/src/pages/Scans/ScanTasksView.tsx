@@ -103,24 +103,40 @@ export const ScanTasksView: React.FC = () => {
       accessor: 'output',
       disableFilters: true,
       maxWidth: 200,
-      Cell: ({ value }: CellProps<ScanTask>) => value && (
-        <pre
-          style={{
-            maxWidth: 200,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}
-        >
-          {value}
-        </pre>
-      )
+      Cell: ({ value }: CellProps<ScanTask>) =>
+        value && (
+          <pre
+            style={{
+              maxWidth: 200,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}
+          >
+            {value}
+          </pre>
+        )
     },
     {
       Header: 'Actions',
       id: 'actions',
       Cell: ({ row }: CellProps<ScanTask>) => (
         <>
-          {row.original.fargateTaskArn && <><a target="_blank" rel="noopener noreferrer" href={`https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/${process.env.FARGATE_LOG_GROUP!}/log-events/worker$252Fmain$252F${row.original.fargateTaskArn}`}>Logs</a>&nbsp;</>}
+          {row.original.fargateTaskArn && (
+            <>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={`https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/${process
+                  .env
+                  .REACT_APP_FARGATE_LOG_GROUP!}/log-events/worker$252Fmain$252F${
+                  row.original.fargateTaskArn.match('/(.*)')![1]
+                }`}
+              >
+                Logs
+              </a>
+              &nbsp;
+            </>
+          )}
           {row.original.status !== 'finished' &&
             row.original.status !== 'failed' && (
               <a
