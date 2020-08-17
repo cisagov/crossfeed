@@ -59,12 +59,21 @@ export const handler = async (commandOptions: CommandOptions) => {
   }
 
   // Should change this to spawnSync
-  const res = execSync(
+  const {
+    status,
+    stdout,
+    stderr
+  } = spawnSync(
     "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 nvd-dump/nvdcve-1.1-2*.json.gz",
-    { input: input }
+    { input: input, stdio: 'pipe' }
   );
 
-  const split = String(res).split('\n');
+  if (status !== 0) {
+    console.error('Error running cpe2cve: ', stderr.toString());
+    throw new Error('Error running cpe2cve');
+  }
+
+  const split = stdout.toString().split('\n');
   const vulnerabilities: Vulnerability[] = [];
   for (const line of split) {
     const parts = line.split(' ');
