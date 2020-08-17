@@ -2,7 +2,7 @@ import { Domain, connectToDatabase, Vulnerability } from '../models';
 import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
-import buffer from 'buffer';
+import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 
 /**
