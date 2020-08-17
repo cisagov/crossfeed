@@ -30,22 +30,22 @@ variable db_instance_class {
 
 variable db_storage_encrypted {
   type    = bool
-  default = false
+  default = true
 }
 
 variable api_domain {
   type    = string
-  default = "stage.api.crossfeed2.dds.mil"
+  default = "api.staging.crossfeed.cyber.dhs.gov"
 }
 
 variable frontend_domain {
   type    = string
-  default = "stage.crossfeed2.dds.mil"
+  default = "staging.crossfeed.cyber.dhs.gov"
 }
 
 variable frontend_bucket {
   type    = string
-  default = "stage.crossfeed2.dds.mil"
+  default = "staging.crossfeed.cyber.dhs.gov"
 }
 
 variable frontend_cert_arn {
