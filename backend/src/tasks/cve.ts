@@ -2,6 +2,7 @@ import { Domain, connectToDatabase, Vulnerability } from '../models';
 import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
+import buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 
 /**
@@ -61,7 +62,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   // Should change this to spawnSync
   const res = execSync(
     "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 nvd-dump/nvdcve-1.1-2*.json.gz",
-    { input: input }
+    { input: input, maxBuffer: buffer.constants.MAX_LENGTH }
   );
 
   const split = String(res).split('\n');
