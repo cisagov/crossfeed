@@ -81,6 +81,17 @@ resource "aws_ecs_cluster" "worker" {
   }
 }
 
+resource "aws_ssm_parameter" "worker_arn" {
+  name      = var.ssm_worker_arn
+  type      = "String"
+  value     = aws_ecs_cluster.worker.arn
+  overwrite = true
+
+  tags = {
+    Project = var.project
+  }
+}
+
 resource "aws_ecs_task_definition" "worker" {
   family                = var.worker_ecs_task_definition_family
   container_definitions = <<EOF

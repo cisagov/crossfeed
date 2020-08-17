@@ -43,6 +43,7 @@ describe('scheduler', () => {
       runCommand.mock.calls[0][0].scanTaskId
     );
     expect(scanTask?.status).toEqual('requested');
+    expect(scanTask?.fargateTaskArn).toEqual('mock_task_arn');
 
     scan = (await Scan.findOne(scan.id))!;
     expect(scan.lastRun).toBeTruthy();
