@@ -43,6 +43,11 @@ variable frontend_domain {
   default = "stage.crossfeed2.dds.mil"
 }
 
+variable frontend_bucket {
+  type    = string
+  default = "stage.crossfeed2.dds.mil"
+}
+
 variable frontend_cert_arn {
   type    = string
   default = "arn:aws:acm:us-east-1:563873274798:certificate/7c6a5980-80e3-47a4-9f21-cbda44b6f34c"
