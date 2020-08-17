@@ -8,20 +8,13 @@ import {
 } from '../../models';
 
 jest.mock('child_process', () => ({
-  spawnSync: (cmd, { input }) => {
-    if (cmd.indexOf('cpe2cve') > -1) {
-      expect(input).toMatchSnapshot('spawnSync.input');
-      return {
-        status: 0,
-        stdout: Buffer.from(
-          [
-            '0 CVE-2019-10866 cpe:/a:10web:form_maker:1.0.0 9.8 CWE-89',
-            '0 CVE-2019-11590 cpe:/a:10web:form_maker:1.0.0 8.8 CWE-352'
-          ].join('\n')
-        ),
-        stderr: Buffer.from('')
-      };
-    }
+  spawnSync: () => null,
+  execSync: (cmd, { input }) => {
+    expect(input).toMatchSnapshot('execSync.input');
+    return [
+      '0 CVE-2019-10866 cpe:/a:10web:form_maker:1.0.0 9.8 CWE-89',
+      '0 CVE-2019-11590 cpe:/a:10web:form_maker:1.0.0 8.8 CWE-352'
+    ].join('\n');
   }
 }));
 
