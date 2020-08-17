@@ -70,6 +70,7 @@ authenticatedRoute.get(
 authenticatedRoute.get('/scans', handlerToExpress(scans.list));
 authenticatedRoute.get('/granularScans', handlerToExpress(scans.listGranular));
 authenticatedRoute.post('/scans', handlerToExpress(scans.create));
+authenticatedRoute.get('/scans/:scanId', handlerToExpress(scans.get));
 authenticatedRoute.put('/scans/:scanId', handlerToExpress(scans.update));
 authenticatedRoute.delete('/scans/:scanId', handlerToExpress(scans.del));
 authenticatedRoute.post('/scan-tasks/search', handlerToExpress(scanTasks.list));

@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 import { Scan, connectToDatabase, Organization } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
-import { isGlobalWriteAdmin } from './auth';
+import { isGlobalWriteAdmin, isGlobalViewAdmin } from './auth';
 
 interface ScanSchema {
   [name: string]: {
@@ -162,6 +162,25 @@ export const create = wrapHandler(async (event) => {
     statusCode: 200,
     body: JSON.stringify(res)
   };
+});
+
+export const get = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  await connectToDatabase();
+  const id = event.pathParameters?.scanId;
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+  const scan = await Scan.findOne({
+    id: id
+  });
+  if (scan) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify(scan)
+    };
+  }
+  return NotFound;
 });
 
 export const list = wrapHandler(async (event) => {

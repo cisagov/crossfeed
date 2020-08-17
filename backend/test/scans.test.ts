@@ -316,4 +316,37 @@ describe('scan', () => {
       expect(response.body).toEqual({});
     });
   });
+  describe('get', () => {
+    it('get by globalView should succeed', async () => {
+      const scan = await Scan.create({
+        name: 'censys',
+        arguments: {},
+        frequency: 999999
+      }).save();
+      const response = await request(app)
+        .get(`/scans/${scan.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalView'
+          })
+        )
+        .expect(200);
+
+      expect(response.body.name).toEqual('censys');
+    });
+    it('get by regular user on a scan not from their org should fail', async () => {
+      const scan = await Scan.create({
+        name: 'censys',
+        arguments: {},
+        frequency: 999999
+      }).save();
+      const response = await request(app)
+        .get(`/scans/${scan.id}`)
+        .set('Authorization', createUserToken({}))
+        .expect(403);
+
+      expect(response.body).toEqual({});
+    });
+  });
 });

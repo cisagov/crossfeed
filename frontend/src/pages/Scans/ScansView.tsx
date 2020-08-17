@@ -12,18 +12,19 @@ import {
   Checkbox
 } from '@trussworks/react-uswds';
 import { Table, ImportExport } from 'components';
-import { Column } from 'react-table';
+import { Column, CellProps } from 'react-table';
 import { Scan, Organization, ScanSchema } from 'types';
 import { FaTimes, FaEdit } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import MultiSelect from './MultiSelect';
+import { Link } from 'react-router-dom';
 
 interface Errors extends Partial<Scan> {
   global?: string;
 }
 
-interface OrganizationOption {
+export interface OrganizationOption {
   label: string;
   value: string;
 }
@@ -98,15 +99,11 @@ const ScansView: React.FC = () => {
     {
       Header: 'Edit',
       id: 'edit',
-      Cell: ({ row }: { row: { index: number } }) => (
-        <span
-          onClick={() => {
-            setShowModal(true);
-            setSelectedRow(row.index);
-          }}
+      Cell: ({ row }: CellProps<Scan>) => (
+        <Link to={`/scans/${row.original.id}`} style={{color: "black"}}
         >
           <FaEdit />
-        </span>
+        </Link>
       ),
       disableFilters: true
     },
