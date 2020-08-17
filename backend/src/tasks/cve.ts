@@ -58,6 +58,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     console.log(`${index} ${host.cpes.join(',')}`);
   }
 
+  // Should change this to spawnSync
   const {
     status,
     stdout,
