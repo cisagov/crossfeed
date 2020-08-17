@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "frontend_bucket" {
-  bucket = var.frontend_domain
+  bucket = var.frontend_bucket
   acl    = "private"
 
   tags = {	
@@ -11,7 +11,7 @@ resource "aws_s3_bucket" "frontend_bucket" {
 data "template_file" "policy_file" {
   template = "${file("frontend_bucket_policy.tpl")}"
   vars = {
-    bucket_name = var.frontend_domain
+    bucket_name = var.frontend_bucket
   }
 }
 
