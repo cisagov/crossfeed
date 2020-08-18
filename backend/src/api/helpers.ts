@@ -10,6 +10,8 @@ import {
 } from 'class-validator';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { plainToClass } from 'class-transformer';
+import { SES, AWSError } from 'aws-sdk';
+import { SendEmailRequest, SendEmailResponse } from 'aws-sdk/clients/ses';
 
 export const validateBody = async <T>(
   obj: ClassType<T>,
@@ -74,4 +76,36 @@ export const NotFound: APIGatewayProxyResult = {
 export const Unauthorized: APIGatewayProxyResult = {
   statusCode: 403,
   body: ''
+};
+
+export const sendEmail = async (
+  recipient: string,
+  subject: string,
+  body: string
+) => {
+  const ses = new SES({ region: 'us-east-1' });
+  const params: SendEmailRequest = {
+    Source:
+      process.env.NODE_ENV === 'production'
+        ? 'support@crossfeed.cyber.dhs.gov'
+        : 'support@staging.crossfeed.cyber.dhs.gov',
+    Destination: {
+      ToAddresses: [recipient]
+    },
+    Message: {
+      Subject: {
+        Data: subject,
+        Charset: 'UTF-8'
+      },
+      Body: {
+        Text: {
+          Data: body,
+          Charset: 'UTF-8'
+        }
+      }
+    }
+  };
+
+  const res = await ses.sendEmail(params).promise();
+  console.log(res);
 };

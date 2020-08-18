@@ -1,19 +1,18 @@
 import {
-  IsInt,
-  IsPositive,
   IsString,
-  IsIn,
   isUUID,
-  IsObject,
-  IsArray,
   IsBoolean,
   IsOptional,
-  IsUUID,
-  IsEnum,
   IsEmail
 } from 'class-validator';
-import { User, connectToDatabase, Role } from '../models';
-import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
+import { User, connectToDatabase, Role, Organization } from '../models';
+import {
+  validateBody,
+  wrapHandler,
+  NotFound,
+  Unauthorized,
+  sendEmail
+} from './helpers';
 import {
   getUserId,
   canAccessUser,
@@ -124,6 +123,8 @@ export const invite = wrapHandler(async (event) => {
   }
 
   if (body.organization) {
+    const organization = await Organization.findOne(body.organization);
+
     // Create approved role if organization supplied
     await Role.createQueryBuilder()
       .insert()
@@ -141,9 +142,17 @@ export const invite = wrapHandler(async (event) => {
     `
       )
       .execute();
-  }
 
-  // TODO: Send invite email via SES
+    await sendEmail(
+      user.email,
+      'Crossfeed Invitation',
+      `Hi there,\n\nYou've been invite to join the ${organization?.name} organization` +
+        ` on Crossfeed. To accept the invitation and start using Crossfeed, sign on at ` +
+        `https://${
+          process.env.NODE_ENV !== 'production' ? 'staging.' : ''
+        }crossfeed.cyber.dhs.gov.`
+    );
+  }
 
   const updated = await User.findOne(
     {
