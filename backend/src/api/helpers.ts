@@ -85,10 +85,7 @@ export const sendEmail = async (
 ) => {
   const ses = new SES({ region: 'us-east-1' });
   const params: SendEmailRequest = {
-    Source:
-      process.env.NODE_ENV === 'production'
-        ? 'support@crossfeed.cyber.dhs.gov'
-        : 'support@staging.crossfeed.cyber.dhs.gov',
+    Source: process.env.CROSSFEED_SUPPORT_EMAIL!,
     Destination: {
       ToAddresses: [recipient]
     },

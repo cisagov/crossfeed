@@ -145,8 +145,6 @@ export const invite = wrapHandler(async (event) => {
 
     const staging = process.env.NODE_ENV !== 'production';
 
-    const url = `https://${staging ? 'staging.' : ''}crossfeed.cyber.dhs.gov`;
-
     await sendEmail(
       user.email,
       'Crossfeed Invitation',
@@ -154,11 +152,13 @@ export const invite = wrapHandler(async (event) => {
 
 You've been invite to join the ${
         organization?.name
-      } organization on Crossfeed. To accept the invitation and start using Crossfeed, sign on at ${url}.
+      } organization on Crossfeed. To accept the invitation and start using Crossfeed, sign on at ${
+        process.env.FRONTEND_DOMAIN
+      }.
 
 Crossfeed access instructions:
 
-1. Visit ${url}
+1. Visit ${process.env.FRONTEND_DOMAIN}
 2. Select to register with Login.gov
 3. Select to create a new Login.gov ${staging ? 'sandbox ' : ''}account${
         staging
