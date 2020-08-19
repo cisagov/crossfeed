@@ -4,11 +4,12 @@ import { Query, User } from 'types';
 import { Table, Paginator, Export } from 'components';
 import { Domain } from 'types';
 import { createColumns, getServiceNames } from './columns';
-import { useAuthContext } from 'context';
+import { useAuthContext, AuthUser } from 'context';
 import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
 import { Grid, Checkbox } from '@trussworks/react-uswds';
+import { getToUVersion } from '../TermsOfUse';
 
 interface ApiResponse {
   result: Domain[];
@@ -102,14 +103,17 @@ export const Dashboard: React.FC = () => {
       return;
     }
     try {
-      const { token, user } = await apiPost<{token: string, user: User}>('/auth/callback', {
-        body: {
-          state: parsed.state,
-          code: parsed.code,
-          nonce: localStorage.getItem('nonce'),
-          origState: localStorage.getItem('state')
+      const { token, user } = await apiPost<{ token: string; user: User }>(
+        '/auth/callback',
+        {
+          body: {
+            state: parsed.state,
+            code: parsed.code,
+            nonce: localStorage.getItem('nonce'),
+            origState: localStorage.getItem('state')
+          }
         }
-      });
+      );
 
       await login(token, user);
 
@@ -120,8 +124,12 @@ export const Dashboard: React.FC = () => {
 
       if (user.firstName === '') {
         history.push('/create-account');
-      } else if (!user.dateAcceptedTerms) {
-        history.push('/create-account');
+      } else if (
+        !user.dateAcceptedTerms ||
+        (user.acceptedTermsVersion &&
+          user.acceptedTermsVersion !== getToUVersion(user as AuthUser))
+      ) {
+        history.push('/terms');
       } else {
         history.push('/');
         fetchDomainTable({

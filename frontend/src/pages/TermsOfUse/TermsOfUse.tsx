@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AuthForm } from 'components';
 import { Button, Checkbox } from '@trussworks/react-uswds';
-import { useAuthContext } from 'context';
+import { useAuthContext, AuthUser } from 'context';
 import { User } from 'types';
 
 interface FormData {
@@ -15,30 +15,31 @@ interface Errors extends Partial<FormData> {
   global?: string;
 }
 
+export const currentTermsVersion = '1';
+
+export const getMaximumRole = (user: AuthUser | null | undefined) => {
+  if (user?.userType === 'globalView') return 'globalView';
+  return user && user.roles && user.roles.find(role => role.role === 'admin')
+    ? 'admin'
+    : 'user';
+};
+
+export const getToUVersion = (user?: AuthUser | null | undefined) => {
+  return `v${currentTermsVersion}-${getMaximumRole(user)}`;
+};
+
 export const TermsOfUse: React.FC = () => {
-  const currentTermsVersion = '1';
   const history = useHistory();
   const [accepted, setAccepted] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
   const { user, login, apiPost } = useAuthContext();
-
-  const getMaximumRole = () => {
-    if (user?.userType === 'globalView') return 'globalView';
-    return user && user.roles && user.roles.find(role => role.role === 'admin')
-      ? 'admin'
-      : 'user';
-  };
-
-  const getToUVersion = () => {
-    return `v${currentTermsVersion}-${getMaximumRole()}`;
-  };
 
   const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
     try {
       if (!accepted) throw Error('Must accept terms');
       const updated: User = await apiPost(`/users/me/acceptTerms`, {
-        body: { version: getToUVersion() }
+        body: { version: getToUVersion(user) }
       });
 
       login(localStorage.getItem('token')!, updated);
@@ -142,7 +143,7 @@ export const TermsOfUse: React.FC = () => {
           organization’s behalf.
         </li>
       </ul>
-      <p>ToU version {getToUVersion()}</p>
+      <p>ToU version {getToUVersion(user)}</p>
       <Checkbox
         required
         id="accept"
