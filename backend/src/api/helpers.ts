@@ -3,15 +3,11 @@ import {
   APIGatewayProxyEvent,
   APIGatewayProxyResult
 } from 'aws-lambda';
-import {
-  ValidationOptions,
-  validateOrReject,
-  ValidationError
-} from 'class-validator';
+import { ValidationOptions, validateOrReject } from 'class-validator';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { plainToClass } from 'class-transformer';
-import { SES, AWSError } from 'aws-sdk';
-import { SendEmailRequest, SendEmailResponse } from 'aws-sdk/clients/ses';
+import { SES } from 'aws-sdk';
+import * as nodemailer from 'nodemailer';
 
 export const validateBody = async <T>(
   obj: ClassType<T>,
@@ -83,25 +79,14 @@ export const sendEmail = async (
   subject: string,
   body: string
 ) => {
-  const ses = new SES({ region: 'us-east-1' });
-  const params: SendEmailRequest = {
-    Source: process.env.CROSSFEED_SUPPORT_EMAIL!,
-    Destination: {
-      ToAddresses: [recipient]
-    },
-    Message: {
-      Subject: {
-        Data: subject,
-        Charset: 'UTF-8'
-      },
-      Body: {
-        Text: {
-          Data: body,
-          Charset: 'UTF-8'
-        }
-      }
-    }
-  };
+  let transporter = nodemailer.createTransport({
+    SES: new SES({ region: 'us-east-1' })
+  });
 
-  await ses.sendEmail(params).promise();
+  await transporter.sendMail({
+    from: process.env.CROSSFEED_SUPPORT_EMAIL!,
+    to: recipient,
+    subject: subject,
+    text: body
+  });
 };
