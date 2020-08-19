@@ -169,6 +169,8 @@ Crossfeed access instructions:
   
 On the "Dashboard" tab, you can view information about each subdomain and the associated ports and services detected on each one. The "Scans" tab has a list of enabled scans and the schedule that they run on. The "Risk Summary" tab has a visual summary of identified assets, and the "Vulnerabilities" tab lists discovered vulnerabilities.
 
+For more information on using Crossfeed, view the Crossfeed user guide at https://cisagov.github.io/crossfeed/usage.
+
 If you encounter any difficulties, please feel free to reply to this email (support@crossfeed.cyber.dhs.gov).`
     );
   }
