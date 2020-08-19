@@ -77,7 +77,7 @@ authenticatedNoTermsRoute.use(checkUserLoggedIn);
 authenticatedNoTermsRoute.get('/users/me', handlerToExpress(users.me));
 authenticatedNoTermsRoute.post(
   '/users/me/acceptTerms',
-  handlerToExpress(users.meAcceptTerms)
+  handlerToExpress(users.acceptTerms)
 );
 authenticatedNoTermsRoute.put('/users/:userId', handlerToExpress(users.update));
 

@@ -15,42 +15,36 @@ interface Errors extends Partial<FormData> {
   global?: string;
 }
 
-const termsText = {
-  v1: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae augue vel lacus pharetra scelerisque vel nec mi. Fusce porta massa nulla, quis tempus elit ullamcorper id. Quisque eros enim, euismod vitae odio et, pellentesque maximus odio. Aenean et nunc non odio consectetur suscipit. Vivamus vel interdum nibh. Praesent consequat ornare lectus, aliquam vestibulum mauris fermentum eget. Curabitur at venenatis mauris, in facilisis metus. Cras at augue lorem. Aliquam erat volutpat. Fusce nec molestie sem. Sed scelerisque efficitur scelerisque. Vestibulum sit amet odio quis purus euismod pulvinar vitae quis magna. Mauris sit amet placerat metus. Ut vitae dui in felis rutrum rhoncus.
-
-
-  Integer aliquet sit amet quam eu bibendum. Aliquam accumsan pellentesque elit non fermentum. Nunc placerat consectetur turpis, eget iaculis lorem molestie nec. Suspendisse vulputate nulla a elementum consectetur. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur lobortis, ligula eu viverra sodales, dui mi semper lorem, quis consectetur turpis metus ut sem. Ut ultricies sapien urna, ac gravida leo dictum quis. Cras ante elit, convallis vitae volutpat et, maximus id lorem. Integer et tellus dui. Nam scelerisque tristique erat, non fringilla odio semper at. Donec porttitor, tortor non hendrerit mattis, velit augue ornare lectus, in sodales turpis nunc sed felis. Aenean diam turpis, euismod tincidunt suscipit at, sollicitudin et est. Sed ornare ipsum et nunc malesuada aliquet.
- 
-  
-  Nunc dictum elit ut arcu cursus faucibus in sit amet tortor. Duis ornare eros nisl, non interdum est sodales ac. Nulla nec vulputate nulla, a ullamcorper neque. Suspendisse sagittis nunc eget congue rutrum. Vivamus ornare dolor tincidunt justo commodo fermentum. In vel maximus erat. Maecenas mattis lorem quis faucibus placerat. Donec gravida ligula nec porta suscipit.
-  
-
-  Ut et magna quis ex interdum hendrerit. Suspendisse vel felis libero. Cras turpis massa, interdum id nisl eget, auctor vulputate dui. Nulla facilisi. Morbi ornare ullamcorper lectus. Vestibulum laoreet nibh eu nisi laoreet venenatis. Nam nec turpis eros. Curabitur posuere turpis et porttitor eleifend. Aliquam ultrices odio quis enim tempus, nec iaculis eros vestibulum. Morbi nibh enim, mattis eget ipsum nec, dictum eleifend tellus. Vestibulum libero est, pellentesque id faucibus ornare, dignissim hendrerit quam. Praesent ut dui malesuada, eleifend ipsum eget, aliquet quam. Donec maximus augue nec pulvinar tincidunt. Vivamus a laoreet purus. Donec sit amet posuere erat. Fusce elementum felis quis orci eleifend, et cursus augue ullamcorper.
-  
-
-  Aenean imperdiet faucibus purus, sed dignissim purus volutpat lacinia. Curabitur in mattis libero. Morbi elementum cursus lacus ac ullamcorper. Aenean pharetra neque id enim rutrum condimentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu luctus velit, in aliquet tellus. Sed auctor erat tellus, id varius massa egestas ut. Phasellus sed bibendum dui. Nunc faucibus scelerisque dui, quis lacinia purus vulputate a. Fusce interdum, turpis eget consequat rhoncus, lectus lectus bibendum massa, ac finibus nunc ipsum in sapien. Duis eget volutpat erat, vel ultricies massa. Maecenas interdum elit eros, aliquet sollicitudin tellus luctus in. Cras vitae quam nisl. Donec at massa a urna luctus auctor. Sed ac convallis magna, id faucibus nunc. Phasellus efficitur est et odio suscipit, sed tempus nisi tempor.`
-};
-
 export const TermsOfUse: React.FC = () => {
+  const currentTermsVersion = '1';
   const history = useHistory();
   const [accepted, setAccepted] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const [] = useState<{ name: string; id: string }[]>(
-    []
-  );
   const { user, login, apiPost } = useAuthContext();
+
+  const getMaximumRole = () => {
+    if (user?.userType === 'globalView') return 'globalView';
+    return user && user.roles && user.roles.find(role => role.role === 'admin')
+      ? 'admin'
+      : 'user';
+  };
+
+  const getToUVersion = () => {
+    return `v${currentTermsVersion}-${getMaximumRole()}`;
+  };
 
   const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
     try {
       if (!accepted) throw Error('Must accept terms');
-      const updated: User = await apiPost(`/users/me/acceptTerms`, {});
+      const updated: User = await apiPost(`/users/me/acceptTerms`, {
+        body: { version: getToUVersion() }
+      });
 
       login(localStorage.getItem('token')!, updated);
       history.push('/', {
         message: 'Your account has been successfully created.'
       });
-      // history.push('/');
     } catch (e) {
       setErrors({
         global: e.message ?? e.toString()
@@ -61,12 +55,94 @@ export const TermsOfUse: React.FC = () => {
   return (
     <AuthForm onSubmit={onSubmit}>
       <h1>Terms of Use</h1>
+      <p>You must read and sign the Terms of Use before using Crossfeed.</p>
       <p>
-        You must read and sign the Terms of Use before using Crossfeed.
+        Crossfeed is a free, self-service tool offered by the Department of
+        Homeland Security’s Cybersecurity and Infrastructure Security Agency
+        (CISA). Using both passive and active processes, Crossfeed can
+        continuously evaluate the cybersecurity posture of your public-facing,
+        internet-accessible network assets for vulnerabilities or configuration
+        issues. Once you create a Crossfeed account, input the Internet Protocol
+        (IP) addresses or domains to be continuously evaluated, and select the
+        scanning/evaluation protocols to be used, Crossfeed will collect data
+        about the sites you specified from multiple publicly-available
+        resources, including through active interactions with your sites, if
+        that option is selected by you. Crossfeed will also examine any
+        publicly-available, internet-accessible resources that appear to be
+        related or otherwise associated with IPs or domains you have provided us
+        to evaluate, presenting you with a list of those related sites for your
+        awareness.
       </p>
       <p>
-        {termsText.v1}
+        By creating a Crossfeed login and using this service, you request CISA’s
+        technical assistance to detect vulnerabilities and configuration issues
+        through Crossfeed and agree to the following:
       </p>
+      <ul>
+        <li>
+          You have authority to authorize scanning/evaluation of the
+          public-facing networks and systems you submit within Crossfeed and you
+          authorize CISA to conduct any such scans/evaluation through Crossfeed;
+        </li>
+        <li>
+          You agree to promptly update or change the information used to
+          identify the public-facing networks and systems to be
+          scanned/evaluated pursuant to this authorization;
+        </li>
+        <li>
+          You agree to comply with any notification or authorization requirement
+          that any third party that operates or maintains your public-facing
+          networks or systems may impose on external vulnerability scanning
+          services, modifying any Crossfeed scans associated with your account
+          if external scanning of those resources is later prohibited;
+        </li>
+        <li>
+          You accept that, while Crossfeed will use best efforts to conduct
+          scans in a way that minimizes risk to your organization’s systems and
+          networks, Crossfeed scanning activities creates some risk of
+          degradation in performance to your organization’s systems and
+          networks;
+        </li>
+        <li>
+          You acknowledge that use of Crossfeed is governed exclusively by
+          federal law and that CISA provides no warranties of any kind relating
+          to any aspect of your use of Crossfeed, including that Crossfeed may
+          detect only a limited range of vulnerabilities or configuration issues
+          and that there is no guarantee that Crossfeed will detect any or all
+          vulnerabilities or configuration issues present in your system;
+        </li>
+        <li>
+          You accept that CISA may modify or discontinue the Crossfeed service
+          at any time;
+        </li>
+        <li>
+          You agree to not:
+          <ul>
+            <li>
+              Use the Crossfeed service in violation of any applicable law;
+            </li>
+            <li>
+              Access or attempt to access any other user’s Crossfeed account or
+              the data contained in such account; and
+            </li>
+            <li>
+              Introduce malware to the Crossfeed platform or otherwise impair,
+              harm, or disrupt the functioning or integrity of the platform in
+              any way;
+            </li>
+          </ul>
+        </li>
+        <li>
+          You accept that, at CISA’s sole discretion, CISA may terminate or
+          suspend your access to the Crossfeed service due to violation of these
+          terms or any other reason; and
+        </li>
+        <li>
+          You are authorized to make the above certifications on your
+          organization’s behalf.
+        </li>
+      </ul>
+      <p>ToU version {getToUVersion()}</p>
       <Checkbox
         required
         id="accept"
@@ -75,8 +151,12 @@ export const TermsOfUse: React.FC = () => {
         checked={accepted}
         onChange={e => setAccepted(e.target.checked)}
       />
-      <p style={{marginBottom: 0}}><strong>Name:</strong> {user?.fullName}</p>
-      <p><strong>Email:</strong> {user?.email}</p>
+      <p style={{ marginBottom: 0 }}>
+        <strong>Name:</strong> {user?.fullName}
+      </p>
+      <p>
+        <strong>Email:</strong> {user?.email}
+      </p>
       <div className="width-full display-flex flex-justify-start">
         {errors.global && <p className="text-error">{errors.global}</p>}
       </div>

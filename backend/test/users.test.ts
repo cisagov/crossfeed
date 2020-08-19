@@ -244,11 +244,15 @@ describe('user', () => {
             id: user.id
           })
         )
+        .send({
+          version: '1-user'
+        })
         .expect(200);
       expect(response.body.email).toEqual(user.email);
       expect(response.body.dateAcceptedTerms).toBeTruthy();
+      expect(response.body.acceptedTermsVersion).toEqual('1-user');
     });
-    it("can't accept terms twice", async () => {
+    it('accepting terms twice updates user', async () => {
       const user = await User.create({
         firstName: '',
         lastName: '',
@@ -263,8 +267,13 @@ describe('user', () => {
             id: user.id
           })
         )
-        .expect(422);
-      expect(response.text).toContain('already accepted');
+        .send({
+          version: '2-user'
+        })
+        .expect(200);
+      expect(response.body.email).toEqual(user.email);
+      expect(response.body.dateAcceptedTerms).toBeTruthy();
+      expect(response.body.acceptedTermsVersion).toEqual('2-user');
     });
   });
   describe('list', () => {

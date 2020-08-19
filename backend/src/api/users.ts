@@ -170,19 +170,15 @@ export const me = wrapHandler(async (event) => {
   };
 });
 
-export const meAcceptTerms = wrapHandler(async (event) => {
+export const acceptTerms = wrapHandler(async (event) => {
   await connectToDatabase();
   const user = await User.findOne(getUserId(event));
-  if (!user) {
+  if (!user || !event.body) {
     return NotFound;
   }
-  if (user.dateAcceptedTerms) {
-    return {
-      statusCode: 422,
-      body: 'User has already accepted terms.'
-    };
-  }
   user.dateAcceptedTerms = new Date();
+  console.log(JSON.parse(event.body));
+  user.acceptedTermsVersion = JSON.parse(event.body).version;
   await user.save();
   return {
     statusCode: 200,
