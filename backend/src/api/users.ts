@@ -143,14 +143,33 @@ export const invite = wrapHandler(async (event) => {
       )
       .execute();
 
+    const staging = process.env.NODE_ENV !== 'production';
+
+    const url = `https://${staging ? 'staging.' : ''}crossfeed.cyber.dhs.gov`;
+
     await sendEmail(
       user.email,
       'Crossfeed Invitation',
-      `Hi there,\n\nYou've been invite to join the ${organization?.name} organization` +
-        ` on Crossfeed. To accept the invitation and start using Crossfeed, sign on at ` +
-        `https://${
-          process.env.NODE_ENV !== 'production' ? 'staging.' : ''
-        }crossfeed.cyber.dhs.gov.`
+      `Hi there,
+
+You've been invite to join the ${
+        organization?.name
+      } organization on Crossfeed. To accept the invitation and start using Crossfeed, sign on at ${url}.
+
+Crossfeed access instructions:
+
+1. Visit ${url}
+2. Select to register with Login.gov
+3. Select to create a new Login.gov ${staging ? 'sandbox ' : ''}account${
+        staging
+          ? '. Note that as Crossfeed staging uses the Login.gov sandbox, this will be a different account from your normal Login.gov account'
+          : ''
+      }
+4. After configuring your account, you will be redirected to Crossfeed
+  
+On the "Dashboard" tab, you can view information about each subdomain and the associated ports and services detected on each one. The "Scans" tab has a list of enabled scans and the schedule that they run on. The "Risk Summary" tab has a visual summary of identified assets, and the "Vulnerabilities" tab lists discovered vulnerabilities.
+
+If you encounter any difficulties, please feel free to reply to this email (support@crossfeed.cyber.dhs.gov).`
     );
   }
 

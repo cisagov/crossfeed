@@ -106,6 +106,5 @@ export const sendEmail = async (
     }
   };
 
-  const res = await ses.sendEmail(params).promise();
-  console.log(res);
+  await ses.sendEmail(params).promise();
 };
