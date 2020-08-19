@@ -27,6 +27,7 @@ services:
     build: ./backend
     volumes:
       - ./backend/src:/app/src
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "3000:3000"
     env_file:

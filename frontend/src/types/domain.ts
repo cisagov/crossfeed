@@ -1,5 +1,6 @@
 import { SortingRule, Filters } from 'react-table';
 import { Organization } from './organization';
+import { Vulnerability } from './vulnerability';
 
 export interface Query<T extends object> {
   sort: SortingRule<T>[];
@@ -33,6 +34,7 @@ export interface Domain {
   asn: string | null;
   cloudHosted: boolean;
   services: Service[];
+  vulnerabilities: Vulnerability[];
   organization: Organization;
   webTechnologies: Technology[];
   ssl: SSLInfo | null;

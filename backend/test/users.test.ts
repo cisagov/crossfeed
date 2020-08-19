@@ -163,8 +163,51 @@ describe('user', () => {
       expect(response.body.invitePending).toEqual(false);
       expect(response.body.firstName).toEqual('new first name');
       expect(response.body.lastName).toEqual('new last name');
+      expect(response.body.fullName).toEqual('new first name new last name');
       expect(response.body.roles[1].approved).toEqual(true);
       expect(response.body.roles[1].role).toEqual('user');
+    });
+    it('invite existing user by same organization admin should work, and should update the user organization role', async () => {
+      const email = Math.random() + '@crossfeed.cisa.gov';
+      const user = await User.create({
+        firstName: 'first',
+        lastName: 'last',
+        email
+      }).save();
+      await Role.create({
+        role: 'user',
+        approved: false,
+        organization,
+        user
+      }).save();
+      const response = await request(app)
+        .post('/users')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .send({
+          firstName: 'first',
+          lastName: 'last',
+          email,
+          organization: organization.id,
+          organizationAdmin: true
+        })
+        .expect(200);
+      expect(response.body.id).toEqual(user.id);
+      expect(response.body.email).toEqual(email);
+      expect(response.body.invitePending).toEqual(false);
+      expect(response.body.firstName).toEqual('first');
+      expect(response.body.lastName).toEqual('last');
+      expect(response.body.roles[0].approved).toEqual(true);
+      expect(response.body.roles[0].role).toEqual('admin');
     });
   });
   describe('me', () => {

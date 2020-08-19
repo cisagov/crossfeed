@@ -9,7 +9,7 @@ describe('scheduler', () => {
     await connectToDatabase();
   });
   test('should run a scan for the first time', async () => {
-    const scan = await Scan.create({
+    let scan = await Scan.create({
       name: 'findomain',
       arguments: {},
       frequency: 999
@@ -43,10 +43,14 @@ describe('scheduler', () => {
       runCommand.mock.calls[0][0].scanTaskId
     );
     expect(scanTask?.status).toEqual('requested');
+    expect(scanTask?.fargateTaskArn).toEqual('mock_task_arn');
+
+    scan = (await Scan.findOne(scan.id))!;
+    expect(scan.lastRun).toBeTruthy();
   });
   describe('scheduling', () => {
     test('should not run a scan when a scantask for that scan and organization is already in progress', async () => {
-      const scan = await Scan.create({
+      let scan = await Scan.create({
         name: 'findomain',
         arguments: {},
         frequency: 999
@@ -74,6 +78,8 @@ describe('scheduler', () => {
       );
 
       expect(runCommand).toHaveBeenCalledTimes(0);
+      scan = (await Scan.findOne(scan.id))!;
+      expect(scan.lastRun).toBeFalsy();
     });
     test('should run a scan when a scantask for that scan and another organization is already in progress', async () => {
       const scan = await Scan.create({

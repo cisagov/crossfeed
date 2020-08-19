@@ -47,6 +47,15 @@ export class ScanTask extends BaseEntity {
   @Column('text')
   type: 'fargate' | 'lambda';
 
+  /**
+   * ARN of the associated fargate task.
+   */
+  @Column({
+    type: 'text',
+    nullable: true
+  })
+  fargateTaskArn: string | null;
+
   @Column({
     type: 'text',
     nullable: true

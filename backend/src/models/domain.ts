@@ -12,9 +12,10 @@ import {
 } from 'typeorm';
 import { Service } from './service';
 import { Organization } from './organization';
+import { Vulnerability } from './vulnerability';
 
 @Entity()
-@Index(['name'], { unique: true })
+@Index(['name', 'organization'], { unique: true })
 export class Domain extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -42,6 +43,9 @@ export class Domain extends BaseEntity {
 
   @OneToMany((type) => Service, (service) => service.domain)
   services: Service[];
+
+  @OneToMany((type) => Vulnerability, (vulnerability) => vulnerability.domain)
+  vulnerabilities: Vulnerability[];
 
   @ManyToOne((type) => Organization, { onDelete: 'CASCADE' })
   organization: Organization;
@@ -82,6 +86,7 @@ export class Domain extends BaseEntity {
     icon: string;
     website: string;
     confidence: number;
+    cpe?: string;
     categories: {
       name: string;
       slug: string;

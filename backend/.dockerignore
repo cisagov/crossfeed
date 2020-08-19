@@ -3,3 +3,5 @@ node_modules
 .serverless
 dist
 Dockerfile*
+nvd-dump
+coverage

@@ -12,7 +12,7 @@ resource "aws_db_subnet_group" "default" {
 
 resource "aws_db_instance" "db" {
   identifier            = var.db_name
-  instance_class        = "db.t3.micro" # "db.t2.small"
+  instance_class        = var.db_instance_class
   allocated_storage     = 20
   max_allocated_storage = 1000
   storage_type          = "gp2"
@@ -21,6 +21,8 @@ resource "aws_db_instance" "db" {
   skip_final_snapshot   = true
   availability_zone     = data.aws_availability_zones.available.names[0]
   multi_az              = false
+  backup_retention_period = 7
+  storage_encrypted     = var.db_storage_encrypted
 
   // database information
   name     = var.db_table_name

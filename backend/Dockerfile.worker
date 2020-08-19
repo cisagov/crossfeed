@@ -12,18 +12,23 @@ COPY src ./src
 
 RUN npx webpack --config webpack.worker.config.js
 
-FROM node:14-buster-slim as deps
+FROM golang:1.14.6-buster as deps
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
     wget \
     unzip \
+    ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
 RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/download/1.7.0/findomain-linux -O /usr/bin/findomain && chmod +x /usr/bin/findomain
 
 RUN wget --quiet https://github.com/OWASP/Amass/releases/download/v3.7.3/amass_linux_i386.zip -O amass.zip && unzip -q amass.zip && cp amass_linux_i386/amass /usr/bin && chmod +x /usr/bin/amass
+
+RUN go mod init crossfeed-worker
+
+RUN go get github.com/facebookincubator/nvdtools/...@v0.1.4
 
 FROM node:14-buster-slim
 
@@ -31,7 +36,8 @@ WORKDIR /app
 
 COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 
-COPY --from=deps /usr/bin/findomain /usr/bin/findomain
-COPY --from=deps /usr/bin/amass /usr/bin/amass
+COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsync /go/bin/cpe2cve /usr/bin/
 
-CMD ["node", "worker.bundle.js"]
+COPY --from=deps /etc/ssl/certs /etc/ssl/certs
+
+CMD ["node", "--unhandled-rejections=strict", "worker.bundle.js"]

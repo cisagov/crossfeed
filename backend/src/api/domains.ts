@@ -6,7 +6,8 @@ import {
   ValidateNested,
   isUUID,
   IsOptional,
-  IsObject
+  IsObject,
+  IsUUID
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Domain, connectToDatabase } from '../models';
@@ -32,6 +33,10 @@ class DomainFilters {
   @IsString()
   @IsOptional()
   ip?: string;
+
+  @IsUUID()
+  @IsOptional()
+  organization?: string;
 }
 
 class DomainSearch {
@@ -78,6 +83,11 @@ class DomainSearch {
         { service: `%${this.filters?.service}%` }
       );
     }
+    if (this.filters?.organization) {
+      qs.andWhere('domain.organization = :org', {
+        org: this.filters.organization
+      });
+    }
     return qs;
   }
 
@@ -86,9 +96,10 @@ class DomainSearch {
     let qs = Domain.createQueryBuilder('domain')
       .leftJoinAndSelect('domain.services', 'services')
       .leftJoinAndSelect('domain.organization', 'organization')
+      .leftJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
       .orderBy(`domain.${this.sort}`, this.order)
       .groupBy(
-        'domain.id, domain.ip, domain.name, organization.id, services.id'
+        'domain.id, domain.ip, domain.name, organization.id, services.id, vulnerabilities.id'
       );
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
@@ -121,6 +132,11 @@ class DomainSearch {
     if (this.filters?.service) {
       qs.andWhere('services.service ILIKE :service', {
         service: `%${this.filters?.service}%`
+      });
+    }
+    if (this.filters?.organization) {
+      qs.andWhere('domain.organization = :org', {
+        org: this.filters.organization
       });
     }
   }
@@ -181,7 +197,7 @@ export const get = wrapHandler(async (event) => {
   const result = await Domain.findOne(
     { id, ...where },
     {
-      relations: ['services', 'organization']
+      relations: ['services', 'organization', 'vulnerabilities']
     }
   );
 

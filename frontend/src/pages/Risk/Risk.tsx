@@ -1,185 +1,167 @@
-import React from 'react';
-import classes from './Risk.module.css';
-import { ResponsivePie, PieDatum } from '@nivo/pie';
-import { ResponsiveBar, BarDatum } from '@nivo/bar';
-import { Table } from '@trussworks/react-uswds';
-import { FaInfoCircle } from 'react-icons/fa';
+import React, { useCallback, useState, useEffect } from 'react';
+import classes from './Risk.module.scss';
+import { ResponsivePie } from '@nivo/pie';
+import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
+import { Checkbox, Grid } from '@trussworks/react-uswds';
 
-// TODO: Pull in actual data to render charts
-const pieData = [
-  {
-    id: 'java',
-    label: 'Java',
-    value: 12,
-    color: 'hsl(275, 70%, 50%)'
-  },
-  {
-    id: 'akamai',
-    label: 'Akamai',
-    value: 107,
-    color: 'hsl(278, 70%, 50%)'
-  },
-  {
-    id: 'apache',
-    label: 'Apache',
-    value: 0,
-    color: 'hsl(177, 70%, 50%)'
-  },
-  {
-    id: 'drupal',
-    label: 'Drupal',
-    value: 138,
-    color: 'hsl(50, 70%, 50%)'
-  },
-  {
-    id: 'wordpress',
-    label: 'Wordpress',
-    value: 267,
-    color: 'hsl(159, 70%, 50%)'
-  }
-];
-const pieData2 = [
-  {
-    id: 'low',
-    label: 'Low',
-    value: 5,
-    color: 'hsl(275, 70%, 50%)'
-  },
-  {
-    id: 'medium',
-    label: 'Medium',
-    value: 3,
-    color: 'hsl(50, 70%, 50%)'
-  },
-  {
-    id: 'high',
-    label: 'High',
-    value: 1,
-    color: 'hsl(177, 70%, 50%)'
-  },
-  {
-    id: 'critical',
-    label: 'Critical',
-    value: 1,
-    color: 'hsl(278, 70%, 50%)'
-  }
-];
-const MyResponsivePie = ({ data }: { data: PieDatum[] }) => (
-  <ResponsivePie
-    data={data}
-    margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-    innerRadius={0.5}
-    padAngle={0.7}
-  />
-);
+const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
 
-const barData = [
-  {
-    port: '443',
-    count: 18,
-    color: 'hsl(275, 70%, 50%)'
-  },
-  {
-    port: '80',
-    count: 16,
-    color: 'hsl(278, 70%, 50%)'
-  },
-  {
-    port: '22',
-    count: 5,
-    color: 'hsl(177, 70%, 50%)'
-  },
-  {
-    port: '21',
-    count: 2,
-    color: 'hsl(50, 70%, 50%)'
-  },
-  {
-    port: '8080',
-    count: 2,
-    color: 'hsl(159, 70%, 50%)'
-  }
-];
-const barData2 = [
-  {
-    port: '443',
-    count: 18,
-    color: 'hsl(275, 70%, 50%)'
-  },
-  {
-    port: '80',
-    count: 16,
-    color: 'hsl(278, 70%, 50%)'
-  },
-  {
-    port: '22',
-    count: 5,
-    color: 'hsl(177, 70%, 50%)'
-  },
-  {
-    port: '21',
-    count: 2,
-    color: 'hsl(50, 70%, 50%)'
-  },
-  {
-    port: '8080',
-    count: 2,
-    color: 'hsl(159, 70%, 50%)'
-  }
-];
+const getColor = ({ index }: { index: number }) => {
+  return allColors[index % allColors.length];
+};
 
-const MyResponsiveBar = ({ data }: { data: BarDatum[] }) => (
-  <ResponsiveBar
-    data={data}
-    keys={['count']}
-    indexBy="port"
-    margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-    padding={0.3}
-    colors={{ scheme: 'nivo' }}
-    borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-    axisTop={null}
-    axisRight={null}
-    axisBottom={{
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: 'Port',
-      legendPosition: 'middle',
-      legendOffset: 32
-    }}
-    axisLeft={{
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: 'Count',
-      legendPosition: 'middle',
-      legendOffset: -40
-    }}
-    labelSkipWidth={12}
-    labelSkipHeight={12}
-    labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-    animate={true}
-    motionStiffness={90}
-    motionDamping={15}
-  />
-);
+const getSeverityColor = ({ id }: { id: string }) => {
+  if (id === 'None') return 'rgb(255, 255, 255)';
+  else if (id === 'Low') return 'rgb(194, 244, 255)';
+  else if (id === 'Medium') return 'rgb(0, 185, 227)';
+  else if (id === 'High') return 'rgb(0, 111, 162)';
+  else if (id === 'Critical') return 'rgb(0, 73, 121)';
+};
+
+const MyResponsivePie = ({ data, colors }: { data: Point[]; colors: any }) => {
+  return (
+    <ResponsivePie
+      data={data as any}
+      margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+      innerRadius={0.5}
+      padAngle={0.7}
+      radialLabelsSkipAngle={10}
+      slicesLabelsSkipAngle={10}
+      colors={colors}
+    />
+  );
+};
+
+const MyResponsiveBar = ({
+  data,
+  xLabel,
+  longXValues = false
+}: {
+  data: Point[];
+  xLabel: string;
+  longXValues?: boolean;
+}) => {
+  return (
+    <ResponsiveBar
+      data={data.map(e => ({ ...e, [xLabel]: e.value })) as any}
+      keys={[xLabel]}
+      indexBy="label"
+      margin={{ top: 50, right: 130, bottom: longXValues ? 250 : 50, left: 60 }}
+      padding={0.3}
+      colors={getColor}
+      borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
+      axisTop={null}
+      axisRight={null}
+      axisBottom={{
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: longXValues ? 90 : 0,
+        legend: longXValues ? '' : xLabel,
+        legendPosition: 'middle',
+        legendOffset: 40
+      }}
+      axisLeft={{
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+        legend: 'Count',
+        legendPosition: 'middle',
+        legendOffset: -40
+      }}
+      labelSkipWidth={12}
+      labelSkipHeight={12}
+      labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
+      animate={true}
+      motionStiffness={90}
+      motionDamping={15}
+      // isInteractive={false}
+    />
+  );
+};
+
+interface Point {
+  id: string;
+  label: string;
+  value: number;
+}
+
+interface Stats {
+  domains: {
+    services: Point[];
+    ports: Point[];
+    numVulnerabilities: Point[];
+    total: number;
+  };
+  vulnerabilities: {
+    severity: Point[];
+  };
+}
+
+interface ApiResponse {
+  result: Stats;
+}
 
 const Risk: React.FC = () => {
-  const { currentOrganization } = useAuthContext();
+  const { currentOrganization, user, apiPost } = useAuthContext();
+
+  const [stats, setStats] = useState<Stats | undefined>(undefined);
+  const [showAll, setShowAll] = useState<boolean>(
+    JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
+  );
+
+  const updateShowAll = (state: boolean) => {
+    setShowAll(state);
+    localStorage.setItem('showGlobal', JSON.stringify(state));
+  };
+
+  const fetchStats = useCallback(async () => {
+    const { result } = await apiPost<ApiResponse>('/stats', {
+      body: {
+        filters: showAll
+          ? {}
+          : {
+              organization: currentOrganization?.id
+            }
+      }
+    });
+    setStats(result);
+  }, [showAll, apiPost, currentOrganization]);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
 
   return (
     <div className={classes.root}>
-      <h1>
-        Risk Dashboard
-        {currentOrganization ? ' - ' + currentOrganization.name : ''}
-      </h1>
-      <h2>
-        Note: this data is demo data and not currently pulled from the database.
-        We plan on implementing this this week.
-      </h2>
-      <h2>Total domains: 24</h2>
-      <h1>Top Action Items</h1>
+      <Grid row>
+        <Grid tablet={{ col: true }}>
+          <h1>
+            Risk Summary
+            {showAll
+              ? ' - Global'
+              : currentOrganization
+              ? ' - ' + currentOrganization.name
+              : ''}
+          </h1>
+        </Grid>
+        <Grid style={{ float: 'right' }}>
+          {((user?.roles && user.roles.length > 1) ||
+            user?.userType === 'globalView' ||
+            user?.userType === 'globalAdmin') && (
+            <Checkbox
+              id="showAll"
+              name="showAll"
+              label="Show all organizations"
+              checked={showAll}
+              onChange={e => updateShowAll(e.target.checked)}
+              className={classes.showAll}
+            />
+          )}
+        </Grid>
+      </Grid>
+      {stats && <h2>Total domains: {stats.domains.total}</h2>}
+      {/* <h1>Top Action Items</h1>
       <Table bordered>
         <React.Fragment key=".0">
           <thead>
@@ -209,53 +191,53 @@ const Risk: React.FC = () => {
             </tr>
           </tbody>
         </React.Fragment>
-      </Table>
-      <h1>Technology Breakdown</h1>
-      <div>
-        <div
-          style={{
-            width: '500px',
-            height: '500px',
-            display: 'inline-block',
-            marginRight: '100px'
-          }}
-        >
-          <h3>Most common services</h3>
-          <MyResponsivePie data={pieData} />
-        </div>
+      </Table> */}
+      {stats && (
+        <>
+          <h1>Technology Breakdown</h1>
+          <div>
+            {stats.domains.services.length > 0 && (
+              <div className={classes.chart}>
+                <h3>Most common services</h3>
+                <MyResponsivePie
+                  data={stats.domains.services}
+                  colors={allColors}
+                />
+              </div>
+            )}
 
-        <div
-          style={{ width: '500px', height: '500px', display: 'inline-block' }}
-        >
-          <h3>Most common ports</h3>
-          <MyResponsiveBar data={barData} />
-        </div>
-      </div>
-      <h1>Vulnerabilities Breakdown</h1>
-      <div>
-        <div
-          style={{
-            width: '500px',
-            height: '500px',
-            display: 'inline-block',
-            marginRight: '100px'
-          }}
-        >
-          <h3>Severity Levels</h3>
-          <MyResponsivePie data={pieData2} />
-        </div>
+            {stats.domains.ports.length > 0 && (
+              <div className={classes.chart}>
+                <h3>Most common ports</h3>
+                <MyResponsiveBar data={stats.domains.ports} xLabel={'Port'} />
+              </div>
+            )}
+          </div>
+          <h1>Vulnerabilities Breakdown</h1>
+          <div>
+            {stats.vulnerabilities.severity.length > 0 && (
+              <div className={classes.chart}>
+                <h3>Severity Levels</h3>
+                <MyResponsivePie
+                  data={stats.vulnerabilities.severity}
+                  colors={getSeverityColor}
+                />
+              </div>
+            )}
 
-        <div
-          style={{ width: '500px', height: '500px', display: 'inline-block' }}
-        >
-          <h3>Open Vulnerabilities by Domain</h3>
-          <MyResponsiveBar data={barData2} />
-        </div>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-      </div>
+            {stats.domains.numVulnerabilities.length > 0 && (
+              <div className={classes.chart}>
+                <h3>Domains with the Most Open Vulnerabilities</h3>
+                <MyResponsiveBar
+                  data={stats.domains.numVulnerabilities}
+                  xLabel={'Domain'}
+                  longXValues={true}
+                />
+              </div>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

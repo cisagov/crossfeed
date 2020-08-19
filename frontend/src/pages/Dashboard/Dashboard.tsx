@@ -8,6 +8,7 @@ import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
+import { Grid, Checkbox } from '@trussworks/react-uswds';
 
 interface ApiResponse {
   result: Domain[];
@@ -30,37 +31,51 @@ export const Dashboard: React.FC = () => {
     sort: [{ id: 'name', desc: true }],
     filters: []
   });
-
+  const [showAll, setShowAll] = useState<boolean>(
+    JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
+  );
   const columns = useMemo(() => createColumns(), []);
   const PAGE_SIZE = 25;
   const history = useHistory();
 
-  const queryDomains = async ({
-    q,
-    pageSize = PAGE_SIZE
-  }: {
-    q: Query<Domain>;
-    pageSize?: number;
-  }) => {
-    const { page, sort, filters } = q;
-    return apiPost<ApiResponse>('/domain/search', {
-      body: {
-        pageSize,
-        page,
-        sort: sort[0]?.id ?? 'name',
-        order: sort[0]?.desc ? 'DESC' : 'ASC',
-        filters: filters
-          .filter(f => Boolean(f.value))
-          .reduce(
-            (accum, next) => ({
-              ...accum,
-              [next.id]: next.value
-            }),
-            {}
-          )
-      }
-    });
+  const updateShowAll = (state: boolean) => {
+    setShowAll(state);
+    localStorage.setItem('showGlobal', JSON.stringify(state));
   };
+
+  const queryDomains = useCallback(
+    async ({
+      q,
+      pageSize = PAGE_SIZE
+    }: {
+      q: Query<Domain>;
+      pageSize?: number;
+    }) => {
+      const { page, sort, filters } = q;
+      const tableFilters = filters
+        .filter(f => Boolean(f.value))
+        .reduce(
+          (accum, next) => ({
+            ...accum,
+            [next.id]: next.value
+          }),
+          {}
+        );
+      return apiPost<ApiResponse>('/domain/search', {
+        body: {
+          pageSize,
+          page,
+          sort: sort[0]?.id ?? 'name',
+          order: sort[0]?.desc ? 'DESC' : 'ASC',
+          filters: {
+            ...tableFilters,
+            organization: showAll ? undefined : currentOrganization?.id
+          }
+        }
+      });
+    },
+    [apiPost, currentOrganization, showAll]
+  );
 
   const fetchDomainTable = useCallback(
     async (q: Query<Domain>) => {
@@ -77,7 +92,7 @@ export const Dashboard: React.FC = () => {
         console.error(e);
       }
     },
-    [apiPost, user]
+    [queryDomains, user]
   );
 
   // Called to sign in the user
@@ -118,7 +133,7 @@ export const Dashboard: React.FC = () => {
     } catch {
       history.push('/');
     }
-  }, [apiPost, history, login, user, queryDomains, refreshUser]);
+  }, [apiPost, history, login, user, refreshUser, fetchDomainTable]);
 
   React.useEffect(() => {
     if (user) {
@@ -138,9 +153,32 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <h1>
-        Dashboard{currentOrganization ? ' - ' + currentOrganization.name : ''}
-      </h1>{' '}
+      <Grid row>
+        <Grid tablet={{ col: true }}>
+          <h1>
+            Dashboard
+            {showAll
+              ? ' - Global'
+              : currentOrganization
+              ? ' - ' + currentOrganization.name
+              : ''}
+          </h1>{' '}
+        </Grid>
+        <Grid style={{ float: 'right' }}>
+          {((user?.roles && user.roles.length > 1) ||
+            user?.userType === 'globalView' ||
+            user?.userType === 'globalAdmin') && (
+            <Checkbox
+              id="showAll"
+              name="showAll"
+              label="Show all organizations"
+              checked={showAll}
+              onChange={e => updateShowAll(e.target.checked)}
+              className={classes.showAll}
+            />
+          )}
+        </Grid>
+      </Grid>
       <Table<Domain>
         renderPagination={renderPagination}
         columns={columns}

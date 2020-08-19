@@ -1,16 +1,54 @@
 import React from 'react';
 import { Column, CellProps } from 'react-table';
-import { Report } from 'types';
+import { Vulnerability } from 'types';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ColumnFilter, selectFilter } from 'components';
+import { Link } from 'react-router-dom';
 
-type CreateColumns = () => Column<Report>[];
+type CreateColumns = () => Column<Vulnerability>[];
 
 export const createColumns: CreateColumns = () => [
   {
+    Header: 'Title',
+    accessor: 'title',
+    width: 800,
+    Filter: ColumnFilter
+  },
+  {
+    Header: 'Domain',
+    id: 'domain',
+    accessor: ({ domain }) => (
+      <Link to={`/domain/${domain.id}`}>{domain?.name}</Link>
+    ),
+    width: 800,
+    Filter: ColumnFilter
+  },
+  {
+    Header: 'Severity',
+    id: 'severity',
+    accessor: ({ severity }) => severity,
+    width: 100,
+    Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
+  },
+  {
+    Header: 'Created',
+    id: 'created',
+    accessor: ({ createdAt }) =>
+      `${formatDistanceToNow(parseISO(createdAt))} ago`,
+    width: 250,
+    disableFilters: true
+  },
+  {
+    Header: 'State',
+    id: 'state',
+    accessor: 'state',
+    width: 100,
+    Filter: selectFilter(['open', 'closed'])
+  },
+  {
     Header: 'Details',
-    Cell: ({ row }: CellProps<Report>) => (
+    Cell: ({ row }: CellProps<Vulnerability>) => (
       <span
         {...row.getToggleRowExpandedProps()}
         className="text-center display-block"
@@ -19,46 +57,5 @@ export const createColumns: CreateColumns = () => [
       </span>
     ),
     disableFilters: true
-  },
-  {
-    Header: 'Created',
-    id: 'created',
-    accessor: ({ created }) => `${formatDistanceToNow(parseISO(created))} ago`,
-    width: 250,
-    disableFilters: true
-  },
-  {
-    Header: 'Severity',
-    accessor: 'severity',
-    width: 100,
-    Filter: selectFilter([
-      'low',
-      'medium',
-      'high',
-      'critical',
-      'none',
-      'unknown'
-    ])
-  },
-  {
-    Header: 'State',
-    accessor: 'state',
-    width: 100,
-    Filter: selectFilter([
-      'duplicate',
-      'informative',
-      'needs-more-info',
-      'new',
-      'not-applicable',
-      'resolved',
-      'spam',
-      'triaged'
-    ])
-  },
-  {
-    Header: 'Title',
-    accessor: 'title',
-    width: 800,
-    Filter: ColumnFilter
   }
 ];

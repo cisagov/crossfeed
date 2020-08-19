@@ -4,11 +4,20 @@ import * as cors from 'cors';
 import { handler as healthcheck } from './healthcheck';
 import * as auth from './auth';
 import * as domains from './domains';
-import * as reports from './reports';
+import * as vulnerabilities from './vulnerabilities';
 import * as organizations from './organizations';
 import * as scans from './scans';
 import * as users from './users';
 import * as scanTasks from './scan-tasks';
+import * as stats from './stats';
+import { listenForDockerEvents } from './docker-events';
+
+if (
+  (process.env.IS_OFFLINE || process.env.IS_LOCAL) &&
+  typeof jest === 'undefined'
+) {
+  listenForDockerEvents();
+}
 
 const handlerToExpress = (handler) => async (req, res, next) => {
   const { statusCode, body } = await handler(
@@ -82,8 +91,14 @@ authenticatedRoute.use(checkUserSignedTerms);
 
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
-authenticatedRoute.post('/report/search', handlerToExpress(reports.list));
-authenticatedRoute.get('/report/:reportId', handlerToExpress(reports.get));
+authenticatedRoute.post(
+  '/vulnerabilities/search',
+  handlerToExpress(vulnerabilities.list)
+);
+authenticatedRoute.get(
+  '/vulnerabilities/:vulnerabilityId',
+  handlerToExpress(vulnerabilities.get)
+);
 authenticatedRoute.get('/scans', handlerToExpress(scans.list));
 authenticatedRoute.get('/granularScans', handlerToExpress(scans.listGranular));
 authenticatedRoute.post('/scans', handlerToExpress(scans.create));
@@ -128,6 +143,7 @@ authenticatedRoute.post(
   '/organizations/:organizationId/granularScans/:scanId/update',
   handlerToExpress(organizations.updateScan)
 );
+authenticatedRoute.post('/stats', handlerToExpress(stats.get));
 authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
