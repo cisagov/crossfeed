@@ -1,6 +1,6 @@
 import { mocked } from 'ts-jest/utils';
 import getLiveWebsites from '../helpers/getLiveWebsites';
-import wappalyzer from 'simple-wappalyzer';
+import * as wappalyzer from 'simple-wappalyzer';
 import { Domain, Service } from '../../models';
 import { CommandOptions } from '../ecs-client';
 import { handler } from '../wappalyzer';
