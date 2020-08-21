@@ -66,7 +66,8 @@
     "preinstall": "npx npm-force-resolutions",
     "codegen": "ts-node src/tools/generate-censys-types.ts",
     "build-worker": "./tools/build-worker.sh",
-    "deploy-worker": "./tools/deploy-worker.sh",
+    "deploy-worker-staging": "./tools/deploy-worker.sh",
+    "deploy-worker-prod": "./tools/deploy-worker.sh crossfeed-prod-worker",
     "syncdb": "docker-compose exec backend npx sls invoke local -f syncdb",
     "scheduler": "docker-compose exec scheduler npx sls invoke local -f scheduler"
   },
