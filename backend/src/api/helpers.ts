@@ -79,7 +79,7 @@ export const sendEmail = async (
   subject: string,
   body: string
 ) => {
-  let transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
     SES: new SES({ region: 'us-east-1' })
   });
 

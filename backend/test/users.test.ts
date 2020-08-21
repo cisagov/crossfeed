@@ -10,7 +10,8 @@ const sesSendEmailPromise = jest.fn().mockReturnValue({
 });
 
 AWS.SES = jest.fn().mockImplementation(() => ({
-  sendEmail: sesSendEmailPromise
+  sendEmail: sesSendEmailPromise,
+  sendRawEmail: sesSendEmailPromise
 }));
 
 describe('user', () => {
