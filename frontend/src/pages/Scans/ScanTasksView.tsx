@@ -121,7 +121,7 @@ export const ScanTasksView: React.FC = () => {
       id: 'actions',
       Cell: ({ row }: CellProps<ScanTask>) => (
         <>
-          {row.original.fargateTaskArn && (
+          {row.original.fargateTaskArn && row.original.fargateTaskArn.match('/(.*)') && (
             <>
               <a
                 target="_blank"
