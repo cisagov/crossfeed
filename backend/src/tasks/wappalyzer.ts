@@ -1,6 +1,6 @@
 import { Domain } from '../models';
 import { plainToClass } from 'class-transformer';
-import wappalyzer from 'simple-wappalyzer';
+import * as wappalyzer from 'simple-wappalyzer';
 import axios from 'axios';
 import { CommandOptions } from './ecs-client';
 import getLiveWebsites from './helpers/getLiveWebsites';
