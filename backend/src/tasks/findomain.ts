@@ -10,7 +10,7 @@ import * as path from 'path';
 const OUT_PATH = path.join(__dirname, 'out-' + Math.random() + '.txt');
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { organizationId, organizationName } = commandOptions;
+  const { organizationId, organizationName, scanId } = commandOptions;
 
   console.log('Running findomain on organization', organizationName);
 
@@ -31,7 +31,9 @@ export const handler = async (commandOptions: CommandOptions) => {
         plainToClass(Domain, {
           name: split[0],
           ip: split[1],
-          organization: { id: organizationId }
+          organization: { id: organizationId },
+          fromRootDomain: rootDomain,
+          discoveredBy: { id: scanId }
         })
       );
     }

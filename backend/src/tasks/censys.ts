@@ -46,14 +46,16 @@ const fetchCensysData = async (rootDomain: string, page: number) => {
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { organizationId, organizationName } = commandOptions;
+  const { organizationId, organizationName, scanId } = commandOptions;
 
   console.log('Running censys on organization', organizationName);
 
   const rootDomains = await getRootDomains(organizationId!);
   const foundDomains = new Set<{
     name: string;
-    organization: { id: string };
+    organization: { id: string },
+    fromRootDomain: string,
+    discoveredBy: { id: string }
   }>();
 
   for (const rootDomain of rootDomains) {
@@ -68,7 +70,9 @@ export const handler = async (commandOptions: CommandOptions) => {
           if (name.endsWith(rootDomain)) {
             foundDomains.add({
               name: name.replace('*.', ''),
-              organization: { id: organizationId! }
+              organization: { id: organizationId! },
+              fromRootDomain: rootDomain,
+              discoveredBy: { id: scanId }
             });
           }
         }
@@ -98,7 +102,9 @@ export const handler = async (commandOptions: CommandOptions) => {
       plainToClass(Domain, {
         ip: ip,
         name: domain.name,
-        organization: domain.organization
+        organization: domain.organization,
+        fromRootDomain: domain.fromRootDomain,
+        discoveredBy: domain.discoveredBy
       })
     );
   }

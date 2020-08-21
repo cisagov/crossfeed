@@ -43,7 +43,7 @@ const wappalyzerResponse = [
 const commandOptions: CommandOptions = {
   organizationId: 'organizationId',
   organizationName: 'organizationName',
-  scanId: 'scanId',
+  scanId: '0fce0882-234a-4f0e-a0d4-e7d6ed50c3b9',
   scanName: 'scanName',
   scanTaskId: 'scanTaskId'
 };

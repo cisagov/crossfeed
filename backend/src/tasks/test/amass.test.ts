@@ -16,7 +16,7 @@ describe('amass', () => {
     await amass({
       organizationId: 'organizationId',
       organizationName: 'organizationName',
-      scanId: 'scanId',
+      scanId: 'ee7640ae-62d9-4e01-8a32-0e42dc8365dd',
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
     });
