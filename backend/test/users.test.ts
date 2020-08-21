@@ -3,6 +3,17 @@ import app from '../src/api/app';
 import { User, connectToDatabase, Organization, Role } from '../src/models';
 import { createUserToken } from './util';
 
+const nodemailer = require('nodemailer'); //Doesn't work with import
+
+const sendMailMock = jest.fn();
+jest.mock('nodemailer');
+nodemailer.createTransport.mockReturnValue({ sendMail: sendMailMock });
+
+beforeEach(() => {
+  sendMailMock.mockClear();
+  nodemailer.createTransport.mockClear();
+});
+
 describe('user', () => {
   let organization;
   let organization2;
