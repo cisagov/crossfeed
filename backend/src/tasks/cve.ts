@@ -1,7 +1,8 @@
 import { Domain, connectToDatabase, Vulnerability } from '../models';
-import { spawnSync, exec } from 'child_process';
+import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
+import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 
 /**
@@ -58,57 +59,41 @@ export const handler = async (commandOptions: CommandOptions) => {
     console.log(`${index} ${host.cpes.join(',')}`);
   }
 
-  const { stdin, stdout, stderr } = exec(
-    "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 nvd-dump/nvdcve-1.1-2*.json.gz"
+  // Should change this to spawnSync
+  const res = execSync(
+    "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 nvd-dump/nvdcve-1.1-2*.json.gz",
+    { input: input, maxBuffer: buffer.constants.MAX_LENGTH }
   );
-  if (!stdin || !stdout || !stderr) {
-    throw new Error("Error executing cpe2cve");
-  }
-  stdin.write(input);
-  stdin.end();
 
+  const split = String(res).split('\n');
   const vulnerabilities: Vulnerability[] = [];
-  await new Promise((resolve, reject) => {
-    stdout.on('data', function (chunk) {
-      for (const line of chunk.split("\n")) {
-        console.error("got line: ", line);
-        const parts = line.split(' ');
-        if (parts.length < 5) {
-          console.error("Skipping line: ", line);
-          return;
-        }
-        const domain = hostsToCheck[parseInt(parts[0])].domain;
+  for (const line of split) {
+    const parts = line.split(' ');
+    if (parts.length < 5) continue;
+    const domain = hostsToCheck[parseInt(parts[0])].domain;
 
-        const cvss = parseFloat(parts[3]);
-        let severity: string;
+    const cvss = parseFloat(parts[3]);
+    let severity: string;
 
-        if (cvss === 0) severity = 'None';
-        else if (cvss < 4) severity = 'Low';
-        else if (cvss < 7) severity = 'Medium';
-        else if (cvss < 9) severity = 'High';
-        else severity = 'Critical';
+    if (cvss === 0) severity = 'None';
+    else if (cvss < 4) severity = 'Low';
+    else if (cvss < 7) severity = 'Medium';
+    else if (cvss < 9) severity = 'High';
+    else severity = 'Critical';
 
-        vulnerabilities.push(
-          plainToClass(Vulnerability, {
-            domain: domain,
-            lastSeen: new Date(Date.now()),
-            title: parts[1],
-            cve: parts[1],
-            cwe: parts[4],
-            cpe: parts[2],
-            cvss,
-            severity,
-            state: 'open'
-          })
-        );
-      }
-    });
-    stdout.on('error', reject);
-    stdout.on('end', resolve);
-    stderr.on('data', a => {
-      console.error("stderr: " + a.toString());
-    });
-  })
-
+    vulnerabilities.push(
+      plainToClass(Vulnerability, {
+        domain: domain,
+        lastSeen: new Date(Date.now()),
+        title: parts[1],
+        cve: parts[1],
+        cwe: parts[4],
+        cpe: parts[2],
+        cvss,
+        severity,
+        state: 'open'
+      })
+    );
+  }
   await saveVulnerabilitiesToDb(vulnerabilities);
 };
