@@ -3,15 +3,14 @@ import app from '../src/api/app';
 import { User, connectToDatabase, Organization, Role } from '../src/models';
 import { createUserToken } from './util';
 
-const AWS = require('aws-sdk');
+const nodemailer = require('nodemailer');
 
-const sesSendEmailPromise = jest.fn().mockReturnValue({
+const sendEmailPromise = jest.fn().mockReturnValue({
   promise: jest.fn().mockResolvedValue({})
 });
 
-AWS.SES = jest.fn().mockImplementation(() => ({
-  sendEmail: sesSendEmailPromise,
-  sendRawEmail: sesSendEmailPromise
+nodemailer.sendMail = jest.fn().mockImplementation(() => ({
+  sendMail: sendEmailPromise
 }));
 
 describe('user', () => {
