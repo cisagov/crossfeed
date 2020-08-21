@@ -87,6 +87,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: true,
+    cpu: '1024',
+    memory: '4096',
     description: 'Matches detected software versions to CVEs from NIST NVD'
   }
 };
