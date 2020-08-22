@@ -94,6 +94,39 @@ class NewUser {
   organizationAdmin: string;
 }
 
+const sendInviteEmail = async (email: string, organization?: Organization) => {
+  const staging = process.env.NODE_ENV !== 'production';
+
+  await sendEmail(
+    email,
+    'Crossfeed Invitation',
+    `Hi there,
+
+You've been invite to join ${
+      organization?.name ? `the ${organization?.name} organization on ` : ''
+    }Crossfeed. To accept the invitation and start using Crossfeed, sign on at ${
+      process.env.FRONTEND_DOMAIN
+    }.
+
+Crossfeed access instructions:
+
+1. Visit ${process.env.FRONTEND_DOMAIN}
+2. Select to register with Login.gov
+3. Select to create a new Login.gov ${staging ? 'sandbox ' : ''}account${
+      staging
+        ? '. Note that as Crossfeed staging uses the Login.gov sandbox, this will be a different account from your normal Login.gov account'
+        : ''
+    }
+4. After configuring your account, you will be redirected to Crossfeed
+
+On the "Dashboard" tab, you can view information about each subdomain and the associated ports and services detected on each one. The "Scans" tab has a list of enabled scans and the schedule that they run on. The "Risk Summary" tab has a visual summary of identified assets, and the "Vulnerabilities" tab lists discovered vulnerabilities.
+
+For more information on using Crossfeed, view the Crossfeed user guide at https://cisagov.github.io/crossfeed/usage.
+
+If you encounter any difficulties, please feel free to reply to this email (support@crossfeed.cyber.dhs.gov).`
+  );
+};
+
 export const invite = wrapHandler(async (event) => {
   const body = await validateBody(NewUser, event.body);
   // Invoker must be either an organization or global admin
@@ -110,21 +143,26 @@ export const invite = wrapHandler(async (event) => {
     email: body.email
   });
 
+  let organization: Organization | undefined;
+
+  if (body.organization) {
+    organization = await Organization.findOne(body.organization);
+  }
+
   if (!user) {
     user = await User.create({
       invitePending: true,
       ...body
     });
     await User.save(user);
+    await sendInviteEmail(user.email, organization);
   } else if (!user.firstName && !user.lastName) {
     user.firstName = body.firstName;
     user.lastName = body.lastName;
     await User.save(user);
   }
 
-  if (body.organization) {
-    const organization = await Organization.findOne(body.organization);
-
+  if (organization) {
     // Create approved role if organization supplied
     await Role.createQueryBuilder()
       .insert()
@@ -142,37 +180,6 @@ export const invite = wrapHandler(async (event) => {
     `
       )
       .execute();
-
-    const staging = process.env.NODE_ENV !== 'production';
-
-    await sendEmail(
-      user.email,
-      'Crossfeed Invitation',
-      `Hi there,
-
-You've been invite to join the ${
-        organization?.name
-      } organization on Crossfeed. To accept the invitation and start using Crossfeed, sign on at ${
-        process.env.FRONTEND_DOMAIN
-      }.
-
-Crossfeed access instructions:
-
-1. Visit ${process.env.FRONTEND_DOMAIN}
-2. Select to register with Login.gov
-3. Select to create a new Login.gov ${staging ? 'sandbox ' : ''}account${
-        staging
-          ? '. Note that as Crossfeed staging uses the Login.gov sandbox, this will be a different account from your normal Login.gov account'
-          : ''
-      }
-4. After configuring your account, you will be redirected to Crossfeed
-  
-On the "Dashboard" tab, you can view information about each subdomain and the associated ports and services detected on each one. The "Scans" tab has a list of enabled scans and the schedule that they run on. The "Risk Summary" tab has a visual summary of identified assets, and the "Vulnerabilities" tab lists discovered vulnerabilities.
-
-For more information on using Crossfeed, view the Crossfeed user guide at https://cisagov.github.io/crossfeed/usage.
-
-If you encounter any difficulties, please feel free to reply to this email (support@crossfeed.cyber.dhs.gov).`
-    );
   }
 
   const updated = await User.findOne(
