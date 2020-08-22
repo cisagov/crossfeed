@@ -10,7 +10,7 @@ export default async () => {
   await User.create({
     firstName: '',
     lastName: '',
-    email: Math.random() + "@crossfeed.cisa.gov",
+    email: Math.random() + '@crossfeed.cisa.gov',
     id: DUMMY_USER_ID,
     userType: 'standard'
   }).save();

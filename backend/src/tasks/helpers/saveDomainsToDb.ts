@@ -6,7 +6,8 @@ export default async (domains: Domain[]): Promise<void> => {
   for (const domain of domains) {
     const updatedValues = Object.keys(domain)
       .map((key) => {
-        if (['name', 'fromRootDomain', 'discoveredBy'].indexOf(key) > -1) return '';
+        if (['name', 'fromRootDomain', 'discoveredBy'].indexOf(key) > -1)
+          return '';
         else if (key === 'organization') return 'organizationId';
         return domain[key] !== null ? key : '';
       })

@@ -78,7 +78,7 @@ const downloadPath = async (
             const s = {
               ...mapping[key](item[key]),
               service,
-              discoveredBy: {id: commandOptions.scanId},
+              discoveredBy: { id: commandOptions.scanId },
               port: Number(key.slice(1)),
               domain: matchingDomain,
               lastSeen: new Date(Date.now()),

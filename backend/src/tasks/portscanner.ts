@@ -23,7 +23,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         services.push(
           plainToClass(Service, {
             domain: domain,
-            discoveredBy: {id: commandOptions.scanId},
+            discoveredBy: { id: commandOptions.scanId },
             port: port,
             lastSeen: new Date(Date.now())
           })

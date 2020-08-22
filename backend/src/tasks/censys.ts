@@ -53,9 +53,9 @@ export const handler = async (commandOptions: CommandOptions) => {
   const rootDomains = await getRootDomains(organizationId!);
   const foundDomains = new Set<{
     name: string;
-    organization: { id: string },
-    fromRootDomain: string,
-    discoveredBy: { id: string }
+    organization: { id: string };
+    fromRootDomain: string;
+    discoveredBy: { id: string };
   }>();
 
   for (const rootDomain of rootDomains) {

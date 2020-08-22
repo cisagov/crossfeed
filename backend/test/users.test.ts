@@ -91,7 +91,9 @@ describe('user', () => {
       expect(response.body.roles[0].role).toEqual('user');
       expect(response.body.roles[0].organization.id).toEqual(organization.id);
 
-      const role = await Role.findOne(response.body.roles[0].id, { relations: ['createdBy', 'approvedBy'] }) as Role;
+      const role = (await Role.findOne(response.body.roles[0].id, {
+        relations: ['createdBy', 'approvedBy']
+      })) as Role;
       expect(role.createdBy.id).toEqual(DUMMY_USER_ID);
       expect(role.approvedBy.id).toEqual(DUMMY_USER_ID);
     });
@@ -231,7 +233,9 @@ describe('user', () => {
       expect(response.body.roles[0].approved).toEqual(true);
       expect(response.body.roles[0].role).toEqual('admin');
 
-      const role = await Role.findOne(response.body.roles[0].id, { relations: ['createdBy', 'approvedBy'] }) as Role;
+      const role = (await Role.findOne(response.body.roles[0].id, {
+        relations: ['createdBy', 'approvedBy']
+      })) as Role;
       expect(role.createdBy.id).toEqual(adminUser.id);
       expect(role.approvedBy.id).toEqual(DUMMY_USER_ID);
     });

@@ -28,7 +28,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            id: user.id,
+            id: user.id
           })
         )
         .send({
@@ -73,8 +73,8 @@ describe('organizations', () => {
           rootDomains: ['cisa.gov'],
           isPassive: false,
           inviteOnly: true
-        })
-        // .expect(200);
+        });
+      // .expect(200);
       const response = await request(app)
         .post('/organizations/')
         .set(
@@ -630,7 +630,9 @@ describe('organizations', () => {
         .expect(200);
       expect(response.body).toEqual({});
 
-      role = await Role.findOne(role.id, { relations: ['approvedBy'] }) as Role;
+      role = (await Role.findOne(role.id, {
+        relations: ['approvedBy']
+      })) as Role;
       expect(role.approved).toEqual(true);
       expect(role.approvedBy.id).toEqual(DUMMY_USER_ID);
     });
