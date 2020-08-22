@@ -30,6 +30,10 @@ provider:
         - ecs:RunTask
         - iam:PassRole
       Resource: '*'
+    - Effect: Allow
+      Action:
+        - ses:SendRawEmail
+      Resource: '*'
 
 functions:
   - ${file(./src/tasks/functions.yml)}
