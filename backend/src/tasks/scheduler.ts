@@ -159,6 +159,7 @@ interface Event {
 
 export const handler: Handler<Event> = async (event) => {
   await connectToDatabase();
+  console.log('Running scheduler...');
 
   const scans = await Scan.find({
     where: event.scanId ? { id: event.scanId } : {},
@@ -204,4 +205,6 @@ export const handler: Handler<Event> = async (event) => {
       await scan.save();
     }
   }
+
+  console.log('Finished running scheduler.');
 };

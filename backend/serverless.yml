@@ -38,4 +38,3 @@ functions:
 plugins:
   - serverless-domain-manager
   - serverless-webpack
-  - serverless-offline-scheduler

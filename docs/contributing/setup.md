@@ -35,9 +35,11 @@ subnav:
 
 ### Running the scheduler lambda function locally
 
-The scheduler lambda function is set to run on an interval or in response to non-http events. To run it manually, run the following command:
+The scheduler lambda function is set to run on a 5-minute interval when deployed.
 
-- `cd backend && npm run scheduler`
+When running locally, the scheduler function runs every 1 minute, for convenience. To run it manually, click on the "Manually run scheduler" button on the Scans page.
+
+You can check scheduler logs locally by checking the backend container logs.
 
 ### Running tests
 
@@ -68,11 +70,7 @@ Each time you make changes to the worker code, you should run:
 npm run build-worker
 ```
 
-To run the scheduler:
-
-```bash
-docker-compose exec scheduler npx serverless invoke local -f scheduler
-```
+To run the scheduler, click on "Manually run scheduler" on the Scans page.
 
 You can then run `docker ps` or ( `docker ps -a | head -n 3` ) to view running / stopped Docker containers,
 and check their logs with `docker logs [containername]` .
