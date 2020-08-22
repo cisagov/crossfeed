@@ -10,7 +10,7 @@ AWS_ECR_DOMAIN=957221700844.dkr.ecr.us-east-1.amazonaws.com
 
 WORKER_TAG=${1:-crossfeed-staging-worker}
 
-# ./tools/build-worker.sh
+./tools/build-worker.sh
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_ECR_DOMAIN
 docker tag crossfeed-worker:latest $AWS_ECR_DOMAIN/$WORKER_TAG:latest
 docker push $AWS_ECR_DOMAIN/$WORKER_TAG:latest
