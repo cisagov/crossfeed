@@ -22,7 +22,7 @@ import {
 } from './auth';
 
 export const del = wrapHandler(async (event) => {
-  if (!canAccessUser(event, event.pathParameters?.userId)) return Unauthorized;
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
   const id = event.pathParameters?.userId;
   if (!id || !isUUID(id)) {
