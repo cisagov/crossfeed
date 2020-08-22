@@ -33,7 +33,7 @@ export const del = wrapHandler(async (event) => {
     return NotFound;
   }
 
-  if (!isOrgAdmin(event, id)) return Unauthorized;
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
 
   await connectToDatabase();
   const result = await Organization.delete(id);

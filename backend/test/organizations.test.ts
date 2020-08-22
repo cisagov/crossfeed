@@ -182,6 +182,29 @@ describe('organizations', () => {
         .expect(200);
       expect(response.body.affected).toEqual(1);
     });
+    it('delete by org admin should fail', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const response = await request(app)
+        .delete(`/organizations/${organization.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .expect(403);
+      expect(response.body).toEqual({});
+    });
     it('delete by globalView should fail', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
