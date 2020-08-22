@@ -7,9 +7,11 @@ import {
   CreateDateColumn,
   BaseEntity,
   OneToMany,
-  ManyToMany
+  ManyToMany,
+  ManyToOne
 } from 'typeorm';
 import { Domain, Role, Scan, ScanTask } from '.';
+import { User } from './user';
 
 @Entity()
 @Index(['name'], { unique: true })
@@ -61,4 +63,10 @@ export class Organization extends BaseEntity {
     onUpdate: 'CASCADE'
   })
   granularScans: Scan[];
+
+  @ManyToOne((type) => User, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  createdBy: User;
 }

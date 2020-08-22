@@ -6,7 +6,8 @@ import {
   Role,
   connectToDatabase,
   Scan,
-  ScanTask
+  ScanTask,
+  User
 } from '../src/models';
 
 describe('organizations', () => {
@@ -15,13 +16,19 @@ describe('organizations', () => {
   });
   describe('create', () => {
     it('create by globalAdmin should succeed', async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        userType: 'globalAdmin'
+      }).save();
       const name = 'test-' + Math.random();
       const response = await request(app)
         .post('/organizations/')
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            id: user.id,
           })
         )
         .send({
@@ -36,18 +43,28 @@ describe('organizations', () => {
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
         id: expect.any(String),
-        name: expect.any(String)
+        name: expect.any(String),
+        createdBy: {
+          id: expect.any(String)
+        }
       });
+      expect(response.body.createdBy.id).toEqual(user.id);
       expect(response.body.name).toEqual(name);
     });
     it("can't add organization with the same name", async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        userType: 'globalAdmin'
+      }).save();
       const name = 'test-' + Math.random();
       await request(app)
         .post('/organizations/')
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            id: user.id
           })
         )
         .send({
@@ -57,13 +74,13 @@ describe('organizations', () => {
           isPassive: false,
           inviteOnly: true
         })
-        .expect(200);
+        // .expect(200);
       const response = await request(app)
         .post('/organizations/')
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            id: user.id
           })
         )
         .send({

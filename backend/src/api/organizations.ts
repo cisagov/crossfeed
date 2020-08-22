@@ -94,8 +94,11 @@ export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   const body = await validateBody(NewOrganization, event.body);
   await connectToDatabase();
-  const scan = await Organization.create(body);
-  const res = await Organization.save(scan);
+  const organization = await Organization.create({
+    ...body,
+    createdBy: { id: event.requestContext.authorizer!.id }
+  });
+  const res = await Organization.save(organization);
   return {
     statusCode: 200,
     body: JSON.stringify(res)
