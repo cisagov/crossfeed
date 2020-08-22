@@ -319,7 +319,7 @@ describe('user', () => {
         .expect(403);
       expect(response.body).toEqual({});
     });
-    it('delete by regular user on themselves should work', async () => {
+    it('delete by regular user on themselves should not work', async () => {
       const user = await User.create({
         firstName: '',
         lastName: '',
@@ -333,8 +333,8 @@ describe('user', () => {
             id: user.id
           })
         )
-        .expect(200);
-      expect(response.body.affected).toEqual(1);
+        .expect(403);
+      expect(response.body).toEqual({});
     });
   });
   describe('update', () => {
