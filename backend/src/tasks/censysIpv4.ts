@@ -116,7 +116,7 @@ const downloadPath = async (
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { chunkNumber, numChunks, scanId } = commandOptions;
+  const { chunkNumber, numChunks } = commandOptions;
 
   if (chunkNumber === undefined || numChunks === undefined) {
     throw new Error('Chunks not specified.');
