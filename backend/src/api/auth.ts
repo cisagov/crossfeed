@@ -2,6 +2,7 @@ import loginGov from './login-gov';
 import { User, connectToDatabase } from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
+import { DUMMY_USER_ID } from '../../test/util';
 
 export interface UserToken {
   email: string;
@@ -120,8 +121,8 @@ export const authorize = async (event) => {
         relations: ['roles', 'roles.organization']
       }
     );
-    // For running tests, ignore if user does not exist
-    if (process.env.NODE_ENV === 'test' && !user) {
+    // For running tests, ignore the database results if user doesn't exist or is the dummy user
+    if (process.env.NODE_ENV === 'test' && (!user || user.id === DUMMY_USER_ID)) {
       return parsed;
     }
     if (!user) throw Error('User does not exist');

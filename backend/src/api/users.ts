@@ -63,7 +63,8 @@ export const update = wrapHandler(async (event) => {
         user: user,
         organization: { id: body.organization },
         approved: false,
-        role: 'user'
+        role: 'user',
+        createdBy: user // User is creating the role themselves.
       });
     }
     return {
@@ -132,13 +133,16 @@ export const invite = wrapHandler(async (event) => {
         user: user,
         organization: { id: body.organization },
         approved: true,
+        createdBy: { id: event.requestContext.authorizer!.id },
+        approvedBy: { id: event.requestContext.authorizer!.id },
         role: body.organizationAdmin ? 'admin' : 'user'
       })
       .onConflict(
         `
       ("userId", "organizationId") DO UPDATE
       SET "role" = excluded."role",
-          "approved" = excluded."approved"
+          "approved" = excluded."approved",
+          "approvedById" = excluded."approvedById"
     `
       )
       .execute();

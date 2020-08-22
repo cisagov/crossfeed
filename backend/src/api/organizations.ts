@@ -14,7 +14,8 @@ import {
   connectToDatabase,
   Role,
   ScanTask,
-  Scan
+  Scan,
+  User
 } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
@@ -228,6 +229,7 @@ export const approveRole = wrapHandler(async (event) => {
   });
   if (role) {
     role.approved = true;
+    role.approvedBy = plainToClass(User, { id: event.requestContext.authorizer!.id });
     const result = await role.save();
     return {
       statusCode: result ? 200 : 404,

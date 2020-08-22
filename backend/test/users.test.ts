@@ -1,7 +1,7 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
 import { User, connectToDatabase, Organization, Role } from '../src/models';
-import { createUserToken } from './util';
+import { createUserToken, DUMMY_USER_ID } from './util';
 
 const nodemailer = require('nodemailer'); //Doesn't work with import
 
@@ -90,6 +90,10 @@ describe('user', () => {
       expect(response.body.roles[0].approved).toEqual(true);
       expect(response.body.roles[0].role).toEqual('user');
       expect(response.body.roles[0].organization.id).toEqual(organization.id);
+
+      const role = await Role.findOne(response.body.roles[0].id, { relations: ['createdBy', 'approvedBy'] }) as Role;
+      expect(role.createdBy.id).toEqual(DUMMY_USER_ID);
+      expect(role.approvedBy.id).toEqual(DUMMY_USER_ID);
     });
     it('invite existing user by a different organization admin should work, and should not modify other user details', async () => {
       const firstName = 'first name';
@@ -179,6 +183,11 @@ describe('user', () => {
       expect(response.body.roles[1].role).toEqual('user');
     });
     it('invite existing user by same organization admin should work, and should update the user organization role', async () => {
+      const adminUser = await User.create({
+        firstName: 'first',
+        lastName: 'last',
+        email: Math.random() + '@crossfeed.cisa.gov'
+      }).save();
       const email = Math.random() + '@crossfeed.cisa.gov';
       const user = await User.create({
         firstName: 'first',
@@ -189,7 +198,9 @@ describe('user', () => {
         role: 'user',
         approved: false,
         organization,
-        user
+        user,
+        createdBy: adminUser,
+        approvedBy: adminUser
       }).save();
       const response = await request(app)
         .post('/users')
@@ -219,6 +230,10 @@ describe('user', () => {
       expect(response.body.lastName).toEqual('last');
       expect(response.body.roles[0].approved).toEqual(true);
       expect(response.body.roles[0].role).toEqual('admin');
+
+      const role = await Role.findOne(response.body.roles[0].id, { relations: ['createdBy', 'approvedBy'] }) as Role;
+      expect(role.createdBy.id).toEqual(adminUser.id);
+      expect(role.approvedBy.id).toEqual(DUMMY_USER_ID);
     });
   });
   describe('me', () => {
@@ -363,12 +378,13 @@ describe('user', () => {
       expect(response.body.firstName).toEqual(firstName);
       expect(response.body.lastName).toEqual(lastName);
       user = await User.findOne(user.id, {
-        relations: ['roles', 'roles.organization']
+        relations: ['roles', 'roles.organization', 'roles.createdBy']
       });
       expect(user.roles.length).toEqual(1);
       expect(user.roles[0].organization.id).toEqual(orgId);
       expect(user.roles[0].approved).toEqual(false);
       expect(user.roles[0].role).toEqual('user');
+      expect(user.roles[0].createdBy.id).toEqual(user.id);
     });
     it('update by globalView should not work', async () => {
       const response = await request(app)

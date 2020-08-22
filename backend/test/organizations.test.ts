@@ -1,6 +1,6 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { createUserToken } from './util';
+import { createUserToken, DUMMY_USER_ID } from './util';
 import {
   Organization,
   Role,
@@ -614,7 +614,7 @@ describe('organizations', () => {
         ipBlocks: [],
         isPassive: false
       }).save();
-      const role = await Role.create({
+      let role = await Role.create({
         role: 'user',
         approved: false,
         organization
@@ -629,6 +629,10 @@ describe('organizations', () => {
         )
         .expect(200);
       expect(response.body).toEqual({});
+
+      role = await Role.findOne(role.id, { relations: ['approvedBy'] }) as Role;
+      expect(role.approved).toEqual(true);
+      expect(role.approvedBy.id).toEqual(DUMMY_USER_ID);
     });
     it('approveRole by globalView should fail', async () => {
       const organization = await Organization.create({
