@@ -94,6 +94,12 @@ describe('scan', () => {
   });
   describe('create', () => {
     it('create by globalAdmin should succeed', async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        userType: 'globalAdmin'
+      }).save();
       const name = 'censys';
       const arguments_ = { a: 'b' };
       const frequency = 999999;
@@ -102,7 +108,7 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            id: user.id
           })
         )
         .send({
@@ -119,8 +125,15 @@ describe('scan', () => {
       expect(response.body.frequency).toEqual(frequency);
       expect(response.body.isGranular).toEqual(false);
       expect(response.body.organizations).toEqual([]);
+      expect(response.body.createdBy.id).toEqual(user.id);
     });
     it('create a granular scan by globalAdmin should succeed', async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        userType: 'globalAdmin'
+      }).save();
       const name = 'censys';
       const arguments_ = { a: 'b' };
       const frequency = 999999;
@@ -135,7 +148,7 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            id: user.id
           })
         )
         .send({
