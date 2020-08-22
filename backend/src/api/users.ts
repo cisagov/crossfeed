@@ -102,7 +102,7 @@ const sendInviteEmail = async (email: string, organization?: Organization) => {
     'Crossfeed Invitation',
     `Hi there,
 
-You've been invite to join ${
+You've been invited to join ${
       organization?.name ? `the ${organization?.name} organization on ` : ''
     }Crossfeed. To accept the invitation and start using Crossfeed, sign on at ${
       process.env.FRONTEND_DOMAIN
