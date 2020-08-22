@@ -142,7 +142,8 @@ jobs:
           SLS_DEBUG: '*'
 
       - name: Deploy worker - Staging
-        run: npm run deploy-worker
+        if: github.ref == 'refs/heads/master'
+        run: npm run deploy-worker-staging
         working-directory: backend
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
@@ -163,3 +164,11 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           SLS_DEBUG: '*'
+
+      - name: Deploy worker - Production
+        if: github.ref == 'refs/heads/production'
+        run: npm run deploy-worker-prod
+        working-directory: backend
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
