@@ -132,6 +132,45 @@ describe('organizations', () => {
       expect(response.body.isPassive).toEqual(isPassive);
       expect(response.body.inviteOnly).toEqual(inviteOnly);
     });
+    it('update by org admin should update everything but rootDomains and ipBlocks', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const name = 'test-' + Math.random();
+      const rootDomains = ['test-' + Math.random()];
+      const ipBlocks = ['1.1.1.1'];
+      const isPassive = true;
+      const inviteOnly = false;
+      const response = await request(app)
+        .put(`/organizations/${organization.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .send({
+          name,
+          rootDomains,
+          ipBlocks,
+          isPassive,
+          inviteOnly
+        })
+        .expect(200);
+      expect(response.body.name).toEqual(name);
+      expect(response.body.rootDomains).toEqual(organization.rootDomains);
+      expect(response.body.ipBlocks).toEqual(organization.ipBlocks);
+      expect(response.body.isPassive).toEqual(isPassive);
+      expect(response.body.inviteOnly).toEqual(inviteOnly);
+    });
     it('update by globalView should fail', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
