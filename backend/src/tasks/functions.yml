@@ -2,7 +2,7 @@ scheduler:
   handler: src/tasks/scheduler.handler
   timeout: 300
   events:
-    - schedule: rate(1 minute)
+    - schedule: rate(5 minutes)
   reservedConcurrency: 1
 
 syncdb:
