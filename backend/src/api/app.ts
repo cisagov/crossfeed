@@ -3,6 +3,7 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import { handler as healthcheck } from './healthcheck';
 import { handler as scheduler } from '../tasks/scheduler';
+import { handler as crawl } from '../tasks/crawl';
 import * as auth from './auth';
 import * as domains from './domains';
 import * as vulnerabilities from './vulnerabilities';
@@ -20,6 +21,9 @@ if (
   listenForDockerEvents();
 
   setInterval(() => scheduler({}, {} as any, () => null), 30000);
+
+  crawl({} as any);
+
 }
 
 const handlerToExpress = (handler) => async (req, res, next) => {

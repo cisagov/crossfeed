@@ -36,4 +36,6 @@ yarn-error.log*
 .build
 dist
 postgres-data
+es-data
 nvd-dump
+apify-cache
