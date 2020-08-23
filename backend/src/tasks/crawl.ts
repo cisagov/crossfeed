@@ -3,7 +3,7 @@ import { CommandOptions } from './ecs-client';
 import * as wappalyzer from 'simple-wappalyzer';
 import Apify, { CheerioHandlePage } from 'apify';
 import { Client } from '@elastic/elasticsearch';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 const INDEX_NAME = 'webpages';
 
@@ -79,7 +79,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   const crawler = new Apify.CheerioCrawler({
     requestQueue,
     handlePageFunction,
-    maxRequestsPerCrawl: 1000,
+    maxRequestsPerCrawl: 100,
     maxConcurrency: 10
   });
   // Run the crawler
