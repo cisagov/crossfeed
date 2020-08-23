@@ -17,7 +17,7 @@ resource "aws_ssm_parameter" "prod_api_domain" {
 resource "aws_ssm_parameter" "stage_api_domain" {
   name      = "/crossfeed/staging/DOMAIN"
   type      = "String"
-  value     = "api.staging.crossfeed.cyber.dhs.gov"
+  value     = "api.crossfeed.dds.mil"
   overwrite = true
 
   tags = {	
