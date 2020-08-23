@@ -11,18 +11,22 @@ class Scheduler {
   maxConcurrentTasks: number;
   scans: Scan[];
   organizations: Organization[];
+  queuedScanTasks: ScanTask[];
 
   constructor() {}
 
   async initialize({
     scans,
-    organizations
+    organizations,
+    queuedScanTasks
   }: {
     scans: Scan[];
     organizations: Organization[];
+    queuedScanTasks: ScanTask[];
   }) {
     this.scans = scans;
     this.organizations = organizations;
+    this.queuedScanTasks = queuedScanTasks;
     this.ecs = new ECSClient();
     this.numExistingTasks = await this.ecs.getNumTasks();
     this.numLaunchedTasks = 0;
@@ -35,24 +39,36 @@ class Scheduler {
     organization = undefined,
     scan,
     chunkNumber,
-    numChunks
+    numChunks,
+    scanTask
   }: {
     organization?: Organization;
     scan: Scan;
     chunkNumber?: number;
     numChunks?: number;
+    scanTask?: ScanTask
   }) => {
     const { type, global } = SCAN_SCHEMA[scan.name];
 
     const ecsClient = new ECSClient();
-    const scanTask = await ScanTask.create({
+    scanTask = scanTask ?? await ScanTask.create({
       organization: global ? undefined : organization,
       scan,
       type,
-      status: 'created'
+      status: 'created',
     }).save();
+
+    if (this.reachedScanLimit()) {
+      scanTask.status = "queued";
+      if (!scanTask.queuedAt) {
+        scanTask.queuedAt = new Date();
+      }
+      await scanTask.save();
+      return scanTask;
+    }
+
     try {
-      const commandOptions = {
+      const commandOptions = scanTask.input ? JSON.parse(scanTask.input): {
         organizationId: organization?.id,
         organizationName: organization?.name,
         scanId: scan.id,
@@ -76,7 +92,7 @@ class Scheduler {
         if (typeof jest === 'undefined') {
           console.log(
             `Successfully invoked ${scan.name} scan with fargate, with ECS task ARN ${taskArn}` +
-              (numChunks ? `, Chunk ${chunkNumber}/${numChunks}` : '')
+              (commandOptions.numChunks ? `, Chunk ${commandOptions.chunkNumber}/${commandOptions.numChunks}` : '')
           );
         }
       } else {
@@ -85,6 +101,7 @@ class Scheduler {
       scanTask.input = JSON.stringify(commandOptions);
       scanTask.status = 'requested';
       scanTask.requestedAt = new Date();
+      this.numLaunchedTasks++;
     } catch (error) {
       console.error(`Error invoking ${scan.name} scan.`);
       console.error(error);
@@ -93,7 +110,6 @@ class Scheduler {
     } finally {
       await scanTask.save();
     }
-    this.numLaunchedTasks++;
   };
 
   launchScanTask = async ({
@@ -111,12 +127,6 @@ class Scheduler {
       if (typeof jest === 'undefined' && process.env.IS_LOCAL) {
         // For running server on localhost -- doesn't apply in jest tests, though.
         numChunks = 1;
-      }
-      if (
-        this.numExistingTasks + this.numLaunchedTasks + numChunks >=
-        this.maxConcurrentTasks
-      ) {
-        return;
       }
       for (let chunkNumber = 0; chunkNumber < numChunks; chunkNumber++) {
         await this.launchSingleScanTask({
@@ -185,6 +195,12 @@ class Scheduler {
         );
         break;
       }
+    }
+  }
+
+  async runQueued() {
+    for (const scanTask of this.queuedScanTasks) {
+      this.launchSingleScanTask({ scanTask, scan: scanTask.scan })
     }
   }
 }
@@ -263,16 +279,26 @@ export const handler: Handler<Event> = async (event) => {
   if (event.scanId) {
     scanIds.push(event.scanId);
   }
+  const scanWhere = scanIds.length ? { id: In(scanIds) } : {};
+  const orgWhere = event.organizationId ? { id: event.organizationId } : {};
   const scans = await Scan.find({
-    where: scanIds.length ? { id: In(scanIds) } : {},
+    where: scanWhere,
     relations: ['organizations']
   });
-  const organizations = await Organization.find(
-    event.organizationId ? { id: event.organizationId } : {}
-  );
+  const organizations = await Organization.find({
+    where: orgWhere
+  });
+
+  const queuedScanTasks = await ScanTask.find({
+    where: {
+      scan: scanWhere,
+    },
+    relations: ['scan']
+  });
 
   const scheduler = new Scheduler();
-  await scheduler.initialize({ scans, organizations });
+  await scheduler.initialize({ scans, organizations, queuedScanTasks });
+  await scheduler.runQueued();
   await scheduler.run();
   console.log('Finished running scheduler.');
 };
