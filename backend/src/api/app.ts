@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import { handler as healthcheck } from './healthcheck';
+import { handler as scheduler } from '../tasks/scheduler';
 import * as auth from './auth';
 import * as domains from './domains';
 import * as vulnerabilities from './vulnerabilities';
@@ -17,6 +18,8 @@ if (
   typeof jest === 'undefined'
 ) {
   listenForDockerEvents();
+
+  setInterval(() => scheduler({}, {} as any, () => null), 30000);
 }
 
 const handlerToExpress = (handler) => async (req, res, next) => {
@@ -79,6 +82,10 @@ authenticatedRoute.get('/granularScans', handlerToExpress(scans.listGranular));
 authenticatedRoute.post('/scans', handlerToExpress(scans.create));
 authenticatedRoute.put('/scans/:scanId', handlerToExpress(scans.update));
 authenticatedRoute.delete('/scans/:scanId', handlerToExpress(scans.del));
+authenticatedRoute.post(
+  '/scheduler/invoke',
+  handlerToExpress(scans.invokeScheduler)
+);
 authenticatedRoute.post('/scan-tasks/search', handlerToExpress(scanTasks.list));
 authenticatedRoute.post(
   '/scan-tasks/:scanTaskId/kill',
