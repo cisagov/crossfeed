@@ -2,7 +2,7 @@ import { handler as scheduler } from '../scheduler';
 import { connectToDatabase, Scan, Organization, ScanTask } from '../../models';
 
 jest.mock('../ecs-client');
-const { runCommand } = require('../ecs-client');
+const { runCommand, getNumTasks } = require('../ecs-client');
 
 describe('scheduler', () => {
   beforeAll(async () => {
@@ -318,6 +318,93 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(0);
+    });
+  });
+  describe('concurrency', () => {
+    afterAll(() => {
+      getNumTasks.mockImplementation(() => 0);
+    });
+    test('should not run scan if max concurrency has already been reached', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      getNumTasks.mockImplementation(() => 100);
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(0);
+    });
+
+    test('should run only one, not two scans, if only one more scan remaining before max concurrency is reached', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999
+      }).save();
+      const scan2 = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      getNumTasks.mockImplementation(() => 99);
+
+      await scheduler(
+        {
+          scanIds: [scan.id, scan2.id],
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(1);
+    });
+
+    test('should not run a chunked (20) scan at all if only one more scan remaining before max concurrency is reached', async () => {
+      const scan = await Scan.create({
+        name: 'censysIpv4',
+        arguments: {},
+        frequency: 999
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      getNumTasks.mockImplementation(() => 99);
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
         },
         {} as any,
         () => void 0

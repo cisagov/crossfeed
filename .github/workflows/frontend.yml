@@ -97,6 +97,8 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: npm ci
+
+      # REACT_APP_API_URL=https://api.staging.crossfeed.cyber.dhs.gov REACT_APP_FARGATE_LOG_GROUP=crossfeed-staging-worker npm run build &&  aws s3 sync build s3://staging.crossfeed.cyber.dhs.gov --delete
       - name: Build Staging
         if: github.ref == 'refs/heads/master'
         run: npm run build
