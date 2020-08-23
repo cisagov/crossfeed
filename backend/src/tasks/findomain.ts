@@ -17,25 +17,30 @@ export const handler = async (commandOptions: CommandOptions) => {
   const rootDomains = await getRootDomains(organizationId!);
 
   for (const rootDomain of rootDomains) {
-    const args = ['-it', rootDomain, '-u', OUT_PATH];
-    console.log('Running findomain with args', args);
-    spawnSync('findomain', args, { stdio: 'pipe' });
+    try {
+      const args = ['-it', rootDomain, '-u', OUT_PATH];
+      console.log('Running findomain with args', args);
+      spawnSync('findomain', args, { stdio: 'pipe' });
 
-    const output = String(readFileSync(OUT_PATH));
-    const lines = output.split('\n');
-    const domains: Domain[] = [];
-    for (const line of lines) {
-      if (line == '') continue;
-      const split = line.split(',');
-      domains.push(
-        plainToClass(Domain, {
-          name: split[0],
-          ip: split[1],
-          organization: { id: organizationId }
-        })
-      );
+      const output = String(readFileSync(OUT_PATH));
+      const lines = output.split('\n');
+      const domains: Domain[] = [];
+      for (const line of lines) {
+        if (line == '') continue;
+        const split = line.split(',');
+        domains.push(
+          plainToClass(Domain, {
+            name: split[0],
+            ip: split[1],
+            organization: { id: organizationId }
+          })
+        );
+      }
+      await saveDomainsToDb(domains);
+      console.log(`Findomain created/updated ${domains.length} new domains`);
+    } catch (e) {
+      console.error(e);
+      continue;
     }
-    await saveDomainsToDb(domains);
-    console.log(`Findomain created/updated ${domains.length} new domains`);
   }
 };
