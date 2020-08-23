@@ -11,7 +11,7 @@ const jwkSet = {
 };
 
 const clientOptions: ClientMetadata = {
-  client_id: 'urn:gov:gsa:openidconnect.profiles:sp:sso:cisa:crossfeed',
+  client_id: 'urn:gov:gsa:openidconnect.profiles:sp:sso:dds:crossfeed',
   token_endpoint_auth_method: 'private_key_jwt',
   id_token_signed_response_alg: 'RS256',
   key: 'client_id',
@@ -19,7 +19,7 @@ const clientOptions: ClientMetadata = {
   token_endpoint: process.env.LOGIN_GOV_BASE_URL + '/api/openid_connect/token'
 };
 
-loginGov.login = async function (): Promise<{
+loginGov.login = async function(): Promise<{
   url: string;
   state: string;
   nonce: string;
@@ -40,7 +40,7 @@ loginGov.login = async function (): Promise<{
   return { url, state, nonce };
 };
 
-loginGov.callback = async function (body) {
+loginGov.callback = async function(body) {
   const issuer = await Issuer.discover(loginGov.discoveryUrl);
   const client = new issuer.Client(clientOptions, jwkSet);
   const tokenSet = await client.callback(
@@ -58,7 +58,7 @@ loginGov.callback = async function (body) {
   return userInfo;
 };
 
-loginGov.randomString = function (length) {
+loginGov.randomString = function(length) {
   return crypto.randomBytes(length).toString('hex');
 };
 

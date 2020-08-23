@@ -101,7 +101,7 @@ jobs:
         if: github.ref == 'refs/heads/master'
         run: npm run build
         env:
-          REACT_APP_API_URL: https://api.staging.crossfeed.cyber.dhs.gov
+          REACT_APP_API_URL: https://api.crossfeed.dds.mil
           REACT_APP_FARGATE_LOG_GROUP: crossfeed-staging-worker
 
       - name: Build Production
