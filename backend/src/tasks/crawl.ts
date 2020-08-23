@@ -87,10 +87,6 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   const data = await dataset.getData();
   console.error(data.items.map((e) => (e as any).url));
-  // const body = data.items.map(doc => ({ index: { _index: 'pages' }, ...doc}) )
-
-  // const { body: bulkResponse } = await client.bulk({ refresh: true, body })
-  // console.error(bulkResponse);
 
   await client.helpers.bulk({
     datasource: data.items,
