@@ -91,6 +91,14 @@ export const SCAN_SCHEMA: ScanSchema = {
     cpu: '1024',
     memory: '4096',
     description: 'Matches detected software versions to CVEs from NIST NVD'
+  },
+  crawl: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    cpu: '1024',
+    memory: '4096',
+    description: 'Crawls a website and all of its pages.'
   }
 };
 

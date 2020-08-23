@@ -34,6 +34,8 @@ FROM node:14-buster-slim
 
 WORKDIR /app
 
+RUN apt-get update && apt-get -y install procps
+
 COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 
 COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsync /go/bin/cpe2cve /usr/bin/

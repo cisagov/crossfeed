@@ -5,3 +5,4 @@ dist
 Dockerfile*
 nvd-dump
 coverage
+apify-cache
