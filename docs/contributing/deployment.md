@@ -63,7 +63,22 @@ aws cloudfront create-invalidation --distribution-id ELM2YU1N4NV9M --paths "/ind
 To deploy this app for the first time, you need to do a couple of things:
 
 - Set up a custom domain for the frontend and create an ACM certificate for it
+- Generate a login.gov RSA key
 - Set initial SSM variables
+
+### Generate login.gov RSA key
+
+Run the following to generate a login.gov RSA key (preferably in a non-git directory outside of crossfeed!):
+
+```bash
+openssl genrsa -out private.pem 2048
+openssl req -newkey rsa:2048 -nodes -days 3650 -out csr.pem
+openssl x509 -req -in csr.pem -out cert.pem -signkey private.pem
+npm install -g pem-jwk
+cat private.pem | pem-jwk > private.jwk
+```
+
+Visit [the Login.gov sandbox dashboard](https://dashboard.int.identitysandbox.gov/) to create a login.gov application, providing `cert.pem` as the public certificate. Copy the contents of `private.jwk` to use as your `LOGIN_GOV_JWT_KEY` in the next step.
 
 ### Set initial SSM variables
 
@@ -77,6 +92,7 @@ First, make sure you set the following SSM variables manually through the AWS Co
 - `/crossfeed/staging/LOGIN_GOV_REDIRECT_URI`
 - `/crossfeed/staging/LOGIN_GOV_BASE_URL`
 - `/crossfeed/staging/LOGIN_GOV_JWT_KEY`
+- `/crossfeed/staging/LOGIN_GOV_ISSUER`
 
 Then, run `cp stage.config .env` and change the variables in `.env` to use a bucket you have access to to store state.
 
