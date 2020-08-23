@@ -75,7 +75,7 @@ openssl genrsa -out private.pem 2048
 openssl req -newkey rsa:2048 -nodes -days 3650 -out csr.pem
 openssl x509 -req -in csr.pem -out cert.pem -signkey private.pem
 npm install -g pem-jwk
-cat private.pem | pem-jwk > private.jwk
+pem-jwk private.pem > private.jwk
 ```
 
 Visit [the Login.gov sandbox dashboard](https://dashboard.int.identitysandbox.gov/) to create a login.gov application, providing `cert.pem` as the public certificate. Copy the contents of `private.jwk` to use as your `LOGIN_GOV_JWT_KEY` in the next step.
