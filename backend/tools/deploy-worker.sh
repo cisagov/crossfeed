@@ -4,7 +4,7 @@
 
 set -e
 
-AWS_ECR_DOMAIN=957221700844.dkr.ecr.us-east-1.amazonaws.com
+AWS_ECR_DOMAIN=268733397604.dkr.ecr.us-east-1.amazonaws.com
 
 ./tools/build-worker.sh
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_ECR_DOMAIN
