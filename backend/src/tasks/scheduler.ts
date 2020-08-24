@@ -126,7 +126,7 @@ const shouldRunScan = async ({
   const lastFinishedScanTask = await ScanTask.findOne(
     {
       scan: { id: scan.id },
-      status: 'finished',
+      status: In(['finished', 'failed']),
       ...orgFilter
     },
     {
