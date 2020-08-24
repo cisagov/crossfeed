@@ -80,7 +80,7 @@ jobs:
           cp dev.env.example .env
           docker-compose up --build -d
           npm install -g wait-port
-          wait-port -t 3000 80 5432
+          wait-port -t 3000 5432
         working-directory: ./
       - name: Sync database
         run: docker-compose exec -T backend npx sls invoke local -f syncdb -d dangerouslyforce
