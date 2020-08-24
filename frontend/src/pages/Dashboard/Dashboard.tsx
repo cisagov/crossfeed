@@ -9,7 +9,7 @@ import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
 import { Grid, Checkbox } from '@trussworks/react-uswds';
-import { getToUVersion } from '../TermsOfUse';
+import { userMustSign } from '../TermsOfUse';
 
 interface ApiResponse {
   result: Domain[];
@@ -124,11 +124,7 @@ export const Dashboard: React.FC = () => {
 
       if (user.firstName === '') {
         history.push('/create-account');
-      } else if (
-        !user.dateAcceptedTerms ||
-        (user.acceptedTermsVersion &&
-          user.acceptedTermsVersion !== getToUVersion(user as AuthUser))
-      ) {
+      } else if (userMustSign(user as AuthUser)) {
         history.push('/terms');
       } else {
         history.push('/');
@@ -147,7 +143,7 @@ export const Dashboard: React.FC = () => {
     if (user) {
       if (user.firstName === '') {
         history.push('/create-account');
-      } else if (!user.dateAcceptedTerms) {
+      } else if (userMustSign(user as AuthUser)) {
         history.push('/terms');
       }
     }

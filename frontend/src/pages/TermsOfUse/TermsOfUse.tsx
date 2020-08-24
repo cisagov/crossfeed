@@ -17,6 +17,19 @@ interface Errors extends Partial<FormData> {
 
 export const currentTermsVersion = '1';
 
+export const userMustSign = (user: AuthUser) => {
+  // Bypass ToU for CISA emails
+  const approvedEmailAddresses = ['@cisa.dhs.gov'];
+  for (const email of approvedEmailAddresses) {
+    if (user.email.endsWith(email)) return false;
+  }
+  return (
+    !user.dateAcceptedTerms ||
+    (user.acceptedTermsVersion &&
+      user.acceptedTermsVersion !== getToUVersion(user as AuthUser))
+  );
+};
+
 export const getMaximumRole = (user: AuthUser | null | undefined) => {
   if (user?.userType === 'globalView') return 'user';
   return user && user.roles && user.roles.find(role => role.role === 'admin')
