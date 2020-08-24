@@ -17,7 +17,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     select: ['id', 'name', 'ip']
   });
 
-  const client = new Client({ node: 'http://localhost:9200' });
+  const client = new Client({ node: process.env.ELASTICSEARCH_ENDPOINT! });
 
   process.env.APIFY_LOCAL_STORAGE_DIR =
     __dirname + '/apify-cache/' + Math.random();

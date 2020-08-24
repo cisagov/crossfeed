@@ -69,7 +69,8 @@ class ECSClient {
             `DB_USERNAME=${process.env.DB_USERNAME}`,
             `DB_PASSWORD=${process.env.DB_PASSWORD}`,
             `CENSYS_API_ID=${process.env.CENSYS_API_ID}`,
-            `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`
+            `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`,
+            `ELASTICSEARCH_ENDPOINT=${process.env.ELASTICSEARCH_ENDPOINT}`
           ],
           // Since the ECSClient is itself running in the backend Docker container,
           // we launch a Docker container from the host Docker daemon. This means that
@@ -175,6 +176,10 @@ class ECSClient {
               {
                 name: 'CENSYS_API_SECRET',
                 value: process.env.CENSYS_API_SECRET
+              },
+              {
+                name: 'ELASTICSEARCH_ENDPOINT',
+                value: process.env.ELASTICSEARCH_ENDPOINT
               }
             ]
           }
