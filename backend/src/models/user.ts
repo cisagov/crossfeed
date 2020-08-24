@@ -46,6 +46,22 @@ export class User extends BaseEntity {
   @Column({ default: false })
   invitePending: boolean;
 
+  /**
+   * When the user accepted the terms of use,
+   * if the user did so
+   */
+  @Column({
+    type: 'timestamp',
+    nullable: true
+  })
+  dateAcceptedTerms: Date | null;
+
+  @Column({
+    type: 'text',
+    nullable: true
+  })
+  acceptedTermsVersion: string | null;
+
   /** The user's type. globalView allows access to all organizations
    * while globalAdmin allows universally administering Crossfeed */
   @Column('text', { default: 'standard' })

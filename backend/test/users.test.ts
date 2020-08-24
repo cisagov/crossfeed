@@ -240,6 +240,53 @@ describe('user', () => {
       expect(response.body.email).toEqual(user.email);
     });
   });
+  describe('meAcceptTerms', () => {
+    it('me accept terms by a regular user should accept terms', async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov'
+      }).save();
+      const response = await request(app)
+        .post('/users/me/acceptTerms')
+        .set(
+          'Authorization',
+          createUserToken({
+            id: user.id
+          })
+        )
+        .send({
+          version: '1-user'
+        })
+        .expect(200);
+      expect(response.body.email).toEqual(user.email);
+      expect(response.body.dateAcceptedTerms).toBeTruthy();
+      expect(response.body.acceptedTermsVersion).toEqual('1-user');
+    });
+    it('accepting terms twice updates user', async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        dateAcceptedTerms: new Date('2020-08-03T13:58:31.715Z')
+      }).save();
+      const response = await request(app)
+        .post('/users/me/acceptTerms')
+        .set(
+          'Authorization',
+          createUserToken({
+            id: user.id
+          })
+        )
+        .send({
+          version: '2-user'
+        })
+        .expect(200);
+      expect(response.body.email).toEqual(user.email);
+      expect(response.body.dateAcceptedTerms).toBeTruthy();
+      expect(response.body.acceptedTermsVersion).toEqual('2-user');
+    });
+  });
   describe('list', () => {
     it('list by globalView should give all users', async () => {
       const user = await User.create({
@@ -323,7 +370,8 @@ describe('user', () => {
       const user = await User.create({
         firstName: '',
         lastName: '',
-        email: Math.random() + '@crossfeed.cisa.gov'
+        email: Math.random() + '@crossfeed.cisa.gov',
+        dateAcceptedTerms: new Date('2020-08-03T13:58:31.715Z')
       }).save();
       const response = await request(app)
         .del(`/users/${user.id}`)
@@ -343,7 +391,8 @@ describe('user', () => {
       user = await User.create({
         firstName: '',
         lastName: '',
-        email: Math.random() + '@crossfeed.cisa.gov'
+        email: Math.random() + '@crossfeed.cisa.gov',
+        dateAcceptedTerms: new Date('2020-08-03T13:58:31.715Z')
       }).save();
       firstName = 'new first name';
       lastName = 'new last name';

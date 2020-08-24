@@ -1,14 +1,15 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { TableInstance } from 'react-table';
-import { Query } from 'types';
+import { Query, User } from 'types';
 import { Table, Paginator, Export } from 'components';
 import { Domain } from 'types';
 import { createColumns, getServiceNames } from './columns';
-import { useAuthContext } from 'context';
+import { useAuthContext, AuthUser } from 'context';
 import classes from './styles.module.scss';
 import { useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
 import { Grid, Checkbox } from '@trussworks/react-uswds';
+import { userMustSign } from '../TermsOfUse';
 
 interface ApiResponse {
   result: Domain[];
@@ -102,14 +103,17 @@ export const Dashboard: React.FC = () => {
       return;
     }
     try {
-      const { token, user } = await apiPost('/auth/callback', {
-        body: {
-          state: parsed.state,
-          code: parsed.code,
-          nonce: localStorage.getItem('nonce'),
-          origState: localStorage.getItem('state')
+      const { token, user } = await apiPost<{ token: string; user: User }>(
+        '/auth/callback',
+        {
+          body: {
+            state: parsed.state,
+            code: parsed.code,
+            nonce: localStorage.getItem('nonce'),
+            origState: localStorage.getItem('state')
+          }
         }
-      });
+      );
 
       await login(token, user);
 
@@ -118,15 +122,17 @@ export const Dashboard: React.FC = () => {
 
       await refreshUser();
 
-      if (user.firstName !== '') {
+      if (user.firstName === '') {
+        history.push('/create-account');
+      } else if (userMustSign(user as AuthUser)) {
+        history.push('/terms');
+      } else {
         history.push('/');
         fetchDomainTable({
           page: 0,
           sort: [],
           filters: []
         });
-      } else {
-        history.push('/create-account');
       }
     } catch {
       history.push('/');
@@ -134,8 +140,12 @@ export const Dashboard: React.FC = () => {
   }, [apiPost, history, login, user, refreshUser, fetchDomainTable]);
 
   React.useEffect(() => {
-    if (user && user.firstName === '') {
-      history.push('/create-account');
+    if (user) {
+      if (user.firstName === '') {
+        history.push('/create-account');
+      } else if (userMustSign(user as AuthUser)) {
+        history.push('/terms');
+      }
     }
     callback();
     // eslint-disable-next-line
