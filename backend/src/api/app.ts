@@ -67,7 +67,11 @@ const checkUserSignedTerms = (req, res, next) => {
   // Bypass ToU for CISA emails
   const approvedEmailAddresses = ['@cisa.dhs.gov'];
   for (const email of approvedEmailAddresses) {
-    if (req.requestContext.authorizer.email.endsWith(email)) return next();
+    if (
+      req.requestContext.authorizer.email &&
+      req.requestContext.authorizer.email.endsWith(email)
+    )
+      return next();
   }
   if (!req.requestContext.authorizer.dateAcceptedTerms) {
     return res.status(403).send('User must accept terms of use');
