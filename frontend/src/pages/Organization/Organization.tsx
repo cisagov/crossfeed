@@ -36,7 +36,6 @@ export const Organization: React.FC = () => {
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
   const [scans, setScans] = useState<Scan[]>([]);
   const [scanSchema, setScanSchema] = useState<ScanSchema>({});
-  const [currentView, setCurrentView] = useState<number>(0);
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
   const [newUserValues, setNewUserValues] = useState<{
@@ -532,11 +531,11 @@ export const Organization: React.FC = () => {
           />
         </div>
       </Header>
-      <Route path="/organization" exact component={() => views[0]} />
-      <Route path="/organization/users" component={() => views[1]} />
-      <Route path="/organization/scans" component={() => views[2]} />
-      <Route path="/organization/edit" component={() => views[3]} />
-      <Route path="/organization/review-domains" component={ReviewDomains} />
+      <Route path="/organization" exact render={() => views[0]} />
+      <Route path="/organization/users" render={() => views[1]} />
+      <Route path="/organization/scans" render={() => views[2]} />
+      <Route path="/organization/edit" render={() => views[3]} />
+      <Route path="/organization/review-domains" render={ReviewDomains} />
     </div>
   );
 };

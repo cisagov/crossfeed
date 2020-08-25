@@ -1,4 +1,4 @@
-version: "3.4"
+version: '3.4'
 
 services:
   db:
@@ -7,7 +7,7 @@ services:
       - ./postgres-data:/var/lib/postgresql/data
       - ./backend/db-init:/docker-entrypoint-initdb.d
     ports:
-      - "5432:5432"
+      - '5432:5432'
     env_file:
       - ./.env
     environment:
@@ -19,9 +19,10 @@ services:
     volumes:
       - ./frontend/src:/app/src
     ports:
-      - "80:3000"
+      - '80:3000'
     env_file:
       - ./.env
+    tty: true
 
   backend:
     build: ./backend
@@ -29,7 +30,7 @@ services:
       - ./backend/src:/app/src
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - "3000:3000"
+      - '3000:3000'
     env_file:
       - ./.env
     depends_on:
@@ -42,7 +43,7 @@ services:
       - ./docs/.bundle-cache:/usr/local/bundle
     command: jekyll serve --incremental
     ports:
-      - "4000:4000"
+      - '4000:4000'
 
 volumes:
   postgres-data:
