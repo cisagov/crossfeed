@@ -113,7 +113,8 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
-            id: user.id
+            id: user.id,
+            userType: 'globalAdmin'
           })
         )
         .send({
@@ -153,7 +154,8 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
-            id: user.id
+            id: user.id,
+            userType: 'globalAdmin'
           })
         )
         .send({

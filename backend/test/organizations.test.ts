@@ -28,7 +28,8 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            id: user.id
+            id: user.id,
+            userType: 'globalAdmin'
           })
         )
         .send({
@@ -64,7 +65,8 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            id: user.id
+            id: user.id,
+            userType: 'globalAdmin'
           })
         )
         .send({
@@ -80,7 +82,8 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            id: user.id
+            id: user.id,
+            userType: 'globalAdmin'
           })
         )
         .send({
