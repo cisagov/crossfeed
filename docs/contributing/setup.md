@@ -22,9 +22,8 @@ subnav:
 1.  Start entire environment from root using Docker Compose
     - `docker-compose up --build`
 1.  Generate DB schema:
-
-    - `docker-compose exec backend npx sls invoke local -f syncdb`
-    - (append `-d dangerouslyforce` to drop and recreate)
+    - `cd backend && npm run syncdb`
+    - (run `npm run syncdb -- -d dangerouslyforce` to drop and recreate)
 
 1.  Navigate to [localhost](http://localhost) in a browser.
 
@@ -36,13 +35,15 @@ subnav:
 
 ### Running the scheduler lambda function locally
 
-The scheduler lambda function is set to run on an interval or in response to non-http events. To run it manually, run the following command:
+The scheduler lambda function is set to run on a 5-minute interval when deployed.
 
-- `docker-compose exec scheduler npx serverless invoke local -f scheduler`
+When running locally, the scheduler function runs every 1 minute, for convenience. To run it manually, click on the "Manually run scheduler" button on the Scans page.
+
+You can check scheduler logs locally by checking the backend container logs.
 
 ### Running tests
 
-To run tests, first make sure you have already started crossfeed with `docker-compose` . Then run:
+To run tests, first make sure you have already started crossfeed with `docker-compose`. Then run:
 
 ```bash
 cd backend
@@ -50,6 +51,10 @@ npm test
 ```
 
 To update snapshots, run `npm test -- -u`.
+
+To view a code coverage report (a minimum code coverage threshold is checked in CI), run `npm test -- --collectCoverage`.
+
+You can then view a HTML coverage report in the `coverage/lcov-report` directory.
 
 ## Fargate worker
 
@@ -65,11 +70,7 @@ Each time you make changes to the worker code, you should run:
 npm run build-worker
 ```
 
-To run the scheduler:
-
-```bash
-docker-compose exec scheduler npx serverless invoke local -f scheduler
-```
+To run the scheduler, click on "Manually run scheduler" on the Scans page.
 
 You can then run `docker ps` or ( `docker ps -a | head -n 3` ) to view running / stopped Docker containers,
 and check their logs with `docker logs [containername]` .

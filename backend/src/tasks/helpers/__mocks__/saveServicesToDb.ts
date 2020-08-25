@@ -9,7 +9,7 @@ export default async (services: Service[]) => {
       // Create a smaller snapshot, rather than storing the entire ipv4 result data.
       service.censysIpv4Results = {
         TEST_SNAPSHOT:
-          JSON.stringify(service.censysIpv4Results).substring(0, 100) + '...'
+          JSON.stringify(service.censysIpv4Results).substring(0, 300) + '...'
       };
     }
   });

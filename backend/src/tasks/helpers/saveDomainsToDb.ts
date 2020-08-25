@@ -16,7 +16,7 @@ export default async (domains: Domain[]): Promise<void> => {
       .values(domain)
       .onConflict(
         `
-            ("name") DO UPDATE
+            ("name", "organizationId") DO UPDATE
             SET ${updatedValues
               .map((val) => `"${val}" = excluded."${val}",`)
               .join('\n')}

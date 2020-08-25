@@ -1,6 +1,5 @@
 import { Handler } from 'aws-lambda';
 import { connectToDatabase, Scan, Organization, ScanTask } from '../models';
-import { Lambda, Credentials } from 'aws-sdk';
 import ECSClient from './ecs-client';
 import { SCAN_SCHEMA } from '../api/scans';
 import { In } from 'typeorm';
@@ -45,9 +44,11 @@ const launchSingleScanTask = async ({
           } failures.`
         );
       }
+      const taskArn = result.tasks![0].taskArn;
+      scanTask.fargateTaskArn = taskArn;
       if (typeof jest === 'undefined') {
         console.log(
-          `Successfully invoked ${scan.name} scan with fargate. ` +
+          `Successfully invoked ${scan.name} scan with fargate, with ECS task ARN ${taskArn}. ` +
             (numChunks ? ` Chunk ${chunkNumber}/${numChunks}` : '')
         );
       }
@@ -118,10 +119,14 @@ const shouldRunScan = async ({
       }
     }
   );
+  if (lastRunningScanTask) {
+    // Don't run another task if there's already a running task.
+    return false;
+  }
   const lastFinishedScanTask = await ScanTask.findOne(
     {
       scan: { id: scan.id },
-      status: 'finished',
+      status: In(['finished', 'failed']),
       ...orgFilter
     },
     {
@@ -130,10 +135,6 @@ const shouldRunScan = async ({
       }
     }
   );
-  if (lastRunningScanTask && !lastFinishedScanTask) {
-    // Don't run another task if there's already a running task.
-    return false;
-  }
   if (
     lastFinishedScanTask &&
     lastFinishedScanTask.finishedAt &&
@@ -146,6 +147,7 @@ const shouldRunScan = async ({
   return true;
 };
 
+// These two arguments are currently used only for testing purposes.
 interface Event {
   // If specified, limits scheduling to a particular scan
   scanId?: string;
@@ -157,8 +159,12 @@ interface Event {
 
 export const handler: Handler<Event> = async (event) => {
   await connectToDatabase();
+  console.log('Running scheduler...');
 
-  const scans = await Scan.find(event.scanId ? { id: event.scanId } : {});
+  const scans = await Scan.find({
+    where: event.scanId ? { id: event.scanId } : {},
+    relations: ['organizations']
+  });
   const organizations = await Organization.find(
     event.organizationId ? { id: event.organizationId } : {}
   );
@@ -168,22 +174,37 @@ export const handler: Handler<Event> = async (event) => {
       continue;
     }
     const { global } = SCAN_SCHEMA[scan.name];
+    let launchedScan = false;
 
     if (global) {
       // Global scans are not associated with an organization.
       if (!(await shouldRunScan({ scan }))) {
         continue;
       }
+      launchedScan = true;
       await launchScanTask({ scan });
+    } else if (scan.isGranular) {
+      for (const organization of scan.organizations) {
+        if (!(await shouldRunScan({ organization, scan }))) {
+          continue;
+        }
+        launchedScan = true;
+        await launchScanTask({ organization, scan });
+      }
     } else {
       for (const organization of organizations) {
         if (!(await shouldRunScan({ organization, scan }))) {
           continue;
         }
+        launchedScan = true;
         await launchScanTask({ organization, scan });
       }
     }
-    scan.lastRun = new Date();
-    scan.save();
+    if (launchedScan) {
+      scan.lastRun = new Date();
+      await scan.save();
+    }
   }
+
+  console.log('Finished running scheduler.');
 };

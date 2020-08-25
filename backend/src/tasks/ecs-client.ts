@@ -1,5 +1,6 @@
 import { ECS } from 'aws-sdk';
 import { SCAN_SCHEMA } from '../api/scans';
+import * as Docker from 'dockerode';
 
 export interface CommandOptions {
   organizationId?: string;
@@ -20,14 +21,13 @@ const toSnakeCase = (input) => input.replace(/ /g, '-');
  */
 class ECSClient {
   ecs?: ECS;
-  docker?: any;
+  docker?: Docker;
   isLocal: boolean;
 
   constructor() {
     this.isLocal =
       process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false;
     if (this.isLocal) {
-      const Docker = require('dockerode');
       this.docker = new Docker();
     } else {
       this.ecs = new ECS();
@@ -50,13 +50,14 @@ class ECSClient {
     const { cpu, memory, global } = SCAN_SCHEMA[scanName];
     if (this.isLocal) {
       try {
+        const containerName = toSnakeCase(
+          `crossfeed_worker_${
+            global ? 'global' : organizationName
+          }_${scanName}_` + Math.floor(Math.random() * 10000000)
+        );
         const container = await this.docker!.createContainer({
           // We need to create unique container names to avoid conflicts.
-          name: toSnakeCase(
-            `crossfeed_worker_${
-              global ? 'global' : organizationName
-            }_${scanName}_` + Math.floor(Math.random() * 10000000)
-          ),
+          name: containerName,
           Image: 'crossfeed-worker',
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
@@ -76,10 +77,14 @@ class ECSClient {
           // crossfeed-worker image; instead, we set NetworkMode to "host" and
           // connect to "localhost."
           NetworkMode: 'host'
-        });
+        } as any);
         await container.start();
         return {
-          tasks: [{}],
+          tasks: [
+            {
+              taskArn: containerName
+            }
+          ],
           failures: []
         };
       } catch (e) {
@@ -120,10 +125,9 @@ class ECSClient {
         value: String(chunkNumber)
       });
     }
-    // TODO: retrieve these values from SSM.
     return this.ecs!.runTask({
-      cluster: 'crossfeed-staging-worker', // aws_ecs_cluster.worker.name
-      taskDefinition: 'crossfeed-staging-worker', // aws_ecs_task_definition.worker.name
+      cluster: process.env.FARGATE_CLUSTER_NAME!,
+      taskDefinition: process.env.FARGATE_TASK_DEFINITION_NAME!,
       networkConfiguration: {
         awsvpcConfiguration: {
           assignPublicIp: 'ENABLED',

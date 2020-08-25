@@ -15,7 +15,7 @@ describe('domains', () => {
     }).save();
   });
   describe('list', () => {
-    it('list by org user should return only domains from that org', async () => {
+    it('list by org user should only return domains from that org', async () => {
       const name = 'test-' + Math.random();
       await Domain.create({
         name,
@@ -65,6 +65,127 @@ describe('domains', () => {
         })
         .expect(200);
       expect(response.body.count).toEqual(2);
+    });
+    it('list by globalView with org filter should only return domains from that org', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const name = 'test-' + Math.random();
+      const domain = await Domain.create({
+        name,
+        organization
+      }).save();
+      await Domain.create({
+        name: name + '-2'
+      }).save();
+      const response = await request(app)
+        .post('/domain/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalView'
+          })
+        )
+        .send({
+          filters: { organization: organization.id }
+        })
+        .expect(200);
+      expect(response.body.count).toEqual(1);
+      expect(response.body.result[0].id).toEqual(domain.id);
+    });
+    it('list by org user with custom pageSize should work', async () => {
+      const name = 'test-' + Math.random();
+      await Domain.create({
+        name: name + '-1',
+        organization
+      }).save();
+      await Domain.create({
+        name: name + '-2',
+        organization
+      }).save();
+      const response = await request(app)
+        .post('/domain/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'user'
+              }
+            ]
+          })
+        )
+        .send({
+          filters: { reverseName: name },
+          pageSize: 1
+        })
+        .expect(200);
+      expect(response.body.count).toEqual(2);
+      expect(response.body.result.length).toEqual(1);
+    });
+    it('list by org user with pageSize of -1 should return all domains', async () => {
+      const name = 'test-' + Math.random();
+      await Domain.create({
+        name: name + '-1',
+        organization
+      }).save();
+      await Domain.create({
+        name: name + '-2',
+        organization
+      }).save();
+      const response = await request(app)
+        .post('/domain/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'user'
+              }
+            ]
+          })
+        )
+        .send({
+          filters: { reverseName: name },
+          pageSize: -1
+        })
+        .expect(200);
+      expect(response.body.count).toEqual(2);
+      expect(response.body.result.length).toEqual(2);
+    });
+    it("list by org user that hasn't signed the terms should fail", async () => {
+      const name = 'test-' + Math.random();
+      await Domain.create({
+        name,
+        organization
+      }).save();
+      await Domain.create({
+        name: name + '-2'
+      }).save();
+      const response = await request(app)
+        .post('/domain/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            dateAcceptedTerms: undefined,
+            roles: [
+              {
+                org: organization.id,
+                role: 'user'
+              }
+            ]
+          })
+        )
+        .send({
+          filters: { reverseName: name }
+        })
+        .expect(403);
+      expect(response.text).toContain('must accept terms');
     });
   });
   describe('get', () => {

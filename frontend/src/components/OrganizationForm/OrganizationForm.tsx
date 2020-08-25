@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classes from './styles.module.scss';
 import { Organization } from 'types';
 import { Label, TextInput, Checkbox, Button } from '@trussworks/react-uswds';
+import { useAuthContext } from 'context';
 
 export interface OrganizationFormValues {
   name: string;
@@ -23,6 +24,8 @@ export const OrganizationForm: React.FC<{
     isPassive: organization ? organization.isPassive : false,
     inviteOnly: organization ? organization.inviteOnly : false
   });
+
+  const { user } = useAuthContext();
 
   const [values, setValues] = useState<OrganizationFormValues>(defaultValues);
 
@@ -68,25 +71,27 @@ export const OrganizationForm: React.FC<{
         value={values.name}
         onChange={onTextChange}
       />
-      <Label htmlFor="rootDomains">Root Domains</Label>
-      <TextInput
-        required
-        id="rootDomains"
-        name="rootDomains"
-        className={classes.textField}
-        type="text"
-        value={values.rootDomains}
-        onChange={onTextChange}
-      />
-      <Label htmlFor="ipBlocks">IP Blocks (Optional)</Label>
-      <TextInput
-        id="ipBlocks"
-        name="ipBlocks"
-        className={classes.textField}
-        type="text"
-        value={values.ipBlocks}
-        onChange={onTextChange}
-      />
+      {user?.userType === 'globalAdmin' && <>
+        <Label htmlFor="rootDomains">Root Domains</Label>
+        <TextInput
+          required
+          id="rootDomains"
+          name="rootDomains"
+          className={classes.textField}
+          type="text"
+          value={values.rootDomains}
+          onChange={onTextChange}
+        />
+        <Label htmlFor="ipBlocks">IP Blocks (Optional)</Label>
+        <TextInput
+          id="ipBlocks"
+          name="ipBlocks"
+          className={classes.textField}
+          type="text"
+          value={values.ipBlocks}
+          onChange={onTextChange}
+        />
+      </>}
       <br></br>
       <Checkbox
         id="isPassive"

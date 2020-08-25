@@ -67,6 +67,11 @@ class DomainSearch {
   @IsOptional()
   filters?: DomainFilters;
 
+  @IsInt()
+  @IsOptional()
+  // If set to -1, returns all results.
+  pageSize?: number;
+
   filterResultQueryset(qs: SelectQueryBuilder<Domain>) {
     if (this.filters?.reverseName) {
       qs.andWhere('domain.name ILIKE :name', {
@@ -88,8 +93,8 @@ class DomainSearch {
       );
     }
     if (this.filters?.organization) {
-      qs.andWhere('domain.organization IN (:...orgs)', {
-        orgs: [this.filters.organization]
+      qs.andWhere('domain.organization = :org', {
+        org: this.filters.organization
       });
     }
     if (this.filters?.status) {
@@ -99,15 +104,18 @@ class DomainSearch {
   }
 
   async getResults(event) {
-    const qs = Domain.createQueryBuilder('domain')
+    const pageSize = this.pageSize || PAGE_SIZE;
+    let qs = Domain.createQueryBuilder('domain')
       .leftJoinAndSelect('domain.services', 'services')
       .leftJoinAndSelect('domain.organization', 'organization')
+      .leftJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
       .orderBy(`domain.${this.sort}`, this.order)
       .groupBy(
-        'domain.id, domain.ip, domain.name, organization.id, services.id'
-      )
-      .skip(PAGE_SIZE * (this.page - 1))
-      .take(PAGE_SIZE);
+        'domain.id, domain.ip, domain.name, organization.id, services.id, vulnerabilities.id'
+      );
+    if (pageSize !== -1) {
+      qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
+    }
 
     if (!isGlobalViewAdmin(event)) {
       qs.andHaving('domain.organization IN (:...orgs)', {
@@ -139,8 +147,8 @@ class DomainSearch {
       });
     }
     if (this.filters?.organization) {
-      qs.andWhere('domain.organization IN (:...orgs)', {
-        orgs: [this.filters.organization]
+      qs.andWhere('domain.organization = :org', {
+        org: this.filters.organization
       });
     }
     if (this.filters?.status) {
@@ -214,7 +222,7 @@ export const get = wrapHandler(async (event) => {
   const result = await Domain.findOne(
     { id, ...where },
     {
-      relations: ['services', 'organization']
+      relations: ['services', 'organization', 'vulnerabilities']
     }
   );
 

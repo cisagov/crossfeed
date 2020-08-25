@@ -18,7 +18,7 @@ jobs:
     name: Build docs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.2
       - uses: actions/setup-ruby@v1.1.1
         with:
           ruby-version: "2.6"
@@ -38,7 +38,7 @@ jobs:
           JEKYLL_ENV: producation
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: crazy-max/ghaction-github-pages@v2.1.1
+        uses: crazy-max/ghaction-github-pages@v2.1.2
         with:
           keep_history: true
           target-branch: gh-pages

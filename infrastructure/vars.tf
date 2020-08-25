@@ -1,6 +1,6 @@
 variable aws_region {
   type    = string
-  default = "us-west-2"
+  default = "us-east-1"
 }
 
 variable project {
@@ -23,14 +23,29 @@ variable db_name {
   default = "crossfeed-stage-db"
 }
 
+variable db_instance_class {
+  type    = string
+  default = "db.t3.micro"
+}
+
+variable db_storage_encrypted {
+  type    = bool
+  default = true
+}
+
 variable api_domain {
   type    = string
-  default = "stage.api.crossfeed2.dds.mil"
+  default = "api.staging.crossfeed.cyber.dhs.gov"
 }
 
 variable frontend_domain {
   type    = string
-  default = "stage.crossfeed2.dds.mil"
+  default = "staging.crossfeed.cyber.dhs.gov"
+}
+
+variable frontend_bucket {
+  type    = string
+  default = "staging.crossfeed.cyber.dhs.gov"
 }
 
 variable frontend_cert_arn {
@@ -64,6 +79,11 @@ variable ssm_worker_sg {
 }
 
 variable ssm_worker_subnet {
+  type    = string
+  default = ""
+}
+
+variable ssm_worker_arn {
   type    = string
   default = ""
 }

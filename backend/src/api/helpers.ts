@@ -3,13 +3,11 @@ import {
   APIGatewayProxyEvent,
   APIGatewayProxyResult
 } from 'aws-lambda';
-import {
-  ValidationOptions,
-  validateOrReject,
-  ValidationError
-} from 'class-validator';
+import { ValidationOptions, validateOrReject } from 'class-validator';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { plainToClass } from 'class-transformer';
+import { SES } from 'aws-sdk';
+import * as nodemailer from 'nodemailer';
 
 export const validateBody = async <T>(
   obj: ClassType<T>,
@@ -59,7 +57,7 @@ export const wrapHandler: WrapHandler = (handler) => async (
     }
     return resp;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return makeResponse(event, {
       statusCode: Array.isArray(e) ? 400 : 500
     });
@@ -74,4 +72,21 @@ export const NotFound: APIGatewayProxyResult = {
 export const Unauthorized: APIGatewayProxyResult = {
   statusCode: 403,
   body: ''
+};
+
+export const sendEmail = async (
+  recipient: string,
+  subject: string,
+  body: string
+) => {
+  const transporter = nodemailer.createTransport({
+    SES: new SES({ region: 'us-east-1' })
+  });
+
+  await transporter.sendMail({
+    from: process.env.CROSSFEED_SUPPORT_EMAIL!,
+    to: recipient,
+    subject: subject,
+    text: body
+  });
 };

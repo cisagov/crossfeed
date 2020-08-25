@@ -1,5 +1,6 @@
 import { Role } from './role';
 import { ScanTask } from './scan-task';
+import { Scan } from './scan';
 
 export interface Organization {
   id: string;
@@ -10,4 +11,5 @@ export interface Organization {
   scanTasks: ScanTask[];
   isPassive: boolean;
   inviteOnly: boolean;
+  granularScans: Scan[];
 }

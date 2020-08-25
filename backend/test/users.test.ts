@@ -3,6 +3,17 @@ import app from '../src/api/app';
 import { User, connectToDatabase, Organization, Role } from '../src/models';
 import { createUserToken } from './util';
 
+const nodemailer = require('nodemailer'); //Doesn't work with import
+
+const sendMailMock = jest.fn();
+jest.mock('nodemailer');
+nodemailer.createTransport.mockReturnValue({ sendMail: sendMailMock });
+
+beforeEach(() => {
+  sendMailMock.mockClear();
+  nodemailer.createTransport.mockClear();
+});
+
 describe('user', () => {
   let organization;
   let organization2;
@@ -78,6 +89,7 @@ describe('user', () => {
       expect(response.body.lastName).toEqual(lastName);
       expect(response.body.roles[0].approved).toEqual(true);
       expect(response.body.roles[0].role).toEqual('user');
+      expect(response.body.roles[0].organization.id).toEqual(organization.id);
     });
     it('invite existing user by a different organization admin should work, and should not modify other user details', async () => {
       const firstName = 'first name';
@@ -162,8 +174,51 @@ describe('user', () => {
       expect(response.body.invitePending).toEqual(false);
       expect(response.body.firstName).toEqual('new first name');
       expect(response.body.lastName).toEqual('new last name');
+      expect(response.body.fullName).toEqual('new first name new last name');
       expect(response.body.roles[1].approved).toEqual(true);
       expect(response.body.roles[1].role).toEqual('user');
+    });
+    it('invite existing user by same organization admin should work, and should update the user organization role', async () => {
+      const email = Math.random() + '@crossfeed.cisa.gov';
+      const user = await User.create({
+        firstName: 'first',
+        lastName: 'last',
+        email
+      }).save();
+      await Role.create({
+        role: 'user',
+        approved: false,
+        organization,
+        user
+      }).save();
+      const response = await request(app)
+        .post('/users')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .send({
+          firstName: 'first',
+          lastName: 'last',
+          email,
+          organization: organization.id,
+          organizationAdmin: true
+        })
+        .expect(200);
+      expect(response.body.id).toEqual(user.id);
+      expect(response.body.email).toEqual(email);
+      expect(response.body.invitePending).toEqual(false);
+      expect(response.body.firstName).toEqual('first');
+      expect(response.body.lastName).toEqual('last');
+      expect(response.body.roles[0].approved).toEqual(true);
+      expect(response.body.roles[0].role).toEqual('admin');
     });
   });
   describe('me', () => {
@@ -183,6 +238,53 @@ describe('user', () => {
         )
         .expect(200);
       expect(response.body.email).toEqual(user.email);
+    });
+  });
+  describe('meAcceptTerms', () => {
+    it('me accept terms by a regular user should accept terms', async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov'
+      }).save();
+      const response = await request(app)
+        .post('/users/me/acceptTerms')
+        .set(
+          'Authorization',
+          createUserToken({
+            id: user.id
+          })
+        )
+        .send({
+          version: '1-user'
+        })
+        .expect(200);
+      expect(response.body.email).toEqual(user.email);
+      expect(response.body.dateAcceptedTerms).toBeTruthy();
+      expect(response.body.acceptedTermsVersion).toEqual('1-user');
+    });
+    it('accepting terms twice updates user', async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        dateAcceptedTerms: new Date('2020-08-03T13:58:31.715Z')
+      }).save();
+      const response = await request(app)
+        .post('/users/me/acceptTerms')
+        .set(
+          'Authorization',
+          createUserToken({
+            id: user.id
+          })
+        )
+        .send({
+          version: '2-user'
+        })
+        .expect(200);
+      expect(response.body.email).toEqual(user.email);
+      expect(response.body.dateAcceptedTerms).toBeTruthy();
+      expect(response.body.acceptedTermsVersion).toEqual('2-user');
     });
   });
   describe('list', () => {
@@ -264,11 +366,12 @@ describe('user', () => {
         .expect(403);
       expect(response.body).toEqual({});
     });
-    it('delete by regular user on themselves should work', async () => {
+    it('delete by regular user on themselves should not work', async () => {
       const user = await User.create({
         firstName: '',
         lastName: '',
-        email: Math.random() + '@crossfeed.cisa.gov'
+        email: Math.random() + '@crossfeed.cisa.gov',
+        dateAcceptedTerms: new Date('2020-08-03T13:58:31.715Z')
       }).save();
       const response = await request(app)
         .del(`/users/${user.id}`)
@@ -278,8 +381,8 @@ describe('user', () => {
             id: user.id
           })
         )
-        .expect(200);
-      expect(response.body.affected).toEqual(1);
+        .expect(403);
+      expect(response.body).toEqual({});
     });
   });
   describe('update', () => {
@@ -288,7 +391,8 @@ describe('user', () => {
       user = await User.create({
         firstName: '',
         lastName: '',
-        email: Math.random() + '@crossfeed.cisa.gov'
+        email: Math.random() + '@crossfeed.cisa.gov',
+        dateAcceptedTerms: new Date('2020-08-03T13:58:31.715Z')
       }).save();
       firstName = 'new first name';
       lastName = 'new last name';

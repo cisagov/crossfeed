@@ -132,6 +132,45 @@ describe('organizations', () => {
       expect(response.body.isPassive).toEqual(isPassive);
       expect(response.body.inviteOnly).toEqual(inviteOnly);
     });
+    it('update by org admin should update everything but rootDomains and ipBlocks', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const name = 'test-' + Math.random();
+      const rootDomains = ['test-' + Math.random()];
+      const ipBlocks = ['1.1.1.1'];
+      const isPassive = true;
+      const inviteOnly = false;
+      const response = await request(app)
+        .put(`/organizations/${organization.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .send({
+          name,
+          rootDomains,
+          ipBlocks,
+          isPassive,
+          inviteOnly
+        })
+        .expect(200);
+      expect(response.body.name).toEqual(name);
+      expect(response.body.rootDomains).toEqual(organization.rootDomains);
+      expect(response.body.ipBlocks).toEqual(organization.ipBlocks);
+      expect(response.body.isPassive).toEqual(isPassive);
+      expect(response.body.inviteOnly).toEqual(inviteOnly);
+    });
     it('update by globalView should fail', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
@@ -181,6 +220,29 @@ describe('organizations', () => {
         )
         .expect(200);
       expect(response.body.affected).toEqual(1);
+    });
+    it('delete by org admin should fail', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const response = await request(app)
+        .delete(`/organizations/${organization.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .expect(403);
+      expect(response.body).toEqual({});
     });
     it('delete by globalView should fail', async () => {
       const organization = await Organization.create({
@@ -415,6 +477,178 @@ describe('organizations', () => {
       expect(response.body.scanTasks.length).toEqual(1);
       expect(response.body.scanTasks[0].id).toEqual(scanTask.id);
       expect(response.body.scanTasks[0].scan.id).toEqual(scan.id);
+    });
+  });
+  describe('update', () => {
+    it('enabling a scan by org admin for an organization should succeed', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const scan = await Scan.create({
+        name: 'censys',
+        arguments: {},
+        frequency: 999999,
+        isGranular: true
+      }).save();
+      const response = await request(app)
+        .post(
+          `/organizations/${organization.id}/granularScans/${scan.id}/update`
+        )
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .send({
+          enabled: true
+        })
+        .expect(200);
+      expect(response.body.granularScans.length).toEqual(1);
+      const updated = (await Organization.findOne(
+        {
+          id: organization.id
+        },
+        {
+          relations: ['granularScans']
+        }
+      )) as Organization;
+      expect(updated.name).toEqual(organization.name);
+      expect(updated.granularScans).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: scan.id
+          })
+        ])
+      );
+    });
+    it('disabling a scan by org admin for an organization should succeed', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const scan = await Scan.create({
+        name: 'censys',
+        arguments: {},
+        frequency: 999999,
+        organizations: [organization],
+        isGranular: true
+      }).save();
+      const response = await request(app)
+        .post(
+          `/organizations/${organization.id}/granularScans/${scan.id}/update`
+        )
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .send({
+          enabled: false
+        })
+        .expect(200);
+      const updated = (await Organization.findOne(
+        {
+          id: organization.id
+        },
+        {
+          relations: ['granularScans']
+        }
+      )) as Organization;
+      expect(updated.name).toEqual(organization.name);
+      expect(updated.granularScans).toEqual([]);
+    });
+    it('enabling a scan by org user for an organization should fail', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const scan = await Scan.create({
+        name: 'censys',
+        arguments: {},
+        frequency: 999999
+      }).save();
+      const response = await request(app)
+        .post(
+          `/organizations/${organization.id}/granularScans/${scan.id}/update`
+        )
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'user'
+              }
+            ]
+          })
+        )
+        .send({
+          enabled: true
+        })
+        .expect(403);
+    });
+    it('enabling a scan by globalAdmin for an organization should succeed', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const scan = await Scan.create({
+        name: 'censys',
+        arguments: {},
+        frequency: 999999,
+        isGranular: true
+      }).save();
+      const response = await request(app)
+        .post(
+          `/organizations/${organization.id}/granularScans/${scan.id}/update`
+        )
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalAdmin'
+          })
+        )
+        .send({
+          enabled: true
+        })
+        .expect(200);
+      const updated = (await Organization.findOne(
+        {
+          id: organization.id
+        },
+        {
+          relations: ['granularScans']
+        }
+      )) as Organization;
+      expect(updated.name).toEqual(organization.name);
+      expect(updated.granularScans).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: scan.id
+          })
+        ])
+      );
     });
   });
   describe('approveRole', () => {

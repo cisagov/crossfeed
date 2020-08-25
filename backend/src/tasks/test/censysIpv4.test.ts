@@ -11,6 +11,16 @@ jest.mock('../helpers/getAllDomains');
 
 const RealDate = Date;
 
+const authHeaders = {
+  reqheaders: {
+    Authorization:
+      'Basic ' +
+      Buffer.from(
+        `${process.env.CENSYS_API_ID}:${process.env.CENSYS_API_SECRET}`
+      ).toString('base64')
+  }
+};
+
 describe('censys ipv4', () => {
   beforeEach(() => {
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
@@ -21,7 +31,7 @@ describe('censys ipv4', () => {
   });
 
   test('basic test', async () => {
-    nock('https://censys.io')
+    nock('https://censys.io', authHeaders)
       .get('/api/v1/data/ipv4_2018/')
       .reply(200, {
         results: {
@@ -30,7 +40,7 @@ describe('censys ipv4', () => {
           }
         }
       });
-    nock('https://censys.io')
+    nock('https://censys.io', authHeaders)
       .get('/api/v1/data/ipv4_2018/20200719')
       .reply(200, {
         files: {
@@ -111,7 +121,7 @@ describe('censys ipv4', () => {
       tags: ['dns']
     });
 
-    nock('https://data-01.censys.io')
+    nock('https://data-01.censys.io', authHeaders)
       .get('/snapshots/ipv4/20200719/first_file.json.gz')
       .reply(200, zlib.gzipSync(firstFileContents))
       .get('/snapshots/ipv4/20200719/second_file.json.gz')
@@ -129,7 +139,7 @@ describe('censys ipv4', () => {
   });
 
   test('http failure should retry', async () => {
-    nock('https://censys.io')
+    nock('https://censys.io', authHeaders)
       .get('/api/v1/data/ipv4_2018/')
       .reply(200, {
         results: {
@@ -138,7 +148,7 @@ describe('censys ipv4', () => {
           }
         }
       });
-    nock('https://censys.io')
+    nock('https://censys.io', authHeaders)
       .get('/api/v1/data/ipv4_2018/20200719')
       .reply(200, {
         files: {
@@ -174,7 +184,7 @@ describe('censys ipv4', () => {
   });
 
   test('repeated http failures should throw an error', async () => {
-    nock('https://censys.io')
+    nock('https://censys.io', authHeaders)
       .get('/api/v1/data/ipv4_2018/')
       .reply(200, {
         results: {
@@ -183,7 +193,7 @@ describe('censys ipv4', () => {
           }
         }
       });
-    nock('https://censys.io')
+    nock('https://censys.io', authHeaders)
       .get('/api/v1/data/ipv4_2018/20200719')
       .reply(200, {
         files: {
