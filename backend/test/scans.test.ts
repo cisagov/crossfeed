@@ -2,6 +2,11 @@ import * as request from 'supertest';
 import app from '../src/api/app';
 import { User, Scan, connectToDatabase, Organization } from '../src/models';
 import { createUserToken } from './util';
+import { handler as scheduler } from '../src/tasks/scheduler';
+
+jest.mock('../src/tasks/scheduler', () => ({
+  handler: jest.fn()
+}));
 
 describe('scan', () => {
   beforeAll(async () => {
@@ -328,5 +333,36 @@ describe('scan', () => {
         .expect(403);
       expect(response.body).toEqual({});
     });
+  });
+});
+
+describe('scheduler invoke', () => {
+  it('invoke by globalAdmin should succeed', async () => {
+    const response = await request(app)
+      .post(`/scheduler/invoke`)
+      .set(
+        'Authorization',
+        createUserToken({
+          userType: 'globalAdmin'
+        })
+      )
+      .expect(200);
+
+    expect(response.body).toEqual({});
+    expect(scheduler).toHaveBeenCalledTimes(1);
+  });
+  it('invoke by globalView should fail', async () => {
+    const response = await request(app)
+      .post(`/scheduler/invoke`)
+      .set(
+        'Authorization',
+        createUserToken({
+          userType: 'globalView'
+        })
+      )
+      .expect(403);
+
+    expect(response.body).toEqual({});
+    expect(scheduler).toHaveBeenCalledTimes(0);
   });
 });

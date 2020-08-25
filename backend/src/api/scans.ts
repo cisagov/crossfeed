@@ -11,6 +11,7 @@ import {
 import { Scan, connectToDatabase, Organization } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { isGlobalWriteAdmin } from './auth';
+import LambdaClient from '../tasks/lambda-client';
 
 interface ScanSchema {
   [name: string]: {
@@ -199,5 +200,24 @@ export const listGranular = wrapHandler(async (event) => {
       scans,
       schema: SCAN_SCHEMA
     })
+  };
+});
+
+export const invokeScheduler = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  const lambdaClient = new LambdaClient();
+  const response = await lambdaClient.runCommand({
+    name: `${process.env.SLS_LAMBDA_PREFIX!}-scheduler`
+  });
+  console.log(response);
+  if (response.StatusCode !== 202) {
+    return {
+      statusCode: 500,
+      body: 'Invocation failed.'
+    };
+  }
+  return {
+    statusCode: 200,
+    body: ''
   };
 });

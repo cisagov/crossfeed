@@ -158,6 +158,35 @@ describe('domains', () => {
       expect(response.body.count).toEqual(2);
       expect(response.body.result.length).toEqual(2);
     });
+    it("list by org user that hasn't signed the terms should fail", async () => {
+      const name = 'test-' + Math.random();
+      await Domain.create({
+        name,
+        organization
+      }).save();
+      await Domain.create({
+        name: name + '-2'
+      }).save();
+      const response = await request(app)
+        .post('/domain/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            dateAcceptedTerms: undefined,
+            roles: [
+              {
+                org: organization.id,
+                role: 'user'
+              }
+            ]
+          })
+        )
+        .send({
+          filters: { reverseName: name }
+        })
+        .expect(403);
+      expect(response.text).toContain('must accept terms');
+    });
   });
   describe('get', () => {
     it("get by org user should work for domain in the user's org", async () => {

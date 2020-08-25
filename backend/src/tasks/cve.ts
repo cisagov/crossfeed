@@ -24,7 +24,8 @@ export const handler = async (commandOptions: CommandOptions) => {
   for (const domain of allDomains) {
     const cpes = new Set<string>();
     for (const tech of domain.webTechnologies) {
-      if (tech.cpe && tech.version) cpes.add(tech.cpe + ':' + tech.version);
+      if (tech.cpe && tech.version && tech.version.split('.').length > 1)
+        cpes.add(tech.cpe + ':' + tech.version);
     }
 
     for (const service of domain.services) {
@@ -32,7 +33,8 @@ export const handler = async (commandOptions: CommandOptions) => {
         service.censysMetadata &&
         service.censysMetadata.manufacturer &&
         service.censysMetadata.product &&
-        service.censysMetadata.version
+        service.censysMetadata.version &&
+        service.censysMetadata.version.split('.').length > 1
       ) {
         // TODO: Improve methods for getting CPEs from Censys
         // See https://www.napier.ac.uk/~/media/worktribe/output-1500093/identifying-vulnerabilities-using-internet-wide-scanning-data.pdf
@@ -61,7 +63,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   // Should change this to spawnSync
   const res = execSync(
-    "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 nvd-dump/nvdcve-1.1-2*.json.gz",
+    "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 -require_version nvd-dump/nvdcve-1.1-2*.json.gz",
     { input: input, maxBuffer: buffer.constants.MAX_LENGTH }
   );
 

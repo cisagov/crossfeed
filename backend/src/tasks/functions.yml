@@ -3,6 +3,7 @@ scheduler:
   timeout: 300
   events:
     - schedule: rate(5 minutes)
+  reservedConcurrency: 1
 
 syncdb:
   handler: src/tasks/syncdb.handler

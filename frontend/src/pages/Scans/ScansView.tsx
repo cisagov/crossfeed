@@ -21,6 +21,7 @@ import MultiSelect from './MultiSelect';
 
 interface Errors extends Partial<Scan> {
   global?: string;
+  scheduler?: string;
 }
 
 interface OrganizationOption {
@@ -204,6 +205,18 @@ const ScansView: React.FC = () => {
     }
   };
 
+  const invokeScheduler = async () => {
+    setErrors({...errors, scheduler: ""});
+    try {
+      await apiPost('/scheduler/invoke', {
+      });
+    }
+    catch (e) {
+      console.error(e);
+      setErrors({...errors, scheduler: "Invocation failed."});
+    }
+  }
+
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
   > = e => onChange(e.target.name, e.target.value);
@@ -220,6 +233,8 @@ const ScansView: React.FC = () => {
   return (
     <>
       <Table<Scan> columns={columns} data={scans} fetchData={fetchScans} />
+      <Button type="submit" outline onClick={invokeScheduler}>Manually run scheduler</Button>
+      {errors.scheduler && <p className={classes.error}>{errors.scheduler}</p>}
       <h2>Add a scan</h2>
       <Form onSubmit={onSubmit} className={classes.form}>
         {errors.global && <p className={classes.error}>{errors.global}</p>}

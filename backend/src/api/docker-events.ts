@@ -46,6 +46,9 @@ export const listenForDockerEvents = async () => {
     } else {
       return;
     }
-    await updateScanTaskStatus(payload, {} as any, () => null);
+    await setTimeout(
+      () => updateScanTaskStatus(payload, {} as any, () => null),
+      1000
+    );
   });
 };

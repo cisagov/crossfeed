@@ -90,7 +90,7 @@ export const AuthCreateAccount: React.FC = () => {
       {(process.env.NODE_ENV === 'development' ||
         (user && user.userType === 'globalAdmin')) && (
         <>
-          <h1>[DEVELOPMENT] Finish Creating Account</h1>
+          <h1>[DEVELOPMENT, FOR GLOBAL ADMINS ONLY] Finish Creating Account</h1>
           <p>
             We need just a few more details from you in order to finish creating
             your account.

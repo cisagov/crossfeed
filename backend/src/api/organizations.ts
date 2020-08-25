@@ -34,7 +34,7 @@ export const del = wrapHandler(async (event) => {
     return NotFound;
   }
 
-  if (!isOrgAdmin(event, id)) return Unauthorized;
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
 
   await connectToDatabase();
   const result = await Organization.delete(id);
@@ -44,21 +44,23 @@ export const del = wrapHandler(async (event) => {
   };
 });
 
-class NewOrganization {
+class NewOrganizationNonGlobalAdmins {
   @IsString()
   name: string;
-
-  @IsArray()
-  rootDomains: string[];
-
-  @IsArray()
-  ipBlocks: string[];
 
   @IsBoolean()
   isPassive: boolean;
 
   @IsBoolean()
   inviteOnly: boolean;
+}
+
+class NewOrganization extends NewOrganizationNonGlobalAdmins {
+  @IsArray()
+  rootDomains: string[];
+
+  @IsArray()
+  ipBlocks: string[];
 }
 
 export const update = wrapHandler(async (event) => {
@@ -69,8 +71,12 @@ export const update = wrapHandler(async (event) => {
   }
 
   if (!isOrgAdmin(event, id)) return Unauthorized;
-
-  const body = await validateBody(NewOrganization, event.body);
+  const body = await validateBody(
+    isGlobalWriteAdmin(event)
+      ? NewOrganization
+      : NewOrganizationNonGlobalAdmins,
+    event.body
+  );
   await connectToDatabase();
   const org = await Organization.findOne(
     {
