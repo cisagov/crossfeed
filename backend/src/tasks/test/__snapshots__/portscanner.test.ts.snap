@@ -3,6 +3,9 @@
 exports[`portscanner basic test: helpers.saveServicesToDb 1`] = `
 Array [
   Service {
+    "discoveredBy": Object {
+      "id": "d0f51c16-a64a-4ed0-8373-d66485bfc678",
+    },
     "domain": Domain {
       "ip": "104.84.119.215",
       "name": "www.cisa.gov",
@@ -19,6 +22,9 @@ Array [
     "port": 80,
   },
   Service {
+    "discoveredBy": Object {
+      "id": "d0f51c16-a64a-4ed0-8373-d66485bfc678",
+    },
     "domain": Domain {
       "ip": "104.84.119.215",
       "name": "www.cisa.gov",

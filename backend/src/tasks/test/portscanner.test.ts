@@ -22,7 +22,7 @@ describe('portscanner', () => {
     await portscanner({
       organizationId: 'organizationId',
       organizationName: 'organizationName',
-      scanId: 'scanId',
+      scanId: 'd0f51c16-a64a-4ed0-8373-d66485bfc678',
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
     });

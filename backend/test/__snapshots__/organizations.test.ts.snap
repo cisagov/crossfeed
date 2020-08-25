@@ -5,6 +5,9 @@ exports[`organizations create can't add organization with the same name 1`] = `O
 exports[`organizations create create by globalAdmin should succeed 1`] = `
 Object {
   "createdAt": Any<String>,
+  "createdBy": Object {
+    "id": Any<String>,
+  },
   "id": Any<String>,
   "inviteOnly": true,
   "ipBlocks": Array [],

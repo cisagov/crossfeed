@@ -1,5 +1,5 @@
 import { handler as findomain } from '../findomain';
-import { connectToDatabase, Organization, Domain } from '../../models';
+import { connectToDatabase, Organization, Domain, Scan } from '../../models';
 import { readFileSync } from 'fs';
 
 jest.mock('child_process', () => ({
@@ -12,6 +12,7 @@ jest.mock('fs', () => ({
 }));
 
 describe('findomain', () => {
+  let scan;
   beforeAll(async () => {
     await connectToDatabase();
     (readFileSync as jest.Mock).mockImplementation(() =>
@@ -20,6 +21,11 @@ describe('findomain', () => {
         'www.filedrop.cisa.gov,104.84.119.215'
       ].join('\n')
     );
+    scan = await Scan.create({
+      name: 'findomain',
+      arguments: {},
+      frequency: 999
+    }).save();
   });
   test('should add new domains', async () => {
     const organization = await Organization.create({
@@ -31,17 +37,20 @@ describe('findomain', () => {
     await findomain({
       organizationId: organization.id,
       organizationName: 'organizationName',
-      scanId: 'scanId',
+      scanId: scan.id,
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
     });
 
     const domains = await Domain.find({
-      organization
+      where: { organization },
+      relations: ['organization', 'discoveredBy']
     });
     expect(domains.length).toEqual(2);
     expect(domains[0].name).toEqual('filedrop.cisa.gov');
     expect(domains[0].ip).toEqual('104.84.119.215');
+    expect(domains[0].organization.id).toEqual(organization.id);
+    expect(domains[0].discoveredBy.id).toEqual(scan.id);
     expect(domains[1].name).toEqual('www.filedrop.cisa.gov');
     expect(domains[1].ip).toEqual('104.84.119.215');
   });
@@ -52,26 +61,38 @@ describe('findomain', () => {
       ipBlocks: [],
       isPassive: false
     }).save();
+    const scanOld = await Scan.create({
+      name: 'findomain',
+      arguments: {},
+      frequency: 999
+    }).save();
     const domain = await Domain.create({
       organization,
-      name: 'filedrop.cisa.gov'
+      name: 'filedrop.cisa.gov',
+      discoveredBy: scanOld,
+      fromRootDomain: 'oldrootdomain.cisa.gov'
     }).save();
     await findomain({
       organizationId: organization.id,
       organizationName: 'organizationName',
-      scanId: 'scanId',
+      scanId: scan.id,
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
     });
 
     const domains = await Domain.find({
-      organization
+      where: { organization },
+      relations: ['discoveredBy']
     });
     expect(domains.length).toEqual(2);
     expect(domains[0].id).toEqual(domain.id);
     expect(domains[0].name).toEqual('filedrop.cisa.gov');
     expect(domains[0].ip).toEqual('104.84.119.215');
+    expect(domains[0].discoveredBy.id).toEqual(scanOld.id);
+    expect(domains[0].fromRootDomain).toEqual('oldrootdomain.cisa.gov');
     expect(domains[1].name).toEqual('www.filedrop.cisa.gov');
     expect(domains[1].ip).toEqual('104.84.119.215');
+    expect(domains[1].discoveredBy.id).toEqual(scan.id);
+    expect(domains[1].fromRootDomain).toEqual(organization.rootDomains[0]);
   });
 });
