@@ -8,6 +8,9 @@ scheduler:
 syncdb:
   handler: src/tasks/syncdb.handler
 
+bastion:
+  handler: src/tasks/bastion.handler
+
 makeGlobalAdmin:
   handler: src/tasks/makeGlobalAdmin.handler
 
