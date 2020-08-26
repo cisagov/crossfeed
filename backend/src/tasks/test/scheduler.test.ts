@@ -443,12 +443,14 @@ describe('scheduler', () => {
       );
       expect(runCommand).toHaveBeenCalledTimes(10);
 
-      expect(await ScanTask.count({
-        where: {
-          scan,
-          status: 'queued'
-        }
-      })).toEqual(10);
+      expect(
+        await ScanTask.count({
+          where: {
+            scan,
+            status: 'queued'
+          }
+        })
+      ).toEqual(10);
 
       // Should run the remaining 10 queued scantasks.
       getNumTasks.mockImplementation(() => 0);
@@ -462,12 +464,14 @@ describe('scheduler', () => {
       );
       expect(runCommand).toHaveBeenCalledTimes(20);
 
-      expect(await ScanTask.count({
-        where: {
-          scan,
-          status: 'queued'
-        }
-      })).toEqual(0);
+      expect(
+        await ScanTask.count({
+          where: {
+            scan,
+            status: 'queued'
+          }
+        })
+      ).toEqual(0);
 
       // No more scantasks remaining to be run.
       getNumTasks.mockImplementation(() => 0);

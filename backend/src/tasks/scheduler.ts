@@ -47,32 +47,36 @@ class Scheduler {
     scan: Scan;
     chunkNumber?: number;
     numChunks?: number;
-    scanTask?: ScanTask
+    scanTask?: ScanTask;
   }) => {
     const { type, global } = SCAN_SCHEMA[scan.name];
 
     const ecsClient = new ECSClient();
-    scanTask = scanTask ?? await ScanTask.create({
-      organization: global ? undefined : organization,
-      scan,
-      type,
-      status: 'created',
-    }).save();
+    scanTask =
+      scanTask ??
+      (await ScanTask.create({
+        organization: global ? undefined : organization,
+        scan,
+        type,
+        status: 'created'
+      }).save());
 
-    const commandOptions = scanTask.input ? JSON.parse(scanTask.input): {
-      organizationId: organization?.id,
-      organizationName: organization?.name,
-      scanId: scan.id,
-      scanName: scan.name,
-      scanTaskId: scanTask.id,
-      numChunks,
-      chunkNumber
-    };
+    const commandOptions = scanTask.input
+      ? JSON.parse(scanTask.input)
+      : {
+          organizationId: organization?.id,
+          organizationName: organization?.name,
+          scanId: scan.id,
+          scanName: scan.name,
+          scanTaskId: scanTask.id,
+          numChunks,
+          chunkNumber
+        };
 
     scanTask.input = JSON.stringify(commandOptions);
 
     if (this.reachedScanLimit()) {
-      scanTask.status = "queued";
+      scanTask.status = 'queued';
       if (!scanTask.queuedAt) {
         scanTask.queuedAt = new Date();
       }
@@ -96,7 +100,9 @@ class Scheduler {
         if (typeof jest === 'undefined') {
           console.log(
             `Successfully invoked ${scan.name} scan with fargate, with ECS task ARN ${taskArn}` +
-              (commandOptions.numChunks ? `, Chunk ${commandOptions.chunkNumber}/${commandOptions.numChunks}` : '')
+              (commandOptions.numChunks
+                ? `, Chunk ${commandOptions.chunkNumber}/${commandOptions.numChunks}`
+                : '')
           );
         }
       } else {

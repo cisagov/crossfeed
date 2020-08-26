@@ -43,7 +43,13 @@ export class ScanTask extends BaseEntity {
    * failed: any of the steps above have failed
    */
   @Column('text')
-  status: 'created' | 'queued' | 'requested' | 'started' | 'finished' | 'failed';
+  status:
+    | 'created'
+    | 'queued'
+    | 'requested'
+    | 'started'
+    | 'finished'
+    | 'failed';
 
   @Column('text')
   type: 'fargate' | 'lambda';
