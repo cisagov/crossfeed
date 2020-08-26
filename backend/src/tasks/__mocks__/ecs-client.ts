@@ -10,6 +10,9 @@ export const runCommand = jest.fn(async (commandOptions: CommandOptions) => {
   };
 });
 
+export const getNumTasks = jest.fn(() => 0);
+
 export default jest.fn(() => ({
-  runCommand
+  runCommand,
+  getNumTasks
 }));
