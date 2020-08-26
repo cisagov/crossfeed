@@ -1,7 +1,6 @@
 import { ECS, CloudWatchLogs } from 'aws-sdk';
 import { SCAN_SCHEMA } from '../api/scans';
 import * as Docker from 'dockerode';
-import { GetLogEventsResponse } from 'aws-sdk/clients/cloudwatchlogs';
 
 export interface CommandOptions {
   organizationId?: string;
