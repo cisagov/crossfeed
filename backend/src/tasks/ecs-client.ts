@@ -195,7 +195,8 @@ class ECSClient {
         stderr: true,
         timestamps: true
       });
-      // Remove 8 special characters at beginning of Docker logs
+      // Remove 8 special characters at beginning of Docker logs -- see
+      // https://github.com/moby/moby/issues/7375.
       return logStream
         ?.toString()
         .split('\n')
