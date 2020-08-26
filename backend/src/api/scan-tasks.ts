@@ -13,6 +13,7 @@ import { ScanTask, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { SelectQueryBuilder } from 'typeorm';
 import { isGlobalViewAdmin, isGlobalWriteAdmin } from './auth';
+import ECSClient from '../tasks/ecs-client';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
@@ -131,5 +132,27 @@ export const kill = wrapHandler(async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify({})
+  };
+});
+
+export const logs = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event)) {
+    return Unauthorized;
+  }
+  const id = event.pathParameters?.scanTaskId;
+
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+  await connectToDatabase();
+  const scanTask = await ScanTask.findOne(id);
+  if (!scanTask || !scanTask.fargateTaskArn) {
+    return NotFound;
+  }
+  const ecsClient = await new ECSClient();
+  const logs = await ecsClient.getLogs(scanTask.fargateTaskArn);
+  return {
+    statusCode: 200,
+    body: logs || ''
   };
 });
