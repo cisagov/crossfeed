@@ -80,6 +80,10 @@ class Scheduler {
       if (!scanTask.queuedAt) {
         scanTask.queuedAt = new Date();
       }
+      console.log(
+        'Reached maximum concurrency, queueing scantask',
+        scanTask.id
+      );
       await scanTask.save();
       return;
     }
@@ -127,9 +131,6 @@ class Scheduler {
     organization?: Organization;
     scan: Scan;
   }) => {
-    if (this.reachedScanLimit()) {
-      return;
-    }
     let { numChunks } = SCAN_SCHEMA[scan.name];
     if (numChunks) {
       if (typeof jest === 'undefined' && process.env.IS_LOCAL) {
@@ -168,18 +169,12 @@ class Scheduler {
           continue;
         }
         await this.launchScanTask({ scan });
-        if (this.reachedScanLimit()) {
-          break;
-        }
       } else if (scan.isGranular) {
         for (const organization of scan.organizations) {
           if (!(await shouldRunScan({ organization, scan }))) {
             continue;
           }
           await this.launchScanTask({ organization, scan });
-          if (this.reachedScanLimit()) {
-            break;
-          }
         }
       } else {
         for (const organization of this.organizations) {
@@ -187,21 +182,11 @@ class Scheduler {
             continue;
           }
           await this.launchScanTask({ organization, scan });
-          if (this.reachedScanLimit()) {
-            break;
-          }
         }
       }
       if (this.numLaunchedTasks > 0) {
         scan.lastRun = new Date();
         await scan.save();
-      }
-      if (this.reachedScanLimit()) {
-        console.warn(
-          'Reached maximum scan concurrency: ',
-          this.maxConcurrentTasks
-        );
-        break;
       }
     }
   }

@@ -373,8 +373,29 @@ describe('scheduler', () => {
         ipBlocks: [],
         isPassive: false
       }).save();
-      getNumTasks.mockImplementation(() => 100);
 
+      getNumTasks.mockImplementation(() => 100);
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+      expect(runCommand).toHaveBeenCalledTimes(0);
+
+      expect(
+        await ScanTask.count({
+          where: {
+            scan,
+            status: 'queued'
+          }
+        })
+      ).toEqual(1);
+
+      // Queue has opened up.
+      getNumTasks.mockImplementation(() => 0);
       await scheduler(
         {
           scanId: scan.id,
@@ -384,7 +405,7 @@ describe('scheduler', () => {
         () => void 0
       );
 
-      expect(runCommand).toHaveBeenCalledTimes(0);
+      expect(runCommand).toHaveBeenCalledTimes(1);
     });
 
     test('should run only one, not two scans, if only one more scan remaining before max concurrency is reached', async () => {
@@ -404,8 +425,8 @@ describe('scheduler', () => {
         ipBlocks: [],
         isPassive: false
       }).save();
-      getNumTasks.mockImplementation(() => 99);
 
+      getNumTasks.mockImplementation(() => 99);
       await scheduler(
         {
           scanIds: [scan.id, scan2.id],
@@ -414,8 +435,28 @@ describe('scheduler', () => {
         {} as any,
         () => void 0
       );
-
       expect(runCommand).toHaveBeenCalledTimes(1);
+
+      expect(
+        await ScanTask.count({
+          where: {
+            scan: scan2,
+            status: 'queued'
+          }
+        })
+      ).toEqual(1);
+
+      // Queue has opened up.
+      getNumTasks.mockImplementation(() => 90);
+      await scheduler(
+        {
+          scanIds: [scan.id, scan2.id],
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+      expect(runCommand).toHaveBeenCalledTimes(2);
     });
 
     test('should run part of a chunked (20) scan if less than 20 scans remaining before concurrency is reached, then run the rest of them only when concurrency opens back up', async () => {
