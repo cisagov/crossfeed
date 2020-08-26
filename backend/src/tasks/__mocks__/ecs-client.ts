@@ -12,7 +12,10 @@ export const runCommand = jest.fn(async (commandOptions: CommandOptions) => {
 
 export const getNumTasks = jest.fn(() => 0);
 
+export const getLogs = jest.fn(() => 'logs');
+
 export default jest.fn(() => ({
   runCommand,
-  getNumTasks
+  getNumTasks,
+  getLogs
 }));
