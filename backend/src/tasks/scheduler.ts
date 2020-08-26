@@ -33,6 +33,7 @@ class Scheduler {
     this.maxConcurrentTasks = Number(process.env.FARGATE_MAX_CONCURRENCY!);
 
     console.log('Number of running Fargate tasks: ', this.numExistingTasks);
+    console.log('Number of queued scan tasks: ', this.queuedScanTasks.length);
   }
 
   launchSingleScanTask = async ({
@@ -58,25 +59,28 @@ class Scheduler {
       status: 'created',
     }).save();
 
+    const commandOptions = scanTask.input ? JSON.parse(scanTask.input): {
+      organizationId: organization?.id,
+      organizationName: organization?.name,
+      scanId: scan.id,
+      scanName: scan.name,
+      scanTaskId: scanTask.id,
+      numChunks,
+      chunkNumber
+    };
+
+    scanTask.input = JSON.stringify(commandOptions);
+
     if (this.reachedScanLimit()) {
       scanTask.status = "queued";
       if (!scanTask.queuedAt) {
         scanTask.queuedAt = new Date();
       }
       await scanTask.save();
-      return scanTask;
+      return;
     }
 
     try {
-      const commandOptions = scanTask.input ? JSON.parse(scanTask.input): {
-        organizationId: organization?.id,
-        organizationName: organization?.name,
-        scanId: scan.id,
-        scanName: scan.name,
-        scanTaskId: scanTask.id,
-        numChunks,
-        chunkNumber
-      };
       if (type === 'fargate') {
         const result = await ecsClient.runCommand(commandOptions);
         if (result.tasks!.length === 0) {
@@ -98,7 +102,6 @@ class Scheduler {
       } else {
         throw new Error('Invalid type ' + type);
       }
-      scanTask.input = JSON.stringify(commandOptions);
       scanTask.status = 'requested';
       scanTask.requestedAt = new Date();
       this.numLaunchedTasks++;
@@ -107,9 +110,8 @@ class Scheduler {
       console.error(error);
       scanTask.output = JSON.stringify(error);
       scanTask.status = 'failed';
-    } finally {
-      await scanTask.save();
     }
+    await scanTask.save();
   };
 
   launchScanTask = async ({
@@ -200,7 +202,7 @@ class Scheduler {
 
   async runQueued() {
     for (const scanTask of this.queuedScanTasks) {
-      this.launchSingleScanTask({ scanTask, scan: scanTask.scan })
+      await this.launchSingleScanTask({ scanTask, scan: scanTask.scan });
     }
   }
 }
@@ -292,6 +294,10 @@ export const handler: Handler<Event> = async (event) => {
   const queuedScanTasks = await ScanTask.find({
     where: {
       scan: scanWhere,
+      status: 'queued'
+    },
+    order: {
+      queuedAt: 'ASC'
     },
     relations: ['scan']
   });

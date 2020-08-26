@@ -418,7 +418,7 @@ describe('scheduler', () => {
       expect(runCommand).toHaveBeenCalledTimes(1);
     });
 
-    test('should not run a chunked (20) scan at all if only one more scan remaining before max concurrency is reached', async () => {
+    test('should run part of a chunked (20) scan if less than 20 scans remaining before concurrency is reached, then run the rest of them only when concurrency opens back up', async () => {
       const scan = await Scan.create({
         name: 'censysIpv4',
         arguments: {},
@@ -430,8 +430,9 @@ describe('scheduler', () => {
         ipBlocks: [],
         isPassive: false
       }).save();
-      getNumTasks.mockImplementation(() => 99);
 
+      // Only 10/20 scantasks will run at first
+      getNumTasks.mockImplementation(() => 90);
       await scheduler(
         {
           scanId: scan.id,
@@ -440,8 +441,45 @@ describe('scheduler', () => {
         {} as any,
         () => void 0
       );
+      expect(runCommand).toHaveBeenCalledTimes(10);
 
-      expect(runCommand).toHaveBeenCalledTimes(0);
+      expect(await ScanTask.count({
+        where: {
+          scan,
+          status: 'queued'
+        }
+      })).toEqual(10);
+
+      // Should run the remaining 10 queued scantasks.
+      getNumTasks.mockImplementation(() => 0);
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+      expect(runCommand).toHaveBeenCalledTimes(20);
+
+      expect(await ScanTask.count({
+        where: {
+          scan,
+          status: 'queued'
+        }
+      })).toEqual(0);
+
+      // No more scantasks remaining to be run.
+      getNumTasks.mockImplementation(() => 0);
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+      expect(runCommand).toHaveBeenCalledTimes(20);
     });
   });
   test('should not run a global scan when a scantask for it is already in progress, even if scantasks have finished before / after it', async () => {
