@@ -29,6 +29,7 @@ provider:
       Action:
         - ecs:RunTask
         - iam:PassRole
+        - logs:getLogEvents
       Resource: '*'
 
 functions:
