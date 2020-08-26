@@ -126,10 +126,9 @@ class ECSClient {
         value: String(chunkNumber)
       });
     }
-    // TODO: retrieve these values from SSM.
     return this.ecs!.runTask({
-      cluster: 'crossfeed-staging-worker', // aws_ecs_cluster.worker.name
-      taskDefinition: 'crossfeed-staging-worker', // aws_ecs_task_definition.worker.name
+      cluster: process.env.FARGATE_CLUSTER_NAME!,
+      taskDefinition: process.env.FARGATE_TASK_DEFINITION_NAME!,
       networkConfiguration: {
         awsvpcConfiguration: {
           assignPublicIp: 'ENABLED',

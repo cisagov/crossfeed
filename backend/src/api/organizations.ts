@@ -14,7 +14,8 @@ import {
   connectToDatabase,
   Role,
   ScanTask,
-  Scan
+  Scan,
+  User
 } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
@@ -100,8 +101,11 @@ export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   const body = await validateBody(NewOrganization, event.body);
   await connectToDatabase();
-  const scan = await Organization.create(body);
-  const res = await Organization.save(scan);
+  const organization = await Organization.create({
+    ...body,
+    createdBy: { id: event.requestContext.authorizer!.id }
+  });
+  const res = await Organization.save(organization);
   return {
     statusCode: 200,
     body: JSON.stringify(res)
@@ -231,6 +235,9 @@ export const approveRole = wrapHandler(async (event) => {
   });
   if (role) {
     role.approved = true;
+    role.approvedBy = plainToClass(User, {
+      id: event.requestContext.authorizer!.id
+    });
     const result = await role.save();
     return {
       statusCode: result ? 200 : 404,

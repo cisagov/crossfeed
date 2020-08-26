@@ -63,7 +63,8 @@ export const update = wrapHandler(async (event) => {
         user: user,
         organization: { id: body.organization },
         approved: false,
-        role: 'user'
+        role: 'user',
+        createdBy: user // User is creating the role themselves.
       });
     }
     return {
@@ -170,13 +171,16 @@ export const invite = wrapHandler(async (event) => {
         user: user,
         organization: { id: body.organization },
         approved: true,
+        createdBy: { id: event.requestContext.authorizer!.id },
+        approvedBy: { id: event.requestContext.authorizer!.id },
         role: body.organizationAdmin ? 'admin' : 'user'
       })
       .onConflict(
         `
       ("userId", "organizationId") DO UPDATE
       SET "role" = excluded."role",
-          "approved" = excluded."approved"
+          "approved" = excluded."approved",
+          "approvedById" = excluded."approvedById"
     `
       )
       .execute();
@@ -204,6 +208,22 @@ export const me = wrapHandler(async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(result)
+  };
+});
+
+export const acceptTerms = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const user = await User.findOne(getUserId(event));
+  if (!user || !event.body) {
+    return NotFound;
+  }
+  user.dateAcceptedTerms = new Date();
+  console.log(JSON.parse(event.body));
+  user.acceptedTermsVersion = JSON.parse(event.body).version;
+  await user.save();
+  return {
+    statusCode: 200,
+    body: JSON.stringify(user)
   };
 });
 

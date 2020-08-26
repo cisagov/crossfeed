@@ -1,19 +1,15 @@
 import { mocked } from 'ts-jest/utils';
 import getLiveWebsites from '../helpers/getLiveWebsites';
 import * as wappalyzer from 'simple-wappalyzer';
-import { Domain, Service } from '../../models';
+import { Domain, Service, connectToDatabase } from '../../models';
 import { CommandOptions } from '../ecs-client';
 import { handler } from '../wappalyzer';
-import saveDomainsToDb from '../helpers/saveDomainsToDb';
 import * as nock from 'nock';
 
 const wappalyzer = require('simple-wappalyzer');
 
 jest.mock('../helpers/getLiveWebsites');
 const getLiveWebsitesMock = mocked(getLiveWebsites);
-
-jest.mock('../helpers/saveDomainsToDb');
-const saveDomainsToDbMock = mocked(saveDomainsToDb);
 
 // @ts-ignore
 jest.mock('simple-wappalyzer', () => jest.fn());
@@ -43,7 +39,7 @@ const wappalyzerResponse = [
 const commandOptions: CommandOptions = {
   organizationId: 'organizationId',
   organizationName: 'organizationName',
-  scanId: 'scanId',
+  scanId: '0fce0882-234a-4f0e-a0d4-e7d6ed50c3b9',
   scanName: 'scanName',
   scanTaskId: 'scanTaskId'
 };
@@ -51,8 +47,8 @@ const commandOptions: CommandOptions = {
 describe('wappalyzer', () => {
   let testDomain: Domain;
 
-  beforeAll(() => {
-    saveDomainsToDbMock.mockResolvedValue();
+  beforeAll(async () => {
+    await connectToDatabase();
   });
 
   beforeEach(() => {
@@ -60,14 +56,11 @@ describe('wappalyzer', () => {
     testDomain.name = 'example.com';
     getLiveWebsitesMock.mockResolvedValue([]);
     wappalyzer.mockResolvedValue([]);
-    logSpy.mockImplementation(() => {});
-    errSpy.mockImplementation(() => {});
   });
 
   afterEach(() => {
     getLiveWebsitesMock.mockReset();
     wappalyzer.mockReset();
-    saveDomainsToDbMock.mockReset();
     nock.cleanAll();
   });
 
@@ -121,15 +114,15 @@ describe('wappalyzer', () => {
       .times(2)
       .reply(200, 'somedata');
     const testDomains = [
-      {
+      await Domain.create({
         ...testDomain,
         services: [httpsService]
-      },
-      {
+      }).save(),
+      await Domain.create({
         ...testDomain,
         name: 'example2.com',
-        services: [httpService]
-      }
+        services: [httpsService]
+      }).save()
     ] as Domain[];
     getLiveWebsitesMock.mockResolvedValue(testDomains);
     wappalyzer
@@ -139,12 +132,14 @@ describe('wappalyzer', () => {
     await handler(commandOptions);
     scope.done();
     expect(wappalyzer).toHaveBeenCalledTimes(2);
-    expect(saveDomainsToDbMock).toHaveBeenCalledTimes(1);
-    // only the domain with results was saved
-    expect(saveDomainsToDbMock.mock.calls).toHaveLength(1);
     expect(logSpy).toHaveBeenLastCalledWith(
-      'Wappalyzer finished for 1 domains'
+      'Wappalyzer finished for 2 domains'
     );
+    const domain1 = await Domain.findOne(testDomains[0].id);
+    expect(domain1?.webTechnologies).toEqual([]);
+
+    const domain2 = await Domain.findOne(testDomains[1].id);
+    expect(domain2?.webTechnologies).toEqual(wappalyzerResponse);
   });
 
   test('logs error on wappalyzer failure', async () => {

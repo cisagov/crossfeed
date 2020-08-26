@@ -158,7 +158,8 @@ export const create = wrapHandler(async (event) => {
   const body = await validateBody(NewScan, event.body);
   const scan = await Scan.create({
     ...body,
-    organizations: body.organizations.map((id) => ({ id }))
+    organizations: body.organizations.map((id) => ({ id })),
+    createdBy: { id: event.requestContext.authorizer!.id }
   });
   const res = await Scan.save(scan);
   return {

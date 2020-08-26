@@ -13,6 +13,7 @@ import {
 import { Service } from './service';
 import { Organization } from './organization';
 import { Vulnerability } from './vulnerability';
+import { Scan } from './scan';
 
 @Entity()
 @Index(['name', 'organization'], { unique: true })
@@ -30,6 +31,18 @@ export class Domain extends BaseEntity {
     nullable: true
   })
   ip: string;
+
+  /** Associated root domain that led to the discovery of this domain. */
+  @Column({
+    nullable: true
+  })
+  fromRootDomain: string;
+
+  @ManyToOne((type) => Scan, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  discoveredBy: Scan;
 
   @Column({
     length: 512

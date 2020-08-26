@@ -130,7 +130,7 @@ describe('censys ipv4', () => {
     await censysIpv4({
       organizationId: 'organizationId',
       organizationName: 'organizationName',
-      scanId: 'scanId',
+      scanId: '0dacd0d9-294b-4bb5-a3b9-afe70cf5acff',
       scanName: 'scanName',
       scanTaskId: 'scanTaskId',
       chunkNumber: 0,
@@ -175,7 +175,7 @@ describe('censys ipv4', () => {
     await censysIpv4({
       organizationId: 'organizationId',
       organizationName: 'organizationName',
-      scanId: 'scanId',
+      scanId: '739c1517-5afb-4665-a577-d6429883edd2',
       scanName: 'scanName',
       scanTaskId: 'scanTaskId',
       chunkNumber: 0,
@@ -218,7 +218,7 @@ describe('censys ipv4', () => {
       censysIpv4({
         organizationId: 'organizationId',
         organizationName: 'organizationName',
-        scanId: 'scanId',
+        scanId: '388de975-5816-4ec4-b84f-f2070fe68a58',
         scanName: 'scanName',
         scanTaskId: 'scanTaskId',
         chunkNumber: 0,
