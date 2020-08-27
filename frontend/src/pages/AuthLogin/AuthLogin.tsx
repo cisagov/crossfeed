@@ -31,6 +31,15 @@ export const AuthLogin: React.FC = () => {
     <AuthForm onSubmit={onSubmit}>
       <h1>Welcome to Crossfeed</h1>
       {errors.global && <p className="text-error">{errors.global}</p>}
+      {process.env.REACT_APP_USE_COGNITO && <>
+        <a href={`https://${process.env.REACT_APP_USER_POOL_DOMAIN}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${encodeURIComponent(process.env.REACT_APP_USER_POOL_CLIENT_ID!)}&redirect_uri=${encodeURIComponent(window.location.origin)}`}>
+        <Button type="button" size="big">
+          Login
+        </Button>
+        </a>
+      </>}
+      
+      {!process.env.REACT_APP_USE_COGNITO && <>
       <Button type="submit" size="big">
         Login with Login.gov
       </Button>
@@ -38,6 +47,7 @@ export const AuthLogin: React.FC = () => {
       <Link to="#" onClick={onSubmit}>
         New to Crossfeed? Register with Login.gov
       </Link>
+      </>}
     </AuthForm>
   );
 };
