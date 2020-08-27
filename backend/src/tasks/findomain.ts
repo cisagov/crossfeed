@@ -10,7 +10,7 @@ import * as path from 'path';
 const OUT_PATH = path.join(__dirname, 'out-' + Math.random() + '.txt');
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { organizationId, organizationName } = commandOptions;
+  const { organizationId, organizationName, scanId } = commandOptions;
 
   console.log('Running findomain on organization', organizationName);
 
@@ -21,7 +21,6 @@ export const handler = async (commandOptions: CommandOptions) => {
       const args = ['-it', rootDomain, '-u', OUT_PATH];
       console.log('Running findomain with args', args);
       spawnSync('findomain', args, { stdio: 'pipe' });
-
       const output = String(readFileSync(OUT_PATH));
       const lines = output.split('\n');
       const domains: Domain[] = [];
@@ -32,7 +31,9 @@ export const handler = async (commandOptions: CommandOptions) => {
           plainToClass(Domain, {
             name: split[0],
             ip: split[1],
-            organization: { id: organizationId }
+            organization: { id: organizationId },
+            fromRootDomain: rootDomain,
+            discoveredBy: { id: scanId }
           })
         );
       }

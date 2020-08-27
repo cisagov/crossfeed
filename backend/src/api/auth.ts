@@ -122,8 +122,11 @@ export const authorize = async (event) => {
         relations: ['roles', 'roles.organization']
       }
     );
-    // For running tests, ignore if user does not exist
-    if (process.env.NODE_ENV === 'test' && !user) {
+    // For running tests, ignore the database results if user doesn't exist or is the dummy user
+    if (
+      process.env.NODE_ENV === 'test' &&
+      (!user || user.id === 'c1afb49c-2216-4e3c-ac52-aa9480956ce9')
+    ) {
       return parsed;
     }
     if (!user) throw Error('User does not exist');

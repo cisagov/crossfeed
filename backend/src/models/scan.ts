@@ -7,9 +7,11 @@ import {
   BaseEntity,
   OneToMany,
   ManyToMany,
-  JoinTable
+  JoinTable,
+  ManyToOne
 } from 'typeorm';
 import { ScanTask, Organization } from '.';
+import { User } from './user';
 
 @Entity()
 export class Scan extends BaseEntity {
@@ -68,4 +70,10 @@ export class Scan extends BaseEntity {
   )
   @JoinTable()
   organizations: Organization[];
+
+  @ManyToOne((type) => User, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  createdBy: User;
 }

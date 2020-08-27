@@ -71,6 +71,8 @@ const checkUserLoggedIn = async (req, res, next) => {
 const checkUserSignedTerms = (req, res, next) => {
   // Bypass ToU for CISA emails
   const approvedEmailAddresses = ['@cisa.dhs.gov'];
+  if (process.env.NODE_ENV === 'test')
+    approvedEmailAddresses.push('@crossfeed.cisa.gov');
   for (const email of approvedEmailAddresses) {
     if (
       req.requestContext.authorizer.email &&
@@ -130,6 +132,10 @@ authenticatedRoute.post('/scan-tasks/search', handlerToExpress(scanTasks.list));
 authenticatedRoute.post(
   '/scan-tasks/:scanTaskId/kill',
   handlerToExpress(scanTasks.kill)
+);
+authenticatedRoute.get(
+  '/scan-tasks/:scanTaskId/logs',
+  handlerToExpress(scanTasks.logs)
 );
 
 authenticatedRoute.get('/organizations', handlerToExpress(organizations.list));

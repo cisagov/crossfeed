@@ -1223,7 +1223,7 @@ describe('censys', () => {
     await censys({
       organizationId: 'organizationId',
       organizationName: 'organizationName',
-      scanId: 'scanId',
+      scanId: 'ddf56d43-7f87-4139-9a86-b8a1ffde9b9e',
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
     });
