@@ -36,13 +36,20 @@ export class ScanTask extends BaseEntity {
 
   /**
    * created: model is created
+   * queued: Fargate capacity has been reached, so the task will run whenever there is available capacity.
    * requested: a request to Fargate has been sent to start the task
    * started: the Fargate container has started running the task
    * finished: the Fargate container has finished running the task
    * failed: any of the steps above have failed
    */
   @Column('text')
-  status: 'created' | 'requested' | 'started' | 'finished' | 'failed';
+  status:
+    | 'created'
+    | 'queued'
+    | 'requested'
+    | 'started'
+    | 'finished'
+    | 'failed';
 
   @Column('text')
   type: 'fargate' | 'lambda';
@@ -85,4 +92,10 @@ export class ScanTask extends BaseEntity {
     nullable: true
   })
   finishedAt: Date | null;
+
+  @Column({
+    type: 'timestamp',
+    nullable: true
+  })
+  queuedAt: Date | null;
 }

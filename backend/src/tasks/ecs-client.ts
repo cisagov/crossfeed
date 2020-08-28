@@ -1,4 +1,4 @@
-import { ECS } from 'aws-sdk';
+import { ECS, CloudWatchLogs } from 'aws-sdk';
 import { SCAN_SCHEMA } from '../api/scans';
 import * as Docker from 'dockerode';
 
@@ -21,16 +21,19 @@ const toSnakeCase = (input) => input.replace(/ /g, '-');
  */
 class ECSClient {
   ecs?: ECS;
+  cloudWatchLogs?: CloudWatchLogs;
   docker?: Docker;
   isLocal: boolean;
 
-  constructor() {
+  constructor(isLocal?: boolean) {
     this.isLocal =
-      process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false;
+      isLocal ??
+      (process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false);
     if (this.isLocal) {
       this.docker = new Docker();
     } else {
       this.ecs = new ECS();
+      this.cloudWatchLogs = new CloudWatchLogs();
     }
   }
 
@@ -180,6 +183,61 @@ class ECSClient {
         ]
       }
     } as ECS.RunTaskRequest).promise();
+  }
+
+  /**
+   * Gets logs for a specific task.
+   */
+  async getLogs(fargateTaskArn: string) {
+    if (this.isLocal) {
+      const logStream = await this.docker?.getContainer(fargateTaskArn).logs({
+        stdout: true,
+        stderr: true,
+        timestamps: true
+      });
+      // Remove 8 special characters at beginning of Docker logs -- see
+      // https://github.com/moby/moby/issues/7375.
+      return logStream
+        ?.toString()
+        .split('\n')
+        .map((e) => e.substring(8))
+        .join('\n');
+    } else {
+      const response = await this.cloudWatchLogs!.getLogEvents({
+        logGroupName: process.env.FARGATE_LOG_GROUP_NAME!,
+        logStreamName: `worker/main/${fargateTaskArn}`,
+        startFromHead: true
+      }).promise();
+      const res = response.$response.data;
+      if (!res || !res.events?.length) {
+        return '';
+      }
+      return res.events
+        .map((e) => `${new Date(e.timestamp!).toISOString()} ${e.message}`)
+        .join('\n');
+    }
+  }
+
+  /**
+   * Retrieves the number of running tasks associated
+   * with the Fargate worker.
+   */
+  async getNumTasks() {
+    if (this.isLocal) {
+      const containers = await this.docker?.listContainers({
+        filters: {
+          ancestor: ['crossfeed-worker']
+        }
+      });
+      return containers?.length || 0;
+    }
+    const tasks = await this.ecs
+      ?.listTasks({
+        cluster: process.env.FARGATE_CLUSTER_NAME,
+        launchType: 'FARGATE'
+      })
+      .promise();
+    return tasks?.taskArns?.length || 0;
   }
 }
 

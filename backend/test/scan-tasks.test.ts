@@ -9,6 +9,8 @@ import {
   Scan
 } from '../src/models';
 import { createUserToken } from './util';
+jest.mock('../src/tasks/ecs-client');
+const { getLogs } = require('../src/tasks/ecs-client');
 
 describe('domains', () => {
   let organization;
@@ -186,6 +188,55 @@ describe('domains', () => {
         )
         .expect(403);
       expect(response.body).toEqual({});
+    });
+  });
+  describe('logs', () => {
+    it('logs by globalView user should get logs', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 100
+      }).save();
+      const scanTask = await ScanTask.create({
+        organization,
+        scan,
+        fargateTaskArn: 'fargateTaskArn',
+        type: 'fargate',
+        status: 'started'
+      }).save();
+
+      const response = await request(app)
+        .get(`/scan-tasks/${scanTask.id}/logs`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalView'
+          })
+        )
+        .expect(200);
+      expect(response.text).toEqual('logs');
+      expect(getLogs).toHaveBeenCalledWith('fargateTaskArn');
+    });
+    it('logs by regular user should fail', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 100
+      }).save();
+      const scanTask = await ScanTask.create({
+        organization,
+        scan,
+        fargateTaskArn: 'fargateTaskArn',
+        type: 'fargate',
+        status: 'started'
+      }).save();
+
+      const response = await request(app)
+        .get(`/scan-tasks/${scanTask.id}/logs`)
+        .set('Authorization', createUserToken({}))
+        .expect(403);
+      expect(response.text).toEqual('');
+      expect(getLogs).not.toHaveBeenCalled();
     });
   });
 });

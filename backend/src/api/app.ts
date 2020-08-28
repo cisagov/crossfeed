@@ -127,6 +127,10 @@ authenticatedRoute.post(
   '/scan-tasks/:scanTaskId/kill',
   handlerToExpress(scanTasks.kill)
 );
+authenticatedRoute.get(
+  '/scan-tasks/:scanTaskId/logs',
+  handlerToExpress(scanTasks.logs)
+);
 
 authenticatedRoute.get('/organizations', handlerToExpress(organizations.list));
 authenticatedRoute.get(
