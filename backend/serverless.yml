@@ -32,6 +32,7 @@ provider:
         - ecs:RunTask
         - ecs:ListTasks
         - iam:PassRole
+        - logs:GetLogEvents
       Resource: '*'
     - Effect: Allow
       Action:
