@@ -4,10 +4,11 @@ import { User } from '../src/models';
 jest.mock('../src/api/login-gov');
 
 jest.mock('jsonwebtoken', () => ({
-  verify: (a, b, cb) => cb(null, {
-    email: "test2@crossfeed.cisa.gov",
-    email_verified: true
-  }),
+  verify: (a, b, cb) =>
+    cb(null, {
+      email: 'test2@crossfeed.cisa.gov',
+      email_verified: true
+    }),
   sign: jest.requireActual('jsonwebtoken').sign
 }));
 
