@@ -18,7 +18,7 @@ export const AuthLogin: React.FC = () => {
     return onAuthUIStateChange((nextAuthState, authData) => {
         refreshUser();
     });
-  }, []);
+  }, [refreshUser]);
 
   const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
@@ -56,8 +56,6 @@ export const AuthLogin: React.FC = () => {
     <AuthForm onSubmit={onSubmit}>
       <h1>Welcome to Crossfeed</h1>
       {errors.global && <p className="text-error">{errors.global}</p>}
-      
-      <>
       <Button type="submit" size="big">
         Login with Login.gov
       </Button>
@@ -65,7 +63,6 @@ export const AuthLogin: React.FC = () => {
       <Link to="#" onClick={onSubmit}>
         New to Crossfeed? Register with Login.gov
       </Link>
-      </>
     </AuthForm>
   );
 };
