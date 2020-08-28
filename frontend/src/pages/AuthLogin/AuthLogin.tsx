@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthForm } from 'components';
 import { Button } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
+import { AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react';
+import { onAuthUIStateChange } from '@aws-amplify/ui-components';
 
 interface Errors extends Partial<FormData> {
   global?: string;
 }
 
 export const AuthLogin: React.FC = () => {
-  const { apiPost } = useAuthContext();
+  const { apiPost, refreshUser } = useAuthContext();
   const [errors, setErrors] = useState<Errors>({});
+
+  useEffect(() => {
+    return onAuthUIStateChange((nextAuthState, authData) => {
+        refreshUser();
+    });
+  }, []);
 
   const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
@@ -27,19 +35,29 @@ export const AuthLogin: React.FC = () => {
     }
   };
 
+  if (process.env.REACT_APP_USE_COGNITO) {
+    return (
+    <AuthForm>
+      <h1>Welcome to Crossfeed</h1>
+      <AmplifyAuthenticator>
+      <AmplifySignUp
+          slot="sign-up"
+          formFields={[
+            { type: "email" },
+            { type: "password" },
+          ]}
+          usernameAlias="email"
+        />
+      </AmplifyAuthenticator>
+    </AuthForm>);
+  }
+
   return (
     <AuthForm onSubmit={onSubmit}>
       <h1>Welcome to Crossfeed</h1>
       {errors.global && <p className="text-error">{errors.global}</p>}
-      {process.env.REACT_APP_USE_COGNITO && <>
-        <a href={`https://${process.env.REACT_APP_USER_POOL_DOMAIN}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${encodeURIComponent(process.env.REACT_APP_USER_POOL_CLIENT_ID!)}&redirect_uri=${encodeURIComponent(window.location.origin)}`}>
-        <Button type="button" size="big">
-          Login
-        </Button>
-        </a>
-      </>}
       
-      {!process.env.REACT_APP_USE_COGNITO && <>
+      <>
       <Button type="submit" size="big">
         Login with Login.gov
       </Button>
@@ -47,7 +65,7 @@ export const AuthLogin: React.FC = () => {
       <Link to="#" onClick={onSubmit}>
         New to Crossfeed? Register with Login.gov
       </Link>
-      </>}
+      </>
     </AuthForm>
   );
 };

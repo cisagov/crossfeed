@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { API } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import { AuthContext, AuthUser, CurrentOrganization } from './AuthContext';
 import { User, Organization } from 'types';
 import { useHistory } from 'react-router-dom';
@@ -54,6 +54,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     setUser(null);
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+    await Auth.signOut();
   };
 
   const handleError = useCallback(
@@ -79,7 +80,28 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
   const refreshUser = async () => {
     if (!localStorage.getItem('token')) {
-      return;
+      if (process.env.REACT_APP_USE_COGNITO) {
+        const session = await Auth.currentSession();
+        // const token = session.getAccessToken().getJwtToken();
+        // console.error(token);
+        // if (!token) {
+        //   throw new Error('hi');
+        //   return;
+        // }
+        // localStorage.setItem('token', token);
+        const { token, user } = await apiPost<{ token: string; user: User }>(
+          '/auth/callback',
+          {
+            body: {
+              token: session.getIdToken().getJwtToken()
+            }
+          }
+        );
+        await login(token, user);
+
+      } else {
+        return;
+      }
     }
     const user: User = await apiGet('/users/me');
     const userCopy: AuthUser = {

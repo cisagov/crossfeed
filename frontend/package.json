@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aws-amplify/auth": "^3.3.5",
+    "@aws-amplify/ui-components": "^0.6.2",
+    "@aws-amplify/ui-react": "^0.2.15",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@nivo/bar": "^0.62.0",
@@ -24,7 +27,7 @@
     "@types/react-select": "^3.0.15",
     "@types/react-table": "^7.0.19",
     "autoprefixer": "^9.8.4",
-    "aws-amplify": "^3.0.18",
+    "aws-amplify": "^3.0.24",
     "classnames": "^2.2.6",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",

@@ -7,53 +7,6 @@ resource "aws_cognito_user_pool" "pool" {
   software_token_mfa_configuration {
     enabled = true
   }
-
-  sms_configuration {
-    external_id    = var.user_pool_name
-    sns_caller_arn = aws_iam_role.pool_sns_role.arn
-  }
-}
-
-resource "aws_iam_role" "pool_sns_role" {
-  name_prefix = "${var.user_pool_name}-SMS-Role"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "cognito-idp.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole",
-      "Condition": {
-        "StringEquals": {
-          "sts:ExternalId": "${var.user_pool_name}"
-        }
-      }
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy" "pool_sns_policy" {
-  role = aws_iam_role.pool_sns_role.id
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "sns:publish"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
-}
-EOF
 }
 
 resource "aws_cognito_user_pool_domain" "auth_domain" {
