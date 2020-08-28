@@ -43,7 +43,7 @@ export class User extends BaseEntity {
   email: string;
 
   /** Whether the user's invite is pending */
-  @Column({ default: false })
+  @Column({ default: true })
   invitePending: boolean;
 
   /**
