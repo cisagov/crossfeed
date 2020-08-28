@@ -82,13 +82,6 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     if (!localStorage.getItem('token')) {
       if (process.env.REACT_APP_USE_COGNITO) {
         const session = await Auth.currentSession();
-        // const token = session.getAccessToken().getJwtToken();
-        // console.error(token);
-        // if (!token) {
-        //   throw new Error('hi');
-        //   return;
-        // }
-        // localStorage.setItem('token', token);
         const { token, user } = await apiPost<{ token: string; user: User }>(
           '/auth/callback',
           {
@@ -98,7 +91,6 @@ export const AuthContextProvider: React.FC = ({ children }) => {
           }
         );
         await login(token, user);
-
       } else {
         return;
       }
