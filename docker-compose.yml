@@ -22,6 +22,7 @@ services:
       - "80:3000"
     env_file:
       - ./.env
+    tty: true
 
   backend:
     build: ./backend
