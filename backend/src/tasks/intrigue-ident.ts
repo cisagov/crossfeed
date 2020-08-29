@@ -27,8 +27,8 @@ const intrigueIdent = async (domain: Domain): Promise<void> => {
     }
     const output = stdout.toString();
     const { fingerprint, content } = JSON.parse(
-        output.substring(output.indexOf('{'))
-      );
+      output.substring(output.indexOf('{'))
+    );
     service.intrigueIdentResults = { fingerprint, content };
     await service.save();
   }

@@ -168,6 +168,7 @@ export const Domain: React.FC = () => {
             {domain.webTechnologies && (
               <div className={classes.section}>
                 <h3>Known Web Technologies</h3>
+                {JSON.stringify(domain.services, null, 2)}
                 <WebInfo webTechnologies={domain.webTechnologies} />
               </div>
             )}
