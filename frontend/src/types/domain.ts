@@ -22,6 +22,7 @@ export interface Service {
     manufacturer: string;
   } | null;
   censysIpv4Results: any;
+  intrigueIdentResults: any;
 }
 
 export interface Domain {
