@@ -16,6 +16,8 @@ ip6tables-legacy -t nat -A OUTPUT -p tcp -m owner ! --uid-owner mitmproxyuser --
 pm2 start --interpreter none sudo -- -u mitmproxyuser -H bash -c 'mitmdump --mode transparent --showhost --set block_global=false --modify-headers /~q/User-Agent/example.org'
 
 wait-port 8080
+
+# Install the mitmproxy SSL certificate so that HTTPS connections can be proxied.
 cp /home/mitmproxyuser/.mitmproxy/mitmproxy-ca-cert.pem /usr/local/share/ca-certificates/mitmproxy-ca-cert.crt
 update-ca-certificates --fresh
 
