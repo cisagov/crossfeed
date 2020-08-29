@@ -50,8 +50,5 @@ COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsy
 
 COPY --from=deps /etc/ssl/certs /etc/ssl/certs
 
-RUN useradd --create-home mitmproxyuser
-RUN sudo -u mitmproxyuser -H bash -c 'cd ~ && pip3 install --user mitmproxy'
-
 CMD ["./worker-entry.sh"]
 # CMD ["node", "--unhandled-rejections=strict", "worker.bundle.js"]
