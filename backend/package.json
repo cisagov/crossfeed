@@ -60,6 +60,7 @@
   },
   "scripts": {
     "test": "jest",
+    "test-python": "pytest",
     "lint": "eslint '**/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint '**/*.{ts,tsx,js,jsx}' --fix",
     "preinstall": "npx npm-force-resolutions",

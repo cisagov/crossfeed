@@ -18,7 +18,7 @@ ip6tables-legacy -t nat -A OUTPUT -p tcp -m owner ! --uid-owner mitmproxyuser --
 ip6tables-legacy -t nat -A OUTPUT -p tcp -m owner ! --uid-owner mitmproxyuser --dport 443 -j REDIRECT --to-port $PROXY_PORT
 
 # Reduce some long and unnecessary tabular output from pm2 with grep
-pm2 start --interpreter none --error ~/pm2-error.log sudo -- -Eu mitmproxyuser -H bash -c "mitmdump --mode transparent --showhost --set block_global=false -s worker/mitmproxy-sign-requests.py --set stream_large_bodies=1 --listen-port $PROXY_PORT" | grep "^\[PM2\]"
+pm2 start --interpreter none --error ~/pm2-error.log sudo -- -Eu mitmproxyuser -H bash -c "mitmdump --mode transparent --showhost --set block_global=false -s worker/mitmproxy_sign_requests.py --set stream_large_bodies=1 --listen-port $PROXY_PORT" | grep "^\[PM2\]"
 
 wait-port $PROXY_PORT -t 5000 || cat ~/pm2-error.log
 
