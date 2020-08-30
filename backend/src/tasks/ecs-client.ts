@@ -67,9 +67,7 @@ class ECSClient {
             // crossfeed-worker image, we must launch the Docker container with
             // the Crossfeed backend network.
             NetworkMode: 'crossfeed_backend',
-            CapAdd: [
-              "NET_ADMIN"
-            ]
+            CapAdd: ['NET_ADMIN']
           },
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
@@ -84,7 +82,7 @@ class ECSClient {
             `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`,
             `WORKER_USER_AGENT=${process.env.WORKER_USER_AGENT}`,
             `WORKER_SIGNATURE_SECRET=${process.env.WORKER_SIGNATURE_SECRET}`
-          ],
+          ]
         } as any);
         await container.start();
         return {
