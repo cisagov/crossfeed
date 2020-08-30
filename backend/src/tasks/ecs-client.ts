@@ -184,10 +184,6 @@ class ECSClient {
               {
                 name: 'WORKER_USER_AGENT',
                 value: process.env.WORKER_USER_AGENT
-              },
-              {
-                name: 'WORKER_SIGNATURE_SECRET',
-                value: process.env.WORKER_SIGNATURE_SECRET
               }
             ]
           }

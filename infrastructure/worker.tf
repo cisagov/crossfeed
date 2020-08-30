@@ -63,7 +63,8 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${aws_ssm_parameter.crossfeed_send_db_host.arn}",
           "${aws_ssm_parameter.crossfeed_send_db_name.arn}",
           "${data.aws_ssm_parameter.db_username.arn}",
-          "${data.aws_ssm_parameter.db_password.arn}"
+          "${data.aws_ssm_parameter.db_password.arn}",
+          "${data.aws_ssm_parameter.worker_signature_secret.arn}"
         ]
     }
   ]
@@ -134,6 +135,10 @@ resource "aws_ecs_task_definition" "worker" {
       {
         "name": "DB_PASSWORD",
         "valueFrom": "${data.aws_ssm_parameter.db_password.arn}"
+      },
+      {
+        "name": "WORKER_SIGNATURE_SECRET",
+        "valueFrom": "${data.aws_ssm_parameter.worker_signature_secret.arn}"
       }
     ],
     "linuxParameters": {
@@ -168,3 +173,4 @@ resource "aws_cloudwatch_log_group" "worker" {
   }
 }
 
+data "aws_ssm_parameter" "worker_signature_secret" { name = var.ssm_worker_signature_secret }
