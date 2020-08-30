@@ -112,6 +112,7 @@ export const ScanTasksView: React.FC = () => {
       accessor: 'status',
       Filter: selectFilter([
         'created',
+        'queued',
         'requested',
         'started',
         'finished',
