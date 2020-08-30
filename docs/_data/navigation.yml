@@ -24,6 +24,8 @@ usage:
     href: /usage/
   - text: Administration
     href: /usage/administration/
+  - text: Customization
+    href: /usage/customization/
 
 contributing:
   - text: Contribution Guidelines
