@@ -26,8 +26,12 @@ wait-port $PROXY_PORT -t 5000 || cat ~/pm2-error.log
 cp /home/mitmproxyuser/.mitmproxy/mitmproxy-ca-cert.pem /usr/local/share/ca-certificates/mitmproxy-ca-cert.crt
 update-ca-certificates --fresh
 
+# Required for node.js to trust our mitmproxy self-signed cert
+export NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/mitmproxy-ca-cert.crt
+
 # Main code
 echo "Running main code..."
+
 node --unhandled-rejections=strict worker.bundle.js || cat ~/pm2-error.log
 
 pm2 stop all | grep "^\[PM2\]"
