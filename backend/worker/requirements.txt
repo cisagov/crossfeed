@@ -1,4 +1,4 @@
--e git+https://github.com/pyauth/requests-http-signature@c0c8fd7255b73001845062f355c2f702bb2903db#egg=requests-http-signature
+requests-http-signature==0.2.0
 requests==2.24.0
 mitmproxy==5.2
 cryptography==3.1
