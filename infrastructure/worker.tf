@@ -135,7 +135,12 @@ resource "aws_ecs_task_definition" "worker" {
         "name": "DB_PASSWORD",
         "valueFrom": "${data.aws_ssm_parameter.db_password.arn}"
       }
-    ]
+    ],
+    "linuxParameters": {
+      "capabilities": {
+        "add": ["NET_ADMIN"]
+      }
+    }
   }
 ]
   EOF
