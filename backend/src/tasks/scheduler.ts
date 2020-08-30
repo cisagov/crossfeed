@@ -214,7 +214,7 @@ const shouldRunScan = async ({
   const lastRunningScanTask = await ScanTask.findOne(
     {
       scan: { id: scan.id },
-      status: In(['created', 'requested', 'started']),
+      status: In(['created', 'queued', 'requested', 'started']),
       ...orgFilter
     },
     {
@@ -224,7 +224,7 @@ const shouldRunScan = async ({
     }
   );
   if (lastRunningScanTask) {
-    // Don't run another task if there's already a running task.
+    // Don't run another task if there's already a running or queued task.
     return false;
   }
   const lastFinishedScanTask = await ScanTask.findOne(
@@ -272,19 +272,21 @@ export const handler: Handler<Event> = async (event) => {
   if (event.scanId) {
     scanIds.push(event.scanId);
   }
-  const scanWhere = scanIds.length ? { id: In(scanIds) } : {};
-  const orgWhere = event.organizationId ? { id: event.organizationId } : {};
+  const scanWhere = scanIds.length ? { scan: { id: In(scanIds) } } : {};
+  const orgWhere = event.organizationId
+    ? { where: { id: event.organizationId } }
+    : {};
   const scans = await Scan.find({
-    where: scanWhere,
+    ...scanWhere,
     relations: ['organizations']
   });
   const organizations = await Organization.find({
-    where: orgWhere
+    ...orgWhere
   });
 
   const queuedScanTasks = await ScanTask.find({
     where: {
-      scan: scanWhere,
+      ...scanWhere,
       status: 'queued'
     },
     order: {
