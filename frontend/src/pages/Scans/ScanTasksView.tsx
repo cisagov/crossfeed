@@ -27,7 +27,7 @@ const dateAccessor = (date?: string) => {
 
 const Log = ({ url }: { url: string }) => {
   const [logKey, setLogKey] = useState(0);
-  return (          <div  className={classes.logContainer}>
+  return (<div className={classes.logContainer}>
     <LazyLog key={"lazylog-" + logKey} follow={true} extraLines={1} enableSearch url={url} caseInsensitive fetchOptions={{ headers: { Authorization: localStorage.getItem("token") as string } }} selectableLines={true} />
     <Button type="button" outline size="small" onClick={() => setLogKey(Math.random())}><FaSyncAlt /></Button>
   </div>);
@@ -76,9 +76,9 @@ export const ScanTasksView: React.FC = () => {
         >
           (View all on CloudWatch)
                 </a>}
-                </h4>
+        </h4>
 
-                <Log url={`${process.env.REACT_APP_API_URL}/scan-tasks/${original.id}/logs`} />
+          <Log url={`${process.env.REACT_APP_API_URL}/scan-tasks/${original.id}/logs`} />
 
         </>)}
 
