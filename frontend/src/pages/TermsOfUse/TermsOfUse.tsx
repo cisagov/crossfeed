@@ -27,7 +27,7 @@ export const userMustSign = (user: AuthUser) => {
   return (
     !user.dateAcceptedTerms ||
     (user.acceptedTermsVersion &&
-      user.acceptedTermsVersion !== getToUVersion(user as AuthUser))
+      user.acceptedTermsVersion !== getToUVersion(user))
   );
 };
 
