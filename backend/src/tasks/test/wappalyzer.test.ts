@@ -136,10 +136,10 @@ describe('wappalyzer', () => {
       'Wappalyzer finished for 2 domains'
     );
     const domain1 = await Domain.findOne(testDomains[0].id);
-    expect(domain1?.webTechnologies).toEqual([]);
+    expect(domain1?.services[0].wappalyzerResults).toEqual([]);
 
     const domain2 = await Domain.findOne(testDomains[1].id);
-    expect(domain2?.webTechnologies).toEqual(wappalyzerResponse);
+    expect(domain2?.services[0].wappalyzerResults).toEqual(wappalyzerResponse);
   });
 
   test('logs error on wappalyzer failure', async () => {

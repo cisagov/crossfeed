@@ -1,4 +1,4 @@
-import { Domain } from '../models';
+import { Domain, Service } from '../models';
 import * as wappalyzer from 'simple-wappalyzer';
 import axios from 'axios';
 import { CommandOptions } from './ecs-client';
@@ -7,17 +7,20 @@ import PQueue from 'p-queue';
 
 const wappalyze = async (domain: Domain): Promise<void> => {
   const ports = domain.services.map((service) => service.port);
-  const url = ports.includes(443)
-    ? `https://${domain.name}`
-    : `http://${domain.name}`;
+  let service: Service;
+  if (ports.includes(443))
+    service = domain.services.find((service) => service.port === 443)!;
+  else service = domain.services.find((service) => service.port === 80)!;
+  const url =
+    service.port === 443 ? `https://${domain.name}` : `http://${domain.name}`;
   try {
     const { data, status, headers } = await axios.get(url, {
       validateStatus: () => true
     });
     const result = await wappalyzer({ url, data, status, headers });
     if (result.length > 0) {
-      domain.webTechnologies = result;
-      await domain.save();
+      service.wappalyzerResults = result;
+      await service.save();
     }
   } catch (e) {
     console.error(e);
