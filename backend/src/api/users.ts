@@ -139,6 +139,8 @@ export const invite = wrapHandler(async (event) => {
 
   await connectToDatabase();
 
+  body.email = body.email.toLowerCase();
+
   // Check if user already exists
   let user = await User.findOne({
     email: body.email
@@ -213,7 +215,9 @@ export const me = wrapHandler(async (event) => {
 
 export const acceptTerms = wrapHandler(async (event) => {
   await connectToDatabase();
-  const user = await User.findOne(getUserId(event));
+  const user = await User.findOne(getUserId(event), {
+    relations: ['roles', 'roles.organization']
+  });
   if (!user || !event.body) {
     return NotFound;
   }

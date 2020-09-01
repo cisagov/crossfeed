@@ -142,3 +142,23 @@ variable worker_ecs_role_name {
   type    = string
   default = "crossfeed-worker-staging"
 }
+
+variable user_pool_name {
+  type    = string
+  default = "crossfeed-staging"
+}
+
+variable user_pool_domain {
+  type    = string
+  default = "crossfeed-staging"
+}
+
+variable ssm_user_pool_id {
+  type    = string
+  default = "/crossfeed/staging/USER_POOL_ID"
+}
+
+variable ssm_user_pool_client_id {
+  type    = string
+  default = "/crossfeed/staging/USER_POOL_CLIENT_ID"
+}

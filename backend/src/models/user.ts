@@ -21,6 +21,12 @@ export class User extends BaseEntity {
   @Column({
     nullable: true
   })
+  cognitoId: string;
+
+  @Index({ unique: true })
+  @Column({
+    nullable: true
+  })
   loginGovId: string;
 
   @CreateDateColumn()
