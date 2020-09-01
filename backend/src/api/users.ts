@@ -139,6 +139,8 @@ export const invite = wrapHandler(async (event) => {
 
   await connectToDatabase();
 
+  body.email = body.email.toLowerCase();
+
   // Check if user already exists
   let user = await User.findOne({
     email: body.email
