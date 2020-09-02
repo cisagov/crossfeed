@@ -64,7 +64,8 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${aws_ssm_parameter.crossfeed_send_db_name.arn}",
           "${data.aws_ssm_parameter.db_username.arn}",
           "${data.aws_ssm_parameter.db_password.arn}",
-          "${data.aws_ssm_parameter.worker_signature_secret.arn}"
+          "${data.aws_ssm_parameter.worker_signature_public_key.arn}",
+          "${data.aws_ssm_parameter.worker_signature_private_key.arn}"
         ]
     }
   ]
@@ -137,8 +138,12 @@ resource "aws_ecs_task_definition" "worker" {
         "valueFrom": "${data.aws_ssm_parameter.db_password.arn}"
       },
       {
-        "name": "WORKER_SIGNATURE_SECRET",
-        "valueFrom": "${data.aws_ssm_parameter.worker_signature_secret.arn}"
+        "name": "WORKER_SIGNATURE_PUBLIC_KEY",
+        "valueFrom": "${data.aws_ssm_parameter.worker_signature_public_key.arn}"
+      },
+        {
+        "name": "WORKER_SIGNATURE_PRIVATE_KEY",
+        "valueFrom": "${data.aws_ssm_parameter.worker_signature_private_key.arn}"
       }
     ],
     "linuxParameters": {
@@ -173,4 +178,6 @@ resource "aws_cloudwatch_log_group" "worker" {
   }
 }
 
-data "aws_ssm_parameter" "worker_signature_secret" { name = var.ssm_worker_signature_secret }
+data "aws_ssm_parameter" "worker_signature_public_key" { name = var.ssm_worker_signature_public_key }
+
+data "aws_ssm_parameter" "worker_signature_private_key" { name = var.ssm_worker_signature_private_key }

@@ -103,9 +103,14 @@ variable ssm_db_password {
   default = "/crossfeed/staging/DATABASE_PASSWORD"
 }
 
-variable ssm_worker_signature_secret {
+variable ssm_worker_signature_public_key {
   type    = string
-  default = "/crossfeed/staging/WORKER_SIGNATURE_SECRET"
+  default = "/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_KEY"
+}
+
+variable ssm_worker_signature_private_key {
+  type    = string
+  default = "/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY"
 }
 
 variable cloudfront_name {
