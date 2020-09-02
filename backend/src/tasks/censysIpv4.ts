@@ -67,6 +67,7 @@ const downloadPath = async (
         domains.push(
           plainToClass(Domain, {
             name: matchingDomain.name,
+            organization: matchingDomain.organization,
             asn: item.autonomous_system?.asn,
             ip: item.ip,
             country: item.location?.country_code
