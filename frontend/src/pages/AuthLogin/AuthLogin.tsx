@@ -8,8 +8,8 @@ import { Translations, onAuthUIStateChange } from '@aws-amplify/ui-components';
 import { I18n } from "aws-amplify";
 
 I18n.putVocabulariesForLanguage("en-US", {
-  [Translations.TOTP_HEADER_TEXT]: "Set up 2FA by scanning the QR code with a TOTP app:",
-  [Translations.TOTP_LABEL]: "Enter 2FA security code:",
+  [Translations.TOTP_HEADER_TEXT]: "Set up 2FA by scanning the QR code with an authenticator app on your phone:",
+  [Translations.TOTP_LABEL]: "Enter 2FA security code from the app:",
 });
 
 interface Errors extends Partial<FormData> {
