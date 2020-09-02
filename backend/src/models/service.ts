@@ -69,7 +69,7 @@ export class Service extends BaseEntity {
 
   @Column({
     type: 'jsonb',
-    default: {}
+    default: []
   })
   products: Product[];
 
