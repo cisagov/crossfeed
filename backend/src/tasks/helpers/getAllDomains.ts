@@ -5,6 +5,6 @@ export default async (): Promise<Domain[]> => {
   await connectToDatabase();
 
   return Domain.find({
-    select: ['id', 'name', 'ip']
+    select: ['id', 'name', 'ip', 'organization']
   });
 };
