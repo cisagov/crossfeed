@@ -1,5 +1,4 @@
-# Sets up an explicit proxy using mitmproxy. We set the HTTP_PROXY and HTTPS_PROXY
-# environment variables on Docker build, so that the proxy is used on all requests.
+# Sets up an explicit proxy using mitmproxy.
 
 set -e
 
