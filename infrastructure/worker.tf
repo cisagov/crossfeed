@@ -145,12 +145,7 @@ resource "aws_ecs_task_definition" "worker" {
         "name": "WORKER_SIGNATURE_PRIVATE_KEY",
         "valueFrom": "${data.aws_ssm_parameter.worker_signature_private_key.arn}"
       }
-    ],
-    "linuxParameters": {
-      "capabilities": {
-        "add": ["NET_ADMIN"]
-      }
-    }
+    ]
   }
 ]
   EOF

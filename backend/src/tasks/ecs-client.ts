@@ -66,8 +66,7 @@ class ECSClient {
             // In order to use the host name "db" to access the database from the
             // crossfeed-worker image, we must launch the Docker container with
             // the Crossfeed backend network.
-            NetworkMode: 'crossfeed_backend',
-            CapAdd: ['NET_ADMIN']
+            NetworkMode: 'crossfeed_backend'
           },
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
