@@ -7,6 +7,19 @@ resource "aws_cognito_user_pool" "pool" {
   software_token_mfa_configuration {
     enabled = true
   }
+
+  email_configuration {
+    email_sending_account = "DEVELOPER"
+    source_arn = aws_ses_email_identity.default.arn
+  }
+
+  tags = {
+    Project = var.project
+  }
+}
+
+resource "aws_ses_email_identity" "default" {
+  email = var.ses_support_email
 }
 
 resource "aws_cognito_user_pool_domain" "auth_domain" {
