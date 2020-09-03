@@ -3,18 +3,9 @@ import { Link } from 'react-router-dom';
 import { AuthForm } from 'components';
 import { Button } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
-import { AmplifyAuthenticator, AmplifySignUp, AmplifyTotpSetup, AmplifySelectMfaType } from '@aws-amplify/ui-react';
-import { Translations, onAuthUIStateChange, CognitoUserInterface } from '@aws-amplify/ui-components';
+import { AmplifyAuthenticator, AmplifySignUp, AmplifySelectMfaType } from '@aws-amplify/ui-react';
+import { Translations, onAuthUIStateChange } from '@aws-amplify/ui-components';
 import { I18n } from "aws-amplify";
-
-// const QRCode = require('qrcode');
-
-// const original = (QRCode as any).toDataURL;
-
-// (QRCode as any).toDataURL = async (e: string) => {
-//   console.warn("qrcode", e);
-//   return "hello world"; // original(e);
-// }
 
 const TOTP_ISSUER_PREFIX = "CISA Crossfeed";
 
@@ -78,18 +69,14 @@ export const AuthLogin: React.FC = () => {
       <h1>Welcome to Crossfeed</h1>
       <AmplifyAuthenticator usernameAlias="email">
         <AmplifySelectMfaType MFATypes={{TOTP: true}} />
-      <AmplifySignUp
-          slot="sign-up"
-          formFields={[
-            { type: "email" },
-            { type: "password" },
-          ]}
-          usernameAlias="email"
-        />
-        {/* <AmplifyTotpSetup
-          slot="totp-setup"
-          // user={cognitoUser}
-        ></AmplifyTotpSetup> */}
+        <AmplifySignUp
+            slot="sign-up"
+            formFields={[
+              { type: "email" },
+              { type: "password" },
+            ]}
+            usernameAlias="email"
+          />
       </AmplifyAuthenticator>
     </AuthForm>);
   }
