@@ -11,6 +11,7 @@
     "class-validator": "^0.12.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "global-agent": "^2.1.12",
     "got": "^11.5.1",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.9.0",
