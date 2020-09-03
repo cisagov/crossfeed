@@ -23,6 +23,11 @@ const ORG_USER = 1;
 const ALL_USERS = GLOBAL_ADMIN | ORG_ADMIN | ORG_USER;
 
 const useStyles = makeStyles(theme => ({
+  inner: {
+    maxWidth: 1440,
+    width: '100%',
+    margin: '0 auto'
+  },
   menuButton: {
     marginRight: theme.spacing(2),
     display: 'block',
@@ -149,6 +154,7 @@ export const Header: React.FC = () => {
   const desktopNavItems: JSX.Element[] = navItems.map(({ title, path }) => (
     <NavLink
       to={path}
+      key={title}
       activeClassName={classes.activeLink}
       className={classes.link}
     >
@@ -159,38 +165,46 @@ export const Header: React.FC = () => {
   return (
     <div>
       <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            onClick={() => setNavOpen(open => !open)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Link to="/">
-            <img
-              src={logo}
-              className={classes.logo}
-              alt="Crossfeed Icon Navigate Home"
-            />
-          </Link>
-          <div className={classes.mdNav}>{desktopNavItems.slice(0, 3)}</div>
-          <div className={classes.lgNav}>
-            {desktopNavItems.slice(3, navItems.length)}
-          </div>
+        <div className={classes.inner}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              aria-label="toggle mobile menu"
+              color="inherit"
+              onClick={() => setNavOpen(open => !open)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Link to="/">
+              <img
+                src={logo}
+                className={classes.logo}
+                alt="Crossfeed Icon Navigate Home"
+              />
+            </Link>
+            <div className={classes.mdNav}>{desktopNavItems.slice(0, 3)}</div>
+            <div className={classes.lgNav}>
+              {desktopNavItems.slice(3, navItems.length)}
+            </div>
 
-          <div className={classes.spacing} />
-          <NavLink
-            to="/settings"
-            activeClassName={classes.activeLink}
-            className={clsx(classes.link, classes.userLink)}
-          >
-            <UserIcon /> My Account
-          </NavLink>
-        </Toolbar>
+            <div className={classes.spacing} />
+            <NavLink
+              to="/settings"
+              activeClassName={classes.activeLink}
+              className={clsx(classes.link, classes.userLink)}
+            >
+              <UserIcon /> My Account
+            </NavLink>
+          </Toolbar>
+        </div>
       </AppBar>
-      <Drawer anchor="left" open={navOpen} onClose={() => setNavOpen(false)}>
+      <Drawer
+        anchor="left"
+        open={navOpen}
+        onClose={() => setNavOpen(false)}
+        data-testid="mobilenav"
+      >
         <List className={classes.mobileNav}>
           {navItems.map(({ title, path }) => (
             <ListItem

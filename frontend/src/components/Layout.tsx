@@ -19,7 +19,6 @@ export const Layout: React.FC = ({ children }) => {
 
   return (
     <div className={classes.root}>
-      <div className="usa-overlay " />
       <GovBanner />
       <Header />
 

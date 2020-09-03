@@ -12,18 +12,19 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     backgroundColor: '#f0f0f0',
     fontSize: '0.87rem',
-    padding: `0 24px`,
-    display: 'flex',
-    [theme.breakpoints.down('sm')]: {
-      padding: '0 8px'
-    }
+    display: 'flex'
   },
   inner: {
     width: '100%',
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'center',
-    maxWidth: 1440
+    maxWidth: 1440,
+    margin: '0 auto',
+    padding: `0 24px`,
+    [theme.breakpoints.down('sm')]: {
+      padding: '0 8px'
+    }
   },
   flag: {
     padding: `0 ${theme.spacing()}px`
