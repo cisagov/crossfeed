@@ -20,6 +20,7 @@ import {
 } from 'pages';
 import { AuthRoute, AuthRedirectRoute, Layout } from 'components';
 import './styles.scss';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 
 Amplify.configure({
   API: {
@@ -39,38 +40,51 @@ Amplify.configure({
     : undefined
 });
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#28A0CB'
+    }
+  }
+});
+
 const App: React.FC = () => (
   <Router>
-    <AuthContextProvider>
-      <Layout>
-        <Switch>
-          <AuthRoute
-            exact
-            path="/"
-            authComponent={Dashboard}
-            unauthComponent={AuthLogin}
-          />
+    <ThemeProvider theme={theme}>
+      <AuthContextProvider>
+        <Layout>
+          <Switch>
+            <AuthRoute
+              exact
+              path="/"
+              authComponent={Dashboard}
+              unauthComponent={AuthLogin}
+            />
 
-          <Route exact path="/create-account" component={AuthCreateAccount} />
+            <Route exact path="/create-account" component={AuthCreateAccount} />
 
-          <Route exact path="/terms" component={TermsOfUse} />
+            <Route exact path="/terms" component={TermsOfUse} />
 
-          <AuthRedirectRoute path="/domain/:domainId" component={Domain} />
-          <AuthRedirectRoute
-            path="/vulnerabilities"
-            component={Vulnerabilities}
-          />
-          <AuthRedirectRoute path="/risk" component={Risk} />
-          <AuthRedirectRoute path="/alerts" component={Alerts} />
-          <AuthRedirectRoute path="/scans" component={Scans} />
-          <AuthRedirectRoute path="/organizations" component={Organizations} />
-          <AuthRedirectRoute path="/organization" component={Organization} />
-          <AuthRedirectRoute path="/users" component={Users} />
-          <AuthRedirectRoute path="/logs" component={Logs} />
-          <AuthRedirectRoute path="/settings" component={Settings} />
-        </Switch>
-      </Layout>
-    </AuthContextProvider>
+            <AuthRedirectRoute path="/domain/:domainId" component={Domain} />
+            <AuthRedirectRoute
+              path="/vulnerabilities"
+              component={Vulnerabilities}
+            />
+            <AuthRedirectRoute path="/risk" component={Risk} />
+            <AuthRedirectRoute path="/alerts" component={Alerts} />
+            <AuthRedirectRoute path="/scans" component={Scans} />
+            <AuthRedirectRoute
+              path="/organizations"
+              component={Organizations}
+            />
+            <AuthRedirectRoute path="/organization" component={Organization} />
+            <AuthRedirectRoute path="/users" component={Users} />
+            <AuthRedirectRoute path="/logs" component={Logs} />
+            <AuthRedirectRoute path="/settings" component={Settings} />
+          </Switch>
+        </Layout>
+      </AuthContextProvider>
+    </ThemeProvider>
   </Router>
 );
 

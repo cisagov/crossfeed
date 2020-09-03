@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
     margin: '0 auto',
     lineHeight: 1.5,
     flexFlow: 'row wrap',
-    padding: `${theme.spacing(3)}px 0`
+    padding: `${theme.spacing(3)}px 16px`
   },
   info: {
     display: 'flex',

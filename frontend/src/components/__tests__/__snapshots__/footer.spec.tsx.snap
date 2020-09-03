@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer component matches snapshot 1`] = `
+<DocumentFragment>
+  <footer
+    class="makeStyles-root-1"
+  >
+    Cybersecurity and Infrastructure Security Agency
+  </footer>
+</DocumentFragment>
+`;
