@@ -34,6 +34,7 @@ const useStyles = makeStyles(theme => ({
     display: 'none',
     height: 60,
     padding: theme.spacing(),
+    paddingLeft: 0,
     [theme.breakpoints.up('sm')]: {
       display: 'block'
     }
