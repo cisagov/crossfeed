@@ -19,10 +19,10 @@ import { I18n } from "aws-amplify";
 const TOTP_ISSUER_PREFIX = "CISA Crossfeed";
 
 I18n.putVocabulariesForLanguage("en-US", {
-  [Translations.TOTP_HEADER_TEXT]: "Set up MFA by scanning the QR code with an authenticator app on your phone:",
-  [Translations.TOTP_LABEL]: "Enter MFA security code:",
+  [Translations.TOTP_HEADER_TEXT]: "Set up 2FA by scanning the QR code with an authenticator app on your phone:",
+  [Translations.TOTP_LABEL]: "Enter 2FA security code from the app:",
   [Translations.TOTP_ISSUER]: TOTP_ISSUER_PREFIX,
-  [Translations.CONFIRM_TOTP_CODE]: "Enter MFA Code",
+  [Translations.CONFIRM_TOTP_CODE]: "Enter 2FA Code",
   [Translations.CONFIRM_SIGN_UP_CODE_LABEL]: "Email Confirmation Code",
   [Translations.CONFIRM_SIGN_UP_CODE_PLACEHOLDER]: "Enter code sent to your email address",
   [Translations.CODE_LABEL]: "Enter verification code from authenticator app:"
