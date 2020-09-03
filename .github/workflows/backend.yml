@@ -87,23 +87,6 @@ jobs:
         working-directory: ./
       - name: Test
         run: npm run test -- --collectCoverage
-  test_python:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v2.3.2
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.7
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: pip-${{ hashFiles('requirements.dev.txt') }}
-          restore-keys: |
-            pip-
-      - run: pip install -r worker/requirements.txt
-      - run: pytest
   build_worker:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -125,7 +108,7 @@ jobs:
         run: npm run build-worker
         working-directory: ./backend
   deploy:
-    needs: [security, build_worker, lint, test, test_python]
+    needs: [security, build_worker, lint, test]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/production')
     steps:

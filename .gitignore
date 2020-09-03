@@ -37,5 +37,3 @@ yarn-error.log*
 dist
 postgres-data
 nvd-dump
-
-**.pyc
