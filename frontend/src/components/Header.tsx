@@ -77,7 +77,8 @@ const useStyles = makeStyles(theme => ({
     textDecoration: 'none',
     margin: `0 ${theme.spacing()}px`,
     padding: theme.spacing(),
-    borderBottom: '2px solid transparent'
+    borderBottom: '2px solid transparent',
+    fontWeight: 600
   },
   userLink: {
     display: 'flex',

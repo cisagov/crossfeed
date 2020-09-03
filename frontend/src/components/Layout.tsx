@@ -1,4 +1,5 @@
 import React from 'react';
+import { CssBaseline } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Header, Footer, GovBanner } from 'components';
 
@@ -19,6 +20,7 @@ export const Layout: React.FC = ({ children }) => {
 
   return (
     <div className={classes.root}>
+      <CssBaseline />
       <GovBanner />
       <Header />
 
