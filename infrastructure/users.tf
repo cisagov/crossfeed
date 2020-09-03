@@ -13,6 +13,11 @@ resource "aws_cognito_user_pool" "pool" {
     source_arn = aws_ses_email_identity.default.arn
   }
 
+  verification_message_template {
+    email_subject = "Crossfeed verification code"
+    email_message = "Your verification code is {####}. Please enter this code in when logging into Crossfeed to complete your account setup."
+  }
+
   tags = {
     Project = var.project
   }
