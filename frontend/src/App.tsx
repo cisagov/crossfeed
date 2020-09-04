@@ -56,7 +56,11 @@ const App: React.FC = () => (
         <Switch>
           <RouteGuard exact path="/" component={Dashboard} unauth={AuthLogin} />
 
-          <Route exact path="/oauth-callback" component={LoginGovCallback} />
+          <Route
+            exact
+            path="/login-gov-callback"
+            component={LoginGovCallback}
+          />
           <Route exact path="/create-account" component={AuthCreateAccount} />
           <Route exact path="/terms" component={TermsOfUse} />
 

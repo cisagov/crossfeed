@@ -22,6 +22,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   );
 
   const api = useApi(handleError);
+  const { apiGet, apiPost } = api;
 
   const refreshState = async () => {
     const organization = localStorage.getItem('organization');
@@ -76,7 +77,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     if (!localStorage.getItem('token')) {
       if (process.env.REACT_APP_USE_COGNITO) {
         const session = await Auth.currentSession();
-        const { token, user } = await api.post<{ token: string; user: User }>(
+        const { token, user } = await apiPost<{ token: string; user: User }>(
           '/auth/callback',
           {
             body: {
@@ -89,7 +90,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         return;
       }
     }
-    const user: User = await api.get('/users/me');
+    const user: User = await apiGet('/users/me');
     const userCopy: AuthUser = {
       isRegistered: user.firstName !== '',
       ...user
@@ -107,11 +108,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         currentOrganization: org,
         login,
         logout,
-        apiGet: api.get,
-        apiPost: api.post,
-        apiPut: api.put,
-        apiDelete: api.del,
-        setLoading: () => {}
+        setLoading: () => {},
+        ...api
       }}
     >
       {api.loading && (

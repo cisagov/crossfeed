@@ -1,12 +1,5 @@
-import { SortingRule, Filters } from 'react-table';
 import { Organization } from './organization';
 import { Vulnerability } from './vulnerability';
-
-export interface Query<T extends object> {
-  sort: SortingRule<T>[];
-  page: number;
-  filters: Filters<T>;
-}
 
 export interface Product {
   // Common name

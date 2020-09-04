@@ -33,21 +33,18 @@ export const RouteGuard: React.FC<AuthRedirectRouteProps> = ({
 
   if (user && !user.isRegistered) {
     // user has authenticated but needs to create an account
-    return <Redirect to={{ pathname: "/create-account" }} />
+    return <Redirect to={{ pathname: '/create-account' }} />;
   }
 
   if (user && userMustSign(user)) {
     // user has authenticated but needs to sign terms
-    return <Redirect to={{ pathname: "/terms" }} />
+    return <Redirect to={{ pathname: '/terms' }} />;
   }
 
-  const RedirectComponent = typeof unauth === "string" ?
-    () => <Redirect to={{ pathname: unauth }} /> : unauth;
+  const RedirectComponent =
+    typeof unauth === 'string'
+      ? () => <Redirect to={{ pathname: unauth }} />
+      : unauth;
 
-  return (
-    <Route
-      {...rest}
-      component={user ? component : RedirectComponent}
-    />
-  );
+  return <Route {...rest} component={user ? component : RedirectComponent} />;
 };

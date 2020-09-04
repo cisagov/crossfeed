@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { API } from 'aws-amplify';
 
 const baseHeaders: HeadersInit = {
@@ -25,7 +25,7 @@ export const useApi = (onError?: OnError) => {
   }, []);
 
   const apiMethod = useCallback(
-    (method: ApiMethod) => async <T extends object>(
+    (method: ApiMethod) => async <T extends object = any>(
       path: string,
       init: any = {}
     ) => {
@@ -45,22 +45,16 @@ export const useApi = (onError?: OnError) => {
     [prepareInit, onError]
   );
 
-  const get = useCallback(apiMethod(API.get.bind(API)), [apiMethod]);
-  const post = useCallback(apiMethod(API.post.bind(API)), [apiMethod]);
-  const del = useCallback(apiMethod(API.del.bind(API)), [apiMethod]);
-  const put = useCallback(apiMethod(API.put.bind(API)), [apiMethod]);
-  const patch = useCallback(apiMethod(API.patch.bind(API)), [apiMethod]);
-
-  useEffect(() => {
-    console.log('GET CHANGED');
-  }, [get]);
+  const api = {
+    apiGet: useCallback(apiMethod(API.get.bind(API)), [apiMethod]),
+    apiPost: useCallback(apiMethod(API.post.bind(API)), [apiMethod]),
+    apiDelete: useCallback(apiMethod(API.del.bind(API)), [apiMethod]),
+    apiPut: useCallback(apiMethod(API.put.bind(API)), [apiMethod]),
+    apiPatch: useCallback(apiMethod(API.patch.bind(API)), [apiMethod])
+  };
 
   return {
-    get,
-    post,
-    del,
-    put,
-    patch,
+    ...api,
     loading: requestCount > 0
   };
 };

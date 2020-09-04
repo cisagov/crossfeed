@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useApi } from 'hooks';
 import { User, Organization } from 'types';
 
 export interface AuthUser extends User {
@@ -9,13 +10,9 @@ export interface CurrentOrganization extends Organization {
   userIsAdmin?: boolean | null;
 }
 
-export interface AuthContextType {
+export interface AuthContextType extends ReturnType<typeof useApi> {
   login(token: string, user: User): Promise<any>;
   logout(): Promise<void>;
-  apiGet<T extends object = any>(path: string, init?: any): Promise<T>;
-  apiPost<T extends object = any>(path: string, init: any): Promise<T>;
-  apiPut<T extends object = any>(path: string, init: any): Promise<T>;
-  apiDelete<T extends object = any>(path: string, init?: any): Promise<T>;
   user?: AuthUser | null;
   currentOrganization?: CurrentOrganization | null;
   setOrganization: (organization: CurrentOrganization) => Promise<void>;
@@ -24,17 +21,18 @@ export interface AuthContextType {
 }
 
 /* istanbul ignore next */
-export const defaultAuthContext: AuthContextType = {
+export const defaultAuthContext = ({
   login: async () => {},
   logout: async () => {},
-  apiGet: async <T>() => ({} as T),
-  apiPost: async <T>() => ({} as T),
-  apiPut: async <T>() => ({} as T),
-  apiDelete: async <T>() => ({} as T),
+  apiGet: async () => {},
+  apiPost: async () => {},
+  apiPut: async () => {},
+  apiDel: async () => {},
+  apiPatch: async () => {},
   setOrganization: <T>(organization: CurrentOrganization) => ({} as T),
   refreshUser: async <T>() => ({} as T),
   setLoading: () => null
-};
+} as unknown) as AuthContextType;
 
 export const AuthContext = React.createContext<AuthContextType>(
   defaultAuthContext
