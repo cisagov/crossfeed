@@ -158,30 +158,6 @@ class ECSClient {
                 value: JSON.stringify(commandOptions)
               },
               {
-                name: 'DB_HOST',
-                value: process.env.DB_HOST
-              },
-              {
-                name: 'DB_PORT',
-                value: process.env.DB_PORT
-              },
-              {
-                name: 'DB_USERNAME',
-                value: process.env.DB_USERNAME
-              },
-              {
-                name: 'DB_PASSWORD',
-                value: process.env.DB_PASSWORD
-              },
-              {
-                name: 'CENSYS_API_ID',
-                value: process.env.CENSYS_API_ID
-              },
-              {
-                name: 'CENSYS_API_SECRET',
-                value: process.env.CENSYS_API_SECRET
-              },
-              {
                 name: 'WORKER_USER_AGENT',
                 value: process.env.WORKER_USER_AGENT
               }

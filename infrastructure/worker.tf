@@ -65,7 +65,9 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.db_username.arn}",
           "${data.aws_ssm_parameter.db_password.arn}",
           "${data.aws_ssm_parameter.worker_signature_public_key.arn}",
-          "${data.aws_ssm_parameter.worker_signature_private_key.arn}"
+          "${data.aws_ssm_parameter.worker_signature_private_key.arn}",
+          "${data.aws_ssm_parameter.censys_api_id.arn}",
+          "${data.aws_ssm_parameter.censys_api_secret.arn}"
         ]
     }
   ]
@@ -138,10 +140,18 @@ resource "aws_ecs_task_definition" "worker" {
         "valueFrom": "${data.aws_ssm_parameter.db_password.arn}"
       },
       {
+        "name": "CENSYS_API_ID",
+        "valueFrom": "${data.aws_ssm_parameter.censys_api_id.arn}"
+      },
+      {
+        "name": "CENSYS_API_SECRET",
+        "valueFrom": "${data.aws_ssm_parameter.censys_api_secret.arn}"
+      },
+      {
         "name": "WORKER_SIGNATURE_PUBLIC_KEY",
         "valueFrom": "${data.aws_ssm_parameter.worker_signature_public_key.arn}"
       },
-        {
+      {
         "name": "WORKER_SIGNATURE_PRIVATE_KEY",
         "valueFrom": "${data.aws_ssm_parameter.worker_signature_private_key.arn}"
       }
@@ -172,6 +182,10 @@ resource "aws_cloudwatch_log_group" "worker" {
     Stage   = var.stage
   }
 }
+
+data "aws_ssm_parameter" "censys_api_id" { name = var.ssm_censys_api_id }
+
+data "aws_ssm_parameter" "censys_api_secret" { name = var.ssm_censys_api_secret }
 
 data "aws_ssm_parameter" "worker_signature_public_key" { name = var.ssm_worker_signature_public_key }
 
