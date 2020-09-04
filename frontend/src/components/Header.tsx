@@ -150,7 +150,7 @@ export const Header: React.FC = () => {
 
     { title: 'Scans', path: '/scans', users: ORG_ADMIN | GLOBAL_ADMIN },
     { title: 'Manage Users', path: '/users', users: GLOBAL_ADMIN }
-  ].filter(({ users }) => (users & userLevel) === userLevel);
+  ].filter(({ users }) => (users & userLevel) > 0);
 
   const desktopNavItems: JSX.Element[] = navItems.map(({ title, path }) => (
     <NavLink
@@ -190,13 +190,15 @@ export const Header: React.FC = () => {
             </div>
 
             <div className={classes.spacing} />
-            <NavLink
-              to="/settings"
-              activeClassName={classes.activeLink}
-              className={clsx(classes.link, classes.userLink)}
-            >
-              <UserIcon /> My Account
-            </NavLink>
+            {user && (
+              <NavLink
+                to="/settings"
+                activeClassName={classes.activeLink}
+                className={clsx(classes.link, classes.userLink)}
+              >
+                <UserIcon /> My Account
+              </NavLink>
+            )}
           </Toolbar>
         </div>
       </AppBar>
