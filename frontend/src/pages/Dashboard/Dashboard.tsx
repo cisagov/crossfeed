@@ -1,15 +1,13 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { TableInstance } from 'react-table';
-import { Query, User } from 'types';
+import { Query } from 'types';
 import { Table, Paginator, Export } from 'components';
 import { Domain } from 'types';
 import { createColumns, getServiceNames } from './columns';
-import { useAuthContext, AuthUser } from 'context';
+import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { useHistory } from 'react-router-dom';
-import { parse } from 'query-string';
 import { Grid, Checkbox } from '@trussworks/react-uswds';
-import { userMustSign } from '../TermsOfUse';
+import { usePersistentState } from 'hooks';
 
 interface ApiResponse {
   result: Domain[];
@@ -17,13 +15,7 @@ interface ApiResponse {
 }
 
 export const Dashboard: React.FC = () => {
-  const {
-    user,
-    refreshUser,
-    currentOrganization,
-    login,
-    apiPost
-  } = useAuthContext();
+  const { user, currentOrganization, apiPost } = useAuthContext();
   const [domains, setDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
@@ -32,17 +24,9 @@ export const Dashboard: React.FC = () => {
     sort: [{ id: 'name', desc: true }],
     filters: []
   });
-  const [showAll, setShowAll] = useState<boolean>(
-    JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
-  );
+  const [showAll, setShowAll] = usePersistentState('showGlobal', false);
   const columns = useMemo(() => createColumns(), []);
   const PAGE_SIZE = 25;
-  const history = useHistory();
-
-  const updateShowAll = (state: boolean) => {
-    setShowAll(state);
-    localStorage.setItem('showGlobal', JSON.stringify(state));
-  };
 
   const queryDomains = useCallback(
     async ({
@@ -96,61 +80,6 @@ export const Dashboard: React.FC = () => {
     [queryDomains, user]
   );
 
-  // Called to sign in the user
-  const callback = useCallback(async () => {
-    const parsed = parse(window.location.search);
-    if ((user && user.firstName !== '') || !parsed.state || !parsed.code) {
-      return;
-    }
-    try {
-      const { token, user } = await apiPost<{ token: string; user: User }>(
-        '/auth/callback',
-        {
-          body: {
-            state: parsed.state,
-            code: parsed.code,
-            nonce: localStorage.getItem('nonce'),
-            origState: localStorage.getItem('state')
-          }
-        }
-      );
-
-      await login(token, user);
-
-      localStorage.removeItem('nonce');
-      localStorage.removeItem('state');
-
-      await refreshUser();
-
-      if (user.firstName === '') {
-        history.push('/create-account');
-      } else if (userMustSign(user as AuthUser)) {
-        history.push('/terms');
-      } else {
-        history.push('/');
-        fetchDomainTable({
-          page: 0,
-          sort: [],
-          filters: []
-        });
-      }
-    } catch {
-      history.push('/');
-    }
-  }, [apiPost, history, login, user, refreshUser, fetchDomainTable]);
-
-  React.useEffect(() => {
-    if (user) {
-      if (user.firstName === '') {
-        history.push('/create-account');
-      } else if (userMustSign(user as AuthUser)) {
-        history.push('/terms');
-      }
-    }
-    callback();
-    // eslint-disable-next-line
-  }, []);
-
   const renderPagination = (table: TableInstance<Domain>) => (
     <Paginator table={table} />
   );
@@ -177,7 +106,7 @@ export const Dashboard: React.FC = () => {
               name="showAll"
               label="Show all organizations"
               checked={showAll}
-              onChange={e => updateShowAll(e.target.checked)}
+              onChange={e => setShowAll(e.target.checked)}
               className={classes.showAll}
             />
           )}

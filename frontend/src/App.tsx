@@ -16,9 +16,10 @@ import {
   Users,
   Settings,
   Vulnerabilities,
-  TermsOfUse
+  TermsOfUse,
+  LoginGovCallback
 } from 'pages';
-import { AuthRoute, AuthRedirectRoute, Layout } from 'components';
+import { Layout, RouteGuard } from 'components';
 import './styles.scss';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 
@@ -27,10 +28,7 @@ Amplify.configure({
     endpoints: [
       {
         name: 'crossfeed',
-        endpoint: process.env.REACT_APP_API_URL,
-        custom_header: async () => {
-          const token = localStorage.getItem('token');
-        }
+        endpoint: process.env.REACT_APP_API_URL
       }
     ]
   },
@@ -53,41 +51,28 @@ const theme = createMuiTheme({
 
 const App: React.FC = () => (
   <Router>
-    <ThemeProvider theme={theme}>
-      <AuthContextProvider>
-        <Layout>
-          <Switch>
-            <AuthRoute
-              exact
-              path="/"
-              authComponent={Dashboard}
-              unauthComponent={AuthLogin}
-            />
+    <AuthContextProvider>
+      <Layout>
+        <Switch>
+          <RouteGuard exact path="/" component={Dashboard} unauth={AuthLogin} />
 
-            <Route exact path="/create-account" component={AuthCreateAccount} />
+          <Route exact path="/oauth-callback" component={LoginGovCallback} />
+          <Route exact path="/create-account" component={AuthCreateAccount} />
+          <Route exact path="/terms" component={TermsOfUse} />
 
-            <Route exact path="/terms" component={TermsOfUse} />
-
-            <AuthRedirectRoute path="/domain/:domainId" component={Domain} />
-            <AuthRedirectRoute
-              path="/vulnerabilities"
-              component={Vulnerabilities}
-            />
-            <AuthRedirectRoute path="/risk" component={Risk} />
-            <AuthRedirectRoute path="/alerts" component={Alerts} />
-            <AuthRedirectRoute path="/scans" component={Scans} />
-            <AuthRedirectRoute
-              path="/organizations"
-              component={Organizations}
-            />
-            <AuthRedirectRoute path="/organization" component={Organization} />
-            <AuthRedirectRoute path="/users" component={Users} />
-            <AuthRedirectRoute path="/logs" component={Logs} />
-            <AuthRedirectRoute path="/settings" component={Settings} />
-          </Switch>
-        </Layout>
-      </AuthContextProvider>
-    </ThemeProvider>
+          <RouteGuard path="/domain/:domainId" component={Domain} />
+          <RouteGuard path="/vulnerabilities" component={Vulnerabilities} />
+          <RouteGuard path="/risk" component={Risk} />
+          <RouteGuard path="/alerts" component={Alerts} />
+          <RouteGuard path="/scans" component={Scans} />
+          <RouteGuard path="/organizations" component={Organizations} />
+          <RouteGuard path="/organization" component={Organization} />
+          <RouteGuard path="/users" component={Users} />
+          <RouteGuard path="/logs" component={Logs} />
+          <RouteGuard path="/settings" component={Settings} />
+        </Switch>
+      </Layout>
+    </AuthContextProvider>
   </Router>
 );
 
