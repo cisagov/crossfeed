@@ -27,7 +27,10 @@ Amplify.configure({
     endpoints: [
       {
         name: 'crossfeed',
-        endpoint: process.env.REACT_APP_API_URL
+        endpoint: process.env.REACT_APP_API_URL,
+        custom_header: async () => {
+          const token = localStorage.getItem('token');
+        }
       }
     ]
   },
