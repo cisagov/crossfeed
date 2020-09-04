@@ -1,3 +1,4 @@
+import 'global-agent/bootstrap'; // proxy
 import { CommandOptions } from './tasks/ecs-client';
 import { handler as amass } from './tasks/amass';
 import { handler as censys } from './tasks/censys';

@@ -62,24 +62,27 @@ class ECSClient {
           // We need to create unique container names to avoid conflicts.
           name: containerName,
           Image: 'crossfeed-worker',
+          HostConfig: {
+            // In order to use the host name "db" to access the database from the
+            // crossfeed-worker image, we must launch the Docker container with
+            // the Crossfeed backend network.
+            NetworkMode: 'crossfeed_backend'
+          },
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
             `DB_DIALECT=${process.env.DB_DIALECT}`,
-            `DB_HOST=localhost`,
+            `DB_HOST=${process.env.DB_HOST}`,
             `IS_LOCAL=true`,
             `DB_PORT=${process.env.DB_PORT}`,
             `DB_NAME=${process.env.DB_NAME}`,
             `DB_USERNAME=${process.env.DB_USERNAME}`,
             `DB_PASSWORD=${process.env.DB_PASSWORD}`,
             `CENSYS_API_ID=${process.env.CENSYS_API_ID}`,
-            `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`
-          ],
-          // Since the ECSClient is itself running in the backend Docker container,
-          // we launch a Docker container from the host Docker daemon. This means that
-          // we cannot the host name "db" to access the database from the
-          // crossfeed-worker image; instead, we set NetworkMode to "host" and
-          // connect to "localhost."
-          NetworkMode: 'host'
+            `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`,
+            `WORKER_USER_AGENT=${process.env.WORKER_USER_AGENT}`,
+            `WORKER_SIGNATURE_PUBLIC_KEY=${process.env.WORKER_SIGNATURE_PUBLIC_KEY}`,
+            `WORKER_SIGNATURE_PRIVATE_KEY=${process.env.WORKER_SIGNATURE_PRIVATE_KEY}`
+          ]
         } as any);
         await container.start();
         return {
@@ -177,6 +180,10 @@ class ECSClient {
               {
                 name: 'CENSYS_API_SECRET',
                 value: process.env.CENSYS_API_SECRET
+              },
+              {
+                name: 'WORKER_USER_AGENT',
+                value: process.env.WORKER_USER_AGENT
               }
             ]
           }
