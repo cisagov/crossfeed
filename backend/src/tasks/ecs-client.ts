@@ -188,7 +188,7 @@ class ECSClient {
               {
                 // Allow node to use more memory, if needed
                 name: 'NODE_OPTIONS',
-                value: memory ? `--max_old_space_size=${memory}`: ""
+                value: memory ? `--max_old_space_size=${memory}` : ''
               }
             ]
           }
