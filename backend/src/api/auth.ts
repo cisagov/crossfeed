@@ -114,16 +114,23 @@ export const callback = async (event, context) => {
     }
   );
 
+  const idKey = `${process.env.USE_COGNITO ? 'cognitoId' : 'loginGovId'}`;
+
   // If user does not exist, create it
   if (!user) {
     user = User.create({
       email: userInfo.email,
-      [`${process.env.USE_COGNITO ? 'cognitoId' : 'loginGovId'}`]: userInfo.sub,
+      [idKey]: userInfo.sub,
       firstName: '',
       lastName: '',
       userType: process.env.IS_OFFLINE ? 'globalAdmin' : 'standard',
       roles: []
     });
+    await user.save();
+  }
+
+  if (user[idKey] !== userInfo.sub) {
+    user[idKey] = userInfo.sub;
     await user.save();
   }
 
