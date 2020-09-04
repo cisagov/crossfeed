@@ -164,6 +164,6 @@ export class Service extends BaseEntity {
       else misc.push(product);
     }
 
-    this.products = Object.values(products);
+    this.products = Object.values(products).concat(misc);
   }
 }

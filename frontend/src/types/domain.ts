@@ -43,7 +43,7 @@ export interface Service {
     manufacturer: string;
   } | null;
   censysIpv4Results: any;
-  webTechnologies: Technology[];
+  wappalyzerResults: Technology[];
   products: Product[];
 }
 
