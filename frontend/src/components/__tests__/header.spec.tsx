@@ -19,6 +19,26 @@ describe('Header component', () => {
     });
   });
 
+  it('shows no links for unauthenticated user', () => {
+    const { queryByText } = render(<Header />, {
+      authContext: {
+        user: { ...testUser, userType: 'standard', isRegistered: false },
+        currentOrganization: { ...testOrganization, userIsAdmin: false }
+      }
+    });
+    [
+      'Vulnerabilities',
+      'Risk Summary',
+      'My Organizations',
+      'Manage Organizations',
+      'Scans',
+      'Manage Users',
+      'My Account'
+    ].forEach(expected => {
+      expect(queryByText(expected)).not.toBeInTheDocument();
+    });
+  });
+
   it('shows correct links for ORG_USER', () => {
     const { getByText, queryByText } = render(<Header />, {
       authContext: {

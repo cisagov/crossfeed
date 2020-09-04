@@ -190,7 +190,7 @@ export const Header: React.FC = () => {
             </div>
 
             <div className={classes.spacing} />
-            {user && (
+            {userLevel > 0 && (
               <NavLink
                 to="/settings"
                 activeClassName={classes.activeLink}
