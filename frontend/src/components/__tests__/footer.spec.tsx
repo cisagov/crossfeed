@@ -1,6 +1,6 @@
 import React from 'react';
 import { Footer } from '../Footer';
-import { render } from 'test-utils';
+import { render } from 'test-utils/test-utils';
 
 describe('Footer component', () => {
   it('matches snapshot', () => {

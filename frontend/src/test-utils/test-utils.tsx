@@ -5,7 +5,7 @@ import {
   AuthContext,
   AuthContextType,
   defaultAuthContext
-} from './context/AuthContext';
+} from '../context/AuthContext';
 
 interface CustomRenderOptions extends RenderOptions {
   initialHistory?: string[];

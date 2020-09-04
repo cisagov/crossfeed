@@ -1,6 +1,6 @@
 import React from 'react';
 import { GovBanner } from '../GovBanner';
-import { render, fireEvent, wait } from 'test-utils';
+import { render, fireEvent, wait } from 'test-utils/test-utils';
 
 describe('Gov Banner Component', () => {
   it('matches snapshot', () => {
