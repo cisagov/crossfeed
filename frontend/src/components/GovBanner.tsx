@@ -11,8 +11,9 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
     width: '100%',
     backgroundColor: '#f0f0f0',
-    fontSize: '0.87rem',
-    display: 'flex'
+    fontSize: '0.75rem',
+    display: 'flex',
+    alignItems: 'center'
   },
   inner: {
     width: '100%',
@@ -21,9 +22,9 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     maxWidth: 1440,
     margin: '0 auto',
-    padding: `0 24px`,
+    padding: `2px 24px`,
     [theme.breakpoints.down('sm')]: {
-      padding: '0 8px'
+      padding: '2px 8px'
     }
   },
   flag: {
@@ -67,15 +68,17 @@ const useStyles = makeStyles(theme => ({
   info: {
     display: 'flex',
     flex: '1 1 50%',
-    padding: `${theme.spacing(2)}px 0`,
+    padding: `${theme.spacing(2)}px ${theme.spacing(2)}px`,
     [theme.breakpoints.down('sm')]: {
-      flex: '0 0 100%'
+      flex: '0 0 100%',
+      padding: `${theme.spacing(2)}px 0`
     }
   },
   infoIcon: {
     minWidth: 40
   },
   infoText: {
+    fontSize: '0.87rem',
     '& p': {
       margin: `0 ${theme.spacing(2)}px`
     }
