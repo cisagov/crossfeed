@@ -21,7 +21,7 @@ interface Errors {
 
 const dateAccessor = (date?: string) => {
   return !date || new Date(date).getTime() === new Date(0).getTime()
-    ? 'Never'
+    ? 'None'
     : `${formatDistanceToNow(parseISO(date))} ago`;
 };
 
