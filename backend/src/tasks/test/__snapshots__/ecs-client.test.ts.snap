@@ -12,6 +12,14 @@ exports[`getLogs local 1`] = `
 `;
 
 exports[`getLogs not local 1`] = `
+Object {
+  "logGroupName": "FARGATE_LOG_GROUP_NAME",
+  "logStreamName": "worker/main/f59d71c6-3d23-4ee9-ad68-c7b810bf458b",
+  "startFromHead": true,
+}
+`;
+
+exports[`getLogs not local 2`] = `
 "2020-08-26T13:06:26.714Z (ECS LOGS)commandOptions are {
 2020-08-26T13:06:26.714Z   organizationId: 'f0143eda-0e95-4748-ba49-a53069b1c738',
 2020-08-26T13:06:26.714Z   organizationName: 'CISA',

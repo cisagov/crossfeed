@@ -103,6 +103,26 @@ variable ssm_db_password {
   default = "/crossfeed/staging/DATABASE_PASSWORD"
 }
 
+variable ssm_worker_signature_public_key {
+  type    = string
+  default = "/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_KEY"
+}
+
+variable ssm_worker_signature_private_key {
+  type    = string
+  default = "/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY"
+}
+
+variable ssm_censys_api_id {
+  type    = string
+  default = "/crossfeed/staging/CENSYS_API_ID"
+}
+
+variable ssm_censys_api_secret {
+  type    = string
+  default = "/crossfeed/staging/CENSYS_API_SECRET"
+}
+
 variable cloudfront_name {
   type    = string
   default = "Crossfeed Staging Frontend"

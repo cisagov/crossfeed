@@ -9,13 +9,13 @@ import { Domain } from 'types';
 type CreateColumns = () => Column<Domain>[];
 
 export const getServiceNames = (domain: Domain) => {
-  const allServices = new Set(
-    domain.webTechnologies &&
-      domain.webTechnologies.map(technology => technology.name)
-  );
+  const allServices = new Set();
   for (const service of domain.services) {
-    if (service.censysMetadata && service.censysMetadata.product)
-      allServices.add(service.censysMetadata?.product);
+    for (const product of service.products) {
+      allServices.add(
+        product.name + (product.version ? ` ${product.version}` : '')
+      );
+    }
   }
   return Array.from(allServices).join(', ');
 };
