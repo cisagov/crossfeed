@@ -43,7 +43,7 @@ Amplify.configure({
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#28A0CB'
+      main: '#122D5D'
     }
   }
 });

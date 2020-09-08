@@ -8,9 +8,6 @@ jest.mock('components/Header', () => ({
 jest.mock('components/GovBanner', () => ({
   GovBanner: () => <div>GOV_BANNER</div>
 }));
-jest.mock('components/Footer', () => ({
-  Footer: () => <div>FOOTER</div>
-}));
 
 afterAll(() => {
   jest.restoreAllMocks();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CssBaseline } from '@material-ui/core';
+import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import { Header, GovBanner } from 'components';
 
@@ -12,6 +12,10 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flex: 1
+  },
+  overrides: {
+    WebkitFontSmoothing: 'unset',
+    MozOsxFontSmoothing: 'unset'
   }
 }));
 
@@ -19,12 +23,13 @@ export const Layout: React.FC = ({ children }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <GovBanner />
-      <Header />
+    <ScopedCssBaseline classes={{ root: classes.overrides }}>
+      <div className={classes.root}>
+        <GovBanner />
+        <Header />
 
-      <div className={classes.content}>{children}</div>
-    </div>
+        <div className={classes.content}>{children}</div>
+      </div>
+    </ScopedCssBaseline>
   );
 };

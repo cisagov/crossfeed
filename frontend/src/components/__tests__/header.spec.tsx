@@ -71,7 +71,6 @@ describe('Header component', () => {
       'Risk Summary',
       'Organization Settings',
       'My Organizations',
-      'Scans',
       'My Account'
     ].forEach(expected => {
       expect(getByText(expected)).toBeInTheDocument();
