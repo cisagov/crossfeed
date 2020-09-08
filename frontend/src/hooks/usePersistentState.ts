@@ -1,6 +1,6 @@
 import { useState, useEffect, SetStateAction } from 'react';
 
-export const usePersistentState = <T extends any = undefined>(
+export const usePersistentState = <T extends any = any>(
   key: string,
   defaultValue?: any
 ): [T, React.Dispatch<SetStateAction<T>>] => {

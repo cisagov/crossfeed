@@ -1,7 +1,6 @@
 import React from 'react';
-import { RouteProps, Redirect, Route } from 'react-router-dom';
+import { RouteProps, Route, useHistory } from 'react-router-dom';
 import { useAuthContext } from 'context';
-import { userMustSign } from 'pages';
 
 interface AuthRedirectRouteProps extends RouteProps {
   unauth?: string | React.ComponentType;
@@ -23,7 +22,8 @@ export const RouteGuard: React.FC<AuthRedirectRouteProps> = ({
   component,
   ...rest
 }) => {
-  const { token, user } = useAuthContext();
+  const { token, user, userMustSign } = useAuthContext();
+  const history = useHistory();
 
   if (token && !user) {
     // waiting on user profile
@@ -32,18 +32,25 @@ export const RouteGuard: React.FC<AuthRedirectRouteProps> = ({
 
   if (user && !user.isRegistered) {
     // user has authenticated but needs to create an account
-    return <Redirect to={{ pathname: '/create-account' }} />;
+    history.push('/create-account');
+    return null;
   }
 
-  if (user && userMustSign(user)) {
+  if (user && userMustSign) {
     // user has authenticated but needs to sign terms
-    return <Redirect to={{ pathname: '/terms' }} />;
+    history.push('/terms');
+    return null;
   }
 
-  const RedirectComponent =
-    typeof unauth === 'string'
-      ? () => <Redirect to={{ pathname: unauth }} />
-      : unauth;
+  if (typeof unauth === 'string' && !user) {
+    history.push(unauth);
+    return null;
+  }
 
-  return <Route {...rest} component={user ? component : RedirectComponent} />;
+  return (
+    <Route
+      {...rest}
+      component={user ? component : (unauth as React.ComponentType)}
+    />
+  );
 };

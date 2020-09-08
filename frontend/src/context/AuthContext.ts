@@ -20,6 +20,9 @@ export interface AuthContextType extends ReturnType<typeof useApi> {
   setOrganization: (organization: CurrentOrganization) => void;
   refreshUser: () => Promise<void>;
   setLoading: React.Dispatch<React.SetStateAction<number>>;
+  maximumRole: 'user' | 'admin';
+  touVersion: string;
+  userMustSign: boolean;
 }
 
 export const AuthContext = React.createContext<AuthContextType>(undefined!);

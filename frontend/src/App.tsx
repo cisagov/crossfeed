@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Amplify from 'aws-amplify';
-import { AuthContextProvider } from 'context';
+import { AuthContextProvider, CFThemeProvider } from 'context';
 import {
   Alerts,
   Dashboard,
@@ -21,7 +21,6 @@ import {
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
 import './styles.scss';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 
 Amplify.configure({
   API: {
@@ -41,42 +40,41 @@ Amplify.configure({
     : undefined
 });
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#122D5D'
-    }
-  }
-});
-
 const App: React.FC = () => (
   <Router>
-    <AuthContextProvider>
-      <Layout>
-        <Switch>
-          <RouteGuard exact path="/" component={Dashboard} unauth={AuthLogin} />
+    <CFThemeProvider>
+      <AuthContextProvider>
+        <Layout>
+          <Switch>
+            <RouteGuard
+              exact
+              path="/"
+              component={Dashboard}
+              unauth={AuthLogin}
+            />
 
-          <Route
-            exact
-            path="/login-gov-callback"
-            component={LoginGovCallback}
-          />
-          <Route exact path="/create-account" component={AuthCreateAccount} />
-          <Route exact path="/terms" component={TermsOfUse} />
+            <Route
+              exact
+              path="/login-gov-callback"
+              component={LoginGovCallback}
+            />
+            <Route exact path="/create-account" component={AuthCreateAccount} />
+            <Route exact path="/terms" component={TermsOfUse} />
 
-          <RouteGuard path="/domain/:domainId" component={Domain} />
-          <RouteGuard path="/vulnerabilities" component={Vulnerabilities} />
-          <RouteGuard path="/risk" component={Risk} />
-          <RouteGuard path="/alerts" component={Alerts} />
-          <RouteGuard path="/scans" component={Scans} />
-          <RouteGuard path="/organizations" component={Organizations} />
-          <RouteGuard path="/organization" component={Organization} />
-          <RouteGuard path="/users" component={Users} />
-          <RouteGuard path="/logs" component={Logs} />
-          <RouteGuard path="/settings" component={Settings} />
-        </Switch>
-      </Layout>
-    </AuthContextProvider>
+            <RouteGuard path="/domain/:domainId" component={Domain} />
+            <RouteGuard path="/vulnerabilities" component={Vulnerabilities} />
+            <RouteGuard path="/risk" component={Risk} />
+            <RouteGuard path="/alerts" component={Alerts} />
+            <RouteGuard path="/scans" component={Scans} />
+            <RouteGuard path="/organizations" component={Organizations} />
+            <RouteGuard path="/organization" component={Organization} />
+            <RouteGuard path="/users" component={Users} />
+            <RouteGuard path="/logs" component={Logs} />
+            <RouteGuard path="/settings" component={Settings} />
+          </Switch>
+        </Layout>
+      </AuthContextProvider>
+    </CFThemeProvider>
   </Router>
 );
 

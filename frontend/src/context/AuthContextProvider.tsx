@@ -6,6 +6,8 @@ import { useHistory } from 'react-router-dom';
 import { useApi } from 'hooks/useApi';
 import { usePersistentState } from 'hooks';
 
+export const currentTermsVersion = '1';
+
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [token, setToken] = usePersistentState<string | null>('token', null);
@@ -70,17 +72,41 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const extendedOrg = useMemo(() => {
     let current: CurrentOrganization | null =
       org ?? authUser?.roles[0]?.organization ?? null;
-
     if (!current) {
       return null;
     }
-
     current.userIsAdmin =
       authUser?.userType === 'globalAdmin' ||
       authUser?.roles.find(role => role.organization.id === org?.id)?.role ===
         'admin';
     return current;
   }, [org, authUser]);
+
+  const maximumRole = useMemo(() => {
+    if (authUser?.userType === 'globalView') return 'user';
+    return authUser &&
+      authUser.roles &&
+      authUser.roles.find(role => role.role === 'admin')
+      ? 'admin'
+      : 'user';
+  }, [authUser]);
+
+  const touVersion = useMemo(() => `v${currentTermsVersion}-${maximumRole}`, [
+    authUser,
+    maximumRole
+  ]);
+
+  const userMustSign = useMemo(() => {
+    const approvedEmailAddresses = ['@cisa.dhs.gov'];
+    for (let email of approvedEmailAddresses) {
+      if (authUser?.email.endsWith(email)) return false;
+    }
+    return Boolean(
+      !authUser?.dateAcceptedTerms ||
+        (authUser.acceptedTermsVersion &&
+          authUser.acceptedTermsVersion !== touVersion)
+    );
+  }, [authUser]);
 
   useEffect(() => {
     refreshUser();
@@ -107,6 +133,9 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         login: setToken,
         logout,
         setLoading: () => {},
+        maximumRole,
+        touVersion,
+        userMustSign,
         ...api
       }}
     >
