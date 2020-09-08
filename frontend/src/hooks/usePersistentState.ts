@@ -1,9 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, SetStateAction } from 'react';
 
-export const usePersistentState = (key: string, defaultValue?: any) => {
-  const [state, setState] = useState(
-    () => JSON.parse(localStorage.getItem(key) ?? '') ?? defaultValue
-  );
+export const usePersistentState = <T extends any = undefined>(
+  key: string,
+  defaultValue?: any
+): [T, React.Dispatch<SetStateAction<T>>] => {
+  const [state, setState] = useState<T>(() => {
+    const existing = localStorage.getItem(key);
+    return existing ? JSON.parse(existing) : defaultValue;
+  });
 
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(state));

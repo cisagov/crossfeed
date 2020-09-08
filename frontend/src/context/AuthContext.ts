@@ -11,32 +11,18 @@ export interface CurrentOrganization extends Organization {
 }
 
 export interface AuthContextType extends ReturnType<typeof useApi> {
-  login(token: string, user: User): Promise<any>;
+  login(token: string): void;
   logout(): Promise<void>;
   user?: AuthUser | null;
+  setUser(user: User): void;
+  token: string | null;
   currentOrganization?: CurrentOrganization | null;
-  setOrganization: (organization: CurrentOrganization) => Promise<void>;
+  setOrganization: (organization: CurrentOrganization) => void;
   refreshUser: () => Promise<void>;
   setLoading: React.Dispatch<React.SetStateAction<number>>;
 }
 
-/* istanbul ignore next */
-export const defaultAuthContext = ({
-  login: async () => {},
-  logout: async () => {},
-  apiGet: async () => {},
-  apiPost: async () => {},
-  apiPut: async () => {},
-  apiDel: async () => {},
-  apiPatch: async () => {},
-  setOrganization: <T>(organization: CurrentOrganization) => ({} as T),
-  refreshUser: async <T>() => ({} as T),
-  setLoading: () => null
-} as unknown) as AuthContextType;
-
-export const AuthContext = React.createContext<AuthContextType>(
-  defaultAuthContext
-);
+export const AuthContext = React.createContext<AuthContextType>(undefined!);
 
 export const useAuthContext = (): AuthContextType => {
   return useContext(AuthContext);

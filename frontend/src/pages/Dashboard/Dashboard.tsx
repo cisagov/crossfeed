@@ -19,7 +19,10 @@ export const Dashboard: React.FC = () => {
 
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
-  const [showAll, setShowAll] = usePersistentState('showGlobal', false);
+  const [showAll, setShowAll] = usePersistentState<boolean>(
+    'showGlobal',
+    false
+  );
 
   const { listDomains } = useDomainApi(showAll);
 

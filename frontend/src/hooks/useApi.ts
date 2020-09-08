@@ -12,6 +12,11 @@ type OnError = (e: Error) => Promise<void>;
 export const useApi = (onError?: OnError) => {
   const [requestCount, setRequestCount] = useState(0);
 
+  const getToken = () => {
+    const t = localStorage.getItem('token');
+    return t ? JSON.parse(t) : '';
+  };
+
   const prepareInit = useCallback(async (init: any) => {
     const { headers, ...rest } = init;
     return {
@@ -19,7 +24,7 @@ export const useApi = (onError?: OnError) => {
       headers: {
         ...headers,
         ...baseHeaders,
-        Authorization: localStorage.getItem('token')
+        Authorization: getToken()
       }
     };
   }, []);

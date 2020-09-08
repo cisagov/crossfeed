@@ -10,8 +10,8 @@ type cbResponse = {
 };
 
 export const LoginGovCallback: React.FC = () => {
-  const { apiPost, login, refreshUser } = useAuthContext();
-  const history = useHistory();
+  const { apiPost, login } = useAuthContext();
+  const { push: historyPush } = useHistory();
 
   const handleLoginGovCB = useCallback(async () => {
     const { state, code } = parse(window.location.search);
@@ -19,7 +19,7 @@ export const LoginGovCallback: React.FC = () => {
     const origState = localStorage.getItem('state');
 
     try {
-      const { token, user } = await apiPost<cbResponse>('/auth/callback', {
+      const { token } = await apiPost<cbResponse>('/auth/callback', {
         body: {
           state,
           code,
@@ -27,19 +27,18 @@ export const LoginGovCallback: React.FC = () => {
           origState
         }
       });
-      await login(token, user);
+      await login(token);
       localStorage.removeItem('nonce');
       localStorage.removeItem('state');
-      await refreshUser();
     } finally {
       // route guard on '/' will respond appropriately
-      history.push('/');
+      historyPush('/');
     }
-  }, [apiPost, history, login, refreshUser]);
+  }, [apiPost, historyPush, login]);
 
   useEffect(() => {
     handleLoginGovCB();
   }, [handleLoginGovCB]);
 
-  return <div>Loading...</div>;
+  return <div></div>;
 };

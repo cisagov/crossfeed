@@ -1,14 +1,24 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { Auth } from 'aws-amplify';
 import { AuthContext, AuthUser, CurrentOrganization } from './AuthContext';
 import { User, Organization } from 'types';
 import { useHistory } from 'react-router-dom';
 import { useApi } from 'hooks/useApi';
+import { usePersistentState } from 'hooks';
 
 export const AuthContextProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [org, setOrg] = useState<CurrentOrganization | null>(null);
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const [token, setToken] = usePersistentState<string | null>('token', null);
+  const [org, setOrg] = usePersistentState<Organization | null>(
+    'organization',
+    null
+  );
   const history = useHistory();
+
+  const logout = useCallback(async () => {
+    setToken(null);
+    await Auth.signOut();
+  }, [setToken]);
 
   const handleError = useCallback(
     async (e: Error) => {
@@ -18,33 +28,59 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         history.push('/');
       }
     },
-    [history]
+    [history, logout]
   );
 
   const api = useApi(handleError);
   const { apiGet, apiPost } = api;
 
-  const refreshState = async () => {
-    const organization = localStorage.getItem('organization');
+  const getProfile = useCallback(async () => {
+    const user: User = await apiGet<User>('/users/me');
+    setAuthUser({
+      ...user,
+      isRegistered: user.firstName !== ''
+    });
+  }, [setAuthUser, apiGet]);
 
-    if (organization) {
-      setOrganization(JSON.parse(organization));
-    } else if (user) {
-      if (user.roles.length > 0) {
-        setOrganization(user.roles[0].organization);
-      }
+  const setProfile = useCallback(
+    async (user: User) => {
+      setAuthUser({
+        ...user,
+        isRegistered: user.firstName !== ''
+      });
+    },
+    [setAuthUser]
+  );
+
+  const refreshUser = useCallback(async () => {
+    if (!token && process.env.REACT_APP_USE_COGNITO) {
+      const session = await Auth.currentSession();
+      const { token } = await apiPost<{ token: string; user: User }>(
+        '/auth/callback',
+        {
+          body: {
+            token: session.getIdToken().getJwtToken()
+          }
+        }
+      );
+      setToken(token);
     }
-  };
+  }, [apiPost, setToken, token]);
 
-  const setOrganization = async (organization: Organization) => {
-    let extendedOrg: CurrentOrganization = organization;
-    extendedOrg.userIsAdmin =
-      user?.userType === 'globalAdmin' ||
-      user?.roles.find(role => role.organization.id === org?.id)?.role ===
+  const extendedOrg = useMemo(() => {
+    let current: CurrentOrganization | null =
+      org ?? authUser?.roles[0]?.organization ?? null;
+
+    if (!current) {
+      return null;
+    }
+
+    current.userIsAdmin =
+      authUser?.userType === 'globalAdmin' ||
+      authUser?.roles.find(role => role.organization.id === org?.id)?.role ===
         'admin';
-    localStorage.setItem('organization', JSON.stringify(extendedOrg));
-    setOrg(extendedOrg);
-  };
+    return current;
+  }, [org, authUser]);
 
   useEffect(() => {
     refreshUser();
@@ -52,61 +88,23 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    refreshState();
-    // eslint-disable-next-line
-  }, [user]);
-
-  const logout = async () => {
-    setUser(null);
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    await Auth.signOut();
-  };
-
-  const login = async (token: string, user: User) => {
-    let userCopy: AuthUser = {
-      isRegistered: user.firstName !== '',
-      ...user
-    };
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(userCopy));
-    setUser(userCopy);
-  };
-
-  const refreshUser = async () => {
-    if (!localStorage.getItem('token')) {
-      if (process.env.REACT_APP_USE_COGNITO) {
-        const session = await Auth.currentSession();
-        const { token, user } = await apiPost<{ token: string; user: User }>(
-          '/auth/callback',
-          {
-            body: {
-              token: session.getIdToken().getJwtToken()
-            }
-          }
-        );
-        await login(token, user);
-      } else {
-        return;
-      }
+    if (!token) {
+      setAuthUser(null);
+    } else {
+      getProfile();
     }
-    const user: User = await apiGet('/users/me');
-    const userCopy: AuthUser = {
-      isRegistered: user.firstName !== '',
-      ...user
-    };
-    localStorage.setItem('user', JSON.stringify(userCopy));
-    setUser(userCopy);
-  };
+  }, [token, getProfile]);
 
   return (
     <AuthContext.Provider
       value={{
-        setOrganization,
+        user: authUser,
+        token,
+        setUser: setProfile,
         refreshUser,
-        user,
-        currentOrganization: org,
-        login,
+        setOrganization: setOrg,
+        currentOrganization: extendedOrg,
+        login: setToken,
         logout,
         setLoading: () => {},
         ...api

@@ -23,11 +23,10 @@ export const RouteGuard: React.FC<AuthRedirectRouteProps> = ({
   component,
   ...rest
 }) => {
-  const token = localStorage.getItem('token');
-  const { user } = useAuthContext();
+  const { token, user } = useAuthContext();
 
   if (token && !user) {
-    // waiting on refreshing the user
+    // waiting on user profile
     return null;
   }
 

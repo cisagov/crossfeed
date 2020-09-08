@@ -45,7 +45,7 @@ export const TermsOfUse: React.FC = () => {
   const history = useHistory();
   const [accepted, setAccepted] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const { user, login, apiPost } = useAuthContext();
+  const { user, setUser, apiPost } = useAuthContext();
 
   const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
@@ -55,7 +55,7 @@ export const TermsOfUse: React.FC = () => {
         body: { version: getToUVersion(user) }
       });
 
-      login(localStorage.getItem('token')!, updated);
+      setUser(updated);
       history.push('/', {
         message: 'Your account has been successfully created.'
       });
