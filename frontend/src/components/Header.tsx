@@ -130,6 +130,7 @@ export const Header: React.FC = () => {
   }
 
   const navItems: NavItem[] = [
+    { title: 'Inventory', path: '/', users: ALL_USERS },
     { title: 'Vulnerabilities', path: '/vulnerabilities', users: ALL_USERS },
     { title: 'Risk Summary', path: '/risk', users: ALL_USERS },
     {
@@ -148,7 +149,7 @@ export const Header: React.FC = () => {
       users: GLOBAL_ADMIN
     },
 
-    { title: 'Scans', path: '/scans', users: ORG_ADMIN | GLOBAL_ADMIN },
+    { title: 'Scans', path: '/scans', users: GLOBAL_ADMIN },
     { title: 'Manage Users', path: '/users', users: GLOBAL_ADMIN }
   ].filter(({ users }) => (users & userLevel) > 0);
 
@@ -158,6 +159,7 @@ export const Header: React.FC = () => {
       key={title}
       activeClassName={classes.activeLink}
       className={classes.link}
+      exact={true}
     >
       {title}
     </NavLink>
@@ -195,6 +197,7 @@ export const Header: React.FC = () => {
                 to="/settings"
                 activeClassName={classes.activeLink}
                 className={clsx(classes.link, classes.userLink)}
+                exact={true}
               >
                 <UserIcon /> My Account
               </NavLink>
@@ -216,6 +219,7 @@ export const Header: React.FC = () => {
               component={NavLink}
               to={path}
               activeClassName={classes.activeMobileLink}
+              exact={true}
             >
               {title}
             </ListItem>
