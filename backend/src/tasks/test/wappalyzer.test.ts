@@ -7,6 +7,7 @@ import { handler } from '../wappalyzer';
 import * as nock from 'nock';
 
 const wappalyzer = require('simple-wappalyzer');
+const axios = require('axios');
 
 jest.mock('../helpers/getLiveWebsites');
 const getLiveWebsitesMock = mocked(getLiveWebsites);
@@ -113,15 +114,23 @@ describe('wappalyzer', () => {
       .get('/')
       .times(2)
       .reply(200, 'somedata');
+    const testServices = [
+      await Service.create({
+        port: 443
+      }).save(),
+      await Service.create({
+        port: 443
+      }).save()
+    ] as Service[];
     const testDomains = [
       await Domain.create({
         ...testDomain,
-        services: [httpsService]
+        services: [testServices[0]]
       }).save(),
       await Domain.create({
         ...testDomain,
         name: 'example2.com',
-        services: [httpsService]
+        services: [testServices[1]]
       }).save()
     ] as Domain[];
     getLiveWebsitesMock.mockResolvedValue(testDomains);
@@ -135,33 +144,32 @@ describe('wappalyzer', () => {
     expect(logSpy).toHaveBeenLastCalledWith(
       'Wappalyzer finished for 2 domains'
     );
-    const domain1 = await Domain.findOne(testDomains[0].id);
-    expect(domain1?.webTechnologies).toEqual([]);
+    const service1 = await Service.findOne(testServices[0].id);
+    expect(service1?.wappalyzerResults).toEqual([]);
 
-    const domain2 = await Domain.findOne(testDomains[1].id);
-    expect(domain2?.webTechnologies).toEqual(wappalyzerResponse);
+    const service2 = await Service.findOne(testServices[1].id);
+    expect(service2?.wappalyzerResults).toEqual(wappalyzerResponse);
   });
 
   test('logs error on wappalyzer failure', async () => {
-    testDomain.services = [];
+    testDomain.services = [httpsService];
     getLiveWebsitesMock.mockResolvedValue([testDomain]);
-    const scope = nock('http://example.com').get('/').reply(200, 'somedata');
+    nock('http://example.com').get('/').reply(200, 'somedata');
     const err = new Error('testerror');
     wappalyzer.mockRejectedValue(err);
     await handler(commandOptions);
-    scope.done();
     expect(errSpy).toHaveBeenCalledTimes(1);
     expect(errSpy).toHaveBeenCalledWith(err);
   });
 
   test('logs error on axios failure', async () => {
-    testDomain.services = [];
-    const scope = nock('http://example.com')
-      .get('/')
-      .replyWithError('network error');
+    axios.get = jest.fn();
+    testDomain.services = [httpsService];
+    nock('http://example.com').get('/').replyWithError('network error');
+    const err = new Error('testerror');
+    axios.get.mockRejectedValue(err);
     getLiveWebsitesMock.mockResolvedValue([testDomain]);
     await handler(commandOptions);
-    scope.done();
     expect(errSpy).toHaveBeenCalledTimes(1);
   });
 });
