@@ -1,7 +1,6 @@
 export * from './Layout';
 export * from './GovBanner';
 export * from './Header';
-export * from './Footer';
 export * from './AuthRoute';
 export * from './Table';
 export * from './Paginator';
