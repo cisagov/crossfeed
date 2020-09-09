@@ -19,8 +19,7 @@ export const currentTermsVersion = '1';
 
 export const userMustSign = (user: AuthUser) => {
   // Bypass ToU for CISA emails
-  // const approvedEmailAddresses = ['@cisa.dhs.gov'];
-  const approvedEmailAddresses: string[] = [];
+  const approvedEmailAddresses = ['@cisa.dhs.gov'];
   for (const email of approvedEmailAddresses) {
     if (user.email.endsWith(email)) return false;
   }
