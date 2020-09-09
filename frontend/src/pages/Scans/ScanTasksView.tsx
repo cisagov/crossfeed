@@ -74,7 +74,7 @@ export const ScanTasksView: React.FC = () => {
             (original.fargateTaskArn.match('/(.*)') || [])[1]
             }`}
         >
-          (View all on CloudWatch)
+          {" "}(View all on CloudWatch)
                 </a>}
         </h4>
 
