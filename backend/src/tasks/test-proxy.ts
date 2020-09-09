@@ -16,7 +16,7 @@ const WEBHOOK_ADMIN_URL =
  * Results should be checked at WEBHOOK_ADMIN_URL. All the requests made below
  * should display at the admin URL, and they should all be signed and have a
  * Crossfeed test user agent.
- * 
+ *
  * To run the test, run:
  * docker-compose up --build
  * cd backend && docker run -e WORKER_TEST=true --network="crossfeed_backend" -t crossfeed-worker
