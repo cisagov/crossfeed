@@ -4,7 +4,6 @@ import { Service } from 'types';
 import { Table } from 'components';
 import { columns } from './columns';
 import classes from './styles.module.scss';
-import { uniq } from 'lodash';
 
 interface Props {
   services: Service[];
@@ -17,7 +16,6 @@ const CodeBlock: React.FC<{}> = ({ children }) => {
 export const ServicesTable: React.FC<Props> = ({ services }) => {
   const renderExpanded = useCallback((row: Row<Service>) => {
     const { original } = row;
-    const cpes: string[] = uniq(original.intrigueIdentResults?.fingerprint?.map(e => e.cpe));
     return (
       <div className={classes.expandedRoot}>
         {original.banner && (
@@ -35,10 +33,6 @@ export const ServicesTable: React.FC<Props> = ({ services }) => {
               </CodeBlock>
             </>
           )}
-          {cpes && <>
-          <h4>CPEs detected by Intrigue Ident</h4>
-          {cpes.map(e => <div>{e}</div>)}
-          </>}
       </div>
     );
   }, []);
