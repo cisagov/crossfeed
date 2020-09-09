@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AuthForm } from 'components';
 import { Button, Checkbox } from '@trussworks/react-uswds';
-import { useAuthContext, AuthUser } from 'context';
+import { useAuthContext } from 'context';
 import { User } from 'types';
 
 interface FormData {
@@ -19,7 +19,7 @@ export const TermsOfUse: React.FC = () => {
   const history = useHistory();
   const [accepted, setAccepted] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const { user, setUser, apiPost, maximumRole, touVersion } = useAuthContext();
+  const { user, setUser, apiPost, touVersion } = useAuthContext();
 
   const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();

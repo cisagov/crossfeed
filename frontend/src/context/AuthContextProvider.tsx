@@ -92,7 +92,6 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   }, [authUser]);
 
   const touVersion = useMemo(() => `v${currentTermsVersion}-${maximumRole}`, [
-    authUser,
     maximumRole
   ]);
 
@@ -106,7 +105,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         (authUser.acceptedTermsVersion &&
           authUser.acceptedTermsVersion !== touVersion)
     );
-  }, [authUser]);
+  }, [authUser, touVersion]);
 
   useEffect(() => {
     refreshUser();
