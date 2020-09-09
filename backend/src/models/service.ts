@@ -181,6 +181,19 @@ export class Service extends BaseEntity {
       }
     }
 
+    if (this.intrigueIdentResults) {
+      for (const result of this.intrigueIdentResults.fingerprint) {
+        const product = {
+          name: result.product,
+          version: result.version,
+          cpe: result.cpe,
+          tags: []
+        };
+        if (product.cpe) products[product.cpe] = product;
+        else misc.push(product);
+      }
+    }
+
     if (this.censysMetadata && Object.values(this.censysMetadata).length > 0) {
       let cpe;
 
