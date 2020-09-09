@@ -1,4 +1,4 @@
-import { Domain, connectToDatabase, Vulnerability } from '../models';
+import { Domain, connectToDatabase, Vulnerability, Product } from '../models';
 import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
@@ -8,6 +8,10 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 /**
  * The CVE scan finds vulnerable CVEs affecting domains based on CPEs identified
  */
+
+const productMap = {
+  'cpe:/a:microsoft:asp.net': ['cpe:/a:microsoft:.net_framework']
+};
 
 export const handler = async (commandOptions: CommandOptions) => {
   console.log('Running cve detection globally');
@@ -30,8 +34,14 @@ export const handler = async (commandOptions: CommandOptions) => {
           product.cpe &&
           product.version &&
           product.version.split('.').length > 1
-        )
+        ) {
           cpes.add(product.cpe + ':' + product.version);
+          if (productMap[product.cpe]) {
+            for (const cpe in productMap[product.cpe]) {
+              cpes.add(cpe + ':' + product.version);
+            }
+          }
+        }
       }
     }
     if (cpes.size > 0)

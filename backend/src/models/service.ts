@@ -21,7 +21,7 @@ const filterProducts = (product: Product) => {
   return true;
 };
 
-interface Product {
+export interface Product {
   // Common name
   name: string;
   // Product name
