@@ -37,7 +37,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         ) {
           cpes.add(product.cpe + ':' + product.version);
           if (productMap[product.cpe]) {
-            for (const cpe in productMap[product.cpe]) {
+            for (const cpe of productMap[product.cpe]) {
               cpes.add(cpe + ':' + product.version);
             }
           }
