@@ -104,7 +104,6 @@ jobs:
           REACT_APP_API_URL: https://api.staging.crossfeed.cyber.dhs.gov
           REACT_APP_FARGATE_LOG_GROUP: crossfeed-staging-worker
           REACT_APP_USE_COGNITO: 1
-          REACT_APP_USER_POOL_DOMAIN: crossfeed-staging
           REACT_APP_USER_POOL_ID: us-east-1_uxiY8DOum
           REACT_APP_USER_POOL_CLIENT_ID: 1qf4cii9v0t9hn1hnr54f2ao0j
 
@@ -115,7 +114,6 @@ jobs:
           REACT_APP_API_URL: https://api.crossfeed.cyber.dhs.gov
           REACT_APP_FARGATE_LOG_GROUP: crossfeed-prod-worker
           REACT_APP_USE_COGNITO: 1
-          REACT_APP_USER_POOL_DOMAIN: crossfeed-prod
           REACT_APP_USER_POOL_ID: us-east-1_MZgKoBmkN
           REACT_APP_USER_POOL_CLIENT_ID: 6qseah01b4vse02srrpra2u350
 
