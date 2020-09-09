@@ -12,6 +12,15 @@ import {
 import { Domain } from './domain';
 import { Scan } from './scan';
 
+const filterProducts = (product: Product) => {
+  // Filter out false positives.
+  const { cpe, version } = product;
+  if (cpe === 'cpe:/a:apache:tomcat' && version === '1.1') {
+    return false;
+  }
+  return true;
+};
+
 interface Product {
   // Common name
   name: string;
@@ -142,7 +151,7 @@ export class Service extends BaseEntity {
       }
     }
 
-    if (this.censysMetadata) {
+    if (this.censysMetadata && Object.values(this.censysMetadata).length > 0) {
       let cpe;
 
       if (this.censysMetadata.manufacturer && this.censysMetadata.product) {
@@ -164,6 +173,6 @@ export class Service extends BaseEntity {
       else misc.push(product);
     }
 
-    this.products = Object.values(products).concat(misc);
+    this.products = Object.values(products).concat(misc).filter(filterProducts);
   }
 }

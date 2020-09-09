@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`service set products 1`] = `
+Array [
+  Object {
+    "cpe": "cpe1",
+    "icon": "icon",
+    "name": "name",
+    "tags": Array [],
+    "version": "version",
+  },
+]
+`;
