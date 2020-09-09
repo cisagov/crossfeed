@@ -8,6 +8,27 @@ export interface Query<T extends object> {
   filters: Filters<T>;
 }
 
+export interface Product {
+  // Common name
+  name: string;
+  // Product name
+  product?: string;
+  // Product vendor
+  vendor?: string;
+  // Product version
+  version: string;
+  // Product version revision
+  revision?: string;
+  // CPE without version (unique identifier)
+  cpe?: string;
+  // Optional icon
+  icon?: string;
+  // Optional description
+  description?: string;
+  // Tags
+  tags: string[];
+}
+
 export interface Service {
   port: string;
   service: string;
@@ -47,6 +68,8 @@ export interface Service {
       result?: boolean;
     }[];
   };
+  wappalyzerResults: Technology[];
+  products: Product[];
 }
 
 export interface Domain {
@@ -61,7 +84,6 @@ export interface Domain {
   services: Service[];
   vulnerabilities: Vulnerability[];
   organization: Organization;
-  webTechnologies: Technology[];
   ssl: SSLInfo | null;
 }
 

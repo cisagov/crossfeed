@@ -15,7 +15,7 @@ const Settings: React.FC = () => {
       <h2>
         Member of:{' '}
         {user &&
-          user.roles
+          (user.roles || [])
             .filter(role => role.approved)
             .map(role => role.organization.name)
             .join(', ')}

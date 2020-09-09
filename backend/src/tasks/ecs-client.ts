@@ -62,24 +62,27 @@ class ECSClient {
           // We need to create unique container names to avoid conflicts.
           name: containerName,
           Image: 'crossfeed-worker',
+          HostConfig: {
+            // In order to use the host name "db" to access the database from the
+            // crossfeed-worker image, we must launch the Docker container with
+            // the Crossfeed backend network.
+            NetworkMode: 'crossfeed_backend'
+          },
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
             `DB_DIALECT=${process.env.DB_DIALECT}`,
-            `DB_HOST=localhost`,
+            `DB_HOST=${process.env.DB_HOST}`,
             `IS_LOCAL=true`,
             `DB_PORT=${process.env.DB_PORT}`,
             `DB_NAME=${process.env.DB_NAME}`,
             `DB_USERNAME=${process.env.DB_USERNAME}`,
             `DB_PASSWORD=${process.env.DB_PASSWORD}`,
             `CENSYS_API_ID=${process.env.CENSYS_API_ID}`,
-            `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`
-          ],
-          // Since the ECSClient is itself running in the backend Docker container,
-          // we launch a Docker container from the host Docker daemon. This means that
-          // we cannot the host name "db" to access the database from the
-          // crossfeed-worker image; instead, we set NetworkMode to "host" and
-          // connect to "localhost."
-          NetworkMode: 'host'
+            `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`,
+            `WORKER_USER_AGENT=${process.env.WORKER_USER_AGENT}`,
+            `WORKER_SIGNATURE_PUBLIC_KEY=${process.env.WORKER_SIGNATURE_PUBLIC_KEY}`,
+            `WORKER_SIGNATURE_PRIVATE_KEY=${process.env.WORKER_SIGNATURE_PRIVATE_KEY}`
+          ]
         } as any);
         await container.start();
         return {
@@ -155,28 +158,13 @@ class ECSClient {
                 value: JSON.stringify(commandOptions)
               },
               {
-                name: 'DB_HOST',
-                value: process.env.DB_HOST
+                name: 'WORKER_USER_AGENT',
+                value: process.env.WORKER_USER_AGENT
               },
               {
-                name: 'DB_PORT',
-                value: process.env.DB_PORT
-              },
-              {
-                name: 'DB_USERNAME',
-                value: process.env.DB_USERNAME
-              },
-              {
-                name: 'DB_PASSWORD',
-                value: process.env.DB_PASSWORD
-              },
-              {
-                name: 'CENSYS_API_ID',
-                value: process.env.CENSYS_API_ID
-              },
-              {
-                name: 'CENSYS_API_SECRET',
-                value: process.env.CENSYS_API_SECRET
+                // Allow node to use more memory, if needed
+                name: 'NODE_OPTIONS',
+                value: memory ? `--max_old_space_size=${memory}` : ''
               }
             ]
           }
@@ -205,7 +193,8 @@ class ECSClient {
     } else {
       const response = await this.cloudWatchLogs!.getLogEvents({
         logGroupName: process.env.FARGATE_LOG_GROUP_NAME!,
-        logStreamName: `worker/main/${fargateTaskArn}`,
+        // Pick the ID from "arn:aws:ecs:us-east-1:957221700844:task/f59d71c6-3d23-4ee9-ad68-c7b810bf458b"
+        logStreamName: `worker/main/${fargateTaskArn.split('/')[1]}`,
         startFromHead: true
       }).promise();
       const res = response.$response.data;

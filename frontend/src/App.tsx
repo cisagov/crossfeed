@@ -29,7 +29,14 @@ Amplify.configure({
         endpoint: process.env.REACT_APP_API_URL
       }
     ]
-  }
+  },
+  Auth: process.env.REACT_APP_USE_COGNITO
+    ? {
+        region: 'us-east-1',
+        userPoolId: process.env.REACT_APP_USER_POOL_ID,
+        userPoolWebClientId: process.env.REACT_APP_USER_POOL_CLIENT_ID
+      }
+    : undefined
 });
 
 const App: React.FC = () => (

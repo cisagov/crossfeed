@@ -112,13 +112,11 @@ You've been invited to join ${
 Crossfeed access instructions:
 
 1. Visit ${process.env.FRONTEND_DOMAIN}
-2. Select to register with Login.gov
-3. Select to create a new Login.gov ${staging ? 'sandbox ' : ''}account${
-      staging
-        ? '. Note that as Crossfeed staging uses the Login.gov sandbox, this will be a different account from your normal Login.gov account'
-        : ''
-    }
-4. After configuring your account, you will be redirected to Crossfeed
+2. Select to create a new account.
+3. Enter your email address and a new password for Crossfeed.
+4. A confirmation code will be sent to your email. Enter this code when you receive it.
+5. You will be prompted to enable MFA. Scan the QR code with an authenticator app on your phone, such as Microsoft Authenticator. Enter the MFA code you see after scanning.
+6. After configuring your account, you will be redirected to Crossfeed.
 
 On the "Dashboard" tab, you can view information about each subdomain and the associated ports and services detected on each one. The "Scans" tab has a list of enabled scans and the schedule that they run on. The "Risk Summary" tab has a visual summary of identified assets, and the "Vulnerabilities" tab lists discovered vulnerabilities.
 
@@ -138,6 +136,8 @@ export const invite = wrapHandler(async (event) => {
   }
 
   await connectToDatabase();
+
+  body.email = body.email.toLowerCase();
 
   // Check if user already exists
   let user = await User.findOne({
@@ -213,7 +213,9 @@ export const me = wrapHandler(async (event) => {
 
 export const acceptTerms = wrapHandler(async (event) => {
   await connectToDatabase();
-  const user = await User.findOne(getUserId(event));
+  const user = await User.findOne(getUserId(event), {
+    relations: ['roles', 'roles.organization']
+  });
   if (!user || !event.body) {
     return NotFound;
   }
