@@ -46,12 +46,12 @@ RUN apt-get update && apt-get install -y python3-pip procps
 
 RUN npm install -g pm2 wait-port
 
-# Install intrigue ident
+# Install intrigue ident v2.0.2
 
 ENV PATH="/root/.rbenv/shims:/root/.rbenv/bin:${PATH}"
 RUN curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
 RUN rbenv install 2.6.5 && rbenv global 2.6.5 && gem install bundler:2.1.4
-RUN git clone https://github.com/intrigueio/intrigue-ident.git && cd intrigue-ident && git checkout cc05e72ff1995cdc137ad4e12936993cd0628605 && bundle install --jobs=4
+RUN git clone https://github.com/intrigueio/intrigue-ident.git && cd intrigue-ident && git checkout e97f974417147df8fa27dcd8f73b7efbb587b942 && bundle install --jobs=4
 RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/bin/intrigue-ident && chmod +x /usr/bin/intrigue-ident
 
 # Python dependencies

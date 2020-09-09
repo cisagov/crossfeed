@@ -141,7 +141,7 @@ export class Service extends BaseEntity {
       result?: boolean;
     }[];
   };
-  
+
   /** Wappalyzer output */
   @Column({
     type: 'jsonb',

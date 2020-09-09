@@ -13,11 +13,17 @@ const intrigueIdent = async (domain: Domain): Promise<void> => {
     }
     const url =
       service.port === 443 ? `https://${domain.name}` : `http://${domain.name}`;
-    const { stdout, stderr, status } = spawnSync('intrigue-ident', [
-      '--uri',
-      url,
-      '--json'
-    ]);
+    const { stdout, stderr, status } = spawnSync(
+      'intrigue-ident',
+      ['--uri', url, '--json'],
+      {
+        env: {
+          ...process.env,
+          HTTP_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY,
+          HTTPS_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY
+        }
+      }
+    );
     if (stderr.toString()) {
       console.error('stderr', stderr.toString());
     }

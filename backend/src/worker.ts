@@ -8,6 +8,7 @@ import { handler as wappalyzer } from './tasks/wappalyzer';
 import { handler as censysIpv4 } from './tasks/censysIpv4';
 import { handler as intrigueIdent } from './tasks/intrigue-ident';
 import { handler as cve } from './tasks/cve';
+import { handler as testProxy } from './tasks/test-proxy';
 
 /**
  * Worker entrypoint.
@@ -28,8 +29,9 @@ async function main() {
     findomain,
     portscanner,
     wappalyzer,
-    intrigueIdent
-  }[scanName];
+    intrigueIdent,
+    testProxy
+  }[scanName || 'testProxy'];
   if (!scanFn) {
     throw new Error('Invalid scan name ' + scanName);
   }
