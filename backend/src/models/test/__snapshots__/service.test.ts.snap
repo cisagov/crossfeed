@@ -9,14 +9,5 @@ Array [
     "tags": Array [],
     "version": "version",
   },
-  Object {
-    "cpe": undefined,
-    "description": undefined,
-    "name": undefined,
-    "product": undefined,
-    "revision": undefined,
-    "tags": Array [],
-    "version": undefined,
-  },
 ]
 `;

@@ -151,7 +151,7 @@ export class Service extends BaseEntity {
       }
     }
 
-    if (this.censysMetadata) {
+    if (this.censysMetadata && Object.values(this.censysMetadata).length > 0) {
       let cpe;
 
       if (this.censysMetadata.manufacturer && this.censysMetadata.product) {

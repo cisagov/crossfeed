@@ -41,6 +41,6 @@ describe('service', () => {
       }
     ];
     await service.save();
-    expect(service.products.length).toEqual(1);
+    expect(service.products.length).toEqual(0);
   });
 });
