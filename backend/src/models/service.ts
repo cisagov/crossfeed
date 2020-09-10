@@ -193,7 +193,8 @@ export class Service extends BaseEntity {
         const product = {
           name: result.product,
           version: result.version,
-          cpe: result.cpe,
+          // Convert "cpe:2.3:a:drupal:drupal:8:" to "cpe:/a:drupal:drupal:8:"
+          cpe: result.cpe?.replace(/^cpe:2\.3:/, "cpe:/"),
           tags: result.tags
         };
         if (product.cpe) products[product.cpe] = product;

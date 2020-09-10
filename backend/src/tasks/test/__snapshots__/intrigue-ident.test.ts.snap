@@ -226,27 +226,36 @@ Object {
 exports[`intrigue ident basic test 2`] = `
 Array [
   Object {
-    "cpe": "cpe:2.3:a:bootstrap:bootstrap::",
+    "cpe": "cpe:/a:bootstrap:bootstrap::",
     "name": "Bootstrap",
-    "tags": Array [],
+    "tags": Array [
+      "Web Framework",
+    ],
     "version": "",
   },
   Object {
-    "cpe": "cpe:2.3:a:apache:http_server::",
+    "cpe": "cpe:/a:apache:http_server::",
     "name": "HTTP Server",
-    "tags": Array [],
+    "tags": Array [
+      "Web Server",
+    ],
     "version": "",
   },
   Object {
-    "cpe": "cpe:2.3:a:drupal:drupal:8:",
+    "cpe": "cpe:/a:drupal:drupal:8:",
     "name": "Drupal",
-    "tags": Array [],
+    "tags": Array [
+      "CMS",
+    ],
     "version": "8",
   },
   Object {
-    "cpe": "cpe:2.3:s:newrelic:newrelic::",
+    "cpe": "cpe:/s:newrelic:newrelic::",
     "name": "NewRelic",
-    "tags": Array [],
+    "tags": Array [
+      "APM",
+      "Javascript",
+    ],
     "version": "",
   },
 ]
