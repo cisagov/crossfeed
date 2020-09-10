@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Gov Banner Component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="makeStyles-root-1"
+  >
+    <div
+      class="makeStyles-inner-2"
+    >
+      <img
+        alt="usa flag"
+        class="makeStyles-flag-3"
+        src="us_flag_small.png"
+      />
+      <div
+        class="makeStyles-textWrap-4"
+      >
+        <div
+          class="makeStyles-text-5"
+        >
+          An official website of the United States government
+        </div>
+        <button
+          class="makeStyles-text-5 makeStyles-btn-6 makeStyles-btnExpand-7"
+        >
+          Here's how you know 
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

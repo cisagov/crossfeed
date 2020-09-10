@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Layout component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiScopedCssBaseline-root makeStyles-overrides-3"
+  >
+    <div
+      class="makeStyles-root-1"
+    >
+      <div>
+        GOV_BANNER
+      </div>
+      <div>
+        HEADER
+      </div>
+      <div
+        class="makeStyles-content-2"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;
