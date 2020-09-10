@@ -32,17 +32,17 @@ RUN go get github.com/facebookincubator/nvdtools/...@v0.1.4
 
 FROM node:14-buster-slim
 
+WORKDIR /app
+
+
 RUN apt-get update && apt-get install -y \
     curl \
     git \
     bzip2 \
     build-essential \
     libssl-dev libreadline-dev zlib1g-dev \
+    python3-pip procps
   && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
-
-RUN apt-get update && apt-get install -y python3-pip procps
 
 RUN npm install -g pm2 wait-port
 
