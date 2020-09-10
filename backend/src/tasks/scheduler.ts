@@ -214,7 +214,7 @@ const shouldRunScan = async ({
   const lastRunningScanTask = await ScanTask.findOne(
     {
       scan: { id: scan.id },
-      status: In(['created', 'requested', 'started']),
+      status: In(['created', 'queued', 'requested', 'started']),
       ...orgFilter
     },
     {
