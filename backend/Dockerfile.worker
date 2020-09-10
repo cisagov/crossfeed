@@ -40,7 +40,7 @@ RUN apt-get update && apt-get install -y \
     bzip2 \
     build-essential \
     libssl-dev libreadline-dev zlib1g-dev \
-    python3-pip procps
+    python3-pip procps \
   && rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g pm2 wait-port
