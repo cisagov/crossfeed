@@ -16,6 +16,13 @@ const filterProducts = (product: Product) => {
   // Filter out false positives.
   const { cpe, version } = product;
   if (cpe === 'cpe:/a:apache:tomcat' && version === '1.1') {
+    // Wappalyzer incorrectly detects "Apache Tomcat 1.1"
+    // https://github.com/AliasIO/wappalyzer/issues/3305
+    return false;
+  }
+  if (cpe === 'cpe:2.3:a:apache:coyote:1.1:') {
+    // Intrigue Ident incorrectly detects "Apache Coyote 1.1"
+    // https://github.com/intrigueio/intrigue-ident/issues/51
     return false;
   }
   return true;
