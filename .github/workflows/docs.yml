@@ -32,10 +32,11 @@ jobs:
       - run: gem install bundler:2.1.4
       - run: bundle install --jobs 4 --retry 3
         working-directory: ./docs
-      - run: bundle exec jekyll build --baseurl /crossfeed
+      - run: bundle exec jekyll build
         working-directory: ./docs
         env:
-          JEKYLL_ENV: producation
+          JEKYLL_ENV: production
+      - run: echo "docs.crossfeed.cyber.dhs.gov" >> docs/_site/CNAME
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: crazy-max/ghaction-github-pages@v2.1.2
