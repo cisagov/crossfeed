@@ -1,4 +1,4 @@
-import { Domain, connectToDatabase, Vulnerability } from '../models';
+import { Domain, connectToDatabase, Vulnerability, Product } from '../models';
 import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
@@ -9,12 +9,16 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
  * The CVE scan finds vulnerable CVEs affecting domains based on CPEs identified
  */
 
+const productMap = {
+  'cpe:/a:microsoft:asp.net': ['cpe:/a:microsoft:.net_framework']
+};
+
 export const handler = async (commandOptions: CommandOptions) => {
   console.log('Running cve detection globally');
 
   await connectToDatabase();
   const allDomains = await Domain.find({
-    select: ['id', 'name', 'ip', 'webTechnologies'],
+    select: ['id', 'name', 'ip'],
     relations: ['services']
   });
   const hostsToCheck: Array<{
@@ -23,25 +27,21 @@ export const handler = async (commandOptions: CommandOptions) => {
   }> = [];
   for (const domain of allDomains) {
     const cpes = new Set<string>();
-    for (const tech of domain.webTechnologies) {
-      if (tech.cpe && tech.version && tech.version.split('.').length > 1)
-        cpes.add(tech.cpe + ':' + tech.version);
-    }
 
     for (const service of domain.services) {
-      if (
-        service.censysMetadata &&
-        service.censysMetadata.manufacturer &&
-        service.censysMetadata.product &&
-        service.censysMetadata.version &&
-        service.censysMetadata.version.split('.').length > 1
-      ) {
-        // TODO: Improve methods for getting CPEs from Censys
-        // See https://www.napier.ac.uk/~/media/worktribe/output-1500093/identifying-vulnerabilities-using-internet-wide-scanning-data.pdf
-        // and https://github.com/TheHairyJ/Scout
-        cpes.add(
-          `cpe:/a:${service.censysMetadata.manufacturer}:${service.censysMetadata.product}:${service.censysMetadata.version}`.toLowerCase()
-        );
+      for (const product of service.products) {
+        if (
+          product.cpe &&
+          product.version &&
+          product.version.split('.').length > 1
+        ) {
+          cpes.add(product.cpe + ':' + product.version);
+          if (productMap[product.cpe]) {
+            for (const cpe of productMap[product.cpe]) {
+              cpes.add(cpe + ':' + product.version);
+            }
+          }
+        }
       }
     }
     if (cpes.size > 0)

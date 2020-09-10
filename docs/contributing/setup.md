@@ -56,6 +56,13 @@ To view a code coverage report (a minimum code coverage threshold is checked in 
 
 You can then view a HTML coverage report in the `coverage/lcov-report` directory.
 
+To run Python tests for some worker code, you need to run:
+
+```bash
+pip install -r worker/requirements.txt
+pytest
+```
+
 ## Fargate worker
 
 In order to run scans locally or work on scanning infrastructure,

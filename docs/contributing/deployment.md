@@ -93,6 +93,8 @@ First, make sure you set the following SSM variables manually through the AWS Co
 - `/crossfeed/staging/LOGIN_GOV_BASE_URL`
 - `/crossfeed/staging/LOGIN_GOV_JWT_KEY`
 - `/crossfeed/staging/LOGIN_GOV_ISSUER`
+- `/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_KEY`
+- `/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY`
 
 Then, run `cp stage.config .env` and change the variables in `.env` to use a bucket you have access to to store state.
 

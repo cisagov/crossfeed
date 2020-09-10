@@ -26,7 +26,7 @@ export const userMustSign = (user: AuthUser) => {
   return (
     !user.dateAcceptedTerms ||
     (user.acceptedTermsVersion &&
-      user.acceptedTermsVersion !== getToUVersion(user as AuthUser))
+      user.acceptedTermsVersion !== getToUVersion(user))
   );
 };
 
@@ -141,11 +141,11 @@ export const TermsOfUse: React.FC = () => {
               other federal agencies with cybersecurity responsibilities, with
               the Multi-State Information Sharing and Analysis Center, and with
               the Election Infrastructure Information Sharing and Analysis
-              Center.
+              Center;
             </li>
             <li>
               You are authorized to make the above certifications on your
-              organization’s behalf
+              organization’s behalf;
             </li>
           </>
         )}

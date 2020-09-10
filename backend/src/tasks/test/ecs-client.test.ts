@@ -57,174 +57,178 @@ jest.mock('aws-sdk', () => ({
   })),
   CloudWatchLogs: jest.fn().mockImplementation(() => ({
     getLogEvents: (e) => ({
-      promise: async () => ({
-        $response: {
-          data: {
-            events: [
-              {
-                timestamp: 1598447186714,
-                message: '(ECS LOGS)commandOptions are {',
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447186714,
-                message:
-                  "  organizationId: 'f0143eda-0e95-4748-ba49-a53069b1c738',",
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447186714,
-                message: "  organizationName: 'CISA',",
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447186714,
-                message: "  scanId: 'e7ff7e7a-7391-431e-9b9e-437e823be3c9',",
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447186714,
-                message: "  scanName: 'amass',",
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447186714,
-                message: "  scanTaskId: 'fef01b7e-2da3-4508-b27a-3d8be8618488'",
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447186714,
-                message: '}',
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447186715,
-                message: 'Running amass on organization CISA',
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447186917,
-                message: '=> DB Connected',
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447187004,
-                message: 'Running amass with args [',
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447187004,
-                message: "  'enum',",
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447187004,
-                message: "  '-ip',",
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447187004,
-                message: "  '-active',",
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447187004,
-                message: "  '-d',",
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447187004,
-                message: "  'cisa.gov',",
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447187004,
-                message: "  '-json',",
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447187004,
-                message: "  '/out-0.6002422193137014.txt'",
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447187004,
-                message: ']',
-                ingestionTime: 1598447188176
-              },
-              {
-                timestamp: 1598447398914,
-                message: '=> DB Connected',
-                ingestionTime: 1598447403181
-              },
-              {
-                timestamp: 1598447399308,
-                message: 'amass created/updated 2 new domains',
-                ingestionTime: 1598447403181
-              },
-              {
-                timestamp: 1598447399308,
-                message: 'Running amass with args [',
-                ingestionTime: 1598447403181
-              },
-              {
-                timestamp: 1598447399308,
-                message: "  'enum',",
-                ingestionTime: 1598447403181
-              },
-              {
-                timestamp: 1598447399308,
-                message: "  '-ip',",
-                ingestionTime: 1598447403181
-              },
-              {
-                timestamp: 1598447399308,
-                message: "  '-active',",
-                ingestionTime: 1598447403181
-              },
-              {
-                timestamp: 1598447399308,
-                message: "  '-d',",
-                ingestionTime: 1598447403181
-              },
-              {
-                timestamp: 1598447399308,
-                message: "  'cyber.dhs.gov',",
-                ingestionTime: 1598447403181
-              },
-              {
-                timestamp: 1598447399308,
-                message: "  '-json',",
-                ingestionTime: 1598447403181
-              },
-              {
-                timestamp: 1598447399308,
-                message: "  '/out-0.6002422193137014.txt'",
-                ingestionTime: 1598447403181
-              },
-              {
-                timestamp: 1598447399308,
-                message: ']',
-                ingestionTime: 1598447403181
-              },
-              {
-                timestamp: 1598447675114,
-                message: '=> DB Connected',
-                ingestionTime: 1598447678181
-              },
-              {
-                timestamp: 1598447675463,
-                message: 'amass created/updated 23 new domains',
-                ingestionTime: 1598447678181
-              }
-            ],
-            nextForwardToken:
-              'f/35646574323683933005741047986357239768293194069041086465',
-            nextBackwardToken:
-              'b/35646563424217017969097517591536750076621854781830201344'
+      promise: async () => {
+        expect(e).toMatchSnapshot();
+        return {
+          $response: {
+            data: {
+              events: [
+                {
+                  timestamp: 1598447186714,
+                  message: '(ECS LOGS)commandOptions are {',
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447186714,
+                  message:
+                    "  organizationId: 'f0143eda-0e95-4748-ba49-a53069b1c738',",
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447186714,
+                  message: "  organizationName: 'CISA',",
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447186714,
+                  message: "  scanId: 'e7ff7e7a-7391-431e-9b9e-437e823be3c9',",
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447186714,
+                  message: "  scanName: 'amass',",
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447186714,
+                  message:
+                    "  scanTaskId: 'fef01b7e-2da3-4508-b27a-3d8be8618488'",
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447186714,
+                  message: '}',
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447186715,
+                  message: 'Running amass on organization CISA',
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447186917,
+                  message: '=> DB Connected',
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447187004,
+                  message: 'Running amass with args [',
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447187004,
+                  message: "  'enum',",
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447187004,
+                  message: "  '-ip',",
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447187004,
+                  message: "  '-active',",
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447187004,
+                  message: "  '-d',",
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447187004,
+                  message: "  'cisa.gov',",
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447187004,
+                  message: "  '-json',",
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447187004,
+                  message: "  '/out-0.6002422193137014.txt'",
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447187004,
+                  message: ']',
+                  ingestionTime: 1598447188176
+                },
+                {
+                  timestamp: 1598447398914,
+                  message: '=> DB Connected',
+                  ingestionTime: 1598447403181
+                },
+                {
+                  timestamp: 1598447399308,
+                  message: 'amass created/updated 2 new domains',
+                  ingestionTime: 1598447403181
+                },
+                {
+                  timestamp: 1598447399308,
+                  message: 'Running amass with args [',
+                  ingestionTime: 1598447403181
+                },
+                {
+                  timestamp: 1598447399308,
+                  message: "  'enum',",
+                  ingestionTime: 1598447403181
+                },
+                {
+                  timestamp: 1598447399308,
+                  message: "  '-ip',",
+                  ingestionTime: 1598447403181
+                },
+                {
+                  timestamp: 1598447399308,
+                  message: "  '-active',",
+                  ingestionTime: 1598447403181
+                },
+                {
+                  timestamp: 1598447399308,
+                  message: "  '-d',",
+                  ingestionTime: 1598447403181
+                },
+                {
+                  timestamp: 1598447399308,
+                  message: "  'cyber.dhs.gov',",
+                  ingestionTime: 1598447403181
+                },
+                {
+                  timestamp: 1598447399308,
+                  message: "  '-json',",
+                  ingestionTime: 1598447403181
+                },
+                {
+                  timestamp: 1598447399308,
+                  message: "  '/out-0.6002422193137014.txt'",
+                  ingestionTime: 1598447403181
+                },
+                {
+                  timestamp: 1598447399308,
+                  message: ']',
+                  ingestionTime: 1598447403181
+                },
+                {
+                  timestamp: 1598447675114,
+                  message: '=> DB Connected',
+                  ingestionTime: 1598447678181
+                },
+                {
+                  timestamp: 1598447675463,
+                  message: 'amass created/updated 23 new domains',
+                  ingestionTime: 1598447678181
+                }
+              ],
+              nextForwardToken:
+                'f/35646574323683933005741047986357239768293194069041086465',
+              nextBackwardToken:
+                'b/35646563424217017969097517591536750076621854781830201344'
+            }
           }
-        }
-      })
+        };
+      }
     })
   }))
 }));
@@ -249,7 +253,9 @@ describe('getLogs', () => {
   });
   test('not local', async () => {
     const client = new ECSClient(false);
-    const logs = await client.getLogs('testArn');
+    const logs = await client.getLogs(
+      'arn:aws:ecs:us-east-1:957221700844:task/f59d71c6-3d23-4ee9-ad68-c7b810bf458b'
+    );
     expect(logs).toMatchSnapshot();
     expect(logs).toContain('ECS LOGS');
   });

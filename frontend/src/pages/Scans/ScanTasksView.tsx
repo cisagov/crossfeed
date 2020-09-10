@@ -6,8 +6,9 @@ import { ScanTask } from 'types';
 import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import classes from './Scans.module.scss';
-import { FaMinus, FaPlus } from 'react-icons/fa';
+import { FaMinus, FaPlus, FaSyncAlt } from 'react-icons/fa';
 import { LazyLog } from "react-lazylog";
+import { Button } from '@trussworks/react-uswds';
 
 interface ApiResponse {
   result: ScanTask[];
@@ -20,9 +21,17 @@ interface Errors {
 
 const dateAccessor = (date?: string) => {
   return !date || new Date(date).getTime() === new Date(0).getTime()
-    ? 'Never'
+    ? 'None'
     : `${formatDistanceToNow(parseISO(date))} ago`;
 };
+
+const Log = ({ url }: { url: string }) => {
+  const [logKey, setLogKey] = useState(0);
+  return (<div className={classes.logContainer}>
+    <LazyLog key={"lazylog-" + logKey} follow={true} extraLines={1} enableSearch url={url} caseInsensitive fetchOptions={{ headers: { Authorization: localStorage.getItem("token") as string } }} selectableLines={true} />
+    <Button type="button" outline size="small" onClick={() => setLogKey(Math.random())}><FaSyncAlt /></Button>
+  </div>);
+}
 
 export const ScanTasksView: React.FC = () => {
   const { apiPost } = useAuthContext();
@@ -56,7 +65,7 @@ export const ScanTasksView: React.FC = () => {
     const { original } = row;
     return (
       <div className={classes.expandedRoot}>
-        {original.fargateTaskArn && (<><h4>Logs {original.fargateTaskArn?.match('/(.*)') && <a
+        {original.fargateTaskArn && (<><h4>Logs{original.fargateTaskArn?.match('/(.*)') && <a
           target="_blank"
           rel="noopener noreferrer"
           href={`https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/${process
@@ -65,12 +74,12 @@ export const ScanTasksView: React.FC = () => {
             (original.fargateTaskArn.match('/(.*)') || [])[1]
             }`}
         >
-          (View all on CloudWatch)
-                </a>}</h4>
+          {" "}(View all on CloudWatch)
+                </a>}
+        </h4>
 
-          <div style={{ height: 500 }}>
-            <LazyLog extraLines={1} enableSearch url={`${process.env.REACT_APP_API_URL}/scan-tasks/${original.id}/logs`} caseInsensitive fetchOptions={{ headers: { Authorization: localStorage.getItem("token") as string } }} selectableLines={true} />
-          </div>
+          <Log url={`${process.env.REACT_APP_API_URL}/scan-tasks/${original.id}/logs`} />
+
         </>)}
 
         <h4>Input</h4>

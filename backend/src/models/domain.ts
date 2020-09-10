@@ -87,26 +87,6 @@ export class Domain extends BaseEntity {
   })
   cloudHosted: boolean;
 
-  /** Wappalyzer output */
-  @Column({
-    type: 'jsonb',
-    default: []
-  })
-  webTechnologies: {
-    name: string;
-    slug: string;
-    version: string;
-    icon: string;
-    website: string;
-    confidence: number;
-    cpe?: string;
-    categories: {
-      name: string;
-      slug: string;
-      id: number;
-    }[];
-  }[];
-
   /** SSL Certificate information  */
   @Column({
     type: 'jsonb',
