@@ -10,7 +10,7 @@ Crossfeed is an asset discovery tool that can be used to monitor and gather info
 
 ### How can I verify that traffic is coming from CISA's instance of Crossfeed?
 
-All requests sent from CISA's instance of Crossfeed (except for instances to third-party APIs) are sent with the following User-Agent:
+All requests sent from CISA's instance of Crossfeed (except for requests to third-party APIs) are sent with the following User-Agent:
 
 ```
 Mozilla/5.0 (compatible; Crossfeed/1.0; +https://cisagov.github.io/crossfeed/scans)
