@@ -194,7 +194,7 @@ export class Service extends BaseEntity {
           name: result.product,
           version: result.version,
           cpe: result.cpe,
-          tags: []
+          tags: result.tags
         };
         if (product.cpe) products[product.cpe] = product;
         else misc.push(product);
