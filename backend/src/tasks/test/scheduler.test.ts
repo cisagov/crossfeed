@@ -394,6 +394,25 @@ describe('scheduler', () => {
         })
       ).toEqual(1);
 
+      // Should not queue any additional scans.
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+      expect(runCommand).toHaveBeenCalledTimes(0);
+      expect(
+        await ScanTask.count({
+          where: {
+            scan,
+            status: 'queued'
+          }
+        })
+      ).toEqual(1);
+
       // Queue has opened up.
       getNumTasks.mockImplementation(() => 0);
       await scheduler(
