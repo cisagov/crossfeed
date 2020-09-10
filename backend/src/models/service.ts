@@ -188,7 +188,7 @@ export class Service extends BaseEntity {
       }
     }
 
-    if (this.intrigueIdentResults) {
+    if (this.intrigueIdentResults?.fingerprint) {
       for (const result of this.intrigueIdentResults.fingerprint) {
         const product = {
           name: result.product,
