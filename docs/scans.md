@@ -20,4 +20,4 @@ All requests are also signed in order to allow verification that the request was
 
 ### Who can I contact with further questions?
 
-Please contact <a href="mailto:support@crossfeed.cyber.dhs.gov">support@crossfeed.cyber.dhs.gov</a>.
+Please go to [https://www.cisa.gov/crossfeed](https://www.cisa.gov/crossfeed) for more information on CISA's use of Crossfeed and additional contact details.
