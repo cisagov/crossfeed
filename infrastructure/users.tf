@@ -35,7 +35,6 @@ resource "aws_cognito_user_pool_domain" "auth_domain" {
 resource "aws_cognito_user_pool_client" "client" {
   name         = "crossfeed"
   user_pool_id = aws_cognito_user_pool.pool.id
-  callback_urls = ["http://localhost"]
   supported_identity_providers = ["COGNITO"]
   allowed_oauth_scopes = ["email", "openid"]
   allowed_oauth_flows = ["code"]
