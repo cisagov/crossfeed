@@ -20,7 +20,7 @@ const mockNucleiResponse = (response) => {
   }));
 };
 
-describe('intrigue ident', () => {
+describe('nuclei', () => {
   beforeAll(async () => {
     await connectToDatabase();
   });
