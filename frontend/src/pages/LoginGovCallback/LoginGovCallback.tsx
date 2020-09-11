@@ -30,6 +30,7 @@ export const LoginGovCallback: React.FC = () => {
       await login(token);
       localStorage.removeItem('nonce');
       localStorage.removeItem('state');
+    } catch (e) {
     } finally {
       // route guard on '/' will respond appropriately
       historyPush('/');

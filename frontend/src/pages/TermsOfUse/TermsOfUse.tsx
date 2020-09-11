@@ -19,7 +19,7 @@ export const TermsOfUse: React.FC = () => {
   const history = useHistory();
   const [accepted, setAccepted] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const { user, setUser, apiPost, touVersion } = useAuthContext();
+  const { user, setUser, apiPost, maximumRole, touVersion } = useAuthContext();
 
   const onSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
@@ -60,7 +60,7 @@ export const TermsOfUse: React.FC = () => {
         to have access to the organization’s data. View-only users can only view
         data provided to or collected by Crossfeed.
       </p>
-      {touVersion === 'admin' && (
+      {maximumRole === 'admin' && (
         <p>
           Once you create a Crossfeed administrator account, input the Internet
           Protocol (IP) addresses or domains to be continuously evaluated, and
@@ -76,13 +76,13 @@ export const TermsOfUse: React.FC = () => {
       )}
       <p>
         By creating a Crossfeed{' '}
-        {touVersion === 'admin' ? 'administrator' : 'view only'} account and
+        {maximumRole === 'admin' ? 'administrator' : 'view only'} account and
         using this service, you request CISA’s technical assistance to detect
         vulnerabilities and configuration issues through Crossfeed and agree to
         the following:
       </p>
       <ul>
-        {touVersion === 'admin' && (
+        {maximumRole === 'admin' && (
           <>
             <li>
               You have authority to authorize scanning/evaluation of the

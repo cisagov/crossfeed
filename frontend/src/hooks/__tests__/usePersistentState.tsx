@@ -1,5 +1,5 @@
 import React from 'react';
-import { usePersistentState } from 'hooks/usePersistentState';
+import { usePersistentState } from 'hooks';
 import { render, mocked, fireEvent, wait } from 'test-utils';
 
 jest.spyOn(Storage.prototype, 'setItem');
@@ -39,7 +39,7 @@ afterEach(() => {
   getItemMock.mockReset();
 });
 
-it('gives exisiting value if found', () => {
+it('gives existing value if found', () => {
   getItemMock.mockReturnValue('1234');
   const { getByTestId } = render(
     <TestComp storagekey="testkey" defaultVal="5678" onclick={jest.fn()} />

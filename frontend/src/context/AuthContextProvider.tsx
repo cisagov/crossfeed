@@ -1,10 +1,16 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { Auth } from 'aws-amplify';
-import { AuthContext, AuthUser, CurrentOrganization } from './AuthContext';
+import { AuthContext, AuthUser } from './AuthContext';
 import { User, Organization } from 'types';
 import { useHistory } from 'react-router-dom';
 import { useApi } from 'hooks/useApi';
 import { usePersistentState } from 'hooks';
+import {
+  getExtendedOrg,
+  getMaximumRole,
+  getTouVersion,
+  getUserMustSign
+} from './userStateUtils';
 
 export const currentTermsVersion = '1';
 
@@ -70,41 +76,19 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   }, [apiPost, setToken, token]);
 
   const extendedOrg = useMemo(() => {
-    let current: CurrentOrganization | null =
-      org ?? authUser?.roles[0]?.organization ?? null;
-    if (!current) {
-      return null;
-    }
-    current.userIsAdmin =
-      authUser?.userType === 'globalAdmin' ||
-      authUser?.roles.find(role => role.organization.id === org?.id)?.role ===
-        'admin';
-    return current;
+    return getExtendedOrg(org, authUser);
   }, [org, authUser]);
 
   const maximumRole = useMemo(() => {
-    if (authUser?.userType === 'globalView') return 'user';
-    return authUser &&
-      authUser.roles &&
-      authUser.roles.find(role => role.role === 'admin')
-      ? 'admin'
-      : 'user';
+    return getMaximumRole(authUser);
   }, [authUser]);
 
-  const touVersion = useMemo(() => `v${currentTermsVersion}-${maximumRole}`, [
-    maximumRole
-  ]);
+  const touVersion = useMemo(() => {
+    return getTouVersion(maximumRole);
+  }, [maximumRole]);
 
   const userMustSign = useMemo(() => {
-    const approvedEmailAddresses = ['@cisa.dhs.gov'];
-    for (let email of approvedEmailAddresses) {
-      if (authUser?.email.endsWith(email)) return false;
-    }
-    return Boolean(
-      !authUser?.dateAcceptedTerms ||
-        (authUser.acceptedTermsVersion &&
-          authUser.acceptedTermsVersion !== touVersion)
-    );
+    return getUserMustSign(authUser, touVersion);
   }, [authUser, touVersion]);
 
   useEffect(() => {
