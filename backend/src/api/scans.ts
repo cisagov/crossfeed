@@ -98,6 +98,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: false,
     description:
       'Open source tool that fingerprints web technologies based on HTTP responses'
+  },
+  nuclei: {
+    type: 'fargate',
+    isPassive: false,
+    global: false,
+    description:
+      'Queries websites with null payloads to detect the presence of CVEs'
   }
 };
 

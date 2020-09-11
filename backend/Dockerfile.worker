@@ -26,6 +26,8 @@ RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/download/1.7.0/
 
 RUN wget --quiet https://github.com/OWASP/Amass/releases/download/v3.7.3/amass_linux_i386.zip -O amass.zip && unzip -q amass.zip && cp amass_linux_i386/amass /usr/bin && chmod +x /usr/bin/amass
 
+RUN wget --quiet https://github.com/projectdiscovery/nuclei/releases/download/v2.1.0/nuclei_2.1.0_linux_386.tar.gz -O nuclei.tar.gz && tar -xzvf nuclei.tar.gz && mv nuclei /usr/bin/
+
 RUN go mod init crossfeed-worker
 
 RUN go get github.com/facebookincubator/nvdtools/...@v0.1.4
@@ -60,9 +62,11 @@ RUN pip3 install -r worker/requirements.txt
 
 COPY worker worker
 
+RUN git clone https://github.com/projectdiscovery/nuclei-templates.git && cd nuclei-templates && git checkout 52b5f5bb1367a55e05c77f987c31157aab3a4507
+
 COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 
-COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsync /go/bin/cpe2cve /usr/bin/
+COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsync /go/bin/cpe2cve /usr/bin/nuclei /usr/bin/
 
 COPY --from=deps /etc/ssl/certs /etc/ssl/certs
 

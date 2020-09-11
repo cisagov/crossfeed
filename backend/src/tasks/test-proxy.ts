@@ -19,7 +19,7 @@ const WEBHOOK_ADMIN_URL =
  *
  * To run the test, run:
  * docker-compose up --build
- * cd backend && docker run -e WORKER_TEST=true --network="crossfeed_backend" -t crossfeed-worker
+ * cd backend && npm run build-worker && docker run -e WORKER_TEST=true --network="crossfeed_backend" -t crossfeed-worker
  *
  * In the future, we can point these URLs to a locally running web server
  * in order to make this test be able to be automatically run.
@@ -51,4 +51,26 @@ export const handler = async (commandOptions: CommandOptions) => {
       }
     }
   );
+
+  spawnSync('nuclei', [
+    '-target',
+    WEBHOOK_URL_HTTP + '?source=nuclei',
+    '-t',
+    'nuclei-templates/cves/CVE-2020-24223.yaml',
+    '-json',
+    '-silent',
+    '-proxy-url',
+    process.env.GLOBAL_AGENT_HTTP_PROXY!
+  ]);
+
+  spawnSync('nuclei', [
+    '-target',
+    WEBHOOK_URL_HTTPS + '?source=nuclei',
+    '-t',
+    'nuclei-templates/cves/CVE-2020-24223.yaml',
+    '-json',
+    '-silent',
+    '-proxy-url',
+    process.env.GLOBAL_AGENT_HTTP_PROXY!
+  ]);
 };

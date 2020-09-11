@@ -7,6 +7,7 @@ import { handler as portscanner } from './tasks/portscanner';
 import { handler as wappalyzer } from './tasks/wappalyzer';
 import { handler as censysIpv4 } from './tasks/censysIpv4';
 import { handler as intrigueIdent } from './tasks/intrigue-ident';
+import { handler as nuclei } from './tasks/nuclei';
 import { handler as cve } from './tasks/cve';
 import { handler as testProxy } from './tasks/test-proxy';
 
@@ -30,6 +31,7 @@ async function main() {
     portscanner,
     wappalyzer,
     intrigueIdent,
+    nuclei,
     testProxy
   }[scanName || 'testProxy'];
   if (!scanFn) {
