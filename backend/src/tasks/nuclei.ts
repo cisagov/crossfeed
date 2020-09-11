@@ -36,7 +36,7 @@ const nuclei = async (domain: Domain): Promise<void> => {
     const url =
       service.port === 443 ? `https://${domain.name}` : `http://${domain.name}`;
     // TODO: consider running templates under nuclei-templates/vulnerabilities as well (those templates aren't
-    // directly tied to CVE, though).
+    // directly tied to CVEs, though).
     const { stdout, stderr, status } = spawnSync('nuclei', [
       '-target',
       url,
