@@ -6,7 +6,7 @@
 
 # Show or hide the official USA banner at the top of the site.
 # Comment out to the following line to hide.
-# usa_banner: true
+usa_banner: true
 
 # This setting changes the TLD used as an argument for trust in banner.html.
 # If options besides .mil and .gov are added, it may be worth adding a JS
