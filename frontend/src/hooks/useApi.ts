@@ -34,7 +34,6 @@ export const useApi = (onError?: OnError) => {
       path: string,
       init: any = {}
     ) => {
-      console.log('REQUEST', path);
       try {
         setRequestCount(cnt => cnt + 1);
         const options = await prepareInit(init);
