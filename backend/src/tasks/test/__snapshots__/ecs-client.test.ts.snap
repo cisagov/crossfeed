@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getLogs local 1`] = `
+"2020-08-24T20:43:02.017719500Z (DOCKER LOGS)commandOptions are {
+2020-08-24T20:43:02.017758400Z   organizationId: '174e9a8c-5c09-4194-b04f-b0d50c171bd1',
+2020-08-24T20:43:02.017832700Z   organizationName: 'cisa',
+2020-08-24T20:43:02.017865500Z   scanId: '372164e6-8df8-48d3-90a5-1319487c3ad2',
+2020-08-24T20:43:02.017877600Z   scanName: 'crawl',
+2020-08-24T20:43:02.017885700Z   scanTaskId: '5382406b-fcb1-40e7-8dd7-bac09dbfdac2'
+2020-08-24T20:43:02.017896900Z }
+2020-08-24T20:43:02.019558000Z Running crawl on organization cisa"
+`;
+
+exports[`getLogs not local 1`] = `
+Object {
+  "logGroupName": "FARGATE_LOG_GROUP_NAME",
+  "logStreamName": "worker/main/f59d71c6-3d23-4ee9-ad68-c7b810bf458b",
+  "startFromHead": true,
+}
+`;
+
+exports[`getLogs not local 2`] = `
+"2020-08-26T13:06:26.714Z (ECS LOGS)commandOptions are {
+2020-08-26T13:06:26.714Z   organizationId: 'f0143eda-0e95-4748-ba49-a53069b1c738',
+2020-08-26T13:06:26.714Z   organizationName: 'CISA',
+2020-08-26T13:06:26.714Z   scanId: 'e7ff7e7a-7391-431e-9b9e-437e823be3c9',
+2020-08-26T13:06:26.714Z   scanName: 'amass',
+2020-08-26T13:06:26.714Z   scanTaskId: 'fef01b7e-2da3-4508-b27a-3d8be8618488'
+2020-08-26T13:06:26.714Z }
+2020-08-26T13:06:26.715Z Running amass on organization CISA
+2020-08-26T13:06:26.917Z => DB Connected
+2020-08-26T13:06:27.004Z Running amass with args [
+2020-08-26T13:06:27.004Z   'enum',
+2020-08-26T13:06:27.004Z   '-ip',
+2020-08-26T13:06:27.004Z   '-active',
+2020-08-26T13:06:27.004Z   '-d',
+2020-08-26T13:06:27.004Z   'cisa.gov',
+2020-08-26T13:06:27.004Z   '-json',
+2020-08-26T13:06:27.004Z   '/out-0.6002422193137014.txt'
+2020-08-26T13:06:27.004Z ]
+2020-08-26T13:09:58.914Z => DB Connected
+2020-08-26T13:09:59.308Z amass created/updated 2 new domains
+2020-08-26T13:09:59.308Z Running amass with args [
+2020-08-26T13:09:59.308Z   'enum',
+2020-08-26T13:09:59.308Z   '-ip',
+2020-08-26T13:09:59.308Z   '-active',
+2020-08-26T13:09:59.308Z   '-d',
+2020-08-26T13:09:59.308Z   'cyber.dhs.gov',
+2020-08-26T13:09:59.308Z   '-json',
+2020-08-26T13:09:59.308Z   '/out-0.6002422193137014.txt'
+2020-08-26T13:09:59.308Z ]
+2020-08-26T13:14:35.114Z => DB Connected
+2020-08-26T13:14:35.463Z amass created/updated 23 new domains"
+`;

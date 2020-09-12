@@ -21,6 +21,12 @@ export class User extends BaseEntity {
   @Column({
     nullable: true
   })
+  cognitoId: string;
+
+  @Index({ unique: true })
+  @Column({
+    nullable: true
+  })
   loginGovId: string;
 
   @CreateDateColumn()
@@ -45,6 +51,22 @@ export class User extends BaseEntity {
   /** Whether the user's invite is pending */
   @Column({ default: false })
   invitePending: boolean;
+
+  /**
+   * When the user accepted the terms of use,
+   * if the user did so
+   */
+  @Column({
+    type: 'timestamp',
+    nullable: true
+  })
+  dateAcceptedTerms: Date | null;
+
+  @Column({
+    type: 'text',
+    nullable: true
+  })
+  acceptedTermsVersion: string | null;
 
   /** The user's type. globalView allows access to all organizations
    * while globalAdmin allows universally administering Crossfeed */

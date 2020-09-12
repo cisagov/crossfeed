@@ -1,11 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import { TableInstance, Column, CellProps } from 'react-table';
+import { TableInstance, Column, CellProps, Row } from 'react-table';
 import { Query } from 'types';
 import { Table, Paginator, ColumnFilter, selectFilter } from 'components';
 import { ScanTask } from 'types';
 import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import classes from './Scans.module.scss';
+import { FaMinus, FaPlus, FaSyncAlt } from 'react-icons/fa';
+import { LazyLog } from "react-lazylog";
+import { Button } from '@trussworks/react-uswds';
 
 interface ApiResponse {
   result: ScanTask[];
@@ -18,9 +21,17 @@ interface Errors {
 
 const dateAccessor = (date?: string) => {
   return !date || new Date(date).getTime() === new Date(0).getTime()
-    ? 'Never'
+    ? 'None'
     : `${formatDistanceToNow(parseISO(date))} ago`;
 };
+
+const Log = ({ url }: { url: string }) => {
+  const [logKey, setLogKey] = useState(0);
+  return (<div className={classes.logContainer}>
+    <LazyLog key={"lazylog-" + logKey} follow={true} extraLines={1} enableSearch url={url} caseInsensitive fetchOptions={{ headers: { Authorization: localStorage.getItem("token") as string } }} selectableLines={true} />
+    <Button type="button" outline size="small" onClick={() => setLogKey(Math.random())}><FaSyncAlt /></Button>
+  </div>);
+}
 
 export const ScanTasksView: React.FC = () => {
   const { apiPost } = useAuthContext();
@@ -50,6 +61,53 @@ export const ScanTasksView: React.FC = () => {
     }
   };
 
+  const renderExpanded = (row: Row<ScanTask>) => {
+    const { original } = row;
+    return (
+      <div className={classes.expandedRoot}>
+        {original.fargateTaskArn && (<><h4>Logs{original.fargateTaskArn?.match('/(.*)') && <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href={`https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/${process
+            .env
+            .REACT_APP_FARGATE_LOG_GROUP!}/log-events/worker$252Fmain$252F${
+            (original.fargateTaskArn.match('/(.*)') || [])[1]
+            }`}
+        >
+          {" "}(View all on CloudWatch)
+                </a>}
+        </h4>
+
+          <Log url={`${process.env.REACT_APP_API_URL}/scan-tasks/${original.id}/logs`} />
+
+        </>)}
+
+        <h4>Input</h4>
+        <small><pre>
+          {JSON.stringify(JSON.parse(original.input), null, 2)}
+        </pre></small>
+        <h4>Output</h4>
+        <small><pre>
+          {original.output || "None"}
+        </pre></small>
+
+        {row.original.status !== 'finished' &&
+          row.original.status !== 'failed' && (<>
+            <h4>Actions</h4>
+            <a
+              href="# "
+              onClick={e => {
+                e.preventDefault();
+                killScanTask(row.index);
+              }}
+            >
+              Kill
+                </a>
+          </>)}
+      </div>
+    );
+  };
+
   const columns: Column<ScanTask>[] = [
     {
       Header: 'ID',
@@ -63,6 +121,7 @@ export const ScanTasksView: React.FC = () => {
       accessor: 'status',
       Filter: selectFilter([
         'created',
+        'queued',
         'requested',
         'started',
         'finished',
@@ -100,57 +159,14 @@ export const ScanTasksView: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Output',
-      accessor: 'output',
-      disableFilters: true,
-      maxWidth: 200,
-      Cell: ({ value }: CellProps<ScanTask>) =>
-        value && (
-          <pre
-            style={{
-              maxWidth: 200,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
-            }}
-          >
-            {value}
-          </pre>
-        )
-    },
-    {
-      Header: 'Actions',
-      id: 'actions',
+      Header: 'Details',
       Cell: ({ row }: CellProps<ScanTask>) => (
-        <>
-          {row.original.fargateTaskArn && row.original.fargateTaskArn.match('/(.*)') && (
-            <>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={`https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/${process
-                  .env
-                  .REACT_APP_FARGATE_LOG_GROUP!}/log-events/worker$252Fmain$252F${
-                  row.original.fargateTaskArn.match('/(.*)')![1]
-                }`}
-              >
-                Logs
-              </a>
-              &nbsp;
-            </>
-          )}
-          {row.original.status !== 'finished' &&
-            row.original.status !== 'failed' && (
-              <a
-                href="# "
-                onClick={e => {
-                  e.preventDefault();
-                  killScanTask(row.index);
-                }}
-              >
-                Kill
-              </a>
-            )}
-        </>
+        <span
+          {...row.getToggleRowExpandedProps()}
+          className="text-center display-block"
+        >
+          {row.isExpanded ? <FaMinus /> : <FaPlus />}
+        </span>
       ),
       disableFilters: true
     }
@@ -211,6 +227,7 @@ export const ScanTasksView: React.FC = () => {
             desc: true
           }
         ]}
+        renderExpanded={renderExpanded}
       />
     </>
   );

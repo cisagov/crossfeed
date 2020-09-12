@@ -38,4 +38,5 @@ dist
 postgres-data
 es-data
 nvd-dump
-apify-cache
+
+**.pyc

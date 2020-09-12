@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header component matches snapshot 1`] = `
+<DocumentFragment>
+  <div>
+    <header
+      class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"
+    >
+      <div
+        class="makeStyles-inner-1"
+      >
+        <div
+          class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
+        >
+          <button
+            aria-label="toggle mobile menu"
+            class="MuiButtonBase-root MuiIconButton-root makeStyles-menuButton-2 MuiIconButton-colorInherit MuiIconButton-edgeStart"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="MuiIconButton-label"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
+                />
+              </svg>
+            </span>
+            <span
+              class="MuiTouchRipple-root"
+            />
+          </button>
+          <a
+            href="/"
+          >
+            <img
+              alt="Crossfeed Icon Navigate Home"
+              class="makeStyles-logo-3"
+              src="cisa_logo.png"
+            />
+          </a>
+          <div
+            class="makeStyles-mdNav-9"
+          />
+          <div
+            class="makeStyles-lgNav-10"
+          />
+          <div
+            class="makeStyles-spacing-4"
+          />
+        </div>
+      </div>
+    </header>
+  </div>
+</DocumentFragment>
+`;

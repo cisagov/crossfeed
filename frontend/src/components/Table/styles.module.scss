@@ -2,6 +2,10 @@
   :global .usa-table {
     width: 100%;
     margin: 0;
+    color: black !important;
+    font-family: Source Sans Pro Web, Helvetica Neue, Helvetica, Arial,
+      sans-serif;
+    // font-weight: 500;
   }
 
   .tableWrapper {

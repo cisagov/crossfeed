@@ -34,7 +34,8 @@ const downloadPath = async (
   path: string,
   ipToDomainsMap: IpToDomainsMap,
   i: number,
-  numFiles: number
+  numFiles: number,
+  commandOptions: CommandOptions
 ): Promise<void> => {
   console.log(`i: ${i} of ${numFiles}: starting download of url ${path}`);
 
@@ -66,6 +67,7 @@ const downloadPath = async (
         domains.push(
           plainToClass(Domain, {
             name: matchingDomain.name,
+            organization: matchingDomain.organization,
             asn: item.autonomous_system?.asn,
             ip: item.ip,
             country: item.location?.country_code
@@ -77,6 +79,7 @@ const downloadPath = async (
             const s = {
               ...mapping[key](item[key]),
               service,
+              discoveredBy: { id: commandOptions.scanId },
               port: Number(key.slice(1)),
               domain: matchingDomain,
               lastSeen: new Date(Date.now()),
@@ -168,7 +171,8 @@ export const handler = async (commandOptions: CommandOptions) => {
               files[fileName].download_path,
               ipToDomainsMap,
               idx,
-              numFiles
+              numFiles,
+              commandOptions
             ),
           {
             // Perform less retries on jest to make tests faster

@@ -21,8 +21,8 @@ jobs:
 
       - name: Install Terraform
         run: |
-          wget https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip
-          unzip terraform_0.12.28_linux_amd64.zip
+          wget https://releases.hashicorp.com/terraform/0.13.1/terraform_0.13.1_linux_amd64.zip
+          unzip terraform_0.13.1_linux_amd64.zip
           sudo mv terraform /usr/local/bin
 
       - name: Terraform Init - Staging

@@ -19,6 +19,12 @@ export class Role extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
+  @ManyToOne((type) => User, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  createdBy: User;
+
   @UpdateDateColumn()
   updatedAt: Date;
 
@@ -31,6 +37,12 @@ export class Role extends BaseEntity {
     default: false
   })
   approved: boolean;
+
+  @ManyToOne((type) => User, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  approvedBy: User;
 
   @ManyToOne((type) => User, (user) => user.roles, {
     onDelete: 'CASCADE',

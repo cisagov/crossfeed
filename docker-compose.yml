@@ -10,6 +10,8 @@ services:
       - "5432:5432"
     env_file:
       - ./.env
+    networks:
+      - backend
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -22,12 +24,15 @@ services:
       - "80:3000"
     env_file:
       - ./.env
+    tty: true
 
   backend:
     build: ./backend
     volumes:
       - ./backend/src:/app/src
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - backend
     ports:
       - "3000:3000"
     env_file:
@@ -72,3 +77,6 @@ services:
 volumes:
   postgres-data:
   es-data:
+
+networks:
+  backend:

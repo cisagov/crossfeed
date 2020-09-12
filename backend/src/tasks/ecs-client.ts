@@ -1,4 +1,4 @@
-import { ECS } from 'aws-sdk';
+import { ECS, CloudWatchLogs } from 'aws-sdk';
 import { SCAN_SCHEMA } from '../api/scans';
 import * as Docker from 'dockerode';
 
@@ -21,16 +21,19 @@ const toSnakeCase = (input) => input.replace(/ /g, '-');
  */
 class ECSClient {
   ecs?: ECS;
+  cloudWatchLogs?: CloudWatchLogs;
   docker?: Docker;
   isLocal: boolean;
 
-  constructor() {
+  constructor(isLocal?: boolean) {
     this.isLocal =
-      process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false;
+      isLocal ??
+      (process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false);
     if (this.isLocal) {
       this.docker = new Docker();
     } else {
       this.ecs = new ECS();
+      this.cloudWatchLogs = new CloudWatchLogs();
     }
   }
 
@@ -59,10 +62,16 @@ class ECSClient {
           // We need to create unique container names to avoid conflicts.
           name: containerName,
           Image: 'crossfeed-worker',
+          HostConfig: {
+            // In order to use the host name "db" to access the database from the
+            // crossfeed-worker image, we must launch the Docker container with
+            // the Crossfeed backend network.
+            NetworkMode: 'crossfeed_backend'
+          },
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
             `DB_DIALECT=${process.env.DB_DIALECT}`,
-            `DB_HOST=localhost`,
+            `DB_HOST=${process.env.DB_HOST}`,
             `IS_LOCAL=true`,
             `DB_PORT=${process.env.DB_PORT}`,
             `DB_NAME=${process.env.DB_NAME}`,
@@ -70,14 +79,11 @@ class ECSClient {
             `DB_PASSWORD=${process.env.DB_PASSWORD}`,
             `CENSYS_API_ID=${process.env.CENSYS_API_ID}`,
             `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`,
+            `WORKER_USER_AGENT=${process.env.WORKER_USER_AGENT}`,
+            `WORKER_SIGNATURE_PUBLIC_KEY=${process.env.WORKER_SIGNATURE_PUBLIC_KEY}`,
+            `WORKER_SIGNATURE_PRIVATE_KEY=${process.env.WORKER_SIGNATURE_PRIVATE_KEY}`,
             `ELASTICSEARCH_ENDPOINT=${process.env.ELASTICSEARCH_ENDPOINT}`
-          ],
-          // Since the ECSClient is itself running in the backend Docker container,
-          // we launch a Docker container from the host Docker daemon. This means that
-          // we cannot the host name "db" to access the database from the
-          // crossfeed-worker image; instead, we set NetworkMode to "host" and
-          // connect to "localhost."
-          NetworkMode: 'host'
+          ]
         } as any);
         await container.start();
         return {
@@ -126,10 +132,9 @@ class ECSClient {
         value: String(chunkNumber)
       });
     }
-    // TODO: retrieve these values from SSM.
     return this.ecs!.runTask({
-      cluster: 'crossfeed-staging-worker', // aws_ecs_cluster.worker.name
-      taskDefinition: 'crossfeed-staging-worker', // aws_ecs_task_definition.worker.name
+      cluster: process.env.FARGATE_CLUSTER_NAME!,
+      taskDefinition: process.env.FARGATE_TASK_DEFINITION_NAME!,
       networkConfiguration: {
         awsvpcConfiguration: {
           assignPublicIp: 'ENABLED',
@@ -154,38 +159,75 @@ class ECSClient {
                 value: JSON.stringify(commandOptions)
               },
               {
-                name: 'DB_HOST',
-                value: process.env.DB_HOST
+                name: 'WORKER_USER_AGENT',
+                value: process.env.WORKER_USER_AGENT
               },
               {
-                name: 'DB_PORT',
-                value: process.env.DB_PORT
-              },
-              {
-                name: 'DB_USERNAME',
-                value: process.env.DB_USERNAME
-              },
-              {
-                name: 'DB_PASSWORD',
-                value: process.env.DB_PASSWORD
-              },
-              {
-                name: 'CENSYS_API_ID',
-                value: process.env.CENSYS_API_ID
-              },
-              {
-                name: 'CENSYS_API_SECRET',
-                value: process.env.CENSYS_API_SECRET
-              },
-              {
-                name: 'ELASTICSEARCH_ENDPOINT',
-                value: process.env.ELASTICSEARCH_ENDPOINT
+                // Allow node to use more memory, if needed
+                name: 'NODE_OPTIONS',
+                value: memory ? `--max_old_space_size=${memory}` : ''
               }
             ]
           }
         ]
       }
     } as ECS.RunTaskRequest).promise();
+  }
+
+  /**
+   * Gets logs for a specific task.
+   */
+  async getLogs(fargateTaskArn: string) {
+    if (this.isLocal) {
+      const logStream = await this.docker?.getContainer(fargateTaskArn).logs({
+        stdout: true,
+        stderr: true,
+        timestamps: true
+      });
+      // Remove 8 special characters at beginning of Docker logs -- see
+      // https://github.com/moby/moby/issues/7375.
+      return logStream
+        ?.toString()
+        .split('\n')
+        .map((e) => e.substring(8))
+        .join('\n');
+    } else {
+      const response = await this.cloudWatchLogs!.getLogEvents({
+        logGroupName: process.env.FARGATE_LOG_GROUP_NAME!,
+        // Pick the ID from "arn:aws:ecs:us-east-1:957221700844:task/f59d71c6-3d23-4ee9-ad68-c7b810bf458b"
+        logStreamName: `worker/main/${fargateTaskArn.split('/')[1]}`,
+        startFromHead: true
+      }).promise();
+      const res = response.$response.data;
+      if (!res || !res.events?.length) {
+        return '';
+      }
+      return res.events
+        .map((e) => `${new Date(e.timestamp!).toISOString()} ${e.message}`)
+        .join('\n');
+    }
+  }
+
+  /**
+   * Retrieves the number of running tasks associated
+   * with the Fargate worker.
+   */
+  async getNumTasks() {
+    if (this.isLocal) {
+      const containers = await this.docker?.listContainers({
+        filters: {
+          ancestor: ['crossfeed-worker']
+        }
+      });
+      return containers?.length || 0;
+    }
+    const tasks = await this.ecs
+      ?.listTasks({
+        cluster: process.env.FARGATE_CLUSTER_NAME,
+        launchType: 'FARGATE'
+      })
+      .promise();
+    return tasks?.taskArns?.length || 0;
   }
 }
 

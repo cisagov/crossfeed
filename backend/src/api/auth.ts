@@ -2,6 +2,7 @@ import loginGov from './login-gov';
 import { User, connectToDatabase } from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
+import * as jwksClient from 'jwks-rsa';
 
 export interface UserToken {
   email: string;
@@ -11,6 +12,37 @@ export interface UserToken {
     org: string;
     role: 'user' | 'admin';
   }[];
+  dateAcceptedTerms: Date | undefined;
+}
+
+interface CognitoUserToken {
+  sub: string;
+  aud: string;
+  email_verified: boolean;
+  event_id: string;
+  token_us: string;
+  auth_time: number;
+  iss: string;
+  'cognito:username': string;
+  exp: number;
+  iat: number;
+  email: string;
+}
+
+interface UserInfo {
+  sub: string;
+  email: string;
+  email_verified: boolean;
+}
+
+const client = jwksClient({
+  jwksUri: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.REACT_APP_USER_POOL_ID}/.well-known/jwks.json`
+});
+function getKey(header, callback) {
+  client.getSigningKey(header.kid, function (err, key) {
+    const signingKey = key.getPublicKey();
+    callback(null, signingKey);
+  });
 }
 
 /** Returns redirect url to initiate login.gov OIDC flow */
@@ -30,6 +62,7 @@ const userTokenBody = (user): UserToken => ({
   id: user.id,
   email: user.email,
   userType: user.userType,
+  dateAcceptedTerms: user.dateAcceptedTerms,
   roles: user.roles
     .filter((role) => role.approved)
     .map((role) => ({
@@ -40,9 +73,19 @@ const userTokenBody = (user): UserToken => ({
 
 /** Processes login.gov OIDC callback and returns user token */
 export const callback = async (event, context) => {
-  let userInfo;
+  let userInfo: UserInfo;
   try {
-    userInfo = await loginGov.callback(JSON.parse(event.body));
+    if (process.env.USE_COGNITO) {
+      userInfo = await new Promise((resolve, reject) =>
+        jwt.verify(
+          JSON.parse(event.body).token,
+          getKey,
+          (err, data: CognitoUserToken) => (err ? reject(err) : resolve(data))
+        )
+      );
+    } else {
+      userInfo = await loginGov.callback(JSON.parse(event.body));
+    }
   } catch (e) {
     console.error(e);
     return {
@@ -58,6 +101,8 @@ export const callback = async (event, context) => {
     };
   }
 
+  userInfo.email = userInfo.email.toLowerCase();
+
   // Look up user by email
   await connectToDatabase();
   let user = await User.findOne(
@@ -69,16 +114,23 @@ export const callback = async (event, context) => {
     }
   );
 
+  const idKey = `${process.env.USE_COGNITO ? 'cognitoId' : 'loginGovId'}`;
+
   // If user does not exist, create it
   if (!user) {
     user = User.create({
       email: userInfo.email,
-      loginGovId: userInfo.sub,
+      [idKey]: userInfo.sub,
       firstName: '',
       lastName: '',
       userType: process.env.IS_OFFLINE ? 'globalAdmin' : 'standard',
       roles: []
     });
+    await user.save();
+  }
+
+  if (user[idKey] !== userInfo.sub) {
+    user[idKey] = userInfo.sub;
     await user.save();
   }
 
@@ -89,7 +141,7 @@ export const callback = async (event, context) => {
   }
 
   const token = jwt.sign(userTokenBody(user), process.env.JWT_SECRET!, {
-    expiresIn: '7 days',
+    expiresIn: '1 day',
     header: {
       typ: 'JWT'
     }
@@ -120,8 +172,11 @@ export const authorize = async (event) => {
         relations: ['roles', 'roles.organization']
       }
     );
-    // For running tests, ignore if user does not exist
-    if (process.env.NODE_ENV === 'test' && !user) {
+    // For running tests, ignore the database results if user doesn't exist or is the dummy user
+    if (
+      process.env.NODE_ENV === 'test' &&
+      (!user || user.id === 'c1afb49c-2216-4e3c-ac52-aa9480956ce9')
+    ) {
       return parsed;
     }
     if (!user) throw Error('User does not exist');

@@ -21,7 +21,7 @@ resource "aws_db_instance" "db" {
   skip_final_snapshot   = true
   availability_zone     = data.aws_availability_zones.available.names[0]
   multi_az              = false
-  backup_retention_period = 7
+  backup_retention_period = 35
   storage_encrypted     = var.db_storage_encrypted
 
   // database information

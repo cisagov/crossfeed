@@ -165,10 +165,10 @@ export const Domain: React.FC = () => {
                 <SSLInfo {...domain.ssl} />
               </div>
             )}
-            {domain.webTechnologies && (
+            {domain.services && (
               <div className={classes.section}>
-                <h3>Known Web Technologies</h3>
-                <WebInfo webTechnologies={domain.webTechnologies} />
+                <h3>Known Products</h3>
+                <WebInfo domain={domain} />
               </div>
             )}
             {domain.vulnerabilities && (
