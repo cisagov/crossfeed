@@ -5,7 +5,6 @@
   "main": "db.js",
   "dependencies": {
     "@elastic/elasticsearch": "^7.9.0",
-    "apify": "^0.21.3",
     "aws-sdk": "^2.716.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",

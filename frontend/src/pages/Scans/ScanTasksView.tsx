@@ -141,7 +141,7 @@ export const ScanTasksView: React.FC = () => {
         'portscanner',
         'wappalyzer',
         'censysIpv4',
-        'crawl',
+        'searchSync',
         'cve'
       ]),
       disableSortBy: true
