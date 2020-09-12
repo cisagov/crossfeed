@@ -27,6 +27,13 @@ export class Domain extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  /** When this model was last synced with Elasticsearch. */
+  @Column({
+    type: 'timestamp',
+    nullable: true
+  })
+  syncedAt: Date | null;
+
   @Column({
     nullable: true
   })

@@ -96,7 +96,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: true,
-    description: 'Syncs records with Elasticsearch so that they appear in search results.'
+    description:
+      'Syncs records with Elasticsearch so that they appear in search results.'
   }
 };
 

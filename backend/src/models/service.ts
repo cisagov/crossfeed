@@ -7,7 +7,8 @@ import {
   BaseEntity,
   CreateDateColumn,
   BeforeInsert,
-  BeforeUpdate
+  BeforeUpdate,
+  UpdateDateColumn
 } from 'typeorm';
 import { Domain } from './domain';
 import { Scan } from './scan';
@@ -50,6 +51,9 @@ export class Service extends BaseEntity {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @ManyToOne((type) => Domain, (domain) => domain.services, {
     onDelete: 'CASCADE',

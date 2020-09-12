@@ -14,6 +14,7 @@ import { Domain, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
 import { isGlobalViewAdmin, getOrgMemberships } from './auth';
+import ESClient from '../tasks/es-client';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
@@ -172,11 +173,16 @@ export const list = wrapHandler(async (event) => {
     search.getResults(event),
     search.getCount(event)
   ]);
+
+  const client = new ESClient();
+  const searchResults = await client.searchDomains();
+
   return {
     statusCode: 200,
     body: JSON.stringify({
       result,
-      count
+      count,
+      searchResults
     })
   };
 });

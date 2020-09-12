@@ -13,6 +13,7 @@ export default async (services: Service[]): Promise<void> => {
         SET "lastSeen" = excluded."lastSeen",
             "banner" = excluded."banner",
             "service" = excluded."service"
+            "updatedAt" = now()
       `
       )
       .execute();

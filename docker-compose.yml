@@ -55,6 +55,8 @@ services:
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - backend
     ulimits:
       memlock:
         soft: -1
@@ -67,6 +69,8 @@ services:
 
   kib:
     image: docker.elastic.co/kibana/kibana:7.9.0
+    networks:
+      - backend
     ports:
       - 5601:5601
     environment:

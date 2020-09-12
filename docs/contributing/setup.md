@@ -33,6 +33,8 @@ subnav:
     - environment variables in root `.env`
 1.  Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save.
 
+If you want to view a local version of Kibana, navigate to [http://localhost:5601](http://localhost:5601).
+
 ### Running the scheduler lambda function locally
 
 The scheduler lambda function is set to run on a 5-minute interval when deployed.
