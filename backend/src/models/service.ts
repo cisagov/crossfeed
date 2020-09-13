@@ -58,7 +58,7 @@ export class Service extends BaseEntity {
   domain: Domain;
 
   @ManyToOne((type) => Scan, {
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
   })
   discoveredBy: Scan;
