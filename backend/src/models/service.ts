@@ -27,7 +27,7 @@ const filterProducts = (product: Product) => {
   }
   if (cpe === 'cpe:2.3::generic:unauthorized::') {
     // Intrigue Ident sometimes detects "Unauthorized" CPEs
-    return false; 
+    return false;
   }
   return true;
 };
