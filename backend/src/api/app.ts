@@ -5,6 +5,7 @@ import { handler as healthcheck } from './healthcheck';
 import { handler as scheduler } from '../tasks/scheduler';
 import * as auth from './auth';
 import * as domains from './domains';
+import * as search from './search';
 import * as vulnerabilities from './vulnerabilities';
 import * as organizations from './organizations';
 import * as scans from './scans';
@@ -103,6 +104,7 @@ const authenticatedRoute = express.Router();
 authenticatedRoute.use(checkUserLoggedIn);
 authenticatedRoute.use(checkUserSignedTerms);
 
+authenticatedRoute.post('/search', handlerToExpress(search.search));
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
 authenticatedRoute.post(
