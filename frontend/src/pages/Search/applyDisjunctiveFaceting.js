@@ -1,5 +1,5 @@
 // import runRequest from "./runRequest";
-import buildRequest from "./buildRequest";
+import {buildRequest} from "./buildRequest";
 
 function combineAggregationsFromResponses(responses) {
   return responses.reduce((acc, response) => {

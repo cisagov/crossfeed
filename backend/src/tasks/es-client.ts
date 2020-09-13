@@ -1,7 +1,11 @@
 import { Client } from '@elastic/elasticsearch';
 import { Domain } from '../models';
 
-export const DOMAINS_INDEX = 'domains-4';
+export const DOMAINS_INDEX = 'domains-5';
+
+interface DomainRecord extends Domain {
+  suggest: { input: string | string[], weight: number }[]
+}
 
 /**
  * Elasticsearch client.
@@ -21,6 +25,16 @@ class ESClient {
       await this.client.indices.get({
         index: DOMAINS_INDEX
       });
+      await this.client.indices.putMapping({
+        index: DOMAINS_INDEX,
+        body: {
+          properties: {
+            suggest: {
+              type: "completion"
+            }
+          }
+        }
+      })
       console.log(`Index ${DOMAINS_INDEX} already created`);
     } catch (e) {
       await this.client.indices.create({
@@ -29,6 +43,9 @@ class ESClient {
           mappings: {
             dynamic: true,
             properties: {
+              suggest: {
+                type: "completion"
+              },
               services: {
                 type: 'nested'
               },
@@ -51,8 +68,9 @@ class ESClient {
    * @param domains Domains to insert.
    */
   async updateDomains(domains: Domain[]) {
-    return this.client.helpers.bulk<Domain>({
-      datasource: domains,
+    const domainRecords = domains.map(e => ({...e, suggest: [{ input: e.name, weight: 1 }] })) as DomainRecord[];
+    return this.client.helpers.bulk<DomainRecord>({
+      datasource: domainRecords,
       onDocument(domain) {
         return [
           {
@@ -69,16 +87,12 @@ class ESClient {
 
   /**
    * Searches for domains.
+   * @param body Elasticsearch query body.
    */
-  async searchDomains() {
+  async searchDomains(body: any) {
     return this.client.search({
       index: DOMAINS_INDEX,
-      body: {
-        query: {
-          // match: { name: 'cisa' }
-          match_all: {}
-        }
-      }
+      body
     });
   }
 }

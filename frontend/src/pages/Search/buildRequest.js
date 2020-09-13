@@ -16,10 +16,22 @@ function buildMatch(searchTerm) {
     ? {
         multi_match: {
           query: searchTerm,
-          fields: ["title", "description"]
+          "fuzziness": "AUTO",
+          fields: ["name"]
         }
       }
     : { match_all: {} };
+}
+
+function buildAutocompleteMatch(searchTerm) {
+  return {
+        multi_match: {
+          query: searchTerm,
+          // TODO: use a completion suggester instead.
+          type: "phrase_prefix",
+          fields: ["name"]
+        }
+      };
 }
 
 /*
@@ -40,7 +52,7 @@ function buildMatch(searchTerm) {
 
   We then do similar things for searchTerm, filters, sort, etc.
 */
-export default function buildRequest(state) {
+export function buildRequest(state) {
   const {
     current,
     filters,
@@ -64,42 +76,41 @@ export default function buildRequest(state) {
       fragment_size: 200,
       number_of_fragments: 1,
       fields: {
-        title: {},
-        description: {}
+        name: {}
       }
     },
     //https://www.elastic.co/guide/en/elasticsearch/reference/7.x/search-request-source-filtering.html#search-request-source-filtering
-    _source: ["id", "nps_link", "title", "description"],
+    // _source: ["id", "nps_link", "title", "description"],
     aggs: {
-      states: { terms: { field: "states.keyword", size: 30 } },
-      world_heritage_site: {
-        terms: { field: "world_heritage_site" }
+      name: { terms: { field: "name.keyword", size: 30 } },
+      fromRootDomain: {
+        terms: { field: "fromRootDomain.keyword" }
       },
-      visitors: {
-        range: {
-          field: "visitors",
-          ranges: [
-            { from: 0.0, to: 10000.0, key: "0 - 10000" },
-            { from: 10001.0, to: 100000.0, key: "10001 - 100000" },
-            { from: 100001.0, to: 500000.0, key: "100001 - 500000" },
-            { from: 500001.0, to: 1000000.0, key: "500001 - 1000000" },
-            { from: 1000001.0, to: 5000000.0, key: "1000001 - 5000000" },
-            { from: 5000001.0, to: 10000000.0, key: "5000001 - 10000000" },
-            { from: 10000001.0, key: "10000001+" }
-          ]
-        }
-      },
-      acres: {
-        range: {
-          field: "acres",
-          ranges: [
-            { from: -1.0, key: "Any" },
-            { from: 0.0, to: 1000.0, key: "Small" },
-            { from: 1001.0, to: 100000.0, key: "Medium" },
-            { from: 100001.0, key: "Large" }
-          ]
-        }
-      }
+      // visitors: {
+      //   range: {
+      //     field: "visitors",
+      //     ranges: [
+      //       { from: 0.0, to: 10000.0, key: "0 - 10000" },
+      //       { from: 10001.0, to: 100000.0, key: "10001 - 100000" },
+      //       { from: 100001.0, to: 500000.0, key: "100001 - 500000" },
+      //       { from: 500001.0, to: 1000000.0, key: "500001 - 1000000" },
+      //       { from: 1000001.0, to: 5000000.0, key: "1000001 - 5000000" },
+      //       { from: 5000001.0, to: 10000000.0, key: "5000001 - 10000000" },
+      //       { from: 10000001.0, key: "10000001+" }
+      //     ]
+      //   }
+      // },
+      // acres: {
+      //   range: {
+      //     field: "acres",
+      //     ranges: [
+      //       { from: -1.0, key: "Any" },
+      //       { from: 0.0, to: 1000.0, key: "Small" },
+      //       { from: 1001.0, to: 100000.0, key: "Medium" },
+      //       { from: 100001.0, key: "Large" }
+      //     ]
+      //   }
+      // }
     },
 
     // Dynamic values based on current Search UI state
@@ -116,6 +127,25 @@ export default function buildRequest(state) {
     // https://www.elastic.co/guide/en/elasticsearch/reference/7.x/search-request-from-size.html
     ...(size && { size }),
     ...(from && { from })
+  };
+
+  return body;
+}
+
+export function buildAutocompleteRequest(state) {
+  const {
+    searchTerm
+  } = state;
+
+  const body = {
+    suggest: {
+      "main-suggest": {
+        prefix: searchTerm,
+        completion: {
+          field: "suggest"
+        },
+      }
+    }
   };
 
   return body;

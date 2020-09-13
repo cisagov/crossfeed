@@ -135,14 +135,15 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
   const apiPost = useCallback(
     async <T extends object = {}>(path: string, init: any) => {
+      const { showLoading = true, ...rest } = init || {};
       try {
-        setLoading(l => l + 1);
-        const options = await prepareInit(init);
+        showLoading && setLoading(l => l + 1);
+        const options = await prepareInit(rest);
         const result = await API.post('crossfeed', path, options);
-        setLoading(l => l - 1);
+        showLoading && setLoading(l => l - 1);
         return result as T;
       } catch (e) {
-        setLoading(l => l - 1);
+        showLoading && setLoading(l => l - 1);
         await handleError(e);
         throw e;
       }

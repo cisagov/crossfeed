@@ -16,13 +16,13 @@ import {
 import { Layout, SingleSelectFacet } from "@elastic/react-search-ui-views";
 import "@elastic/react-search-ui-views/lib/styles/styles.css";
 
-import buildRequest from "./buildRequest";
+import {buildRequest, buildAutocompleteRequest} from "./buildRequest";
 import applyDisjunctiveFaceting from "./applyDisjunctiveFaceting";
 import buildState from "./buildState";
 
 
 interface ApiResponse {
-  
+  suggest: any;
 }
 
 // See https://github.com/elastic/search-ui/blob/master/examples/elasticsearch/src
@@ -38,15 +38,22 @@ export const Search: React.FC = () => {
     onResultClick: () => {
       /* Not implemented */
     },
-    onAutocompleteResultClick: () => {
-      /* Not implemented */
+    onAutocompleteResultClick: (e: any, f: any) => {
+      console.error(e, f);
     },
     onAutocomplete: async ({ searchTerm }: { searchTerm: string }) => {
-      const requestBody = buildRequest({ searchTerm });
-      // const json = await runRequest(requestBody);
+      const requestBody = buildAutocompleteRequest({ searchTerm });
+      const json = await apiPost<ApiResponse>('/search', {
+        body: {
+          ...requestBody
+        },
+        showLoading: false
+      });
       // const state = buildState(json);
+      const state = { results: json.suggest["main-suggest"][0].options.map((e: any) => ({text: { raw: e.text }, id: { raw: e._source.id } })) }
+      console.error(state.results);
       return {
-        autocompletedResults: [] // state.results
+        autocompletedResults: state.results
       };
     },
     onSearch: async (state: any) => {
@@ -69,10 +76,6 @@ export const Search: React.FC = () => {
     }
   };
 
-  const search = () => {
-
-  };
-
   return (
     <div className={classes.root}>
     <SearchProvider config={config}>
@@ -83,11 +86,11 @@ export const Search: React.FC = () => {
               <Layout
                 header={
                   <SearchBox
-                    autocompleteMinimumCharacters={3}
+                    autocompleteMinimumCharacters={1}
                     autocompleteResults={{
                       linkTarget: "_blank",
                       sectionTitle: "Results",
-                      titleField: "name",
+                      titleField: "text",
                       urlField: "nps_link",
                       shouldTrackClickThrough: true,
                       clickThroughTags: ["test"]
@@ -107,29 +110,31 @@ export const Search: React.FC = () => {
                             direction: ""
                           },
                           {
-                            name: "Title",
-                            value: "title",
+                            name: "Domain",
+                            value: "domain",
                             direction: "asc"
                           }
                         ]}
                       />
                     )}
                     <Facet
-                      field="states"
-                      label="States"
+                      field="name"
+                      label="Name"
                       filterType="any"
                       isFilterable={true}
                     />
                     <Facet
-                      field="world_heritage_site"
-                      label="World Heritage Site?"
+                      field="fromRootDomain"
+                      label="fromRootDomain"
+                      filterType="any"
+                      isFilterable={true}
                     />
-                    <Facet field="visitors" label="Visitors" filterType="any" />
+                    {/* <Facet field="visitors" label="Visitors" filterType="any" />
                     <Facet
                       field="acres"
                       label="Acres"
                       view={SingleSelectFacet}
-                    />
+                    /> */}
                   </div>
                 }
                 bodyContent={

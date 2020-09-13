@@ -178,5 +178,12 @@ export class Service extends BaseEntity {
     }
 
     this.products = Object.values(products).concat(misc).filter(filterProducts);
+
+    this.products.push({
+      cpe: "cpe:/a:apache:tomcat",
+      version: "1.1",
+      name: "Apache Tomcat",
+      tags: []
+    })
   }
 }
