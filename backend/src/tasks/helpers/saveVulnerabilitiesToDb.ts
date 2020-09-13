@@ -17,7 +17,7 @@ export default async (vulnerabilities: Vulnerability[]): Promise<void> => {
               "cve" = excluded."cve",
               "cwe" = excluded."cwe",
               "cpe" = excluded."cpe",
-              "state" = excluded."state"
+              "state" = excluded."state",
               "updatedAt" = now()
       `
       )
