@@ -18,6 +18,8 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment: ${file(env.yml):${self:provider.stage}}
   vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
+  logs:
+    restApi: true
   deploymentBucket:
     serverSideEncryption: AES256
   iamRoleStatements:
