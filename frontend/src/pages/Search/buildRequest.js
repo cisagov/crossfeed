@@ -82,10 +82,47 @@ export function buildRequest(state) {
     //https://www.elastic.co/guide/en/elasticsearch/reference/7.x/search-request-source-filtering.html#search-request-source-filtering
     // _source: ["id", "nps_link", "title", "description"],
     aggs: {
-      name: { terms: { field: "name.keyword", size: 30 } },
+      name: { terms: { field: "name.keyword" } },
       fromRootDomain: {
         terms: { field: "fromRootDomain.keyword" }
       },
+      organization: {
+        terms: { field: "organization.name.keyword" }
+      },
+      services: {
+        nested: {
+          path: "services"
+        },
+        aggs: {
+          port: {
+            terms: {
+              field: "services.port"
+            }
+          },
+          name: {
+            terms: {
+              field: "services.service.keyword"
+            }
+          }
+        }
+      },
+      vulnerabilities: {
+        nested: {
+          path: "vulnerabilities"
+        },
+        aggs: {
+          severity: {
+            terms: {
+              field: "vulnerabilities.severity.keyword"
+            }
+          },
+          cve: {
+            terms: {
+              field: "vulnerabilities.cve.keyword"
+            }
+          }
+        }
+      }
       // visitors: {
       //   range: {
       //     field: "visitors",

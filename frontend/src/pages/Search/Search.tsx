@@ -125,10 +125,36 @@ export const Search: React.FC = () => {
                     />
                     <Facet
                       field="fromRootDomain"
-                      label="fromRootDomain"
+                      label="Root Domain"
                       filterType="any"
                       isFilterable={true}
                     />
+                    <Facet
+                      field="services.port"
+                      label="Port"
+                      filterType="any"
+                      isFilterable={true}
+                    />
+                    <Facet
+                      field="vulnerabilities.cve"
+                      label="CVEs"
+                      filterType="any"
+                      isFilterable={true}
+                    />
+                    <Facet
+                      field="vulnerabilities.severity"
+                      label="Vulnerability severity"
+                      filterType="any"
+                      isFilterable={true}
+                    />
+                    <Facet
+                      field="organization"
+                      label="Organization"
+                      filterType="any"
+                      isFilterable={true}
+                    />
+
+
                     {/* <Facet field="visitors" label="Visitors" filterType="any" />
                     <Facet
                       field="acres"
