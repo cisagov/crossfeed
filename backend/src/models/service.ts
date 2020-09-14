@@ -40,7 +40,7 @@ export interface Product {
   // Product vendor
   vendor?: string;
   // Product version
-  version: string;
+  version?: string;
   // Product version revision
   revision?: string;
   // CPE without version (unique identifier)
@@ -182,7 +182,7 @@ export class Service extends BaseEntity {
       for (const wappalyzerResult of this.wappalyzerResults) {
         const product = {
           name: wappalyzerResult.name,
-          version: wappalyzerResult.version,
+          version: wappalyzerResult.version || undefined,
           cpe: wappalyzerResult.cpe,
           icon: wappalyzerResult.icon,
           tags: wappalyzerResult.categories.map((cat) => cat.name)
@@ -196,14 +196,16 @@ export class Service extends BaseEntity {
       for (const result of this.intrigueIdentResults.fingerprint) {
         const product = {
           name: result.product,
-          version: result.version,
+          version: result.version || undefined,
           // Convert "cpe:2.3:" to "cpe:/"
           cpe: result.cpe?.replace(/^cpe:2\.3:/, 'cpe:/'),
           tags: result.tags,
           vendor: result.vendor,
           revision: result.update
         };
-        if (product.cpe) products[product.cpe] = product;
+        if (product.cpe && products[product.cpe])
+          products[product.cpe] = { ...products[product.cpe], ...product };
+        else if (product.cpe) products[product.cpe] = product;
         else misc.push(product);
       }
     }
@@ -219,14 +221,16 @@ export class Service extends BaseEntity {
       }
       const product = {
         name: this.censysMetadata.product,
-        version: this.censysMetadata.version,
+        version: this.censysMetadata.version || undefined,
         description: this.censysMetadata.description,
         product: this.censysMetadata.product,
         revision: this.censysMetadata.revision,
         cpe,
         tags: []
       };
-      if (cpe) products[cpe] = product;
+      if (product.cpe && products[product.cpe])
+        products[product.cpe] = { ...products[product.cpe], ...product };
+      else if (product.cpe) products[product.cpe] = product;
       else misc.push(product);
     }
 
