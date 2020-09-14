@@ -40,7 +40,7 @@ export interface Product {
   // Product vendor
   vendor?: string;
   // Product version
-  version?: string;
+  version: string;
   // Product version revision
   revision?: string;
   // CPE without version (unique identifier)
@@ -176,19 +176,17 @@ export class Service extends BaseEntity {
   @BeforeInsert()
   @BeforeUpdate()
   setProducts() {
-    const products: { [cpe: string]: Product } = {};
-    const misc: Product[] = [];
+    const products: Product[] = [];
     if (this.wappalyzerResults) {
       for (const wappalyzerResult of this.wappalyzerResults) {
         const product = {
           name: wappalyzerResult.name,
-          version: wappalyzerResult.version || undefined,
+          version: wappalyzerResult.version,
           cpe: wappalyzerResult.cpe,
           icon: wappalyzerResult.icon,
           tags: wappalyzerResult.categories.map((cat) => cat.name)
         };
-        if (wappalyzerResult.cpe) products[wappalyzerResult.cpe] = product;
-        else misc.push(product);
+        products.push(product);
       }
     }
 
@@ -196,17 +194,14 @@ export class Service extends BaseEntity {
       for (const result of this.intrigueIdentResults.fingerprint) {
         const product = {
           name: result.product,
-          version: result.version || undefined,
+          version: result.version,
           // Convert "cpe:2.3:" to "cpe:/"
           cpe: result.cpe?.replace(/^cpe:2\.3:/, 'cpe:/'),
           tags: result.tags,
           vendor: result.vendor,
           revision: result.update
         };
-        if (product.cpe && products[product.cpe])
-          products[product.cpe] = { ...products[product.cpe], ...product };
-        else if (product.cpe) products[product.cpe] = product;
-        else misc.push(product);
+        products.push(product);
       }
     }
 
@@ -221,19 +216,32 @@ export class Service extends BaseEntity {
       }
       const product = {
         name: this.censysMetadata.product,
-        version: this.censysMetadata.version || undefined,
+        version: this.censysMetadata.version,
         description: this.censysMetadata.description,
         product: this.censysMetadata.product,
         revision: this.censysMetadata.revision,
         cpe,
         tags: []
       };
-      if (product.cpe && products[product.cpe])
-        products[product.cpe] = { ...products[product.cpe], ...product };
-      else if (product.cpe) products[product.cpe] = product;
+      products.push(product);
+    }
+
+    const productDict: { [cpe: string]: Product } = {};
+    const misc: Product[] = [];
+
+    for (const product of products) {
+      for (const prop in product) {
+        if (!product[prop]) delete product[prop];
+      }
+      console.log(product);
+      if (product.cpe && productDict[product.cpe])
+        productDict[product.cpe] = { ...productDict[product.cpe], ...product };
+      else if (product.cpe) productDict[product.cpe] = product;
       else misc.push(product);
     }
 
-    this.products = Object.values(products).concat(misc).filter(filterProducts);
+    this.products = Object.values(productDict)
+      .concat(misc)
+      .filter(filterProducts);
   }
 }
