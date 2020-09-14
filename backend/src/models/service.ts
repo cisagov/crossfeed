@@ -199,7 +199,9 @@ export class Service extends BaseEntity {
           version: result.version,
           // Convert "cpe:2.3:" to "cpe:/"
           cpe: result.cpe?.replace(/^cpe:2\.3:/, 'cpe:/'),
-          tags: result.tags
+          tags: result.tags,
+          vendor: result.vendor,
+          revision: result.update
         };
         if (product.cpe) products[product.cpe] = product;
         else misc.push(product);
