@@ -31,6 +31,7 @@ const intrigueIdent = async (domain: Domain): Promise<void> => {
   if (status !== 0) {
     console.error('IntrigueIdent failed');
     return;
+  }
   const output = stdout.toString();
   const { fingerprint, content } = JSON.parse(
     output.substring(output.indexOf('{'))
