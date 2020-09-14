@@ -137,7 +137,7 @@ export const Search: React.FC = () => {
                     />
                     <Facet
                       field="vulnerabilities.cve"
-                      label="CVEs"
+                      label="CVE"
                       filterType="any"
                       isFilterable={true}
                     />
@@ -150,6 +150,12 @@ export const Search: React.FC = () => {
                     <Facet
                       field="organization"
                       label="Organization"
+                      filterType="any"
+                      isFilterable={true}
+                    />
+                                        <Facet
+                      field="services.products.cpe"
+                      label="CPE"
                       filterType="any"
                       isFilterable={true}
                     />

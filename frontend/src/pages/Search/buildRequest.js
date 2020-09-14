@@ -103,6 +103,19 @@ export function buildRequest(state) {
             terms: {
               field: "services.service.keyword"
             }
+          },
+          // TODO: products type nested
+          products: {
+            nested: {
+              path: "products"
+            },
+            aggs: {
+              cpe: {
+                terms: {
+                  field: "services.products.cpe.keyword"
+                }
+              }
+            }
           }
         }
       },

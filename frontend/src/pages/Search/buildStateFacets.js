@@ -38,7 +38,7 @@ function getRangeFacet(aggregations, fieldName) {
   }
 }
 
-const FACETS = ["name", "fromRootDomain", "services.port", "vulnerabilities.cve", "vulnerabilities.severity", "organization.name"];
+const FACETS = ["name", "fromRootDomain", "services.port", "vulnerabilities.cve", "vulnerabilities.severity", "organization.name", "services.products.cpe"];
 export default function buildStateFacets(aggregations) {
   const facets = {};
   
