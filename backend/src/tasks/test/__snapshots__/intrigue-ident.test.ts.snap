@@ -228,35 +228,40 @@ Array [
   Object {
     "cpe": "cpe:/a:bootstrap:bootstrap::",
     "name": "Bootstrap",
+    "revision": "",
     "tags": Array [
       "Web Framework",
     ],
-    "version": "",
+    "vendor": "Bootstrap",
   },
   Object {
     "cpe": "cpe:/a:apache:http_server::",
     "name": "HTTP Server",
+    "revision": "",
     "tags": Array [
       "Web Server",
     ],
-    "version": "",
+    "vendor": "Apache",
   },
   Object {
     "cpe": "cpe:/a:drupal:drupal:8:",
     "name": "Drupal",
+    "revision": "",
     "tags": Array [
       "CMS",
     ],
+    "vendor": "Drupal",
     "version": "8",
   },
   Object {
     "cpe": "cpe:/s:newrelic:newrelic::",
     "name": "NewRelic",
+    "revision": "",
     "tags": Array [
       "APM",
       "Javascript",
     ],
-    "version": "",
+    "vendor": "NewRelic",
   },
 ]
 `;
