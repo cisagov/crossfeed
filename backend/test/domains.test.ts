@@ -188,6 +188,69 @@ describe('domains', () => {
         .expect(403);
       expect(response.text).toContain('must accept terms');
     });
+
+    it("list by org user that hasn't signed the correct ToU should fail", async () => {
+      const name = 'test-' + Math.random();
+      await Domain.create({
+        name,
+        organization
+      }).save();
+      await Domain.create({
+        name: name + '-2'
+      }).save();
+      const response = await request(app)
+        .post('/domain/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            dateAcceptedTerms: new Date(),
+            acceptedTermsVersion: 'v0-user',
+            roles: [
+              {
+                org: organization.id,
+                role: 'user'
+              }
+            ]
+          })
+        )
+        .send({
+          filters: { reverseName: name }
+        })
+        .expect(403);
+      expect(response.text).toContain('must accept terms');
+    });
+
+    it("list by org admin that has signed correct ToU should succeed", async () => {
+      const name = 'test-' + Math.random();
+      await Domain.create({
+        name,
+        organization
+      }).save();
+      await Domain.create({
+        name: name + '-2'
+      }).save();
+      const response = await request(app)
+        .post('/domain/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            dateAcceptedTerms: new Date(),
+            acceptedTermsVersion: 'v1-admin',
+            roles: [
+              {
+                org: organization.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .send({
+          filters: { reverseName: name }
+        })
+        .expect(200);
+    });
+
+
   });
   describe('get', () => {
     it("get by org user should work for domain in the user's org", async () => {
