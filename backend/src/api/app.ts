@@ -86,7 +86,7 @@ const checkUserSignedTerms = (req, res, next) => {
   return next();
 };
 
-const currentTermsVersion = '1';
+const currentTermsVersion = process.env.TERMS_VERSION;
 
 const getMaximumRole = (user) => {
   if (user?.userType === 'globalView') return 'user';
