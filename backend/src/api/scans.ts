@@ -91,6 +91,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     cpu: '1024',
     memory: '4096',
     description: 'Matches detected software versions to CVEs from NIST NVD'
+  },
+  intrigueIdent: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Open source tool that fingerprints web technologies based on HTTP responses'
   }
 };
 
