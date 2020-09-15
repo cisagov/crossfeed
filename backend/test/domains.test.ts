@@ -220,6 +220,37 @@ describe('domains', () => {
       expect(response.text).toContain('must accept terms');
     });
 
+    it("list by org admin that has signed user level ToU should fail", async () => {
+      const name = 'test-' + Math.random();
+      await Domain.create({
+        name,
+        organization
+      }).save();
+      await Domain.create({
+        name: name + '-2'
+      }).save();
+      const response = await request(app)
+        .post('/domain/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            dateAcceptedTerms: new Date(),
+            acceptedTermsVersion: 'v1-user',
+            roles: [
+              {
+                org: organization.id,
+                role: 'admin'
+              }
+            ]
+          })
+        )
+        .send({
+          filters: { reverseName: name }
+        })
+        .expect(403);
+      expect(response.text).toContain('must accept terms');
+    });
+
     it("list by org admin that has signed correct ToU should succeed", async () => {
       const name = 'test-' + Math.random();
       await Domain.create({
