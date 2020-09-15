@@ -158,6 +158,7 @@ describe('domains', () => {
       expect(response.body.count).toEqual(2);
       expect(response.body.result.length).toEqual(2);
     });
+    /*ToU tests begin here*/
     it("list by org user that hasn't signed the terms should fail", async () => {
       const name = 'test-' + Math.random();
       await Domain.create({
