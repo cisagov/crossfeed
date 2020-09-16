@@ -5,7 +5,7 @@
   "main": "db.js",
   "dependencies": {
     "aws-sdk": "^2.716.0",
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "body-parser": "^1.19.0",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
