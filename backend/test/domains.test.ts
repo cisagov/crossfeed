@@ -220,7 +220,7 @@ describe('domains', () => {
       expect(response.text).toContain('must accept terms');
     });
 
-    it("list by org admin that has signed user level ToU should fail", async () => {
+    it('list by org admin that has signed user level ToU should fail', async () => {
       const name = 'test-' + Math.random();
       await Domain.create({
         name,
@@ -251,7 +251,7 @@ describe('domains', () => {
       expect(response.text).toContain('must accept terms');
     });
 
-    it("list by org admin that has signed correct ToU should succeed", async () => {
+    it('list by org admin that has signed correct ToU should succeed', async () => {
       const name = 'test-' + Math.random();
       await Domain.create({
         name,
@@ -280,8 +280,6 @@ describe('domains', () => {
         })
         .expect(200);
     });
-
-
   });
   describe('get', () => {
     it("get by org user should work for domain in the user's org", async () => {
