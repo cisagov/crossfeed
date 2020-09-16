@@ -72,7 +72,7 @@ export class Scan extends BaseEntity {
   organizations: Organization[];
 
   @ManyToOne((type) => User, {
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
   })
   createdBy: User;

@@ -13,6 +13,7 @@ export interface UserToken {
     role: 'user' | 'admin';
   }[];
   dateAcceptedTerms: Date | undefined;
+  acceptedTermsVersion: string | undefined;
 }
 
 interface CognitoUserToken {
@@ -63,6 +64,7 @@ const userTokenBody = (user): UserToken => ({
   email: user.email,
   userType: user.userType,
   dateAcceptedTerms: user.dateAcceptedTerms,
+  acceptedTermsVersion: user.acceptedTermsVersion,
   roles: user.roles
     .filter((role) => role.approved)
     .map((role) => ({

@@ -65,7 +65,7 @@ export class Organization extends BaseEntity {
   granularScans: Scan[];
 
   @ManyToOne((type) => User, {
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
   })
   createdBy: User;
