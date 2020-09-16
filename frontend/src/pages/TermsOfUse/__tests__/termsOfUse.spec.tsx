@@ -33,11 +33,21 @@ const adminOnly = [
   /You are authorized to make the above certifications on your organization\’s behalf/
 ];
 
-it('matches snapshot', () => {
+it('matches admin snapshot', () => {
   const { asFragment } = render(<TermsOfUse />, {
     authContext: {
       maximumRole: 'admin',
       touVersion: 'v5-admin'
+    }
+  });
+  expect(asFragment()).toMatchSnapshot();
+});
+
+it('matches user snapshot', () => {
+  const { asFragment } = render(<TermsOfUse />, {
+    authContext: {
+      maximumRole: 'user',
+      touVersion: 'v5-user'
     }
   });
   expect(asFragment()).toMatchSnapshot();

@@ -50,7 +50,7 @@ const renderMocked = () => {
   });
 };
 
-it('can handle successful Oauth callback', async () => {
+it('can handle successful OAuth callback', async () => {
   window.location.search = '?state=fake_oauth_state&code=fake_oauth_code';
   mockGetItem
     .mockReturnValueOnce('FAKE_NONCE')

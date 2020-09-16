@@ -64,7 +64,7 @@ it('updates state with default value', () => {
   expect(setItemMock).toHaveBeenCalledWith('testkey', JSON.stringify('zxcv'));
 });
 
-it('updates localstorage on call to setState', async () => {
+it('updates localStorage on call to setState', async () => {
   getItemMock.mockReturnValue(null);
   const onClick = (dispatch: React.Dispatch<any>) => dispatch('newval');
   const { getByTestId } = render(

@@ -24,7 +24,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const history = useHistory();
 
   const logout = useCallback(async () => {
-    setToken(null);
+    localStorage.clear();
     await Auth.signOut();
   }, [setToken]);
 
