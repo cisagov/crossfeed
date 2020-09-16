@@ -12,7 +12,7 @@ Crossfeed is a collaboration between the [Cybersecurity and Infrastructure Secur
 
 ## Documentation
 
-See [https://cisagov.github.io/crossfeed/](https://cisagov.github.io/crossfeed/) for documentation on both how to use Crossfeed and how to contribute to it.
+See [https://docs.crossfeed.cyber.dhs.gov](https://docs.crossfeed.cyber.dhs.gov) for documentation on both how to use Crossfeed and how to contribute to it.
 
 ## Public domain
 

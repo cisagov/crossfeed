@@ -25,6 +25,10 @@ const filterProducts = (product: Product) => {
     // https://github.com/intrigueio/intrigue-ident/issues/51
     return false;
   }
+  if (cpe === 'cpe:2.3::generic:unauthorized::') {
+    // Intrigue Ident sometimes detects "Unauthorized" CPEs
+    return false;
+  }
   return true;
 };
 
@@ -65,7 +69,7 @@ export class Service extends BaseEntity {
   domain: Domain;
 
   @ManyToOne((type) => Scan, {
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
   })
   discoveredBy: Scan;
@@ -149,19 +153,6 @@ export class Service extends BaseEntity {
     }[];
   };
 
-  @Column({
-    type: 'jsonb',
-    default: []
-  })
-  nucleiResults: {
-    template: string;
-    type: string;
-    matched: string;
-    severity: string;
-    author: string;
-    description: string;
-  }[];
-
   /** Wappalyzer output */
   @Column({
     type: 'jsonb',
@@ -185,8 +176,7 @@ export class Service extends BaseEntity {
   @BeforeInsert()
   @BeforeUpdate()
   setProducts() {
-    const products: { [cpe: string]: Product } = {};
-    const misc: Product[] = [];
+    const products: Product[] = [];
     if (this.wappalyzerResults) {
       for (const wappalyzerResult of this.wappalyzerResults) {
         const product = {
@@ -196,8 +186,7 @@ export class Service extends BaseEntity {
           icon: wappalyzerResult.icon,
           tags: wappalyzerResult.categories.map((cat) => cat.name)
         };
-        if (wappalyzerResult.cpe) products[wappalyzerResult.cpe] = product;
-        else misc.push(product);
+        products.push(product);
       }
     }
 
@@ -206,12 +195,13 @@ export class Service extends BaseEntity {
         const product = {
           name: result.product,
           version: result.version,
-          // Convert "cpe:2.3:a:drupal:drupal:8:" to "cpe:/a:drupal:drupal:8:"
+          // Convert "cpe:2.3:" to "cpe:/"
           cpe: result.cpe?.replace(/^cpe:2\.3:/, 'cpe:/'),
-          tags: result.tags
+          tags: result.tags,
+          vendor: result.vendor,
+          revision: result.update
         };
-        if (product.cpe) products[product.cpe] = product;
-        else misc.push(product);
+        products.push(product);
       }
     }
 
@@ -233,10 +223,25 @@ export class Service extends BaseEntity {
         cpe,
         tags: []
       };
-      if (cpe) products[cpe] = product;
+      products.push(product);
+    }
+
+    const productDict: { [cpe: string]: Product } = {};
+    const misc: Product[] = [];
+
+    for (const product of products) {
+      for (const prop in product) {
+        if (!product[prop]) delete product[prop];
+      }
+      console.log(product);
+      if (product.cpe && productDict[product.cpe])
+        productDict[product.cpe] = { ...productDict[product.cpe], ...product };
+      else if (product.cpe) productDict[product.cpe] = product;
       else misc.push(product);
     }
 
-    this.products = Object.values(products).concat(misc).filter(filterProducts);
+    this.products = Object.values(productDict)
+      .concat(misc)
+      .filter(filterProducts);
   }
 }

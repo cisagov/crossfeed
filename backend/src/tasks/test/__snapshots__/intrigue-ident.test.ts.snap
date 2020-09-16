@@ -231,7 +231,7 @@ Array [
     "tags": Array [
       "Web Framework",
     ],
-    "version": "",
+    "vendor": "Bootstrap",
   },
   Object {
     "cpe": "cpe:/a:apache:http_server::",
@@ -239,7 +239,7 @@ Array [
     "tags": Array [
       "Web Server",
     ],
-    "version": "",
+    "vendor": "Apache",
   },
   Object {
     "cpe": "cpe:/a:drupal:drupal:8:",
@@ -247,6 +247,7 @@ Array [
     "tags": Array [
       "CMS",
     ],
+    "vendor": "Drupal",
     "version": "8",
   },
   Object {
@@ -256,7 +257,7 @@ Array [
       "APM",
       "Javascript",
     ],
-    "version": "",
+    "vendor": "NewRelic",
   },
 ]
 `;

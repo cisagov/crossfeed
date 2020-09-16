@@ -143,7 +143,7 @@ export const ScanTasksView: React.FC = () => {
         'censysIpv4',
         'cve',
         'intrigueIdent',
-        'nuclei'
+        'nuclei',
       ]),
       disableSortBy: true
     },
