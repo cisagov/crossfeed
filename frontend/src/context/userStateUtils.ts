@@ -1,7 +1,7 @@
 import { Organization } from 'types';
 import { AuthUser, CurrentOrganization } from './AuthContext';
 
-const currentTermsVersion = '1';
+const currentTermsVersion = process.env.REACT_APP_TERMS_VERSION;
 
 export const getExtendedOrg = (
   org: Organization | null,
