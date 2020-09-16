@@ -15,7 +15,8 @@ interface Errors extends Partial<FormData> {
   global?: string;
 }
 
-export const currentTermsVersion = process.env.TERMS_VERSION;
+export const currentTermsVersion = process.env.REACT_APP_TERMS_VERSION;
+
 
 export const userMustSign = (user: AuthUser) => {
   // Bypass ToU for CISA emails
