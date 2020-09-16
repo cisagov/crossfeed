@@ -89,8 +89,6 @@ const checkUserSignedTerms = (req, res, next) => {
   return next();
 };
 
-const currentTermsVersion = process.env.TERMS_VERSION;
-
 const getMaximumRole = (user) => {
   if (user?.userType === 'globalView') return 'user';
   return user && user.roles && user.roles.find((role) => role.role === 'admin')
@@ -99,7 +97,7 @@ const getMaximumRole = (user) => {
 };
 
 const getToUVersion = (user) => {
-  return `v${currentTermsVersion}-${getMaximumRole(user)}`;
+  return `v${process.env.REACT_APP_TERMS_VERSION}-${getMaximumRole(user)}`;
 };
 
 // Routes that require an authenticated user, without
