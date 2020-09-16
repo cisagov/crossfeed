@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`intrigue ident basic test 1`] = `
+exports[`nuclei basic test 1`] = `
 Array [
   Object {
     "author": "madrobot",
@@ -29,7 +29,7 @@ Array [
 ]
 `;
 
-exports[`intrigue ident basic test 2`] = `
+exports[`nuclei basic test 2`] = `
 Object {
   "cpe": null,
   "createdAt": Any<Date>,
