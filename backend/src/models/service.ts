@@ -153,6 +153,20 @@ export class Service extends BaseEntity {
     }[];
   };
 
+  /** Nuclei results */
+  @Column({	
+    type: 'jsonb',	
+    default: []	
+  })	
+  nucleiResults: {	
+    template: string;	
+    type: string;	
+    matched: string;	
+    severity: string;	
+    author: string;	
+    description: string;	
+  }[];
+
   /** Wappalyzer output */
   @Column({
     type: 'jsonb',
