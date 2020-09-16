@@ -121,6 +121,7 @@ export const ScanTasksView: React.FC = () => {
       accessor: 'status',
       Filter: selectFilter([
         'created',
+        'queued',
         'requested',
         'started',
         'finished',
@@ -140,7 +141,8 @@ export const ScanTasksView: React.FC = () => {
         'portscanner',
         'wappalyzer',
         'censysIpv4',
-        'cve'
+        'cve',
+        'intrigueIdent'
       ]),
       disableSortBy: true
     },

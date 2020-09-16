@@ -160,7 +160,7 @@ export const Dashboard: React.FC = () => {
       <Grid row>
         <Grid tablet={{ col: true }}>
           <h1>
-            Dashboard
+            Inventory
             {showAll
               ? ' - Global'
               : currentOrganization

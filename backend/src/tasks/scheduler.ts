@@ -214,7 +214,7 @@ const shouldRunScan = async ({
   const lastRunningScanTask = await ScanTask.findOne(
     {
       scan: { id: scan.id },
-      status: In(['created', 'requested', 'started']),
+      status: In(['created', 'queued', 'requested', 'started']),
       ...orgFilter
     },
     {
@@ -224,7 +224,7 @@ const shouldRunScan = async ({
     }
   );
   if (lastRunningScanTask) {
-    // Don't run another task if there's already a running task.
+    // Don't run another task if there's already a running or queued task.
     return false;
   }
   const lastFinishedScanTask = await ScanTask.findOne(
