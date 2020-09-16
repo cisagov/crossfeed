@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useImperativeHandle } from 'react';
 import { Table as UsaTable } from '@trussworks/react-uswds';
 import { Query } from 'types';
 import {
@@ -27,20 +27,24 @@ interface TableProps<T extends object> {
   disableFilters?: boolean;
   renderPagination?: (table: TableInstance<T>) => JSX.Element;
   renderExpanded?: (row: Row<T>) => JSX.Element;
+  tableRef?: React.Ref<TableInstance<T>>;
 }
 
-export const Table = <T extends object>({
-  columns,
-  data,
-  initialSortBy,
-  pageCount = 0,
-  pageSize = 20,
-  count,
-  fetchData,
-  disableFilters = false,
-  renderPagination,
-  renderExpanded
-}: TableProps<T>) => {
+export const Table = <T extends object>(props: TableProps<T>) => {
+  const {
+    columns,
+    data,
+    initialSortBy,
+    pageCount = 0,
+    pageSize = 20,
+    count,
+    fetchData,
+    disableFilters = false,
+    renderPagination,
+    renderExpanded,
+    tableRef
+  } = props;
+
   const stateReducer = (nextState: any, action: any, prevState: any) => {
     if (action.type === 'toggleSortBy' || action.type === 'setGlobalFilter') {
       return { ...nextState, pageIndex: 0 };
@@ -73,6 +77,8 @@ export const Table = <T extends object>({
     useExpanded,
     usePagination
   );
+
+  useImperativeHandle(tableRef, () => instance);
 
   const {
     state: { sortBy, pageIndex, filters }

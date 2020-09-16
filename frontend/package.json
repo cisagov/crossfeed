@@ -51,13 +51,14 @@
     "react-select": "^3.1.0",
     "react-table": "^7.2.2",
     "sass": "^1.26.9",
+    "ts-jest": "^26.3.0",
     "typescript": "^3.9.6",
     "uswds": "^2.8.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --passWithNoTests",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint 'src/*.{ts,tsx,js,jsx}' --fix",
