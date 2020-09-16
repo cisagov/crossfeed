@@ -20,4 +20,3 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-
