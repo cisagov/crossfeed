@@ -78,10 +78,26 @@ const checkUserSignedTerms = (req, res, next) => {
     )
       return next();
   }
-  if (!req.requestContext.authorizer.dateAcceptedTerms) {
+  if (
+    !req.requestContext.authorizer.dateAcceptedTerms ||
+    (req.requestContext.authorizer.acceptedTermsVersion &&
+      req.requestContext.authorizer.acceptedTermsVersion !==
+        getToUVersion(req.requestContext.authorizer))
+  ) {
     return res.status(403).send('User must accept terms of use');
   }
   return next();
+};
+
+const getMaximumRole = (user) => {
+  if (user?.userType === 'globalView') return 'user';
+  return user && user.roles && user.roles.find((role) => role.role === 'admin')
+    ? 'admin'
+    : 'user';
+};
+
+const getToUVersion = (user) => {
+  return `v${process.env.REACT_APP_TERMS_VERSION}-${getMaximumRole(user)}`;
 };
 
 // Routes that require an authenticated user, without
