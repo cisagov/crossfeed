@@ -26,7 +26,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const logout = useCallback(async () => {
     localStorage.clear();
     await Auth.signOut();
-  }, [setToken]);
+  }, []);
 
   const handleError = useCallback(
     async (e: Error) => {

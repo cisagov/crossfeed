@@ -14,7 +14,11 @@ export const useApi = (onError?: OnError) => {
 
   const getToken = () => {
     const t = localStorage.getItem('token');
-    return t ? JSON.parse(t) : '';
+    try {
+      return t ? JSON.parse(t) : '';
+    } catch {
+      return '';
+    }
   };
 
   const prepareInit = useCallback(async (init: any) => {

@@ -6,7 +6,11 @@ export const usePersistentState = <T extends any = any>(
 ): [T, React.Dispatch<SetStateAction<T>>] => {
   const [state, setState] = useState<T>(() => {
     const existing = localStorage.getItem(key);
-    return existing ? JSON.parse(existing) : defaultValue;
+    try {
+      return existing ? JSON.parse(existing) : defaultValue;
+    } catch {
+      return defaultValue;
+    }
   });
 
   useEffect(() => {
