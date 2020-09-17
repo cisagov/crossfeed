@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useCallback, useRef } from 'react';
-import { TableInstance, Row } from 'react-table';
+import { TableInstance, Row, Filters, SortingRule } from 'react-table';
 import { Query } from 'types';
 import { useAuthContext } from 'context';
 import { Table, Paginator, Export } from 'components';
@@ -48,66 +48,65 @@ export const Vulnerabilities: React.FC = () => {
     localStorage.setItem('showGlobal', JSON.stringify(state));
   };
 
+  const vulnerabilitiesSearch = async (
+    filters: Filters<Vulnerability>,
+    sort: SortingRule<Vulnerability>[],
+    page: number,
+    paginate: boolean
+  ): Promise<ApiResponse | undefined> => {
+    try {
+      const tableFilters = filters
+        .filter(f => Boolean(f.value))
+        .reduce(
+          (accum, next) => ({
+            ...accum,
+            [next.id]: next.value
+          }),
+          {}
+        );
+      return await apiPost<ApiResponse>('/vulnerabilities/search', {
+        body: {
+          page,
+          sort: sort[0]?.id ?? 'createdAt',
+          order: sort[0]?.desc ? 'DESC' : 'ASC',
+          filters: {
+            ...tableFilters,
+            organization: showAll ? undefined : currentOrganization?.id
+          },
+          pageCount: paginate ? 25 : -1
+        }
+      });
+    } catch (e) {
+      console.error(e);
+      return;
+    }
+  };
+
   const fetchVulnerabilities = useCallback(
     async (query: Query<Vulnerability>) => {
-      const { page, sort, filters } = query;
-      try {
-        const tableFilters = filters
-          .filter(f => Boolean(f.value))
-          .reduce(
-            (accum, next) => ({
-              ...accum,
-              [next.id]: next.value
-            }),
-            {}
-          );
-        const { result, count } = await apiPost<ApiResponse>(
-          '/vulnerabilities/search',
-          {
-            body: {
-              page,
-              sort: sort[0]?.id ?? 'createdAt',
-              order: sort[0]?.desc ? 'DESC' : 'ASC',
-              filters: {
-                ...tableFilters,
-                organization: showAll ? undefined : currentOrganization?.id
-              }
-            }
-          }
-        );
-        setVulnerabilities(result);
-        setPageCount(Math.ceil(count / 25));
-      } catch (e) {
-        console.error(e);
-      }
+      const resp = await vulnerabilitiesSearch(
+        query.filters,
+        query.sort,
+        query.page,
+        false
+      );
+      if (!resp) return;
+      const { result, count } = resp;
+      setVulnerabilities(result);
+      setPageCount(Math.ceil(count / 25));
     },
     [apiPost, showAll, currentOrganization]
   );
 
   const fetchVulnerabilitiesExport = async (): Promise<any[]> => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
-    try {
-      const { result } = await apiPost<ApiResponse>('/vulnerabilities/search', {
-        body: {
-          page: 1,
-          pageSize: -1,
-          sort: sortBy && sortBy[0]?.id ? sortBy[0]?.id : 'createdAt',
-          order: sortBy && sortBy[0]?.desc ? 'DESC' : 'ASC',
-          filters: {
-            ...filters,
-            organization: showAll ? undefined : currentOrganization?.id
-          }
-        }
-      });
-      console.log(result);
-      return result.map(vuln => ({
-        ...vuln,
-        domain: vuln.domain.name
-      }));
-    } catch (e) {
-      console.error(e);
-      return [];
-    }
+    if (!sortBy || !filters) return [];
+    const resp = await vulnerabilitiesSearch(filters, sortBy, 1, true);
+    if (!resp) return [];
+    return resp.result.map(vuln => ({
+      ...vuln,
+      domain: vuln.domain.name
+    }));
   };
 
   const renderPagination = (table: TableInstance<Vulnerability>) => (
