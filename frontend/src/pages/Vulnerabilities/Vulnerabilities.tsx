@@ -1,8 +1,8 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useRef } from 'react';
 import { TableInstance, Row } from 'react-table';
 import { Query } from 'types';
 import { useAuthContext } from 'context';
-import { Table, Paginator } from 'components';
+import { Table, Paginator, Export } from 'components';
 import { createColumns } from './columns';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
@@ -38,6 +38,7 @@ export const Vulnerabilities: React.FC = () => {
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const columns = useMemo(() => createColumns(), []);
+  const tableRef = useRef<TableInstance<Vulnerability>>(null);
   const [showAll, setShowAll] = useState<boolean>(
     JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
   );
@@ -83,6 +84,32 @@ export const Vulnerabilities: React.FC = () => {
     [apiPost, showAll, currentOrganization]
   );
 
+  const fetchVulnerabilitiesExport = async (): Promise<any[]> => {
+    const { sortBy, filters } = tableRef.current?.state ?? {};
+    try {
+      const { result } = await apiPost<ApiResponse>('/vulnerabilities/search', {
+        body: {
+          page: 1,
+          pageSize: -1,
+          sort: sortBy && sortBy[0]?.id ? sortBy[0]?.id : 'createdAt',
+          order: sortBy && sortBy[0]?.desc ? 'DESC' : 'ASC',
+          filters: {
+            ...filters,
+            organization: showAll ? undefined : currentOrganization?.id
+          }
+        }
+      });
+      console.log(result);
+      return result.map(vuln => ({
+        ...vuln,
+        domain: vuln.domain.name
+      }));
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
+  };
+
   const renderPagination = (table: TableInstance<Vulnerability>) => (
     <Paginator table={table} />
   );
@@ -122,6 +149,25 @@ export const Vulnerabilities: React.FC = () => {
         pageCount={pageCount}
         fetchData={fetchVulnerabilities}
         renderExpanded={renderExpandedVulnerability}
+        tableRef={tableRef}
+      />
+      <Export<Vulnerability>
+        name="vulnerabilities"
+        fieldsToExport={[
+          'domain',
+          'title',
+          'cve',
+          'cwe',
+          'cpe',
+          'description',
+          'cvss',
+          'severity',
+          'state',
+          'lastSeen',
+          'createdAt',
+          'id'
+        ]}
+        getDataToExport={fetchVulnerabilitiesExport}
       />
     </div>
   );
