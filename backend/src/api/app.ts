@@ -38,7 +38,7 @@ const handlerToExpress = (handler) => async (req, res, next) => {
     res.status(statusCode).json(parsedBody);
   } catch (e) {
     // Not a JSON body
-    res.status(statusCode).send(body);
+    res.status(statusCode).json({ resp: body });
   }
 };
 
