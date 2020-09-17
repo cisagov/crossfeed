@@ -47,7 +47,7 @@
     "jest": "^26.1.0",
     "json-schema-to-typescript": "^9.1.1",
     "nock": "^13.0.4",
-    "prettier": "^2.0.5",
+    "prettier": "^2.1.2",
     "serverless-domain-manager": "^4.2.0",
     "serverless-webpack": "^5.3.2",
     "supertest": "^4.0.2",
