@@ -21,7 +21,7 @@
     "p-retry": "^4.2.0",
     "pg": "^8.3.0",
     "portscanner": "^2.2.0",
-    "serverless": "^1.75.1",
+    "serverless": "^2.1.0",
     "serverless-http": "^2.5.0",
     "simple-wappalyzer": "^1.1.6",
     "typeorm": "^0.2.25",
