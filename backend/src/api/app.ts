@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
+import hsts from 'helmet';
 import { handler as healthcheck } from './healthcheck';
 import { handler as scheduler } from '../tasks/scheduler';
 import * as auth from './auth';
@@ -46,6 +47,7 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(hsts());
 
 app.get('/', handlerToExpress(healthcheck));
 app.post('/auth/login', handlerToExpress(auth.login));
