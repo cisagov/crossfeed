@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.59",
     "@types/dockerode": "^2.5.34",
-    "@types/jest": "^26.0.5",
+    "@types/jest": "^26.0.14",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/node": "^14.0.24",
     "@types/nodemailer": "^6.4.0",
@@ -48,7 +48,7 @@
     "json-schema-to-typescript": "^9.1.1",
     "nock": "^13.0.4",
     "prettier": "^2.1.2",
-    "serverless-domain-manager": "^4.2.0",
+    "serverless-domain-manager": "^4.2.2",
     "serverless-webpack": "^5.3.2",
     "supertest": "^4.0.2",
     "ts-jest": "^26.1.3",
