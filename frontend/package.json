@@ -50,7 +50,7 @@
     "react-scripts": "^3.4.3",
     "react-select": "^3.1.0",
     "react-table": "^7.2.2",
-    "sass": "^1.26.9",
+    "sass": "^1.26.11",
     "ts-jest": "^26.3.0",
     "typescript": "^3.9.6",
     "uswds": "^2.8.1"
