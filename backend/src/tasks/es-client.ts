@@ -4,7 +4,7 @@ import { Domain } from '../models';
 export const DOMAINS_INDEX = 'domains-5';
 
 interface DomainRecord extends Domain {
-  suggest: { input: string | string[], weight: number }[]
+  suggest: { input: string | string[]; weight: number }[];
 }
 
 /**
@@ -30,11 +30,11 @@ class ESClient {
         body: {
           properties: {
             suggest: {
-              type: "completion"
+              type: 'completion'
             }
           }
         }
-      })
+      });
       console.log(`Index ${DOMAINS_INDEX} already created`);
     } catch (e) {
       await this.client.indices.create({
@@ -44,7 +44,7 @@ class ESClient {
             dynamic: true,
             properties: {
               suggest: {
-                type: "completion"
+                type: 'completion'
               },
               services: {
                 type: 'nested'
@@ -68,7 +68,10 @@ class ESClient {
    * @param domains Domains to insert.
    */
   async updateDomains(domains: Domain[]) {
-    const domainRecords = domains.map(e => ({...e, suggest: [{ input: e.name, weight: 1 }] })) as DomainRecord[];
+    const domainRecords = domains.map((e) => ({
+      ...e,
+      suggest: [{ input: e.name, weight: 1 }]
+    })) as DomainRecord[];
     return this.client.helpers.bulk<DomainRecord>({
       datasource: domainRecords,
       onDocument(domain) {

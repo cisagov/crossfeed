@@ -3,7 +3,7 @@ import app from '../src/api/app';
 import { User, Domain, connectToDatabase, Organization } from '../src/models';
 import { createUserToken } from './util';
 
-import '../src/tasks/es-client'
+import '../src/tasks/es-client';
 
 jest.mock('../src/tasks/es-client');
 const { searchDomains } = require('../src/tasks/es-client');
@@ -21,10 +21,10 @@ describe('search', () => {
   });
   describe('search', () => {
     it('search by global admin should work', async () => {
-        searchDomains.mockImplementation(() => ({
-            body: [1,2,3]
-        }));
-        const response = await request(app)
+      searchDomains.mockImplementation(() => ({
+        body: [1, 2, 3]
+      }));
+      const response = await request(app)
         .post('/search')
         .set(
           'Authorization',
@@ -32,29 +32,22 @@ describe('search', () => {
             userType: 'globalAdmin'
           })
         )
-        .send({
-
-        })
+        .send({})
         .expect(200);
       expect(response.body).toEqual([1, 2, 3]);
     });
 
-
-    it("search by non-global admin should not work", async () => {
+    it('search by non-global admin should not work', async () => {
       const response = await request(app)
         .post('/search')
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-            ]
+            roles: []
           })
         )
-        .send({
-
-        })
+        .send({})
         .expect(403);
     });
   });
-
 });

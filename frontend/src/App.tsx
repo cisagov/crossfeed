@@ -17,7 +17,7 @@ import {
   Settings,
   Vulnerabilities,
   TermsOfUse,
-  Search
+  Search,
   LoginGovCallback
 } from 'pages';
 import { Layout, RouteGuard } from 'components';

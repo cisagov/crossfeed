@@ -172,7 +172,7 @@ export const ScanTasksView: React.FC = () => {
         'wappalyzer',
         'censysIpv4',
         'searchSync',
-        'cve'
+        'cve',
         'intrigueIdent'
       ]),
       disableSortBy: true
