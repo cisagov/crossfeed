@@ -47,7 +47,7 @@ export const Search: React.FC = () => {
         body: {
           ...requestBody
         },
-        // showLoading: false
+        showLoading: false
       });
       // const state = buildState(json);
       const state = { results: json.suggest["main-suggest"][0].options.map((e: any) => ({text: { raw: e.text }, id: { raw: e._source.id } })) }
@@ -95,7 +95,7 @@ export const Search: React.FC = () => {
                       shouldTrackClickThrough: true,
                       clickThroughTags: ["test"]
                     }}
-                    autocompleteSuggestions={false}
+                    autocompleteSuggestions={true}
                   />
                 }
                 sideContent={
