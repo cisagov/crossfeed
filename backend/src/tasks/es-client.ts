@@ -35,7 +35,7 @@ class ESClient {
           }
         }
       });
-      console.log(`Index ${DOMAINS_INDEX} already created`);
+      console.log(`Index ${DOMAINS_INDEX} updated.`);
     } catch (e) {
       await this.client.indices.create({
         index: DOMAINS_INDEX,
@@ -59,7 +59,7 @@ class ESClient {
           }
         }
       });
-      console.log(`Created index ${DOMAINS_INDEX}`);
+      console.log(`Created index ${DOMAINS_INDEX}.`);
     }
   }
 
