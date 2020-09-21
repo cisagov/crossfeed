@@ -104,7 +104,7 @@ npm run codegen
 
 ## Documentation
 
-The documentation files are stored in the `docs` directory and served from a Jekyll site. To work on this, you can run:
+The documentation files are stored in the `docs` directory and served from a Jekyll site. To work on this, you should first comment out the "docs" section of `docker-compose.yml` and then run:
 
 ```bash
 docker-compose up docs
