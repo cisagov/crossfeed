@@ -7,7 +7,9 @@ import { handler as portscanner } from './tasks/portscanner';
 import { handler as wappalyzer } from './tasks/wappalyzer';
 import { handler as censysIpv4 } from './tasks/censysIpv4';
 import { handler as searchSync } from './tasks/search-sync';
+import { handler as intrigueIdent } from './tasks/intrigue-ident';
 import { handler as cve } from './tasks/cve';
+import { handler as testProxy } from './tasks/test-proxy';
 
 /**
  * Worker entrypoint.
@@ -28,8 +30,10 @@ async function main() {
     cve,
     findomain,
     portscanner,
-    wappalyzer
-  }[scanName];
+    wappalyzer,
+    intrigueIdent,
+    testProxy
+  }[scanName || 'testProxy'];
   if (!scanFn) {
     throw new Error('Invalid scan name ' + scanName);
   }

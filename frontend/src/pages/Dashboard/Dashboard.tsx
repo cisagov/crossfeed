@@ -1,155 +1,64 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo, useRef } from 'react';
 import { TableInstance } from 'react-table';
-import { Query, User } from 'types';
+import { Query } from 'types';
 import { Table, Paginator, Export } from 'components';
 import { Domain } from 'types';
 import { createColumns, getServiceNames } from './columns';
-import { useAuthContext, AuthUser } from 'context';
+import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { useHistory } from 'react-router-dom';
-import { parse } from 'query-string';
 import { Grid, Checkbox } from '@trussworks/react-uswds';
-import { userMustSign } from '../TermsOfUse';
+import { usePersistentState, useDomainApi } from 'hooks';
 
-interface ApiResponse {
-  result: Domain[];
-  count: number;
-}
+const PAGE_SIZE = 25;
 
 export const Dashboard: React.FC = () => {
-  const {
-    user,
-    refreshUser,
-    currentOrganization,
-    login,
-    apiPost
-  } = useAuthContext();
+  const { user, currentOrganization } = useAuthContext();
+  const tableRef = useRef<TableInstance<Domain>>(null);
+  const columns = useMemo(() => createColumns(), []);
   const [domains, setDomains] = useState<Domain[]>([]);
+
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
-  const [query, setQuery] = useState<Query<Domain>>({
-    page: 1,
-    sort: [{ id: 'name', desc: true }],
-    filters: []
-  });
-  const [showAll, setShowAll] = useState<boolean>(
-    JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
-  );
-  const columns = useMemo(() => createColumns(), []);
-  const PAGE_SIZE = 25;
-  const history = useHistory();
-
-  const updateShowAll = (state: boolean) => {
-    setShowAll(state);
-    localStorage.setItem('showGlobal', JSON.stringify(state));
-  };
-
-  const queryDomains = useCallback(
-    async ({
-      q,
-      pageSize = PAGE_SIZE
-    }: {
-      q: Query<Domain>;
-      pageSize?: number;
-    }) => {
-      const { page, sort, filters } = q;
-      const tableFilters = filters
-        .filter(f => Boolean(f.value))
-        .reduce(
-          (accum, next) => ({
-            ...accum,
-            [next.id]: next.value
-          }),
-          {}
-        );
-      return apiPost<ApiResponse>('/domain/search', {
-        body: {
-          pageSize,
-          page,
-          sort: sort[0]?.id ?? 'name',
-          order: sort[0]?.desc ? 'DESC' : 'ASC',
-          filters: {
-            ...tableFilters,
-            organization: showAll ? undefined : currentOrganization?.id
-          }
-        }
-      });
-    },
-    [apiPost, currentOrganization, showAll]
+  const [showAll, setShowAll] = usePersistentState<boolean>(
+    'showGlobal',
+    false
   );
 
-  const fetchDomainTable = useCallback(
+  const { listDomains } = useDomainApi(showAll);
+
+  const fetchDomains = useCallback(
     async (q: Query<Domain>) => {
-      if (!user) {
-        return;
-      }
       try {
-        const { result, count } = await queryDomains({ q });
-        setQuery(q);
-        setDomains(result);
+        const { domains, count, pageCount } = await listDomains(q);
+        setDomains(domains);
         setCount(count);
-        setPageCount(Math.ceil(count / PAGE_SIZE));
+        setPageCount(pageCount);
       } catch (e) {
         console.error(e);
       }
     },
-    [queryDomains, user]
+    [listDomains]
   );
 
-  // Called to sign in the user
-  const callback = useCallback(async () => {
-    const parsed = parse(window.location.search);
-    if ((user && user.firstName !== '') || !parsed.state || !parsed.code) {
-      return;
-    }
+  const fetchDomainsExport = async (): Promise<any[]> => {
+    const { sortBy, filters } = tableRef.current?.state ?? {};
     try {
-      const { token, user } = await apiPost<{ token: string; user: User }>(
-        '/auth/callback',
-        {
-          body: {
-            state: parsed.state,
-            code: parsed.code,
-            nonce: localStorage.getItem('nonce'),
-            origState: localStorage.getItem('state')
-          }
-        }
-      );
-
-      await login(token, user);
-
-      localStorage.removeItem('nonce');
-      localStorage.removeItem('state');
-
-      await refreshUser();
-
-      if (user.firstName === '') {
-        history.push('/create-account');
-      } else if (userMustSign(user as AuthUser)) {
-        history.push('/terms');
-      } else {
-        history.push('/');
-        fetchDomainTable({
-          page: 0,
-          sort: [],
-          filters: []
-        });
-      }
-    } catch {
-      history.push('/');
+      const { domains } = await listDomains({
+        sort: sortBy ?? [],
+        page: 1,
+        pageSize: -1,
+        filters: filters ?? []
+      });
+      return domains.map(domain => ({
+        ...domain,
+        ports: domain.services.map(service => service.port).join(','),
+        services: getServiceNames(domain)
+      }));
+    } catch (e) {
+      console.error(e);
+      return [];
     }
-  }, [apiPost, history, login, user, refreshUser, fetchDomainTable]);
-
-  React.useEffect(() => {
-    if (user) {
-      if (user.firstName === '') {
-        history.push('/create-account');
-      } else if (userMustSign(user as AuthUser)) {
-        history.push('/terms');
-      }
-    }
-    callback();
-    // eslint-disable-next-line
-  }, []);
+  };
 
   const renderPagination = (table: TableInstance<Domain>) => (
     <Paginator table={table} />
@@ -177,7 +86,7 @@ export const Dashboard: React.FC = () => {
               name="showAll"
               label="Show all organizations"
               checked={showAll}
-              onChange={e => updateShowAll(e.target.checked)}
+              onChange={e => setShowAll(e.target.checked)}
               className={classes.showAll}
             />
           )}
@@ -185,29 +94,18 @@ export const Dashboard: React.FC = () => {
       </Grid>
       <Table<Domain>
         renderPagination={renderPagination}
+        tableRef={tableRef}
         columns={columns}
         data={domains}
         pageCount={pageCount}
-        fetchData={fetchDomainTable}
+        fetchData={fetchDomains}
         count={count}
         pageSize={PAGE_SIZE}
       />
-      <Export<
-        | Domain
-        | {
-            services: string;
-          }
-      >
+      <Export<Domain>
         name="domains"
         fieldsToExport={['name', 'ip', 'id', 'ports', 'services', 'updatedAt']}
-        getDataToExport={async () => {
-          const { result } = await queryDomains({ q: query, pageSize: -1 });
-          return result.map(domain => ({
-            ...domain,
-            ports: domain.services.map(service => service.port).join(','),
-            services: getServiceNames(domain)
-          }));
-        }}
+        getDataToExport={fetchDomainsExport}
       />
     </div>
   );

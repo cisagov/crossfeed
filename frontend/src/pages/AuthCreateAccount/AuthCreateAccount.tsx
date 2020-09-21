@@ -26,7 +26,7 @@ export const AuthCreateAccount: React.FC = () => {
   const [publicOrgs, setPublicOrgs] = useState<{ name: string; id: string }[]>(
     []
   );
-  const { user, login, apiGet, apiPut } = useAuthContext();
+  const { user, setUser, apiGet, apiPut } = useAuthContext();
 
   const fetchPublicOrgs = useCallback(async () => {
     const publicOrgs = await apiGet('/organizations/public');
@@ -65,7 +65,7 @@ export const AuthCreateAccount: React.FC = () => {
         body: values
       });
 
-      login(localStorage.getItem('token')!, updated);
+      setUser(updated);
       history.push('/', {
         message: 'Your account has been successfully created.'
       });

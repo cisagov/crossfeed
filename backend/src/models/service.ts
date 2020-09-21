@@ -17,6 +17,17 @@ const filterProducts = (product: Product) => {
   // Filter out false positives.
   const { cpe, version } = product;
   if (cpe === 'cpe:/a:apache:tomcat' && version === '1.1') {
+    // Wappalyzer incorrectly detects "Apache Tomcat 1.1"
+    // https://github.com/AliasIO/wappalyzer/issues/3305
+    return false;
+  }
+  if (cpe === 'cpe:2.3:a:apache:coyote:1.1:') {
+    // Intrigue Ident incorrectly detects "Apache Coyote 1.1"
+    // https://github.com/intrigueio/intrigue-ident/issues/51
+    return false;
+  }
+  if (cpe === 'cpe:2.3::generic:unauthorized::') {
+    // Intrigue Ident sometimes detects "Unauthorized" CPEs
     return false;
   }
   return true;
@@ -62,7 +73,7 @@ export class Service extends BaseEntity {
   domain: Domain;
 
   @ManyToOne((type) => Scan, {
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
   })
   discoveredBy: Scan;
@@ -116,6 +127,36 @@ export class Service extends BaseEntity {
     [x: string]: any;
   };
 
+  @Column({
+    type: 'jsonb',
+    default: {}
+  })
+  intrigueIdentResults: {
+    fingerprint: {
+      type: string;
+      vendor: string;
+      product: string;
+      version: string;
+      update: string;
+      tags: string[];
+      match_type: string;
+      match_details: string;
+      hide: boolean;
+      cpe: string;
+      issue?: string;
+      task?: string;
+      inference: boolean;
+    }[];
+    content: {
+      type: string;
+      name: string;
+      hide?: boolean;
+      issue?: boolean;
+      task?: boolean;
+      result?: boolean;
+    }[];
+  };
+
   /** Wappalyzer output */
   @Column({
     type: 'jsonb',
@@ -139,8 +180,7 @@ export class Service extends BaseEntity {
   @BeforeInsert()
   @BeforeUpdate()
   setProducts() {
-    const products: { [cpe: string]: Product } = {};
-    const misc: Product[] = [];
+    const products: Product[] = [];
     if (this.wappalyzerResults) {
       for (const wappalyzerResult of this.wappalyzerResults) {
         const product = {
@@ -150,8 +190,22 @@ export class Service extends BaseEntity {
           icon: wappalyzerResult.icon,
           tags: wappalyzerResult.categories.map((cat) => cat.name)
         };
-        if (wappalyzerResult.cpe) products[wappalyzerResult.cpe] = product;
-        else misc.push(product);
+        products.push(product);
+      }
+    }
+
+    if (this.intrigueIdentResults?.fingerprint) {
+      for (const result of this.intrigueIdentResults.fingerprint) {
+        const product = {
+          name: result.product,
+          version: result.version,
+          // Convert "cpe:2.3:" to "cpe:/"
+          cpe: result.cpe?.replace(/^cpe:2\.3:/, 'cpe:/'),
+          tags: result.tags,
+          vendor: result.vendor,
+          revision: result.update
+        };
+        products.push(product);
       }
     }
 
@@ -173,17 +227,25 @@ export class Service extends BaseEntity {
         cpe,
         tags: []
       };
-      if (cpe) products[cpe] = product;
+      products.push(product);
+    }
+
+    const productDict: { [cpe: string]: Product } = {};
+    const misc: Product[] = [];
+
+    for (const product of products) {
+      for (const prop in product) {
+        if (!product[prop]) delete product[prop];
+      }
+      console.log(product);
+      if (product.cpe && productDict[product.cpe])
+        productDict[product.cpe] = { ...productDict[product.cpe], ...product };
+      else if (product.cpe) productDict[product.cpe] = product;
       else misc.push(product);
     }
 
-    this.products = Object.values(products).concat(misc).filter(filterProducts);
-
-    this.products.push({
-      cpe: "cpe:/a:apache:tomcat",
-      version: "1.1",
-      name: "Apache Tomcat",
-      tags: []
-    })
+    this.products = Object.values(productDict)
+      .concat(misc)
+      .filter(filterProducts);
   }
 }

@@ -98,6 +98,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: true,
     description:
       'Syncs records with Elasticsearch so that they appear in search results.'
+  },
+  intrigueIdent: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Open source tool that fingerprints web technologies based on HTTP responses'
   }
 };
 

@@ -1,11 +1,10 @@
 import React from 'react';
 import { render, RenderOptions } from '@testing-library/react';
+import { mocked } from 'ts-jest/utils';
 import { MemoryRouter } from 'react-router-dom';
-import {
-  AuthContext,
-  AuthContextType,
-  defaultAuthContext
-} from '../context/AuthContext';
+import { AuthContext, AuthContextType } from '../context/AuthContext';
+import { CFThemeProvider } from 'context';
+import { authCtx } from './authCtx';
 
 interface CustomRenderOptions extends RenderOptions {
   initialHistory?: string[];
@@ -17,16 +16,18 @@ const customRender = (ui: any, options: CustomRenderOptions = {}) => {
 
   // Provide any context that the components may be expecting
   const Wrapper: React.FC = ({ children }) => (
-    <MemoryRouter initialEntries={initialHistory}>
-      <AuthContext.Provider
-        value={{
-          ...defaultAuthContext,
-          ...authContext
-        }}
-      >
-        {children}
-      </AuthContext.Provider>
-    </MemoryRouter>
+    <CFThemeProvider>
+      <MemoryRouter initialEntries={initialHistory}>
+        <AuthContext.Provider
+          value={{
+            ...authCtx,
+            ...authContext
+          }}
+        >
+          {children}
+        </AuthContext.Provider>
+      </MemoryRouter>
+    </CFThemeProvider>
   );
   return render(ui, { wrapper: Wrapper, ...rest });
 };
@@ -35,4 +36,4 @@ const customRender = (ui: any, options: CustomRenderOptions = {}) => {
 export * from '@testing-library/react';
 
 // override render method
-export { customRender as render };
+export { customRender as render, mocked };
