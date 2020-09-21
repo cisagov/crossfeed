@@ -2,8 +2,6 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { MTable, Export, SearchBar, TablePaginationActions } from 'components';
 import { Domain } from 'types';
 import { getServiceNames } from './columns';
-import { useAuthContext } from 'context';
-import classes from './styles.module.scss';
 import { usePersistentState, useDomainApi } from 'hooks';
 import { useDashboardTable } from './useDashboardTable';
 import { TablePagination, TableRow, makeStyles } from '@material-ui/core';
@@ -12,7 +10,6 @@ const PAGE_SIZE = 25;
 
 export const Dashboard: React.FC = () => {
   const classes = useStyles();
-  const { user, currentOrganization } = useAuthContext();
   const [domains, setDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
@@ -27,10 +24,7 @@ export const Dashboard: React.FC = () => {
     state: { sortBy, pageIndex, filters }
   } = table;
 
-  const [showAll, setShowAll] = usePersistentState<boolean>(
-    'showGlobal',
-    false
-  );
+  const [showAll] = usePersistentState<boolean>('showGlobal', false);
 
   const fetchDomains = useCallback(async () => {
     try {
