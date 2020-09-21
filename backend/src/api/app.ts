@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
+import * as helmet from 'helmet';
 import { handler as healthcheck } from './healthcheck';
 import { handler as scheduler } from '../tasks/scheduler';
 import * as auth from './auth';
@@ -46,6 +47,7 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(helmet.hsts());
 
 app.get('/', handlerToExpress(healthcheck));
 app.post('/auth/login', handlerToExpress(auth.login));
@@ -78,10 +80,26 @@ const checkUserSignedTerms = (req, res, next) => {
     )
       return next();
   }
-  if (!req.requestContext.authorizer.dateAcceptedTerms) {
+  if (
+    !req.requestContext.authorizer.dateAcceptedTerms ||
+    (req.requestContext.authorizer.acceptedTermsVersion &&
+      req.requestContext.authorizer.acceptedTermsVersion !==
+        getToUVersion(req.requestContext.authorizer))
+  ) {
     return res.status(403).send('User must accept terms of use');
   }
   return next();
+};
+
+const getMaximumRole = (user) => {
+  if (user?.userType === 'globalView') return 'user';
+  return user && user.roles && user.roles.find((role) => role.role === 'admin')
+    ? 'admin'
+    : 'user';
+};
+
+const getToUVersion = (user) => {
+  return `v${process.env.REACT_APP_TERMS_VERSION}-${getMaximumRole(user)}`;
 };
 
 // Routes that require an authenticated user, without
