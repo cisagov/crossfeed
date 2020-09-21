@@ -95,7 +95,7 @@ export const Search: React.FC = () => {
                       shouldTrackClickThrough: true,
                       clickThroughTags: ["test"]
                     }}
-                    autocompleteSuggestions={true}
+                    autocompleteSuggestions={false}
                   />
                 }
                 sideContent={
