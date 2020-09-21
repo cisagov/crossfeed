@@ -1,10 +1,11 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { MTable, Export, SearchBar, TablePaginationActions } from 'components';
 import { Domain } from 'types';
-import { getServiceNames } from './columns';
+import { getServiceNames } from '../../components/columns';
 import { usePersistentState, useDomainApi } from 'hooks';
 import { useDashboardTable } from './useDashboardTable';
 import { TablePagination, TableRow, makeStyles } from '@material-ui/core';
+import { FilterDrawer } from './FilterDrawer';
 
 const PAGE_SIZE = 25;
 
@@ -68,9 +69,11 @@ export const Dashboard: React.FC = () => {
   };
 
   return (
-    <>
-      <SearchBar />
-      <div className={classes.root}>
+    <div className={classes.root}>
+      <FilterDrawer instance={table} />
+
+      <div className={classes.content}>
+        <SearchBar />
         <MTable<Domain>
           classes={{ root: classes.tableRoot }}
           instance={table}
@@ -100,7 +103,7 @@ export const Dashboard: React.FC = () => {
           getDataToExport={fetchDomainsExport}
         />
       </div>
-    </>
+    </div>
   );
 };
 
@@ -109,7 +112,19 @@ const useStyles = makeStyles(() => ({
     marginTop: '2rem'
   },
   root: {
-    maxWidth: 1400,
-    margin: '0 auto'
+    position: 'relative',
+    flex: '1',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    alignItems: 'stretch',
+    margin: '0'
+  },
+  content: {
+    position: 'relative',
+    flex: '1 1 auto',
+    overflowY: 'auto',
+    height: '100%'
   }
 }));

@@ -14,7 +14,6 @@ import { Link } from 'react-router-dom';
 import { Domain } from 'types';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { FaSearch } from 'react-icons/fa';
-import { ColumnFilter } from 'components';
 
 type CreateColumns = () => Column<Domain>[];
 
@@ -42,36 +41,31 @@ const createColumns: CreateColumns = () => [
   {
     Header: 'Domain',
     accessor: 'name',
-    id: 'reverseName',
-    Filter: ColumnFilter
+    id: 'reverseName'
   },
   {
     Header: 'IP',
     accessor: 'ip',
-    Filter: ColumnFilter
+    id: 'ip'
   },
   {
     Header: 'Ports',
     id: 'port',
     disableSortBy: true,
-    accessor: ({ services }) =>
-      services.map(service => service.port).join(', '),
-    Filter: ColumnFilter
+    accessor: ({ services }) => services.map(service => service.port).join(', ')
   },
   {
     Header: 'Services',
     id: 'services',
     disableSortBy: true,
-    accessor: domain => getServiceNames(domain),
-    Filter: ColumnFilter
+    accessor: domain => getServiceNames(domain)
   },
   {
     Header: 'Vulnerabilities',
     id: 'vulnerabilities',
     accessor: domain =>
       domain.vulnerabilities &&
-      domain.vulnerabilities.map(vulnerability => vulnerability.cve).join(', '),
-    Filter: ColumnFilter
+      domain.vulnerabilities.map(vulnerability => vulnerability.cve).join(', ')
   },
   {
     Header: 'Updated',

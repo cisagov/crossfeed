@@ -16,3 +16,4 @@ export * from './RouteGuard';
 export * from './SearchBar';
 export * from './MTable';
 export * from './TablePaginationActions';
+export * from './TaggedInput';

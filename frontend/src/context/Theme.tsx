@@ -9,6 +9,9 @@ const theme = createMuiTheme({
     primary: {
       main: '#122D5D'
     }
+  },
+  typography: {
+    fontFamily: ["'Public Sans'", 'sans-serif'].join(',')
   }
 });
 
