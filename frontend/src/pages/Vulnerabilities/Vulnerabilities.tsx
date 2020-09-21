@@ -1,8 +1,8 @@
-import React, { useMemo, useState, useCallback } from 'react';
-import { TableInstance, Row } from 'react-table';
+import React, { useMemo, useState, useCallback, useRef } from 'react';
+import { TableInstance, Row, Filters, SortingRule } from 'react-table';
 import { Query } from 'types';
 import { useAuthContext } from 'context';
-import { Table, Paginator } from 'components';
+import { Table, Paginator, Export } from 'components';
 import { createColumns } from './columns';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
@@ -38,6 +38,7 @@ export const Vulnerabilities: React.FC = () => {
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const columns = useMemo(() => createColumns(), []);
+  const tableRef = useRef<TableInstance<Vulnerability>>(null);
   const [showAll, setShowAll] = useState<boolean>(
     JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
   );
@@ -47,9 +48,13 @@ export const Vulnerabilities: React.FC = () => {
     localStorage.setItem('showGlobal', JSON.stringify(state));
   };
 
-  const fetchVulnerabilities = useCallback(
-    async (query: Query<Vulnerability>) => {
-      const { page, sort, filters } = query;
+  const vulnerabilitiesSearch = useCallback(
+    async (
+      filters: Filters<Vulnerability>,
+      sort: SortingRule<Vulnerability>[],
+      page: number,
+      paginate: boolean
+    ): Promise<ApiResponse | undefined> => {
       try {
         const tableFilters = filters
           .filter(f => Boolean(f.value))
@@ -60,28 +65,52 @@ export const Vulnerabilities: React.FC = () => {
             }),
             {}
           );
-        const { result, count } = await apiPost<ApiResponse>(
-          '/vulnerabilities/search',
-          {
-            body: {
-              page,
-              sort: sort[0]?.id ?? 'createdAt',
-              order: sort[0]?.desc ? 'DESC' : 'ASC',
-              filters: {
-                ...tableFilters,
-                organization: showAll ? undefined : currentOrganization?.id
-              }
-            }
+        return await apiPost<ApiResponse>('/vulnerabilities/search', {
+          body: {
+            page,
+            sort: sort[0]?.id ?? 'createdAt',
+            order: sort[0]?.desc ? 'DESC' : 'ASC',
+            filters: {
+              ...tableFilters,
+              organization: showAll ? undefined : currentOrganization?.id
+            },
+            pageCount: paginate ? 25 : -1
           }
-        );
-        setVulnerabilities(result);
-        setPageCount(Math.ceil(count / 25));
+        });
       } catch (e) {
         console.error(e);
+        return;
       }
     },
-    [apiPost, showAll, currentOrganization]
+    [apiPost, currentOrganization, showAll]
   );
+
+  const fetchVulnerabilities = useCallback(
+    async (query: Query<Vulnerability>) => {
+      const resp = await vulnerabilitiesSearch(
+        query.filters,
+        query.sort,
+        query.page,
+        false
+      );
+      if (!resp) return;
+      const { result, count } = resp;
+      setVulnerabilities(result);
+      setPageCount(Math.ceil(count / 25));
+    },
+    [vulnerabilitiesSearch]
+  );
+
+  const fetchVulnerabilitiesExport = async (): Promise<any[]> => {
+    const { sortBy, filters } = tableRef.current?.state ?? {};
+    if (!sortBy || !filters) return [];
+    const resp = await vulnerabilitiesSearch(filters, sortBy, 1, true);
+    if (!resp) return [];
+    return resp.result.map(vuln => ({
+      ...vuln,
+      domain: vuln.domain.name
+    }));
+  };
 
   const renderPagination = (table: TableInstance<Vulnerability>) => (
     <Paginator table={table} />
@@ -122,6 +151,25 @@ export const Vulnerabilities: React.FC = () => {
         pageCount={pageCount}
         fetchData={fetchVulnerabilities}
         renderExpanded={renderExpandedVulnerability}
+        tableRef={tableRef}
+      />
+      <Export<Vulnerability>
+        name="vulnerabilities"
+        fieldsToExport={[
+          'domain',
+          'title',
+          'cve',
+          'cwe',
+          'cpe',
+          'description',
+          'cvss',
+          'severity',
+          'state',
+          'lastSeen',
+          'createdAt',
+          'id'
+        ]}
+        getDataToExport={fetchVulnerabilitiesExport}
       />
     </div>
   );
