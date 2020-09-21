@@ -67,7 +67,8 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.worker_signature_public_key.arn}",
           "${data.aws_ssm_parameter.worker_signature_private_key.arn}",
           "${data.aws_ssm_parameter.censys_api_id.arn}",
-          "${data.aws_ssm_parameter.censys_api_secret.arn}"
+          "${data.aws_ssm_parameter.censys_api_secret.arn}",
+          "${aws_ssm_parameter.es_endpoint.arn}
         ]
     }
   ]
@@ -154,6 +155,10 @@ resource "aws_ecs_task_definition" "worker" {
       {
         "name": "WORKER_SIGNATURE_PRIVATE_KEY",
         "valueFrom": "${data.aws_ssm_parameter.worker_signature_private_key.arn}"
+      },
+      {
+        "name": "ELASTICSEARCH_ENDPOINT",
+        "valueFrom": "${aws_ssm_parameter.es_endpoint.arn}"
       }
     ]
   }

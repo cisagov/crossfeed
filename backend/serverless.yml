@@ -40,6 +40,10 @@ provider:
       Action:
         - ses:SendRawEmail
       Resource: '*'
+    - Effect: Allow
+      Action:
+        - es:ESHttp*
+      Resource: '*'
 
 functions:
   - ${file(./src/tasks/functions.yml)}
