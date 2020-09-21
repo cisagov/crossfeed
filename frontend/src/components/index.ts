@@ -14,3 +14,5 @@ export * from './FileInput';
 export * from './ImportExport';
 export * from './RouteGuard';
 export * from './SearchBar';
+export * from './MTable';
+export * from './TablePaginationActions';
