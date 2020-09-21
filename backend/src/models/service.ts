@@ -32,6 +32,7 @@ const filterProducts = (product: Product) => {
   if (
     cpe === 'cpe:/a:f5:big-ip_application_security_manager:14.0.0_and_later:'
   ) {
+    // Intrigue Ident returns an invalid CPE version. TODO: ignore all invalid versions in CPEs.
     return false;
   }
   return true;
