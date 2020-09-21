@@ -1,31 +1,12 @@
-import {
-    IsInt,
-    IsPositive,
-    IsString,
-    IsIn,
-    ValidateNested,
-    isUUID,
-    IsOptional,
-    IsObject,
-    IsUUID
-  } from 'class-validator';
-  import { Type } from 'class-transformer';
-  import { Domain, connectToDatabase } from '../models';
-  import { validateBody, wrapHandler, NotFound } from './helpers';
-  import { SelectQueryBuilder, In } from 'typeorm';
-  import { isGlobalViewAdmin, getOrgMemberships } from './auth';
+  import { connectToDatabase } from '../models';
+  import { Unauthorized, wrapHandler } from './helpers';
+  import { isGlobalWriteAdmin } from './auth';
   import ESClient from '../tasks/es-client';
   
   
 export const search = wrapHandler(async (event) => {
-    if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
-        return {
-        statusCode: 200,
-        body: JSON.stringify({
-            result: [],
-            count: 0
-        })
-        };
+    if (!isGlobalWriteAdmin(event)) {
+        return Unauthorized;
     }
     await connectToDatabase();
     // const search = await validateBody(DomainSearch, event.body);
@@ -33,7 +14,6 @@ export const search = wrapHandler(async (event) => {
     const searchBody = JSON.parse(event.body!);
 
     const client = new ESClient();
-    // const searchResults = 
     
     let searchResults;
     try {
@@ -43,7 +23,7 @@ export const search = wrapHandler(async (event) => {
         throw e;
     }
 
-    console.error(searchResults.body);
+    console.error("search results: ", searchResults.body);
 
     return {
         statusCode: 200,
