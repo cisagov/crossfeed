@@ -1,3 +1,7 @@
+data "aws_region" "current" {}
+
+data "aws_caller_identity" "current" {}
+
 resource "aws_elasticsearch_domain" "es" {
   domain_name           = "crossfeed-${var.stage}"
   elasticsearch_version = "7.7"
@@ -13,6 +17,23 @@ resource "aws_elasticsearch_domain" "es" {
     #   availability_zone_count = 2
     # }
   }
+
+    # Allow all IPs within the private subnet to access this domain.
+    # This allows us to make requests to this ES domain without
+    # having to AWS-sign each request.
+    access_policies = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "es:ESHttp*",
+      "Principal": "*",
+      "Effect": "Allow",
+      "Resource": "arn:aws:es:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:domain/crossfeed-${var.stage}/*"
+    }
+  ]
+}
+POLICY
 
   vpc_options {
     subnet_ids         = [aws_subnet.es_1.id]
@@ -92,7 +113,7 @@ resource "aws_cloudwatch_log_group" "es_application" {
 resource "aws_ssm_parameter" "es_endpoint" {
   name      = "/crossfeed/${var.stage}/ELASTICSEARCH_ENDPOINT"
   type      = "String"
-  value     = aws_elasticsearch_domain.es.endpoint
+  value     = "https://${aws_elasticsearch_domain.es.endpoint}"
   overwrite = true
 
   tags = {
