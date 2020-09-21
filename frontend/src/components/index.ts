@@ -13,3 +13,4 @@ export * from './AuthForm';
 export * from './FileInput';
 export * from './ImportExport';
 export * from './RouteGuard';
+export * from './SearchBar';

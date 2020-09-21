@@ -12,7 +12,7 @@ import {
   getUserMustSign
 } from './userStateUtils';
 
-export const currentTermsVersion = '1';
+export const currentTermsVersion = process.env.REACT_APP_TERMS_VERSION;
 
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);

@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useMemo, useRef } from 'react';
 import { TableInstance } from 'react-table';
 import { Query } from 'types';
-import { Table, Paginator, Export } from 'components';
+import { Table, Paginator, Export, SearchBar } from 'components';
 import { Domain } from 'types';
 import { createColumns, getServiceNames } from './columns';
 import { useAuthContext } from 'context';
@@ -65,48 +65,58 @@ export const Dashboard: React.FC = () => {
   );
 
   return (
-    <div className={classes.root}>
-      <Grid row>
-        <Grid tablet={{ col: true }}>
-          <h1>
-            Inventory
-            {showAll
-              ? ' - Global'
-              : currentOrganization
-              ? ' - ' + currentOrganization.name
-              : ''}
-          </h1>{' '}
+    <>
+      <SearchBar />
+      <div className={classes.root}>
+        <Grid row>
+          <Grid tablet={{ col: true }}>
+            <h1>
+              Inventory
+              {showAll
+                ? ' - Global'
+                : currentOrganization
+                ? ' - ' + currentOrganization.name
+                : ''}
+            </h1>{' '}
+          </Grid>
+          <Grid style={{ float: 'right' }}>
+            {((user?.roles && user.roles.length > 1) ||
+              user?.userType === 'globalView' ||
+              user?.userType === 'globalAdmin') && (
+              <Checkbox
+                id="showAll"
+                name="showAll"
+                label="Show all organizations"
+                checked={showAll}
+                onChange={e => setShowAll(e.target.checked)}
+                className={classes.showAll}
+              />
+            )}
+          </Grid>
         </Grid>
-        <Grid style={{ float: 'right' }}>
-          {((user?.roles && user.roles.length > 1) ||
-            user?.userType === 'globalView' ||
-            user?.userType === 'globalAdmin') && (
-            <Checkbox
-              id="showAll"
-              name="showAll"
-              label="Show all organizations"
-              checked={showAll}
-              onChange={e => setShowAll(e.target.checked)}
-              className={classes.showAll}
-            />
-          )}
-        </Grid>
-      </Grid>
-      <Table<Domain>
-        renderPagination={renderPagination}
-        tableRef={tableRef}
-        columns={columns}
-        data={domains}
-        pageCount={pageCount}
-        fetchData={fetchDomains}
-        count={count}
-        pageSize={PAGE_SIZE}
-      />
-      <Export<Domain>
-        name="domains"
-        fieldsToExport={['name', 'ip', 'id', 'ports', 'services', 'updatedAt']}
-        getDataToExport={fetchDomainsExport}
-      />
-    </div>
+        <Table<Domain>
+          renderPagination={renderPagination}
+          tableRef={tableRef}
+          columns={columns}
+          data={domains}
+          pageCount={pageCount}
+          fetchData={fetchDomains}
+          count={count}
+          pageSize={PAGE_SIZE}
+        />
+        <Export<Domain>
+          name="domains"
+          fieldsToExport={[
+            'name',
+            'ip',
+            'id',
+            'ports',
+            'services',
+            'updatedAt'
+          ]}
+          getDataToExport={fetchDomainsExport}
+        />
+      </div>
+    </>
   );
 };
