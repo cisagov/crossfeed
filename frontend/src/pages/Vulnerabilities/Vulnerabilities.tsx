@@ -48,39 +48,42 @@ export const Vulnerabilities: React.FC = () => {
     localStorage.setItem('showGlobal', JSON.stringify(state));
   };
 
-  const vulnerabilitiesSearch = async (
-    filters: Filters<Vulnerability>,
-    sort: SortingRule<Vulnerability>[],
-    page: number,
-    paginate: boolean
-  ): Promise<ApiResponse | undefined> => {
-    try {
-      const tableFilters = filters
-        .filter(f => Boolean(f.value))
-        .reduce(
-          (accum, next) => ({
-            ...accum,
-            [next.id]: next.value
-          }),
-          {}
-        );
-      return await apiPost<ApiResponse>('/vulnerabilities/search', {
-        body: {
-          page,
-          sort: sort[0]?.id ?? 'createdAt',
-          order: sort[0]?.desc ? 'DESC' : 'ASC',
-          filters: {
-            ...tableFilters,
-            organization: showAll ? undefined : currentOrganization?.id
-          },
-          pageCount: paginate ? 25 : -1
-        }
-      });
-    } catch (e) {
-      console.error(e);
-      return;
-    }
-  };
+  const vulnerabilitiesSearch = useCallback(
+    async (
+      filters: Filters<Vulnerability>,
+      sort: SortingRule<Vulnerability>[],
+      page: number,
+      paginate: boolean
+    ): Promise<ApiResponse | undefined> => {
+      try {
+        const tableFilters = filters
+          .filter(f => Boolean(f.value))
+          .reduce(
+            (accum, next) => ({
+              ...accum,
+              [next.id]: next.value
+            }),
+            {}
+          );
+        return await apiPost<ApiResponse>('/vulnerabilities/search', {
+          body: {
+            page,
+            sort: sort[0]?.id ?? 'createdAt',
+            order: sort[0]?.desc ? 'DESC' : 'ASC',
+            filters: {
+              ...tableFilters,
+              organization: showAll ? undefined : currentOrganization?.id
+            },
+            pageCount: paginate ? 25 : -1
+          }
+        });
+      } catch (e) {
+        console.error(e);
+        return;
+      }
+    },
+    [apiPost, currentOrganization, showAll]
+  );
 
   const fetchVulnerabilities = useCallback(
     async (query: Query<Vulnerability>) => {
@@ -95,7 +98,7 @@ export const Vulnerabilities: React.FC = () => {
       setVulnerabilities(result);
       setPageCount(Math.ceil(count / 25));
     },
-    [apiPost, showAll, currentOrganization]
+    [vulnerabilitiesSearch]
   );
 
   const fetchVulnerabilitiesExport = async (): Promise<any[]> => {
