@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Chip, makeStyles } from '@material-ui/core';
 
 interface Props {
@@ -9,8 +9,12 @@ interface Props {
 export const TaggedArrayInput: React.FC<Props> = props => {
   const { values, onChange } = props;
   const [inpValue, setInpValue] = useState('');
-  const [error, setError] = useState('');
   const classes = useStyles();
+
+  const error = useMemo(
+    () => (values.includes(inpValue) ? 'Filters must be unique' : ''),
+    [values, inpValue]
+  );
 
   const onSubmit: React.FormEventHandler = e => {
     e.preventDefault();
@@ -27,11 +31,6 @@ export const TaggedArrayInput: React.FC<Props> = props => {
   const onInpChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     e.persist();
     setInpValue(e.target.value);
-    if (values.includes(e.target.value)) {
-      setError('Filters must be unique');
-    } else {
-      setError('');
-    }
   };
 
   return (
