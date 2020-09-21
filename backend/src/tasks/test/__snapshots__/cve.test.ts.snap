@@ -18,6 +18,7 @@ Object {
   "severity": "Critical",
   "state": "open",
   "title": "CVE-2019-10866",
+  "updatedAt": Any<Date>,
 }
 `;
 
@@ -34,5 +35,6 @@ Object {
   "severity": "High",
   "state": "open",
   "title": "CVE-2019-11590",
+  "updatedAt": Any<Date>,
 }
 `;
