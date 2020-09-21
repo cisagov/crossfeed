@@ -7,20 +7,21 @@ import {
   TableHead,
   TableRow,
   TableFooter,
-  makeStyles
+  makeStyles,
+  TableProps
 } from '@material-ui/core';
 
-interface Props<T extends object> {
+interface Props<T extends object> extends TableProps {
   instance: TableInstance<T>;
-  footerRows?: React.ReactNode
+  footerRows?: React.ReactNode;
 }
 
 export const MTable = <T extends object>(props: Props<T>) => {
-  const { instance, footerRows } = props;
+  const { instance, footerRows, ...rest } = props;
   const classes = useStyles();
 
   return (
-    <Table {...instance.getTableProps}>
+    <Table {...instance.getTableProps} {...rest}>
       <TableHead classes={{ root: classes.head }}>
         {instance.headerGroups.map(group => (
           <TableRow {...group.getHeaderGroupProps()}>
@@ -55,11 +56,7 @@ export const MTable = <T extends object>(props: Props<T>) => {
           );
         })}
       </TableBody>
-      {footerRows && (
-        <TableFooter>
-          {footerRows}
-        </TableFooter>
-      )}
+      {footerRows && <TableFooter>{footerRows}</TableFooter>}
     </Table>
   );
 };

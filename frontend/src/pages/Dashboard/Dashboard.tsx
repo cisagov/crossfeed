@@ -4,14 +4,14 @@ import { Domain } from 'types';
 import { getServiceNames } from './columns';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { Grid, Checkbox } from '@trussworks/react-uswds';
 import { usePersistentState, useDomainApi } from 'hooks';
 import { useDashboardTable } from './useDashboardTable';
-import { TablePagination, TableRow } from '@material-ui/core';
+import { TablePagination, TableRow, makeStyles } from '@material-ui/core';
 
 const PAGE_SIZE = 25;
 
 export const Dashboard: React.FC = () => {
+  const classes = useStyles();
   const { user, currentOrganization } = useAuthContext();
   const [domains, setDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(0);
@@ -77,33 +77,8 @@ export const Dashboard: React.FC = () => {
     <>
       <SearchBar />
       <div className={classes.root}>
-        <Grid row>
-          <Grid tablet={{ col: true }}>
-            <h1>
-              Inventory
-              {showAll
-                ? ' - Global'
-                : currentOrganization
-                ? ' - ' + currentOrganization.name
-                : ''}
-            </h1>{' '}
-          </Grid>
-          <Grid style={{ float: 'right' }}>
-            {((user?.roles && user.roles.length > 1) ||
-              user?.userType === 'globalView' ||
-              user?.userType === 'globalAdmin') && (
-              <Checkbox
-                id="showAll"
-                name="showAll"
-                label="Show all organizations"
-                checked={showAll}
-                onChange={e => setShowAll(e.target.checked)}
-                className={classes.showAll}
-              />
-            )}
-          </Grid>
-        </Grid>
         <MTable<Domain>
+          classes={{ root: classes.tableRoot }}
           instance={table}
           footerRows={
             <TableRow>
@@ -134,3 +109,13 @@ export const Dashboard: React.FC = () => {
     </>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  tableRoot: {
+    marginTop: '2rem'
+  },
+  root: {
+    maxWidth: 1400,
+    margin: '0 auto'
+  }
+}));
