@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Amplify from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import { AuthContextProvider, CFThemeProvider } from 'context';
 import {
   Alerts,
@@ -23,23 +23,22 @@ import {
 import { Layout, RouteGuard } from 'components';
 import './styles.scss';
 
-Amplify.configure({
-  API: {
-    endpoints: [
-      {
-        name: 'crossfeed',
-        endpoint: process.env.REACT_APP_API_URL
-      }
-    ]
-  },
-  Auth: process.env.REACT_APP_USE_COGNITO
-    ? {
-        region: 'us-east-1',
-        userPoolId: process.env.REACT_APP_USER_POOL_ID,
-        userPoolWebClientId: process.env.REACT_APP_USER_POOL_CLIENT_ID
-      }
-    : undefined
+API.configure({
+  endpoints: [
+    {
+      name: 'crossfeed',
+      endpoint: process.env.REACT_APP_API_URL
+    }
+  ]
 });
+
+if (process.env.REACT_APP_USE_COGNITO) {
+  Auth.configure({
+    region: 'us-east-1',
+    userPoolId: process.env.REACT_APP_USER_POOL_ID,
+    userPoolWebClientId: process.env.REACT_APP_USER_POOL_CLIENT_ID
+  });
+}
 
 const App: React.FC = () => (
   <Router>
