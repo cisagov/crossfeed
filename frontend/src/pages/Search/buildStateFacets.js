@@ -17,26 +17,26 @@ function getValueFacet(aggregations, fieldName) {
   }
 }
 
-function getRangeFacet(aggregations, fieldName) {
-  const value = get(aggregations, fieldName);
-  if (value?.buckets?.length  > 0) {
-    return [
-      {
-        field: fieldName,
-        type: "range",
-        data: value.buckets.map(bucket => ({
-          // Boolean values and date values require using `key_as_string`
-          value: {
-            to: bucket.to,
-            from: bucket.from,
-            name: bucket.key
-          },
-          count: bucket.doc_count
-        }))
-      }
-    ];
-  }
-}
+// function getRangeFacet(aggregations, fieldName) {
+//   const value = get(aggregations, fieldName);
+//   if (value?.buckets?.length  > 0) {
+//     return [
+//       {
+//         field: fieldName,
+//         type: "range",
+//         data: value.buckets.map(bucket => ({
+//           // Boolean values and date values require using `key_as_string`
+//           value: {
+//             to: bucket.to,
+//             from: bucket.from,
+//             name: bucket.key
+//           },
+//           count: bucket.doc_count
+//         }))
+//       }
+//     ];
+//   }
+// }
 
 const FACETS = ["name", "fromRootDomain", "services.port", "vulnerabilities.cve", "vulnerabilities.severity", "organization.name", "services.products.cpe"];
 export default function buildStateFacets(aggregations) {

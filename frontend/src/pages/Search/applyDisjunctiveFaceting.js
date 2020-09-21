@@ -45,6 +45,7 @@ async function getDisjunctiveFacetCounts(state, disunctiveFacetNames) {
       let body = buildRequest(newState);
       body = changeSizeToZero(body);
       body = removeAllFacetsExcept(body, facetName);
+      console.warn(body);
       // return runRequest(body);
       return {};
     })

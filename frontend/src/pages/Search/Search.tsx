@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, {  } from 'react';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import {
@@ -13,7 +13,7 @@ import {
   Paging,
   Sorting
 } from "@elastic/react-search-ui";
-import { Layout, SingleSelectFacet } from "@elastic/react-search-ui-views";
+import { Layout } from "@elastic/react-search-ui-views";
 import "@elastic/react-search-ui-views/lib/styles/styles.css";
 
 import {buildRequest, buildAutocompleteRequest} from "./buildRequest";
@@ -29,7 +29,7 @@ interface ApiResponse {
 // Demo: https://search-ui-stable-elasticsearch.netlify.app/
 
 export const Search: React.FC = () => {
-  const { user, currentOrganization, apiPost } = useAuthContext();
+  const { apiPost } = useAuthContext();
 
 
   const config = {

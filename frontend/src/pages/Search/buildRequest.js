@@ -23,17 +23,6 @@ function buildMatch(searchTerm) {
     : { match_all: {} };
 }
 
-function buildAutocompleteMatch(searchTerm) {
-  return {
-        multi_match: {
-          query: searchTerm,
-          // TODO: use a completion suggester instead.
-          type: "phrase_prefix",
-          fields: ["name"]
-        }
-      };
-}
-
 /*
 
   Converts current application state to an Elasticsearch request.
