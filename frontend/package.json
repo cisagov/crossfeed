@@ -51,7 +51,7 @@
     "react-select": "^3.1.0",
     "react-table": "^7.5.0",
     "sass": "^1.26.11",
-    "ts-jest": "^26.3.0",
+    "ts-jest": "^26.4.0",
     "typescript": "^3.9.7",
     "uswds": "^2.8.1"
   },
