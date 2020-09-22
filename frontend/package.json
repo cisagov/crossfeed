@@ -15,7 +15,7 @@
     "@testing-library/user-event": "^7.2.1",
     "@trussworks/react-uswds": "^1.9.2",
     "@types/classnames": "^2.2.9",
-    "@types/faker": "^4.1.10",
+    "@types/faker": "^5.1.0",
     "@types/file-saver": "^2.0.1",
     "@types/jest": "^26.0.14",
     "@types/jwt-decode": "^2.2.1",
