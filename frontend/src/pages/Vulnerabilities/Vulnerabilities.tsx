@@ -57,7 +57,7 @@ export const Vulnerabilities: React.FC = () => {
     ): Promise<ApiResponse | undefined> => {
       try {
         const tableFilters = filters
-          .filter(f => Boolean(f.value))
+          .filter((f) => Boolean(f.value))
           .reduce(
             (accum, next) => ({
               ...accum,
@@ -74,7 +74,7 @@ export const Vulnerabilities: React.FC = () => {
               ...tableFilters,
               organization: showAll ? undefined : currentOrganization?.id
             },
-            pageCount: paginate ? 25 : -1
+            pageSize: paginate ? -1 : 25
           }
         });
       } catch (e) {
@@ -106,7 +106,7 @@ export const Vulnerabilities: React.FC = () => {
     if (!sortBy || !filters) return [];
     const resp = await vulnerabilitiesSearch(filters, sortBy, 1, true);
     if (!resp) return [];
-    return resp.result.map(vuln => ({
+    return resp.result.map((vuln) => ({
       ...vuln,
       domain: vuln.domain.name
     }));
@@ -138,7 +138,7 @@ export const Vulnerabilities: React.FC = () => {
               name="showAll"
               label="Show all organizations"
               checked={showAll}
-              onChange={e => updateShowAll(e.target.checked)}
+              onChange={(e) => updateShowAll(e.target.checked)}
               className={classes.showAll}
             />
           )}
