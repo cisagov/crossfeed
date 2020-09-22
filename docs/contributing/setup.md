@@ -22,6 +22,7 @@ subnav:
 1.  Start entire environment from root using Docker Compose
     - `docker-compose up --build`
 1.  Generate DB schema:
+
     - `cd backend && npm run syncdb`
     - (run `npm run syncdb -- -d dangerouslyforce` to drop and recreate)
 
@@ -33,7 +34,7 @@ subnav:
     - environment variables in root `.env`
 1.  Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save.
 
-If you want to view a local version of Kibana, navigate to [http://localhost:5601](http://localhost:5601).
+If you want to view a local version of Kibana, you should first comment out the "kib" section of `docker-compose.yml` and then navigate to [http://localhost:5601](http://localhost:5601).
 
 ### Running the scheduler lambda function locally
 
