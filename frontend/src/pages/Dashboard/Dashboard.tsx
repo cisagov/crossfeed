@@ -1,47 +1,54 @@
-import React, { useCallback, useState, useMemo, useRef } from 'react';
-import { TableInstance } from 'react-table';
-import { Query } from 'types';
-import { Table, Paginator, Export, SearchBar } from 'components';
+import React, { useCallback, useState, useEffect } from 'react';
+import { MTable, Export, SearchBar, TablePaginationActions } from 'components';
 import { Domain } from 'types';
-import { createColumns, getServiceNames } from './columns';
-import { useAuthContext } from 'context';
-import classes from './styles.module.scss';
-import { Grid, Checkbox } from '@trussworks/react-uswds';
+import { getServiceNames } from './columns';
 import { usePersistentState, useDomainApi } from 'hooks';
+import { useDashboardTable } from './useDashboardTable';
+import { TablePagination, TableRow, makeStyles } from '@material-ui/core';
 
 const PAGE_SIZE = 25;
 
 export const Dashboard: React.FC = () => {
-  const { user, currentOrganization } = useAuthContext();
-  const tableRef = useRef<TableInstance<Domain>>(null);
-  const columns = useMemo(() => createColumns(), []);
+  const classes = useStyles();
   const [domains, setDomains] = useState<Domain[]>([]);
-
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
-  const [showAll, setShowAll] = usePersistentState<boolean>(
-    'showGlobal',
-    false
-  );
+  const { listDomains } = useDomainApi();
 
-  const { listDomains } = useDomainApi(showAll);
+  const table = useDashboardTable(domains, {
+    count,
+    pageCount
+  });
 
-  const fetchDomains = useCallback(
-    async (q: Query<Domain>) => {
-      try {
-        const { domains, count, pageCount } = await listDomains(q);
-        setDomains(domains);
-        setCount(count);
-        setPageCount(pageCount);
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    [listDomains]
-  );
+  const {
+    state: { sortBy, pageIndex, filters }
+  } = table;
+
+  const [showAll] = usePersistentState<boolean>('showGlobal', false);
+
+  const fetchDomains = useCallback(async () => {
+    try {
+      const { domains, count, pageCount } = await listDomains({
+        sort: sortBy,
+        page: pageIndex + 1,
+        filters,
+        pageSize: PAGE_SIZE,
+        showAll
+      });
+      setDomains(domains);
+      setCount(count);
+      setPageCount(pageCount);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [sortBy, pageIndex, filters, showAll, listDomains]);
+
+  useEffect(() => {
+    fetchDomains();
+  }, [fetchDomains]);
 
   const fetchDomainsExport = async (): Promise<any[]> => {
-    const { sortBy, filters } = tableRef.current?.state ?? {};
+    const { sortBy, filters } = table.state ?? {};
     try {
       const { domains } = await listDomains({
         sort: sortBy ?? [],
@@ -60,49 +67,25 @@ export const Dashboard: React.FC = () => {
     }
   };
 
-  const renderPagination = (table: TableInstance<Domain>) => (
-    <Paginator table={table} />
-  );
-
   return (
     <>
       <SearchBar />
       <div className={classes.root}>
-        <Grid row>
-          <Grid tablet={{ col: true }}>
-            <h1>
-              Inventory
-              {showAll
-                ? ' - Global'
-                : currentOrganization
-                ? ' - ' + currentOrganization.name
-                : ''}
-            </h1>{' '}
-          </Grid>
-          <Grid style={{ float: 'right' }}>
-            {((user?.roles && user.roles.length > 1) ||
-              user?.userType === 'globalView' ||
-              user?.userType === 'globalAdmin') && (
-              <Checkbox
-                id="showAll"
-                name="showAll"
-                label="Show all organizations"
-                checked={showAll}
-                onChange={e => setShowAll(e.target.checked)}
-                className={classes.showAll}
+        <MTable<Domain>
+          classes={{ root: classes.tableRoot }}
+          instance={table}
+          footerRows={
+            <TableRow>
+              <TablePagination
+                count={count}
+                page={pageIndex}
+                rowsPerPage={PAGE_SIZE}
+                onChangePage={(_, page) => table.gotoPage(page)}
+                rowsPerPageOptions={[]}
+                ActionsComponent={TablePaginationActions}
               />
-            )}
-          </Grid>
-        </Grid>
-        <Table<Domain>
-          renderPagination={renderPagination}
-          tableRef={tableRef}
-          columns={columns}
-          data={domains}
-          pageCount={pageCount}
-          fetchData={fetchDomains}
-          count={count}
-          pageSize={PAGE_SIZE}
+            </TableRow>
+          }
         />
         <Export<Domain>
           name="domains"
@@ -120,3 +103,13 @@ export const Dashboard: React.FC = () => {
     </>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  tableRoot: {
+    marginTop: '2rem'
+  },
+  root: {
+    maxWidth: 1400,
+    margin: '0 auto'
+  }
+}));

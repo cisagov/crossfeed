@@ -2,6 +2,10 @@ import { Query, Domain } from 'types';
 import { useAuthContext } from 'context';
 import { useCallback } from 'react';
 
+export interface DomainQuery extends Query<Domain> {
+  showAll?: boolean;
+}
+
 interface ApiResponse {
   result: Domain[];
   count: number;
@@ -9,13 +13,13 @@ interface ApiResponse {
 
 const PAGE_SIZE = 25;
 
-export const useDomainApi = (showAll: boolean) => {
+export const useDomainApi = () => {
   const { currentOrganization, apiPost } = useAuthContext();
   const orgId = currentOrganization?.id;
 
   const listDomains = useCallback(
-    async (query: Query<Domain>) => {
-      const { page, sort, filters, pageSize = PAGE_SIZE } = query;
+    async (query: DomainQuery) => {
+      const { showAll, page, sort, filters, pageSize = PAGE_SIZE } = query;
 
       const tableFilters = filters
         .filter(f => Boolean(f.value))
@@ -46,7 +50,7 @@ export const useDomainApi = (showAll: boolean) => {
         pageCount: Math.ceil(count / pageSize)
       };
     },
-    [showAll, orgId, apiPost]
+    [orgId, apiPost]
   );
 
   return {
