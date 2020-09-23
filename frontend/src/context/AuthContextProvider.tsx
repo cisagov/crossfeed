@@ -33,7 +33,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
       if (e.message.includes('401')) {
         // Unauthorized, log out user
         await logout();
-        history.push('/');
+        window.location.reload();
       }
     },
     [history, logout]
