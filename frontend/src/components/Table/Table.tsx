@@ -10,7 +10,8 @@ import {
   usePagination,
   TableInstance,
   Row,
-  useFilters
+  useFilters,
+  Filters
 } from 'react-table';
 import { TableHead } from './TableHead';
 import { TableBody } from './TableBody';
@@ -20,6 +21,7 @@ interface TableProps<T extends object> {
   columns: Column<T>[];
   data: T[];
   initialSortBy?: SortingRule<T>[];
+  initialFilterBy?: Filters<T>;
   pageCount?: number;
   count?: number;
   pageSize?: number;
@@ -35,6 +37,7 @@ export const Table = <T extends object>(props: TableProps<T>) => {
     columns,
     data,
     initialSortBy,
+    initialFilterBy,
     pageCount = 0,
     pageSize = 20,
     count,
@@ -69,6 +72,7 @@ export const Table = <T extends object>(props: TableProps<T>) => {
         sortBy: initialSortBy ?? [],
         pageSize,
         pageIndex: 0,
+        filters: initialFilterBy ?? [],
         globalFilter: []
       }
     },

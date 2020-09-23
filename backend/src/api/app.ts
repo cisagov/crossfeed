@@ -133,6 +133,10 @@ authenticatedRoute.get(
   '/vulnerabilities/:vulnerabilityId',
   handlerToExpress(vulnerabilities.get)
 );
+authenticatedRoute.put(
+  '/vulnerabilities/:vulnerabilityId',
+  handlerToExpress(vulnerabilities.update)
+);
 authenticatedRoute.get('/scans', handlerToExpress(scans.list));
 authenticatedRoute.get('/granularScans', handlerToExpress(scans.listGranular));
 authenticatedRoute.post('/scans', handlerToExpress(scans.create));

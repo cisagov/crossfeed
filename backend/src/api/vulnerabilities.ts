@@ -125,6 +125,37 @@ class VulnerabilitySearch {
   }
 }
 
+export const update = wrapHandler(async (event) => {
+  let where = {};
+  if (isGlobalViewAdmin(event)) {
+    where = {};
+  } else {
+    where = { domain: { organization: In(getOrgMemberships(event)) } };
+  }
+  await connectToDatabase();
+  const id = event.pathParameters?.vulnerabilityId;
+  if (!isUUID(id) || !event.body) {
+    return NotFound;
+  }
+  const vuln = await Vulnerability.findOne({ id, ...where });
+  if (vuln) {
+    console.log(vuln);
+    const body = JSON.parse(event.body);
+    if (body.substate) {
+      vuln.substate = body.substate;
+      if (body.substate === 'unconfirmed' || body.substate === 'exploitable')
+        vuln.state = 'open';
+      else vuln.state = 'closed';
+    }
+    if (body.notes) vuln.notes = body.notes;
+    vuln.save();
+  }
+  return {
+    statusCode: vuln ? 200 : 404,
+    body: vuln ? JSON.stringify(vuln) : ''
+  };
+});
+
 export const list = wrapHandler(async (event) => {
   await connectToDatabase();
   const search = await validateBody(VulnerabilitySearch, event.body);

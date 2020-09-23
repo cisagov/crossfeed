@@ -1,12 +1,27 @@
-import React, { useMemo, useState, useCallback, useRef } from 'react';
-import { TableInstance, Row, Filters, SortingRule } from 'react-table';
+import React, { useState, useCallback, useRef } from 'react';
+import {
+  TableInstance,
+  Row,
+  Filters,
+  SortingRule,
+  CellProps,
+  Column
+} from 'react-table';
 import { Query } from 'types';
 import { useAuthContext } from 'context';
-import { Table, Paginator, Export } from 'components';
-import { createColumns } from './columns';
+import {
+  Table,
+  Paginator,
+  Export,
+  ColumnFilter,
+  selectFilter
+} from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import { Grid, Checkbox } from '@trussworks/react-uswds';
+import { Grid, Checkbox, Dropdown } from '@trussworks/react-uswds';
+import { FaMinus, FaPlus } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 
 export interface ApiResponse {
   result: Vulnerability[];
@@ -34,14 +49,102 @@ export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
 };
 
 export const Vulnerabilities: React.FC = () => {
-  const { user, currentOrganization, apiPost } = useAuthContext();
+  const { user, currentOrganization, apiPost, apiPut } = useAuthContext();
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
   const [pageCount, setPageCount] = useState(0);
-  const columns = useMemo(() => createColumns(), []);
   const tableRef = useRef<TableInstance<Vulnerability>>(null);
   const [showAll, setShowAll] = useState<boolean>(
     JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
   );
+
+  const columns: Column<Vulnerability>[] = [
+    {
+      Header: 'Title',
+      accessor: 'title',
+      width: 800,
+      Filter: ColumnFilter
+    },
+    {
+      Header: 'Domain',
+      id: 'domain',
+      accessor: ({ domain }) => (
+        <Link to={`/domain/${domain.id}`}>{domain?.name}</Link>
+      ),
+      width: 800,
+      Filter: ColumnFilter
+    },
+    {
+      Header: 'Severity',
+      id: 'severity',
+      accessor: ({ severity }) => severity,
+      width: 100,
+      Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
+    },
+    {
+      Header: 'Created',
+      id: 'created',
+      accessor: ({ createdAt }) =>
+        `${formatDistanceToNow(parseISO(createdAt))} ago`,
+      width: 250,
+      disableFilters: true
+    },
+    {
+      Header: 'State',
+      id: 'state',
+      width: 100,
+      maxWidth: 200,
+      accessor: 'state',
+      Filter: selectFilter(['open', 'closed']),
+      Cell: ({ row }: CellProps<Vulnerability>) => (
+        <Dropdown
+          id="state-dropdown"
+          name="state-dropdown"
+          onChange={(e) => {
+            setVulnerabilityState(row.index, e.target.value);
+          }}
+          value={row.original.substate}
+          style={{ display: 'inline-block', width: '200px' }}
+        >
+          <option value="unconfirmed">Open (Unconfirmed)</option>
+          <option value="exploitable">Open (Exploitable)</option>
+          <option value="false-positive">Closed (False Positive)</option>
+          <option value="accepted-risk">Closed (Accepted Risk)</option>
+          <option value="remediated">Closed (Remediated)</option>
+        </Dropdown>
+      )
+    },
+    {
+      Header: 'Details',
+      Cell: ({ row }: CellProps<Vulnerability>) => (
+        <span
+          {...row.getToggleRowExpandedProps()}
+          className="text-center display-block"
+        >
+          {row.isExpanded ? <FaMinus /> : <FaPlus />}
+        </span>
+      ),
+      disableFilters: true
+    }
+  ];
+
+  const setVulnerabilityState = async (index: number, state: string) => {
+    try {
+      const res = await apiPut<Vulnerability>(
+        '/vulnerabilities/' + vulnerabilities[index].id,
+        {
+          body: {
+            substate: state
+          }
+        }
+      );
+      const vulnCopy = [...vulnerabilities];
+      vulnCopy[index].state = res.state;
+      vulnCopy[index].substate = res.substate;
+      setVulnerabilities(vulnCopy);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const updateShowAll = (state: boolean) => {
     setShowAll(state);
@@ -57,7 +160,7 @@ export const Vulnerabilities: React.FC = () => {
     ): Promise<ApiResponse | undefined> => {
       try {
         const tableFilters = filters
-          .filter(f => Boolean(f.value))
+          .filter((f) => Boolean(f.value))
           .reduce(
             (accum, next) => ({
               ...accum,
@@ -65,6 +168,7 @@ export const Vulnerabilities: React.FC = () => {
             }),
             {}
           );
+        console.log(filters);
         return await apiPost<ApiResponse>('/vulnerabilities/search', {
           body: {
             page,
@@ -74,7 +178,7 @@ export const Vulnerabilities: React.FC = () => {
               ...tableFilters,
               organization: showAll ? undefined : currentOrganization?.id
             },
-            pageCount: paginate ? 25 : -1
+            pageSize: paginate ? -1 : 25
           }
         });
       } catch (e) {
@@ -106,7 +210,7 @@ export const Vulnerabilities: React.FC = () => {
     if (!sortBy || !filters) return [];
     const resp = await vulnerabilitiesSearch(filters, sortBy, 1, true);
     if (!resp) return [];
-    return resp.result.map(vuln => ({
+    return resp.result.map((vuln) => ({
       ...vuln,
       domain: vuln.domain.name
     }));
@@ -138,7 +242,7 @@ export const Vulnerabilities: React.FC = () => {
               name="showAll"
               label="Show all organizations"
               checked={showAll}
-              onChange={e => updateShowAll(e.target.checked)}
+              onChange={(e) => updateShowAll(e.target.checked)}
               className={classes.showAll}
             />
           )}
@@ -152,6 +256,7 @@ export const Vulnerabilities: React.FC = () => {
         fetchData={fetchVulnerabilities}
         renderExpanded={renderExpandedVulnerability}
         tableRef={tableRef}
+        initialFilterBy={[{ id: 'state', value: 'open' }]}
       />
       <Export<Vulnerability>
         name="vulnerabilities"
