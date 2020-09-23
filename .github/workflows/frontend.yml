@@ -106,6 +106,7 @@ jobs:
           REACT_APP_USE_COGNITO: 1
           REACT_APP_USER_POOL_ID: us-east-1_uxiY8DOum
           REACT_APP_USER_POOL_CLIENT_ID: 1qf4cii9v0t9hn1hnr54f2ao0j
+          REACT_APP_TERMS_VERSION: 1
 
       - name: Build Production
         if: github.ref == 'refs/heads/production'
@@ -116,6 +117,7 @@ jobs:
           REACT_APP_USE_COGNITO: 1
           REACT_APP_USER_POOL_ID: us-east-1_MZgKoBmkN
           REACT_APP_USER_POOL_CLIENT_ID: 6qseah01b4vse02srrpra2u350
+          REACT_APP_TERMS_VERSION: 1
 
       - name: Deploy Staging
         if: github.ref == 'refs/heads/master'
