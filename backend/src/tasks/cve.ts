@@ -97,5 +97,5 @@ export const handler = async (commandOptions: CommandOptions) => {
       })
     );
   }
-  await saveVulnerabilitiesToDb(vulnerabilities);
+  await saveVulnerabilitiesToDb(vulnerabilities, false);
 };

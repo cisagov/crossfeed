@@ -96,7 +96,11 @@ class DomainSearch {
     let qs = Domain.createQueryBuilder('domain')
       .leftJoinAndSelect('domain.services', 'services')
       .leftJoinAndSelect('domain.organization', 'organization')
-      .leftJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
+      .leftJoinAndSelect(
+        'domain.vulnerabilities',
+        'vulnerabilities',
+        "state = 'open'"
+      )
       .orderBy(`domain.${this.sort}`, this.order)
       .groupBy(
         'domain.id, domain.ip, domain.name, organization.id, services.id, vulnerabilities.id'
