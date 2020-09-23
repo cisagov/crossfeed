@@ -3,6 +3,8 @@ export * from './AuthCreateAccount';
 export * from './Dashboard';
 export * from './Domain';
 export * from './TermsOfUse';
+export * from './Search';
+export * from './LoginGovCallback';
 export { default as Organization } from './Organization';
 export { default as Vulnerabilities } from './Vulnerabilities';
 export { default as Risk } from './Risk';

@@ -33,7 +33,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         if (
           product.cpe &&
           product.version &&
-          product.version.split('.').length > 1
+          String(product.version).split('.').length > 1
         ) {
           cpes.add(product.cpe + ':' + product.version);
           if (productMap[product.cpe]) {
@@ -97,5 +97,5 @@ export const handler = async (commandOptions: CommandOptions) => {
       })
     );
   }
-  await saveVulnerabilitiesToDb(vulnerabilities);
+  await saveVulnerabilitiesToDb(vulnerabilities, false);
 };

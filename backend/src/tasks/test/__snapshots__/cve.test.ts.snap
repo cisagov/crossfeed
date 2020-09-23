@@ -15,9 +15,12 @@ Object {
   "description": "",
   "id": Any<String>,
   "lastSeen": 2019-04-22T10:20:30.000Z,
+  "notes": "",
   "severity": "Critical",
   "state": "open",
+  "substate": "unconfirmed",
   "title": "CVE-2019-10866",
+  "updatedAt": Any<Date>,
 }
 `;
 
@@ -31,8 +34,11 @@ Object {
   "description": "",
   "id": Any<String>,
   "lastSeen": 2019-04-22T10:20:30.000Z,
+  "notes": "",
   "severity": "High",
   "state": "open",
+  "substate": "unconfirmed",
   "title": "CVE-2019-11590",
+  "updatedAt": Any<Date>,
 }
 `;

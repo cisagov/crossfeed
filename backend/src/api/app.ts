@@ -1,10 +1,12 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
+import * as helmet from 'helmet';
 import { handler as healthcheck } from './healthcheck';
 import { handler as scheduler } from '../tasks/scheduler';
 import * as auth from './auth';
 import * as domains from './domains';
+import * as search from './search';
 import * as vulnerabilities from './vulnerabilities';
 import * as organizations from './organizations';
 import * as scans from './scans';
@@ -38,6 +40,7 @@ const handlerToExpress = (handler) => async (req, res, next) => {
     res.status(statusCode).json(parsedBody);
   } catch (e) {
     // Not a JSON body
+    res.setHeader('content-type', 'text/plain');
     res.status(statusCode).send(body);
   }
 };
@@ -46,6 +49,7 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(helmet.hsts());
 
 app.get('/', handlerToExpress(healthcheck));
 app.post('/auth/login', handlerToExpress(auth.login));
@@ -78,10 +82,26 @@ const checkUserSignedTerms = (req, res, next) => {
     )
       return next();
   }
-  if (!req.requestContext.authorizer.dateAcceptedTerms) {
+  if (
+    !req.requestContext.authorizer.dateAcceptedTerms ||
+    (req.requestContext.authorizer.acceptedTermsVersion &&
+      req.requestContext.authorizer.acceptedTermsVersion !==
+        getToUVersion(req.requestContext.authorizer))
+  ) {
     return res.status(403).send('User must accept terms of use');
   }
   return next();
+};
+
+const getMaximumRole = (user) => {
+  if (user?.userType === 'globalView') return 'user';
+  return user && user.roles && user.roles.find((role) => role.role === 'admin')
+    ? 'admin'
+    : 'user';
+};
+
+const getToUVersion = (user) => {
+  return `v${process.env.REACT_APP_TERMS_VERSION}-${getMaximumRole(user)}`;
 };
 
 // Routes that require an authenticated user, without
@@ -103,6 +123,7 @@ const authenticatedRoute = express.Router();
 authenticatedRoute.use(checkUserLoggedIn);
 authenticatedRoute.use(checkUserSignedTerms);
 
+authenticatedRoute.post('/search', handlerToExpress(search.search));
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
 authenticatedRoute.post(
@@ -112,6 +133,10 @@ authenticatedRoute.post(
 authenticatedRoute.get(
   '/vulnerabilities/:vulnerabilityId',
   handlerToExpress(vulnerabilities.get)
+);
+authenticatedRoute.put(
+  '/vulnerabilities/:vulnerabilityId',
+  handlerToExpress(vulnerabilities.update)
 );
 authenticatedRoute.get('/scans', handlerToExpress(scans.list));
 authenticatedRoute.get('/granularScans', handlerToExpress(scans.listGranular));

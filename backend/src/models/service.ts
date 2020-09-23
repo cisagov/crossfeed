@@ -7,7 +7,8 @@ import {
   BaseEntity,
   CreateDateColumn,
   BeforeInsert,
-  BeforeUpdate
+  BeforeUpdate,
+  UpdateDateColumn
 } from 'typeorm';
 import { Domain } from './domain';
 import { Scan } from './scan';
@@ -20,13 +21,19 @@ const filterProducts = (product: Product) => {
     // https://github.com/AliasIO/wappalyzer/issues/3305
     return false;
   }
-  if (cpe === 'cpe:2.3:a:apache:coyote:1.1:') {
+  if (cpe === 'cpe:/a:apache:coyote:1.1:') {
     // Intrigue Ident incorrectly detects "Apache Coyote 1.1"
     // https://github.com/intrigueio/intrigue-ident/issues/51
     return false;
   }
-  if (cpe === 'cpe:2.3::generic:unauthorized::') {
+  if (cpe === 'cpe:/a::generic:unauthorized::') {
     // Intrigue Ident sometimes detects "Unauthorized" CPEs
+    return false;
+  }
+  if (
+    cpe === 'cpe:/a:f5:big-ip_application_security_manager:14.0.0_and_later:'
+  ) {
+    // Intrigue Ident returns an invalid CPE version. TODO: ignore all invalid versions in CPEs.
     return false;
   }
   return true;
@@ -61,6 +68,9 @@ export class Service extends BaseEntity {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @ManyToOne((type) => Domain, (domain) => domain.services, {
     onDelete: 'CASCADE',

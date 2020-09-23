@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Amplify from 'aws-amplify';
-import { AuthContextProvider } from 'context';
+import { API, Auth } from 'aws-amplify';
+import { AuthContextProvider, CFThemeProvider } from 'context';
 import {
   Alerts,
   Dashboard,
@@ -16,75 +16,66 @@ import {
   Users,
   Settings,
   Vulnerabilities,
-  TermsOfUse
+  TermsOfUse,
+  Search,
+  LoginGovCallback
 } from 'pages';
-import { AuthRoute, AuthRedirectRoute, Layout } from 'components';
+import { Layout, RouteGuard } from 'components';
 import './styles.scss';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 
-Amplify.configure({
-  API: {
-    endpoints: [
-      {
-        name: 'crossfeed',
-        endpoint: process.env.REACT_APP_API_URL
-      }
-    ]
-  },
-  Auth: process.env.REACT_APP_USE_COGNITO
-    ? {
-        region: 'us-east-1',
-        userPoolId: process.env.REACT_APP_USER_POOL_ID,
-        userPoolWebClientId: process.env.REACT_APP_USER_POOL_CLIENT_ID
-      }
-    : undefined
-});
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#122D5D'
+API.configure({
+  endpoints: [
+    {
+      name: 'crossfeed',
+      endpoint: process.env.REACT_APP_API_URL
     }
-  }
+  ]
 });
+
+if (process.env.REACT_APP_USE_COGNITO) {
+  Auth.configure({
+    region: 'us-east-1',
+    userPoolId: process.env.REACT_APP_USER_POOL_ID,
+    userPoolWebClientId: process.env.REACT_APP_USER_POOL_CLIENT_ID
+  });
+}
 
 const App: React.FC = () => (
   <Router>
-    <ThemeProvider theme={theme}>
+    <CFThemeProvider>
       <AuthContextProvider>
         <Layout>
           <Switch>
-            <AuthRoute
+            <RouteGuard
               exact
               path="/"
-              authComponent={Dashboard}
-              unauthComponent={AuthLogin}
+              component={Dashboard}
+              unauth={AuthLogin}
             />
 
+            <Route
+              exact
+              path="/login-gov-callback"
+              component={LoginGovCallback}
+            />
             <Route exact path="/create-account" component={AuthCreateAccount} />
-
             <Route exact path="/terms" component={TermsOfUse} />
 
-            <AuthRedirectRoute path="/domain/:domainId" component={Domain} />
-            <AuthRedirectRoute
-              path="/vulnerabilities"
-              component={Vulnerabilities}
-            />
-            <AuthRedirectRoute path="/risk" component={Risk} />
-            <AuthRedirectRoute path="/alerts" component={Alerts} />
-            <AuthRedirectRoute path="/scans" component={Scans} />
-            <AuthRedirectRoute
-              path="/organizations"
-              component={Organizations}
-            />
-            <AuthRedirectRoute path="/organization" component={Organization} />
-            <AuthRedirectRoute path="/users" component={Users} />
-            <AuthRedirectRoute path="/logs" component={Logs} />
-            <AuthRedirectRoute path="/settings" component={Settings} />
+            <RouteGuard path="/domain/:domainId" component={Domain} />
+            <RouteGuard path="/search" component={Search} />
+            <RouteGuard path="/vulnerabilities" component={Vulnerabilities} />
+            <RouteGuard path="/risk" component={Risk} />
+            <RouteGuard path="/alerts" component={Alerts} />
+            <RouteGuard path="/scans" component={Scans} />
+            <RouteGuard path="/organizations" component={Organizations} />
+            <RouteGuard path="/organization" component={Organization} />
+            <RouteGuard path="/users" component={Users} />
+            <RouteGuard path="/logs" component={Logs} />
+            <RouteGuard path="/settings" component={Settings} />
           </Switch>
         </Layout>
       </AuthContextProvider>
-    </ThemeProvider>
+    </CFThemeProvider>
   </Router>
 );
 

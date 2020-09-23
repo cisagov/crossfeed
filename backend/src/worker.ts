@@ -6,6 +6,7 @@ import { handler as findomain } from './tasks/findomain';
 import { handler as portscanner } from './tasks/portscanner';
 import { handler as wappalyzer } from './tasks/wappalyzer';
 import { handler as censysIpv4 } from './tasks/censysIpv4';
+import { handler as searchSync } from './tasks/search-sync';
 import { handler as intrigueIdent } from './tasks/intrigue-ident';
 import { handler as nuclei } from './tasks/nuclei';
 import { handler as cve } from './tasks/cve';
@@ -26,6 +27,7 @@ async function main() {
     amass,
     censys,
     censysIpv4,
+    searchSync,
     cve,
     findomain,
     portscanner,
