@@ -40,6 +40,7 @@ const handlerToExpress = (handler) => async (req, res, next) => {
     res.status(statusCode).json(parsedBody);
   } catch (e) {
     // Not a JSON body
+    res.setHeader('content-type', 'text/plain');
     res.status(statusCode).send(body);
   }
 };
