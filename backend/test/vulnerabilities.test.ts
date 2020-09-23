@@ -301,4 +301,129 @@ describe('vulnerabilities', () => {
       expect(response.body.id).toEqual(vulnerability.id);
     });
   });
+
+  describe('update', () => {
+    it("update by org user should work for vulnerability in the user's org", async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const domain = await Domain.create({
+        name: 'test-' + Math.random(),
+        organization
+      }).save();
+      const vulnerability = await Vulnerability.create({
+        title: 'test-' + Math.random(),
+        domain,
+        state: 'open',
+        substate: 'unconfirmed'
+      }).save();
+      const vulnerability2 = await Vulnerability.create({
+        title: 'test-' + Math.random(),
+        domain
+      }).save();
+      const response = await request(app)
+        .put(`/vulnerabilities/${vulnerability.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization.id,
+                role: 'user'
+              }
+            ]
+          })
+        )
+        .send({
+          substate: 'remediated'
+        })
+        .expect(200);
+      expect(response.body.state).toEqual('closed');
+      expect(response.body.substate).toEqual('remediated');
+    });
+    it('update by global admin should work', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const domain = await Domain.create({
+        name: 'test-' + Math.random(),
+        organization
+      }).save();
+      const vulnerability = await Vulnerability.create({
+        title: 'test-' + Math.random(),
+        domain,
+        state: 'open',
+        substate: 'unconfirmed'
+      }).save();
+      const vulnerability2 = await Vulnerability.create({
+        title: 'test-' + Math.random(),
+        domain
+      }).save();
+      const response = await request(app)
+        .put(`/vulnerabilities/${vulnerability.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalAdmin'
+          })
+        )
+        .send({
+          substate: 'remediated'
+        })
+        .expect(200);
+      expect(response.body.state).toEqual('closed');
+      expect(response.body.substate).toEqual('remediated');
+    });
+    it("update by org user should not work for vulnerability outside the user's org", async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const organization2 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const domain = await Domain.create({
+        name: 'test-' + Math.random(),
+        organization
+      }).save();
+      const vulnerability = await Vulnerability.create({
+        title: 'test-' + Math.random(),
+        domain,
+        state: 'open',
+        substate: 'unconfirmed'
+      }).save();
+      const vulnerability2 = await Vulnerability.create({
+        title: 'test-' + Math.random(),
+        domain
+      }).save();
+      const response = await request(app)
+        .put(`/vulnerabilities/${vulnerability.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [
+              {
+                org: organization2.id,
+                role: 'user'
+              }
+            ]
+          })
+        )
+        .send({
+          substate: 'remediated'
+        })
+        .expect(404);
+    });
+  });
 });
