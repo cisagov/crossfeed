@@ -139,16 +139,13 @@ export const update = wrapHandler(async (event) => {
     { id },
     { relations: ['domain', 'domain.organization'] }
   );
-
   let isAuthorized = false;
   if (vuln && vuln.domain.organization && vuln.domain.organization.id) {
     isAuthorized =
       isGlobalWriteAdmin(event) ||
       getOrgMemberships(event).includes(vuln.domain.organization.id);
   }
-
   if (vuln && isAuthorized) {
-    console.log(vuln);
     const body = JSON.parse(event.body);
     if (body.substate) {
       vuln.substate = body.substate;
@@ -158,11 +155,15 @@ export const update = wrapHandler(async (event) => {
     }
     if (body.notes) vuln.notes = body.notes;
     vuln.save();
-  }
 
+    return {
+      statusCode: 200,
+      body: JSON.stringify(vuln)
+    };
+  }
   return {
-    statusCode: vuln && isAuthorized ? 200 : 404,
-    body: vuln && isAuthorized ? JSON.stringify(vuln) : ''
+    statusCode: 404,
+    body: ''
   };
 });
 

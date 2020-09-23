@@ -38,7 +38,7 @@ describe('domains', () => {
         .expect(200);
       expect(response.body.count).toEqual(1);
     });
-    it('list by unapproved org user should only return no ddomains', async () => {
+    it('list by unapproved org user should only return no domains', async () => {
       const name = 'test-' + Math.random();
       await Domain.create({
         name,
