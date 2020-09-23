@@ -49,9 +49,9 @@ export const Dashboard: React.FC = () => {
         pageSize: -1,
         filters: filters ?? []
       });
-      return domains.map(domain => ({
+      return domains.map((domain) => ({
         ...domain,
-        ports: domain.services.map(service => service.port).join(','),
+        ports: domain.services.map((service) => service.port).join(','),
         services: getServiceNames(domain)
       }));
     } catch (e) {
@@ -86,7 +86,7 @@ export const Dashboard: React.FC = () => {
               name="showAll"
               label="Show all organizations"
               checked={showAll}
-              onChange={e => setShowAll(e.target.checked)}
+              onChange={(e) => setShowAll(e.target.checked)}
               className={classes.showAll}
             />
           )}
@@ -104,7 +104,15 @@ export const Dashboard: React.FC = () => {
       />
       <Export<Domain>
         name="domains"
-        fieldsToExport={['name', 'ip', 'id', 'ports', 'services', 'updatedAt']}
+        fieldsToExport={[
+          'name',
+          'ip',
+          'id',
+          'ports',
+          'services',
+          'createdAt',
+          'updatedAt'
+        ]}
         getDataToExport={fetchDomainsExport}
       />
     </div>

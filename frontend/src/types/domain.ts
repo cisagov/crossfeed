@@ -69,6 +69,7 @@ export interface Domain {
   id: string;
   name: string;
   ip: string;
+  createdAt: string;
   updatedAt: string;
   screenshot: string | null;
   country: string | null;
@@ -104,4 +105,4 @@ export interface Technology {
     slug: string;
     id: number;
   }[];
-};
+}
