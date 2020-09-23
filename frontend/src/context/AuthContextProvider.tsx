@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { Auth } from 'aws-amplify';
 import { AuthContext, AuthUser } from './AuthContext';
 import { User, Organization } from 'types';
-import { useHistory } from 'react-router-dom';
 import { useApi } from 'hooks/useApi';
 import { usePersistentState } from 'hooks';
 import {
@@ -21,7 +20,6 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     'organization',
     null
   );
-  const history = useHistory();
 
   const logout = useCallback(async () => {
     localStorage.clear();
@@ -36,7 +34,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         window.location.reload();
       }
     },
-    [history, logout]
+    [logout]
   );
 
   const api = useApi(handleError);
