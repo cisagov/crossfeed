@@ -22,6 +22,7 @@ subnav:
 1.  Start entire environment from root using Docker Compose
     - `docker-compose up --build`
 1.  Generate DB schema:
+
     - `cd backend && npm run syncdb`
     - (run `npm run syncdb -- -d dangerouslyforce` to drop and recreate)
 
@@ -32,6 +33,8 @@ subnav:
     - backend `serverless.yml` or `env.yml`
     - environment variables in root `.env`
 1.  Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save.
+
+If you want to view a local version of Kibana, you should first comment out the "kib" section of `docker-compose.yml` and then navigate to [http://localhost:5601](http://localhost:5601).
 
 ### Running the scheduler lambda function locally
 
@@ -102,7 +105,7 @@ npm run codegen
 
 ## Documentation
 
-The documentation files are stored in the `docs` directory and served from a Jekyll site. To work on this, you can run:
+The documentation files are stored in the `docs` directory and served from a Jekyll site. To work on this, you should first comment out the "docs" section of `docker-compose.yml` and then run:
 
 ```bash
 docker-compose up docs

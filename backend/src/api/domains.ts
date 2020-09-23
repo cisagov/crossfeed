@@ -176,6 +176,7 @@ export const list = wrapHandler(async (event) => {
     search.getResults(event),
     search.getCount(event)
   ]);
+
   return {
     statusCode: 200,
     body: JSON.stringify({

@@ -92,6 +92,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     memory: '4096',
     description: 'Matches detected software versions to CVEs from NIST NVD'
   },
+  searchSync: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    description:
+      'Syncs records with Elasticsearch so that they appear in search results.'
+  },
   intrigueIdent: {
     type: 'fargate',
     isPassive: true,

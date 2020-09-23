@@ -40,17 +40,48 @@ services:
     depends_on:
       - db
 
-  docs:
-    image: jekyll/jekyll:4.0
+  # docs:
+  #   image: jekyll/jekyll:4.0
+  #   volumes:
+  #     - ./docs:/srv/jekyll
+  #     - ./docs/.bundle-cache:/usr/local/bundle
+  #   command: jekyll serve --incremental
+  #   ports:
+  #     - "4000:4000"
+
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    command: ["elasticsearch", "-Elogger.level=WARN"]
+    networks:
+      - backend
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
-      - ./docs:/srv/jekyll
-      - ./docs/.bundle-cache:/usr/local/bundle
-    command: jekyll serve --incremental
+      - es-data:/usr/share/elasticsearch/data
     ports:
-      - "4000:4000"
+      - 9200:9200
+      - 9300:9300
+
+  # kib:
+  #   image: docker.elastic.co/kibana/kibana:7.9.0
+  #   networks:
+  #     - backend
+  #   ports:
+  #     - 5601:5601
+  #   environment:
+  #     ELASTICSEARCH_URL: http://es:9200
+  #     ELASTICSEARCH_HOSTS: http://es:9200
+  #     LOGGING_QUIET: 'true'
 
 volumes:
   postgres-data:
+  es-data:
 
 networks:
   backend:
