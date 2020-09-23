@@ -1,6 +1,9 @@
 import { connectToDatabase, Vulnerability } from '../../models';
 
-export default async (vulnerabilities: Vulnerability[]): Promise<void> => {
+export default async (
+  vulnerabilities: Vulnerability[],
+  updateState: boolean
+): Promise<void> => {
   await connectToDatabase();
 
   for (const vulnerability of vulnerabilities) {
@@ -16,9 +19,12 @@ export default async (vulnerabilities: Vulnerability[]): Promise<void> => {
               "description" = excluded."description",
               "cve" = excluded."cve",
               "cwe" = excluded."cwe",
-              "cpe" = excluded."cpe",
-              "state" = excluded."state"
-      `
+              "cpe" = excluded."cpe"${
+                updateState
+                  ? `,"state" = excluded."state",
+                  "substate" = excluded."substate"`
+                  : ''
+              }`
       )
       .execute();
   }
