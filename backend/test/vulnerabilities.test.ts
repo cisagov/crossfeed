@@ -41,12 +41,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ approved: true, org: organization.id, role: 'user' }]
           })
         )
         .send({})
@@ -153,12 +148,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ approved: true, org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -192,12 +182,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ approved: true, org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -233,12 +218,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ approved: true, org: organization.id, role: 'user' }]
           })
         )
         .expect(200);
@@ -270,12 +250,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ approved: true, org: organization.id, role: 'user' }]
           })
         )
         .expect(404);
@@ -329,12 +304,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ approved: true, org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -412,12 +382,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization2.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ approved: true, org: organization2.id, role: 'user' }]
           })
         )
         .send({

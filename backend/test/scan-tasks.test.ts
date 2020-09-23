@@ -104,12 +104,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ approved: true, org: organization.id, role: 'user' }]
           })
         )
         .expect(403);
