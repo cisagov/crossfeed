@@ -9,6 +9,7 @@ export interface UserToken {
   id: string;
   userType: 'standard' | 'globalView' | 'globalAdmin';
   roles: {
+    approved: boolean;
     org: string;
     role: 'user' | 'admin';
   }[];
@@ -225,9 +226,11 @@ export const isOrgAdmin = (
 };
 
 /** Returns the organizations a user is a member of */
-export const getOrgMemberships = (event: APIGatewayProxyEvent) => {
+export const getOrgMemberships = (event: APIGatewayProxyEvent): string[] => {
   if (!event.requestContext.authorizer) return [];
-  return event.requestContext.authorizer.roles.map((role) => role.org);
+  return event.requestContext.authorizer.roles
+    .filter((role) => role.approved)
+    .map((role) => role.org);
 };
 
 /** Returns a user's id */
