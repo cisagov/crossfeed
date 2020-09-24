@@ -7,7 +7,7 @@ import { FilterDrawer } from './FilterDrawer';
 import { ContextType } from './SearchProvider';
 import { FilterTags } from './FilterTags';
 
-export const DashboardUI: React.FC<ContextType> = props => {
+export const DashboardUI: React.FC<ContextType> = (props) => {
   const {
     // current,
     searchTerm,
@@ -24,8 +24,6 @@ export const DashboardUI: React.FC<ContextType> = props => {
   const classes = useStyles();
   const [selectedDomain, setSelectedDomain] = useState('');
 
-  console.log(facets);
-
   return (
     <div className={classes.root}>
       <FilterDrawer
@@ -38,7 +36,7 @@ export const DashboardUI: React.FC<ContextType> = props => {
       <div className={classes.contentWrapper}>
         <SearchBar
           value={searchTerm}
-          onChange={value =>
+          onChange={(value) =>
             setSearchTerm(value, {
               shouldClearFilters: false,
               autocompleteResults: true
@@ -56,11 +54,11 @@ export const DashboardUI: React.FC<ContextType> = props => {
         </div>
         <div className={classes.content}>
           <div className={classes.panel}>
-            {results.map(result => (
+            {results.map((result) => (
               <ResultCard
                 key={result.id.raw}
                 {...result}
-                onDomainSelected={id => setSelectedDomain(id)}
+                onDomainSelected={(id) => setSelectedDomain(id)}
                 selected={result.id.raw === selectedDomain}
               />
             ))}
@@ -140,7 +138,7 @@ const useStyles = makeStyles(() => ({
     position: 'relative',
     height: '100%',
     overflowY: 'auto',
-    padding: '0 1rem',
+    padding: '0 1rem 2rem 1rem',
     flex: '0 0 50%'
   }
 }));

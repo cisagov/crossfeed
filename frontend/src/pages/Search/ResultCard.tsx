@@ -9,7 +9,7 @@ interface Props extends Result {
   selected?: boolean;
 }
 
-export const ResultCard: React.FC<Props> = props => {
+export const ResultCard: React.FC<Props> = (props) => {
   const classes = useStyles(props);
   const {
     id,
@@ -81,7 +81,6 @@ export const ResultCard: React.FC<Props> = props => {
       <div className={classes.inner}>
         <button className={classes.domainRow} onClick={onClick}>
           <h4>{name.raw}</h4>
-          <span>Details</span>
         </button>
 
         {ip.raw && (
@@ -113,7 +112,7 @@ export const ResultCard: React.FC<Props> = props => {
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     boxSizing: 'border-box',
     marginBottom: '1rem',
