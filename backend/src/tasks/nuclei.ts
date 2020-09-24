@@ -70,10 +70,11 @@ const nuclei = async (domain: Domain): Promise<void> => {
           title: e.template,
           cve: e.template,
           severity: SEVERITY_MAP[e.severity],
-          state: 'open'
+          state: 'open',
+          substate: 'exploitable'
         })
       );
-    await saveVulnerabilitiesToDb(vulnerabilities);
+    await saveVulnerabilitiesToDb(vulnerabilities, false);
   }
 };
 
