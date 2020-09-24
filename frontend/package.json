@@ -54,7 +54,7 @@
     "react-table": "^7.5.1",
     "sass": "^1.26.11",
     "ts-jest": "^26.4.0",
-    "typescript": "^3.9.7",
+    "typescript": "^4.0.3",
     "uswds": "^2.9.0"
   },
   "scripts": {
