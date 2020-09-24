@@ -9,12 +9,13 @@ interface Props {
 
 type FlatFilters = {
   field: string;
-  fullField: string;
+  label: string;
   value: any;
+  values: any[];
   type: 'all' | 'none' | 'any';
 }[];
 
-export const FilterTags: React.FC<Props> = props => {
+export const FilterTags: React.FC<Props> = (props) => {
   const { filters, removeFilter } = props;
   const classes = useStyles();
 
@@ -23,12 +24,11 @@ export const FilterTags: React.FC<Props> = props => {
       filters.reduce(
         (acc, nextFilter) => [
           ...acc,
-          ...nextFilter.values.map((value: any) => ({
-            field: nextFilter.field.split('.').pop(),
-            fullField: nextFilter.field,
-            type: nextFilter.type,
-            value
-          }))
+          {
+            ...nextFilter,
+            value: nextFilter.values.join(', '),
+            label: nextFilter.field.split('.').pop()
+          }
         ],
         []
       ),
@@ -37,12 +37,14 @@ export const FilterTags: React.FC<Props> = props => {
 
   return (
     <div>
-      {filtersByColumn.map(filter => (
+      {filtersByColumn.map((filter) => (
         <Chip
           classes={{ root: classes.chip }}
-          label={`${filter.field}: ${filter.value}`}
+          label={`${filter.label}: ${filter.value}`}
           onDelete={() => {
-            removeFilter(filter.fullField, filter.value, filter.type);
+            filter.values.forEach((val) => {
+              removeFilter(filter.field, val, filter.type);
+            });
           }}
         />
       ))}
@@ -50,7 +52,7 @@ export const FilterTags: React.FC<Props> = props => {
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   chip: {
     margin: '0 0.5rem'
   }
