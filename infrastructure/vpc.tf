@@ -47,6 +47,16 @@ resource "aws_subnet" "worker" {
   }
 }
 
+resource "aws_subnet" "es_1" {
+  availability_zone = data.aws_availability_zones.available.names[0]
+  vpc_id            = aws_vpc.crossfeed_vpc.id
+  cidr_block        = "10.0.4.0/28"
+
+  tags = {
+    Project = var.project
+  }
+}
+
 resource "aws_route_table" "r" {
   vpc_id = aws_vpc.crossfeed_vpc.id
 

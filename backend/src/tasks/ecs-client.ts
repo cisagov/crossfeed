@@ -81,7 +81,8 @@ class ECSClient {
             `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`,
             `WORKER_USER_AGENT=${process.env.WORKER_USER_AGENT}`,
             `WORKER_SIGNATURE_PUBLIC_KEY=${process.env.WORKER_SIGNATURE_PUBLIC_KEY}`,
-            `WORKER_SIGNATURE_PRIVATE_KEY=${process.env.WORKER_SIGNATURE_PRIVATE_KEY}`
+            `WORKER_SIGNATURE_PRIVATE_KEY=${process.env.WORKER_SIGNATURE_PRIVATE_KEY}`,
+            `ELASTICSEARCH_ENDPOINT=${process.env.ELASTICSEARCH_ENDPOINT}`
           ]
         } as any);
         await container.start();

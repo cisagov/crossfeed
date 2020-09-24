@@ -8,6 +8,8 @@ updates:
     directory: "/frontend"
     schedule:
       interval: "daily"
+    ignore:
+      - dependency-name: "typescript"
   - package-ecosystem: "npm"
     directory: "/backend"
     schedule:

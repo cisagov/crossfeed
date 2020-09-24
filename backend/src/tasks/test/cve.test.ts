@@ -66,7 +66,8 @@ describe('cve', () => {
       expect(vulnerability).toMatchSnapshot(
         {
           id: expect.any(String),
-          createdAt: expect.any(Date)
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date)
         },
         'vulnerability'
       );

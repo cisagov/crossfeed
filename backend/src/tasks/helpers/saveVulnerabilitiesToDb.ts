@@ -19,6 +19,7 @@ export default async (
               "description" = excluded."description",
               "cve" = excluded."cve",
               "cwe" = excluded."cwe",
+              "updatedAt" = now(),
               "cpe" = excluded."cpe"${
                 updateState
                   ? `,"state" = excluded."state",
