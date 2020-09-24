@@ -1,4 +1,10 @@
-import { Domain, connectToDatabase, Vulnerability, Product } from '../models';
+import {
+  Domain,
+  connectToDatabase,
+  Vulnerability,
+  Product,
+  Service
+} from '../models';
 import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
@@ -73,7 +79,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     const parts = line.split(' ');
     if (parts.length < 5) continue;
     const domain = hostsToCheck[parseInt(parts[0])].domain;
-
+    const service = domain.services;
     const cvss = parseFloat(parts[3]);
     let severity: string;
 
@@ -93,7 +99,8 @@ export const handler = async (commandOptions: CommandOptions) => {
         cpe: parts[2],
         cvss,
         severity,
-        state: 'open'
+        state: 'open',
+        service: service
       })
     );
   }
