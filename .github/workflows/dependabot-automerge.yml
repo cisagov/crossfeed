@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Auto merge
         # Custom action for auto merging already available on marketplace
-        uses: pascalgn/automerge-action@135f0bdb927d9807b5446f7ca9ecc2c51de03c4a
+        uses: pascalgn/automerge-action@a6eda95628e71aa97719c9e111847402fa9d476a
         # Perform the auto merge action only when the PR is raised by dependabot
         if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
         env:
