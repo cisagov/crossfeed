@@ -39,8 +39,11 @@ Object {
   "description": "",
   "id": Any<String>,
   "lastSeen": Any<Date>,
+  "notes": "",
   "severity": "High",
   "state": "open",
+  "substate": "exploitable",
   "title": "CVE-2018-1000129",
+  "updatedAt": 2020-09-24T21:41:05.747Z,
 }
 `;
