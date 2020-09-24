@@ -45,29 +45,38 @@ export const createColumns: CreateColumns = () => [
     id: 'port',
     disableSortBy: true,
     accessor: ({ services }) =>
-      services.map(service => service.port).join(', '),
+      services.map((service) => service.port).join(', '),
     Filter: ColumnFilter
   },
   {
     Header: 'Services',
     id: 'services',
     disableSortBy: true,
-    accessor: domain => getServiceNames(domain),
+    accessor: (domain) => getServiceNames(domain),
     Filter: ColumnFilter
   },
   {
     Header: 'Vulnerabilities',
     id: 'vulnerabilities',
-    accessor: domain =>
+    accessor: (domain) =>
       domain.vulnerabilities &&
-      domain.vulnerabilities.map(vulnerability => vulnerability.cve).join(', '),
+      domain.vulnerabilities
+        .map((vulnerability) => vulnerability.cve)
+        .join(', '),
     Filter: ColumnFilter
   },
   {
-    Header: 'Updated',
+    Header: 'Last Seen',
     id: 'updatedAt',
     accessor: ({ updatedAt }) =>
       `${formatDistanceToNow(parseISO(updatedAt))} ago`,
+    disableFilters: true
+  },
+  {
+    Header: 'First Seen',
+    id: 'createdAt',
+    accessor: ({ createdAt }) =>
+      `${formatDistanceToNow(parseISO(createdAt))} ago`,
     disableFilters: true
   }
 ];
