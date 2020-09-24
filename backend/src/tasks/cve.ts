@@ -31,6 +31,9 @@ export const handler = async (commandOptions: CommandOptions) => {
     domain: Domain;
     cpes: string[];
   }> = [];
+
+  const servicesToCheck = new Map();
+
   for (const domain of allDomains) {
     const cpes = new Set<string>();
 
@@ -46,6 +49,9 @@ export const handler = async (commandOptions: CommandOptions) => {
             for (const cpe of productMap[product.cpe]) {
               cpes.add(cpe + ':' + product.version);
             }
+          }
+          if (!servicesToCheck.has(product.cpe + ':' + product.version)) {
+            servicesToCheck.set(product.cpe + ':' + product.version, service);
           }
         }
       }
@@ -72,14 +78,16 @@ export const handler = async (commandOptions: CommandOptions) => {
     "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 -require_version nvd-dump/nvdcve-1.1-2*.json.gz",
     { input: input, maxBuffer: buffer.constants.MAX_LENGTH }
   );
-
+  console.log(res);
   const split = String(res).split('\n');
   const vulnerabilities: Vulnerability[] = [];
   for (const line of split) {
     const parts = line.split(' ');
     if (parts.length < 5) continue;
     const domain = hostsToCheck[parseInt(parts[0])].domain;
-    const service = domain.services;
+
+    const service = servicesToCheck.get(parts[2]);
+
     const cvss = parseFloat(parts[3]);
     let severity: string;
 
