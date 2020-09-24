@@ -16,7 +16,7 @@
     "got": "^11.7.0",
     "helmet": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
-    "jwks-rsa": "^1.9.0",
+    "jwks-rsa": "^1.10.1",
     "nodemailer": "^6.4.11",
     "openid-client": "^4.1.1",
     "p-queue": "^6.6.1",
