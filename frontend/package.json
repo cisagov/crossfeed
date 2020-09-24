@@ -35,7 +35,7 @@
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.21.0",
+    "eslint-plugin-react": "^7.21.1",
     "file-saver": "^2.0.2",
     "jwt-decode": "^2.2.0",
     "material-table": "^1.69.0",
