@@ -38,29 +38,6 @@ describe('domains', () => {
         .expect(200);
       expect(response.body.count).toEqual(1);
     });
-    it('list by unapproved org user should only return no domains', async () => {
-      const name = 'test-' + Math.random();
-      await Domain.create({
-        name,
-        organization
-      }).save();
-      await Domain.create({
-        name: name + '-2'
-      }).save();
-      const response = await request(app)
-        .post('/domain/search')
-        .set(
-          'Authorization',
-          createUserToken({
-            roles: [{ org: organization.id, role: 'user' }]
-          })
-        )
-        .send({
-          filters: { reverseName: name }
-        })
-        .expect(200);
-      expect(response.body.count).toEqual(0);
-    });
     it('list by globalView should return domains from all orgs', async () => {
       const name = 'test-' + Math.random();
       await Domain.create({
