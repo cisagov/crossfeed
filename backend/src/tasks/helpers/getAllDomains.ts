@@ -7,6 +7,6 @@ export default async (organizations?: string[]): Promise<Domain[]> => {
 
   return Domain.find({
     select: ['id', 'name', 'ip', 'organization'],
-    where: organizations ? { organization = In(organizations) } : {}
+    where: organizations ? { organization: In(organizations) } : {}
   });
 };
