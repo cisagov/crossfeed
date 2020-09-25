@@ -29,7 +29,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -52,7 +52,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: false, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -129,7 +129,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -155,7 +155,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -182,7 +182,7 @@ describe('domains', () => {
           'Authorization',
           createUserToken({
             dateAcceptedTerms: undefined,
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -208,7 +208,7 @@ describe('domains', () => {
           createUserToken({
             dateAcceptedTerms: new Date(),
             acceptedTermsVersion: 'v0-user',
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -234,7 +234,7 @@ describe('domains', () => {
           createUserToken({
             dateAcceptedTerms: new Date(),
             acceptedTermsVersion: 'v1-user',
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
@@ -260,7 +260,7 @@ describe('domains', () => {
           createUserToken({
             dateAcceptedTerms: new Date(),
             acceptedTermsVersion: 'v1-admin',
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
@@ -281,7 +281,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(200);
@@ -297,7 +297,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(404);
