@@ -77,7 +77,7 @@ export const ResultCard: React.FC<Props> = (props) => {
   }
 
   return (
-    <Paper elevation={selected ? 5 : 1} classes={{ root: classes.root }}>
+    <Paper elevation={0} classes={{ root: classes.root }}>
       <div className={classes.inner}>
         <button className={classes.domainRow} onClick={onClick}>
           <h4>{name.raw}</h4>
@@ -117,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     marginBottom: '1rem',
     border: ({ selected }: Props) =>
-      selected ? '2px solid #28A0CB' : '2px solid transparent'
+      selected ? '2px solid #28A0CB' : '2px solid #DCDEE0'
   },
   inner: {
     padding: '1.5rem'
@@ -139,8 +139,9 @@ const useStyles = makeStyles((theme) => ({
       outline: 'none !important'
     },
     '& h4': {
+      fontWeight: 400,
       display: 'block',
-      fontSize: '1.6rem',
+      fontSize: '1.9rem',
       color: '#28A0CB',
       margin: 0,
       textAlign: 'left',
