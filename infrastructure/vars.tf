@@ -180,5 +180,5 @@ variable ssm_user_pool_client_id {
 
 variable ses_support_email {
   type    = string
-  default = "support@staging.crossfeed.cyber.dhs.gov"
+  default = "support@crossfeed.dds.mil"
 }
