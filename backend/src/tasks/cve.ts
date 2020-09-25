@@ -78,7 +78,6 @@ export const handler = async (commandOptions: CommandOptions) => {
     "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 -require_version nvd-dump/nvdcve-1.1-2*.json.gz",
     { input: input, maxBuffer: buffer.constants.MAX_LENGTH }
   );
-  console.log(res);
   const split = String(res).split('\n');
   const vulnerabilities: Vulnerability[] = [];
   for (const line of split) {
