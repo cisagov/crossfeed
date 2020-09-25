@@ -13,10 +13,8 @@ const productMap = {
   'cpe:/a:microsoft:asp.net': ['cpe:/a:microsoft:.net_framework']
 };
 
-export const handler = async (commandOptions: CommandOptions) => {
-  console.log('Running cve detection globally');
-
-  await connectToDatabase();
+// Scan for new vulnerabilities based on version numbers
+const identifyPassiveCVEs = async () => {
   const allDomains = await Domain.find({
     select: ['id', 'name', 'ip'],
     relations: ['services']
@@ -98,4 +96,25 @@ export const handler = async (commandOptions: CommandOptions) => {
     );
   }
   await saveVulnerabilitiesToDb(vulnerabilities, false);
+};
+
+// Populate CVE information
+const populateVulnerabilities = async (vulnerabilities: Vulnerability[]) => {};
+
+// Closes vulnerabilities that haven't been seen recently
+const closeVulnerabilities = async () => {
+  await Vulnerability.createQueryBuilder()
+    .update()
+    .set({ state: 'closed', substate: 'remediated' })
+    .where("state = 'open'")
+    .andWhere('"lastSeen" <= now() - interval \'1 day\'')
+    .execute();
+};
+
+export const handler = async (commandOptions: CommandOptions) => {
+  console.log('Running cve detection globally');
+
+  await connectToDatabase();
+  await identifyPassiveCVEs();
+  await closeVulnerabilities();
 };
