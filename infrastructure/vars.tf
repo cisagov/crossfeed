@@ -165,7 +165,7 @@ variable user_pool_name {
 
 variable user_pool_domain {
   type    = string
-  default = "crossfeed-staging"
+  default = "crossfeed-staging-dds"
 }
 
 variable ssm_user_pool_id {
