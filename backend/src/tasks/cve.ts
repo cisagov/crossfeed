@@ -99,7 +99,12 @@ const identifyPassiveCVEs = async () => {
 };
 
 // Populate CVE information
-const populateVulnerabilities = async (vulnerabilities: Vulnerability[]) => {};
+const populateVulnerabilities = async () => {
+  const vulnerabilities = await Vulnerability.find({
+    needsPopulation: true
+  });
+  console.log(vulnerabilities);
+};
 
 // Closes vulnerabilities that haven't been seen recently
 const closeVulnerabilities = async () => {
