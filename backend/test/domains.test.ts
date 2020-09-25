@@ -29,7 +29,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -37,29 +37,6 @@ describe('domains', () => {
         })
         .expect(200);
       expect(response.body.count).toEqual(1);
-    });
-    it('list by unapproved org user should only return no domains', async () => {
-      const name = 'test-' + Math.random();
-      await Domain.create({
-        name,
-        organization
-      }).save();
-      await Domain.create({
-        name: name + '-2'
-      }).save();
-      const response = await request(app)
-        .post('/domain/search')
-        .set(
-          'Authorization',
-          createUserToken({
-            roles: [{ approved: false, org: organization.id, role: 'user' }]
-          })
-        )
-        .send({
-          filters: { reverseName: name }
-        })
-        .expect(200);
-      expect(response.body.count).toEqual(0);
     });
     it('list by globalView should return domains from all orgs', async () => {
       const name = 'test-' + Math.random();
@@ -129,7 +106,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -155,7 +132,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -182,7 +159,7 @@ describe('domains', () => {
           'Authorization',
           createUserToken({
             dateAcceptedTerms: undefined,
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -208,7 +185,7 @@ describe('domains', () => {
           createUserToken({
             dateAcceptedTerms: new Date(),
             acceptedTermsVersion: 'v0-user',
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -234,7 +211,7 @@ describe('domains', () => {
           createUserToken({
             dateAcceptedTerms: new Date(),
             acceptedTermsVersion: 'v1-user',
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
@@ -260,7 +237,7 @@ describe('domains', () => {
           createUserToken({
             dateAcceptedTerms: new Date(),
             acceptedTermsVersion: 'v1-admin',
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
@@ -281,7 +258,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(200);
@@ -297,7 +274,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(404);

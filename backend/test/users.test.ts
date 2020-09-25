@@ -43,7 +43,7 @@ describe('user', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -62,7 +62,7 @@ describe('user', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
@@ -107,7 +107,7 @@ describe('user', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization2.id, role: 'admin' }]
+            roles: [{ org: organization2.id, role: 'admin' }]
           })
         )
         .send({
@@ -144,7 +144,7 @@ describe('user', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization2.id, role: 'admin' }]
+            roles: [{ org: organization2.id, role: 'admin' }]
           })
         )
         .send({
@@ -189,7 +189,7 @@ describe('user', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
