@@ -7,7 +7,7 @@ export const WebInfo: React.FC<{ domain: Domain }> = ({ domain }) => {
   let categoriesToProducts: { [name: string]: Product[] } = {};
   for (const service of domain.services) {
     for (const product of service.products) {
-      if (product.tags.length === 0) {
+      if (!product.tags || product.tags.length === 0) {
         product.tags.push('Misc');
       }
       for (const tag of product.tags) {
@@ -25,7 +25,7 @@ export const WebInfo: React.FC<{ domain: Domain }> = ({ domain }) => {
           title={name}
           value={products
             .map(
-              product =>
+              (product) =>
                 product.name + (product.version ? ` ${product.version}` : '')
             )
             .join(', ')}
