@@ -1,7 +1,14 @@
-name: Deploy Infrastructure
+name: Infrastructure Pipeline
 
 on:
   push:
+    branches:
+      - master
+      - production
+    paths:
+      - 'infrastructure/**'
+      - '.github/workflows/infrastructure.yml'
+  pull_request:
     branches:
       - master
       - production
@@ -25,33 +32,52 @@ jobs:
           unzip terraform_0.13.1_linux_amd64.zip
           sudo mv terraform /usr/local/bin
 
-      - name: Terraform Init - Staging
-        if: github.ref != 'refs/heads/production'
+      - name: Terraform init - Staging
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
         run: terraform init -backend-config=stage.config -input=false
 
-      - name: Terraform Init - Prod
-        if: github.ref == 'refs/heads/production'
+      - name: Terraform validation - Staging
+        run: terraform validate
+
+      - name: Terraform plan - Staging
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        run: terraform plan -backend-config=stage.config -input=false -var-file=stage.tfvars -out stage.plan
+
+      - name: Terraform apply - Staging
+        if: github.ref == 'refs/heads/master'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        run: terraform apply stage.plan
+
+      - if: ${{ always() }}
+        run: rm stage.plan || true
+
+      - name: Terraform init - Prod
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
         run: terraform init -backend-config=prod.config -input=false
 
-      - name: Terraform validation
+      - name: Terraform validation - Prod
         run: terraform validate
 
-      - name: Terraform apply - Staging
-        if: github.ref != 'refs/heads/production'
+      - name: Terraform plan - Prod
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-        run: terraform apply -auto-approve -input=false -var-file=stage.tfvars
+        run: terraform plan -backend-config=prod.config -input=false -var-file=prod.tfvars -out prod.plan
 
       - name: Terraform apply - Prod
         if: github.ref == 'refs/heads/production'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-        run: terraform apply -auto-approve -input=false -var-file=prod.tfvars
+        run: terraform apply prod.plan
+
+      - if: ${{ always() }}
+        run: rm prod.plan || true
