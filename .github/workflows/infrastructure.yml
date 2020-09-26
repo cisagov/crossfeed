@@ -19,9 +19,6 @@ on:
 defaults:
   run:
     working-directory: ./infrastructure
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
 jobs:
   format:
@@ -51,17 +48,26 @@ jobs:
 
       - name: Terraform init
         run: terraform init -backend-config=stage.config
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Terraform validation
         run: terraform validate
 
       - name: Terraform plan
         run: terraform plan -var-file=stage.tfvars -out stage.plan
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Terraform apply
         if: github.ref == 'refs/heads/master'
         run: terraform apply stage.plan
-
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      
       - if: ${{ always() }}
         run: rm stage.plan || true
 
@@ -78,16 +84,28 @@ jobs:
 
       - name: Terraform init
         run: terraform init -backend-config=prod.config -input=false
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Terraform validation
         run: terraform validate
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Terraform plan
         run: terraform plan -var-file=prod.tfvars -out prod.plan
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Terraform apply
         if: github.ref == 'refs/heads/production'
         run: terraform apply prod.plan
-
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      
       - if: ${{ always() }}
         run: rm prod.plan || true
