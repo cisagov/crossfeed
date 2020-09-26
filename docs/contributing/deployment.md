@@ -97,6 +97,12 @@ First, make sure you set the following SSM variables manually through the AWS Co
 - `/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY`
 - `/crossfeed/staging/REACT_APP_TERMS_VERSION`
 
+You must also [create a service-linked role for Amazon ES](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/slr-es.html#create-slr) (this only needs to be created once per AWS account):
+
+```bash
+aws iam create-service-linked-role --aws-service-name es.amazonaws.com
+```
+
 Then, run `cp stage.config .env` and change the variables in `.env` to use a bucket you have access to to store state.
 
 Make sure you configure the default AWS profile using `aws configure` , or set the `AWS_PROFILE` environment variable in `.env`.
