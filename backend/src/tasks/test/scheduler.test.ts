@@ -142,6 +142,44 @@ describe('scheduler', () => {
 
       expect(runCommand).toHaveBeenCalledTimes(0);
     });
+    test('should not run a scan when a scantask for that scan and organization finished too recently, and a failed scan occurred afterwards that does not have a finishedAt column', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'finished',
+        finishedAt: new Date()
+      }).save();
+      await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'failed',
+        createdAt: new Date()
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(0);
+    });
     test('should not run a scan when a scantask for that scan and organization failed too recently', async () => {
       const scan = await Scan.create({
         name: 'findomain',
