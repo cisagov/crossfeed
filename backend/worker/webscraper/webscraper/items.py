@@ -6,7 +6,10 @@
 import scrapy
 
 
-class WebscraperItem(scrapy.Item):
+class Webpage(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    url = scrapy.Field()
+    s3_key = scrapy.Field()
+    headers = scrapy.Field()
+    status = scrapy.Field()
+    # body = scrapy.Field()
