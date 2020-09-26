@@ -24,6 +24,20 @@ defaults:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
 jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.3
+
+      - name: Install Terraform
+        run: |
+          wget https://releases.hashicorp.com/terraform/0.13.1/terraform_0.13.1_linux_amd64.zip
+          unzip terraform_0.13.1_linux_amd64.zip
+          sudo mv terraform /usr/local/bin
+      
+      - name: Check format
+        run: terraform fmt -recursive -check -diff
+
   staging:
     runs-on: ubuntu-latest
     steps:
