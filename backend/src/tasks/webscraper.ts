@@ -121,5 +121,5 @@ export const handler = async (commandOptions: CommandOptions) => {
   }
   await saveWebpagesToDb(webpages);
 
-  console.log(`Webscraper finished for ${liveWebsites.length} domains, found ${webpages.length} webpages`);
+  console.log(`Webscraper finished for ${liveWebsites.length} domains, saved ${webpages.length} webpages`);
 };

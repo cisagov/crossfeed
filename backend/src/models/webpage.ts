@@ -30,7 +30,7 @@ import {
     })
     syncedAt: Date | null;
   
-    @ManyToOne((type) => Domain, (domain) => domain.services, {
+    @ManyToOne((type) => Domain, (domain) => domain.webpages, {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     })
