@@ -19,9 +19,12 @@ on:
 defaults:
   run:
     working-directory: ./infrastructure
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
 jobs:
-  terraform_apply:
+  staging:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.3
@@ -32,51 +35,44 @@ jobs:
           unzip terraform_0.13.1_linux_amd64.zip
           sudo mv terraform /usr/local/bin
 
-      - name: Terraform init - Staging
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-        run: terraform init -backend-config=stage.config -input=false
+      - name: Terraform init
+        run: terraform init -backend-config=stage.config
 
-      - name: Terraform validation - Staging
+      - name: Terraform validation
         run: terraform validate
 
-      - name: Terraform plan - Staging
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-        run: terraform plan -backend-config=stage.config -input=false -var-file=stage.tfvars -out stage.plan
+      - name: Terraform plan
+        run: terraform plan -var-file=stage.tfvars -out stage.plan
 
-      - name: Terraform apply - Staging
+      - name: Terraform apply
         if: github.ref == 'refs/heads/master'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
         run: terraform apply stage.plan
 
       - if: ${{ always() }}
         run: rm stage.plan || true
 
-      - name: Terraform init - Prod
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+  prod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.3
+
+      - name: Install Terraform
+        run: |
+          wget https://releases.hashicorp.com/terraform/0.13.1/terraform_0.13.1_linux_amd64.zip
+          unzip terraform_0.13.1_linux_amd64.zip
+          sudo mv terraform /usr/local/bin
+
+      - name: Terraform init
         run: terraform init -backend-config=prod.config -input=false
 
-      - name: Terraform validation - Prod
+      - name: Terraform validation
         run: terraform validate
 
-      - name: Terraform plan - Prod
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-        run: terraform plan -backend-config=prod.config -input=false -var-file=prod.tfvars -out prod.plan
+      - name: Terraform plan
+        run: terraform plan -var-file=prod.tfvars -out prod.plan
 
-      - name: Terraform apply - Prod
+      - name: Terraform apply
         if: github.ref == 'refs/heads/production'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
         run: terraform apply prod.plan
 
       - if: ${{ always() }}
