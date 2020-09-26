@@ -120,6 +120,7 @@ class Scheduler {
       console.error(error);
       scanTask.output = JSON.stringify(error);
       scanTask.status = 'failed';
+      scanTask.finishedAt = new Date();
     }
     await scanTask.save();
   };

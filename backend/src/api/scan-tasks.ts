@@ -126,6 +126,7 @@ export const kill = wrapHandler(async (event) => {
   }
   if (scanTask) {
     scanTask.status = 'failed';
+    scanTask.finishedAt = new Date();
     scanTask.output = 'Manually stopped at ' + new Date().toISOString();
     await ScanTask.save(scanTask);
   }
