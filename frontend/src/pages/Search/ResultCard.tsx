@@ -13,7 +13,6 @@ export const ResultCard: React.FC<Props> = (props) => {
   const classes = useStyles(props);
   const {
     id,
-    selected,
     name,
     ip,
     updatedAt,
