@@ -13,7 +13,7 @@
     "@nivo/bar": "^0.62.0",
     "@nivo/pie": "^0.62.0",
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^9.5.0",
+    "@testing-library/react": "^11.0.4",
     "@testing-library/user-event": "^7.2.1",
     "@trussworks/react-uswds": "^1.9.2",
     "@types/classnames": "^2.2.9",
