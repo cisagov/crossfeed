@@ -71,13 +71,6 @@ POLICY
   tags = {
     Project = var.project
   }
-
-  depends_on = [aws_iam_service_linked_role.es]
-}
-
-resource "aws_iam_service_linked_role" "es" {
-  aws_service_name = "es.amazonaws.com"
-  custom_suffix = "crossfeed-${var.stage}"
 }
 
 resource "aws_cloudwatch_log_resource_policy" "es" {
