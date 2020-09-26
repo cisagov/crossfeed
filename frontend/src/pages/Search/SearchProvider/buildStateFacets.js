@@ -1,12 +1,12 @@
-import { get } from "lodash";
+import { get } from 'lodash';
 
 function getValueFacet(aggregations, fieldName) {
   const value = get(aggregations, fieldName);
-  if (value?.buckets?.length  > 0) {
+  if (value?.buckets?.length > 0) {
     return [
       {
         field: fieldName,
-        type: "value",
+        type: 'value',
         data: value.buckets.map(bucket => ({
           // Boolean values and date values require using `key_as_string`
           value: bucket.key_as_string || bucket.key,
@@ -38,10 +38,18 @@ function getValueFacet(aggregations, fieldName) {
 //   }
 // }
 
-const FACETS = ["name", "fromRootDomain", "services.port", "vulnerabilities.cve", "vulnerabilities.severity", "organization.name", "services.products.cpe"];
+const FACETS = [
+  'name',
+  'fromRootDomain',
+  'services.port',
+  'vulnerabilities.cve',
+  'vulnerabilities.severity',
+  'organization.name',
+  'services.products.cpe'
+];
 export default function buildStateFacets(aggregations) {
   const facets = {};
-  
+
   for (let facetName of FACETS) {
     const value = getValueFacet(aggregations, facetName);
     if (value) {

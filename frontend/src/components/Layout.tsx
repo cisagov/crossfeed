@@ -1,26 +1,31 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import { Header, GovBanner } from 'components';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: 'relative',
-    minHeight: '100vh',
+    height: '100vh',
     display: 'flex',
-    flexFlow: 'column nowrap'
-  },
-  content: {
-    flex: 1
+    flexFlow: 'column nowrap',
+    overflow: 'auto'
   },
   overrides: {
     WebkitFontSmoothing: 'unset',
     MozOsxFontSmoothing: 'unset'
+  },
+  content: {
+    flex: '1',
+    display: 'block',
+    position: 'relative'
   }
 }));
 
 export const Layout: React.FC = ({ children }) => {
   const classes = useStyles();
+  const { pathname } = useLocation();
 
   return (
     <ScopedCssBaseline classes={{ root: classes.overrides }}>
@@ -28,7 +33,11 @@ export const Layout: React.FC = ({ children }) => {
         <GovBanner />
         <Header />
 
-        <div className={classes.content}>{children}</div>
+        {pathname === '/search' ? (
+          children
+        ) : (
+          <div className={classes.content}>{children}</div>
+        )}
       </div>
     </ScopedCssBaseline>
   );

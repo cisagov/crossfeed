@@ -24,7 +24,7 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.2
+      - uses: actions/checkout@v2.3.3
       - uses: actions/setup-node@v2.1.1
         with:
           node-version: '12.14'
@@ -43,7 +43,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.2
+      - uses: actions/checkout@v2.3.3
       - uses: actions/setup-node@v2.1.1
         with:
           node-version: '12.14'
@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v2.3.2
+      - uses: actions/checkout@v2.3.3
       - uses: actions/setup-node@v2.1.1
         with:
           node-version: '12.14'
@@ -84,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/production')
     steps:
-      - uses: actions/checkout@v2.3.2
+      - uses: actions/checkout@v2.3.3
       - uses: actions/setup-node@v2.1.1
         with:
           node-version: '12.14'
@@ -106,6 +106,7 @@ jobs:
           REACT_APP_USE_COGNITO: 1
           REACT_APP_USER_POOL_ID: us-east-1_uxiY8DOum
           REACT_APP_USER_POOL_CLIENT_ID: 1qf4cii9v0t9hn1hnr54f2ao0j
+          REACT_APP_TERMS_VERSION: 1
 
       - name: Build Production
         if: github.ref == 'refs/heads/production'
@@ -116,6 +117,7 @@ jobs:
           REACT_APP_USE_COGNITO: 1
           REACT_APP_USER_POOL_ID: us-east-1_MZgKoBmkN
           REACT_APP_USER_POOL_CLIENT_ID: 6qseah01b4vse02srrpra2u350
+          REACT_APP_TERMS_VERSION: 1
 
       - name: Deploy Staging
         if: github.ref == 'refs/heads/master'
