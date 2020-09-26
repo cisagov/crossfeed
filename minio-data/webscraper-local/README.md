@@ -1,0 +1,1 @@
+Keep this file here, so that the webscraper-local bucket is craeted by default with minio.
