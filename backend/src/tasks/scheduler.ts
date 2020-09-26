@@ -2,7 +2,7 @@ import { Handler } from 'aws-lambda';
 import { connectToDatabase, Scan, Organization, ScanTask } from '../models';
 import ECSClient from './ecs-client';
 import { SCAN_SCHEMA } from '../api/scans';
-import { In } from 'typeorm';
+import { In, IsNull, Not } from 'typeorm';
 
 class Scheduler {
   ecs: ECSClient;
@@ -231,6 +231,7 @@ const shouldRunScan = async ({
     {
       scan: { id: scan.id },
       status: In(['finished', 'failed']),
+      finishedAt: Not(IsNull()),
       ...orgFilter
     },
     {
