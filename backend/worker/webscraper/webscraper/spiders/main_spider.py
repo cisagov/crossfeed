@@ -8,6 +8,16 @@ import json
 import os
 from datetime import datetime
 
+def convert(data):
+    """Recursively converts all bytestrings to strings in a dictionary.
+    From https://stackoverflow.com/a/33137796
+    """
+    if isinstance(data, list):  return list(map(convert, data))
+    if isinstance(data, bytes):  return data.decode()
+    if isinstance(data, dict):   return dict(map(convert, data.items()))
+    if isinstance(data, tuple):  return list(map(convert, data))
+    return data
+
 class MainSpider(CrawlSpider):
     name = "main"
 
@@ -21,29 +31,21 @@ class MainSpider(CrawlSpider):
             self.start_urls = f.read().split("\n")
         self.allowed_domains = [urlparse(url).netloc for url in self.start_urls]
 
-    # def start_requests(self):
-    #     # domains_file is an input
-    #     with open(self.domains_file, "r") as f:
-    #         urls = f.read().split("\n")
-    #     for url in urls:
-    #         yield scrapy.Request(url=url, callback=self.parse)
-
     def parse_start_url(self, response):
         return self.parse_item(response)
 
     def parse_item(self, response):
         s3_key = hashlib.sha256(response.url.encode()).hexdigest()
 
-
         item = Webpage(
             s3_key=s3_key,
             status=response.status,
-            url=response.url
+            url=response.url,
+            # headers=convert(response.headers)
         )
         yield item
 
-
-        output_dir = os.path.join("s3_output", s3_key)
+        output_dir = os.path.join("s3-data", s3_key)
         date_dir = os.path.join(output_dir, datetime.now().isoformat())
         latest_dir = os.path.join(output_dir, "latest")
         os.makedirs(date_dir, exist_ok=True)
@@ -53,6 +55,6 @@ class MainSpider(CrawlSpider):
             with open(os.path.join(directory, "body.txt"), "w+") as f:
                 f.write(response.body.decode())
             with open(os.path.join(directory, "item.json"), "w+") as f:
-                json.dump(item, f)
+                json.dump(dict(item), f)
         
         #, body=response.body.decode())
