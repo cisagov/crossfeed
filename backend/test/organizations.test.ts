@@ -169,7 +169,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
@@ -248,7 +248,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .expect(403);
@@ -311,7 +311,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(200);
@@ -383,7 +383,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .expect(200);
@@ -407,7 +407,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .expect(403);
@@ -425,7 +425,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(403);
@@ -454,7 +454,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .expect(200);
@@ -485,7 +485,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
@@ -531,7 +531,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
@@ -568,7 +568,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -691,7 +691,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .expect(200);
@@ -714,7 +714,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(403);
@@ -785,7 +785,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'admin' }]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .expect(200);
@@ -808,7 +808,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [{ approved: true, org: organization.id, role: 'user' }]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(403);
