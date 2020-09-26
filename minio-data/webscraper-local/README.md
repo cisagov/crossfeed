@@ -1,1 +1,1 @@
-Keep this file here, so that the webscraper-local bucket is craeted by default with minio.
+Keep this file here, so that the webscraper-local bucket is created by default with minio.
