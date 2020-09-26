@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`webscraper basic test 1`] = `
+Array [
+  Array [
+    "scrapy",
+    Array [
+      "crawl",
+      "main",
+      "-a",
+      "domains_file=/app/worker/webscraper/domains.txt",
+    ],
+  ],
+  Array [
+    "aws",
+    Array [
+      "s3",
+      "cp",
+      "--recursive",
+      "--no-progress",
+      "/app/worker/webscraper/s3-data",
+      "s3://webscraper-local",
+    ],
+  ],
+]
+`;
+
+exports[`webscraper basic test 2`] = `
+Array [
+  Array [
+    "/app/worker/webscraper/out.jl",
+  ],
+]
+`;
+
+exports[`webscraper basic test 3`] = `
+Array [
+  Array [
+    "/app/worker/webscraper/domains.txt",
+    "https://docs.crossfeed.cyber.dhs.gov",
+  ],
+]
+`;
+
+exports[`webscraper basic test 4`] = `
+Array [
+  "https://docs.crossfeed.cyber.dhs.gov/scans/",
+  "https://docs.crossfeed.cyber.dhs.gov/contributing/",
+  "https://docs.crossfeed.cyber.dhs.gov/usage/",
+  "https://docs.crossfeed.cyber.dhs.gov",
+  "https://docs.crossfeed.cyber.dhs.gov/contributing/deployment/",
+  "https://docs.crossfeed.cyber.dhs.gov/contributing/architecture/",
+  "https://docs.crossfeed.cyber.dhs.gov/usage/customization/",
+  "https://docs.crossfeed.cyber.dhs.gov/usage/administration/",
+  "https://docs.crossfeed.cyber.dhs.gov/contributing/setup/",
+]
+`;
+
+exports[`webscraper basic test 5`] = `
+Array [
+  "200",
+  "200",
+  "200",
+  "200",
+  "200",
+  "200",
+  "200",
+  "200",
+  "400",
+]
+`;

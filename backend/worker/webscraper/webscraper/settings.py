@@ -68,14 +68,14 @@ TELNETCONSOLE_ENABLED = False
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
-AUTOTHROTTLE_ENABLED = False
+AUTOTHROTTLE_ENABLED = True
 # The initial download delay
 AUTOTHROTTLE_START_DELAY = 1
 # The maximum download delay to be set in case of high latencies
 AUTOTHROTTLE_MAX_DELAY = 60
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
-AUTOTHROTTLE_TARGET_CONCURRENCY = 3.0
+AUTOTHROTTLE_TARGET_CONCURRENCY = 5.0
 # Enable showing throttling stats for every response received:
 AUTOTHROTTLE_DEBUG = True
 

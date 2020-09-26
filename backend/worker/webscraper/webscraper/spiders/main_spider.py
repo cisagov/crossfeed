@@ -41,7 +41,7 @@ class MainSpider(CrawlSpider):
             s3_key=s3_key,
             status=response.status,
             url=response.url,
-            # headers=convert(response.headers)
+            domain_name=urlparse(response.url).netloc
         )
         yield item
 

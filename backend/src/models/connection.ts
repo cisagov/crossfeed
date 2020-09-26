@@ -7,7 +7,8 @@ import {
   Organization,
   User,
   Role,
-  ScanTask
+  ScanTask,
+  Webpage
 } from '.';
 
 let connection: Connection | null = null;
@@ -28,7 +29,8 @@ const connectDb = async (logging?: boolean) => {
       Organization,
       User,
       Role,
-      ScanTask
+      ScanTask,
+      Webpage
     ],
     synchronize: false,
     name: 'default',
