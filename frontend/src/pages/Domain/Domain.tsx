@@ -96,7 +96,7 @@ export const Domain: React.FC = () => {
       width: 800,
       disableFilters: true,
       Cell: ({ value }: CellProps<Vulnerability>) => (
-        <a href={value} target="_blank">{value}</a>
+        <a href={value} target="_blank" rel="noopener noreferrer">{value}</a>
       )
     },
     {
