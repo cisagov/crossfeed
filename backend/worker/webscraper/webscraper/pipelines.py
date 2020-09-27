@@ -16,7 +16,7 @@ class ExportFilePipeline:
     def process_item(self, item, spider):
         output_dir = os.path.join("s3-data", item["s3_key"])
         if os.path.exists(output_dir):
-            raise DropItem("Duplicate item found: %r" % item)
+            raise DropItem("Duplicate item found with s3_key: %s" % item["s3_key"])
         date_dir = os.path.join(output_dir, datetime.now().isoformat())
         latest_dir = os.path.join(output_dir, "latest")
         os.makedirs(date_dir, exist_ok=True)
