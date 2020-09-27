@@ -55,16 +55,14 @@ export const handler = async (commandOptions: CommandOptions) => {
         HTTP_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY,
         HTTPS_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY
       },
-      stdio: "inherit"
+      stdio: 'inherit'
     }
   );
   if (response.error) {
     console.error(response.error);
   }
   if (response.status !== 0) {
-    console.error(
-      'Failed'
-    );
+    console.error('Failed');
     return;
   }
 
