@@ -70,6 +70,19 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.censys_api_secret.arn}",
           "${aws_ssm_parameter.es_endpoint.arn}"
         ]
+    },
+    {
+        "Effect": "Allow",
+        "Action": [
+            "s3:PutObject",
+            "s3:PutObjectAcl",
+            "s3:GetObject",
+            "s3:GetObjectAcl",
+            "s3:DeleteObject"
+        ],
+        "Resource": [
+          "${aws_s3_bucket.webscraper_bucket.arn}/*"
+        ]
     }
   ]
 }
@@ -195,3 +208,33 @@ data "aws_ssm_parameter" "censys_api_secret" { name = var.ssm_censys_api_secret 
 data "aws_ssm_parameter" "worker_signature_public_key" { name = var.ssm_worker_signature_public_key }
 
 data "aws_ssm_parameter" "worker_signature_private_key" { name = var.ssm_worker_signature_private_key }
+
+resource "aws_ssm_parameter" "webscraper_s3_bucket_name" {
+  name      = "/crossfeed/${var.stage}/WEBSCRAPER_S3_BUCKET_NAME"
+  type      = "String"
+  value     = aws_s3_bucket.webscraper_bucket.id
+  overwrite = true
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+resource "aws_s3_bucket" "webscraper_bucket" {
+  bucket = "webscraper-${var.stage}"
+  acl    = "private"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "AES256"
+      }
+    }
+  }
+
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
+  }
+}
