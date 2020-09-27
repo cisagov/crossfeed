@@ -1,22 +1,27 @@
-import { Domain, connectToDatabase } from '../models';
+import { Domain, connectToDatabase, Webpage } from '../models';
 import { CommandOptions } from './ecs-client';
 import { In } from 'typeorm';
-import ESClient from './es-client';
+import ESClient, { WebpageRecord } from './es-client';
+import S3Client from './s3-client';
 
 const MAX_RESULTS = 1000;
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { organizationId } = commandOptions;
+  const { organizationId, domainId } = commandOptions;
 
   console.log('Running searchSync');
   await connectToDatabase();
 
   const client = new ESClient();
 
-  const where = organizationId ? { organization: organizationId } : {};
+  // This filtering is used only for testing in search-sync.test.ts; usually,
+  // this scan is called in a global fashion and runs on all organizations.
+  let where: any = organizationId ? { organization: organizationId } : {};
+
   let domains = await Domain.find({
     where,
-    relations: ['services', 'organization', 'vulnerabilities']
+    relations: ['services', 'organization', 'vulnerabilities'],
+    take: MAX_RESULTS
   });
 
   domains = domains.filter((domain) => {
@@ -35,7 +40,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       // so we need to sync this domain again.
       return true;
     }
-    return false;
+    return true;
   });
 
   if (domains.length) {
@@ -50,5 +55,37 @@ export const handler = async (commandOptions: CommandOptions) => {
     console.log('Domain sync complete.');
   } else {
     console.log('Not syncing any domains.');
+  }
+
+  const qs = Webpage.createQueryBuilder('webpage');
+  // .where('webpage.updatedAt > webpage.syncedAt')
+  // .orWhere('webpage.syncedAt is null');
+
+  // This filtering is also used only for testing in search-sync.test.ts.
+  if (domainId) {
+    qs.andWhere('webpage."domainId" = :id', {id: domainId});
+  }
+  
+  // The response actually has keys "webpage_id", "webpage_createdAt", etc.
+  const s3Client = new S3Client();
+  let webpages: WebpageRecord[] = await Promise.all((await qs.take(MAX_RESULTS).execute()).map(async e => {
+    if (e.webpage_s3Key) {
+      e.webpage_body = await s3Client.getWebpageBody(e.webpage_s3Key);
+    }
+    return e;
+  }));
+  if (webpages.length) {
+    console.log(`Syncing ${webpages.length} webpages...`);
+    const results = await client.updateWebpages(webpages);
+    console.warn(results);
+
+    await Webpage.createQueryBuilder('webpage')
+      .update(Webpage)
+      .set({ syncedAt: new Date(Date.now()) })
+      .where({ id: In(webpages.map((e) => e.webpage_id)) })
+      .execute();
+    console.log('Webpage sync complete.');
+  } else {
+    console.log('Not syncing any webpages.');
   }
 };

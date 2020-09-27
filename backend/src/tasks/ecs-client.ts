@@ -10,6 +10,9 @@ export interface CommandOptions {
   scanTaskId: string;
   chunkNumber?: number;
   numChunks?: number;
+
+  // Used only for testing to scope down global scans to a single domain.
+  domainId?: string;
 }
 
 const toSnakeCase = (input) => input.replace(/ /g, '-');
