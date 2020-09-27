@@ -5,7 +5,7 @@ import { S3 } from 'aws-sdk';
  * When the app is running locally, connects
  * to local S3 (minio) instead.
  */
-class ECSClient {
+class S3Client {
   s3: S3;
   isLocal: boolean;
 
@@ -37,4 +37,4 @@ class ECSClient {
   }
 }
 
-export default ECSClient;
+export default S3Client;
