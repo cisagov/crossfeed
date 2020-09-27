@@ -60,7 +60,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint 'src/*.{ts,tsx,js,jsx}' --fix",
@@ -83,5 +83,8 @@
   },
   "resolutions": {
     "yargs-parser": "18.1.2"
+  },
+  "devDependencies": {
+    "jest-environment-jsdom-sixteen": "^1.0.3"
   }
 }
