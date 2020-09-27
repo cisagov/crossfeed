@@ -88,7 +88,6 @@ export const handler = async (commandOptions: CommandOptions) => {
     console.error('Failed');
     return;
   }
-  console.log(response.stdout?.toString());
 
   console.log('Going to save webpages to the database...');
   const liveWebsitesMap: { [x: string]: Domain } = {};
