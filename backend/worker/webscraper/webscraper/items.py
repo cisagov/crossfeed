@@ -16,4 +16,4 @@ class Webpage(scrapy.Item):
     body = scrapy.Field()
 
     def __repr__(self):
-        return repr({"s3_key": self.s3_key})
+        return repr({"s3_key": self["s3_key"]})
