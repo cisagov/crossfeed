@@ -40,7 +40,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       // so we need to sync this domain again.
       return true;
     }
-    return true;
+    return false;
   });
 
   if (domains.length) {
@@ -57,9 +57,9 @@ export const handler = async (commandOptions: CommandOptions) => {
     console.log('Not syncing any domains.');
   }
 
-  const qs = Webpage.createQueryBuilder('webpage');
-  // .where('webpage.updatedAt > webpage.syncedAt')
-  // .orWhere('webpage.syncedAt is null');
+  const qs = Webpage.createQueryBuilder('webpage')
+    .where('webpage.updatedAt > webpage.syncedAt')
+    .orWhere('webpage.syncedAt is null');
 
   // This filtering is also used only for testing in search-sync.test.ts.
   if (domainId) {
