@@ -149,7 +149,7 @@ Essentially, each webpage is stored in a folder with a name equal to a hash of i
 attribute of the `Webpage` model). Inside this folder are folders with timestamps corresponding to each scan, as well as a `latest`
 folder for the information for the latest scan.
 
-In each subfolder, `body.txt` contains the response contents, while `info.json` contains basic metadata about the webpage
+In each subfolder, `body.txt` contains the response contents, while `item.json` contains basic metadata about the webpage
 (URL, status code). In the future, these subfolders will also store screenshots and other large information.
 
 When `searchSync` runs, for each webpage that needs to be synced, it reads from `latest/body.txt` and sets this to the contents of
