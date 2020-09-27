@@ -111,7 +111,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     isPassive: true,
     global: false,
     description:
-      'Scrapes all webpages on a given domain, respecting robots.txt.'
+      'Scrapes all webpages on a given domain, respecting robots.txt'
   }
 };
 
