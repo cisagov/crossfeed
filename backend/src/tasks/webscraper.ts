@@ -80,19 +80,12 @@ export const handler = async (commandOptions: CommandOptions) => {
     args = ['--endpoint-url', 'http://minio:9000', ...args];
   }
   console.log('aws', args);
-  response = spawnSync('aws', args, { env: process.env });
+  response = spawnSync('aws', args, { env: process.env, stdio: 'inherit' });
   if (response.error) {
     console.error(response.error);
   }
-  if (response.stderr?.toString()) {
-    console.error('stderr', response.stderr.toString());
-  }
   if (response.status !== 0) {
-    console.error(
-      'Failed',
-      response.stdout?.toString(),
-      response.stderr?.toString()
-    );
+    console.error('Failed');
     return;
   }
   console.log(response.stdout?.toString());
