@@ -13,4 +13,4 @@ class Webpage(scrapy.Item):
     # headers = scrapy.Field()
     status = scrapy.Field()
     domain_name = scrapy.Field()
-    # body = scrapy.Field()
+    body = scrapy.Field()

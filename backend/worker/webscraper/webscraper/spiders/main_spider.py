@@ -5,8 +5,6 @@ from webscraper.items import Webpage
 from urllib.parse import urlparse
 import hashlib
 import json
-import os
-from datetime import datetime
 
 def convert(data):
     """Recursively converts all bytestrings to strings in a dictionary.
@@ -41,20 +39,9 @@ class MainSpider(CrawlSpider):
             s3_key=s3_key,
             status=response.status,
             url=response.url,
-            domain_name=urlparse(response.url).netloc
+            domain_name=urlparse(response.url).netloc,
+            body=response.body.decode()
         )
         yield item
-
-        output_dir = os.path.join("s3-data", s3_key)
-        date_dir = os.path.join(output_dir, datetime.now().isoformat())
-        latest_dir = os.path.join(output_dir, "latest")
-        os.makedirs(date_dir, exist_ok=True)
-        os.makedirs(latest_dir, exist_ok=True)
-
-        for directory in [date_dir, latest_dir]:
-            with open(os.path.join(directory, "body.txt"), "w+") as f:
-                f.write(response.body.decode())
-            with open(os.path.join(directory, "item.json"), "w+") as f:
-                json.dump(dict(item), f)
         
         #, body=response.body.decode())
