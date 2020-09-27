@@ -71,7 +71,44 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${aws_ssm_parameter.es_endpoint.arn}",
           "${aws_ssm_parameter.webscraper_s3_bucket_name.arn}"
         ]
-    },
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "worker_task_role" {
+  name = "crossfeed-${var.stage}-worker-task"
+  assume_role_policy = <<EOF
+{
+  "Version": "2008-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+  EOF
+
+  tags = {	
+    Project = var.project	
+    Stage   = var.stage
+  }
+}
+
+resource "aws_iam_role_policy" "worker_task_role_policy" {
+  name_prefix = aws_iam_role.worker_task_role.name
+  role = aws_iam_role.worker_task_role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
     {
         "Effect": "Allow",
         "Action": [
@@ -181,10 +218,10 @@ resource "aws_ecs_task_definition" "worker" {
   }
 ]
   EOF
-  # TODO: ADD CENSYS_API_ID, CENSYS_API_SECRET
   requires_compatibilities = ["FARGATE"]
   network_mode          = "awsvpc"
   execution_role_arn       = aws_iam_role.worker_task_execution_role.arn
+  task_role_arn = aws_iam_role.worker_task_role.arn
 
   # CPU and memory values: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
   
