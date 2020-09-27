@@ -103,7 +103,7 @@ const populateVulnerabilities = async () => {
   const vulnerabilities = await Vulnerability.find({
     needsPopulation: true
   });
-  console.log(vulnerabilities);
+  // TODO: Populate info of these vulnerabilities
 };
 
 // Closes vulnerabilities that haven't been seen recently
@@ -112,7 +112,7 @@ const closeVulnerabilities = async () => {
     .update()
     .set({ state: 'closed', substate: 'remediated' })
     .where("state = 'open'")
-    .andWhere('"lastSeen" <= now() - interval \'1 day\'')
+    .andWhere('"lastSeen" <= now() - interval \'2 day\'')
     .execute();
 };
 
