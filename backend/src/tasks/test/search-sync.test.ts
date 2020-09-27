@@ -10,7 +10,9 @@ import {
 } from '../../models';
 
 jest.mock('../es-client');
+jest.mock('../s3-client');
 const { updateDomains, updateWebpages } = require('../es-client');
+const { getWebpageBody } = require('../s3-client');
 
 describe('search_sync', () => {
   let organization;
@@ -167,7 +169,8 @@ describe('search_sync', () => {
       domain,
       url: 'https://cisa.gov/123',
       status: 200,
-      updatedAt: new Date('2020-08-23T03:36:57.231Z')
+      updatedAt: new Date('2020-08-23T03:36:57.231Z'),
+      s3Key: "testS3key",
     }).save();
 
     await searchSync({
@@ -180,6 +183,11 @@ describe('search_sync', () => {
     expect(updateWebpages).toBeCalled();
     expect(
       Object.keys((updateWebpages as jest.Mock).mock.calls[0][0][0])
+    ).toMatchSnapshot();
+    
+    expect(getWebpageBody).toHaveBeenCalled();
+    expect(
+      (getWebpageBody as jest.Mock).mock.calls[0]
     ).toMatchSnapshot();
 
     webpage = (await Webpage.findOne(webpage.id)) as Webpage;

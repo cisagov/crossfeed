@@ -12,6 +12,13 @@ Array [
   "webpage_status",
   "webpage_domainId",
   "webpage_discoveredById",
+  "webpage_body",
+]
+`;
+
+exports[`search_sync should sync webpages when webpages have never been synced 2`] = `
+Array [
+  "testS3key",
 ]
 `;
 
