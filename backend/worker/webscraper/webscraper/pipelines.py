@@ -6,6 +6,7 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+from scrapy.exceptions import DropItem
 import json
 import os
 from datetime import datetime
@@ -15,8 +16,7 @@ class ExportFilePipeline:
     def process_item(self, item, spider):
         output_dir = os.path.join("s3-data", item["s3_key"])
         if os.path.exists(output_dir):
-            print("Duplicate detected, item already exists")
-            return
+            raise DropItem("Duplicate item found: %r" % item)
         date_dir = os.path.join(output_dir, datetime.now().isoformat())
         latest_dir = os.path.join(output_dir, "latest")
         os.makedirs(date_dir, exist_ok=True)
