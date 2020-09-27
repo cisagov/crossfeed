@@ -97,3 +97,5 @@ FEEDS = {
 # DEPTH_LIMIT = 2
 
 LOG_LEVEL = logging.INFO
+
+HTTPERROR_ALLOW_ALL = True
