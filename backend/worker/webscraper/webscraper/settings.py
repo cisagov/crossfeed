@@ -96,4 +96,4 @@ FEEDS = {
 
 # DEPTH_LIMIT = 2
 
-LOG_LEVEL = logging.WARNING
+LOG_LEVEL = logging.INFO

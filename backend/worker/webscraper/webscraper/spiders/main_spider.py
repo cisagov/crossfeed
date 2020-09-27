@@ -33,6 +33,8 @@ class MainSpider(CrawlSpider):
         return self.parse_item(response)
 
     def parse_item(self, response):
+        self.logger.info('Parsing response from URL: %s', response.url)
+
         s3_key = hashlib.sha256(response.url.encode()).hexdigest()
 
         item = Webpage(
