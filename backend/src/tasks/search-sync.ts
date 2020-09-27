@@ -32,9 +32,9 @@ export const handler = async (commandOptions: CommandOptions) => {
     const { syncedAt } = domain;
     if (
       domain.updatedAt > syncedAt ||
-      domain.organization.updatedAt > syncedAt ||
-      domain.services.filter((e) => e.updatedAt > syncedAt).length ||
-      domain.vulnerabilities.filter((e) => e.updatedAt > syncedAt).length
+      domain.organization?.updatedAt > syncedAt ||
+      domain.services?.filter((e) => e.updatedAt > syncedAt).length ||
+      domain.vulnerabilities?.filter((e) => e.updatedAt > syncedAt).length
     ) {
       // Some part of domains / services / vulnerabilities has been updated since the last sync,
       // so we need to sync this domain again.
