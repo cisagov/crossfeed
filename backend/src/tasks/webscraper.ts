@@ -54,24 +54,19 @@ export const handler = async (commandOptions: CommandOptions) => {
         ...process.env,
         HTTP_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY,
         HTTPS_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY
-      }
+      },
+      stdio: "inherit"
     }
   );
   if (response.error) {
     console.error(response.error);
   }
-  if (response.stderr?.toString()) {
-    console.error('stderr', response.stderr.toString());
-  }
   if (response.status !== 0) {
     console.error(
-      'Failed',
-      response.stdout?.toString(),
-      response.stderr?.toString()
+      'Failed'
     );
     return;
   }
-  console.log(response.stdout?.toString());
 
   console.log('Going to sync to S3...');
   let args = [
