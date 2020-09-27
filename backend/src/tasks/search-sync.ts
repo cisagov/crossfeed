@@ -16,7 +16,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   // This filtering is used only for testing in search-sync.test.ts; usually,
   // this scan is called in a global fashion and runs on all organizations.
-  let where: any = organizationId ? { organization: organizationId } : {};
+  const where: any = organizationId ? { organization: organizationId } : {};
 
   let domains = await Domain.find({
     where,
@@ -63,17 +63,19 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   // This filtering is also used only for testing in search-sync.test.ts.
   if (domainId) {
-    qs.andWhere('webpage."domainId" = :id', {id: domainId});
+    qs.andWhere('webpage."domainId" = :id', { id: domainId });
   }
-  
+
   // The response actually has keys "webpage_id", "webpage_createdAt", etc.
   const s3Client = new S3Client();
-  let webpages: WebpageRecord[] = await Promise.all((await qs.take(MAX_RESULTS).execute()).map(async e => {
-    if (e.webpage_s3Key) {
-      e.webpage_body = await s3Client.getWebpageBody(e.webpage_s3Key);
-    }
-    return e;
-  }));
+  const webpages: WebpageRecord[] = await Promise.all(
+    (await qs.take(MAX_RESULTS).execute()).map(async (e) => {
+      if (e.webpage_s3Key) {
+        e.webpage_body = await s3Client.getWebpageBody(e.webpage_s3Key);
+      }
+      return e;
+    })
+  );
   if (webpages.length) {
     console.log(`Syncing ${webpages.length} webpages...`);
     const results = await client.updateWebpages(webpages);

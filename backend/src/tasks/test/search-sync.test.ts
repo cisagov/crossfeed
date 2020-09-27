@@ -5,7 +5,8 @@ import {
   Domain,
   Scan,
   Service,
-  Vulnerability, Webpage
+  Vulnerability,
+  Webpage
 } from '../../models';
 
 jest.mock('../es-client');
@@ -115,7 +116,9 @@ describe('search_sync', () => {
     });
 
     expect(updateDomains).toBeCalled();
-    expect(Object.keys((updateDomains as jest.Mock).mock.calls[0][0][0])).toMatchSnapshot();
+    expect(
+      Object.keys((updateDomains as jest.Mock).mock.calls[0][0][0])
+    ).toMatchSnapshot();
 
     const domains = updateDomains.mock.calls[0][0];
     expect(domains.length).toEqual(1);
@@ -138,12 +141,12 @@ describe('search_sync', () => {
 
     const webpage = await Webpage.create({
       domain,
-      url: "https://cisa.gov/123",
+      url: 'https://cisa.gov/123',
       status: 200,
       updatedAt: new Date('2020-08-23T03:36:57.231Z'),
       syncedAt: new Date('2020-08-30T03:36:57.231Z')
     }).save();
-    
+
     await searchSync({
       domainId: domain.id,
       scanId: 'scanId',
@@ -162,11 +165,11 @@ describe('search_sync', () => {
 
     let webpage = await Webpage.create({
       domain,
-      url: "https://cisa.gov/123",
+      url: 'https://cisa.gov/123',
       status: 200,
       updatedAt: new Date('2020-08-23T03:36:57.231Z')
     }).save();
-    
+
     await searchSync({
       domainId: domain.id,
       scanId: 'scanId',
@@ -175,9 +178,11 @@ describe('search_sync', () => {
     });
 
     expect(updateWebpages).toBeCalled();
-    expect(Object.keys((updateWebpages as jest.Mock).mock.calls[0][0][0])).toMatchSnapshot();
+    expect(
+      Object.keys((updateWebpages as jest.Mock).mock.calls[0][0][0])
+    ).toMatchSnapshot();
 
-    webpage = await Webpage.findOne(webpage.id) as Webpage;
+    webpage = (await Webpage.findOne(webpage.id)) as Webpage;
     expect(webpage.syncedAt).toBeTruthy();
   });
 
@@ -189,12 +194,12 @@ describe('search_sync', () => {
 
     const webpage = await Webpage.create({
       domain,
-      url: "https://cisa.gov/123",
+      url: 'https://cisa.gov/123',
       status: 200,
       updatedAt: new Date('2020-08-30T03:36:57.231Z'),
       syncedAt: new Date('2020-08-23T03:36:57.231Z')
     }).save();
-    
+
     await searchSync({
       domainId: domain.id,
       scanId: 'scanId',
@@ -204,5 +209,4 @@ describe('search_sync', () => {
 
     expect(updateWebpages).toBeCalled();
   });
-
 });

@@ -15,7 +15,7 @@ class ECSClient {
       (process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false);
     if (this.isLocal) {
       this.s3 = new S3({
-        endpoint: "http://minio:9000",
+        endpoint: 'http://minio:9000',
         s3ForcePathStyle: true
       });
     } else {
@@ -28,12 +28,12 @@ class ECSClient {
    * @param s3Key s3Key attribute of the webpage.
    */
   async getWebpageBody(s3Key: string) {
-      const params = {
-        Bucket: process.env.WEBSCRAPER_S3_BUCKET_NAME!,
-        Key: `${s3Key}/latest/body.txt`
-      };
+    const params = {
+      Bucket: process.env.WEBSCRAPER_S3_BUCKET_NAME!,
+      Key: `${s3Key}/latest/body.txt`
+    };
     const data = await this.s3.getObject(params).promise();
-    return data.Body?.toString("utf-8");
+    return data.Body?.toString('utf-8');
   }
 }
 

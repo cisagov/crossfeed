@@ -5,27 +5,27 @@ export const DOMAINS_INDEX = 'domains-5';
 
 interface DomainRecord extends Domain {
   suggest: { input: string | string[]; weight: number }[];
-  parent_join: "domain";
+  parent_join: 'domain';
 }
 
 export interface WebpageRecord {
-  webpage_id: string,
-  webpage_createdAt: Date,
-  webpage_updatedAt: Date,
-  webpage_syncedAt: Date,
-  webpage_lastSeen: Date,
-  webpage_s3Key: string,
-  webpage_url: string,
-  webpage_status: string | number,
-  webpage_domainId: string,
-  webpage_discoveredById: string,
-  
+  webpage_id: string;
+  webpage_createdAt: Date;
+  webpage_updatedAt: Date;
+  webpage_syncedAt: Date;
+  webpage_lastSeen: Date;
+  webpage_s3Key: string;
+  webpage_url: string;
+  webpage_status: string | number;
+  webpage_domainId: string;
+  webpage_discoveredById: string;
+
   // Added before elasticsearch insertion (not present in the database):
   suggest?: { input: string | string[]; weight: number }[];
   parent_join?: {
-    name: "webpage",
+    name: 'webpage';
     parent: string;
-  }
+  };
   webpage_body?: string;
 }
 
@@ -51,9 +51,9 @@ class ESClient {
         type: 'nested'
       },
       parent_join: {
-        type: "join",
+        type: 'join',
         relations: {
-          "domain": ["webpage"]
+          domain: ['webpage']
         }
       }
     };
@@ -63,11 +63,11 @@ class ESClient {
       });
       await this.client.indices.putMapping({
         index: DOMAINS_INDEX,
-        body: {properties: mapping}
+        body: { properties: mapping }
       });
       console.log(`Index ${DOMAINS_INDEX} updated.`);
     } catch (e) {
-      if (e.meta?.body?.error.type !== "index_not_found_exception") {
+      if (e.meta?.body?.error.type !== 'index_not_found_exception') {
         console.error(e.meta?.body);
         throw e;
       }
@@ -79,9 +79,9 @@ class ESClient {
               ...mapping,
               suggest: {
                 type: 'completion'
-              },
+              }
             },
-            dynamic: true,
+            dynamic: true
           },
           settings: {
             number_of_shards: 2
@@ -100,7 +100,7 @@ class ESClient {
     const domainRecords = domains.map((e) => ({
       ...e,
       suggest: [{ input: e.name, weight: 1 }],
-      parent_join: "domain"
+      parent_join: 'domain'
     })) as DomainRecord[];
     const b = this.client.helpers.bulk<DomainRecord>({
       datasource: domainRecords,
@@ -123,7 +123,7 @@ class ESClient {
     const result = await b;
     if (result.aborted) {
       console.error(result);
-      throw new Error("Bulk operation aborted");
+      throw new Error('Bulk operation aborted');
     }
     return result;
   }
@@ -135,10 +135,12 @@ class ESClient {
   async updateWebpages(webpages: WebpageRecord[]) {
     const webpageRecords = webpages.map((e) => ({
       ...e,
-      webpage_status: e.webpage_status ? Number(e.webpage_status): e.webpage_status,
+      webpage_status: e.webpage_status
+        ? Number(e.webpage_status)
+        : e.webpage_status,
       suggest: [{ input: e.webpage_url, weight: 1 }],
       parent_join: {
-        name: "webpage",
+        name: 'webpage',
         parent: e.webpage_domainId
       }
     })) as WebpageRecord[];
@@ -149,7 +151,7 @@ class ESClient {
           {
             update: {
               _index: DOMAINS_INDEX,
-              _id: "webpage_" + webpage.webpage_id,
+              _id: 'webpage_' + webpage.webpage_id,
               routing: webpage.webpage_domainId
             }
           },
@@ -164,7 +166,7 @@ class ESClient {
     const result = await b;
     if (result.aborted) {
       console.error(result);
-      throw new Error("Bulk operation aborted");
+      throw new Error('Bulk operation aborted');
     }
     return result;
   }

@@ -1,6 +1,11 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { Domain, connectToDatabase, Organization, Webpage } from '../src/models';
+import {
+  Domain,
+  connectToDatabase,
+  Organization,
+  Webpage
+} from '../src/models';
 import { createUserToken } from './util';
 
 describe('domains', () => {
@@ -255,8 +260,8 @@ describe('domains', () => {
       }).save();
       const webpage = await Webpage.create({
         domain,
-        url: "http://url",
-        status: 200,
+        url: 'http://url',
+        status: 200
       }).save();
       const response = await request(app)
         .get(`/domain/${domain.id}`)
