@@ -78,8 +78,7 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
             "s3:PutObject",
             "s3:PutObjectAcl",
             "s3:GetObject",
-            "s3:GetObjectAcl",
-            "s3:DeleteObject"
+            "s3:GetObjectAcl"
         ],
         "Resource": [
           "${aws_s3_bucket.webscraper_bucket.arn}/*"
