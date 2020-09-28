@@ -44,7 +44,7 @@
     "dockerode": "^3.2.1",
     "dotenv": "^8.2.0",
     "eslint": "^7.9.0",
-    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-prettier": "^6.12.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.4.2",
     "json-schema-to-typescript": "^9.1.1",
