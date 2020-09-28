@@ -1,6 +1,6 @@
 import { Domain, Service } from '../models';
 import { CommandOptions } from './ecs-client';
-import getLiveWebsites from './helpers/getLiveWebsites';
+import { getLiveWebsites } from './helpers/getLiveWebsites';
 import { spawn } from 'child_process';
 import * as path from 'path';
 import { writeFileSync } from 'fs';
@@ -29,16 +29,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   console.log('Running webscraper on organization', organizationName);
 
   const liveWebsites = await getLiveWebsites(organizationId!);
-  const urls = liveWebsites.map((domain) => {
-    const ports = domain.services.map((service) => service.port);
-    let service: Service;
-    if (ports.includes(443))
-      service = domain.services.find((service) => service.port === 443)!;
-    else service = domain.services.find((service) => service.port === 80)!;
-    const url =
-      service.port === 443 ? `https://${domain.name}` : `http://${domain.name}`;
-    return url;
-  });
+  const urls = liveWebsites.map((domain) => domain.url);
   console.log('input urls', urls);
   if (urls.length === 0) {
     console.log('no urls, returning');
