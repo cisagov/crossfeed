@@ -71,5 +71,20 @@ describe('cve', () => {
         'vulnerability'
       );
     }
+
+    //check that the service key is populated in the Vulnerability model
+    const vulnerabilities2 = await Vulnerability.find({
+      service
+    });
+    expect(vulnerabilities2.length).toEqual(2);
+    for (const vulnerability of vulnerabilities2) {
+      expect(vulnerability).toMatchSnapshot(
+        {
+          id: expect.any(String),
+          createdAt: expect.any(Date)
+        },
+        'vulnerability'
+      );
+    } 
   });
 });
