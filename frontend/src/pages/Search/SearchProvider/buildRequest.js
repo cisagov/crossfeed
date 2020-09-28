@@ -28,7 +28,6 @@ function buildChildMatch(searchTerm) {
     ? {
       multi_match: {
         query: searchTerm,
-        fuzziness: 'AUTO',
         fields: ['webpage_body']
       }
     }
