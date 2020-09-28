@@ -67,7 +67,8 @@ describe('cve', () => {
         {
           id: expect.any(String),
           createdAt: expect.any(Date),
-          updatedAt: expect.any(Date)
+          updatedAt: expect.any(Date),
+          actions: expect.any(Array)
         },
         'vulnerability'
       );
