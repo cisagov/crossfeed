@@ -85,6 +85,6 @@ describe('cve', () => {
         },
         'vulnerability'
       );
-    } 
+    }
   });
 });
