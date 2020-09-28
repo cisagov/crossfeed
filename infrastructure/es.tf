@@ -7,7 +7,7 @@ resource "aws_elasticsearch_domain" "es" {
   elasticsearch_version = "7.7"
 
   cluster_config {
-    instance_type = "t2.medium.elasticsearch"
+    instance_type = "t2.small.elasticsearch"
     instance_count = 1
     dedicated_master_enabled = false
     
