@@ -29,7 +29,13 @@ interface Errors extends Partial<OrganizationType> {
 }
 
 export const Organization: React.FC = () => {
-  const { currentOrganization, apiGet, apiPut, apiPost } = useAuthContext();
+  const {
+    currentOrganization,
+    apiGet,
+    apiPut,
+    apiPost,
+    user
+  } = useAuthContext();
   const [organization, setOrganization] = useState<OrganizationType>();
   const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
@@ -155,7 +161,7 @@ export const Organization: React.FC = () => {
       Cell: ({ row }: { row: { index: number } }) => {
         if (!organization) return;
         const enabled = organization.granularScans.find(
-          scan => scan.id === scans[row.index].id
+          (scan) => scan.id === scans[row.index].id
         );
         return (
           <Button
@@ -246,10 +252,13 @@ export const Organization: React.FC = () => {
 
   const fetchScans = useCallback(async () => {
     try {
-      const { scans, schema } = await apiGet<{
+      let { scans, schema } = await apiGet<{
         scans: Scan[];
         schema: ScanSchema;
       }>('/granularScans/');
+
+      if (user?.userType !== 'globalAdmin')
+        scans = scans.filter((scan) => scan.name !== 'censysIpv4');
 
       setScans(scans);
       setScanSchema(schema);
@@ -320,7 +329,7 @@ export const Organization: React.FC = () => {
         granularScans: enabled
           ? organization.granularScans.concat([scan])
           : organization.granularScans.filter(
-              granularScan => granularScan.id !== scan.id
+              (granularScan) => granularScan.id !== scan.id
             )
       });
     } catch (e) {
@@ -338,7 +347,7 @@ export const Organization: React.FC = () => {
     fetchOrganization();
   }, [fetchOrganization]);
 
-  const onInviteUserSubmit: React.FormEventHandler = async e => {
+  const onInviteUserSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
     try {
       let body = {
@@ -353,9 +362,9 @@ export const Organization: React.FC = () => {
       });
       let newRole = user.roles[user.roles.length - 1];
       newRole.user = user;
-      if (userRoles.find(role => role.user.id === user.id)) {
+      if (userRoles.find((role) => role.user.id === user.id)) {
         setUserRoles(
-          userRoles.map(role => (role.user.id === user.id ? newRole : role))
+          userRoles.map((role) => (role.user.id === user.id ? newRole : role))
         );
       } else {
         setUserRoles(userRoles.concat([newRole]));
@@ -373,10 +382,10 @@ export const Organization: React.FC = () => {
 
   const onInviteUserTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
-  > = e => onInviteUserChange(e.target.name, e.target.value);
+  > = (e) => onInviteUserChange(e.target.name, e.target.value);
 
   const onInviteUserChange = (name: string, value: any) => {
-    setNewUserValues(values => ({
+    setNewUserValues((values) => ({
       ...values,
       [name]: value
     }));
