@@ -40,7 +40,8 @@ class MainSpider(CrawlSpider):
             status=response.status,
             url=response.url,
             domain_name=urlparse(response.url).netloc,
-            body=response.body
+            body=response.body,
+            response_size=len(response.body)
         )
         yield item
         

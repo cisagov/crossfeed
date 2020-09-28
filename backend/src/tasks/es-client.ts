@@ -19,6 +19,7 @@ export interface WebpageRecord {
   webpage_status: string | number;
   webpage_domainId: string;
   webpage_discoveredById: string;
+  webpage_responseSize: string;
 
   // Added before elasticsearch insertion (not present in the database):
   suggest?: { input: string | string[]; weight: number }[];

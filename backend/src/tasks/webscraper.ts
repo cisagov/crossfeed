@@ -20,6 +20,7 @@ interface ScraperItem {
   s3_key: string;
   status: number;
   domain_name: string;
+  response_size: number;
 }
 
 export const handler = async (commandOptions: CommandOptions) => {
@@ -105,7 +106,8 @@ export const handler = async (commandOptions: CommandOptions) => {
           lastSeen: new Date(Date.now()),
           s3Key: item.s3_key,
           url: item.url,
-          status: item.status
+          status: item.status,
+          responseSize: item.response_size
         })
       );
       if (webpages.length >= WEBPAGE_DB_BATCH_LENGTH) {
