@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@aws-amplify/auth": "^3.4.4",
-    "@aws-amplify/ui-components": "^0.8.4",
+    "@aws-amplify/ui-components": "^0.8.5",
     "@aws-amplify/ui-react": "^0.2.21",
     "@elastic/react-search-ui": "^1.4.1",
     "@elastic/react-search-ui-views": "^1.4.1",
