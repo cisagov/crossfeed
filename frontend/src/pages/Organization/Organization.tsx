@@ -265,7 +265,7 @@ export const Organization: React.FC = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [apiGet]);
+  }, [apiGet, user]);
 
   const approveUser = async (user: number) => {
     try {
