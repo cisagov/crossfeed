@@ -3,8 +3,7 @@ import { CommandOptions } from './ecs-client';
 import { In } from 'typeorm';
 import ESClient, { WebpageRecord } from './es-client';
 import S3Client from './s3-client';
-
-const MAX_RESULTS = 1000;
+import PQueue from 'p-queue';
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, domainId } = commandOptions;
@@ -20,8 +19,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   let domains = await Domain.find({
     where,
-    relations: ['services', 'organization', 'vulnerabilities'],
-    take: MAX_RESULTS
+    relations: ['services', 'organization', 'vulnerabilities']
   });
 
   domains = domains.filter((domain) => {
@@ -57,6 +55,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     console.log('Not syncing any domains.');
   }
 
+  console.log('Retrieving webpages...');
   const qs = Webpage.createQueryBuilder('webpage')
     .where('webpage.updatedAt > webpage.syncedAt')
     .orWhere('webpage.syncedAt is null');
@@ -68,14 +67,22 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   // The response actually has keys "webpage_id", "webpage_createdAt", etc.
   const s3Client = new S3Client();
-  const webpages: WebpageRecord[] = await Promise.all(
-    (await qs.take(MAX_RESULTS).execute()).map(async (e) => {
-      if (e.webpage_s3Key) {
-        e.webpage_body = await s3Client.getWebpageBody(e.webpage_s3Key);
-      }
-      return e;
-    })
-  );
+  const queue = new PQueue({ concurrency: 10 });
+  const webpages: WebpageRecord[] = await qs.execute();
+  console.log(`Got ${webpages.length} webpages. Retrieving body of each webpage...`);
+  for (const i in webpages) {
+    const webpage = webpages[i];
+    if (webpage.webpage_s3Key) {
+      queue.add(async () => {
+        webpage.webpage_body = await s3Client.getWebpageBody(webpage.webpage_s3Key);
+        if (Number(i) % 100 == 0) {
+          console.log(`Finished: ${i}`);
+        }
+      });
+    }
+  }
+  await queue.onIdle();
+
   if (webpages.length) {
     console.log(`Syncing ${webpages.length} webpages...`);
     const results = await client.updateWebpages(webpages);
