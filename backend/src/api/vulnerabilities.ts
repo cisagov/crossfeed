@@ -148,13 +148,10 @@ export const update = wrapHandler(async (event) => {
   if (vuln && isAuthorized) {
     const body = JSON.parse(event.body);
     if (body.substate) {
-      vuln.setState(
-        body.substate,
-        false,
-        plainToClass(User, {
-          id: event.requestContext.authorizer!.id
-        })
-      );
+      const user = await User.findOne({
+        id: event.requestContext.authorizer!.id
+      });
+      vuln.setState(body.substate, false, user ? user : null);
     }
     if (body.notes) vuln.notes = body.notes;
     vuln.save();

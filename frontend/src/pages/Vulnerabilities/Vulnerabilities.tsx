@@ -21,15 +21,28 @@ import classes from './styles.module.scss';
 import { Grid, Checkbox, Dropdown } from '@trussworks/react-uswds';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { formatDistanceToNow, parseISO } from 'date-fns';
+import { formatDistanceToNow, parseISO, format } from 'date-fns';
 
 export interface ApiResponse {
   result: Vulnerability[];
   count: number;
 }
 
+const formatDate = (date: string) => {
+  return format(parseISO(date), 'MM-dd-yyyy');
+};
+
+const stateMap: { [key: string]: string } = {
+  unconfirmed: 'Unconfirmed',
+  exploitable: 'Exploitable',
+  'false-positive': 'False Positive',
+  'accepted-risk': 'Accepted Risk',
+  remediated: 'Remediated'
+};
+
 export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
   const { original } = row;
+  console.log(original);
   return (
     <div className={classes.expandedRoot}>
       <h4>Details</h4>
@@ -43,6 +56,23 @@ export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
             View vulnerability description
           </a>
         )}
+        <h3>Vulnerability history</h3>
+        {original.actions.map((action, num) => {
+          const val = action.automatic ? (
+            <>Vulnerability automatically marked as remediated</>
+          ) : (
+            <>
+              State changed to {action.state} (
+              {stateMap[action.substate].toLowerCase()}) by {action.userName}
+            </>
+          );
+          return (
+            <p key={num}>
+              {val} on {formatDate(original.createdAt)}
+            </p>
+          );
+        })}
+        <p>Vulnerability opened on {formatDate(original.createdAt)}</p>
       </div>
     </div>
   );
@@ -140,6 +170,7 @@ export const Vulnerabilities: React.FC = () => {
       const vulnCopy = [...vulnerabilities];
       vulnCopy[index].state = res.state;
       vulnCopy[index].substate = res.substate;
+      vulnCopy[index].actions = res.actions;
       setVulnerabilities(vulnCopy);
     } catch (e) {
       console.error(e);
