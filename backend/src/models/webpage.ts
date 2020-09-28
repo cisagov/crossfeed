@@ -64,4 +64,9 @@ export class Webpage extends BaseEntity {
     type: 'numeric'
   })
   status: number;
+
+  @Column({
+    type: 'numeric'
+  })
+  responseSize: number;
 }
