@@ -30,7 +30,7 @@
     "@types/react-select": "^3.0.20",
     "@types/react-table": "^7.0.23",
     "autoprefixer": "^9.8.6",
-    "aws-amplify": "^3.3.1",
+    "aws-amplify": "^3.3.2",
     "classnames": "^2.2.6",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.12.0",
