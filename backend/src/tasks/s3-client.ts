@@ -19,7 +19,10 @@ class S3Client {
         s3ForcePathStyle: true
       });
     } else {
-      this.s3 = new S3();
+      this.s3 = new S3({
+        s3BucketEndpoint: false,
+        endpoint: 'https://s3.amazonaws.com'
+      });
     }
   }
 

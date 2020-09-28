@@ -37,6 +37,7 @@ yarn-error.log*
 dist
 postgres-data
 es-data
+minio-data
 nvd-dump
 
 **.pyc

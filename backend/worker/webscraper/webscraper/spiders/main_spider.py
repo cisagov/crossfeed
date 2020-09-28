@@ -33,8 +33,6 @@ class MainSpider(CrawlSpider):
         return self.parse_item(response)
 
     def parse_item(self, response):
-        self.logger.info('Parsing response from URL: %s', response.url)
-
         s3_key = hashlib.sha256(response.url.encode()).hexdigest()
 
         item = Webpage(
@@ -42,7 +40,7 @@ class MainSpider(CrawlSpider):
             status=response.status,
             url=response.url,
             domain_name=urlparse(response.url).netloc,
-            body=response.body.decode('utf-8', 'ignore')
+            body=response.body
         )
         yield item
         
