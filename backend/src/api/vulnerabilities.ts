@@ -10,8 +10,8 @@ import {
   IsNumber,
   IsUUID
 } from 'class-validator';
-import { Type } from 'class-transformer';
-import { Vulnerability, connectToDatabase } from '../models';
+import { plainToClass, Type } from 'class-transformer';
+import { Vulnerability, connectToDatabase, User } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
 import {
@@ -148,10 +148,13 @@ export const update = wrapHandler(async (event) => {
   if (vuln && isAuthorized) {
     const body = JSON.parse(event.body);
     if (body.substate) {
-      vuln.substate = body.substate;
-      if (body.substate === 'unconfirmed' || body.substate === 'exploitable')
-        vuln.state = 'open';
-      else vuln.state = 'closed';
+      vuln.setState(
+        body.substate,
+        false,
+        plainToClass(User, {
+          id: event.requestContext.authorizer!.id
+        })
+      );
     }
     if (body.notes) vuln.notes = body.notes;
     vuln.save();

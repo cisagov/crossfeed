@@ -4,6 +4,7 @@ import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
+import { LessThan } from 'typeorm';
 
 /**
  * The CVE scan finds vulnerable CVEs affecting domains based on CPEs identified
@@ -108,12 +109,16 @@ const populateVulnerabilities = async () => {
 
 // Closes vulnerabilities that haven't been seen recently
 const closeVulnerabilities = async () => {
-  await Vulnerability.createQueryBuilder()
-    .update()
-    .set({ state: 'closed', substate: 'remediated' })
-    .where("state = 'open'")
-    .andWhere('"lastSeen" <= now() - interval \'2 day\'')
-    .execute();
+  const openVulnerabilites = await Vulnerability.find({
+    where: {
+      state: 'open',
+      lastSeen: LessThan(new Date(new Date().setDate(new Date().getDate() - 2)))
+    }
+  });
+  for (const vulnerability of openVulnerabilites) {
+    vulnerability.setState('remediated', true, null);
+    await vulnerability.save();
+  }
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
