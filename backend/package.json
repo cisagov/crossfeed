@@ -52,7 +52,7 @@
     "prettier": "^2.1.2",
     "serverless-domain-manager": "^5.0.0",
     "serverless-webpack": "^5.3.5",
-    "supertest": "^4.0.2",
+    "supertest": "^5.0.0",
     "ts-jest": "^26.4.0",
     "ts-loader": "^8.0.4",
     "ts-node": "^9.0.0",
