@@ -54,7 +54,15 @@ class VulnerabilitySearch {
   page: number = 1;
 
   @IsString()
-  @IsIn(['title', 'createdAt', 'cvss', 'state'])
+  @IsIn([
+    'title',
+    'createdAt',
+    'severity',
+    'cvss',
+    'state',
+    'createdAt',
+    'domain'
+  ])
   @IsOptional()
   sort: string = 'createdAt';
 
@@ -74,7 +82,6 @@ class VulnerabilitySearch {
   pageSize?: number;
 
   filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>) {
-    console.log(this.filters);
     if (this.filters?.id) {
       qs.andWhere('vulnerability.id = :id', {
         id: this.filters.id
@@ -110,10 +117,16 @@ class VulnerabilitySearch {
 
   async getResults(event) {
     const pageSize = this.pageSize || PAGE_SIZE;
+    const sort =
+      this.sort === 'domain'
+        ? 'domain.name'
+        : this.sort === 'severity'
+        ? 'vulnerability.cvss'
+        : `vulnerability.${this.sort}`;
     let qs = Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
       .leftJoinAndSelect('domain.organization', 'organization')
-      .orderBy(`vulnerability.${this.sort}`, this.order);
+      .orderBy(sort, this.order);
 
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);

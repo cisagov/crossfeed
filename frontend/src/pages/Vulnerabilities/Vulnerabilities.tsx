@@ -112,7 +112,7 @@ export const Vulnerabilities: React.FC = () => {
     },
     {
       Header: 'Created',
-      id: 'created',
+      id: 'createdAt',
       accessor: ({ createdAt }) =>
         `${formatDistanceToNow(parseISO(createdAt))} ago`,
       width: 250,
