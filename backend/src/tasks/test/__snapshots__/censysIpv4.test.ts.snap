@@ -142,24 +142,6 @@ Array [
 exports[`censys ipv4 basic test: helpers.saveServicesToDb 2`] = `
 Array [
   Service {
-    "banner": undefined,
-    "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"cwmp\\":{\\"get\\":{\\"headers\\":{\\"content_length\\":\\"0\\",\\"server\\":\\"gSOAP/2.7\\"},\\"status_code\\":\\"404\\",\\"status_line\\":\\"404 Not Found\\",\\"timestamp\\":\\"2020-07-15T04:07:26Z\\"}}}...",
-    },
-    "censysMetadata": undefined,
-    "discoveredBy": Object {
-      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
-    },
-    "domain": Domain {
-      "ip": "81.141.166.145",
-      "name": "first_file_testdomain8",
-      "organization": "1234",
-    },
-    "lastSeen": 2019-04-22T10:20:30.000Z,
-    "port": 7547,
-    "service": "cwmp",
-  },
-  Service {
     "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\"><html><head><title>401 Unauthorized</title></head><body><h1>Authorization Required</h1><p>This server could not verify that you are authorized to access the document requested.  Either you supplied the wrong credentials (e.g., bad password), or your browser doesn't understand how to supply the credentials required</p><hr></body></html>",
     "censysIpv4Results": Object {
       "TEST_SNAPSHOT": "{\\"cwmp\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\"><html><head><title>401 Unauthorized</title></head><body><h1>Authorization Required</h1><p>This server could not verify that you are authorized to access the document requested.  Either you supplied the wrong credentials (e.g...",
@@ -171,6 +153,24 @@ Array [
     "domain": Domain {
       "ip": "24.65.82.187",
       "name": "first_file_testdomain9",
+      "organization": "1234",
+    },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "port": 7547,
+    "service": "cwmp",
+  },
+  Service {
+    "banner": undefined,
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"cwmp\\":{\\"get\\":{\\"headers\\":{\\"content_length\\":\\"0\\",\\"server\\":\\"gSOAP/2.7\\"},\\"status_code\\":\\"404\\",\\"status_line\\":\\"404 Not Found\\",\\"timestamp\\":\\"2020-07-15T04:07:26Z\\"}}}...",
+    },
+    "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
+    "domain": Domain {
+      "ip": "81.141.166.145",
+      "name": "first_file_testdomain8",
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
@@ -256,53 +256,29 @@ Array [
     "service": "http",
   },
   Service {
-    "banner": "<!DOCTYPE html PUBLIC \\"-//W3C//DTD XHTML 1.0 Strict//EN\\" \\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\\">
-<html xmlns=\\"http://www.w3.org/1999/xhtml\\">
-<head>
-<meta http-equiv=\\"Content-Type\\" content=\\"text/html; charset=iso-8859-1\\" />
-<title>IIS7</title>
-<style type=\\"text/css\\">
-<!--
-body {
-	color:#000000;
-	background-color:#B3B3B3;
-	margin:0;
-}
-
-#container {
-	margin-left:auto;
-	margin-right:auto;
-	text-align:center;
-	}
-
-a img {
-	border:none;
-}
-
--->
-</style>
-</head>
-<body>
-<div id=\\"container\\">
-<a href=\\"http://go.microsoft.com/fwlink/?linkid=66138&amp;clcid=0x409\\"><img src=\\"welcome.png\\" alt=\\"IIS7\\" width=\\"571\\" height=\\"411\\" /></a>
-</div>
-</body>
-</html>",
+    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access /
+on this server.</p>
+</body></html>
+",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE html PUBLIC \\\\\\"-//W3C//DTD XHTML 1.0 Strict//EN\\\\\\" \\\\\\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\\\\\\">\\\\r\\\\n<html xmlns=\\\\\\"http://www.w3.org/1999/xhtml\\\\\\">\\\\r\\\\n<head>\\\\r\\\\n<meta http-equiv=\\\\\\"Content-Type\\\\\\" content=\\\\\\"text/html; charset=iso-8859-1\\\\\\" />\\\\r\\\\n<title>IIS7</title...",
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>403 Forbidden</title>\\\\n</head><body>\\\\n<h1>Forbidden</h1>\\\\n<p>You don't have permission to access /\\\\non this server.</p>\\\\n</body></html>\\\\n\\",\\"body_sha256\\":\\"e6134491cb1cd3e211b94d20b48482caeec46813007e918...",
     },
     "censysMetadata": Object {
-      "description": "Microsoft IIS 7.5",
-      "manufacturer": "Microsoft",
-      "product": "IIS",
-      "version": "7.5",
+      "description": "Apache httpd",
+      "manufacturer": "Apache",
+      "product": "httpd",
     },
     "discoveredBy": Object {
       "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
     },
     "domain": Domain {
-      "ip": "156.249.159.119",
-      "name": "first_file_testdomain6",
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain1",
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
@@ -332,7 +308,71 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "first_file_testdomain1",
+      "name": "first_file_testdomain3",
+      "organization": "1234",
+    },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "port": 80,
+    "service": "http",
+  },
+  Service {
+    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL was not found on this server.</p>
+<hr>
+<address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>
+</body></html>
+",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>404 Not Found</title>\\\\n</head><body>\\\\n<h1>Not Found</h1>\\\\n<p>The requested URL was not found on this server.</p>\\\\n<hr>\\\\n<address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>\\\\n</body...",
+    },
+    "censysMetadata": Object {
+      "description": "Apache httpd 2.4.38",
+      "manufacturer": "Apache",
+      "product": "httpd",
+      "version": "2.4.38",
+    },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
+    "domain": Domain {
+      "ip": "31.134.10.156",
+      "name": "first_file_testdomain2",
+      "organization": "1234",
+    },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "port": 80,
+    "service": "http",
+  },
+  Service {
+    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL was not found on this server.</p>
+<hr>
+<address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>
+</body></html>
+",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>404 Not Found</title>\\\\n</head><body>\\\\n<h1>Not Found</h1>\\\\n<p>The requested URL was not found on this server.</p>\\\\n<hr>\\\\n<address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>\\\\n</body...",
+    },
+    "censysMetadata": Object {
+      "description": "Apache httpd 2.4.38",
+      "manufacturer": "Apache",
+      "product": "httpd",
+      "version": "2.4.38",
+    },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
+    "domain": Domain {
+      "ip": "31.134.10.156",
+      "name": "first_file_testdomain11",
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
@@ -431,115 +471,46 @@ on this server.</p>
     "service": "http",
   },
   Service {
-    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
-<html><head>
-<title>404 Not Found</title>
-</head><body>
-<h1>Not Found</h1>
-<p>The requested URL was not found on this server.</p>
-<hr>
-<address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>
-</body></html>
-",
+    "banner": "<!DOCTYPE html PUBLIC \\"-//W3C//DTD XHTML 1.0 Strict//EN\\" \\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\\">
+<html xmlns=\\"http://www.w3.org/1999/xhtml\\">
+<head>
+<meta http-equiv=\\"Content-Type\\" content=\\"text/html; charset=iso-8859-1\\" />
+<title>IIS7</title>
+<style type=\\"text/css\\">
+<!--
+body {
+	color:#000000;
+	background-color:#B3B3B3;
+	margin:0;
+}
+
+#container {
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;
+	}
+
+a img {
+	border:none;
+}
+
+-->
+</style>
+</head>
+<body>
+<div id=\\"container\\">
+<a href=\\"http://go.microsoft.com/fwlink/?linkid=66138&amp;clcid=0x409\\"><img src=\\"welcome.png\\" alt=\\"IIS7\\" width=\\"571\\" height=\\"411\\" /></a>
+</div>
+</body>
+</html>",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>404 Not Found</title>\\\\n</head><body>\\\\n<h1>Not Found</h1>\\\\n<p>The requested URL was not found on this server.</p>\\\\n<hr>\\\\n<address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>\\\\n</body...",
+      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE html PUBLIC \\\\\\"-//W3C//DTD XHTML 1.0 Strict//EN\\\\\\" \\\\\\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\\\\\\">\\\\r\\\\n<html xmlns=\\\\\\"http://www.w3.org/1999/xhtml\\\\\\">\\\\r\\\\n<head>\\\\r\\\\n<meta http-equiv=\\\\\\"Content-Type\\\\\\" content=\\\\\\"text/html; charset=iso-8859-1\\\\\\" />\\\\r\\\\n<title>IIS7</title...",
     },
     "censysMetadata": Object {
-      "description": "Apache httpd 2.4.38",
-      "manufacturer": "Apache",
-      "product": "httpd",
-      "version": "2.4.38",
-    },
-    "discoveredBy": Object {
-      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
-    },
-    "domain": Domain {
-      "ip": "31.134.10.156",
-      "name": "first_file_testdomain11",
-      "organization": "1234",
-    },
-    "lastSeen": 2019-04-22T10:20:30.000Z,
-    "port": 80,
-    "service": "http",
-  },
-  Service {
-    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
-<html><head>
-<title>404 Not Found</title>
-</head><body>
-<h1>Not Found</h1>
-<p>The requested URL was not found on this server.</p>
-<hr>
-<address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>
-</body></html>
-",
-    "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>404 Not Found</title>\\\\n</head><body>\\\\n<h1>Not Found</h1>\\\\n<p>The requested URL was not found on this server.</p>\\\\n<hr>\\\\n<address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>\\\\n</body...",
-    },
-    "censysMetadata": Object {
-      "description": "Apache httpd 2.4.38",
-      "manufacturer": "Apache",
-      "product": "httpd",
-      "version": "2.4.38",
-    },
-    "discoveredBy": Object {
-      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
-    },
-    "domain": Domain {
-      "ip": "31.134.10.156",
-      "name": "first_file_testdomain2",
-      "organization": "1234",
-    },
-    "lastSeen": 2019-04-22T10:20:30.000Z,
-    "port": 80,
-    "service": "http",
-  },
-  Service {
-    "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
-<html><head>
-<title>403 Forbidden</title>
-</head><body>
-<h1>Forbidden</h1>
-<p>You don't have permission to access /
-on this server.</p>
-</body></html>
-",
-    "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\">\\\\n<html><head>\\\\n<title>403 Forbidden</title>\\\\n</head><body>\\\\n<h1>Forbidden</h1>\\\\n<p>You don't have permission to access /\\\\non this server.</p>\\\\n</body></html>\\\\n\\",\\"body_sha256\\":\\"e6134491cb1cd3e211b94d20b48482caeec46813007e918...",
-    },
-    "censysMetadata": Object {
-      "description": "Apache httpd",
-      "manufacturer": "Apache",
-      "product": "httpd",
-    },
-    "discoveredBy": Object {
-      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
-    },
-    "domain": Domain {
-      "ip": "153.126.148.60",
-      "name": "first_file_testdomain3",
-      "organization": "1234",
-    },
-    "lastSeen": 2019-04-22T10:20:30.000Z,
-    "port": 80,
-    "service": "http",
-  },
-  Service {
-    "banner": "<!DOCTYPE HTML PUBLIC \\"-//W3C//DTD HTML 4.01//EN\\"\\"http://www.w3.org/TR/html4/strict.dtd\\">
-<HTML><HEAD><TITLE>Not Found</TITLE>
-<META HTTP-EQUIV=\\"Content-Type\\" Content=\\"text/html; charset=us-ascii\\"></HEAD>
-<BODY><h2>Not Found</h2>
-<hr><p>HTTP Error 404. The requested resource is not found.</p>
-</BODY></HTML>
-",
-    "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"extended_key_usage\\":{\\"server_auth\\":true},\\"key_usage\\":{\\"data_encipherment\\":true,\\"digital_signature\\":true,\\"key_encipherment\\":true,\\"value\\":\\"13\\"}},\\"fingerprint_md5\\":\\"355a2a4731bb4efffbce243be3d68948\\",\\"fingerprint_sha1\\":\\"d840933627a82b2cfa55f2a05ca...",
-    },
-    "censysMetadata": Object {
-      "description": "Microsoft HTTPAPI 2.0",
+      "description": "Microsoft IIS 7.5",
       "manufacturer": "Microsoft",
-      "product": "HTTPAPI",
-      "version": "2.0",
+      "product": "IIS",
+      "version": "7.5",
     },
     "discoveredBy": Object {
       "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
@@ -550,8 +521,8 @@ on this server.</p>
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "port": 443,
-    "service": "https",
+    "port": 80,
+    "service": "http",
   },
   Service {
     "banner": "
@@ -1613,7 +1584,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "first_file_testdomain3",
+      "name": "first_file_testdomain1",
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
@@ -1643,7 +1614,36 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "first_file_testdomain1",
+      "name": "first_file_testdomain3",
+      "organization": "1234",
+    },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "port": 443,
+    "service": "https",
+  },
+  Service {
+    "banner": "<!DOCTYPE HTML PUBLIC \\"-//W3C//DTD HTML 4.01//EN\\"\\"http://www.w3.org/TR/html4/strict.dtd\\">
+<HTML><HEAD><TITLE>Not Found</TITLE>
+<META HTTP-EQUIV=\\"Content-Type\\" Content=\\"text/html; charset=us-ascii\\"></HEAD>
+<BODY><h2>Not Found</h2>
+<hr><p>HTTP Error 404. The requested resource is not found.</p>
+</BODY></HTML>
+",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"https\\":{\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"extended_key_usage\\":{\\"server_auth\\":true},\\"key_usage\\":{\\"data_encipherment\\":true,\\"digital_signature\\":true,\\"key_encipherment\\":true,\\"value\\":\\"13\\"}},\\"fingerprint_md5\\":\\"355a2a4731bb4efffbce243be3d68948\\",\\"fingerprint_sha1\\":\\"d840933627a82b2cfa55f2a05ca...",
+    },
+    "censysMetadata": Object {
+      "description": "Microsoft HTTPAPI 2.0",
+      "manufacturer": "Microsoft",
+      "product": "HTTPAPI",
+      "version": "2.0",
+    },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
+    "domain": Domain {
+      "ip": "156.249.159.119",
+      "name": "first_file_testdomain6",
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
@@ -1703,7 +1703,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "first_file_testdomain3",
+      "name": "first_file_testdomain1",
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
@@ -1721,7 +1721,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "first_file_testdomain1",
+      "name": "first_file_testdomain3",
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
@@ -1760,7 +1760,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "first_file_testdomain3",
+      "name": "first_file_testdomain1",
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
@@ -1781,7 +1781,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "first_file_testdomain1",
+      "name": "first_file_testdomain3",
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
@@ -1799,7 +1799,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "first_file_testdomain3",
+      "name": "first_file_testdomain1",
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
@@ -1817,7 +1817,7 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
-      "name": "first_file_testdomain1",
+      "name": "first_file_testdomain3",
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
@@ -1827,7 +1827,7 @@ on this server.</p>
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-STARTTLS\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"starttls\\":\\"220 2.0.0 Ready to start TLS\\",\\"tls...",
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"tls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{...",
     },
     "censysMetadata": undefined,
     "discoveredBy": Object {
@@ -1839,25 +1839,7 @@ on this server.</p>
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "port": 587,
-    "service": "smtp",
-  },
-  Service {
-    "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
-    "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-STARTTLS\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"starttls\\":\\"220 2.0.0 Ready to start TLS\\",\\"tls...",
-    },
-    "censysMetadata": undefined,
-    "discoveredBy": Object {
-      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
-    },
-    "domain": Domain {
-      "ip": "153.126.148.60",
-      "name": "first_file_testdomain3",
-      "organization": "1234",
-    },
-    "lastSeen": 2019-04-22T10:20:30.000Z,
-    "port": 587,
+    "port": 465,
     "service": "smtp",
   },
   Service {
@@ -1889,6 +1871,42 @@ on this server.</p>
     },
     "domain": Domain {
       "ip": "153.126.148.60",
+      "name": "first_file_testdomain1",
+      "organization": "1234",
+    },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "port": 587,
+    "service": "smtp",
+  },
+  Service {
+    "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"tls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{...",
+    },
+    "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
+    "domain": Domain {
+      "ip": "153.126.148.60",
+      "name": "first_file_testdomain3",
+      "organization": "1234",
+    },
+    "lastSeen": 2019-04-22T10:20:30.000Z,
+    "port": 465,
+    "service": "smtp",
+  },
+  Service {
+    "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
+    "censysIpv4Results": Object {
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-STARTTLS\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"starttls\\":\\"220 2.0.0 Ready to start TLS\\",\\"tls...",
+    },
+    "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
+    "domain": Domain {
+      "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
       "organization": "1234",
     },
@@ -1899,25 +1917,7 @@ on this server.</p>
   Service {
     "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
     "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"tls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{...",
-    },
-    "censysMetadata": undefined,
-    "discoveredBy": Object {
-      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
-    },
-    "domain": Domain {
-      "ip": "153.126.148.60",
-      "name": "first_file_testdomain1",
-      "organization": "1234",
-    },
-    "lastSeen": 2019-04-22T10:20:30.000Z,
-    "port": 465,
-    "service": "smtp",
-  },
-  Service {
-    "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
-    "censysIpv4Results": Object {
-      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"tls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{...",
+      "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-STARTTLS\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"starttls\\":\\"220 2.0.0 Ready to start TLS\\",\\"tls...",
     },
     "censysMetadata": undefined,
     "discoveredBy": Object {
@@ -1929,7 +1929,7 @@ on this server.</p>
       "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
-    "port": 465,
+    "port": 587,
     "service": "smtp",
   },
   Service {
