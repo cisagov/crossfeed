@@ -135,6 +135,18 @@ export const Domain: React.FC = () => {
                   </label>
                   <span>{domain.organization?.isPassive ? 'Yes' : 'No'}</span>
                 </div>
+                <div className={classes.headerRow}>
+                  <label>Last Seen</label>
+                  <span>
+                    {formatDistanceToNow(parseISO(domain.updatedAt))} ago
+                  </span>
+                </div>
+                <div className={classes.headerRow}>
+                  <label>First Seen</label>
+                  <span>
+                    {formatDistanceToNow(parseISO(domain.createdAt))} ago
+                  </span>
+                </div>
               </div>
               <div className={classes.imgWrapper}>
                 {/* <div style={{ float: 'right', marginBottom: '20px' }}>

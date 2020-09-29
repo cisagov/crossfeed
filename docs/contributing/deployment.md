@@ -38,6 +38,10 @@ npx sls create_domain --stage=staging
 npx sls deploy --stage=staging
 ```
 
+To change the environment variables used to build the backend, edit `env.yaml`. Most of these
+variables are set through SSM variables (which should be set manually / through Terraform -- see below),
+but some of these variables are hard-coded and configurable by just editing `env.yaml`.
+
 ### Worker
 
 Deploying the worker involves building the Docker image and pushing it to ECR:
@@ -53,10 +57,14 @@ Deploying the frontend involves building the React code, uploading it to an S3 b
 
 ```bash
 cd frontend
-REACT_APP_API_URL=https://api.staging.crossfeed.cyber.dhs.gov npm run build
+cp stage.env .env
+npm run build
 aws s3 sync build/ s3://staging.crossfeed.cyber.dhs.gov/ --delete
 aws cloudfront create-invalidation --distribution-id ELM2YU1N4NV9M --paths "/index.html"
 ```
+
+You may need to change the values in `stage.env` or `prod.env` if you need to change the environment variables
+that are used to build the frontend.
 
 ## First-time Setup
 
@@ -95,6 +103,17 @@ First, make sure you set the following SSM variables manually through the AWS Co
 - `/crossfeed/staging/LOGIN_GOV_ISSUER`
 - `/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_KEY`
 - `/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY`
+- `/crossfeed/staging/REACT_APP_TERMS_VERSION`
+
+### Create service-linked role for Amazon ES
+
+You must also [create a service-linked role for Amazon ES](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/slr-es.html#create-slr) (this only needs to be created once per AWS account):
+
+```bash
+aws iam create-service-linked-role --aws-service-name es.amazonaws.com
+```
+
+### Use Terraform
 
 Then, run `cp stage.config .env` and change the variables in `.env` to use a bucket you have access to to store state.
 
@@ -105,4 +124,6 @@ Then run:
 ```bash
 npm i -g dotenv-cli
 make init
+make plan
+make apply
 ```

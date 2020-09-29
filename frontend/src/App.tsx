@@ -17,6 +17,7 @@ import {
   Settings,
   Vulnerabilities,
   TermsOfUse,
+  SearchPage,
   LoginGovCallback
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
@@ -61,6 +62,7 @@ const App: React.FC = () => (
             <Route exact path="/terms" component={TermsOfUse} />
 
             <RouteGuard path="/domain/:domainId" component={Domain} />
+            <RouteGuard path="/search" component={SearchPage} />
             <RouteGuard path="/vulnerabilities" component={Vulnerabilities} />
             <RouteGuard path="/risk" component={Risk} />
             <RouteGuard path="/alerts" component={Alerts} />

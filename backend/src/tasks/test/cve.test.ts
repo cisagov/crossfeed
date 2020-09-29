@@ -66,7 +66,9 @@ describe('cve', () => {
       expect(vulnerability).toMatchSnapshot(
         {
           id: expect.any(String),
-          createdAt: expect.any(Date)
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+          actions: expect.any(Array)
         },
         'vulnerability'
       );
@@ -86,5 +88,67 @@ describe('cve', () => {
         'vulnerability'
       );
     }
+  });
+  test('closes old vulnerabilities', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const vulnerability = await Vulnerability.create({
+      domain,
+      cve: 'CVE-123',
+      lastSeen: new Date(new Date().setDate(new Date().getDate() - 7)),
+      title: '123',
+      description: '123'
+    }).save();
+    await cve({
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vuln = await Vulnerability.findOne({
+      id: vulnerability.id
+    });
+    expect(vuln?.state).toEqual('closed');
+    expect(vuln?.substate).toEqual('remediated');
+  });
+  test('does not close new vulnerability', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const vulnerability = await Vulnerability.create({
+      domain,
+      cve: 'CVE-123',
+      lastSeen: new Date(),
+      title: '123',
+      description: '123'
+    }).save();
+    await cve({
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vuln = await Vulnerability.findOne({
+      id: vulnerability.id
+    });
+    expect(vuln?.state).toEqual('open');
+    expect(vuln?.substate).toEqual('unconfirmed');
   });
 });

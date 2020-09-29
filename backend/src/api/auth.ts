@@ -225,7 +225,7 @@ export const isOrgAdmin = (
 };
 
 /** Returns the organizations a user is a member of */
-export const getOrgMemberships = (event: APIGatewayProxyEvent) => {
+export const getOrgMemberships = (event: APIGatewayProxyEvent): string[] => {
   if (!event.requestContext.authorizer) return [];
   return event.requestContext.authorizer.roles.map((role) => role.org);
 };

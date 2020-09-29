@@ -104,12 +104,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(403);
@@ -213,7 +208,8 @@ describe('domains', () => {
             userType: 'globalView'
           })
         )
-        .expect(200);
+        .expect(200)
+        .expect('Content-Type', /text\/plain/); // Prevent XSS by setting text/plain header
       expect(response.text).toEqual('logs');
       expect(getLogs).toHaveBeenCalledWith('fargateTaskArn');
     });

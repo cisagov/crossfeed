@@ -38,14 +38,15 @@ export const useApi = (onError?: OnError) => {
       path: string,
       init: any = {}
     ) => {
+      const {showLoading = true, ...rest} = init;
       try {
-        setRequestCount(cnt => cnt + 1);
-        const options = await prepareInit(init);
+        showLoading && setRequestCount(cnt => cnt + 1);
+        const options = await prepareInit(rest);
         const result = await method('crossfeed', path, options);
-        setRequestCount(cnt => cnt - 1);
+        showLoading && setRequestCount(cnt => cnt - 1);
         return result as T;
       } catch (e) {
-        setRequestCount(cnt => cnt - 1);
+        showLoading && setRequestCount(cnt => cnt - 1);
         onError && onError(e);
         throw e;
       }

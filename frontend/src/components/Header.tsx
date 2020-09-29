@@ -131,6 +131,7 @@ export const Header: React.FC = () => {
 
   const navItems: NavItem[] = [
     { title: 'Inventory', path: '/', users: ALL_USERS },
+    { title: 'Search', path: '/search', users: GLOBAL_ADMIN },
     { title: 'Vulnerabilities', path: '/vulnerabilities', users: ALL_USERS },
     { title: 'Risk Summary', path: '/risk', users: ALL_USERS },
     {

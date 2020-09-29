@@ -12,7 +12,8 @@ export default async (services: Service[]): Promise<void> => {
         ("domainId","port") DO UPDATE
         SET "lastSeen" = excluded."lastSeen",
             "banner" = excluded."banner",
-            "service" = excluded."service"
+            "service" = excluded."service",
+            "updatedAt" = now()
       `
       )
       .execute();

@@ -1,17 +1,17 @@
 resource "aws_ecr_repository" "worker" {
-  name                = var.worker_ecs_repository_name
+  name = var.worker_ecs_repository_name
   image_scanning_configuration {
     scan_on_push = true
   }
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
 
 resource "aws_iam_role" "worker_task_execution_role" {
-  name = var.worker_ecs_role_name
+  name               = var.worker_ecs_role_name
   assume_role_policy = <<EOF
 {
   "Version": "2008-10-17",
@@ -28,15 +28,15 @@ resource "aws_iam_role" "worker_task_execution_role" {
 }
   EOF
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
 
 resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
   name_prefix = var.worker_ecs_role_name
-  role = aws_iam_role.worker_task_execution_role.id
+  role        = aws_iam_role.worker_task_execution_role.id
 
   policy = <<EOF
 {
@@ -67,7 +67,8 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.worker_signature_public_key.arn}",
           "${data.aws_ssm_parameter.worker_signature_private_key.arn}",
           "${data.aws_ssm_parameter.censys_api_id.arn}",
-          "${data.aws_ssm_parameter.censys_api_secret.arn}"
+          "${data.aws_ssm_parameter.censys_api_secret.arn}",
+          "${aws_ssm_parameter.es_endpoint.arn}"
         ]
     }
   ]
@@ -76,11 +77,11 @@ EOF
 }
 
 resource "aws_ecs_cluster" "worker" {
-  name = var.worker_ecs_cluster_name
+  name               = var.worker_ecs_cluster_name
   capacity_providers = ["FARGATE"]
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
@@ -154,6 +155,10 @@ resource "aws_ecs_task_definition" "worker" {
       {
         "name": "WORKER_SIGNATURE_PRIVATE_KEY",
         "valueFrom": "${data.aws_ssm_parameter.worker_signature_private_key.arn}"
+      },
+      {
+        "name": "ELASTICSEARCH_ENDPOINT",
+        "valueFrom": "${aws_ssm_parameter.es_endpoint.arn}"
       }
     ]
   }
@@ -161,24 +166,24 @@ resource "aws_ecs_task_definition" "worker" {
   EOF
   # TODO: ADD CENSYS_API_ID, CENSYS_API_SECRET
   requires_compatibilities = ["FARGATE"]
-  network_mode          = "awsvpc"
+  network_mode             = "awsvpc"
   execution_role_arn       = aws_iam_role.worker_task_execution_role.arn
 
   # CPU and memory values: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
-  
-  cpu = 256 # .25 vCPU
+
+  cpu    = 256 # .25 vCPU
   memory = 512 # 512 MB
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
 
 resource "aws_cloudwatch_log_group" "worker" {
   name = var.worker_ecs_log_group_name # should match awslogs-group in service.json
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
