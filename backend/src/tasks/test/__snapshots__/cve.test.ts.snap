@@ -59,6 +59,16 @@ Object {
 
 exports[`cve simple test: vulnerability 3`] = `
 Object {
+  "actions": Array [
+    Object {
+      "automatic": true,
+      "date": "2020-09-29T16:22:25.660Z",
+      "state": "closed",
+      "substate": "remediated",
+      "userId": null,
+      "userName": null,
+    },
+  ],
   "cpe": "cpe:/a:10web:form_maker:1.0.0",
   "createdAt": Any<Date>,
   "cve": "CVE-2019-10866",
@@ -67,16 +77,28 @@ Object {
   "description": "",
   "id": Any<String>,
   "lastSeen": 2019-04-22T10:20:30.000Z,
+  "needsPopulation": false,
   "notes": "",
   "severity": "Critical",
-  "state": "open",
-  "substate": "unconfirmed",
+  "state": "closed",
+  "substate": "remediated",
   "title": "CVE-2019-10866",
+  "updatedAt": 2020-09-29T20:22:25.666Z,
 }
 `;
 
 exports[`cve simple test: vulnerability 4`] = `
 Object {
+  "actions": Array [
+    Object {
+      "automatic": true,
+      "date": "2020-09-29T16:22:25.674Z",
+      "state": "closed",
+      "substate": "remediated",
+      "userId": null,
+      "userName": null,
+    },
+  ],
   "cpe": "cpe:/a:10web:form_maker:1.0.0",
   "createdAt": Any<Date>,
   "cve": "CVE-2019-11590",
@@ -85,10 +107,12 @@ Object {
   "description": "",
   "id": Any<String>,
   "lastSeen": 2019-04-22T10:20:30.000Z,
+  "needsPopulation": false,
   "notes": "",
   "severity": "High",
-  "state": "open",
-  "substate": "unconfirmed",
+  "state": "closed",
+  "substate": "remediated",
   "title": "CVE-2019-11590",
+  "updatedAt": 2020-09-29T20:22:25.677Z,
 }
 `;
