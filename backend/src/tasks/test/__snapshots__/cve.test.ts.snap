@@ -59,16 +59,7 @@ Object {
 
 exports[`cve simple test: vulnerability 3`] = `
 Object {
-  "actions": Array [
-    Object {
-      "automatic": true,
-      "date": "2020-09-29T16:22:25.660Z",
-      "state": "closed",
-      "substate": "remediated",
-      "userId": null,
-      "userName": null,
-    },
-  ],
+  "actions": Any<Array>,
   "cpe": "cpe:/a:10web:form_maker:1.0.0",
   "createdAt": Any<Date>,
   "cve": "CVE-2019-10866",
@@ -83,22 +74,13 @@ Object {
   "state": "closed",
   "substate": "remediated",
   "title": "CVE-2019-10866",
-  "updatedAt": 2020-09-29T20:22:25.666Z,
+  "updatedAt": Any<Date>,
 }
 `;
 
 exports[`cve simple test: vulnerability 4`] = `
 Object {
-  "actions": Array [
-    Object {
-      "automatic": true,
-      "date": "2020-09-29T16:22:25.674Z",
-      "state": "closed",
-      "substate": "remediated",
-      "userId": null,
-      "userName": null,
-    },
-  ],
+  "actions": Any<Array>,
   "cpe": "cpe:/a:10web:form_maker:1.0.0",
   "createdAt": Any<Date>,
   "cve": "CVE-2019-11590",
@@ -113,6 +95,6 @@ Object {
   "state": "closed",
   "substate": "remediated",
   "title": "CVE-2019-11590",
-  "updatedAt": 2020-09-29T20:22:25.677Z,
+  "updatedAt": Any<Date>,
 }
 `;
