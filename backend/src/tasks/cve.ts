@@ -4,6 +4,7 @@ import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
+import { LessThan } from 'typeorm';
 
 /**
  * The CVE scan finds vulnerable CVEs affecting domains based on CPEs identified
@@ -13,10 +14,8 @@ const productMap = {
   'cpe:/a:microsoft:asp.net': ['cpe:/a:microsoft:.net_framework']
 };
 
-export const handler = async (commandOptions: CommandOptions) => {
-  console.log('Running cve detection globally');
-
-  await connectToDatabase();
+// Scan for new vulnerabilities based on version numbers
+const identifyPassiveCVEs = async () => {
   const allDomains = await Domain.find({
     select: ['id', 'name', 'ip'],
     relations: ['services']
@@ -98,4 +97,34 @@ export const handler = async (commandOptions: CommandOptions) => {
     );
   }
   await saveVulnerabilitiesToDb(vulnerabilities, false);
+};
+
+// Populate CVE information
+const populateVulnerabilities = async () => {
+  const vulnerabilities = await Vulnerability.find({
+    needsPopulation: true
+  });
+  // TODO: Populate info of these vulnerabilities
+};
+
+// Closes vulnerabilities that haven't been seen recently
+const closeVulnerabilities = async () => {
+  const openVulnerabilites = await Vulnerability.find({
+    where: {
+      state: 'open',
+      lastSeen: LessThan(new Date(new Date().setDate(new Date().getDate() - 2)))
+    }
+  });
+  for (const vulnerability of openVulnerabilites) {
+    vulnerability.setState('remediated', true, null);
+    await vulnerability.save();
+  }
+};
+
+export const handler = async (commandOptions: CommandOptions) => {
+  console.log('Running cve detection globally');
+
+  await connectToDatabase();
+  await identifyPassiveCVEs();
+  await closeVulnerabilities();
 };
