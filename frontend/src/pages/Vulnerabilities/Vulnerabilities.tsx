@@ -42,7 +42,6 @@ const stateMap: { [key: string]: string } = {
 
 export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
   const { original } = row;
-  console.log(original);
   return (
     <div className={classes.expandedRoot}>
       <h4>Details</h4>
