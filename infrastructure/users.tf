@@ -1,7 +1,7 @@
 resource "aws_cognito_user_pool" "pool" {
-  name = var.user_pool_name
-  mfa_configuration = "ON"
-  username_attributes = ["email"]
+  name                     = var.user_pool_name
+  mfa_configuration        = "ON"
+  username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
 
   software_token_mfa_configuration {
@@ -10,7 +10,7 @@ resource "aws_cognito_user_pool" "pool" {
 
   email_configuration {
     email_sending_account = "DEVELOPER"
-    source_arn = aws_ses_email_identity.default.arn
+    source_arn            = aws_ses_email_identity.default.arn
   }
 
   verification_message_template {
@@ -33,13 +33,13 @@ resource "aws_cognito_user_pool_domain" "auth_domain" {
 }
 
 resource "aws_cognito_user_pool_client" "client" {
-  name         = "crossfeed"
-  user_pool_id = aws_cognito_user_pool.pool.id
-  callback_urls = ["http://localhost"]
-  supported_identity_providers = ["COGNITO"]
-  allowed_oauth_scopes = ["email", "openid"]
-  allowed_oauth_flows = ["code"]
-  explicit_auth_flows = ["ALLOW_CUSTOM_AUTH", "ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH"]
+  name                                 = "crossfeed"
+  user_pool_id                         = aws_cognito_user_pool.pool.id
+  callback_urls                        = ["http://localhost"]
+  supported_identity_providers         = ["COGNITO"]
+  allowed_oauth_scopes                 = ["email", "openid"]
+  allowed_oauth_flows                  = ["code"]
+  explicit_auth_flows                  = ["ALLOW_CUSTOM_AUTH", "ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH"]
   allowed_oauth_flows_user_pool_client = true
 }
 
