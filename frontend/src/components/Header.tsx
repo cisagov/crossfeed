@@ -22,7 +22,7 @@ const ORG_ADMIN = 2;
 const ORG_USER = 1;
 const ALL_USERS = GLOBAL_ADMIN | ORG_ADMIN | ORG_USER;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   inner: {
     maxWidth: 1440,
     width: '100%',
@@ -176,7 +176,7 @@ export const Header: React.FC = () => {
               className={classes.menuButton}
               aria-label="toggle mobile menu"
               color="inherit"
-              onClick={() => setNavOpen(open => !open)}
+              onClick={() => setNavOpen((open) => !open)}
             >
               <MenuIcon />
             </IconButton>
