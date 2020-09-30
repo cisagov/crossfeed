@@ -101,6 +101,7 @@ First, make sure you set the following SSM variables manually through the AWS Co
 - `/crossfeed/staging/LOGIN_GOV_BASE_URL`
 - `/crossfeed/staging/LOGIN_GOV_JWT_KEY`
 - `/crossfeed/staging/LOGIN_GOV_ISSUER`
+- `/crossfeed/staging/WORKER_USER_AGENT`
 - `/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_KEY`
 - `/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY`
 - `/crossfeed/staging/REACT_APP_TERMS_VERSION`
