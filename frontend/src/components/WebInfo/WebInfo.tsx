@@ -1,19 +1,20 @@
 import React from 'react';
 import classes from './styles.module.scss';
-import { Domain, Product } from 'types';
+import { Domain } from 'types';
 import { Item } from './Item';
 
 export const WebInfo: React.FC<{ domain: Domain }> = ({ domain }) => {
-  let categoriesToProducts: { [name: string]: Product[] } = {};
+  let categoriesToProducts: { [name: string]: Set<string> } = {};
   for (const service of domain.services) {
     for (const product of service.products) {
       if (!product.tags || product.tags.length === 0) {
         product.tags.push('Misc');
       }
-      for (const tag of product.tags) {
-        if (categoriesToProducts[tag]) categoriesToProducts[tag].push(product);
-        else categoriesToProducts[tag] = [product];
-      }
+      const name =
+        product.name + (product.version ? ` ${product.version}` : '');
+      if (categoriesToProducts[product.tags[0]])
+        categoriesToProducts[product.tags[0]].add(name);
+      else categoriesToProducts[product.tags[0]] = new Set([name]);
     }
   }
 
@@ -23,12 +24,7 @@ export const WebInfo: React.FC<{ domain: Domain }> = ({ domain }) => {
         <Item
           key={index}
           title={name}
-          value={products
-            .map(
-              (product) =>
-                product.name + (product.version ? ` ${product.version}` : '')
-            )
-            .join(', ')}
+          value={Array.from(products).join(', ')}
         ></Item>
       ))}
     </div>
