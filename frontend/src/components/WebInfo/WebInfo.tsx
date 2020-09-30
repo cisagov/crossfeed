@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './styles.module.scss';
-import { Domain, Product } from 'types';
+import { Domain } from 'types';
 import { Item } from './Item';
 
 export const WebInfo: React.FC<{ domain: Domain }> = ({ domain }) => {
