@@ -186,7 +186,7 @@ export const Vulnerabilities: React.FC = () => {
       filters: Filters<Vulnerability>,
       sort: SortingRule<Vulnerability>[],
       page: number,
-      paginate: boolean
+      pageSize: number = 25
     ): Promise<ApiResponse | undefined> => {
       try {
         const tableFilters = filters
@@ -208,7 +208,7 @@ export const Vulnerabilities: React.FC = () => {
               ...tableFilters,
               organization: showAll ? undefined : currentOrganization?.id
             },
-            pageSize: paginate ? -1 : 25
+            pageSize
           }
         });
       } catch (e) {
@@ -224,8 +224,7 @@ export const Vulnerabilities: React.FC = () => {
       const resp = await vulnerabilitiesSearch(
         query.filters,
         query.sort,
-        query.page,
-        false
+        query.page
       );
       if (!resp) return;
       const { result, count } = resp;
@@ -238,9 +237,16 @@ export const Vulnerabilities: React.FC = () => {
   const fetchVulnerabilitiesExport = async (): Promise<any[]> => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
     if (!sortBy || !filters) return [];
-    const resp = await vulnerabilitiesSearch(filters, sortBy, 1, true);
-    if (!resp) return [];
-    return resp.result.map((vuln) => ({
+
+    let allVulns: Vulnerability[] = [];
+    let page = 0;
+    while (true) {
+      page += 1;
+      const { count, result } = await vulnerabilitiesSearch(filters, sortBy, page, 100) as ApiResponse;
+      allVulns = allVulns.concat(result || []);
+      if (count <= page * 100) break;
+    }
+    return allVulns.map((vuln) => ({
       ...vuln,
       domain: vuln.domain.name
     }));
