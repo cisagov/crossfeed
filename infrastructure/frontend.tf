@@ -2,8 +2,8 @@ resource "aws_s3_bucket" "frontend_bucket" {
   bucket = var.frontend_bucket
   acl    = "private"
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
@@ -77,8 +77,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     max_ttl                = 2628000
   }
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 

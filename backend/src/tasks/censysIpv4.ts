@@ -1,4 +1,10 @@
-import { Domain, Service } from '../models';
+import {
+  connectToDatabase,
+  Domain,
+  Organization,
+  Scan,
+  Service
+} from '../models';
 import { plainToClass } from 'class-transformer';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
@@ -131,7 +137,15 @@ export const handler = async (commandOptions: CommandOptions) => {
     data: { files }
   } = await axios.get(results.latest.details_url, { auth });
 
-  const allDomains = await getAllDomains();
+  await connectToDatabase();
+  const scan = await Scan.findOne(
+    { id: commandOptions.scanId },
+    { relations: ['organizations'] }
+  );
+
+  const orgs = scan?.organizations && scan?.organizations.map((org) => org.id);
+
+  const allDomains = await getAllDomains(orgs);
 
   const queue = new PQueue({ concurrency: 5 });
 

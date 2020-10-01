@@ -1,4 +1,4 @@
-import buildRequestFilter from "./buildRequestFilter";
+import buildRequestFilter from './buildRequestFilter';
 
 function buildFrom(current, resultsPerPage) {
   if (!current || !resultsPerPage) return;
@@ -16,8 +16,8 @@ function buildMatch(searchTerm) {
     ? {
         multi_match: {
           query: searchTerm,
-          "fuzziness": "AUTO",
-          fields: ["name"]
+          fuzziness: 'AUTO',
+          fields: ['name']
         }
       }
     : { match_all: {} };
@@ -71,37 +71,37 @@ export function buildRequest(state) {
     //https://www.elastic.co/guide/en/elasticsearch/reference/7.x/search-request-source-filtering.html#search-request-source-filtering
     // _source: ["id", "nps_link", "title", "description"],
     aggs: {
-      name: { terms: { field: "name.keyword" } },
+      name: { terms: { field: 'name.keyword' } },
       fromRootDomain: {
-        terms: { field: "fromRootDomain.keyword" }
+        terms: { field: 'fromRootDomain.keyword' }
       },
       organization: {
-        terms: { field: "organization.name.keyword" }
+        terms: { field: 'organization.name.keyword' }
       },
       services: {
         nested: {
-          path: "services"
+          path: 'services'
         },
         aggs: {
           port: {
             terms: {
-              field: "services.port"
+              field: 'services.port'
             }
           },
           name: {
             terms: {
-              field: "services.service.keyword"
+              field: 'services.service.keyword'
             }
           },
           // TODO: products type nested
           products: {
             nested: {
-              path: "products"
+              path: 'products'
             },
             aggs: {
               cpe: {
                 terms: {
-                  field: "services.products.cpe.keyword"
+                  field: 'services.products.cpe.keyword'
                 }
               }
             }
@@ -110,17 +110,17 @@ export function buildRequest(state) {
       },
       vulnerabilities: {
         nested: {
-          path: "vulnerabilities"
+          path: 'vulnerabilities'
         },
         aggs: {
           severity: {
             terms: {
-              field: "vulnerabilities.severity.keyword"
+              field: 'vulnerabilities.severity.keyword'
             }
           },
           cve: {
             terms: {
-              field: "vulnerabilities.cve.keyword"
+              field: 'vulnerabilities.cve.keyword'
             }
           }
         }
@@ -172,17 +172,15 @@ export function buildRequest(state) {
 }
 
 export function buildAutocompleteRequest(state) {
-  const {
-    searchTerm
-  } = state;
+  const { searchTerm } = state;
 
   const body = {
     suggest: {
-      "main-suggest": {
+      'main-suggest': {
         prefix: searchTerm,
         completion: {
-          field: "suggest"
-        },
+          field: 'suggest'
+        }
       }
     }
   };

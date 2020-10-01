@@ -9,15 +9,15 @@ import { Domain } from 'types';
 type CreateColumns = () => Column<Domain>[];
 
 export const getServiceNames = (domain: Domain) => {
-  const allServices = new Set();
+  const allServices: { [key: string]: string } = {};
   for (const service of domain.services) {
     for (const product of service.products) {
-      allServices.add(
-        product.name + (product.version ? ` ${product.version}` : '')
-      );
+      if (product.name)
+        allServices[product.name.toLowerCase()] =
+          product.name + (product.version ? ` ${product.version}` : '');
     }
   }
-  return Array.from(allServices).join(', ');
+  return Object.values(allServices).join(', ');
 };
 
 export const createColumns: CreateColumns = () => [
