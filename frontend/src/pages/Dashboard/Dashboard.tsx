@@ -43,13 +43,20 @@ export const Dashboard: React.FC = () => {
   const fetchDomainsExport = async (): Promise<any[]> => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
     try {
-      const { domains } = await listDomains({
-        sort: sortBy ?? [],
-        page: 1,
-        pageSize: -1,
-        filters: filters ?? []
-      });
-      return domains.map((domain) => ({
+      let allDomains: Domain[] = [];
+      let page = 0;
+      while (true) {
+        page += 1;
+        const { count, domains } = await listDomains({
+          sort: sortBy ?? [],
+          page: page,
+          pageSize: 250,
+          filters: filters ?? []
+        });
+        allDomains = allDomains.concat(domains);
+        if (count <= page * 250) break;
+      }
+      return allDomains.map((domain) => ({
         ...domain,
         ports: domain.services.map((service) => service.port).join(','),
         services: getServiceNames(domain)
