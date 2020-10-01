@@ -210,7 +210,6 @@ describe('search_sync', () => {
     expect(updateDomains).not.toBeCalled();
   });
 
-
   test('should update a domain if a domain has changed', async () => {
     const domain = await Domain.create({
       name: 'cisa.gov',
