@@ -9,13 +9,12 @@ jobs:
   repo-sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: sync fork
+        uses: sudo-bot/action-fork-sync@v1.0.1
         with:
-          persist-credentials: false
-      - name: repo-sync
-        uses: repo-sync/github-sync@v2
-        with:
-          source_repo: 'https://github.com/cisagov/crossfeed.git'
-          source_branch: 'master'
-          destination_branch: 'master'
-          github_token: ${{ secrets.ACCESS_TOKEN }}
+          branches: master
+          source-url: 'https://${{ secrets.b628e8393ab9a82906ab8e77c1793356b52e09cb }}:x-oauth-basic@github.com/cisagov/crossfeed.git'
+          # Give repo scope to token and access to myname/officialproject-fork for a token user != myname (eg: a bot)
+          fork-url: 'https://${{ secrets.b628e8393ab9a82906ab8e77c1793356b52e09cb }}:x-oauth-basic@github.com/deptofdefense/crossfeed-ows.git'
+          dry-run: 'true' # remove this line to make sync effective
+          clone-depth: '100' # optional, defaults to 100
