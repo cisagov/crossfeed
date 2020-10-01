@@ -1,4 +1,4 @@
-# File: .github/workflows/repo-sync.yml
+name: Auto Sync
 
 on:
   schedule:
