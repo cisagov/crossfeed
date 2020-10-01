@@ -9,19 +9,18 @@ export const getExtendedOrg = (
 ) => {
   let current: CurrentOrganization | null =
     org ?? user?.roles[0]?.organization ?? null;
-  if (!current) {
-    return null;
+  if (current) {
+    current.userIsAdmin =
+      user?.userType === 'globalAdmin' ||
+      user?.roles.find((role) => role.organization.id === current?.id)?.role ===
+        'admin';
   }
-  current.userIsAdmin =
-    user?.userType === 'globalAdmin' ||
-    user?.roles.find(role => role.organization.id === org?.id)?.role ===
-      'admin';
   return current;
 };
 
 export const getMaximumRole = (user: AuthUser | null) => {
   if (user?.userType === 'globalView') return 'user';
-  return user && user.roles && user.roles.find(role => role.role === 'admin')
+  return user && user.roles && user.roles.find((role) => role.role === 'admin')
     ? 'admin'
     : 'user';
 };
