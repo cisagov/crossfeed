@@ -149,7 +149,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   const allDomains = await getAllDomains(orgs);
 
-  const queue = new PQueue({ concurrency: 5 });
+  const queue = new PQueue({ concurrency: 2 });
 
   const numFiles = Object.keys(files).length;
   const fileNames = Object.keys(files).sort();
