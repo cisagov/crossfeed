@@ -143,7 +143,9 @@ export const handler = async (commandOptions: CommandOptions) => {
     { relations: ['organizations'] }
   );
 
-  const orgs = scan?.organizations && scan?.organizations.map((org) => org.id);
+  const orgs = scan?.organizations?.length
+    ? undefined
+    : scan?.organizations.map((org) => org.id);
 
   const allDomains = await getAllDomains(orgs);
 
