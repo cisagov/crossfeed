@@ -50,11 +50,11 @@ export const Dashboard: React.FC = () => {
         const { count, domains } = await listDomains({
           sort: sortBy ?? [],
           page: page,
-          pageSize: 250,
+          pageSize: 100,
           filters: filters ?? []
         });
         allDomains = allDomains.concat(domains);
-        if (count <= page * 250) break;
+        if (count <= page * 100) break;
       }
       return allDomains.map((domain) => ({
         ...domain,

@@ -67,7 +67,7 @@ export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
           );
           return (
             <p key={num}>
-              {val} on {formatDate(original.createdAt)}
+              {val} on {formatDate(action.date)}
             </p>
           );
         })}
