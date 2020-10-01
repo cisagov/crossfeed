@@ -1,9 +1,9 @@
-import { Domain, connectToDatabase } from '../models';
+import { Domain, connectToDatabase, Vulnerability } from '../models';
 import { CommandOptions } from './ecs-client';
 import { In } from 'typeorm';
 import ESClient from './es-client';
 
-const MAX_RESULTS = 1000;
+const MAX_RESULTS = 500;
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId } = commandOptions;
@@ -13,32 +13,34 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   const client = new ESClient();
 
-  const where = organizationId ? { organization: organizationId } : {};
-  let domains = await Domain.find({
-    where,
-    relations: ['services', 'organization', 'vulnerabilities']
-  });
+  const qs = Domain.createQueryBuilder('domain')
+    .leftJoinAndSelect('domain.organization', 'organization')
+    .leftJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
+    .leftJoinAndSelect('domain.services', 'services')
+    .having('domain.syncedAt is null')
+    .orHaving('domain.updatedAt > domain.syncedAt')
+    .orHaving('organization.updatedAt > domain.syncedAt')
+    .orHaving(
+      'COUNT(CASE WHEN vulnerabilities.updatedAt > domain.syncedAt THEN 1 END) >= 1'
+    )
+    .orHaving(
+      'COUNT(CASE WHEN services.updatedAt > domain.syncedAt THEN 1 END) >= 1'
+    )
+    .groupBy('domain.id, organization.id, vulnerabilities.id, services.id')
+    .select(['domain.id'])
+    .take(MAX_RESULTS);
 
-  domains = domains.filter((domain) => {
-    if (!domain.syncedAt) {
-      // Domain hasn't been synced before
-      return true;
-    }
-    const { syncedAt } = domain;
-    if (
-      domain.updatedAt > syncedAt ||
-      domain.organization.updatedAt > syncedAt ||
-      domain.services.filter((e) => e.updatedAt > syncedAt).length ||
-      domain.vulnerabilities.filter((e) => e.updatedAt > syncedAt).length
-    ) {
-      // Some part of domains / services / vulnerabilities has been updated since the last sync,
-      // so we need to sync this domain again.
-      return true;
-    }
-    return false;
-  });
+  if (organizationId) {
+    qs.where('organization.id=:org', { org: organizationId });
+  }
 
-  if (domains.length) {
+  const domainIds = (await qs.getMany()).map((e) => e.id);
+
+  if (domainIds.length) {
+    const domains = await Domain.find({
+      where: { id: In(domainIds) },
+      relations: ['services', 'organization', 'vulnerabilities']
+    });
     console.log(`Syncing ${domains.length} domains...`);
     await client.updateDomains(domains);
 
