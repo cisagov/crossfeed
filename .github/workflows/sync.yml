@@ -18,4 +18,4 @@ jobs:
           source_repo: 'https://github.com/cisagov/crossfeed.git'
           source_branch: 'master'
           destination_branch: 'master'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.ACCESS_TOKEN }}
