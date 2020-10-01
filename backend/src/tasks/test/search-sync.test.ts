@@ -85,6 +85,31 @@ describe('search_sync', () => {
     expect(updateDomains).toBeCalled();
   });
 
+  test('should update a domain if a vulnerability has changed', async () => {
+    const domain = await Domain.create({
+      name: 'cisa.gov',
+      organization,
+      syncedAt: new Date('2020-10-10')
+    }).save();
+
+    await Vulnerability.create({
+      domain,
+      title: 'vuln',
+      updatedAt: new Date('2020-10-11')
+    }).save();
+
+    await searchSync({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    expect(updateDomains).toBeCalled();
+  });
+
+
   test('should update a domain if a domain has changed', async () => {
     const domain = await Domain.create({
       name: 'cisa.gov',
