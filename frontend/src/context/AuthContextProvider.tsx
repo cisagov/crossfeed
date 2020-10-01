@@ -24,6 +24,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const logout = useCallback(async () => {
     localStorage.clear();
     await Auth.signOut();
+    window.location.reload();
   }, []);
 
   const handleError = useCallback(
@@ -31,7 +32,6 @@ export const AuthContextProvider: React.FC = ({ children }) => {
       if (e.message.includes('401')) {
         // Unauthorized, log out user
         await logout();
-        window.location.reload();
       }
     },
     [logout]

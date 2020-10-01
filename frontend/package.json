@@ -13,7 +13,7 @@
     "@nivo/bar": "^0.62.0",
     "@nivo/pie": "^0.62.0",
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^9.5.0",
+    "@testing-library/react": "^11.0.4",
     "@testing-library/user-event": "^7.2.1",
     "@trussworks/react-uswds": "^1.9.2",
     "@types/classnames": "^2.2.9",
@@ -30,19 +30,19 @@
     "@types/react-select": "^3.0.20",
     "@types/react-table": "^7.0.23",
     "autoprefixer": "^9.8.6",
-    "aws-amplify": "3.3.1",
+    "aws-amplify": "^3.3.1",
     "classnames": "^2.2.6",
     "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.9.0",
+    "eslint-config-prettier": "^6.12.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.21.1",
+    "eslint-plugin-react": "^7.21.2",
     "file-saver": "^2.0.2",
     "jwt-decode": "^2.2.0",
     "material-table": "^1.69.0",
     "node-sass": "^4.13.1",
     "papaparse": "^5.3.0",
     "prettier": "2.1.2",
-    "query-string": "^6.13.2",
+    "query-string": "^6.13.3",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-icons": "^3.11.0",
@@ -60,7 +60,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint 'src/*.{ts,tsx,js,jsx}' --fix",
@@ -83,5 +83,8 @@
   },
   "resolutions": {
     "yargs-parser": "18.1.2"
+  },
+  "devDependencies": {
+    "jest-environment-jsdom-sixteen": "^1.0.3"
   }
 }

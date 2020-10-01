@@ -49,7 +49,6 @@ describe('stats', () => {
           createUserToken({
             roles: [
               {
-                approved: true,
                 org: organization.id,
                 role: 'user'
               }
