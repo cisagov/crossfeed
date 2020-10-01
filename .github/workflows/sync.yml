@@ -1,18 +1,21 @@
-name: Sync Fork
+# File: .github/workflows/repo-sync.yml
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # every 30 minutes
-  workflow_dispatch: # on button click
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
 
 jobs:
-  sync:
+  repo-sync:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: tgymnich/fork-sync@v1.2
+      - uses: actions/checkout@v2
         with:
+          persist-credentials: false
+      - name: repo-sync
+        uses: repo-sync/github-sync@v2
+        with:
+          source_repo: 'https://github.com/cisagov/crossfeed.git'
+          source_branch: 'master'
+          destination_branch: 'master'
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          owner: deptofdefense
-          base: master
-          head: master
