@@ -16,11 +16,10 @@ interface Errors extends Partial<OrganizationType> {
 
 const ScanComponent: React.FC = () => {
   const { scanId } = useParams();
-  const { apiGet } = useAuthContext();
+  const { apiGet, apiPut } = useAuthContext();
   const [scan, setScan] = useState<Scan>();
-  const [] = useState<number>(0);
-  const [] = useState<Errors>({});
-  const [] = useState<string>('');
+  const [errors, setErrors] = useState<Errors>({});
+  const [message, setMessage] = useState<string>('');
   const [] = useState<{
     name: string;
     organizations: OrganizationOption[];
@@ -49,6 +48,24 @@ const ScanComponent: React.FC = () => {
     }
   }, [apiGet, setScan, scanId]);
 
+  const updateScan = async (body: any) => {
+    try {
+      const scan = await apiPut( `/scans/${scanId}`, {
+        body
+      });
+      setScan(scan);
+      setMessage('Scan successfully updated');
+    } catch (e) {
+      setErrors({
+        global:
+          e.status === 422
+            ? 'Error when submitting scan entry.'
+            : e.message ?? e.toString()
+      });
+      console.error(e);
+    }
+  };
+
 
   useEffect(() => {
     fetchScan();
@@ -70,6 +87,8 @@ const ScanComponent: React.FC = () => {
           </div>
         </div>
       </Header>
+      {errors.global && <p className={classes.error}>{errors.global}</p>}
+      {message && <p>{message}</p>}
       Hello world! {scan.name}
     </div>
   );
