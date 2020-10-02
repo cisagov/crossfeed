@@ -79,8 +79,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: true,
-    cpu: '1024',
-    memory: '4096',
+    cpu: '2048',
+    memory: '6144',
     numChunks: 20,
     description: 'Fetch passive port and banner data from censys ipv4 dataset'
   },
