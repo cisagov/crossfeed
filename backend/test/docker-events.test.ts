@@ -1,6 +1,6 @@
 import { listenForDockerEvents } from '../src/api/docker-events';
 import { handler as updateScanTaskStatus } from '../src/tasks/updateScanTaskStatus';
-import { Readable } from 'typeorm/platform/PlatformTools';
+import { Readable } from 'stream';
 import waitForExpect from 'wait-for-expect';
 
 jest.mock('../src/tasks/updateScanTaskStatus', () => ({

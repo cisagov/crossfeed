@@ -37,12 +37,13 @@ function buildResults(hits) {
   };
 
   return hits.map(record => {
-    return Object.entries(record._source)
+    const hit = Object.entries(record._source)
       .map(([fieldName, fieldValue]) => [
         fieldName,
         toObject(fieldValue, getHighlight(record, fieldName))
       ])
       .reduce(addEachKeyValueToObject, {});
+    return {...hit, inner_hits: record.inner_hits};
   });
 }
 

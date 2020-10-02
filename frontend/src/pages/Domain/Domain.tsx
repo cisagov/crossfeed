@@ -24,6 +24,7 @@ import { Table } from 'components';
 import { Column, CellProps } from 'react-table';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { renderExpandedVulnerability } from '../Vulnerabilities/Vulnerabilities';
+import { Webpage } from 'types/webpage';
 
 export const Domain: React.FC = () => {
   const { domainId } = useParams();
@@ -84,6 +85,24 @@ export const Domain: React.FC = () => {
           {row.isExpanded ? <FaMinus /> : <FaPlus />}
         </span>
       ),
+      disableFilters: true
+    }
+  ];
+
+  const webpageColumns: Column<Webpage>[] = [
+    {
+      Header: 'URL',
+      accessor: 'url',
+      width: 800,
+      disableFilters: true,
+      Cell: ({ value }: CellProps<Vulnerability>) => (
+        <a href={value} target="_blank" rel="noopener noreferrer">{value}</a>
+      )
+    },
+    {
+      Header: 'Status',
+      accessor: 'status',
+      width: 100,
       disableFilters: true
     }
   ];
@@ -194,6 +213,22 @@ export const Domain: React.FC = () => {
                   initialSortBy={[
                     {
                       id: 'created',
+                      desc: false
+                    }
+                  ]}
+                />
+              </div>
+            )}
+            {domain.webpages && (
+              <div className={classes.section}>
+                <h3>Webpages</h3>
+                <Table<Webpage>
+                  columns={webpageColumns}
+                  data={domain.webpages}
+                  // renderExpanded={renderExpandedVulnerability}
+                  initialSortBy={[
+                    {
+                      id: 'url',
                       desc: false
                     }
                   ]}

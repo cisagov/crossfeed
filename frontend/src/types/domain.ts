@@ -1,5 +1,6 @@
 import { Organization } from './organization';
 import { Vulnerability } from './vulnerability';
+import { Webpage } from './webpage';
 
 export interface Product {
   // Common name
@@ -77,6 +78,7 @@ export interface Domain {
   cloudHosted: boolean;
   services: Service[];
   vulnerabilities: Vulnerability[];
+  webpages: Webpage[];
   organization: Organization;
   ssl: SSLInfo | null;
 }
