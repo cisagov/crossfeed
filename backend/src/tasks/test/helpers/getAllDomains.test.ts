@@ -18,7 +18,8 @@ describe('getAllDomains', () => {
     expect(domains[domainIndex]).toEqual({
       id: domain.id,
       name,
-      ip
+      ip,
+      organization: null
     });
   });
   test('providing organizations filters based on that organization', async () => {
