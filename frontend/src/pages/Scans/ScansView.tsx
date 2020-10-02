@@ -394,7 +394,7 @@ const ScansView: React.FC = () => {
             >
               <p>
                 Are you sure you would like to delete the{' '}
-                <code>{scans[selectedRow].name}</code> scan? This will delete all ScanTasks and history associated with the scan.
+                <code>{scans[selectedRow].name}</code> scan?
               </p>
             </Modal>
           </ModalContainer>
