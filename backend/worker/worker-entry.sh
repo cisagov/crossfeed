@@ -17,7 +17,9 @@ update-ca-certificates --fresh
 
 # Required for node.js to trust our mitmproxy self-signed cert
 export NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/mitmproxy-ca-cert.crt
-export AWS_CA_BUNDLE=/usr/local/share/ca-certificates/mitmproxy-ca-cert.crt
+
+# Disable proxying for the following domains:
+export NO_PROXY=.s3.amazonaws.com
 
 # Main code
 echo "Running main code..."
