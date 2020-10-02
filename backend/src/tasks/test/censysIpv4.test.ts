@@ -114,7 +114,8 @@ describe('censys ipv4', () => {
           organization: null,
           id: null,
           updatedAt: null,
-          createdAt: null
+          createdAt: null,
+          syncedAt: null
         }))
     ).toMatchSnapshot();
     expect(domains.filter((e) => !e.organization).length).toEqual(0);
