@@ -78,7 +78,7 @@ EOF
 }
 
 resource "aws_iam_role" "worker_task_role" {
-  name = "crossfeed-${var.stage}-worker-task"
+  name               = "crossfeed-${var.stage}-worker-task"
   assume_role_policy = <<EOF
 {
   "Version": "2008-10-17",
@@ -95,15 +95,15 @@ resource "aws_iam_role" "worker_task_role" {
 }
   EOF
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
 
 resource "aws_iam_role_policy" "worker_task_role_policy" {
   name_prefix = aws_iam_role.worker_task_role.name
-  role = aws_iam_role.worker_task_role.id
+  role        = aws_iam_role.worker_task_role.id
 
   policy = <<EOF
 {
@@ -148,8 +148,8 @@ resource "aws_ssm_parameter" "worker_arn" {
 }
 
 resource "aws_ecs_task_definition" "worker" {
-  family                = var.worker_ecs_task_definition_family
-  container_definitions = <<EOF
+  family                   = var.worker_ecs_task_definition_family
+  container_definitions    = <<EOF
 [
   {
     "name": "main",
@@ -221,7 +221,7 @@ resource "aws_ecs_task_definition" "worker" {
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   execution_role_arn       = aws_iam_role.worker_task_execution_role.arn
-  task_role_arn = aws_iam_role.worker_task_role.arn
+  task_role_arn            = aws_iam_role.worker_task_role.arn
 
   # CPU and memory values: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
 
@@ -263,19 +263,19 @@ resource "aws_ssm_parameter" "webscraper_s3_bucket_name" {
 }
 
 resource "aws_s3_bucket" "webscraper_bucket" {
-  bucket = "webscraper-${var.stage}"
+  bucket = "crossfeed-webscraper-${var.stage}"
   acl    = "private"
 
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm     = "AES256"
+        sse_algorithm = "AES256"
       }
     }
   }
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
