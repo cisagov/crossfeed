@@ -60,7 +60,7 @@ export const get = wrapHandler(async (event) => {
     })) as { id: string; value: number; label: string }[];
   };
 
-  const MAX_RESULTS = 25;
+  const MAX_RESULTS = 50;
 
   const services = await performQuery(
     Domain.createQueryBuilder('domain')
@@ -70,7 +70,6 @@ export const get = wrapHandler(async (event) => {
       .select('services.service as id, count(*) as value')
       .groupBy('services.service')
       .orderBy('value', 'DESC')
-      .take(MAX_RESULTS)
   );
   const ports = await performQuery(
     Domain.createQueryBuilder('domain')
@@ -79,7 +78,6 @@ export const get = wrapHandler(async (event) => {
       .select('services.port as id, count(*) as value')
       .groupBy('services.port')
       .orderBy('value', 'DESC')
-      .take(MAX_RESULTS)
   );
   const numVulnerabilities = await performQuery(
     Domain.createQueryBuilder('domain')
@@ -89,7 +87,7 @@ export const get = wrapHandler(async (event) => {
       .select('domain.name as id, count(*) as value')
       .groupBy('domain.id')
       .orderBy('value', 'DESC')
-      .take(MAX_RESULTS)
+      .limit(MAX_RESULTS)
   );
   const severity = await performQuery(
     Vulnerability.createQueryBuilder('vulnerability')

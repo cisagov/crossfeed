@@ -132,7 +132,7 @@ export const Organizations: React.FC = () => {
       let row = organizations[index];
       await apiDelete(`/organizations/${row.id}`);
       setOrganizations(
-        organizations.filter(organization => organization.id !== row.id)
+        organizations.filter((organization) => organization.id !== row.id)
       );
     } catch (e) {
       setErrors({
@@ -163,7 +163,7 @@ export const Organizations: React.FC = () => {
   };
 
   React.useEffect(() => {
-    document.addEventListener('keyup', e => {
+    document.addEventListener('keyup', (e) => {
       //Escape
       if (e.keyCode === 27) {
         setShowModal(false);
@@ -196,7 +196,7 @@ export const Organizations: React.FC = () => {
               'isPassive',
               'inviteOnly'
             ]}
-            onImport={async results => {
+            onImport={async (results) => {
               // TODO: use a batch call here instead.
               let createdOrganizations = [];
               for (let result of results) {

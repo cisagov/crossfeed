@@ -21,12 +21,24 @@ import classes from './styles.module.scss';
 import { Grid, Checkbox, Dropdown } from '@trussworks/react-uswds';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { formatDistanceToNow, parseISO } from 'date-fns';
+import { formatDistanceToNow, parseISO, format } from 'date-fns';
 
 export interface ApiResponse {
   result: Vulnerability[];
   count: number;
 }
+
+const formatDate = (date: string) => {
+  return format(parseISO(date), 'MM-dd-yyyy');
+};
+
+const stateMap: { [key: string]: string } = {
+  unconfirmed: 'Unconfirmed',
+  exploitable: 'Exploitable',
+  'false-positive': 'False Positive',
+  'accepted-risk': 'Accepted Risk',
+  remediated: 'Remediated'
+};
 
 export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
   const { original } = row;
@@ -43,6 +55,23 @@ export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
             View vulnerability description
           </a>
         )}
+        <h3>Vulnerability history</h3>
+        {original.actions.map((action, num) => {
+          const val = action.automatic ? (
+            <>Vulnerability automatically marked as remediated</>
+          ) : (
+            <>
+              State changed to {action.state} (
+              {stateMap[action.substate].toLowerCase()}) by {action.userName}
+            </>
+          );
+          return (
+            <p key={num}>
+              {val} on {formatDate(action.date)}
+            </p>
+          );
+        })}
+        <p>Vulnerability opened on {formatDate(original.createdAt)}</p>
       </div>
     </div>
   );
@@ -82,7 +111,7 @@ export const Vulnerabilities: React.FC = () => {
     },
     {
       Header: 'Created',
-      id: 'created',
+      id: 'createdAt',
       accessor: ({ createdAt }) =>
         `${formatDistanceToNow(parseISO(createdAt))} ago`,
       width: 250,
@@ -140,6 +169,7 @@ export const Vulnerabilities: React.FC = () => {
       const vulnCopy = [...vulnerabilities];
       vulnCopy[index].state = res.state;
       vulnCopy[index].substate = res.substate;
+      vulnCopy[index].actions = res.actions;
       setVulnerabilities(vulnCopy);
     } catch (e) {
       console.error(e);
@@ -156,7 +186,7 @@ export const Vulnerabilities: React.FC = () => {
       filters: Filters<Vulnerability>,
       sort: SortingRule<Vulnerability>[],
       page: number,
-      paginate: boolean
+      pageSize: number = 25
     ): Promise<ApiResponse | undefined> => {
       try {
         const tableFilters = filters
@@ -178,7 +208,7 @@ export const Vulnerabilities: React.FC = () => {
               ...tableFilters,
               organization: showAll ? undefined : currentOrganization?.id
             },
-            pageSize: paginate ? -1 : 25
+            pageSize
           }
         });
       } catch (e) {
@@ -194,8 +224,7 @@ export const Vulnerabilities: React.FC = () => {
       const resp = await vulnerabilitiesSearch(
         query.filters,
         query.sort,
-        query.page,
-        false
+        query.page
       );
       if (!resp) return;
       const { result, count } = resp;
@@ -208,9 +237,16 @@ export const Vulnerabilities: React.FC = () => {
   const fetchVulnerabilitiesExport = async (): Promise<any[]> => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
     if (!sortBy || !filters) return [];
-    const resp = await vulnerabilitiesSearch(filters, sortBy, 1, true);
-    if (!resp) return [];
-    return resp.result.map((vuln) => ({
+
+    let allVulns: Vulnerability[] = [];
+    let page = 0;
+    while (true) {
+      page += 1;
+      const { count, result } = await vulnerabilitiesSearch(filters, sortBy, page, 100) as ApiResponse;
+      allVulns = allVulns.concat(result || []);
+      if (count <= page * 100) break;
+    }
+    return allVulns.map((vuln) => ({
       ...vuln,
       domain: vuln.domain.name
     }));

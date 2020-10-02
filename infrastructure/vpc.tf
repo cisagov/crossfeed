@@ -41,8 +41,8 @@ resource "aws_subnet" "worker" {
   vpc_id            = aws_vpc.crossfeed_vpc.id
   cidr_block        = "10.0.3.0/24"
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
@@ -60,8 +60,8 @@ resource "aws_subnet" "es_1" {
 resource "aws_route_table" "r" {
   vpc_id = aws_vpc.crossfeed_vpc.id
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
@@ -69,13 +69,13 @@ resource "aws_route_table" "r" {
 resource "aws_route_table" "r2" {
   vpc_id = aws_vpc.crossfeed_vpc.id
 
-  route {	
-    nat_gateway_id = aws_nat_gateway.nat.id	
-    cidr_block     = "0.0.0.0/0"	
+  route {
+    nat_gateway_id = aws_nat_gateway.nat.id
+    cidr_block     = "0.0.0.0/0"
   }
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
@@ -88,8 +88,8 @@ resource "aws_route_table" "worker" {
     cidr_block = "0.0.0.0/0"
   }
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
@@ -123,20 +123,20 @@ resource "aws_internet_gateway" "gw" {
 }
 
 resource "aws_eip" "nat_eip" {
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
-  }	
+  }
 }
 
-resource "aws_nat_gateway" "nat" {	
-  allocation_id = aws_eip.nat_eip.id	
-  subnet_id     = aws_subnet.worker.id	
+resource "aws_nat_gateway" "nat" {
+  allocation_id = aws_eip.nat_eip.id
+  subnet_id     = aws_subnet.worker.id
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
-  }	
+  }
 }
 
 resource "aws_security_group" "allow_internal" {
@@ -159,8 +159,8 @@ resource "aws_security_group" "allow_internal" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
@@ -180,8 +180,8 @@ resource "aws_security_group" "backend" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
@@ -199,8 +199,8 @@ resource "aws_security_group" "worker" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }

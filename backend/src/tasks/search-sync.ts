@@ -1,9 +1,11 @@
-import { Domain, connectToDatabase, Webpage } from '../models';
+import { Domain, connectToDatabase, Vulnerability, Webpage } from '../models';
 import { CommandOptions } from './ecs-client';
 import { In } from 'typeorm';
-import ESClient, { WebpageRecord } from './es-client';
+import ESClient, { WebpageRecord }  from './es-client';
 import S3Client from './s3-client';
 import PQueue from 'p-queue';
+
+const MAX_RESULTS = 500;
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, domainId } = commandOptions;
@@ -13,35 +15,34 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   const client = new ESClient();
 
-  // This filtering is used only for testing in search-sync.test.ts; usually,
-  // this scan is called in a global fashion and runs on all organizations.
-  const where: any = organizationId ? { organization: organizationId } : {};
+  const qs = Domain.createQueryBuilder('domain')
+    .leftJoinAndSelect('domain.organization', 'organization')
+    .leftJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
+    .leftJoinAndSelect('domain.services', 'services')
+    .having('domain.syncedAt is null')
+    .orHaving('domain.updatedAt > domain.syncedAt')
+    .orHaving('organization.updatedAt > domain.syncedAt')
+    .orHaving(
+      'COUNT(CASE WHEN vulnerabilities.updatedAt > domain.syncedAt THEN 1 END) >= 1'
+    )
+    .orHaving(
+      'COUNT(CASE WHEN services.updatedAt > domain.syncedAt THEN 1 END) >= 1'
+    )
+    .groupBy('domain.id, organization.id, vulnerabilities.id, services.id')
+    .select(['domain.id'])
+    .take(MAX_RESULTS);
 
-  let domains = await Domain.find({
-    where,
-    relations: ['services', 'organization', 'vulnerabilities']
-  });
+  if (organizationId) {
+    qs.where('organization.id=:org', { org: organizationId });
+  }
 
-  domains = domains.filter((domain) => {
-    if (!domain.syncedAt) {
-      // Domain hasn't been synced before
-      return true;
-    }
-    const { syncedAt } = domain;
-    if (
-      domain.updatedAt > syncedAt ||
-      domain.organization?.updatedAt > syncedAt ||
-      domain.services?.filter((e) => e.updatedAt > syncedAt).length ||
-      domain.vulnerabilities?.filter((e) => e.updatedAt > syncedAt).length
-    ) {
-      // Some part of domains / services / vulnerabilities has been updated since the last sync,
-      // so we need to sync this domain again.
-      return true;
-    }
-    return false;
-  });
+  const domainIds = (await qs.getMany()).map((e) => e.id);
 
-  if (domains.length) {
+  if (domainIds.length) {
+    const domains = await Domain.find({
+      where: { id: In(domainIds) },
+      relations: ['services', 'organization', 'vulnerabilities']
+    });
     console.log(`Syncing ${domains.length} domains...`);
     await client.updateDomains(domains);
 
@@ -56,19 +57,18 @@ export const handler = async (commandOptions: CommandOptions) => {
   }
 
   console.log('Retrieving webpages...');
-  const qs = Webpage.createQueryBuilder('webpage')
+  const qs_ = Webpage.createQueryBuilder('webpage')
     .where('webpage.updatedAt > webpage.syncedAt')
     .orWhere('webpage.syncedAt is null');
 
-  // This filtering is also used only for testing in search-sync.test.ts.
   if (domainId) {
-    qs.andWhere('webpage."domainId" = :id', { id: domainId });
+    qs_.andWhere('webpage."domainId" = :id', { id: domainId });
   }
 
   // The response actually has keys "webpage_id", "webpage_createdAt", etc.
   const s3Client = new S3Client();
   const queue = new PQueue({ concurrency: 10 });
-  const webpages: WebpageRecord[] = await qs.take(500).execute();
+  const webpages: WebpageRecord[] = await qs_.take(MAX_RESULTS).execute();
   console.log(`Got ${webpages.length} webpages. Retrieving body of each webpage...`);
   for (const i in webpages) {
     const webpage = webpages[i];
