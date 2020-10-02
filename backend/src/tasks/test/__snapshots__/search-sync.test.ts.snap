@@ -10,6 +10,7 @@ Array [
   "webpage_s3Key",
   "webpage_url",
   "webpage_status",
+  "webpage_responseSize",
   "webpage_domainId",
   "webpage_discoveredById",
   "webpage_body",

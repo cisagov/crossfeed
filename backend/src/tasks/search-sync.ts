@@ -1,7 +1,7 @@
 import { Domain, connectToDatabase, Vulnerability, Webpage } from '../models';
 import { CommandOptions } from './ecs-client';
 import { In } from 'typeorm';
-import ESClient, { WebpageRecord }  from './es-client';
+import ESClient, { WebpageRecord } from './es-client';
 import S3Client from './s3-client';
 import PQueue from 'p-queue';
 
@@ -33,6 +33,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     .take(MAX_RESULTS);
 
   if (organizationId) {
+    // This parameter is used for testing only
     qs.where('organization.id=:org', { org: organizationId });
   }
 
@@ -57,11 +58,13 @@ export const handler = async (commandOptions: CommandOptions) => {
   }
 
   console.log('Retrieving webpages...');
-  const qs_ = Webpage.createQueryBuilder('webpage')
-    .where('webpage.updatedAt > webpage.syncedAt')
-    .orWhere('webpage.syncedAt is null');
+  const qs_ = Webpage.createQueryBuilder('webpage').where(
+    '(webpage.updatedAt > webpage.syncedAt OR webpage.syncedAt is null)'
+  );
+  // .orWhere('');
 
   if (domainId) {
+    // This parameter is used for testing only
     qs_.andWhere('webpage."domainId" = :id', { id: domainId });
   }
 
@@ -69,12 +72,16 @@ export const handler = async (commandOptions: CommandOptions) => {
   const s3Client = new S3Client();
   const queue = new PQueue({ concurrency: 10 });
   const webpages: WebpageRecord[] = await qs_.take(MAX_RESULTS).execute();
-  console.log(`Got ${webpages.length} webpages. Retrieving body of each webpage...`);
+  console.log(
+    `Got ${webpages.length} webpages. Retrieving body of each webpage...`
+  );
   for (const i in webpages) {
     const webpage = webpages[i];
     if (webpage.webpage_s3Key) {
       queue.add(async () => {
-        webpage.webpage_body = await s3Client.getWebpageBody(webpage.webpage_s3Key);
+        webpage.webpage_body = await s3Client.getWebpageBody(
+          webpage.webpage_s3Key
+        );
         if (Number(i) % 100 == 0) {
           console.log(`Finished: ${i}`);
         }

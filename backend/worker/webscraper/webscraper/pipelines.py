@@ -23,7 +23,7 @@ class ExportFilePipeline:
             self.s3 = boto3.resource('s3', endpoint_url='http://minio:9000')
         else:
             self.s3 = boto3.resource('s3')
-        self.bucket = self.s3.Bucket(os.getenv("WEBSCRAPER_S3_BUCKET_NAME", "webscraper-local"))
+        self.bucket = self.s3.Bucket(os.getenv("WEBSCRAPER_S3_BUCKET_NAME", "crossfeed-local-webscraper"))
     
     def process_item(self, item, spider):
         if item["s3_key"] in self.s3_keys_seen:

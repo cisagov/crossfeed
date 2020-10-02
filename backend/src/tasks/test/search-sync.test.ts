@@ -27,18 +27,6 @@ describe('search_sync', () => {
       isPassive: false
     }).save();
   });
-  test('no domains', async () => {
-    await searchSync({
-      organizationId: organization.id,
-      organizationName: 'organizationName',
-      scanId: 'scanId',
-      scanName: 'scanName',
-      scanTaskId: 'scanTaskId'
-    });
-
-    expect(updateDomains).not.toBeCalled();
-    expect(updateWebpages).not.toBeCalled();
-  });
 
   test('should not update already-synced domains', async () => {
     const domain = await Domain.create({
@@ -270,8 +258,8 @@ describe('search_sync', () => {
       domain,
       url: 'https://cisa.gov/123',
       status: 200,
-      updatedAt: new Date('2020-08-23T03:36:57.231Z'),
-      syncedAt: new Date('2020-08-30T03:36:57.231Z')
+      updatedAt: new Date('9999-08-23T03:36:57.231Z'),
+      syncedAt: new Date('9999-08-30T03:36:57.231Z')
     }).save();
 
     await searchSync({
@@ -294,7 +282,7 @@ describe('search_sync', () => {
       domain,
       url: 'https://cisa.gov/123',
       status: 200,
-      updatedAt: new Date('2020-08-23T03:36:57.231Z'),
+      updatedAt: new Date('9999-08-23T03:36:57.231Z'),
       s3Key: 'testS3key'
     }).save();
 
@@ -327,8 +315,8 @@ describe('search_sync', () => {
       domain,
       url: 'https://cisa.gov/123',
       status: 200,
-      updatedAt: new Date('2020-08-30T03:36:57.231Z'),
-      syncedAt: new Date('2020-08-23T03:36:57.231Z')
+      updatedAt: new Date('9999-08-30T03:36:57.231Z'),
+      syncedAt: new Date('9999-08-23T03:36:57.231Z')
     }).save();
 
     await searchSync({
