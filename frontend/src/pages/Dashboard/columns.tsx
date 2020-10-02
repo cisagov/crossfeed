@@ -50,14 +50,14 @@ export const createColumns: CreateColumns = () => [
   },
   {
     Header: 'Services',
-    id: 'services',
+    id: 'service',
     disableSortBy: true,
     accessor: (domain) => getServiceNames(domain),
     Filter: ColumnFilter
   },
   {
     Header: 'Vulnerabilities',
-    id: 'vulnerabilities',
+    id: 'vulnerability',
     accessor: (domain) =>
       domain.vulnerabilities &&
       domain.vulnerabilities
