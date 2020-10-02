@@ -95,7 +95,9 @@ describe('censys ipv4', () => {
 
   afterEach(async () => {
     global.Date = RealDate;
+  });
 
+  const checkDomains = async organization => {
     const domains = await Domain.find({
       where: { organization },
       relations: ['organization', 'services']
@@ -119,11 +121,10 @@ describe('censys ipv4', () => {
         }))
     ).toMatchSnapshot();
     expect(domains.filter((e) => !e.organization).length).toEqual(0);
-  });
+  }
 
   test('basic test', async () => {
     nock('https://censys.io', authHeaders)
-      .persist()
       .get('/api/v1/data/ipv4_2018/')
       .reply(200, {
         results: {
@@ -133,7 +134,6 @@ describe('censys ipv4', () => {
         }
       });
     nock('https://censys.io', authHeaders)
-      .persist()
       .get('/api/v1/data/ipv4_2018/20200719')
       .reply(200, {
         files: {
@@ -230,6 +230,8 @@ describe('censys ipv4', () => {
       chunkNumber: 0,
       numChunks: 1
     });
+
+    await checkDomains(organization);
   });
 
   test('http failure should retry', async () => {
@@ -275,6 +277,8 @@ describe('censys ipv4', () => {
       chunkNumber: 0,
       numChunks: 1
     });
+
+    await checkDomains(organization);
   });
 
   test('repeated http failures should throw an error', async () => {
@@ -319,5 +323,7 @@ describe('censys ipv4', () => {
         numChunks: 1
       })
     ).rejects.toThrow('Response code 429');
+    
+    await checkDomains(organization);
   });
 });
