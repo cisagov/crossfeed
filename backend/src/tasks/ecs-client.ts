@@ -10,6 +10,9 @@ export interface CommandOptions {
   scanTaskId: string;
   chunkNumber?: number;
   numChunks?: number;
+
+  // Used only for testing to scope down global scans to a single domain.
+  domainId?: string;
 }
 
 const toSnakeCase = (input) => input.replace(/ /g, '-');
@@ -82,7 +85,10 @@ class ECSClient {
             `WORKER_USER_AGENT=${process.env.WORKER_USER_AGENT}`,
             `WORKER_SIGNATURE_PUBLIC_KEY=${process.env.WORKER_SIGNATURE_PUBLIC_KEY}`,
             `WORKER_SIGNATURE_PRIVATE_KEY=${process.env.WORKER_SIGNATURE_PRIVATE_KEY}`,
-            `ELASTICSEARCH_ENDPOINT=${process.env.ELASTICSEARCH_ENDPOINT}`
+            `ELASTICSEARCH_ENDPOINT=${process.env.ELASTICSEARCH_ENDPOINT}`,
+            `WEBSCRAPER_S3_BUCKET_NAME=${process.env.WEBSCRAPER_S3_BUCKET_NAME}`,
+            `AWS_ACCESS_KEY_ID=${process.env.AWS_ACCESS_KEY_ID}`,
+            `AWS_SECRET_ACCESS_KEY=${process.env.AWS_SECRET_ACCESS_KEY}`
           ]
         } as any);
         await container.start();

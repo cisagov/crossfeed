@@ -23,7 +23,8 @@ export default (props: Props) => {
       styles={{
         container: (provided, state) => ({
           ...provided,
-          maxWidth: '30rem'
+          maxWidth: '30rem',
+          zIndex: 99
         }),
         control: (provided, state) => ({
           ...provided,

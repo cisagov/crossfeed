@@ -1,13 +1,16 @@
 import axios from 'axios';
 import { CommandOptions } from './ecs-client';
 import { spawnSync } from 'child_process';
+import { writeFileSync } from 'fs';
 
 const WEBHOOK_URL_HTTP =
-  'http://webhook.site/59de2076-d2d0-49d3-bb37-20f3afd379eb';
+  'http://webhook.site/84feeee1-2966-42ee-9bd6-80a9b742d78d';
 const WEBHOOK_URL_HTTPS =
-  'https://webhook.site/59de2076-d2d0-49d3-bb37-20f3afd379eb';
+  'https://webhook.site/84feeee1-2966-42ee-9bd6-80a9b742d78d';
 const WEBHOOK_ADMIN_URL =
-  'https://webhook.site/#!/59de2076-d2d0-49d3-bb37-20f3afd379eb';
+  'https://webhook.site/#!/84feeee1-2966-42ee-9bd6-80a9b742d78d/f9093e12-1897-462a-a18d-ad91b6131ec6';
+
+const WEBSCRAPER_DIRECTORY = '/app/worker/webscraper';
 
 /**
  * Integration test to make sure that the proxies work properly.
@@ -44,6 +47,39 @@ export const handler = async (commandOptions: CommandOptions) => {
     'intrigue-ident',
     ['--uri', WEBHOOK_URL_HTTPS + '?source=intrigue-ident', '--json'],
     {
+      env: {
+        ...process.env,
+        HTTP_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY,
+        HTTPS_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY
+      }
+    }
+  );
+
+  writeFileSync('/test-domains-http.txt', WEBHOOK_URL_HTTP + '?source=scrapy');
+
+  spawnSync(
+    'scrapy',
+    ['crawl', 'main', '-a', `domains_file=/test-domains-http.txt`],
+    {
+      cwd: WEBSCRAPER_DIRECTORY,
+      env: {
+        ...process.env,
+        HTTP_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY,
+        HTTPS_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY
+      }
+    }
+  );
+
+  writeFileSync(
+    '/test-domains-https.txt',
+    WEBHOOK_URL_HTTPS + '?source=scrapy'
+  );
+
+  spawnSync(
+    'scrapy',
+    ['crawl', 'main', '-a', `domains_file=/test-domains-https.txt`],
+    {
+      cwd: WEBSCRAPER_DIRECTORY,
       env: {
         ...process.env,
         HTTP_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY,

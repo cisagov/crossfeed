@@ -10,7 +10,6 @@ resource "aws_ssm_parameter" "prod_api_domain" {
 
   tags = {
     Project = var.project
-    Stage   = var.stage
   }
 }
 
@@ -22,6 +21,5 @@ resource "aws_ssm_parameter" "stage_api_domain" {
 
   tags = {
     Project = var.project
-    Stage   = var.stage
   }
 }
