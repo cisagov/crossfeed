@@ -258,7 +258,6 @@ resource "aws_ssm_parameter" "webscraper_s3_bucket_name" {
 
   tags = {
     Project = var.project
-    Stage   = var.stage
   }
 }
 
