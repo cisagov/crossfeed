@@ -28,12 +28,21 @@ class S3Client {
    * @param s3Key s3Key attribute of the webpage.
    */
   async getWebpageBody(s3Key: string) {
-    const params = {
-      Bucket: process.env.WEBSCRAPER_S3_BUCKET_NAME!,
-      Key: `${s3Key}/latest/body.txt`
-    };
-    const data = await this.s3.getObject(params).promise();
-    return data.Body?.toString('utf-8');
+    try {
+      const params = {
+        Bucket: process.env.WEBSCRAPER_S3_BUCKET_NAME!,
+        Key: `${s3Key}/latest/body.txt`
+      };
+      const data = await this.s3.getObject(params).promise();
+      return data.Body?.toString('utf-8');
+    } catch (e) {
+      if (e?.code === 'NoSuchKey') {
+        console.warn('Files for key ' + s3Key + ' not found');
+        return '';
+      }
+      console.error(e);
+      throw e;
+    }
   }
 }
 
