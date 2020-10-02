@@ -14,13 +14,24 @@ function buildSort(sortDirection, sortField) {
 function buildMatch(searchTerm) {
   return searchTerm
     ? {
-        multi_match: {
-          query: searchTerm,
-          fuzziness: 'AUTO',
-          fields: ['name']
-        }
+      multi_match: {
+        query: searchTerm,
+        fuzziness: 'AUTO',
+        fields: ['name']
       }
+    }
     : { match_all: {} };
+}
+
+function buildChildMatch(searchTerm) {
+  return searchTerm
+    ? {
+      multi_match: {
+        query: searchTerm,
+        fields: ['webpage_body']
+      }
+    }
+    : {};
 }
 
 /*
@@ -53,7 +64,7 @@ export function buildRequest(state) {
 
   const sort = buildSort(sortDirection, sortField);
   const match = buildMatch(searchTerm);
-  const size = resultsPerPage;
+  const size = 100; // resultsPerPage;
   const from = buildFrom(current, resultsPerPage);
   const filter = buildRequestFilter(filters);
 
@@ -156,8 +167,44 @@ export function buildRequest(state) {
     // --------------------------
     // https://www.elastic.co/guide/en/elasticsearch/reference/7.x/full-text-queries.html
     query: {
+      // "has_child": {
+      //   "type": "webpage",
+      //   "query": {
+      //     "match_all": {}
+      //   },
+      //   "min_children": 1,
+      //   // "inner_hits": {}    
+      // },
       bool: {
-        must: [match],
+        must: [{
+          match: {
+            parent_join: "domain"
+          }
+        },
+        {
+          bool: {
+            should: [
+              match,
+              {
+                has_child: {
+                  type: "webpage",
+                  query: buildChildMatch(searchTerm),
+                  inner_hits: {
+                    _source: ["webpage_url"],
+                    highlight: {
+                      fragment_size: 50,
+                      number_of_fragments: 3,
+                      fields: {
+                        "webpage_body": {}
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+        ],
         ...(filter && { filter })
       }
     },

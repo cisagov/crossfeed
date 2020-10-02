@@ -83,7 +83,7 @@ export const Dashboard = withSearch(
     searchTerm,
     setSearchTerm,
     autocompletedResults,
-    clearFilters
+    clearFilters,
   }: ContextType) => ({
     addFilter,
     removeFilter,

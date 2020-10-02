@@ -1,6 +1,11 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { User, Domain, connectToDatabase, Organization } from '../src/models';
+import {
+  Domain,
+  connectToDatabase,
+  Organization,
+  Webpage
+} from '../src/models';
 import { createUserToken } from './util';
 
 describe('domains', () => {
@@ -253,6 +258,11 @@ describe('domains', () => {
         name,
         organization
       }).save();
+      const webpage = await Webpage.create({
+        domain,
+        url: 'http://url',
+        status: 200
+      }).save();
       const response = await request(app)
         .get(`/domain/${domain.id}`)
         .set(
@@ -263,6 +273,7 @@ describe('domains', () => {
         )
         .expect(200);
       expect(response.body.id).toEqual(domain.id);
+      expect(response.body.webpages.length).toEqual(1);
     });
     it("get by org user should not work for domain not in the user's org", async () => {
       const name = 'test-' + Math.random();
