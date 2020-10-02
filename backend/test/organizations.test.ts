@@ -1,12 +1,13 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { createUserToken } from './util';
+import { createUserToken, DUMMY_USER_ID } from './util';
 import {
   Organization,
   Role,
   connectToDatabase,
   Scan,
-  ScanTask
+  ScanTask,
+  User
 } from '../src/models';
 
 describe('organizations', () => {
@@ -15,12 +16,19 @@ describe('organizations', () => {
   });
   describe('create', () => {
     it('create by globalAdmin should succeed', async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        userType: 'globalAdmin'
+      }).save();
       const name = 'test-' + Math.random();
       const response = await request(app)
         .post('/organizations/')
         .set(
           'Authorization',
           createUserToken({
+            id: user.id,
             userType: 'globalAdmin'
           })
         )
@@ -36,17 +44,28 @@ describe('organizations', () => {
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
         id: expect.any(String),
-        name: expect.any(String)
+        name: expect.any(String),
+        createdBy: {
+          id: expect.any(String)
+        }
       });
+      expect(response.body.createdBy.id).toEqual(user.id);
       expect(response.body.name).toEqual(name);
     });
     it("can't add organization with the same name", async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        userType: 'globalAdmin'
+      }).save();
       const name = 'test-' + Math.random();
       await request(app)
         .post('/organizations/')
         .set(
           'Authorization',
           createUserToken({
+            id: user.id,
             userType: 'globalAdmin'
           })
         )
@@ -56,13 +75,14 @@ describe('organizations', () => {
           rootDomains: ['cisa.gov'],
           isPassive: false,
           inviteOnly: true
-        })
-        .expect(200);
+        });
+      // .expect(200);
       const response = await request(app)
         .post('/organizations/')
         .set(
           'Authorization',
           createUserToken({
+            id: user.id,
             userType: 'globalAdmin'
           })
         )
@@ -132,6 +152,40 @@ describe('organizations', () => {
       expect(response.body.isPassive).toEqual(isPassive);
       expect(response.body.inviteOnly).toEqual(inviteOnly);
     });
+    it('update by org admin should update everything but rootDomains and ipBlocks', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const name = 'test-' + Math.random();
+      const rootDomains = ['test-' + Math.random()];
+      const ipBlocks = ['1.1.1.1'];
+      const isPassive = true;
+      const inviteOnly = false;
+      const response = await request(app)
+        .put(`/organizations/${organization.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [{ org: organization.id, role: 'admin' }]
+          })
+        )
+        .send({
+          name,
+          rootDomains,
+          ipBlocks,
+          isPassive,
+          inviteOnly
+        })
+        .expect(200);
+      expect(response.body.name).toEqual(name);
+      expect(response.body.rootDomains).toEqual(organization.rootDomains);
+      expect(response.body.ipBlocks).toEqual(organization.ipBlocks);
+      expect(response.body.isPassive).toEqual(isPassive);
+      expect(response.body.inviteOnly).toEqual(inviteOnly);
+    });
     it('update by globalView should fail', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
@@ -181,6 +235,24 @@ describe('organizations', () => {
         )
         .expect(200);
       expect(response.body.affected).toEqual(1);
+    });
+    it('delete by org admin should fail', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const response = await request(app)
+        .delete(`/organizations/${organization.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [{ org: organization.id, role: 'admin' }]
+          })
+        )
+        .expect(403);
+      expect(response.body).toEqual({});
     });
     it('delete by globalView should fail', async () => {
       const organization = await Organization.create({
@@ -239,12 +311,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(200);
@@ -316,12 +383,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'admin'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .expect(200);
@@ -345,12 +407,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'admin'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .expect(403);
@@ -368,12 +425,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(403);
@@ -402,12 +454,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'admin'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .expect(200);
@@ -438,12 +485,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'admin'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
@@ -489,12 +531,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'admin'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
@@ -531,12 +568,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -597,7 +629,7 @@ describe('organizations', () => {
         ipBlocks: [],
         isPassive: false
       }).save();
-      const role = await Role.create({
+      let role = await Role.create({
         role: 'user',
         approved: false,
         organization
@@ -612,6 +644,12 @@ describe('organizations', () => {
         )
         .expect(200);
       expect(response.body).toEqual({});
+
+      role = (await Role.findOne(role.id, {
+        relations: ['approvedBy']
+      })) as Role;
+      expect(role.approved).toEqual(true);
+      expect(role.approvedBy.id).toEqual(DUMMY_USER_ID);
     });
     it('approveRole by globalView should fail', async () => {
       const organization = await Organization.create({
@@ -653,12 +691,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'admin'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .expect(200);
@@ -681,12 +714,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(403);
@@ -757,12 +785,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'admin'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .expect(200);
@@ -785,12 +808,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(403);

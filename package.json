@@ -1,0 +1,17 @@
+{
+    "name": "crossfeed",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+      "start": "docker-compose up --build"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/cisagov/crossfeed.git"
+    },
+    "keywords": [],
+    "bugs": {
+      "url": "https://github.com/cisagov/crossfeed/issues"
+    },
+    "homepage": "https://github.com/cisagov/crossfeed#readme"
+  }

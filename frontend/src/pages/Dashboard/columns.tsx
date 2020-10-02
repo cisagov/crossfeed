@@ -9,15 +9,15 @@ import { Domain } from 'types';
 type CreateColumns = () => Column<Domain>[];
 
 export const getServiceNames = (domain: Domain) => {
-  const allServices = new Set(
-    domain.webTechnologies &&
-      domain.webTechnologies.map(technology => technology.name)
-  );
+  const allServices: { [key: string]: string } = {};
   for (const service of domain.services) {
-    if (service.censysMetadata && service.censysMetadata.product)
-      allServices.add(service.censysMetadata?.product);
+    for (const product of service.products) {
+      if (product.name)
+        allServices[product.name.toLowerCase()] =
+          product.name + (product.version ? ` ${product.version}` : '');
+    }
   }
-  return Array.from(allServices).join(', ');
+  return Object.values(allServices).join(', ');
 };
 
 export const createColumns: CreateColumns = () => [
@@ -45,29 +45,38 @@ export const createColumns: CreateColumns = () => [
     id: 'port',
     disableSortBy: true,
     accessor: ({ services }) =>
-      services.map(service => service.port).join(', '),
+      services.map((service) => service.port).join(', '),
     Filter: ColumnFilter
   },
   {
     Header: 'Services',
     id: 'services',
     disableSortBy: true,
-    accessor: domain => getServiceNames(domain),
+    accessor: (domain) => getServiceNames(domain),
     Filter: ColumnFilter
   },
   {
     Header: 'Vulnerabilities',
     id: 'vulnerabilities',
-    accessor: domain =>
+    accessor: (domain) =>
       domain.vulnerabilities &&
-      domain.vulnerabilities.map(vulnerability => vulnerability.cve).join(', '),
+      domain.vulnerabilities
+        .map((vulnerability) => vulnerability.cve)
+        .join(', '),
     Filter: ColumnFilter
   },
   {
-    Header: 'Updated',
+    Header: 'Last Seen',
     id: 'updatedAt',
     accessor: ({ updatedAt }) =>
       `${formatDistanceToNow(parseISO(updatedAt))} ago`,
+    disableFilters: true
+  },
+  {
+    Header: 'First Seen',
+    id: 'createdAt',
+    accessor: ({ createdAt }) =>
+      `${formatDistanceToNow(parseISO(createdAt))} ago`,
     disableFilters: true
   }
 ];

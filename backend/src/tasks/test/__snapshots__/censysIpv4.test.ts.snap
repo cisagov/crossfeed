@@ -7,6 +7,7 @@ Array [
     "country": "TR",
     "ip": "1.1.1.1",
     "name": "second_file_testdomain1",
+    "organization": "1234",
   },
 ]
 `;
@@ -18,66 +19,77 @@ Array [
     "country": "JP",
     "ip": "153.126.148.60",
     "name": "first_file_testdomain1",
+    "organization": "1234",
   },
   Domain {
     "asn": "16509",
     "country": "SG",
     "ip": "52.74.149.117",
     "name": "first_file_testdomain10",
+    "organization": "1234",
   },
   Domain {
     "asn": "48347",
     "country": "RU",
     "ip": "31.134.10.156",
     "name": "first_file_testdomain11",
+    "organization": "1234",
   },
   Domain {
     "asn": "48347",
     "country": "RU",
     "ip": "31.134.10.156",
     "name": "first_file_testdomain2",
+    "organization": "1234",
   },
   Domain {
     "asn": "7684",
     "country": "JP",
     "ip": "153.126.148.60",
     "name": "first_file_testdomain3",
+    "organization": "1234",
   },
   Domain {
     "asn": "8473",
     "country": "SE",
     "ip": "85.24.146.152",
     "name": "first_file_testdomain4",
+    "organization": "1234",
   },
   Domain {
     "asn": "63949",
     "country": "US",
     "ip": "45.79.207.117",
     "name": "first_file_testdomain5",
+    "organization": "1234",
   },
   Domain {
     "asn": "26484",
     "country": "US",
     "ip": "156.249.159.119",
     "name": "first_file_testdomain6",
+    "organization": "1234",
   },
   Domain {
     "asn": undefined,
     "country": undefined,
     "ip": "221.10.15.220",
     "name": "first_file_testdomain7",
+    "organization": "1234",
   },
   Domain {
     "asn": "2856",
     "country": "GB",
     "ip": "81.141.166.145",
     "name": "first_file_testdomain8",
+    "organization": "1234",
   },
   Domain {
     "asn": "6327",
     "country": "CA",
     "ip": "24.65.82.187",
     "name": "first_file_testdomain9",
+    "organization": "1234",
   },
 ]
 `;
@@ -90,9 +102,13 @@ Array [
       "TEST_SNAPSHOT": "{\\"dns\\":{\\"lookup\\":{\\"errors\\":false,\\"open_resolver\\":false,\\"questions\\":[{\\"name\\":\\"c.afekv.com\\",\\"type\\":\\"A\\"}],\\"resolves_correctly\\":false,\\"support\\":true,\\"timestamp\\":\\"2020-07-05T15:41:45Z\\"}}}...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "1.1.1.1",
       "name": "second_file_testdomain1",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 53,
@@ -108,9 +124,13 @@ Array [
       "TEST_SNAPSHOT": "{\\"http\\":{\\"get\\":{\\"body\\":\\"these characters should not show up in the snapshot:\\\\n              null: \\\\n              another null: \\\\n              another null: \\\\\\\\n              \\"}}}...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "1.1.1.1",
       "name": "second_file_testdomain1",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 8080,
@@ -127,9 +147,13 @@ Array [
       "TEST_SNAPSHOT": "{\\"cwmp\\":{\\"get\\":{\\"body\\":\\"<!DOCTYPE HTML PUBLIC \\\\\\"-//IETF//DTD HTML 2.0//EN\\\\\\"><html><head><title>401 Unauthorized</title></head><body><h1>Authorization Required</h1><p>This server could not verify that you are authorized to access the document requested.  Either you supplied the wrong credentials (e.g...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "24.65.82.187",
       "name": "first_file_testdomain9",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 7547,
@@ -141,9 +165,13 @@ Array [
       "TEST_SNAPSHOT": "{\\"cwmp\\":{\\"get\\":{\\"headers\\":{\\"content_length\\":\\"0\\",\\"server\\":\\"gSOAP/2.7\\"},\\"status_code\\":\\"404\\",\\"status_line\\":\\"404 Not Found\\",\\"timestamp\\":\\"2020-07-15T04:07:26Z\\"}}}...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "81.141.166.145",
       "name": "first_file_testdomain8",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 7547,
@@ -155,9 +183,13 @@ Array [
       "TEST_SNAPSHOT": "{\\"dns\\":{\\"lookup\\":{\\"answers\\":[{\\"name\\":\\"c.afekv.com\\",\\"response\\":\\"221.10.58.54\\",\\"type\\":\\"A\\"},{\\"name\\":\\"c.afekv.com\\",\\"response\\":\\"192.150.186.1\\",\\"type\\":\\"A\\"}],\\"errors\\":false,\\"open_resolver\\":true,\\"questions\\":[{\\"name\\":\\"c.afekv.com\\",\\"type\\":\\"A\\"}],\\"resolves_correctly\\":true,\\"support\\":true,\\"timestamp\\":\\"2020-06-11T...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "221.10.15.220",
       "name": "first_file_testdomain7",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 53,
@@ -211,9 +243,13 @@ Array [
       "product": "httpd",
       "version": "2.4.18",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "52.74.149.117",
       "name": "first_file_testdomain10",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
@@ -236,10 +272,14 @@ on this server.</p>
       "description": "Apache httpd",
       "manufacturer": "Apache",
       "product": "httpd",
+    },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
     },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
@@ -263,9 +303,13 @@ on this server.</p>
       "manufacturer": "Apache",
       "product": "httpd",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
@@ -290,10 +334,14 @@ on this server.</p>
       "manufacturer": "Apache",
       "product": "httpd",
       "version": "2.4.38",
+    },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
     },
     "domain": Domain {
       "ip": "31.134.10.156",
       "name": "first_file_testdomain2",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
@@ -319,9 +367,13 @@ on this server.</p>
       "product": "httpd",
       "version": "2.4.38",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "31.134.10.156",
       "name": "first_file_testdomain11",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
@@ -406,9 +458,13 @@ on this server.</p>
       "description": "nginx",
       "product": "nginx",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "45.79.207.117",
       "name": "first_file_testdomain5",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
@@ -456,9 +512,13 @@ a img {
       "product": "IIS",
       "version": "7.5",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "156.249.159.119",
       "name": "first_file_testdomain6",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 80,
@@ -1489,9 +1549,13 @@ a img {
       "product": "httpd",
       "version": "2.4.18",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "52.74.149.117",
       "name": "first_file_testdomain10",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 443,
@@ -1514,10 +1578,14 @@ on this server.</p>
       "description": "Apache httpd",
       "manufacturer": "Apache",
       "product": "httpd",
+    },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
     },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 443,
@@ -1541,9 +1609,13 @@ on this server.</p>
       "manufacturer": "Apache",
       "product": "httpd",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 443,
@@ -1566,9 +1638,13 @@ on this server.</p>
       "product": "HTTPAPI",
       "version": "2.0",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "156.249.159.119",
       "name": "first_file_testdomain6",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 443,
@@ -1583,9 +1659,13 @@ on this server.</p>
       "description": "Dovecot",
       "product": "Dovecot",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 143,
@@ -1600,9 +1680,13 @@ on this server.</p>
       "description": "Dovecot",
       "product": "Dovecot",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 143,
@@ -1614,9 +1698,13 @@ on this server.</p>
       "TEST_SNAPSHOT": "{\\"imaps\\":{\\"tls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75a9c8c50cd65b0d20ff590ec16720bc\\",\\"fingerprint_sha1\\":\\"316f85e231f9e623dc746ec837f69ba21605efb9\\",\\"fingerprint...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 993,
@@ -1628,9 +1716,13 @@ on this server.</p>
       "TEST_SNAPSHOT": "{\\"imaps\\":{\\"tls\\":{\\"banner\\":\\"* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75a9c8c50cd65b0d20ff590ec16720bc\\",\\"fingerprint_sha1\\":\\"316f85e231f9e623dc746ec837f69ba21605efb9\\",\\"fingerprint...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 993,
@@ -1642,9 +1734,13 @@ on this server.</p>
       "TEST_SNAPSHOT": "{\\"mongodb\\":{\\"banner\\":{\\"build_info\\":{\\"build_environment\\":{\\"cc\\":\\"/opt/mongodbtoolchain/v2/bin/gcc: gcc (GCC) 5.4.0\\",\\"cc_flags\\":\\"-fno-omit-frame-pointer -fno-strict-aliasing -ggdb -pthread -Wall -Wsign-compare -Wno-unknown-pragmas -Winvalid-pch -Werror -O2 -Wno-unused-local-typedefs -Wno-unused-functio...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "52.74.149.117",
       "name": "first_file_testdomain10",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 27017,
@@ -1659,9 +1755,13 @@ on this server.</p>
       "description": "Dovecot",
       "product": "Dovecot",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 110,
@@ -1676,9 +1776,13 @@ on this server.</p>
       "description": "Dovecot",
       "product": "Dovecot",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 110,
@@ -1690,9 +1794,13 @@ on this server.</p>
       "TEST_SNAPSHOT": "{\\"pop3s\\":{\\"tls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75a9c8c50cd65b0d20ff590ec16720bc\\",\\"fingerprint_sha1\\":\\"316f85e231f9e623dc746ec837f69ba21605efb9\\",\\"fingerprint_sha256\\":\\"2fc1e7271275a9000cd30a120082532b8d5d829df0f43e424ea984283a8561ca\\",\\"issuer\\":{\\"common_...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 995,
@@ -1704,9 +1812,13 @@ on this server.</p>
       "TEST_SNAPSHOT": "{\\"pop3s\\":{\\"tls\\":{\\"banner\\":\\"+OK Dovecot ready.\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"fingerprint_md5\\":\\"75a9c8c50cd65b0d20ff590ec16720bc\\",\\"fingerprint_sha1\\":\\"316f85e231f9e623dc746ec837f69ba21605efb9\\",\\"fingerprint_sha256\\":\\"2fc1e7271275a9000cd30a120082532b8d5d829df0f43e424ea984283a8561ca\\",\\"issuer\\":{\\"common_...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 995,
@@ -1718,9 +1830,13 @@ on this server.</p>
       "TEST_SNAPSHOT": "{\\"smtp\\":{\\"tls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 465,
@@ -1732,9 +1848,13 @@ on this server.</p>
       "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-STARTTLS\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"starttls\\":\\"220 2.0.0 Ready to start TLS\\",\\"tls...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 25,
@@ -1746,9 +1866,13 @@ on this server.</p>
       "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-STARTTLS\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"starttls\\":\\"220 2.0.0 Ready to start TLS\\",\\"tls...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain1",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 587,
@@ -1760,9 +1884,13 @@ on this server.</p>
       "TEST_SNAPSHOT": "{\\"smtp\\":{\\"tls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"tls\\":{\\"certificate\\":{\\"parsed\\":{\\"extensions\\":{\\"basic_constraints\\":{...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 465,
@@ -1774,9 +1902,13 @@ on this server.</p>
       "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-STARTTLS\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"starttls\\":\\"220 2.0.0 Ready to start TLS\\",\\"tls...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 25,
@@ -1788,9 +1920,13 @@ on this server.</p>
       "TEST_SNAPSHOT": "{\\"smtp\\":{\\"starttls\\":{\\"banner\\":\\"220 mail.otakukonkatsu.com ESMTP unknown\\",\\"ehlo\\":\\"250-mail.otakukonkatsu.com\\\\r\\\\n250-PIPELINING\\\\r\\\\n250-SIZE 10240000\\\\r\\\\n250-ETRN\\\\r\\\\n250-STARTTLS\\\\r\\\\n250-AUTH PLAIN LOGIN\\\\r\\\\n250-ENHANCEDSTATUSCODES\\\\r\\\\n250-8BITMIME\\\\r\\\\n250 DSN\\",\\"starttls\\":\\"220 2.0.0 Ready to start TLS\\",\\"tls...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "153.126.148.60",
       "name": "first_file_testdomain3",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 587,
@@ -1806,9 +1942,13 @@ on this server.</p>
       "product": "OpenSSH",
       "version": "7.2p2",
     },
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "52.74.149.117",
       "name": "first_file_testdomain10",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 22,
@@ -1820,9 +1960,13 @@ on this server.</p>
       "TEST_SNAPSHOT": "{\\"vnc\\":{\\"banner\\":{\\"security_types\\":[{\\"name\\":\\"Apple Inc.\\",\\"value\\":\\"30\\"},{\\"name\\":\\"Apple Inc.\\",\\"value\\":\\"33\\"},{\\"name\\":\\"Unknown\\",\\"value\\":\\"36\\"},{\\"name\\":\\"Apple Inc.\\",\\"value\\":\\"35\\"}],\\"server_protocol_version\\":{\\"version_major\\":\\"3\\",\\"version_minor\\":\\"121\\",\\"version_string\\":\\"RFB 003.889\\"},\\"supported\\":true,\\"timesta...",
     },
     "censysMetadata": undefined,
+    "discoveredBy": Object {
+      "id": "0dacd0d9-294b-4bb5-a3b9-afe70cf5acff",
+    },
     "domain": Domain {
       "ip": "85.24.146.152",
       "name": "first_file_testdomain4",
+      "organization": "1234",
     },
     "lastSeen": 2019-04-22T10:20:30.000Z,
     "port": 5900,

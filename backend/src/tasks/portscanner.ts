@@ -18,15 +18,21 @@ export const handler = async (commandOptions: CommandOptions) => {
   const services: Service[] = [];
   for (const domain of domainsWithIPs) {
     for (const port of [21, 22, 80, 443, 3000, 8080, 8443]) {
-      const status = await portscanner.checkPortStatus(port, domain.ip);
-      if (status === 'open') {
-        services.push(
-          plainToClass(Service, {
-            domain: domain,
-            port: port,
-            lastSeen: new Date(Date.now())
-          })
-        );
+      try {
+        const status = await portscanner.checkPortStatus(port, domain.ip);
+        if (status === 'open') {
+          services.push(
+            plainToClass(Service, {
+              domain: domain,
+              discoveredBy: { id: commandOptions.scanId },
+              port: port,
+              lastSeen: new Date(Date.now())
+            })
+          );
+        }
+      } catch (e) {
+        console.error(e);
+        continue;
       }
     }
   }

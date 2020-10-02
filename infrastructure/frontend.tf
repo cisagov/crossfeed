@@ -1,9 +1,9 @@
 resource "aws_s3_bucket" "frontend_bucket" {
-  bucket = var.frontend_domain
+  bucket = var.frontend_bucket
   acl    = "private"
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }
@@ -11,7 +11,7 @@ resource "aws_s3_bucket" "frontend_bucket" {
 data "template_file" "policy_file" {
   template = "${file("frontend_bucket_policy.tpl")}"
   vars = {
-    bucket_name = var.frontend_domain
+    bucket_name = var.frontend_bucket
   }
 }
 
@@ -77,8 +77,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     max_ttl                = 2628000
   }
 
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 

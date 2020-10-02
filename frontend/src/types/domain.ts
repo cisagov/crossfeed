@@ -1,11 +1,26 @@
-import { SortingRule, Filters } from 'react-table';
 import { Organization } from './organization';
 import { Vulnerability } from './vulnerability';
+import { Webpage } from './webpage';
 
-export interface Query<T extends object> {
-  sort: SortingRule<T>[];
-  page: number;
-  filters: Filters<T>;
+export interface Product {
+  // Common name
+  name: string;
+  // Product name
+  product?: string;
+  // Product vendor
+  vendor?: string;
+  // Product version
+  version: string;
+  // Product version revision
+  revision?: string;
+  // CPE without version (unique identifier)
+  cpe?: string;
+  // Optional icon
+  icon?: string;
+  // Optional description
+  description?: string;
+  // Tags
+  tags: string[];
 }
 
 export interface Service {
@@ -22,12 +37,40 @@ export interface Service {
     manufacturer: string;
   } | null;
   censysIpv4Results: any;
+  intrigueIdentResults: {
+    fingerprint: {
+      type: string;
+      vendor: string;
+      product: string;
+      version: string;
+      update: string;
+      tags: string[];
+      match_type: string;
+      match_details: string;
+      hide: boolean;
+      cpe: string;
+      issue?: string;
+      task?: string;
+      inference: boolean;
+    }[];
+    content: {
+      type: string;
+      name: string;
+      hide?: boolean;
+      issue?: boolean;
+      task?: boolean;
+      result?: boolean;
+    }[];
+  };
+  wappalyzerResults: Technology[];
+  products: Product[];
 }
 
 export interface Domain {
   id: string;
   name: string;
   ip: string;
+  createdAt: string;
   updatedAt: string;
   screenshot: string | null;
   country: string | null;
@@ -35,8 +78,8 @@ export interface Domain {
   cloudHosted: boolean;
   services: Service[];
   vulnerabilities: Vulnerability[];
+  webpages: Webpage[];
   organization: Organization;
-  webTechnologies: Technology[];
   ssl: SSLInfo | null;
 }
 
@@ -58,6 +101,7 @@ export interface Technology {
   icon: string;
   website: string;
   confidence: number;
+  cpe?: string;
   categories: {
     name: string;
     slug: string;

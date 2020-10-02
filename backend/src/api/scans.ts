@@ -11,6 +11,7 @@ import {
 import { Scan, connectToDatabase, Organization } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { isGlobalWriteAdmin, isGlobalViewAdmin } from './auth';
+import LambdaClient from '../tasks/lambda-client';
 
 interface ScanSchema {
   [name: string]: {
@@ -78,8 +79,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: true,
-    cpu: '1024',
-    memory: '4096',
+    cpu: '2048',
+    memory: '6144',
     numChunks: 20,
     description: 'Fetch passive port and banner data from censys ipv4 dataset'
   },
@@ -87,7 +88,33 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: true,
+    cpu: '1024',
+    memory: '4096',
     description: 'Matches detected software versions to CVEs from NIST NVD'
+  },
+  searchSync: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    cpu: '1024',
+    memory: '4096',
+    description:
+      'Syncs records with Elasticsearch so that they appear in search results.'
+  },
+  intrigueIdent: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Open source tool that fingerprints web technologies based on HTTP responses'
+  },
+  webscraper: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    cpu: '1024',
+    memory: '4096',
+    description: 'Scrapes all webpages on a given domain, respecting robots.txt'
   }
 };
 
@@ -155,7 +182,8 @@ export const create = wrapHandler(async (event) => {
   const body = await validateBody(NewScan, event.body);
   const scan = await Scan.create({
     ...body,
-    organizations: body.organizations.map((id) => ({ id }))
+    organizations: body.organizations.map((id) => ({ id })),
+    createdBy: { id: event.requestContext.authorizer!.id }
   });
   const res = await Scan.save(scan);
   return {
@@ -215,5 +243,24 @@ export const listGranular = wrapHandler(async (event) => {
       scans,
       schema: SCAN_SCHEMA
     })
+  };
+});
+
+export const invokeScheduler = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  const lambdaClient = new LambdaClient();
+  const response = await lambdaClient.runCommand({
+    name: `${process.env.SLS_LAMBDA_PREFIX!}-scheduler`
+  });
+  console.log(response);
+  if (response.StatusCode !== 202) {
+    return {
+      statusCode: 500,
+      body: 'Invocation failed.'
+    };
+  }
+  return {
+    statusCode: 200,
+    body: ''
   };
 });

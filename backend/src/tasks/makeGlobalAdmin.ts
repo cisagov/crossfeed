@@ -2,8 +2,7 @@ import { Handler } from 'aws-lambda';
 import { connectToDatabase, User } from '../models';
 
 export const handler: Handler = async (event) => {
-  const connection = await connectToDatabase(true);
-  console.log(event);
+  await connectToDatabase(true);
   if (event.email) {
     const user = await User.findOne({
       email: event.email

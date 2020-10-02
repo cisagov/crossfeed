@@ -18,6 +18,10 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment: ${file(env.yml):${self:provider.stage}}
   vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
+  logs:
+    restApi: true
+  deploymentBucket:
+    serverSideEncryption: AES256
   iamRoleStatements:
     # TODO: make the resources more specific.
     - Effect: Allow
@@ -28,7 +32,13 @@ provider:
     - Effect: Allow
       Action:
         - ecs:RunTask
+        - ecs:ListTasks
         - iam:PassRole
+        - logs:GetLogEvents
+      Resource: '*'
+    - Effect: Allow
+      Action:
+        - ses:SendRawEmail
       Resource: '*'
 
 functions:
@@ -38,4 +48,3 @@ functions:
 plugins:
   - serverless-domain-manager
   - serverless-webpack
-  - serverless-offline-scheduler

@@ -24,6 +24,7 @@ import { Table } from 'components';
 import { Column, CellProps } from 'react-table';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { renderExpandedVulnerability } from '../Vulnerabilities/Vulnerabilities';
+import { Webpage } from 'types/webpage';
 
 export const Domain: React.FC = () => {
   const { domainId } = useParams();
@@ -88,6 +89,24 @@ export const Domain: React.FC = () => {
     }
   ];
 
+  const webpageColumns: Column<Webpage>[] = [
+    {
+      Header: 'URL',
+      accessor: 'url',
+      width: 800,
+      disableFilters: true,
+      Cell: ({ value }: CellProps<Vulnerability>) => (
+        <a href={value} target="_blank" rel="noopener noreferrer">{value}</a>
+      )
+    },
+    {
+      Header: 'Status',
+      accessor: 'status',
+      width: 100,
+      disableFilters: true
+    }
+  ];
+
   return (
     <div className={classes.root}>
       <div className={classes.inner}>
@@ -135,6 +154,18 @@ export const Domain: React.FC = () => {
                   </label>
                   <span>{domain.organization?.isPassive ? 'Yes' : 'No'}</span>
                 </div>
+                <div className={classes.headerRow}>
+                  <label>Last Seen</label>
+                  <span>
+                    {formatDistanceToNow(parseISO(domain.updatedAt))} ago
+                  </span>
+                </div>
+                <div className={classes.headerRow}>
+                  <label>First Seen</label>
+                  <span>
+                    {formatDistanceToNow(parseISO(domain.createdAt))} ago
+                  </span>
+                </div>
               </div>
               <div className={classes.imgWrapper}>
                 {/* <div style={{ float: 'right', marginBottom: '20px' }}>
@@ -165,10 +196,10 @@ export const Domain: React.FC = () => {
                 <SSLInfo {...domain.ssl} />
               </div>
             )}
-            {domain.webTechnologies && (
+            {domain.services && (
               <div className={classes.section}>
-                <h3>Known Web Technologies</h3>
-                <WebInfo webTechnologies={domain.webTechnologies} />
+                <h3>Known Products</h3>
+                <WebInfo domain={domain} />
               </div>
             )}
             {domain.vulnerabilities && (
@@ -182,6 +213,22 @@ export const Domain: React.FC = () => {
                   initialSortBy={[
                     {
                       id: 'created',
+                      desc: false
+                    }
+                  ]}
+                />
+              </div>
+            )}
+            {domain.webpages && (
+              <div className={classes.section}>
+                <h3>Webpages</h3>
+                <Table<Webpage>
+                  columns={webpageColumns}
+                  data={domain.webpages}
+                  // renderExpanded={renderExpandedVulnerability}
+                  initialSortBy={[
+                    {
+                      id: 'url',
                       desc: false
                     }
                   ]}

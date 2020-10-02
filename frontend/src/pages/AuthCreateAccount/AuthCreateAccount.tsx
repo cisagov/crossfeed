@@ -26,7 +26,7 @@ export const AuthCreateAccount: React.FC = () => {
   const [publicOrgs, setPublicOrgs] = useState<{ name: string; id: string }[]>(
     []
   );
-  const { user, login, apiGet, apiPut } = useAuthContext();
+  const { user, setUser, apiGet, apiPut } = useAuthContext();
 
   const fetchPublicOrgs = useCallback(async () => {
     const publicOrgs = await apiGet('/organizations/public');
@@ -65,7 +65,7 @@ export const AuthCreateAccount: React.FC = () => {
         body: values
       });
 
-      login(localStorage.getItem('token')!, updated);
+      setUser(updated);
       history.push('/', {
         message: 'Your account has been successfully created.'
       });
@@ -85,12 +85,12 @@ export const AuthCreateAccount: React.FC = () => {
       </p>
       <p>
         Is your organization not yet on Crossfeed? Contact{' '}
-        <a href="# ">crossfeed@example.gov</a> to learn more.
+        <a href="# ">support@crossfeed.cyber.dhs.gov</a> to learn more.
       </p>
       {(process.env.NODE_ENV === 'development' ||
         (user && user.userType === 'globalAdmin')) && (
         <>
-          <h1>[DEVELOPMENT] Finish Creating Account</h1>
+          <h1>[DEVELOPMENT, FOR GLOBAL ADMINS ONLY] Finish Creating Account</h1>
           <p>
             We need just a few more details from you in order to finish creating
             your account.

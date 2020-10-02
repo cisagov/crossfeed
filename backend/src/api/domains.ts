@@ -96,7 +96,11 @@ class DomainSearch {
     let qs = Domain.createQueryBuilder('domain')
       .leftJoinAndSelect('domain.services', 'services')
       .leftJoinAndSelect('domain.organization', 'organization')
-      .leftJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
+      .leftJoinAndSelect(
+        'domain.vulnerabilities',
+        'vulnerabilities',
+        "state = 'open'"
+      )
       .orderBy(`domain.${this.sort}`, this.order)
       .groupBy(
         'domain.id, domain.ip, domain.name, organization.id, services.id, vulnerabilities.id'
@@ -172,6 +176,7 @@ export const list = wrapHandler(async (event) => {
     search.getResults(event),
     search.getCount(event)
   ]);
+
   return {
     statusCode: 200,
     body: JSON.stringify({
@@ -197,7 +202,7 @@ export const get = wrapHandler(async (event) => {
   const result = await Domain.findOne(
     { id, ...where },
     {
-      relations: ['services', 'organization', 'vulnerabilities']
+      relations: ['services', 'organization', 'vulnerabilities', 'webpages']
     }
   );
 

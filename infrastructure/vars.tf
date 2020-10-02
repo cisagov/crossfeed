@@ -1,6 +1,6 @@
 variable aws_region {
   type    = string
-  default = "us-west-2"
+  default = "us-east-1"
 }
 
 variable project {
@@ -30,17 +30,22 @@ variable db_instance_class {
 
 variable db_storage_encrypted {
   type    = bool
-  default = false
+  default = true
 }
 
 variable api_domain {
   type    = string
-  default = "stage.api.crossfeed2.dds.mil"
+  default = "api.staging.crossfeed.cyber.dhs.gov"
 }
 
 variable frontend_domain {
   type    = string
-  default = "stage.crossfeed2.dds.mil"
+  default = "staging.crossfeed.cyber.dhs.gov"
+}
+
+variable frontend_bucket {
+  type    = string
+  default = "staging.crossfeed.cyber.dhs.gov"
 }
 
 variable frontend_cert_arn {
@@ -78,6 +83,11 @@ variable ssm_worker_subnet {
   default = ""
 }
 
+variable ssm_worker_arn {
+  type    = string
+  default = ""
+}
+
 variable db_table_name {
   type    = string
   default = "cfstagedb"
@@ -91,6 +101,26 @@ variable ssm_db_username {
 variable ssm_db_password {
   type    = string
   default = "/crossfeed/staging/DATABASE_PASSWORD"
+}
+
+variable ssm_worker_signature_public_key {
+  type    = string
+  default = "/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_KEY"
+}
+
+variable ssm_worker_signature_private_key {
+  type    = string
+  default = "/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY"
+}
+
+variable ssm_censys_api_id {
+  type    = string
+  default = "/crossfeed/staging/CENSYS_API_ID"
+}
+
+variable ssm_censys_api_secret {
+  type    = string
+  default = "/crossfeed/staging/CENSYS_API_SECRET"
 }
 
 variable cloudfront_name {
@@ -126,4 +156,34 @@ variable worker_ecs_log_group_name {
 variable worker_ecs_role_name {
   type    = string
   default = "crossfeed-worker-staging"
+}
+
+variable webscraper_bucket_name {
+  type    = string
+  default = "crossfeed-staging-webscraper"
+}
+
+variable user_pool_name {
+  type    = string
+  default = "crossfeed-staging"
+}
+
+variable user_pool_domain {
+  type    = string
+  default = "crossfeed-staging"
+}
+
+variable ssm_user_pool_id {
+  type    = string
+  default = "/crossfeed/staging/USER_POOL_ID"
+}
+
+variable ssm_user_pool_client_id {
+  type    = string
+  default = "/crossfeed/staging/USER_POOL_CLIENT_ID"
+}
+
+variable ses_support_email {
+  type    = string
+  default = "support@staging.crossfeed.cyber.dhs.gov"
 }

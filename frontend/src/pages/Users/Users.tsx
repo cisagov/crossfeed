@@ -67,6 +67,22 @@ export const Users: React.FC = () => {
       disableFilters: true
     },
     {
+      Header: 'Date ToU Signed',
+      accessor: ({ dateAcceptedTerms }) => dateAcceptedTerms,
+      width: 50,
+      minWidth: 50,
+      id: 'dateAcceptedTerms',
+      disableFilters: true
+    },
+    {
+      Header: 'ToU Version',
+      accessor: 'acceptedTermsVersion',
+      width: 50,
+      minWidth: 50,
+      id: 'acceptedTermsVersion',
+      disableFilters: true
+    },
+    {
       Header: 'Delete',
       id: 'delete',
       Cell: ({ row }: { row: { index: number } }) => (

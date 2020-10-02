@@ -10,11 +10,15 @@ import {
   IsNumber,
   IsUUID
 } from 'class-validator';
-import { Type } from 'class-transformer';
-import { Vulnerability, connectToDatabase } from '../models';
+import { plainToClass, Type } from 'class-transformer';
+import { Vulnerability, connectToDatabase, User } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
-import { getOrgMemberships, isGlobalViewAdmin } from './auth';
+import {
+  getOrgMemberships,
+  isGlobalViewAdmin,
+  isGlobalWriteAdmin
+} from './auth';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
@@ -50,7 +54,15 @@ class VulnerabilitySearch {
   page: number = 1;
 
   @IsString()
-  @IsIn(['title', 'createdAt', 'cvss', 'state'])
+  @IsIn([
+    'title',
+    'createdAt',
+    'severity',
+    'cvss',
+    'state',
+    'createdAt',
+    'domain'
+  ])
   @IsOptional()
   sort: string = 'createdAt';
 
@@ -70,7 +82,6 @@ class VulnerabilitySearch {
   pageSize?: number;
 
   filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>) {
-    console.log(this.filters);
     if (this.filters?.id) {
       qs.andWhere('vulnerability.id = :id', {
         id: this.filters.id
@@ -106,10 +117,16 @@ class VulnerabilitySearch {
 
   async getResults(event) {
     const pageSize = this.pageSize || PAGE_SIZE;
+    const sort =
+      this.sort === 'domain'
+        ? 'domain.name'
+        : this.sort === 'severity'
+        ? 'vulnerability.cvss'
+        : `vulnerability.${this.sort}`;
     let qs = Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
       .leftJoinAndSelect('domain.organization', 'organization')
-      .orderBy(`vulnerability.${this.sort}`, this.order);
+      .orderBy(sort, this.order);
 
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
@@ -124,6 +141,44 @@ class VulnerabilitySearch {
     return await qs.getManyAndCount();
   }
 }
+
+export const update = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const id = event.pathParameters?.vulnerabilityId;
+  if (!isUUID(id) || !event.body) {
+    return NotFound;
+  }
+  const vuln = await Vulnerability.findOne(
+    { id },
+    { relations: ['domain', 'domain.organization'] }
+  );
+  let isAuthorized = false;
+  if (vuln && vuln.domain.organization && vuln.domain.organization.id) {
+    isAuthorized =
+      isGlobalWriteAdmin(event) ||
+      getOrgMemberships(event).includes(vuln.domain.organization.id);
+  }
+  if (vuln && isAuthorized) {
+    const body = JSON.parse(event.body);
+    if (body.substate) {
+      const user = await User.findOne({
+        id: event.requestContext.authorizer!.id
+      });
+      vuln.setState(body.substate, false, user ? user : null);
+    }
+    if (body.notes) vuln.notes = body.notes;
+    vuln.save();
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(vuln)
+    };
+  }
+  return {
+    statusCode: 404,
+    body: ''
+  };
+});
 
 export const list = wrapHandler(async (event) => {
   await connectToDatabase();

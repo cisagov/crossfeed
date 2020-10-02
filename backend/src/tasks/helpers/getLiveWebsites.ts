@@ -1,7 +1,15 @@
-import { Domain, connectToDatabase } from '../../models';
+import { plainToClass } from 'class-transformer';
+import { Domain, connectToDatabase, Service } from '../../models';
+
+export class LiveDomain extends Domain {
+  url: string;
+  service: Service;
+}
 
 /** Helper function to fetch all live websites (port 80 or 443) */
-export default async (organizationId: string): Promise<Domain[]> => {
+export const getLiveWebsites = async (
+  organizationId: string
+): Promise<LiveDomain[]> => {
   await connectToDatabase();
 
   const qs = Domain.createQueryBuilder('domain')
@@ -14,5 +22,19 @@ export default async (organizationId: string): Promise<Domain[]> => {
     "COUNT(CASE WHEN services.port = '443' OR services.port = '80' THEN 1 END) >= 1"
   );
 
-  return await qs.getMany();
+  const websites = await qs.getMany();
+
+  return websites.map((domain) => {
+    const live = domain as LiveDomain;
+    const ports = domain.services.map((service) => service.port);
+    let service: Service;
+    if (ports.includes(443))
+      service = domain.services.find((service) => service.port === 443)!;
+    else service = domain.services.find((service) => service.port === 80)!;
+    const url =
+      service.port === 443 ? `https://${domain.name}` : `http://${domain.name}`;
+    live.url = url;
+    live.service = service;
+    return live;
+  });
 };

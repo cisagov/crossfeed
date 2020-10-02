@@ -11,4 +11,5 @@ export interface ScanTask {
   requestedAt: string;
   finishedAt: string;
   scan: Scan;
+  fargateTaskArn: string;
 }

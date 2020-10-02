@@ -22,6 +22,7 @@ subnav:
 1.  Start entire environment from root using Docker Compose
     - `docker-compose up --build`
 1.  Generate DB schema:
+
     - `cd backend && npm run syncdb`
     - (run `npm run syncdb -- -d dangerouslyforce` to drop and recreate)
 
@@ -33,11 +34,15 @@ subnav:
     - environment variables in root `.env`
 1.  Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save.
 
+If you want to view a local version of Kibana, you should first comment out the "kib" section of `docker-compose.yml` and then navigate to [http://localhost:5601](http://localhost:5601).
+
 ### Running the scheduler lambda function locally
 
-The scheduler lambda function is set to run on an interval or in response to non-http events. To run it manually, run the following command:
+The scheduler lambda function is set to run on a 5-minute interval when deployed.
 
-- `cd backend && npm run scheduler`
+When running locally, the scheduler function runs every 1 minute, for convenience. To run it manually, click on the "Manually run scheduler" button on the Scans page.
+
+You can check scheduler logs locally by checking the backend container logs.
 
 ### Running tests
 
@@ -54,6 +59,13 @@ To view a code coverage report (a minimum code coverage threshold is checked in 
 
 You can then view a HTML coverage report in the `coverage/lcov-report` directory.
 
+To run Python tests for some worker code, you need to run:
+
+```bash
+pip install -r worker/requirements.txt
+pytest
+```
+
 ## Fargate worker
 
 In order to run scans locally or work on scanning infrastructure,
@@ -68,11 +80,7 @@ Each time you make changes to the worker code, you should run:
 npm run build-worker
 ```
 
-To run the scheduler:
-
-```bash
-docker-compose exec scheduler npx serverless invoke local -f scheduler
-```
+To run the scheduler, click on "Manually run scheduler" on the Scans page.
 
 You can then run `docker ps` or ( `docker ps -a | head -n 3` ) to view running / stopped Docker containers,
 and check their logs with `docker logs [containername]` .
@@ -97,7 +105,7 @@ npm run codegen
 
 ## Documentation
 
-The documentation files are stored in the `docs` directory and served from a Jekyll site. To work on this, you can run:
+The documentation files are stored in the `docs` directory and served from a Jekyll site. To work on this, you should first comment out the "docs" section of `docker-compose.yml` and then run:
 
 ```bash
 docker-compose up docs

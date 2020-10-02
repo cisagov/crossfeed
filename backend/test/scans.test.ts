@@ -2,6 +2,11 @@ import * as request from 'supertest';
 import app from '../src/api/app';
 import { User, Scan, connectToDatabase, Organization } from '../src/models';
 import { createUserToken } from './util';
+import { handler as scheduler } from '../src/tasks/scheduler';
+
+jest.mock('../src/tasks/scheduler', () => ({
+  handler: jest.fn()
+}));
 
 describe('scan', () => {
   beforeAll(async () => {
@@ -94,6 +99,12 @@ describe('scan', () => {
   });
   describe('create', () => {
     it('create by globalAdmin should succeed', async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        userType: 'globalAdmin'
+      }).save();
       const name = 'censys';
       const arguments_ = { a: 'b' };
       const frequency = 999999;
@@ -102,6 +113,7 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
+            id: user.id,
             userType: 'globalAdmin'
           })
         )
@@ -119,8 +131,15 @@ describe('scan', () => {
       expect(response.body.frequency).toEqual(frequency);
       expect(response.body.isGranular).toEqual(false);
       expect(response.body.organizations).toEqual([]);
+      expect(response.body.createdBy.id).toEqual(user.id);
     });
     it('create a granular scan by globalAdmin should succeed', async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        userType: 'globalAdmin'
+      }).save();
       const name = 'censys';
       const arguments_ = { a: 'b' };
       const frequency = 999999;
@@ -135,6 +154,7 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
+            id: user.id,
             userType: 'globalAdmin'
           })
         )
@@ -348,5 +368,36 @@ describe('scan', () => {
 
       expect(response.body).toEqual({});
     });
+  });
+});
+
+describe('scheduler invoke', () => {
+  it('invoke by globalAdmin should succeed', async () => {
+    const response = await request(app)
+      .post(`/scheduler/invoke`)
+      .set(
+        'Authorization',
+        createUserToken({
+          userType: 'globalAdmin'
+        })
+      )
+      .expect(200);
+
+    expect(response.body).toEqual({});
+    expect(scheduler).toHaveBeenCalledTimes(1);
+  });
+  it('invoke by globalView should fail', async () => {
+    const response = await request(app)
+      .post(`/scheduler/invoke`)
+      .set(
+        'Authorization',
+        createUserToken({
+          userType: 'globalView'
+        })
+      )
+      .expect(403);
+
+    expect(response.body).toEqual({});
+    expect(scheduler).toHaveBeenCalledTimes(0);
   });
 });

@@ -1,4 +1,10 @@
-import { Domain, Service } from '../models';
+import {
+  connectToDatabase,
+  Domain,
+  Organization,
+  Scan,
+  Service
+} from '../models';
 import { plainToClass } from 'class-transformer';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
@@ -34,7 +40,8 @@ const downloadPath = async (
   path: string,
   ipToDomainsMap: IpToDomainsMap,
   i: number,
-  numFiles: number
+  numFiles: number,
+  commandOptions: CommandOptions
 ): Promise<void> => {
   console.log(`i: ${i} of ${numFiles}: starting download of url ${path}`);
 
@@ -66,6 +73,7 @@ const downloadPath = async (
         domains.push(
           plainToClass(Domain, {
             name: matchingDomain.name,
+            organization: matchingDomain.organization,
             asn: item.autonomous_system?.asn,
             ip: item.ip,
             country: item.location?.country_code
@@ -77,6 +85,7 @@ const downloadPath = async (
             const s = {
               ...mapping[key](item[key]),
               service,
+              discoveredBy: { id: commandOptions.scanId },
               port: Number(key.slice(1)),
               domain: matchingDomain,
               lastSeen: new Date(Date.now()),
@@ -128,9 +137,19 @@ export const handler = async (commandOptions: CommandOptions) => {
     data: { files }
   } = await axios.get(results.latest.details_url, { auth });
 
-  const allDomains = await getAllDomains();
+  await connectToDatabase();
+  const scan = await Scan.findOne(
+    { id: commandOptions.scanId },
+    { relations: ['organizations'] }
+  );
 
-  const queue = new PQueue({ concurrency: 5 });
+  const orgs = scan?.organizations?.length
+    ? undefined
+    : scan?.organizations.map((org) => org.id);
+
+  const allDomains = await getAllDomains(orgs);
+
+  const queue = new PQueue({ concurrency: 2 });
 
   const numFiles = Object.keys(files).length;
   const fileNames = Object.keys(files).sort();
@@ -168,7 +187,8 @@ export const handler = async (commandOptions: CommandOptions) => {
               files[fileName].download_path,
               ipToDomainsMap,
               idx,
-              numFiles
+              numFiles,
+              commandOptions
             ),
           {
             // Perform less retries on jest to make tests faster

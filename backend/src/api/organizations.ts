@@ -14,7 +14,8 @@ import {
   connectToDatabase,
   Role,
   ScanTask,
-  Scan
+  Scan,
+  User
 } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
@@ -33,7 +34,7 @@ export const del = wrapHandler(async (event) => {
     return NotFound;
   }
 
-  if (!isOrgAdmin(event, id)) return Unauthorized;
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
 
   await connectToDatabase();
   const result = await Organization.delete(id);
@@ -43,21 +44,23 @@ export const del = wrapHandler(async (event) => {
   };
 });
 
-class NewOrganization {
+class NewOrganizationNonGlobalAdmins {
   @IsString()
   name: string;
-
-  @IsArray()
-  rootDomains: string[];
-
-  @IsArray()
-  ipBlocks: string[];
 
   @IsBoolean()
   isPassive: boolean;
 
   @IsBoolean()
   inviteOnly: boolean;
+}
+
+class NewOrganization extends NewOrganizationNonGlobalAdmins {
+  @IsArray()
+  rootDomains: string[];
+
+  @IsArray()
+  ipBlocks: string[];
 }
 
 export const update = wrapHandler(async (event) => {
@@ -68,8 +71,12 @@ export const update = wrapHandler(async (event) => {
   }
 
   if (!isOrgAdmin(event, id)) return Unauthorized;
-
-  const body = await validateBody(NewOrganization, event.body);
+  const body = await validateBody(
+    isGlobalWriteAdmin(event)
+      ? NewOrganization
+      : NewOrganizationNonGlobalAdmins,
+    event.body
+  );
   await connectToDatabase();
   const org = await Organization.findOne(
     {
@@ -94,8 +101,11 @@ export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   const body = await validateBody(NewOrganization, event.body);
   await connectToDatabase();
-  const scan = await Organization.create(body);
-  const res = await Organization.save(scan);
+  const organization = await Organization.create({
+    ...body,
+    createdBy: { id: event.requestContext.authorizer!.id }
+  });
+  const res = await Organization.save(organization);
   return {
     statusCode: 200,
     body: JSON.stringify(res)
@@ -225,6 +235,9 @@ export const approveRole = wrapHandler(async (event) => {
   });
   if (role) {
     role.approved = true;
+    role.approvedBy = plainToClass(User, {
+      id: event.requestContext.authorizer!.id
+    });
     const result = await role.save();
     return {
       statusCode: result ? 200 : 404,

@@ -1,44 +1,93 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { API } from 'aws-amplify';
-import { AuthContext, AuthUser, CurrentOrganization } from './AuthContext';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { Auth } from 'aws-amplify';
+import { AuthContext, AuthUser } from './AuthContext';
 import { User, Organization } from 'types';
-import { useHistory } from 'react-router-dom';
+import { useApi } from 'hooks/useApi';
+import { usePersistentState } from 'hooks';
+import {
+  getExtendedOrg,
+  getMaximumRole,
+  getTouVersion,
+  getUserMustSign
+} from './userStateUtils';
 
-// to be added to every request
-const baseHeaders: HeadersInit = {
-  'Content-Type': 'application/json',
-  Accept: 'application/json'
-};
+export const currentTermsVersion = '1';
 
 export const AuthContextProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState<AuthUser | null>();
-  const [currentOrganization, setCurrentOrganization] = useState<
-    CurrentOrganization
-  >();
-  const [loading, setLoading] = useState(0);
-  const history = useHistory();
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const [token, setToken] = usePersistentState<string | null>('token', null);
+  const [org, setOrg] = usePersistentState<Organization | null>(
+    'organization',
+    null
+  );
 
-  const refreshState = async () => {
-    const organization = localStorage.getItem('organization');
+  const logout = useCallback(async () => {
+    localStorage.clear();
+    await Auth.signOut();
+    window.location.reload();
+  }, []);
 
-    if (organization) {
-      setOrganization(JSON.parse(organization));
-    } else if (user) {
-      if (user.roles.length > 0) {
-        setOrganization(user.roles[0].organization);
+  const handleError = useCallback(
+    async (e: Error) => {
+      if (e.message.includes('401')) {
+        // Unauthorized, log out user
+        await logout();
       }
-    }
-  };
+    },
+    [logout]
+  );
 
-  const setOrganization = async (organization: Organization) => {
-    let extendedOrg: CurrentOrganization = organization;
-    extendedOrg.userIsAdmin =
-      user?.userType === 'globalAdmin' ||
-      user?.roles.find(role => role.organization.id === currentOrganization?.id)
-        ?.role === 'admin';
-    localStorage.setItem('organization', JSON.stringify(extendedOrg));
-    setCurrentOrganization(extendedOrg);
-  };
+  const api = useApi(handleError);
+  const { apiGet, apiPost } = api;
+
+  const getProfile = useCallback(async () => {
+    const user: User = await apiGet<User>('/users/me');
+    setAuthUser({
+      ...user,
+      isRegistered: user.firstName !== ''
+    });
+  }, [setAuthUser, apiGet]);
+
+  const setProfile = useCallback(
+    async (user: User) => {
+      setAuthUser({
+        ...user,
+        isRegistered: user.firstName !== ''
+      });
+    },
+    [setAuthUser]
+  );
+
+  const refreshUser = useCallback(async () => {
+    if (!token && process.env.REACT_APP_USE_COGNITO) {
+      const session = await Auth.currentSession();
+      const { token } = await apiPost<{ token: string; user: User }>(
+        '/auth/callback',
+        {
+          body: {
+            token: session.getIdToken().getJwtToken()
+          }
+        }
+      );
+      setToken(token);
+    }
+  }, [apiPost, setToken, token]);
+
+  const extendedOrg = useMemo(() => {
+    return getExtendedOrg(org, authUser);
+  }, [org, authUser]);
+
+  const maximumRole = useMemo(() => {
+    return getMaximumRole(authUser);
+  }, [authUser]);
+
+  const touVersion = useMemo(() => {
+    return getTouVersion(maximumRole);
+  }, [maximumRole]);
+
+  const userMustSign = useMemo(() => {
+    return getUserMustSign(authUser, touVersion);
+  }, [authUser, touVersion]);
 
   useEffect(() => {
     refreshUser();
@@ -46,147 +95,32 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    refreshState();
-    // eslint-disable-next-line
-  }, [user]);
-
-  const logout = async () => {
-    setUser(null);
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-  };
-
-  const handleError = useCallback(
-    async (e: Error) => {
-      if (e.message.includes('401')) {
-        // Unauthorized, log out user
-        await logout();
-        history.push('/');
-      }
-    },
-    [history]
-  );
-
-  const login = async (token: string, user: User) => {
-    let userCopy: AuthUser = {
-      isRegistered: user.firstName !== '',
-      ...user
-    };
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(userCopy));
-    setUser(userCopy);
-  };
-
-  const refreshUser = async () => {
-    if (!localStorage.getItem('token')) {
-      return;
+    if (!token) {
+      setAuthUser(null);
+    } else {
+      getProfile();
     }
-    const user: User = await apiGet('/users/me');
-    const userCopy: AuthUser = {
-      isRegistered: user.firstName !== '',
-      ...user
-    };
-    localStorage.setItem('user', JSON.stringify(userCopy));
-    setUser(userCopy);
-  };
-
-  const prepareInit = useCallback(async (init: any) => {
-    const { headers, ...rest } = init;
-    return {
-      ...rest,
-      headers: {
-        ...headers,
-        ...baseHeaders,
-        Authorization: localStorage.getItem('token')
-      }
-    };
-  }, []);
-
-  const apiGet = useCallback(
-    async <T extends object = {}>(path: string, init: any = {}) => {
-      try {
-        setLoading(l => l + 1);
-        const options = await prepareInit(init);
-        const result = await API.get('crossfeed', path, options);
-        setLoading(l => l - 1);
-        return result as T;
-      } catch (e) {
-        setLoading(l => l - 1);
-        await handleError(e);
-        throw e;
-      }
-    },
-    [prepareInit, handleError]
-  );
-
-  const apiPost = useCallback(
-    async <T extends object = {}>(path: string, init: any) => {
-      try {
-        setLoading(l => l + 1);
-        const options = await prepareInit(init);
-        const result = await API.post('crossfeed', path, options);
-        setLoading(l => l - 1);
-        return result as T;
-      } catch (e) {
-        setLoading(l => l - 1);
-        await handleError(e);
-        throw e;
-      }
-    },
-    [prepareInit, handleError]
-  );
-
-  const apiDelete = useCallback(
-    async <T extends object = {}>(path: string, init: any = {}) => {
-      try {
-        setLoading(l => l + 1);
-        const options = await prepareInit(init);
-        const result = await API.del('crossfeed', path, options);
-        setLoading(l => l - 1);
-        return result as T;
-      } catch (e) {
-        setLoading(l => l - 1);
-        await handleError(e);
-        throw e;
-      }
-    },
-    [prepareInit, handleError]
-  );
-
-  const apiPut = useCallback(
-    async <T extends object = {}>(path: string, init: any) => {
-      try {
-        setLoading(l => l + 1);
-        const options = await prepareInit(init);
-        const result = await API.put('crossfeed', path, options);
-        setLoading(l => l - 1);
-        return result as T;
-      } catch (e) {
-        setLoading(l => l - 1);
-        await handleError(e);
-        throw e;
-      }
-    },
-    [prepareInit, handleError]
-  );
+  }, [token, getProfile]);
 
   return (
     <AuthContext.Provider
       value={{
-        setOrganization,
+        user: authUser,
+        token,
+        setUser: setProfile,
         refreshUser,
-        user,
-        currentOrganization,
-        login,
+        setOrganization: setOrg,
+        currentOrganization: extendedOrg,
+        login: setToken,
         logout,
-        apiGet,
-        apiPost,
-        apiPut,
-        apiDelete,
-        setLoading
+        setLoading: () => {},
+        maximumRole,
+        touVersion,
+        userMustSign,
+        ...api
       }}
     >
-      {loading > 0 && (
+      {api.loading && (
         <div className="cisa-crossfeed-loading">
           <div></div>
           <div></div>

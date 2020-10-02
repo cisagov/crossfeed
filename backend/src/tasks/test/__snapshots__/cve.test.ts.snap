@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`cve closes old vulnerabilities: execSync.input 1`] = `
+"0 cpe:/a:10web:form_maker:1.0.0
+"
+`;
+
+exports[`cve does not close new vulnerability: execSync.input 1`] = `
+"0 cpe:/a:10web:form_maker:1.0.0
+"
+`;
+
 exports[`cve simple test: execSync.input 1`] = `
 "0 cpe:/a:10web:form_maker:1.0.0
 "
@@ -7,6 +17,7 @@ exports[`cve simple test: execSync.input 1`] = `
 
 exports[`cve simple test: vulnerability 1`] = `
 Object {
+  "actions": Any<Array>,
   "cpe": "cpe:/a:10web:form_maker:1.0.0",
   "createdAt": Any<Date>,
   "cve": "CVE-2019-10866",
@@ -15,14 +26,19 @@ Object {
   "description": "",
   "id": Any<String>,
   "lastSeen": 2019-04-22T10:20:30.000Z,
+  "needsPopulation": false,
+  "notes": "",
   "severity": "Critical",
-  "state": "open",
+  "state": "closed",
+  "substate": "remediated",
   "title": "CVE-2019-10866",
+  "updatedAt": Any<Date>,
 }
 `;
 
 exports[`cve simple test: vulnerability 2`] = `
 Object {
+  "actions": Any<Array>,
   "cpe": "cpe:/a:10web:form_maker:1.0.0",
   "createdAt": Any<Date>,
   "cve": "CVE-2019-11590",
@@ -31,8 +47,12 @@ Object {
   "description": "",
   "id": Any<String>,
   "lastSeen": 2019-04-22T10:20:30.000Z,
+  "needsPopulation": false,
+  "notes": "",
   "severity": "High",
-  "state": "open",
+  "state": "closed",
+  "substate": "remediated",
   "title": "CVE-2019-11590",
+  "updatedAt": Any<Date>,
 }
 `;

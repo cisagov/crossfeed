@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom';
 
 interface Errors extends Partial<Scan> {
   global?: string;
+  scheduler?: string;
 }
 
 export interface OrganizationOption {
@@ -150,7 +151,7 @@ const ScansView: React.FC = () => {
   });
 
   React.useEffect(() => {
-    document.addEventListener('keyup', e => {
+    document.addEventListener('keyup', (e) => {
       //Escape
       if (e.keyCode === 27) {
         setShowModal(false);
@@ -168,7 +169,7 @@ const ScansView: React.FC = () => {
       setScans(scans);
       setScanSchema(schema);
       setOrganizationOptions(
-        organizations.map(e => ({ label: e.name, value: e.id }))
+        organizations.map((e) => ({ label: e.name, value: e.id }))
       );
     } catch (e) {
       console.error(e);
@@ -179,7 +180,7 @@ const ScansView: React.FC = () => {
     try {
       let row = scans[index];
       await apiDelete(`/scans/${row.id}`);
-      setScans(scans.filter(scan => scan.id !== row.id));
+      setScans(scans.filter((scan) => scan.id !== row.id));
     } catch (e) {
       setErrors({
         global:
@@ -189,7 +190,7 @@ const ScansView: React.FC = () => {
     }
   };
 
-  const onSubmit: React.FormEventHandler = async e => {
+  const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
     try {
       // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
@@ -203,7 +204,7 @@ const ScansView: React.FC = () => {
         body: {
           ...body,
           organizations: body.organizations
-            ? body.organizations.map(e => e.value)
+            ? body.organizations.map((e) => e.value)
             : []
         }
       });
@@ -216,12 +217,22 @@ const ScansView: React.FC = () => {
     }
   };
 
+  const invokeScheduler = async () => {
+    setErrors({ ...errors, scheduler: '' });
+    try {
+      await apiPost('/scheduler/invoke', {});
+    } catch (e) {
+      console.error(e);
+      setErrors({ ...errors, scheduler: 'Invocation failed.' });
+    }
+  };
+
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
-  > = e => onChange(e.target.name, e.target.value);
+  > = (e) => onChange(e.target.name, e.target.value);
 
   const onChange = (name: string, value: any) => {
-    setValues(values => ({
+    setValues((values) => ({
       ...values,
       [name]: value
     }));
@@ -232,6 +243,10 @@ const ScansView: React.FC = () => {
   return (
     <>
       <Table<Scan> columns={columns} data={scans} fetchData={fetchScans} />
+      <Button type="submit" outline onClick={invokeScheduler}>
+        Manually run scheduler
+      </Button>
+      {errors.scheduler && <p className={classes.error}>{errors.scheduler}</p>}
       <h2>Add a scan</h2>
       <Form onSubmit={onSubmit} className={classes.form}>
         {errors.global && <p className={classes.error}>{errors.global}</p>}
@@ -244,7 +259,7 @@ const ScansView: React.FC = () => {
           onChange={onTextChange}
           value={values.name}
         >
-          {Object.keys(scanSchema).map(i => {
+          {Object.keys(scanSchema).map((i) => {
             return (
               <option key={i} value={i}>
                 {i}
@@ -263,13 +278,13 @@ const ScansView: React.FC = () => {
           value={values.arguments}
           onChange={onTextChange}
         /> */}
-        {!selectedScan.global && (
+        {(values.name === 'censysIpv4' || !selectedScan.global) && (
           <Checkbox
             id="isGranular"
-            label="Run per organization"
+            label="Limit enabled organizations"
             name="isGranular"
             checked={values.isGranular}
-            onChange={e => onChange('isGranular', e.target.checked)}
+            onChange={(e) => onChange('isGranular', e.target.checked)}
           />
         )}
         {values.isGranular && (
@@ -279,7 +294,7 @@ const ScansView: React.FC = () => {
               name="organizations"
               options={organizationOptions}
               value={values.organizations}
-              onChange={e => onChange('organizations', e)}
+              onChange={(e) => onChange('organizations', e)}
             />
             <br />
           </>
@@ -298,7 +313,7 @@ const ScansView: React.FC = () => {
               marginRight: '15px'
             }}
             value={values.frequency}
-            onChange={e => {
+            onChange={(e) => {
               onChange(e.target.name, Number(e.target.value));
             }}
           />
@@ -321,7 +336,7 @@ const ScansView: React.FC = () => {
       <ImportExport<Scan>
         name="scans"
         fieldsToExport={['name', 'arguments', 'frequency']}
-        onImport={async results => {
+        onImport={async (results) => {
           // TODO: use a batch call here instead.
           let createdScans = [];
           for (let result of results) {
@@ -341,7 +356,7 @@ const ScansView: React.FC = () => {
           setScans(scans.concat(...createdScans));
         }}
         getDataToExport={() =>
-          scans.map(scan => ({
+          scans.map((scan) => ({
             ...scan,
             arguments: JSON.stringify(scan.arguments)
           }))
