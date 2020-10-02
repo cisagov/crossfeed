@@ -44,18 +44,9 @@ export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
   const { original } = row;
   return (
     <div className={classes.expandedRoot}>
-      <h4>Details</h4>
+      <h3>Details</h3>
       <div className={classes.desc}>
-        {original.cve && (
-          <a
-            href={`https://nvd.nist.gov/vuln/detail/${original.cve}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View vulnerability description
-          </a>
-        )}
-        <h3>Vulnerability history</h3>
+        <h4>Vulnerability history</h4>
         {original.actions.map((action, num) => {
           const val = action.automatic ? (
             <>Vulnerability automatically marked as remediated</>
@@ -90,6 +81,15 @@ export const Vulnerabilities: React.FC = () => {
     {
       Header: 'Title',
       accessor: 'title',
+      Cell: ({value, row}: CellProps<Vulnerability>) => (
+        <a
+        href={`https://nvd.nist.gov/vuln/detail/${row.original.cve}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        >
+          {value}
+        </a>
+      ),
       width: 800,
       Filter: ColumnFilter
     },
