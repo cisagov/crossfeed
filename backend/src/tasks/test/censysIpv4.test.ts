@@ -123,6 +123,7 @@ describe('censys ipv4', () => {
 
   test('basic test', async () => {
     nock('https://censys.io', authHeaders)
+      .persist()
       .get('/api/v1/data/ipv4_2018/')
       .reply(200, {
         results: {
@@ -132,6 +133,7 @@ describe('censys ipv4', () => {
         }
       });
     nock('https://censys.io', authHeaders)
+      .persist()
       .get('/api/v1/data/ipv4_2018/20200719')
       .reply(200, {
         files: {
@@ -213,6 +215,7 @@ describe('censys ipv4', () => {
     });
 
     nock('https://data-01.censys.io', authHeaders)
+      .persist()
       .get('/snapshots/ipv4/20200719/first_file.json.gz')
       .reply(200, zlib.gzipSync(firstFileContents))
       .get('/snapshots/ipv4/20200719/second_file.json.gz')
@@ -307,7 +310,7 @@ describe('censys ipv4', () => {
     jest.setTimeout(30000);
     await expect(
       censysIpv4({
-        organizationId: 'organizationId',
+        organizationId: organization.id,
         organizationName: 'organizationName',
         scanId: '388de975-5816-4ec4-b84f-f2070fe68a58',
         scanName: 'scanName',
