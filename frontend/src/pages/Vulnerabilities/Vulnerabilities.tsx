@@ -81,11 +81,11 @@ export const Vulnerabilities: React.FC = () => {
     {
       Header: 'Title',
       accessor: 'title',
-      Cell: ({value, row}: CellProps<Vulnerability>) => (
+      Cell: ({ value, row }: CellProps<Vulnerability>) => (
         <a
-        href={`https://nvd.nist.gov/vuln/detail/${row.original.cve}`}
-        target="_blank"
-        rel="noopener noreferrer"
+          href={`https://nvd.nist.gov/vuln/detail/${row.original.cve}`}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           {value}
         </a>
@@ -316,7 +316,9 @@ export const Vulnerabilities: React.FC = () => {
         fetchData={fetchVulnerabilities}
         renderExpanded={renderExpandedVulnerability}
         tableRef={tableRef}
-        initialFilterBy={[{ id: 'state', value: 'open' }]}
+        initialFilterBy={[
+          { id: 'state', value: showAll ? 'open (exploitable)' : 'open' }
+        ]}
       />
       <Export<Vulnerability>
         name="vulnerabilities"
