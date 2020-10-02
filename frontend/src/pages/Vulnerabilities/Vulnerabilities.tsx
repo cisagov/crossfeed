@@ -44,18 +44,9 @@ export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
   const { original } = row;
   return (
     <div className={classes.expandedRoot}>
-      <h4>Details</h4>
+      <h3>Details</h3>
       <div className={classes.desc}>
-        {original.cve && (
-          <a
-            href={`https://nvd.nist.gov/vuln/detail/${original.cve}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View vulnerability description
-          </a>
-        )}
-        <h3>Vulnerability history</h3>
+        <h4>Vulnerability history</h4>
         {original.actions.map((action, num) => {
           const val = action.automatic ? (
             <>Vulnerability automatically marked as remediated</>
@@ -90,6 +81,15 @@ export const Vulnerabilities: React.FC = () => {
     {
       Header: 'Title',
       accessor: 'title',
+      Cell: ({value, row}: CellProps<Vulnerability>) => (
+        <a
+        href={`https://nvd.nist.gov/vuln/detail/${row.original.cve}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        >
+          {value}
+        </a>
+      ),
       width: 800,
       Filter: ColumnFilter
     },
@@ -123,7 +123,15 @@ export const Vulnerabilities: React.FC = () => {
       width: 100,
       maxWidth: 200,
       accessor: 'state',
-      Filter: selectFilter(['open', 'closed']),
+      Filter: selectFilter([
+        'open',
+        'open (unconfirmed)',
+        'open (exploitable)',
+        'closed',
+        'closed (false positive)',
+        'closed (accepted risk)',
+        'closed (remediated)'
+      ]),
       Cell: ({ row }: CellProps<Vulnerability>) => (
         <Dropdown
           id="state-dropdown"
@@ -189,7 +197,9 @@ export const Vulnerabilities: React.FC = () => {
       pageSize: number = 25
     ): Promise<ApiResponse | undefined> => {
       try {
-        const tableFilters = filters
+        const tableFilters: {
+          [key: string]: string | undefined;
+        } = filters
           .filter((f) => Boolean(f.value))
           .reduce(
             (accum, next) => ({
@@ -198,7 +208,16 @@ export const Vulnerabilities: React.FC = () => {
             }),
             {}
           );
-        console.log(filters);
+        // If not open or closed, substitute for appropriate substate
+        if (
+          tableFilters['state'] &&
+          !['open', 'closed'].includes(tableFilters['state'])
+        ) {
+          const substate = tableFilters['state']!.match(/\((.*)\)/)?.pop();
+          if (substate)
+            tableFilters['substate'] = substate.toLowerCase().replace(' ', '-');
+          delete tableFilters['state'];
+        }
         return await apiPost<ApiResponse>('/vulnerabilities/search', {
           body: {
             page,
@@ -242,7 +261,12 @@ export const Vulnerabilities: React.FC = () => {
     let page = 0;
     while (true) {
       page += 1;
-      const { count, result } = await vulnerabilitiesSearch(filters, sortBy, page, 100) as ApiResponse;
+      const { count, result } = (await vulnerabilitiesSearch(
+        filters,
+        sortBy,
+        page,
+        100
+      )) as ApiResponse;
       allVulns = allVulns.concat(result || []);
       if (count <= page * 100) break;
     }
