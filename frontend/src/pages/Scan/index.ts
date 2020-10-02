@@ -1,1 +1,1 @@
-export { default } from './Scan';
+export { default } from "./Scan";
