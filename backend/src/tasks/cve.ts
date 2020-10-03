@@ -138,7 +138,6 @@ const populateVulnerabilities = async () => {
       } else vulnerabilitiesMap[vuln.cve] = [vuln];
     }
   }
-  // TODO: Populate info of these vulnerabilities
   const filenames = await fs.promises.readdir('nvd-dump');
   for (const file of filenames) {
     if (!file.match(/nvdcve-1\.1-\d{4}\.json\.gz/)) continue;

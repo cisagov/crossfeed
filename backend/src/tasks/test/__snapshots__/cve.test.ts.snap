@@ -10,6 +10,11 @@ exports[`cve does not close new vulnerability: execSync.input 1`] = `
 "
 `;
 
+exports[`cve populates vulnerability: execSync.input 1`] = `
+"0 cpe:/a:10web:form_maker:1.0.0
+"
+`;
+
 exports[`cve simple test: execSync.input 1`] = `
 "0 cpe:/a:10web:form_maker:1.0.0
 "
@@ -23,11 +28,22 @@ Object {
   "cve": "CVE-2019-10866",
   "cvss": "9.8",
   "cwe": "CWE-89",
-  "description": "",
+  "description": "Test description",
   "id": Any<String>,
   "lastSeen": 2019-04-22T10:20:30.000Z,
   "needsPopulation": false,
   "notes": "",
+  "references": Array [
+    Object {
+      "name": "https://example.com",
+      "source": "CONFIRM",
+      "tags": Array [
+        "Patch",
+        "Vendor Advisory",
+      ],
+      "url": "https://example.com",
+    },
+  ],
   "severity": "Critical",
   "state": "closed",
   "substate": "remediated",
@@ -47,8 +63,9 @@ Object {
   "description": "",
   "id": Any<String>,
   "lastSeen": 2019-04-22T10:20:30.000Z,
-  "needsPopulation": false,
+  "needsPopulation": true,
   "notes": "",
+  "references": Array [],
   "severity": "High",
   "state": "closed",
   "substate": "remediated",
