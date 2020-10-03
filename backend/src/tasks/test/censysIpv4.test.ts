@@ -3,7 +3,14 @@ import * as zlib from 'zlib';
 import * as nock from 'nock';
 import * as path from 'path';
 import * as fs from 'fs';
-import { connectToDatabase, Domain, Organization, Service } from '../../models';
+import {
+  connectToDatabase,
+  Domain,
+  Organization,
+  Scan,
+  Service
+} from '../../models';
+import { O_DIRECT } from 'constants';
 
 jest.mock('../helpers/getCensysIpv4Data');
 
@@ -21,7 +28,7 @@ const authHeaders = {
 
 describe('censys ipv4', () => {
   let organization;
-
+  let scan;
   beforeEach(async () => {
     await connectToDatabase();
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
@@ -30,6 +37,11 @@ describe('censys ipv4', () => {
       rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
       isPassive: false
+    }).save();
+    scan = await Scan.create({
+      name: 'censysIpv4',
+      arguments: {},
+      frequency: 999
     }).save();
     await Domain.create({
       name: 'first_file_testdomain1',
@@ -43,7 +55,7 @@ describe('censys ipv4', () => {
     }).save();
     await Domain.create({
       name: 'first_file_testdomain3',
-      ip: '153.126.148.60',
+      ip: '153.126.148.61',
       organization
     }).save();
     await Domain.create({
@@ -97,7 +109,7 @@ describe('censys ipv4', () => {
     global.Date = RealDate;
   });
 
-  const checkDomains = async organization => {
+  const checkDomains = async (organization) => {
     const domains = await Domain.find({
       where: { organization },
       relations: ['organization', 'services']
@@ -121,7 +133,7 @@ describe('censys ipv4', () => {
         }))
     ).toMatchSnapshot();
     expect(domains.filter((e) => !e.organization).length).toEqual(0);
-  }
+  };
 
   test('basic test', async () => {
     nock('https://censys.io', authHeaders)
@@ -224,7 +236,7 @@ describe('censys ipv4', () => {
     await censysIpv4({
       organizationId: organization.id,
       organizationName: 'organizationName',
-      scanId: '0dacd0d9-294b-4bb5-a3b9-afe70cf5acff',
+      scanId: scan.id,
       scanName: 'scanName',
       scanTaskId: 'scanTaskId',
       chunkNumber: 0,
@@ -271,7 +283,7 @@ describe('censys ipv4', () => {
     await censysIpv4({
       organizationId: organization.id,
       organizationName: 'organizationName',
-      scanId: '739c1517-5afb-4665-a577-d6429883edd2',
+      scanId: scan.id,
       scanName: 'scanName',
       scanTaskId: 'scanTaskId',
       chunkNumber: 0,
@@ -316,14 +328,14 @@ describe('censys ipv4', () => {
       censysIpv4({
         organizationId: organization.id,
         organizationName: 'organizationName',
-        scanId: '388de975-5816-4ec4-b84f-f2070fe68a58',
+        scanId: scan.id,
         scanName: 'scanName',
         scanTaskId: 'scanTaskId',
         chunkNumber: 0,
         numChunks: 1
       })
     ).rejects.toThrow('Response code 429');
-    
+
     await checkDomains(organization);
   });
 });
