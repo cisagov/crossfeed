@@ -18,7 +18,8 @@ describe('getAllDomains', () => {
     expect(domains[domainIndex]).toEqual({
       id: domain.id,
       name,
-      ip
+      ip,
+      organization: null
     });
   });
   test('providing organizations filters based on that organization', async () => {
@@ -67,13 +68,15 @@ describe('getAllDomains', () => {
     expect(domains[domain1Index]).toEqual({
       id: domain.id,
       name,
-      ip
+      ip,
+      organization: organization
     });
     const domain2Index = domains.map((e) => e.id).indexOf(domain2.id);
     expect(domains[domain2Index]).toEqual({
       id: domain2.id,
       name: name2,
-      ip: ip2
+      ip: ip2,
+      organization: organization2
     });
   });
 });

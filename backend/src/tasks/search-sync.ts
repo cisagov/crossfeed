@@ -71,7 +71,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   // The response actually has keys "webpage_id", "webpage_createdAt", etc.
   const s3Client = new S3Client();
   const queue = new PQueue({ concurrency: 10 });
-  const webpages: WebpageRecord[] = await qs_.take(MAX_RESULTS).execute();
+  const webpages: WebpageRecord[] = await qs_.take(100).execute();
   console.log(
     `Got ${webpages.length} webpages. Retrieving body of each webpage...`
   );

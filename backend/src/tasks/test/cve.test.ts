@@ -53,6 +53,7 @@ describe('cve', () => {
       }
     }).save();
     await cve({
+      organizationId: organization.id,
       scanId: 'scanId',
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
@@ -74,6 +75,30 @@ describe('cve', () => {
       );
     }
   });
+  test('should exit if no matching domains with cpes', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    await cve({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vulnerabilities = await Vulnerability.find({
+      domain
+    });
+    expect(vulnerabilities.length).toEqual(0);
+  });
   test('closes old vulnerabilities', async () => {
     const organization = await Organization.create({
       name: 'test-' + Math.random(),
@@ -94,6 +119,7 @@ describe('cve', () => {
       description: '123'
     }).save();
     await cve({
+      organizationId: organization.id,
       scanId: 'scanId',
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
@@ -125,6 +151,7 @@ describe('cve', () => {
       description: '123'
     }).save();
     await cve({
+      organizationId: organization.id,
       scanId: 'scanId',
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
