@@ -17,11 +17,7 @@ const productMap = {
 };
 
 // Scan for new vulnerabilities based on version numbers
-const identifyPassiveCVEs = async () => {
-  const allDomains = await Domain.find({
-    select: ['id', 'name', 'ip'],
-    relations: ['services']
-  });
+const identifyPassiveCVEs = async (allDomains: Domain[]) => {
   const hostsToCheck: Array<{
     domain: Domain;
     cpes: string[];
@@ -50,6 +46,10 @@ const identifyPassiveCVEs = async () => {
         domain: domain,
         cpes: Array.from(cpes)
       });
+  }
+  if (hostsToCheck.length === 0) {
+    console.warn('No hosts to check - no domains with CPEs found.');
+    return;
   }
 
   spawnSync('nvdsync', ['-cve_feed', 'cve-1.1.json.gz', 'nvd-dump'], {
@@ -169,13 +169,7 @@ const populateVulnerabilities = async () => {
 };
 
 // Closes vulnerabilities that haven't been seen recently
-const closeVulnerabilities = async () => {
-  const openVulnerabilites = await Vulnerability.find({
-    where: {
-      state: 'open',
-      lastSeen: LessThan(new Date(new Date().setDate(new Date().getDate() - 2)))
-    }
-  });
+const closeVulnerabilities = async (openVulnerabilites: Vulnerability[]) => {
   for (const vulnerability of openVulnerabilites) {
     vulnerability.setState('remediated', true, null);
     await vulnerability.save();
@@ -185,8 +179,24 @@ const closeVulnerabilities = async () => {
 export const handler = async (commandOptions: CommandOptions) => {
   console.log('Running cve detection globally');
 
+  // CVE is a global scan; organizationId is used only for testing.
+  const { organizationId } = commandOptions;
+
   await connectToDatabase();
-  await identifyPassiveCVEs();
-  await closeVulnerabilities();
+  const allDomains = await Domain.find({
+    select: ['id', 'name', 'ip'],
+    relations: ['services'],
+    where: organizationId ? { organization: { id: organizationId } } : undefined
+  });
+  await identifyPassiveCVEs(allDomains);
+
+  const openVulnerabilites = await Vulnerability.find({
+    where: {
+      state: 'open',
+      lastSeen: LessThan(new Date(new Date().setDate(new Date().getDate() - 2)))
+    }
+  });
+  await closeVulnerabilities(openVulnerabilites);
+
   await populateVulnerabilities();
 };
