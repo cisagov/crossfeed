@@ -51,30 +51,32 @@ export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
       <div className={classes.desc}>
         <p>{original.description}</p>
         <h4>References</h4>
-        {original.references.map((ref, index) => (
-          <p key={index}>
-            <a href={ref.url} target="_blank" rel="noopener noreferrer">
-              {ref.url} {extLink}
-            </a>
-            {ref.tags.length > 0 ? ' - ' + ref.tags.join(',') : ''}
-          </p>
-        ))}
-        <h4>Vulnerability history</h4>
-        {original.actions.map((action, index) => {
-          const val = action.automatic ? (
-            <>Vulnerability automatically marked as remediated</>
-          ) : (
-            <>
-              State changed to {action.state} (
-              {stateMap[action.substate].toLowerCase()}) by {action.userName}
-            </>
-          );
-          return (
+        {original.references &&
+          original.references.map((ref, index) => (
             <p key={index}>
-              {val} on {formatDate(action.date)}
+              <a href={ref.url} target="_blank" rel="noopener noreferrer">
+                {ref.url} {extLink}
+              </a>
+              {ref.tags.length > 0 ? ' - ' + ref.tags.join(',') : ''}
             </p>
-          );
-        })}
+          ))}
+        <h4>Vulnerability history</h4>
+        {original.actions &&
+          original.actions.map((action, index) => {
+            const val = action.automatic ? (
+              <>Vulnerability automatically marked as remediated</>
+            ) : (
+              <>
+                State changed to {action.state} (
+                {stateMap[action.substate].toLowerCase()}) by {action.userName}
+              </>
+            );
+            return (
+              <p key={index}>
+                {val} on {formatDate(action.date)}
+              </p>
+            );
+          })}
         <p>Vulnerability opened on {formatDate(original.createdAt)}</p>
       </div>
     </div>

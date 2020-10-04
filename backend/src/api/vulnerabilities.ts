@@ -41,6 +41,10 @@ class VulnerabilityFilters {
 
   @IsString()
   @IsOptional()
+  cpe?: string;
+
+  @IsString()
+  @IsOptional()
   state?: string;
 
   @IsString()
@@ -104,6 +108,11 @@ class VulnerabilitySearch {
     if (this.filters?.severity) {
       qs.andWhere('vulnerability.severity=:severity', {
         severity: this.filters.severity
+      });
+    }
+    if (this.filters?.cpe) {
+      qs.andWhere('vulnerability.cpe ILIKE :cpe', {
+        cpe: this.filters.cpe
       });
     }
     if (this.filters?.state) {
