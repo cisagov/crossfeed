@@ -6,11 +6,18 @@ describe('getAllDomains', () => {
     await connectToDatabase();
   });
   test('basic test', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
     const name = Math.random() + '';
     const ip = Math.random() + '';
     const domain = await Domain.create({
       name,
-      ip
+      ip,
+      organization
     }).save();
     const domains = await getAllDomains();
     expect(domains.length).toBeGreaterThan(0);
@@ -19,7 +26,7 @@ describe('getAllDomains', () => {
       id: domain.id,
       name,
       ip,
-      organization: null
+      organization: organization
     });
   });
   test('providing organizations filters based on that organization', async () => {
