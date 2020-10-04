@@ -10,9 +10,16 @@ import { createUserToken } from './util';
 
 describe('domains', () => {
   let organization;
+  let organization2;
   beforeAll(async () => {
     await connectToDatabase();
     organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    organization2 = await Organization.create({
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
@@ -27,7 +34,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -50,7 +58,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -79,7 +88,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -156,7 +166,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -181,7 +192,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -207,7 +219,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -233,7 +246,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -278,7 +292,8 @@ describe('domains', () => {
     it("get by org user should not work for domain not in the user's org", async () => {
       const name = 'test-' + Math.random();
       const domain = await Domain.create({
-        name
+        name,
+        organization: organization2
       }).save();
       const response = await request(app)
         .get(`/domain/${domain.id}`)
@@ -294,7 +309,8 @@ describe('domains', () => {
     it('get by globalView should work for any domain', async () => {
       const name = 'test-' + Math.random();
       const domain = await Domain.create({
-        name
+        name,
+        organization: organization2
       }).save();
       const response = await request(app)
         .get(`/domain/${domain.id}`)

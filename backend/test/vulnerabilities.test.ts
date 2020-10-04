@@ -21,6 +21,12 @@ describe('vulnerabilities', () => {
         ipBlocks: [],
         isPassive: false
       }).save();
+      const organization2 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
       const domain = await Domain.create({
         name: 'test-' + Math.random(),
         organization
@@ -30,7 +36,8 @@ describe('vulnerabilities', () => {
         domain
       }).save();
       const domain2 = await Domain.create({
-        name: 'test-' + Math.random()
+        name: 'test-' + Math.random(),
+        organization: organization2
       }).save();
       const vulnerability2 = await Vulnerability.create({
         title: 'test-' + Math.random(),
@@ -56,6 +63,12 @@ describe('vulnerabilities', () => {
         ipBlocks: [],
         isPassive: false
       }).save();
+      const organization2 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
       const domain = await Domain.create({
         name: 'test-' + Math.random(),
         organization
@@ -66,7 +79,8 @@ describe('vulnerabilities', () => {
         domain
       }).save();
       const domain2 = await Domain.create({
-        name: 'test-' + Math.random()
+        name: 'test-' + Math.random(),
+        organization: organization2
       }).save();
       const vulnerability2 = await Vulnerability.create({
         title: title + '-2',
@@ -93,6 +107,12 @@ describe('vulnerabilities', () => {
         ipBlocks: [],
         isPassive: false
       }).save();
+      const organization2 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
       const domain = await Domain.create({
         name: 'test-' + Math.random(),
         organization
@@ -103,7 +123,8 @@ describe('vulnerabilities', () => {
         domain
       }).save();
       const domain2 = await Domain.create({
-        name: 'test-' + Math.random()
+        name: 'test-' + Math.random(),
+        organization: organization2
       }).save();
       const vulnerability2 = await Vulnerability.create({
         title: title + '-2',
@@ -257,8 +278,15 @@ describe('vulnerabilities', () => {
       expect(response.body).toEqual({});
     });
     it('get by globalView should work for any vulnerability', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
       const domain = await Domain.create({
-        name: 'test-' + Math.random()
+        name: 'test-' + Math.random(),
+        organization: organization
       }).save();
       const vulnerability = await Vulnerability.create({
         title: 'test-' + Math.random(),
