@@ -203,7 +203,6 @@ describe('cve', () => {
     expect(vuln?.state).toEqual('open');
     expect(vuln?.substate).toEqual('unconfirmed');
   });
-
   test('populates vulnerability', async () => {
     const organization = await Organization.create({
       name: 'test-' + Math.random(),
@@ -224,6 +223,7 @@ describe('cve', () => {
       needsPopulation: true
     }).save();
     await cve({
+      organizationId: organization.id,
       scanId: 'scanId',
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
