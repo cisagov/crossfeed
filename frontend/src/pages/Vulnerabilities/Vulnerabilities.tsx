@@ -32,7 +32,7 @@ const formatDate = (date: string) => {
   return format(parseISO(date), 'MM-dd-yyyy');
 };
 
-const stateMap: { [key: string]: string } = {
+export const stateMap: { [key: string]: string } = {
   unconfirmed: 'Unconfirmed',
   exploitable: 'Exploitable',
   'false-positive': 'False Positive',

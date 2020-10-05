@@ -13,6 +13,7 @@ import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import { stateMap } from 'pages/Vulnerabilities/Vulnerabilities';
 
 interface Props {
   domainId: string;
@@ -124,12 +125,22 @@ export const DomainDetails: React.FC<Props> = (props) => {
     return null;
   }
 
+  const url =
+    (domain.services.find((service) => service.port === 443)
+      ? 'https://'
+      : 'http://') + domain.name;
+
   return (
     <Paper classes={{ root: classes.root }}>
-      <Link to={`/domain/${domain.id}`} className={classes.title}>
-        <h4>{domain.name}</h4>
-        <LinkOffIcon />
-      </Link>
+      <div className={classes.title}>
+        <h4>
+          <Link to={`/domain/${domain.id}`}>{domain.name}</Link>
+        </h4>
+
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          <LinkOffIcon />
+        </a>
+      </div>
       <div className={classes.inner}>
         <div className={classes.section}>
           <h4 className={classes.subtitle}>Organization</h4>
@@ -226,7 +237,10 @@ export const DomainDetails: React.FC<Props> = (props) => {
                       },
                       {
                         label: 'State',
-                        value: vuln.state ?? 'N/A'
+                        value:
+                          `${vuln.state} (${stateMap[
+                            vuln.substate
+                          ].toLowerCase()})` ?? 'N/A'
                       }
                     ]}
                   />
@@ -265,6 +279,11 @@ const useStyles = makeStyles((theme) => ({
       wordBreak: 'break-all',
       paddingRight: '2rem',
       margin: '0'
+    },
+
+    '& > a, & > h4 a': {
+      color: 'white',
+      textDecoration: 'none'
     }
   },
   section: {
