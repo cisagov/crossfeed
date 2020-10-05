@@ -140,6 +140,7 @@ const populateVulnerabilities = async () => {
   }
   const filenames = await fs.promises.readdir('nvd-dump');
   for (const file of filenames) {
+    // Only process yearly CVE files, e.g. nvdcve-1.1-2014.json.gz
     if (!file.match(/nvdcve-1\.1-\d{4}\.json\.gz/)) continue;
     const contents = await fs.promises.readFile('nvd-dump/' + file);
     const unzipped = zlib.unzipSync(contents);
