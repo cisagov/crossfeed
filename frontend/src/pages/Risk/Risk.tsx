@@ -4,14 +4,8 @@ import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
 import { Checkbox, Grid } from '@trussworks/react-uswds';
-import {
-  ComposableMap,
-  Geographies,
-  GeographiesProps,
-  Geography,
-  GeographyProps
-} from 'react-simple-maps';
-import { ScaleQuantize, scaleLinear, ScaleLinear } from 'd3-scale';
+import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { scaleLinear } from 'd3-scale';
 
 const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 const geoCountyUrl =
