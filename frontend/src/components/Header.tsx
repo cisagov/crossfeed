@@ -8,7 +8,9 @@ import {
   IconButton,
   Drawer,
   ListItem,
-  List
+  List,
+  Menu,
+  MenuItem
 } from '@material-ui/core';
 import {
   Menu as MenuIcon,
@@ -80,6 +82,13 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: '2px solid transparent',
     fontWeight: 600
   },
+  nestedLink: {
+    position: 'relative',
+    color: 'black',
+    textDecoration: 'none',
+    fontWeight: 400,
+    fontSize: '14px'
+  },
   userLink: {
     display: 'flex',
     alignItems: 'center',
@@ -109,11 +118,13 @@ interface NavItem {
   title: string;
   path: string;
   users: number;
+  parent?: string;
+  onClick?: any;
 }
 
 export const Header: React.FC = () => {
   const classes = useStyles();
-  const { currentOrganization, user } = useAuthContext();
+  const { currentOrganization, user, logout } = useAuthContext();
   const [navOpen, setNavOpen] = useState(false);
 
   let userLevel = 0;
@@ -128,43 +139,77 @@ export const Header: React.FC = () => {
       userLevel = GLOBAL_ADMIN;
     }
   }
+  userLevel = ORG_ADMIN;
 
   const navItems: NavItem[] = [
+    { title: 'Overview', path: '/risk', users: ALL_USERS },
     { title: 'Inventory', path: '/', users: ALL_USERS },
     { title: 'Search', path: '/search', users: GLOBAL_ADMIN },
     { title: 'Vulnerabilities', path: '/vulnerabilities', users: ALL_USERS },
-    { title: 'Risk Summary', path: '/risk', users: ALL_USERS },
+
+    { title: 'Scans', path: '/scans', users: GLOBAL_ADMIN },
+    {
+      title: 'Manage Users',
+      path: '/users',
+      users: GLOBAL_ADMIN,
+      parent: 'Account'
+    },
     {
       title: 'Organization Settings',
       path: '/organization',
-      users: ORG_ADMIN | GLOBAL_ADMIN
+      users: ORG_ADMIN | GLOBAL_ADMIN,
+      parent: 'Account'
     },
     {
       title: 'My Organizations',
       path: '/organizations',
-      users: ORG_USER | ORG_ADMIN
+      users: ORG_USER | ORG_ADMIN,
+      parent: 'Account'
     },
     {
       title: 'Manage Organizations',
       path: '/organizations',
-      users: GLOBAL_ADMIN
+      users: GLOBAL_ADMIN,
+      parent: 'Account'
     },
-
-    { title: 'Scans', path: '/scans', users: GLOBAL_ADMIN },
-    { title: 'Manage Users', path: '/users', users: GLOBAL_ADMIN }
+    {
+      title: 'Account Settings',
+      path: '/settings',
+      users: ALL_USERS,
+      parent: 'Account'
+    },
+    {
+      title: 'Log Out',
+      path: '/settings',
+      users: ALL_USERS,
+      parent: 'Account',
+      onClick: logout
+    }
   ].filter(({ users }) => (users & userLevel) > 0);
 
-  const desktopNavItems: JSX.Element[] = navItems.map(({ title, path }) => (
-    <NavLink
-      to={path}
-      key={title}
-      activeClassName={classes.activeLink}
-      className={classes.link}
-      exact={true}
-    >
-      {title}
-    </NavLink>
-  ));
+  const desktopNavItems: JSX.Element[] = navItems
+    .filter((nav) => !nav.parent)
+    .map(({ title, path }) => (
+      <NavLink
+        to={path}
+        key={title}
+        activeClassName={classes.activeLink}
+        className={classes.link}
+        exact={true}
+      >
+        {title}
+      </NavLink>
+    ));
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div>
@@ -194,14 +239,46 @@ export const Header: React.FC = () => {
 
             <div className={classes.spacing} />
             {userLevel > 0 && (
-              <NavLink
-                to="/settings"
-                activeClassName={classes.activeLink}
-                className={clsx(classes.link, classes.userLink)}
-                exact={true}
-              >
-                <UserIcon /> My Account
-              </NavLink>
+              <>
+                <NavLink
+                  to="/settings"
+                  activeClassName={classes.activeLink}
+                  className={clsx(classes.link, classes.userLink)}
+                  exact={true}
+                  onMouseOver={handleClick}
+                  onClick={handleClick}
+                >
+                  <UserIcon /> My Account
+                </NavLink>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center'
+                  }}
+                  getContentAnchorEl={null}
+                >
+                  {navItems
+                    .filter((nav) => nav.parent === 'Account')
+                    .map(({ title, path, onClick }) => (
+                      <MenuItem>
+                        <NavLink
+                          to={onClick ? '#' : path}
+                          key={title}
+                          className={classes.nestedLink}
+                          exact={true}
+                          onClick={onClick ? onClick : handleClose}
+                        >
+                          {title}
+                        </NavLink>
+                      </MenuItem>
+                    ))}
+                </Menu>
+              </>
             )}
           </Toolbar>
         </div>

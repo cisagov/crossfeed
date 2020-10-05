@@ -44,7 +44,7 @@ const MyResponsiveBar = ({
 }) => {
   return (
     <ResponsiveBar
-      data={data.map(e => ({ ...e, [xLabel]: e.value })) as any}
+      data={data.map((e) => ({ ...e, [xLabel]: e.value })) as any}
       keys={[xLabel]}
       indexBy="label"
       margin={{ top: 50, right: 130, bottom: longXValues ? 250 : 50, left: 60 }}
@@ -154,7 +154,7 @@ const Risk: React.FC = () => {
               name="showAll"
               label="Show all organizations"
               checked={showAll}
-              onChange={e => updateShowAll(e.target.checked)}
+              onChange={(e) => updateShowAll(e.target.checked)}
               className={classes.showAll}
             />
           )}
@@ -192,8 +192,31 @@ const Risk: React.FC = () => {
           </tbody>
         </React.Fragment>
       </Table> */}
+
       {stats && (
         <>
+          <h1>Vulnerabilities Breakdown</h1>
+          <div>
+            {stats.domains.numVulnerabilities.length > 0 && (
+              <div className={classes.chart}>
+                <h3>Domains with the Most Open Vulnerabilities</h3>
+                <MyResponsiveBar
+                  data={stats.domains.numVulnerabilities}
+                  xLabel={'Domain'}
+                  longXValues={true}
+                />
+              </div>
+            )}
+            {stats.vulnerabilities.severity.length > 0 && (
+              <div className={classes.chart}>
+                <h3>Severity Levels</h3>
+                <MyResponsivePie
+                  data={stats.vulnerabilities.severity}
+                  colors={getSeverityColor}
+                />
+              </div>
+            )}
+          </div>
           <h1>Technology Breakdown</h1>
           <div>
             {stats.domains.services.length > 0 && (
@@ -210,29 +233,6 @@ const Risk: React.FC = () => {
               <div className={classes.chart}>
                 <h3>Most common ports</h3>
                 <MyResponsiveBar data={stats.domains.ports} xLabel={'Port'} />
-              </div>
-            )}
-          </div>
-          <h1>Vulnerabilities Breakdown</h1>
-          <div>
-            {stats.vulnerabilities.severity.length > 0 && (
-              <div className={classes.chart}>
-                <h3>Severity Levels</h3>
-                <MyResponsivePie
-                  data={stats.vulnerabilities.severity}
-                  colors={getSeverityColor}
-                />
-              </div>
-            )}
-
-            {stats.domains.numVulnerabilities.length > 0 && (
-              <div className={classes.chart}>
-                <h3>Domains with the Most Open Vulnerabilities</h3>
-                <MyResponsiveBar
-                  data={stats.domains.numVulnerabilities}
-                  xLabel={'Domain'}
-                  longXValues={true}
-                />
               </div>
             )}
           </div>
