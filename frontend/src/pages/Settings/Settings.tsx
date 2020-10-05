@@ -1,7 +1,6 @@
 import React from 'react';
 import classes from './Settings.module.css';
 import { useAuthContext } from 'context';
-import { Button } from '@trussworks/react-uswds';
 
 const Settings: React.FC = () => {
   const { user } = useAuthContext();
