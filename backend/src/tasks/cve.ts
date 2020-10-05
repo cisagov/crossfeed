@@ -5,6 +5,8 @@ import { CommandOptions } from './ecs-client';
 import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { LessThan } from 'typeorm';
+import * as fs from 'fs';
+import * as zlib from 'zlib';
 
 /**
  * The CVE scan finds vulnerable CVEs affecting domains based on CPEs identified
@@ -99,12 +101,72 @@ const identifyPassiveCVEs = async (allDomains: Domain[]) => {
   await saveVulnerabilitiesToDb(vulnerabilities, false);
 };
 
+interface NvdFile {
+  CVE_Items: {
+    cve: {
+      CVE_data_meta: {
+        ID: string;
+      };
+      references: {
+        reference_data: {
+          url: string;
+          name: string;
+          refsource: string;
+          tags: string[];
+        }[];
+      };
+      description: {
+        description_data: {
+          lang: string;
+          value: string;
+        }[];
+      };
+    };
+  }[];
+}
+
 // Populate CVE information
 const populateVulnerabilities = async () => {
   const vulnerabilities = await Vulnerability.find({
     needsPopulation: true
   });
-  // TODO: Populate info of these vulnerabilities
+  const vulnerabilitiesMap: { [key: string]: Vulnerability[] } = {};
+  for (const vuln of vulnerabilities) {
+    if (vuln.cve) {
+      if (vulnerabilitiesMap[vuln.cve]) {
+        vulnerabilitiesMap[vuln.cve].push(vuln);
+      } else vulnerabilitiesMap[vuln.cve] = [vuln];
+    }
+  }
+  const filenames = await fs.promises.readdir('nvd-dump');
+  for (const file of filenames) {
+    // Only process yearly CVE files, e.g. nvdcve-1.1-2014.json.gz
+    if (!file.match(/nvdcve-1\.1-\d{4}\.json\.gz/)) continue;
+    const contents = await fs.promises.readFile('nvd-dump/' + file);
+    const unzipped = zlib.unzipSync(contents);
+    const parsed: NvdFile = JSON.parse(unzipped.toString());
+    for (const item of parsed.CVE_Items) {
+      const cve = item.cve.CVE_data_meta.ID;
+      if (vulnerabilitiesMap[cve]) {
+        console.log(cve);
+        const vulns = vulnerabilitiesMap[cve];
+        const description = item.cve.description.description_data.find(
+          (desc) => desc.lang === 'en'
+        );
+        for (const vuln of vulns) {
+          if (description) vuln.description = description.value;
+          vuln.references = item.cve.references.reference_data.map((r) => ({
+            url: r.url,
+            name: r.name,
+            source: r.refsource,
+            tags: r.tags
+          }));
+          vuln.needsPopulation = false;
+          await vuln.save();
+        }
+      }
+    }
+  }
 };
 
 // Closes vulnerabilities that haven't been seen recently
@@ -136,4 +198,6 @@ export const handler = async (commandOptions: CommandOptions) => {
     }
   });
   await closeVulnerabilities(openVulnerabilites);
+
+  await populateVulnerabilities();
 };

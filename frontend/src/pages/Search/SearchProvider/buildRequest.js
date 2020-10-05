@@ -31,7 +31,7 @@ function buildChildMatch(searchTerm) {
         fields: ['webpage_body']
       }
     }
-    : {};
+    : { match_all: {} };
 }
 
 /*
