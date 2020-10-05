@@ -59,27 +59,13 @@ describe('cve', () => {
     });
 
     const vulnerabilities = await Vulnerability.find({
-      domain
+      where: {
+        domain: domain,
+        service: service
+      }
     });
     expect(vulnerabilities.length).toEqual(2);
     for (const vulnerability of vulnerabilities) {
-      expect(vulnerability).toMatchSnapshot(
-        {
-          id: expect.any(String),
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-          actions: expect.any(Array)
-        },
-        'vulnerability'
-      );
-    }
-
-    //check that the service key is populated in the Vulnerability model
-    const vulnerabilities2 = await Vulnerability.find({
-      service
-    });
-    expect(vulnerabilities2.length).toEqual(2);
-    for (const vulnerability of vulnerabilities2) {
       expect(vulnerability).toMatchSnapshot(
         {
           id: expect.any(String),

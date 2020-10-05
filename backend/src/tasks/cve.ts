@@ -28,15 +28,13 @@ const identifyPassiveCVEs = async () => {
   });
   const hostsToCheck: Array<{
     domain: Domain;
+    service: Service;
     cpes: string[];
   }> = [];
 
-  const servicesToCheck = new Map();
-
   for (const domain of allDomains) {
-    const cpes = new Set<string>();
-
     for (const service of domain.services) {
+      const cpes = new Set<string>();
       for (const product of service.products) {
         if (
           product.cpe &&
@@ -49,17 +47,15 @@ const identifyPassiveCVEs = async () => {
               cpes.add(cpe + ':' + product.version);
             }
           }
-          if (!servicesToCheck.has(product.cpe + ':' + product.version)) {
-            servicesToCheck.set(product.cpe + ':' + product.version, service);
-          }
         }
       }
+      if (cpes.size > 0)
+        hostsToCheck.push({
+          domain: domain,
+          service: service,
+          cpes: Array.from(cpes)
+        });
     }
-    if (cpes.size > 0)
-      hostsToCheck.push({
-        domain: domain,
-        cpes: Array.from(cpes)
-      });
   }
 
   spawnSync('nvdsync', ['-cve_feed', 'cve-1.1.json.gz', 'nvd-dump'], {
@@ -84,7 +80,7 @@ const identifyPassiveCVEs = async () => {
     if (parts.length < 5) continue;
     const domain = hostsToCheck[parseInt(parts[0])].domain;
 
-    const service = servicesToCheck.get(parts[2]);
+    const service = hostsToCheck[parseInt(parts[0])].service;
 
     const cvss = parseFloat(parts[3]);
     let severity: string;
