@@ -108,7 +108,7 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
               value={resultsPerPage}
               onChange={(e) => setResultsPerPage(e.target.value as number)}
             >
-              {[10, 50, 100].map((perPage) => (
+              {[15, 45, 90].map((perPage) => (
                 <MenuItem key={perPage} value={perPage}>
                   {perPage}
                 </MenuItem>
