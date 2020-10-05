@@ -4,6 +4,22 @@ import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
 import { Checkbox, Grid } from '@trussworks/react-uswds';
+import {
+  ComposableMap,
+  Geographies,
+  GeographiesProps,
+  Geography,
+  GeographyProps
+} from 'react-simple-maps';
+import { ScaleQuantize, scaleLinear, ScaleLinear } from 'd3-scale';
+
+const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
+const geoCountyUrl =
+  'https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json';
+
+let colorScale = scaleLinear<string>()
+  .domain([0, 1])
+  .range(['#c7e8ff', '#135787']);
 
 const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
 
@@ -44,7 +60,7 @@ const MyResponsiveBar = ({
 }) => {
   return (
     <ResponsiveBar
-      data={data.map(e => ({ ...e, [xLabel]: e.value })) as any}
+      data={data.map((e) => ({ ...e, [xLabel]: e.value })) as any}
       keys={[xLabel]}
       indexBy="label"
       margin={{ top: 50, right: 130, bottom: longXValues ? 250 : 50, left: 60 }}
@@ -95,6 +111,7 @@ interface Stats {
   };
   vulnerabilities: {
     severity: Point[];
+    byOrg: Point[];
   };
 }
 
@@ -125,6 +142,10 @@ const Risk: React.FC = () => {
             }
       }
     });
+    const max = Math.max(...result.vulnerabilities.byOrg.map((p) => p.value));
+    colorScale = scaleLinear<string>()
+      .domain([0, Math.log(max)])
+      .range(['#c7e8ff', '#135787']);
     setStats(result);
   }, [showAll, apiPost, currentOrganization]);
 
@@ -154,7 +175,7 @@ const Risk: React.FC = () => {
               name="showAll"
               label="Show all organizations"
               checked={showAll}
-              onChange={e => updateShowAll(e.target.checked)}
+              onChange={(e) => updateShowAll(e.target.checked)}
               className={classes.showAll}
             />
           )}
@@ -192,6 +213,84 @@ const Risk: React.FC = () => {
           </tbody>
         </React.Fragment>
       </Table> */}
+      {user?.userType === 'globalView' ||
+        (user?.userType === 'globalAdmin' && (
+          <>
+            <div className={classes.chart}>
+              <h3>State vulnerabilities</h3>
+              <ComposableMap
+                projection="geoAlbersUsa"
+                style={{ width: '50%', display: 'block', margin: 'auto' }}
+              >
+                <Geographies geography={geoStateUrl}>
+                  {({ geographies }) =>
+                    geographies.map((geo) => {
+                      const cur = stats?.vulnerabilities.byOrg.find(
+                        (p) => p.label === geo.properties.name
+                      );
+                      return (
+                        <Geography
+                          key={geo.rsmKey}
+                          geography={geo}
+                          fill={colorScale(cur ? Math.log(cur.value) : 0)}
+                        />
+                      );
+                    })
+                  }
+                </Geographies>
+              </ComposableMap>
+            </div>
+            <div className={classes.chart}>
+              <h3>State vulnerabilities (counties)</h3>
+              <ComposableMap
+                projection="geoAlbersUsa"
+                style={{ width: '50%', display: 'block', margin: 'auto' }}
+              >
+                <Geographies geography={geoStateUrl}>
+                  {({ geographies }) =>
+                    geographies.map((geo) => {
+                      const cur = stats?.vulnerabilities.byOrg.find(
+                        (p) => p.label === geo.properties.name + ' Counties'
+                      );
+                      return (
+                        <Geography
+                          key={geo.rsmKey}
+                          geography={geo}
+                          fill={colorScale(cur ? Math.log(cur.value) : 0)}
+                        />
+                      );
+                    })
+                  }
+                </Geographies>
+              </ComposableMap>
+            </div>
+
+            <div className={classes.chart}>
+              <h3>County Vulnerabilities</h3>
+              <ComposableMap
+                projection="geoAlbersUsa"
+                style={{ width: '50%', display: 'block', margin: 'auto' }}
+              >
+                <Geographies geography={geoCountyUrl}>
+                  {({ geographies }) =>
+                    geographies.map((geo) => {
+                      const cur = stats?.domains.numVulnerabilities.find((p) =>
+                        p.label.includes(geo.properties.name.toLowerCase())
+                      );
+                      return (
+                        <Geography
+                          key={geo.rsmKey}
+                          geography={geo}
+                          fill={colorScale(cur ? Math.log(cur.value) : 0)}
+                        />
+                      );
+                    })
+                  }
+                </Geographies>
+              </ComposableMap>
+            </div>
+          </>
+        ))}
       {stats && (
         <>
           <h1>Technology Breakdown</h1>

@@ -20,6 +20,7 @@ interface Stats {
   };
   vulnerabilities: {
     severity: Point[];
+    byOrg: Point[];
   };
 }
 
@@ -103,6 +104,15 @@ export const get = wrapHandler(async (event) => {
       .innerJoinAndSelect('domain.organization', 'organization')
       .select('count(*) as value')
   );
+  const byOrg = await performQuery(
+    Domain.createQueryBuilder('domain')
+      .innerJoinAndSelect('domain.organization', 'organization')
+      .innerJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
+      .andWhere("vulnerabilities.state = 'open'")
+      .select('organization.name as id, count(*) as value')
+      .groupBy('organization.name')
+      .orderBy('value', 'DESC')
+  );
   const result: Stats = {
     domains: {
       services,
@@ -111,7 +121,8 @@ export const get = wrapHandler(async (event) => {
       total: total[0].value
     },
     vulnerabilities: {
-      severity
+      severity,
+      byOrg
     }
   };
   return {
