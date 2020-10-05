@@ -15,6 +15,7 @@ export const SearchProvider: React.FC = ({ children }) => {
   const config = {
     debug: true,
     alwaysSearchOnInitialLoad: true,
+
     onResultClick: () => {
       /* Not implemented */
     },
