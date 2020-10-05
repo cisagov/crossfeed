@@ -151,7 +151,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Ports</h4>
             {domain.services.map((service) => (
-              <Accordion className={classes.accordion}>
+              <Accordion className={classes.accordion} key={service.id}>
                 <AccordionSummary>
                   <Typography className={classes.accordionHeading}>
                     {service.port}
@@ -188,7 +188,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Vulnerabilities</h4>
             {domain.vulnerabilities.map((vuln) => (
-              <Accordion className={classes.accordion}>
+              <Accordion className={classes.accordion} key={vuln.id}>
                 <AccordionSummary>
                   <Typography className={classes.accordionHeading}>
                     {vuln.cve}
