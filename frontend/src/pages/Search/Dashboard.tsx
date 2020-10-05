@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { SearchBar, DomainDetails } from 'components';
+import { SearchBar, DomainDetails, TablePaginationActions } from 'components';
 import { ResultCard } from './ResultCard';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Paper, TablePagination } from '@material-ui/core';
 import { withSearch } from '@elastic/react-search-ui';
 import { FilterDrawer } from './FilterDrawer';
 import { ContextType } from './SearchProvider';
@@ -9,7 +9,10 @@ import { FilterTags } from './FilterTags';
 
 export const DashboardUI: React.FC<ContextType> = (props) => {
   const {
-    // current,
+    current,
+    setCurrent,
+    resultsPerPage,
+    setResultsPerPage,
     searchTerm,
     setSearchTerm,
     filters,
@@ -67,6 +70,20 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
             {selectedDomain && <DomainDetails domainId={selectedDomain} />}
           </div>
         </div>
+        <Paper classes={{ root: classes.pagination }}>
+          <TablePagination
+            component="div"
+            count={totalResults}
+            page={current - 1}
+            onChangePage={(_, page) => setCurrent(page + 1)}
+            rowsPerPage={resultsPerPage ?? 20}
+            onChangeRowsPerPage={(e) =>
+              setResultsPerPage(parseInt(e?.target.value) ?? 20)
+            }
+            rowsPerPageOptions={[5, 10, 20, 50, 100]}
+            ActionsComponent={TablePaginationActions}
+          />
+        </Paper>
       </div>
     </div>
   );
@@ -84,6 +101,10 @@ export const Dashboard = withSearch(
     setSearchTerm,
     autocompletedResults,
     clearFilters,
+    resultsPerPage,
+    setResultsPerPage,
+    current,
+    setCurrent
   }: ContextType) => ({
     addFilter,
     removeFilter,
@@ -94,7 +115,11 @@ export const Dashboard = withSearch(
     searchTerm,
     setSearchTerm,
     autocompletedResults,
-    clearFilters
+    clearFilters,
+    resultsPerPage,
+    setResultsPerPage,
+    current,
+    setCurrent
   })
 )(DashboardUI);
 
@@ -140,5 +165,13 @@ const useStyles = makeStyles(() => ({
     overflowY: 'auto',
     padding: '0 1rem 2rem 1rem',
     flex: '0 0 50%'
+  },
+  pagination: {
+    height: 'auto',
+    flex: 0,
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    justifyContent: 'flex-end',
+    padding: '0 2rem'
   }
 }));

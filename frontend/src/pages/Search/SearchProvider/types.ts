@@ -27,9 +27,9 @@ export interface ContextType {
   results: Result[];
   resultsPerPage: number;
   searchTerm: string;
-  setCurrent(): void;
+  setCurrent(current: number): void;
   setFilter(): void;
-  setResultsPerPage(): void;
+  setResultsPerPage(count: number): void;
   setSort(): void;
   sortDirection: string;
   sortField: string;
