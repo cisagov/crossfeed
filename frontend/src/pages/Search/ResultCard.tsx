@@ -173,7 +173,8 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     marginBottom: '1rem',
     border: ({ selected }: Props) =>
-      selected ? '2px solid #28A0CB' : '2px solid #DCDEE0',
+      selected ? `2px solid ${theme.palette.primary.main}` : 'none',
+    boxShadow: '0px 1px 6px rgba(0, 0, 0, 0.25)',
     '& em': {
       fontStyle: 'normal',
       backgroundColor: 'yellow'

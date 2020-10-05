@@ -38,7 +38,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    border: '2px solid #28A0CB',
+    border: `2px solid ${theme.palette.primary.main}`,
     marginBottom: '1rem'
   },
   inner: {
