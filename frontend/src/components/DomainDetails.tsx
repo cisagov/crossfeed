@@ -244,6 +244,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
 const useStyles = makeStyles((theme) => ({
   root: {
     border: `2px solid ${theme.palette.primary.main}`,
+    boxShadow: '0px 1px 6px rgba(0, 0, 0, 0.25)',
     marginBottom: '1rem',
     '& *:focus': {
       outline: 'none !important'
