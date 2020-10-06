@@ -5,11 +5,14 @@ import {
   Domain,
   Scan,
   Service,
-  Vulnerability
+  Vulnerability,
+  Webpage
 } from '../../models';
 
 jest.mock('../es-client');
-const { updateDomains } = require('../es-client');
+jest.mock('../s3-client');
+const { updateDomains, updateWebpages } = require('../es-client');
+const { getWebpageBody } = require('../s3-client');
 
 describe('search_sync', () => {
   let organization;
@@ -23,17 +26,6 @@ describe('search_sync', () => {
       ipBlocks: [],
       isPassive: false
     }).save();
-  });
-  test('no domains', async () => {
-    await searchSync({
-      organizationId: organization.id,
-      organizationName: 'organizationName',
-      scanId: 'scanId',
-      scanName: 'scanName',
-      scanTaskId: 'scanTaskId'
-    });
-
-    expect(updateDomains).not.toBeCalled();
   });
 
   test('should not update already-synced domains', async () => {
@@ -239,6 +231,9 @@ describe('search_sync', () => {
     });
 
     expect(updateDomains).toBeCalled();
+    expect(
+      Object.keys((updateDomains as jest.Mock).mock.calls[0][0][0])
+    ).toMatchSnapshot();
 
     const domains = updateDomains.mock.calls[0][0];
     expect(domains.length).toEqual(1);
@@ -251,5 +246,86 @@ describe('search_sync', () => {
 
     const newDomain = await Domain.findOneOrFail(domain.id);
     expect(newDomain.syncedAt).not.toEqual(domain.syncedAt);
+  });
+
+  test('should not sync webpages when webpages have already been synced', async () => {
+    const domain = await Domain.create({
+      name: 'cisa.gov',
+      organization
+    }).save();
+
+    const webpage = await Webpage.create({
+      domain,
+      url: 'https://cisa.gov/123',
+      status: 200,
+      updatedAt: new Date('9999-08-23T03:36:57.231Z'),
+      syncedAt: new Date('9999-08-30T03:36:57.231Z')
+    }).save();
+
+    await searchSync({
+      domainId: domain.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    expect(updateWebpages).not.toBeCalled();
+  });
+
+  test('should sync webpages when webpages have never been synced', async () => {
+    const domain = await Domain.create({
+      name: 'cisa.gov',
+      organization
+    }).save();
+
+    let webpage = await Webpage.create({
+      domain,
+      url: 'https://cisa.gov/123',
+      status: 200,
+      updatedAt: new Date('9999-08-23T03:36:57.231Z'),
+      s3Key: 'testS3key'
+    }).save();
+
+    await searchSync({
+      domainId: domain.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    expect(updateWebpages).toBeCalled();
+    expect(
+      Object.keys((updateWebpages as jest.Mock).mock.calls[0][0][0])
+    ).toMatchSnapshot();
+
+    expect(getWebpageBody).toHaveBeenCalled();
+    expect((getWebpageBody as jest.Mock).mock.calls[0]).toMatchSnapshot();
+
+    webpage = (await Webpage.findOne(webpage.id)) as Webpage;
+    expect(webpage.syncedAt).toBeTruthy();
+  });
+
+  test('should sync webpages when webpages have been updated since being synced', async () => {
+    const domain = await Domain.create({
+      name: 'cisa.gov',
+      organization
+    }).save();
+
+    const webpage = await Webpage.create({
+      domain,
+      url: 'https://cisa.gov/123',
+      status: 200,
+      updatedAt: new Date('9999-08-30T03:36:57.231Z'),
+      syncedAt: new Date('9999-08-23T03:36:57.231Z')
+    }).save();
+
+    await searchSync({
+      domainId: domain.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    expect(updateWebpages).toBeCalled();
   });
 });

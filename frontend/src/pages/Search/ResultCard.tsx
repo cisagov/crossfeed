@@ -3,10 +3,49 @@ import clsx from 'classnames';
 import { makeStyles, Paper } from '@material-ui/core';
 import { Result } from './SearchProvider';
 import { parseISO, formatDistanceToNow } from 'date-fns';
+import { sanitize } from 'dompurify';
+
+// Sync this with the backend client in es-client.ts.
+export interface WebpageRecord {
+  webpage_id: string,
+  webpage_createdAt: Date,
+  webpage_updatedAt: Date,
+  webpage_syncedAt: Date,
+  webpage_lastSeen: Date,
+  webpage_s3Key: string,
+  webpage_url: string,
+  webpage_status: string | number,
+  webpage_domainId: string,
+  webpage_discoveredById: string,
+  
+  // Added before elasticsearch insertion (not present in the database):
+  suggest?: { input: string | string[]; weight: number }[];
+  parent_join?: {
+    name: "webpage",
+    parent: string;
+  }
+  webpage_body?: string;
+}
+
+interface Highlight {
+  webpage_body: string[]
+}
 
 interface Props extends Result {
   onDomainSelected(domainId: string): void;
   selected?: boolean;
+  inner_hits?: {
+    webpage?: {
+      hits: {
+        hits: {_source: WebpageRecord, highlight: Highlight}[],
+        max_score: number,
+        total: {
+          value: number,
+          relation: string
+        }
+      }
+    }
+  }
 }
 
 export const ResultCard: React.FC<Props> = (props) => {
@@ -18,6 +57,7 @@ export const ResultCard: React.FC<Props> = (props) => {
     updatedAt,
     services,
     vulnerabilities,
+    inner_hits,
     onDomainSelected
   } = props;
 
@@ -74,6 +114,23 @@ export const ResultCard: React.FC<Props> = (props) => {
       value: cves.join(', ')
     });
   }
+  if (inner_hits?.webpage?.hits?.hits?.length! > 0) {
+    const { hits } = inner_hits!.webpage!.hits!;
+    console.warn(hits.map(e => e._source.webpage_body));
+    console.warn(hits.map(e => e.highlight));
+    data.push({
+      label: `matching webpage${hits.length > 1 ? 's' : ''}`,
+      count: hits.length,
+      value: hits.map(e => <div>
+        <small>
+        <strong>{e._source.webpage_url}</strong><br />
+        {e.highlight?.webpage_body?.map(body => <div>
+          <code dangerouslySetInnerHTML={{__html: sanitize(body, { ALLOWED_TAGS: ['em']})}} />
+        </div> )}
+        </small>
+      </div>)
+    });
+  }
 
   return (
     <Paper elevation={0} classes={{ root: classes.root }}>
@@ -116,7 +173,11 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     marginBottom: '1rem',
     border: ({ selected }: Props) =>
-      selected ? '2px solid #28A0CB' : '2px solid #DCDEE0'
+      selected ? '2px solid #28A0CB' : '2px solid #DCDEE0',
+    '& em': {
+      fontStyle: 'normal',
+      backgroundColor: 'yellow'
+    }
   },
   inner: {
     padding: '1.5rem'

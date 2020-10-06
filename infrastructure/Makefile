@@ -7,4 +7,4 @@ plan:
 apply:
 	dotenv -- terraform apply plan 
 format:
-	terraform fmt -recursive -check -diff
+	terraform fmt -recursive

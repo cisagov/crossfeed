@@ -3,11 +3,16 @@ import * as zlib from 'zlib';
 import * as nock from 'nock';
 import * as path from 'path';
 import * as fs from 'fs';
+import {
+  connectToDatabase,
+  Domain,
+  Organization,
+  Scan,
+  Service
+} from '../../models';
+import { O_DIRECT } from 'constants';
 
 jest.mock('../helpers/getCensysIpv4Data');
-jest.mock('../helpers/saveDomainsToDb');
-jest.mock('../helpers/saveServicesToDb');
-jest.mock('../helpers/getAllDomains');
 
 const RealDate = Date;
 
@@ -22,13 +27,113 @@ const authHeaders = {
 };
 
 describe('censys ipv4', () => {
-  beforeEach(() => {
+  let organization;
+  let scan;
+  beforeEach(async () => {
+    await connectToDatabase();
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
+    organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    scan = await Scan.create({
+      name: 'censysIpv4',
+      arguments: {},
+      frequency: 999
+    }).save();
+    await Domain.create({
+      name: 'first_file_testdomain1',
+      ip: '153.126.148.60',
+      organization
+    }).save();
+    await Domain.create({
+      name: 'first_file_testdomain2',
+      ip: '31.134.10.156',
+      organization
+    }).save();
+    await Domain.create({
+      name: 'first_file_testdomain3',
+      ip: '153.126.148.61',
+      organization
+    }).save();
+    await Domain.create({
+      name: 'first_file_testdomain4',
+      ip: '85.24.146.152',
+      organization
+    }).save();
+    await Domain.create({
+      name: 'first_file_testdomain5',
+      ip: '45.79.207.117',
+      organization
+    }).save();
+    await Domain.create({
+      name: 'first_file_testdomain6',
+      ip: '156.249.159.119',
+      organization
+    }).save();
+    await Domain.create({
+      name: 'first_file_testdomain7',
+      ip: '221.10.15.220',
+      organization
+    }).save();
+    await Domain.create({
+      name: 'first_file_testdomain8',
+      ip: '81.141.166.145',
+      organization
+    }).save();
+    await Domain.create({
+      name: 'first_file_testdomain9',
+      ip: '24.65.82.187',
+      organization
+    }).save();
+    await Domain.create({
+      name: 'first_file_testdomain10',
+      ip: '52.74.149.117',
+      organization
+    }).save();
+    await Domain.create({
+      name: 'first_file_testdomain11',
+      ip: '31.134.10.156',
+      organization
+    }).save();
+    await Domain.create({
+      name: 'first_file_testdomain12',
+      ip: '1.1.1.1',
+      organization
+    }).save();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     global.Date = RealDate;
   });
+
+  const checkDomains = async (organization) => {
+    const domains = await Domain.find({
+      where: { organization },
+      relations: ['organization', 'services']
+    });
+    expect(
+      domains
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((e) => ({
+          ...e,
+          services: e.services.map((s) => ({
+            ...s,
+            id: null,
+            updatedAt: null,
+            createdAt: null
+          })),
+          organization: null,
+          id: null,
+          updatedAt: null,
+          createdAt: null,
+          syncedAt: null
+        }))
+    ).toMatchSnapshot();
+    expect(domains.filter((e) => !e.organization).length).toEqual(0);
+  };
 
   test('basic test', async () => {
     nock('https://censys.io', authHeaders)
@@ -122,20 +227,23 @@ describe('censys ipv4', () => {
     });
 
     nock('https://data-01.censys.io', authHeaders)
+      .persist()
       .get('/snapshots/ipv4/20200719/first_file.json.gz')
       .reply(200, zlib.gzipSync(firstFileContents))
       .get('/snapshots/ipv4/20200719/second_file.json.gz')
       .reply(200, zlib.gzipSync(secondFileContents));
     jest.setTimeout(30000);
     await censysIpv4({
-      organizationId: 'organizationId',
+      organizationId: organization.id,
       organizationName: 'organizationName',
-      scanId: '0dacd0d9-294b-4bb5-a3b9-afe70cf5acff',
+      scanId: scan.id,
       scanName: 'scanName',
       scanTaskId: 'scanTaskId',
       chunkNumber: 0,
       numChunks: 1
     });
+
+    await checkDomains(organization);
   });
 
   test('http failure should retry', async () => {
@@ -173,14 +281,16 @@ describe('censys ipv4', () => {
 
     jest.setTimeout(30000);
     await censysIpv4({
-      organizationId: 'organizationId',
+      organizationId: organization.id,
       organizationName: 'organizationName',
-      scanId: '739c1517-5afb-4665-a577-d6429883edd2',
+      scanId: scan.id,
       scanName: 'scanName',
       scanTaskId: 'scanTaskId',
       chunkNumber: 0,
       numChunks: 1
     });
+
+    await checkDomains(organization);
   });
 
   test('repeated http failures should throw an error', async () => {
@@ -216,14 +326,16 @@ describe('censys ipv4', () => {
     jest.setTimeout(30000);
     await expect(
       censysIpv4({
-        organizationId: 'organizationId',
+        organizationId: organization.id,
         organizationName: 'organizationName',
-        scanId: '388de975-5816-4ec4-b84f-f2070fe68a58',
+        scanId: scan.id,
         scanName: 'scanName',
         scanTaskId: 'scanTaskId',
         chunkNumber: 0,
         numChunks: 1
       })
     ).rejects.toThrow('Response code 429');
+
+    await checkDomains(organization);
   });
 });

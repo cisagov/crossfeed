@@ -22,6 +22,7 @@ import { Grid, Checkbox, Dropdown } from '@trussworks/react-uswds';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, parseISO, format } from 'date-fns';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 
 export interface ApiResponse {
   result: Vulnerability[];
@@ -31,6 +32,8 @@ export interface ApiResponse {
 const formatDate = (date: string) => {
   return format(parseISO(date), 'MM-dd-yyyy');
 };
+
+const extLink = <FaExternalLinkAlt style={{ width: 12 }}></FaExternalLinkAlt>;
 
 const stateMap: { [key: string]: string } = {
   unconfirmed: 'Unconfirmed',
@@ -44,33 +47,36 @@ export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
   const { original } = row;
   return (
     <div className={classes.expandedRoot}>
-      <h4>Details</h4>
+      <h3>Details</h3>
       <div className={classes.desc}>
-        {original.cve && (
-          <a
-            href={`https://nvd.nist.gov/vuln/detail/${original.cve}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View vulnerability description
-          </a>
-        )}
-        <h3>Vulnerability history</h3>
-        {original.actions.map((action, num) => {
-          const val = action.automatic ? (
-            <>Vulnerability automatically marked as remediated</>
-          ) : (
-            <>
-              State changed to {action.state} (
-              {stateMap[action.substate].toLowerCase()}) by {action.userName}
-            </>
-          );
-          return (
-            <p key={num}>
-              {val} on {formatDate(action.date)}
+        <p>{original.description}</p>
+        <h4>References</h4>
+        {original.references &&
+          original.references.map((ref, index) => (
+            <p key={index}>
+              <a href={ref.url} target="_blank" rel="noopener noreferrer">
+                {ref.url} {extLink}
+              </a>
+              {ref.tags.length > 0 ? ' - ' + ref.tags.join(',') : ''}
             </p>
-          );
-        })}
+          ))}
+        <h4>Vulnerability history</h4>
+        {original.actions &&
+          original.actions.map((action, index) => {
+            const val = action.automatic ? (
+              <>Vulnerability automatically marked as remediated</>
+            ) : (
+              <>
+                State changed to {action.state} (
+                {stateMap[action.substate].toLowerCase()}) by {action.userName}
+              </>
+            );
+            return (
+              <p key={index}>
+                {val} on {formatDate(action.date)}
+              </p>
+            );
+          })}
         <p>Vulnerability opened on {formatDate(original.createdAt)}</p>
       </div>
     </div>
@@ -90,6 +96,15 @@ export const Vulnerabilities: React.FC = () => {
     {
       Header: 'Title',
       accessor: 'title',
+      Cell: ({ value, row }: CellProps<Vulnerability>) => (
+        <a
+          href={`https://nvd.nist.gov/vuln/detail/${row.original.cve}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {value} {extLink}
+        </a>
+      ),
       width: 800,
       Filter: ColumnFilter
     },
@@ -100,6 +115,14 @@ export const Vulnerabilities: React.FC = () => {
         <Link to={`/domain/${domain.id}`}>{domain?.name}</Link>
       ),
       width: 800,
+      Filter: ColumnFilter
+    },
+    // To replace with product once we store that with vulnerabilities
+    {
+      Header: 'Product',
+      id: 'cpe',
+      accessor: 'cpe',
+      width: 100,
       Filter: ColumnFilter
     },
     {
@@ -123,7 +146,15 @@ export const Vulnerabilities: React.FC = () => {
       width: 100,
       maxWidth: 200,
       accessor: 'state',
-      Filter: selectFilter(['open', 'closed']),
+      Filter: selectFilter([
+        'open',
+        'open (unconfirmed)',
+        'open (exploitable)',
+        'closed',
+        'closed (false positive)',
+        'closed (accepted risk)',
+        'closed (remediated)'
+      ]),
       Cell: ({ row }: CellProps<Vulnerability>) => (
         <Dropdown
           id="state-dropdown"
@@ -189,7 +220,9 @@ export const Vulnerabilities: React.FC = () => {
       pageSize: number = 25
     ): Promise<ApiResponse | undefined> => {
       try {
-        const tableFilters = filters
+        const tableFilters: {
+          [key: string]: string | undefined;
+        } = filters
           .filter((f) => Boolean(f.value))
           .reduce(
             (accum, next) => ({
@@ -198,7 +231,16 @@ export const Vulnerabilities: React.FC = () => {
             }),
             {}
           );
-        console.log(filters);
+        // If not open or closed, substitute for appropriate substate
+        if (
+          tableFilters['state'] &&
+          !['open', 'closed'].includes(tableFilters['state'])
+        ) {
+          const substate = tableFilters['state']!.match(/\((.*)\)/)?.pop();
+          if (substate)
+            tableFilters['substate'] = substate.toLowerCase().replace(' ', '-');
+          delete tableFilters['state'];
+        }
         return await apiPost<ApiResponse>('/vulnerabilities/search', {
           body: {
             page,
@@ -242,7 +284,12 @@ export const Vulnerabilities: React.FC = () => {
     let page = 0;
     while (true) {
       page += 1;
-      const { count, result } = await vulnerabilitiesSearch(filters, sortBy, page, 100) as ApiResponse;
+      const { count, result } = (await vulnerabilitiesSearch(
+        filters,
+        sortBy,
+        page,
+        100
+      )) as ApiResponse;
       allVulns = allVulns.concat(result || []);
       if (count <= page * 100) break;
     }
@@ -292,7 +339,9 @@ export const Vulnerabilities: React.FC = () => {
         fetchData={fetchVulnerabilities}
         renderExpanded={renderExpandedVulnerability}
         tableRef={tableRef}
-        initialFilterBy={[{ id: 'state', value: 'open' }]}
+        initialFilterBy={[
+          { id: 'state', value: showAll ? 'open (exploitable)' : 'open' }
+        ]}
       />
       <Export<Vulnerability>
         name="vulnerabilities"

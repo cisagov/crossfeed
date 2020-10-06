@@ -79,8 +79,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: true,
-    cpu: '1024',
-    memory: '4096',
+    cpu: '2048',
+    memory: '6144',
     numChunks: 20,
     description: 'Fetch passive port and banner data from censys ipv4 dataset'
   },
@@ -96,6 +96,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: true,
+    cpu: '1024',
+    memory: '4096',
     description:
       'Syncs records with Elasticsearch so that they appear in search results.'
   },
@@ -105,6 +107,14 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: false,
     description:
       'Open source tool that fingerprints web technologies based on HTTP responses'
+  },
+  webscraper: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    cpu: '1024',
+    memory: '4096',
+    description: 'Scrapes all webpages on a given domain, respecting robots.txt'
   }
 };
 

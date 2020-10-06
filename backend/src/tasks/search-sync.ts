@@ -1,12 +1,14 @@
-import { Domain, connectToDatabase, Vulnerability } from '../models';
+import { Domain, connectToDatabase, Vulnerability, Webpage } from '../models';
 import { CommandOptions } from './ecs-client';
 import { In } from 'typeorm';
-import ESClient from './es-client';
+import ESClient, { WebpageRecord } from './es-client';
+import S3Client from './s3-client';
+import PQueue from 'p-queue';
 
 const MAX_RESULTS = 500;
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { organizationId } = commandOptions;
+  const { organizationId, domainId } = commandOptions;
 
   console.log('Running searchSync');
   await connectToDatabase();
@@ -31,6 +33,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     .take(MAX_RESULTS);
 
   if (organizationId) {
+    // This parameter is used for testing only
     qs.where('organization.id=:org', { org: organizationId });
   }
 
@@ -52,5 +55,53 @@ export const handler = async (commandOptions: CommandOptions) => {
     console.log('Domain sync complete.');
   } else {
     console.log('Not syncing any domains.');
+  }
+
+  console.log('Retrieving webpages...');
+  const qs_ = Webpage.createQueryBuilder('webpage').where(
+    '(webpage.updatedAt > webpage.syncedAt OR webpage.syncedAt is null)'
+  );
+  // .orWhere('');
+
+  if (domainId) {
+    // This parameter is used for testing only
+    qs_.andWhere('webpage."domainId" = :id', { id: domainId });
+  }
+
+  // The response actually has keys "webpage_id", "webpage_createdAt", etc.
+  const s3Client = new S3Client();
+  const queue = new PQueue({ concurrency: 10 });
+  const webpages: WebpageRecord[] = await qs_.take(100).execute();
+  console.log(
+    `Got ${webpages.length} webpages. Retrieving body of each webpage...`
+  );
+  for (const i in webpages) {
+    const webpage = webpages[i];
+    if (webpage.webpage_s3Key) {
+      queue.add(async () => {
+        webpage.webpage_body = await s3Client.getWebpageBody(
+          webpage.webpage_s3Key
+        );
+        if (Number(i) % 100 == 0) {
+          console.log(`Finished: ${i}`);
+        }
+      });
+    }
+  }
+  await queue.onIdle();
+
+  if (webpages.length) {
+    console.log(`Syncing ${webpages.length} webpages...`);
+    const results = await client.updateWebpages(webpages);
+    console.warn(results);
+
+    await Webpage.createQueryBuilder('webpage')
+      .update(Webpage)
+      .set({ syncedAt: new Date(Date.now()) })
+      .where({ id: In(webpages.map((e) => e.webpage_id)) })
+      .execute();
+    console.log('Webpage sync complete.');
+  } else {
+    console.log('Not syncing any webpages.');
   }
 };

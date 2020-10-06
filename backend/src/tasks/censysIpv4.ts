@@ -123,7 +123,7 @@ const downloadPath = async (
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { chunkNumber, numChunks } = commandOptions;
+  const { chunkNumber, numChunks, organizationId } = commandOptions;
 
   if (chunkNumber === undefined || numChunks === undefined) {
     throw new Error('Chunks not specified.');
@@ -143,13 +143,17 @@ export const handler = async (commandOptions: CommandOptions) => {
     { relations: ['organizations'] }
   );
 
-  const orgs = scan?.organizations?.length
+  // censysIpv4 is a global scan, so organizationId is only specified for tests.
+  // Otherwise, scan.organizations can be used for granular control of censys.
+  const orgs = organizationId
+    ? [organizationId]
+    : scan?.organizations?.length
     ? undefined
     : scan?.organizations.map((org) => org.id);
 
   const allDomains = await getAllDomains(orgs);
 
-  const queue = new PQueue({ concurrency: 5 });
+  const queue = new PQueue({ concurrency: 2 });
 
   const numFiles = Object.keys(files).length;
   const fileNames = Object.keys(files).sort();

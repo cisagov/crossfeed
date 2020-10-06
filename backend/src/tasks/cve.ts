@@ -1,10 +1,18 @@
-import { Domain, connectToDatabase, Vulnerability, Product } from '../models';
+import {
+  Domain,
+  connectToDatabase,
+  Vulnerability,
+  Product,
+  Service
+} from '../models';
 import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { LessThan } from 'typeorm';
+import * as fs from 'fs';
+import * as zlib from 'zlib';
 
 /**
  * The CVE scan finds vulnerable CVEs affecting domains based on CPEs identified
@@ -15,19 +23,16 @@ const productMap = {
 };
 
 // Scan for new vulnerabilities based on version numbers
-const identifyPassiveCVEs = async () => {
-  const allDomains = await Domain.find({
-    select: ['id', 'name', 'ip'],
-    relations: ['services']
-  });
+const identifyPassiveCVEs = async (allDomains: Domain[]) => {
   const hostsToCheck: Array<{
     domain: Domain;
+    service: Service;
     cpes: string[];
   }> = [];
-  for (const domain of allDomains) {
-    const cpes = new Set<string>();
 
+  for (const domain of allDomains) {
     for (const service of domain.services) {
+      const cpes = new Set<string>();
       for (const product of service.products) {
         if (
           product.cpe &&
@@ -42,12 +47,17 @@ const identifyPassiveCVEs = async () => {
           }
         }
       }
+      if (cpes.size > 0)
+        hostsToCheck.push({
+          domain: domain,
+          service: service,
+          cpes: Array.from(cpes)
+        });
     }
-    if (cpes.size > 0)
-      hostsToCheck.push({
-        domain: domain,
-        cpes: Array.from(cpes)
-      });
+  }
+  if (hostsToCheck.length === 0) {
+    console.warn('No hosts to check - no domains with CPEs found.');
+    return;
   }
 
   spawnSync('nvdsync', ['-cve_feed', 'cve-1.1.json.gz', 'nvd-dump'], {
@@ -65,13 +75,14 @@ const identifyPassiveCVEs = async () => {
     "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 -require_version nvd-dump/nvdcve-1.1-2*.json.gz",
     { input: input, maxBuffer: buffer.constants.MAX_LENGTH }
   );
-
   const split = String(res).split('\n');
   const vulnerabilities: Vulnerability[] = [];
   for (const line of split) {
     const parts = line.split(' ');
     if (parts.length < 5) continue;
     const domain = hostsToCheck[parseInt(parts[0])].domain;
+
+    const service = hostsToCheck[parseInt(parts[0])].service;
 
     const cvss = parseFloat(parts[3]);
     let severity: string;
@@ -92,29 +103,84 @@ const identifyPassiveCVEs = async () => {
         cpe: parts[2],
         cvss,
         severity,
-        state: 'open'
+        state: 'open',
+        service: service
       })
     );
   }
   await saveVulnerabilitiesToDb(vulnerabilities, false);
 };
 
+interface NvdFile {
+  CVE_Items: {
+    cve: {
+      CVE_data_meta: {
+        ID: string;
+      };
+      references: {
+        reference_data: {
+          url: string;
+          name: string;
+          refsource: string;
+          tags: string[];
+        }[];
+      };
+      description: {
+        description_data: {
+          lang: string;
+          value: string;
+        }[];
+      };
+    };
+  }[];
+}
+
 // Populate CVE information
 const populateVulnerabilities = async () => {
   const vulnerabilities = await Vulnerability.find({
     needsPopulation: true
   });
-  // TODO: Populate info of these vulnerabilities
+  const vulnerabilitiesMap: { [key: string]: Vulnerability[] } = {};
+  for (const vuln of vulnerabilities) {
+    if (vuln.cve) {
+      if (vulnerabilitiesMap[vuln.cve]) {
+        vulnerabilitiesMap[vuln.cve].push(vuln);
+      } else vulnerabilitiesMap[vuln.cve] = [vuln];
+    }
+  }
+  const filenames = await fs.promises.readdir('nvd-dump');
+  for (const file of filenames) {
+    // Only process yearly CVE files, e.g. nvdcve-1.1-2014.json.gz
+    if (!file.match(/nvdcve-1\.1-\d{4}\.json\.gz/)) continue;
+    const contents = await fs.promises.readFile('nvd-dump/' + file);
+    const unzipped = zlib.unzipSync(contents);
+    const parsed: NvdFile = JSON.parse(unzipped.toString());
+    for (const item of parsed.CVE_Items) {
+      const cve = item.cve.CVE_data_meta.ID;
+      if (vulnerabilitiesMap[cve]) {
+        console.log(cve);
+        const vulns = vulnerabilitiesMap[cve];
+        const description = item.cve.description.description_data.find(
+          (desc) => desc.lang === 'en'
+        );
+        for (const vuln of vulns) {
+          if (description) vuln.description = description.value;
+          vuln.references = item.cve.references.reference_data.map((r) => ({
+            url: r.url,
+            name: r.name,
+            source: r.refsource,
+            tags: r.tags
+          }));
+          vuln.needsPopulation = false;
+          await vuln.save();
+        }
+      }
+    }
+  }
 };
 
 // Closes vulnerabilities that haven't been seen recently
-const closeVulnerabilities = async () => {
-  const openVulnerabilites = await Vulnerability.find({
-    where: {
-      state: 'open',
-      lastSeen: LessThan(new Date(new Date().setDate(new Date().getDate() - 2)))
-    }
-  });
+const closeVulnerabilities = async (openVulnerabilites: Vulnerability[]) => {
   for (const vulnerability of openVulnerabilites) {
     vulnerability.setState('remediated', true, null);
     await vulnerability.save();
@@ -124,7 +190,24 @@ const closeVulnerabilities = async () => {
 export const handler = async (commandOptions: CommandOptions) => {
   console.log('Running cve detection globally');
 
+  // CVE is a global scan; organizationId is used only for testing.
+  const { organizationId } = commandOptions;
+
   await connectToDatabase();
-  await identifyPassiveCVEs();
-  await closeVulnerabilities();
+  const allDomains = await Domain.find({
+    select: ['id', 'name', 'ip'],
+    relations: ['services'],
+    where: organizationId ? { organization: { id: organizationId } } : undefined
+  });
+  await identifyPassiveCVEs(allDomains);
+
+  const openVulnerabilites = await Vulnerability.find({
+    where: {
+      state: 'open',
+      lastSeen: LessThan(new Date(new Date().setDate(new Date().getDate() - 2)))
+    }
+  });
+  await closeVulnerabilities(openVulnerabilites);
+
+  await populateVulnerabilities();
 };

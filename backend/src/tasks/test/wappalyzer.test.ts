@@ -1,7 +1,7 @@
 import { mocked } from 'ts-jest/utils';
-import getLiveWebsites from '../helpers/getLiveWebsites';
+import { getLiveWebsites, LiveDomain } from '../helpers/getLiveWebsites';
 import * as wappalyzer from 'simple-wappalyzer';
-import { Domain, Service, connectToDatabase } from '../../models';
+import { Domain, Service, connectToDatabase, Organization } from '../../models';
 import { CommandOptions } from '../ecs-client';
 import { handler } from '../wappalyzer';
 import * as nock from 'nock';
@@ -46,14 +46,15 @@ const commandOptions: CommandOptions = {
 };
 
 describe('wappalyzer', () => {
-  let testDomain: Domain;
+  let testDomain: LiveDomain;
 
   beforeAll(async () => {
     await connectToDatabase();
   });
 
   beforeEach(() => {
-    testDomain = new Domain();
+    testDomain = new Domain() as LiveDomain;
+    testDomain.url = '';
     testDomain.name = 'example.com';
     getLiveWebsitesMock.mockResolvedValue([]);
     wappalyzer.mockResolvedValue([]);
@@ -88,6 +89,8 @@ describe('wappalyzer', () => {
 
   test('calls https for domain with port 443', async () => {
     testDomain.services = [httpsService];
+    testDomain.url = 'https://example.com';
+    testDomain.service = httpsService;
     getLiveWebsitesMock.mockResolvedValue([testDomain]);
     const scope = nock('https://example.com')
       .get('/')
@@ -98,6 +101,8 @@ describe('wappalyzer', () => {
   });
 
   test('calls http for domains without port 443', async () => {
+    testDomain.url = 'http://example.com';
+    testDomain.service = httpService;
     testDomain.services = [httpService];
     getLiveWebsitesMock.mockResolvedValue([testDomain]);
     const scope = nock('http://example.com')
@@ -114,6 +119,12 @@ describe('wappalyzer', () => {
       .get('/')
       .times(2)
       .reply(200, 'somedata');
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
     const testServices = [
       await Service.create({
         port: 443
@@ -125,14 +136,20 @@ describe('wappalyzer', () => {
     const testDomains = [
       await Domain.create({
         ...testDomain,
-        services: [testServices[0]]
+        services: [testServices[0]],
+        organization
       }).save(),
       await Domain.create({
         ...testDomain,
         name: 'example2.com',
-        services: [testServices[1]]
+        services: [testServices[1]],
+        organization
       }).save()
-    ] as Domain[];
+    ] as LiveDomain[];
+    testDomains[0].url = 'https://example2.com';
+    testDomains[0].service = testServices[0];
+    testDomains[1].url = 'https://example2.com';
+    testDomains[1].service = testServices[1];
     getLiveWebsitesMock.mockResolvedValue(testDomains);
     wappalyzer
       .mockResolvedValueOnce([])
@@ -153,6 +170,8 @@ describe('wappalyzer', () => {
 
   test('logs error on wappalyzer failure', async () => {
     testDomain.services = [httpsService];
+    testDomain.url = 'https://example.com';
+    testDomain.service = httpsService;
     getLiveWebsitesMock.mockResolvedValue([testDomain]);
     nock('http://example.com').get('/').reply(200, 'somedata');
     const err = new Error('testerror');
@@ -165,6 +184,8 @@ describe('wappalyzer', () => {
   test('logs error on axios failure', async () => {
     axios.get = jest.fn();
     testDomain.services = [httpsService];
+    testDomain.url = 'https://example.com';
+    testDomain.service = httpsService;
     nock('http://example.com').get('/').replyWithError('network error');
     const err = new Error('testerror');
     axios.get.mockRejectedValue(err);

@@ -14,6 +14,7 @@ import { Service } from './service';
 import { Organization } from './organization';
 import { Vulnerability } from './vulnerability';
 import { Scan } from './scan';
+import { Webpage } from './webpage';
 
 @Entity()
 @Index(['name', 'organization'], { unique: true })
@@ -67,7 +68,10 @@ export class Domain extends BaseEntity {
   @OneToMany((type) => Vulnerability, (vulnerability) => vulnerability.domain)
   vulnerabilities: Vulnerability[];
 
-  @ManyToOne((type) => Organization, { onDelete: 'CASCADE' })
+  @OneToMany((type) => Webpage, (webpage) => webpage.domain)
+  webpages: Service[];
+
+  @ManyToOne((type) => Organization, { onDelete: 'CASCADE', nullable: false })
   organization: Organization;
 
   @Column({

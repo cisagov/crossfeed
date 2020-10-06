@@ -41,7 +41,15 @@ class VulnerabilityFilters {
 
   @IsString()
   @IsOptional()
+  cpe?: string;
+
+  @IsString()
+  @IsOptional()
   state?: string;
+
+  @IsString()
+  @IsOptional()
+  substate?: string;
 
   @IsUUID()
   @IsOptional()
@@ -102,9 +110,19 @@ class VulnerabilitySearch {
         severity: this.filters.severity
       });
     }
+    if (this.filters?.cpe) {
+      qs.andWhere('vulnerability.cpe ILIKE :cpe', {
+        cpe: this.filters.cpe
+      });
+    }
     if (this.filters?.state) {
       qs.andWhere('vulnerability.state=:state', {
         state: this.filters.state
+      });
+    }
+    if (this.filters?.substate) {
+      qs.andWhere('vulnerability.substate=:substate', {
+        substate: this.filters.substate
       });
     }
     if (this.filters?.organization) {
@@ -126,6 +144,7 @@ class VulnerabilitySearch {
     let qs = Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
       .leftJoinAndSelect('domain.organization', 'organization')
+      .leftJoinAndSelect('vulnerability.service', 'service')
       .orderBy(sort, this.order);
 
     if (pageSize !== -1) {
