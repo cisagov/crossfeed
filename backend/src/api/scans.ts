@@ -123,6 +123,9 @@ class NewScan {
   @IsBoolean()
   isGranular: boolean;
 
+  @IsBoolean()
+  isSingleScan: boolean;
+
   @IsUUID('all', { each: true })
   organizations: string[];
 }

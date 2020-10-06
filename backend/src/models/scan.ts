@@ -76,4 +76,10 @@ export class Scan extends BaseEntity {
     onUpdate: 'CASCADE'
   })
   createdBy: User;
+
+  @Column({
+    type: 'boolean',
+    default: false
+  })
+  isSingleScan: boolean;
 }

@@ -70,7 +70,8 @@ class Scheduler {
           scanName: scan.name,
           scanTaskId: scanTask.id,
           numChunks,
-          chunkNumber
+          chunkNumber,
+          isSingleScan: scan.isSingleScan
         };
 
     scanTask.input = JSON.stringify(commandOptions);
@@ -245,11 +246,16 @@ const shouldRunScan = async ({
     lastFinishedScanTask &&
     lastFinishedScanTask.finishedAt &&
     lastFinishedScanTask.finishedAt.getTime() >=
-      new Date().getTime() - 1000 * scan.frequency
+      new Date().getTime() - 1000 * scan.frequency 
   ) {
     return false;
   }
-
+  if (lastFinishedScanTask &&
+    lastFinishedScanTask.finishedAt &&
+    scan.isSingleScan
+  ) {
+    return false;
+  }
   return true;
 };
 
