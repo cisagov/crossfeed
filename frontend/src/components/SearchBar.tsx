@@ -11,7 +11,6 @@ interface Props
   }[];
   onSelectResult(id: string): void;
   onChange(value: string): void;
-  onClear?(): void;
 }
 
 const defaultPlaceholder = 'Search for a domain, vuln type, port, service, IP';
@@ -26,7 +25,6 @@ export const SearchBar = React.forwardRef<HTMLInputElement, Props>(
       autocompletedResults,
       onSelectResult,
       onChange,
-      onClear,
       ...rest
     } = props;
     const [hasFocus, setHasFocus] = useState(false);
@@ -52,13 +50,13 @@ export const SearchBar = React.forwardRef<HTMLInputElement, Props>(
             onBlur={handleBlur}
             className={clsx(classes.inp, className)}
             placeholder={placeholder ?? defaultPlaceholder}
-            onChange={e => onChange(e.target.value)}
+            onChange={(e) => onChange(e.target.value)}
             ref={ref}
           />
           {autocompletedResults.length > 0 && hasFocus && (
             <Paper classes={{ root: classes.autocompleteRoot }}>
               <List>
-                {autocompletedResults.map(result => (
+                {autocompletedResults.map((result) => (
                   <ListItem
                     onFocus={handleFocus}
                     onBlur={handleBlur}
@@ -76,24 +74,12 @@ export const SearchBar = React.forwardRef<HTMLInputElement, Props>(
             </Paper>
           )}
         </div>
-        <div className={classes.actions}>
-          {onClear && (
-            <Button
-              variant="outlined"
-              startIcon={<RemoveCircle />}
-              onClick={onClear}
-              classes={{ root: classes.actionBtn }}
-            >
-              Clear All
-            </Button>
-          )}
-        </div>
       </div>
     );
   }
 );
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
     zIndex: 100,
     width: '100%',
@@ -104,7 +90,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     boxShadow: ({ inpFocused }: any) =>
       inpFocused ? theme.shadows[4] : theme.shadows[1],
-    transition: 'box-shadow 0.2s linear'
+    transition: 'box-shadow 0.3s linear'
   },
   inner: {
     flex: '1',
@@ -140,10 +126,6 @@ const useStyles = makeStyles(theme => ({
     left: 20,
     padding: '1rem',
     minWidth: 600
-  },
-  actions: {
-    flex: '0 0 auto',
-    marginRight: '2rem'
   },
   actionBtn: {
     borderColor: '#28A0CB',

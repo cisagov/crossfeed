@@ -30,8 +30,8 @@ export interface ContextType {
   setCurrent(): void;
   setFilter(): void;
   setResultsPerPage(): void;
-  setSort(): void;
-  sortDirection: string;
+  setSort(field: string, direction: 'asc' | 'desc'): void;
+  sortDirection: '' | 'asc' | 'desc';
   sortField: string;
   totalPages: number;
   totalResults: number;

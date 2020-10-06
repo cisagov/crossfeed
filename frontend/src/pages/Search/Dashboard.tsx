@@ -6,6 +6,7 @@ import { withSearch } from '@elastic/react-search-ui';
 import { FilterDrawer } from './FilterDrawer';
 import { ContextType } from './SearchProvider';
 import { FilterTags } from './FilterTags';
+import { SortBar } from './SortBar';
 
 export const DashboardUI: React.FC<ContextType> = (props) => {
   const {
@@ -19,10 +20,22 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
     totalResults,
     autocompletedResults,
     facets,
-    clearFilters
+    clearFilters,
+    sortDirection,
+    sortField,
+    setSort
   } = props;
   const classes = useStyles();
   const [selectedDomain, setSelectedDomain] = useState('');
+  const [resultsScrolled, setResultsScrolled] = useState(false);
+
+  const handleResultScroll = (e: React.UIEvent<HTMLElement>) => {
+    if (e.currentTarget.scrollTop > 0) {
+      setResultsScrolled(true);
+    } else {
+      setResultsScrolled(false);
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -42,18 +55,18 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
               autocompleteResults: true
             })
           }
-          onClear={filters.length > 0 ? () => clearFilters([]) : undefined}
           autocompletedResults={autocompletedResults}
           onSelectResult={setSelectedDomain}
         />
-        <div className={classes.status}>
-          <div>
-            Showing&nbsp;<strong>{totalResults}</strong>&nbsp;domains
-          </div>
-          <FilterTags filters={filters} removeFilter={removeFilter} />
-        </div>
+        <SortBar
+          sortField={sortField}
+          sortDirection={sortDirection}
+          setSort={setSort}
+          isFixed={resultsScrolled}
+          clearFilters={filters.length > 0 ? () => clearFilters([]) : undefined}
+        />
         <div className={classes.content}>
-          <div className={classes.panel}>
+          <div className={classes.panel} onScroll={handleResultScroll}>
             {results.map((result) => (
               <ResultCard
                 key={result.id.raw}
@@ -84,6 +97,9 @@ export const Dashboard = withSearch(
     setSearchTerm,
     autocompletedResults,
     clearFilters,
+    sortDirection,
+    sortField,
+    setSort
   }: ContextType) => ({
     addFilter,
     removeFilter,
@@ -94,7 +110,10 @@ export const Dashboard = withSearch(
     searchTerm,
     setSearchTerm,
     autocompletedResults,
-    clearFilters
+    clearFilters,
+    sortDirection,
+    sortField,
+    setSort
   })
 )(DashboardUI);
 
