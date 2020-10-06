@@ -60,31 +60,11 @@ export const DomainDetails: React.FC<Props> = (props) => {
         ...acc,
         {
           label: name,
-          value: Array.from(value)
+          value: Array.from(value).join(', ')
         }
       ],
       [] as any
     );
-  }, [domain]);
-
-  const orgInfo = useMemo(() => {
-    if (!domain) {
-      return [];
-    }
-    return [
-      {
-        label: 'Organization',
-        value: domain.organization.name
-      },
-      {
-        label: 'Root Domains',
-        value: domain.organization.rootDomains.join(', ')
-      },
-      {
-        label: 'Passive Mode',
-        value: domain.organization.isPassive ? 'Yes' : 'No'
-      }
-    ];
   }, [domain]);
 
   const overviewInfo = useMemo(() => {
@@ -118,6 +98,10 @@ export const DomainDetails: React.FC<Props> = (props) => {
         value: 'Yes'
       });
     }
+    ret.push({
+      label: 'Organization',
+      value: domain.organization.name
+    });
     return ret;
   }, [domain]);
 
@@ -142,10 +126,6 @@ export const DomainDetails: React.FC<Props> = (props) => {
         </a>
       </div>
       <div className={classes.inner}>
-        <div className={classes.section}>
-          <h4 className={classes.subtitle}>Organization</h4>
-          <DefinitionList items={orgInfo} />
-        </div>
         {overviewInfo.length > 0 && (
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Overview</h4>
@@ -161,11 +141,25 @@ export const DomainDetails: React.FC<Props> = (props) => {
         {domain.services.length > 0 && (
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Ports</h4>
+            <Accordion className={classes.accordionHeaderRow} disabled>
+              <AccordionSummary>
+                <Typography className={classes.accordionHeading}>
+                  Port
+                </Typography>
+                <Typography className={classes.accordionHeading}>
+                  Service
+                </Typography>
+                <Typography>Last Seen</Typography>
+              </AccordionSummary>
+            </Accordion>
             {domain.services.map((service) => (
               <Accordion className={classes.accordion} key={service.id}>
                 <AccordionSummary>
                   <Typography className={classes.accordionHeading}>
                     {service.port}
+                  </Typography>
+                  <Typography className={classes.accordionHeading}>
+                    {service.service}
                   </Typography>
                   {service.lastSeen && (
                     <Typography>
@@ -198,6 +192,22 @@ export const DomainDetails: React.FC<Props> = (props) => {
         {domain.vulnerabilities.length > 0 && (
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Vulnerabilities</h4>
+            <Accordion className={classes.accordionHeaderRow} disabled>
+              <AccordionSummary>
+                <Typography className={classes.accordionHeading}>
+                  Title
+                </Typography>
+                <Typography className={classes.vulnDescription}>
+                  Serverity
+                </Typography>
+                <Typography className={classes.vulnDescription}>
+                  State
+                </Typography>
+                <Typography className={classes.vulnDescription}>
+                  Created
+                </Typography>
+              </AccordionSummary>
+            </Accordion>
             {domain.vulnerabilities.map((vuln) => (
               <Accordion className={classes.accordion} key={vuln.id}>
                 <AccordionSummary>
@@ -205,14 +215,14 @@ export const DomainDetails: React.FC<Props> = (props) => {
                     {vuln.cve}
                   </Typography>
                   <Typography className={classes.vulnDescription}>
-                    {vuln.state}
-                  </Typography>
-                  <Typography className={classes.vulnDescription}>
                     {vuln.severity}
                   </Typography>
                   <Typography className={classes.vulnDescription}>
-                    {vuln.lastSeen
-                      ? `${formatDistanceToNow(parseISO(vuln.lastSeen))} ago`
+                    {vuln.state}
+                  </Typography>
+                  <Typography className={classes.vulnDescription}>
+                    {vuln.createdAt
+                      ? `${formatDistanceToNow(parseISO(vuln.createdAt))} ago`
                       : ''}
                   </Typography>
                 </AccordionSummary>
@@ -241,6 +251,10 @@ export const DomainDetails: React.FC<Props> = (props) => {
                           `${vuln.state} (${stateMap[
                             vuln.substate
                           ].toLowerCase()})` ?? 'N/A'
+                      },
+                      {
+                        label: 'Description',
+                        value: vuln.description ?? 'N/A'
                       }
                     ]}
                   />
@@ -301,6 +315,10 @@ const useStyles = makeStyles((theme) => ({
   },
   accordion: {
     color: '#3D4551'
+  },
+  accordionHeaderRow: {
+    color: '#000',
+    backgroundColor: '#eaeaea !important'
   },
   accordionHeading: {
     flex: '1 0 33%'
