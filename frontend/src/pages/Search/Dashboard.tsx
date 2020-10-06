@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core';
 import { withSearch } from '@elastic/react-search-ui';
 import { FilterDrawer } from './FilterDrawer';
 import { ContextType } from './SearchProvider';
-import { FilterTags } from './FilterTags';
 import { SortBar } from './SortBar';
 
 export const DashboardUI: React.FC<ContextType> = (props) => {
@@ -17,7 +16,6 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
     addFilter,
     removeFilter,
     results,
-    totalResults,
     autocompletedResults,
     facets,
     clearFilters,

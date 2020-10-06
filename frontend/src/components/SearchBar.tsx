@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'classnames';
-import { Button, List, ListItem, makeStyles, Paper } from '@material-ui/core';
-import { SearchOutlined, RemoveCircle } from '@material-ui/icons';
+import { List, ListItem, makeStyles, Paper } from '@material-ui/core';
+import { SearchOutlined } from '@material-ui/icons';
 
 interface Props
   extends Partial<Omit<JSX.IntrinsicElements['input'], 'onChange'>> {
