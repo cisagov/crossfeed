@@ -66,7 +66,7 @@ const ScansView: React.FC = () => {
     },
     {
       Header: 'Frequency',
-      accessor: ({ frequency }) => {
+      accessor: ({ frequency, isSingleScan }) => {
         let val, unit;
         if (frequency < 60 * 60) {
           val = frequency / 60;
@@ -77,6 +77,9 @@ const ScansView: React.FC = () => {
         } else {
           val = frequency / (60 * 60 * 24);
           unit = 'day';
+        }
+        if (isSingleScan) {
+          return 'Single Scan'
         }
         return `Every ${val} ${unit}${val === 1 ? '' : 's'}`;
       },
@@ -129,13 +132,15 @@ const ScansView: React.FC = () => {
     frequency: number;
     frequencyUnit: string;
     isGranular: boolean;
+    isSingleScan: boolean;
   }>({
     name: 'censys',
     arguments: '{}',
     organizations: [],
-    frequency: 0,
+    frequency: 1,
     frequencyUnit: 'minute',
-    isGranular: false
+    isGranular: false,
+    isSingleScan: false
   });
 
   React.useEffect(() => {
@@ -197,6 +202,7 @@ const ScansView: React.FC = () => {
         }
       });
       setScans(scans.concat(scan));
+      console.log(values.isSingleScan);
     } catch (e) {
       setErrors({
         global: e.message ?? e.toString()
@@ -266,7 +272,9 @@ const ScansView: React.FC = () => {
           value={values.arguments}
           onChange={onTextChange}
         /> */}
+        
         {(values.name === 'censysIpv4' || !selectedScan.global) && (
+          
           <Checkbox
             id="isGranular"
             label="Limit enabled organizations"
@@ -287,7 +295,15 @@ const ScansView: React.FC = () => {
             <br />
           </>
         )}
-        <div className="form-group form-inline">
+        <Checkbox
+            id="isSingleScan"
+            label="Run scan once"
+            name="isSingleScan"
+            checked={values.isSingleScan}
+            onChange={(e) => onChange('isSingleScan', e.target.checked)}
+          />
+        {!values.isSingleScan && (
+          <div className="form-group form-inline">
           <label style={{ marginRight: '10px' }} htmlFor="frequency">
             Run every
           </label>
@@ -316,9 +332,9 @@ const ScansView: React.FC = () => {
             <option value="hour">Hour(s)</option>
             <option value="day">Day(s)</option>
           </Dropdown>
-        </div>
-        <br />
-
+        </div>  
+        )}      
+        <br />       
         <Button type="submit">Create Scan</Button>
       </Form>
       <ImportExport<Scan>
