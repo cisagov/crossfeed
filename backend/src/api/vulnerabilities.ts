@@ -144,6 +144,7 @@ class VulnerabilitySearch {
     let qs = Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
       .leftJoinAndSelect('domain.organization', 'organization')
+      .leftJoinAndSelect('vulnerability.service', 'service')
       .orderBy(sort, this.order);
 
     if (pageSize !== -1) {

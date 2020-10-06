@@ -100,7 +100,10 @@ describe('cve', () => {
     });
 
     const vulnerabilities = await Vulnerability.find({
-      domain
+      where: {
+        domain: domain,
+        service: service
+      }
     });
     expect(vulnerabilities.length).toEqual(2);
     for (const vulnerability of vulnerabilities) {

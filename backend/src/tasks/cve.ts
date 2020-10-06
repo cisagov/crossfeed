@@ -1,4 +1,10 @@
-import { Domain, connectToDatabase, Vulnerability, Product } from '../models';
+import {
+  Domain,
+  connectToDatabase,
+  Vulnerability,
+  Product,
+  Service
+} from '../models';
 import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
@@ -20,12 +26,13 @@ const productMap = {
 const identifyPassiveCVEs = async (allDomains: Domain[]) => {
   const hostsToCheck: Array<{
     domain: Domain;
+    service: Service;
     cpes: string[];
   }> = [];
-  for (const domain of allDomains) {
-    const cpes = new Set<string>();
 
+  for (const domain of allDomains) {
     for (const service of domain.services) {
+      const cpes = new Set<string>();
       for (const product of service.products) {
         if (
           product.cpe &&
@@ -40,12 +47,13 @@ const identifyPassiveCVEs = async (allDomains: Domain[]) => {
           }
         }
       }
+      if (cpes.size > 0)
+        hostsToCheck.push({
+          domain: domain,
+          service: service,
+          cpes: Array.from(cpes)
+        });
     }
-    if (cpes.size > 0)
-      hostsToCheck.push({
-        domain: domain,
-        cpes: Array.from(cpes)
-      });
   }
   if (hostsToCheck.length === 0) {
     console.warn('No hosts to check - no domains with CPEs found.');
@@ -67,13 +75,14 @@ const identifyPassiveCVEs = async (allDomains: Domain[]) => {
     "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 -require_version nvd-dump/nvdcve-1.1-2*.json.gz",
     { input: input, maxBuffer: buffer.constants.MAX_LENGTH }
   );
-
   const split = String(res).split('\n');
   const vulnerabilities: Vulnerability[] = [];
   for (const line of split) {
     const parts = line.split(' ');
     if (parts.length < 5) continue;
     const domain = hostsToCheck[parseInt(parts[0])].domain;
+
+    const service = hostsToCheck[parseInt(parts[0])].service;
 
     const cvss = parseFloat(parts[3]);
     let severity: string;
@@ -94,7 +103,8 @@ const identifyPassiveCVEs = async (allDomains: Domain[]) => {
         cpe: parts[2],
         cvss,
         severity,
-        state: 'open'
+        state: 'open',
+        service: service
       })
     );
   }
