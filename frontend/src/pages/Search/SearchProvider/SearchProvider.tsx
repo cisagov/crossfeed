@@ -15,6 +15,10 @@ export const SearchProvider: React.FC = ({ children }) => {
   const config = {
     debug: true,
     alwaysSearchOnInitialLoad: true,
+    initialState: {
+      resultsPerPage: 15
+    },
+
     onResultClick: () => {
       /* Not implemented */
     },

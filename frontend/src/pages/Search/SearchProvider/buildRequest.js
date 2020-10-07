@@ -69,7 +69,7 @@ export function buildRequest(state) {
 
   const sort = buildSort(sortDirection, sortField);
   const match = buildMatch(searchTerm);
-  const size = 100; // resultsPerPage;
+  const size = resultsPerPage;
   const from = buildFrom(current, resultsPerPage);
   const filter = buildRequestFilter(filters);
 

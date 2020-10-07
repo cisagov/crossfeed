@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { SearchBar, DomainDetails } from 'components';
 import { ResultCard } from './ResultCard';
-import { makeStyles } from '@material-ui/core';
+import {
+  makeStyles,
+  Paper,
+  FormControl,
+  Select,
+  MenuItem,
+  Typography
+} from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
 import { withSearch } from '@elastic/react-search-ui';
 import { FilterDrawer } from './FilterDrawer';
 import { ContextType } from './SearchProvider';
@@ -9,7 +17,10 @@ import { SortBar } from './SortBar';
 
 export const DashboardUI: React.FC<ContextType> = (props) => {
   const {
-    // current,
+    current,
+    setCurrent,
+    resultsPerPage,
+    setResultsPerPage,
     searchTerm,
     setSearchTerm,
     filters,
@@ -21,7 +32,9 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
     clearFilters,
     sortDirection,
     sortField,
-    setSort
+    setSort,
+    totalPages,
+    totalResults
   } = props;
   const classes = useStyles();
   const [selectedDomain, setSelectedDomain] = useState('');
@@ -78,6 +91,43 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
             {selectedDomain && <DomainDetails domainId={selectedDomain} />}
           </div>
         </div>
+        <Paper classes={{ root: classes.pagination }}>
+          <span>
+            <strong>
+              {(current - 1) * resultsPerPage + 1} -{' '}
+              {(current - 1) * resultsPerPage + resultsPerPage}
+            </strong>{' '}
+            of <strong>{totalResults}</strong>
+          </span>
+          <Pagination
+            count={totalPages}
+            page={current}
+            onChange={(_, page) => setCurrent(page)}
+            color="primary"
+            size="small"
+          />
+          <FormControl
+            variant="outlined"
+            className={classes.pageSize}
+            size="small"
+          >
+            <Typography id="results-per-page-label">
+              Results per page:
+            </Typography>
+            <Select
+              id="teststa"
+              labelId="results-per-page-label"
+              value={resultsPerPage}
+              onChange={(e) => setResultsPerPage(e.target.value as number)}
+            >
+              {[15, 45, 90].map((perPage) => (
+                <MenuItem key={perPage} value={perPage}>
+                  {perPage}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Paper>
       </div>
     </div>
   );
@@ -97,7 +147,12 @@ export const Dashboard = withSearch(
     clearFilters,
     sortDirection,
     sortField,
-    setSort
+    setSort,
+    resultsPerPage,
+    setResultsPerPage,
+    current,
+    setCurrent,
+    totalPages
   }: ContextType) => ({
     addFilter,
     removeFilter,
@@ -111,7 +166,12 @@ export const Dashboard = withSearch(
     clearFilters,
     sortDirection,
     sortField,
-    setSort
+    setSort,
+    resultsPerPage,
+    setResultsPerPage,
+    current,
+    setCurrent,
+    totalPages
   })
 )(DashboardUI);
 
@@ -157,5 +217,28 @@ const useStyles = makeStyles(() => ({
     overflowY: 'auto',
     padding: '0 1rem 2rem 1rem',
     flex: '0 0 50%'
+  },
+  pagination: {
+    height: 'auto',
+    flex: 0,
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    padding: '1rem 2rem',
+    '& > span': {
+      marginRight: '2rem'
+    },
+    '& *:focus': {
+      outline: 'none !important'
+    }
+  },
+  pageSize: {
+    '& > p': {
+      margin: '0 1rem 0 2rem'
+    },
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    alignItems: 'center'
   }
 }));
