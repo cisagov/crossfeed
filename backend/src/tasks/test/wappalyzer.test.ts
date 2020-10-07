@@ -1,7 +1,7 @@
 import { mocked } from 'ts-jest/utils';
 import { getLiveWebsites, LiveDomain } from '../helpers/getLiveWebsites';
 import * as wappalyzer from 'simple-wappalyzer';
-import { Domain, Service, connectToDatabase } from '../../models';
+import { Domain, Service, connectToDatabase, Organization } from '../../models';
 import { CommandOptions } from '../ecs-client';
 import { handler } from '../wappalyzer';
 import * as nock from 'nock';
@@ -119,6 +119,12 @@ describe('wappalyzer', () => {
       .get('/')
       .times(2)
       .reply(200, 'somedata');
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
     const testServices = [
       await Service.create({
         port: 443
@@ -130,12 +136,14 @@ describe('wappalyzer', () => {
     const testDomains = [
       await Domain.create({
         ...testDomain,
-        services: [testServices[0]]
+        services: [testServices[0]],
+        organization
       }).save(),
       await Domain.create({
         ...testDomain,
         name: 'example2.com',
-        services: [testServices[1]]
+        services: [testServices[1]],
+        organization
       }).save()
     ] as LiveDomain[];
     testDomains[0].url = 'https://example2.com';

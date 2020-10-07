@@ -22,6 +22,7 @@ import { Grid, Checkbox, Dropdown } from '@trussworks/react-uswds';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, parseISO, format } from 'date-fns';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 
 export interface ApiResponse {
   result: Vulnerability[];
@@ -31,6 +32,8 @@ export interface ApiResponse {
 const formatDate = (date: string) => {
   return format(parseISO(date), 'MM-dd-yyyy');
 };
+
+const extLink = <FaExternalLinkAlt style={{ width: 12 }}></FaExternalLinkAlt>;
 
 const stateMap: { [key: string]: string } = {
   unconfirmed: 'Unconfirmed',
@@ -46,22 +49,34 @@ export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
     <div className={classes.expandedRoot}>
       <h3>Details</h3>
       <div className={classes.desc}>
-        <h4>Vulnerability history</h4>
-        {original.actions.map((action, num) => {
-          const val = action.automatic ? (
-            <>Vulnerability automatically marked as remediated</>
-          ) : (
-            <>
-              State changed to {action.state} (
-              {stateMap[action.substate].toLowerCase()}) by {action.userName}
-            </>
-          );
-          return (
-            <p key={num}>
-              {val} on {formatDate(action.date)}
+        <p>{original.description}</p>
+        <h4>References</h4>
+        {original.references &&
+          original.references.map((ref, index) => (
+            <p key={index}>
+              <a href={ref.url} target="_blank" rel="noopener noreferrer">
+                {ref.url} {extLink}
+              </a>
+              {ref.tags.length > 0 ? ' - ' + ref.tags.join(',') : ''}
             </p>
-          );
-        })}
+          ))}
+        <h4>Vulnerability history</h4>
+        {original.actions &&
+          original.actions.map((action, index) => {
+            const val = action.automatic ? (
+              <>Vulnerability automatically marked as remediated</>
+            ) : (
+              <>
+                State changed to {action.state} (
+                {stateMap[action.substate].toLowerCase()}) by {action.userName}
+              </>
+            );
+            return (
+              <p key={index}>
+                {val} on {formatDate(action.date)}
+              </p>
+            );
+          })}
         <p>Vulnerability opened on {formatDate(original.createdAt)}</p>
       </div>
     </div>
@@ -87,7 +102,7 @@ export const Vulnerabilities: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          {value}
+          {value} {extLink}
         </a>
       ),
       width: 800,
@@ -100,6 +115,14 @@ export const Vulnerabilities: React.FC = () => {
         <Link to={`/domain/${domain.id}`}>{domain?.name}</Link>
       ),
       width: 800,
+      Filter: ColumnFilter
+    },
+    // To replace with product once we store that with vulnerabilities
+    {
+      Header: 'Product',
+      id: 'cpe',
+      accessor: 'cpe',
+      width: 100,
       Filter: ColumnFilter
     },
     {
