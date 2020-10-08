@@ -35,7 +35,7 @@ const formatDate = (date: string) => {
 
 const extLink = <FaExternalLinkAlt style={{ width: 12 }}></FaExternalLinkAlt>;
 
-const stateMap: { [key: string]: string } = {
+export const stateMap: { [key: string]: string } = {
   unconfirmed: 'Unconfirmed',
   exploitable: 'Exploitable',
   'false-positive': 'False Positive',
