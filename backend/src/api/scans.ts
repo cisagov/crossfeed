@@ -165,7 +165,7 @@ export const update = wrapHandler(async (event) => {
   const scan = await Scan.findOne({
     id: id
   });
-  console.log('TTTTEESSSSTTTT');
+
   if (scan) {
     Scan.merge(scan, {
       ...body,
@@ -252,6 +252,7 @@ export const invokeScheduler = wrapHandler(async (event) => {
 });
 
 export const runScan = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
   const id = event.pathParameters?.scanId;
   if (!id || !isUUID(id)) {

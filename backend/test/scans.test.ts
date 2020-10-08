@@ -397,4 +397,24 @@ describe('run scan', () => {
 
     expect(response.body.lastRun).toEqual(null);
   });
+  it('runScan by globalView should fail', async () => {
+    const scan = await Scan.create({
+      name: 'censys',
+      arguments: {},
+      frequency: 999999,
+      lastRun: new Date()
+    }).save();
+    const response = await request(app)
+      .post(`/scans/${scan.id}/run`)
+      .set(
+        'Authorization',
+        createUserToken({
+          userType: 'globalView'
+        })
+      )
+      .expect(403);
+
+    expect(response.body).toEqual({});
+    expect(scheduler).toHaveBeenCalledTimes(0);
+  });
 });
