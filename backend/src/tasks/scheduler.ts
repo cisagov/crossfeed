@@ -252,6 +252,7 @@ const shouldRunScan = async ({
   ) {
     return false;
   }
+  //Should not run a scan if the scan is a SingleScan and has run once
   if (
     lastFinishedScanTask &&
     lastFinishedScanTask.finishedAt &&
