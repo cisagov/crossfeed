@@ -138,57 +138,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
             <DefinitionList items={webInfo} />
           </div>
         )}
-        {domain.services.length > 0 && (
-          <div className={classes.section}>
-            <h4 className={classes.subtitle}>Ports</h4>
-            <Accordion className={classes.accordionHeaderRow} disabled>
-              <AccordionSummary>
-                <Typography className={classes.accordionHeading}>
-                  Port
-                </Typography>
-                <Typography className={classes.accordionHeading}>
-                  Service
-                </Typography>
-                <Typography>Last Seen</Typography>
-              </AccordionSummary>
-            </Accordion>
-            {domain.services.map((service) => (
-              <Accordion className={classes.accordion} key={service.id}>
-                <AccordionSummary>
-                  <Typography className={classes.accordionHeading}>
-                    {service.port}
-                  </Typography>
-                  <Typography className={classes.accordionHeading}>
-                    {service.service}
-                  </Typography>
-                  {service.lastSeen && (
-                    <Typography>
-                      {formatDistanceToNow(parseISO(service.lastSeen))} ago
-                    </Typography>
-                  )}
-                </AccordionSummary>
-                {service.products.length > 0 && (
-                  <AccordionDetails>
-                    <DefinitionList
-                      items={service.products.reduce(
-                        (acc, product) => [
-                          ...acc,
-                          {
-                            label: product.cpe ?? 'Misc',
-                            value:
-                              product.name +
-                              (product.version ? ` ${product.version}` : '')
-                          }
-                        ],
-                        [] as any
-                      )}
-                    />
-                  </AccordionDetails>
-                )}
-              </Accordion>
-            ))}
-          </div>
-        )}
+
         {domain.vulnerabilities.length > 0 && (
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Vulnerabilities</h4>
@@ -263,7 +213,58 @@ export const DomainDetails: React.FC<Props> = (props) => {
             ))}
           </div>
         )}
-        {/* <pre>{JSON.stringify(domain, undefined, '  ')}</pre> */}
+        {domain.services.length > 0 && (
+          <div className={classes.section}>
+            <h4 className={classes.subtitle}>Ports</h4>
+            <Accordion className={classes.accordionHeaderRow} disabled>
+              <AccordionSummary>
+                <Typography className={classes.accordionHeading}>
+                  Port
+                </Typography>
+                <Typography className={classes.accordionHeading}>
+                  Service
+                </Typography>
+                <Typography>Last Seen</Typography>
+              </AccordionSummary>
+            </Accordion>
+            {domain.services.map((service) => (
+              <Accordion className={classes.accordion} key={service.id}>
+                <AccordionSummary>
+                  <Typography className={classes.accordionHeading}>
+                    {service.port}
+                  </Typography>
+                  <Typography className={classes.accordionHeading}>
+                    {service.service}
+                  </Typography>
+                  {service.lastSeen && (
+                    <Typography>
+                      {formatDistanceToNow(parseISO(service.lastSeen))} ago
+                    </Typography>
+                  )}
+                </AccordionSummary>
+                {service.products.length > 0 && (
+                  <AccordionDetails>
+                    <DefinitionList
+                      items={[
+                        {
+                          label: 'Products',
+                          value: service.products
+                            .map(
+                              (product) =>
+                                product.name +
+                                (product.version ? ` ${product.version}` : '')
+                            )
+                            .join(', ')
+                        },
+                        { label: 'Banner', value: service.banner ?? 'None' }
+                      ]}
+                    />
+                  </AccordionDetails>
+                )}
+              </Accordion>
+            ))}
+          </div>
+        )}
       </div>
     </Paper>
   );
