@@ -242,21 +242,20 @@ const shouldRunScan = async ({
       }
     }
   );
-  console.log("LAST RUN");
-  console.log(scan.lastRun);
-  console.log(scan);
+
   if (
     lastFinishedScanTask &&
     lastFinishedScanTask.finishedAt &&
     scan.lastRun &&
     lastFinishedScanTask.finishedAt.getTime() >=
-      new Date().getTime() - 1000 * scan.frequency 
+      new Date().getTime() - 1000 * scan.frequency
   ) {
     return false;
   }
-  if (lastFinishedScanTask &&
+  if (
+    lastFinishedScanTask &&
     lastFinishedScanTask.finishedAt &&
-    scan.isSingleScan && 
+    scan.isSingleScan &&
     scan.lastRun
   ) {
     return false;

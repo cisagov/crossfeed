@@ -376,3 +376,25 @@ describe('scheduler invoke', () => {
     expect(scheduler).toHaveBeenCalledTimes(0);
   });
 });
+
+describe('run scan', () => {
+  it('run scan should change lastRun to null', async () => {
+    const scan = await Scan.create({
+      name: 'censys',
+      arguments: {},
+      frequency: 999999,
+      lastRun: new Date()
+    }).save();
+    const response = await request(app)
+      .post(`/scans/${scan.id}/run`)
+      .set(
+        'Authorization',
+        createUserToken({
+          userType: 'globalAdmin'
+        })
+      )
+      .expect(200);
+
+    expect(response.body.lastRun).toEqual(null);
+  });
+});

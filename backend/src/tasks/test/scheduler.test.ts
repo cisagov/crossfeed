@@ -220,7 +220,7 @@ describe('scheduler', () => {
         arguments: {},
         frequency: 999,
         isSingleScan: true,
-        lastRun: new Date(),
+        lastRun: new Date()
       }).save();
       const organization = await Organization.create({
         name: 'test-' + Math.random(),

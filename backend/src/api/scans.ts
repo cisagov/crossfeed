@@ -165,7 +165,7 @@ export const update = wrapHandler(async (event) => {
   const scan = await Scan.findOne({
     id: id
   });
-  console.log("TTTTEESSSSTTTT");
+  console.log('TTTTEESSSSTTTT');
   if (scan) {
     Scan.merge(scan, {
       ...body,
@@ -253,22 +253,18 @@ export const invokeScheduler = wrapHandler(async (event) => {
 
 export const runScan = wrapHandler(async (event) => {
   await connectToDatabase();
-  console.log("TEST");
   const id = event.pathParameters?.scanId;
   if (!id || !isUUID(id)) {
     return NotFound;
   }
-  //const body = await validateBody(NewScan, event.body);
   const scan = await Scan.findOne({
     id: id
   });
 
-  console.log("TTTTEESSSSTTTT");
   if (scan) {
     scan.lastRun = null;
-  
+
     const res = await Scan.save(scan);
-    console.log(res);
     return {
       statusCode: 200,
       body: JSON.stringify(res)
