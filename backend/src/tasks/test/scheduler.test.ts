@@ -211,6 +211,70 @@ describe('scheduler', () => {
 
       expect(runCommand).toHaveBeenCalledTimes(0);
     });
+    test('should not run a scan when scan is a SingleScan and has finished recently.', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999,
+        isSingleScan: true
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'finished',
+        finishedAt: new Date()
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(0);
+    });
+    test('should not run a scan when scan is a SingleScan and after sufficient time has passed', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999,
+        isSingleScan: true
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'finished',
+        finishedAt: new Date(1)
+      }).save();
+      
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(0);
+    });
     test('should run a scan when a scantask for that scan and organization finished and sufficient time has passed', async () => {
       const scan = await Scan.create({
         name: 'findomain',

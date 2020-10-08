@@ -8,7 +8,7 @@ import {
   IsBoolean,
   IsUUID
 } from 'class-validator';
-import { Scan, connectToDatabase, Organization } from '../models';
+import { Scan, connectToDatabase, Organization, ScanTask } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { isGlobalWriteAdmin } from './auth';
 import LambdaClient from '../tasks/lambda-client';
@@ -165,12 +165,14 @@ export const update = wrapHandler(async (event) => {
   const scan = await Scan.findOne({
     id: id
   });
+  console.log("TTTTEESSSSTTTT");
   if (scan) {
     Scan.merge(scan, {
       ...body,
       organizations: body.organizations.map((id) => ({ id }))
     });
     const res = await Scan.save(scan);
+    console.log(res);
     return {
       statusCode: 200,
       body: JSON.stringify(res)
@@ -247,4 +249,30 @@ export const invokeScheduler = wrapHandler(async (event) => {
     statusCode: 200,
     body: ''
   };
+});
+
+export const runScan = wrapHandler(async (event) => {
+  await connectToDatabase();
+  console.log("TEST");
+  const id = event.pathParameters?.scanId;
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+  //const body = await validateBody(NewScan, event.body);
+  const scan = await Scan.findOne({
+    id: id
+  });
+
+  console.log("TTTTEESSSSTTTT");
+  if (scan) {
+    scan.lastRun = null;
+  
+    const res = await Scan.save(scan);
+    console.log(res);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(res)
+    };
+  }
+  return NotFound;
 });

@@ -15,6 +15,7 @@ import { Table, ImportExport } from 'components';
 import { Column } from 'react-table';
 import { Scan, Organization, ScanSchema } from 'types';
 import { FaTimes } from 'react-icons/fa';
+import { FaPlay } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import MultiSelect from './MultiSelect';
@@ -40,6 +41,20 @@ const ScansView: React.FC = () => {
   const [scanSchema, setScanSchema] = useState<ScanSchema>({});
 
   const columns: Column<Scan>[] = [
+    {
+      Header: 'Run',
+      id: 'run',
+      Cell: ({ row }: { row: { index: number } }) => (
+        <span
+          onClick={() => {
+            runScan(row.index);
+          }}
+        >
+          <FaPlay />
+        </span>
+      ),
+      disableFilters: true
+    },
     {
       Header: 'Name',
       accessor: 'name',
@@ -232,6 +247,11 @@ const ScansView: React.FC = () => {
       [name]: value
     }));
   };
+
+  const runScan = async (index: number) => {
+    let row = scans[index];
+    await apiPost(`/scans/${row.id}/run`);
+  }
 
   const selectedScan = scanSchema[values.name] || {};
 

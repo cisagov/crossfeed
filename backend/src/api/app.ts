@@ -143,6 +143,7 @@ authenticatedRoute.get('/granularScans', handlerToExpress(scans.listGranular));
 authenticatedRoute.post('/scans', handlerToExpress(scans.create));
 authenticatedRoute.put('/scans/:scanId', handlerToExpress(scans.update));
 authenticatedRoute.delete('/scans/:scanId', handlerToExpress(scans.del));
+authenticatedRoute.post('/scans/:scanId/run', handlerToExpress(scans.runScan));
 authenticatedRoute.post(
   '/scheduler/invoke',
   handlerToExpress(scans.invokeScheduler)
