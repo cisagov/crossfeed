@@ -265,7 +265,7 @@ const useStyles = makeStyles(theme => ({
 
     '& svg': {
       fontSize: '0.7rem',
-      color: '#28A0CB',
+      color: theme.palette.primary.main,
       marginRight: 3
     }
   }
