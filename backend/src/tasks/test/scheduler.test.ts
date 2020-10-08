@@ -115,7 +115,8 @@ describe('scheduler', () => {
       const scan = await Scan.create({
         name: 'findomain',
         arguments: {},
-        frequency: 999
+        frequency: 999,
+        lastRun: new Date()
       }).save();
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
@@ -146,7 +147,8 @@ describe('scheduler', () => {
       const scan = await Scan.create({
         name: 'findomain',
         arguments: {},
-        frequency: 999
+        frequency: 999,
+        lastRun: new Date()
       }).save();
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
@@ -184,7 +186,8 @@ describe('scheduler', () => {
       const scan = await Scan.create({
         name: 'findomain',
         arguments: {},
-        frequency: 999
+        frequency: 999,
+        lastRun: new Date()
       }).save();
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
@@ -216,7 +219,8 @@ describe('scheduler', () => {
         name: 'findomain',
         arguments: {},
         frequency: 999,
-        isSingleScan: true
+        isSingleScan: true,
+        lastRun: new Date(),
       }).save();
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
@@ -248,7 +252,8 @@ describe('scheduler', () => {
         name: 'findomain',
         arguments: {},
         frequency: 999,
-        isSingleScan: true
+        isSingleScan: true,
+        lastRun: new Date()
       }).save();
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
@@ -263,7 +268,7 @@ describe('scheduler', () => {
         status: 'finished',
         finishedAt: new Date(1)
       }).save();
-      
+
       await scheduler(
         {
           scanId: scan.id,
