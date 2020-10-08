@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { makeStyles, Menu, MenuItem } from '@material-ui/core';
-import { ArrowUpward, ArrowDownward, ArrowDropDown } from '@material-ui/icons';
+import {
+  makeStyles,
+  Select,
+  FormControl,
+  MenuItem,
+  SelectProps
+} from '@material-ui/core';
+import { ArrowUpward, ArrowDownward } from '@material-ui/icons';
 import { ContextType } from './SearchProvider';
-
-const fieldToLabel: Record<string, string> = {
-  createdAt: 'First Seen',
-  updatedAt: 'Last Seen',
-  ip: 'IP',
-  name: 'Domain Name'
-};
 
 interface Props {
   sortField: ContextType['sortField'];
@@ -20,24 +19,14 @@ interface Props {
 
 export const SortBar: React.FC<Props> = (props) => {
   const { sortField, sortDirection, setSort, clearFilters } = props;
-  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const classes = useStyles(props);
 
   const toggleDirection = () => {
     setSort(sortField, sortDirection === 'asc' ? 'desc' : 'asc');
   };
 
-  const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchor(event?.currentTarget);
-  };
-
-  const closeMenu = () => {
-    setAnchor(null);
-  };
-
-  const onSetSortField = (field: string) => () => {
-    setSort(field, 'desc');
-    closeMenu();
+  const onSetSortField: SelectProps['onChange'] = (e) => {
+    setSort(e.target.value as string, 'asc');
   };
 
   return (
@@ -50,28 +39,29 @@ export const SortBar: React.FC<Props> = (props) => {
             <ArrowUpward />
           )}
         </button>
-        <button
-          aria-controls="fieldchoices"
-          onClick={openMenu}
-          className={classes.openFields}
-        >
-          <span>Sort by: </span>
-          {sortField && (
-            <span className={classes.field}>{fieldToLabel[sortField]}</span>
-          )}
-          <ArrowDropDown />
-        </button>
-        <Menu
-          id="fieldchoices"
-          anchorEl={anchor}
-          open={Boolean(anchor)}
-          onClose={closeMenu}
-        >
-          <MenuItem onClick={onSetSortField('name')}>Domain Name</MenuItem>
-          <MenuItem onClick={onSetSortField('ip')}>IP</MenuItem>
-          <MenuItem onClick={onSetSortField('updatedAt')}>Last Seen</MenuItem>
-          <MenuItem onClick={onSetSortField('createdAt')}>First Seen</MenuItem>
-        </Menu>
+        <span id="sort-by-label">Sort by: </span>
+        <FormControl className={classes.openFields}>
+          <Select
+            disableUnderline
+            labelId="sort-by-label"
+            value={sortField}
+            onChange={onSetSortField}
+            classes={{ root: classes.selectInp }}
+          >
+            <MenuItem classes={{ root: classes.option }} value="name">
+              Domain Name
+            </MenuItem>
+            <MenuItem classes={{ root: classes.option }} value="ip">
+              IP
+            </MenuItem>
+            <MenuItem classes={{ root: classes.option }} value="updatedAt">
+              Last Seen
+            </MenuItem>
+            <MenuItem classes={{ root: classes.option }} value="createdAt">
+              First Seen
+            </MenuItem>
+          </Select>
+        </FormControl>
       </div>
       <div>
         {clearFilters && (
@@ -89,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
     flexFlow: 'row nowrap',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '0.5rem 1rem',
+    padding: '1rem 1rem',
     color: '#71767A',
     boxShadow: ({ isFixed }: Props) =>
       isFixed ? '0px 1px 2px rgba(0, 0, 0, 0.15)' : 'none',
@@ -103,7 +93,8 @@ const useStyles = makeStyles((theme) => ({
     },
     '& *:focus': {
       outline: 'none !important'
-    }
+    },
+    fontSize: 14
   },
   sortMenu: {
     display: 'flex',
@@ -112,10 +103,6 @@ const useStyles = makeStyles((theme) => ({
     '& > span': {
       display: 'block'
     }
-  },
-  field: {
-    fontWeight: 600,
-    marginLeft: '0.2rem'
   },
   toggleDirection: {
     '& > svg': {
@@ -126,8 +113,21 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   openFields: {
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    alignItems: 'center'
+    minWidth: 120,
+    marginLeft: '0.5rem',
+    '& :focus': {
+      background: 'none'
+    }
+  },
+  selectInp: {
+    fontWeight: 600,
+    fontSize: 14,
+    padding: 0,
+    color: '#71767A'
+  },
+  option: {
+    fontWeight: 600,
+    fontSize: 14,
+    color: '#71767A'
   }
 }));
