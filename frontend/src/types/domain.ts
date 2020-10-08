@@ -24,7 +24,7 @@ export interface Product {
 }
 
 export interface Service {
-  port: string;
+  port: number;
   service: string;
   id: number;
   lastSeen: string | null;
