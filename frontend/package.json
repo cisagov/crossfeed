@@ -10,6 +10,7 @@
     "@elastic/react-search-ui-views": "^1.4.1",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@nivo/bar": "^0.62.0",
     "@nivo/pie": "^0.62.0",
     "@testing-library/jest-dom": "^5.11.4",
