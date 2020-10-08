@@ -29,9 +29,10 @@ export interface ContextType {
   searchTerm: string;
   setCurrent(current: number): void;
   setFilter(): void;
+  setResultsPerPage(): void;
+  setSort(field: string, direction: 'asc' | 'desc'): void;
+  sortDirection: '' | 'asc' | 'desc';
   setResultsPerPage(count: number): void;
-  setSort(): void;
-  sortDirection: string;
   sortField: string;
   totalPages: number;
   totalResults: number;

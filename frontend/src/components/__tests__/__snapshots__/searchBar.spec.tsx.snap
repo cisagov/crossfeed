@@ -3,7 +3,7 @@
 exports[`matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="makeStyles-wrapper-1 makeStyles-wrapper-8"
+    class="makeStyles-wrapper-1 makeStyles-wrapper-7"
   >
     <div
       class="makeStyles-inner-2"
@@ -23,9 +23,6 @@ exports[`matches snapshot 1`] = `
         placeholder="Search for a domain, vuln type, port, service, IP"
       />
     </div>
-    <div
-      class="makeStyles-actions-6"
-    />
   </div>
 </DocumentFragment>
 `;
