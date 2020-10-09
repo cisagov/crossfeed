@@ -29,7 +29,7 @@ const FiltersApplied: React.FC = () => {
   );
 };
 
-export const FilterDrawer: React.FC<Props> = props => {
+export const FilterDrawer: React.FC<Props> = (props) => {
   const { filters, addFilter, removeFilter, facets } = props;
   const classes = useStyles();
 
@@ -44,6 +44,9 @@ export const FilterDrawer: React.FC<Props> = props => {
       ),
     [filters]
   );
+
+  const makeWildcard = (term: string) =>
+    term === '' || term.includes('*') ? term : `*${term}*`;
 
   const portFacet: any[] = facets['services.port']
     ? facets['services.port'][0].data
@@ -75,8 +78,8 @@ export const FilterDrawer: React.FC<Props> = props => {
           <TaggedArrayInput
             placeholder="IP address"
             values={filtersByColumn.ip ?? []}
-            onAddTag={value => addFilter('ip', value, 'any')}
-            onRemoveTag={value => removeFilter('ip', value, 'any')}
+            onAddTag={(value) => addFilter('ip', value, 'any')}
+            onRemoveTag={(value) => removeFilter('ip', value, 'any')}
           />
         </AccordionDetails>
       </Accordion>
@@ -89,8 +92,10 @@ export const FilterDrawer: React.FC<Props> = props => {
           <TaggedArrayInput
             placeholder="Domain"
             values={filtersByColumn.name ?? []}
-            onAddTag={value => addFilter('name', value, 'any')}
-            onRemoveTag={value => removeFilter('name', value, 'any')}
+            onAddTag={(value) => addFilter('name', makeWildcard(value), 'any')}
+            onRemoveTag={(value) =>
+              removeFilter('name', makeWildcard(value), 'any')
+            }
           />
         </AccordionDetails>
       </Accordion>
@@ -106,8 +111,10 @@ export const FilterDrawer: React.FC<Props> = props => {
             <FacetFilter
               options={fromDomainFacet}
               selected={filtersByColumn['fromRootDomain'] ?? []}
-              onSelect={value => addFilter('fromRootDomain', value, 'any')}
-              onDeselect={value => removeFilter('fromRootDomain', value, 'any')}
+              onSelect={(value) => addFilter('fromRootDomain', value, 'any')}
+              onDeselect={(value) =>
+                removeFilter('fromRootDomain', value, 'any')
+              }
             />
           </AccordionDetails>
         </Accordion>
@@ -122,8 +129,10 @@ export const FilterDrawer: React.FC<Props> = props => {
             <FacetFilter
               options={portFacet}
               selected={filtersByColumn['services.port'] ?? []}
-              onSelect={value => addFilter('services.port', value, 'any')}
-              onDeselect={value => removeFilter('services.port', value, 'any')}
+              onSelect={(value) => addFilter('services.port', value, 'any')}
+              onDeselect={(value) =>
+                removeFilter('services.port', value, 'any')
+              }
             />
           </AccordionDetails>
         </Accordion>
@@ -140,8 +149,10 @@ export const FilterDrawer: React.FC<Props> = props => {
             <FacetFilter
               options={cveFacet}
               selected={filtersByColumn['vulnerabilities.cve'] ?? []}
-              onSelect={value => addFilter('vulnerabilities.cve', value, 'any')}
-              onDeselect={value =>
+              onSelect={(value) =>
+                addFilter('vulnerabilities.cve', value, 'any')
+              }
+              onDeselect={(value) =>
                 removeFilter('vulnerabilities.cve', value, 'any')
               }
             />
@@ -160,10 +171,10 @@ export const FilterDrawer: React.FC<Props> = props => {
             <FacetFilter
               options={severityFacet}
               selected={filtersByColumn['vulnerabilities.severity'] ?? []}
-              onSelect={value =>
+              onSelect={(value) =>
                 addFilter('vulnerabilities.severity', value, 'any')
               }
-              onDeselect={value =>
+              onDeselect={(value) =>
                 removeFilter('vulnerabilities.severity', value, 'any')
               }
             />
@@ -236,7 +247,7 @@ const Wrapper = withStyles({
   }
 })(Paper);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   header: {
     display: 'flex',
     alignItems: 'center',
