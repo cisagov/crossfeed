@@ -192,6 +192,15 @@ class ESClient {
       body
     });
   }
+
+  /**
+   * Deletes everything in Elasticsearch
+   */
+  async deleteAll() {
+    await this.client.indices.delete({
+      index: '*'
+    });
+  }
 }
 
 export default ESClient;

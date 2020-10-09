@@ -48,7 +48,8 @@ export const DomainDetails: React.FC<Props> = (props) => {
       for (const product of service.products) {
         const version = product.version ? ` ${product.version}` : '';
         const value = product.name + version;
-        const name = product?.tags[0] ?? 'Misc';
+        const name =
+          product.tags && product.tags.length > 0 ? product.tags[0] : 'Misc';
         if (!categoriesToProducts[name]) {
           categoriesToProducts[name] = new Set();
         }
