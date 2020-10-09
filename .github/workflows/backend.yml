@@ -200,7 +200,7 @@ jobs:
 
       - name: Run syncdb - Production
         if: github.ref == 'refs/heads/production'
-        run: aws lambda invoke --function-name crossfeed-prod-syncdb out.json
+        run: aws lambda invoke --function-name crossfeed-prod-syncdb /dev/stdout
         working-directory: backend
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
