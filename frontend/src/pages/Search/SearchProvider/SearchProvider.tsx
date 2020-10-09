@@ -16,7 +16,9 @@ export const SearchProvider: React.FC = ({ children }) => {
     debug: true,
     alwaysSearchOnInitialLoad: true,
     initialState: {
-      resultsPerPage: 15
+      resultsPerPage: 15,
+      sortField: 'name',
+      sortDirection: 'asc'
     },
 
     onResultClick: () => {
