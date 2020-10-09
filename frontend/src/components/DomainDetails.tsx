@@ -8,7 +8,7 @@ import {
   Typography,
   AccordionDetails
 } from '@material-ui/core';
-import { Launch as LinkOffIcon } from '@material-ui/icons';
+import { ExpandMore, Launch as LinkOffIcon } from '@material-ui/icons';
 import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
@@ -161,7 +161,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
             </Accordion>
             {domain.vulnerabilities.map((vuln) => (
               <Accordion className={classes.accordion} key={vuln.id}>
-                <AccordionSummary>
+                <AccordionSummary expandIcon={<ExpandMore />}>
                   <Typography className={classes.accordionHeading}>
                     {vuln.cve}
                   </Typography>
@@ -230,7 +230,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
             </Accordion>
             {domain.services.map((service) => (
               <Accordion className={classes.accordion} key={service.id}>
-                <AccordionSummary>
+                <AccordionSummary expandIcon={<ExpandMore />}>
                   <Typography className={classes.accordionHeading}>
                     {service.port}
                   </Typography>
