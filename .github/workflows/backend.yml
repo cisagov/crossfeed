@@ -168,7 +168,7 @@ jobs:
 
       - name: Run syncdb - Staging
         if: github.ref == 'refs/heads/master'
-        run: aws lambda invoke --function-name crossfeed-staging-syncdb out.json
+        run: aws lambda invoke --function-name crossfeed-staging-syncdb /dev/stdout
         working-directory: backend
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
