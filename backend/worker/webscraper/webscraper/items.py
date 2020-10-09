@@ -15,6 +15,7 @@ class Webpage(scrapy.Item):
     domain_name = scrapy.Field()
     body = scrapy.Field()
     response_size = scrapy.Field()
+    headers = scrapy.Field()
 
     def __repr__(self):
         return repr({"s3_key": self["s3_key"]})
