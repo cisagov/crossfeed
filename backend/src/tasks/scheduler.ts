@@ -188,6 +188,7 @@ class Scheduler {
       }
       if (this.numLaunchedTasks > 0) {
         scan.lastRun = new Date();
+        scan.manualRunPending = false;
         await scan.save();
       }
     }
@@ -246,7 +247,7 @@ const shouldRunScan = async ({
   if (
     lastFinishedScanTask &&
     lastFinishedScanTask.finishedAt &&
-    scan.lastRun &&
+    !scan.manualRunPending &&
     lastFinishedScanTask.finishedAt.getTime() >=
       new Date().getTime() - 1000 * scan.frequency
   ) {
@@ -257,7 +258,7 @@ const shouldRunScan = async ({
     lastFinishedScanTask &&
     lastFinishedScanTask.finishedAt &&
     scan.isSingleScan &&
-    scan.lastRun
+    !scan.manualRunPending
   ) {
     return false;
   }

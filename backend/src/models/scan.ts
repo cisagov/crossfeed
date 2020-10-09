@@ -82,4 +82,10 @@ export class Scan extends BaseEntity {
     default: false
   })
   isSingleScan: boolean;
+
+  @Column({
+    type: 'boolean',
+    default: false
+  })
+  manualRunPending: boolean;
 }

@@ -263,7 +263,7 @@ export const runScan = wrapHandler(async (event) => {
   });
 
   if (scan) {
-    scan.lastRun = null;
+    scan.manualRunPending = true;
 
     const res = await Scan.save(scan);
     return {

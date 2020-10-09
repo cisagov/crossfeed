@@ -378,7 +378,7 @@ describe('scheduler invoke', () => {
 });
 
 describe('run scan', () => {
-  it('run scan should change lastRun to null', async () => {
+  it('run scan should manualRunPending to true', async () => {
     const scan = await Scan.create({
       name: 'censys',
       arguments: {},
@@ -395,7 +395,7 @@ describe('run scan', () => {
       )
       .expect(200);
 
-    expect(response.body.lastRun).toEqual(null);
+    expect(response.body.manualRunPending).toEqual(true);
   });
   it('runScan by globalView should fail', async () => {
     const scan = await Scan.create({
@@ -415,6 +415,5 @@ describe('run scan', () => {
       .expect(403);
 
     expect(response.body).toEqual({});
-    expect(scheduler).toHaveBeenCalledTimes(0);
   });
 });
