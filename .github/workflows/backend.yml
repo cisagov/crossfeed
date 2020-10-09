@@ -166,6 +166,14 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
+      - name: Run syncdb - Staging
+        if: github.ref == 'refs/heads/master'
+        run: aws lambda invoke --function-name crossfeed-staging-syncdb out.json
+        working-directory: backend
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+
       - name: Ensure domain exists - Production
         if: github.ref == 'refs/heads/production'
         run: npx sls create_domain --stage=prod
@@ -185,6 +193,14 @@ jobs:
       - name: Deploy worker - Production
         if: github.ref == 'refs/heads/production'
         run: npm run deploy-worker-prod
+        working-directory: backend
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+
+      - name: Run syncdb - Production
+        if: github.ref == 'refs/heads/production'
+        run: aws lambda invoke --function-name crossfeed-prod-syncdb out.json
         working-directory: backend
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
