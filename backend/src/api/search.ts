@@ -8,7 +8,6 @@ export const search = wrapHandler(async (event) => {
     return Unauthorized;
   }
   await connectToDatabase();
-  // const search = await validateBody(DomainSearch, event.body);
 
   const searchBody = JSON.parse(event.body!);
 
@@ -21,8 +20,6 @@ export const search = wrapHandler(async (event) => {
     console.error(e.meta.body.error);
     throw e;
   }
-
-  console.error('search results: ', searchResults.body);
 
   return {
     statusCode: 200,
