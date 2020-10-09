@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'classnames';
 import { makeStyles, Paper } from '@material-ui/core';
 import { Result } from './SearchProvider';
@@ -7,28 +7,28 @@ import { sanitize } from 'dompurify';
 
 // Sync this with the backend client in es-client.ts.
 export interface WebpageRecord {
-  webpage_id: string,
-  webpage_createdAt: Date,
-  webpage_updatedAt: Date,
-  webpage_syncedAt: Date,
-  webpage_lastSeen: Date,
-  webpage_s3Key: string,
-  webpage_url: string,
-  webpage_status: string | number,
-  webpage_domainId: string,
-  webpage_discoveredById: string,
-  
+  webpage_id: string;
+  webpage_createdAt: Date;
+  webpage_updatedAt: Date;
+  webpage_syncedAt: Date;
+  webpage_lastSeen: Date;
+  webpage_s3Key: string;
+  webpage_url: string;
+  webpage_status: string | number;
+  webpage_domainId: string;
+  webpage_discoveredById: string;
+
   // Added before elasticsearch insertion (not present in the database):
   suggest?: { input: string | string[]; weight: number }[];
   parent_join?: {
-    name: "webpage",
+    name: 'webpage';
     parent: string;
-  }
+  };
   webpage_body?: string;
 }
 
 interface Highlight {
-  webpage_body: string[]
+  webpage_body: string[];
 }
 
 interface Props extends Result {
@@ -37,19 +37,28 @@ interface Props extends Result {
   inner_hits?: {
     webpage?: {
       hits: {
-        hits: {_source: WebpageRecord, highlight: Highlight}[],
-        max_score: number,
+        hits: { _source: WebpageRecord; highlight: Highlight }[];
+        max_score: number;
         total: {
-          value: number,
-          relation: string
-        }
-      }
-    }
-  }
+          value: number;
+          relation: string;
+        };
+      };
+    };
+  };
 }
+
+const filterExpanded = (
+  data: any[],
+  isExpanded: boolean,
+  count: number = 3
+) => {
+  return isExpanded ? data : data.slice(0, count);
+};
 
 export const ResultCard: React.FC<Props> = (props) => {
   const classes = useStyles(props);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const {
     id,
     name,
@@ -60,6 +69,13 @@ export const ResultCard: React.FC<Props> = (props) => {
     inner_hits,
     onDomainSelected
   } = props;
+
+  const toggleExpanded = (key: string) => {
+    setExpanded((expanded) => ({
+      ...expanded,
+      [key]: expanded[key] ? !expanded[key] : true
+    }));
+  };
 
   let lastSeen;
   try {
@@ -93,42 +109,53 @@ export const ResultCard: React.FC<Props> = (props) => {
   );
 
   const data = [];
-  if (ports.length > 0) {
-    data.push({
-      label: `port${ports.length > 1 ? 's' : ''}`,
-      count: ports.length,
-      value: ports.join(', ')
-    });
-  }
   if (products.length > 0) {
     data.push({
       label: `product${products.length > 1 ? 's' : ''}`,
       count: products.length,
-      value: [...Array.from(new Set(products))].join(', ')
+      value: filterExpanded(
+        [...Array.from(new Set(products))],
+        Boolean(expanded.products),
+        8
+      ).join(', '),
+      onExpand: () => toggleExpanded('products'),
+      expansionText:
+        products.length <= 8 ? null : expanded.products ? 'less' : 'more'
     });
   }
   if (cves.length > 0) {
     data.push({
       label: `vulnerabilit${cves.length > 1 ? 'ies' : 'y'}`,
       count: cves.length,
-      value: cves.join(', ')
+      value: filterExpanded(cves, Boolean(expanded.vulns), 10).join(', '),
+      onExpand: () => toggleExpanded('vulns'),
+      expansionText: cves.length <= 10 ? null : expanded.vulns ? 'less' : 'more'
     });
   }
   if (inner_hits?.webpage?.hits?.hits?.length! > 0) {
     const { hits } = inner_hits!.webpage!.hits!;
-    console.warn(hits.map(e => e._source.webpage_body));
-    console.warn(hits.map(e => e.highlight));
+    console.warn(hits.map((e) => e._source.webpage_body));
+    console.warn(hits.map((e) => e.highlight));
     data.push({
       label: `matching webpage${hits.length > 1 ? 's' : ''}`,
       count: hits.length,
-      value: hits.map(e => <div>
-        <small>
-        <strong>{e._source.webpage_url}</strong><br />
-        {e.highlight?.webpage_body?.map(body => <div>
-          <code dangerouslySetInnerHTML={{__html: sanitize(body, { ALLOWED_TAGS: ['em']})}} />
-        </div> )}
-        </small>
-      </div>)
+      value: hits.map((e) => (
+        <div>
+          <small>
+            <strong>{e._source.webpage_url}</strong>
+            <br />
+            {e.highlight?.webpage_body?.map((body) => (
+              <div>
+                <code
+                  dangerouslySetInnerHTML={{
+                    __html: sanitize(body, { ALLOWED_TAGS: ['em'] })
+                  }}
+                />
+              </div>
+            ))}
+          </small>
+        </div>
+      ))
     });
   }
 
@@ -137,22 +164,31 @@ export const ResultCard: React.FC<Props> = (props) => {
       <div className={classes.inner}>
         <button className={classes.domainRow} onClick={onClick}>
           <h4>{name.raw}</h4>
+          <div className={classes.lastSeen}>
+            <span className={classes.label}>Last Seen</span>
+            <span className={classes.data}>{lastSeen} ago</span>
+          </div>
         </button>
 
         {ip.raw && (
           <div className={clsx(classes.ipRow, classes.row)}>
             <div>
               <span className={classes.label}>IP</span>
-              <span>{ip.raw}</span>
+              <span className={classes.data}>{ip.raw}</span>
             </div>
-            <div className={classes.lastSeen}>
-              <span className={classes.label}>Last Seen</span>
-              <span>{lastSeen} ago</span>
-            </div>
+            {ports.length > 0 && (
+              <div className={classes.lastSeen}>
+                <span className={classes.label}>
+                  <span className={classes.count}>{ports.length}</span>
+                  {` port${ports.length > 1 ? 's' : ''}`}
+                </span>
+                <span className={classes.data}>{ports.join(', ')}</span>
+              </div>
+            )}
           </div>
         )}
 
-        {data.map(({ label, value, count }) => (
+        {data.map(({ label, value, count, onExpand, expansionText }) => (
           <p className={classes.row} key={label}>
             <span className={classes.label}>
               {count !== undefined && (
@@ -160,7 +196,14 @@ export const ResultCard: React.FC<Props> = (props) => {
               )}
               {label}
             </span>
-            <span className={classes.data}>{value}</span>
+            <span className={classes.data}>
+              {value}
+              {expansionText && (
+                <button className={classes.expandMore} onClick={onExpand}>
+                  {expansionText}
+                </button>
+              )}
+            </span>
           </p>
         ))}
       </div>
@@ -173,7 +216,11 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     marginBottom: '1rem',
     border: ({ selected }: Props) =>
-      selected ? '2px solid #28A0CB' : '2px solid #DCDEE0',
+      selected
+        ? `2px solid ${theme.palette.primary.main}`
+        : '2px solid #DCDEE0',
+    boxShadow: ({ selected }: Props) =>
+      selected ? '0px 1px 6px rgba(0, 0, 0, 0.25)' : 'none',
     '& em': {
       fontStyle: 'normal',
       backgroundColor: 'yellow'
@@ -207,11 +254,6 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'left',
       wordBreak: 'break-all',
       paddingRight: '1rem'
-    },
-    '& span': {
-      display: 'block',
-      textTransform: 'uppercase',
-      fontSize: '1rem'
     }
   },
   ipRow: {
@@ -233,9 +275,19 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.error.light
   },
   data: {
-    display: 'block'
+    display: 'block',
+    color: '#3D4551'
   },
   lastSeen: {
+    display: 'block',
     textAlign: 'right'
+  },
+  expandMore: {
+    outline: 'none',
+    border: 'none',
+    background: 'none',
+    color: theme.palette.secondary.main,
+    margin: '0 0.2rem',
+    cursor: 'pointer'
   }
 }));
