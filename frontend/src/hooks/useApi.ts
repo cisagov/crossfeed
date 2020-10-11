@@ -60,7 +60,7 @@ export const useApi = (onError?: OnError) => {
         throw e;
       }
     },
-    [prepareInit, onError]
+    [prepareInit, onError, trackEvent]
   );
 
   const api = {

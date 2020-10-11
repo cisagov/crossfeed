@@ -71,7 +71,7 @@ const LinkTracker = () => {
   const location = useLocation();
   const { trackPageView } = useMatomo();
 
-  useEffect(() => trackPageView({}), [location]);
+  useEffect(() => trackPageView({}), [location, trackPageView]);
 
   return null;
 };
