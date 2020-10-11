@@ -51,7 +51,7 @@ if (process.env.REACT_APP_USE_COGNITO) {
 }
 
 const instance = createInstance({
-  urlBase: 'http://localhost:3001',
+  urlBase: `${process.env.REACT_APP_API_URL}/matomo`,
   siteId: 1,
   heartBeat: {
     // optional, enabled by default

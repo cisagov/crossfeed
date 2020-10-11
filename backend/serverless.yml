@@ -18,6 +18,9 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment: ${file(env.yml):${self:provider.stage}}
   vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
+  apiGateway:
+    binaryMediaTypes:
+      - '*/*'
   logs:
     restApi: true
   deploymentBucket:

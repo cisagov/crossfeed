@@ -215,5 +215,20 @@ variable matomo_db_instance_class {
 
 variable matomo_db_table_name {
   type    = string
-  default = "cfstagedb"
+  default = "matomo"
+}
+
+variable matomo_vpc_link_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_ecs_role_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable ssm_matomo_vpc_link_id {
+  type    = string
+  default = "/crossfeed/staging/MATOMO_VPC_LINK_ID"
 }

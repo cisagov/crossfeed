@@ -14,6 +14,7 @@ import * as users from './users';
 import * as scanTasks from './scan-tasks';
 import * as stats from './stats';
 import { listenForDockerEvents } from './docker-events';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 if (
   (process.env.IS_OFFLINE || process.env.IS_LOCAL) &&
@@ -50,6 +51,20 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(helmet.hsts());
+
+app.use('/matomo', createProxyMiddleware({
+  target: process.env.MATOMO_URL || "http://matomo",
+  logLevel: 'debug',
+  headers: { HTTP_X_FORWARDED_URI: "/matomo" },
+  pathRewrite: function (path, req) { return path.replace(/^\/matomo/, '') },
+  onProxyRes: function (proxyRes, req, res) {
+    // Remove transfer-encoding: chunked responses, because API Gateway doesn't
+    // support chunked encoding.
+   if (proxyRes.headers['transfer-encoding'] === 'chunked') {
+     proxyRes.headers['transfer-encoding'] = '';
+   }
+  }
+}));
 
 app.get('/', handlerToExpress(healthcheck));
 app.post('/auth/login', handlerToExpress(auth.login));

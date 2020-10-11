@@ -11,6 +11,51 @@ resource "aws_ecs_cluster" "matomo" {
   }
 }
 
+resource "aws_iam_role" "matomo_task_execution_role" {
+  name               = var.matomo_ecs_role_name
+  assume_role_policy = <<EOF
+{
+  "Version": "2008-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+  EOF
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+resource "aws_iam_role_policy" "matomo_task_execution_role_policy" {
+  name_prefix = var.matomo_ecs_role_name
+  role        = aws_iam_role.matomo_task_execution_role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_ecs_task_definition" "matomo" {
   family                   = var.matomo_ecs_task_definition_family
   container_definitions    = <<EOF
@@ -56,6 +101,7 @@ resource "aws_ecs_task_definition" "matomo" {
   }
 ]
   EOF
+  execution_role_arn       = aws_iam_role.matomo_task_execution_role.arn
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
 
@@ -68,30 +114,41 @@ resource "aws_ecs_task_definition" "matomo" {
   }
 }
 
-# resource "aws_ecs_service" "matomo" {
-#   name            = "matomo"
-#   cluster         = aws_ecs_cluster.foo.id
-#   task_definition = aws_ecs_task_definition.mongo.arn
-#   desired_count   = 3
-#   iam_role        = aws_iam_role.foo.arn
-#   depends_on      = [aws_iam_role_policy.foo]
+resource "aws_service_discovery_private_dns_namespace" "matomo" {
+  name        = "crossfeed-${var.stage}"
+  description = "Crossfeed ${var.stage}"
+  vpc         = aws_vpc.crossfeed_vpc.id
+}
 
-#   ordered_placement_strategy {
-#     type  = "binpack"
-#     field = "cpu"
-#   }
+resource "aws_service_discovery_service" "matomo" {
+  name = "crossfeed-${var.stage}"
 
-#   load_balancer {
-#     target_group_arn = aws_lb_target_group.foo.arn
-#     container_name   = "mongo"
-#     container_port   = 8080
-#   }
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.matomo.id
 
-#   placement_constraints {
-#     type       = "memberOf"
-#     expression = "attribute:ecs.availability-zone in [us-west-2a, us-west-2b]"
-#   }
-# }
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+}
+
+resource "aws_ecs_service" "matomo" {
+  name            = "matomo"
+  launch_type     = "FARGATE"
+  cluster         = aws_ecs_cluster.matomo.id
+  task_definition = aws_ecs_task_definition.matomo.arn
+  desired_count   = 1
+  network_configuration {
+    subnets = [aws_subnet.matomo_1.id]
+    security_groups = [aws_security_group.allow_internal.id]
+  }
+  service_registries {
+    registry_arn = aws_service_discovery_service.matomo.arn
+  }
+}
 
 resource "aws_cloudwatch_log_group" "matomo" {
   name = var.matomo_ecs_log_group_name

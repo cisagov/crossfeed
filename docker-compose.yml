@@ -99,7 +99,7 @@ services:
     networks:
       - backend
     volumes:
-      - matomodb:/var/lib/mysql
+      - ./matomo-db-data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=password
 
@@ -109,7 +109,7 @@ services:
     networks:
       - backend
     volumes:
-      - matomo:/var/www/html
+      - ./matomo-data:/var/www/html
     environment:
       - MATOMO_DATABASE_HOST=matomodb
       - MATOMO_DATABASE_ADAPTER=mysql
@@ -117,15 +117,15 @@ services:
       - MATOMO_DATABASE_USERNAME=root
       - MATOMO_DATABASE_PASSWORD=password
       - MATOMO_DATABASE_DBNAME=matomo
-    ports:
-      - 3001:80
+      - MATOMO_GENERAL_PROXY_URI_HEADER=1
+      - MATOMO_GENERAL_ASSUME_SECURE_PROTOCOL=1
 
 volumes:
   postgres-data:
   es-data:
   minio-data:
-  matomodb:
-  matomo:
+  matomo-db-data:
+  matomo-data:
 
 networks:
   backend:
