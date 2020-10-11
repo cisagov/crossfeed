@@ -93,13 +93,23 @@ class ESClient {
     }
   }
 
+  excludeFields = (domain: Domain) => {
+    const copy: any = domain;
+    for (const service in copy.services) {
+      delete copy.services[service].censysIpv4Results;
+      delete copy.services[service].wappalyzerResults;
+      delete copy.services[service].intrigueIdentResults;
+    }
+    return copy;
+  };
+
   /**
    * Updates the given domains, upserting as necessary.
    * @param domains Domains to insert.
    */
   async updateDomains(domains: Domain[]) {
     const domainRecords = domains.map((e) => ({
-      ...e,
+      ...this.excludeFields(e),
       suggest: [{ input: e.name, weight: 1 }],
       parent_join: 'domain'
     })) as DomainRecord[];
@@ -180,6 +190,15 @@ class ESClient {
     return this.client.search({
       index: DOMAINS_INDEX,
       body
+    });
+  }
+
+  /**
+   * Deletes everything in Elasticsearch
+   */
+  async deleteAll() {
+    await this.client.indices.delete({
+      index: '*'
     });
   }
 }

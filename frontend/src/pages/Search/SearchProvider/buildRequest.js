@@ -5,33 +5,38 @@ function buildFrom(current, resultsPerPage) {
   return (current - 1) * resultsPerPage;
 }
 
+const nonKeywordFields = new Set(['updatedAt', 'createdAt']);
 function buildSort(sortDirection, sortField) {
-  if (sortDirection && sortField) {
-    return [{ [`${sortField}.keyword`]: sortDirection }];
+  if (!sortDirection || !sortField) {
+    return;
   }
+  if (nonKeywordFields.has(sortField)) {
+    return [{ [sortField]: sortDirection }];
+  }
+  return [{ [`${sortField}.keyword`]: sortDirection }];
 }
 
 function buildMatch(searchTerm) {
   return searchTerm
     ? {
-      multi_match: {
-        query: searchTerm,
-        fuzziness: 'AUTO',
-        fields: ['name']
+        multi_match: {
+          query: searchTerm,
+          fuzziness: 'AUTO',
+          fields: ['name']
+        }
       }
-    }
     : { match_all: {} };
 }
 
 function buildChildMatch(searchTerm) {
   return searchTerm
     ? {
-      multi_match: {
-        query: searchTerm,
-        fields: ['webpage_body']
+        multi_match: {
+          query: searchTerm,
+          fields: ['webpage_body']
+        }
       }
-    }
-    : {};
+    : { match_all: {} };
 }
 
 /*
@@ -64,7 +69,7 @@ export function buildRequest(state) {
 
   const sort = buildSort(sortDirection, sortField);
   const match = buildMatch(searchTerm);
-  const size = 100; // resultsPerPage;
+  const size = resultsPerPage;
   const from = buildFrom(current, resultsPerPage);
   const filter = buildRequestFilter(filters);
 
@@ -173,37 +178,38 @@ export function buildRequest(state) {
       //     "match_all": {}
       //   },
       //   "min_children": 1,
-      //   // "inner_hits": {}    
+      //   // "inner_hits": {}
       // },
       bool: {
-        must: [{
-          match: {
-            parent_join: "domain"
-          }
-        },
-        {
-          bool: {
-            should: [
-              match,
-              {
-                has_child: {
-                  type: "webpage",
-                  query: buildChildMatch(searchTerm),
-                  inner_hits: {
-                    _source: ["webpage_url"],
-                    highlight: {
-                      fragment_size: 50,
-                      number_of_fragments: 3,
-                      fields: {
-                        "webpage_body": {}
+        must: [
+          {
+            match: {
+              parent_join: 'domain'
+            }
+          },
+          {
+            bool: {
+              should: [
+                match,
+                {
+                  has_child: {
+                    type: 'webpage',
+                    query: buildChildMatch(searchTerm),
+                    inner_hits: {
+                      _source: ['webpage_url'],
+                      highlight: {
+                        fragment_size: 50,
+                        number_of_fragments: 3,
+                        fields: {
+                          webpage_body: {}
+                        }
                       }
                     }
                   }
                 }
-              }
-            ]
+              ]
+            }
           }
-        }
         ],
         ...(filter && { filter })
       }

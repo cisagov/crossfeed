@@ -23,6 +23,12 @@ describe('stats', () => {
         ipBlocks: [],
         isPassive: false
       }).save();
+      const organization2 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
       const name = 'test-' + Math.random();
       const domain = await Domain.create({
         name,
@@ -40,7 +46,8 @@ describe('stats', () => {
         domain
       }).save();
       await Domain.create({
-        name: 'test-' + Math.random()
+        name: 'test-' + Math.random(),
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/stats')
@@ -77,6 +84,12 @@ describe('stats', () => {
         ipBlocks: [],
         isPassive: false
       }).save();
+      const organization2 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
       const name = 'test-' + Math.random();
       const domain = await Domain.create({
         name,
@@ -94,7 +107,8 @@ describe('stats', () => {
         domain
       }).save();
       const domain2 = await Domain.create({
-        name: 'test-' + Math.random()
+        name: 'test-' + Math.random(),
+        organization: organization2
       }).save();
       await Vulnerability.create({
         title: 'vuln title 2',

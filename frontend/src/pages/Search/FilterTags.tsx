@@ -39,8 +39,13 @@ export const FilterTags: React.FC<Props> = (props) => {
     <div>
       {filtersByColumn.map((filter) => (
         <Chip
+          color="primary"
           classes={{ root: classes.chip }}
-          label={`${filter.label}: ${filter.value}`}
+          label={
+            <>
+            <strong>{filter.label}:</strong> {filter.value}
+            </>
+          }
           onDelete={() => {
             filter.values.forEach((val) => {
               removeFilter(filter.field, val, filter.type);

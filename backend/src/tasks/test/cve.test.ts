@@ -18,6 +18,46 @@ jest.mock('child_process', () => ({
   }
 }));
 
+jest.mock('fs', () => ({
+  promises: {
+    readdir: (str) => ['nvdcve-1.1-2019.json.gz'],
+    readFile: (str) => ''
+  }
+}));
+
+jest.mock('zlib', () => ({
+  unzipSync: (contents) =>
+    Buffer.from(
+      JSON.stringify({
+        CVE_Items: [
+          {
+            cve: {
+              CVE_data_meta: { ID: 'CVE-2019-10866' },
+              description: {
+                description_data: [
+                  {
+                    lang: 'en',
+                    value: 'Test description'
+                  }
+                ]
+              },
+              references: {
+                reference_data: [
+                  {
+                    url: 'https://example.com',
+                    name: 'https://example.com',
+                    refsource: 'CONFIRM',
+                    tags: ['Patch', 'Vendor Advisory']
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      })
+    )
+}));
+
 const RealDate = Date;
 
 describe('cve', () => {
@@ -60,7 +100,10 @@ describe('cve', () => {
     });
 
     const vulnerabilities = await Vulnerability.find({
-      domain
+      where: {
+        domain: domain,
+        service: service
+      }
     });
     expect(vulnerabilities.length).toEqual(2);
     for (const vulnerability of vulnerabilities) {
@@ -162,5 +205,44 @@ describe('cve', () => {
     });
     expect(vuln?.state).toEqual('open');
     expect(vuln?.substate).toEqual('unconfirmed');
+  });
+  test('populates vulnerability', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const vulnerability = await Vulnerability.create({
+      domain,
+      cve: 'CVE-2019-10866',
+      lastSeen: new Date(),
+      title: '123',
+      needsPopulation: true
+    }).save();
+    await cve({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vuln = await Vulnerability.findOne({
+      id: vulnerability.id
+    });
+    expect(vuln?.description).toEqual('Test description');
+    expect(vuln?.references).toEqual([
+      {
+        url: 'https://example.com',
+        name: 'https://example.com',
+        source: 'CONFIRM',
+        tags: ['Patch', 'Vendor Advisory']
+      }
+    ]);
   });
 });

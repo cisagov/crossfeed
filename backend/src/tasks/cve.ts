@@ -1,10 +1,18 @@
-import { Domain, connectToDatabase, Vulnerability, Product } from '../models';
+import {
+  Domain,
+  connectToDatabase,
+  Vulnerability,
+  Product,
+  Service
+} from '../models';
 import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { LessThan } from 'typeorm';
+import * as fs from 'fs';
+import * as zlib from 'zlib';
 
 /**
  * The CVE scan finds vulnerable CVEs affecting domains based on CPEs identified
@@ -14,16 +22,20 @@ const productMap = {
   'cpe:/a:microsoft:asp.net': ['cpe:/a:microsoft:.net_framework']
 };
 
+// The number of domains to process at once
+const BATCH_SIZE = 1000;
+
 // Scan for new vulnerabilities based on version numbers
 const identifyPassiveCVEs = async (allDomains: Domain[]) => {
   const hostsToCheck: Array<{
     domain: Domain;
+    service: Service;
     cpes: string[];
   }> = [];
-  for (const domain of allDomains) {
-    const cpes = new Set<string>();
 
+  for (const domain of allDomains) {
     for (const service of domain.services) {
+      const cpes = new Set<string>();
       for (const product of service.products) {
         if (
           product.cpe &&
@@ -38,12 +50,13 @@ const identifyPassiveCVEs = async (allDomains: Domain[]) => {
           }
         }
       }
+      if (cpes.size > 0)
+        hostsToCheck.push({
+          domain: domain,
+          service: service,
+          cpes: Array.from(cpes)
+        });
     }
-    if (cpes.size > 0)
-      hostsToCheck.push({
-        domain: domain,
-        cpes: Array.from(cpes)
-      });
   }
   if (hostsToCheck.length === 0) {
     console.warn('No hosts to check - no domains with CPEs found.');
@@ -54,57 +67,130 @@ const identifyPassiveCVEs = async (allDomains: Domain[]) => {
     stdio: [process.stdin, process.stdout, process.stderr]
   });
 
-  let input = '';
-  for (const [index, host] of hostsToCheck.entries()) {
-    input += `${index} ${host.cpes.join(',')}\n`;
-    console.log(`${index} ${host.cpes.join(',')}`);
+  const numBatches = hostsToCheck.length / BATCH_SIZE;
+  for (let batch = 0; batch < numBatches; batch++) {
+    let input = '';
+    for (
+      let index = BATCH_SIZE * batch;
+      index < Math.min(BATCH_SIZE * (batch + 1), hostsToCheck.length);
+      index++
+    ) {
+      input += `${index} ${hostsToCheck[index].cpes.join(',')}\n`;
+      console.log(`${index} ${hostsToCheck[index].cpes.join(',')}`);
+    }
+    let res: Buffer;
+    try {
+      res = execSync(
+        "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 -require_version nvd-dump/nvdcve-1.1-2*.json.gz",
+        { input: input, maxBuffer: buffer.constants.MAX_LENGTH }
+      );
+    } catch (e) {
+      console.error(e);
+      continue;
+    }
+    const split = String(res).split('\n');
+    const vulnerabilities: Vulnerability[] = [];
+    for (const line of split) {
+      const parts = line.split(' ');
+      if (parts.length < 5) continue;
+      const domain = hostsToCheck[parseInt(parts[0])].domain;
+
+      const service = hostsToCheck[parseInt(parts[0])].service;
+
+      const cvss = parseFloat(parts[3]);
+      let severity: string;
+
+      if (cvss === 0) severity = 'None';
+      else if (cvss < 4) severity = 'Low';
+      else if (cvss < 7) severity = 'Medium';
+      else if (cvss < 9) severity = 'High';
+      else severity = 'Critical';
+
+      vulnerabilities.push(
+        plainToClass(Vulnerability, {
+          domain: domain,
+          lastSeen: new Date(Date.now()),
+          title: parts[1],
+          cve: parts[1],
+          cwe: parts[4],
+          cpe: parts[2],
+          cvss,
+          severity,
+          state: 'open',
+          service: service
+        })
+      );
+    }
+    await saveVulnerabilitiesToDb(vulnerabilities, false);
   }
-
-  // Should change this to spawnSync
-  const res = execSync(
-    "cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 -require_version nvd-dump/nvdcve-1.1-2*.json.gz",
-    { input: input, maxBuffer: buffer.constants.MAX_LENGTH }
-  );
-
-  const split = String(res).split('\n');
-  const vulnerabilities: Vulnerability[] = [];
-  for (const line of split) {
-    const parts = line.split(' ');
-    if (parts.length < 5) continue;
-    const domain = hostsToCheck[parseInt(parts[0])].domain;
-
-    const cvss = parseFloat(parts[3]);
-    let severity: string;
-
-    if (cvss === 0) severity = 'None';
-    else if (cvss < 4) severity = 'Low';
-    else if (cvss < 7) severity = 'Medium';
-    else if (cvss < 9) severity = 'High';
-    else severity = 'Critical';
-
-    vulnerabilities.push(
-      plainToClass(Vulnerability, {
-        domain: domain,
-        lastSeen: new Date(Date.now()),
-        title: parts[1],
-        cve: parts[1],
-        cwe: parts[4],
-        cpe: parts[2],
-        cvss,
-        severity,
-        state: 'open'
-      })
-    );
-  }
-  await saveVulnerabilitiesToDb(vulnerabilities, false);
 };
+
+interface NvdFile {
+  CVE_Items: {
+    cve: {
+      CVE_data_meta: {
+        ID: string;
+      };
+      references: {
+        reference_data: {
+          url: string;
+          name: string;
+          refsource: string;
+          tags: string[];
+        }[];
+      };
+      description: {
+        description_data: {
+          lang: string;
+          value: string;
+        }[];
+      };
+    };
+  }[];
+}
 
 // Populate CVE information
 const populateVulnerabilities = async () => {
   const vulnerabilities = await Vulnerability.find({
     needsPopulation: true
   });
-  // TODO: Populate info of these vulnerabilities
+  const vulnerabilitiesMap: { [key: string]: Vulnerability[] } = {};
+  for (const vuln of vulnerabilities) {
+    if (vuln.cve) {
+      if (vulnerabilitiesMap[vuln.cve]) {
+        vulnerabilitiesMap[vuln.cve].push(vuln);
+      } else vulnerabilitiesMap[vuln.cve] = [vuln];
+    }
+  }
+  const filenames = await fs.promises.readdir('nvd-dump');
+  for (const file of filenames) {
+    // Only process yearly CVE files, e.g. nvdcve-1.1-2014.json.gz
+    if (!file.match(/nvdcve-1\.1-\d{4}\.json\.gz/)) continue;
+    const contents = await fs.promises.readFile('nvd-dump/' + file);
+    const unzipped = zlib.unzipSync(contents);
+    const parsed: NvdFile = JSON.parse(unzipped.toString());
+    for (const item of parsed.CVE_Items) {
+      const cve = item.cve.CVE_data_meta.ID;
+      if (vulnerabilitiesMap[cve]) {
+        console.log(cve);
+        const vulns = vulnerabilitiesMap[cve];
+        const description = item.cve.description.description_data.find(
+          (desc) => desc.lang === 'en'
+        );
+        for (const vuln of vulns) {
+          if (description) vuln.description = description.value;
+          vuln.references = item.cve.references.reference_data.map((r) => ({
+            url: r.url,
+            name: r.name,
+            source: r.refsource,
+            tags: r.tags
+          }));
+          vuln.needsPopulation = false;
+          await vuln.save();
+        }
+      }
+    }
+  }
 };
 
 // Closes vulnerabilities that haven't been seen recently
@@ -136,4 +222,6 @@ export const handler = async (commandOptions: CommandOptions) => {
     }
   });
   await closeVulnerabilities(openVulnerabilites);
+
+  await populateVulnerabilities();
 };

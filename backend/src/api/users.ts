@@ -220,7 +220,6 @@ export const acceptTerms = wrapHandler(async (event) => {
     return NotFound;
   }
   user.dateAcceptedTerms = new Date();
-  console.log(JSON.parse(event.body));
   user.acceptedTermsVersion = JSON.parse(event.body).version;
   await user.save();
   return {
