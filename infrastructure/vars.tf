@@ -187,3 +187,33 @@ variable ses_support_email {
   type    = string
   default = "support@staging.crossfeed.cyber.dhs.gov"
 }
+
+variable matomo_ecs_cluster_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_ecs_task_definition_family {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_ecs_log_group_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_db_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_db_instance_class {
+  type    = string
+  default = "db.t3.micro"
+}
+
+variable matomo_db_table_name {
+  type    = string
+  default = "cfstagedb"
+}
