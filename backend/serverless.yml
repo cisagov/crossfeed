@@ -20,7 +20,8 @@ provider:
   vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
   apiGateway:
     binaryMediaTypes:
-      - '*/*'
+      - 'image/*'
+      - 'font/*'
   logs:
     restApi: true
   deploymentBucket:
