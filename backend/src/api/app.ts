@@ -66,6 +66,10 @@ app.use('/matomo', createProxyMiddleware({
   }
 }));
 
+// Rewrite the URL for the top image of the Matomo admin dashboard,
+// due to a bug in how Matomo handles relative URLs.
+app.get('/plugins/Morpheus/images/logo.svg', (req, res) => res.redirect('/matomo/plugins/Morpheus/images/logo.svg?matomo'));
+
 app.get('/', handlerToExpress(healthcheck));
 app.post('/auth/login', handlerToExpress(auth.login));
 app.post('/auth/callback', handlerToExpress(auth.callback));
