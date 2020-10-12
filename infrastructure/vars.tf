@@ -216,6 +216,7 @@ variable matomo_db_instance_class {
 variable matomo_ecs_role_name {
   type    = string
   default = "crossfeed-matomo-staging"
+}
 
 variable es_instance_type {
   type    = string
