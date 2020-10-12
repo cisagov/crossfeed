@@ -1,6 +1,3 @@
-# https://github.com/wikitribune/matomo/tree/master/aws-ecs
-
-
 resource "aws_ecs_cluster" "matomo" {
   name               = var.matomo_ecs_cluster_name
   capacity_providers = ["FARGATE"]
