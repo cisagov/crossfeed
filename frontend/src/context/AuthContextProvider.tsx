@@ -28,7 +28,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     await Auth.signOut();
     cookies.remove('crossfeed-token', { domain: process.env.REACT_APP_COOKIE_DOMAIN });
     window.location.reload();
-  }, []);
+  }, [cookies]);
 
   const handleError = useCallback(
     async (e: Error) => {
