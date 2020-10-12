@@ -1,9 +1,12 @@
-import { handler as searchSync } from '../search-sync';
+import {
+  handler as searchSync,
+  WEBPAGE_CHUNK_SIZE,
+  DOMAIN_CHUNK_SIZE
+} from '../search-sync';
 import {
   connectToDatabase,
   Organization,
   Domain,
-  Scan,
   Service,
   Vulnerability,
   Webpage
@@ -248,6 +251,28 @@ describe('search_sync', () => {
     expect(newDomain.syncedAt).not.toEqual(domain.syncedAt);
   });
 
+  test('should sync domains in chunks', async () => {
+    await Promise.all(
+      new Array(DOMAIN_CHUNK_SIZE + 1).fill(null).map((e) =>
+        Domain.create({
+          name: 'cisa-' + Math.random() + '.gov',
+          organization,
+          syncedAt: new Date('9999-09-19T19:57:32.346Z'),
+          updatedAt: new Date('9999-09-20T19:57:32.346Z')
+        }).save()
+      )
+    );
+
+    await searchSync({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    expect(updateDomains).toBeCalledTimes(2);
+  });
+
   test('should not sync webpages when webpages have already been synced', async () => {
     const domain = await Domain.create({
       name: 'cisa.gov',
@@ -327,5 +352,33 @@ describe('search_sync', () => {
     });
 
     expect(updateWebpages).toBeCalled();
+  });
+
+  test('should sync webpages in chunks', async () => {
+    const domain = await Domain.create({
+      name: 'cisa.gov',
+      organization
+    }).save();
+
+    await Promise.all(
+      new Array(WEBPAGE_CHUNK_SIZE + 1).fill(null).map((e) =>
+        Webpage.create({
+          domain,
+          url: 'https://cisa.gov/123' + Math.random(),
+          status: 200,
+          updatedAt: new Date('9999-08-30T03:36:57.231Z'),
+          syncedAt: new Date('9999-08-23T03:36:57.231Z')
+        }).save()
+      )
+    );
+
+    await searchSync({
+      domainId: domain.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    expect(updateWebpages).toBeCalledTimes(2);
   });
 });
