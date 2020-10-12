@@ -36,7 +36,6 @@ user_pool_domain                  = "crossfeed-staging"
 ssm_user_pool_id                  = "/crossfeed/staging/USER_POOL_ID"
 ssm_user_pool_client_id           = "/crossfeed/staging/USER_POOL_CLIENT_ID"
 ses_support_email                 = "support@staging.crossfeed.cyber.dhs.gov"
-
 matomo_ecs_cluster_name           = "crossfeed-matomo-staging"
 matomo_ecs_task_definition_family = "crossfeed-matomo-staging"
 matomo_ecs_log_group_name         = "crossfeed-matomo-staging"
