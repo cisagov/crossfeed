@@ -209,9 +209,13 @@ const shouldRunScan = async ({
   scan: Scan;
 }) => {
   const { isPassive, global } = SCAN_SCHEMA[scan.name];
-  // Don't run non-passive scans on passive organizations.
   if (organization?.isPassive && !isPassive) {
+    // Don't run non-passive scans on passive organizations.
     return false;
+  }
+  if (scan.manualRunPending) {
+    // Always run these scans.
+    return true;
   }
   const orgFilter = global ? {} : { organization: { id: organization?.id } };
   const lastRunningScanTask = await ScanTask.findOne(
@@ -247,19 +251,18 @@ const shouldRunScan = async ({
   if (
     lastFinishedScanTask &&
     lastFinishedScanTask.finishedAt &&
-    !scan.manualRunPending &&
     lastFinishedScanTask.finishedAt.getTime() >=
       new Date().getTime() - 1000 * scan.frequency
   ) {
     return false;
   }
-  //Should not run a scan if the scan is a SingleScan and has run once
   if (
     lastFinishedScanTask &&
     lastFinishedScanTask.finishedAt &&
-    scan.isSingleScan &&
-    !scan.manualRunPending
+    scan.isSingleScan
   ) {
+    // Should not run a scan if the scan is a singleScan
+    // and has already run once before.
     return false;
   }
   return true;

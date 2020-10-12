@@ -172,7 +172,6 @@ export const update = wrapHandler(async (event) => {
       organizations: body.organizations.map((id) => ({ id }))
     });
     const res = await Scan.save(scan);
-    console.log(res);
     return {
       statusCode: 200,
       body: JSON.stringify(res)

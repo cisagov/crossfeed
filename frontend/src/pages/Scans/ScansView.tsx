@@ -218,7 +218,6 @@ const ScansView: React.FC = () => {
         }
       });
       setScans(scans.concat(scan));
-      console.log(values.isSingleScan);
     } catch (e) {
       setErrors({
         global: e.message ?? e.toString()
