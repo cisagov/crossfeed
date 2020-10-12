@@ -151,7 +151,7 @@ resource "aws_ecs_service" "matomo" {
   task_definition = aws_ecs_task_definition.matomo.arn
   desired_count   = 1
   network_configuration {
-    subnets = [aws_subnet.matomo_1.id]
+    subnets         = [aws_subnet.matomo_1.id]
     security_groups = [aws_security_group.allow_internal.id]
   }
   service_registries {
@@ -168,7 +168,7 @@ resource "aws_cloudwatch_log_group" "matomo" {
 }
 
 resource "random_password" "matomo_db_password" {
-  length = 16
+  length  = 16
   special = false
 }
 
