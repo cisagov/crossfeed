@@ -60,7 +60,9 @@ export const useApi = (onError?: OnError) => {
         throw e;
       }
     },
-    [prepareInit, onError, trackEvent]
+    // Adding trackEvent to deps causes an infinite loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [prepareInit, onError]
   );
 
   const api = {

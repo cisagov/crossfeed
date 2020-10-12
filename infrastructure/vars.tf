@@ -227,8 +227,3 @@ variable matomo_ecs_role_name {
   type    = string
   default = "crossfeed-matomo-staging"
 }
-
-variable ssm_matomo_vpc_link_id {
-  type    = string
-  default = "/crossfeed/staging/MATOMO_VPC_LINK_ID"
-}

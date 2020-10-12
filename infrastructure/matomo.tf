@@ -114,17 +114,18 @@ resource "aws_ecs_task_definition" "matomo" {
   }
 }
 
-resource "aws_service_discovery_private_dns_namespace" "matomo" {
-  name        = "crossfeed-${var.stage}"
+resource "aws_service_discovery_private_dns_namespace" "default" {
+  name        = "crossfeed.local"
   description = "Crossfeed ${var.stage}"
   vpc         = aws_vpc.crossfeed_vpc.id
 }
 
 resource "aws_service_discovery_service" "matomo" {
-  name = "crossfeed-${var.stage}"
+  # ECS service can be accessed through http://matomo.crossfeed.local
+  name = "matomo"
 
   dns_config {
-    namespace_id = aws_service_discovery_private_dns_namespace.matomo.id
+    namespace_id = aws_service_discovery_private_dns_namespace.default.id
 
     dns_records {
       ttl  = 10

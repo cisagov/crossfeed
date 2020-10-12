@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
 import { handler as healthcheck } from './healthcheck';
@@ -51,24 +52,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(helmet.hsts());
-
-app.use('/matomo', createProxyMiddleware({
-  target: process.env.MATOMO_URL || "http://matomo",
-  logLevel: 'debug',
-  headers: { HTTP_X_FORWARDED_URI: "/matomo" },
-  pathRewrite: function (path, req) { return path.replace(/^\/matomo/, '') },
-  onProxyRes: function (proxyRes, req, res) {
-    // Remove transfer-encoding: chunked responses, because API Gateway doesn't
-    // support chunked encoding.
-   if (proxyRes.headers['transfer-encoding'] === 'chunked') {
-     proxyRes.headers['transfer-encoding'] = '';
-   }
-  }
-}));
-
-// Rewrite the URL for the top image of the Matomo admin dashboard,
-// due to a bug in how Matomo handles relative URLs.
-app.get('/plugins/Morpheus/images/logo.svg', (req, res) => res.redirect('/matomo/plugins/Morpheus/images/logo.svg?matomo'));
+app.use(cookieParser());
 
 app.get('/', handlerToExpress(healthcheck));
 app.post('/auth/login', handlerToExpress(auth.login));
@@ -122,6 +106,41 @@ const getMaximumRole = (user) => {
 const getToUVersion = (user) => {
   return `v${process.env.REACT_APP_TERMS_VERSION}-${getMaximumRole(user)}`;
 };
+
+const matomoProxy = createProxyMiddleware({
+  target: process.env.MATOMO_URL || "http://matomo",
+  headers: { HTTP_X_FORWARDED_URI: "/matomo" },
+  pathRewrite: function (path, req) { return path.replace(/^\/matomo/, '') },
+  onProxyRes: function (proxyRes, req, res) {
+    // Remove transfer-encoding: chunked responses, because API Gateway doesn't
+    // support chunked encoding.
+   if (proxyRes.headers['transfer-encoding'] === 'chunked') {
+     proxyRes.headers['transfer-encoding'] = '';
+   }
+  }
+});
+
+app.use('/matomo', async (req, res, next) => {
+  // Public paths -- see https://matomo.org/docs/security-how-to/
+  const ALLOWED_PATHS = ["/matomo.php", "/matomo.js"];
+  if (ALLOWED_PATHS.indexOf(req.path) > -1) {
+    return next();
+  }
+  // Only allow global admins to access all other paths.
+  const user = await auth.authorize({
+    authorizationToken: req.cookies["crossfeed-token"]
+  }) as auth.UserToken;
+  if (
+    user.userType !== "globalAdmin"
+  ) {
+    return res.status(401).send('Unauthorized');
+  }
+  return next();
+}, matomoProxy);
+
+// Rewrite the URL for the top image of the Matomo admin dashboard,
+// due to a bug in how Matomo handles relative URLs.
+app.get('/plugins/Morpheus/images/logo.svg', (req, res) => res.redirect('/matomo/plugins/Morpheus/images/logo.svg?matomo'));
 
 // Routes that require an authenticated user, without
 // needing to sign the terms of service yet
