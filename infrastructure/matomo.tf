@@ -96,6 +96,14 @@ resource "aws_ecs_task_definition" "matomo" {
       {
         "name": "MATOMO_DATABASE_DBNAME",
         "value": "${aws_db_instance.matomo_db.name}"
+      },
+      {
+        "name": "MATOMO_GENERAL_PROXY_URI_HEADER",
+        "value": "1"
+      },
+      {
+        "name": "MATOMO_GENERAL_ASSUME_SECURE_PROTOCOL",
+        "value": "1"
       }
     ]
   }
