@@ -107,6 +107,10 @@ const getToUVersion = (user) => {
   return `v${process.env.REACT_APP_TERMS_VERSION}-${getMaximumRole(user)}`;
 };
 
+// Rewrite the URL for the top image of the Matomo admin dashboard,
+// due to a bug in how Matomo handles relative URLs.
+app.get('/plugins/Morpheus/images/logo.svg', (req, res) => res.redirect('/matomo/plugins/Morpheus/images/logo.svg?matomo'));
+
 const matomoProxy = createProxyMiddleware({
   target: process.env.MATOMO_URL || "http://matomo",
   headers: { HTTP_X_FORWARDED_URI: "/matomo" },
@@ -126,6 +130,16 @@ app.use('/matomo', async (req, res, next) => {
   if (ALLOWED_PATHS.indexOf(req.path) > -1) {
     return next();
   }
+  // API Gateway isn't able to proxy fonts properly -- so we're using a CDN instead.
+  if (req.path === "/plugins/Morpheus/fonts/matomo.woff2") {
+    return res.redirect("https://cdn.jsdelivr.net/gh/matomo-org/matomo@3.14.1/plugins/Morpheus/fonts/matomo.woff2");
+  }
+  if (req.path === "/plugins/Morpheus/fonts/matomo.woff") {
+    return res.redirect("https://cdn.jsdelivr.net/gh/matomo-org/matomo@3.14.1/plugins/Morpheus/fonts/matomo.woff");
+  }
+  if (req.path === "/plugins/Morpheus/fonts/matomo.ttf") {
+    return res.redirect("https://cdn.jsdelivr.net/gh/matomo-org/matomo@3.14.1/plugins/Morpheus/fonts/matomo.ttf");
+  }
   // Only allow global admins to access all other paths.
   const user = await auth.authorize({
     authorizationToken: req.cookies["crossfeed-token"]
@@ -137,10 +151,6 @@ app.use('/matomo', async (req, res, next) => {
   }
   return next();
 }, matomoProxy);
-
-// Rewrite the URL for the top image of the Matomo admin dashboard,
-// due to a bug in how Matomo handles relative URLs.
-app.get('/plugins/Morpheus/images/logo.svg', (req, res) => res.redirect('/matomo/plugins/Morpheus/images/logo.svg?matomo'));
 
 // Routes that require an authenticated user, without
 // needing to sign the terms of service yet
