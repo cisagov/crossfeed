@@ -15,7 +15,7 @@ import { Table, ImportExport } from 'components';
 import { Column } from 'react-table';
 import { Scan, Organization, ScanSchema } from 'types';
 import { FaTimes } from 'react-icons/fa';
-import { FaPlay } from 'react-icons/fa';
+import { FaPlayCircle } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import MultiSelect from './MultiSelect';
@@ -45,13 +45,14 @@ const ScansView: React.FC = () => {
       Header: 'Run',
       id: 'run',
       Cell: ({ row }: { row: { index: number } }) => (
-        <span
+        <div
+          style={{textAlign: 'center'}}
           onClick={() => {
             runScan(row.index);
           }}
         >
-          <FaPlay />
-        </span>
+          <FaPlayCircle />
+        </div>
       ),
       disableFilters: true
     },
