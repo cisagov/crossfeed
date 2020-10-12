@@ -1,4 +1,3 @@
-import { Domain, Service } from '../models';
 import { CommandOptions } from './ecs-client';
 import { getLiveWebsites, LiveDomain } from './helpers/getLiveWebsites';
 import PQueue from 'p-queue';
@@ -15,7 +14,8 @@ const intrigueIdent = async (domain: LiveDomain): Promise<void> => {
         ...process.env,
         HTTP_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY,
         HTTPS_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY
-      }
+      },
+      maxBuffer: buffer.constants.MAX_LENGTH
     }
   );
   if (stderr.toString()) {
