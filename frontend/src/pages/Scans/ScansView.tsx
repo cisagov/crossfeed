@@ -248,9 +248,20 @@ const ScansView: React.FC = () => {
     }));
   };
 
+  /**
+   * Manually runs a single scan, then immediately invokes the
+   * scheduler so the scan is run.
+   * @param index Row index
+   */
   const runScan = async (index: number) => {
     let row = scans[index];
-    await apiPost(`/scans/${row.id}/run`);
+    try {
+      await apiPost(`/scans/${row.id}/run`);
+    } catch (e) {
+      console.error(e);
+      setErrors({ ...errors, scheduler: 'Run failed.' });
+    }
+    await invokeScheduler();
   }
 
   const selectedScan = scanSchema[values.name] || {};
