@@ -107,8 +107,8 @@ const getToUVersion = (user) => {
   return `v${process.env.REACT_APP_TERMS_VERSION}-${getMaximumRole(user)}`;
 };
 
-// Rewrite the URL for the top image of the Matomo admin dashboard,
-// due to a bug in how Matomo handles relative URLs.
+// Rewrite the URL for some Matomo admin dashboard URLs, due to a bug in
+// how Matomo handles relative URLs when hosted on a subpath.
 app.get('/plugins/Morpheus/images/logo.svg', (req, res) =>
   res.redirect('/matomo/plugins/Morpheus/images/logo.svg?matomo')
 );
