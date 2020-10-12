@@ -42,3 +42,5 @@ matomo_ecs_log_group_name         = "crossfeed-matomo-staging"
 matomo_db_name                    = "crossfeed-matomo-staging"
 matomo_db_instance_class          = "db.t3.micro"
 matomo_ecs_role_name              = "crossfeed-matomo-staging"
+es_instance_type                  = "t2.micro.elasticsearch"
+es_instance_count                 = 1
