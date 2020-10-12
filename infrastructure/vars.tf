@@ -213,16 +213,6 @@ variable matomo_db_instance_class {
   default = "db.t3.micro"
 }
 
-variable matomo_db_table_name {
-  type    = string
-  default = "matomo"
-}
-
-variable matomo_vpc_link_name {
-  type    = string
-  default = "crossfeed-matomo-staging"
-}
-
 variable matomo_ecs_role_name {
   type    = string
   default = "crossfeed-matomo-staging"
