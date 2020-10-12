@@ -112,6 +112,9 @@ const getToUVersion = (user) => {
 app.get('/plugins/Morpheus/images/logo.svg', (req, res) =>
   res.redirect('/matomo/plugins/Morpheus/images/logo.svg?matomo')
 );
+app.get('/index.php', (req, res) =>
+  res.redirect('/matomo/index.php')
+);
 
 const matomoProxy = createProxyMiddleware({
   target: process.env.MATOMO_URL || 'http://matomo',
