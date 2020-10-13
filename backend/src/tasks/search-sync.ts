@@ -9,7 +9,7 @@ import { chunk } from 'lodash';
 /**
  * Chunk sizes. These values are small during testing to facilitate testing.
  */
-export const DOMAIN_CHUNK_SIZE = typeof jest === 'undefined' ? 300 : 10;
+export const DOMAIN_CHUNK_SIZE = typeof jest === 'undefined' ? 100 : 10;
 export const WEBPAGE_CHUNK_SIZE = typeof jest === 'undefined' ? 100 : 5;
 
 export const handler = async (commandOptions: CommandOptions) => {
