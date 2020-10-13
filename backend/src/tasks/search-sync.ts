@@ -5,6 +5,7 @@ import ESClient, { WebpageRecord } from './es-client';
 import S3Client from './s3-client';
 import PQueue from 'p-queue';
 import { chunk } from 'lodash';
+import pRetry from 'p-retry';
 
 /**
  * Chunk sizes. These values are small during testing to facilitate testing.
@@ -51,7 +52,10 @@ export const handler = async (commandOptions: CommandOptions) => {
         relations: ['services', 'organization', 'vulnerabilities']
       });
       console.log(`Syncing ${domains.length} domains...`);
-      await client.updateDomains(domains);
+      await pRetry(() => client.updateDomains(domains), {
+        retries: 3,
+        randomize: true
+      });
 
       await Domain.createQueryBuilder('domain')
         .update(Domain)
@@ -98,7 +102,10 @@ export const handler = async (commandOptions: CommandOptions) => {
         }
       }
       await queue.onIdle();
-      await client.updateWebpages(webpageChunk);
+      await pRetry(() => client.updateWebpages(webpageChunk), {
+        retries: 3,
+        randomize: true
+      });
 
       await Webpage.createQueryBuilder('webpage')
         .update(Webpage)
