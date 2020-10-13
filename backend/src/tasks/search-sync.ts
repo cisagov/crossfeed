@@ -4,8 +4,13 @@ import { In } from 'typeorm';
 import ESClient, { WebpageRecord } from './es-client';
 import S3Client from './s3-client';
 import PQueue from 'p-queue';
+import { chunk } from 'lodash';
 
-const MAX_RESULTS = 500;
+/**
+ * Chunk sizes. These values are small during testing to facilitate testing.
+ */
+export const DOMAIN_CHUNK_SIZE = typeof jest === 'undefined' ? 300 : 10;
+export const WEBPAGE_CHUNK_SIZE = typeof jest === 'undefined' ? 100 : 5;
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, domainId } = commandOptions;
@@ -29,8 +34,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       'COUNT(CASE WHEN services.updatedAt > domain.syncedAt THEN 1 END) >= 1'
     )
     .groupBy('domain.id, organization.id, vulnerabilities.id, services.id')
-    .select(['domain.id'])
-    .take(MAX_RESULTS);
+    .select(['domain.id']);
 
   if (organizationId) {
     // This parameter is used for testing only
@@ -38,20 +42,23 @@ export const handler = async (commandOptions: CommandOptions) => {
   }
 
   const domainIds = (await qs.getMany()).map((e) => e.id);
-
+  console.log(`Got ${domainIds.length} domains.`);
   if (domainIds.length) {
-    const domains = await Domain.find({
-      where: { id: In(domainIds) },
-      relations: ['services', 'organization', 'vulnerabilities']
-    });
-    console.log(`Syncing ${domains.length} domains...`);
-    await client.updateDomains(domains);
+    const domainIdChunks = chunk(domainIds, DOMAIN_CHUNK_SIZE);
+    for (const domainIdChunk of domainIdChunks) {
+      const domains = await Domain.find({
+        where: { id: In(domainIdChunk) },
+        relations: ['services', 'organization', 'vulnerabilities']
+      });
+      console.log(`Syncing ${domains.length} domains...`);
+      await client.updateDomains(domains);
 
-    await Domain.createQueryBuilder('domain')
-      .update(Domain)
-      .set({ syncedAt: new Date(Date.now()) })
-      .where({ id: In(domains.map((e) => e.id)) })
-      .execute();
+      await Domain.createQueryBuilder('domain')
+        .update(Domain)
+        .set({ syncedAt: new Date(Date.now()) })
+        .where({ id: In(domains.map((e) => e.id)) })
+        .execute();
+    }
     console.log('Domain sync complete.');
   } else {
     console.log('Not syncing any domains.');
@@ -61,7 +68,6 @@ export const handler = async (commandOptions: CommandOptions) => {
   const qs_ = Webpage.createQueryBuilder('webpage').where(
     '(webpage.updatedAt > webpage.syncedAt OR webpage.syncedAt is null)'
   );
-  // .orWhere('');
 
   if (domainId) {
     // This parameter is used for testing only
@@ -70,36 +76,37 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   // The response actually has keys "webpage_id", "webpage_createdAt", etc.
   const s3Client = new S3Client();
-  const queue = new PQueue({ concurrency: 10 });
-  const webpages: WebpageRecord[] = await qs_.take(MAX_RESULTS).execute();
-  console.log(
-    `Got ${webpages.length} webpages. Retrieving body of each webpage...`
-  );
-  for (const i in webpages) {
-    const webpage = webpages[i];
-    if (webpage.webpage_s3Key) {
-      queue.add(async () => {
-        webpage.webpage_body = await s3Client.getWebpageBody(
-          webpage.webpage_s3Key
-        );
-        if (Number(i) % 100 == 0) {
-          console.log(`Finished: ${i}`);
-        }
-      });
-    }
-  }
-  await queue.onIdle();
+  const webpages: WebpageRecord[] = await qs_.execute();
+  console.log(`Got ${webpages.length} webpages.`);
 
   if (webpages.length) {
-    console.log(`Syncing ${webpages.length} webpages...`);
-    const results = await client.updateWebpages(webpages);
-    console.warn(results);
+    const webpageChunks = chunk(webpages, WEBPAGE_CHUNK_SIZE);
+    for (const webpageChunk of webpageChunks) {
+      console.log(`Syncing ${webpageChunk.length} webpages...`);
+      const queue = new PQueue({ concurrency: 10 });
+      for (const i in webpageChunk) {
+        const webpage = webpageChunk[i];
+        if (webpage.webpage_s3Key) {
+          queue.add(async () => {
+            webpage.webpage_body = await s3Client.getWebpageBody(
+              webpage.webpage_s3Key
+            );
+            if (Number(i) % 100 == 0) {
+              console.log(`Finished getting contents from S3: ${i}`);
+            }
+          });
+        }
+      }
+      await queue.onIdle();
+      await client.updateWebpages(webpageChunk);
 
-    await Webpage.createQueryBuilder('webpage')
-      .update(Webpage)
-      .set({ syncedAt: new Date(Date.now()) })
-      .where({ id: In(webpages.map((e) => e.webpage_id)) })
-      .execute();
+      await Webpage.createQueryBuilder('webpage')
+        .update(Webpage)
+        .set({ syncedAt: new Date(Date.now()) })
+        .where({ id: In(webpageChunk.map((e) => e.webpage_id)) })
+        .execute();
+    }
+
     console.log('Webpage sync complete.');
   } else {
     console.log('Not syncing any webpages.');

@@ -15,6 +15,7 @@ import { Table, ImportExport } from 'components';
 import { Column, CellProps } from 'react-table';
 import { Scan, Organization, ScanSchema } from 'types';
 import { FaTimes, FaEdit } from 'react-icons/fa';
+import { FaPlayCircle } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import MultiSelect from './MultiSelect';
@@ -42,6 +43,21 @@ const ScansView: React.FC = () => {
 
   const columns: Column<Scan>[] = [
     {
+      Header: 'Run',
+      id: 'run',
+      Cell: ({ row }: { row: { index: number } }) => (
+        <div
+          style={{textAlign: 'center'}}
+          onClick={() => {
+            runScan(row.index);
+          }}
+        >
+          <FaPlayCircle />
+        </div>
+      ),
+      disableFilters: true
+    },
+    {
       Header: 'Name',
       accessor: 'name',
       width: 200,
@@ -67,7 +83,7 @@ const ScansView: React.FC = () => {
     },
     {
       Header: 'Frequency',
-      accessor: ({ frequency }) => {
+      accessor: ({ frequency, isSingleScan }) => {
         let val, unit;
         if (frequency < 60 * 60) {
           val = frequency / 60;
@@ -78,6 +94,9 @@ const ScansView: React.FC = () => {
         } else {
           val = frequency / (60 * 60 * 24);
           unit = 'day';
+        }
+        if (isSingleScan) {
+          return 'Single Scan'
         }
         return `Every ${val} ${unit}${val === 1 ? '' : 's'}`;
       },
@@ -141,13 +160,15 @@ const ScansView: React.FC = () => {
     frequency: number;
     frequencyUnit: string;
     isGranular: boolean;
+    isSingleScan: boolean;
   }>({
     name: 'censys',
     arguments: '{}',
     organizations: [],
-    frequency: 0,
+    frequency: 1,
     frequencyUnit: 'minute',
-    isGranular: false
+    isGranular: false,
+    isSingleScan: false
   });
 
   React.useEffect(() => {
@@ -196,6 +217,7 @@ const ScansView: React.FC = () => {
       // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
       let body: typeof values = Object.assign({}, values);
       body.arguments = JSON.parse(values.arguments);
+      if (values.isSingleScan) body.frequency = 1;
       if (values.frequencyUnit === 'minute') body.frequency *= 60;
       else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
       else body.frequency *= 60 * 60 * 24;
@@ -238,6 +260,22 @@ const ScansView: React.FC = () => {
     }));
   };
 
+  /**
+   * Manually runs a single scan, then immediately invokes the
+   * scheduler so the scan is run.
+   * @param index Row index
+   */
+  const runScan = async (index: number) => {
+    let row = scans[index];
+    try {
+      await apiPost(`/scans/${row.id}/run`);
+    } catch (e) {
+      console.error(e);
+      setErrors({ ...errors, scheduler: 'Run failed.' });
+    }
+    await invokeScheduler();
+  }
+
   const selectedScan = scanSchema[values.name] || {};
 
   return (
@@ -278,7 +316,9 @@ const ScansView: React.FC = () => {
           value={values.arguments}
           onChange={onTextChange}
         /> */}
+        
         {(values.name === 'censysIpv4' || !selectedScan.global) && (
+          
           <Checkbox
             id="isGranular"
             label="Limit enabled organizations"
@@ -299,7 +339,15 @@ const ScansView: React.FC = () => {
             <br />
           </>
         )}
-        <div className="form-group form-inline">
+        <Checkbox
+            id="isSingleScan"
+            label="Run scan once"
+            name="isSingleScan"
+            checked={values.isSingleScan}
+            onChange={(e) => onChange('isSingleScan', e.target.checked)}
+          />
+        {!values.isSingleScan && (
+          <div className="form-group form-inline">
           <label style={{ marginRight: '10px' }} htmlFor="frequency">
             Run every
           </label>
@@ -328,9 +376,9 @@ const ScansView: React.FC = () => {
             <option value="hour">Hour(s)</option>
             <option value="day">Day(s)</option>
           </Dropdown>
-        </div>
-        <br />
-
+        </div>  
+        )}      
+        <br />       
         <Button type="submit">Create Scan</Button>
       </Form>
       <ImportExport<Scan>

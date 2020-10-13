@@ -37,6 +37,10 @@ class DomainFilters {
   @IsUUID()
   @IsOptional()
   organization?: string;
+
+  @IsString()
+  @IsOptional()
+  vulnerability?: string;
 }
 
 class DomainSearch {
@@ -79,7 +83,7 @@ class DomainSearch {
     }
     if (this.filters?.service) {
       qs.andHaving(
-        'COUNT(CASE WHEN services.service ILIKE :service THEN 1 END) >= 1',
+        'COUNT(CASE WHEN services.products->>0 ILIKE :service THEN 1 END) >= 1',
         { service: `%${this.filters?.service}%` }
       );
     }
@@ -87,6 +91,14 @@ class DomainSearch {
       qs.andWhere('domain.organization = :org', {
         org: this.filters.organization
       });
+    }
+    if (this.filters?.vulnerability) {
+      qs.andHaving(
+        'COUNT(CASE WHEN vulnerabilities.title ILIKE :title THEN 1 END) >= 1',
+        {
+          title: `%${this.filters?.vulnerability}%`
+        }
+      );
     }
     return qs;
   }
@@ -143,13 +155,17 @@ class DomainSearch {
         org: this.filters.organization
       });
     }
+    if (this.filters?.vulnerability) {
+      qs.andWhere('vulnerabilities.title ILIKE :title', {
+        title: `%${this.filters?.vulnerability}%`
+      });
+    }
   }
 
   async getCount(event) {
-    const qs = Domain.createQueryBuilder('domain').leftJoin(
-      'domain.services',
-      'services'
-    );
+    const qs = Domain.createQueryBuilder('domain')
+      .leftJoin('domain.services', 'services')
+      .leftJoin('domain.vulnerabilities', 'vulnerabilities', "state = 'open'");
     if (!isGlobalViewAdmin(event)) {
       qs.andWhere('domain.organization IN (:...orgs)', {
         orgs: getOrgMemberships(event)

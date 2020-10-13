@@ -120,6 +120,15 @@ resource "aws_iam_role_policy" "worker_task_role_policy" {
         "Resource": [
           "${aws_s3_bucket.webscraper_bucket.arn}/*"
         ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+          "s3:ListBucket"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.webscraper_bucket.arn}"
+      ]
     }
   ]
 }
@@ -258,7 +267,6 @@ resource "aws_ssm_parameter" "webscraper_s3_bucket_name" {
 
   tags = {
     Project = var.project
-    Stage   = var.stage
   }
 }
 

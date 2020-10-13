@@ -5,6 +5,7 @@ export interface Scan {
   frequency: number;
   lastRun: string;
   isGranular: boolean;
+  isSingleScan: boolean;
 }
 
 // ScanSchema. TODO: synchronize this with the ScanSchema type in the backend.

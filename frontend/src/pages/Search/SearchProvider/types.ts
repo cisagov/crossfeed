@@ -27,11 +27,12 @@ export interface ContextType {
   results: Result[];
   resultsPerPage: number;
   searchTerm: string;
-  setCurrent(): void;
+  setCurrent(current: number): void;
   setFilter(): void;
   setResultsPerPage(): void;
-  setSort(): void;
-  sortDirection: string;
+  setSort(field: string, direction: 'asc' | 'desc'): void;
+  sortDirection: '' | 'asc' | 'desc';
+  setResultsPerPage(count: number): void;
   sortField: string;
   totalPages: number;
   totalResults: number;

@@ -1,4 +1,4 @@
-import { FindConditions, In } from 'typeorm';
+import { In } from 'typeorm';
 import { Domain, connectToDatabase } from '../../models';
 
 /** Helper function to fetch all domains */
@@ -7,6 +7,7 @@ export default async (organizations?: string[]): Promise<Domain[]> => {
 
   return Domain.find({
     select: ['id', 'name', 'ip', 'organization'],
-    where: organizations ? { organization: In(organizations) } : {}
+    where: organizations ? { organization: In(organizations) } : {},
+    relations: ['organization']
   });
 };

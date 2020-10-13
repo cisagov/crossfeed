@@ -36,3 +36,5 @@ user_pool_domain                  = "crossfeed"
 ssm_user_pool_id                  = "/crossfeed/staging/USER_POOL_ID"
 ssm_user_pool_client_id           = "/crossfeed/staging/USER_POOL_CLIENT_ID"
 ses_support_email                 = "support@crossfeed.cyber.dhs.gov"
+es_instance_type                  = "t3.small.elasticsearch"
+es_instance_count                 = 3
