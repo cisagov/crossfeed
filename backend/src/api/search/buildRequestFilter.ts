@@ -27,7 +27,7 @@ function getTermFilter(filter) {
   if (filter.type === 'any') {
     search = {
       bool: {
-        should: filter.values.map(filterValue => ({
+        should: filter.values.map((filterValue) => ({
           [searchType]: getTermFilterValue(filter.field, filterValue)
         })),
         minimum_should_match: 1
@@ -36,7 +36,7 @@ function getTermFilter(filter) {
   } else if (filter.type === 'all') {
     search = {
       bool: {
-        filter: filter.values.map(filterValue => ({
+        filter: filter.values.map((filterValue) => ({
           [searchType]: getTermFilterValue(filter.field, filterValue)
         }))
       }
