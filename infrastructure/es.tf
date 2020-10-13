@@ -7,8 +7,8 @@ resource "aws_elasticsearch_domain" "es" {
   elasticsearch_version = "7.7"
 
   cluster_config {
-    instance_type            = "t2.small.elasticsearch"
-    instance_count           = 1
+    instance_type            = var.es_instance_type
+    instance_count           = var.es_instance_count
     dedicated_master_enabled = false
 
     # Enable for prod:

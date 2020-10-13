@@ -211,6 +211,102 @@ describe('scheduler', () => {
 
       expect(runCommand).toHaveBeenCalledTimes(0);
     });
+    test('should not run a scan when scan is a SingleScan and has finished', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999,
+        isSingleScan: true,
+        manualRunPending: false
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'finished',
+        finishedAt: new Date()
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(0);
+    });
+    test('should not run a scan when scan is a SingleScan and has not run yet', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999,
+        isSingleScan: true,
+        manualRunPending: false
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(1);
+    });
+    test('should always run a scan when scan has manualRunPending set to true', async () => {
+      let scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 1,
+        isSingleScan: true,
+        manualRunPending: true
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'finished',
+        finishedAt: new Date()
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(1);
+
+      // Ensure scheduler set manualRunPending back to false
+      scan = (await Scan.findOne({ id: scan.id })) as Scan;
+      expect(scan.manualRunPending).toEqual(false);
+    });
     test('should run a scan when a scantask for that scan and organization finished and sufficient time has passed', async () => {
       const scan = await Scan.create({
         name: 'findomain',
