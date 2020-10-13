@@ -71,7 +71,7 @@ export class Domain extends BaseEntity {
   @OneToMany((type) => Webpage, (webpage) => webpage.domain)
   webpages: Service[];
 
-  @ManyToOne((type) => Organization, { onDelete: 'CASCADE', nullable: false })
+  @ManyToOne((type) => Organization, { onDelete: 'CASCADE', nullable: true })
   organization: Organization;
 
   @Column({
