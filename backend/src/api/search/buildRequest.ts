@@ -57,7 +57,7 @@ function buildChildMatch(searchTerm) {
 
   We then do similar things for searchTerm, filters, sort, etc.
 */
-export function buildRequest(state) {
+export function buildRequest(state, organizationIds: string[]) {
   const {
     current,
     filters,
@@ -183,35 +183,46 @@ export function buildRequest(state) {
       bool: {
         must: [
           {
-            match: {
-              parent_join: 'domain'
+            terms: {
+              "organization.id.keyword": [] // ["3db067f5-8505-4091-8fb4-87113c698bd6"]
             }
           },
           {
             bool: {
-              should: [
-                match,
+              must: [
                 {
-                  has_child: {
-                    type: 'webpage',
-                    query: buildChildMatch(searchTerm),
-                    inner_hits: {
-                      _source: ['webpage_url'],
-                      highlight: {
-                        fragment_size: 50,
-                        number_of_fragments: 3,
-                        fields: {
-                          webpage_body: {}
+                  match: {
+                    parent_join: 'domain'
+                  }
+                },
+                {
+                  bool: {
+                    should: [
+                      match,
+                      {
+                        has_child: {
+                          type: 'webpage',
+                          query: buildChildMatch(searchTerm),
+                          inner_hits: {
+                            _source: ['webpage_url'],
+                            highlight: {
+                              fragment_size: 50,
+                              number_of_fragments: 3,
+                              fields: {
+                                webpage_body: {}
+                              }
+                            }
+                          }
                         }
                       }
-                    }
+                    ]
                   }
                 }
-              ]
+              ],
+              ...(filter && { filter })
             }
           }
-        ],
-        ...(filter && { filter })
+        ]
       }
     },
     // https://www.elastic.co/guide/en/elasticsearch/reference/7.x/search-request-sort.html
