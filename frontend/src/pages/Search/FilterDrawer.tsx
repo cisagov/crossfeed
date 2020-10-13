@@ -45,9 +45,6 @@ export const FilterDrawer: React.FC<Props> = (props) => {
     [filters]
   );
 
-  const makeWildcard = (term: string) =>
-    term === '' || term.includes('*') ? term : `*${term}*`;
-
   const portFacet: any[] = facets['services.port']
     ? facets['services.port'][0].data
     : [];
@@ -92,10 +89,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
           <TaggedArrayInput
             placeholder="Domain"
             values={filtersByColumn.name ?? []}
-            onAddTag={(value) => addFilter('name', makeWildcard(value), 'any')}
-            onRemoveTag={(value) =>
-              removeFilter('name', makeWildcard(value), 'any')
-            }
+            onAddTag={(value) => addFilter('name', value, 'any')}
+            onRemoveTag={(value) => removeFilter('name', value, 'any')}
           />
         </AccordionDetails>
       </Accordion>
