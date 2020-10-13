@@ -187,3 +187,13 @@ variable ses_support_email {
   type    = string
   default = "support@crossfeed.dds.mil"
 }
+
+variable es_instance_type {
+  type    = string
+  default = "t2.micro.elasticsearch"
+}
+
+variable es_instance_count {
+  type    = number
+  default = 1
+}

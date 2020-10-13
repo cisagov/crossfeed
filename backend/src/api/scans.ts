@@ -8,7 +8,7 @@ import {
   IsBoolean,
   IsUUID
 } from 'class-validator';
-import { Scan, connectToDatabase, Organization } from '../models';
+import { Scan, connectToDatabase, Organization, ScanTask } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { isGlobalWriteAdmin } from './auth';
 import LambdaClient from '../tasks/lambda-client';
@@ -105,6 +105,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
+    cpu: '1024',
+    memory: '4096',
     description:
       'Open source tool that fingerprints web technologies based on HTTP responses'
   },
@@ -132,6 +134,9 @@ class NewScan {
 
   @IsBoolean()
   isGranular: boolean;
+
+  @IsBoolean()
+  isSingleScan: boolean;
 
   @IsUUID('all', { each: true })
   organizations: string[];
@@ -162,6 +167,7 @@ export const update = wrapHandler(async (event) => {
   const scan = await Scan.findOne({
     id: id
   });
+
   if (scan) {
     Scan.merge(scan, {
       ...body,
@@ -244,4 +250,27 @@ export const invokeScheduler = wrapHandler(async (event) => {
     statusCode: 200,
     body: ''
   };
+});
+
+export const runScan = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  await connectToDatabase();
+  const id = event.pathParameters?.scanId;
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+  const scan = await Scan.findOne({
+    id: id
+  });
+
+  if (scan) {
+    scan.manualRunPending = true;
+
+    const res = await Scan.save(scan);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(res)
+    };
+  }
+  return NotFound;
 });
