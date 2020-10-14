@@ -107,7 +107,7 @@ jobs:
 
       - name: Deploy Staging
         if: github.ref == 'refs/heads/master'
-        run: aws s3 sync build s3://staging.crossfeed.cyber.dhs.gov --delete
+        run: aws s3 sync build s3://crossfeed.dds.mil --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
