@@ -50,7 +50,6 @@ export const SearchProvider: React.FC = ({ children }) => {
     onSearch: async (state: any) => {
       const { resultsPerPage } = state;
       const requestBody = buildRequest(state);
-      console.log(requestBody);
       // Note that this could be optimized by running all of these requests
       // at the same time. Kept simple here for clarity.
       const responseJson = await apiPost<ApiResponse>('/search', {
