@@ -18,6 +18,7 @@ import {
 import MultiSelect from '../Scans/MultiSelect';
 import { OrganizationOption } from 'pages/Scans/ScansView';
 import { Link } from 'react-router-dom';
+import { isRegExp } from 'util';
 
 
 interface Errors extends Partial<OrganizationType> {
@@ -130,13 +131,21 @@ const ScanComponent: React.FC = () => {
     setValues((values) => ({
     ...values,
       name: scan.name,
-      lastRun: scan.lastRun,
-      //organizations: organizationOptions,
       frequency: scan.frequency,
       frequencyUnit: oldFrequencyUnit,
       isGranular: scan.isGranular,
       isSingleScan: scan.isSingleScan
       }));
+
+      /*
+      if (scan.isGranular) {
+        setValues((values) => ({
+          ...values,
+            organizations: scan.organizations
+        }))
+      }
+      */
+
   } 
 
   useEffect(() => {
