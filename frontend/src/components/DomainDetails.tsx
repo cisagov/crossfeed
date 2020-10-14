@@ -14,6 +14,7 @@ import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { stateMap } from 'pages/Vulnerabilities/Vulnerabilities';
+import { useAuthContext } from 'context';
 
 interface Props {
   domainId: string;
@@ -22,6 +23,7 @@ interface Props {
 export const DomainDetails: React.FC<Props> = (props) => {
   const { domainId } = props;
   const { getDomain } = useDomainApi(false);
+  const { user } = useAuthContext();
   const [domain, setDomain] = useState<Domain>();
   const classes = useStyles();
 
@@ -257,7 +259,15 @@ export const DomainDetails: React.FC<Props> = (props) => {
                             )
                             .join(', ')
                         },
-                        { label: 'Banner', value: service.banner ?? 'None' }
+                        {
+                          label: 'Banner',
+                          value:
+                            (user?.userType === 'globalView' ||
+                              user?.userType === 'globalAdmin') &&
+                            service.banner
+                              ? service.banner
+                              : 'None'
+                        }
                       ]}
                     />
                   </AccordionDetails>
