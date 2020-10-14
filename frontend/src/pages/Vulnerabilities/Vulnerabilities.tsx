@@ -64,7 +64,10 @@ export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
         {original.actions &&
           original.actions.map((action, index) => {
             const val = action.automatic ? (
-              <>Vulnerability automatically marked as remediated</>
+              <>
+                State automatically changed to{' '}
+                {stateMap[action.substate].toLowerCase()}
+              </>
             ) : (
               <>
                 State changed to {action.state} (
