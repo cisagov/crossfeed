@@ -207,11 +207,20 @@ export const get = wrapHandler(async (event) => {
   }
   const scan = await Scan.findOne({
     id: id
+  },
+  {
+    relations: ['organizations']
   });
+  
   if (scan) {
+
+    let schema = SCAN_SCHEMA[scan.name];
     return {
       statusCode: 200,
-      body: JSON.stringify(scan)
+      body: JSON.stringify({
+        scan: scan,
+        schema: schema
+      })
     };
   }
   return NotFound;
