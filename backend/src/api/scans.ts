@@ -215,13 +215,17 @@ export const get = wrapHandler(async (event) => {
   if (scan) {
 
     let schema = SCAN_SCHEMA[scan.name];
+    const organizations = await Organization.find();
     return {
       statusCode: 200,
       body: JSON.stringify({
         scan: scan,
-        schema: schema
-      })
-    };
+        schema: schema,
+        organizations: organizations.map((e) => ({
+          name: e.name,
+          id: e.id
+      }))
+    })};
   }
   return NotFound;
 });

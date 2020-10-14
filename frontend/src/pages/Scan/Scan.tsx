@@ -56,37 +56,22 @@ const ScanComponent: React.FC = () => {
 
   const fetchScan = useCallback(async () => {
     try {
-      const { scan, schema }= await apiGet<{
+      const { scan, schema, organizations }= await apiGet<{
         scan: Scan;
         schema: ScanSchema;
+        organizations: OrganizationType[];
       }>(`/scans/${scanId}`);
-      
       setScan(scan);
       setScanSchema(schema);
       setDefaultValues(scan);
+      setOrganizationOptions(
+          organizations.map((e) => ({ label: e.name, value: e.id }))
+        );
     } catch (e) {
       console.error(e);
     }
     
   }, [apiGet, setScan, scanId]);
-
-  const updateScan = async (body: any) => {
-    try {
-      const scan = await apiPut( `/scans/${scanId}`, {
-        body
-      });
-      setScan(scan);
-      setMessage('Scan successfully updated');
-    } catch (e) {
-      setErrors({
-        global:
-          e.status === 422
-            ? 'Error when submitting scan entry.'
-            : e.message ?? e.toString()
-      });
-      console.error(e);
-    }
-  };
 
   const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
@@ -98,9 +83,9 @@ const ScanComponent: React.FC = () => {
       if (values.frequencyUnit === 'minute') body.frequency *= 60;
       else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
       else body.frequency *= 60 * 60 * 24;
-      updateScan(body);
+      //updateScan(body);
 
-      /*const scan = await apiPost('/scans/', {
+      const scan = await apiPut(`/scans/${scanId}`, {
         body: {
           ...body,
           organizations: body.organizations
@@ -108,7 +93,8 @@ const ScanComponent: React.FC = () => {
             : []
         }
       });
-      setScan(scan.concat(scan));*/
+      setScan(scan);
+      setMessage("Scan successfully updated");
     } catch (e) {
       setErrors({
         global: e.message ?? e.toString()
@@ -144,8 +130,8 @@ const ScanComponent: React.FC = () => {
     setValues((values) => ({
     ...values,
       name: scan.name,
-      //arguments: scan.arguments,
-      //organizations: scan.organizations,
+      lastRun: scan.lastRun,
+      //organizations: organizationOptions,
       frequency: scan.frequency,
       frequencyUnit: oldFrequencyUnit,
       isGranular: scan.isGranular,
