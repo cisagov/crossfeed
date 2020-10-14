@@ -10,7 +10,7 @@ import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
-import { LessThan, MoreThan } from 'typeorm';
+import { ObjectType, LessThan, MoreThan, FindOperator } from 'typeorm';
 import * as fs from 'fs';
 import * as zlib from 'zlib';
 
@@ -196,11 +196,20 @@ const populateVulnerabilities = async () => {
 // Closes or reopens vulnerabilities that need to be updated
 const adjustVulnerabilities = async (type: 'open' | 'closed') => {
   const twoDaysAgo = new Date(new Date().setDate(new Date().getDate() - 2));
+  const where: {
+    state: string;
+    lastSeen: FindOperator<Date>;
+    substate?: string;
+  } = {
+    state: type,
+    lastSeen: type === 'open' ? LessThan(twoDaysAgo) : MoreThan(twoDaysAgo)
+  };
+  // If vulnerability is already closed, we should only reopen if it was remediated
+  if (type === 'closed') {
+    where.substate = 'remediated';
+  }
   const openVulnerabilites = await Vulnerability.find({
-    where: {
-      state: type,
-      lastSeen: type === 'open' ? LessThan(twoDaysAgo) : MoreThan(twoDaysAgo)
-    }
+    where
   });
   for (const vulnerability of openVulnerabilites) {
     vulnerability.setState(
