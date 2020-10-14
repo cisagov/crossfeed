@@ -10,7 +10,7 @@ import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
-import { LessThan } from 'typeorm';
+import { LessThan, MoreThan } from 'typeorm';
 import * as fs from 'fs';
 import * as zlib from 'zlib';
 
@@ -193,10 +193,21 @@ const populateVulnerabilities = async () => {
   }
 };
 
-// Closes vulnerabilities that haven't been seen recently
-const closeVulnerabilities = async (openVulnerabilites: Vulnerability[]) => {
+// Closes or reopens vulnerabilities that need to be updated
+const adjustVulnerabilities = async (type: 'open' | 'closed') => {
+  const twoDaysAgo = new Date(new Date().setDate(new Date().getDate() - 2));
+  const openVulnerabilites = await Vulnerability.find({
+    where: {
+      state: type,
+      lastSeen: type === 'open' ? LessThan(twoDaysAgo) : MoreThan(twoDaysAgo)
+    }
+  });
   for (const vulnerability of openVulnerabilites) {
-    vulnerability.setState('remediated', true, null);
+    vulnerability.setState(
+      type === 'open' ? 'remediated' : 'unconfirmed',
+      true,
+      null
+    );
     await vulnerability.save();
   }
 };
@@ -215,13 +226,8 @@ export const handler = async (commandOptions: CommandOptions) => {
   });
   await identifyPassiveCVEs(allDomains);
 
-  const openVulnerabilites = await Vulnerability.find({
-    where: {
-      state: 'open',
-      lastSeen: LessThan(new Date(new Date().setDate(new Date().getDate() - 2)))
-    }
-  });
-  await closeVulnerabilities(openVulnerabilites);
+  await adjustVulnerabilities('open');
+  await adjustVulnerabilities('closed');
 
   await populateVulnerabilities();
 };
