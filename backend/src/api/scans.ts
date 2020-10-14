@@ -239,7 +239,6 @@ export const invokeScheduler = wrapHandler(async (event) => {
   const response = await lambdaClient.runCommand({
     name: `${process.env.SLS_LAMBDA_PREFIX!}-scheduler`
   });
-  console.log(response);
   if (response.StatusCode !== 202) {
     return {
       statusCode: 500,

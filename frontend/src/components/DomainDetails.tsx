@@ -144,7 +144,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Vulnerabilities</h4>
             <Accordion className={classes.accordionHeaderRow} disabled>
-              <AccordionSummary>
+              <AccordionSummary expandIcon={<ExpandMore />}>
                 <Typography className={classes.accordionHeading}>
                   Title
                 </Typography>
@@ -218,7 +218,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Ports</h4>
             <Accordion className={classes.accordionHeaderRow} disabled>
-              <AccordionSummary>
+              <AccordionSummary expandIcon={<ExpandMore />}>
                 <Typography className={classes.accordionHeading}>
                   Port
                 </Typography>
