@@ -11,7 +11,7 @@ const jwkSet = {
 };
 
 const clientOptions: ClientMetadata = {
-  client_id: 'urn:gov:gsa:openidconnect.profiles:sp:sso:dds:crossfeed',
+  client_id: process.env.LOGIN_GOV_ISSUER!,
   token_endpoint_auth_method: 'private_key_jwt',
   id_token_signed_response_alg: 'RS256',
   key: 'client_id',
