@@ -56,7 +56,7 @@ const instance = createInstance({
   heartBeat: {
     // optional, enabled by default
     active: true, // optional, default value: true
-    seconds: 2 // optional, default value: `15
+    seconds: 15 // optional, default value: `15
   },
   linkTracking: false // optional, default value: true
   // configurations: { // optional, default value: {}
