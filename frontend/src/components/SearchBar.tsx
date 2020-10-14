@@ -81,7 +81,7 @@ export const SearchBar = React.forwardRef<HTMLInputElement, Props>(
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    zIndex: 100,
+    zIndex: 101,
     width: '100%',
     backgroundColor: theme.palette.background.paper,
     height: '60px',
