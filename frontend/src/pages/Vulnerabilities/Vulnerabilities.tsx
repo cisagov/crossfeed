@@ -24,6 +24,7 @@ import { Link } from 'react-router-dom';
 import { formatDistanceToNow, parseISO, format } from 'date-fns';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import { TextareaAutosize } from '@material-ui/core';
+import ReactMarkdown from 'react-markdown';
 
 export interface ApiResponse {
   result: Vulnerability[];
@@ -219,15 +220,16 @@ export const Vulnerabilities: React.FC = () => {
               } else if (action.type === 'comment' && action.value) {
                 return (
                   <p key={index}>
-                    Comment by {action.userName}: {action.value}
+                    Comment by {action.userName}:{' '}
+                    <ReactMarkdown source={action.value} />
                   </p>
                 );
               }
-              return;
+              return <></>;
             })}
           <p>Vulnerability opened on {formatDate(original.createdAt)}</p>
           <TextareaAutosize
-            style={{ width: 300 }}
+            style={{ width: 300, padding: 10 }}
             rowsMin={2}
             placeholder="Leave a Comment"
             onChange={(e) => (comments[original.id] = e.target.value)}
