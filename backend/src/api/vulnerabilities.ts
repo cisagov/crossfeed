@@ -179,13 +179,23 @@ export const update = wrapHandler(async (event) => {
   }
   if (vuln && isAuthorized) {
     const body = JSON.parse(event.body);
+    const user = await User.findOne({
+      id: event.requestContext.authorizer!.id
+    });
     if (body.substate) {
-      const user = await User.findOne({
-        id: event.requestContext.authorizer!.id
-      });
       vuln.setState(body.substate, false, user ? user : null);
     }
     if (body.notes) vuln.notes = body.notes;
+    if (body.comment) {
+      vuln.actions.unshift({
+        type: 'comment',
+        automatic: false,
+        userId: user ? user.id : null,
+        userName: user ? user.fullName : null,
+        date: new Date(),
+        value: body.comment
+      });
+    }
     vuln.save();
 
     return {
