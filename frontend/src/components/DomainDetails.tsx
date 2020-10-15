@@ -191,7 +191,12 @@ export const DomainDetails: React.FC<Props> = (props) => {
           const parsed = new URL(page.url);
           const split = parsed.pathname.split('/');
           return (
-            <ListItem button divider={true} key={page.url}>
+            <ListItem
+              button
+              divider={true}
+              key={page.url}
+              onClick={() => window.open(page.url, '_blank')}
+            >
               <ListItemText
                 primary={(prefix ? '' : '/') + split.pop()}
                 secondary={
