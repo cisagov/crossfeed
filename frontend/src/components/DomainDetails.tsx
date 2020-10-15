@@ -6,14 +6,24 @@ import {
   Accordion,
   AccordionSummary,
   Typography,
-  AccordionDetails
+  AccordionDetails,
+  List,
+  ListItem,
+  ListItemText,
+  Collapse
 } from '@material-ui/core';
-import { ExpandMore, Launch as LinkOffIcon } from '@material-ui/icons';
+import {
+  ExpandLess,
+  ExpandMore,
+  Launch as LinkOffIcon
+} from '@material-ui/icons';
 import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { stateMap } from 'pages/Vulnerabilities/Vulnerabilities';
+import { Webpage } from 'types/webpage';
+import { isNamedImports, isNamespaceExport } from 'typescript';
 
 interface Props {
   domainId: string;
@@ -106,6 +116,79 @@ export const DomainDetails: React.FC<Props> = (props) => {
     return ret;
   }, [domain]);
 
+  const generateWebpageTree = (pages: Webpage[]) => {
+    const tree: any = {};
+    for (const page of pages) {
+      const url = new URL(page.url);
+      const parts = url.pathname.split('/').filter((path) => path !== '');
+      let root = tree;
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (parts[i] in root) root = root[parts[i]];
+        else {
+          root[parts[i]] = {};
+          root = root[parts[i]];
+        }
+      }
+      root[parts[parts.length - 1]] = page;
+    }
+    return tree;
+  };
+  const [hiddenRows, setHiddenRows] = React.useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const generateWebpageList = (tree: any, prefix = '') => {
+    return (
+      <List
+        className={`${classes.listRoot}${prefix ? ' ' + classes.nested : ''}`}
+      >
+        {Object.keys(tree).map((key) => {
+          const isWebpage =
+            'url' in tree[key] && typeof tree[key]['url'] === 'string';
+          if (!isWebpage) {
+            let newPrefix = prefix + '/' + key;
+            return (
+              <>
+                <ListItem
+                  button
+                  onClick={() => {
+                    setHiddenRows((hiddenRows: any) => {
+                      hiddenRows[newPrefix] =
+                        newPrefix in hiddenRows ? !hiddenRows[newPrefix] : true;
+                      return { ...hiddenRows };
+                    });
+                  }}
+                  key={newPrefix}
+                >
+                  <ListItemText primary={(prefix ? '' : '/') + key + '/'} />
+                  {hiddenRows[newPrefix] ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse
+                  in={!hiddenRows[newPrefix]}
+                  timeout="auto"
+                  unmountOnExit
+                >
+                  {generateWebpageList(tree[key], newPrefix)}
+                </Collapse>
+              </>
+            );
+          }
+          const page = tree[key] as Webpage;
+          const parsed = new URL(page.url);
+          const split = parsed.pathname.split('/');
+          return (
+            <ListItem button divider={true} key={page.url}>
+              <ListItemText
+                primary={(prefix ? '' : '/') + split.pop()}
+                secondary={page.status + ' • ' + page.responseSize + ' bytes'}
+              ></ListItemText>
+            </ListItem>
+          );
+        })}
+      </List>
+    );
+  };
+
   if (!domain) {
     return null;
   }
@@ -114,6 +197,10 @@ export const DomainDetails: React.FC<Props> = (props) => {
     (domain.services.find((service) => service.port === 443)
       ? 'https://'
       : 'http://') + domain.name;
+
+  domain.webpages.sort((a, b) => (a.url > b.url ? 1 : -1));
+  const webpageTree = generateWebpageTree(domain.webpages);
+  const webpageList = generateWebpageList(webpageTree);
 
   return (
     <Paper classes={{ root: classes.root }}>
@@ -266,6 +353,12 @@ export const DomainDetails: React.FC<Props> = (props) => {
             ))}
           </div>
         )}
+        {domain.webpages.length > 0 && (
+          <div className={classes.section}>
+            <h4 className={classes.subtitle}>Site Map</h4>
+            {webpageList}
+          </div>
+        )}
       </div>
     </Paper>
   );
@@ -329,5 +422,12 @@ const useStyles = makeStyles((theme) => ({
     flex: '1 1 15%',
     textOverflow: 'hidden',
     textAlign: 'right'
+  },
+  listRoot: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper
+  },
+  nested: {
+    paddingLeft: theme.spacing(2)
   }
 }));
