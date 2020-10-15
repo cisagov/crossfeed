@@ -223,6 +223,7 @@ export const Vulnerabilities: React.FC = () => {
                   </p>
                 );
               }
+              return;
             })}
           <p>Vulnerability opened on {formatDate(original.createdAt)}</p>
           <TextareaAutosize
