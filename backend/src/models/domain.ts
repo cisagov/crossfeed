@@ -46,10 +46,7 @@ export class Domain extends BaseEntity {
   })
   fromRootDomain: string;
 
-  @ManyToOne((type) => Scan, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE'
-  })
+  @ManyToOne((type) => Scan)
   discoveredBy: Scan;
 
   @Column({
