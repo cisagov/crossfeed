@@ -361,26 +361,9 @@ describe('scan', () => {
           })
         )
         .expect(200);
-      expect(response.body.scan.name).toEqual('censys');
+      expect(response.body.organizations);
     });
-    it('get by globalView should succeed check organizations retrieved ', async () => {
-      const scan = await Scan.create({
-        name: 'censys',
-        arguments: {},
-        frequency: 999999,
-        isGranular: true
-      }).save();
-      const response = await request(app)
-        .get(`/scans/${scan.id}`)
-        .set(
-          'Authorization',
-          createUserToken({
-            userType: 'globalView'
-          })
-        )
-        .expect(200);
-      expect(response.body.organizations.length).toEqual(3);
-    });
+
     it('get by regular user on a scan not from their org should fail', async () => {
       const scan = await Scan.create({
         name: 'censys',
