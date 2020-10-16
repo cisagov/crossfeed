@@ -4,6 +4,7 @@ import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
 import { Checkbox, Grid } from '@trussworks/react-uswds';
+import { makeStyles, Paper } from '@material-ui/core';
 
 const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
 
@@ -44,10 +45,10 @@ const MyResponsiveBar = ({
 }) => {
   return (
     <ResponsiveBar
-      data={data.map(e => ({ ...e, [xLabel]: e.value })) as any}
+      data={data.map((e) => ({ ...e, [xLabel]: e.value })) as any}
       keys={[xLabel]}
       indexBy="label"
-      margin={{ top: 50, right: 130, bottom: longXValues ? 250 : 50, left: 60 }}
+      margin={{ top: 50, right: 0, bottom: longXValues ? 100 : 0, left: 60 }}
       padding={0.3}
       colors={getColor}
       borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
@@ -75,6 +76,7 @@ const MyResponsiveBar = ({
       animate={true}
       motionStiffness={90}
       motionDamping={15}
+      layout={'horizontal'}
       // isInteractive={false}
     />
   );
@@ -102,13 +104,14 @@ interface ApiResponse {
   result: Stats;
 }
 
-const Risk: React.FC = () => {
+const Risk: React.FC = (props) => {
   const { currentOrganization, user, apiPost } = useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
   const [showAll, setShowAll] = useState<boolean>(
     JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
   );
+  const cardClasses = useStyles(props);
 
   const updateShowAll = (state: boolean) => {
     setShowAll(state);
@@ -154,15 +157,16 @@ const Risk: React.FC = () => {
               name="showAll"
               label="Show all organizations"
               checked={showAll}
-              onChange={e => updateShowAll(e.target.checked)}
+              onChange={(e) => updateShowAll(e.target.checked)}
               className={classes.showAll}
             />
           )}
         </Grid>
       </Grid>
+
       {stats && <h2>Total domains: {stats.domains.total}</h2>}
-      {/* <h1>Top Action Items</h1>
-      <Table bordered>
+      {/* <h1>Top Action Items</h1> */}
+      {/* <Table>
         <React.Fragment key=".0">
           <thead>
             <tr>
@@ -192,54 +196,116 @@ const Risk: React.FC = () => {
           </tbody>
         </React.Fragment>
       </Table> */}
-      {stats && (
-        <>
-          <h1>Technology Breakdown</h1>
-          <div>
-            {stats.domains.services.length > 0 && (
-              <div className={classes.chart}>
-                <h3>Most common services</h3>
-                <MyResponsivePie
-                  data={stats.domains.services}
-                  colors={allColors}
-                />
-              </div>
-            )}
+      <div className={cardClasses.contentWrapper}>
+        {stats && (
+          <div className={cardClasses.content}>
+            <div className={cardClasses.panel}>
+              {stats.domains.services.length > 0 && (
+                <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+                  <div className={classes.chart}>
+                    <h3>Most common services</h3>
+                    <MyResponsivePie
+                      data={stats.domains.services}
+                      colors={allColors}
+                    />
+                  </div>
+                </Paper>
+              )}
 
-            {stats.domains.ports.length > 0 && (
-              <div className={classes.chart}>
-                <h3>Most common ports</h3>
-                <MyResponsiveBar data={stats.domains.ports} xLabel={'Port'} />
-              </div>
-            )}
-          </div>
-          <h1>Vulnerabilities Breakdown</h1>
-          <div>
-            {stats.vulnerabilities.severity.length > 0 && (
-              <div className={classes.chart}>
-                <h3>Severity Levels</h3>
-                <MyResponsivePie
-                  data={stats.vulnerabilities.severity}
-                  colors={getSeverityColor}
-                />
-              </div>
-            )}
+              {stats.domains.ports.length > 0 && (
+                <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+                  <div className={classes.chart}>
+                    <h3>Most common ports</h3>
+                    <MyResponsiveBar
+                      data={stats.domains.ports}
+                      xLabel={'Port'}
+                    />
+                  </div>
+                </Paper>
+              )}
+              <h1>Vulnerabilities Breakdown</h1>
+              {stats.vulnerabilities.severity.length > 0 && (
+                <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+                  <div className={classes.chart}>
+                    <h3>Severity Levels</h3>
+                    <MyResponsivePie
+                      data={stats.vulnerabilities.severity}
+                      colors={getSeverityColor}
+                    />
+                  </div>
+                </Paper>
+              )}
+            </div>
 
-            {stats.domains.numVulnerabilities.length > 0 && (
-              <div className={classes.chart}>
-                <h3>Domains with the Most Open Vulnerabilities</h3>
-                <MyResponsiveBar
-                  data={stats.domains.numVulnerabilities}
-                  xLabel={'Domain'}
-                  longXValues={true}
-                />
-              </div>
-            )}
+            <div className={cardClasses.panel}>
+              <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+                <div className={cardClasses.inner}>
+                  {stats.domains.numVulnerabilities.length > 0 && (
+                    <div className={classes.chart}>
+                      <h3>Domains with the Most Open Vulnerabilities</h3>
+                      <MyResponsiveBar
+                        data={stats.domains.numVulnerabilities}
+                        xLabel={'Domain'}
+                        longXValues={true}
+                      />
+                    </div>
+                  )}
+                </div>
+              </Paper>
+            </div>
           </div>
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 };
 
 export default Risk;
+
+const useStyles = makeStyles((theme) => ({
+  cardRoot: {
+    boxSizing: 'border-box',
+    marginBottom: '1rem',
+    border: '2px solid #DCDEE0',
+    boxShadow: 'none',
+    '& em': {
+      fontStyle: 'normal',
+      backgroundColor: 'yellow'
+    }
+  },
+  inner: {
+    padding: '1.5rem'
+  },
+  root: {
+    position: 'relative',
+    flex: '1',
+    width: '100%',
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    alignItems: 'stretch',
+    margin: '0',
+    overflowY: 'hidden'
+  },
+  contentWrapper: {
+    position: 'relative',
+    flex: '1 1 auto',
+    height: '100%',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    overflowY: 'hidden'
+  },
+  content: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    alignItems: 'stretch',
+    flex: '1',
+    overflowY: 'hidden'
+  },
+  panel: {
+    position: 'relative',
+    height: '100%',
+    overflowY: 'auto',
+    padding: '0 1rem 2rem 1rem',
+    flex: '0 0 50%'
+  }
+}));
