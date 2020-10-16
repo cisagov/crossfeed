@@ -21,7 +21,7 @@ interface Errors extends Partial<OrganizationType> {
 }
 
 const ScanComponent: React.FC = () => {
-  const scanId = useParams();
+  const { scanId } = useParams();
   const { apiGet, apiPut } = useAuthContext();
   const [scan, setScan] = useState<Scan>();
   const [errors, setErrors] = useState<Errors>({});
@@ -236,7 +236,7 @@ const ScanComponent: React.FC = () => {
         <Link to={`/scans`}>
           <Button type="button"> Return to Scans</Button>
         </Link>
-        <Button type="submit" size="big">
+        <Button type="submit">
           Save Changes
         </Button>
       </Form>

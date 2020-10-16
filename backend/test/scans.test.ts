@@ -361,7 +361,7 @@ describe('scan', () => {
           })
         )
         .expect(200);
-      expect(response.body.organizations);
+      expect(response.body.scan.name).toEqual('censys');
     });
 
     it('get by regular user on a scan not from their org should fail', async () => {
