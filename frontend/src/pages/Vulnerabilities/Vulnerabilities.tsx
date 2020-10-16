@@ -23,7 +23,13 @@ import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, parseISO, format } from 'date-fns';
 import { FaExternalLinkAlt } from 'react-icons/fa';
-import { TextareaAutosize } from '@material-ui/core';
+import {
+  TextareaAutosize,
+  List,
+  ListItem,
+  ListItemText,
+  makeStyles
+} from '@material-ui/core';
 import ReactMarkdown from 'react-markdown';
 
 export interface ApiResponse {
@@ -53,6 +59,7 @@ export const Vulnerabilities: React.FC = () => {
   const [showAll, setShowAll] = useState<boolean>(
     JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
   );
+  const listClasses = useStyles();
 
   const columns: Column<Vulnerability>[] = [
     {
@@ -197,37 +204,51 @@ export const Vulnerabilities: React.FC = () => {
               </p>
             ))}
           <h4>Vulnerability history</h4>
-          {original.actions &&
-            original.actions.map((action, index) => {
-              if (action.type === 'state-change' && action.substate) {
-                const val = action.automatic ? (
-                  <>
-                    State automatically changed to{' '}
-                    {stateMap[action.substate].toLowerCase()}
-                  </>
-                ) : (
-                  <>
-                    State changed to {action.state} (
-                    {stateMap[action.substate].toLowerCase()}) by{' '}
-                    {action.userName}
-                  </>
-                );
+          <List className={`${listClasses.listRoot}`}>
+            {original.actions &&
+              original.actions.map((action, index) => {
+                let primary: JSX.Element = <></>;
+                let secondary: JSX.Element = <></>;
+                if (action.type === 'state-change' && action.substate) {
+                  const val = action.automatic ? (
+                    <>
+                      State automatically changed to{' '}
+                      {stateMap[action.substate].toLowerCase()}
+                    </>
+                  ) : (
+                    <>
+                      State changed to {action.state} (
+                      {stateMap[action.substate].toLowerCase()}) by{' '}
+                      {action.userName}
+                    </>
+                  );
+                  primary = (
+                    <>
+                      {val} on {formatDate(action.date)}
+                    </>
+                  );
+                } else if (action.type === 'comment' && action.value) {
+                  primary = (
+                    <ReactMarkdown source={action.value} linkTarget="_blank" />
+                  );
+                  secondary = <>{action.userName}</>;
+                }
                 return (
-                  <p key={index}>
-                    {val} on {formatDate(action.date)}
-                  </p>
+                  <ListItem button divider={true} key={index}>
+                    <ListItemText
+                      primary={primary}
+                      secondary={secondary}
+                    ></ListItemText>
+                  </ListItem>
                 );
-              } else if (action.type === 'comment' && action.value) {
-                return (
-                  <p key={index}>
-                    Comment by {action.userName}:{' '}
-                    <ReactMarkdown source={action.value} />
-                  </p>
-                );
-              }
-              return <></>;
-            })}
-          <p>Vulnerability opened on {formatDate(original.createdAt)}</p>
+              })}
+            <ListItem button divider={true} key="initial">
+              <ListItemText
+                primary={'Opened on ' + formatDate(original.createdAt)}
+              ></ListItemText>
+            </ListItem>
+          </List>
+
           <TextareaAutosize
             style={{ width: 300, padding: 10 }}
             rowsMin={2}
@@ -404,5 +425,12 @@ export const Vulnerabilities: React.FC = () => {
     </div>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  listRoot: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper
+  }
+}));
 
 export default Vulnerabilities;
