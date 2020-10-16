@@ -10,9 +10,7 @@ export const search = wrapHandler(async (event) => {
   await connectToDatabase();
 
   const searchBody = JSON.parse(event.body!);
-
   const client = new ESClient();
-
   let searchResults;
   try {
     searchResults = await client.searchDomains(searchBody);

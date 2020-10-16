@@ -206,6 +206,74 @@ describe('cve', () => {
     expect(vuln?.state).toEqual('open');
     expect(vuln?.substate).toEqual('unconfirmed');
   });
+  test('reopens remediated vulnerability found again', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const vulnerability = await Vulnerability.create({
+      domain,
+      cve: 'CVE-123',
+      lastSeen: new Date(),
+      title: '123',
+      description: '123',
+      state: 'closed',
+      substate: 'remediated'
+    }).save();
+    await cve({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vuln = await Vulnerability.findOne({
+      id: vulnerability.id
+    });
+    expect(vuln?.state).toEqual('open');
+    expect(vuln?.substate).toEqual('unconfirmed');
+  });
+  test('does not reopen false positive vulnerability found again', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const vulnerability = await Vulnerability.create({
+      domain,
+      cve: 'CVE-123',
+      lastSeen: new Date(),
+      title: '123',
+      description: '123',
+      state: 'closed',
+      substate: 'false-positive'
+    }).save();
+    await cve({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vuln = await Vulnerability.findOne({
+      id: vulnerability.id
+    });
+    expect(vuln?.state).toEqual('closed');
+    expect(vuln?.substate).toEqual('false-positive');
+  });
   test('populates vulnerability', async () => {
     const organization = await Organization.create({
       name: 'test-' + Math.random(),

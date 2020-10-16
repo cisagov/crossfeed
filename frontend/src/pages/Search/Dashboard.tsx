@@ -95,7 +95,10 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
           <span>
             <strong>
               {(current - 1) * resultsPerPage + 1} -{' '}
-              {(current - 1) * resultsPerPage + resultsPerPage}
+              {Math.min(
+                (current - 1) * resultsPerPage + resultsPerPage,
+                totalResults
+              )}
             </strong>{' '}
             of <strong>{totalResults}</strong>
           </span>
