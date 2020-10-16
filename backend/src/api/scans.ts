@@ -215,7 +215,7 @@ export const get = wrapHandler(async (event) => {
   );
 
   if (scan) {
-    let schema = SCAN_SCHEMA[scan.name];
+    const schema = SCAN_SCHEMA[scan.name];
     const organizations = await Organization.find();
     return {
       statusCode: 200,
