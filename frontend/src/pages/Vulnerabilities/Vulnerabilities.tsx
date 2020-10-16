@@ -21,7 +21,7 @@ import classes from './styles.module.scss';
 import { Grid, Checkbox, Dropdown } from '@trussworks/react-uswds';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { formatDistanceToNow, parseISO, format } from 'date-fns';
+import { differenceInCalendarDays, parseISO, format } from 'date-fns';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 export interface ApiResponse {
@@ -139,8 +139,7 @@ export const Vulnerabilities: React.FC = () => {
       Header: 'Days Open',
       id: 'createdAt',
       accessor: ({ createdAt }) =>
-        `${formatDistanceToNow(parseISO(createdAt))} ago`,
-      width: 250,
+        `${differenceInCalendarDays(new Date(), parseISO(createdAt))}`,
       disableFilters: true
     },
     {
