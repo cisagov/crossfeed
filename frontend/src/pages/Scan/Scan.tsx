@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { Organization as OrganizationType, Scan, ScanSchema } from 'types';
-import { formatDistanceToNow, parseISO } from 'date-fns';
 import {
   Header,
   Button,
@@ -16,7 +15,6 @@ import {
 import MultiSelect from '../Scans/MultiSelect';
 import { OrganizationOption } from 'pages/Scans/ScansView';
 import { Link } from 'react-router-dom';
-import { isRegExp } from 'util';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
@@ -24,7 +22,7 @@ interface Errors extends Partial<OrganizationType> {
 
 const ScanComponent: React.FC = () => {
   const { scanId } = useParams();
-  const { apiGet, apiPut, apiPost } = useAuthContext();
+  const { apiGet, apiPut } = useAuthContext();
   const [scan, setScan] = useState<Scan>();
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
