@@ -331,55 +331,58 @@ export const DomainDetails: React.FC<Props> = (props) => {
                   Port
                 </Typography>
                 <Typography className={classes.accordionHeading}>
-                  Service
+                  Products
                 </Typography>
                 <Typography>Last Seen</Typography>
               </AccordionSummary>
             </Accordion>
-            {domain.services.map((service) => (
-              <Accordion className={classes.accordion} key={service.id}>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography className={classes.accordionHeading}>
-                    {service.port}
-                  </Typography>
-                  <Typography className={classes.accordionHeading}>
-                    {service.service}
-                  </Typography>
-                  {service.lastSeen && (
-                    <Typography>
-                      {formatDistanceToNow(parseISO(service.lastSeen))} ago
+            {domain.services.map((service) => {
+              const products = service.products
+                .map(
+                  (product) =>
+                    product.name +
+                    (product.version ? ` ${product.version}` : '')
+                )
+                .join(', ');
+              return (
+                <Accordion className={classes.accordion} key={service.id}>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography className={classes.accordionHeading}>
+                      {service.port}
                     </Typography>
+                    <Typography className={classes.accordionHeading}>
+                      {products}
+                    </Typography>
+                    {service.lastSeen && (
+                      <Typography>
+                        {formatDistanceToNow(parseISO(service.lastSeen))} ago
+                      </Typography>
+                    )}
+                  </AccordionSummary>
+                  {service.products.length > 0 && (
+                    <AccordionDetails>
+                      <DefinitionList
+                        items={[
+                          {
+                            label: 'Products',
+                            value: products
+                          },
+                          {
+                            label: 'Banner',
+                            value:
+                              (user?.userType === 'globalView' ||
+                                user?.userType === 'globalAdmin') &&
+                              service.banner
+                                ? service.banner
+                                : 'None'
+                          }
+                        ]}
+                      />
+                    </AccordionDetails>
                   )}
-                </AccordionSummary>
-                {service.products.length > 0 && (
-                  <AccordionDetails>
-                    <DefinitionList
-                      items={[
-                        {
-                          label: 'Products',
-                          value: service.products
-                            .map(
-                              (product) =>
-                                product.name +
-                                (product.version ? ` ${product.version}` : '')
-                            )
-                            .join(', ')
-                        },
-                        {
-                          label: 'Banner',
-                          value:
-                            (user?.userType === 'globalView' ||
-                              user?.userType === 'globalAdmin') &&
-                            service.banner
-                              ? service.banner
-                              : 'None'
-                        }
-                      ]}
-                    />
-                  </AccordionDetails>
-                )}
-              </Accordion>
-            ))}
+                </Accordion>
+              );
+            })}
           </div>
         )}
         {domain.webpages.length > 0 && (
