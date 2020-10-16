@@ -136,7 +136,7 @@ export const Vulnerabilities: React.FC = () => {
       Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
     },
     {
-      Header: 'Created',
+      Header: 'Days Open',
       id: 'createdAt',
       accessor: ({ createdAt }) =>
         `${formatDistanceToNow(parseISO(createdAt))} ago`,
