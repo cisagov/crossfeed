@@ -68,6 +68,7 @@ const ScanComponent: React.FC = () => {
       setOrganizationOptions(
           organizations.map((e) => ({ label: e.name, value: e.id }))
         );
+        
     } catch (e) {
       console.error(e);
     }
@@ -137,14 +138,25 @@ const ScanComponent: React.FC = () => {
       isSingleScan: scan.isSingleScan
       }));
 
-      /*
+      
+      
+      
+      //retrieves the organizations that are currently
+      //associated with this scan
       if (scan.isGranular) {
+        const defaultOrganizations: OrganizationOption[] = [];
+        for (const org in scan.organizations){
+          const thisOrganization: OrganizationType = scan.organizations[org];
+          const thisOrganizationOption: OrganizationOption = {label: thisOrganization.name, value: thisOrganization.id};
+          defaultOrganizations.push(thisOrganizationOption);
+        }
         setValues((values) => ({
           ...values,
-            organizations: scan.organizations
+            organizations: defaultOrganizations
         }))
       }
-      */
+      
+      
 
   } 
 
