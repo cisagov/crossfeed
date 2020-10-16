@@ -3,6 +3,7 @@ import app from '../src/api/app';
 import { User, Scan, connectToDatabase, Organization } from '../src/models';
 import { createUserToken } from './util';
 import { handler as scheduler } from '../src/tasks/scheduler';
+import { Organizations } from 'aws-sdk';
 
 jest.mock('../src/tasks/scheduler', () => ({
   handler: jest.fn()
@@ -360,8 +361,25 @@ describe('scan', () => {
           })
         )
         .expect(200);
-
-      expect(response.body.name).toEqual('censys');
+      expect(response.body.scan.name).toEqual('censys');
+    });
+    it('get by globalView should succeed check organizations retrieved ', async () => {
+      const scan = await Scan.create({
+        name: 'censys',
+        arguments: {},
+        frequency: 999999,
+        isGranular: true
+      }).save();
+      const response = await request(app)
+        .get(`/scans/${scan.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalView'
+          })
+        )
+        .expect(200);
+      expect(response.body.organizations.length).toEqual(3);
     });
     it('get by regular user on a scan not from their org should fail', async () => {
       const scan = await Scan.create({
