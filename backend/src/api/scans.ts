@@ -205,15 +205,16 @@ export const get = wrapHandler(async (event) => {
   if (!id || !isUUID(id)) {
     return NotFound;
   }
-  const scan = await Scan.findOne({
-    id: id
-  },
-  {
-    relations: ['organizations']
-  });
-  
-  if (scan) {
+  const scan = await Scan.findOne(
+    {
+      id: id
+    },
+    {
+      relations: ['organizations']
+    }
+  );
 
+  if (scan) {
     let schema = SCAN_SCHEMA[scan.name];
     const organizations = await Organization.find();
     return {
@@ -224,8 +225,9 @@ export const get = wrapHandler(async (event) => {
         organizations: organizations.map((e) => ({
           name: e.name,
           id: e.id
-      }))
-    })};
+        }))
+      })
+    };
   }
   return NotFound;
 });
