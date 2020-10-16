@@ -189,7 +189,7 @@ class Scheduler {
         }
       }
       //if atleast 1 new scan task was launched for this scan, update the scan
-      if (this.numLaunchedTasks > prev_numLaunchedTasks ) {
+      if (this.numLaunchedTasks > prev_numLaunchedTasks) {
         scan.lastRun = new Date();
         scan.manualRunPending = false;
         await scan.save();
