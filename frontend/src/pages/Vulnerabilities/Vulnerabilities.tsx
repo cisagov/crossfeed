@@ -138,8 +138,33 @@ export const Vulnerabilities: React.FC = () => {
     {
       Header: 'Days Open',
       id: 'createdAt',
-      accessor: ({ createdAt }) =>
-        `${differenceInCalendarDays(new Date(), parseISO(createdAt))}`,
+      accessor: ({ createdAt, actions }) => {
+        // Calculates the total number of days a vulnerability has been open
+        let daysOpen = 0;
+        let lastOpenDate = createdAt;
+        let lastState = 'open';
+        console.log(actions);
+        actions.reverse();
+        for (const action of actions) {
+          if (action.state === 'closed' && lastState === 'open') {
+            daysOpen += differenceInCalendarDays(
+              parseISO(action.date),
+              parseISO(lastOpenDate)
+            );
+            lastState = 'closed';
+          } else if (action.state === 'open' && lastState === 'closed') {
+            lastOpenDate = action.date;
+            lastState = 'open';
+          }
+        }
+        if (lastState === 'open') {
+          daysOpen += differenceInCalendarDays(
+            new Date(),
+            parseISO(lastOpenDate)
+          );
+        }
+        return daysOpen;
+      },
       disableFilters: true
     },
     {
