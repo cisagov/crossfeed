@@ -160,6 +160,8 @@ class Scheduler {
 
   async run() {
     for (const scan of this.scans) {
+      const prev_numLaunchedTasks = this.numLaunchedTasks;
+
       if (!SCAN_SCHEMA[scan.name]) {
         console.error('Invalid scan name ', scan.name);
         continue;
@@ -186,7 +188,8 @@ class Scheduler {
           await this.launchScanTask({ organization, scan });
         }
       }
-      if (this.numLaunchedTasks > 0) {
+      //if atleast 1 new scan task was launched for this scan, update the scan
+      if (this.numLaunchedTasks > prev_numLaunchedTasks) {
         scan.lastRun = new Date();
         scan.manualRunPending = false;
         await scan.save();

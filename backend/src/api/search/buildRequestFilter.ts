@@ -10,6 +10,12 @@ function getTermFilterValue(field, fieldValue) {
   if (typeof fieldValue === 'number') {
     return { [field]: fieldValue };
   }
+  if (field === 'name') {
+    // If name does not have wildcards, make it wildcard by default
+    if (fieldValue !== '' && !fieldValue.includes('*')) {
+      fieldValue = '*' + fieldValue + '*';
+    }
+  }
   return { [`${field}.keyword`]: fieldValue };
 }
 

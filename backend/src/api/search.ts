@@ -33,7 +33,6 @@ export const search = wrapHandler(async (event) => {
   const request = buildRequest(searchBody, options);
 
   const client = new ESClient();
-
   let searchResults;
   try {
     searchResults = await client.searchDomains(request);

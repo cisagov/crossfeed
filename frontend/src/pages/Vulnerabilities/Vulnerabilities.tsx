@@ -21,7 +21,7 @@ import classes from './styles.module.scss';
 import { Grid, Checkbox, Dropdown } from '@trussworks/react-uswds';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { formatDistanceToNow, parseISO, format } from 'date-fns';
+import { differenceInCalendarDays, parseISO, format } from 'date-fns';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 export interface ApiResponse {
@@ -64,7 +64,10 @@ export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
         {original.actions &&
           original.actions.map((action, index) => {
             const val = action.automatic ? (
-              <>Vulnerability automatically marked as remediated</>
+              <>
+                State automatically changed to{' '}
+                {stateMap[action.substate].toLowerCase()}
+              </>
             ) : (
               <>
                 State changed to {action.state} (
@@ -133,11 +136,35 @@ export const Vulnerabilities: React.FC = () => {
       Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
     },
     {
-      Header: 'Created',
+      Header: 'Days Open',
       id: 'createdAt',
-      accessor: ({ createdAt }) =>
-        `${formatDistanceToNow(parseISO(createdAt))} ago`,
-      width: 250,
+      accessor: ({ createdAt, actions }) => {
+        // Calculates the total number of days a vulnerability has been open
+        let daysOpen = 0;
+        let lastOpenDate = createdAt;
+        let lastState = 'open';
+        console.log(actions);
+        actions.reverse();
+        for (const action of actions) {
+          if (action.state === 'closed' && lastState === 'open') {
+            daysOpen += differenceInCalendarDays(
+              parseISO(action.date),
+              parseISO(lastOpenDate)
+            );
+            lastState = 'closed';
+          } else if (action.state === 'open' && lastState === 'closed') {
+            lastOpenDate = action.date;
+            lastState = 'open';
+          }
+        }
+        if (lastState === 'open') {
+          daysOpen += differenceInCalendarDays(
+            new Date(),
+            parseISO(lastOpenDate)
+          );
+        }
+        return daysOpen;
+      },
       disableFilters: true
     },
     {

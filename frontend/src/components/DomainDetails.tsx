@@ -6,14 +6,24 @@ import {
   Accordion,
   AccordionSummary,
   Typography,
-  AccordionDetails
+  AccordionDetails,
+  List,
+  ListItem,
+  ListItemText,
+  Collapse
 } from '@material-ui/core';
-import { ExpandMore, Launch as LinkOffIcon } from '@material-ui/icons';
+import {
+  ExpandLess,
+  ExpandMore,
+  Launch as LinkOffIcon
+} from '@material-ui/icons';
 import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { stateMap } from 'pages/Vulnerabilities/Vulnerabilities';
+import { Webpage } from 'types/webpage';
+import { useAuthContext } from 'context';
 
 interface Props {
   domainId: string;
@@ -22,6 +32,7 @@ interface Props {
 export const DomainDetails: React.FC<Props> = (props) => {
   const { domainId } = props;
   const { getDomain } = useDomainApi(false);
+  const { user } = useAuthContext();
   const [domain, setDomain] = useState<Domain>();
   const classes = useStyles();
 
@@ -106,6 +117,99 @@ export const DomainDetails: React.FC<Props> = (props) => {
     return ret;
   }, [domain]);
 
+  const generateWebpageTree = (pages: Webpage[]) => {
+    const tree: any = {};
+    for (const page of pages) {
+      const url = new URL(page.url);
+      const parts = url.pathname.split('/').filter((path) => path !== '');
+      let root = tree;
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (parts[i] in root) root = root[parts[i]];
+        else {
+          root[parts[i]] = {};
+          root = root[parts[i]];
+        }
+      }
+      root[parts[parts.length - 1]] = page;
+    }
+    return tree;
+  };
+
+  const [hiddenRows, setHiddenRows] = React.useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const formatBytes = (bytes: number, decimals = 2): string => {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  };
+
+  const generateWebpageList = (tree: any, prefix = '') => {
+    return (
+      <List
+        className={`${classes.listRoot}${prefix ? ' ' + classes.nested : ''}`}
+      >
+        {Object.keys(tree).map((key) => {
+          const isWebpage =
+            'url' in tree[key] && typeof tree[key]['url'] === 'string';
+          if (!isWebpage) {
+            let newPrefix = prefix + '/' + key;
+            return (
+              <>
+                <ListItem
+                  button
+                  onClick={() => {
+                    setHiddenRows((hiddenRows: any) => {
+                      hiddenRows[newPrefix] =
+                        newPrefix in hiddenRows ? !hiddenRows[newPrefix] : true;
+                      return { ...hiddenRows };
+                    });
+                  }}
+                  key={newPrefix}
+                >
+                  <ListItemText primary={(prefix ? '' : '/') + key + '/'} />
+                  {hiddenRows[newPrefix] ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse
+                  in={!hiddenRows[newPrefix]}
+                  timeout="auto"
+                  unmountOnExit
+                >
+                  {generateWebpageList(tree[key], newPrefix)}
+                </Collapse>
+              </>
+            );
+          }
+          const page = tree[key] as Webpage;
+          const parsed = new URL(page.url);
+          const split = parsed.pathname.split('/');
+          return (
+            <ListItem
+              button
+              divider={true}
+              key={page.url}
+              onClick={() => window.open(page.url, '_blank')}
+            >
+              <ListItemText
+                primary={(prefix ? '' : '/') + split.pop()}
+                secondary={
+                  page.status + ' • ' + formatBytes(page.responseSize ?? 0, 1)
+                }
+              ></ListItemText>
+            </ListItem>
+          );
+        })}
+      </List>
+    );
+  };
+
   if (!domain) {
     return null;
   }
@@ -114,6 +218,10 @@ export const DomainDetails: React.FC<Props> = (props) => {
     (domain.services.find((service) => service.port === 443)
       ? 'https://'
       : 'http://') + domain.name;
+
+  domain.webpages.sort((a, b) => (a.url > b.url ? 1 : -1));
+  const webpageTree = generateWebpageTree(domain.webpages);
+  const webpageList = generateWebpageList(webpageTree);
 
   return (
     <Paper classes={{ root: classes.root }}>
@@ -144,7 +252,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Vulnerabilities</h4>
             <Accordion className={classes.accordionHeaderRow} disabled>
-              <AccordionSummary>
+              <AccordionSummary expandIcon={<ExpandMore />}>
                 <Typography className={classes.accordionHeading}>
                   Title
                 </Typography>
@@ -218,52 +326,69 @@ export const DomainDetails: React.FC<Props> = (props) => {
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Ports</h4>
             <Accordion className={classes.accordionHeaderRow} disabled>
-              <AccordionSummary>
+              <AccordionSummary expandIcon={<ExpandMore />}>
                 <Typography className={classes.accordionHeading}>
                   Port
                 </Typography>
                 <Typography className={classes.accordionHeading}>
-                  Service
+                  Products
                 </Typography>
                 <Typography>Last Seen</Typography>
               </AccordionSummary>
             </Accordion>
-            {domain.services.map((service) => (
-              <Accordion className={classes.accordion} key={service.id}>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography className={classes.accordionHeading}>
-                    {service.port}
-                  </Typography>
-                  <Typography className={classes.accordionHeading}>
-                    {service.service}
-                  </Typography>
-                  {service.lastSeen && (
-                    <Typography>
-                      {formatDistanceToNow(parseISO(service.lastSeen))} ago
+            {domain.services.map((service) => {
+              const products = service.products
+                .map(
+                  (product) =>
+                    product.name +
+                    (product.version ? ` ${product.version}` : '')
+                )
+                .join(', ');
+              return (
+                <Accordion className={classes.accordion} key={service.id}>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography className={classes.accordionHeading}>
+                      {service.port}
                     </Typography>
+                    <Typography className={classes.accordionHeading}>
+                      {products}
+                    </Typography>
+                    {service.lastSeen && (
+                      <Typography>
+                        {formatDistanceToNow(parseISO(service.lastSeen))} ago
+                      </Typography>
+                    )}
+                  </AccordionSummary>
+                  {service.products.length > 0 && (
+                    <AccordionDetails>
+                      <DefinitionList
+                        items={[
+                          {
+                            label: 'Products',
+                            value: products
+                          },
+                          {
+                            label: 'Banner',
+                            value:
+                              (user?.userType === 'globalView' ||
+                                user?.userType === 'globalAdmin') &&
+                              service.banner
+                                ? service.banner
+                                : 'None'
+                          }
+                        ]}
+                      />
+                    </AccordionDetails>
                   )}
-                </AccordionSummary>
-                {service.products.length > 0 && (
-                  <AccordionDetails>
-                    <DefinitionList
-                      items={[
-                        {
-                          label: 'Products',
-                          value: service.products
-                            .map(
-                              (product) =>
-                                product.name +
-                                (product.version ? ` ${product.version}` : '')
-                            )
-                            .join(', ')
-                        },
-                        { label: 'Banner', value: service.banner ?? 'None' }
-                      ]}
-                    />
-                  </AccordionDetails>
-                )}
-              </Accordion>
-            ))}
+                </Accordion>
+              );
+            })}
+          </div>
+        )}
+        {domain.webpages.length > 0 && (
+          <div className={classes.section}>
+            <h4 className={classes.subtitle}>Site Map</h4>
+            {webpageList}
           </div>
         )}
       </div>
@@ -329,5 +454,12 @@ const useStyles = makeStyles((theme) => ({
     flex: '1 1 15%',
     textOverflow: 'hidden',
     textAlign: 'right'
+  },
+  listRoot: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper
+  },
+  nested: {
+    paddingLeft: theme.spacing(2)
   }
 }));
