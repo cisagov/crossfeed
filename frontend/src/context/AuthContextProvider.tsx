@@ -10,6 +10,7 @@ import {
   getTouVersion,
   getUserMustSign
 } from './userStateUtils';
+import Cookies from 'universal-cookie';
 
 export const currentTermsVersion = '1';
 
@@ -20,12 +21,14 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     'organization',
     null
   );
+  const cookies = useMemo(() => new Cookies(), []);
 
   const logout = useCallback(async () => {
     localStorage.clear();
     await Auth.signOut();
+    cookies.remove('crossfeed-token', { domain: process.env.REACT_APP_COOKIE_DOMAIN });
     window.location.reload();
-  }, []);
+  }, [cookies]);
 
   const handleError = useCallback(
     async (e: Error) => {

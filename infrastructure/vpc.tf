@@ -1,6 +1,7 @@
 resource "aws_vpc" "crossfeed_vpc" {
-  cidr_block = "10.0.0.0/16"
-
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_support   = true
+  enable_dns_hostnames = true
   tags = {
     Project = var.project
   }
@@ -57,6 +58,16 @@ resource "aws_subnet" "es_1" {
   }
 }
 
+resource "aws_subnet" "matomo_1" {
+  availability_zone = data.aws_availability_zones.available.names[0]
+  vpc_id            = aws_vpc.crossfeed_vpc.id
+  cidr_block        = "10.0.5.0/28"
+
+  tags = {
+    Project = var.project
+  }
+}
+
 resource "aws_route_table" "r" {
   vpc_id = aws_vpc.crossfeed_vpc.id
 
@@ -107,6 +118,11 @@ resource "aws_route_table_association" "r_assoc_db_2" {
 resource "aws_route_table_association" "r_assoc_backend" {
   route_table_id = aws_route_table.r2.id
   subnet_id      = aws_subnet.backend.id
+}
+
+resource "aws_route_table_association" "r_assoc_matomo" {
+  route_table_id = aws_route_table.r2.id
+  subnet_id      = aws_subnet.matomo_1.id
 }
 
 resource "aws_route_table_association" "r_assoc_worker" {
