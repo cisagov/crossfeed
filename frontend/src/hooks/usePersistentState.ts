@@ -1,9 +1,12 @@
-import { useState, useEffect, SetStateAction } from 'react';
+import { useState, useEffect, SetStateAction, useMemo } from 'react';
+import Cookies from 'universal-cookie';
 
 export const usePersistentState = <T extends any = any>(
   key: string,
   defaultValue?: any
 ): [T, React.Dispatch<SetStateAction<T>>] => {
+  const cookies = useMemo(() => new Cookies(), []);
+
   const [state, setState] = useState<T>(() => {
     const existing = localStorage.getItem(key);
     try {
@@ -15,7 +18,10 @@ export const usePersistentState = <T extends any = any>(
 
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(state));
-  }, [state, key]);
+    if (key === 'token') {
+      cookies.set('crossfeed-token', state, { domain: process.env.REACT_APP_COOKIE_DOMAIN });
+    }
+  }, [state, key, cookies]);
 
   return [state, setState];
 };

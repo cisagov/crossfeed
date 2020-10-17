@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { API } from 'aws-amplify';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 const baseHeaders: HeadersInit = {
   'Content-Type': 'application/json',
@@ -33,13 +34,21 @@ export const useApi = (onError?: OnError) => {
     };
   }, []);
 
+  const { trackEvent } = useMatomo();
+
   const apiMethod = useCallback(
-    (method: ApiMethod) => async <T extends object = any>(
+    (method: ApiMethod, methodName: string) => async <T extends object = any>(
       path: string,
       init: any = {}
     ) => {
       const {showLoading = true, ...rest} = init;
       try {
+        trackEvent({
+          category: "apiMethod",
+          action: methodName,
+          name: path,
+          documentTitle: document.title
+        })
         showLoading && setRequestCount(cnt => cnt + 1);
         const options = await prepareInit(rest);
         const result = await method('crossfeed', path, options);
@@ -51,15 +60,17 @@ export const useApi = (onError?: OnError) => {
         throw e;
       }
     },
+    // Adding trackEvent to deps causes an infinite loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [prepareInit, onError]
   );
 
   const api = {
-    apiGet: useCallback(apiMethod(API.get.bind(API)), [apiMethod]),
-    apiPost: useCallback(apiMethod(API.post.bind(API)), [apiMethod]),
-    apiDelete: useCallback(apiMethod(API.del.bind(API)), [apiMethod]),
-    apiPut: useCallback(apiMethod(API.put.bind(API)), [apiMethod]),
-    apiPatch: useCallback(apiMethod(API.patch.bind(API)), [apiMethod])
+    apiGet: useCallback(apiMethod(API.get.bind(API), "get"), [apiMethod]),
+    apiPost: useCallback(apiMethod(API.post.bind(API), "post"), [apiMethod]),
+    apiDelete: useCallback(apiMethod(API.del.bind(API), "del"), [apiMethod]),
+    apiPut: useCallback(apiMethod(API.put.bind(API), "put"), [apiMethod]),
+    apiPatch: useCallback(apiMethod(API.patch.bind(API), "patch"), [apiMethod])
   };
 
   return {

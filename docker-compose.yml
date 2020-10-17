@@ -93,10 +93,39 @@ services:
       - MINIO_ACCESS_KEY=aws_access_key
       - MINIO_SECRET_KEY=aws_secret_key
 
+  matomodb:
+    image: mariadb:10.5
+    command: --max-allowed-packet=64MB
+    networks:
+      - backend
+    volumes:
+      - ./matomo-db-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+
+  matomo:
+    image: matomo:3.14.1
+    user: root
+    networks:
+      - backend
+    volumes:
+      - ./matomo-data:/var/www/html
+    environment:
+      - MATOMO_DATABASE_HOST=matomodb
+      - MATOMO_DATABASE_ADAPTER=mysql
+      - MATOMO_DATABASE_TABLES_PREFIX=matomo_
+      - MATOMO_DATABASE_USERNAME=root
+      - MATOMO_DATABASE_PASSWORD=password
+      - MATOMO_DATABASE_DBNAME=matomo
+      - MATOMO_GENERAL_PROXY_URI_HEADER=1
+      - MATOMO_GENERAL_ASSUME_SECURE_PROTOCOL=1
+
 volumes:
   postgres-data:
   es-data:
   minio-data:
+  matomo-db-data:
+  matomo-data:
 
 networks:
   backend:

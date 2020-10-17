@@ -18,11 +18,19 @@ import {
 } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import { Grid, Checkbox, Dropdown } from '@trussworks/react-uswds';
+import { Grid, Checkbox, Dropdown, Button } from '@trussworks/react-uswds';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { formatDistanceToNow, parseISO, format } from 'date-fns';
+import { differenceInCalendarDays, parseISO, format } from 'date-fns';
 import { FaExternalLinkAlt } from 'react-icons/fa';
+import {
+  TextareaAutosize,
+  List,
+  ListItem,
+  ListItemText,
+  makeStyles
+} from '@material-ui/core';
+import ReactMarkdown from 'react-markdown';
 
 export interface ApiResponse {
   result: Vulnerability[];
@@ -43,49 +51,6 @@ export const stateMap: { [key: string]: string } = {
   remediated: 'Remediated'
 };
 
-export const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
-  const { original } = row;
-  return (
-    <div className={classes.expandedRoot}>
-      <h3>Details</h3>
-      <div className={classes.desc}>
-        <p>{original.description}</p>
-        <h4>References</h4>
-        {original.references &&
-          original.references.map((ref, index) => (
-            <p key={index}>
-              <a href={ref.url} target="_blank" rel="noopener noreferrer">
-                {ref.url} {extLink}
-              </a>
-              {ref.tags.length > 0 ? ' - ' + ref.tags.join(',') : ''}
-            </p>
-          ))}
-        <h4>Vulnerability history</h4>
-        {original.actions &&
-          original.actions.map((action, index) => {
-            const val = action.automatic ? (
-              <>
-                State automatically changed to{' '}
-                {stateMap[action.substate].toLowerCase()}
-              </>
-            ) : (
-              <>
-                State changed to {action.state} (
-                {stateMap[action.substate].toLowerCase()}) by {action.userName}
-              </>
-            );
-            return (
-              <p key={index}>
-                {val} on {formatDate(action.date)}
-              </p>
-            );
-          })}
-        <p>Vulnerability opened on {formatDate(original.createdAt)}</p>
-      </div>
-    </div>
-  );
-};
-
 export const Vulnerabilities: React.FC = () => {
   const { user, currentOrganization, apiPost, apiPut } = useAuthContext();
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
@@ -94,6 +59,7 @@ export const Vulnerabilities: React.FC = () => {
   const [showAll, setShowAll] = useState<boolean>(
     JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
   );
+  const listClasses = useStyles();
 
   const columns: Column<Vulnerability>[] = [
     {
@@ -136,11 +102,35 @@ export const Vulnerabilities: React.FC = () => {
       Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
     },
     {
-      Header: 'Created',
+      Header: 'Days Open',
       id: 'createdAt',
-      accessor: ({ createdAt }) =>
-        `${formatDistanceToNow(parseISO(createdAt))} ago`,
-      width: 250,
+      accessor: ({ createdAt, actions }) => {
+        // Calculates the total number of days a vulnerability has been open
+        let daysOpen = 0;
+        let lastOpenDate = createdAt;
+        let lastState = 'open';
+        console.log(actions);
+        actions.reverse();
+        for (const action of actions) {
+          if (action.state === 'closed' && lastState === 'open') {
+            daysOpen += differenceInCalendarDays(
+              parseISO(action.date),
+              parseISO(lastOpenDate)
+            );
+            lastState = 'closed';
+          } else if (action.state === 'open' && lastState === 'closed') {
+            lastOpenDate = action.date;
+            lastState = 'open';
+          }
+        }
+        if (lastState === 'open') {
+          daysOpen += differenceInCalendarDays(
+            new Date(),
+            parseISO(lastOpenDate)
+          );
+        }
+        return daysOpen;
+      },
       disableFilters: true
     },
     {
@@ -163,7 +153,9 @@ export const Vulnerabilities: React.FC = () => {
           id="state-dropdown"
           name="state-dropdown"
           onChange={(e) => {
-            setVulnerabilityState(row.index, e.target.value);
+            updateVulnerability(row.index, {
+              substate: e.target.value
+            });
           }}
           value={row.original.substate}
           style={{ display: 'inline-block', width: '200px' }}
@@ -190,14 +182,15 @@ export const Vulnerabilities: React.FC = () => {
     }
   ];
 
-  const setVulnerabilityState = async (index: number, state: string) => {
+  const updateVulnerability = async (
+    index: number,
+    body: { [key: string]: string }
+  ) => {
     try {
       const res = await apiPut<Vulnerability>(
         '/vulnerabilities/' + vulnerabilities[index].id,
         {
-          body: {
-            substate: state
-          }
+          body: body
         }
       );
       const vulnCopy = [...vulnerabilities];
@@ -213,6 +206,95 @@ export const Vulnerabilities: React.FC = () => {
   const updateShowAll = (state: boolean) => {
     setShowAll(state);
     localStorage.setItem('showGlobal', JSON.stringify(state));
+  };
+
+  const comments: { [key: string]: string } = {};
+
+  const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
+    const { original } = row;
+    return (
+      <div className={classes.expandedRoot}>
+        <h3>Details</h3>
+        <div className={classes.desc}>
+          <p>{original.description}</p>
+          <h4>References</h4>
+          {original.references &&
+            original.references.map((ref, index) => (
+              <p key={index}>
+                <a href={ref.url} target="_blank" rel="noopener noreferrer">
+                  {ref.url} {extLink}
+                </a>
+                {ref.tags.length > 0 ? ' - ' + ref.tags.join(',') : ''}
+              </p>
+            ))}
+          <h4>Vulnerability history</h4>
+          <List className={`${listClasses.listRoot}`}>
+            {original.actions &&
+              original.actions.map((action, index) => {
+                let primary: JSX.Element = <></>;
+                let secondary: JSX.Element = <></>;
+                if (action.type === 'state-change' && action.substate) {
+                  const val = action.automatic ? (
+                    <>
+                      State automatically changed to{' '}
+                      {stateMap[action.substate].toLowerCase()}
+                    </>
+                  ) : (
+                    <>
+                      State changed to {action.state} (
+                      {stateMap[action.substate].toLowerCase()}) by{' '}
+                      {action.userName}
+                    </>
+                  );
+                  primary = (
+                    <>
+                      {val} on {formatDate(action.date)}
+                    </>
+                  );
+                } else if (action.type === 'comment' && action.value) {
+                  primary = (
+                    <ReactMarkdown source={action.value} linkTarget="_blank" />
+                  );
+                  secondary = <>{action.userName}</>;
+                }
+                return (
+                  <ListItem button divider={true} key={index}>
+                    <ListItemText
+                      primary={primary}
+                      secondary={secondary}
+                    ></ListItemText>
+                  </ListItem>
+                );
+              })}
+            <ListItem button divider={true} key="initial">
+              <ListItemText
+                primary={'Opened on ' + formatDate(original.createdAt)}
+              ></ListItemText>
+            </ListItem>
+          </List>
+
+          <TextareaAutosize
+            style={{ width: 300, padding: 10 }}
+            rowsMin={2}
+            placeholder="Leave a Comment"
+            onChange={(e) => (comments[original.id] = e.target.value)}
+          />
+          <br></br>
+          <Button
+            type="button"
+            style={{ width: 150 }}
+            outline
+            onClick={() => {
+              updateVulnerability(row.index, {
+                comment: comments[original.id]
+              });
+            }}
+          >
+            Comment
+          </Button>
+        </div>
+      </div>
+    );
   };
 
   const vulnerabilitiesSearch = useCallback(
@@ -367,5 +449,12 @@ export const Vulnerabilities: React.FC = () => {
     </div>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  listRoot: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper
+  }
+}));
 
 export default Vulnerabilities;
