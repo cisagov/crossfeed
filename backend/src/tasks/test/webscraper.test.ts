@@ -10,6 +10,9 @@ import {
 import { spawn } from 'child_process';
 import { writeFileSync } from 'fs';
 import { Readable } from 'stream';
+jest.mock('../es-client');
+
+const updateWebpages = require('../es-client').updateWebpages as jest.Mock;
 
 jest.mock('child_process', () => ({
   spawn: jest.fn().mockImplementationOnce(() => ({
@@ -18,11 +21,11 @@ jest.mock('child_process', () => ({
     stdout: Readable.from([
       `
 line with no database output
-database_output: {"s3_key": "5d1ec4072fee8b04b26fe8f400eef551f9498445eeff64f38695bee7f5435c04", "status": 200, "url": "https://docs.crossfeed.cyber.dhs.gov", "domain_name": "docs.crossfeed.cyber.dhs.gov"}
+database_output: {"body": "abc", "headers": [{"a": "b", "c": "d"}], "status": 200, "url": "https://docs.crossfeed.cyber.dhs.gov", "domain_name": "docs.crossfeed.cyber.dhs.gov"}
 database_output: {"s3_key": "1de6816e1b0d07840082bed89f852b3f10688a5df6877a97460dbc474195d5dd", "status": 200, "url": "https://docs.crossfeed.cyber.dhs.gov/scans/", "domain_name": "docs.crossfeed.cyber.dhs.gov"}
 database_output: {"s3_key": "6a2946030f804a281a0141397dbd948d7cae4698118bffd1c58e6d5f87480435", "status": 200, "url": "https://docs.crossfeed.cyber.dhs.gov/contributing/", "domain_name": "docs.crossfeed.cyber.dhs.gov"}
 database_output: {"s3_key": "d8f190dfeaba948e31fc26e3ab7b7c774b1fbf1f6caac535e4837595eadf4795", "status": 200, "url": "https://docs.crossfeed.cyber.dhs.gov/usage/", "domain_name": "docs.crossfeed.cyber.dhs.gov"}
-database_output: {"s3_key": "5d1ec4072fee8b04b26fe8f400eef551f9498445eeff64f38695bee7f5435c04", "status": 200, "url": "https://docs.crossfeed.cyber.dhs.gov", "domain_name": "docs.crossfeed.cyber.dhs.gov"}
+database_output: {"body": "abc", "headers": [{"a": "b", "c": "d"}], "status": 200, "url": "https://docs.crossfeed.cyber.dhs.gov", "domain_name": "docs.crossfeed.cyber.dhs.gov"}
 database_output: {"s3_key": "226706ff585e907aa977323c404b9889f3b2e547d134060ed57fda2e2f1b9860", "status": 200, "url": "https://docs.crossfeed.cyber.dhs.gov/contributing/deployment/", "domain_name": "docs.crossfeed.cyber.dhs.gov"}
 database_output: {"s3_key": "e1448fa789c02ddc90a37803150923359a4a21512e1737caec52be53ef3aa3b5", "status": 200, "url": "https://docs.crossfeed.cyber.dhs.gov/contributing/architecture/", "domain_name": "docs.crossfeed.cyber.dhs.gov"}
 database_output: {"s3_key": "3091ca75bf2ee1e0bead7475adb2db8362f96b472d220fd0c29eaac639cdf37f", "status": 200, "url": "https://docs.crossfeed.cyber.dhs.gov/usage/customization/", "domain_name": "docs.crossfeed.cyber.dhs.gov"}
@@ -87,6 +90,20 @@ describe('webscraper', () => {
     expect((writeFileSync as jest.Mock).mock.calls).toMatchSnapshot();
     expect(webpages.map((e) => e.url)).toMatchSnapshot();
     expect(webpages.map((e) => e.status)).toMatchSnapshot();
+    expect(webpages.map((e) => e.headers)).toMatchSnapshot();
     expect(webpages.filter((e) => e.discoveredBy.id !== scan.id)).toEqual([]);
+
+    expect(
+      updateWebpages.mock.calls[0][0].map((e) => ({
+        ...e,
+        webpage_createdAt: e.webpage_createdAt ? true : false,
+        webpage_updatedAt: e.webpage_updatedAt ? true : false,
+        webpage_syncedAt: e.webpage_discoveredById ? true : false,
+        webpage_discoveredById: e.webpage_discoveredById ? true : false,
+        webpage_domainId: e.webpage_domainId ? true : false,
+        webpage_lastSeen: e.webpage_lastSeen ? true : false,
+        webpage_id: e.webpage_id ? true : false
+      }))
+    ).toMatchSnapshot();
   });
 });
