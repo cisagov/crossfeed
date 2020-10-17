@@ -78,27 +78,34 @@ describe('search', () => {
 });
 
 describe('buildRequest', () => {
-  const buildRequest = jest.requireActual('../src/api/search/buildRequest').buildRequest;
+  const buildRequest = jest.requireActual('../src/api/search/buildRequest')
+    .buildRequest;
   test('sample request by global admin', () => {
-    const req = buildRequest({
-      current: 1,
-      resultsPerPage: 25,
-      searchTerm: 'term',
-      sortDirection: 'asc',
-      sortField: 'name',
-      filters: []
-    }, { matchAllOrganizations: true, organizationIds: [] });
+    const req = buildRequest(
+      {
+        current: 1,
+        resultsPerPage: 25,
+        searchTerm: 'term',
+        sortDirection: 'asc',
+        sortField: 'name',
+        filters: []
+      },
+      { matchAllOrganizations: true, organizationIds: [] }
+    );
     expect(req).toMatchSnapshot();
   });
   test('sample request by non-global admin', () => {
-    const req = buildRequest({
-      current: 1,
-      resultsPerPage: 25,
-      searchTerm: 'term',
-      sortDirection: 'asc',
-      sortField: 'name',
-      filters: []
-    }, { matchAllOrganizations: false, organizationIds: ["id1"] });
+    const req = buildRequest(
+      {
+        current: 1,
+        resultsPerPage: 25,
+        searchTerm: 'term',
+        sortDirection: 'asc',
+        sortField: 'name',
+        filters: []
+      },
+      { matchAllOrganizations: false, organizationIds: ['id1'] }
+    );
     expect(req).toMatchSnapshot();
   });
-})
+});
