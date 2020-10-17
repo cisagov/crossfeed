@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
+import * as cookie from 'cookie';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
 import { handler as healthcheck } from './healthcheck';
@@ -115,10 +116,19 @@ app.get('/plugins/Morpheus/images/logo.svg', (req, res) =>
 app.get('/index.php', (req, res) => res.redirect('/matomo/index.php'));
 
 const matomoProxy = createProxyMiddleware({
-  target: process.env.MATOMO_URL || 'http://matomo',
+  target: process.env.MATOMO_URL,
   headers: { HTTP_X_FORWARDED_URI: '/matomo' },
   pathRewrite: function (path, req) {
     return path.replace(/^\/matomo/, '');
+  },
+  onProxyReq: function (proxyReq, req, res) {
+    // Only pass the MATOMO_SESSID cookie to Matomo.
+    const cookies = cookie.parse(proxyReq.getHeader('Cookie'));
+    const newCookies = cookie.serialize(
+      'MATOMO_SESSID',
+      String(cookies['MATOMO_SESSID'])
+    );
+    proxyReq.setHeader('Cookie', newCookies);
   },
   onProxyRes: function (proxyRes, req, res) {
     // Remove transfer-encoding: chunked responses, because API Gateway doesn't
@@ -160,6 +170,8 @@ app.use(
     if (user.userType !== 'globalAdmin') {
       return res.status(401).send('Unauthorized');
     }
+    // Don't forward the crossfeed-token cookie to the proxy
+    delete req.cookies['crossfeed-token'];
     return next();
   },
   matomoProxy
