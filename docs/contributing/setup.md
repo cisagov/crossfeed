@@ -124,4 +124,4 @@ When running Matomo for the first time locally, you must run `./setup-matomo.sh`
 
 You can access Matomo by clicking on the "Matomo" button from the "My Account" page. Click
 through the original setup (keep the default values for database connection, etc.),
-then set the superuser username and password to "root" and "password".
+then set the superuser username and password to "root" and "password" (for development only, in production generate a random password).
