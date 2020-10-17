@@ -117,6 +117,9 @@ See [uswds-jekyll](https://github.com/18F/uswds-jekyll) for more information on 
 
 ## Matomo
 
+[Matomo](https://matomo.org/) is an open source analytics platform. We host an instance of Matomo as part of Crossfeed to collect analytics
+on its usage.
+
 When running Matomo for the first time locally, you must run `./setup-matomo.sh`.
 
 You can access Matomo by clicking on the "Matomo" button from the "My Account" page. Click
