@@ -33,17 +33,17 @@ class MainSpider(CrawlSpider):
         return self.parse_item(response)
 
     def parse_item(self, response):
-
         try:
             body_decoded = body.decode()
         except UnicodeDecodeError:
             body_decoded = "<binary>"
 
-        item = Webpage(
+        item = dict(
             status=response.status,
             url=response.url,
             domain_name=urlparse(response.url).netloc,
             body=body_decoded,
-            response_size=len(response.body)
+            response_size=len(response.body),
+            headers=[{"name": name, "value": value for name, value in response.headers.items()}]
         )
         yield item
