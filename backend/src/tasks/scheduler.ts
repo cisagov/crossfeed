@@ -70,7 +70,8 @@ class Scheduler {
           scanName: scan.name,
           scanTaskId: scanTask.id,
           numChunks,
-          chunkNumber
+          chunkNumber,
+          isSingleScan: scan.isSingleScan
         };
 
     scanTask.input = JSON.stringify(commandOptions);
@@ -159,6 +160,8 @@ class Scheduler {
 
   async run() {
     for (const scan of this.scans) {
+      const prev_numLaunchedTasks = this.numLaunchedTasks;
+
       if (!SCAN_SCHEMA[scan.name]) {
         console.error('Invalid scan name ', scan.name);
         continue;
@@ -185,8 +188,10 @@ class Scheduler {
           await this.launchScanTask({ organization, scan });
         }
       }
-      if (this.numLaunchedTasks > 0) {
+      //if atleast 1 new scan task was launched for this scan, update the scan
+      if (this.numLaunchedTasks > prev_numLaunchedTasks) {
         scan.lastRun = new Date();
+        scan.manualRunPending = false;
         await scan.save();
       }
     }
@@ -207,9 +212,13 @@ const shouldRunScan = async ({
   scan: Scan;
 }) => {
   const { isPassive, global } = SCAN_SCHEMA[scan.name];
-  // Don't run non-passive scans on passive organizations.
   if (organization?.isPassive && !isPassive) {
+    // Don't run non-passive scans on passive organizations.
     return false;
+  }
+  if (scan.manualRunPending) {
+    // Always run these scans.
+    return true;
   }
   const orgFilter = global ? {} : { organization: { id: organization?.id } };
   const lastRunningScanTask = await ScanTask.findOne(
@@ -241,6 +250,7 @@ const shouldRunScan = async ({
       }
     }
   );
+
   if (
     lastFinishedScanTask &&
     lastFinishedScanTask.finishedAt &&
@@ -249,7 +259,15 @@ const shouldRunScan = async ({
   ) {
     return false;
   }
-
+  if (
+    lastFinishedScanTask &&
+    lastFinishedScanTask.finishedAt &&
+    scan.isSingleScan
+  ) {
+    // Should not run a scan if the scan is a singleScan
+    // and has already run once before.
+    return false;
+  }
   return true;
 };
 

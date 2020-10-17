@@ -112,7 +112,7 @@ class VulnerabilitySearch {
     }
     if (this.filters?.cpe) {
       qs.andWhere('vulnerability.cpe ILIKE :cpe', {
-        cpe: this.filters.cpe
+        cpe: `%${this.filters.cpe}%`
       });
     }
     if (this.filters?.state) {

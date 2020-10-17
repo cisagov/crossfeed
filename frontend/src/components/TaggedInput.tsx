@@ -8,7 +8,7 @@ interface Props {
   onRemoveTag(value: string): void;
 }
 
-export const TaggedArrayInput: React.FC<Props> = props => {
+export const TaggedArrayInput: React.FC<Props> = (props) => {
   const { values, onAddTag, onRemoveTag, placeholder = '' } = props;
   const [inpValue, setInpValue] = useState('');
   const classes = useStyles();
@@ -18,9 +18,9 @@ export const TaggedArrayInput: React.FC<Props> = props => {
     [values, inpValue]
   );
 
-  const onSubmit: React.FormEventHandler = e => {
+  const onSubmit: React.FormEventHandler = (e) => {
     e.preventDefault();
-    if (!error) {
+    if (!error && inpValue !== '') {
       onAddTag(inpValue);
       setInpValue('');
     }
@@ -30,7 +30,7 @@ export const TaggedArrayInput: React.FC<Props> = props => {
     onRemoveTag(key);
   };
 
-  const onInpChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const onInpChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     e.persist();
     setInpValue(e.target.value);
   };
@@ -46,7 +46,7 @@ export const TaggedArrayInput: React.FC<Props> = props => {
       />
       {error && <span className={classes.error}>{error}</span>}
       <div className={classes.tagsWrapper}>
-        {values.map(val => (
+        {values.map((val) => (
           <div key={val}>
             <Chip
               classes={{ root: classes.chip }}
@@ -60,7 +60,7 @@ export const TaggedArrayInput: React.FC<Props> = props => {
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%',
     background: 'none'
