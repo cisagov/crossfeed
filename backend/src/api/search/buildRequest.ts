@@ -57,7 +57,10 @@ function buildChildMatch(searchTerm) {
 
   We then do similar things for searchTerm, filters, sort, etc.
 */
-export function buildRequest(state, organizationIds: string[]) {
+export function buildRequest(
+  state,
+  options: { organizationIds: string[]; matchAllOrganizations: boolean }
+) {
   const {
     current,
     filters,
@@ -182,11 +185,13 @@ export function buildRequest(state, organizationIds: string[]) {
       // },
       bool: {
         must: [
-          {
-            terms: {
-              "organization.id.keyword": [] // ["3db067f5-8505-4091-8fb4-87113c698bd6"]
-            }
-          },
+          options.matchAllOrganizations
+            ? { match_all: {} }
+            : {
+                terms: {
+                  'organization.id.keyword': options.organizationIds
+                }
+              },
           {
             bool: {
               must: [

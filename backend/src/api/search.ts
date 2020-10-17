@@ -25,13 +25,12 @@ class SearchBody {
 }
 
 export const search = wrapHandler(async (event) => {
-  if (!isGlobalWriteAdmin(event)) {
-    return Unauthorized;
-  }
-  await connectToDatabase();
-
   const searchBody = await validateBody(SearchBody, event.body);
-  const request = buildRequest(searchBody, getOrgMemberships(event));
+  const options = {
+    organizationIds: getOrgMemberships(event),
+    matchAllOrganizations: isGlobalWriteAdmin(event)
+  };
+  const request = buildRequest(searchBody, options);
 
   const client = new ESClient();
 
