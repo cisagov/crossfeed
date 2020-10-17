@@ -79,20 +79,6 @@ services:
   #     ELASTICSEARCH_HOSTS: http://es:9200
   #     LOGGING_QUIET: 'true'
 
-  minio:
-    image: bitnami/minio:2020.9.26
-    user: root
-    command: "minio server /data"
-    networks:
-      - backend
-    volumes:
-      - ./minio-data:/data
-    ports:
-      - 9000:9000
-    environment:
-      - MINIO_ACCESS_KEY=aws_access_key
-      - MINIO_SECRET_KEY=aws_secret_key
-
   matomodb:
     image: mariadb:10.5
     command: --max-allowed-packet=64MB
@@ -123,7 +109,6 @@ services:
 volumes:
   postgres-data:
   es-data:
-  minio-data:
   matomo-db-data:
   matomo-data:
 
