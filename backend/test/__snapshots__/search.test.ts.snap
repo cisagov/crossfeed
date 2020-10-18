@@ -84,7 +84,7 @@ Object {
           "bool": Object {
             "should": Array [
               Object {
-                "simple_query_string": Object {
+                "query_string": Object {
                   "analyze_wildcard": true,
                   "fields": Array [
                     "*",
@@ -107,7 +107,7 @@ Object {
                     },
                   },
                   "query": Object {
-                    "simple_query_string": Object {
+                    "query_string": Object {
                       "analyze_wildcard": true,
                       "fields": Array [
                         "*",
@@ -227,7 +227,7 @@ Object {
                 "bool": Object {
                   "should": Array [
                     Object {
-                      "simple_query_string": Object {
+                      "query_string": Object {
                         "analyze_wildcard": true,
                         "fields": Array [
                           "*",
@@ -250,7 +250,7 @@ Object {
                           },
                         },
                         "query": Object {
-                          "simple_query_string": Object {
+                          "query_string": Object {
                             "analyze_wildcard": true,
                             "fields": Array [
                               "*",
