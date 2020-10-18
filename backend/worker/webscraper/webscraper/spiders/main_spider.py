@@ -1,27 +1,15 @@
 import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-from webscraper.items import Webpage
 from urllib.parse import urlparse
 import hashlib
 import json
 
-def convert(data):
-    """Recursively converts all bytestrings to strings in a dictionary.
-    From https://stackoverflow.com/a/33137796
-    """
-    if isinstance(data, list):  return list(map(convert, data))
-    if isinstance(data, bytes):  return data.decode()
-    if isinstance(data, dict):   return dict(map(convert, data.items()))
-    if isinstance(data, tuple):  return list(map(convert, data))
-    return data
 
 class MainSpider(CrawlSpider):
     name = "main"
 
-    rules = (
-        Rule(LinkExtractor(), callback='parse_item', follow=True),
-    )
+    rules = (Rule(LinkExtractor(), callback="parse_item", follow=True),)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,9 +22,14 @@ class MainSpider(CrawlSpider):
 
     def parse_item(self, response):
         try:
-            body_decoded = body.decode()
+            body_decoded = response.body.decode()
         except UnicodeDecodeError:
             body_decoded = "<binary>"
+
+        headers = []
+        for name, values in response.headers.items():
+            for value in values:
+                headers.append({"name": name.decode(), "value": value.decode()})
 
         item = dict(
             status=response.status,
@@ -44,6 +37,6 @@ class MainSpider(CrawlSpider):
             domain_name=urlparse(response.url).netloc,
             body=body_decoded,
             response_size=len(response.body),
-            headers=[{"name": name, "value": value for name, value in response.headers.items()}]
+            headers=headers,
         )
         yield item
