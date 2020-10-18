@@ -10,7 +10,6 @@ export default async (scrapedWebpages: ScraperItem[]): Promise<void> => {
   await connectToDatabase();
 
   const urlToInsertedWebpage: { [x: string]: Webpage } = {};
-
   for (const scrapedWebpage of scrapedWebpages) {
     const result = await Webpage.createQueryBuilder()
       .insert()
@@ -42,6 +41,7 @@ export default async (scrapedWebpages: ScraperItem[]): Promise<void> => {
     urlToInsertedWebpage[scrapedWebpage.url] = result
       .generatedMaps[0] as Webpage;
   }
+  console.log("Saving webpages to elasticsearch...");
   const client = new ESClient();
   client.updateWebpages(
     scrapedWebpages.map((e) => {

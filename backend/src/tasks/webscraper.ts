@@ -80,12 +80,12 @@ export const handler = async (commandOptions: CommandOptions) => {
         console.log(line);
         return;
       }
-      console.log('got line', line);
       const item: ScraperItem = JSON.parse(
         line.slice(
           line.indexOf('database_output: ') + 'database_output: '.length
         )
       );
+      console.log('got item', item.status, item.url);
       const domain = liveWebsitesMap[item.domain_name];
       if (!domain) {
         console.error(
