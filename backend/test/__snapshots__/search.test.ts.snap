@@ -84,11 +84,11 @@ Object {
           "bool": Object {
             "should": Array [
               Object {
-                "multi_match": Object {
+                "simple_query_string": Object {
+                  "analyze_wildcard": true,
                   "fields": Array [
-                    "name",
+                    "*",
                   ],
-                  "fuzziness": "AUTO",
                   "query": "term",
                 },
               },
@@ -107,9 +107,10 @@ Object {
                     },
                   },
                   "query": Object {
-                    "multi_match": Object {
+                    "simple_query_string": Object {
+                      "analyze_wildcard": true,
                       "fields": Array [
-                        "webpage_body",
+                        "*",
                       ],
                       "query": "term",
                     },
@@ -226,11 +227,11 @@ Object {
                 "bool": Object {
                   "should": Array [
                     Object {
-                      "multi_match": Object {
+                      "simple_query_string": Object {
+                        "analyze_wildcard": true,
                         "fields": Array [
-                          "name",
+                          "*",
                         ],
-                        "fuzziness": "AUTO",
                         "query": "term",
                       },
                     },
@@ -249,9 +250,10 @@ Object {
                           },
                         },
                         "query": Object {
-                          "multi_match": Object {
+                          "simple_query_string": Object {
+                            "analyze_wildcard": true,
                             "fields": Array [
-                              "webpage_body",
+                              "*",
                             ],
                             "query": "term",
                           },
