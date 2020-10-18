@@ -1,5 +1,50 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`cve identify unexpected webpages basic test 1`] = `
+Array [
+  Object {
+    "actions": Array [],
+    "cpe": null,
+    "createdAt": true,
+    "cve": null,
+    "cvss": null,
+    "cwe": null,
+    "description": "500 is not a normal status code that comes from performing a GET request on http://url-not-ok. This may indicate a misconfiguration or a potential for a Denial of Service (DoS) attack.",
+    "id": true,
+    "lastSeen": true,
+    "needsPopulation": false,
+    "notes": "",
+    "references": Array [],
+    "severity": "Low",
+    "source": "webpage_status_code",
+    "state": "open",
+    "substate": "unconfirmed",
+    "title": "Unexpected status code 500 for http://url-not-ok",
+    "updatedAt": true,
+  },
+  Object {
+    "actions": Array [],
+    "cpe": null,
+    "createdAt": true,
+    "cve": null,
+    "cvss": null,
+    "cwe": null,
+    "description": "503 is not a normal status code that comes from performing a GET request on http://url-not-ok-2. This may indicate a misconfiguration or a potential for a Denial of Service (DoS) attack.",
+    "id": true,
+    "lastSeen": true,
+    "needsPopulation": false,
+    "notes": "",
+    "references": Array [],
+    "severity": "Low",
+    "source": "webpage_status_code",
+    "state": "open",
+    "substate": "unconfirmed",
+    "title": "Unexpected status code 503 for http://url-not-ok-2",
+    "updatedAt": true,
+  },
+]
+`;
+
 exports[`cve simple test: execSync.input 1`] = `
 "0 cpe:/a:10web:form_maker:1.0.0
 "
@@ -30,8 +75,9 @@ Object {
     },
   ],
   "severity": "Critical",
-  "state": "closed",
-  "substate": "remediated",
+  "source": "cpe2cve",
+  "state": "open",
+  "substate": "unconfirmed",
   "title": "CVE-2019-10866",
   "updatedAt": Any<Date>,
 }
@@ -52,8 +98,9 @@ Object {
   "notes": "",
   "references": Array [],
   "severity": "High",
-  "state": "closed",
-  "substate": "remediated",
+  "source": "cpe2cve",
+  "state": "open",
+  "substate": "unconfirmed",
   "title": "CVE-2019-11590",
   "updatedAt": Any<Date>,
 }
