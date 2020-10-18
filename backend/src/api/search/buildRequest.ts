@@ -76,6 +76,56 @@ export function buildRequest(
   const from = buildFrom(current, resultsPerPage);
   const filter = buildRequestFilter(filters);
 
+  let query: any = {
+    bool: {
+      must: [
+        {
+          match: {
+            parent_join: 'domain'
+          }
+        },
+        {
+          bool: {
+            should: [
+              match,
+              {
+                has_child: {
+                  type: 'webpage',
+                  query: buildChildMatch(searchTerm),
+                  inner_hits: {
+                    _source: ['webpage_url'],
+                    highlight: {
+                      fragment_size: 50,
+                      number_of_fragments: 3,
+                      fields: {
+                        webpage_body: {}
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      ...(filter && { filter })
+    }
+  };
+  if (!options.matchAllOrganizations) {
+    query = {
+      bool: {
+        must: [
+          {
+            terms: {
+              'organization.id.keyword': options.organizationIds
+            }
+          },
+          query
+        ]
+      }
+    };
+  }
+
   const body = {
     // Static query Configuration
     // --------------------------
@@ -174,62 +224,7 @@ export function buildRequest(
     // Dynamic values based on current Search UI state
     // --------------------------
     // https://www.elastic.co/guide/en/elasticsearch/reference/7.x/full-text-queries.html
-    query: {
-      // "has_child": {
-      //   "type": "webpage",
-      //   "query": {
-      //     "match_all": {}
-      //   },
-      //   "min_children": 1,
-      //   // "inner_hits": {}
-      // },
-      bool: {
-        must: [
-          options.matchAllOrganizations
-            ? { match_all: {} }
-            : {
-                terms: {
-                  'organization.id.keyword': options.organizationIds
-                }
-              },
-          {
-            bool: {
-              must: [
-                {
-                  match: {
-                    parent_join: 'domain'
-                  }
-                },
-                {
-                  bool: {
-                    should: [
-                      match,
-                      {
-                        has_child: {
-                          type: 'webpage',
-                          query: buildChildMatch(searchTerm),
-                          inner_hits: {
-                            _source: ['webpage_url'],
-                            highlight: {
-                              fragment_size: 50,
-                              number_of_fragments: 3,
-                              fields: {
-                                webpage_body: {}
-                              }
-                            }
-                          }
-                        }
-                      }
-                    ]
-                  }
-                }
-              ],
-              ...(filter && { filter })
-            }
-          }
-        ]
-      }
-    },
+    query,
     // https://www.elastic.co/guide/en/elasticsearch/reference/7.x/search-request-sort.html
     ...(sort && { sort }),
     // https://www.elastic.co/guide/en/elasticsearch/reference/7.x/search-request-from-size.html
@@ -237,6 +232,7 @@ export function buildRequest(
     ...(from && { from })
   };
 
+  console.warn(JSON.stringify(body.query));
   return body;
 }
 
