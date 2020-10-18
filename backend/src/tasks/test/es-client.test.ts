@@ -53,7 +53,7 @@ describe('updateWebpages', () => {
         webpage_discoveredById: 'webpage_discoveredById',
         webpage_responseSize: 5000,
         webpage_headers: [{ name: 'a', value: 'b' }],
-        webpage_body: 'test bpdu'
+        webpage_body: 'test body'
       }
     ]);
     expect(bulk).toBeCalledTimes(1);
