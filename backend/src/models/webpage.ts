@@ -67,4 +67,10 @@ export class Webpage extends BaseEntity {
     nullable: true
   })
   responseSize: number | null;
+
+  @Column({
+    type: 'jsonb',
+    default: []
+  })
+  headers: { name: string; value: string }[];
 }
