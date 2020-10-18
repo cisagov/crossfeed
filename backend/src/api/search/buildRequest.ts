@@ -230,8 +230,6 @@ export function buildRequest(
     ...(size && { size }),
     ...(from && { from })
   };
-
-  console.warn(JSON.stringify(body.query));
   return body;
 }
 
