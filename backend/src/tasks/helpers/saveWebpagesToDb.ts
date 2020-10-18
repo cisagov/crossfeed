@@ -41,7 +41,7 @@ export default async (scrapedWebpages: ScraperItem[]): Promise<void> => {
     urlToInsertedWebpage[scrapedWebpage.url] = result
       .generatedMaps[0] as Webpage;
   }
-  console.log("Saving webpages to elasticsearch...");
+  console.log('Saving webpages to elasticsearch...');
   const client = new ESClient();
   client.updateWebpages(
     scrapedWebpages.map((e) => {
