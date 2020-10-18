@@ -76,54 +76,45 @@ Object {
     "bool": Object {
       "must": Array [
         Object {
-          "match_all": Object {},
+          "match": Object {
+            "parent_join": "domain",
+          },
         },
         Object {
           "bool": Object {
-            "must": Array [
+            "should": Array [
               Object {
-                "match": Object {
-                  "parent_join": "domain",
+                "multi_match": Object {
+                  "fields": Array [
+                    "name",
+                  ],
+                  "fuzziness": "AUTO",
+                  "query": "term",
                 },
               },
               Object {
-                "bool": Object {
-                  "should": Array [
-                    Object {
-                      "multi_match": Object {
-                        "fields": Array [
-                          "name",
-                        ],
-                        "fuzziness": "AUTO",
-                        "query": "term",
+                "has_child": Object {
+                  "inner_hits": Object {
+                    "_source": Array [
+                      "webpage_url",
+                    ],
+                    "highlight": Object {
+                      "fields": Object {
+                        "webpage_body": Object {},
                       },
+                      "fragment_size": 50,
+                      "number_of_fragments": 3,
                     },
-                    Object {
-                      "has_child": Object {
-                        "inner_hits": Object {
-                          "_source": Array [
-                            "webpage_url",
-                          ],
-                          "highlight": Object {
-                            "fields": Object {
-                              "webpage_body": Object {},
-                            },
-                            "fragment_size": 50,
-                            "number_of_fragments": 3,
-                          },
-                        },
-                        "query": Object {
-                          "multi_match": Object {
-                            "fields": Array [
-                              "webpage_body",
-                            ],
-                            "query": "term",
-                          },
-                        },
-                        "type": "webpage",
-                      },
+                  },
+                  "query": Object {
+                    "multi_match": Object {
+                      "fields": Array [
+                        "webpage_body",
+                      ],
+                      "query": "term",
                     },
-                  ],
+                  },
+                  "type": "webpage",
                 },
               },
             ],
