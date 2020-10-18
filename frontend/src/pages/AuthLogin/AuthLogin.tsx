@@ -7,7 +7,7 @@ import { AmplifyAuthenticator, AmplifySignUp, AmplifySelectMfaType } from '@aws-
 import { Translations, onAuthUIStateChange } from '@aws-amplify/ui-components';
 import { I18n } from "aws-amplify";
 
-const TOTP_ISSUER_PREFIX = "CISA Crossfeed";
+const TOTP_ISSUER_PREFIX = process.env.REACT_APP_TOTP_ISSUER;
 
 I18n.putVocabulariesForLanguage("en-US", {
   [Translations.TOTP_HEADER_TEXT]: "Set up 2FA by scanning the QR code with an authenticator app on your phone:",
@@ -16,7 +16,7 @@ I18n.putVocabulariesForLanguage("en-US", {
   [Translations.CONFIRM_TOTP_CODE]: "Enter 2FA Code",
   [Translations.CONFIRM_SIGN_UP_CODE_LABEL]: "Email Confirmation Code",
   [Translations.CONFIRM_SIGN_UP_CODE_PLACEHOLDER]: "Enter code sent to your email address",
-  [Translations.CODE_LABEL]: "Enter verification code from authenticator app:",
+  [Translations.CODE_LABEL]: "Enter code sent to your email address:", // Reset password code
   [Translations.LESS_THAN_TWO_MFA_VALUES_MESSAGE]: ""
 });
 

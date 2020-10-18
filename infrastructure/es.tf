@@ -63,6 +63,16 @@ POLICY
     log_type                 = "ES_APPLICATION_LOGS"
   }
 
+  log_publishing_options {
+    cloudwatch_log_group_arn = aws_cloudwatch_log_group.es_index_slow.arn
+    log_type                 = "INDEX_SLOW_LOGS"
+  }
+
+  log_publishing_options {
+    cloudwatch_log_group_arn = aws_cloudwatch_log_group.es_search_slow.arn
+    log_type                 = "SEARCH_SLOW_LOGS"
+  }
+
   ebs_options {
     ebs_enabled = true
     volume_size = 10
@@ -98,6 +108,22 @@ CONFIG
 
 resource "aws_cloudwatch_log_group" "es_application" {
   name = "crossfeed-${var.stage}-es-application"
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+resource "aws_cloudwatch_log_group" "es_index_slow" {
+  name = "crossfeed-${var.stage}-es-index-slow"
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+resource "aws_cloudwatch_log_group" "es_search_slow" {
+  name = "crossfeed-${var.stage}-es-search-slow"
   tags = {
     Project = var.project
     Stage   = var.stage
