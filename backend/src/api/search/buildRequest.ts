@@ -19,7 +19,7 @@ function buildSort(sortDirection, sortField) {
 function buildMatch(searchTerm) {
   return searchTerm
     ? {
-        simple_query_string: {
+        query_string: {
           query: searchTerm,
           analyze_wildcard: true,
           fields: ['*']
@@ -31,7 +31,7 @@ function buildMatch(searchTerm) {
 function buildChildMatch(searchTerm) {
   return searchTerm
     ? {
-        simple_query_string: {
+        query_string: {
           query: searchTerm,
           analyze_wildcard: true,
           fields: ['*']
