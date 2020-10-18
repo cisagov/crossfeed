@@ -21,6 +21,7 @@ function buildMatch(searchTerm) {
     ? {
         simple_query_string: {
           query: searchTerm,
+          analyze_wildcard: true,
           fields: ['*']
         }
       }
@@ -32,6 +33,7 @@ function buildChildMatch(searchTerm) {
     ? {
         simple_query_string: {
           query: searchTerm,
+          analyze_wildcard: true,
           fields: ['*']
         }
       }
