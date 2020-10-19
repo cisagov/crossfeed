@@ -70,7 +70,7 @@ export default async (scrapedWebpages: ScraperItem[]): Promise<void> => {
         }).filter(e => e) as WebpageRecord[]
       ),
     {
-      retries: 5,
+      retries: 10,
       randomize: true
     }
   );
