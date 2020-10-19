@@ -114,6 +114,21 @@ export class Domain extends BaseEntity {
     fingerprint: string;
   } | null;
 
+  /** Whois output */
+  @Column({
+    type: 'jsonb',
+    default: {}
+  })
+  whois: {
+    name: string;
+    slug: string;
+    version: string;
+    icon: string;
+    website: string;
+    confidence: number;
+    cpe?: string;
+  };
+
   @BeforeInsert()
   setLowerCase() {
     this.name = this.name.toLowerCase();
