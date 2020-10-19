@@ -31,6 +31,10 @@
   border-color: white;
   text-overflow: ellipsis;
   white-space: normal;
+  > div {
+    max-height: 50px;
+    overflow: auto;
+  }
 }
 
 .subComponentTd {

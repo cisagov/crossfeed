@@ -4,17 +4,3 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
-
-
-class Webpage(scrapy.Item):
-    # define the fields for your item here like:
-    url = scrapy.Field()
-    s3_key = scrapy.Field()
-    # headers = scrapy.Field()
-    status = scrapy.Field()
-    domain_name = scrapy.Field()
-    body = scrapy.Field()
-    response_size = scrapy.Field()
-
-    def __repr__(self):
-        return repr({"s3_key": self["s3_key"]})
