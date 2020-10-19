@@ -30,7 +30,8 @@
     "serverless-http": "^2.6.0",
     "simple-wappalyzer": "^1.1.14",
     "typeorm": "^0.2.26",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "whois": "^2.13.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.62",
