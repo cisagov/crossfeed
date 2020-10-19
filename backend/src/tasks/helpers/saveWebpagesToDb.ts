@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import pRetry from 'p-retry';
 import { connectToDatabase, Webpage } from '../../models';
-import ESClient from '../es-client';
+import ESClient, { WebpageRecord } from '../es-client';
 import { ScraperItem } from '../webscraper';
 
 /** Saves scraped webpages to the database, and also syncs them
@@ -49,6 +49,10 @@ export default async (scrapedWebpages: ScraperItem[]): Promise<void> => {
       client.updateWebpages(
         scrapedWebpages.map((e) => {
           const insertedWebpage = urlToInsertedWebpage[e.url];
+          if (!insertedWebpage) {
+            console.log(`Inserted webpage not found for URL: ${e.url}`)
+            return undefined;
+          }
           return {
             webpage_id: insertedWebpage.id,
             webpage_createdAt: insertedWebpage.createdAt,
@@ -63,7 +67,7 @@ export default async (scrapedWebpages: ScraperItem[]): Promise<void> => {
             webpage_headers: insertedWebpage.headers,
             webpage_body: e.body
           };
-        })
+        }).filter(e => e) as WebpageRecord[]
       ),
     {
       retries: 5,
