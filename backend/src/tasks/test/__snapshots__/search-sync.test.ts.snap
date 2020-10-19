@@ -1,28 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`search_sync should sync webpages when webpages have never been synced 1`] = `
-Array [
-  "webpage_id",
-  "webpage_createdAt",
-  "webpage_updatedAt",
-  "webpage_syncedAt",
-  "webpage_lastSeen",
-  "webpage_s3Key",
-  "webpage_url",
-  "webpage_status",
-  "webpage_responseSize",
-  "webpage_domainId",
-  "webpage_discoveredById",
-  "webpage_body",
-]
-`;
-
-exports[`search_sync should sync webpages when webpages have never been synced 2`] = `
-Array [
-  "testS3key",
-]
-`;
-
 exports[`search_sync should update a domain if a domain has changed 1`] = `
 Array [
   "id",

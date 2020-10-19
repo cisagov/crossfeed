@@ -1,9 +1,7 @@
 import { Domain, connectToDatabase, Vulnerability, Webpage } from '../models';
 import { CommandOptions } from './ecs-client';
 import { In } from 'typeorm';
-import ESClient, { WebpageRecord } from './es-client';
-import S3Client from './s3-client';
-import PQueue from 'p-queue';
+import ESClient from './es-client';
 import { chunk } from 'lodash';
 import pRetry from 'p-retry';
 
@@ -11,7 +9,6 @@ import pRetry from 'p-retry';
  * Chunk sizes. These values are small during testing to facilitate testing.
  */
 export const DOMAIN_CHUNK_SIZE = typeof jest === 'undefined' ? 100 : 10;
-export const WEBPAGE_CHUNK_SIZE = typeof jest === 'undefined' ? 100 : 5;
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, domainId } = commandOptions;
@@ -66,56 +63,5 @@ export const handler = async (commandOptions: CommandOptions) => {
     console.log('Domain sync complete.');
   } else {
     console.log('Not syncing any domains.');
-  }
-
-  console.log('Retrieving webpages...');
-  const qs_ = Webpage.createQueryBuilder('webpage').where(
-    '(webpage.updatedAt > webpage.syncedAt OR webpage.syncedAt is null)'
-  );
-
-  if (domainId) {
-    // This parameter is used for testing only
-    qs_.andWhere('webpage."domainId" = :id', { id: domainId });
-  }
-
-  // The response actually has keys "webpage_id", "webpage_createdAt", etc.
-  const s3Client = new S3Client();
-  const webpages: WebpageRecord[] = await qs_.execute();
-  console.log(`Got ${webpages.length} webpages.`);
-
-  if (webpages.length) {
-    const webpageChunks = chunk(webpages, WEBPAGE_CHUNK_SIZE);
-    for (const webpageChunk of webpageChunks) {
-      console.log(`Syncing ${webpageChunk.length} webpages...`);
-      const queue = new PQueue({ concurrency: 10 });
-      for (const i in webpageChunk) {
-        const webpage = webpageChunk[i];
-        if (webpage.webpage_s3Key) {
-          queue.add(async () => {
-            webpage.webpage_body = await s3Client.getWebpageBody(
-              webpage.webpage_s3Key
-            );
-            if (Number(i) % 100 == 0) {
-              console.log(`Finished getting contents from S3: ${i}`);
-            }
-          });
-        }
-      }
-      await queue.onIdle();
-      await pRetry(() => client.updateWebpages(webpageChunk), {
-        retries: 3,
-        randomize: true
-      });
-
-      await Webpage.createQueryBuilder('webpage')
-        .update(Webpage)
-        .set({ syncedAt: new Date(Date.now()) })
-        .where({ id: In(webpageChunk.map((e) => e.webpage_id)) })
-        .execute();
-    }
-
-    console.log('Webpage sync complete.');
-  } else {
-    console.log('Not syncing any webpages.');
   }
 };

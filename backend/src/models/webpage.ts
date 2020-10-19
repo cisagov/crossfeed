@@ -36,7 +36,10 @@ export class Webpage extends BaseEntity {
   })
   domain: Domain;
 
-  @ManyToOne((type) => Scan)
+  @ManyToOne((type) => Scan, {
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
+  })
   discoveredBy: Scan;
 
   @Column({
@@ -67,4 +70,10 @@ export class Webpage extends BaseEntity {
     nullable: true
   })
   responseSize: number | null;
+
+  @Column({
+    type: 'jsonb',
+    default: []
+  })
+  headers: { name: string; value: string }[];
 }
