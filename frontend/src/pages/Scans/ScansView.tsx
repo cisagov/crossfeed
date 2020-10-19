@@ -20,6 +20,7 @@ import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import MultiSelect from './MultiSelect';
 import { Link } from 'react-router-dom';
+import { setFrequency } from 'pages/Scan/Scan';
 
 interface Errors extends Partial<Scan> {
   global?: string;
@@ -47,7 +48,7 @@ const ScansView: React.FC = () => {
       id: 'run',
       Cell: ({ row }: { row: { index: number } }) => (
         <div
-          style={{textAlign: 'center'}}
+          style={{ textAlign: 'center' }}
           onClick={() => {
             runScan(row.index);
           }}
@@ -96,7 +97,7 @@ const ScansView: React.FC = () => {
           unit = 'day';
         }
         if (isSingleScan) {
-          return 'Single Scan'
+          return 'Single Scan';
         }
         return `Every ${val} ${unit}${val === 1 ? '' : 's'}`;
       },
@@ -120,8 +121,7 @@ const ScansView: React.FC = () => {
       Header: 'Edit',
       id: 'edit',
       Cell: ({ row }: CellProps<Scan>) => (
-        <Link to={`/scans/${row.original.id}`} style={{color: "black"}}
-        >
+        <Link to={`/scans/${row.original.id}`} style={{ color: 'black' }}>
           <FaEdit />
         </Link>
       ),
@@ -216,11 +216,7 @@ const ScansView: React.FC = () => {
     try {
       // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
       let body: typeof values = Object.assign({}, values);
-      body.arguments = JSON.parse(values.arguments);
-      if (values.isSingleScan) body.frequency = 1;
-      if (values.frequencyUnit === 'minute') body.frequency *= 60;
-      else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
-      else body.frequency *= 60 * 60 * 24;
+      setFrequency(body, values);
 
       const scan = await apiPost('/scans/', {
         body: {
@@ -274,7 +270,7 @@ const ScansView: React.FC = () => {
       setErrors({ ...errors, scheduler: 'Run failed.' });
     }
     await invokeScheduler();
-  }
+  };
 
   const selectedScan = scanSchema[values.name] || {};
 
@@ -316,9 +312,8 @@ const ScansView: React.FC = () => {
           value={values.arguments}
           onChange={onTextChange}
         /> */}
-        
+
         {(values.name === 'censysIpv4' || !selectedScan.global) && (
-          
           <Checkbox
             id="isGranular"
             label="Limit enabled organizations"
@@ -340,45 +335,45 @@ const ScansView: React.FC = () => {
           </>
         )}
         <Checkbox
-            id="isSingleScan"
-            label="Run scan once"
-            name="isSingleScan"
-            checked={values.isSingleScan}
-            onChange={(e) => onChange('isSingleScan', e.target.checked)}
-          />
+          id="isSingleScan"
+          label="Run scan once"
+          name="isSingleScan"
+          checked={values.isSingleScan}
+          onChange={(e) => onChange('isSingleScan', e.target.checked)}
+        />
         {!values.isSingleScan && (
           <div className="form-group form-inline">
-          <label style={{ marginRight: '10px' }} htmlFor="frequency">
-            Run every
-          </label>
-          <TextInput
-            id="frequency"
-            name="frequency"
-            type="number"
-            style={{
-              display: 'inline-block',
-              width: '150px',
-              marginRight: '15px'
-            }}
-            value={values.frequency}
-            onChange={(e) => {
-              onChange(e.target.name, Number(e.target.value));
-            }}
-          />
-          <Dropdown
-            id="frequencyUnit"
-            name="frequencyUnit"
-            onChange={onTextChange}
-            value={values.frequencyUnit}
-            style={{ display: 'inline-block', width: '150px' }}
-          >
-            <option value="minute">Minute(s)</option>
-            <option value="hour">Hour(s)</option>
-            <option value="day">Day(s)</option>
-          </Dropdown>
-        </div>  
-        )}      
-        <br />       
+            <label style={{ marginRight: '10px' }} htmlFor="frequency">
+              Run every
+            </label>
+            <TextInput
+              id="frequency"
+              name="frequency"
+              type="number"
+              style={{
+                display: 'inline-block',
+                width: '150px',
+                marginRight: '15px'
+              }}
+              value={values.frequency}
+              onChange={(e) => {
+                onChange(e.target.name, Number(e.target.value));
+              }}
+            />
+            <Dropdown
+              id="frequencyUnit"
+              name="frequencyUnit"
+              onChange={onTextChange}
+              value={values.frequencyUnit}
+              style={{ display: 'inline-block', width: '150px' }}
+            >
+              <option value="minute">Minute(s)</option>
+              <option value="hour">Hour(s)</option>
+              <option value="day">Day(s)</option>
+            </Dropdown>
+          </div>
+        )}
+        <br />
         <Button type="submit">Create Scan</Button>
       </Form>
       <ImportExport<Scan>

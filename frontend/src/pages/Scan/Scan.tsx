@@ -20,6 +20,14 @@ interface Errors extends Partial<OrganizationType> {
   global?: string;
 }
 
+export const setFrequency = async (body: any, values: any) => {
+  body.arguments = JSON.parse(values.arguments);
+  if (values.isSingleScan) body.frequency = 1;
+  if (values.frequencyUnit === 'minute') body.frequency *= 60;
+  else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
+  else body.frequency *= 60 * 60 * 24;
+};
+
 const ScanComponent: React.FC = () => {
   const { scanId } = useParams();
   const { apiGet, apiPut } = useAuthContext();
@@ -69,12 +77,9 @@ const ScanComponent: React.FC = () => {
   const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
     try {
+      // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
       let body: typeof values = Object.assign({}, values);
-      body.arguments = JSON.parse(values.arguments);
-      if (values.isSingleScan) body.frequency = 1;
-      if (values.frequencyUnit === 'minute') body.frequency *= 60;
-      else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
-      else body.frequency *= 60 * 60 * 24;
+      setFrequency(body, values);
 
       const scan = await apiPut(`/scans/${scanId}`, {
         body: {
@@ -234,9 +239,7 @@ const ScanComponent: React.FC = () => {
         <Link to={`/scans`}>
           <Button type="button"> Return to Scans</Button>
         </Link>
-        <Button type="submit">
-          Save Changes
-        </Button>
+        <Button type="submit">Save Changes</Button>
       </Form>
     </div>
   );
