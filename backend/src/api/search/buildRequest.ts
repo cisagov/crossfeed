@@ -19,10 +19,10 @@ function buildSort(sortDirection, sortField) {
 function buildMatch(searchTerm) {
   return searchTerm
     ? {
-        multi_match: {
+        query_string: {
           query: searchTerm,
-          fuzziness: 'AUTO',
-          fields: ['name']
+          analyze_wildcard: true,
+          fields: ['*']
         }
       }
     : { match_all: {} };
@@ -31,9 +31,10 @@ function buildMatch(searchTerm) {
 function buildChildMatch(searchTerm) {
   return searchTerm
     ? {
-        multi_match: {
+        query_string: {
           query: searchTerm,
-          fields: ['webpage_body']
+          analyze_wildcard: true,
+          fields: ['*']
         }
       }
     : { match_all: {} };
@@ -57,7 +58,10 @@ function buildChildMatch(searchTerm) {
 
   We then do similar things for searchTerm, filters, sort, etc.
 */
-export function buildRequest(state) {
+export function buildRequest(
+  state,
+  options: { organizationIds: string[]; matchAllOrganizations: boolean }
+) {
   const {
     current,
     filters,
@@ -72,6 +76,56 @@ export function buildRequest(state) {
   const size = resultsPerPage;
   const from = buildFrom(current, resultsPerPage);
   const filter = buildRequestFilter(filters);
+
+  let query: any = {
+    bool: {
+      must: [
+        {
+          match: {
+            parent_join: 'domain'
+          }
+        },
+        {
+          bool: {
+            should: [
+              match,
+              {
+                has_child: {
+                  type: 'webpage',
+                  query: buildChildMatch(searchTerm),
+                  inner_hits: {
+                    _source: ['webpage_url'],
+                    highlight: {
+                      fragment_size: 50,
+                      number_of_fragments: 3,
+                      fields: {
+                        webpage_body: {}
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      ...(filter && { filter })
+    }
+  };
+  if (!options.matchAllOrganizations) {
+    query = {
+      bool: {
+        must: [
+          {
+            terms: {
+              'organization.id.keyword': options.organizationIds
+            }
+          },
+          query
+        ]
+      }
+    };
+  }
 
   const body = {
     // Static query Configuration
@@ -171,56 +225,13 @@ export function buildRequest(state) {
     // Dynamic values based on current Search UI state
     // --------------------------
     // https://www.elastic.co/guide/en/elasticsearch/reference/7.x/full-text-queries.html
-    query: {
-      // "has_child": {
-      //   "type": "webpage",
-      //   "query": {
-      //     "match_all": {}
-      //   },
-      //   "min_children": 1,
-      //   // "inner_hits": {}
-      // },
-      bool: {
-        must: [
-          {
-            match: {
-              parent_join: 'domain'
-            }
-          },
-          {
-            bool: {
-              should: [
-                match,
-                {
-                  has_child: {
-                    type: 'webpage',
-                    query: buildChildMatch(searchTerm),
-                    inner_hits: {
-                      _source: ['webpage_url'],
-                      highlight: {
-                        fragment_size: 50,
-                        number_of_fragments: 3,
-                        fields: {
-                          webpage_body: {}
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ],
-        ...(filter && { filter })
-      }
-    },
+    query,
     // https://www.elastic.co/guide/en/elasticsearch/reference/7.x/search-request-sort.html
     ...(sort && { sort }),
     // https://www.elastic.co/guide/en/elasticsearch/reference/7.x/search-request-from-size.html
     ...(size && { size }),
     ...(from && { from })
   };
-
   return body;
 }
 
