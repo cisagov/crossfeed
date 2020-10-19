@@ -1,1 +1,0 @@
-Keep this file here, so that the crossfeed-local-webscraper bucket is created by default with minio.

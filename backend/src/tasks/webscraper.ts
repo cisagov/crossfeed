@@ -4,8 +4,6 @@ import { getLiveWebsites } from './helpers/getLiveWebsites';
 import { spawn } from 'child_process';
 import * as path from 'path';
 import { writeFileSync } from 'fs';
-import { Webpage } from '../models';
-import { plainToClass } from 'class-transformer';
 import saveWebpagesToDb from './helpers/saveWebpagesToDb';
 import * as readline from 'readline';
 import PQueue from 'p-queue';
@@ -15,12 +13,17 @@ const INPUT_PATH = path.join(WEBSCRAPER_DIRECTORY, 'domains.txt');
 const WEBPAGE_DB_BATCH_LENGTH = 100;
 
 // Sync this with backend/worker/webscraper/webscraper/items.py
-interface ScraperItem {
+export interface ScraperItem {
   url: string;
-  s3_key: string;
   status: number;
   domain_name: string;
   response_size: number;
+
+  body: string;
+  headers: { name: string; value: string }[];
+
+  domain?: { id: string };
+  discoveredBy?: { id: string };
 }
 
 export const handler = async (commandOptions: CommandOptions) => {
@@ -70,19 +73,19 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   await new Promise((resolve, reject) => {
     console.log('Going to save webpages to the database...');
-    let webpages: Webpage[] = [];
+    let scrapedWebpages: ScraperItem[] = [];
     readInterfaceStderr.on('line', (line) => console.error(line));
     readInterface.on('line', async (line) => {
       if (!line?.trim() || line.indexOf('database_output: ') === -1) {
         console.log(line);
         return;
       }
-      console.log('got line', line);
       const item: ScraperItem = JSON.parse(
         line.slice(
           line.indexOf('database_output: ') + 'database_output: '.length
         )
       );
+      console.log('got item', item.status, item.url);
       const domain = liveWebsitesMap[item.domain_name];
       if (!domain) {
         console.error(
@@ -90,38 +93,34 @@ export const handler = async (commandOptions: CommandOptions) => {
         );
         return;
       }
-      webpages.push(
-        plainToClass(Webpage, {
-          domain: { id: domain.id },
-          discoveredBy: { id: scanId },
-          lastSeen: new Date(Date.now()),
-          s3Key: item.s3_key,
-          url: item.url,
-          status: item.status,
-          responseSize: item.response_size
-        })
-      );
-      if (webpages.length >= WEBPAGE_DB_BATCH_LENGTH) {
+      scrapedWebpages.push({
+        ...item,
+        domain: { id: domain.id },
+        discoveredBy: { id: scanId }
+      });
+      if (scrapedWebpages.length >= WEBPAGE_DB_BATCH_LENGTH) {
         await queue.onIdle();
         queue.add(async () => {
-          if (webpages.length === 0) {
+          if (scrapedWebpages.length === 0) {
             return;
           }
-          console.log(`Saving ${webpages.length} webpages to the database...`);
-          await saveWebpagesToDb(webpages);
-          totalNumWebpages += webpages.length;
-          webpages = [];
+          console.log(`Saving ${scrapedWebpages.length} webpages...`);
+          await saveWebpagesToDb(scrapedWebpages);
+          totalNumWebpages += scrapedWebpages.length;
+          scrapedWebpages = [];
         });
       }
     });
 
     readInterface.on('close', async () => {
       await queue.onIdle();
-      if (webpages.length > 0) {
-        console.log(`Saving ${webpages.length} webpages to the database...`);
-        await saveWebpagesToDb(webpages);
-        totalNumWebpages += webpages.length;
-        webpages = [];
+      if (scrapedWebpages.length > 0) {
+        console.log(
+          `Saving ${scrapedWebpages.length} webpages to the database...`
+        );
+        await saveWebpagesToDb(scrapedWebpages);
+        totalNumWebpages += scrapedWebpages.length;
+        scrapedWebpages = [];
       }
       resolve();
     });

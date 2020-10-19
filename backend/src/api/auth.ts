@@ -192,10 +192,10 @@ export const authorize = async (event) => {
 
 /** Check if a user has global write admin permissions */
 export const isGlobalWriteAdmin = (event: APIGatewayProxyEvent) => {
-  return (
-    event.requestContext.authorizer &&
+  return event.requestContext.authorizer &&
     event.requestContext.authorizer.userType === 'globalAdmin'
-  );
+    ? true
+    : false;
 };
 
 /** Check if a user has global view permissions */
