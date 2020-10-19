@@ -47,27 +47,29 @@ export default async (scrapedWebpages: ScraperItem[]): Promise<void> => {
   await pRetry(
     () =>
       client.updateWebpages(
-        scrapedWebpages.map((e) => {
-          const insertedWebpage = urlToInsertedWebpage[e.url];
-          if (!insertedWebpage) {
-            console.log(`Inserted webpage not found for URL: ${e.url}`)
-            return undefined;
-          }
-          return {
-            webpage_id: insertedWebpage.id,
-            webpage_createdAt: insertedWebpage.createdAt,
-            webpage_updatedAt: insertedWebpage.updatedAt,
-            webpage_syncedAt: insertedWebpage.syncedAt,
-            webpage_lastSeen: insertedWebpage.lastSeen,
-            webpage_url: insertedWebpage.url,
-            webpage_status: insertedWebpage.status,
-            webpage_domainId: e.domain!.id,
-            webpage_discoveredById: e.discoveredBy!.id,
-            webpage_responseSize: insertedWebpage.responseSize,
-            webpage_headers: insertedWebpage.headers,
-            webpage_body: e.body
-          };
-        }).filter(e => e) as WebpageRecord[]
+        scrapedWebpages
+          .map((e) => {
+            const insertedWebpage = urlToInsertedWebpage[e.url];
+            if (!insertedWebpage) {
+              console.log(`Inserted webpage not found for URL: ${e.url}`);
+              return undefined;
+            }
+            return {
+              webpage_id: insertedWebpage.id,
+              webpage_createdAt: insertedWebpage.createdAt,
+              webpage_updatedAt: insertedWebpage.updatedAt,
+              webpage_syncedAt: insertedWebpage.syncedAt,
+              webpage_lastSeen: insertedWebpage.lastSeen,
+              webpage_url: insertedWebpage.url,
+              webpage_status: insertedWebpage.status,
+              webpage_domainId: e.domain!.id,
+              webpage_discoveredById: e.discoveredBy!.id,
+              webpage_responseSize: insertedWebpage.responseSize,
+              webpage_headers: insertedWebpage.headers,
+              webpage_body: e.body
+            };
+          })
+          .filter((e) => e) as WebpageRecord[]
       ),
     {
       retries: 10,

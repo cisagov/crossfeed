@@ -74,7 +74,9 @@ export const handler = async (commandOptions: CommandOptions) => {
   await new Promise((resolve, reject) => {
     console.log('Going to save webpages to the database...');
     let scrapedWebpages: ScraperItem[] = [];
-    readInterfaceStderr.on('line', (line) => console.error(line?.substring(0, 999)));
+    readInterfaceStderr.on('line', (line) =>
+      console.error(line?.substring(0, 999))
+    );
     readInterface.on('line', async (line) => {
       if (!line?.trim() || line.indexOf('database_output: ') === -1) {
         console.log(line);
@@ -103,7 +105,9 @@ export const handler = async (commandOptions: CommandOptions) => {
           if (scrapedWebpages.length === 0) {
             return;
           }
-          console.log(`Saving ${scrapedWebpages.length} webpages, starting with ${scrapedWebpages[0].url}...`);
+          console.log(
+            `Saving ${scrapedWebpages.length} webpages, starting with ${scrapedWebpages[0].url}...`
+          );
           await saveWebpagesToDb(scrapedWebpages);
           totalNumWebpages += scrapedWebpages.length;
           scrapedWebpages = [];
