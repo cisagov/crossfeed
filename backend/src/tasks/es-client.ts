@@ -91,6 +91,13 @@ class ESClient {
       });
       console.log(`Created index ${DOMAINS_INDEX}.`);
     }
+    await this.client.indices.putSettings({
+      index: DOMAINS_INDEX,
+      body: {
+        settings: { refresh_interval: '60s' }
+      }
+    });
+    console.log(`Updated settings for index ${DOMAINS_INDEX}.`);
   }
 
   excludeFields = (domain: Domain) => {
