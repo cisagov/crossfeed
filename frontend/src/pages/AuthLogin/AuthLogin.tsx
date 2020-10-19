@@ -16,7 +16,7 @@ I18n.putVocabulariesForLanguage("en-US", {
   [Translations.CONFIRM_TOTP_CODE]: "Enter 2FA Code",
   [Translations.CONFIRM_SIGN_UP_CODE_LABEL]: "Email Confirmation Code",
   [Translations.CONFIRM_SIGN_UP_CODE_PLACEHOLDER]: "Enter code sent to your email address",
-  [Translations.CODE_LABEL]: "Enter code sent to your email address:", // Reset password code
+  [Translations.CODE_LABEL]: "Enter code:", // Reset password code
   [Translations.LESS_THAN_TWO_MFA_VALUES_MESSAGE]: ""
 });
 
