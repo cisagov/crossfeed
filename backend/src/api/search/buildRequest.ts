@@ -19,10 +19,10 @@ function buildSort(sortDirection, sortField) {
 function buildMatch(searchTerm) {
   return searchTerm
     ? {
-        multi_match: {
+        query_string: {
           query: searchTerm,
-          fuzziness: 'AUTO',
-          fields: ['name']
+          analyze_wildcard: true,
+          fields: ['*']
         }
       }
     : { match_all: {} };
@@ -31,9 +31,10 @@ function buildMatch(searchTerm) {
 function buildChildMatch(searchTerm) {
   return searchTerm
     ? {
-        multi_match: {
+        query_string: {
           query: searchTerm,
-          fields: ['webpage_body']
+          analyze_wildcard: true,
+          fields: ['*']
         }
       }
     : { match_all: {} };
