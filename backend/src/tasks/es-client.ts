@@ -94,7 +94,7 @@ class ESClient {
     await this.client.indices.putSettings({
       index: DOMAINS_INDEX,
       body: {
-        settings: { refresh_interval: '300s' }
+        settings: { refresh_interval: '1800s' }
       }
     });
     console.log(`Updated settings for index ${DOMAINS_INDEX}.`);
