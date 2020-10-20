@@ -28,10 +28,10 @@ jobs:
 
       - name: Install Terraform
         run: |
-          wget https://releases.hashicorp.com/terraform/0.13.3/terraform_0.13.3_linux_amd64.zip
-          unzip terraform_0.13.3_linux_amd64.zip
+          wget https://releases.hashicorp.com/terraform/0.13.1/terraform_0.13.1_linux_amd64.zip
+          unzip terraform_0.13.1_linux_amd64.zip
           sudo mv terraform /usr/local/bin
-
+      
       - name: Check format
         run: terraform fmt -recursive -check -diff
 
@@ -42,8 +42,8 @@ jobs:
 
       - name: Install Terraform
         run: |
-          wget https://releases.hashicorp.com/terraform/0.13.3/terraform_0.13.3_linux_amd64.zip
-          unzip terraform_0.13.3_linux_amd64.zip
+          wget https://releases.hashicorp.com/terraform/0.13.1/terraform_0.13.1_linux_amd64.zip
+          unzip terraform_0.13.1_linux_amd64.zip
           sudo mv terraform /usr/local/bin
 
       - name: Terraform init
@@ -67,7 +67,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-
+      
       - if: ${{ always() }}
         run: rm stage.plan || true
 
@@ -106,6 +106,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-
+      
       - if: ${{ always() }}
         run: rm prod.plan || true
