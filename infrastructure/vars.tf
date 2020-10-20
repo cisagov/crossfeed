@@ -170,7 +170,7 @@ variable user_pool_name {
 
 variable user_pool_domain {
   type    = string
-  default = "crossfeed-staging"
+  default = "crossfeed-staging-dds"
 }
 
 variable ssm_user_pool_id {
@@ -185,7 +185,7 @@ variable ssm_user_pool_client_id {
 
 variable ses_support_email {
   type    = string
-  default = "support@staging.crossfeed.cyber.dhs.gov"
+  default = "support@crossfeed.dds.mil"
 }
 
 variable matomo_ecs_cluster_name {
