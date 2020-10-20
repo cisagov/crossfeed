@@ -75,7 +75,7 @@ POLICY
 
   ebs_options {
     ebs_enabled = true
-    volume_size = 20
+    volume_size = 100
   }
 
   tags = {
