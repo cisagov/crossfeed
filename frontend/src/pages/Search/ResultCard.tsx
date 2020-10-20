@@ -134,8 +134,6 @@ export const ResultCard: React.FC<Props> = (props) => {
   }
   if (inner_hits?.webpage?.hits?.hits?.length! > 0) {
     const { hits } = inner_hits!.webpage!.hits!;
-    console.warn(hits.map((e) => e._source.webpage_body));
-    console.warn(hits.map((e) => e.highlight));
     data.push({
       label: `matching webpage${hits.length > 1 ? 's' : ''}`,
       count: hits.length,
