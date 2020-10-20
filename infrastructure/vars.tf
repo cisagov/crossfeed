@@ -188,6 +188,36 @@ variable ses_support_email {
   default = "support@crossfeed.dds.mil"
 }
 
+variable matomo_ecs_cluster_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_ecs_task_definition_family {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_ecs_log_group_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_db_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_db_instance_class {
+  type    = string
+  default = "db.t3.micro"
+}
+
+variable matomo_ecs_role_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
 variable es_instance_type {
   type    = string
   default = "t2.micro.elasticsearch"

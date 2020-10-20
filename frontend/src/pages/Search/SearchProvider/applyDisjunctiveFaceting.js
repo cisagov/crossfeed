@@ -1,5 +1,4 @@
 // import runRequest from "./runRequest";
-import {buildRequest} from "./buildRequest";
 
 function combineAggregationsFromResponses(responses) {
   return responses.reduce((acc, response) => {
@@ -13,39 +12,39 @@ function combineAggregationsFromResponses(responses) {
 // To calculate a disjunctive facet correctly, you need to calculate the facet counts as if the filter was
 // not applied. If you did not do this, list of facet values would collapse to just one value, which is
 // whatever you have filtered on in that facet.
-function removeFilterByName(state, facetName) {
-  return {
-    ...state,
-    filters: state.filters.filter(f => f.field !== facetName)
-  };
-}
+// function removeFilterByName(state, facetName) {
+//   return {
+//     ...state,
+//     filters: state.filters.filter(f => f.field !== facetName)
+//   };
+// }
 
-function removeAllFacetsExcept(body, facetName) {
-  return {
-    ...body,
-    aggs: {
-      [facetName]: body.aggs[facetName]
-    }
-  };
-}
+// function removeAllFacetsExcept(body, facetName) {
+//   return {
+//     ...body,
+//     aggs: {
+//       [facetName]: body.aggs[facetName]
+//     }
+//   };
+// }
 
-function changeSizeToZero(body) {
-  return {
-    ...body,
-    size: 0
-  };
-}
+// function changeSizeToZero(body) {
+//   return {
+//     ...body,
+//     size: 0
+//   };
+// }
 
 async function getDisjunctiveFacetCounts(state, disunctiveFacetNames) {
   const responses = await Promise.all(
     // Note that this could be optimized by *not* executing a request
     // if not filter is currently applied for that field. Kept simple here for clarity.
     disunctiveFacetNames.map(facetName => {
-      let newState = removeFilterByName(state, facetName);
-      let body = buildRequest(newState);
-      body = changeSizeToZero(body);
-      body = removeAllFacetsExcept(body, facetName);
-      console.warn(body);
+      // let newState = removeFilterByName(state, facetName);
+      // let body = buildRequest(newState);
+      // body = changeSizeToZero(body);
+      // body = removeAllFacetsExcept(body, facetName);
+      // console.warn(body);
       // return runRequest(body);
       return {};
     })

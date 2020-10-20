@@ -114,3 +114,14 @@ docker-compose up docs
 You can then open up [http://localhost:4000][http://localhost:4000] in your browser.
 
 See [uswds-jekyll](https://github.com/18F/uswds-jekyll) for more information on theme customizations that can be done.
+
+## Matomo
+
+[Matomo](https://matomo.org/) is an open source analytics platform. We host an instance of Matomo as part of Crossfeed to collect analytics
+on its usage.
+
+When running Matomo for the first time locally, you must run `./setup-matomo.sh`.
+
+You can access Matomo by clicking on the "Matomo" button from the "My Account" page. Click
+through the original setup (keep the default values for database connection, etc.),
+then set the superuser username and password to "root" and "password" (for development only, in production generate a random password).

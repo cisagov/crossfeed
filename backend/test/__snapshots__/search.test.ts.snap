@@ -1,0 +1,280 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildRequest sample request by global admin 1`] = `
+Object {
+  "aggs": Object {
+    "fromRootDomain": Object {
+      "terms": Object {
+        "field": "fromRootDomain.keyword",
+      },
+    },
+    "name": Object {
+      "terms": Object {
+        "field": "name.keyword",
+      },
+    },
+    "organization": Object {
+      "terms": Object {
+        "field": "organization.name.keyword",
+      },
+    },
+    "services": Object {
+      "aggs": Object {
+        "name": Object {
+          "terms": Object {
+            "field": "services.service.keyword",
+          },
+        },
+        "port": Object {
+          "terms": Object {
+            "field": "services.port",
+          },
+        },
+        "products": Object {
+          "aggs": Object {
+            "cpe": Object {
+              "terms": Object {
+                "field": "services.products.cpe.keyword",
+              },
+            },
+          },
+          "nested": Object {
+            "path": "products",
+          },
+        },
+      },
+      "nested": Object {
+        "path": "services",
+      },
+    },
+    "vulnerabilities": Object {
+      "aggs": Object {
+        "cve": Object {
+          "terms": Object {
+            "field": "vulnerabilities.cve.keyword",
+          },
+        },
+        "severity": Object {
+          "terms": Object {
+            "field": "vulnerabilities.severity.keyword",
+          },
+        },
+      },
+      "nested": Object {
+        "path": "vulnerabilities",
+      },
+    },
+  },
+  "highlight": Object {
+    "fields": Object {
+      "name": Object {},
+    },
+    "fragment_size": 200,
+    "number_of_fragments": 1,
+  },
+  "query": Object {
+    "bool": Object {
+      "must": Array [
+        Object {
+          "match": Object {
+            "parent_join": "domain",
+          },
+        },
+        Object {
+          "bool": Object {
+            "should": Array [
+              Object {
+                "query_string": Object {
+                  "analyze_wildcard": true,
+                  "fields": Array [
+                    "*",
+                  ],
+                  "query": "term",
+                },
+              },
+              Object {
+                "has_child": Object {
+                  "inner_hits": Object {
+                    "_source": Array [
+                      "webpage_url",
+                    ],
+                    "highlight": Object {
+                      "fields": Object {
+                        "webpage_body": Object {},
+                      },
+                      "fragment_size": 50,
+                      "number_of_fragments": 3,
+                    },
+                  },
+                  "query": Object {
+                    "query_string": Object {
+                      "analyze_wildcard": true,
+                      "fields": Array [
+                        "*",
+                      ],
+                      "query": "term",
+                    },
+                  },
+                  "type": "webpage",
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  "size": 25,
+  "sort": Array [
+    Object {
+      "name.keyword": "asc",
+    },
+  ],
+}
+`;
+
+exports[`buildRequest sample request by non-global admin 1`] = `
+Object {
+  "aggs": Object {
+    "fromRootDomain": Object {
+      "terms": Object {
+        "field": "fromRootDomain.keyword",
+      },
+    },
+    "name": Object {
+      "terms": Object {
+        "field": "name.keyword",
+      },
+    },
+    "organization": Object {
+      "terms": Object {
+        "field": "organization.name.keyword",
+      },
+    },
+    "services": Object {
+      "aggs": Object {
+        "name": Object {
+          "terms": Object {
+            "field": "services.service.keyword",
+          },
+        },
+        "port": Object {
+          "terms": Object {
+            "field": "services.port",
+          },
+        },
+        "products": Object {
+          "aggs": Object {
+            "cpe": Object {
+              "terms": Object {
+                "field": "services.products.cpe.keyword",
+              },
+            },
+          },
+          "nested": Object {
+            "path": "products",
+          },
+        },
+      },
+      "nested": Object {
+        "path": "services",
+      },
+    },
+    "vulnerabilities": Object {
+      "aggs": Object {
+        "cve": Object {
+          "terms": Object {
+            "field": "vulnerabilities.cve.keyword",
+          },
+        },
+        "severity": Object {
+          "terms": Object {
+            "field": "vulnerabilities.severity.keyword",
+          },
+        },
+      },
+      "nested": Object {
+        "path": "vulnerabilities",
+      },
+    },
+  },
+  "highlight": Object {
+    "fields": Object {
+      "name": Object {},
+    },
+    "fragment_size": 200,
+    "number_of_fragments": 1,
+  },
+  "query": Object {
+    "bool": Object {
+      "must": Array [
+        Object {
+          "terms": Object {
+            "organization.id.keyword": Array [
+              "id1",
+            ],
+          },
+        },
+        Object {
+          "bool": Object {
+            "must": Array [
+              Object {
+                "match": Object {
+                  "parent_join": "domain",
+                },
+              },
+              Object {
+                "bool": Object {
+                  "should": Array [
+                    Object {
+                      "query_string": Object {
+                        "analyze_wildcard": true,
+                        "fields": Array [
+                          "*",
+                        ],
+                        "query": "term",
+                      },
+                    },
+                    Object {
+                      "has_child": Object {
+                        "inner_hits": Object {
+                          "_source": Array [
+                            "webpage_url",
+                          ],
+                          "highlight": Object {
+                            "fields": Object {
+                              "webpage_body": Object {},
+                            },
+                            "fragment_size": 50,
+                            "number_of_fragments": 3,
+                          },
+                        },
+                        "query": Object {
+                          "query_string": Object {
+                            "analyze_wildcard": true,
+                            "fields": Array [
+                              "*",
+                            ],
+                            "query": "term",
+                          },
+                        },
+                        "type": "webpage",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  "size": 25,
+  "sort": Array [
+    Object {
+      "name.keyword": "asc",
+    },
+  ],
+}
+`;

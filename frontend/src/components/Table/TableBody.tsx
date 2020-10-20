@@ -25,7 +25,9 @@ export const TableBody = <T extends object>({
                 const { key, ...rest } = cell.getCellProps();
                 return (
                   <td key={key} {...rest} className={classes.td}>
+                    <div>
                     {cell.render("Cell")}
+                    </div>
                   </td>
                 );
               })}

@@ -29,6 +29,24 @@ interface Props {
   domainId: string;
 }
 
+export const generateWebpageTree = (pages: Webpage[]) => {
+  const tree: any = {};
+  for (const page of pages) {
+    const url = new URL(page.url);
+    const parts = url.pathname.split('/').filter((path) => path !== '');
+    let root = tree;
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (parts[i] in root) root = root[parts[i]];
+      else {
+        root[parts[i]] = {};
+        root = root[parts[i]];
+      }
+    }
+    root[parts[parts.length - 1]] = page;
+  }
+  return tree;
+};
+
 export const DomainDetails: React.FC<Props> = (props) => {
   const { domainId } = props;
   const { getDomain } = useDomainApi(false);
@@ -117,24 +135,6 @@ export const DomainDetails: React.FC<Props> = (props) => {
     return ret;
   }, [domain]);
 
-  const generateWebpageTree = (pages: Webpage[]) => {
-    const tree: any = {};
-    for (const page of pages) {
-      const url = new URL(page.url);
-      const parts = url.pathname.split('/').filter((path) => path !== '');
-      let root = tree;
-      for (let i = 0; i < parts.length - 1; i++) {
-        if (parts[i] in root) root = root[parts[i]];
-        else {
-          root[parts[i]] = {};
-          root = root[parts[i]];
-        }
-      }
-      root[parts[parts.length - 1]] = page;
-    }
-    return tree;
-  };
-
   const [hiddenRows, setHiddenRows] = React.useState<{
     [key: string]: boolean;
   }>({});
@@ -189,7 +189,9 @@ export const DomainDetails: React.FC<Props> = (props) => {
           }
           const page = tree[key] as Webpage;
           const parsed = new URL(page.url);
-          const split = parsed.pathname.split('/');
+          const split = parsed.pathname
+            .replace(/\/$/, "") // Remove trailing slash
+            .split('/');
           return (
             <ListItem
               button
@@ -331,55 +333,58 @@ export const DomainDetails: React.FC<Props> = (props) => {
                   Port
                 </Typography>
                 <Typography className={classes.accordionHeading}>
-                  Service
+                  Products
                 </Typography>
                 <Typography>Last Seen</Typography>
               </AccordionSummary>
             </Accordion>
-            {domain.services.map((service) => (
-              <Accordion className={classes.accordion} key={service.id}>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography className={classes.accordionHeading}>
-                    {service.port}
-                  </Typography>
-                  <Typography className={classes.accordionHeading}>
-                    {service.service}
-                  </Typography>
-                  {service.lastSeen && (
-                    <Typography>
-                      {formatDistanceToNow(parseISO(service.lastSeen))} ago
+            {domain.services.map((service) => {
+              const products = service.products
+                .map(
+                  (product) =>
+                    product.name +
+                    (product.version ? ` ${product.version}` : '')
+                )
+                .join(', ');
+              return (
+                <Accordion className={classes.accordion} key={service.id}>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography className={classes.accordionHeading}>
+                      {service.port}
                     </Typography>
+                    <Typography className={classes.accordionHeading}>
+                      {products}
+                    </Typography>
+                    {service.lastSeen && (
+                      <Typography>
+                        {formatDistanceToNow(parseISO(service.lastSeen))} ago
+                      </Typography>
+                    )}
+                  </AccordionSummary>
+                  {service.products.length > 0 && (
+                    <AccordionDetails>
+                      <DefinitionList
+                        items={[
+                          {
+                            label: 'Products',
+                            value: products
+                          },
+                          {
+                            label: 'Banner',
+                            value:
+                              (user?.userType === 'globalView' ||
+                                user?.userType === 'globalAdmin') &&
+                              service.banner
+                                ? service.banner
+                                : 'None'
+                          }
+                        ]}
+                      />
+                    </AccordionDetails>
                   )}
-                </AccordionSummary>
-                {service.products.length > 0 && (
-                  <AccordionDetails>
-                    <DefinitionList
-                      items={[
-                        {
-                          label: 'Products',
-                          value: service.products
-                            .map(
-                              (product) =>
-                                product.name +
-                                (product.version ? ` ${product.version}` : '')
-                            )
-                            .join(', ')
-                        },
-                        {
-                          label: 'Banner',
-                          value:
-                            (user?.userType === 'globalView' ||
-                              user?.userType === 'globalAdmin') &&
-                            service.banner
-                              ? service.banner
-                              : 'None'
-                        }
-                      ]}
-                    />
-                  </AccordionDetails>
-                )}
-              </Accordion>
-            ))}
+                </Accordion>
+              );
+            })}
           </div>
         )}
         {domain.webpages.length > 0 && (
