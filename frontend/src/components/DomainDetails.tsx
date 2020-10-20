@@ -29,6 +29,24 @@ interface Props {
   domainId: string;
 }
 
+export const generateWebpageTree = (pages: Webpage[]) => {
+  const tree: any = {};
+  for (const page of pages) {
+    const url = new URL(page.url);
+    const parts = url.pathname.split('/').filter((path) => path !== '');
+    let root = tree;
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (parts[i] in root) root = root[parts[i]];
+      else {
+        root[parts[i]] = {};
+        root = root[parts[i]];
+      }
+    }
+    root[parts[parts.length - 1]] = page;
+  }
+  return tree;
+};
+
 export const DomainDetails: React.FC<Props> = (props) => {
   const { domainId } = props;
   const { getDomain } = useDomainApi(false);
@@ -117,24 +135,6 @@ export const DomainDetails: React.FC<Props> = (props) => {
     return ret;
   }, [domain]);
 
-  const generateWebpageTree = (pages: Webpage[]) => {
-    const tree: any = {};
-    for (const page of pages) {
-      const url = new URL(page.url);
-      const parts = url.pathname.split('/').filter((path) => path !== '');
-      let root = tree;
-      for (let i = 0; i < parts.length - 1; i++) {
-        if (parts[i] in root) root = root[parts[i]];
-        else {
-          root[parts[i]] = {};
-          root = root[parts[i]];
-        }
-      }
-      root[parts[parts.length - 1]] = page;
-    }
-    return tree;
-  };
-
   const [hiddenRows, setHiddenRows] = React.useState<{
     [key: string]: boolean;
   }>({});
@@ -189,7 +189,9 @@ export const DomainDetails: React.FC<Props> = (props) => {
           }
           const page = tree[key] as Webpage;
           const parsed = new URL(page.url);
-          const split = parsed.pathname.split('/');
+          const split = parsed.pathname
+            .replace(/\/$/, "") // Remove trailing slash
+            .split('/');
           return (
             <ListItem
               button
