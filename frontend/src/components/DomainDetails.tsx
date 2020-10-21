@@ -20,7 +20,7 @@ import {
 import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
-import { formatDistanceToNow, parseISO } from 'date-fns';
+import { differenceInCalendarDays, parseISO } from 'date-fns';
 import { stateMap } from 'pages/Vulnerabilities/Vulnerabilities';
 import { Webpage } from 'types/webpage';
 import { useAuthContext } from 'context';
@@ -110,11 +110,11 @@ export const DomainDetails: React.FC<Props> = (props) => {
     }
     ret.push({
       label: 'First Seen',
-      value: `${formatDistanceToNow(parseISO(domain.createdAt))} ago`
+      value: `${differenceInCalendarDays(parseISO(domain.createdAt), Date.now())} ago`
     });
     ret.push({
       label: 'Last Seen',
-      value: `${formatDistanceToNow(parseISO(domain.updatedAt))} ago`
+      value: `${differenceInCalendarDays(parseISO(domain.updatedAt), Date.now())} ago`
     });
     if (domain.country) {
       ret.push({
@@ -283,7 +283,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
                   </Typography>
                   <Typography className={classes.vulnDescription}>
                     {vuln.createdAt
-                      ? `${formatDistanceToNow(parseISO(vuln.createdAt))} ago`
+                      ? `${differenceInCalendarDays(parseISO(vuln.createdAt), Date.now())} days ago`
                       : ''}
                   </Typography>
                 </AccordionSummary>
@@ -335,7 +335,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
                 <Typography className={classes.accordionHeading}>
                   Products
                 </Typography>
-                <Typography>Last Seen</Typography>
+                <Typography className={classes.lastSeen}>Last Seen</Typography>
               </AccordionSummary>
             </Accordion>
             {domain.services.map((service) => {
@@ -355,11 +355,12 @@ export const DomainDetails: React.FC<Props> = (props) => {
                     <Typography className={classes.accordionHeading}>
                       {products}
                     </Typography>
-                    {service.lastSeen && (
-                      <Typography>
-                        {formatDistanceToNow(parseISO(service.lastSeen))} ago
-                      </Typography>
-                    )}
+                    <Typography className={classes.lastSeen}>
+                      {service.lastSeen ?
+                      `${differenceInCalendarDays(parseISO(service.lastSeen), Date.now())} days ago`
+                      : ''
+                    }
+                    </Typography>
                   </AccordionSummary>
                   {service.products.length > 0 && (
                     <AccordionDetails>
@@ -443,7 +444,8 @@ const useStyles = makeStyles((theme) => ({
     padding: '1.5rem'
   },
   accordion: {
-    color: '#3D4551'
+    color: '#3D4551',
+    textAlign: 'left'
   },
   accordionHeaderRow: {
     color: '#000',
@@ -451,6 +453,9 @@ const useStyles = makeStyles((theme) => ({
   },
   accordionHeading: {
     flex: '1 0 33%'
+  },
+  lastSeen: {
+    flex: '0 0 125px'
   },
   vulnDescription: {
     flex: '1 1 15%',
