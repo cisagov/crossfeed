@@ -8,14 +8,23 @@ export class LiveDomain extends Domain {
 
 /** Helper function to fetch all live websites (port 80 or 443) */
 export const getLiveWebsites = async (
-  organizationId: string
+  organizationId?: string,
+  organizationIds: string[] = []
 ): Promise<LiveDomain[]> => {
   await connectToDatabase();
+
+  if (organizationId) {
+    organizationIds = [organizationId];
+  }
+
+  if (organizationIds.length === 0) {
+    return [];
+  }
 
   const qs = Domain.createQueryBuilder('domain')
     .leftJoinAndSelect('domain.services', 'services')
     .leftJoinAndSelect('domain.organization', 'organization')
-    .andWhere('domain.organization=:org', { org: organizationId })
+    .andWhere('domain.organization IN (:...orgs)', { orgs: organizationIds })
     .groupBy('domain.id, domain.ip, domain.name, organization.id, services.id');
 
   qs.andHaving(

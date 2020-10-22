@@ -1,4 +1,4 @@
-import { Domain, Service } from '../models';
+import { connectToDatabase, Domain, Organization, Service } from '../models';
 import { CommandOptions } from './ecs-client';
 import { getLiveWebsites } from './helpers/getLiveWebsites';
 import { spawn } from 'child_process';
@@ -7,6 +7,7 @@ import { writeFileSync } from 'fs';
 import saveWebpagesToDb from './helpers/saveWebpagesToDb';
 import * as readline from 'readline';
 import PQueue from 'p-queue';
+import { chunk } from 'lodash';
 
 const WEBSCRAPER_DIRECTORY = '/app/worker/webscraper';
 const INPUT_PATH = path.join(WEBSCRAPER_DIRECTORY, 'domains.txt');
@@ -27,11 +28,18 @@ export interface ScraperItem {
 }
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { organizationId, organizationName, scanId } = commandOptions;
+  const { chunkNumber, numChunks, organizationId, scanId } = commandOptions;
 
-  console.log('Running webscraper on organization', organizationName);
+  await connectToDatabase();
 
-  const liveWebsites = await getLiveWebsites(organizationId!);
+  const where = organizationId ? { organizationId } : {};
+  const organizations = await Organization.find({ where, select: ['id'] });
+  const organizationIds = (
+    chunk(organizations, numChunks)[chunkNumber!] || []
+  ).map((e) => e.id);
+  console.log('Running webscraper on organizations ', organizationIds);
+
+  const liveWebsites = await getLiveWebsites(undefined, organizationIds);
   const urls = liveWebsites.map((domain) => domain.url);
   console.log('input urls', urls);
   if (urls.length === 0) {
