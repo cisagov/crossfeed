@@ -1,50 +1,45 @@
 import {
-    connectToDatabase,
-    Domain,
-    Organization,
-    Scan,
-    Service
-  } from '../models';
-  import { plainToClass } from 'class-transformer';
-  import saveDomainsToDb from './helpers/saveDomainsToDb';
-  import { CommandOptions } from './ecs-client';
-  import { CensysIpv4Data } from 'src/models/generated/censysIpv4';
-  import { mapping } from './censys/mapping';
-  import saveServicesToDb from './helpers/saveServicesToDb';
-  import getAllDomains from './helpers/getAllDomains';
-  import * as zlib from 'zlib';
-  import * as readline from 'readline';
-  import got from 'got';
-  import PQueue from 'p-queue';
-  import pRetry from 'p-retry';
-  import axios from 'axios';
-  import * as whois from 'whois';
-  
-  export const handler = async (commandOptions: CommandOptions) => {
-    const { organizationId } = commandOptions;
+  Vulnerability
+} from '../models';
+import { plainToClass } from 'class-transformer';
+import { CommandOptions } from './ecs-client';
+import PQueue from 'p-queue';
+import * as whois from 'whois';
+import getRootDomains from './helpers/getRootDomains';
+import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
+import { differenceInDays } from 'date-fns';
 
-    if (!organizationId) {
-        throw new Error("organizationId must be defined");
+export const handler = async (commandOptions: CommandOptions) => {
+  const { organizationId } = commandOptions;
+
+  if (!organizationId) {
+    throw new Error("organizationId must be defined");
+  }
+
+  const rootDomains = await getRootDomains(organizationId);
+
+  const queue = new PQueue({ concurrency: 2 });
+  const vulns: Vulnerability[] = [];
+  rootDomains.forEach(domain => queue.add(async () => {
+    const result: string = await new Promise((resolve, reject) => whois.lookup(domain, (err, data) => err ? reject(err) : resolve(data)));
+    const match = result.match(/Registrar Registration Expiration Date: (.*)/);
+    if (!match || !match[1]) {
+      return;
     }
-  
-    const allDomains = await getAllDomains([organizationId]);
-  
-    const queue = new PQueue({ concurrency: 2 });
-    const jobs: Promise<Domain>[] = allDomains.map(domain => queue.add(() => {
-        return plainToClass(Domain, {
-              name: domain.name,
-              organization: domain.organization,
-              
-            })
-        }));
+    if (differenceInDays(new Date(match[1]), new Date(Date.now())) <= 31) {
+      // one month
+      vulns.push(plainToClass(Vulnerability, {
+        domain: domain,
+        lastSeen: new Date(Date.now()),
+        title: "Registrar expiration soon - " + match[1],
+        severity: 'high',
+        state: 'open',
+        source: 'whois_expiration'
+      }));
+    }
+  }));
+  await queue.onIdle();
+  await saveVulnerabilitiesToDb(vulns, false);
 
-
-    await saveDomainsToDb(domains);
-
-    await queue.onEmpty();
-    console.log(`censysipv4: scheduled all tasks`);
-    await Promise.all(jobs);
-  
-    console.log(`censysipv4 done`);
-  };
-  
+  console.log(`whois done`);
+};
