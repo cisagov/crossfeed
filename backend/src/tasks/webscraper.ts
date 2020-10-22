@@ -18,7 +18,7 @@ import { In } from 'typeorm';
 
 const WEBSCRAPER_DIRECTORY = '/app/worker/webscraper';
 const INPUT_PATH = path.join(WEBSCRAPER_DIRECTORY, 'domains.txt');
-const WEBPAGE_DB_BATCH_LENGTH = 10;
+const WEBPAGE_DB_BATCH_LENGTH = process.env.IS_LOCAL ? 2 : 10;
 
 // Sync this with backend/worker/webscraper/webscraper/items.py
 export interface ScraperItem {
