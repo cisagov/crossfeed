@@ -120,13 +120,7 @@ export class Domain extends BaseEntity {
     default: {}
   })
   whois: {
-    name: string;
-    slug: string;
-    version: string;
-    icon: string;
-    website: string;
-    confidence: number;
-    cpe?: string;
+    
   };
 
   @BeforeInsert()
