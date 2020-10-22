@@ -125,7 +125,7 @@ export const ResultCard: React.FC<Props> = (props) => {
   }
   if (cves.length > 0) {
     data.push({
-      label: `vulnerabilit${cves.length > 1 ? 'ies' : 'y'}`,
+      label: `cve${cves.length > 1 ? 's' : ''}`,
       count: cves.length,
       value: filterExpanded(cves, Boolean(expanded.vulns), 10).join(', '),
       onExpand: () => toggleExpanded('vulns'),
@@ -158,9 +158,9 @@ export const ResultCard: React.FC<Props> = (props) => {
   }
 
   return (
-    <Paper elevation={0} classes={{ root: classes.root }}>
+    <Paper elevation={0} classes={{ root: classes.root }} aria-label="view domain details" onClick={onClick}>
       <div className={classes.inner}>
-        <button className={classes.domainRow} onClick={onClick}>
+        <button className={classes.domainRow}>
           <h4>{name.raw}</h4>
           <div className={classes.lastSeen}>
             <span className={classes.label}>Last Seen</span>
@@ -211,6 +211,7 @@ export const ResultCard: React.FC<Props> = (props) => {
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    cursor: 'pointer',
     boxSizing: 'border-box',
     marginBottom: '1rem',
     border: ({ selected }: Props) =>
