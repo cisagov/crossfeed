@@ -305,7 +305,7 @@ const ScansView: React.FC = () => {
           onChange={onTextChange}
         /> */}
         
-        {(values.name === 'censysIpv4' || !selectedScan.global) && (
+        {(values.name === 'censysIpv4' || values.name === 'webscraper' || !selectedScan.global) && (
           
           <Checkbox
             id="isGranular"
