@@ -49,8 +49,8 @@ export const handler = async (commandOptions: CommandOptions) => {
   const orgs = organizationId
     ? [organizationId]
     : scan?.organizations?.length
-    ? undefined
-    : scan?.organizations.map((org) => org.id);
+    ? scan?.organizations.map((org) => org.id)
+    : undefined;
 
   const where = orgs?.length ? { id: In(orgs) } : {};
   const organizations = await Organization.find({ where, select: ['id'] });
