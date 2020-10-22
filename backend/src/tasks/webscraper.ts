@@ -1,4 +1,10 @@
-import { connectToDatabase, Domain, Organization, Service } from '../models';
+import {
+  connectToDatabase,
+  Domain,
+  Organization,
+  Scan,
+  Service
+} from '../models';
 import { CommandOptions } from './ecs-client';
 import { getLiveWebsites } from './helpers/getLiveWebsites';
 import { spawn } from 'child_process';
@@ -8,6 +14,7 @@ import saveWebpagesToDb from './helpers/saveWebpagesToDb';
 import * as readline from 'readline';
 import PQueue from 'p-queue';
 import { chunk } from 'lodash';
+import { In } from 'typeorm';
 
 const WEBSCRAPER_DIRECTORY = '/app/worker/webscraper';
 const INPUT_PATH = path.join(WEBSCRAPER_DIRECTORY, 'domains.txt');
@@ -32,7 +39,20 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   await connectToDatabase();
 
-  const where = organizationId ? { organizationId } : {};
+  const scan = await Scan.findOne(
+    { id: scanId },
+    { relations: ['organizations'] }
+  );
+
+  // webscraper is a global scan, so organizationId is only specified for tests.
+  // Otherwise, scan.organizations can be used for granular control of censys.
+  const orgs = organizationId
+    ? [organizationId]
+    : scan?.organizations?.length
+    ? undefined
+    : scan?.organizations.map((org) => org.id);
+
+  const where = orgs?.length ? { id: In(orgs) } : {};
   const organizations = await Organization.find({ where, select: ['id'] });
   const organizationIds = (
     chunk(organizations, numChunks)[chunkNumber!] || []
