@@ -57,20 +57,26 @@ exports[`Header component matches snapshot 1`] = `
             </a>
             <a
               class="makeStyles-link-7"
+              href="/search"
+            >
+              Search
+            </a>
+            <a
+              class="makeStyles-link-7"
               href="/vulnerabilities"
             >
               Vulnerabilities
             </a>
+          </div>
+          <div
+            class="makeStyles-lgNav-10"
+          >
             <a
               class="makeStyles-link-7"
               href="/risk"
             >
               Risk Summary
             </a>
-          </div>
-          <div
-            class="makeStyles-lgNav-10"
-          >
             <a
               class="makeStyles-link-7"
               href="/organizations"

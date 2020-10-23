@@ -170,8 +170,6 @@ app.use(
     if (user.userType !== 'globalAdmin') {
       return res.status(401).send('Unauthorized');
     }
-    // Don't forward the crossfeed-token cookie to the proxy
-    delete req.cookies['crossfeed-token'];
     return next();
   },
   matomoProxy

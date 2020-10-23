@@ -1,4 +1,10 @@
-import { Domain, Service } from '../models';
+import {
+  connectToDatabase,
+  Domain,
+  Organization,
+  Scan,
+  Service
+} from '../models';
 import { CommandOptions } from './ecs-client';
 import { getLiveWebsites } from './helpers/getLiveWebsites';
 import { spawn } from 'child_process';
@@ -7,10 +13,12 @@ import { writeFileSync } from 'fs';
 import saveWebpagesToDb from './helpers/saveWebpagesToDb';
 import * as readline from 'readline';
 import PQueue from 'p-queue';
+import { chunk } from 'lodash';
+import { In } from 'typeorm';
 
 const WEBSCRAPER_DIRECTORY = '/app/worker/webscraper';
 const INPUT_PATH = path.join(WEBSCRAPER_DIRECTORY, 'domains.txt');
-const WEBPAGE_DB_BATCH_LENGTH = 100;
+const WEBPAGE_DB_BATCH_LENGTH = process.env.IS_LOCAL ? 2 : 10;
 
 // Sync this with backend/worker/webscraper/webscraper/items.py
 export interface ScraperItem {
@@ -27,11 +35,31 @@ export interface ScraperItem {
 }
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { organizationId, organizationName, scanId } = commandOptions;
+  const { chunkNumber, numChunks, organizationId, scanId } = commandOptions;
 
-  console.log('Running webscraper on organization', organizationName);
+  await connectToDatabase();
 
-  const liveWebsites = await getLiveWebsites(organizationId!);
+  const scan = await Scan.findOne(
+    { id: scanId },
+    { relations: ['organizations'] }
+  );
+
+  // webscraper is a global scan, so organizationId is only specified for tests.
+  // Otherwise, scan.organizations can be used for granular control of censys.
+  const orgs = organizationId
+    ? [organizationId]
+    : scan?.organizations?.length
+    ? scan?.organizations.map((org) => org.id)
+    : undefined;
+
+  const where = orgs?.length ? { id: In(orgs) } : {};
+  const organizations = await Organization.find({ where, select: ['id'] });
+  const organizationIds = (
+    chunk(organizations, numChunks)[chunkNumber!] || []
+  ).map((e) => e.id);
+  console.log('Running webscraper on organizations ', organizationIds);
+
+  const liveWebsites = await getLiveWebsites(undefined, organizationIds);
   const urls = liveWebsites.map((domain) => domain.url);
   console.log('input urls', urls);
   if (urls.length === 0) {
@@ -74,7 +102,9 @@ export const handler = async (commandOptions: CommandOptions) => {
   await new Promise((resolve, reject) => {
     console.log('Going to save webpages to the database...');
     let scrapedWebpages: ScraperItem[] = [];
-    readInterfaceStderr.on('line', (line) => console.error(line));
+    readInterfaceStderr.on('line', (line) =>
+      console.error(line?.substring(0, 999))
+    );
     readInterface.on('line', async (line) => {
       if (!line?.trim() || line.indexOf('database_output: ') === -1) {
         console.log(line);
@@ -85,7 +115,6 @@ export const handler = async (commandOptions: CommandOptions) => {
           line.indexOf('database_output: ') + 'database_output: '.length
         )
       );
-      console.log('got item', item.status, item.url);
       const domain = liveWebsitesMap[item.domain_name];
       if (!domain) {
         console.error(
@@ -104,7 +133,9 @@ export const handler = async (commandOptions: CommandOptions) => {
           if (scrapedWebpages.length === 0) {
             return;
           }
-          console.log(`Saving ${scrapedWebpages.length} webpages...`);
+          console.log(
+            `Saving ${scrapedWebpages.length} webpages, starting with ${scrapedWebpages[0].url}...`
+          );
           await saveWebpagesToDb(scrapedWebpages);
           totalNumWebpages += scrapedWebpages.length;
           scrapedWebpages = [];
