@@ -3,28 +3,18 @@ import { useParams } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { Organization as OrganizationType, Scan, ScanSchema } from 'types';
-import {
-  Header,
-  Button,
-  Form,
-  Dropdown,
-  TextInput,
-  Checkbox,
-  Label
-} from '@trussworks/react-uswds';
-import MultiSelect from '../Scans/MultiSelect';
+import { Header } from '@trussworks/react-uswds';
 import { OrganizationOption } from 'pages/Scans/ScansView';
-import { Link } from 'react-router-dom';
+import { ScanForm, ScanFormValues } from 'components/ScanForm';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
 }
 
-export const setFrequency = async (body: any, values: any) => {
-  body.arguments = JSON.parse(values.arguments);
-  if (values.isSingleScan) body.frequency = 1;
-  if (values.frequencyUnit === 'minute') body.frequency *= 60;
-  else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
+export const setFrequency = async (body: ScanFormValues) => {
+  if (body.isSingleScan) body.frequency = 1;
+  if (body.frequencyUnit === 'minute') body.frequency *= 60;
+  else if (body.frequencyUnit === 'hour') body.frequency *= 60 * 60;
   else body.frequency *= 60 * 60 * 24;
 };
 
@@ -38,15 +28,7 @@ const ScanComponent: React.FC = () => {
     OrganizationOption[]
   >([]);
   const [scanSchema, setScanSchema] = useState<ScanSchema>({});
-  const [values, setValues] = useState<{
-    name: string;
-    organizations: OrganizationOption[];
-    arguments: string;
-    frequency: number;
-    frequencyUnit: string;
-    isGranular: boolean;
-    isSingleScan: boolean;
-  }>({
+  const [values, setValues] = useState<ScanFormValues>({
     name: 'scan.name',
     arguments: '{}',
     organizations: [],
@@ -64,8 +46,8 @@ const ScanComponent: React.FC = () => {
         organizations: OrganizationType[];
       }>(`/scans/${scanId}`);
       setScan(scan);
-      setScanSchema(schema);
       setDefaultValues(scan);
+      setScanSchema(schema);
       setOrganizationOptions(
         organizations.map((e) => ({ label: e.name, value: e.id }))
       );
@@ -74,14 +56,10 @@ const ScanComponent: React.FC = () => {
     }
   }, [apiGet, setScan, scanId]);
 
-  const onSubmit: React.FormEventHandler = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (body: ScanFormValues) => {
     try {
-      // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
-      let body: typeof values = Object.assign({}, values);
-      setFrequency(body, values);
-
-      const scan = await apiPut(`/scans/${scanId}`, {
+      setFrequency(body);
+      await apiPut(`/scans/${scanId}`, {
         body: {
           ...body,
           organizations: body.organizations
@@ -89,7 +67,6 @@ const ScanComponent: React.FC = () => {
             : []
         }
       });
-      setScan(scan);
       setMessage('Scan successfully updated');
     } catch (e) {
       setErrors({
@@ -97,17 +74,6 @@ const ScanComponent: React.FC = () => {
       });
       console.log(e);
     }
-  };
-
-  const onTextChange: React.ChangeEventHandler<
-    HTMLInputElement | HTMLSelectElement
-  > = (e) => onChange(e.target.name, e.target.value);
-
-  const onChange = (name: string, value: any) => {
-    setValues((values) => ({
-      ...values,
-      [name]: value
-    }));
   };
 
   const setDefaultValues = async (scan: Scan) => {
@@ -118,7 +84,7 @@ const ScanComponent: React.FC = () => {
     } else if (scan.frequency >= 3600) {
       scan.frequency = scan.frequency / (60 * 60);
       oldFrequencyUnit = 'hour';
-    } else {
+    } else if (scan.frequency >= 60) {
       scan.frequency = scan.frequency / 60;
       oldFrequencyUnit = 'minute';
     }
@@ -151,6 +117,7 @@ const ScanComponent: React.FC = () => {
     }
   };
 
+  const isGlobal = scanSchema.global;
   useEffect(() => {
     fetchScan();
   }, [fetchScan]);
@@ -171,76 +138,17 @@ const ScanComponent: React.FC = () => {
           </div>
         </div>
       </Header>
-      <Form onSubmit={onSubmit} className={classes.form}>
-        {errors.global && <p className={classes.error}>{errors.global}</p>}
-        {message && <p>{message}</p>}
-        {(values.name === 'censysIpv4' || !scanSchema.global) && (
-          <Checkbox
-            id="isGranular"
-            label="Limit enabled organizations"
-            name="isGranular"
-            checked={values.isGranular}
-            onChange={(e) => onChange('isGranular', e.target.checked)}
-          />
-        )}
-        {values.isGranular && (
-          <>
-            <Label htmlFor="organizations">Enabled Organizations</Label>
-            <MultiSelect
-              name="organizations"
-              options={organizationOptions}
-              value={values.organizations}
-              onChange={(e) => onChange('organizations', e)}
-            />
-            <br />
-          </>
-        )}
-        <Checkbox
-          id="isSingleScan"
-          label="Run scan once"
-          name="isSingleScan"
-          checked={values.isSingleScan}
-          onChange={(e) => onChange('isSingleScan', e.target.checked)}
-        />
-        {!values.isSingleScan && (
-          <div className="form-group form-inline">
-            <label style={{ marginRight: '10px' }} htmlFor="frequency">
-              Run every
-            </label>
-            <TextInput
-              id="frequency"
-              name="frequency"
-              type="number"
-              style={{
-                display: 'inline-block',
-                width: '150px',
-                marginRight: '15px'
-              }}
-              value={values.frequency}
-              onChange={(e) => {
-                onChange(e.target.name, Number(e.target.value));
-              }}
-            />
-            <Dropdown
-              id="frequencyUnit"
-              name="frequencyUnit"
-              onChange={onTextChange}
-              value={values.frequencyUnit}
-              style={{ display: 'inline-block', width: '150px' }}
-            >
-              <option value="minute">Minute(s)</option>
-              <option value="hour">Hour(s)</option>
-              <option value="day">Day(s)</option>
-            </Dropdown>
-          </div>
-        )}
-        <br />
-
-        <Link to={`/scans`}>
-          <Button type="button"> Return to Scans</Button>
-        </Link>
-        <Button type="submit">Save Changes</Button>
-      </Form>
+      {errors.global && <p className={classes.error}>{errors.global}</p>}
+      {message && <p>{message}</p>}
+      <ScanForm
+        organizationOption={organizationOptions}
+        propValues={values}
+        global={isGlobal}
+        onSubmit={onSubmit}
+        type="edit"
+        scan={scan}
+        scanSchema={scanSchema}
+      ></ScanForm>
     </div>
   );
 };
