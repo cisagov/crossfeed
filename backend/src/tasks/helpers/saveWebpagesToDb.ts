@@ -1,6 +1,7 @@
 import { plainToClass } from 'class-transformer';
+import pRetry from 'p-retry';
 import { connectToDatabase, Webpage } from '../../models';
-import ESClient from '../es-client';
+import ESClient, { WebpageRecord } from '../es-client';
 import { ScraperItem } from '../webscraper';
 
 /** Saves scraped webpages to the database, and also syncs them
@@ -43,23 +44,36 @@ export default async (scrapedWebpages: ScraperItem[]): Promise<void> => {
   }
   console.log('Saving webpages to elasticsearch...');
   const client = new ESClient();
-  client.updateWebpages(
-    scrapedWebpages.map((e) => {
-      const insertedWebpage = urlToInsertedWebpage[e.url];
-      return {
-        webpage_id: insertedWebpage.id,
-        webpage_createdAt: insertedWebpage.createdAt,
-        webpage_updatedAt: insertedWebpage.updatedAt,
-        webpage_syncedAt: insertedWebpage.syncedAt,
-        webpage_lastSeen: insertedWebpage.lastSeen,
-        webpage_url: insertedWebpage.url,
-        webpage_status: insertedWebpage.status,
-        webpage_domainId: e.domain!.id,
-        webpage_discoveredById: e.discoveredBy!.id,
-        webpage_responseSize: insertedWebpage.responseSize,
-        webpage_headers: insertedWebpage.headers,
-        webpage_body: e.body
-      };
-    })
+  await pRetry(
+    () =>
+      client.updateWebpages(
+        scrapedWebpages
+          .map((e) => {
+            const insertedWebpage = urlToInsertedWebpage[e.url];
+            if (!insertedWebpage) {
+              console.log(`Inserted webpage not found for URL: ${e.url}`);
+              return undefined;
+            }
+            return {
+              webpage_id: insertedWebpage.id,
+              webpage_createdAt: insertedWebpage.createdAt,
+              webpage_updatedAt: insertedWebpage.updatedAt,
+              webpage_syncedAt: insertedWebpage.syncedAt,
+              webpage_lastSeen: insertedWebpage.lastSeen,
+              webpage_url: insertedWebpage.url,
+              webpage_status: insertedWebpage.status,
+              webpage_domainId: e.domain!.id,
+              webpage_discoveredById: e.discoveredBy!.id,
+              webpage_responseSize: insertedWebpage.responseSize,
+              webpage_headers: insertedWebpage.headers,
+              webpage_body: e.body
+            };
+          })
+          .filter((e) => e) as WebpageRecord[]
+      ),
+    {
+      retries: 10,
+      randomize: true
+    }
   );
 };

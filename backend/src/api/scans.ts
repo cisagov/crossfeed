@@ -113,7 +113,8 @@ export const SCAN_SCHEMA: ScanSchema = {
   webscraper: {
     type: 'fargate',
     isPassive: true,
-    global: false,
+    global: true,
+    numChunks: 3,
     cpu: '1024',
     memory: '4096',
     description: 'Scrapes all webpages on a given domain, respecting robots.txt'

@@ -144,17 +144,32 @@ export const ScanForm: React.FC<{
           })}
         </Dropdown>
       )}
-      {type === 'edit' && (values.name === 'censysIpv4' || !global) && (
-        <Checkbox
-          id="isGranular"
-          label="Limit enabled organizations"
-          name="isGranular"
-          checked={values.isGranular}
-          onChange={(e) => onChange('isGranular', e.target.checked)}
-        />
-      )}
+      {schemaUpdated && <p>{scanSchema[values.name].description}</p>}
+      {/* <Label htmlFor="arguments">Arguments</Label>
+        <TextInput
+          required
+          id="arguments"
+          name="arguments"
+          className={classes.textField}
+          type="text"
+          value={values.arguments}
+          onChange={onTextChange}
+        /> */}
+      {type === 'edit' &&
+        (values.name === 'censysIpv4' ||
+          values.name === 'webscraper' ||
+          !global) && (
+          <Checkbox
+            id="isGranular"
+            label="Limit enabled organizations"
+            name="isGranular"
+            checked={values.isGranular}
+            onChange={(e) => onChange('isGranular', e.target.checked)}
+          />
+        )}
       {type === 'create' &&
         (values.name === 'censysIpv4' ||
+          values.name === 'webscraper' ||
           (schemaUpdated && !scanSchema[values.name].global)) && (
           <Checkbox
             id="isGranular"
