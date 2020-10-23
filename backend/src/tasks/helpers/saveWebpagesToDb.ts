@@ -23,7 +23,7 @@ export default async (scrapedWebpages: ScraperItem[]): Promise<void> => {
           url: scrapedWebpage.url,
           status: scrapedWebpage.status,
           responseSize: scrapedWebpage.response_size,
-          headers: scrapedWebpage.headers
+          headers: []
         })
       )
       .onConflict(
@@ -65,7 +65,7 @@ export default async (scrapedWebpages: ScraperItem[]): Promise<void> => {
               webpage_domainId: e.domain!.id,
               webpage_discoveredById: e.discoveredBy!.id,
               webpage_responseSize: insertedWebpage.responseSize,
-              webpage_headers: insertedWebpage.headers,
+              webpage_headers: e.headers || [],
               webpage_body: e.body
             };
           })
