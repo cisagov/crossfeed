@@ -78,7 +78,7 @@ jobs:
       - name: Run site locally
         run: |
           cp dev.env.example .env
-          docker-compose up db --build -d
+          docker-compose up -d db
           npm install -g wait-port
           wait-port -t 5432
         working-directory: ./
