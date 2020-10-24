@@ -44,3 +44,4 @@ matomo_db_instance_class          = "db.t3.micro"
 matomo_ecs_role_name              = "crossfeed-matomo-staging"
 es_instance_type                  = "t3.small.elasticsearch"
 es_instance_count                 = 1
+es_instance_volume_size           = 100

@@ -218,7 +218,7 @@ export const get = wrapHandler(async (event) => {
   const result = await Domain.findOne(
     { id, ...where },
     {
-      relations: ['services', 'organization', 'vulnerabilities', 'webpages']
+      relations: ['services', 'organization', 'vulnerabilities']
     }
   );
 
