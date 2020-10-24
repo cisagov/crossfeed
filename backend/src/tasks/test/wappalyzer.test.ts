@@ -10,14 +10,9 @@ const axios = require('axios');
 jest.mock('../helpers/getLiveWebsites');
 const getLiveWebsitesMock = mocked(getLiveWebsites);
 
-require('../helpers/simple-wappalyzer');
-
-const wappalyzer = jest.fn();
-
-// @ts-ignore
-jest.mock('../helpers/simple-wappalyzer', () => ({
-  wappalyzer
-}));
+jest.mock('../helpers/simple-wappalyzer');
+const wappalyzer = require('../helpers/simple-wappalyzer')
+  .wappalyzer as jest.Mock;
 
 const logSpy = jest.spyOn(console, 'log');
 const errSpy = jest.spyOn(console, 'error');

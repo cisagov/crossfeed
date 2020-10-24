@@ -5,7 +5,11 @@ Object.keys(technologies).forEach((technology) => {
     describe(technology, () => {
       technologies[technology].examples.forEach((example, i) => {
         test(`example: ${example.name || i + 1}`, () => {
-          const { headers = {}, url = "https://www.cisa.gov", html = '' } = example;
+          const {
+            headers = {},
+            url = 'https://www.cisa.gov',
+            html = ''
+          } = example;
           const results = wappalyzer({
             url: url,
             data: html,
