@@ -227,3 +227,8 @@ variable es_instance_count {
   type    = number
   default = 1
 }
+
+variable es_instance_volume_size {
+  type    = number
+  default = 100
+}
