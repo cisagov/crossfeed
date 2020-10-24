@@ -2,30 +2,27 @@ import classes from './Scans.module.scss';
 import React, { useCallback, useState } from 'react';
 import {
   Button,
-  TextInput,
-  Label,
-  Dropdown,
   ModalContainer,
   Overlay,
-  Modal,
-  Form,
-  Checkbox
+  Modal
 } from '@trussworks/react-uswds';
 import { Table, ImportExport } from 'components';
-import { Column } from 'react-table';
+import { Column, CellProps } from 'react-table';
 import { Scan, Organization, ScanSchema } from 'types';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaEdit } from 'react-icons/fa';
 import { FaPlayCircle } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import MultiSelect from './MultiSelect';
+import { Link } from 'react-router-dom';
+import { setFrequency } from 'pages/Scan/Scan';
+import { ScanForm, ScanFormValues } from 'components/ScanForm';
 
 interface Errors extends Partial<Scan> {
   global?: string;
   scheduler?: string;
 }
 
-interface OrganizationOption {
+export interface OrganizationOption {
   label: string;
   value: string;
 }
@@ -46,7 +43,7 @@ const ScansView: React.FC = () => {
       id: 'run',
       Cell: ({ row }: { row: { index: number } }) => (
         <div
-          style={{textAlign: 'center'}}
+          style={{ textAlign: 'center' }}
           onClick={() => {
             runScan(row.index);
           }}
@@ -95,7 +92,7 @@ const ScansView: React.FC = () => {
           unit = 'day';
         }
         if (isSingleScan) {
-          return 'Single Scan'
+          return 'Single Scan';
         }
         return `Every ${val} ${unit}${val === 1 ? '' : 's'}`;
       },
@@ -113,6 +110,16 @@ const ScansView: React.FC = () => {
       },
       width: 200,
       id: 'lastRun',
+      disableFilters: true
+    },
+    {
+      Header: 'Edit',
+      id: 'edit',
+      Cell: ({ row }: CellProps<Scan>) => (
+        <Link to={`/scans/${row.original.id}`} style={{ color: 'black' }}>
+          <FaEdit />
+        </Link>
+      ),
       disableFilters: true
     },
     {
@@ -141,15 +148,7 @@ const ScansView: React.FC = () => {
   ];
   const [errors, setErrors] = useState<Errors>({});
 
-  const [values, setValues] = useState<{
-    name: string;
-    organizations: OrganizationOption[];
-    arguments: string;
-    frequency: number;
-    frequencyUnit: string;
-    isGranular: boolean;
-    isSingleScan: boolean;
-  }>({
+  const [values] = useState<ScanFormValues>({
     name: 'censys',
     arguments: '{}',
     organizations: [],
@@ -199,16 +198,11 @@ const ScansView: React.FC = () => {
     }
   };
 
-  const onSubmit: React.FormEventHandler = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (body: ScanFormValues) => {
     try {
       // For now, parse the arguments as JSON. We'll want to add a GUI for this in the future
-      let body: typeof values = Object.assign({}, values);
-      body.arguments = JSON.parse(values.arguments);
-      if (values.isSingleScan) body.frequency = 1;
-      if (values.frequencyUnit === 'minute') body.frequency *= 60;
-      else if (values.frequencyUnit === 'hour') body.frequency *= 60 * 60;
-      else body.frequency *= 60 * 60 * 24;
+      body.arguments = JSON.parse(body.arguments);
+      setFrequency(body);
 
       const scan = await apiPost('/scans/', {
         body: {
@@ -237,17 +231,6 @@ const ScansView: React.FC = () => {
     }
   };
 
-  const onTextChange: React.ChangeEventHandler<
-    HTMLInputElement | HTMLSelectElement
-  > = (e) => onChange(e.target.name, e.target.value);
-
-  const onChange = (name: string, value: any) => {
-    setValues((values) => ({
-      ...values,
-      [name]: value
-    }));
-  };
-
   /**
    * Manually runs a single scan, then immediately invokes the
    * scheduler so the scan is run.
@@ -262,9 +245,7 @@ const ScansView: React.FC = () => {
       setErrors({ ...errors, scheduler: 'Run failed.' });
     }
     await invokeScheduler();
-  }
-
-  const selectedScan = scanSchema[values.name] || {};
+  };
 
   return (
     <>
@@ -274,101 +255,14 @@ const ScansView: React.FC = () => {
       </Button>
       {errors.scheduler && <p className={classes.error}>{errors.scheduler}</p>}
       <h2>Add a scan</h2>
-      <Form onSubmit={onSubmit} className={classes.form}>
-        {errors.global && <p className={classes.error}>{errors.global}</p>}
-        <Label htmlFor="name">Name</Label>
-        <Dropdown
-          required
-          id="name"
-          name="name"
-          className={classes.textField}
-          onChange={onTextChange}
-          value={values.name}
-        >
-          {Object.keys(scanSchema).map((i) => {
-            return (
-              <option key={i} value={i}>
-                {i}
-              </option>
-            );
-          })}
-        </Dropdown>
-        <p>{selectedScan.description}</p>
-        {/* <Label htmlFor="arguments">Arguments</Label>
-        <TextInput
-          required
-          id="arguments"
-          name="arguments"
-          className={classes.textField}
-          type="text"
-          value={values.arguments}
-          onChange={onTextChange}
-        /> */}
-        
-        {(values.name === 'censysIpv4' || values.name === 'webscraper' || !selectedScan.global) && (
-          
-          <Checkbox
-            id="isGranular"
-            label="Limit enabled organizations"
-            name="isGranular"
-            checked={values.isGranular}
-            onChange={(e) => onChange('isGranular', e.target.checked)}
-          />
-        )}
-        {values.isGranular && (
-          <>
-            <Label htmlFor="organizations">Enabled Organizations</Label>
-            <MultiSelect
-              name="organizations"
-              options={organizationOptions}
-              value={values.organizations}
-              onChange={(e) => onChange('organizations', e)}
-            />
-            <br />
-          </>
-        )}
-        <Checkbox
-            id="isSingleScan"
-            label="Run scan once"
-            name="isSingleScan"
-            checked={values.isSingleScan}
-            onChange={(e) => onChange('isSingleScan', e.target.checked)}
-          />
-        {!values.isSingleScan && (
-          <div className="form-group form-inline">
-          <label style={{ marginRight: '10px' }} htmlFor="frequency">
-            Run every
-          </label>
-          <TextInput
-            id="frequency"
-            name="frequency"
-            type="number"
-            style={{
-              display: 'inline-block',
-              width: '150px',
-              marginRight: '15px'
-            }}
-            value={values.frequency}
-            onChange={(e) => {
-              onChange(e.target.name, Number(e.target.value));
-            }}
-          />
-          <Dropdown
-            id="frequencyUnit"
-            name="frequencyUnit"
-            onChange={onTextChange}
-            value={values.frequencyUnit}
-            style={{ display: 'inline-block', width: '150px' }}
-          >
-            <option value="minute">Minute(s)</option>
-            <option value="hour">Hour(s)</option>
-            <option value="day">Day(s)</option>
-          </Dropdown>
-        </div>  
-        )}      
-        <br />       
-        <Button type="submit">Create Scan</Button>
-      </Form>
+      {errors.global && <p className={classes.error}>{errors.global}</p>}
+      <ScanForm
+        organizationOption={organizationOptions}
+        propValues={values}
+        onSubmit={onSubmit}
+        type="create"
+        scanSchema={scanSchema}
+      ></ScanForm>
       <ImportExport<Scan>
         name="scans"
         fieldsToExport={['name', 'arguments', 'frequency']}
