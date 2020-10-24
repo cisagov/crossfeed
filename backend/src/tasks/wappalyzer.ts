@@ -1,15 +1,15 @@
-import * as wappalyzer from 'simple-wappalyzer';
 import axios from 'axios';
 import { CommandOptions } from './ecs-client';
 import { getLiveWebsites, LiveDomain } from './helpers/getLiveWebsites';
 import PQueue from 'p-queue';
+import { wappalyzer } from './helpers/simple-wappalyzer';
 
 const wappalyze = async (domain: LiveDomain): Promise<void> => {
   try {
     const { data, status, headers } = await axios.get(domain.url, {
       validateStatus: () => true
     });
-    const result = await wappalyzer({ url: domain.url, data, status, headers });
+    const result = await wappalyzer({ url: domain.url, data, headers });
     if (result.length > 0) {
       domain.service.wappalyzerResults = result;
       await domain.service.save();
