@@ -4,7 +4,8 @@ import {
   Domain,
   connectToDatabase,
   Service,
-  Vulnerability
+  Vulnerability,
+  Webpage
 } from '../../models';
 
 jest.mock('child_process', () => ({
@@ -157,7 +158,9 @@ describe('cve', () => {
     const vulnerability = await Vulnerability.create({
       domain,
       cve: 'CVE-123',
-      lastSeen: new Date(new Date().setDate(new Date().getDate() - 7)),
+      lastSeen: new Date(
+        new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 7)
+      ),
       title: '123',
       description: '123'
     }).save();
@@ -189,7 +192,7 @@ describe('cve', () => {
     const vulnerability = await Vulnerability.create({
       domain,
       cve: 'CVE-123',
-      lastSeen: new Date(),
+      lastSeen: new Date(Date.now()),
       title: '123',
       description: '123'
     }).save();
@@ -221,7 +224,7 @@ describe('cve', () => {
     const vulnerability = await Vulnerability.create({
       domain,
       cve: 'CVE-123',
-      lastSeen: new Date(),
+      lastSeen: new Date(Date.now()),
       title: '123',
       description: '123',
       state: 'closed',
@@ -255,7 +258,7 @@ describe('cve', () => {
     const vulnerability = await Vulnerability.create({
       domain,
       cve: 'CVE-123',
-      lastSeen: new Date(),
+      lastSeen: new Date(Date.now()),
       title: '123',
       description: '123',
       state: 'closed',
@@ -289,7 +292,7 @@ describe('cve', () => {
     const vulnerability = await Vulnerability.create({
       domain,
       cve: 'CVE-2019-10866',
-      lastSeen: new Date(),
+      lastSeen: new Date(Date.now()),
       title: '123',
       needsPopulation: true
     }).save();
@@ -312,5 +315,85 @@ describe('cve', () => {
         tags: ['Patch', 'Vendor Advisory']
       }
     ]);
+  });
+  test('does not populate non-needsPopulation vulnerability', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const vulnerability = await Vulnerability.create({
+      domain,
+      lastSeen: new Date(Date.now()),
+      title: '123',
+      needsPopulation: false
+    }).save();
+    await cve({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vuln = await Vulnerability.findOne({
+      id: vulnerability.id
+    });
+    expect(vuln?.description).toBeFalsy();
+    expect(vuln?.references).toEqual([]);
+  });
+  describe('identify unexpected webpages', () => {
+    test('basic test', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const name = 'test-' + Math.random();
+      const domain = await Domain.create({
+        name,
+        organization
+      }).save();
+      await Webpage.create({
+        domain,
+        url: 'http://url-ok',
+        status: 200
+      }).save();
+      await Webpage.create({
+        domain,
+        url: 'http://url-not-ok',
+        status: 500
+      }).save();
+      await Webpage.create({
+        domain,
+        url: 'http://url-not-ok-2',
+        status: 503
+      }).save();
+      await cve({
+        organizationId: organization.id,
+        scanId: 'scanId',
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId'
+      });
+
+      const vulns = await Vulnerability.find({
+        domain: { id: domain.id }
+      });
+      expect(
+        vulns.map((e) => ({
+          ...e,
+          createdAt: !!e.createdAt,
+          updatedAt: !!e.updatedAt,
+          lastSeen: !!e.lastSeen,
+          id: !!e.id
+        }))
+      ).toMatchSnapshot();
+    });
   });
 });
