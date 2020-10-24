@@ -30,7 +30,6 @@
     "portscanner": "^2.2.0",
     "serverless": "^2.3.0",
     "serverless-http": "^2.6.0",
-    "simple-wappalyzer": "^1.1.16",
     "tough-cookie": "^3.0.1",
     "typeorm": "^0.2.26",
     "uuid": "^8.3.0",
