@@ -78,12 +78,12 @@ jobs:
       - name: Run site locally
         run: |
           cp dev.env.example .env
-          docker-compose up --build -d
+          docker-compose up db --build -d
           npm install -g wait-port
-          wait-port -t 3000 5432 9200 9300
+          wait-port -t 5432
         working-directory: ./
       - name: Sync database
-        run: docker-compose exec -T backend npx sls invoke local --stage dev -f syncdb -d dangerouslyforce
+        run: docker-compose exec -T backend npx sls invoke local -f syncdb -d dangerouslyforce
         working-directory: ./
       - name: Test
         run: npm run test -- --collectCoverage
