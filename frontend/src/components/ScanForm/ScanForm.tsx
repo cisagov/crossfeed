@@ -236,7 +236,7 @@ export const ScanForm: React.FC<{
       <br />
       {type === 'edit' && (
         <Link to={`/scans`}>
-          <Button type="button"> Return to Scans</Button>
+          <Button type="button" outline> Return to Scans</Button>
         </Link>
       )}
       {type === 'edit' && <Button type="submit">Save Changes</Button>}
