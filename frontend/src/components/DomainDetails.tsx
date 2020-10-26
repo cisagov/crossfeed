@@ -221,8 +221,9 @@ export const DomainDetails: React.FC<Props> = (props) => {
       ? 'https://'
       : 'http://') + domain.name;
 
-  domain.webpages.sort((a, b) => (a.url > b.url ? 1 : -1));
-  const webpageTree = generateWebpageTree(domain.webpages);
+  const { webpages = [] } = domain;
+  webpages.sort((a, b) => (a.url > b.url ? 1 : -1));
+  const webpageTree = generateWebpageTree(webpages);
   const webpageList = generateWebpageList(webpageTree);
 
   return (
@@ -388,7 +389,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
             })}
           </div>
         )}
-        {domain.webpages.length > 0 && (
+        {domain.webpages?.length > 0 && (
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Site Map</h4>
             {webpageList}

@@ -19,6 +19,7 @@ import {
   AuthLogin,
   AuthCreateAccount,
   Scans,
+  Scan,
   Logs,
   Risk,
   Organizations,
@@ -103,12 +104,12 @@ const App: React.FC = () => (
                 component={AuthCreateAccount}
               />
               <Route exact path="/terms" component={TermsOfUse} />
-
               <RouteGuard path="/domain/:domainId" component={Domain} />
               <RouteGuard path="/search" component={SearchPage} />
               <RouteGuard path="/vulnerabilities" component={Vulnerabilities} />
               <RouteGuard path="/risk" component={Risk} />
               <RouteGuard path="/alerts" component={Alerts} />
+              <RouteGuard path="/scans/:scanId" component={Scan} />
               <RouteGuard path="/scans" component={Scans} />
               <RouteGuard path="/organizations" component={Organizations} />
               <RouteGuard path="/organization" component={Organization} />
