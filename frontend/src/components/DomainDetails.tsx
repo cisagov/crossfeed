@@ -389,7 +389,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
             })}
           </div>
         )}
-        {domain.webpages.length > 0 && (
+        {domain.webpages?.length > 0 && (
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Site Map</h4>
             {webpageList}
