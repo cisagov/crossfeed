@@ -271,7 +271,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   });
   await identifyPassiveCVEsFromCPEs(allDomains);
 
-  await identifyUnexpectedWebpages(allDomains);
+  // await identifyUnexpectedWebpages(allDomains);
 
   await adjustVulnerabilities('open');
   await adjustVulnerabilities('closed');
