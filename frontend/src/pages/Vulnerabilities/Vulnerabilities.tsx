@@ -424,9 +424,7 @@ export const Vulnerabilities: React.FC = () => {
         fetchData={fetchVulnerabilities}
         renderExpanded={renderExpandedVulnerability}
         tableRef={tableRef}
-        initialFilterBy={[
-          { id: 'state', value: showAll ? 'open (exploitable)' : 'open' }
-        ]}
+        initialFilterBy={[{ id: 'state', value: 'open' }]}
       />
       <Export<Vulnerability>
         name="vulnerabilities"

@@ -83,8 +83,8 @@ jobs:
           wait-port -t 3000 5432 9200 9300
         working-directory: ./
       - name: Sync database
-        run: docker-compose exec -T backend npx sls invoke local -f syncdb -d dangerouslyforce
-        working-directory: ./
+        run: npm run syncdb
+        working-directory: ./backend
       - name: Test
         run: npm run test -- --collectCoverage
   test_python:

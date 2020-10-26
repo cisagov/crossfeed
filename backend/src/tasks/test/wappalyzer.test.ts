@@ -1,19 +1,18 @@
 import { mocked } from 'ts-jest/utils';
 import { getLiveWebsites, LiveDomain } from '../helpers/getLiveWebsites';
-import * as wappalyzer from 'simple-wappalyzer';
 import { Domain, Service, connectToDatabase, Organization } from '../../models';
 import { CommandOptions } from '../ecs-client';
 import { handler } from '../wappalyzer';
 import * as nock from 'nock';
 
-const wappalyzer = require('simple-wappalyzer');
 const axios = require('axios');
 
 jest.mock('../helpers/getLiveWebsites');
 const getLiveWebsitesMock = mocked(getLiveWebsites);
 
-// @ts-ignore
-jest.mock('simple-wappalyzer', () => jest.fn());
+jest.mock('../helpers/simple-wappalyzer');
+const wappalyzer = require('../helpers/simple-wappalyzer')
+  .wappalyzer as jest.Mock;
 
 const logSpy = jest.spyOn(console, 'log');
 const errSpy = jest.spyOn(console, 'error');

@@ -18,8 +18,10 @@
     "got": "^11.7.0",
     "helmet": "^4.1.1",
     "http-proxy-middleware": "^1.0.5",
+    "jsdom": "^16.4.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.10.1",
+    "lodash": "^4.17.19",
     "nodemailer": "^6.4.11",
     "openid-client": "^4.1.1",
     "p-queue": "^6.6.1",
@@ -28,9 +30,11 @@
     "portscanner": "^2.2.0",
     "serverless": "^2.3.0",
     "serverless-http": "^2.6.0",
-    "simple-wappalyzer": "^1.1.14",
+    "tough-cookie": "^3.0.1",
     "typeorm": "^0.2.26",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "wappalyzer": "^6.3.11",
+    "wappalyzer-core": "^6.3.11"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.62",
@@ -75,7 +79,7 @@
     "build-worker": "./tools/build-worker.sh",
     "deploy-worker-staging": "./tools/deploy-worker.sh",
     "deploy-worker-prod": "./tools/deploy-worker.sh crossfeed-prod-worker",
-    "syncdb": "docker-compose exec backend npx sls invoke local -f syncdb"
+    "syncdb": "ts-node src/tools/run-syncdb.ts"
   },
   "author": "",
   "license": "ISC"
