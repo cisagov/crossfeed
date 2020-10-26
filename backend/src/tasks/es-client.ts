@@ -51,6 +51,10 @@ class ESClient {
       vulnerabilities: {
         type: 'nested'
       },
+      webpage_body: {
+        type: 'text',
+        term_vector: 'yes'
+      },
       parent_join: {
         type: 'join',
         relations: {
