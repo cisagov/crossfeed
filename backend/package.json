@@ -23,8 +23,8 @@
     "jsdom": "^16.4.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.10.1",
-    "node-file-cache": "^1.0.2",
     "lodash": "^4.17.19",
+    "node-file-cache": "^1.0.2",
     "nodemailer": "^6.4.11",
     "openid-client": "^4.1.1",
     "p-queue": "^6.6.1",
@@ -37,9 +37,9 @@
     "tough-cookie": "^3.0.1",
     "typeorm": "^0.2.26",
     "uuid": "^8.3.0",
-    "whois": "^2.13.1"
     "wappalyzer": "^6.3.11",
-    "wappalyzer-core": "^6.3.11"
+    "wappalyzer-core": "^6.3.11",
+    "whois": "^2.13.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.62",
