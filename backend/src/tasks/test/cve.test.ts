@@ -347,53 +347,53 @@ describe('cve', () => {
     expect(vuln?.description).toBeFalsy();
     expect(vuln?.references).toEqual([]);
   });
-  describe('identify unexpected webpages', () => {
-    test('basic test', async () => {
-      const organization = await Organization.create({
-        name: 'test-' + Math.random(),
-        rootDomains: ['test-' + Math.random()],
-        ipBlocks: [],
-        isPassive: false
-      }).save();
-      const name = 'test-' + Math.random();
-      const domain = await Domain.create({
-        name,
-        organization
-      }).save();
-      await Webpage.create({
-        domain,
-        url: 'http://url-ok',
-        status: 200
-      }).save();
-      await Webpage.create({
-        domain,
-        url: 'http://url-not-ok',
-        status: 500
-      }).save();
-      await Webpage.create({
-        domain,
-        url: 'http://url-not-ok-2',
-        status: 503
-      }).save();
-      await cve({
-        organizationId: organization.id,
-        scanId: 'scanId',
-        scanName: 'scanName',
-        scanTaskId: 'scanTaskId'
-      });
+  // describe('identify unexpected webpages', () => {
+  //   test('basic test', async () => {
+  //     const organization = await Organization.create({
+  //       name: 'test-' + Math.random(),
+  //       rootDomains: ['test-' + Math.random()],
+  //       ipBlocks: [],
+  //       isPassive: false
+  //     }).save();
+  //     const name = 'test-' + Math.random();
+  //     const domain = await Domain.create({
+  //       name,
+  //       organization
+  //     }).save();
+  //     await Webpage.create({
+  //       domain,
+  //       url: 'http://url-ok',
+  //       status: 200
+  //     }).save();
+  //     await Webpage.create({
+  //       domain,
+  //       url: 'http://url-not-ok',
+  //       status: 500
+  //     }).save();
+  //     await Webpage.create({
+  //       domain,
+  //       url: 'http://url-not-ok-2',
+  //       status: 503
+  //     }).save();
+  //     await cve({
+  //       organizationId: organization.id,
+  //       scanId: 'scanId',
+  //       scanName: 'scanName',
+  //       scanTaskId: 'scanTaskId'
+  //     });
 
-      const vulns = await Vulnerability.find({
-        domain: { id: domain.id }
-      });
-      expect(
-        vulns.map((e) => ({
-          ...e,
-          createdAt: !!e.createdAt,
-          updatedAt: !!e.updatedAt,
-          lastSeen: !!e.lastSeen,
-          id: !!e.id
-        }))
-      ).toMatchSnapshot();
-    });
-  });
+  //     const vulns = await Vulnerability.find({
+  //       domain: { id: domain.id }
+  //     });
+  //     expect(
+  //       vulns.map((e) => ({
+  //         ...e,
+  //         createdAt: !!e.createdAt,
+  //         updatedAt: !!e.updatedAt,
+  //         lastSeen: !!e.lastSeen,
+  //         id: !!e.id
+  //       }))
+  //     ).toMatchSnapshot();
+  //   });
+  // });
 });
