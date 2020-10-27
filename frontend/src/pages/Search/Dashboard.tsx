@@ -30,6 +30,7 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
     autocompletedResults,
     facets,
     clearFilters,
+    saveSearch,
     sortDirection,
     sortField,
     setSort,
@@ -55,8 +56,10 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
         removeFilter={removeFilter}
         filters={filters}
         facets={facets}
+        saveSearch={
+          filters.length > 0 || searchTerm ? () => saveSearch([]) : undefined
+        }
       />
-
       <div className={classes.contentWrapper}>
         <SearchBar
           value={searchTerm}
@@ -148,6 +151,7 @@ export const Dashboard = withSearch(
     setSearchTerm,
     autocompletedResults,
     clearFilters,
+    saveSearch,
     sortDirection,
     sortField,
     setSort,
@@ -167,6 +171,7 @@ export const Dashboard = withSearch(
     setSearchTerm,
     autocompletedResults,
     clearFilters,
+    saveSearch,
     sortDirection,
     sortField,
     setSort,

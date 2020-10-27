@@ -89,7 +89,8 @@ const useStyles = makeStyles((theme) => ({
       border: 'none',
       color: '#71767A',
       background: 'none',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      textDecoration: 'underline'
     },
     '& *:focus': {
       outline: 'none !important'
