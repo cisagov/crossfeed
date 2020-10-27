@@ -94,7 +94,7 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
         <Paper classes={{ root: classes.pagination }}>
           <span>
             <strong>
-              {(current - 1) * resultsPerPage + 1} -{' '}
+              {totalResults === 0 ? 0 : (current - 1) * resultsPerPage + 1} -{' '}
               {Math.min(
                 (current - 1) * resultsPerPage + resultsPerPage,
                 totalResults

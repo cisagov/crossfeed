@@ -61,6 +61,12 @@ export const FilterDrawer: React.FC<Props> = (props) => {
     ? facets['vulnerabilities.severity'][0].data
     : [];
 
+  // Always show all severities
+  for (const value of ['Critical', 'High', 'Medium', 'Low']) {
+    if (!severityFacet.find((severity) => value === severity.value))
+      severityFacet.push({ value, count: 0 });
+  }
+
   return (
     <Wrapper>
       <div className={classes.header}>
