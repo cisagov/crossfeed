@@ -7,13 +7,24 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Typography
+  Typography,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  FormGroup
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { withSearch } from '@elastic/react-search-ui';
 import { FilterDrawer } from './FilterDrawer';
 import { ContextType } from './SearchProvider';
 import { SortBar } from './SortBar';
+import {
+  Button,
+  Overlay,
+  Modal,
+  ModalContainer
+} from '@trussworks/react-uswds';
+import { AddCircleOutline } from '@material-ui/icons';
 
 export const DashboardUI: React.FC<ContextType> = (props) => {
   const {
@@ -30,7 +41,6 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
     autocompletedResults,
     facets,
     clearFilters,
-    saveSearch,
     sortDirection,
     sortField,
     setSort,
@@ -40,6 +50,7 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
   const classes = useStyles();
   const [selectedDomain, setSelectedDomain] = useState('');
   const [resultsScrolled, setResultsScrolled] = useState(false);
+  const [showSaveSearch, setShowSaveSearch] = useState<Boolean>(false);
 
   const handleResultScroll = (e: React.UIEvent<HTMLElement>) => {
     if (e.currentTarget.scrollTop > 0) {
@@ -60,7 +71,7 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
       />
       <div className={classes.contentWrapper}>
         <SearchBar
-          value={searchTerm}
+          initialValue={searchTerm}
           onChange={(value) =>
             setSearchTerm(value, {
               shouldClearFilters: false,
@@ -76,7 +87,9 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
           setSort={setSort}
           isFixed={resultsScrolled}
           saveSearch={
-            filters.length > 0 || searchTerm ? () => saveSearch([]) : undefined
+            filters.length > 0 || searchTerm
+              ? () => setShowSaveSearch(true)
+              : undefined
           }
         />
         <div className={classes.content}>
@@ -135,6 +148,79 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
           </FormControl>
         </Paper>
       </div>
+
+      {showSaveSearch && (
+        <div>
+          <Overlay />
+          <ModalContainer>
+            <Modal
+              className={classes.saveSearchModal}
+              actions={
+                <>
+                  <Button
+                    outline
+                    type="button"
+                    onClick={() => {
+                      setShowSaveSearch(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      // deleteRow(selectedRow);
+                      setShowSaveSearch(false);
+                    }}
+                  >
+                    Save
+                  </Button>
+                </>
+              }
+              title={<h2>Save Search</h2>}
+            >
+              <FormGroup>
+                <TextField
+                  style={{ width: '100%' }}
+                  id="standard-basic"
+                  label="Name your search"
+                  variant="outlined"
+                />
+                <p>When a new result is found:</p>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // checked={gilad}
+                      // onChange={handleChange}
+                      name="email"
+                    />
+                  }
+                  label="Email me"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // checked={jason}
+                      // onChange={handleChange}
+                      name="create"
+                    />
+                  }
+                  label="Create a vulnerability"
+                />
+                <h3>Collaborators</h3>
+                <p>
+                  Collaborators can view vulnerabilities, and domains within
+                  this search. Adding a team will make all members
+                  collaborators.
+                </p>
+                <button className={classes.addButton}>
+                  <AddCircleOutline></AddCircleOutline> ADD
+                </button>
+              </FormGroup>
+            </Modal>
+          </ModalContainer>
+        </div>
+      )}
     </div>
   );
 };
@@ -248,5 +334,13 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'center'
+  },
+  saveSearchModal: {},
+  addButton: {
+    outline: 'none',
+    border: 'none',
+    color: '#71767A',
+    background: 'none',
+    cursor: 'pointer'
   }
 }));
