@@ -13,12 +13,12 @@ interface Props {
   sortField: ContextType['sortField'];
   sortDirection?: ContextType['sortDirection'];
   setSort: ContextType['setSort'];
-  clearFilters?(): void;
+  saveSearch?(): void;
   isFixed: boolean;
 }
 
 export const SortBar: React.FC<Props> = (props) => {
-  const { sortField, sortDirection, setSort, clearFilters } = props;
+  const { sortField, sortDirection, setSort, saveSearch } = props;
   const classes = useStyles(props);
 
   const toggleDirection = () => {
@@ -64,9 +64,7 @@ export const SortBar: React.FC<Props> = (props) => {
         </FormControl>
       </div>
       <div>
-        {clearFilters && (
-          <button onClick={clearFilters}>Clear All Filters</button>
-        )}
+        {saveSearch && <button onClick={saveSearch}>Save Search</button>}
       </div>
     </div>
   );

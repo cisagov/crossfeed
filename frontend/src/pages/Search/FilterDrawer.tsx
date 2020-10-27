@@ -17,7 +17,7 @@ interface Props {
   removeFilter: ContextType['removeFilter'];
   filters: ContextType['filters'];
   facets: ContextType['facets'];
-  saveSearch: ContextType['saveSearch'];
+  clearFilters: ContextType['clearFilters'];
 }
 
 const FiltersApplied: React.FC = () => {
@@ -31,7 +31,7 @@ const FiltersApplied: React.FC = () => {
 };
 
 export const FilterDrawer: React.FC<Props> = (props) => {
-  const { filters, addFilter, removeFilter, facets, saveSearch } = props;
+  const { filters, addFilter, removeFilter, facets, clearFilters } = props;
   const classes = useStyles();
 
   const filtersByColumn = useMemo(
@@ -74,9 +74,9 @@ export const FilterDrawer: React.FC<Props> = (props) => {
         <div className={classes.filter}>
           <FaFilter /> <h3>Filter</h3>
         </div>
-        {saveSearch && (
+        {clearFilters && (
           <div>
-            <button onClick={saveSearch}>Save Search</button>
+            <button onClick={clearFilters}>Clear All Filters</button>
           </div>
         )}
       </div>

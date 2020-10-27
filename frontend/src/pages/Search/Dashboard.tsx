@@ -56,9 +56,7 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
         removeFilter={removeFilter}
         filters={filters}
         facets={facets}
-        saveSearch={
-          filters.length > 0 || searchTerm ? () => saveSearch([]) : undefined
-        }
+        clearFilters={filters.length > 0 ? () => clearFilters([]) : undefined}
       />
       <div className={classes.contentWrapper}>
         <SearchBar
@@ -77,7 +75,9 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
           sortDirection={sortDirection}
           setSort={setSort}
           isFixed={resultsScrolled}
-          clearFilters={filters.length > 0 ? () => clearFilters([]) : undefined}
+          saveSearch={
+            filters.length > 0 || searchTerm ? () => saveSearch([]) : undefined
+          }
         />
         <div className={classes.content}>
           <div className={classes.panel} onScroll={handleResultScroll}>
