@@ -110,11 +110,17 @@ export const DomainDetails: React.FC<Props> = (props) => {
     }
     ret.push({
       label: 'First Seen',
-      value: `${differenceInCalendarDays(parseISO(domain.createdAt), Date.now())} ago`
+      value: `${differenceInCalendarDays(
+        Date.now(),
+        parseISO(domain.createdAt)
+      )} ago`
     });
     ret.push({
       label: 'Last Seen',
-      value: `${differenceInCalendarDays(parseISO(domain.updatedAt), Date.now())} ago`
+      value: `${differenceInCalendarDays(
+        Date.now(),
+        parseISO(domain.updatedAt)
+      )} ago`
     });
     if (domain.country) {
       ret.push({
@@ -190,7 +196,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
           const page = tree[key] as Webpage;
           const parsed = new URL(page.url);
           const split = parsed.pathname
-            .replace(/\/$/, "") // Remove trailing slash
+            .replace(/\/$/, '') // Remove trailing slash
             .split('/');
           return (
             <ListItem
@@ -284,7 +290,10 @@ export const DomainDetails: React.FC<Props> = (props) => {
                   </Typography>
                   <Typography className={classes.vulnDescription}>
                     {vuln.createdAt
-                      ? `${differenceInCalendarDays(parseISO(vuln.createdAt), Date.now())} days ago`
+                      ? `${differenceInCalendarDays(
+                          Date.now(),
+                          parseISO(vuln.createdAt)
+                        )} days ago`
                       : ''}
                   </Typography>
                 </AccordionSummary>
@@ -357,10 +366,12 @@ export const DomainDetails: React.FC<Props> = (props) => {
                       {products}
                     </Typography>
                     <Typography className={classes.lastSeen}>
-                      {service.lastSeen ?
-                      `${differenceInCalendarDays(parseISO(service.lastSeen), Date.now())} days ago`
-                      : ''
-                    }
+                      {service.lastSeen
+                        ? `${differenceInCalendarDays(
+                            Date.now(),
+                            parseISO(service.lastSeen)
+                          )} days ago`
+                        : ''}
                     </Typography>
                   </AccordionSummary>
                   {service.products.length > 0 && (
