@@ -37,8 +37,9 @@ export const FilterTags: React.FC<Props> = (props) => {
 
   return (
     <div>
-      {filtersByColumn.map((filter) => (
+      {filtersByColumn.map((filter, idx) => (
         <Chip
+          key={idx}
           color="primary"
           classes={{ root: classes.chip }}
           label={
