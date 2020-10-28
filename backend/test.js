@@ -12,8 +12,8 @@ const organizations = Papa.parse(fs.readFileSync(ORG_EXPORT_PATH, 'utf8'), { hea
 const rootDomains = organizations.map(e => e.rootDomains.split(",")).flat().filter(e => !e.endsWith(".gov") && !e.match(/state\...\.us$/));
 const results = [];
 const expirationDates = [];
-const queue = new PQueue({ concurrency: 10 });
-["hindscountyms.com"].forEach((domain, i) => queue.add(async () => {
+const queue = new PQueue({ concurrency: 2 });
+rootDomains.forEach((domain, i) => queue.add(async () => {
     console.log(domain, i, rootDomains.length);
     let result;
     if (cache.get(domain) && cache.get(domain).indexOf("Rate Limit") === -1) {
@@ -22,7 +22,16 @@ const queue = new PQueue({ concurrency: 10 });
     else {
         if (cache.get(domain)?.indexOf("Rate Limit") === -1) { return; }
         console.warn('no cache');
-        result = await new Promise((resolve, reject) => whois.lookup(domain, (err, data) => err ? reject(err) : resolve(data)));
+        let opts = {};
+        // if (domain.endsWith(".org")) {
+        //     opts = { server: "whois.pir.org" };
+        // }
+        try {
+        result = await new Promise((resolve, reject) => whois.lookup(domain, opts, (err, data) => err ? reject(err) : resolve(data)));
+        } catch (e) {
+            console.error(e);
+            return;
+        }
         await new Promise(e => setTimeout(e, 10000));
         cache.set(domain, result, {life: 99999999999999});
     }
