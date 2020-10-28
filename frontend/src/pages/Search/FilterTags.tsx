@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ContextType } from './SearchProvider';
+import { ContextType } from '../../context/SearchProvider';
 import { Chip, makeStyles } from '@material-ui/core';
 
 interface Props {
@@ -43,7 +43,7 @@ export const FilterTags: React.FC<Props> = (props) => {
           classes={{ root: classes.chip }}
           label={
             <>
-            <strong>{filter.label}:</strong> {filter.value}
+              <strong>{filter.label}:</strong> {filter.value}
             </>
           }
           onDelete={() => {

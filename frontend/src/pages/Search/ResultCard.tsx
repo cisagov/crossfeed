@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'classnames';
 import { makeStyles, Paper } from '@material-ui/core';
-import { Result } from './SearchProvider';
+import { Result } from '../../context/SearchProvider';
 import { parseISO, formatDistanceToNow } from 'date-fns';
 import { sanitize } from 'dompurify';
 
@@ -137,13 +137,13 @@ export const ResultCard: React.FC<Props> = (props) => {
     data.push({
       label: `matching webpage${hits.length > 1 ? 's' : ''}`,
       count: hits.length,
-      value: hits.map((e) => (
-        <div>
+      value: hits.map((e, idx) => (
+        <React.Fragment key={idx}>
           <small>
             <strong>{e._source.webpage_url}</strong>
             <br />
-            {e.highlight?.webpage_body?.map((body) => (
-              <div>
+            {e.highlight?.webpage_body?.map((body, idx) => (
+              <div key={idx}>
                 <code
                   dangerouslySetInnerHTML={{
                     __html: sanitize(body, { ALLOWED_TAGS: ['em'] })
@@ -152,13 +152,18 @@ export const ResultCard: React.FC<Props> = (props) => {
               </div>
             ))}
           </small>
-        </div>
+        </React.Fragment>
       ))
     });
   }
 
   return (
-    <Paper elevation={0} classes={{ root: classes.root }} aria-label="view domain details" onClick={onClick}>
+    <Paper
+      elevation={0}
+      classes={{ root: classes.root }}
+      aria-label="view domain details"
+      onClick={onClick}
+    >
       <div className={classes.inner}>
         <button className={classes.domainRow}>
           <h4>{name.raw}</h4>

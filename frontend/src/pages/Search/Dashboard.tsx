@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SearchBar, DomainDetails } from 'components';
+import { DomainDetails, Subnav } from 'components';
 import { ResultCard } from './ResultCard';
 import {
   makeStyles,
@@ -12,8 +12,9 @@ import {
 import { Pagination } from '@material-ui/lab';
 import { withSearch } from '@elastic/react-search-ui';
 import { FilterDrawer } from './FilterDrawer';
-import { ContextType } from './SearchProvider';
+import { ContextType } from '../../context/SearchProvider';
 import { SortBar } from './SortBar';
+import { FilterTags } from './FilterTags';
 
 export const DashboardUI: React.FC<ContextType> = (props) => {
   const {
@@ -21,13 +22,10 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
     setCurrent,
     resultsPerPage,
     setResultsPerPage,
-    searchTerm,
-    setSearchTerm,
     filters,
     addFilter,
     removeFilter,
     results,
-    autocompletedResults,
     facets,
     clearFilters,
     sortDirection,
@@ -58,17 +56,14 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
       />
 
       <div className={classes.contentWrapper}>
-        <SearchBar
-          value={searchTerm}
-          onChange={(value) =>
-            setSearchTerm(value, {
-              shouldClearFilters: false,
-              autocompleteResults: true
-            })
-          }
-          autocompletedResults={autocompletedResults}
-          onSelectResult={setSelectedDomain}
-        />
+        <Subnav
+          items={[
+            { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' },
+            { title: 'Domains', path: '/inventory/search' }
+          ]}
+        >
+          <FilterTags filters={filters} removeFilter={removeFilter} />
+        </Subnav>
         <SortBar
           sortField={sortField}
           sortDirection={sortDirection}

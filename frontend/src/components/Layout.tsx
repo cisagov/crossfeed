@@ -33,7 +33,7 @@ export const Layout: React.FC = ({ children }) => {
         <GovBanner />
         <Header />
 
-        {pathname === '/search' ? (
+        {pathname === '/inventory/search' ? (
           children
         ) : (
           <div className={classes.content}>{children}</div>
