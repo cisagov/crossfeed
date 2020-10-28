@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
     flexFlow: 'row nowrap',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '0.2rem 1rem',
+    padding: '0.2rem 1rem 0.5rem 1rem',
     color: '#71767A',
     margin: '0.5rem 0',
     boxShadow: ({ isFixed }: Props) =>
