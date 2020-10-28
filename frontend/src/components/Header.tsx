@@ -103,10 +103,8 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
         path: '/organizations',
         users: GLOBAL_ADMIN
       },
-
-      { title: 'Scans', path: '/scans', users: GLOBAL_ADMIN },
       { title: 'Manage Users', path: '/users', users: GLOBAL_ADMIN }
-    ]
+    ].filter(({ users }) => (users & userLevel) > 0)
   };
 
   const desktopNavItems: JSX.Element[] = navItems.map((item) => (

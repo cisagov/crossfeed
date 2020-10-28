@@ -90,6 +90,7 @@ export const NavItem: React.FC<Props> = (props) => {
           anchorEl={anchor}
           onClose={onCloseMenu}
           getContentAnchorEl={null}
+          keepMounted
           // anchorOrigin={{
           //   vertical: 'bottom',
           //   horizontal: 'center'
