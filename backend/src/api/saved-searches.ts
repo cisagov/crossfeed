@@ -1,4 +1,4 @@
-import { IsString, isUUID, IsObject } from 'class-validator';
+import { IsString, isUUID, IsObject, IsArray, IsNumber } from 'class-validator';
 import { connectToDatabase, SavedSearch } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
@@ -7,7 +7,7 @@ import {
   getOrgMemberships,
   isGlobalViewAdmin
 } from './auth';
-import { In } from 'typeorm';
+import { FindManyOptions, In } from 'typeorm';
 
 export const del = wrapHandler(async (event) => {
   const id = event.pathParameters?.searchId;
@@ -28,11 +28,19 @@ export const del = wrapHandler(async (event) => {
 
 class NewSavedSearch {
   @IsString()
+  name: string;
+
+  @IsNumber()
+  count: number;
+
+  @IsString()
   searchTerm: string;
 
-  @IsObject()
+  @IsArray()
   filters: { field: string; values: any[]; type: string }[];
 }
+
+const PAGE_SIZE = 20;
 
 export const update = wrapHandler(async (event) => {
   const id = event.pathParameters?.searchId;
@@ -91,13 +99,26 @@ export const list = wrapHandler(async (event) => {
   } else {
     where = { id: In(getOrgMemberships(event)) };
   }
-  const result = await SavedSearch.find({
-    where
-  });
+
+  const pageSize = event.pathParameters?.pageSize
+    ? parseInt(event.pathParameters.pageSize)
+    : PAGE_SIZE;
+  const page = event.pathParameters?.page
+    ? parseInt(event.pathParameters?.page)
+    : 1;
+
+  const result = await SavedSearch.findAndCount({
+    where,
+    take: pageSize,
+    skip: pageSize * (page - 1)
+  } as FindManyOptions);
 
   return {
     statusCode: 200,
-    body: JSON.stringify(result)
+    body: JSON.stringify({
+      result: result[0],
+      count: result[1]
+    })
   };
 });
 

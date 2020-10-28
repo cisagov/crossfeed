@@ -46,8 +46,8 @@ export const Users: React.FC = () => {
       accessor: ({ roles }) =>
         roles &&
         roles
-          .filter(role => role.approved)
-          .map(role => role.organization.name)
+          .filter((role) => role.approved)
+          .map((role) => role.organization.name)
           .join(', '),
       id: 'organizations',
       width: 200,
@@ -126,7 +126,7 @@ export const Users: React.FC = () => {
     try {
       let row = users[index];
       await apiDelete(`/users/${row.id}`);
-      setUsers(users.filter(user => user.id !== row.id));
+      setUsers(users.filter((user) => user.id !== row.id));
     } catch (e) {
       setErrors({
         global:
@@ -136,7 +136,7 @@ export const Users: React.FC = () => {
     }
   };
 
-  const onSubmit: React.FormEventHandler = async e => {
+  const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
     try {
       let body = {
@@ -162,17 +162,17 @@ export const Users: React.FC = () => {
 
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
-  > = e => onChange(e.target.name, e.target.value);
+  > = (e) => onChange(e.target.name, e.target.value);
 
   const onChange = (name: string, value: any) => {
-    setValues(values => ({
+    setValues((values) => ({
       ...values,
       [name]: value
     }));
   };
 
   React.useEffect(() => {
-    document.addEventListener('keyup', e => {
+    document.addEventListener('keyup', (e) => {
       //Escape
       if (e.keyCode === 27) {
         setShowModal(false);
@@ -238,7 +238,7 @@ export const Users: React.FC = () => {
       >
         name="users"
         fieldsToExport={['firstName', 'lastName', 'email', 'roles', 'userType']}
-        onImport={async results => {
+        onImport={async (results) => {
           // TODO: use a batch call here instead.
           let createdUsers = [];
           for (let result of results) {
@@ -266,10 +266,10 @@ export const Users: React.FC = () => {
           setUsers(users.concat(...createdUsers));
         }}
         getDataToExport={() =>
-          users.map(user => ({
+          users.map((user) => ({
             ...user,
             roles: JSON.stringify(
-              user.roles.map(role => ({
+              user.roles.map((role) => ({
                 organization: role.organization.id,
                 role: role.role
               }))

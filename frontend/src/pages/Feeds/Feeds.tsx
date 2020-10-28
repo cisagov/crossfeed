@@ -1,22 +1,41 @@
-import React from 'react';
-import {
-  Paper,
-  FormControl,
-  Typography,
-  Select,
-  MenuItem,
-  makeStyles
-} from '@material-ui/core';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Paper, makeStyles } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
+import { useAuthContext } from 'context';
+import { SavedSearch } from 'types';
+import { useHistory } from 'react-router-dom';
 
 const Feeds = () => {
   const classes = useStyles();
+  const { apiGet, apiPost, apiDelete } = useAuthContext();
+  const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
+  const [pageState, setPageState] = useState({
+    totalResults: 0,
+    current: 1,
+    resultsPerPage: 20,
+    totalPages: 0
+  });
+  const history = useHistory();
 
-  let results: any = [{}, {}, {}, {}];
-  let totalResults = 10;
-  let current = 1;
-  let resultsPerPage = 20;
-  let totalPages = 10;
+  const fetchSavedSearches = useCallback(async () => {
+    try {
+      let res = await apiGet<{ result: SavedSearch[]; count: number }>(
+        `/saved-searches/?page=${pageState.current}`
+      );
+      setSavedSearches(res.result);
+      setPageState((pageState) => ({
+        ...pageState,
+        totalResults: res.count,
+        totalPages: Math.ceil(pageState.totalResults / pageState.resultsPerPage)
+      }));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet]);
+
+  useEffect(() => {
+    fetchSavedSearches();
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -29,20 +48,23 @@ const Feeds = () => {
         </div>
         <div className={classes.content}>
           <div className={classes.panel}>
-            {results.map((result: any) => (
+            {savedSearches.map((search: SavedSearch) => (
               <Paper
                 elevation={0}
                 classes={{ root: classes.cardRoot }}
                 aria-label="view domain details"
+                onClick={() => {
+                  history.push(`/search?savedSearch=${search.id}`);
+                }}
               >
                 <div className={classes.cardInner}>
                   <button className={classes.domainRow}>
                     <div className={classes.cardAlerts}>
-                      <h4>22 new</h4>
+                      <h4>{search.count} new</h4>
                     </div>
                     <div className={classes.cardDetails}>
-                      <p>Test</p>
-                      <p>Hello</p>
+                      <h3>{search.name}</h3>
+                      <p>{search.searchTerm}</p>
                     </div>
                     <div className={classes.cardActions}>
                       <button className={classes.button}>EDIT</button>
@@ -58,18 +80,28 @@ const Feeds = () => {
         <Paper classes={{ root: classes.pagination }}>
           <span>
             <strong>
-              {totalResults === 0 ? 0 : (current - 1) * resultsPerPage + 1} -{' '}
+              {pageState.totalResults === 0
+                ? 0
+                : (pageState.current - 1) * pageState.resultsPerPage + 1}{' '}
+              -{' '}
               {Math.min(
-                (current - 1) * resultsPerPage + resultsPerPage,
-                totalResults
+                (pageState.current - 1) * pageState.resultsPerPage +
+                  pageState.resultsPerPage,
+                pageState.totalResults
               )}
             </strong>{' '}
-            of <strong>{totalResults}</strong>
+            of <strong>{pageState.totalResults}</strong>
           </span>
           <Pagination
-            count={totalPages}
-            page={current}
-            // onChange={(_, page) => setCurrent(page)}
+            count={pageState.totalPages}
+            page={pageState.current}
+            onChange={(_, page) => {
+              setPageState((pageState) => ({
+                ...pageState,
+                page: page
+              }));
+              fetchSavedSearches();
+            }}
             color="primary"
             size="small"
           />
@@ -198,7 +230,8 @@ const useStyles = makeStyles((theme) => ({
   },
   cardActions: {
     display: 'block',
-    textAlign: 'right'
+    textAlign: 'right',
+    marginRight: 100
   },
   button: {
     outline: 'none',

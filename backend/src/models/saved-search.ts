@@ -30,6 +30,9 @@ export class SavedSearch extends BaseEntity {
   @Column()
   searchTerm: string;
 
+  @Column()
+  count: number;
+
   @Column({ type: 'jsonb', default: '[]' })
   filters: { field: string; values: any[]; type: string }[];
 

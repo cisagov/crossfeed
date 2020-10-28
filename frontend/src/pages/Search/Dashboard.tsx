@@ -8,7 +8,6 @@ import {
   Select,
   MenuItem,
   Typography,
-  TextField,
   Checkbox,
   FormControlLabel,
   FormGroup
@@ -22,9 +21,13 @@ import {
   Button,
   Overlay,
   Modal,
-  ModalContainer
+  ModalContainer,
+  TextInput,
+  Label
 } from '@trussworks/react-uswds';
 import { AddCircleOutline } from '@material-ui/icons';
+import { useAuthContext } from 'context';
+import { parse } from 'query-string';
 
 export const DashboardUI: React.FC<ContextType> = (props) => {
   const {
@@ -51,6 +54,27 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
   const [selectedDomain, setSelectedDomain] = useState('');
   const [resultsScrolled, setResultsScrolled] = useState(false);
   const [showSaveSearch, setShowSaveSearch] = useState<Boolean>(false);
+  const { apiPost } = useAuthContext();
+
+  const [savedSearchValues, setSavedSearchValues] = useState<{
+    name: string;
+  }>({
+    name: ''
+  });
+
+  const { savedSearch } = parse(window.location.search);
+  console.log(savedSearch);
+
+  const onTextChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLSelectElement
+  > = (e) => onChange(e.target.name, e.target.value);
+
+  const onChange = (name: string, value: any) => {
+    setSavedSearchValues((values) => ({
+      ...values,
+      [name]: value
+    }));
+  };
 
   const handleResultScroll = (e: React.UIEvent<HTMLElement>) => {
     if (e.currentTarget.scrollTop > 0) {
@@ -168,8 +192,15 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
                   </Button>
                   <Button
                     type="button"
-                    onClick={() => {
-                      // deleteRow(selectedRow);
+                    onClick={async () => {
+                      await apiPost('/saved-searches/', {
+                        body: {
+                          ...savedSearchValues,
+                          searchTerm,
+                          filters,
+                          count: totalResults
+                        }
+                      });
                       setShowSaveSearch(false);
                     }}
                   >
@@ -180,11 +211,14 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
               title={<h2>Save Search</h2>}
             >
               <FormGroup>
-                <TextField
-                  style={{ width: '100%' }}
-                  id="standard-basic"
-                  label="Name your search"
-                  variant="outlined"
+                <Label htmlFor="name">Name Your Search</Label>
+                <TextInput
+                  required
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={savedSearchValues.name}
+                  onChange={onTextChange}
                 />
                 <p>When a new result is found:</p>
                 <FormControlLabel
