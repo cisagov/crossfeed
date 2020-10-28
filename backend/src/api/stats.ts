@@ -85,11 +85,14 @@ export const get = wrapHandler(async (event) => {
       .innerJoinAndSelect('domain.organization', 'organization')
       .innerJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
       .andWhere("vulnerabilities.state = 'open'")
-      .select('domain.name as id, count(*) as value')
-      .groupBy('domain.id')
+      .select(
+        "CONCAT(domain.id, '_', vulnerabilities.severity) as id, count(*) as value"
+      )
+      .groupBy('vulnerabilities.severity, domain.id')
       .orderBy('value', 'DESC')
       .limit(MAX_RESULTS)
   );
+  console.log(numVulnerabilities);
   const severity = await performQuery(
     Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
