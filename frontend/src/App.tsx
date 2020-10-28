@@ -29,7 +29,8 @@ import {
   Vulnerabilities,
   TermsOfUse,
   SearchPage,
-  LoginGovCallback
+  LoginGovCallback,
+  Feeds
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
 import './styles.scss';
@@ -105,6 +106,7 @@ const App: React.FC = () => (
               />
               <Route exact path="/terms" component={TermsOfUse} />
               <RouteGuard path="/domain/:domainId" component={Domain} />
+              <RouteGuard path="/feeds" component={Feeds} />
               <RouteGuard path="/search" component={SearchPage} />
               <RouteGuard path="/vulnerabilities" component={Vulnerabilities} />
               <RouteGuard path="/risk" component={Risk} />

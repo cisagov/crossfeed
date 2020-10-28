@@ -15,3 +15,4 @@ export { default as Organizations } from './Organizations';
 export { default as Users } from './Users';
 export { default as Logs } from './Logs';
 export { default as Settings } from './Settings';
+export { default as Feeds } from './Feeds';

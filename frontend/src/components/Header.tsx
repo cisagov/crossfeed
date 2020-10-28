@@ -130,10 +130,10 @@ export const Header: React.FC = () => {
   }
 
   const navItems: NavItem[] = [
-    { title: 'Inventory', path: '/', users: ALL_USERS },
-    { title: 'Search', path: '/search', users: ALL_USERS },
+    { title: 'Overview', path: '/risk', users: ALL_USERS },
+    { title: 'Inventory', path: '/search', users: ALL_USERS },
     { title: 'Vulnerabilities', path: '/vulnerabilities', users: ALL_USERS },
-    { title: 'Risk Summary', path: '/risk', users: ALL_USERS },
+    { title: 'Feeds', path: '/feeds', users: ALL_USERS },
     {
       title: 'Organization Settings',
       path: '/organization',
