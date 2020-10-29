@@ -74,7 +74,7 @@ describe('stats', () => {
         }
       });
       expect(response.body.result.domains.numVulnerabilities[0].id).toEqual(
-        domain.name
+        domain.name + '|High'
       );
     });
     it('get by globalView should filter domains to a single org if specified', async () => {
@@ -144,7 +144,7 @@ describe('stats', () => {
         }
       });
       expect(response.body.result.domains.numVulnerabilities[0].id).toEqual(
-        domain.name
+        domain.name + '|High'
       );
     });
   });
