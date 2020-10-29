@@ -7,6 +7,7 @@ import { Checkbox, Grid } from '@trussworks/react-uswds';
 import { makeStyles, Paper } from '@material-ui/core';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
+import { useHistory } from 'react-router-dom';
 
 const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 const geoCountyUrl =
@@ -18,78 +19,16 @@ let colorScale = scaleLinear<string>()
 
 const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
 
-const getColor = ({ index }: { index: number }) => {
-  return allColors[index % allColors.length];
+const getSingleColor = ({ id }: { id: string }) => {
+  return '#FFBC78';
 };
 
 const getSeverityColor = ({ id }: { id: string }) => {
   if (id === 'None') return 'rgb(255, 255, 255)';
-  else if (id === 'Low') return 'rgb(194, 244, 255)';
-  else if (id === 'Medium') return 'rgb(0, 185, 227)';
-  else if (id === 'High') return 'rgb(0, 111, 162)';
-  else if (id === 'Critical') return 'rgb(0, 73, 121)';
-};
-
-const MyResponsivePie = ({ data, colors }: { data: Point[]; colors: any }) => {
-  return (
-    <ResponsivePie
-      data={data as any}
-      innerRadius={0.5}
-      padAngle={0.7}
-      radialLabelsSkipAngle={10}
-      slicesLabelsSkipAngle={10}
-      colors={colors}
-    />
-  );
-};
-
-const MyResponsiveBar = ({
-  data,
-  xLabel,
-  longXValues = false
-}: {
-  data: Point[];
-  xLabel: string;
-  longXValues?: boolean;
-}) => {
-  return (
-    <ResponsiveBar
-      data={data.map((e) => ({ ...e, [xLabel]: e.value })) as any}
-      keys={['critical', 'high', 'medium', 'low']}
-      indexBy="label"
-      margin={{
-        top: 0,
-        right: 0,
-        bottom: longXValues ? 100 : 0,
-        left: longXValues ? 200 : 60
-      }}
-      padding={0.5}
-      colors={getColor}
-      borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-      axisTop={null}
-      axisRight={null}
-      axisBottom={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: longXValues ? 90 : 0,
-        legend: longXValues ? '' : xLabel,
-        legendPosition: 'middle',
-        legendOffset: 40
-      }}
-      axisLeft={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0
-      }}
-      labelSkipWidth={12}
-      labelSkipHeight={12}
-      labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-      animate={true}
-      motionStiffness={90}
-      motionDamping={15}
-      layout={'horizontal'}
-    />
-  );
+  else if (id === 'Low') return '#F8DFE2';
+  else if (id === 'Medium') return '#F2938C';
+  else if (id === 'High') return '#B51D09';
+  else return '#540C03';
 };
 
 interface Point {
@@ -116,6 +55,7 @@ interface ApiResponse {
 }
 
 const Risk: React.FC = (props) => {
+  const history = useHistory();
   const { currentOrganization, user, apiPost } = useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
@@ -149,6 +89,120 @@ const Risk: React.FC = (props) => {
   useEffect(() => {
     fetchStats();
   }, [fetchStats]);
+
+  const MyResponsivePie = ({
+    data,
+    colors,
+    type
+  }: {
+    data: Point[];
+    colors: any;
+    type: string;
+  }) => {
+    return (
+      <ResponsivePie
+        data={data as any}
+        innerRadius={0.5}
+        padAngle={0.7}
+        radialLabelsSkipAngle={10}
+        slicesLabelsSkipAngle={10}
+        colors={colors}
+        onClick={(event) => {
+          if (type === 'vulns') {
+            history.push(`/vulnerabilities?severity=${event.id}`);
+          }
+        }}
+      />
+    );
+  };
+
+  const MyResponsiveBar = ({
+    data,
+    xLabels,
+    type,
+    longXValues = false
+  }: {
+    data: Point[];
+    xLabels: string[];
+    type: string;
+    longXValues?: boolean;
+  }) => {
+    let keys: string[];
+    let dataVal: object[];
+    if (type === 'ports') {
+      keys = xLabels;
+      dataVal = data.map((e) => ({ ...e, [xLabels[0]]: e.value })) as any;
+    } else {
+      let domainToSevMap: any = {};
+      for (let point of data) {
+        let split = point.id.split('|');
+        let domain = split[0];
+        let severity = split[1];
+        if (!(domain in domainToSevMap)) domainToSevMap[domain] = {};
+        domainToSevMap[domain][severity] = point.value;
+      }
+      keys = xLabels;
+      dataVal = Object.keys(domainToSevMap)
+        .map((key) => ({
+          label: key,
+          ...domainToSevMap[key]
+        }))
+        .sort((a, b) => {
+          let diff = 0;
+          for (var label of xLabels) {
+            diff += (label in b ? b[label] : 0) - (label in a ? a[label] : 0);
+          }
+          return diff;
+        })
+        .slice(0, 15)
+        .reverse();
+    }
+    return (
+      <ResponsiveBar
+        data={dataVal}
+        keys={keys}
+        indexBy="label"
+        margin={{
+          top: 0,
+          right: 0,
+          bottom: longXValues ? 100 : 0,
+          left: longXValues ? 200 : 60
+        }}
+        onClick={(event) => {
+          if (type === 'vulns') {
+            history.push(
+              `/vulnerabilities?domain=${event.data.label}&severity=${event.id}`
+            );
+          }
+        }}
+        padding={0.5}
+        colors={type === 'ports' ? getSingleColor : getSeverityColor}
+        borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
+        axisTop={null}
+        axisRight={null}
+        axisBottom={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: longXValues ? 90 : 0,
+          legend: xLabels.length > 1 ? '' : xLabels[0],
+          legendPosition: 'middle',
+          legendOffset: 40
+        }}
+        axisLeft={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0
+        }}
+        labelSkipWidth={12}
+        labelSkipHeight={12}
+        labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
+        animate={true}
+        motionStiffness={90}
+        motionDamping={15}
+        layout={'horizontal'}
+      />
+    );
+  };
 
   return (
     <div className={classes.root}>
@@ -193,6 +247,7 @@ const Risk: React.FC = (props) => {
                     <MyResponsivePie
                       data={stats.domains.services}
                       colors={allColors}
+                      type={'services'}
                     />
                   </div>
                 </Paper>
@@ -206,7 +261,8 @@ const Risk: React.FC = (props) => {
                     </div>
                     <MyResponsiveBar
                       data={stats.domains.ports.slice(0, 5).reverse()}
-                      xLabel={'Port'}
+                      type={'ports'}
+                      xLabels={['Port']}
                     />
                   </div>
                 </Paper>
@@ -220,6 +276,7 @@ const Risk: React.FC = (props) => {
                     <MyResponsivePie
                       data={stats.vulnerabilities.severity}
                       colors={getSeverityColor}
+                      type={'vulns'}
                     />
                   </div>
                 </Paper>
@@ -235,10 +292,9 @@ const Risk: React.FC = (props) => {
                         <h2>Open Vulnerabilities by Domain</h2>
                       </div>
                       <MyResponsiveBar
-                        data={stats.domains.numVulnerabilities
-                          .slice(0, 15)
-                          .reverse()}
-                        xLabel={'Domain'}
+                        data={stats.domains.numVulnerabilities}
+                        xLabels={['Critical', 'High', 'Medium', 'Low']}
+                        type={'vulns'}
                         longXValues={true}
                       />
                     </div>
@@ -379,7 +435,7 @@ const useStyles = makeStyles((theme) => ({
     '& h3': {
       textAlign: 'center'
     },
-    overflow: 'scroll'
+    overflow: 'hidden'
   },
   cardBig: {
     width: '100%',
@@ -387,7 +443,7 @@ const useStyles = makeStyles((theme) => ({
     '& h3': {
       textAlign: 'center'
     },
-    overflow: 'scroll'
+    overflow: 'hidden'
   },
   header: {
     height: '60px',

@@ -86,7 +86,7 @@ export const get = wrapHandler(async (event) => {
       .innerJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
       .andWhere("vulnerabilities.state = 'open'")
       .select(
-        "CONCAT(domain.id, '_', vulnerabilities.severity) as id, count(*) as value"
+        "CONCAT(domain.name, '|', vulnerabilities.severity) as id, count(*) as value"
       )
       .groupBy('vulnerabilities.severity, domain.id')
       .orderBy('value', 'DESC')
