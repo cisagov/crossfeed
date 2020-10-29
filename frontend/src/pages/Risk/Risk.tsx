@@ -7,7 +7,8 @@ import { Checkbox, Grid } from '@trussworks/react-uswds';
 import { makeStyles, Paper } from '@material-ui/core';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { Vulnerability } from 'types';
 
 const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 const geoCountyUrl =
@@ -47,6 +48,7 @@ interface Stats {
   vulnerabilities: {
     severity: Point[];
     byOrg: Point[];
+    latestVulnerabilities: Vulnerability[];
   };
 }
 
@@ -204,6 +206,16 @@ const Risk: React.FC = (props) => {
     );
   };
 
+  const grouped: { [key: string]: Vulnerability & { count: number } } = {};
+  if (stats) {
+    for (const vuln of stats.vulnerabilities.latestVulnerabilities) {
+      if (vuln.title in grouped) grouped[vuln.title].count++;
+      else {
+        grouped[vuln.title] = { ...vuln, count: 1 };
+      }
+    }
+    console.log(grouped);
+  }
   return (
     <div className={classes.root}>
       <Grid row>
@@ -231,9 +243,23 @@ const Risk: React.FC = (props) => {
                 <Paper elevation={0} className={cardClasses.cardRoot}>
                   <div className={cardClasses.cardSmall}>
                     <div className={cardClasses.header}>
-                      <h2>Alerts</h2>
+                      <h2>Latest Vulnerabilities</h2>
                     </div>
-                    <h4>Today:</h4>
+                    <div className={cardClasses.body}>
+                      <h4>Today:</h4>
+                      <ul>
+                        {Object.keys(grouped).map((key) => (
+                          <li>{grouped[key].cve}</li>
+                        ))}
+                      </ul>
+                      <div className={cardClasses.footer}>
+                        <h5>
+                          <Link to="/vulnerabilities?sort=createdAt&desc=false">
+                            See all latest vulnerabilites
+                          </Link>
+                        </h5>
+                      </div>
+                    </div>
                   </div>
                 </Paper>
               )}
@@ -445,6 +471,10 @@ const useStyles = makeStyles((theme) => ({
     },
     overflow: 'hidden'
   },
+  body: {
+    paddingLeft: 20,
+    paddingRight: 20
+  },
   header: {
     height: '60px',
     backgroundColor: '#F8F9FA',
@@ -455,6 +485,9 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 20,
     paddingTop: 1
     // fontSize: '20px'
+  },
+  footer: {
+    float: 'right'
   },
   inner: {},
   root: {

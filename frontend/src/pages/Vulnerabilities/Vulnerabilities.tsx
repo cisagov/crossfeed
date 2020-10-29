@@ -388,14 +388,24 @@ export const Vulnerabilities: React.FC = () => {
     <Paginator table={table} />
   );
 
-  const initialFilterBy = [];
+  const initialFilterBy: Filters<Vulnerability> = [];
+  let initialSortBy: SortingRule<Vulnerability>[] = [];
   const params = parse(window.location.search);
   if (!('state' in params)) params['state'] = 'open';
   for (const param of Object.keys(params)) {
-    initialFilterBy.push({
-      id: param,
-      value: params[param]
-    });
+    if (param === 'sort') {
+      initialSortBy = [
+        {
+          id: params[param] as string,
+          desc: 'desc' in params ? params['desc'] === 'true' : true
+        }
+      ];
+    } else if (param !== 'desc') {
+      initialFilterBy.push({
+        id: param,
+        value: params[param] as string
+      });
+    }
   }
 
   return (
@@ -435,6 +445,7 @@ export const Vulnerabilities: React.FC = () => {
         renderExpanded={renderExpandedVulnerability}
         tableRef={tableRef}
         initialFilterBy={initialFilterBy}
+        initialSortBy={initialSortBy}
       />
       <Export<Vulnerability>
         name="vulnerabilities"
