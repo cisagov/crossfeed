@@ -10,16 +10,16 @@ interface DomainRecord extends Domain {
 
 export interface WebpageRecord {
   webpage_id: string;
-  webpage_createdAt: Date;
-  webpage_updatedAt: Date;
-  webpage_syncedAt: Date;
-  webpage_lastSeen: Date;
-  webpage_s3Key: string;
+  webpage_createdAt: Date | null;
+  webpage_updatedAt: Date | null;
+  webpage_syncedAt: Date | null;
+  webpage_lastSeen: Date | null;
   webpage_url: string;
   webpage_status: string | number;
   webpage_domainId: string;
   webpage_discoveredById: string;
-  webpage_responseSize: string;
+  webpage_responseSize: number | null;
+  webpage_headers: { name: string; value: string }[];
 
   // Added before elasticsearch insertion (not present in the database):
   suggest?: { input: string | string[]; weight: number }[];
@@ -50,6 +50,10 @@ class ESClient {
       },
       vulnerabilities: {
         type: 'nested'
+      },
+      webpage_body: {
+        type: 'text',
+        term_vector: 'yes'
       },
       parent_join: {
         type: 'join',
@@ -91,6 +95,13 @@ class ESClient {
       });
       console.log(`Created index ${DOMAINS_INDEX}.`);
     }
+    await this.client.indices.putSettings({
+      index: DOMAINS_INDEX,
+      body: {
+        settings: { refresh_interval: '1800s' }
+      }
+    });
+    console.log(`Updated settings for index ${DOMAINS_INDEX}.`);
   }
 
   excludeFields = (domain: Domain) => {
@@ -146,9 +157,6 @@ class ESClient {
   async updateWebpages(webpages: WebpageRecord[]) {
     const webpageRecords = webpages.map((e) => ({
       ...e,
-      webpage_status: e.webpage_status
-        ? Number(e.webpage_status)
-        : e.webpage_status,
       suggest: [{ input: e.webpage_url, weight: 1 }],
       parent_join: {
         name: 'webpage',

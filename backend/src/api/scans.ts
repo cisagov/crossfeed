@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 import { Scan, connectToDatabase, Organization, ScanTask } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
-import { isGlobalWriteAdmin } from './auth';
+import { isGlobalWriteAdmin, isGlobalViewAdmin } from './auth';
 import LambdaClient from '../tasks/lambda-client';
 
 interface ScanSchema {
@@ -113,7 +113,8 @@ export const SCAN_SCHEMA: ScanSchema = {
   webscraper: {
     type: 'fargate',
     isPassive: true,
-    global: false,
+    global: true,
+    numChunks: 3,
     cpu: '1024',
     memory: '4096',
     description: 'Scrapes all webpages on a given domain, respecting robots.txt'
@@ -196,6 +197,40 @@ export const create = wrapHandler(async (event) => {
     statusCode: 200,
     body: JSON.stringify(res)
   };
+});
+
+export const get = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  await connectToDatabase();
+  const id = event.pathParameters?.scanId;
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+  const scan = await Scan.findOne(
+    {
+      id: id
+    },
+    {
+      relations: ['organizations']
+    }
+  );
+
+  if (scan) {
+    const schema = SCAN_SCHEMA[scan.name];
+    const organizations = await Organization.find();
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        scan: scan,
+        schema: schema,
+        organizations: organizations.map((e) => ({
+          name: e.name,
+          id: e.id
+        }))
+      })
+    };
+  }
+  return NotFound;
 });
 
 export const list = wrapHandler(async (event) => {

@@ -1,5 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
+import * as cookie from 'cookie';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
 import { handler as healthcheck } from './healthcheck';
@@ -14,6 +16,7 @@ import * as users from './users';
 import * as scanTasks from './scan-tasks';
 import * as stats from './stats';
 import { listenForDockerEvents } from './docker-events';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 if (
   (process.env.IS_OFFLINE || process.env.IS_LOCAL) &&
@@ -50,6 +53,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(helmet.hsts());
+app.use(cookieParser());
 
 app.get('/', handlerToExpress(healthcheck));
 app.post('/auth/login', handlerToExpress(auth.login));
@@ -104,6 +108,73 @@ const getToUVersion = (user) => {
   return `v${process.env.REACT_APP_TERMS_VERSION}-${getMaximumRole(user)}`;
 };
 
+// Rewrite the URL for some Matomo admin dashboard URLs, due to a bug in
+// how Matomo handles relative URLs when hosted on a subpath.
+app.get('/plugins/Morpheus/images/logo.svg', (req, res) =>
+  res.redirect('/matomo/plugins/Morpheus/images/logo.svg?matomo')
+);
+app.get('/index.php', (req, res) => res.redirect('/matomo/index.php'));
+
+const matomoProxy = createProxyMiddleware({
+  target: process.env.MATOMO_URL,
+  headers: { HTTP_X_FORWARDED_URI: '/matomo' },
+  pathRewrite: function (path, req) {
+    return path.replace(/^\/matomo/, '');
+  },
+  onProxyReq: function (proxyReq, req, res) {
+    // Only pass the MATOMO_SESSID cookie to Matomo.
+    const cookies = cookie.parse(proxyReq.getHeader('Cookie'));
+    const newCookies = cookie.serialize(
+      'MATOMO_SESSID',
+      String(cookies['MATOMO_SESSID'])
+    );
+    proxyReq.setHeader('Cookie', newCookies);
+  },
+  onProxyRes: function (proxyRes, req, res) {
+    // Remove transfer-encoding: chunked responses, because API Gateway doesn't
+    // support chunked encoding.
+    if (proxyRes.headers['transfer-encoding'] === 'chunked') {
+      proxyRes.headers['transfer-encoding'] = '';
+    }
+  }
+});
+
+app.use(
+  '/matomo',
+  async (req, res, next) => {
+    // Public paths -- see https://matomo.org/docs/security-how-to/
+    const ALLOWED_PATHS = ['/matomo.php', '/matomo.js'];
+    if (ALLOWED_PATHS.indexOf(req.path) > -1) {
+      return next();
+    }
+    // API Gateway isn't able to proxy fonts properly -- so we're using a CDN instead.
+    if (req.path === '/plugins/Morpheus/fonts/matomo.woff2') {
+      return res.redirect(
+        'https://cdn.jsdelivr.net/gh/matomo-org/matomo@3.14.1/plugins/Morpheus/fonts/matomo.woff2'
+      );
+    }
+    if (req.path === '/plugins/Morpheus/fonts/matomo.woff') {
+      return res.redirect(
+        'https://cdn.jsdelivr.net/gh/matomo-org/matomo@3.14.1/plugins/Morpheus/fonts/matomo.woff'
+      );
+    }
+    if (req.path === '/plugins/Morpheus/fonts/matomo.ttf') {
+      return res.redirect(
+        'https://cdn.jsdelivr.net/gh/matomo-org/matomo@3.14.1/plugins/Morpheus/fonts/matomo.ttf'
+      );
+    }
+    // Only allow global admins to access all other paths.
+    const user = (await auth.authorize({
+      authorizationToken: req.cookies['crossfeed-token']
+    })) as auth.UserToken;
+    if (user.userType !== 'globalAdmin') {
+      return res.status(401).send('Unauthorized');
+    }
+    return next();
+  },
+  matomoProxy
+);
+
 // Routes that require an authenticated user, without
 // needing to sign the terms of service yet
 const authenticatedNoTermsRoute = express.Router();
@@ -141,6 +212,7 @@ authenticatedRoute.put(
 authenticatedRoute.get('/scans', handlerToExpress(scans.list));
 authenticatedRoute.get('/granularScans', handlerToExpress(scans.listGranular));
 authenticatedRoute.post('/scans', handlerToExpress(scans.create));
+authenticatedRoute.get('/scans/:scanId', handlerToExpress(scans.get));
 authenticatedRoute.put('/scans/:scanId', handlerToExpress(scans.update));
 authenticatedRoute.delete('/scans/:scanId', handlerToExpress(scans.del));
 authenticatedRoute.post('/scans/:scanId/run', handlerToExpress(scans.runScan));

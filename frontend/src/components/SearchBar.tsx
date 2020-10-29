@@ -29,6 +29,7 @@ export const SearchBar = React.forwardRef<HTMLInputElement, Props>(
     } = props;
     const [hasFocus, setHasFocus] = useState(false);
     const [focusTimer, setFocusTimer] = useState<Timer>();
+    const [query, setQuery] = useState<string>("");
     const classes = useStyles({ inpFocused: hasFocus });
 
     const handleFocus = () => {
@@ -44,15 +45,18 @@ export const SearchBar = React.forwardRef<HTMLInputElement, Props>(
       <div className={classes.wrapper}>
         <div className={classes.inner}>
           <SearchOutlined className={classes.icon} />
-          <input
-            {...rest}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            className={clsx(classes.inp, className)}
-            placeholder={placeholder ?? defaultPlaceholder}
-            onChange={(e) => onChange(e.target.value)}
-            ref={ref}
-          />
+          <form onSubmit={(e) => { e.preventDefault(); onChange(query) }}>
+            <input
+              {...rest}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              className={clsx(classes.inp, className)}
+              placeholder={placeholder ?? defaultPlaceholder}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              ref={ref}
+            />
+          </form>
           {autocompletedResults.length > 0 && hasFocus && (
             <Paper classes={{ root: classes.autocompleteRoot }}>
               <List>

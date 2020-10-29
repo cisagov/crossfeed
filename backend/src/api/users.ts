@@ -112,7 +112,7 @@ You've been invited to join ${
 Crossfeed access instructions:
 
 1. Visit ${process.env.FRONTEND_DOMAIN}
-2. Select to create a new account.
+2. Select 'Create Account'.
 3. Enter your email address and a new password for Crossfeed.
 4. A confirmation code will be sent to your email. Enter this code when you receive it.
 5. You will be prompted to enable MFA. Scan the QR code with an authenticator app on your phone, such as Microsoft Authenticator. Enter the MFA code you see after scanning.

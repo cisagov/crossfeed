@@ -20,7 +20,7 @@ import {
 import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
-import { formatDistanceToNow, parseISO } from 'date-fns';
+import { differenceInCalendarDays, parseISO } from 'date-fns';
 import { stateMap } from 'pages/Vulnerabilities/Vulnerabilities';
 import { Webpage } from 'types/webpage';
 import { useAuthContext } from 'context';
@@ -28,6 +28,24 @@ import { useAuthContext } from 'context';
 interface Props {
   domainId: string;
 }
+
+export const generateWebpageTree = (pages: Webpage[]) => {
+  const tree: any = {};
+  for (const page of pages) {
+    const url = new URL(page.url);
+    const parts = url.pathname.split('/').filter((path) => path !== '');
+    let root = tree;
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (parts[i] in root) root = root[parts[i]];
+      else {
+        root[parts[i]] = {};
+        root = root[parts[i]];
+      }
+    }
+    root[parts[parts.length - 1]] = page;
+  }
+  return tree;
+};
 
 export const DomainDetails: React.FC<Props> = (props) => {
   const { domainId } = props;
@@ -92,11 +110,17 @@ export const DomainDetails: React.FC<Props> = (props) => {
     }
     ret.push({
       label: 'First Seen',
-      value: `${formatDistanceToNow(parseISO(domain.createdAt))} ago`
+      value: `${differenceInCalendarDays(
+        Date.now(),
+        parseISO(domain.createdAt)
+      )} ago`
     });
     ret.push({
       label: 'Last Seen',
-      value: `${formatDistanceToNow(parseISO(domain.updatedAt))} ago`
+      value: `${differenceInCalendarDays(
+        Date.now(),
+        parseISO(domain.updatedAt)
+      )} ago`
     });
     if (domain.country) {
       ret.push({
@@ -116,24 +140,6 @@ export const DomainDetails: React.FC<Props> = (props) => {
     });
     return ret;
   }, [domain]);
-
-  const generateWebpageTree = (pages: Webpage[]) => {
-    const tree: any = {};
-    for (const page of pages) {
-      const url = new URL(page.url);
-      const parts = url.pathname.split('/').filter((path) => path !== '');
-      let root = tree;
-      for (let i = 0; i < parts.length - 1; i++) {
-        if (parts[i] in root) root = root[parts[i]];
-        else {
-          root[parts[i]] = {};
-          root = root[parts[i]];
-        }
-      }
-      root[parts[parts.length - 1]] = page;
-    }
-    return tree;
-  };
 
   const [hiddenRows, setHiddenRows] = React.useState<{
     [key: string]: boolean;
@@ -189,7 +195,9 @@ export const DomainDetails: React.FC<Props> = (props) => {
           }
           const page = tree[key] as Webpage;
           const parsed = new URL(page.url);
-          const split = parsed.pathname.split('/');
+          const split = parsed.pathname
+            .replace(/\/$/, '') // Remove trailing slash
+            .split('/');
           return (
             <ListItem
               button
@@ -219,8 +227,9 @@ export const DomainDetails: React.FC<Props> = (props) => {
       ? 'https://'
       : 'http://') + domain.name;
 
-  domain.webpages.sort((a, b) => (a.url > b.url ? 1 : -1));
-  const webpageTree = generateWebpageTree(domain.webpages);
+  const { webpages = [] } = domain;
+  webpages.sort((a, b) => (a.url > b.url ? 1 : -1));
+  const webpageTree = generateWebpageTree(webpages);
   const webpageList = generateWebpageList(webpageTree);
 
   return (
@@ -281,7 +290,10 @@ export const DomainDetails: React.FC<Props> = (props) => {
                   </Typography>
                   <Typography className={classes.vulnDescription}>
                     {vuln.createdAt
-                      ? `${formatDistanceToNow(parseISO(vuln.createdAt))} ago`
+                      ? `${differenceInCalendarDays(
+                          Date.now(),
+                          parseISO(vuln.createdAt)
+                        )} days ago`
                       : ''}
                   </Typography>
                 </AccordionSummary>
@@ -331,58 +343,64 @@ export const DomainDetails: React.FC<Props> = (props) => {
                   Port
                 </Typography>
                 <Typography className={classes.accordionHeading}>
-                  Service
+                  Products
                 </Typography>
-                <Typography>Last Seen</Typography>
+                <Typography className={classes.lastSeen}>Last Seen</Typography>
               </AccordionSummary>
             </Accordion>
-            {domain.services.map((service) => (
-              <Accordion className={classes.accordion} key={service.id}>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography className={classes.accordionHeading}>
-                    {service.port}
-                  </Typography>
-                  <Typography className={classes.accordionHeading}>
-                    {service.service}
-                  </Typography>
-                  {service.lastSeen && (
-                    <Typography>
-                      {formatDistanceToNow(parseISO(service.lastSeen))} ago
+            {domain.services.map((service) => {
+              const products = service.products
+                .map(
+                  (product) =>
+                    product.name +
+                    (product.version ? ` ${product.version}` : '')
+                )
+                .join(', ');
+              return (
+                <Accordion className={classes.accordion} key={service.id}>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography className={classes.accordionHeading}>
+                      {service.port}
                     </Typography>
+                    <Typography className={classes.accordionHeading}>
+                      {products}
+                    </Typography>
+                    <Typography className={classes.lastSeen}>
+                      {service.lastSeen
+                        ? `${differenceInCalendarDays(
+                            Date.now(),
+                            parseISO(service.lastSeen)
+                          )} days ago`
+                        : ''}
+                    </Typography>
+                  </AccordionSummary>
+                  {service.products.length > 0 && (
+                    <AccordionDetails>
+                      <DefinitionList
+                        items={[
+                          {
+                            label: 'Products',
+                            value: products
+                          },
+                          {
+                            label: 'Banner',
+                            value:
+                              (user?.userType === 'globalView' ||
+                                user?.userType === 'globalAdmin') &&
+                              service.banner
+                                ? service.banner
+                                : 'None'
+                          }
+                        ]}
+                      />
+                    </AccordionDetails>
                   )}
-                </AccordionSummary>
-                {service.products.length > 0 && (
-                  <AccordionDetails>
-                    <DefinitionList
-                      items={[
-                        {
-                          label: 'Products',
-                          value: service.products
-                            .map(
-                              (product) =>
-                                product.name +
-                                (product.version ? ` ${product.version}` : '')
-                            )
-                            .join(', ')
-                        },
-                        {
-                          label: 'Banner',
-                          value:
-                            (user?.userType === 'globalView' ||
-                              user?.userType === 'globalAdmin') &&
-                            service.banner
-                              ? service.banner
-                              : 'None'
-                        }
-                      ]}
-                    />
-                  </AccordionDetails>
-                )}
-              </Accordion>
-            ))}
+                </Accordion>
+              );
+            })}
           </div>
         )}
-        {domain.webpages.length > 0 && (
+        {domain.webpages?.length > 0 && (
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Site Map</h4>
             {webpageList}
@@ -438,7 +456,8 @@ const useStyles = makeStyles((theme) => ({
     padding: '1.5rem'
   },
   accordion: {
-    color: '#3D4551'
+    color: '#3D4551',
+    textAlign: 'left'
   },
   accordionHeaderRow: {
     color: '#000',
@@ -446,6 +465,9 @@ const useStyles = makeStyles((theme) => ({
   },
   accordionHeading: {
     flex: '1 0 33%'
+  },
+  lastSeen: {
+    flex: '0 0 125px'
   },
   vulnDescription: {
     flex: '1 1 15%',

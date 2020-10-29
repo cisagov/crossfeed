@@ -20,6 +20,11 @@ const Settings: React.FC = () => {
             .map(role => role.organization.name)
             .join(', ')}
       </h2>
+      {user?.userType === 'globalAdmin' && <><a href={`${process.env.REACT_APP_API_URL}/matomo/index.php`}>
+        <Button type="button">
+          Matomo
+        </Button>
+      </a><br /><br /></>}
       <Button type="button" onClick={logout}>
         Logout
       </Button>

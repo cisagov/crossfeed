@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generateWebpageTree basic path 1`] = `
+Object {
+  "a": Object {
+    "b": Object {
+      "c": Object {
+        "url": "https://www.cisa.gov/a/b/c",
+      },
+    },
+  },
+}
+`;
+
+exports[`generateWebpageTree no path 1`] = `
+Object {
+  "undefined": Object {
+    "url": "https://www.cisa.gov/",
+  },
+}
+`;
+
+exports[`generateWebpageTree single path 1`] = `
+Object {
+  "a": Object {
+    "url": "https://www.cisa.gov/a",
+  },
+}
+`;
+
+exports[`generateWebpageTree trailing slash 1`] = `
+Object {
+  "a": Object {
+    "url": "https://www.cisa.gov/a/",
+  },
+}
+`;
