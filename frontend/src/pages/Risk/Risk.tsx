@@ -109,6 +109,12 @@ const Risk: React.FC = (props) => {
         radialLabelsSkipAngle={10}
         slicesLabelsSkipAngle={10}
         colors={colors}
+        margin={{
+          left: 30,
+          right: 50,
+          top: 30,
+          bottom: 50
+        }}
         onClick={(event) => {
           if (type === 'vulns') {
             history.push(`/vulnerabilities?severity=${event.id}`);
@@ -166,7 +172,7 @@ const Risk: React.FC = (props) => {
         indexBy="label"
         margin={{
           top: 0,
-          right: 0,
+          right: 30,
           bottom: longXValues ? 100 : 0,
           left: longXValues ? 200 : 60
         }}
@@ -185,7 +191,7 @@ const Risk: React.FC = (props) => {
         axisBottom={{
           tickSize: 5,
           tickPadding: 5,
-          tickRotation: longXValues ? 90 : 0,
+          tickRotation: 0,
           legend: xLabels.length > 1 ? '' : xLabels[0],
           legendPosition: 'middle',
           legendOffset: 40
@@ -202,6 +208,8 @@ const Risk: React.FC = (props) => {
         motionStiffness={90}
         motionDamping={15}
         layout={'horizontal'}
+        enableGridX={true}
+        enableGridY={false}
       />
     );
   };
@@ -263,6 +271,17 @@ const Risk: React.FC = (props) => {
                   </div>
                 </Paper>
               )}
+              <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+                <div className={cardClasses.inner}>
+                  {stats.domains.numVulnerabilities.length > 0 && (
+                    <div className={cardClasses.cardSmall}>
+                      <div className={cardClasses.header}>
+                        <h2>Latest Feeds</h2>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Paper>
 
               {stats.domains.services.length > 0 && (
                 <Paper elevation={0} className={cardClasses.cardRoot}>
@@ -270,11 +289,13 @@ const Risk: React.FC = (props) => {
                     <div className={cardClasses.header}>
                       <h2>Most common services</h2>
                     </div>
-                    <MyResponsivePie
-                      data={stats.domains.services}
-                      colors={allColors}
-                      type={'services'}
-                    />
+                    <div className={cardClasses.chartSmall}>
+                      <MyResponsivePie
+                        data={stats.domains.services}
+                        colors={allColors}
+                        type={'services'}
+                      />
+                    </div>
                   </div>
                 </Paper>
               )}
@@ -285,11 +306,13 @@ const Risk: React.FC = (props) => {
                     <div className={cardClasses.header}>
                       <h2>Most common ports</h2>
                     </div>
-                    <MyResponsiveBar
-                      data={stats.domains.ports.slice(0, 5).reverse()}
-                      type={'ports'}
-                      xLabels={['Port']}
-                    />
+                    <div className={cardClasses.chartSmall}>
+                      <MyResponsiveBar
+                        data={stats.domains.ports.slice(0, 5).reverse()}
+                        type={'ports'}
+                        xLabels={['Port']}
+                      />
+                    </div>
                   </div>
                 </Paper>
               )}
@@ -299,11 +322,13 @@ const Risk: React.FC = (props) => {
                     <div className={cardClasses.header}>
                       <h2>Severity Levels</h2>
                     </div>
-                    <MyResponsivePie
-                      data={stats.vulnerabilities.severity}
-                      colors={getSeverityColor}
-                      type={'vulns'}
-                    />
+                    <div className={cardClasses.chartSmall}>
+                      <MyResponsivePie
+                        data={stats.vulnerabilities.severity}
+                        colors={getSeverityColor}
+                        type={'vulns'}
+                      />
+                    </div>
                   </div>
                 </Paper>
               )}
@@ -317,29 +342,46 @@ const Risk: React.FC = (props) => {
                       <div className={cardClasses.header}>
                         <h2>Open Vulnerabilities by Domain</h2>
                       </div>
-                      <MyResponsiveBar
-                        data={stats.domains.numVulnerabilities}
-                        xLabels={['Critical', 'High', 'Medium', 'Low']}
-                        type={'vulns'}
-                        longXValues={true}
-                      />
+                      <div className={cardClasses.chartLarge}>
+                        <MyResponsiveBar
+                          data={stats.domains.numVulnerabilities}
+                          xLabels={['Critical', 'High', 'Medium', 'Low']}
+                          type={'vulns'}
+                          longXValues={true}
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
               </Paper>
-            </div>
-            <div className={cardClasses.panel}>
               <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
                 <div className={cardClasses.inner}>
-                  {user?.userType === 'globalView' ||
-                    (user?.userType === 'globalAdmin' && (
-                      <>
+                  {stats.domains.numVulnerabilities.length > 0 && (
+                    <div className={cardClasses.cardSmall}>
+                      <div className={cardClasses.header}>
+                        <h2>Most Common CVEs</h2>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Paper>
+
+              {user?.userType === 'globalView' ||
+                (user?.userType === 'globalAdmin' && (
+                  <>
+                    <Paper
+                      elevation={0}
+                      classes={{ root: cardClasses.cardRoot }}
+                    >
+                      <div className={cardClasses.inner}>
                         <div className={classes.chart}>
-                          <h3>State vulnerabilities</h3>
+                          <div className={cardClasses.header}>
+                            <h2>Vulnerabilities by State</h2>
+                          </div>
                           <ComposableMap
                             projection="geoAlbersUsa"
                             style={{
-                              width: '50%',
+                              width: '70%',
                               display: 'block',
                               margin: 'auto'
                             }}
@@ -364,45 +406,21 @@ const Risk: React.FC = (props) => {
                             </Geographies>
                           </ComposableMap>
                         </div>
+                      </div>
+                    </Paper>
+                    <Paper
+                      elevation={0}
+                      classes={{ root: cardClasses.cardRoot }}
+                    >
+                      <div className={cardClasses.inner}>
                         <div className={classes.chart}>
-                          <h3>State vulnerabilities (counties)</h3>
+                          <div className={cardClasses.header}>
+                            <h2>Vulnerabilities by County</h2>
+                          </div>
                           <ComposableMap
                             projection="geoAlbersUsa"
                             style={{
-                              width: '50%',
-                              display: 'block',
-                              margin: 'auto'
-                            }}
-                          >
-                            <Geographies geography={geoStateUrl}>
-                              {({ geographies }) =>
-                                geographies.map((geo) => {
-                                  const cur = stats?.vulnerabilities.byOrg.find(
-                                    (p) =>
-                                      p.label ===
-                                      geo.properties.name + ' Counties'
-                                  );
-                                  return (
-                                    <Geography
-                                      key={geo.rsmKey}
-                                      geography={geo}
-                                      fill={colorScale(
-                                        cur ? Math.log(cur.value) : 0
-                                      )}
-                                    />
-                                  );
-                                })
-                              }
-                            </Geographies>
-                          </ComposableMap>
-                        </div>
-
-                        <div className={classes.chart}>
-                          <h3>County Vulnerabilities</h3>
-                          <ComposableMap
-                            projection="geoAlbersUsa"
-                            style={{
-                              width: '50%',
+                              width: '70%',
                               display: 'block',
                               margin: 'auto'
                             }}
@@ -430,10 +448,10 @@ const Risk: React.FC = (props) => {
                             </Geographies>
                           </ComposableMap>
                         </div>
-                      </>
-                    ))}
-                </div>
-              </Paper>
+                      </div>
+                    </Paper>
+                  </>
+                ))}
             </div>
           </div>
         )}
@@ -457,11 +475,18 @@ const useStyles = makeStyles((theme) => ({
   },
   cardSmall: {
     width: '100%',
-    height: '300px',
+    height: '350px',
     '& h3': {
       textAlign: 'center'
     },
     overflow: 'hidden'
+  },
+  chartSmall: {
+    height: '85%'
+  },
+  chartLarge: {
+    height: '90%',
+    width: '90%'
   },
   cardBig: {
     width: '100%',
