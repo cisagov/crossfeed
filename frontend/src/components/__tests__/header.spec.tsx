@@ -51,10 +51,12 @@ describe('Header component', () => {
       }
     });
     [
-      'Vulnerabilities',
-      'Risk Summary',
+      'Overview',
+      'Inventory',
       'My Organizations',
-      'My Account'
+      'My Account',
+      'My Settings',
+      'Logout'
     ].forEach((expected) => {
       expect(getByText(expected)).toBeInTheDocument();
     });
@@ -71,11 +73,13 @@ describe('Header component', () => {
       }
     });
     [
-      'Vulnerabilities',
-      'Risk Summary',
+      'Overview',
+      'Inventory',
       'Organization Settings',
       'My Organizations',
-      'My Account'
+      'My Account',
+      'My Settings',
+      'Logout'
     ].forEach((expected) => {
       expect(getByText(expected)).toBeInTheDocument();
     });
@@ -92,13 +96,15 @@ describe('Header component', () => {
       }
     });
     [
-      'Vulnerabilities',
-      'Risk Summary',
-      'Organization Settings',
+      'Overview',
+      'Inventory',
       'Scans',
+      'Organization Settings',
       'Manage Organizations',
       'Manage Users',
-      'My Account'
+      'My Account',
+      'My Settings',
+      'Logout'
     ].forEach((expected) => {
       expect(getByText(expected)).toBeInTheDocument();
     });

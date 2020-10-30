@@ -49,6 +49,13 @@ exports[`Header component matches snapshot 1`] = `
             class="makeStyles-mdNav-9"
           >
             <a
+              aria-current="page"
+              class="makeStyles-link-16 makeStyles-activeLink-14"
+              href="/"
+            >
+              Overview
+            </a>
+            <a
               class="makeStyles-link-16"
               href="/inventory"
             >
