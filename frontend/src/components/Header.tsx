@@ -30,13 +30,14 @@ interface NavItem {
   path: string;
   users?: number;
   nested?: NavItem[];
+  onClick?: any;
 }
 
 const HeaderNoCtx: React.FC<ContextType> = (props) => {
   const { searchTerm, setSearchTerm } = props;
   const classes = useStyles();
   const history = useHistory();
-  const { currentOrganization, user } = useAuthContext();
+  const { currentOrganization, user, logout } = useAuthContext();
   const [navOpen, setNavOpen] = useState(false);
 
   let userLevel = 0;
@@ -54,31 +55,23 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
 
   const navItems: NavItem[] = [
     {
+      title: 'Overview',
+      path: '/',
+      users: ALL_USERS,
+      exact: true
+    },
+    {
       title: 'Inventory',
       path: '/inventory',
       users: ALL_USERS,
-      exact: false,
-      nested: [
-        { title: 'Search', path: '/inventory/search', users: ALL_USERS },
-        {
-          title: 'Vulnerabilities',
-          path: '/inventory/vulnerabilities',
-          users: ALL_USERS
-        },
-        { title: 'Risk Summary', path: '/inventory/risk', users: ALL_USERS }
-      ]
+      exact: false
     },
     {
       title: 'Scans',
       path: '/scans',
       users: GLOBAL_ADMIN
     }
-  ]
-    .filter(({ users }) => (users & userLevel) > 0)
-    .map((item) => ({
-      ...item,
-      nested: item.nested?.filter((nested) => (nested.users & userLevel) > 0)
-    }));
+  ].filter(({ users }) => (users & userLevel) > 0);
 
   const userMenu: NavItem = {
     title: (
@@ -88,6 +81,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     ),
     path: '/settings',
     nested: [
+      { title: 'Manage Users', path: '/users', users: GLOBAL_ADMIN },
+      {
+        title: 'Manage Organizations',
+        path: '/organizations',
+        users: GLOBAL_ADMIN
+      },
       {
         title: 'Organization Settings',
         path: '/organization',
@@ -99,11 +98,16 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
         users: ORG_USER | ORG_ADMIN
       },
       {
-        title: 'Manage Organizations',
-        path: '/organizations',
-        users: GLOBAL_ADMIN
+        title: 'My Settings',
+        path: '/settings',
+        users: ALL_USERS
       },
-      { title: 'Manage Users', path: '/users', users: GLOBAL_ADMIN }
+      {
+        title: 'Logout',
+        path: '/settings',
+        users: ALL_USERS
+        // onClick: logout
+      }
     ].filter(({ users }) => (users & userLevel) > 0)
   };
 
@@ -139,17 +143,21 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
 
             <div className={classes.spacing} />
 
-            <SearchBar
-              value={searchTerm}
-              onChange={(value) => {
-                history.push('/inventory/search');
-                setSearchTerm(value, {
-                  shouldClearFilters: false,
-                  autocompleteResults: false
-                });
-              }}
-            />
-            {userLevel > 0 && <NavItem {...userMenu} />}
+            {userLevel > 0 && (
+              <>
+                <SearchBar
+                  value={searchTerm}
+                  onChange={(value) => {
+                    history.push('/inventory');
+                    setSearchTerm(value, {
+                      shouldClearFilters: false,
+                      autocompleteResults: false
+                    });
+                  }}
+                />
+                <NavItem {...userMenu} />
+              </>
+            )}
           </Toolbar>
         </div>
       </AppBar>
@@ -178,8 +186,9 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                   button
                   key={nested.title.toString()}
                   component={NavLink}
-                  to={nested.path}
+                  to={nested.onClick ? '#' : nested.path}
                   activeClassName={classes.activeMobileLink}
+                  onClick={nested.onClick ? nested.onClick : undefined}
                 >
                   {nested.title}
                 </ListItem>

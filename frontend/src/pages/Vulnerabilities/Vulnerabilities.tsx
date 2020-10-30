@@ -31,6 +31,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import ReactMarkdown from 'react-markdown';
+import { Subnav } from 'components';
 
 export interface ApiResponse {
   result: Vulnerability[];
@@ -81,7 +82,7 @@ export const Vulnerabilities: React.FC = () => {
       Header: 'Domain',
       id: 'domain',
       accessor: ({ domain }) => (
-        <Link to={`/domain/${domain.id}`}>{domain?.name}</Link>
+        <Link to={`/inventory/domain/${domain.id}`}>{domain?.name}</Link>
       ),
       width: 800,
       Filter: ColumnFilter
@@ -109,7 +110,7 @@ export const Vulnerabilities: React.FC = () => {
         let daysOpen = 0;
         let lastOpenDate = createdAt;
         let lastState = 'open';
-        console.log(actions);
+
         actions.reverse();
         for (const action of actions) {
           if (action.state === 'closed' && lastState === 'open') {
@@ -391,16 +392,12 @@ export const Vulnerabilities: React.FC = () => {
   return (
     <div className={classes.root}>
       <Grid row>
-        <Grid tablet={{ col: true }}>
-          <h1>
-            Vulnerabilities
-            {showAll
-              ? ' - Global'
-              : currentOrganization
-              ? ' - ' + currentOrganization.name
-              : ''}
-          </h1>
-        </Grid>
+        <Subnav
+          items={[
+            { title: 'Assets', path: '/inventory', exact: true },
+            { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
+          ]}
+        ></Subnav>
         <Grid style={{ float: 'right' }}>
           {((user?.roles && user.roles.length > 1) ||
             user?.userType === 'globalView' ||

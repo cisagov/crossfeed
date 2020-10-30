@@ -58,8 +58,8 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
       <div className={classes.contentWrapper}>
         <Subnav
           items={[
-            { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' },
-            { title: 'Domains', path: '/inventory/search' }
+            { title: 'Assets', path: '/inventory' },
+            { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
         >
           <FilterTags filters={filters} removeFilter={removeFilter} />

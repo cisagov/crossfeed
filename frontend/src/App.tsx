@@ -15,7 +15,6 @@ import {
 } from '@datapunt/matomo-tracker-react';
 import {
   Alerts,
-  Dashboard,
   Domain,
   AuthLogin,
   AuthCreateAccount,
@@ -93,7 +92,7 @@ const App: React.FC = () => (
                   path="/"
                   render={() => <Redirect to="/inventory" />}
                   unauth={AuthLogin}
-                  component={Dashboard}
+                  component={Risk}
                 />
 
                 <Route
@@ -108,17 +107,15 @@ const App: React.FC = () => (
                 />
                 <Route exact path="/terms" component={TermsOfUse} />
 
-                <RouteGuard exact path="/inventory" component={Dashboard} />
+                <RouteGuard exact path="/inventory" component={SearchPage} />
                 <RouteGuard
                   path="/inventory/domain/:domainId"
                   component={Domain}
                 />
-                <RouteGuard path="/inventory/search" component={SearchPage} />
                 <RouteGuard
                   path="/inventory/vulnerabilities"
                   component={Vulnerabilities}
                 />
-                <RouteGuard path="/inventory/risk" component={Risk} />
                 <RouteGuard path="/inventory/alerts" component={Alerts} />
 
                 <RouteGuard path="/scans/:scanId" component={Scan} />
