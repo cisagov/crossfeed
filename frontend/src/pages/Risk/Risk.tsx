@@ -14,13 +14,14 @@ const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 const geoCountyUrl =
   'https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json';
 
+// Color Scale used for map
 let colorScale = scaleLinear<string>()
   .domain([0, 1])
   .range(['#c7e8ff', '#135787']);
 
 const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
 
-const getSingleColor = ({ id }: { id: string }) => {
+const getSingleColor = () => {
   return '#FFBC78';
 };
 
@@ -54,11 +55,16 @@ interface Stats {
     severity: Point[];
     byOrg: Point[];
     latestVulnerabilities: Vulnerability[];
+    mostCommonVulnerabilities: VulnerabilityCount[];
   };
 }
 
 interface ApiResponse {
   result: Stats;
+}
+
+interface VulnerabilityCount extends Vulnerability {
+  count: number;
 }
 
 const Risk: React.FC = (props) => {
@@ -87,6 +93,7 @@ const Risk: React.FC = (props) => {
       }
     });
     const max = Math.max(...result.vulnerabilities.byOrg.map((p) => p.value));
+    // Adjust color scale based on highest count
     colorScale = scaleLinear<string>()
       .domain([0, Math.log(max)])
       .range(['#c7e8ff', '#135787']);
@@ -140,12 +147,12 @@ const Risk: React.FC = (props) => {
     type: string;
     longXValues?: boolean;
   }) => {
-    let keys: string[];
+    let keys = xLabels;
     let dataVal: object[];
     if (type === 'ports') {
-      keys = xLabels;
       dataVal = data.map((e) => ({ ...e, [xLabels[0]]: e.value })) as any;
     } else {
+      // Separate count by severity
       let domainToSevMap: any = {};
       for (let point of data) {
         let split = point.id.split('|');
@@ -154,7 +161,6 @@ const Risk: React.FC = (props) => {
         if (!(domain in domainToSevMap)) domainToSevMap[domain] = {};
         domainToSevMap[domain][severity] = point.value;
       }
-      keys = xLabels;
       dataVal = Object.keys(domainToSevMap)
         .map((key) => ({
           label: key,
@@ -222,8 +228,95 @@ const Risk: React.FC = (props) => {
     );
   };
 
+  const VulnerabilityCard = ({
+    title,
+    showLatest,
+    data
+  }: {
+    title: string;
+    showLatest: boolean;
+    data: VulnerabilityCount[];
+  }) => (
+    <Paper elevation={0} className={cardClasses.cardRoot}>
+      <div className={cardClasses.cardSmall}>
+        <div className={cardClasses.header}>
+          <h2>{title}</h2>
+        </div>
+        <div className={cardClasses.body}>
+          {/* <h4 style={{ float: 'left' }}>Today:</h4> */}
+          <div>
+            {data.slice(0, 4).map((vuln) => (
+              <Tooltip
+                title={truncateText(vuln.description, 120)}
+                placement="right"
+                arrow
+              >
+                <Paper
+                  elevation={0}
+                  className={cardClasses.miniCardRoot}
+                  aria-label="view domain details"
+                >
+                  <div className={cardClasses.cardInner}>
+                    <div className={cardClasses.miniCardLeft}>
+                      <p>
+                        <Chip
+                          label={vuln.count}
+                          style={{
+                            marginRight: 10,
+                            color: '#D83933',
+                            backgroundColor: 'white',
+                            border: '1px solid #71767A'
+                          }}
+                        />
+                        {vuln.title}
+                      </p>
+                    </div>
+                    <div className={cardClasses.miniCardCenter}>
+                      <p
+                        className={cardClasses.underlined}
+                        style={{
+                          borderBottom: `6px solid ${getSeverityColor({
+                            id: vuln.severity ?? ''
+                          })}`
+                        }}
+                      >
+                        {vuln.severity}
+                      </p>
+                    </div>
+                    <button
+                      className={cardClasses.button}
+                      onClick={() => {
+                        history.push(
+                          '/vulnerabilities?title=' +
+                            vuln.title +
+                            (vuln.domain ? '&domain=' + vuln.domain.name : '')
+                        );
+                      }}
+                    >
+                      DETAILS
+                    </button>
+                  </div>
+                </Paper>
+              </Tooltip>
+            ))}
+          </div>
+
+          {showLatest && (
+            <div className={cardClasses.footer}>
+              <h4>
+                <Link to="/vulnerabilities?sort=createdAt&desc=false">
+                  See all latest vulnerabilites
+                </Link>
+              </h4>
+            </div>
+          )}
+        </div>
+      </div>
+    </Paper>
+  );
+
   const latestVulnsGrouped: {
-    [key: string]: Vulnerability & { count: number };
+    [key: string]: VulnerabilityCount;
   } = {};
   if (stats) {
     for (const vuln of stats.vulnerabilities.latestVulnerabilities) {
@@ -235,12 +328,9 @@ const Risk: React.FC = (props) => {
     }
   }
 
-  const latestVulnsGroupedArr = Object.values(latestVulnsGrouped)
-    .sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
-    .slice(0, 4);
+  const latestVulnsGroupedArr = Object.values(latestVulnsGrouped).sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   return (
     <div className={classes.root}>
@@ -265,81 +355,12 @@ const Risk: React.FC = (props) => {
         {stats && (
           <div className={cardClasses.content}>
             <div className={cardClasses.panel}>
-              {stats.domains.services.length > 0 && (
-                <Paper elevation={0} className={cardClasses.cardRoot}>
-                  <div className={cardClasses.cardSmall}>
-                    <div className={cardClasses.header}>
-                      <h2>Latest Vulnerabilities</h2>
-                    </div>
-                    <div className={cardClasses.body}>
-                      {/* <h4 style={{ float: 'left' }}>Today:</h4> */}
-                      <div>
-                        {latestVulnsGroupedArr.map((vuln) => (
-                          <Tooltip
-                            title={truncateText(vuln.description, 120)}
-                            placement="right"
-                            arrow
-                          >
-                            <Paper
-                              elevation={0}
-                              className={cardClasses.miniCardRoot}
-                              aria-label="view domain details"
-                            >
-                              <div className={cardClasses.cardInner}>
-                                <div className={cardClasses.miniCardLeft}>
-                                  <p>
-                                    <Chip
-                                      label={vuln.count}
-                                      style={{
-                                        marginRight: 10,
-                                        color: '#D83933',
-                                        backgroundColor: 'white',
-                                        border: '1px solid #71767A'
-                                      }}
-                                    />
-                                    {vuln.title}
-                                  </p>
-                                </div>
-                                <div className={cardClasses.miniCardCenter}>
-                                  <p
-                                    className={cardClasses.underlined}
-                                    style={{
-                                      borderBottom: `6px solid ${getSeverityColor(
-                                        { id: vuln.severity ?? '' }
-                                      )}`
-                                    }}
-                                  >
-                                    {vuln.severity}
-                                  </p>
-                                </div>
-                                <button
-                                  className={cardClasses.button}
-                                  onClick={() => {
-                                    history.push(
-                                      `/vulnerabilities?title=${vuln.title}&domain=${vuln.domain.name}`
-                                    );
-                                  }}
-                                >
-                                  DETAILS
-                                </button>
-                              </div>
-                            </Paper>
-                          </Tooltip>
-                        ))}
-                      </div>
-
-                      <div className={cardClasses.footer}>
-                        <h4>
-                          <Link to="/vulnerabilities?sort=createdAt&desc=false">
-                            See all latest vulnerabilites
-                          </Link>
-                        </h4>
-                      </div>
-                    </div>
-                  </div>
-                </Paper>
-              )}
-              <Paper elevation={20} classes={{ root: cardClasses.cardRoot }}>
+              <VulnerabilityCard
+                title={'Latest Vulnerabilities'}
+                data={latestVulnsGroupedArr}
+                showLatest={true}
+              ></VulnerabilityCard>
+              {/* <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
                 <div className={cardClasses.inner}>
                   {stats.domains.numVulnerabilities.length > 0 && (
                     <div className={cardClasses.cardSmall}>
@@ -349,7 +370,7 @@ const Risk: React.FC = (props) => {
                     </div>
                   )}
                 </div>
-              </Paper>
+              </Paper> */}
 
               {stats.domains.services.length > 0 && (
                 <Paper elevation={0} className={cardClasses.cardRoot}>
@@ -422,17 +443,12 @@ const Risk: React.FC = (props) => {
                   )}
                 </div>
               </Paper>
-              <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
-                <div className={cardClasses.inner}>
-                  {stats.domains.numVulnerabilities.length > 0 && (
-                    <div className={cardClasses.cardSmall}>
-                      <div className={cardClasses.header}>
-                        <h2>Most Common CVEs</h2>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </Paper>
+
+              <VulnerabilityCard
+                title={'Most Common Vulnerabilities'}
+                data={stats.vulnerabilities.mostCommonVulnerabilities}
+                showLatest={false}
+              ></VulnerabilityCard>
 
               {user?.userType === 'globalView' ||
                 (user?.userType === 'globalAdmin' && (

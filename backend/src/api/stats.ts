@@ -22,6 +22,7 @@ interface Stats {
     severity: Point[];
     byOrg: Point[];
     latestVulnerabilities: Vulnerability[];
+    mostCommonVulnerabilities: Vulnerability[];
   };
 }
 
@@ -103,6 +104,18 @@ export const get = wrapHandler(async (event) => {
       .orderBy('vulnerability.createdAt', 'ASC')
       .limit(MAX_RESULTS)
   ).getMany();
+  const mostCommonVulnerabilities = await filterQuery(
+    Vulnerability.createQueryBuilder('vulnerability')
+      .leftJoinAndSelect('vulnerability.domain', 'domain')
+      .andWhere("vulnerability.state = 'open'")
+      .select(
+        'vulnerability.title, vulnerability.description, vulnerability.severity, count(*) as count'
+      )
+      .groupBy(
+        'vulnerability.title, vulnerability.description, vulnerability.severity'
+      )
+      .orderBy('count', 'DESC')
+  ).getRawMany();
   const severity = await performQuery(
     Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
@@ -133,7 +146,8 @@ export const get = wrapHandler(async (event) => {
     vulnerabilities: {
       severity,
       byOrg,
-      latestVulnerabilities
+      latestVulnerabilities,
+      mostCommonVulnerabilities
     }
   };
   return {
