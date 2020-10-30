@@ -163,6 +163,11 @@ variable webscraper_bucket_name {
   default = "crossfeed-staging-webscraper"
 }
 
+variable export_bucket_name {
+  type    = string
+  default = "cisa-crossfeed-staging-exports"
+}
+
 variable user_pool_name {
   type    = string
   default = "crossfeed-staging"
