@@ -5,7 +5,15 @@ import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
 import { Checkbox, Grid } from '@trussworks/react-uswds';
 import { Chip, makeStyles, Paper, Tooltip } from '@material-ui/core';
-import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { geoCentroid } from 'd3-geo';
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  ZoomableGroup,
+  Marker,
+  Annotation
+} from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
 import { Link, useHistory } from 'react-router-dom';
 import { Vulnerability } from 'types';
@@ -60,8 +68,6 @@ const Risk: React.FC = (props) => {
   };
 
   const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
-  const geoCountyUrl =
-    'https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json';
 
   const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
 
@@ -245,20 +251,22 @@ const Risk: React.FC = (props) => {
         <div className={cardClasses.body}>
           {/* <h4 style={{ float: 'left' }}>Today:</h4> */}
           <div>
-            {data.slice(0, 4).map((vuln) => (
-              <Tooltip
-                title={truncateText(vuln.description, 120)}
-                placement="right"
-                arrow
-              >
-                <Paper
-                  elevation={0}
-                  className={cardClasses.miniCardRoot}
-                  aria-label="view domain details"
+            {data.length === 0 && <h3>No open vulnerabilities</h3>}
+            {data.length > 0 &&
+              data.slice(0, 4).map((vuln) => (
+                <Tooltip
+                  title={truncateText(vuln.description, 120)}
+                  placement="right"
+                  arrow
+                  key={vuln.title}
                 >
-                  <div className={cardClasses.cardInner}>
-                    <div className={cardClasses.miniCardLeft}>
-                      <p>
+                  <Paper
+                    elevation={0}
+                    className={cardClasses.miniCardRoot}
+                    aria-label="view domain details"
+                  >
+                    <div className={cardClasses.cardInner}>
+                      <div className={cardClasses.miniCardLeft}>
                         <Chip
                           label={vuln.count}
                           style={{
@@ -269,36 +277,35 @@ const Risk: React.FC = (props) => {
                           }}
                         />
                         {vuln.title}
-                      </p>
-                    </div>
-                    <div className={cardClasses.miniCardCenter}>
-                      <p
-                        className={cardClasses.underlined}
-                        style={{
-                          borderBottom: `6px solid ${getSeverityColor({
-                            id: vuln.severity ?? ''
-                          })}`
+                      </div>
+                      <div className={cardClasses.miniCardCenter}>
+                        <p
+                          className={cardClasses.underlined}
+                          style={{
+                            borderBottom: `6px solid ${getSeverityColor({
+                              id: vuln.severity ?? ''
+                            })}`
+                          }}
+                        >
+                          {vuln.severity}
+                        </p>
+                      </div>
+                      <button
+                        className={cardClasses.button}
+                        onClick={() => {
+                          history.push(
+                            '/vulnerabilities?title=' +
+                              vuln.title +
+                              (vuln.domain ? '&domain=' + vuln.domain.name : '')
+                          );
                         }}
                       >
-                        {vuln.severity}
-                      </p>
+                        DETAILS
+                      </button>
                     </div>
-                    <button
-                      className={cardClasses.button}
-                      onClick={() => {
-                        history.push(
-                          '/vulnerabilities?title=' +
-                            vuln.title +
-                            (vuln.domain ? '&domain=' + vuln.domain.name : '')
-                        );
-                      }}
-                    >
-                      DETAILS
-                    </button>
-                  </div>
-                </Paper>
-              </Tooltip>
-            ))}
+                  </Paper>
+                </Tooltip>
+              ))}
           </div>
 
           {showLatest && (
@@ -315,14 +322,28 @@ const Risk: React.FC = (props) => {
     </Paper>
   );
 
+  const offsets: any = {
+    Vermont: [50, -8],
+    'New Hampshire': [34, 2],
+    Massachusetts: [30, -1],
+    'Rhode Island': [28, 2],
+    Connecticut: [35, 10],
+    'New Jersey': [34, 1],
+    Delaware: [33, 0],
+    Maryland: [47, 10],
+    'District of Columbia': [49, 21]
+  };
+
   const MapCard = ({
     title,
     geoUrl,
-    findFn
+    findFn,
+    type
   }: {
     title: string;
     geoUrl: string;
     findFn: (geo: any) => Point | undefined;
+    type: string;
   }) => (
     <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
       <div className={cardClasses.inner}>
@@ -332,28 +353,65 @@ const Risk: React.FC = (props) => {
           </div>
 
           <ComposableMap
+            data-tip="hello world"
             projection="geoAlbersUsa"
             style={{
-              width: '70%',
+              width: '90%',
               display: 'block',
               margin: 'auto'
             }}
           >
-            <Geographies geography={geoUrl}>
-              {({ geographies }) =>
-                geographies.map((geo) => {
-                  const cur = findFn(geo);
-                  return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      fill={colorScale(cur ? Math.log(cur.value) : 0)}
-                    />
-                  );
-                })
-              }
-            </Geographies>
+            <ZoomableGroup zoom={1}>
+              <Geographies geography={geoUrl}>
+                {({ geographies }) =>
+                  geographies.map((geo) => {
+                    const cur = findFn(geo);
+                    const centroid = geoCentroid(geo);
+                    const name: string = geo.properties.name;
+                    return (
+                      <>
+                        <Geography
+                          key={geo.rsmKey}
+                          geography={geo}
+                          fill={colorScale(cur ? Math.log(cur.value) : 0)}
+                          onClick={() => {
+                            // alert(cur ? cur.label : '');
+                          }}
+                        />
+                        <g key={geo.rsmKey + '-name'}>
+                          {centroid[0] > -160 &&
+                            centroid[0] < -67 &&
+                            (Object.keys(offsets).indexOf(name) === -1 ? (
+                              <Marker coordinates={centroid}>
+                                <text y="2" fontSize={14} textAnchor="middle">
+                                  {cur ? cur.value : 0}
+                                </text>
+                              </Marker>
+                            ) : (
+                              <Annotation
+                                subject={centroid}
+                                dx={offsets[name][0]}
+                                dy={offsets[name][1]}
+                                connectorProps={{}}
+                              >
+                                <text
+                                  x={4}
+                                  fontSize={14}
+                                  alignmentBaseline="middle"
+                                >
+                                  {cur ? cur.value : 0}
+                                </text>
+                              </Annotation>
+                            ))}
+                        </g>
+                      </>
+                    );
+                  })
+                }
+              </Geographies>
+            </ZoomableGroup>
           </ComposableMap>
+          {/* <ReactTooltip>{tooltipContent}</ReactTooltip> */}
         </div>
       </div>
     </Paper>
@@ -477,12 +535,16 @@ const Risk: React.FC = (props) => {
                         <h2>Open Vulnerabilities by Domain</h2>
                       </div>
                       <div className={cardClasses.chartLarge}>
-                        <MyResponsiveBar
-                          data={stats.domains.numVulnerabilities}
-                          xLabels={['Critical', 'High', 'Medium', 'Low']}
-                          type={'vulns'}
-                          longXValues={true}
-                        />
+                        {stats.domains.numVulnerabilities.length === 0 ? (
+                          <h3>No open vulnerabilities</h3>
+                        ) : (
+                          <MyResponsiveBar
+                            data={stats.domains.numVulnerabilities}
+                            xLabels={['Critical', 'High', 'Medium', 'Low']}
+                            type={'vulns'}
+                            longXValues={true}
+                          />
+                        )}
                       </div>
                     </div>
                   )}
@@ -499,22 +561,24 @@ const Risk: React.FC = (props) => {
                 (user?.userType === 'globalAdmin' && (
                   <>
                     <MapCard
-                      title={'Vulnerabilities by State'}
+                      title={'State Vulnerabilities'}
                       geoUrl={geoStateUrl}
                       findFn={(geo) =>
                         stats?.vulnerabilities.byOrg.find(
                           (p) => p.label === geo.properties.name
                         )
                       }
+                      type={'state'}
                     ></MapCard>
                     <MapCard
-                      title={'Vulnerabilities by County'}
-                      geoUrl={geoCountyUrl}
+                      title={'County Vulnerabilities'}
+                      geoUrl={geoStateUrl}
                       findFn={(geo) =>
-                        stats?.domains.numVulnerabilities.find((p) =>
-                          p.label.includes(geo.properties.name.toLowerCase())
+                        stats?.vulnerabilities.byOrg.find(
+                          (p) => p.label === geo.properties.name + ' Counties'
                         )
                       }
+                      type={'county'}
                     ></MapCard>
                   </>
                 ))}
