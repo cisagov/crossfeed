@@ -35,6 +35,7 @@ import ReactMarkdown from 'react-markdown';
 export interface ApiResponse {
   result: Vulnerability[];
   count: number;
+  url?: string;
 }
 
 const formatDate = (date: string) => {
@@ -302,7 +303,8 @@ export const Vulnerabilities: React.FC = () => {
       filters: Filters<Vulnerability>,
       sort: SortingRule<Vulnerability>[],
       page: number,
-      pageSize: number = 25
+      pageSize: number = 25,
+      doExport = false
     ): Promise<ApiResponse | undefined> => {
       try {
         const tableFilters: {
@@ -326,7 +328,7 @@ export const Vulnerabilities: React.FC = () => {
             tableFilters['substate'] = substate.toLowerCase().replace(' ', '-');
           delete tableFilters['state'];
         }
-        return await apiPost<ApiResponse>('/vulnerabilities/search', {
+        return await apiPost<ApiResponse>(doExport ? '/vulnerabilities/export': '/vulnerabilities/search', {
           body: {
             page,
             sort: sort[0]?.id ?? 'createdAt',
@@ -361,27 +363,17 @@ export const Vulnerabilities: React.FC = () => {
     [vulnerabilitiesSearch]
   );
 
-  const fetchVulnerabilitiesExport = async (): Promise<any[]> => {
+  const fetchVulnerabilitiesExport = async (): Promise<string> => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
-    if (!sortBy || !filters) return [];
-
-    let allVulns: Vulnerability[] = [];
     let page = 0;
-    while (true) {
-      page += 1;
-      const { count, result } = (await vulnerabilitiesSearch(
-        filters,
-        sortBy,
-        page,
-        100
-      )) as ApiResponse;
-      allVulns = allVulns.concat(result || []);
-      if (count <= page * 100) break;
-    }
-    return allVulns.map((vuln) => ({
-      ...vuln,
-      domain: vuln.domain.name
-    }));
+    const { url } = await vulnerabilitiesSearch(
+      filters,
+      sortBy,
+      page,
+      100,
+      true
+    ) as ApiResponse;
+    return url!;
   };
 
   const renderPagination = (table: TableInstance<Vulnerability>) => (
@@ -428,20 +420,6 @@ export const Vulnerabilities: React.FC = () => {
       />
       <Export<Vulnerability>
         name="vulnerabilities"
-        fieldsToExport={[
-          'domain',
-          'title',
-          'cve',
-          'cwe',
-          'cpe',
-          'description',
-          'cvss',
-          'severity',
-          'state',
-          'lastSeen',
-          'createdAt',
-          'id'
-        ]}
         getDataToExport={fetchVulnerabilitiesExport}
       />
     </div>
