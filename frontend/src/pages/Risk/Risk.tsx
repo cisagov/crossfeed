@@ -10,34 +10,6 @@ import { scaleLinear } from 'd3-scale';
 import { Link, useHistory } from 'react-router-dom';
 import { Vulnerability } from 'types';
 
-const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
-const geoCountyUrl =
-  'https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json';
-
-// Color Scale used for map
-let colorScale = scaleLinear<string>()
-  .domain([0, 1])
-  .range(['#c7e8ff', '#135787']);
-
-const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
-
-const getSingleColor = () => {
-  return '#FFBC78';
-};
-
-const getSeverityColor = ({ id }: { id: string }) => {
-  if (id === 'None') return 'rgb(255, 255, 255)';
-  else if (id === 'Low') return '#F8DFE2';
-  else if (id === 'Medium') return '#F2938C';
-  else if (id === 'High') return '#B51D09';
-  else return '#540C03';
-};
-
-const truncateText = (text: string, len: number) => {
-  if (text.length <= len) return text;
-  return text.substring(0, len) + '...';
-};
-
 interface Point {
   id: string;
   label: string;
@@ -80,6 +52,34 @@ const Risk: React.FC = (props) => {
   const updateShowAll = (state: boolean) => {
     setShowAll(state);
     localStorage.setItem('showGlobal', JSON.stringify(state));
+  };
+
+  const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
+  const geoCountyUrl =
+    'https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json';
+
+  // Color Scale used for map
+  let colorScale = scaleLinear<string>()
+    .domain([0, 1])
+    .range(['#c7e8ff', '#135787']);
+
+  const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
+
+  const getSingleColor = () => {
+    return '#FFBC78';
+  };
+
+  const getSeverityColor = ({ id }: { id: string }) => {
+    if (id === 'None') return 'rgb(255, 255, 255)';
+    else if (id === 'Low') return '#F8DFE2';
+    else if (id === 'Medium') return '#F2938C';
+    else if (id === 'High') return '#B51D09';
+    else return '#540C03';
+  };
+
+  const truncateText = (text: string, len: number) => {
+    if (text.length <= len) return text;
+    return text.substring(0, len) + '...';
   };
 
   const fetchStats = useCallback(async () => {
@@ -315,6 +315,51 @@ const Risk: React.FC = (props) => {
     </Paper>
   );
 
+  const MapCard = ({
+    title,
+    geoUrl,
+    findFn
+  }: {
+    title: string;
+    geoUrl: string;
+    findFn: (geo: any) => Point | undefined;
+  }) => (
+    <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+      <div className={cardClasses.inner}>
+        <div className={classes.chart}>
+          <div className={cardClasses.header}>
+            <h2>{title}</h2>
+          </div>
+
+          <ComposableMap
+            projection="geoAlbersUsa"
+            style={{
+              width: '70%',
+              display: 'block',
+              margin: 'auto'
+            }}
+          >
+            <Geographies geography={geoUrl}>
+              {({ geographies }) =>
+                geographies.map((geo) => {
+                  const cur = findFn(geo);
+                  return (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      fill={colorScale(cur ? Math.log(cur.value) : 0)}
+                    />
+                  );
+                })
+              }
+            </Geographies>
+          </ComposableMap>
+        </div>
+      </div>
+    </Paper>
+  );
+
+  // Group latest vulns together
   const latestVulnsGrouped: {
     [key: string]: VulnerabilityCount;
   } = {};
@@ -453,87 +498,24 @@ const Risk: React.FC = (props) => {
               {user?.userType === 'globalView' ||
                 (user?.userType === 'globalAdmin' && (
                   <>
-                    <Paper
-                      elevation={0}
-                      classes={{ root: cardClasses.cardRoot }}
-                    >
-                      <div className={cardClasses.inner}>
-                        <div className={classes.chart}>
-                          <div className={cardClasses.header}>
-                            <h2>Vulnerabilities by State</h2>
-                          </div>
-                          <ComposableMap
-                            projection="geoAlbersUsa"
-                            style={{
-                              width: '70%',
-                              display: 'block',
-                              margin: 'auto'
-                            }}
-                          >
-                            <Geographies geography={geoStateUrl}>
-                              {({ geographies }) =>
-                                geographies.map((geo) => {
-                                  const cur = stats?.vulnerabilities.byOrg.find(
-                                    (p) => p.label === geo.properties.name
-                                  );
-                                  return (
-                                    <Geography
-                                      key={geo.rsmKey}
-                                      geography={geo}
-                                      fill={colorScale(
-                                        cur ? Math.log(cur.value) : 0
-                                      )}
-                                    />
-                                  );
-                                })
-                              }
-                            </Geographies>
-                          </ComposableMap>
-                        </div>
-                      </div>
-                    </Paper>
-                    <Paper
-                      elevation={0}
-                      classes={{ root: cardClasses.cardRoot }}
-                    >
-                      <div className={cardClasses.inner}>
-                        <div className={classes.chart}>
-                          <div className={cardClasses.header}>
-                            <h2>Vulnerabilities by County</h2>
-                          </div>
-                          <ComposableMap
-                            projection="geoAlbersUsa"
-                            style={{
-                              width: '70%',
-                              display: 'block',
-                              margin: 'auto'
-                            }}
-                          >
-                            <Geographies geography={geoCountyUrl}>
-                              {({ geographies }) =>
-                                geographies.map((geo) => {
-                                  const cur = stats?.domains.numVulnerabilities.find(
-                                    (p) =>
-                                      p.label.includes(
-                                        geo.properties.name.toLowerCase()
-                                      )
-                                  );
-                                  return (
-                                    <Geography
-                                      key={geo.rsmKey}
-                                      geography={geo}
-                                      fill={colorScale(
-                                        cur ? Math.log(cur.value) : 0
-                                      )}
-                                    />
-                                  );
-                                })
-                              }
-                            </Geographies>
-                          </ComposableMap>
-                        </div>
-                      </div>
-                    </Paper>
+                    <MapCard
+                      title={'Vulnerabilities by State'}
+                      geoUrl={geoStateUrl}
+                      findFn={(geo) =>
+                        stats?.vulnerabilities.byOrg.find(
+                          (p) => p.label === geo.properties.name
+                        )
+                      }
+                    ></MapCard>
+                    <MapCard
+                      title={'Vulnerabilities by County'}
+                      geoUrl={geoCountyUrl}
+                      findFn={(geo) =>
+                        stats?.domains.numVulnerabilities.find((p) =>
+                          p.label.includes(geo.properties.name.toLowerCase())
+                        )
+                      }
+                    ></MapCard>
                   </>
                 ))}
             </div>
