@@ -9,6 +9,7 @@ export interface DomainQuery extends Query<Domain> {
 interface ApiResponse {
   result: Domain[];
   count: number;
+  url?: string;
 }
 
 const PAGE_SIZE = 25;
@@ -18,7 +19,7 @@ export const useDomainApi = (showAll?: boolean) => {
   const orgId = currentOrganization?.id;
 
   const listDomains = useCallback(
-    async (query: DomainQuery) => {
+    async (query: DomainQuery, doExport = false) => {
       const { page, sort, filters, pageSize = PAGE_SIZE } = query;
 
       const tableFilters = filters
@@ -31,7 +32,7 @@ export const useDomainApi = (showAll?: boolean) => {
           {}
         );
 
-      const { result, count } = await apiPost<ApiResponse>('/domain/search', {
+      const { result, count, url } = await apiPost<ApiResponse>(doExport ? '/domain/export': '/domain/search', {
         body: {
           pageSize,
           page,
@@ -47,6 +48,7 @@ export const useDomainApi = (showAll?: boolean) => {
       return {
         domains: result,
         count,
+        url,
         pageCount: Math.ceil(count / pageSize)
       };
     },

@@ -28,9 +28,9 @@ class S3Client {
    * temporary URL that can be used to access it.
    * @param data Data to be saved as a CSV
    */
-  async saveCSV(body: string) {
+  async saveCSV(body: string, name: string = '') {
     try {
-      const Key = Math.random() + '';
+      const Key = `${Math.random()}/${name}-${new Date().toISOString()}.csv`;
       const params = {
         Bucket: process.env.EXPORT_BUCKET_NAME!,
         Key,
@@ -38,11 +38,17 @@ class S3Client {
         ContentType: 'text/csv'
       };
       const data = await this.s3.putObject(params).promise();
-      return this.s3.getSignedUrlPromise('getObject', {
+      const url = await this.s3.getSignedUrlPromise('getObject', {
         Bucket: process.env.EXPORT_BUCKET_NAME!,
         Key,
         Expires: 60 * 5 // 5 minutes
       });
+
+      // Do this so exports are accessible when running locally.
+      if (this.isLocal) {
+        return url.replace('minio:9000', 'localhost:9000');
+      }
+      return url;
     } catch (e) {
       console.error(e);
       throw e;

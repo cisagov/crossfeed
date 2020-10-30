@@ -221,7 +221,7 @@ export const export_ = wrapHandler(async (event) => {
     search.getCount(event)
   ]);
   const client = new S3Client();
-  const url = client.saveCSV(
+  const url = await client.saveCSV(
     Papa.unparse({
       fields: [
         'name',
@@ -233,7 +233,8 @@ export const export_ = wrapHandler(async (event) => {
         'updatedAt'
       ],
       data: result
-    })
+    }),
+    'domains'
   );
 
   return {
