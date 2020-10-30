@@ -11,7 +11,38 @@ import {
 import { createUserToken } from './util';
 
 describe('stats', () => {
-  let organization;
+  const standard = {
+    domains: {
+      numVulnerabilities: [
+        {
+          id: expect.any(String),
+          label: expect.any(String)
+        }
+      ]
+    },
+    vulnerabilities: {
+      byOrg: [
+        {
+          id: expect.any(String),
+          label: expect.any(String)
+        }
+      ],
+      latestVulnerabilities: [
+        {
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+          id: expect.any(String),
+          domain: {
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+            id: expect.any(String),
+            name: expect.any(String),
+            reverseName: expect.any(String)
+          }
+        }
+      ]
+    }
+  };
   beforeAll(async () => {
     await connectToDatabase();
   });
@@ -63,16 +94,7 @@ describe('stats', () => {
           })
         )
         .expect(200);
-      expect(response.body.result).toMatchSnapshot({
-        domains: {
-          numVulnerabilities: [
-            {
-              id: expect.any(String),
-              label: expect.any(String)
-            }
-          ]
-        }
-      });
+      expect(response.body.result).toMatchSnapshot(standard);
       expect(response.body.result.domains.numVulnerabilities[0].id).toEqual(
         domain.name + '|High'
       );
@@ -133,16 +155,7 @@ describe('stats', () => {
           filters: { organization: organization.id }
         })
         .expect(200);
-      expect(response.body.result).toMatchSnapshot({
-        domains: {
-          numVulnerabilities: [
-            {
-              id: expect.any(String),
-              label: expect.any(String)
-            }
-          ]
-        }
-      });
+      expect(response.body.result).toMatchSnapshot(standard);
       expect(response.body.result.domains.numVulnerabilities[0].id).toEqual(
         domain.name + '|High'
       );
