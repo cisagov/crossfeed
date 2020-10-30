@@ -129,7 +129,7 @@ resource "aws_iam_role_policy" "worker_task_role_policy" {
       ],
       "Resource": [
         "${aws_s3_bucket.webscraper_bucket.arn}",
-        "${aws_s3_bucket.export_bucket.arn}/*"
+        "${aws_s3_bucket.export_bucket.arn}"
       ]
     }
   ]
