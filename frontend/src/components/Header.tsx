@@ -105,8 +105,8 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       {
         title: 'Logout',
         path: '/settings',
-        users: ALL_USERS
-        // onClick: logout
+        users: ALL_USERS,
+        onClick: logout
       }
     ].filter(({ users }) => (users & userLevel) > 0)
   };
@@ -169,7 +169,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
         data-testid="mobilenav"
       >
         <List className={classes.mobileNav}>
-          {navItems.map(({ title, path, nested }) => (
+          {navItems.map(({ title, path, nested, onClick }) => (
             <React.Fragment key={title.toString()}>
               {path && (
                 <ListItem
@@ -177,6 +177,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                   component={NavLink}
                   to={path}
                   activeClassName={classes.activeMobileLink}
+                  onClick={onClick ? onClick : undefined}
                 >
                   {title}
                 </ListItem>

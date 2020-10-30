@@ -6,6 +6,7 @@ import { Menu, MenuItem, Button, makeStyles } from '@material-ui/core';
 interface LinkConfig {
   title: string | JSX.Element;
   path: string;
+  onClick?: any;
 }
 
 interface Props {
@@ -13,10 +14,11 @@ interface Props {
   path?: string;
   title: string | JSX.Element;
   exact?: boolean;
+  onClick?: any;
 }
 
 export const NavItem: React.FC<Props> = (props) => {
-  const { title, path, nested, exact } = props;
+  const { title, path, nested, exact, onClick } = props;
   const match = useRouteMatch(path ?? '');
   const history = useHistory();
   const [anchor, setAnchor] = useState<any>(null);
@@ -66,7 +68,7 @@ export const NavItem: React.FC<Props> = (props) => {
           activeClassName={classes.activeLink}
           className={classes.link}
           onMouseEnter={onHoverButton}
-          onClick={onHoverButton}
+          onClick={onClick ? onClick : onHoverButton}
           onMouseLeave={onLeaveButton}
           exact={exact}
         >
@@ -78,7 +80,7 @@ export const NavItem: React.FC<Props> = (props) => {
             [classes.activeLink]: !!match
           })}
           onMouseOver={onHoverButton}
-          onClick={onHoverButton}
+          onClick={onClick ? onClick : onHoverButton}
         >
           {title}
         </Button>
@@ -107,7 +109,9 @@ export const NavItem: React.FC<Props> = (props) => {
           {nested.map((item) => (
             <MenuItem
               key={item.title.toString()}
-              onClick={() => navigateTo(item.path)}
+              onClick={
+                item.onClick ? item.onClick : () => navigateTo(item.path)
+              }
             >
               {item.title}
             </MenuItem>
