@@ -44,6 +44,11 @@ provider:
       Action:
         - ses:SendRawEmail
       Resource: '*'
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+        - s3:GetObjectAcl
+      Resource: '*'
 
 functions:
   - ${file(./src/tasks/functions.yml)}
