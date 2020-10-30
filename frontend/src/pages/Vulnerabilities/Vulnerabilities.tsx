@@ -32,6 +32,7 @@ import {
 } from '@material-ui/core';
 import ReactMarkdown from 'react-markdown';
 import { Subnav } from 'components';
+import { parse } from 'query-string';
 
 export interface ApiResponse {
   result: Vulnerability[];
@@ -110,7 +111,6 @@ export const Vulnerabilities: React.FC = () => {
         let daysOpen = 0;
         let lastOpenDate = createdAt;
         let lastState = 'open';
-
         actions.reverse();
         for (const action of actions) {
           if (action.state === 'closed' && lastState === 'open') {
@@ -389,6 +389,26 @@ export const Vulnerabilities: React.FC = () => {
     <Paginator table={table} />
   );
 
+  const initialFilterBy: Filters<Vulnerability> = [];
+  let initialSortBy: SortingRule<Vulnerability>[] = [];
+  const params = parse(window.location.search);
+  if (!('state' in params)) params['state'] = 'open';
+  for (const param of Object.keys(params)) {
+    if (param === 'sort') {
+      initialSortBy = [
+        {
+          id: params[param] as string,
+          desc: 'desc' in params ? params['desc'] === 'true' : true
+        }
+      ];
+    } else if (param !== 'desc') {
+      initialFilterBy.push({
+        id: param,
+        value: params[param] as string
+      });
+    }
+  }
+
   return (
     <div className={classes.root}>
       <Grid row>
@@ -421,7 +441,8 @@ export const Vulnerabilities: React.FC = () => {
         fetchData={fetchVulnerabilities}
         renderExpanded={renderExpandedVulnerability}
         tableRef={tableRef}
-        initialFilterBy={[{ id: 'state', value: 'open' }]}
+        initialFilterBy={initialFilterBy}
+        initialSortBy={initialSortBy}
       />
       <Export<Vulnerability>
         name="vulnerabilities"
