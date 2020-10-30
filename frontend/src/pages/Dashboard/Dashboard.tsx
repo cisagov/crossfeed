@@ -3,7 +3,7 @@ import { TableInstance } from 'react-table';
 import { Query } from 'types';
 import { Table, Paginator, Export } from 'components';
 import { Domain } from 'types';
-import { createColumns, getServiceNames } from './columns';
+import { createColumns } from './columns';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { Grid, Checkbox } from '@trussworks/react-uswds';
