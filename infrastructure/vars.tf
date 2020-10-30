@@ -163,6 +163,11 @@ variable webscraper_bucket_name {
   default = "crossfeed-staging-webscraper"
 }
 
+variable export_bucket_name {
+  type    = string
+  default = "cisa-crossfeed-staging-exports"
+}
+
 variable user_pool_name {
   type    = string
   default = "crossfeed-staging"
@@ -170,7 +175,7 @@ variable user_pool_name {
 
 variable user_pool_domain {
   type    = string
-  default = "crossfeed-staging-dds"
+  default = "crossfeed-staging"
 }
 
 variable ssm_user_pool_id {
@@ -185,7 +190,7 @@ variable ssm_user_pool_client_id {
 
 variable ses_support_email {
   type    = string
-  default = "support@crossfeed.dds.mil"
+  default = "support@staging.crossfeed.cyber.dhs.gov"
 }
 
 variable matomo_ecs_cluster_name {
@@ -226,4 +231,9 @@ variable es_instance_type {
 variable es_instance_count {
   type    = number
   default = 1
+}
+
+variable es_instance_volume_size {
+  type    = number
+  default = 100
 }

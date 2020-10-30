@@ -7,4 +7,4 @@ plan:
 apply:
 	dotenv -- terraform apply plan 
 format:
-	terraform fmt -recursive
+	terraform validate && terraform fmt -recursive

@@ -6,7 +6,7 @@
 
 set -e
 
-AWS_ECR_DOMAIN=268733397604.dkr.ecr.us-east-1.amazonaws.com
+AWS_ECR_DOMAIN=957221700844.dkr.ecr.us-east-1.amazonaws.com
 
 WORKER_TAG=${1:-crossfeed-staging-worker}
 

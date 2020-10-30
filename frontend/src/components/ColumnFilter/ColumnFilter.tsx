@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { TextInput } from "@trussworks/react-uswds";
-import { ColumnInstance } from "react-table";
-import { FaTimes } from "react-icons/fa";
-import classes from "./styles.module.scss";
+import React, { useState } from 'react';
+import { TextInput } from '@trussworks/react-uswds';
+import { ColumnInstance } from 'react-table';
+import { FaTimes } from 'react-icons/fa';
+import classes from './styles.module.scss';
 
 interface Props {
   column: ColumnInstance;
 }
 
 export const ColumnFilter: React.FC<Props> = ({
-  column: { filterValue, setFilter, id },
+  column: { filterValue, setFilter, id }
 }) => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const onSubmit: React.FormEventHandler = (e) => {
     e.preventDefault();
@@ -19,8 +19,8 @@ export const ColumnFilter: React.FC<Props> = ({
   };
 
   const clear: React.MouseEventHandler = (e) => {
-    setSearch("");
-    setFilter("");
+    setSearch('');
+    setFilter('');
   };
 
   return (
@@ -35,7 +35,7 @@ export const ColumnFilter: React.FC<Props> = ({
         }}
       />
       {filterValue && (
-        <button className={classes.clearFilter} onClick={clear}>
+        <button type="button" className={classes.clearFilter} onClick={clear}>
           <FaTimes />
         </button>
       )}

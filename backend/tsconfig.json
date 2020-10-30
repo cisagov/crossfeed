@@ -15,7 +15,8 @@
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "baseUrl": ".",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   },
   "include": ["./**/*"]
 }

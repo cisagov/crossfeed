@@ -42,3 +42,5 @@ matomo-db-data
 nvd-dump
 
 **.pyc
+
+minio-data

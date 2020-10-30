@@ -20,7 +20,7 @@ import {
 import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
-import { formatDistanceToNow, parseISO } from 'date-fns';
+import { differenceInCalendarDays, parseISO } from 'date-fns';
 import { stateMap } from 'pages/Vulnerabilities/Vulnerabilities';
 import { Webpage } from 'types/webpage';
 import { useAuthContext } from 'context';
@@ -110,11 +110,17 @@ export const DomainDetails: React.FC<Props> = (props) => {
     }
     ret.push({
       label: 'First Seen',
-      value: `${formatDistanceToNow(parseISO(domain.createdAt))} ago`
+      value: `${differenceInCalendarDays(
+        Date.now(),
+        parseISO(domain.createdAt)
+      )} ago`
     });
     ret.push({
       label: 'Last Seen',
-      value: `${formatDistanceToNow(parseISO(domain.updatedAt))} ago`
+      value: `${differenceInCalendarDays(
+        Date.now(),
+        parseISO(domain.updatedAt)
+      )} ago`
     });
     if (domain.country) {
       ret.push({
@@ -190,7 +196,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
           const page = tree[key] as Webpage;
           const parsed = new URL(page.url);
           const split = parsed.pathname
-            .replace(/\/$/, "") // Remove trailing slash
+            .replace(/\/$/, '') // Remove trailing slash
             .split('/');
           return (
             <ListItem
@@ -221,8 +227,9 @@ export const DomainDetails: React.FC<Props> = (props) => {
       ? 'https://'
       : 'http://') + domain.name;
 
-  domain.webpages.sort((a, b) => (a.url > b.url ? 1 : -1));
-  const webpageTree = generateWebpageTree(domain.webpages);
+  const { webpages = [] } = domain;
+  webpages.sort((a, b) => (a.url > b.url ? 1 : -1));
+  const webpageTree = generateWebpageTree(webpages);
   const webpageList = generateWebpageList(webpageTree);
 
   return (
@@ -283,7 +290,10 @@ export const DomainDetails: React.FC<Props> = (props) => {
                   </Typography>
                   <Typography className={classes.vulnDescription}>
                     {vuln.createdAt
-                      ? `${formatDistanceToNow(parseISO(vuln.createdAt))} ago`
+                      ? `${differenceInCalendarDays(
+                          Date.now(),
+                          parseISO(vuln.createdAt)
+                        )} days ago`
                       : ''}
                   </Typography>
                 </AccordionSummary>
@@ -335,7 +345,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
                 <Typography className={classes.accordionHeading}>
                   Products
                 </Typography>
-                <Typography>Last Seen</Typography>
+                <Typography className={classes.lastSeen}>Last Seen</Typography>
               </AccordionSummary>
             </Accordion>
             {domain.services.map((service) => {
@@ -355,11 +365,14 @@ export const DomainDetails: React.FC<Props> = (props) => {
                     <Typography className={classes.accordionHeading}>
                       {products}
                     </Typography>
-                    {service.lastSeen && (
-                      <Typography>
-                        {formatDistanceToNow(parseISO(service.lastSeen))} ago
-                      </Typography>
-                    )}
+                    <Typography className={classes.lastSeen}>
+                      {service.lastSeen
+                        ? `${differenceInCalendarDays(
+                            Date.now(),
+                            parseISO(service.lastSeen)
+                          )} days ago`
+                        : ''}
+                    </Typography>
                   </AccordionSummary>
                   {service.products.length > 0 && (
                     <AccordionDetails>
@@ -387,7 +400,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
             })}
           </div>
         )}
-        {domain.webpages.length > 0 && (
+        {domain.webpages?.length > 0 && (
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Site Map</h4>
             {webpageList}
@@ -443,7 +456,8 @@ const useStyles = makeStyles((theme) => ({
     padding: '1.5rem'
   },
   accordion: {
-    color: '#3D4551'
+    color: '#3D4551',
+    textAlign: 'left'
   },
   accordionHeaderRow: {
     color: '#000',
@@ -451,6 +465,9 @@ const useStyles = makeStyles((theme) => ({
   },
   accordionHeading: {
     flex: '1 0 33%'
+  },
+  lastSeen: {
+    flex: '0 0 125px'
   },
   vulnDescription: {
     flex: '1 1 15%',

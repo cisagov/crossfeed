@@ -6,6 +6,7 @@ export interface Scan {
   lastRun: string;
   isGranular: boolean;
   isSingleScan: boolean;
+  organizations: [];
 }
 
 // ScanSchema. TODO: synchronize this with the ScanSchema type in the backend.

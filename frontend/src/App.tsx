@@ -19,6 +19,7 @@ import {
   AuthLogin,
   AuthCreateAccount,
   Scans,
+  Scan,
   Logs,
   Risk,
   Organizations,
@@ -53,7 +54,7 @@ if (process.env.REACT_APP_USE_COGNITO) {
 const instance = createInstance({
   urlBase: `${process.env.REACT_APP_API_URL}/matomo`,
   siteId: 1,
-  disabled: true,
+  disabled: false,
   heartBeat: {
     // optional, enabled by default
     active: true, // optional, default value: true
@@ -103,12 +104,12 @@ const App: React.FC = () => (
                 component={AuthCreateAccount}
               />
               <Route exact path="/terms" component={TermsOfUse} />
-
               <RouteGuard path="/domain/:domainId" component={Domain} />
               <RouteGuard path="/search" component={SearchPage} />
               <RouteGuard path="/vulnerabilities" component={Vulnerabilities} />
               <RouteGuard path="/risk" component={Risk} />
               <RouteGuard path="/alerts" component={Alerts} />
+              <RouteGuard path="/scans/:scanId" component={Scan} />
               <RouteGuard path="/scans" component={Scans} />
               <RouteGuard path="/organizations" component={Organizations} />
               <RouteGuard path="/organization" component={Organization} />

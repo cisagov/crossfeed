@@ -76,7 +76,7 @@ const checkUserLoggedIn = async (req, res, next) => {
 
 const checkUserSignedTerms = (req, res, next) => {
   // Bypass ToU for CISA emails
-  const approvedEmailAddresses = ['@cisa.dhs.gov', '@dds.mil'];
+  const approvedEmailAddresses = ['@cisa.dhs.gov'];
   if (process.env.NODE_ENV === 'test')
     approvedEmailAddresses.push('@crossfeed.cisa.gov');
   for (const email of approvedEmailAddresses) {
@@ -170,8 +170,6 @@ app.use(
     if (user.userType !== 'globalAdmin') {
       return res.status(401).send('Unauthorized');
     }
-    // Don't forward the crossfeed-token cookie to the proxy
-    delete req.cookies['crossfeed-token'];
     return next();
   },
   matomoProxy
@@ -198,10 +196,15 @@ authenticatedRoute.use(checkUserSignedTerms);
 
 authenticatedRoute.post('/search', handlerToExpress(search.search));
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
+authenticatedRoute.post('/domain/export', handlerToExpress(domains.export_));
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
 authenticatedRoute.post(
   '/vulnerabilities/search',
   handlerToExpress(vulnerabilities.list)
+);
+authenticatedRoute.post(
+  '/vulnerabilities/export',
+  handlerToExpress(vulnerabilities.export_)
 );
 authenticatedRoute.get(
   '/vulnerabilities/:vulnerabilityId',
@@ -214,6 +217,7 @@ authenticatedRoute.put(
 authenticatedRoute.get('/scans', handlerToExpress(scans.list));
 authenticatedRoute.get('/granularScans', handlerToExpress(scans.listGranular));
 authenticatedRoute.post('/scans', handlerToExpress(scans.create));
+authenticatedRoute.get('/scans/:scanId', handlerToExpress(scans.get));
 authenticatedRoute.put('/scans/:scanId', handlerToExpress(scans.update));
 authenticatedRoute.delete('/scans/:scanId', handlerToExpress(scans.del));
 authenticatedRoute.post('/scans/:scanId/run', handlerToExpress(scans.runScan));

@@ -2,20 +2,22 @@ import {
   Domain,
   connectToDatabase,
   Vulnerability,
-  Product,
-  Service
+  Service,
+  Webpage
 } from '../models';
 import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
-import { ObjectType, LessThan, MoreThan, FindOperator } from 'typeorm';
+import { LessThan, MoreThan, FindOperator, In, MoreThanOrEqual } from 'typeorm';
 import * as fs from 'fs';
 import * as zlib from 'zlib';
 
 /**
- * The CVE scan finds vulnerable CVEs affecting domains based on CPEs identified
+ * The CVE scan creates vulnerabilities based on existing
+ * data (such as product version numbers / CPEs, webpages)
+ * that have already been collected from other scans.
  */
 
 const productMap = {
@@ -25,8 +27,10 @@ const productMap = {
 // The number of domains to process at once
 const BATCH_SIZE = 1000;
 
-// Scan for new vulnerabilities based on version numbers
-const identifyPassiveCVEs = async (allDomains: Domain[]) => {
+/**
+ * Scan for new vulnerabilities based on version numbers of identified CPEs
+ */
+const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
   const hostsToCheck: Array<{
     domain: Domain;
     service: Service;
@@ -117,12 +121,42 @@ const identifyPassiveCVEs = async (allDomains: Domain[]) => {
           cvss,
           severity,
           state: 'open',
+          source: 'cpe2cve',
+          needsPopulation: true,
           service: service
         })
       );
     }
     await saveVulnerabilitiesToDb(vulnerabilities, false);
   }
+};
+
+/**
+ * Identifies unexpected webpages.
+ */
+const identifyUnexpectedWebpages = async (allDomains: Domain[]) => {
+  const vulnerabilities: Vulnerability[] = [];
+  const webpages = await Webpage.find({
+    where: {
+      domain: { id: In(allDomains.map((e) => e.id)) },
+      status: MoreThanOrEqual(500)
+    },
+    relations: ['domain']
+  });
+  for (const webpage of webpages) {
+    vulnerabilities.push(
+      plainToClass(Vulnerability, {
+        domain: webpage.domain,
+        lastSeen: new Date(Date.now()),
+        title: `Unexpected status code ${webpage.status} for ${webpage.url}`,
+        severity: 'Low',
+        state: 'open',
+        source: 'webpage_status_code',
+        description: `${webpage.status} is not a normal status code that comes from performing a GET request on ${webpage.url}. This may indicate a misconfiguration or a potential for a Denial of Service (DoS) attack.`
+      })
+    );
+  }
+  await saveVulnerabilitiesToDb(vulnerabilities, false);
 };
 
 interface NvdFile {
@@ -149,7 +183,7 @@ interface NvdFile {
   }[];
 }
 
-// Populate CVE information
+// Populate CVE details from the NVD.
 const populateVulnerabilities = async () => {
   const vulnerabilities = await Vulnerability.find({
     needsPopulation: true
@@ -195,7 +229,9 @@ const populateVulnerabilities = async () => {
 
 // Closes or reopens vulnerabilities that need to be updated
 const adjustVulnerabilities = async (type: 'open' | 'closed') => {
-  const twoDaysAgo = new Date(new Date().setDate(new Date().getDate() - 2));
+  const twoDaysAgo = new Date(
+    new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 2)
+  );
   const where: {
     state: string;
     lastSeen: FindOperator<Date>;
@@ -233,7 +269,9 @@ export const handler = async (commandOptions: CommandOptions) => {
     relations: ['services'],
     where: organizationId ? { organization: { id: organizationId } } : undefined
   });
-  await identifyPassiveCVEs(allDomains);
+  await identifyPassiveCVEsFromCPEs(allDomains);
+
+  // await identifyUnexpectedWebpages(allDomains);
 
   await adjustVulnerabilities('open');
   await adjustVulnerabilities('closed');
