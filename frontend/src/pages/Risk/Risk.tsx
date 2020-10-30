@@ -628,7 +628,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'yellow'
     },
     height: 45,
-    width: '80%',
+    width: '100%',
     borderRadius: '4px'
   },
   cardInner: {
