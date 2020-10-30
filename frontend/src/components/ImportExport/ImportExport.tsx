@@ -18,10 +18,10 @@ interface ExportProps<T> {
   name: string;
 
   // List of fields to export.
-  fieldsToExport: string[];
+  fieldsToExport?: string[];
 
   // Return data to be exported.
-  getDataToExport: () => Partial<T>[] | Promise<Partial<T>[]>;
+  getDataToExport: () => Partial<T>[] | Promise<Partial<T>[]> | Promise<string>;
 }
 
 interface ImportExportProps<T> extends ImportProps<T>, ExportProps<T> {}
@@ -61,13 +61,19 @@ export const Import = <T extends object>(props: ImportProps<T>) => {
 
 export const Export = <T extends object>(props: ExportProps<T>) => {
   const { setLoading } = useAuthContext();
-  const { name, fieldsToExport, getDataToExport } = props;
+  const { name, fieldsToExport = [], getDataToExport } = props;
 
   const downloadCSV = async (filename: string) => {
     setLoading(l => l + 1);
+    const data = await getDataToExport();
+    if (typeof data === "string") {
+      setLoading(l => l - 1);
+      window.open(data);
+      return;
+    }
     const csv = Papa.unparse({
       fields: fieldsToExport,
-      data: await getDataToExport()
+      data: data
     });
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
     FileSaver.saveAs(blob, `${filename}.csv`);

@@ -3,7 +3,7 @@ import { TableInstance } from 'react-table';
 import { Query } from 'types';
 import { Table, Paginator, Export } from 'components';
 import { Domain } from 'types';
-import { createColumns, getServiceNames } from './columns';
+import { createColumns } from './columns';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { Grid, Checkbox } from '@trussworks/react-uswds';
@@ -40,30 +40,19 @@ export const Dashboard: React.FC = () => {
     [listDomains]
   );
 
-  const fetchDomainsExport = async (): Promise<any[]> => {
+  const fetchDomainsExport = async (): Promise<string> => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
     try {
-      let allDomains: Domain[] = [];
-      let page = 0;
-      while (true) {
-        page += 1;
-        const { count, domains } = await listDomains({
-          sort: sortBy ?? [],
-          page: page,
-          pageSize: 100,
-          filters: filters ?? []
-        });
-        allDomains = allDomains.concat(domains);
-        if (count <= page * 100) break;
-      }
-      return allDomains.map((domain) => ({
-        ...domain,
-        ports: domain.services.map((service) => service.port).join(','),
-        services: getServiceNames(domain)
-      }));
+      const { url } = await listDomains({
+        sort: sortBy ?? [],
+        page: 1,
+        pageSize: -1,
+        filters: filters ?? []
+      }, true);
+      return url!;
     } catch (e) {
       console.error(e);
-      return [];
+      return "";
     }
   };
 
@@ -111,15 +100,6 @@ export const Dashboard: React.FC = () => {
       />
       <Export<Domain>
         name="domains"
-        fieldsToExport={[
-          'name',
-          'ip',
-          'id',
-          'ports',
-          'services',
-          'createdAt',
-          'updatedAt'
-        ]}
         getDataToExport={fetchDomainsExport}
       />
     </div>

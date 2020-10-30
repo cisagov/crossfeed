@@ -5,6 +5,7 @@
   "main": "db.js",
   "dependencies": {
     "@elastic/elasticsearch": "^7.9.1",
+    "@types/papaparse": "^5.2.4",
     "aws-sdk": "^2.761.0",
     "axios": "^0.20.0",
     "body-parser": "^1.19.0",
@@ -26,6 +27,7 @@
     "openid-client": "^4.1.1",
     "p-queue": "^6.6.1",
     "p-retry": "^4.2.0",
+    "papaparse": "^5.3.0",
     "pg": "^8.3.3",
     "portscanner": "^2.2.0",
     "serverless": "^2.3.0",
