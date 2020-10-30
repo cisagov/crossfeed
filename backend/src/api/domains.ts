@@ -14,6 +14,8 @@ import { Domain, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
 import { isGlobalViewAdmin, getOrgMemberships } from './auth';
+import S3Client from '../tasks/s3-client';
+import * as Papa from 'papaparse';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
@@ -198,6 +200,46 @@ export const list = wrapHandler(async (event) => {
     body: JSON.stringify({
       result,
       count
+    })
+  };
+});
+
+export const export_ = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        result: [],
+        count: 0
+      })
+    };
+  }
+  await connectToDatabase();
+  const search = await validateBody(DomainSearch, event.body);
+  const [result, count] = await Promise.all([
+    search.getResults(event),
+    search.getCount(event)
+  ]);
+  const client = new S3Client();
+  const url = client.saveCSV(
+    Papa.unparse({
+      fields: [
+        'name',
+        'ip',
+        'id',
+        'ports',
+        'services',
+        'createdAt',
+        'updatedAt'
+      ],
+      data: result
+    })
+  );
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      url
     })
   };
 });

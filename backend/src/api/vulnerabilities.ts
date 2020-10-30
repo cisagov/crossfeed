@@ -19,6 +19,8 @@ import {
   isGlobalViewAdmin,
   isGlobalWriteAdmin
 } from './auth';
+import S3Client from '../tasks/s3-client';
+import * as Papa from 'papaparse';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
@@ -218,6 +220,39 @@ export const list = wrapHandler(async (event) => {
     body: JSON.stringify({
       result,
       count
+    })
+  };
+});
+
+export const export_ = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const search = await validateBody(VulnerabilitySearch, event.body);
+  const [result, count] = await search.getResults(event);
+  const client = new S3Client();
+  const url = client.saveCSV(
+    Papa.unparse({
+      fields: [
+        'domain',
+        'title',
+        'cve',
+        'cwe',
+        'cpe',
+        'description',
+        'cvss',
+        'severity',
+        'state',
+        'lastSeen',
+        'createdAt',
+        'id'
+      ],
+      data: result
+    })
+  );
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      url
     })
   };
 });
