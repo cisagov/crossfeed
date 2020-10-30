@@ -17,7 +17,7 @@ resource "aws_db_instance" "db" {
   max_allocated_storage   = 1000
   storage_type            = "gp2"
   engine                  = "postgres"
-  engine_version          = "11.5" #change to fit desired PostgresQL version
+  engine_version          = "11.8" #change to fit desired PostgresQL version
   skip_final_snapshot     = true
   availability_zone       = data.aws_availability_zones.available.names[0]
   multi_az                = false
