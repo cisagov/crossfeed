@@ -365,11 +365,10 @@ export const Vulnerabilities: React.FC = () => {
 
   const fetchVulnerabilitiesExport = async (): Promise<string> => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
-    let page = 0;
     const { url } = await vulnerabilitiesSearch(
       filters!,
       sortBy!,
-      page,
+      1,
       100,
       true
     ) as ApiResponse;

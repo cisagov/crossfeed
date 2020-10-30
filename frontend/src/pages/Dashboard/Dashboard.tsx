@@ -45,7 +45,7 @@ export const Dashboard: React.FC = () => {
     try {
       const { url } = await listDomains({
         sort: sortBy ?? [],
-        page: 0,
+        page: 1,
         pageSize: -1,
         filters: filters ?? []
       }, true);
