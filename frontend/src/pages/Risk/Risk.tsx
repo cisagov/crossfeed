@@ -173,7 +173,7 @@ const Risk: React.FC = (props) => {
         margin={{
           top: 0,
           right: 30,
-          bottom: longXValues ? 100 : 0,
+          bottom: longXValues ? 100 : 40,
           left: longXValues ? 200 : 60
         }}
         onClick={(event) => {
@@ -192,14 +192,17 @@ const Risk: React.FC = (props) => {
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: xLabels.length > 1 ? '' : xLabels[0],
+          legend: type === 'ports' ? 'Count' : '',
           legendPosition: 'middle',
-          legendOffset: 40
+          legendOffset: 0
         }}
         axisLeft={{
           tickSize: 5,
           tickPadding: 5,
-          tickRotation: 0
+          tickRotation: 0,
+          legend: type === 'ports' ? 'Port' : '',
+          legendPosition: 'middle',
+          legendOffset: -40
         }}
         labelSkipWidth={12}
         labelSkipHeight={12}
