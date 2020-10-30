@@ -367,8 +367,8 @@ export const Vulnerabilities: React.FC = () => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
     let page = 0;
     const { url } = await vulnerabilitiesSearch(
-      filters,
-      sortBy,
+      filters!,
+      sortBy!,
       page,
       100,
       true
