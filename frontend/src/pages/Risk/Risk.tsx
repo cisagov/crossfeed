@@ -4,7 +4,7 @@ import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
 import { Checkbox, Grid } from '@trussworks/react-uswds';
-import { makeStyles, Paper } from '@material-ui/core';
+import { Chip, makeStyles, Paper, Tooltip } from '@material-ui/core';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
 import { Link, useHistory } from 'react-router-dom';
@@ -30,6 +30,11 @@ const getSeverityColor = ({ id }: { id: string }) => {
   else if (id === 'Medium') return '#F2938C';
   else if (id === 'High') return '#B51D09';
   else return '#540C03';
+};
+
+const truncateText = (text: string, len: number) => {
+  if (text.length <= len) return text;
+  return text.substring(0, len) + '...';
 };
 
 interface Point {
@@ -217,16 +222,26 @@ const Risk: React.FC = (props) => {
     );
   };
 
-  const grouped: { [key: string]: Vulnerability & { count: number } } = {};
+  const latestVulnsGrouped: {
+    [key: string]: Vulnerability & { count: number };
+  } = {};
   if (stats) {
     for (const vuln of stats.vulnerabilities.latestVulnerabilities) {
-      if (vuln.title in grouped) grouped[vuln.title].count++;
+      if (vuln.title in latestVulnsGrouped)
+        latestVulnsGrouped[vuln.title].count++;
       else {
-        grouped[vuln.title] = { ...vuln, count: 1 };
+        latestVulnsGrouped[vuln.title] = { ...vuln, count: 1 };
       }
     }
-    console.log(grouped);
   }
+
+  const latestVulnsGroupedArr = Object.values(latestVulnsGrouped)
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+    .slice(0, 4);
+
   return (
     <div className={classes.root}>
       <Grid row>
@@ -257,24 +272,74 @@ const Risk: React.FC = (props) => {
                       <h2>Latest Vulnerabilities</h2>
                     </div>
                     <div className={cardClasses.body}>
-                      <h4>Today:</h4>
-                      <ul>
-                        {Object.keys(grouped).map((key) => (
-                          <li>{grouped[key].cve}</li>
+                      {/* <h4 style={{ float: 'left' }}>Today:</h4> */}
+                      <div>
+                        {latestVulnsGroupedArr.map((vuln) => (
+                          <Tooltip
+                            title={truncateText(vuln.description, 120)}
+                            placement="right"
+                            arrow
+                          >
+                            <Paper
+                              elevation={0}
+                              className={cardClasses.miniCardRoot}
+                              aria-label="view domain details"
+                            >
+                              <div className={cardClasses.cardInner}>
+                                <div className={cardClasses.miniCardLeft}>
+                                  <p>
+                                    <Chip
+                                      label={vuln.count}
+                                      style={{
+                                        marginRight: 10,
+                                        color: '#D83933',
+                                        backgroundColor: 'white',
+                                        border: '1px solid #71767A'
+                                      }}
+                                    />
+                                    {vuln.title}
+                                  </p>
+                                </div>
+                                <div className={cardClasses.miniCardCenter}>
+                                  <p
+                                    className={cardClasses.underlined}
+                                    style={{
+                                      borderBottom: `6px solid ${getSeverityColor(
+                                        { id: vuln.severity ?? '' }
+                                      )}`
+                                    }}
+                                  >
+                                    {vuln.severity}
+                                  </p>
+                                </div>
+                                <button
+                                  className={cardClasses.button}
+                                  onClick={() => {
+                                    history.push(
+                                      `/vulnerabilities?title=${vuln.title}&domain=${vuln.domain.name}`
+                                    );
+                                  }}
+                                >
+                                  DETAILS
+                                </button>
+                              </div>
+                            </Paper>
+                          </Tooltip>
                         ))}
-                      </ul>
+                      </div>
+
                       <div className={cardClasses.footer}>
-                        <h5>
+                        <h4>
                           <Link to="/vulnerabilities?sort=createdAt&desc=false">
                             See all latest vulnerabilites
                           </Link>
-                        </h5>
+                        </h4>
                       </div>
                     </div>
                   </div>
                 </Paper>
               )}
-              <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+              <Paper elevation={20} classes={{ root: cardClasses.cardRoot }}>
                 <div className={cardClasses.inner}>
                   {stats.domains.numVulnerabilities.length > 0 && (
                     <div className={cardClasses.cardSmall}>
@@ -500,8 +565,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden'
   },
   body: {
-    paddingLeft: 20,
-    paddingRight: 20
+    padding: 20
   },
   header: {
     height: '60px',
@@ -515,7 +579,14 @@ const useStyles = makeStyles((theme) => ({
     // fontSize: '20px'
   },
   footer: {
-    float: 'right'
+    float: 'right',
+    position: 'relative',
+    bottom: 20,
+    '& h4 a': {
+      color: '#71767A',
+      fontSize: '14px',
+      fontWeight: '400'
+    }
   },
   inner: {},
   root: {
@@ -541,7 +612,7 @@ const useStyles = makeStyles((theme) => ({
     flexFlow: 'row nowrap',
     alignItems: 'stretch',
     flex: '1',
-    overflowY: 'hidden'
+    overflowY: 'scroll'
   },
   panel: {
     position: 'relative',
@@ -549,5 +620,54 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'auto',
     padding: '0 1rem 2rem 1rem',
     flex: '0 0 50%'
+  },
+  miniCardRoot: {
+    boxSizing: 'border-box',
+    marginBottom: '1rem',
+    border: '2px solid #DCDEE0',
+    '& em': {
+      fontStyle: 'normal',
+      backgroundColor: 'yellow'
+    },
+    height: 45,
+    width: '80%',
+    borderRadius: '4px'
+  },
+  cardInner: {
+    paddingLeft: 30,
+    paddingRight: 30,
+    display: 'flex',
+    alignItems: 'center',
+    '& div': {
+      display: 'inline',
+      fontSize: '16px',
+      fontWeight: '400',
+      color: '#3D4551'
+    },
+    '& button': {
+      justifyContent: 'flex-end'
+    },
+    height: 45
+  },
+  miniCardLeft: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'flex-start'
+  },
+  miniCardCenter: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center'
+  },
+  button: {
+    outline: 'none',
+    border: 'none',
+    background: 'none',
+    color: theme.palette.secondary.main,
+    margin: '0 0.2rem',
+    cursor: 'pointer'
+  },
+  underlined: {
+    width: '80px'
   }
 }));
