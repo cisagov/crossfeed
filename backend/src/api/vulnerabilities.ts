@@ -247,7 +247,7 @@ export const export_ = wrapHandler(async (event) => {
       ],
       data: result
     }),
-    "vulnerabilities"
+    'vulnerabilities'
   );
 
   return {
