@@ -88,7 +88,7 @@ class DomainSearch {
       );
     }
     if (this.filters?.organization) {
-      qs.andWhere('domain."organizationId" = :org', {
+      qs.andWhere('domain.organizationId = :org', {
         org: this.filters.organization
       });
     }
@@ -114,14 +114,14 @@ class DomainSearch {
       )
       .orderBy(`domain.${this.sort}`, this.order)
       .groupBy(
-        'domain.id, domain.ip, domain.name, domain."organizationId", services.id, vulnerabilities.id'
+        'domain.id, domain.ip, domain.name, domain.organizationId, services.id, vulnerabilities.id'
       );
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
     }
 
     if (!isGlobalViewAdmin(event)) {
-      qs.andHaving('domain."organizationId" IN (:...orgs)', {
+      qs.andHaving('domain.organizationId IN (:...orgs)', {
         orgs: getOrgMemberships(event)
       });
     }
@@ -150,7 +150,7 @@ class DomainSearch {
       });
     }
     if (this.filters?.organization) {
-      qs.andWhere('domain."organizationId" = :org', {
+      qs.andWhere('domain.organizationId = :org', {
         org: this.filters.organization
       });
     }
@@ -166,7 +166,7 @@ class DomainSearch {
       .leftJoin('domain.services', 'services')
       .leftJoin('domain.vulnerabilities', 'vulnerabilities', "state = 'open'");
     if (!isGlobalViewAdmin(event)) {
-      qs.andWhere('domain."organizationId" IN (:...orgs)', {
+      qs.andWhere('domain.organizationId IN (:...orgs)', {
         orgs: getOrgMemberships(event)
       });
     }

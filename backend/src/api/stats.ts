@@ -48,12 +48,12 @@ export const get = wrapHandler(async (event) => {
     qs: SelectQueryBuilder<any>
   ): SelectQueryBuilder<any> => {
     if (!isGlobalViewAdmin(event)) {
-      qs.andWhere('domain."organizationId" IN (:...orgs)', {
+      qs.andWhere('domain.organizationId IN (:...orgs)', {
         orgs: getOrgMemberships(event)
       });
     }
     if (search.filters?.organization) {
-      qs.andWhere('domain."organizationId" = :org', {
+      qs.andWhere('domain.organizationId = :org', {
         org: search.filters?.organization
       });
     }

@@ -39,6 +39,11 @@ interface VulnerabilityCount extends Vulnerability {
   count: number;
 }
 
+// Color Scale used for map
+let colorScale = scaleLinear<string>()
+  .domain([0, 1])
+  .range(['#c7e8ff', '#135787']);
+
 const Risk: React.FC = (props) => {
   const history = useHistory();
   const { currentOrganization, user, apiPost } = useAuthContext();
@@ -57,11 +62,6 @@ const Risk: React.FC = (props) => {
   const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
   const geoCountyUrl =
     'https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json';
-
-  // Color Scale used for map
-  let colorScale = scaleLinear<string>()
-    .domain([0, 1])
-    .range(['#c7e8ff', '#135787']);
 
   const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
 
