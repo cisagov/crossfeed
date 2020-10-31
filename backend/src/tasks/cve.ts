@@ -169,7 +169,6 @@ const identifyExpiringCerts = async (allDomains: Domain[]) => {
   const vulnerabilities: Vulnerability[] = [];
   for (const domain of allDomains) {
     const { validTo } = domain.ssl || {};
-    console.warn("validTo", domain);
     if (validTo && new Date(validTo) <= oneWeekFromNow) {
       vulnerabilities.push(
         plainToClass(Vulnerability, {
@@ -179,7 +178,9 @@ const identifyExpiringCerts = async (allDomains: Domain[]) => {
           severity: 'Critical',
           state: 'open',
           source: 'certs',
-          description: `This domain's SSL certificate is expiring / has expired at ${new Date(validTo).toISOString()}. Please make sure its certificate is renewed, or users may face SSL errors when trying to navigate to the site.`
+          description: `This domain's SSL certificate is expiring / has expired at ${new Date(
+            validTo
+          ).toISOString()}. Please make sure its certificate is renewed, or users may face SSL errors when trying to navigate to the site.`
         })
       );
     }
