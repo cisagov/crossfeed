@@ -235,6 +235,7 @@ export const export_ = wrapHandler(async (event) => {
         'organization',
         'domain',
         'title',
+        'description',
         'cve',
         'cwe',
         'cpe',
@@ -242,6 +243,7 @@ export const export_ = wrapHandler(async (event) => {
         'cvss',
         'severity',
         'state',
+        'substate',
         'lastSeen',
         'createdAt',
         'id'
