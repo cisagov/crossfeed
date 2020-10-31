@@ -258,7 +258,7 @@ export const Organization: React.FC = () => {
       }>('/granularScans/');
 
       if (user?.userType !== 'globalAdmin')
-        scans = scans.filter((scan) => scan.name !== 'censysIpv4');
+        scans = scans.filter((scan) => scan.name !== 'censysIpv4' && scan.name !== 'censysCertificates');
 
       setScans(scans);
       setScanSchema(schema);
