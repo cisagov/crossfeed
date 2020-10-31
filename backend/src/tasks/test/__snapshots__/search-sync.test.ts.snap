@@ -15,6 +15,7 @@ Array [
   "asn",
   "cloudHosted",
   "ssl",
+  "censysCertificatesResults",
   "services",
   "organization",
   "vulnerabilities",
