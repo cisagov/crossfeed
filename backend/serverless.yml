@@ -48,7 +48,9 @@ provider:
       Action:
         - s3:GetObject
         - s3:GetObjectAcl
-      Resource: '*/*'
+        - s3:PutObject
+        - s3:PutObjectAcl
+      Resource: '*'
 
 functions:
   - ${file(./src/tasks/functions.yml)}

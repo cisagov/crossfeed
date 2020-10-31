@@ -232,6 +232,7 @@ export const export_ = wrapHandler(async (event) => {
   const url = await client.saveCSV(
     Papa.unparse({
       fields: [
+        'organization',
         'domain',
         'title',
         'cve',
@@ -245,7 +246,11 @@ export const export_ = wrapHandler(async (event) => {
         'createdAt',
         'id'
       ],
-      data: result
+      data: result.map((e) => ({
+        ...e,
+        organization: e.domain?.organization?.name,
+        domain: e.domain?.name
+      }))
     }),
     'vulnerabilities'
   );

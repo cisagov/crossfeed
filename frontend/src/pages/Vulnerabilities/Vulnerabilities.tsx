@@ -369,7 +369,7 @@ export const Vulnerabilities: React.FC = () => {
       filters!,
       sortBy!,
       1,
-      100,
+      -1,
       true
     ) as ApiResponse;
     return url!;
