@@ -171,6 +171,7 @@ export const ScanTasksView: React.FC = () => {
         'portscanner',
         'wappalyzer',
         'censysIpv4',
+        'censysCertificates',
         'searchSync',
         'cve',
         'webscraper',

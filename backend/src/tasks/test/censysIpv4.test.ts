@@ -3,16 +3,7 @@ import * as zlib from 'zlib';
 import * as nock from 'nock';
 import * as path from 'path';
 import * as fs from 'fs';
-import {
-  connectToDatabase,
-  Domain,
-  Organization,
-  Scan,
-  Service
-} from '../../models';
-import { O_DIRECT } from 'constants';
-
-jest.mock('../helpers/getCensysIpv4Data');
+import { connectToDatabase, Domain, Organization, Scan } from '../../models';
 
 const RealDate = Date;
 

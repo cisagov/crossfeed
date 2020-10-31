@@ -84,6 +84,15 @@ export const SCAN_SCHEMA: ScanSchema = {
     numChunks: 20,
     description: 'Fetch passive port and banner data from censys ipv4 dataset'
   },
+  censysCertificates: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    cpu: '2048',
+    memory: '6144',
+    numChunks: 20,
+    description: 'Fetch TLS certificate data from censys certificates dataset'
+  },
   cve: {
     type: 'fargate',
     isPassive: true,
