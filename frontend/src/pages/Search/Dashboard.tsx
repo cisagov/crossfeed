@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { SearchBar, DomainDetails } from 'components';
+import React, { useEffect, useState } from 'react';
+import { DomainDetails, Subnav } from 'components';
 import { ResultCard } from './ResultCard';
 import {
   makeStyles,
@@ -15,7 +15,7 @@ import {
 import { Pagination } from '@material-ui/lab';
 import { withSearch } from '@elastic/react-search-ui';
 import { FilterDrawer } from './FilterDrawer';
-import { ContextType } from './SearchProvider';
+import { ContextType } from '../../context/SearchProvider';
 import { SortBar } from './SortBar';
 import {
   Button,
@@ -28,6 +28,7 @@ import {
 import { AddCircleOutline } from '@material-ui/icons';
 import { useAuthContext } from 'context';
 import { parse } from 'query-string';
+import { FilterTags } from './FilterTags';
 
 export const DashboardUI: React.FC<ContextType> = (props) => {
   const {
@@ -35,20 +36,18 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
     setCurrent,
     resultsPerPage,
     setResultsPerPage,
-    searchTerm,
-    setSearchTerm,
     filters,
     addFilter,
     removeFilter,
     results,
-    autocompletedResults,
     facets,
     clearFilters,
     sortDirection,
     sortField,
     setSort,
     totalPages,
-    totalResults
+    totalResults,
+    setSearchTerm
   } = props;
   const classes = useStyles();
   const [selectedDomain, setSelectedDomain] = useState('');
@@ -84,6 +83,11 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
     }
   };
 
+  useEffect(() => {
+    // Search on initial load
+    setSearchTerm('');
+  }, [setSearchTerm]);
+
   return (
     <div className={classes.root}>
       <FilterDrawer
@@ -94,17 +98,14 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
         clearFilters={filters.length > 0 ? () => clearFilters([]) : undefined}
       />
       <div className={classes.contentWrapper}>
-        <SearchBar
-          initialValue={searchTerm}
-          onChange={(value) =>
-            setSearchTerm(value, {
-              shouldClearFilters: false,
-              autocompleteResults: true
-            })
-          }
-          autocompletedResults={autocompletedResults}
-          onSelectResult={setSelectedDomain}
-        />
+        <Subnav
+          items={[
+            { title: 'Assets', path: '/inventory' },
+            { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
+          ]}
+        >
+          <FilterTags filters={filters} removeFilter={removeFilter} />
+        </Subnav>
         <SortBar
           sortField={sortField}
           sortDirection={sortDirection}

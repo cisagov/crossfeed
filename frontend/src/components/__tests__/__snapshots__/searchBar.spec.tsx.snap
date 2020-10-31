@@ -3,7 +3,7 @@
 exports[`matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="makeStyles-wrapper-1 makeStyles-wrapper-7"
+    class="makeStyles-wrapper-1"
   >
     <div
       class="makeStyles-inner-2"

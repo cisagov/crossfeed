@@ -1,5 +1,5 @@
-export const getWebpageBody = jest.fn(() => 'webpage body');
+export const saveCSV = jest.fn(() => 'http://mock_url');
 
 export default jest.fn(() => ({
-  getWebpageBody
+  saveCSV
 }));

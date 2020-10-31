@@ -3,6 +3,10 @@ import { render, fireEvent, testUser, testOrganization } from 'test-utils';
 import { Header } from '../Header';
 import { wait, getByTestId } from '@testing-library/react';
 
+jest.mock('@elastic/react-search-ui', () => ({
+  withSearch: () => (comp: any) => comp
+}));
+
 describe('Header component', () => {
   it('matches snapshot', () => {
     const { asFragment } = render(<Header />);
@@ -34,7 +38,7 @@ describe('Header component', () => {
       'Scans',
       'Manage Users',
       'My Account'
-    ].forEach(expected => {
+    ].forEach((expected) => {
       expect(queryByText(expected)).not.toBeInTheDocument();
     });
   });
@@ -47,14 +51,16 @@ describe('Header component', () => {
       }
     });
     [
-      'Vulnerabilities',
-      'Risk Summary',
+      'Overview',
+      'Inventory',
       'My Organizations',
-      'My Account'
-    ].forEach(expected => {
+      'My Account',
+      'My Settings',
+      'Logout'
+    ].forEach((expected) => {
       expect(getByText(expected)).toBeInTheDocument();
     });
-    ['Manage Organizations', 'Scans', 'Manage Users'].forEach(notExpected => {
+    ['Manage Organizations', 'Scans', 'Manage Users'].forEach((notExpected) => {
       expect(queryByText(notExpected)).not.toBeInTheDocument();
     });
   });
@@ -67,15 +73,17 @@ describe('Header component', () => {
       }
     });
     [
-      'Vulnerabilities',
-      'Risk Summary',
+      'Overview',
+      'Inventory',
       'Organization Settings',
       'My Organizations',
-      'My Account'
-    ].forEach(expected => {
+      'My Account',
+      'My Settings',
+      'Logout'
+    ].forEach((expected) => {
       expect(getByText(expected)).toBeInTheDocument();
     });
-    ['Manage Organizations', 'Manage Users'].forEach(notExpected => {
+    ['Manage Organizations', 'Manage Users'].forEach((notExpected) => {
       expect(queryByText(notExpected)).not.toBeInTheDocument();
     });
   });
@@ -88,17 +96,19 @@ describe('Header component', () => {
       }
     });
     [
-      'Vulnerabilities',
-      'Risk Summary',
-      'Organization Settings',
+      'Overview',
+      'Inventory',
       'Scans',
+      'Organization Settings',
       'Manage Organizations',
       'Manage Users',
-      'My Account'
-    ].forEach(expected => {
+      'My Account',
+      'My Settings',
+      'Logout'
+    ].forEach((expected) => {
       expect(getByText(expected)).toBeInTheDocument();
     });
-    ['My Organizations'].forEach(notExpected => {
+    ['My Organizations'].forEach((notExpected) => {
       expect(queryByText(notExpected)).not.toBeInTheDocument();
     });
   });

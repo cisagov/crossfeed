@@ -197,10 +197,15 @@ authenticatedRoute.use(checkUserSignedTerms);
 
 authenticatedRoute.post('/search', handlerToExpress(search.search));
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
+authenticatedRoute.post('/domain/export', handlerToExpress(domains.export_));
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
 authenticatedRoute.post(
   '/vulnerabilities/search',
   handlerToExpress(vulnerabilities.list)
+);
+authenticatedRoute.post(
+  '/vulnerabilities/export',
+  handlerToExpress(vulnerabilities.export_)
 );
 authenticatedRoute.get(
   '/vulnerabilities/:vulnerabilityId',

@@ -17,3 +17,4 @@ export * from './TaggedInput';
 export * from './DomainDetails';
 export * from './AutoCompletedResults';
 export * from './FacetFilter';
+export * from './Subnav';
