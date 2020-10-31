@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DomainDetails, Subnav } from 'components';
 import { ResultCard } from './ResultCard';
 import {
@@ -32,7 +32,8 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
     sortField,
     setSort,
     totalPages,
-    totalResults
+    totalResults,
+    setSearchTerm
   } = props;
   const classes = useStyles();
   const [selectedDomain, setSelectedDomain] = useState('');
@@ -45,6 +46,11 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
       setResultsScrolled(false);
     }
   };
+
+  useEffect(() => {
+    // Search on initial load
+    setSearchTerm("");
+  }, [setSearchTerm]);
 
   return (
     <div className={classes.root}>
