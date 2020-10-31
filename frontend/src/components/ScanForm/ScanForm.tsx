@@ -157,6 +157,7 @@ export const ScanForm: React.FC<{
         /> */}
       {type === 'edit' &&
         (values.name === 'censysIpv4' ||
+          values.name === 'censysCertificates' ||
           values.name === 'webscraper' ||
           !global) && (
           <Checkbox
@@ -169,6 +170,7 @@ export const ScanForm: React.FC<{
         )}
       {type === 'create' &&
         (values.name === 'censysIpv4' ||
+        values.name === 'censysCertificates' ||
           values.name === 'webscraper' ||
           (schemaUpdated && !scanSchema[values.name].global)) && (
           <Checkbox
@@ -181,6 +183,7 @@ export const ScanForm: React.FC<{
         )}
       {values.isGranular &&
         (values.name === 'censysIpv4' ||
+        values.name === 'censysCertificates' ||
           (schemaUpdated && !scanSchema[values.name].global) ||
           !global) && (
           <>

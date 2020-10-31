@@ -236,7 +236,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
     <Paper classes={{ root: classes.root }}>
       <div className={classes.title}>
         <h4>
-          <Link to={`/domain/${domain.id}`}>{domain.name}</Link>
+          <Link to={`/inventory/domain/${domain.id}`}>{domain.name}</Link>
         </h4>
 
         <a href={url} target="_blank" rel="noopener noreferrer">

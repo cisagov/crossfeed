@@ -7,7 +7,7 @@ import {
   SelectProps
 } from '@material-ui/core';
 import { ArrowUpward, ArrowDownward } from '@material-ui/icons';
-import { ContextType } from './SearchProvider';
+import { ContextType } from '../../context/SearchProvider';
 
 interface Props {
   sortField: ContextType['sortField'];
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const SortBar: React.FC<Props> = (props) => {
-  const { sortField, sortDirection, setSort, clearFilters } = props;
+  const { sortField, sortDirection, setSort, clearFilters, children } = props;
   const classes = useStyles(props);
 
   const toggleDirection = () => {
@@ -63,6 +63,7 @@ export const SortBar: React.FC<Props> = (props) => {
           </Select>
         </FormControl>
       </div>
+      {children}
       <div>
         {clearFilters && (
           <button onClick={clearFilters}>Clear All Filters</button>
@@ -79,8 +80,9 @@ const useStyles = makeStyles((theme) => ({
     flexFlow: 'row nowrap',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '1rem 1rem',
+    padding: '0.2rem 1rem 0.5rem 1rem',
     color: '#71767A',
+    margin: '0.5rem 0',
     boxShadow: ({ isFixed }: Props) =>
       isFixed ? '0px 1px 2px rgba(0, 0, 0, 0.15)' : 'none',
     transition: 'box-shadow 0.3s linear',
