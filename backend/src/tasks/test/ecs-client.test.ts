@@ -49,8 +49,8 @@ jest.mock('aws-sdk', () => ({
     listTasks: (e) => ({
       promise: async () => ({
         taskArns: [
-          'arn:aws:ecs:us-east-1:957221700844:task/dfd16a90-f944-4387-953f-694071ae95b6',
-          'arn:aws:ecs:us-east-1:957221700844:task/dfd16a90-f944-4387-953f-694071ae95b7'
+          'arn:aws:ecs:us-east-1:957221700844:task/crossfeed-staging-worker/dfd16a90-f944-4387-953f-694071ae95b6',
+          'arn:aws:ecs:us-east-1:957221700844:task/crossfeed-staging-worker/dfd16a90-f944-4387-953f-694071ae95b7'
         ]
       })
     })
@@ -254,7 +254,7 @@ describe('getLogs', () => {
   test('not local', async () => {
     const client = new ECSClient(false);
     const logs = await client.getLogs(
-      'arn:aws:ecs:us-east-1:957221700844:task/f59d71c6-3d23-4ee9-ad68-c7b810bf458b'
+      'arn:aws:ecs:us-east-1:957221700844:task/crossfeed-staging-worker/f59d71c6-3d23-4ee9-ad68-c7b810bf458b'
     );
     expect(logs).toMatchSnapshot();
     expect(logs).toContain('ECS LOGS');
