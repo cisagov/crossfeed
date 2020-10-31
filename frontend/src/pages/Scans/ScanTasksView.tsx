@@ -87,14 +87,14 @@ export const ScanTasksView: React.FC = () => {
           <>
             <h4>
               Logs
-              {original.fargateTaskArn?.match('/(.*)') && (
+              {original.fargateTaskArn?.match('.*/(.*)') && (
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
                   href={`https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/${process
                     .env
                     .REACT_APP_FARGATE_LOG_GROUP!}/log-events/worker$252Fmain$252F${
-                    (original.fargateTaskArn.match('/(.*)') || [])[1]
+                    (original.fargateTaskArn.match('.*/(.*)') || [])[1]
                   }`}
                 >
                   {' '}
