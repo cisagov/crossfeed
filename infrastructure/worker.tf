@@ -118,7 +118,8 @@ resource "aws_iam_role_policy" "worker_task_role_policy" {
             "s3:GetObjectAcl"
         ],
         "Resource": [
-          "${aws_s3_bucket.webscraper_bucket.arn}/*"
+          "${aws_s3_bucket.webscraper_bucket.arn}/*",
+          "${aws_s3_bucket.export_bucket.arn}/*"
         ]
     },
     {
@@ -127,7 +128,8 @@ resource "aws_iam_role_policy" "worker_task_role_policy" {
           "s3:ListBucket"
       ],
       "Resource": [
-        "${aws_s3_bucket.webscraper_bucket.arn}"
+        "${aws_s3_bucket.webscraper_bucket.arn}",
+        "${aws_s3_bucket.export_bucket.arn}"
       ]
     }
   ]
@@ -272,6 +274,24 @@ resource "aws_ssm_parameter" "webscraper_s3_bucket_name" {
 
 resource "aws_s3_bucket" "webscraper_bucket" {
   bucket = var.webscraper_bucket_name
+  acl    = "private"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+resource "aws_s3_bucket" "export_bucket" {
+  bucket = var.export_bucket_name
   acl    = "private"
 
   server_side_encryption_configuration {

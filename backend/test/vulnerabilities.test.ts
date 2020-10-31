@@ -8,10 +8,58 @@ import {
   Vulnerability
 } from '../src/models';
 import { createUserToken } from './util';
+jest.mock('../src/tasks/s3-client');
+const saveCSV = require('../src/tasks/s3-client').saveCSV as jest.Mock;
 
 describe('vulnerabilities', () => {
   beforeAll(async () => {
     await connectToDatabase();
+  });
+  describe('export', () => {
+    it('export by org user should only return vulnerabilities from that org', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const organization2 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const domain = await Domain.create({
+        name: 'test-' + Math.random(),
+        organization
+      }).save();
+      const vulnerability = await Vulnerability.create({
+        title: 'test-' + Math.random(),
+        domain
+      }).save();
+      const domain2 = await Domain.create({
+        name: 'test-' + Math.random(),
+        organization: organization2
+      }).save();
+      const vulnerability2 = await Vulnerability.create({
+        title: 'test-' + Math.random(),
+        domain: domain2
+      }).save();
+      const response = await request(app)
+        .post('/vulnerabilities/export')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [{ org: organization.id, role: 'user' }]
+          })
+        )
+        .send({})
+        .expect(200);
+      expect(response.body).toEqual({ url: 'http://mock_url' });
+      expect(saveCSV).toBeCalledTimes(1);
+      expect(saveCSV.mock.calls[0][0]).toContain(vulnerability.title);
+      expect(saveCSV.mock.calls[0][0]).not.toContain(vulnerability2.title);
+    });
   });
   describe('list', () => {
     it('list by org user should only return vulnerabilities from that org', async () => {
