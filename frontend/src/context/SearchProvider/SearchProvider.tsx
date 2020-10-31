@@ -13,7 +13,7 @@ export const SearchProvider: React.FC = ({ children }) => {
 
   const config = {
     debug: false,
-    alwaysSearchOnInitialLoad: true,
+    alwaysSearchOnInitialLoad: false,
     initialState: {
       resultsPerPage: 15,
       sortField: 'name',

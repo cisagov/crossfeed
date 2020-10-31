@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'classnames';
 import { makeStyles, Paper } from '@material-ui/core';
-import { Result } from './SearchProvider';
+import { Result } from '../../context/SearchProvider';
 import { parseISO, formatDistanceToNow } from 'date-fns';
 import { sanitize } from 'dompurify';
 
@@ -137,31 +137,35 @@ export const ResultCard: React.FC<Props> = (props) => {
     data.push({
       label: `matching webpage${hits.length > 1 ? 's' : ''}`,
       count: hits.length,
-      value: hits.map((e) => (
-        <div>
+      value: hits.map((e, idx) => (
+        <React.Fragment key={idx}>
           <small>
             <strong>{e._source.webpage_url}</strong>
             <br />
-            {e.highlight?.webpage_body?.map((body) => (
-              <div>
+            {e.highlight?.webpage_body?.map((body, idx) => (
+              <React.Fragment key={idx}>
                 <code
                   dangerouslySetInnerHTML={{
                     __html: sanitize(body, { ALLOWED_TAGS: ['em'] })
                   }}
                 />
-              </div>
+              </React.Fragment>
             ))}
           </small>
-        </div>
+        </React.Fragment>
       ))
     });
   }
 
   return (
-    <Paper elevation={0} classes={{ root: classes.root }} aria-label="view domain details" onClick={onClick}>
+    <Paper
+      elevation={0}
+      classes={{ root: classes.root }}
+      aria-label="view domain details"
+    >
       <div className={classes.inner}>
         <button className={classes.domainRow}>
-          <h4>{name.raw}</h4>
+          <h4 onClick={onClick}>{name.raw}</h4>
           <div className={classes.lastSeen}>
             <span className={classes.label}>Last Seen</span>
             <span className={classes.data}>{lastSeen} ago</span>
@@ -211,7 +215,6 @@ export const ResultCard: React.FC<Props> = (props) => {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    cursor: 'pointer',
     boxSizing: 'border-box',
     marginBottom: '1rem',
     border: ({ selected }: Props) =>
@@ -239,13 +242,13 @@ const useStyles = makeStyles((theme) => ({
     background: 'none',
     border: 'none',
     padding: '0.5rem 0',
-    cursor: 'pointer',
 
     '&:focus': {
       outline: 'none !important'
     },
     '& h4': {
       fontWeight: 400,
+      cursor: 'pointer',
       display: 'block',
       fontSize: '1.9rem',
       color: '#28A0CB',

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'classnames';
 import { List, ListItem, makeStyles, Paper } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
 
 interface Props
   extends Partial<Omit<JSX.IntrinsicElements['input'], 'onChange'>> {
-  autocompletedResults: {
+  autocompletedResults?: {
     id: { raw: string };
     text: { raw: string };
   }[];
-  onSelectResult(id: string): void;
+  onSelectResult?(id: string): void;
   onChange(value: string): void;
 }
 
@@ -29,8 +29,13 @@ export const SearchBar = React.forwardRef<HTMLInputElement, Props>(
     } = props;
     const [hasFocus, setHasFocus] = useState(false);
     const [focusTimer, setFocusTimer] = useState<Timer>();
-    const [query, setQuery] = useState<string>("");
+    const [query, setQuery] = useState<string>('');
     const classes = useStyles({ inpFocused: hasFocus });
+
+    const { value } = props;
+    useEffect(() => {
+      setQuery(value?.toString() ?? '');
+    }, [value]);
 
     const handleFocus = () => {
       clearTimeout(focusTimer as Timer);
@@ -45,7 +50,12 @@ export const SearchBar = React.forwardRef<HTMLInputElement, Props>(
       <div className={classes.wrapper}>
         <div className={classes.inner}>
           <SearchOutlined className={classes.icon} />
-          <form onSubmit={(e) => { e.preventDefault(); onChange(query) }}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onChange(query);
+            }}
+          >
             <input
               {...rest}
               onFocus={handleFocus}
@@ -57,26 +67,29 @@ export const SearchBar = React.forwardRef<HTMLInputElement, Props>(
               ref={ref}
             />
           </form>
-          {autocompletedResults.length > 0 && hasFocus && (
-            <Paper classes={{ root: classes.autocompleteRoot }}>
-              <List>
-                {autocompletedResults.map((result) => (
-                  <ListItem
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                    button
-                    key={result.id.raw}
-                    onClick={() => {
-                      onSelectResult(result.id.raw);
-                      onChange(result.text.raw);
-                    }}
-                  >
-                    {result.text.raw}
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
-          )}
+          {autocompletedResults &&
+            onSelectResult &&
+            autocompletedResults.length > 0 &&
+            hasFocus && (
+              <Paper classes={{ root: classes.autocompleteRoot }}>
+                <List>
+                  {autocompletedResults.map((result) => (
+                    <ListItem
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
+                      button
+                      key={result.id.raw}
+                      onClick={() => {
+                        onSelectResult(result.id.raw);
+                        onChange(result.text.raw);
+                      }}
+                    >
+                      {result.text.raw}
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            )}
         </div>
       </div>
     );
@@ -87,14 +100,13 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     zIndex: 101,
     width: '100%',
+    maxWidth: 500,
     backgroundColor: theme.palette.background.paper,
-    height: '60px',
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'center',
-    boxShadow: ({ inpFocused }: any) =>
-      inpFocused ? theme.shadows[4] : theme.shadows[1],
-    transition: 'box-shadow 0.3s linear'
+    transition: 'box-shadow 0.3s linear',
+    borderRadius: '5px'
   },
   inner: {
     flex: '1',
@@ -104,12 +116,12 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative'
   },
   inp: {
-    padding: '1rem 2rem 1rem 4rem',
+    padding: '0.5rem 0.5rem 0.5rem 2rem',
     display: 'block',
     width: '100%',
     border: 'none',
-    height: '60px',
-    fontSize: '1.2rem',
+    height: '45px',
+    fontSize: '1rem',
     fontWeight: 300,
     background: 'none',
     '&:focus': {
@@ -118,11 +130,11 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     position: 'absolute',
-    left: '2rem',
+    left: '0.5rem',
     top: '50%',
     transform: 'translateY(-50%)',
     fontSize: '1.5rem',
-    color: theme.palette.grey[500]
+    color: theme.palette.grey[300]
   },
   autocompleteRoot: {
     position: 'absolute',

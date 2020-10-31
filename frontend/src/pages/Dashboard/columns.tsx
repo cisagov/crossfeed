@@ -24,7 +24,7 @@ export const createColumns: CreateColumns = () => [
   {
     Header: 'Details',
     Cell: ({ row: { original } }: CellProps<Domain>) => (
-      <Link to={`/domain/${original.id}`}>
+      <Link to={`/inventory/domain/${original.id}`}>
         <FaSearch className="margin-x-auto display-block" />
       </Link>
     )
