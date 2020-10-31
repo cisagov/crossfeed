@@ -88,12 +88,8 @@ const downloadPath = async (
             ssl: {
               issuerOrg: item.parsed?.issuer?.organization,
               issuerCN: item.parsed?.issuer?.common_name,
-              validFrom: item.parsed?.validity?.start
-                ? new Date(item.parsed?.validity?.start)
-                : null,
-              validTo: item.parsed?.validity?.end
-                ? new Date(item.parsed?.validity?.end)
-                : null,
+              validFrom: item.parsed?.validity?.start,
+              validTo: item.parsed?.validity?.end,
               altNames: item.parsed?.names || [],
               fingerprint: item.raw
             }
