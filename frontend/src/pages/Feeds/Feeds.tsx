@@ -54,7 +54,7 @@ const Feeds = () => {
                 classes={{ root: classes.cardRoot }}
                 aria-label="view domain details"
                 onClick={() => {
-                  history.push(`/search?savedSearch=${search.id}`);
+                  history.push(`/inventory?savedSearch=${search.id}`);
                 }}
               >
                 <div className={classes.cardInner}>
