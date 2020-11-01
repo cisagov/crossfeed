@@ -9,7 +9,8 @@ export class LiveDomain extends Domain {
 /** Helper function to fetch all live websites (port 80 or 443) */
 export const getLiveWebsites = async (
   organizationId?: string,
-  organizationIds: string[] = []
+  organizationIds: string[] = [],
+  onlySSL: boolean = false
 ): Promise<LiveDomain[]> => {
   await connectToDatabase();
 
@@ -27,9 +28,15 @@ export const getLiveWebsites = async (
     .andWhere('domain.organization IN (:...orgs)', { orgs: organizationIds })
     .groupBy('domain.id, domain.ip, domain.name, organization.id, services.id');
 
-  qs.andHaving(
-    "COUNT(CASE WHEN services.port = '443' OR services.port = '80' THEN 1 END) >= 1"
-  );
+  if (onlySSL) {
+    qs.andHaving(
+      "COUNT(CASE WHEN services.port = '443' THEN 1 END) >= 1"
+    );
+  } else {
+    qs.andHaving(
+      "COUNT(CASE WHEN services.port = '443' OR services.port = '80' THEN 1 END) >= 1"
+    );
+  }
 
   const websites = await qs.getMany();
 
