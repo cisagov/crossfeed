@@ -79,8 +79,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
-    description:
-      'SSL certificate inspection'
+    description: 'SSL certificate inspection'
   },
   censysIpv4: {
     type: 'fargate',
