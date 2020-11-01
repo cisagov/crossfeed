@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useMemo, useRef } from 'react';
 import { TableInstance } from 'react-table';
 import { Query } from 'types';
-import { Table, Paginator, Export } from 'components';
+import { Table, Paginator, Export, Subnav } from 'components';
 import { Domain } from 'types';
 import { createColumns } from './columns';
 import { useAuthContext } from 'context';
@@ -43,16 +43,19 @@ export const Dashboard: React.FC = () => {
   const fetchDomainsExport = async (): Promise<string> => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
     try {
-      const { url } = await listDomains({
-        sort: sortBy ?? [],
-        page: 1,
-        pageSize: -1,
-        filters: filters ?? []
-      }, true);
+      const { url } = await listDomains(
+        {
+          sort: sortBy ?? [],
+          page: 1,
+          pageSize: -1,
+          filters: filters ?? []
+        },
+        true
+      );
       return url!;
     } catch (e) {
       console.error(e);
-      return "";
+      return '';
     }
   };
 
@@ -63,16 +66,13 @@ export const Dashboard: React.FC = () => {
   return (
     <div className={classes.root}>
       <Grid row>
-        <Grid tablet={{ col: true }}>
-          <h1>
-            Inventory
-            {showAll
-              ? ' - Global'
-              : currentOrganization
-              ? ' - ' + currentOrganization.name
-              : ''}
-          </h1>{' '}
-        </Grid>
+        <Subnav
+          items={[
+            { title: 'Assets', path: '/inventory', exact: true },
+            { title: 'Domains', path: '/inventory/domains' },
+            { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
+          ]}
+        ></Subnav>
         <Grid style={{ float: 'right' }}>
           {((user?.roles && user.roles.length > 1) ||
             user?.userType === 'globalView' ||
@@ -98,10 +98,7 @@ export const Dashboard: React.FC = () => {
         count={count}
         pageSize={PAGE_SIZE}
       />
-      <Export<Domain>
-        name="domains"
-        getDataToExport={fetchDomainsExport}
-      />
+      <Export<Domain> name="domains" getDataToExport={fetchDomainsExport} />
     </div>
   );
 };
