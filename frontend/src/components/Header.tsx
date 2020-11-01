@@ -11,7 +11,8 @@ import {
 } from '@material-ui/core';
 import {
   Menu as MenuIcon,
-  AccountCircle as UserIcon
+  AccountCircle as UserIcon,
+  ArrowDropDown
 } from '@material-ui/icons';
 import { NavItem } from './NavItem';
 import { useAuthContext } from 'context';
@@ -25,12 +26,13 @@ const ORG_ADMIN = 2;
 const ORG_USER = 1;
 const ALL_USERS = GLOBAL_ADMIN | ORG_ADMIN | ORG_USER;
 
-interface NavItem {
+interface NavItemType {
   title: string | JSX.Element;
   path: string;
   users?: number;
-  nested?: NavItem[];
+  nested?: NavItemType[];
   onClick?: any;
+  exact: boolean;
 }
 
 const HeaderNoCtx: React.FC<ContextType> = (props) => {
@@ -53,7 +55,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     }
   }
 
-  const navItems: NavItem[] = [
+  const navItems: NavItemType[] = [
     {
       title: 'Overview',
       path: '/',
@@ -69,44 +71,56 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     {
       title: 'Scans',
       path: '/scans',
-      users: GLOBAL_ADMIN
+      users: GLOBAL_ADMIN,
+      exact: true
     }
   ].filter(({ users }) => (users & userLevel) > 0);
 
-  const userMenu: NavItem = {
+  const userMenu: NavItemType = {
     title: (
       <div className={classes.userLink}>
-        <UserIcon /> My Account
+        <UserIcon /> My Account <ArrowDropDown />
       </div>
     ),
-    path: '/settings',
+    path: '#',
+    exact: false,
     nested: [
-      { title: 'Manage Users', path: '/users', users: GLOBAL_ADMIN },
+      {
+        title: 'Manage Users',
+        path: '/users',
+        users: GLOBAL_ADMIN,
+        exact: true
+      },
       {
         title: 'Manage Organizations',
         path: '/organizations',
-        users: GLOBAL_ADMIN
+        users: GLOBAL_ADMIN,
+        exact: true
       },
       {
         title: 'Organization Settings',
         path: '/organization',
-        users: ORG_ADMIN | GLOBAL_ADMIN
+        users: ORG_ADMIN | GLOBAL_ADMIN,
+        exact: true
       },
       {
         title: 'My Organizations',
         path: '/organizations',
-        users: ORG_USER | ORG_ADMIN
+        users: ORG_USER | ORG_ADMIN,
+        exact: true
       },
       {
         title: 'My Settings',
         path: '/settings',
-        users: ALL_USERS
+        users: ALL_USERS,
+        exact: true
       },
       {
         title: 'Logout',
         path: '/settings',
         users: ALL_USERS,
-        onClick: logout
+        onClick: logout,
+        exact: true
       }
     ].filter(({ users }) => (users & userLevel) > 0)
   };
@@ -274,7 +288,9 @@ const useStyles = makeStyles((theme) => ({
 
     '& svg': {
       marginRight: theme.spacing()
-    }
+    },
+    border: 'none',
+    textDecoration: 'none'
   },
   mdNav: {
     display: 'none',

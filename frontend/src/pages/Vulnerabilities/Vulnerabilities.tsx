@@ -329,18 +329,21 @@ export const Vulnerabilities: React.FC = () => {
             tableFilters['substate'] = substate.toLowerCase().replace(' ', '-');
           delete tableFilters['state'];
         }
-        return await apiPost<ApiResponse>(doExport ? '/vulnerabilities/export': '/vulnerabilities/search', {
-          body: {
-            page,
-            sort: sort[0]?.id ?? 'createdAt',
-            order: sort[0]?.desc ? 'DESC' : 'ASC',
-            filters: {
-              ...tableFilters,
-              organization: showAll ? undefined : currentOrganization?.id
-            },
-            pageSize
+        return await apiPost<ApiResponse>(
+          doExport ? '/vulnerabilities/export' : '/vulnerabilities/search',
+          {
+            body: {
+              page,
+              sort: sort[0]?.id ?? 'createdAt',
+              order: sort[0]?.desc ? 'DESC' : 'ASC',
+              filters: {
+                ...tableFilters,
+                organization: showAll ? undefined : currentOrganization?.id
+              },
+              pageSize
+            }
           }
-        });
+        );
       } catch (e) {
         console.error(e);
         return;
@@ -366,13 +369,13 @@ export const Vulnerabilities: React.FC = () => {
 
   const fetchVulnerabilitiesExport = async (): Promise<string> => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
-    const { url } = await vulnerabilitiesSearch(
+    const { url } = (await vulnerabilitiesSearch(
       filters!,
       sortBy!,
       1,
       -1,
       true
-    ) as ApiResponse;
+    )) as ApiResponse;
     return url!;
   };
 
@@ -406,6 +409,7 @@ export const Vulnerabilities: React.FC = () => {
         <Subnav
           items={[
             { title: 'Assets', path: '/inventory', exact: true },
+            { title: 'Domains', path: '/inventory/domains' },
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
         ></Subnav>
