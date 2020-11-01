@@ -12,7 +12,7 @@ export const getExtendedOrg = (
   if (current) {
     current.userIsAdmin =
       user?.userType === 'globalAdmin' ||
-      user?.roles.find((role) => role.organization.id === current?.id)?.role ===
+      user?.roles.find(role => role.organization.id === current?.id)?.role ===
         'admin';
   }
   return current;
@@ -20,7 +20,7 @@ export const getExtendedOrg = (
 
 export const getMaximumRole = (user: AuthUser | null) => {
   if (user?.userType === 'globalView') return 'user';
-  return user && user.roles && user.roles.find((role) => role.role === 'admin')
+  return user && user.roles && user.roles.find(role => role.role === 'admin')
     ? 'admin'
     : 'user';
 };
@@ -30,7 +30,7 @@ export const getTouVersion = (maxRole: string) => {
 };
 
 export const getUserMustSign = (user: AuthUser | null, touVersion: string) => {
-  const approvedEmailAddresses = ['@cisa.dhs.gov'];
+  const approvedEmailAddresses = ['@cisa.dhs.gov', '@dds.mil'];
   for (let email of approvedEmailAddresses) {
     if (user?.email.endsWith(email)) return false;
   }
