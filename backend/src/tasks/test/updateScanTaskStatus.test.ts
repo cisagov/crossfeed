@@ -37,7 +37,7 @@ const createSampleEvent = ({
           'sha256:080467614c0d7d5a5b092023b762931095308ae1dec8e54481fbd951f9784391',
         runtimeId: 'eeccdb34-d8cf-49e7-b379-1cf4f123c0ee-3935363592',
         taskArn:
-          'arn:aws:ecs:us-east-1:563873274798:task/eeccdb34-d8cf-49e7-b379-1cf4f123c0ee',
+          'arn:aws:ecs:us-east-1:563873274798:task/crossfeed-staging-worker/eeccdb34-d8cf-49e7-b379-1cf4f123c0ee',
         networkInterfaces: [
           {
             attachmentId: '5ff58204-1180-48ab-a62e-0a65a17cc4ef',

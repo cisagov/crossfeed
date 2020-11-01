@@ -159,6 +159,35 @@ const identifyUnexpectedWebpages = async (allDomains: Domain[]) => {
   await saveVulnerabilitiesToDb(vulnerabilities, false);
 };
 
+/**
+ * Identifies expired and soon-to-expire certificates.
+ */
+const identifyExpiringCerts = async (allDomains: Domain[]) => {
+  const oneWeekFromNow = new Date(
+    new Date(Date.now()).setDate(new Date(Date.now()).getDate() + 7)
+  );
+  const vulnerabilities: Vulnerability[] = [];
+  for (const domain of allDomains) {
+    const { validTo } = domain.ssl || {};
+    if (validTo && new Date(validTo) <= oneWeekFromNow) {
+      vulnerabilities.push(
+        plainToClass(Vulnerability, {
+          domain: domain,
+          lastSeen: new Date(Date.now()),
+          title: `Expiring SSL certificate`,
+          severity: 'Critical',
+          state: 'open',
+          source: 'certs',
+          description: `This domain's SSL certificate is expiring / has expired at ${new Date(
+            validTo
+          ).toISOString()}. Please make sure its certificate is renewed, or users may face SSL errors when trying to navigate to the site.`
+        })
+      );
+    }
+  }
+  await saveVulnerabilitiesToDb(vulnerabilities, false);
+};
+
 interface NvdFile {
   CVE_Items: {
     cve: {
@@ -265,13 +294,15 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   await connectToDatabase();
   const allDomains = await Domain.find({
-    select: ['id', 'name', 'ip'],
+    select: ['id', 'name', 'ip', 'ssl'],
     relations: ['services'],
     where: organizationId ? { organization: { id: organizationId } } : undefined
   });
   await identifyPassiveCVEsFromCPEs(allDomains);
 
   // await identifyUnexpectedWebpages(allDomains);
+
+  // await identifyExpiringCerts(allDomains);
 
   await adjustVulnerabilities('open');
   await adjustVulnerabilities('closed');

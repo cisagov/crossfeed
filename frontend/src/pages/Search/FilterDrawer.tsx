@@ -10,7 +10,7 @@ import {
 import { ExpandMore, FiberManualRecordRounded } from '@material-ui/icons';
 import { FaFilter } from 'react-icons/fa';
 import { TaggedArrayInput, FacetFilter } from 'components';
-import { ContextType } from './SearchProvider';
+import { ContextType } from '../../context/SearchProvider';
 
 interface Props {
   addFilter: ContextType['addFilter'];

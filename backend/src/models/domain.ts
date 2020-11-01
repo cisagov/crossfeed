@@ -114,6 +114,15 @@ export class Domain extends BaseEntity {
     fingerprint: string;
   } | null;
 
+  /** Censys Certificates results */
+  @Column({
+    type: 'jsonb',
+    default: {}
+  })
+  censysCertificatesResults: {
+    [x: string]: any;
+  };
+
   @BeforeInsert()
   setLowerCase() {
     this.name = this.name.toLowerCase();

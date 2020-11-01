@@ -196,8 +196,8 @@ class ECSClient {
     } else {
       const response = await this.cloudWatchLogs!.getLogEvents({
         logGroupName: process.env.FARGATE_LOG_GROUP_NAME!,
-        // Pick the ID from "arn:aws:ecs:us-east-1:957221700844:task/f59d71c6-3d23-4ee9-ad68-c7b810bf458b"
-        logStreamName: `worker/main/${fargateTaskArn.split('/')[1]}`,
+        // Pick the ID from "arn:aws:ecs:us-east-1:957221700844:task/crossfeed-staging-worker/f59d71c6-3d23-4ee9-ad68-c7b810bf458b"
+        logStreamName: `worker/main/${fargateTaskArn.split('/')[2]}`,
         startFromHead: true
       }).promise();
       const res = response.$response.data;

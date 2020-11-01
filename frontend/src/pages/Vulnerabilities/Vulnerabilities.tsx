@@ -31,6 +31,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import ReactMarkdown from 'react-markdown';
+import { Subnav } from 'components';
 import { parse } from 'query-string';
 
 export interface ApiResponse {
@@ -83,7 +84,7 @@ export const Vulnerabilities: React.FC = () => {
       Header: 'Domain',
       id: 'domain',
       accessor: ({ domain }) => (
-        <Link to={`/domain/${domain.id}`}>{domain?.name}</Link>
+        <Link to={`/inventory/domain/${domain.id}`}>{domain?.name}</Link>
       ),
       width: 800,
       Filter: ColumnFilter
@@ -328,18 +329,21 @@ export const Vulnerabilities: React.FC = () => {
             tableFilters['substate'] = substate.toLowerCase().replace(' ', '-');
           delete tableFilters['state'];
         }
-        return await apiPost<ApiResponse>(doExport ? '/vulnerabilities/export': '/vulnerabilities/search', {
-          body: {
-            page,
-            sort: sort[0]?.id ?? 'createdAt',
-            order: sort[0]?.desc ? 'DESC' : 'ASC',
-            filters: {
-              ...tableFilters,
-              organization: showAll ? undefined : currentOrganization?.id
-            },
-            pageSize
+        return await apiPost<ApiResponse>(
+          doExport ? '/vulnerabilities/export' : '/vulnerabilities/search',
+          {
+            body: {
+              page,
+              sort: sort[0]?.id ?? 'createdAt',
+              order: sort[0]?.desc ? 'DESC' : 'ASC',
+              filters: {
+                ...tableFilters,
+                organization: showAll ? undefined : currentOrganization?.id
+              },
+              pageSize
+            }
           }
-        });
+        );
       } catch (e) {
         console.error(e);
         return;
@@ -365,13 +369,13 @@ export const Vulnerabilities: React.FC = () => {
 
   const fetchVulnerabilitiesExport = async (): Promise<string> => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
-    const { url } = await vulnerabilitiesSearch(
+    const { url } = (await vulnerabilitiesSearch(
       filters!,
       sortBy!,
       1,
-      100,
+      -1,
       true
-    ) as ApiResponse;
+    )) as ApiResponse;
     return url!;
   };
 
@@ -402,16 +406,13 @@ export const Vulnerabilities: React.FC = () => {
   return (
     <div className={classes.root}>
       <Grid row>
-        <Grid tablet={{ col: true }}>
-          <h1>
-            Vulnerabilities
-            {showAll
-              ? ' - Global'
-              : currentOrganization
-              ? ' - ' + currentOrganization.name
-              : ''}
-          </h1>
-        </Grid>
+        <Subnav
+          items={[
+            { title: 'Assets', path: '/inventory', exact: true },
+            { title: 'Domains', path: '/inventory/domains' },
+            { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
+          ]}
+        ></Subnav>
         <Grid style={{ float: 'right' }}>
           {((user?.roles && user.roles.length > 1) ||
             user?.userType === 'globalView' ||

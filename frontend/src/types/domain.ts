@@ -81,6 +81,7 @@ export interface Domain {
   webpages: Webpage[];
   organization: Organization;
   ssl: SSLInfo | null;
+  censysCertificatesResults: any;
 }
 
 export interface SSLInfo {

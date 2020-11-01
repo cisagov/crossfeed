@@ -3,10 +3,11 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  useLocation
+  useLocation,
+  Redirect
 } from 'react-router-dom';
 import { API, Auth } from 'aws-amplify';
-import { AuthContextProvider, CFThemeProvider } from 'context';
+import { AuthContextProvider, CFThemeProvider, SearchProvider } from 'context';
 import {
   MatomoProvider,
   createInstance,
@@ -14,7 +15,6 @@ import {
 } from '@datapunt/matomo-tracker-react';
 import {
   Alerts,
-  Dashboard,
   Domain,
   AuthLogin,
   AuthCreateAccount,
@@ -29,7 +29,8 @@ import {
   Vulnerabilities,
   TermsOfUse,
   SearchPage,
-  LoginGovCallback
+  LoginGovCallback,
+  Dashboard
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
 import './styles.scss';
@@ -83,41 +84,52 @@ const App: React.FC = () => (
     <Router>
       <CFThemeProvider>
         <AuthContextProvider>
-          <Layout>
-            <LinkTracker />
-            <Switch>
-              <RouteGuard
-                exact
-                path="/"
-                component={Dashboard}
-                unauth={AuthLogin}
-              />
+          <SearchProvider>
+            <Layout>
+              <LinkTracker />
+              <Switch>
+                <RouteGuard
+                  exact
+                  path="/"
+                  render={() => <Redirect to="/inventory" />}
+                  unauth={AuthLogin}
+                  component={Risk}
+                />
 
-              <Route
-                exact
-                path="/login-gov-callback"
-                component={LoginGovCallback}
-              />
-              <Route
-                exact
-                path="/create-account"
-                component={AuthCreateAccount}
-              />
-              <Route exact path="/terms" component={TermsOfUse} />
-              <RouteGuard path="/domain/:domainId" component={Domain} />
-              <RouteGuard path="/search" component={SearchPage} />
-              <RouteGuard path="/vulnerabilities" component={Vulnerabilities} />
-              <RouteGuard path="/risk" component={Risk} />
-              <RouteGuard path="/alerts" component={Alerts} />
-              <RouteGuard path="/scans/:scanId" component={Scan} />
-              <RouteGuard path="/scans" component={Scans} />
-              <RouteGuard path="/organizations" component={Organizations} />
-              <RouteGuard path="/organization" component={Organization} />
-              <RouteGuard path="/users" component={Users} />
-              <RouteGuard path="/logs" component={Logs} />
-              <RouteGuard path="/settings" component={Settings} />
-            </Switch>
-          </Layout>
+                <Route
+                  exact
+                  path="/login-gov-callback"
+                  component={LoginGovCallback}
+                />
+                <Route
+                  exact
+                  path="/create-account"
+                  component={AuthCreateAccount}
+                />
+                <Route exact path="/terms" component={TermsOfUse} />
+
+                <RouteGuard exact path="/inventory" component={SearchPage} />
+                <RouteGuard
+                  path="/inventory/domain/:domainId"
+                  component={Domain}
+                />
+                <RouteGuard path="/inventory/domains" component={Dashboard} />
+                <RouteGuard
+                  path="/inventory/vulnerabilities"
+                  component={Vulnerabilities}
+                />
+                <RouteGuard path="/inventory/alerts" component={Alerts} />
+
+                <RouteGuard path="/scans/:scanId" component={Scan} />
+                <RouteGuard path="/scans" component={Scans} />
+                <RouteGuard path="/organizations" component={Organizations} />
+                <RouteGuard path="/organization" component={Organization} />
+                <RouteGuard path="/users" component={Users} />
+                <RouteGuard path="/logs" component={Logs} />
+                <RouteGuard path="/settings" component={Settings} />
+              </Switch>
+            </Layout>
+          </SearchProvider>
         </AuthContextProvider>
       </CFThemeProvider>
     </Router>
