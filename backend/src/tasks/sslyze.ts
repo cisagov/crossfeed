@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { CommandOptions } from './ecs-client';
 import { getLiveWebsites, LiveDomain } from './helpers/getLiveWebsites';
 import PQueue from 'p-queue';
@@ -10,13 +9,13 @@ const sslyze = async (domain: LiveDomain): Promise<void> => {
     const res = execSync(
       `echo "" | openssl s_client -connect ${domain.name}:443 > ${path}; openssl x509 -in ${path} -noout -enddate`,
       {
-        shell: "/bin/bash"
+        shell: '/bin/bash'
       }
     );
     const output = String(res);
-    const result = output.match(/notAfter=(.*))/);
+    const result = output.match(/notAfter=(.*)/);
     if (!result || !result[1]) {
-      console.error("No notAfter date found, output is", output);
+      console.error('No notAfter date found, output is', output);
       return;
     }
     domain.ssl = {
@@ -36,9 +35,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   const liveWebsites = await getLiveWebsites(organizationId!, [], true);
   const queue = new PQueue({ concurrency: 5 });
-  await Promise.all(
-    liveWebsites.map((site) => queue.add(() => sslyze(site)))
-  );
+  await Promise.all(liveWebsites.map((site) => queue.add(() => sslyze(site))));
 
   console.log(`sslyze finished for ${liveWebsites.length} domains`);
 };

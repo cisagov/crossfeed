@@ -29,9 +29,7 @@ export const getLiveWebsites = async (
     .groupBy('domain.id, domain.ip, domain.name, organization.id, services.id');
 
   if (onlySSL) {
-    qs.andHaving(
-      "COUNT(CASE WHEN services.port = '443' THEN 1 END) >= 1"
-    );
+    qs.andHaving("COUNT(CASE WHEN services.port = '443' THEN 1 END) >= 1");
   } else {
     qs.andHaving(
       "COUNT(CASE WHEN services.port = '443' OR services.port = '80' THEN 1 END) >= 1"
