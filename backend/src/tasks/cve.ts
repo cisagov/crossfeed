@@ -302,7 +302,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   // await identifyUnexpectedWebpages(allDomains);
 
-  await identifyExpiringCerts(allDomains);
+  // await identifyExpiringCerts(allDomains);
 
   await adjustVulnerabilities('open');
   await adjustVulnerabilities('closed');
