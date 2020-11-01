@@ -12,7 +12,7 @@ import { usePersistentState, useDomainApi } from 'hooks';
 const PAGE_SIZE = 25;
 
 export const Dashboard: React.FC = () => {
-  const { user, currentOrganization } = useAuthContext();
+  const { user } = useAuthContext();
   const tableRef = useRef<TableInstance<Domain>>(null);
   const columns = useMemo(() => createColumns(), []);
   const [domains, setDomains] = useState<Domain[]>([]);
