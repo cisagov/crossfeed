@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, Link, useHistory } from 'react-router-dom';
+import { NavLink, Link, useHistory, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   AppBar,
@@ -37,6 +37,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   const { searchTerm, setSearchTerm } = props;
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation();
   const { currentOrganization, user, logout } = useAuthContext();
   const [navOpen, setNavOpen] = useState(false);
 
@@ -147,9 +148,11 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
             {userLevel > 0 && (
               <>
                 <SearchBar
+                  initialValue={searchTerm}
                   value={searchTerm}
                   onChange={(value) => {
-                    history.push('/inventory');
+                    if (location.pathname !== '/inventory')
+                      history.push('/inventory');
                     setSearchTerm(value, {
                       shouldClearFilters: false,
                       autocompleteResults: false

@@ -47,7 +47,8 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
     setSort,
     totalPages,
     totalResults,
-    setSearchTerm
+    setSearchTerm,
+    searchTerm
   } = props;
   const classes = useStyles();
   const [selectedDomain, setSelectedDomain] = useState('');
@@ -62,7 +63,7 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
   });
 
   const { savedSearch } = parse(window.location.search);
-  console.log(savedSearch);
+  // console.log(savedSearch);
 
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
@@ -85,7 +86,7 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
 
   useEffect(() => {
     // Search on initial load
-    setSearchTerm('');
+    setSearchTerm(searchTerm);
   }, [setSearchTerm]);
 
   return (
