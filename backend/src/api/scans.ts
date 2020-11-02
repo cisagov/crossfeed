@@ -75,6 +75,12 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Open source tool that fingerprints web technologies based on HTTP responses'
   },
+  sslyze: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'SSL certificate inspection'
+  },
   censysIpv4: {
     type: 'fargate',
     isPassive: true,

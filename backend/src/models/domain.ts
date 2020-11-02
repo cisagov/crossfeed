@@ -104,14 +104,15 @@ export class Domain extends BaseEntity {
     nullable: true
   })
   ssl: {
-    issuerOrg: string;
-    issuerCN: string;
-    validFrom: string;
-    validTo: string;
-    protocol: string;
-    altNames: string;
-    bits: string;
-    fingerprint: string;
+    issuerOrg?: string;
+    issuerCN?: string;
+    validFrom?: string;
+    validTo?: string;
+    protocol?: string;
+    altNames?: string[];
+    bits?: string;
+    fingerprint?: string;
+    valid?: boolean;
   } | null;
 
   /** Censys Certificates results */
