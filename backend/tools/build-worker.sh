@@ -22,7 +22,7 @@ END_SUDO
 
     # cp Dockerfile.worker Dockerfile
 
-    echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_REPOSITORY} --password-stdin docker.pkg.github.com
+    echo ${GITHUB_TOKEN} | docker login -u $USERNAME --password-stdin docker.pkg.github.com
 
     buildctl build \
         --frontend=dockerfile.v0 --local dockerfile=. --local context=. \
