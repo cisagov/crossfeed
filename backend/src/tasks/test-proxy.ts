@@ -4,11 +4,11 @@ import { spawnSync } from 'child_process';
 import { writeFileSync } from 'fs';
 
 const WEBHOOK_URL_HTTP =
-  'http://webhook.site/84feeee1-2966-42ee-9bd6-80a9b742d78d';
+  'http://webhook.site/0f3e7e8f-ffe4-46df-aad1-d017b2c27921';
 const WEBHOOK_URL_HTTPS =
-  'https://webhook.site/84feeee1-2966-42ee-9bd6-80a9b742d78d';
+  'https://webhook.site/0f3e7e8f-ffe4-46df-aad1-d017b2c27921';
 const WEBHOOK_ADMIN_URL =
-  'https://webhook.site/#!/84feeee1-2966-42ee-9bd6-80a9b742d78d/f9093e12-1897-462a-a18d-ad91b6131ec6';
+  'https://webhook.site/#!/0f3e7e8f-ffe4-46df-aad1-d017b2c27921';
 
 const WEBSCRAPER_DIRECTORY = '/app/worker/webscraper';
 
