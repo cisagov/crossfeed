@@ -20,7 +20,7 @@ if [ $CI = "true" ]; then
         chgrp docker /run/buildkit/buildkitd.sock
 END_SUDO
 
-    cp Dockerfile.worker Dockerfile
+    # cp Dockerfile.worker Dockerfile
 
     echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin docker.pkg.github.com
 
