@@ -10,4 +10,4 @@ WORKER_TAG=crossfeed-staging-worker
 
 ./tools/pull-worker.sh $WORKER_TAG || "Failed to pull worker"
 
-docker build --cache-from $WORKER_TAG -t crossfeed-worker -f Dockerfile.worker .
+docker build --cache-from local.registry/$WORKER_TAG -t crossfeed-worker -f Dockerfile.worker .
