@@ -229,8 +229,8 @@ const populateVulnerabilities = async () => {
 
 // Closes or reopens vulnerabilities that need to be updated
 const adjustVulnerabilities = async (type: 'open' | 'closed') => {
-  const twoWeeksAgo = new Date(
-    new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 14)
+  const oneWeekAgo = new Date(
+    new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 7)
   );
   const where: {
     state: string;
@@ -238,7 +238,7 @@ const adjustVulnerabilities = async (type: 'open' | 'closed') => {
     substate?: string;
   } = {
     state: type,
-    lastSeen: type === 'open' ? LessThan(twoWeeksAgo) : MoreThan(twoWeeksAgo)
+    lastSeen: type === 'open' ? LessThan(oneWeekAgo) : MoreThan(oneWeekAgo)
   };
   // If vulnerability is already closed, we should only reopen if it was remediated
   if (type === 'closed') {
