@@ -27,7 +27,6 @@ END_SUDO
         --frontend=dockerfile.v0 --local dockerfile=. --local context=. \
         --export-cache type=local,dest=${BUILD_CACHE},mode=max \
         --import-cache type=local,src=${BUILD_CACHE} \
-        --oci-worker=false --containerd-worker=true \
         --output type=docker,name=${DOCKER_IMAGE} | docker load
     
 else 
