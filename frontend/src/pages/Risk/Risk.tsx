@@ -95,14 +95,14 @@ const Risk: React.FC = (props) => {
 
   const fetchStats = useCallback(
     async (orgId?: string) => {
-      console.log(orgId);
       const { result } = await apiPost<ApiResponse>('/stats', {
         body: {
-          filters: showAll
-            ? {}
-            : {
-                organization: orgId ? orgId : currentOrganization?.id
-              }
+          filters:
+            !orgId && showAll
+              ? {}
+              : {
+                  organization: orgId ? orgId : currentOrganization?.id
+                }
         }
       });
       const max = Math.max(...result.vulnerabilities.byOrg.map((p) => p.value));
