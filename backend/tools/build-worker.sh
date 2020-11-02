@@ -26,8 +26,8 @@ END_SUDO
 
     buildctl build \
         --frontend=dockerfile.v0 --local dockerfile=. --local context=. \
-        --export-cache type=registry,ref=docker.pkg.github.com/$DOCKER_CACHE_IMAGE,mode=max \
-        --import-cache type=registry,ref=docker.pkg.github.com/$DOCKER_CACHE_IMAGE \
+        --export-cache type=registry,ref=docker.pkg.github.com/$DOCKER_CACHE_IMAGE:latest,mode=max \
+        --import-cache type=registry,ref=docker.pkg.github.com/$DOCKER_CACHE_IMAGE:latest \
         --output type=docker,name=${DOCKER_IMAGE} | docker load
     
 else 
