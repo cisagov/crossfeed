@@ -22,7 +22,7 @@ if [ $CI = "true" ]; then
 END_SUDO
 
     buildctl build \
-        --frontend=dockerfile.v0 --local dockerfile=. --local context=. \
+        --frontend=dockerfile.v0 --local dockerfile=Dockerfile.worker --local context=. \
         --export-cache type=local,dest=${BUILD_CACHE},mode=max \
         --import-cache type=local,src=${BUILD_CACHE} \
         --output type=docker,name=${DOCKER_IMAGE} | docker load
