@@ -188,7 +188,7 @@ const identifyExpiringCerts = async (allDomains: Domain[]) => {
           domain: domain,
           lastSeen: new Date(Date.now()),
           title: `Expiring SSL certificate`,
-          severity: 'Low',
+          severity: 'High',
           state: 'open',
           source: 'certs',
           description: `This domain's SSL certificate is expiring / has expired at ${new Date(
