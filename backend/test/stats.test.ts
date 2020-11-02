@@ -24,7 +24,8 @@ describe('stats', () => {
       byOrg: [
         {
           id: expect.any(String),
-          label: expect.any(String)
+          label: expect.any(String),
+          orgId: expect.any(String)
         }
       ],
       latestVulnerabilities: [
