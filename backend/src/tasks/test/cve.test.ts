@@ -159,7 +159,7 @@ describe('cve', () => {
       domain,
       cve: 'CVE-123',
       lastSeen: new Date(
-        new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 7)
+        new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 10)
       ),
       title: '123',
       description: '123'
