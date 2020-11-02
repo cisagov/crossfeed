@@ -82,10 +82,12 @@ describe('findomain', () => {
       scanTaskId: 'scanTaskId'
     });
 
-    const domains = (await Domain.find({
-      where: { organization },
-      relations: ['discoveredBy']
-    })).sort((a, b) => a.name.localeCompare(b.name));
+    const domains = (
+      await Domain.find({
+        where: { organization },
+        relations: ['discoveredBy']
+      })
+    ).sort((a, b) => a.name.localeCompare(b.name));
     expect(domains.length).toEqual(2);
     expect(domains[0].id).toEqual(domain.id);
     expect(domains[0].name).toEqual('filedrop.cisa.gov');
