@@ -24,6 +24,8 @@ END_SUDO
 
     cp Dockerfile.worker Dockerfile
 
+    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_ECR_DOMAIN
+
     buildctl build \
         --frontend=dockerfile.v0 --local dockerfile=. --local context=. \
         --export-cache type=registry,ref=$AWS_ECR_DOMAIN/$WORKER_CACHE_TAG:cache,mode=max \
