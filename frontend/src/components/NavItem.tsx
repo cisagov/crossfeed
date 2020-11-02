@@ -26,25 +26,9 @@ export const NavItem: React.FC<Props> = (props) => {
   const [mouseInMenu, setMouseInMenu] = useState(false);
   const classes = useStyles();
 
-  const onHoverButton = (e: any) => {
+  const onClickButton = (e: any) => {
     setAnchor(e.currentTarget);
     setMouseInButton(true);
-  };
-
-  const onLeaveButton = (e: any) => {
-    setTimeout(() => {
-      setMouseInButton(false);
-    }, 400);
-  };
-
-  const onHoverMenu = (e: any) => {
-    setMouseInMenu(true);
-  };
-
-  const onLeaveMenu = (e: any) => {
-    setTimeout(() => {
-      setMouseInMenu(false);
-    }, 400);
   };
 
   const onCloseMenu = () => {
@@ -64,13 +48,12 @@ export const NavItem: React.FC<Props> = (props) => {
     <>
       {path ? (
         <NavLink
-          to={path ?? '#'}
-          activeClassName={classes.activeLink}
+          to={path}
+          activeClassName={path !== '#' ? classes.activeLink : classes.link}
           className={classes.link}
-          onMouseEnter={onHoverButton}
-          onClick={onClick ? onClick : onHoverButton}
-          onMouseLeave={onLeaveButton}
+          onClick={onClick ? onClick : onClickButton}
           exact={exact}
+          style={{ outline: 'none' }}
         >
           {title}
         </NavLink>
@@ -79,8 +62,8 @@ export const NavItem: React.FC<Props> = (props) => {
           className={clsx(classes.link, {
             [classes.activeLink]: !!match
           })}
-          onMouseOver={onHoverButton}
-          onClick={onClick ? onClick : onHoverButton}
+          onClick={onClick ? onClick : onClickButton}
+          style={{ outline: 'none' }}
         >
           {title}
         </Button>
@@ -93,17 +76,13 @@ export const NavItem: React.FC<Props> = (props) => {
           onClose={onCloseMenu}
           getContentAnchorEl={null}
           keepMounted
-          // anchorOrigin={{
-          //   vertical: 'bottom',
-          //   horizontal: 'center'
-          // }}
-          // transformOrigin={{
-          //   vertical: 'top',
-          //   horizontal: 'center'
-          // }}
-          MenuListProps={{
-            onMouseEnter: onHoverMenu,
-            onMouseLeave: onLeaveMenu
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center'
           }}
         >
           {nested.map((item) => (
@@ -112,6 +91,7 @@ export const NavItem: React.FC<Props> = (props) => {
               onClick={
                 item.onClick ? item.onClick : () => navigateTo(item.path)
               }
+              style={{ outline: 'none' }}
             >
               {item.title}
             </MenuItem>

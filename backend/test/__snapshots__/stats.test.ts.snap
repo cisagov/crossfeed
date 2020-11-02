@@ -45,6 +45,7 @@ Object {
         "description": "",
         "domain": Object {
           "asn": null,
+          "censysCertificatesResults": Object {},
           "cloudHosted": false,
           "country": null,
           "createdAt": Any<String>,
@@ -135,6 +136,7 @@ Object {
         "description": "",
         "domain": Object {
           "asn": null,
+          "censysCertificatesResults": Object {},
           "cloudHosted": false,
           "country": null,
           "createdAt": Any<String>,

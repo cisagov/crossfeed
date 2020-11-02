@@ -75,6 +75,12 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Open source tool that fingerprints web technologies based on HTTP responses'
   },
+  sslyze: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'SSL certificate inspection'
+  },
   censysIpv4: {
     type: 'fargate',
     isPassive: true,
@@ -83,6 +89,15 @@ export const SCAN_SCHEMA: ScanSchema = {
     memory: '6144',
     numChunks: 20,
     description: 'Fetch passive port and banner data from censys ipv4 dataset'
+  },
+  censysCertificates: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    cpu: '2048',
+    memory: '6144',
+    numChunks: 20,
+    description: 'Fetch TLS certificate data from censys certificates dataset'
   },
   cve: {
     type: 'fargate',

@@ -67,5 +67,6 @@ COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsy
 COPY --from=deps /etc/ssl/certs /etc/ssl/certs
 
 ENV GLOBAL_AGENT_HTTP_PROXY=http://localhost:8080
+ENV GLOBAL_AGENT_NO_PROXY=censys.io
 
 CMD ["./worker/worker-entry.sh"]
