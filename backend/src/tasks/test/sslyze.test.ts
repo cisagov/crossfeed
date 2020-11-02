@@ -1,18 +1,19 @@
 import { handler as sslyze } from '../sslyze';
 import { connectToDatabase, Organization, Service, Domain } from '../../models';
 
-jest.mock('child_process', () => ({
-  execSync: function (a, b) {
-    expect([a, b]).toMatchSnapshot();
-    return `depth=2 C = US, O = DigiCert Inc, OU = www.digicert.com, CN = DigiCert Global Root CA
-  verify return:1
-  depth=1 C = US, O = DigiCert Inc, OU = www.digicert.com, CN = DigiCert Secure Site ECC CA-1
-  verify return:1
-  depth=0 C = US, ST = District Of Columbia, L = Washington, O = Department of Homeland Security, CN = www3.dhs.gov
-  verify return:1
-  DONE
-  notAfter=Mar  7 12:00:00 2021 GMT`;
-  }
+jest.mock('ssl-checker', () => () => ({
+  daysRemaining: 125,
+  valid: true,
+  validFrom: '2020-06-15T00:00:00.000Z',
+  validTo: '2021-03-07T12:00:00.000Z',
+  validFor: [
+    'www3.dhs.gov',
+    'biometrics.gov',
+    'us-cert.cisa.gov',
+    'preview.cisa.gov',
+    'fema.com',
+    'www.cisa.gov'
+  ]
 }));
 
 describe('sslyze', () => {
@@ -51,12 +52,22 @@ describe('sslyze', () => {
     domain = (await Domain.findOne(domain.id)) as Domain;
     expect(domain.ssl).toMatchInlineSnapshot(`
       Object {
+        "altNames": Array [
+          "www3.dhs.gov",
+          "biometrics.gov",
+          "us-cert.cisa.gov",
+          "preview.cisa.gov",
+          "fema.com",
+          "www.cisa.gov",
+        ],
+        "valid": true,
+        "validFrom": "2020-06-15T00:00:00.000Z",
         "validTo": "2021-03-07T12:00:00.000Z",
       }
     `);
   });
   test('should not be called on non-https domains', async () => {
-    const domain = await Domain.create({
+    let domain = await Domain.create({
       organization,
       name: 'www.cisa.gov',
       ip: '0.0.0.0'
@@ -75,5 +86,7 @@ describe('sslyze', () => {
       chunkNumber: 0,
       numChunks: 1
     });
+    domain = (await Domain.findOne(domain.id)) as Domain;
+    expect(domain.ssl).toEqual(null);
   });
 });

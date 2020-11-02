@@ -109,9 +109,10 @@ export class Domain extends BaseEntity {
     validFrom?: string;
     validTo?: string;
     protocol?: string;
-    altNames?: string;
+    altNames?: string[];
     bits?: string;
     fingerprint?: string;
+    valid?: boolean;
   } | null;
 
   /** Censys Certificates results */

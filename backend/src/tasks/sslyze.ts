@@ -1,27 +1,35 @@
 import { CommandOptions } from './ecs-client';
 import { getLiveWebsites, LiveDomain } from './helpers/getLiveWebsites';
 import PQueue from 'p-queue';
-import { execSync } from 'child_process';
+import * as sslChecker from 'ssl-checker';
+
+interface IResolvedValues {
+  valid: boolean;
+  validFrom: string;
+  validTo: string;
+  daysRemaining: number;
+  validFor: string[];
+}
 
 const sslyze = async (domain: LiveDomain): Promise<void> => {
   try {
-    const path = `/tmp/${domain.name}.crt`;
-    const res = execSync(
-      `echo "" | openssl s_client -connect ${domain.name}:443 > ${path}; openssl x509 -in ${path} -noout -enddate`,
-      {
-        shell: '/bin/bash'
-      }
-    );
-    const output = String(res);
-    const result = output.match(/notAfter=(.*)/);
-    if (!result || !result[1]) {
-      console.error('No notAfter date found, output is', output);
-      return;
-    }
+    const response: IResolvedValues = await (sslChecker as any)(domain.name);
     domain.ssl = {
       ...(domain.ssl || {}),
-      validTo: new Date(result![1]).toISOString()
+      valid: response.valid,
+      validFrom: response.validFrom,
+      validTo: response.validTo,
+      altNames: response.validFor
     };
+    console.log(
+      domain.name,
+      ': valid',
+      response.valid,
+      'validFrom',
+      response.validFrom,
+      'validTo',
+      response.validTo
+    );
     await domain.save();
   } catch (e) {
     console.error(domain.name, e);

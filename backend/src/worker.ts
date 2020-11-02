@@ -1,4 +1,4 @@
-import 'global-agent/bootstrap'; // proxy
+import { bootstrap } from 'global-agent';
 import { CommandOptions } from './tasks/ecs-client';
 import { handler as amass } from './tasks/amass';
 import { handler as censys } from './tasks/censys';
@@ -42,6 +42,12 @@ async function main() {
   }[scanName || 'testProxy'];
   if (!scanFn) {
     throw new Error('Invalid scan name ' + scanName);
+  }
+
+  if (scanName === 'sslyze') {
+    // No proxy
+  } else {
+    bootstrap();
   }
 
   await scanFn(commandOptions);
