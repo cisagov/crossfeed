@@ -135,7 +135,7 @@ const Risk: React.FC = (props) => {
         }}
         onClick={(event) => {
           if (type === 'vulns') {
-            history.push(`/vulnerabilities?severity=${event.id}`);
+            history.push(`/inventory/vulnerabilities?severity=${event.id}`);
           }
         }}
       />
@@ -196,7 +196,7 @@ const Risk: React.FC = (props) => {
         onClick={(event) => {
           if (type === 'vulns') {
             history.push(
-              `/vulnerabilities?domain=${event.data.label}&severity=${event.id}`
+              `/inventory/vulnerabilities?domain=${event.data.label}&severity=${event.id}`
             );
           }
         }}
@@ -294,7 +294,7 @@ const Risk: React.FC = (props) => {
                         className={cardClasses.button}
                         onClick={() => {
                           history.push(
-                            '/vulnerabilities?title=' +
+                            '/inventory/vulnerabilities?title=' +
                               vuln.title +
                               (vuln.domain ? '&domain=' + vuln.domain.name : '')
                           );
@@ -311,7 +311,7 @@ const Risk: React.FC = (props) => {
           {showLatest && (
             <div className={cardClasses.footer}>
               <h4>
-                <Link to="/vulnerabilities?sort=createdAt&desc=false">
+                <Link to="/inventory/vulnerabilities?sort=createdAt&desc=false">
                   See all latest vulnerabilites
                 </Link>
               </h4>
