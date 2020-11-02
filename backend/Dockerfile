@@ -4,7 +4,7 @@ FROM node:current-buster
 WORKDIR /app
 COPY ./package* ./
 
-RUN npm ci
+RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
 
 COPY . .
 

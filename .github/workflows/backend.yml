@@ -36,7 +36,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
-        run: npm ci
+        run: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
       - name: Security
         run: npm audit
         continue-on-error: true
@@ -55,7 +55,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
-        run: npm ci
+        run: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
       - name: Lint
         run: npm run lint
   test:
@@ -74,7 +74,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
-        run: npm ci
+        run: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
       - name: Run site locally
         run: |
           cp dev.env.example .env
@@ -120,7 +120,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
-        run: npm ci
+        run: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
       - name: Build worker container
         run: npm run build-worker
         working-directory: backend
@@ -145,7 +145,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
-        run: npm ci
+        run: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
       - name: Ensure domain exists - Staging
         if: github.ref == 'refs/heads/master'
         run: npx sls create_domain --stage=staging

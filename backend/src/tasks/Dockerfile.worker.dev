@@ -4,13 +4,13 @@ WORKDIR /app
 
 COPY ./package* ./
 
-RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
+RUN npm ci
 
 COPY tsconfig.json ./tsconfig.json
 COPY webpack.worker.config.js ./webpack.worker.config.js
 COPY src ./src
 
-RUN npx webpack --config webpack.worker.config.js
+# RUN npx webpack --config webpack.worker.config.js
 
 FROM golang:1.14.6-buster as deps
 
@@ -53,6 +53,12 @@ RUN rbenv install 2.6.5 && rbenv global 2.6.5 && gem install bundler:2.1.4
 RUN git clone https://github.com/intrigueio/intrigue-ident.git && cd intrigue-ident && git checkout e97f974417147df8fa27dcd8f73b7efbb587b942 && bundle install --jobs=4
 RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/bin/intrigue-ident && chmod +x /usr/bin/intrigue-ident
 
+RUN npm i -g ts-node
+
+COPY ./package* ./
+
+RUN npm ci
+
 # Python dependencies
 
 COPY worker/requirements.txt worker/requirements.txt
@@ -60,13 +66,16 @@ RUN pip3 install -r worker/requirements.txt
 
 COPY worker worker
 
-COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
+# COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 
 COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsync /go/bin/cpe2cve /usr/bin/
 
 COPY --from=deps /etc/ssl/certs /etc/ssl/certs
 
+COPY tsconfig.json ./tsconfig.json
+COPY webpack.worker.config.js ./webpack.worker.config.js
+COPY src ./src
+
 ENV GLOBAL_AGENT_HTTP_PROXY=http://localhost:8080
-ENV GLOBAL_AGENT_NO_PROXY=censys.io
 
 CMD ["./worker/worker-entry.sh"]
