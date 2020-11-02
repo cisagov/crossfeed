@@ -6,6 +6,7 @@
 
 set -e
 DOCKER_IMAGE=crossfeed-worker
+DOCKER_CACHE_IMAGE=$GITHUB_REPOSITORY/crossfeed-worker-build-cache
 
 if [ $CI = "true" ]; then
     # From https://gist.github.com/UrsaDK/f90c9632997a70cfe2a6df2797731ac8
@@ -25,8 +26,8 @@ END_SUDO
 
     buildctl build \
         --frontend=dockerfile.v0 --local dockerfile=. --local context=. \
-        --export-cache type=registry,ref=docker.pkg.github.com/crossfeed-worker-build-cache,mode=max \
-        --import-cache type=registry,ref=docker.pkg.github.com/crossfeed-worker-build-cache \
+        --export-cache type=registry,ref=docker.pkg.github.com/$DOCKER_CACHE_IMAGE,mode=max \
+        --import-cache type=registry,ref=docker.pkg.github.com/$DOCKER_CACHE_IMAGE \
         --output type=docker,name=${DOCKER_IMAGE} | docker load
     
 else 
