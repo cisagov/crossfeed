@@ -160,7 +160,8 @@ const identifyUnexpectedWebpages = async (allDomains: Domain[]) => {
 };
 
 /**
- * Identifies expired and soon-to-expire certificates.
+ * Identifies expired and soon-to-expire certificates, as well
+ * as invalid certificates.
  */
 const identifyExpiringCerts = async (allDomains: Domain[]) => {
   const oneWeekFromNow = new Date(
@@ -168,8 +169,20 @@ const identifyExpiringCerts = async (allDomains: Domain[]) => {
   );
   const vulnerabilities: Vulnerability[] = [];
   for (const domain of allDomains) {
-    const { validTo } = domain.ssl || {};
-    if (validTo && new Date(validTo) <= oneWeekFromNow) {
+    const { validTo, valid } = domain.ssl || {};
+    if (valid === false) {
+      vulnerabilities.push(
+        plainToClass(Vulnerability, {
+          domain: domain,
+          lastSeen: new Date(Date.now()),
+          title: `Invalid SSL certificate`,
+          severity: 'Critical',
+          state: 'open',
+          source: 'certs',
+          description: `This domain's SSL certificate is invalid. Please make sure its certificate is properly configured, or users may face SSL errors when trying to navigate to the site.`
+        })
+      );
+    } else if (validTo && new Date(validTo) <= oneWeekFromNow) {
       vulnerabilities.push(
         plainToClass(Vulnerability, {
           domain: domain,
@@ -302,7 +315,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   // await identifyUnexpectedWebpages(allDomains);
 
-  // await identifyExpiringCerts(allDomains);
+  await identifyExpiringCerts(allDomains);
 
   await adjustVulnerabilities('open');
   await adjustVulnerabilities('closed');
