@@ -21,8 +21,10 @@ if [ $CI = "true" ]; then
         chgrp docker /run/buildkit/buildkitd.sock
 END_SUDO
 
+    cp Dockerfile.worker Dockerfile
+
     buildctl build \
-        --frontend=dockerfile.v0 --local dockerfile=Dockerfile.worker --local context=. \
+        --frontend=dockerfile.v0 --local dockerfile=. --local context=. \
         --export-cache type=local,dest=${BUILD_CACHE},mode=max \
         --import-cache type=local,src=${BUILD_CACHE} \
         --output type=docker,name=${DOCKER_IMAGE} | docker load
