@@ -54,7 +54,12 @@ let colorScale = scaleLinear<string>()
 
 const Risk: React.FC = (props) => {
   const history = useHistory();
-  const { currentOrganization, user, apiPost } = useAuthContext();
+  const {
+    currentOrganization,
+    user,
+    apiPost,
+    setOrganization
+  } = useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
   const [showAll, setShowAll] = useState<boolean>(
@@ -88,23 +93,27 @@ const Risk: React.FC = (props) => {
     return text.substring(0, len) + '...';
   };
 
-  const fetchStats = useCallback(async () => {
-    const { result } = await apiPost<ApiResponse>('/stats', {
-      body: {
-        filters: showAll
-          ? {}
-          : {
-              organization: currentOrganization?.id
-            }
-      }
-    });
-    const max = Math.max(...result.vulnerabilities.byOrg.map((p) => p.value));
-    // Adjust color scale based on highest count
-    colorScale = scaleLinear<string>()
-      .domain([0, Math.log(max)])
-      .range(['#c7e8ff', '#135787']);
-    setStats(result);
-  }, [showAll, apiPost, currentOrganization]);
+  const fetchStats = useCallback(
+    async (orgId?: string) => {
+      console.log(orgId);
+      const { result } = await apiPost<ApiResponse>('/stats', {
+        body: {
+          filters: showAll
+            ? {}
+            : {
+                organization: orgId ? orgId : currentOrganization?.id
+              }
+        }
+      });
+      const max = Math.max(...result.vulnerabilities.byOrg.map((p) => p.value));
+      // Adjust color scale based on highest count
+      colorScale = scaleLinear<string>()
+        .domain([0, Math.log(max)])
+        .range(['#c7e8ff', '#135787']);
+      setStats(result);
+    },
+    [showAll, apiPost, currentOrganization]
+  );
 
   useEffect(() => {
     fetchStats();
@@ -365,7 +374,11 @@ const Risk: React.FC = (props) => {
               <Geographies geography={geoUrl}>
                 {({ geographies }) =>
                   geographies.map((geo) => {
-                    const cur = findFn(geo);
+                    const cur = findFn(geo) as
+                      | (Point & {
+                          orgId: string;
+                        })
+                      | undefined;
                     const centroid = geoCentroid(geo);
                     const name: string = geo.properties.name;
                     return (
@@ -375,7 +388,7 @@ const Risk: React.FC = (props) => {
                           geography={geo}
                           fill={colorScale(cur ? Math.log(cur.value) : 0)}
                           onClick={() => {
-                            // alert(cur ? cur.label : '');
+                            if (cur) fetchStats(cur.orgId);
                           }}
                         />
                         <g key={geo.rsmKey + '-name'}>
