@@ -6,7 +6,8 @@
 
 set -e
 
-BUILD_CACHE=/home/runner/.docker/buildkit
+AWS_ECR_DOMAIN=957221700844.dkr.ecr.us-east-1.amazonaws.com
+WORKER_CACHE_TAG=crossfeed-staging-worker
 DOCKER_IMAGE=crossfeed-worker
 
 if [ $CI = "true" ]; then
@@ -25,9 +26,8 @@ END_SUDO
 
     buildctl build \
         --frontend=dockerfile.v0 --local dockerfile=. --local context=. \
-        --export-cache type=local,dest=${BUILD_CACHE},mode=max \
-        --import-cache type=local,src=${BUILD_CACHE} \
-        --output type=docker,name=${DOCKER_IMAGE} | docker load
+        --export-cache type=registry,ref=$AWS_ECR_DOMAIN/$WORKER_CACHE_TAG:cache,mode=max \
+        --import-cache type=registry,ref=$AWS_ECR_DOMAIN/$WORKER_CACHE_TAG:cache
     
 else 
     docker build -t $DOCKER_IMAGE -f Dockerfile.worker .
