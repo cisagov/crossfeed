@@ -36,6 +36,9 @@ class NewSavedSearch {
   @IsString()
   searchTerm: string;
 
+  @IsString()
+  searchPath: string;
+
   @IsArray()
   filters: { field: string; values: any[]; type: string }[];
 }

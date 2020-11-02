@@ -36,6 +36,9 @@ export class SavedSearch extends BaseEntity {
   @Column({ type: 'jsonb', default: '[]' })
   filters: { field: string; values: any[]; type: string }[];
 
+  @Column()
+  searchPath: string;
+
   @ManyToOne((type) => User, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE'

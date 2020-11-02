@@ -4,6 +4,7 @@ import { Pagination } from '@material-ui/lab';
 import { useAuthContext } from 'context';
 import { SavedSearch } from 'types';
 import { useHistory } from 'react-router-dom';
+import { Subnav } from 'components';
 
 const Feeds = () => {
   const classes = useStyles();
@@ -37,15 +38,21 @@ const Feeds = () => {
     fetchSavedSearches();
   }, []);
 
+  const editSearch = async (id: string) => {};
+
+  const deleteSearch = async (id: string) => {
+    try {
+      await apiDelete(`/saved-searches/${id}`);
+      setSavedSearches(savedSearches.filter((search) => search.id !== id));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.contentWrapper}>
-        <div className={classes.barWrapper}>
-          <div className={classes.barInner}>
-            <h2>Feeds</h2>
-            <h3>Saved Searches</h3>
-          </div>
-        </div>
+        <Subnav items={[{ title: 'Saved Searches', path: '/feeds' }]}></Subnav>
         <div className={classes.content}>
           <div className={classes.panel}>
             {savedSearches.map((search: SavedSearch) => (
@@ -67,8 +74,24 @@ const Feeds = () => {
                       <p>{search.searchTerm}</p>
                     </div>
                     <div className={classes.cardActions}>
-                      <button className={classes.button}>EDIT</button>
-                      <button className={classes.button}>DELETE</button>
+                      <button
+                        className={classes.button}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          editSearch(search.id);
+                        }}
+                      >
+                        EDIT
+                      </button>
+                      <button
+                        className={classes.button}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          deleteSearch(search.id);
+                        }}
+                      >
+                        DELETE
+                      </button>
                     </div>
                   </button>
                 </div>
@@ -135,7 +158,8 @@ const useStyles = makeStyles((theme) => ({
     flexFlow: 'row nowrap',
     alignItems: 'stretch',
     flex: '1',
-    overflowY: 'hidden'
+    overflowY: 'hidden',
+    marginTop: '2em'
   },
   panel: {
     position: 'relative',
