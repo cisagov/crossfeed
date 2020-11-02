@@ -29,7 +29,8 @@ END_SUDO
     buildctl build \
         --frontend=dockerfile.v0 --local dockerfile=. --local context=. \
         --export-cache type=registry,ref=$AWS_ECR_DOMAIN/$WORKER_CACHE_TAG:cache,mode=max \
-        --import-cache type=registry,ref=$AWS_ECR_DOMAIN/$WORKER_CACHE_TAG:cache
+        --import-cache type=registry,ref=$AWS_ECR_DOMAIN/$WORKER_CACHE_TAG:cache \
+        --output type=docker,name=${DOCKER_IMAGE} | docker load
     
 else 
     docker build -t $DOCKER_IMAGE -f Dockerfile.worker .
