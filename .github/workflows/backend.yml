@@ -121,6 +121,10 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
+      - uses: actions/cache@v1
+        with:
+          path: /home/runner/.docker/buildkit
+          key: ${{ hashFiles('backend/Dockerfile.worker') }}
       - name: Build worker container
         run: npm run build-worker
         working-directory: backend
@@ -161,6 +165,11 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           SLS_DEBUG: '*'
+
+      - uses: actions/cache@v1
+        with:
+          path: /home/runner/.docker/buildkit
+          key: ${{ hashFiles('backend/Dockerfile.worker') }}
 
       - name: Deploy worker - Staging
         if: github.ref == 'refs/heads/master'
