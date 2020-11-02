@@ -54,12 +54,7 @@ let colorScale = scaleLinear<string>()
 
 const Risk: React.FC = (props) => {
   const history = useHistory();
-  const {
-    currentOrganization,
-    user,
-    apiPost,
-    setOrganization
-  } = useAuthContext();
+  const { currentOrganization, user, apiPost } = useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
   const [showAll, setShowAll] = useState<boolean>(
