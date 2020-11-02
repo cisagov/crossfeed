@@ -124,7 +124,7 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: /home/runner/.docker/buildkit
-          key: ${{ hashFiles('backend/Dockerfile.worker') }}
+          key: "worker-cache"
       - name: Build worker container
         run: npm run build-worker
         working-directory: backend
@@ -169,7 +169,7 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: /home/runner/.docker/buildkit
-          key: ${{ hashFiles('backend/Dockerfile.worker') }}
+          key: "worker-cache"
 
       - name: Deploy worker - Staging
         if: github.ref == 'refs/heads/master'
