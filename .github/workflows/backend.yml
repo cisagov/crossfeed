@@ -125,8 +125,7 @@ jobs:
         run: npm run build-worker
         working-directory: backend
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          GITHUB_TOKEN: $${{ secrets.GITHUB_TOKEN }}
 
   deploy:
     needs: [security, build_worker, lint, test, test_python]
@@ -167,6 +166,7 @@ jobs:
         run: npm run deploy-worker-staging
         working-directory: backend
         env:
+          GITHUB_TOKEN: $${{ secrets.GITHUB_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
@@ -199,6 +199,7 @@ jobs:
         run: npm run deploy-worker-prod
         working-directory: backend
         env:
+          GITHUB_TOKEN: $${{ secrets.GITHUB_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 

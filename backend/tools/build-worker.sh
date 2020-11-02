@@ -5,9 +5,6 @@
 # at the beginning of ./deploy-worker.sh.
 
 set -e
-
-AWS_ECR_DOMAIN=957221700844.dkr.ecr.us-east-1.amazonaws.com
-WORKER_CACHE_TAG=crossfeed-staging-worker
 DOCKER_IMAGE=crossfeed-worker
 
 if [ $CI = "true" ]; then
@@ -24,12 +21,12 @@ END_SUDO
 
     cp Dockerfile.worker Dockerfile
 
-    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_ECR_DOMAIN
+    echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin docker.pkg.github.com
 
     buildctl build \
         --frontend=dockerfile.v0 --local dockerfile=. --local context=. \
-        --export-cache type=registry,ref=$AWS_ECR_DOMAIN/$WORKER_CACHE_TAG:cache,mode=max \
-        --import-cache type=registry,ref=$AWS_ECR_DOMAIN/$WORKER_CACHE_TAG:cache \
+        --export-cache type=registry,ref=docker.pkg.github.com/crossfeed-worker-build-cache,mode=max \
+        --import-cache type=registry,ref=docker.pkg.github.com/crossfeed-worker-build-cache \
         --output type=docker,name=${DOCKER_IMAGE} | docker load
     
 else 
