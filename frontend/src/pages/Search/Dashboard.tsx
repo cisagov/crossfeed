@@ -29,6 +29,7 @@ import { AddCircleOutline } from '@material-ui/icons';
 import { useAuthContext } from 'context';
 import { parse } from 'query-string';
 import { FilterTags } from './FilterTags';
+import { useLocation } from 'react-router-dom';
 
 export const DashboardUI: React.FC<ContextType> = (props) => {
   const {
@@ -62,8 +63,9 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
     name: ''
   });
 
-  const { savedSearch } = parse(window.location.search);
-  // console.log(savedSearch);
+  const { savedSearch } = parse(window.location.search) as {
+    savedSearch: string | null;
+  };
 
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
@@ -118,6 +120,7 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
               ? () => setShowSaveSearch(true)
               : undefined
           }
+          existingSavedSearch={savedSearch}
         />
         <div className={classes.content}>
           <div className={classes.panel} onScroll={handleResultScroll}>
@@ -201,7 +204,8 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
                           ...savedSearchValues,
                           searchTerm,
                           filters,
-                          count: totalResults
+                          count: totalResults,
+                          searchPath: window.location.search
                         }
                       });
                       setShowSaveSearch(false);

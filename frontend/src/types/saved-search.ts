@@ -9,4 +9,5 @@ export interface SavedSearch {
   count: number;
   filters: { field: string; values: any[]; type: string }[];
   createdBy: User;
+  searchPath: string;
 }

@@ -15,10 +15,19 @@ interface Props {
   setSort: ContextType['setSort'];
   saveSearch?(): void;
   isFixed: boolean;
+  existingSavedSearch: string | null;
 }
 
 export const SortBar: React.FC<Props> = (props) => {
-  const { sortField, sortDirection, setSort, saveSearch, children } = props;
+  const {
+    sortField,
+    sortDirection,
+    setSort,
+    saveSearch,
+    children,
+    existingSavedSearch
+  } = props;
+
   const classes = useStyles(props);
 
   const toggleDirection = () => {
@@ -65,7 +74,11 @@ export const SortBar: React.FC<Props> = (props) => {
       </div>
       {children}
       <div>
-        {saveSearch && <button onClick={saveSearch}>Save Search</button>}
+        {saveSearch && (
+          <button onClick={saveSearch}>
+            {existingSavedSearch ? 'Update Saved Search' : 'Save Search'}
+          </button>
+        )}
       </div>
     </div>
   );

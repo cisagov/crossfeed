@@ -61,11 +61,14 @@ const Feeds = () => {
                 classes={{ root: classes.cardRoot }}
                 aria-label="view domain details"
                 onClick={() => {
-                  history.push(`/inventory?savedSearch=${search.id}`);
+                  history.push(
+                    `/inventory${search.searchPath}&savedSearch=${search.id}`
+                  );
                 }}
+                key={search.id}
               >
                 <div className={classes.cardInner}>
-                  <button className={classes.domainRow}>
+                  <div className={classes.domainRow}>
                     <div className={classes.cardAlerts}>
                       <h4>{search.count} new</h4>
                     </div>
@@ -93,7 +96,7 @@ const Feeds = () => {
                         DELETE
                       </button>
                     </div>
-                  </button>
+                  </div>
                 </div>
               </Paper>
             ))}
