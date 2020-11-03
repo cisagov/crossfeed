@@ -30,6 +30,8 @@ RUN go mod init crossfeed-worker
 
 RUN go get github.com/facebookincubator/nvdtools/...@v0.1.4
 
+RUN go get github.com/haccer/subjack
+
 FROM node:14-buster-slim
 
 WORKDIR /app
@@ -62,7 +64,7 @@ COPY worker worker
 
 COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 
-COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsync /go/bin/cpe2cve /usr/bin/
+COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsync /go/bin/cpe2cve /go/bin/subjack /usr/bin/
 
 COPY --from=deps /etc/ssl/certs /etc/ssl/certs
 
