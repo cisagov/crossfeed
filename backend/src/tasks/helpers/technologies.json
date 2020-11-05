@@ -77,6 +77,17 @@
             }
         ]
     },
+    "Microsoft Exchange Server": {
+        "cats": [
+          30
+        ],
+        "cpe": "cpe:/a:microsoft:exchange_server",
+        "html": [
+            "<link rel=\"shortcut icon\" href=\"/owa/auth/(.*?)/\\;version:\\1"
+        ],
+        "icon": "Microsoft.png",
+        "website": "https://www.microsoft.com/en-us/microsoft-365/exchange/email"
+    },
     "Atlassian Crowd": {
         "cats": [
           61
