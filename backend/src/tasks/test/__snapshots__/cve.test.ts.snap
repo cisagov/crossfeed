@@ -1,5 +1,55 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`cve certs expiring certs 1`] = `
+Array [
+  Object {
+    "actions": Array [],
+    "cpe": null,
+    "createdAt": true,
+    "cve": null,
+    "cvss": null,
+    "cwe": null,
+    "description": "This domain's SSL certificate is expiring / has expired at 2019-04-22T10:20:30.000Z. Please make sure its certificate is renewed, or users may face SSL errors when trying to navigate to the site.",
+    "id": true,
+    "lastSeen": true,
+    "needsPopulation": false,
+    "notes": "",
+    "references": Array [],
+    "severity": "High",
+    "source": "certs",
+    "state": "open",
+    "substate": "unconfirmed",
+    "title": "Expiring SSL certificate",
+    "updatedAt": true,
+  },
+]
+`;
+
+exports[`cve certs invalid certs 1`] = `
+Array [
+  Object {
+    "actions": Array [],
+    "cpe": null,
+    "createdAt": true,
+    "cve": null,
+    "cvss": null,
+    "cwe": null,
+    "description": "This domain's SSL certificate is invalid. Please make sure its certificate is properly configured, or users may face SSL errors when trying to navigate to the site.",
+    "id": true,
+    "lastSeen": true,
+    "needsPopulation": false,
+    "notes": "",
+    "references": Array [],
+    "severity": "Low",
+    "source": "certs",
+    "state": "open",
+    "substate": "unconfirmed",
+    "title": "Invalid SSL certificate",
+    "updatedAt": true,
+  },
+]
+`;
+
 exports[`cve simple test: execSync.input 1`] = `
 "0 cpe:/a:10web:form_maker:1.0.0
 "

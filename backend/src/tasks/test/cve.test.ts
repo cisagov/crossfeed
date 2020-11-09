@@ -159,7 +159,7 @@ describe('cve', () => {
       domain,
       cve: 'CVE-123',
       lastSeen: new Date(
-        new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 7)
+        new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 10)
       ),
       title: '123',
       description: '123'
@@ -347,56 +347,104 @@ describe('cve', () => {
     expect(vuln?.description).toBeFalsy();
     expect(vuln?.references).toEqual([]);
   });
-  // describe('identify invalid certs', () => {
-  //   test('basic test', async () => {
-  //     const organization = await Organization.create({
-  //       name: 'test-' + Math.random(),
-  //       rootDomains: ['test-' + Math.random()],
-  //       ipBlocks: [],
-  //       isPassive: false
-  //     }).save();
-  //     const name = 'test-' + Math.random();
-  //     const domain = await Domain.create({
-  //       name,
-  //       organization,
-  //       ssl: {
-  //         validTo: new Date(Date.now()).toISOString()
-  //       }
-  //     }).save();
-  //     const domain2 = await Domain.create({
-  //       name: name + '-2',
-  //       organization,
-  //       ssl: {
-  //         validTo: '9999-08-23T03:36:57.231Z'
-  //       }
-  //     }).save();
-  //     await cve({
-  //       organizationId: organization.id,
-  //       scanId: 'scanId',
-  //       scanName: 'scanName',
-  //       scanTaskId: 'scanTaskId'
-  //     });
+  describe('certs', () => {
+    test('invalid certs', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const name = 'test-' + Math.random();
+      const domain = await Domain.create({
+        name,
+        organization,
+        ssl: {
+          valid: false
+        }
+      }).save();
+      const domain2 = await Domain.create({
+        name: name + '-2',
+        organization,
+        ssl: {
+          valid: true
+        }
+      }).save();
+      await cve({
+        organizationId: organization.id,
+        scanId: 'scanId',
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId'
+      });
 
-  //     const vulns = await Vulnerability.find({
-  //       domain: { id: domain.id }
-  //     });
-  //     expect(vulns.length).toEqual(1);
-  //     expect(
-  //       vulns.map((e) => ({
-  //         ...e,
-  //         createdAt: !!e.createdAt,
-  //         updatedAt: !!e.updatedAt,
-  //         lastSeen: !!e.lastSeen,
-  //         id: !!e.id
-  //       }))
-  //     ).toMatchSnapshot();
+      const vulns = await Vulnerability.find({
+        domain: { id: domain.id }
+      });
+      expect(vulns.length).toEqual(1);
+      expect(
+        vulns.map((e) => ({
+          ...e,
+          createdAt: !!e.createdAt,
+          updatedAt: !!e.updatedAt,
+          lastSeen: !!e.lastSeen,
+          id: !!e.id
+        }))
+      ).toMatchSnapshot();
 
-  //     const vulns2 = await Vulnerability.find({
-  //       domain: { id: domain2.id }
-  //     });
-  //     expect(vulns2.length).toEqual(0);
-  //   });
-  // });
+      const vulns2 = await Vulnerability.find({
+        domain: { id: domain2.id }
+      });
+      expect(vulns2.length).toEqual(0);
+    });
+    test('expiring certs', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const name = 'test-' + Math.random();
+      const domain = await Domain.create({
+        name,
+        organization,
+        ssl: {
+          validTo: new Date(Date.now()).toISOString()
+        }
+      }).save();
+      const domain2 = await Domain.create({
+        name: name + '-2',
+        organization,
+        ssl: {
+          validTo: '9999-08-23T03:36:57.231Z'
+        }
+      }).save();
+      await cve({
+        organizationId: organization.id,
+        scanId: 'scanId',
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId'
+      });
+
+      const vulns = await Vulnerability.find({
+        domain: { id: domain.id }
+      });
+      expect(vulns.length).toEqual(1);
+      expect(
+        vulns.map((e) => ({
+          ...e,
+          createdAt: !!e.createdAt,
+          updatedAt: !!e.updatedAt,
+          lastSeen: !!e.lastSeen,
+          id: !!e.id
+        }))
+      ).toMatchSnapshot();
+
+      const vulns2 = await Vulnerability.find({
+        domain: { id: domain2.id }
+      });
+      expect(vulns2.length).toEqual(0);
+    });
+  });
   // describe('identify unexpected webpages', () => {
   //   test('basic test', async () => {
   //     const organization = await Organization.create({
