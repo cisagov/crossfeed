@@ -5,6 +5,7 @@ import { handler as censys } from './tasks/censys';
 import { handler as findomain } from './tasks/findomain';
 import { handler as portscanner } from './tasks/portscanner';
 import { handler as wappalyzer } from './tasks/wappalyzer';
+import { handler as gowitness } from './tasks/gowitness';
 import { handler as censysIpv4 } from './tasks/censysIpv4';
 import { handler as censysCertificates } from './tasks/censysCertificates';
 import { handler as sslyze } from './tasks/sslyze';
@@ -38,6 +39,7 @@ async function main() {
     wappalyzer,
     intrigueIdent,
     webscraper,
+    gowitness,
     testProxy
   }[scanName || 'testProxy'];
   if (!scanFn) {

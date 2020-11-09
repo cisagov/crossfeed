@@ -133,6 +133,12 @@ export const SCAN_SCHEMA: ScanSchema = {
     cpu: '1024',
     memory: '4096',
     description: 'Scrapes all webpages on a given domain, respecting robots.txt'
+  },
+  gowitness: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'Open source tool that screenshots domains'
   }
 };
 
