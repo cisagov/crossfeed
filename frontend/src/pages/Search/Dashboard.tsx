@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { DomainDetails, Subnav } from 'components';
 import { ResultCard } from './ResultCard';
 import {
@@ -30,8 +30,11 @@ import { useAuthContext } from 'context';
 import { parse } from 'query-string';
 import { FilterTags } from './FilterTags';
 import { useLocation } from 'react-router-dom';
+import { SavedSearch } from 'types';
 
-export const DashboardUI: React.FC<ContextType> = (props) => {
+export const DashboardUI: React.FC<ContextType & { location: any }> = (
+  props
+) => {
   const {
     current,
     setCurrent,
@@ -55,17 +58,22 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
   const [selectedDomain, setSelectedDomain] = useState('');
   const [resultsScrolled, setResultsScrolled] = useState(false);
   const [showSaveSearch, setShowSaveSearch] = useState<Boolean>(false);
-  const { apiPost } = useAuthContext();
+  const { apiPost, apiGet } = useAuthContext();
 
-  const [savedSearchValues, setSavedSearchValues] = useState<{
-    name: string;
-  }>({
-    name: ''
-  });
+  const search: SavedSearch | undefined = props.location.state
+    ? props.location.state.search
+    : undefined;
+  const [savedSearchValues, setSavedSearchValues] = useState<
+    Partial<SavedSearch>
+  >(
+    search
+      ? search
+      : {
+          name: ''
+        }
+  );
 
-  const { savedSearch } = parse(window.location.search) as {
-    savedSearch: string | null;
-  };
+  console.log(search);
 
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
@@ -120,7 +128,7 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
               ? () => setShowSaveSearch(true)
               : undefined
           }
-          existingSavedSearch={savedSearch}
+          existingSavedSearch={search}
         />
         <div className={classes.content}>
           <div className={classes.panel} onScroll={handleResultScroll}>

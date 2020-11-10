@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core';
 import { ArrowUpward, ArrowDownward } from '@material-ui/icons';
 import { ContextType } from '../../context/SearchProvider';
+import { SavedSearch } from 'types';
 
 interface Props {
   sortField: ContextType['sortField'];
@@ -15,7 +16,7 @@ interface Props {
   setSort: ContextType['setSort'];
   saveSearch?(): void;
   isFixed: boolean;
-  existingSavedSearch: string | null;
+  existingSavedSearch?: SavedSearch;
 }
 
 export const SortBar: React.FC<Props> = (props) => {

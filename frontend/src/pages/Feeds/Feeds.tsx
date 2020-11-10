@@ -3,7 +3,7 @@ import { Paper, makeStyles } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { useAuthContext } from 'context';
 import { SavedSearch } from 'types';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Subnav } from 'components';
 
 const Feeds = () => {
@@ -56,49 +56,54 @@ const Feeds = () => {
         <div className={classes.content}>
           <div className={classes.panel}>
             {savedSearches.map((search: SavedSearch) => (
-              <Paper
-                elevation={0}
-                classes={{ root: classes.cardRoot }}
-                aria-label="view domain details"
-                onClick={() => {
-                  history.push(
-                    `/inventory${search.searchPath}&savedSearch=${search.id}`
-                  );
+              <Link
+                to={{
+                  pathname: '/inventory',
+                  search: search.searchPath,
+                  state: {
+                    search
+                  }
                 }}
                 key={search.id}
               >
-                <div className={classes.cardInner}>
-                  <div className={classes.domainRow}>
-                    <div className={classes.cardAlerts}>
-                      <h4>{search.count} new</h4>
-                    </div>
-                    <div className={classes.cardDetails}>
-                      <h3>{search.name}</h3>
-                      <p>{search.searchTerm}</p>
-                    </div>
-                    <div className={classes.cardActions}>
-                      <button
-                        className={classes.button}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          editSearch(search.id);
-                        }}
-                      >
-                        EDIT
-                      </button>
-                      <button
-                        className={classes.button}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          deleteSearch(search.id);
-                        }}
-                      >
-                        DELETE
-                      </button>
+                <Paper
+                  elevation={0}
+                  classes={{ root: classes.cardRoot }}
+                  aria-label="view domain details"
+                >
+                  <div className={classes.cardInner}>
+                    <div className={classes.domainRow}>
+                      <div className={classes.cardAlerts}>
+                        <h4>{search.count} new</h4>
+                      </div>
+                      <div className={classes.cardDetails}>
+                        <h3>{search.name}</h3>
+                        <p>{search.searchTerm}</p>
+                      </div>
+                      <div className={classes.cardActions}>
+                        <button
+                          className={classes.button}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            editSearch(search.id);
+                          }}
+                        >
+                          EDIT
+                        </button>
+                        <button
+                          className={classes.button}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            deleteSearch(search.id);
+                          }}
+                        >
+                          DELETE
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Paper>
+                </Paper>
+              </Link>
             ))}
           </div>
         </div>
@@ -162,7 +167,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'stretch',
     flex: '1',
     overflowY: 'hidden',
-    marginTop: '2em'
+    marginTop: '2em',
+    lineHeight: 1
   },
   panel: {
     position: 'relative',
