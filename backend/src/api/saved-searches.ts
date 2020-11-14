@@ -34,6 +34,12 @@ class NewSavedSearch {
   count: number;
 
   @IsString()
+  sortDirection: string;
+
+  @IsString()
+  sortField: string;
+
+  @IsString()
   searchTerm: string;
 
   @IsString()

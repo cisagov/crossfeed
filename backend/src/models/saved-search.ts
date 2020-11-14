@@ -1,16 +1,12 @@
 import {
   Entity,
-  Index,
   Column,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   CreateDateColumn,
   BaseEntity,
-  OneToMany,
-  ManyToMany,
   ManyToOne
 } from 'typeorm';
-import { Domain, Role, Scan, ScanTask } from '.';
 import { User } from './user';
 
 @Entity()
@@ -29,6 +25,12 @@ export class SavedSearch extends BaseEntity {
 
   @Column()
   searchTerm: string;
+
+  @Column()
+  sortDirection: string;
+
+  @Column()
+  sortField: string;
 
   @Column()
   count: number;

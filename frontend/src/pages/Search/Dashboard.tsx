@@ -213,7 +213,9 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
                           searchTerm,
                           filters,
                           count: totalResults,
-                          searchPath: window.location.search
+                          searchPath: window.location.search,
+                          sortField,
+                          sortDirection
                         }
                       });
                       setShowSaveSearch(false);
