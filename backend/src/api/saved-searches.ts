@@ -6,7 +6,7 @@ import {
   IsNumber,
   IsBoolean
 } from 'class-validator';
-import { connectToDatabase, SavedSearch } from '../models';
+import { connectToDatabase, SavedSearch, Vulnerability } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
   isOrgAdmin,
@@ -57,6 +57,9 @@ class NewSavedSearch {
 
   @IsBoolean()
   createVulnerabilities: boolean;
+
+  @IsObject()
+  vulnerabilityTemplate: Partial<Vulnerability>;
 }
 
 const PAGE_SIZE = 20;

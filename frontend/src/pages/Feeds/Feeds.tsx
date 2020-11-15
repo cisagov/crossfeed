@@ -52,7 +52,12 @@ const Feeds = () => {
   return (
     <div className={classes.root}>
       <div className={classes.contentWrapper}>
-        <Subnav items={[{ title: 'Saved Searches', path: '/feeds' }]}></Subnav>
+        <Subnav
+          items={[
+            { title: 'My Saved Searches', path: '/feeds', exact: true },
+            { title: 'Default Searches', path: '/feeds/default' }
+          ]}
+        ></Subnav>
         <div className={classes.content}>
           <div className={classes.panel}>
             {savedSearches.map((search: SavedSearch) => (

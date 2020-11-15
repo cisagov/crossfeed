@@ -7,6 +7,7 @@ import {
   BaseEntity,
   ManyToOne
 } from 'typeorm';
+import { Vulnerability } from './vulnerability';
 import { User } from './user';
 
 @Entity()
@@ -41,13 +42,15 @@ export class SavedSearch extends BaseEntity {
   @Column()
   searchPath: string;
 
-  // @Column()
-  // description: string;
-
   @Column({
     default: false
   })
   createVulnerabilities: boolean;
+
+  @Column({ type: 'jsonb', default: '{}' })
+  vulnerabilityTemplate: Partial<Vulnerability> & {
+    title: string;
+  };
 
   @ManyToOne((type) => User, {
     onDelete: 'SET NULL',

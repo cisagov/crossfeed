@@ -10,7 +10,8 @@ import {
   Typography,
   Checkbox,
   FormControlLabel,
-  FormGroup
+  FormGroup,
+  TextareaAutosize
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { withSearch } from '@elastic/react-search-ui';
@@ -23,12 +24,12 @@ import {
   Modal,
   ModalContainer,
   TextInput,
-  Label
+  Label,
+  Dropdown
 } from '@trussworks/react-uswds';
-import { AddCircleOutline } from '@material-ui/icons';
 import { useAuthContext } from 'context';
 import { FilterTags } from './FilterTags';
-import { SavedSearch } from 'types';
+import { SavedSearch, Vulnerability } from 'types';
 
 export const DashboardUI: React.FC<ContextType & { location: any }> = (
   props
@@ -62,16 +63,18 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
     ? props.location.state.search
     : undefined;
   const [savedSearchValues, setSavedSearchValues] = useState<
-    Partial<SavedSearch>
+    Partial<SavedSearch> & {
+      name: string;
+      vulnerabilityTemplate: Partial<Vulnerability>;
+    }
   >(
     search
       ? search
       : {
-          name: ''
+          name: '',
+          vulnerabilityTemplate: { title: '' }
         }
   );
-
-  console.log(search);
 
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
@@ -82,6 +85,12 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
       ...values,
       [name]: value
     }));
+  };
+
+  const onVulnerabilityTemplateChange = (e: any) => {
+    (savedSearchValues.vulnerabilityTemplate as any)[e.target.name] =
+      e.target.value;
+    setSavedSearchValues(savedSearchValues);
   };
 
   const handleResultScroll = (e: React.UIEvent<HTMLElement>) => {
@@ -264,23 +273,57 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
                   }
                   label="Create a vulnerability"
                 />
-                {/* <TextInput
-                  required
-                  id="description"
-                  name="description"
-                  type="text"
-                  value={savedSearchValues.description}
-                  onChange={onTextChange}
-                /> */}
-                <h3>Collaborators</h3>
+                {savedSearchValues.createVulnerabilities && (
+                  <>
+                    <Label htmlFor="title">Title</Label>
+                    <TextInput
+                      required
+                      id="title"
+                      name="title"
+                      type="text"
+                      value={savedSearchValues.vulnerabilityTemplate.title}
+                      onChange={onVulnerabilityTemplateChange}
+                    />
+                    <Label htmlFor="description">Description</Label>
+                    <TextareaAutosize
+                      required
+                      id="description"
+                      name="description"
+                      style={{ padding: 10 }}
+                      rowsMin={2}
+                      value={
+                        savedSearchValues.vulnerabilityTemplate.description
+                      }
+                      onChange={onVulnerabilityTemplateChange}
+                    />
+                    <Label htmlFor="description">Severity</Label>
+                    <Dropdown
+                      id="severity"
+                      name="severity"
+                      onChange={onVulnerabilityTemplateChange}
+                      value={
+                        savedSearchValues.vulnerabilityTemplate
+                          .severity as string
+                      }
+                      style={{ display: 'inline-block', width: '150px' }}
+                    >
+                      <option value="None">None</option>
+                      <option value="Low">Low</option>
+                      <option value="Medium">Medium</option>
+                      <option value="High">High</option>
+                      <option value="Critical">Critical</option>
+                    </Dropdown>
+                  </>
+                )}
+                {/* <h3>Collaborators</h3>
                 <p>
                   Collaborators can view vulnerabilities, and domains within
                   this search. Adding a team will make all members
                   collaborators.
                 </p>
-                <button className={classes.addButton}>
+                <button className={classes.addButton} >
                   <AddCircleOutline></AddCircleOutline> ADD
-                </button>
+                </button> */}
               </FormGroup>
             </Modal>
           </ModalContainer>
