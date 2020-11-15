@@ -3,12 +3,12 @@ import { Paper, makeStyles } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { useAuthContext } from 'context';
 import { SavedSearch } from 'types';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Subnav } from 'components';
 
 const Feeds = () => {
   const classes = useStyles();
-  const { apiGet, apiPost, apiDelete } = useAuthContext();
+  const { apiGet, apiDelete } = useAuthContext();
   const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
   const [pageState, setPageState] = useState({
     totalResults: 0,
@@ -16,7 +16,6 @@ const Feeds = () => {
     resultsPerPage: 20,
     totalPages: 0
   });
-  const history = useHistory();
 
   const fetchSavedSearches = useCallback(async () => {
     try {
@@ -32,11 +31,11 @@ const Feeds = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [apiGet]);
+  }, [apiGet, pageState]);
 
   useEffect(() => {
     fetchSavedSearches();
-  }, []);
+  }, [fetchSavedSearches]);
 
   const editSearch = async (id: string) => {};
 

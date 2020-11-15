@@ -104,7 +104,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
   useEffect(() => {
     // Search on initial load
     setSearchTerm(searchTerm);
-  }, [setSearchTerm]);
+  }, [setSearchTerm, searchTerm]);
 
   return (
     <div className={classes.root}>

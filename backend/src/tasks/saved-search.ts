@@ -75,10 +75,8 @@ export const handler = async (commandOptions: CommandOptions) => {
     search.count = hits;
     search.save();
 
-    console.log(hits);
     if (search.createVulnerabilities) {
       const results = await fetchAllResults(filters, options, hits);
-      console.log(results);
       const vulnerabilities: Vulnerability[] = results.map((domain) =>
         plainToClass(Vulnerability, {
           domain: domain,
@@ -89,7 +87,6 @@ export const handler = async (commandOptions: CommandOptions) => {
           needsPopulation: false
         })
       );
-      console.log(vulnerabilities);
       await saveVulnerabilitiesToDb(vulnerabilities, false);
     }
   }
