@@ -127,15 +127,24 @@ export const get = wrapHandler(async (event) => {
   const total = await performQuery(
     Domain.createQueryBuilder('domain').select('count(*) as value')
   );
-  const byOrg = await performQuery(
-    Domain.createQueryBuilder('domain')
-      .innerJoinAndSelect('domain.organization', 'organization')
-      .innerJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
-      .andWhere("vulnerabilities.state = 'open'")
-      .select('organization.name as id, count(*) as value')
-      .groupBy('organization.name')
-      .orderBy('value', 'DESC')
-  );
+  const byOrg = (
+    await filterQuery(
+      Domain.createQueryBuilder('domain')
+        .innerJoinAndSelect('domain.organization', 'organization')
+        .innerJoinAndSelect('domain.vulnerabilities', 'vulnerabilities')
+        .andWhere("vulnerabilities.state = 'open'")
+        .select(
+          'organization.name as id, organization.id as "orgId", count(*) as value'
+        )
+        .groupBy('organization.name, organization.id')
+        .orderBy('value', 'DESC')
+    ).getRawMany()
+  ).map((e) => ({
+    id: String(e.id),
+    orgId: String(e.orgId),
+    value: Number(e.value),
+    label: String(e.id)
+  }));
   const result: Stats = {
     domains: {
       services,

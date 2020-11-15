@@ -18,7 +18,7 @@ jobs:
     name: Build docs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.3
+      - uses: actions/checkout@v2.3.4
       - uses: actions/setup-ruby@v1.1.2
         with:
           ruby-version: "2.6"
@@ -39,7 +39,7 @@ jobs:
       - run: echo "docs.crossfeed.cyber.dhs.gov" >> docs/_site/CNAME
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: crazy-max/ghaction-github-pages@v2.1.3
+        uses: crazy-max/ghaction-github-pages@v2.2.0
         with:
           keep_history: true
           target-branch: gh-pages
