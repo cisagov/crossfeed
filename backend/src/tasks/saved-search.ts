@@ -32,9 +32,15 @@ export const handler = async (commandOptions: CommandOptions) => {
       searchResults = await client.searchDomains(request);
     } catch (e) {
       console.error(e.meta.body.error);
-      throw e;
+      continue;
     }
-    console.log(searchResults.body.hits.total);
+    const hits: number = searchResults.body.hits.total.value;
+    search.count = hits;
+    search.save();
+    console.log(JSON.stringify(searchResults));
+
+    if (search.createVulnerabilities) {
+    }
   }
 
   console.log(savedSearches);

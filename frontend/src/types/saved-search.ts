@@ -10,4 +10,7 @@ export interface SavedSearch {
   filters: { field: string; values: any[]; type: string }[];
   createdBy: User;
   searchPath: string;
+  sortField: string;
+  sortDirection: string;
+  createVulnerabilities: boolean;
 }

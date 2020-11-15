@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DomainDetails, Subnav } from 'components';
 import { ResultCard } from './ResultCard';
 import {
@@ -27,9 +27,7 @@ import {
 } from '@trussworks/react-uswds';
 import { AddCircleOutline } from '@material-ui/icons';
 import { useAuthContext } from 'context';
-import { parse } from 'query-string';
 import { FilterTags } from './FilterTags';
-import { useLocation } from 'react-router-dom';
 import { SavedSearch } from 'types';
 
 export const DashboardUI: React.FC<ContextType & { location: any }> = (
@@ -58,7 +56,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
   const [selectedDomain, setSelectedDomain] = useState('');
   const [resultsScrolled, setResultsScrolled] = useState(false);
   const [showSaveSearch, setShowSaveSearch] = useState<Boolean>(false);
-  const { apiPost, apiGet } = useAuthContext();
+  const { apiPost, apiPut } = useAuthContext();
 
   const search: SavedSearch | undefined = props.location.state
     ? props.location.state.search
@@ -207,7 +205,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
                   <Button
                     type="button"
                     onClick={async () => {
-                      await apiPost('/saved-searches/', {
+                      const body = {
                         body: {
                           ...savedSearchValues,
                           searchTerm,
@@ -217,7 +215,12 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
                           sortField,
                           sortDirection
                         }
-                      });
+                      };
+                      if (search) {
+                        await apiPut('/saved-searches/' + search.id, body);
+                      } else {
+                        await apiPost('/saved-searches/', body);
+                      }
                       setShowSaveSearch(false);
                     }}
                   >
@@ -238,7 +241,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
                   onChange={onTextChange}
                 />
                 <p>When a new result is found:</p>
-                <FormControlLabel
+                {/* <FormControlLabel
                   control={
                     <Checkbox
                       // checked={gilad}
@@ -247,17 +250,28 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
                     />
                   }
                   label="Email me"
-                />
+                /> */}
                 <FormControlLabel
                   control={
                     <Checkbox
-                      // checked={jason}
-                      // onChange={handleChange}
-                      name="create"
+                      checked={savedSearchValues.createVulnerabilities}
+                      onChange={(e) =>
+                        onChange(e.target.name, e.target.checked)
+                      }
+                      id="createVulnerabilities"
+                      name="createVulnerabilities"
                     />
                   }
                   label="Create a vulnerability"
                 />
+                {/* <TextInput
+                  required
+                  id="description"
+                  name="description"
+                  type="text"
+                  value={savedSearchValues.description}
+                  onChange={onTextChange}
+                /> */}
                 <h3>Collaborators</h3>
                 <p>
                   Collaborators can view vulnerabilities, and domains within

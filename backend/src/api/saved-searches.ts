@@ -1,4 +1,11 @@
-import { IsString, isUUID, IsObject, IsArray, IsNumber } from 'class-validator';
+import {
+  IsString,
+  isUUID,
+  IsObject,
+  IsArray,
+  IsNumber,
+  IsBoolean
+} from 'class-validator';
 import { connectToDatabase, SavedSearch } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
@@ -47,6 +54,9 @@ class NewSavedSearch {
 
   @IsArray()
   filters: { field: string; values: any[]; type: string }[];
+
+  @IsBoolean()
+  createVulnerabilities: boolean;
 }
 
 const PAGE_SIZE = 20;

@@ -65,6 +65,7 @@ const Feeds = () => {
                   }
                 }}
                 key={search.id}
+                style={{ textDecoration: 'none' }}
               >
                 <Paper
                   elevation={0}
@@ -74,7 +75,7 @@ const Feeds = () => {
                   <div className={classes.cardInner}>
                     <div className={classes.domainRow}>
                       <div className={classes.cardAlerts}>
-                        <h4>{search.count} new</h4>
+                        <h4>{search.count} items</h4>
                       </div>
                       <div className={classes.cardDetails}>
                         <h3>{search.name}</h3>

@@ -41,6 +41,14 @@ export class SavedSearch extends BaseEntity {
   @Column()
   searchPath: string;
 
+  // @Column()
+  // description: string;
+
+  @Column({
+    default: false
+  })
+  createVulnerabilities: boolean;
+
   @ManyToOne((type) => User, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
