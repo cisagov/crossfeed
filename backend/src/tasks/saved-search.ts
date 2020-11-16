@@ -46,10 +46,6 @@ export const handler = async (commandOptions: CommandOptions) => {
   await connectToDatabase();
   const savedSearches = await SavedSearch.find();
   for (const search of savedSearches) {
-    const options = {
-      organizationIds: [],
-      matchAllOrganizations: true
-    };
     const filters = {
       searchTerm: search.searchTerm,
       sortDirection: search.sortDirection,
@@ -62,7 +58,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         resultsPerPage: 1,
         ...filters
       },
-      options
+      search.searchRestrictions
     );
     let searchResults;
     try {

@@ -200,11 +200,11 @@ export const isGlobalWriteAdmin = (event: APIGatewayProxyEvent) => {
 
 /** Check if a user has global view permissions */
 export const isGlobalViewAdmin = (event: APIGatewayProxyEvent) => {
-  return (
-    event.requestContext.authorizer &&
+  return event.requestContext.authorizer &&
     (event.requestContext.authorizer.userType === 'globalView' ||
       event.requestContext.authorizer.userType === 'globalAdmin')
-  );
+    ? true
+    : false;
 };
 
 /** Checks if the current user is allowed to access (modify) a user with id userId */

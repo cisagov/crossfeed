@@ -1,6 +1,5 @@
-import { connectToDatabase } from '../models';
-import { Unauthorized, validateBody, wrapHandler } from './helpers';
-import { getOrgMemberships, isGlobalWriteAdmin } from './auth';
+import { validateBody, wrapHandler } from './helpers';
+import { getOrgMemberships, isGlobalViewAdmin } from './auth';
 import { buildRequest } from './search/buildRequest';
 import ESClient from '../tasks/es-client';
 import { IsArray, IsInt, IsObject, IsString } from 'class-validator';
@@ -28,7 +27,7 @@ export const search = wrapHandler(async (event) => {
   const searchBody = await validateBody(SearchBody, event.body);
   const options = {
     organizationIds: getOrgMemberships(event),
-    matchAllOrganizations: isGlobalWriteAdmin(event)
+    matchAllOrganizations: isGlobalViewAdmin(event)
   };
   const request = buildRequest(searchBody, options);
 

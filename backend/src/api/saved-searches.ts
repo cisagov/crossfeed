@@ -66,16 +66,19 @@ const PAGE_SIZE = 20;
 
 export const update = wrapHandler(async (event) => {
   const id = event.pathParameters?.searchId;
-
   if (!id || !isUUID(id)) {
     return NotFound;
   }
+  const where = isGlobalViewAdmin(event)
+    ? {}
+    : { createdBy: { id: event.requestContext.authorizer!.id } };
 
   const body = await validateBody(NewSavedSearch, event.body);
   await connectToDatabase();
   const search = await SavedSearch.findOne(
     {
-      id
+      id,
+      ...where
     },
     {
       relations: []
@@ -93,12 +96,15 @@ export const update = wrapHandler(async (event) => {
 });
 
 export const create = wrapHandler(async (event) => {
-  if (!isGlobalWriteAdmin(event)) return Unauthorized;
   const body = await validateBody(NewSavedSearch, event.body);
   await connectToDatabase();
   const search = await SavedSearch.create({
     ...body,
-    createdBy: { id: event.requestContext.authorizer!.id }
+    createdBy: { id: event.requestContext.authorizer!.id },
+    searchRestrictions: {
+      organizationIds: getOrgMemberships(event),
+      matchAllOrganizations: isGlobalViewAdmin(event)
+    }
   });
   const res = await SavedSearch.save(search);
   return {
@@ -108,19 +114,10 @@ export const create = wrapHandler(async (event) => {
 });
 
 export const list = wrapHandler(async (event) => {
-  if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
-    return {
-      statusCode: 200,
-      body: JSON.stringify([])
-    };
-  }
   await connectToDatabase();
-  let where = {};
-  if (isGlobalViewAdmin(event)) {
-    where = {};
-  } else {
-    where = { id: In(getOrgMemberships(event)) };
-  }
+  const where = isGlobalViewAdmin(event)
+    ? {}
+    : { createdBy: { id: event.requestContext.authorizer!.id } };
 
   const pageSize = event.pathParameters?.pageSize
     ? parseInt(event.pathParameters.pageSize)
@@ -146,13 +143,17 @@ export const list = wrapHandler(async (event) => {
 
 export const get = wrapHandler(async (event) => {
   const id = event.pathParameters?.searchId;
-
-  if (!isOrgAdmin(event, id)) return Unauthorized;
+  const where = isGlobalViewAdmin(event)
+    ? {}
+    : { createdBy: { id: event.requestContext.authorizer!.id } };
 
   await connectToDatabase();
-  const result = await SavedSearch.findOne(id, {
-    relations: []
-  });
+  const result = await SavedSearch.findOne(
+    { ...where, id },
+    {
+      relations: []
+    }
+  );
 
   return {
     statusCode: result ? 200 : 404,
