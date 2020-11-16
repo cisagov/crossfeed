@@ -10,6 +10,9 @@ export interface CommandOptions {
   scanTaskId: string;
   chunkNumber?: number;
   numChunks?: number;
+
+  // Used only for testing to scope down global scans to a single domain.
+  domainId?: string;
 }
 
 const toSnakeCase = (input) => input.replace(/ /g, '-');
@@ -82,7 +85,10 @@ class ECSClient {
             `WORKER_USER_AGENT=${process.env.WORKER_USER_AGENT}`,
             `WORKER_SIGNATURE_PUBLIC_KEY=${process.env.WORKER_SIGNATURE_PUBLIC_KEY}`,
             `WORKER_SIGNATURE_PRIVATE_KEY=${process.env.WORKER_SIGNATURE_PRIVATE_KEY}`,
-            `ELASTICSEARCH_ENDPOINT=${process.env.ELASTICSEARCH_ENDPOINT}`
+            `ELASTICSEARCH_ENDPOINT=${process.env.ELASTICSEARCH_ENDPOINT}`,
+            `WEBSCRAPER_S3_BUCKET_NAME=${process.env.WEBSCRAPER_S3_BUCKET_NAME}`,
+            `AWS_ACCESS_KEY_ID=${process.env.AWS_ACCESS_KEY_ID}`,
+            `AWS_SECRET_ACCESS_KEY=${process.env.AWS_SECRET_ACCESS_KEY}`
           ]
         } as any);
         await container.start();
@@ -159,10 +165,6 @@ class ECSClient {
                 value: JSON.stringify(commandOptions)
               },
               {
-                name: 'WORKER_USER_AGENT',
-                value: process.env.WORKER_USER_AGENT
-              },
-              {
                 // Allow node to use more memory, if needed
                 name: 'NODE_OPTIONS',
                 value: memory ? `--max_old_space_size=${memory}` : ''
@@ -194,8 +196,8 @@ class ECSClient {
     } else {
       const response = await this.cloudWatchLogs!.getLogEvents({
         logGroupName: process.env.FARGATE_LOG_GROUP_NAME!,
-        // Pick the ID from "arn:aws:ecs:us-east-1:957221700844:task/f59d71c6-3d23-4ee9-ad68-c7b810bf458b"
-        logStreamName: `worker/main/${fargateTaskArn.split('/')[1]}`,
+        // Pick the ID from "arn:aws:ecs:us-east-1:957221700844:task/crossfeed-staging-worker/f59d71c6-3d23-4ee9-ad68-c7b810bf458b"
+        logStreamName: `worker/main/${fargateTaskArn.split('/')[2]}`,
         startFromHead: true
       }).promise();
       const res = response.$response.data;

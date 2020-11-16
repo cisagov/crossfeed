@@ -87,14 +87,14 @@ export const ScanTasksView: React.FC = () => {
           <>
             <h4>
               Logs
-              {original.fargateTaskArn?.match('/(.*)') && (
+              {original.fargateTaskArn?.match('.*/(.*)') && (
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
                   href={`https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/${process
                     .env
                     .REACT_APP_FARGATE_LOG_GROUP!}/log-events/worker$252Fmain$252F${
-                    (original.fargateTaskArn.match('/(.*)') || [])[1]
+                    (original.fargateTaskArn.match('.*/(.*)') || [])[1]
                   }`}
                 >
                   {' '}
@@ -125,7 +125,7 @@ export const ScanTasksView: React.FC = () => {
               <h4>Actions</h4>
               <a
                 href="# "
-                onClick={e => {
+                onClick={(e) => {
                   e.preventDefault();
                   killScanTask(row.index);
                 }}
@@ -171,10 +171,13 @@ export const ScanTasksView: React.FC = () => {
         'portscanner',
         'wappalyzer',
         'censysIpv4',
+        'censysCertificates',
+        'sslyze',
         'searchSync',
         'cve',
-        'intrigueIdent',
         'nuclei',
+        'webscraper',
+        'intrigueIdent'
       ]),
       disableSortBy: true
     },
@@ -217,7 +220,7 @@ export const ScanTasksView: React.FC = () => {
               sort: sort[0]?.id ?? 'createdAt',
               order: sort[0]?.desc ? 'DESC' : 'ASC',
               filters: filters
-                .filter(f => Boolean(f.value))
+                .filter((f) => Boolean(f.value))
                 .reduce(
                   (accum, next) => ({
                     ...accum,

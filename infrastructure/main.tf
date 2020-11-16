@@ -8,9 +8,8 @@ resource "aws_ssm_parameter" "prod_api_domain" {
   value     = "api.crossfeed.cyber.dhs.gov"
   overwrite = true
 
-  tags = {	
-    Project = var.project	
-    Stage   = var.stage
+  tags = {
+    Project = var.project
   }
 }
 
@@ -20,8 +19,7 @@ resource "aws_ssm_parameter" "stage_api_domain" {
   value     = "api.staging.crossfeed.cyber.dhs.gov"
   overwrite = true
 
-  tags = {	
-    Project = var.project	
-    Stage   = var.stage
+  tags = {
+    Project = var.project
   }
 }

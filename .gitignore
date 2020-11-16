@@ -37,6 +37,10 @@ yarn-error.log*
 dist
 postgres-data
 es-data
+matomo-data
+matomo-db-data
 nvd-dump
 
 **.pyc
+
+minio-data

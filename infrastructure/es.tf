@@ -7,10 +7,10 @@ resource "aws_elasticsearch_domain" "es" {
   elasticsearch_version = "7.7"
 
   cluster_config {
-    instance_type = "t2.small.elasticsearch"
-    instance_count = 1
+    instance_type            = var.es_instance_type
+    instance_count           = var.es_instance_count
     dedicated_master_enabled = false
-    
+
     # Enable for prod:
     # zone_awareness_enabled = true
     # zone_awareness_config {
@@ -18,10 +18,10 @@ resource "aws_elasticsearch_domain" "es" {
     # }
   }
 
-    # Allow all IPs within the private subnet to access this domain.
-    # This allows us to make requests to this ES domain without
-    # having to AWS-sign each request.
-    access_policies = <<POLICY
+  # Allow all IPs within the private subnet to access this domain.
+  # This allows us to make requests to this ES domain without
+  # having to AWS-sign each request.
+  access_policies = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -54,33 +54,37 @@ POLICY
   }
 
   domain_endpoint_options {
-    enforce_https = true
+    enforce_https       = true
     tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
   }
 
   log_publishing_options {
     cloudwatch_log_group_arn = aws_cloudwatch_log_group.es_application.arn
-    log_type = "ES_APPLICATION_LOGS"
+    log_type                 = "ES_APPLICATION_LOGS"
+  }
+
+  log_publishing_options {
+    cloudwatch_log_group_arn = aws_cloudwatch_log_group.es_index_slow.arn
+    log_type                 = "INDEX_SLOW_LOGS"
+  }
+
+  log_publishing_options {
+    cloudwatch_log_group_arn = aws_cloudwatch_log_group.es_search_slow.arn
+    log_type                 = "SEARCH_SLOW_LOGS"
   }
 
   ebs_options {
     ebs_enabled = true
-    volume_size = 10
+    volume_size = var.es_instance_volume_size
   }
 
   tags = {
     Project = var.project
   }
-
-  depends_on = [aws_iam_service_linked_role.es]
-}
-
-resource "aws_iam_service_linked_role" "es" {
-  aws_service_name = "es.amazonaws.com"
 }
 
 resource "aws_cloudwatch_log_resource_policy" "es" {
-  policy_name = "crossfeed-${var.stage}"
+  policy_name     = "crossfeed-${var.stage}"
   policy_document = <<CONFIG
 {
   "Version": "2012-10-17",
@@ -104,8 +108,24 @@ CONFIG
 
 resource "aws_cloudwatch_log_group" "es_application" {
   name = "crossfeed-${var.stage}-es-application"
-  tags = {	
-    Project = var.project	
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+resource "aws_cloudwatch_log_group" "es_index_slow" {
+  name = "crossfeed-${var.stage}-es-index-slow"
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+resource "aws_cloudwatch_log_group" "es_search_slow" {
+  name = "crossfeed-${var.stage}-es-search-slow"
+  tags = {
+    Project = var.project
     Stage   = var.stage
   }
 }

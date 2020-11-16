@@ -8,9 +8,9 @@ import {
   IsBoolean,
   IsUUID
 } from 'class-validator';
-import { Scan, connectToDatabase, Organization } from '../models';
+import { Scan, connectToDatabase, Organization, ScanTask } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
-import { isGlobalWriteAdmin } from './auth';
+import { isGlobalWriteAdmin, isGlobalViewAdmin } from './auth';
 import LambdaClient from '../tasks/lambda-client';
 
 interface ScanSchema {
@@ -75,14 +75,29 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Open source tool that fingerprints web technologies based on HTTP responses'
   },
+  sslyze: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'SSL certificate inspection'
+  },
   censysIpv4: {
     type: 'fargate',
     isPassive: true,
     global: true,
-    cpu: '1024',
-    memory: '4096',
+    cpu: '2048',
+    memory: '6144',
     numChunks: 20,
     description: 'Fetch passive port and banner data from censys ipv4 dataset'
+  },
+  censysCertificates: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    cpu: '2048',
+    memory: '6144',
+    numChunks: 20,
+    description: 'Fetch TLS certificate data from censys certificates dataset'
   },
   cve: {
     type: 'fargate',
@@ -96,6 +111,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: true,
+    cpu: '1024',
+    memory: '4096',
     description:
       'Syncs records with Elasticsearch so that they appear in search results.'
   },
@@ -103,6 +120,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
+    cpu: '1024',
+    memory: '4096',
     description:
       'Open source tool that fingerprints web technologies based on HTTP responses'
   },
@@ -112,6 +131,15 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: false,
     description:
       'Queries websites with null payloads to detect the presence of CVEs'
+  },
+  webscraper: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    numChunks: 3,
+    cpu: '1024',
+    memory: '4096',
+    description: 'Scrapes all webpages on a given domain, respecting robots.txt'
   }
 };
 
@@ -129,6 +157,9 @@ class NewScan {
 
   @IsBoolean()
   isGranular: boolean;
+
+  @IsBoolean()
+  isSingleScan: boolean;
 
   @IsUUID('all', { each: true })
   organizations: string[];
@@ -159,6 +190,7 @@ export const update = wrapHandler(async (event) => {
   const scan = await Scan.findOne({
     id: id
   });
+
   if (scan) {
     Scan.merge(scan, {
       ...body,
@@ -187,6 +219,40 @@ export const create = wrapHandler(async (event) => {
     statusCode: 200,
     body: JSON.stringify(res)
   };
+});
+
+export const get = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  await connectToDatabase();
+  const id = event.pathParameters?.scanId;
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+  const scan = await Scan.findOne(
+    {
+      id: id
+    },
+    {
+      relations: ['organizations']
+    }
+  );
+
+  if (scan) {
+    const schema = SCAN_SCHEMA[scan.name];
+    const organizations = await Organization.find();
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        scan: scan,
+        schema: schema,
+        organizations: organizations.map((e) => ({
+          name: e.name,
+          id: e.id
+        }))
+      })
+    };
+  }
+  return NotFound;
 });
 
 export const list = wrapHandler(async (event) => {
@@ -230,7 +296,6 @@ export const invokeScheduler = wrapHandler(async (event) => {
   const response = await lambdaClient.runCommand({
     name: `${process.env.SLS_LAMBDA_PREFIX!}-scheduler`
   });
-  console.log(response);
   if (response.StatusCode !== 202) {
     return {
       statusCode: 500,
@@ -241,4 +306,27 @@ export const invokeScheduler = wrapHandler(async (event) => {
     statusCode: 200,
     body: ''
   };
+});
+
+export const runScan = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  await connectToDatabase();
+  const id = event.pathParameters?.scanId;
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+  const scan = await Scan.findOne({
+    id: id
+  });
+
+  if (scan) {
+    scan.manualRunPending = true;
+
+    const res = await Scan.save(scan);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(res)
+    };
+  }
+  return NotFound;
 });

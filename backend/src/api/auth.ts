@@ -192,10 +192,10 @@ export const authorize = async (event) => {
 
 /** Check if a user has global write admin permissions */
 export const isGlobalWriteAdmin = (event: APIGatewayProxyEvent) => {
-  return (
-    event.requestContext.authorizer &&
+  return event.requestContext.authorizer &&
     event.requestContext.authorizer.userType === 'globalAdmin'
-  );
+    ? true
+    : false;
 };
 
 /** Check if a user has global view permissions */
@@ -225,7 +225,7 @@ export const isOrgAdmin = (
 };
 
 /** Returns the organizations a user is a member of */
-export const getOrgMemberships = (event: APIGatewayProxyEvent) => {
+export const getOrgMemberships = (event: APIGatewayProxyEvent): string[] => {
   if (!event.requestContext.authorizer) return [];
   return event.requestContext.authorizer.roles.map((role) => role.org);
 };

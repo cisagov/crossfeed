@@ -14,6 +14,8 @@ import { Domain, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
 import { isGlobalViewAdmin, getOrgMemberships } from './auth';
+import S3Client from '../tasks/s3-client';
+import * as Papa from 'papaparse';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
@@ -37,6 +39,10 @@ class DomainFilters {
   @IsUUID()
   @IsOptional()
   organization?: string;
+
+  @IsString()
+  @IsOptional()
+  vulnerability?: string;
 }
 
 class DomainSearch {
@@ -79,14 +85,22 @@ class DomainSearch {
     }
     if (this.filters?.service) {
       qs.andHaving(
-        'COUNT(CASE WHEN services.service ILIKE :service THEN 1 END) >= 1',
+        'COUNT(CASE WHEN services.products->>0 ILIKE :service THEN 1 END) >= 1',
         { service: `%${this.filters?.service}%` }
       );
     }
     if (this.filters?.organization) {
-      qs.andWhere('domain.organization = :org', {
+      qs.andWhere('domain."organizationId" = :org', {
         org: this.filters.organization
       });
+    }
+    if (this.filters?.vulnerability) {
+      qs.andHaving(
+        'COUNT(CASE WHEN vulnerabilities.title ILIKE :title THEN 1 END) >= 1',
+        {
+          title: `%${this.filters?.vulnerability}%`
+        }
+      );
     }
     return qs;
   }
@@ -95,7 +109,6 @@ class DomainSearch {
     const pageSize = this.pageSize || PAGE_SIZE;
     let qs = Domain.createQueryBuilder('domain')
       .leftJoinAndSelect('domain.services', 'services')
-      .leftJoinAndSelect('domain.organization', 'organization')
       .leftJoinAndSelect(
         'domain.vulnerabilities',
         'vulnerabilities',
@@ -103,14 +116,14 @@ class DomainSearch {
       )
       .orderBy(`domain.${this.sort}`, this.order)
       .groupBy(
-        'domain.id, domain.ip, domain.name, organization.id, services.id, vulnerabilities.id'
+        'domain.id, domain.ip, domain.name, domain."organizationId", services.id, vulnerabilities.id'
       );
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
     }
 
     if (!isGlobalViewAdmin(event)) {
-      qs.andHaving('domain.organization IN (:...orgs)', {
+      qs.andHaving('domain."organizationId" IN (:...orgs)', {
         orgs: getOrgMemberships(event)
       });
     }
@@ -139,19 +152,23 @@ class DomainSearch {
       });
     }
     if (this.filters?.organization) {
-      qs.andWhere('domain.organization = :org', {
+      qs.andWhere('domain."organizationId" = :org', {
         org: this.filters.organization
+      });
+    }
+    if (this.filters?.vulnerability) {
+      qs.andWhere('vulnerabilities.title ILIKE :title', {
+        title: `%${this.filters?.vulnerability}%`
       });
     }
   }
 
   async getCount(event) {
-    const qs = Domain.createQueryBuilder('domain').leftJoin(
-      'domain.services',
-      'services'
-    );
+    const qs = Domain.createQueryBuilder('domain')
+      .leftJoin('domain.services', 'services')
+      .leftJoin('domain.vulnerabilities', 'vulnerabilities', "state = 'open'");
     if (!isGlobalViewAdmin(event)) {
-      qs.andWhere('domain.organization IN (:...orgs)', {
+      qs.andWhere('domain."organizationId" IN (:...orgs)', {
         orgs: getOrgMemberships(event)
       });
     }
@@ -182,6 +199,47 @@ export const list = wrapHandler(async (event) => {
     body: JSON.stringify({
       result,
       count
+    })
+  };
+});
+
+export const export_ = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        result: [],
+        count: 0
+      })
+    };
+  }
+  await connectToDatabase();
+  const search = await validateBody(DomainSearch, event.body);
+  const [result, count] = await Promise.all([
+    search.getResults(event),
+    search.getCount(event)
+  ]);
+  const client = new S3Client();
+  const url = await client.saveCSV(
+    Papa.unparse({
+      fields: [
+        'name',
+        'ip',
+        'id',
+        'ports',
+        'services',
+        'createdAt',
+        'updatedAt'
+      ],
+      data: result
+    }),
+    'domains'
+  );
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      url
     })
   };
 });

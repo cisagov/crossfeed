@@ -1,4 +1,10 @@
-import { Domain, Service } from '../models';
+import {
+  connectToDatabase,
+  Domain,
+  Organization,
+  Scan,
+  Service
+} from '../models';
 import { plainToClass } from 'class-transformer';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
@@ -117,7 +123,7 @@ const downloadPath = async (
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { chunkNumber, numChunks } = commandOptions;
+  const { chunkNumber, numChunks, organizationId } = commandOptions;
 
   if (chunkNumber === undefined || numChunks === undefined) {
     throw new Error('Chunks not specified.');
@@ -131,9 +137,23 @@ export const handler = async (commandOptions: CommandOptions) => {
     data: { files }
   } = await axios.get(results.latest.details_url, { auth });
 
-  const allDomains = await getAllDomains();
+  await connectToDatabase();
+  const scan = await Scan.findOne(
+    { id: commandOptions.scanId },
+    { relations: ['organizations'] }
+  );
 
-  const queue = new PQueue({ concurrency: 5 });
+  // censysIpv4 is a global scan, so organizationId is only specified for tests.
+  // Otherwise, scan.organizations can be used for granular control of censys.
+  const orgs = organizationId
+    ? [organizationId]
+    : scan?.organizations?.length
+    ? undefined
+    : scan?.organizations.map((org) => org.id);
+
+  const allDomains = await getAllDomains(orgs);
+
+  const queue = new PQueue({ concurrency: 2 });
 
   const numFiles = Object.keys(files).length;
   const fileNames = Object.keys(files).sort();

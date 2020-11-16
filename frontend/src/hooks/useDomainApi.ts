@@ -2,23 +2,28 @@ import { Query, Domain } from 'types';
 import { useAuthContext } from 'context';
 import { useCallback } from 'react';
 
+export interface DomainQuery extends Query<Domain> {
+  showAll?: boolean;
+}
+
 interface ApiResponse {
   result: Domain[];
   count: number;
+  url?: string;
 }
 
 const PAGE_SIZE = 25;
 
-export const useDomainApi = (showAll: boolean) => {
-  const { currentOrganization, apiPost } = useAuthContext();
+export const useDomainApi = (showAll?: boolean) => {
+  const { currentOrganization, apiPost, apiGet } = useAuthContext();
   const orgId = currentOrganization?.id;
 
   const listDomains = useCallback(
-    async (query: Query<Domain>) => {
+    async (query: DomainQuery, doExport = false) => {
       const { page, sort, filters, pageSize = PAGE_SIZE } = query;
 
       const tableFilters = filters
-        .filter(f => Boolean(f.value))
+        .filter((f) => Boolean(f.value))
         .reduce(
           (accum, next) => ({
             ...accum,
@@ -27,7 +32,7 @@ export const useDomainApi = (showAll: boolean) => {
           {}
         );
 
-      const { result, count } = await apiPost<ApiResponse>('/domain/search', {
+      const { result, count, url } = await apiPost<ApiResponse>(doExport ? '/domain/export': '/domain/search', {
         body: {
           pageSize,
           page,
@@ -43,13 +48,22 @@ export const useDomainApi = (showAll: boolean) => {
       return {
         domains: result,
         count,
+        url,
         pageCount: Math.ceil(count / pageSize)
       };
     },
-    [showAll, orgId, apiPost]
+    [orgId, apiPost, showAll]
+  );
+
+  const getDomain = useCallback(
+    async (domainId: string) => {
+      return await apiGet<Domain>(`/domain/${domainId}`);
+    },
+    [apiGet]
   );
 
   return {
-    listDomains
+    listDomains,
+    getDomain
   };
 };

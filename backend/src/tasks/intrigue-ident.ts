@@ -1,28 +1,21 @@
-import { Domain, Service } from '../models';
 import { CommandOptions } from './ecs-client';
-import getLiveWebsites from './helpers/getLiveWebsites';
+import { getLiveWebsites, LiveDomain } from './helpers/getLiveWebsites';
 import PQueue from 'p-queue';
 import * as buffer from 'buffer';
 import { spawnSync } from 'child_process';
 
-const intrigueIdent = async (domain: Domain): Promise<void> => {
+const intrigueIdent = async (domain: LiveDomain): Promise<void> => {
   console.log('Domain', domain.name);
-  const ports = domain.services.map((service) => service.port);
-  let service: Service;
-  if (ports.includes(443))
-    service = domain.services.find((service) => service.port === 443)!;
-  else service = domain.services.find((service) => service.port === 80)!;
-  const url =
-    service.port === 443 ? `https://${domain.name}` : `http://${domain.name}`;
   const { stdout, stderr, status } = spawnSync(
     'intrigue-ident',
-    ['--uri', url, '--json'],
+    ['--uri', domain.url, '--json'],
     {
       env: {
         ...process.env,
         HTTP_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY,
         HTTPS_PROXY: process.env.GLOBAL_AGENT_HTTP_PROXY
-      }
+      },
+      maxBuffer: buffer.constants.MAX_LENGTH
     }
   );
   if (stderr.toString()) {
@@ -36,8 +29,8 @@ const intrigueIdent = async (domain: Domain): Promise<void> => {
   const { fingerprint, content } = JSON.parse(
     output.substring(output.indexOf('{'))
   );
-  service.intrigueIdentResults = { fingerprint, content };
-  await service.save();
+  domain.service.intrigueIdentResults = { fingerprint, content };
+  await domain.service.save();
 };
 
 export const handler = async (commandOptions: CommandOptions) => {

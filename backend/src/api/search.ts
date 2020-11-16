@@ -1,28 +1,45 @@
 import { connectToDatabase } from '../models';
-import { Unauthorized, wrapHandler } from './helpers';
-import { isGlobalWriteAdmin } from './auth';
+import { Unauthorized, validateBody, wrapHandler } from './helpers';
+import { getOrgMemberships, isGlobalWriteAdmin } from './auth';
+import { buildRequest } from './search/buildRequest';
 import ESClient from '../tasks/es-client';
+import { IsArray, IsInt, IsObject, IsString } from 'class-validator';
+class SearchBody {
+  @IsInt()
+  current: number;
+
+  @IsInt()
+  resultsPerPage: number;
+
+  @IsString()
+  searchTerm: string;
+
+  @IsString()
+  sortDirection: string;
+
+  @IsString()
+  sortField: string;
+
+  @IsArray()
+  filters: { field: string; values: any[]; type: string }[];
+}
 
 export const search = wrapHandler(async (event) => {
-  if (!isGlobalWriteAdmin(event)) {
-    return Unauthorized;
-  }
-  await connectToDatabase();
-  // const search = await validateBody(DomainSearch, event.body);
-
-  const searchBody = JSON.parse(event.body!);
+  const searchBody = await validateBody(SearchBody, event.body);
+  const options = {
+    organizationIds: getOrgMemberships(event),
+    matchAllOrganizations: isGlobalWriteAdmin(event)
+  };
+  const request = buildRequest(searchBody, options);
 
   const client = new ESClient();
-
   let searchResults;
   try {
-    searchResults = await client.searchDomains(searchBody);
+    searchResults = await client.searchDomains(request);
   } catch (e) {
     console.error(e.meta.body.error);
     throw e;
   }
-
-  console.error('search results: ', searchResults.body);
 
   return {
     statusCode: 200,

@@ -24,8 +24,8 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.2
-      - uses: actions/setup-node@v2.1.1
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/setup-node@v2.1.2
         with:
           node-version: '12.14'
       - name: Restore npm cache
@@ -43,8 +43,8 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.2
-      - uses: actions/setup-node@v2.1.1
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/setup-node@v2.1.2
         with:
           node-version: '12.14'
       - name: Restore npm cache
@@ -62,8 +62,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v2.3.2
-      - uses: actions/setup-node@v2.1.1
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/setup-node@v2.1.2
         with:
           node-version: '12.14'
       - name: Restore npm cache
@@ -78,22 +78,22 @@ jobs:
       - name: Run site locally
         run: |
           cp dev.env.example .env
-          docker-compose up --build -d
+          docker-compose up -d db backend es
           npm install -g wait-port
-          wait-port -t 3000 5432
+          wait-port -t 3000 5432 9200 9300
         working-directory: ./
       - name: Sync database
-        run: docker-compose exec -T backend npx sls invoke local -f syncdb -d dangerouslyforce
-        working-directory: ./
+        run: npm run syncdb
+        working-directory: ./backend
       - name: Test
         run: npm run test -- --collectCoverage
   test_python:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v2.3.2
+      - uses: actions/checkout@v2.3.4
       - name: Set up Python 3.7
-        uses: actions/setup-python@v2.1.2
+        uses: actions/setup-python@v2.1.4
         with:
           python-version: 3.7
       - uses: actions/cache@v2
@@ -108,8 +108,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v2.3.2
-      - uses: actions/setup-node@v2.1.1
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/setup-node@v2.1.2
         with:
           node-version: '12.14'
       - name: Restore npm cache
@@ -129,8 +129,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/production')
     steps:
-      - uses: actions/checkout@v2.3.2
-      - uses: actions/setup-node@v2.1.1
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/setup-node@v2.1.2
         with:
           node-version: '12.14'
       - name: Restore npm cache
@@ -166,6 +166,14 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
+      - name: Run syncdb - Staging
+        if: github.ref == 'refs/heads/master'
+        run: aws lambda invoke --function-name crossfeed-staging-syncdb --region us-east-1 /dev/stdout
+        working-directory: backend
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+
       - name: Ensure domain exists - Production
         if: github.ref == 'refs/heads/production'
         run: npx sls create_domain --stage=prod
@@ -185,6 +193,14 @@ jobs:
       - name: Deploy worker - Production
         if: github.ref == 'refs/heads/production'
         run: npm run deploy-worker-prod
+        working-directory: backend
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+
+      - name: Run syncdb - Production
+        if: github.ref == 'refs/heads/production'
+        run: aws lambda invoke --function-name crossfeed-prod-syncdb --region us-east-1 /dev/stdout
         working-directory: backend
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}

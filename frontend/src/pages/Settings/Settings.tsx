@@ -6,7 +6,6 @@ import { Button } from '@trussworks/react-uswds';
 const Settings: React.FC = () => {
   const { logout, user } = useAuthContext();
 
-  console.log(user);
   return (
     <div className={classes.root}>
       <h1>My Account</h1>
@@ -16,10 +15,19 @@ const Settings: React.FC = () => {
         Member of:{' '}
         {user &&
           (user.roles || [])
-            .filter(role => role.approved)
-            .map(role => role.organization.name)
+            .filter((role) => role.approved)
+            .map((role) => role.organization.name)
             .join(', ')}
       </h2>
+      {user?.userType === 'globalAdmin' && (
+        <>
+          <a href={`${process.env.REACT_APP_API_URL}/matomo/index.php`}>
+            <Button type="button">Matomo</Button>
+          </a>
+          <br />
+          <br />
+        </>
+      )}
       <Button type="button" onClick={logout}>
         Logout
       </Button>

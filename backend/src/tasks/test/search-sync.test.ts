@@ -1,15 +1,14 @@
-import { handler as searchSync } from '../search-sync';
+import { handler as searchSync, DOMAIN_CHUNK_SIZE } from '../search-sync';
 import {
   connectToDatabase,
   Organization,
   Domain,
-  Scan,
   Service,
   Vulnerability
 } from '../../models';
 
 jest.mock('../es-client');
-const { updateDomains } = require('../es-client');
+const { updateDomains, updateWebpages } = require('../es-client');
 
 describe('search_sync', () => {
   let organization;
@@ -23,17 +22,6 @@ describe('search_sync', () => {
       ipBlocks: [],
       isPassive: false
     }).save();
-  });
-  test('no domains', async () => {
-    await searchSync({
-      organizationId: organization.id,
-      organizationName: 'organizationName',
-      scanId: 'scanId',
-      scanName: 'scanName',
-      scanTaskId: 'scanTaskId'
-    });
-
-    expect(updateDomains).not.toBeCalled();
   });
 
   test('should not update already-synced domains', async () => {
@@ -64,14 +52,14 @@ describe('search_sync', () => {
     const domain = await Domain.create({
       name: 'cisa.gov',
       organization,
-      syncedAt: new Date('2020-10-10')
+      syncedAt: new Date('9999-10-10')
     }).save();
 
     await Service.create({
       service: 'https',
       port: 443,
       domain,
-      updatedAt: new Date('2020-10-11')
+      updatedAt: new Date('9999-10-11')
     }).save();
 
     await searchSync({
@@ -85,19 +73,144 @@ describe('search_sync', () => {
     expect(updateDomains).toBeCalled();
   });
 
+  test('should not update a domain if a service has not changed', async () => {
+    const domain = await Domain.create({
+      name: 'cisa.gov',
+      organization,
+      syncedAt: new Date('9999-10-10')
+    }).save();
+
+    await Service.create({
+      service: 'https',
+      port: 443,
+      domain,
+      updatedAt: new Date('9999-9-11')
+    }).save();
+
+    await searchSync({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    expect(updateDomains).not.toBeCalled();
+  });
+
+  test('should update a domain if a vulnerability has changed', async () => {
+    const domain = await Domain.create({
+      name: 'cisa.gov',
+      organization,
+      syncedAt: new Date('9999-10-10')
+    }).save();
+
+    await Vulnerability.create({
+      domain,
+      title: 'vuln',
+      updatedAt: new Date('9999-10-11')
+    }).save();
+
+    await searchSync({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    expect(updateDomains).toBeCalled();
+  });
+
+  test('should not update a domain if a vulnerability has not changed', async () => {
+    const domain = await Domain.create({
+      name: 'cisa.gov',
+      organization,
+      syncedAt: new Date('9999-10-10')
+    }).save();
+
+    await Vulnerability.create({
+      domain,
+      title: 'vuln',
+      updatedAt: new Date('9999-9-11')
+    }).save();
+
+    await searchSync({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    expect(updateDomains).not.toBeCalled();
+  });
+
+  test('should update a domain if an organization has changed', async () => {
+    organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false,
+      updatedAt: new Date('9999-10-11')
+    }).save();
+
+    const domain = await Domain.create({
+      name: 'cisa.gov',
+      organization,
+      syncedAt: new Date('9999-10-10')
+    }).save();
+
+    await searchSync({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    expect(updateDomains).toBeCalled();
+  });
+
+  test('should not update a domain if an organization has not changed', async () => {
+    organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false,
+      updatedAt: new Date('9999-9-11')
+    }).save();
+
+    const domain = await Domain.create({
+      name: 'cisa.gov',
+      organization,
+      syncedAt: new Date('9999-10-10')
+    }).save();
+
+    await searchSync({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    expect(updateDomains).not.toBeCalled();
+  });
+
   test('should update a domain if a domain has changed', async () => {
     const domain = await Domain.create({
       name: 'cisa.gov',
       organization,
-      syncedAt: new Date('2020-09-19T19:57:32.346Z'),
-      updatedAt: new Date('2020-09-20T19:57:32.346Z')
+      syncedAt: new Date('9999-09-19T19:57:32.346Z'),
+      updatedAt: new Date('9999-09-20T19:57:32.346Z')
     }).save();
 
     const service = await Service.create({
       service: 'https',
       port: 443,
       domain,
-      updatedAt: new Date('2020-09-12T19:57:32.346Z')
+      updatedAt: new Date('9999-09-12T19:57:32.346Z')
     }).save();
 
     const vulnerability = await Vulnerability.create({
@@ -114,6 +227,9 @@ describe('search_sync', () => {
     });
 
     expect(updateDomains).toBeCalled();
+    expect(
+      Object.keys((updateDomains as jest.Mock).mock.calls[0][0][0])
+    ).toMatchSnapshot();
 
     const domains = updateDomains.mock.calls[0][0];
     expect(domains.length).toEqual(1);
@@ -126,5 +242,27 @@ describe('search_sync', () => {
 
     const newDomain = await Domain.findOneOrFail(domain.id);
     expect(newDomain.syncedAt).not.toEqual(domain.syncedAt);
+  });
+
+  test('should sync domains in chunks', async () => {
+    await Promise.all(
+      new Array(DOMAIN_CHUNK_SIZE + 1).fill(null).map((e) =>
+        Domain.create({
+          name: 'cisa-' + Math.random() + '.gov',
+          organization,
+          syncedAt: new Date('9999-09-19T19:57:32.346Z'),
+          updatedAt: new Date('9999-09-20T19:57:32.346Z')
+        }).save()
+      )
+    );
+
+    await searchSync({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    expect(updateDomains).toBeCalledTimes(2);
   });
 });

@@ -9,22 +9,22 @@ import { Domain } from 'types';
 type CreateColumns = () => Column<Domain>[];
 
 export const getServiceNames = (domain: Domain) => {
-  const allServices = new Set();
+  const allServices: { [key: string]: string } = {};
   for (const service of domain.services) {
     for (const product of service.products) {
-      allServices.add(
-        product.name + (product.version ? ` ${product.version}` : '')
-      );
+      if (product.name)
+        allServices[product.name.toLowerCase()] =
+          product.name + (product.version ? ` ${product.version}` : '');
     }
   }
-  return Array.from(allServices).join(', ');
+  return Object.values(allServices).join(', ');
 };
 
 export const createColumns: CreateColumns = () => [
   {
     Header: 'Details',
     Cell: ({ row: { original } }: CellProps<Domain>) => (
-      <Link to={`/domain/${original.id}`}>
+      <Link to={`/inventory/domain/${original.id}`}>
         <FaSearch className="margin-x-auto display-block" />
       </Link>
     )
@@ -45,29 +45,38 @@ export const createColumns: CreateColumns = () => [
     id: 'port',
     disableSortBy: true,
     accessor: ({ services }) =>
-      services.map(service => service.port).join(', '),
+      services.map((service) => service.port).join(', '),
     Filter: ColumnFilter
   },
   {
     Header: 'Services',
-    id: 'services',
+    id: 'service',
     disableSortBy: true,
-    accessor: domain => getServiceNames(domain),
+    accessor: (domain) => getServiceNames(domain),
     Filter: ColumnFilter
   },
   {
     Header: 'Vulnerabilities',
-    id: 'vulnerabilities',
-    accessor: domain =>
+    id: 'vulnerability',
+    accessor: (domain) =>
       domain.vulnerabilities &&
-      domain.vulnerabilities.map(vulnerability => vulnerability.cve).join(', '),
+      domain.vulnerabilities
+        .map((vulnerability) => vulnerability.cve)
+        .join(', '),
     Filter: ColumnFilter
   },
   {
-    Header: 'Updated',
+    Header: 'Last Seen',
     id: 'updatedAt',
     accessor: ({ updatedAt }) =>
       `${formatDistanceToNow(parseISO(updatedAt))} ago`,
+    disableFilters: true
+  },
+  {
+    Header: 'First Seen',
+    id: 'createdAt',
+    accessor: ({ createdAt }) =>
+      `${formatDistanceToNow(parseISO(createdAt))} ago`,
     disableFilters: true
   }
 ];

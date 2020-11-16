@@ -10,11 +10,17 @@ import {
   IsNumber,
   IsUUID
 } from 'class-validator';
-import { Type } from 'class-transformer';
-import { Vulnerability, connectToDatabase } from '../models';
+import { plainToClass, Type } from 'class-transformer';
+import { Vulnerability, connectToDatabase, User } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
-import { getOrgMemberships, isGlobalViewAdmin } from './auth';
+import {
+  getOrgMemberships,
+  isGlobalViewAdmin,
+  isGlobalWriteAdmin
+} from './auth';
+import S3Client from '../tasks/s3-client';
+import * as Papa from 'papaparse';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
@@ -37,7 +43,15 @@ class VulnerabilityFilters {
 
   @IsString()
   @IsOptional()
+  cpe?: string;
+
+  @IsString()
+  @IsOptional()
   state?: string;
+
+  @IsString()
+  @IsOptional()
+  substate?: string;
 
   @IsUUID()
   @IsOptional()
@@ -50,7 +64,15 @@ class VulnerabilitySearch {
   page: number = 1;
 
   @IsString()
-  @IsIn(['title', 'createdAt', 'cvss', 'state'])
+  @IsIn([
+    'title',
+    'createdAt',
+    'severity',
+    'cvss',
+    'state',
+    'createdAt',
+    'domain'
+  ])
   @IsOptional()
   sort: string = 'createdAt';
 
@@ -70,7 +92,6 @@ class VulnerabilitySearch {
   pageSize?: number;
 
   filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>) {
-    console.log(this.filters);
     if (this.filters?.id) {
       qs.andWhere('vulnerability.id = :id', {
         id: this.filters.id
@@ -91,9 +112,19 @@ class VulnerabilitySearch {
         severity: this.filters.severity
       });
     }
+    if (this.filters?.cpe) {
+      qs.andWhere('vulnerability.cpe ILIKE :cpe', {
+        cpe: `%${this.filters.cpe}%`
+      });
+    }
     if (this.filters?.state) {
       qs.andWhere('vulnerability.state=:state', {
         state: this.filters.state
+      });
+    }
+    if (this.filters?.substate) {
+      qs.andWhere('vulnerability.substate=:substate', {
+        substate: this.filters.substate
       });
     }
     if (this.filters?.organization) {
@@ -106,10 +137,17 @@ class VulnerabilitySearch {
 
   async getResults(event) {
     const pageSize = this.pageSize || PAGE_SIZE;
+    const sort =
+      this.sort === 'domain'
+        ? 'domain.name'
+        : this.sort === 'severity'
+        ? 'vulnerability.cvss'
+        : `vulnerability.${this.sort}`;
     let qs = Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
       .leftJoinAndSelect('domain.organization', 'organization')
-      .orderBy(`vulnerability.${this.sort}`, this.order);
+      .leftJoinAndSelect('vulnerability.service', 'service')
+      .orderBy(sort, this.order);
 
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
@@ -126,33 +164,50 @@ class VulnerabilitySearch {
 }
 
 export const update = wrapHandler(async (event) => {
-  let where = {};
-  if (isGlobalViewAdmin(event)) {
-    where = {};
-  } else {
-    where = { domain: { organization: In(getOrgMemberships(event)) } };
-  }
   await connectToDatabase();
   const id = event.pathParameters?.vulnerabilityId;
   if (!isUUID(id) || !event.body) {
     return NotFound;
   }
-  const vuln = await Vulnerability.findOne({ id, ...where });
-  if (vuln) {
-    console.log(vuln);
+  const vuln = await Vulnerability.findOne(
+    { id },
+    { relations: ['domain', 'domain.organization'] }
+  );
+  let isAuthorized = false;
+  if (vuln && vuln.domain.organization && vuln.domain.organization.id) {
+    isAuthorized =
+      isGlobalWriteAdmin(event) ||
+      getOrgMemberships(event).includes(vuln.domain.organization.id);
+  }
+  if (vuln && isAuthorized) {
     const body = JSON.parse(event.body);
+    const user = await User.findOne({
+      id: event.requestContext.authorizer!.id
+    });
     if (body.substate) {
-      vuln.substate = body.substate;
-      if (body.substate === 'unconfirmed' || body.substate === 'exploitable')
-        vuln.state = 'open';
-      else vuln.state = 'closed';
+      vuln.setState(body.substate, false, user ? user : null);
     }
     if (body.notes) vuln.notes = body.notes;
+    if (body.comment) {
+      vuln.actions.unshift({
+        type: 'comment',
+        automatic: false,
+        userId: user ? user.id : null,
+        userName: user ? user.fullName : null,
+        date: new Date(),
+        value: body.comment
+      });
+    }
     vuln.save();
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(vuln)
+    };
   }
   return {
-    statusCode: vuln ? 200 : 404,
-    body: vuln ? JSON.stringify(vuln) : ''
+    statusCode: 404,
+    body: ''
   };
 });
 
@@ -165,6 +220,47 @@ export const list = wrapHandler(async (event) => {
     body: JSON.stringify({
       result,
       count
+    })
+  };
+});
+
+export const export_ = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const search = await validateBody(VulnerabilitySearch, event.body);
+  const [result, count] = await search.getResults(event);
+  const client = new S3Client();
+  const url = await client.saveCSV(
+    Papa.unparse({
+      fields: [
+        'organization',
+        'domain',
+        'title',
+        'description',
+        'cve',
+        'cwe',
+        'cpe',
+        'description',
+        'cvss',
+        'severity',
+        'state',
+        'substate',
+        'lastSeen',
+        'createdAt',
+        'id'
+      ],
+      data: result.map((e) => ({
+        ...e,
+        organization: e.domain?.organization?.name,
+        domain: e.domain?.name
+      }))
+    }),
+    'vulnerabilities'
+  );
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      url
     })
   };
 });

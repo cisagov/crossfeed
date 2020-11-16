@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`updateWebpages test 1`] = `
+Array [
+  Object {
+    "parent_join": Object {
+      "name": "webpage",
+      "parent": "domainId",
+    },
+    "suggest": Array [
+      Object {
+        "input": "url",
+        "weight": 1,
+      },
+    ],
+    "webpage_body": "test body",
+    "webpage_createdAt": 2020-10-17T22:21:17.000Z,
+    "webpage_discoveredById": "webpage_discoveredById",
+    "webpage_domainId": "domainId",
+    "webpage_headers": Array [
+      Object {
+        "name": "a",
+        "value": "b",
+      },
+    ],
+    "webpage_id": "webpage_id",
+    "webpage_lastSeen": 2020-10-17T22:21:17.000Z,
+    "webpage_responseSize": 5000,
+    "webpage_status": 200,
+    "webpage_syncedAt": 2020-10-17T22:21:17.000Z,
+    "webpage_updatedAt": 2020-10-17T22:21:17.000Z,
+    "webpage_url": "url",
+  },
+]
+`;

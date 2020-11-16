@@ -6,3 +6,5 @@ plan:
 	dotenv -- terraform plan -var-file=stage.tfvars -out plan
 apply:
 	dotenv -- terraform apply plan 
+format:
+	terraform validate && terraform fmt -recursive

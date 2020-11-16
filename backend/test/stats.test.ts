@@ -11,13 +11,51 @@ import {
 import { createUserToken } from './util';
 
 describe('stats', () => {
-  let organization;
+  const standard = {
+    domains: {
+      numVulnerabilities: [
+        {
+          id: expect.any(String),
+          label: expect.any(String)
+        }
+      ]
+    },
+    vulnerabilities: {
+      byOrg: [
+        {
+          id: expect.any(String),
+          label: expect.any(String),
+          orgId: expect.any(String)
+        }
+      ],
+      latestVulnerabilities: [
+        {
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+          id: expect.any(String),
+          domain: {
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+            id: expect.any(String),
+            name: expect.any(String),
+            reverseName: expect.any(String)
+          }
+        }
+      ]
+    }
+  };
   beforeAll(async () => {
     await connectToDatabase();
   });
   describe('get', () => {
     it('get by org user should return only domains from that org', async () => {
       const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const organization2 = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
@@ -40,7 +78,8 @@ describe('stats', () => {
         domain
       }).save();
       await Domain.create({
-        name: 'test-' + Math.random()
+        name: 'test-' + Math.random(),
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/stats')
@@ -56,22 +95,19 @@ describe('stats', () => {
           })
         )
         .expect(200);
-      expect(response.body.result).toMatchSnapshot({
-        domains: {
-          numVulnerabilities: [
-            {
-              id: expect.any(String),
-              label: expect.any(String)
-            }
-          ]
-        }
-      });
+      expect(response.body.result).toMatchSnapshot(standard);
       expect(response.body.result.domains.numVulnerabilities[0].id).toEqual(
-        domain.name
+        domain.name + '|High'
       );
     });
     it('get by globalView should filter domains to a single org if specified', async () => {
       const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const organization2 = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
@@ -94,7 +130,8 @@ describe('stats', () => {
         domain
       }).save();
       const domain2 = await Domain.create({
-        name: 'test-' + Math.random()
+        name: 'test-' + Math.random(),
+        organization: organization2
       }).save();
       await Vulnerability.create({
         title: 'vuln title 2',
@@ -119,18 +156,9 @@ describe('stats', () => {
           filters: { organization: organization.id }
         })
         .expect(200);
-      expect(response.body.result).toMatchSnapshot({
-        domains: {
-          numVulnerabilities: [
-            {
-              id: expect.any(String),
-              label: expect.any(String)
-            }
-          ]
-        }
-      });
+      expect(response.body.result).toMatchSnapshot(standard);
       expect(response.body.result.domains.numVulnerabilities[0].id).toEqual(
-        domain.name
+        domain.name + '|High'
       );
     });
   });

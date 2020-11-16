@@ -142,6 +142,44 @@ describe('scheduler', () => {
 
       expect(runCommand).toHaveBeenCalledTimes(0);
     });
+    test('should not run a scan when a scantask for that scan and organization finished too recently, and a failed scan occurred afterwards that does not have a finishedAt column', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'finished',
+        finishedAt: new Date()
+      }).save();
+      await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'failed',
+        createdAt: new Date()
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(0);
+    });
     test('should not run a scan when a scantask for that scan and organization failed too recently', async () => {
       const scan = await Scan.create({
         name: 'findomain',
@@ -172,6 +210,102 @@ describe('scheduler', () => {
       );
 
       expect(runCommand).toHaveBeenCalledTimes(0);
+    });
+    test('should not run a scan when scan is a SingleScan and has finished', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999,
+        isSingleScan: true,
+        manualRunPending: false
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'finished',
+        finishedAt: new Date()
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(0);
+    });
+    test('should not run a scan when scan is a SingleScan and has not run yet', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999,
+        isSingleScan: true,
+        manualRunPending: false
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(1);
+    });
+    test('should always run a scan when scan has manualRunPending set to true', async () => {
+      let scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 1,
+        isSingleScan: true,
+        manualRunPending: true
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      await ScanTask.create({
+        organization,
+        scan,
+        type: 'fargate',
+        status: 'finished',
+        finishedAt: new Date()
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationId: organization.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(1);
+
+      // Ensure scheduler set manualRunPending back to false
+      scan = (await Scan.findOne({ id: scan.id })) as Scan;
+      expect(scan.manualRunPending).toEqual(false);
     });
     test('should run a scan when a scantask for that scan and organization finished and sufficient time has passed', async () => {
       const scan = await Scan.create({
@@ -580,5 +714,54 @@ describe('scheduler', () => {
     );
 
     expect(runCommand).toHaveBeenCalledTimes(0);
+  });
+  test('should not change lastRun time of the second scan if the first scan runs', async () => {
+    //Make scan run before scan2. Scan2 should have already run, and doesn't need to run again.
+    //The scheduler should not change scan2.lastRun during its second call
+    const scan = await Scan.create({
+      name: 'findomain',
+      arguments: {},
+      frequency: 1,
+      lastRun: new Date(0)
+    }).save();
+    let scan2 = await Scan.create({
+      name: 'findomain',
+      arguments: {},
+      frequency: 999,
+      lastRun: new Date()
+    }).save();
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+
+    //run scheduler on scan2, this establishes a finished recent scantask for scan2
+    await scheduler(
+      {
+        scanIds: [scan2.id],
+        organizationId: organization.id
+      },
+      {} as any,
+      () => void 0
+    );
+    scan2 = (await Scan.findOne(scan2.id))!;
+    expect(runCommand).toHaveBeenCalledTimes(1);
+
+    //run scheduler on both scans, scan should be run, but scan2 should be skipped
+    await scheduler(
+      {
+        scanIds: [scan.id, scan2.id],
+        organizationId: organization.id
+      },
+      {} as any,
+      () => void 0
+    );
+    expect(runCommand).toHaveBeenCalledTimes(2);
+
+    const newscan2 = (await Scan.findOne(scan2.id))!;
+    //expect scan2's lastRun was not edited during the second call to scheduler
+    expect(newscan2.lastRun).toEqual(scan2.lastRun);
   });
 });

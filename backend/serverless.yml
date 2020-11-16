@@ -18,6 +18,10 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment: ${file(env.yml):${self:provider.stage}}
   vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
+  apiGateway:
+    binaryMediaTypes:
+      - 'image/*'
+      - 'font/*'
   logs:
     restApi: true
   deploymentBucket:
@@ -39,6 +43,13 @@ provider:
     - Effect: Allow
       Action:
         - ses:SendRawEmail
+      Resource: '*'
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+        - s3:GetObjectAcl
+        - s3:PutObject
+        - s3:PutObjectAcl
       Resource: '*'
 
 functions:

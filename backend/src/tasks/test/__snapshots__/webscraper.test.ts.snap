@@ -1,0 +1,221 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`webscraper basic test 1`] = `
+Array [
+  Array [
+    "scrapy",
+    Array [
+      "crawl",
+      "main",
+      "-a",
+      "domains_file=/app/worker/webscraper/domains.txt",
+    ],
+  ],
+]
+`;
+
+exports[`webscraper basic test 2`] = `
+Array [
+  Array [
+    "/app/worker/webscraper/domains.txt",
+    "https://docs.crossfeed.cyber.dhs.gov",
+  ],
+]
+`;
+
+exports[`webscraper basic test 3`] = `
+Array [
+  "https://docs.crossfeed.cyber.dhs.gov/scans/",
+  "https://docs.crossfeed.cyber.dhs.gov/contributing/",
+  "https://docs.crossfeed.cyber.dhs.gov/usage/",
+  "https://docs.crossfeed.cyber.dhs.gov",
+  "https://docs.crossfeed.cyber.dhs.gov/contributing/deployment/",
+  "https://docs.crossfeed.cyber.dhs.gov/contributing/architecture/",
+  "https://docs.crossfeed.cyber.dhs.gov/usage/customization/",
+  "https://docs.crossfeed.cyber.dhs.gov/usage/administration/",
+  "https://docs.crossfeed.cyber.dhs.gov/contributing/setup/",
+]
+`;
+
+exports[`webscraper basic test 4`] = `
+Array [
+  "200",
+  "200",
+  "200",
+  "200",
+  "200",
+  "200",
+  "200",
+  "200",
+  "400",
+]
+`;
+
+exports[`webscraper basic test 5`] = `
+Array [
+  Array [],
+  Array [],
+  Array [],
+  Array [],
+  Array [],
+  Array [],
+  Array [],
+  Array [],
+  Array [],
+]
+`;
+
+exports[`webscraper basic test 6`] = `
+Array [
+  Object {
+    "webpage_body": "abc",
+    "webpage_createdAt": true,
+    "webpage_discoveredById": true,
+    "webpage_domainId": true,
+    "webpage_headers": Array [
+      Object {
+        "a": "b",
+        "c": "d",
+      },
+    ],
+    "webpage_id": true,
+    "webpage_lastSeen": true,
+    "webpage_responseSize": null,
+    "webpage_status": "200",
+    "webpage_syncedAt": true,
+    "webpage_updatedAt": true,
+    "webpage_url": "https://docs.crossfeed.cyber.dhs.gov",
+  },
+  Object {
+    "webpage_body": undefined,
+    "webpage_createdAt": true,
+    "webpage_discoveredById": true,
+    "webpage_domainId": true,
+    "webpage_headers": Array [],
+    "webpage_id": true,
+    "webpage_lastSeen": true,
+    "webpage_responseSize": null,
+    "webpage_status": "200",
+    "webpage_syncedAt": true,
+    "webpage_updatedAt": true,
+    "webpage_url": "https://docs.crossfeed.cyber.dhs.gov/scans/",
+  },
+  Object {
+    "webpage_body": undefined,
+    "webpage_createdAt": true,
+    "webpage_discoveredById": true,
+    "webpage_domainId": true,
+    "webpage_headers": Array [],
+    "webpage_id": true,
+    "webpage_lastSeen": true,
+    "webpage_responseSize": null,
+    "webpage_status": "200",
+    "webpage_syncedAt": true,
+    "webpage_updatedAt": true,
+    "webpage_url": "https://docs.crossfeed.cyber.dhs.gov/contributing/",
+  },
+  Object {
+    "webpage_body": undefined,
+    "webpage_createdAt": true,
+    "webpage_discoveredById": true,
+    "webpage_domainId": true,
+    "webpage_headers": Array [],
+    "webpage_id": true,
+    "webpage_lastSeen": true,
+    "webpage_responseSize": null,
+    "webpage_status": "200",
+    "webpage_syncedAt": true,
+    "webpage_updatedAt": true,
+    "webpage_url": "https://docs.crossfeed.cyber.dhs.gov/usage/",
+  },
+  Object {
+    "webpage_body": "abc",
+    "webpage_createdAt": true,
+    "webpage_discoveredById": true,
+    "webpage_domainId": true,
+    "webpage_headers": Array [
+      Object {
+        "a": "b",
+        "c": "d",
+      },
+    ],
+    "webpage_id": true,
+    "webpage_lastSeen": true,
+    "webpage_responseSize": null,
+    "webpage_status": "200",
+    "webpage_syncedAt": true,
+    "webpage_updatedAt": true,
+    "webpage_url": "https://docs.crossfeed.cyber.dhs.gov",
+  },
+  Object {
+    "webpage_body": undefined,
+    "webpage_createdAt": true,
+    "webpage_discoveredById": true,
+    "webpage_domainId": true,
+    "webpage_headers": Array [],
+    "webpage_id": true,
+    "webpage_lastSeen": true,
+    "webpage_responseSize": null,
+    "webpage_status": "200",
+    "webpage_syncedAt": true,
+    "webpage_updatedAt": true,
+    "webpage_url": "https://docs.crossfeed.cyber.dhs.gov/contributing/deployment/",
+  },
+  Object {
+    "webpage_body": undefined,
+    "webpage_createdAt": true,
+    "webpage_discoveredById": true,
+    "webpage_domainId": true,
+    "webpage_headers": Array [],
+    "webpage_id": true,
+    "webpage_lastSeen": true,
+    "webpage_responseSize": null,
+    "webpage_status": "200",
+    "webpage_syncedAt": true,
+    "webpage_updatedAt": true,
+    "webpage_url": "https://docs.crossfeed.cyber.dhs.gov/contributing/architecture/",
+  },
+  Object {
+    "webpage_body": undefined,
+    "webpage_createdAt": true,
+    "webpage_discoveredById": true,
+    "webpage_domainId": true,
+    "webpage_headers": Array [],
+    "webpage_id": true,
+    "webpage_lastSeen": true,
+    "webpage_responseSize": null,
+    "webpage_status": "200",
+    "webpage_syncedAt": true,
+    "webpage_updatedAt": true,
+    "webpage_url": "https://docs.crossfeed.cyber.dhs.gov/usage/customization/",
+  },
+  Object {
+    "webpage_body": undefined,
+    "webpage_createdAt": true,
+    "webpage_discoveredById": true,
+    "webpage_domainId": true,
+    "webpage_headers": Array [],
+    "webpage_id": true,
+    "webpage_lastSeen": true,
+    "webpage_responseSize": null,
+    "webpage_status": "200",
+    "webpage_syncedAt": true,
+    "webpage_updatedAt": true,
+    "webpage_url": "https://docs.crossfeed.cyber.dhs.gov/usage/administration/",
+  },
+  Object {
+    "webpage_body": undefined,
+    "webpage_createdAt": true,
+    "webpage_discoveredById": true,
+    "webpage_domainId": true,
+    "webpage_headers": Array [],
+    "webpage_id": true,
+    "webpage_lastSeen": true,
+    "webpage_responseSize": null,
+    "webpage_status": "400",
+    "webpage_syncedAt": true,
+    "webpage_updatedAt": true,
+    "webpage_url": "https://docs.crossfeed.cyber.dhs.gov/contributing/setup/",
+  },
+]
+`;

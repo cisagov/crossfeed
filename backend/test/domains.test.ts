@@ -1,10 +1,18 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { User, Domain, connectToDatabase, Organization } from '../src/models';
+import {
+  Domain,
+  connectToDatabase,
+  Organization,
+  Webpage
+} from '../src/models';
 import { createUserToken } from './util';
+jest.mock('../src/tasks/s3-client');
+const saveCSV = require('../src/tasks/s3-client').saveCSV as jest.Mock;
 
 describe('domains', () => {
   let organization;
+  let organization2;
   beforeAll(async () => {
     await connectToDatabase();
     organization = await Organization.create({
@@ -13,6 +21,41 @@ describe('domains', () => {
       ipBlocks: [],
       isPassive: false
     }).save();
+    organization2 = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+  });
+  describe('export', () => {
+    it('export by org user should only return domains from that org', async () => {
+      const name = 'test-' + Math.random();
+      await Domain.create({
+        name,
+        organization
+      }).save();
+      await Domain.create({
+        name: name + '-2',
+        organization: organization2
+      }).save();
+      const response = await request(app)
+        .post('/domain/export')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [{ org: organization.id, role: 'user' }]
+          })
+        )
+        .send({
+          filters: { reverseName: name }
+        })
+        .expect(200);
+      expect(response.body).toEqual({ url: 'http://mock_url' });
+      expect(saveCSV).toBeCalledTimes(1);
+      expect(saveCSV.mock.calls[0][0]).toContain(name);
+      expect(saveCSV.mock.calls[0][0]).not.toContain(name + '-2');
+    });
   });
   describe('list', () => {
     it('list by org user should only return domains from that org', async () => {
@@ -22,19 +65,15 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -50,7 +89,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -79,7 +119,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -111,12 +152,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -142,12 +178,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -166,7 +197,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -174,12 +206,7 @@ describe('domains', () => {
           'Authorization',
           createUserToken({
             dateAcceptedTerms: undefined,
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -196,7 +223,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -205,12 +233,7 @@ describe('domains', () => {
           createUserToken({
             dateAcceptedTerms: new Date(),
             acceptedTermsVersion: 'v0-user',
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .send({
@@ -227,7 +250,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -236,12 +260,7 @@ describe('domains', () => {
           createUserToken({
             dateAcceptedTerms: new Date(),
             acceptedTermsVersion: 'v1-user',
-            roles: [
-              {
-                org: organization.id,
-                role: 'admin'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
@@ -258,7 +277,8 @@ describe('domains', () => {
         organization
       }).save();
       await Domain.create({
-        name: name + '-2'
+        name: name + '-2',
+        organization: organization2
       }).save();
       const response = await request(app)
         .post('/domain/search')
@@ -267,12 +287,7 @@ describe('domains', () => {
           createUserToken({
             dateAcceptedTerms: new Date(),
             acceptedTermsVersion: 'v1-admin',
-            roles: [
-              {
-                org: organization.id,
-                role: 'admin'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'admin' }]
           })
         )
         .send({
@@ -288,38 +303,35 @@ describe('domains', () => {
         name,
         organization
       }).save();
-      const response = await request(app)
-        .get(`/domain/${domain.id}`)
-        .set(
-          'Authorization',
-          createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
-          })
-        )
-        .expect(200);
-      expect(response.body.id).toEqual(domain.id);
-    });
-    it("get by org user should not work for domain not in the user's org", async () => {
-      const name = 'test-' + Math.random();
-      const domain = await Domain.create({
-        name
+      const webpage = await Webpage.create({
+        domain,
+        url: 'http://url',
+        status: 200
       }).save();
       const response = await request(app)
         .get(`/domain/${domain.id}`)
         .set(
           'Authorization',
           createUserToken({
-            roles: [
-              {
-                org: organization.id,
-                role: 'user'
-              }
-            ]
+            roles: [{ org: organization.id, role: 'user' }]
+          })
+        )
+        .expect(200);
+      expect(response.body.id).toEqual(domain.id);
+      // expect(response.body.webpages.length).toEqual(1);
+    });
+    it("get by org user should not work for domain not in the user's org", async () => {
+      const name = 'test-' + Math.random();
+      const domain = await Domain.create({
+        name,
+        organization: organization2
+      }).save();
+      const response = await request(app)
+        .get(`/domain/${domain.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [{ org: organization.id, role: 'user' }]
           })
         )
         .expect(404);
@@ -328,7 +340,8 @@ describe('domains', () => {
     it('get by globalView should work for any domain', async () => {
       const name = 'test-' + Math.random();
       const domain = await Domain.create({
-        name
+        name,
+        organization: organization2
       }).save();
       const response = await request(app)
         .get(`/domain/${domain.id}`)

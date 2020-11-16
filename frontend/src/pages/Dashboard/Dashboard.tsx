@@ -1,9 +1,9 @@
 import React, { useCallback, useState, useMemo, useRef } from 'react';
 import { TableInstance } from 'react-table';
 import { Query } from 'types';
-import { Table, Paginator, Export } from 'components';
+import { Table, Paginator, Export, Subnav } from 'components';
 import { Domain } from 'types';
-import { createColumns, getServiceNames } from './columns';
+import { createColumns } from './columns';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
 import { Grid, Checkbox } from '@trussworks/react-uswds';
@@ -12,7 +12,7 @@ import { usePersistentState, useDomainApi } from 'hooks';
 const PAGE_SIZE = 25;
 
 export const Dashboard: React.FC = () => {
-  const { user, currentOrganization } = useAuthContext();
+  const { user } = useAuthContext();
   const tableRef = useRef<TableInstance<Domain>>(null);
   const columns = useMemo(() => createColumns(), []);
   const [domains, setDomains] = useState<Domain[]>([]);
@@ -40,23 +40,22 @@ export const Dashboard: React.FC = () => {
     [listDomains]
   );
 
-  const fetchDomainsExport = async (): Promise<any[]> => {
+  const fetchDomainsExport = async (): Promise<string> => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
     try {
-      const { domains } = await listDomains({
-        sort: sortBy ?? [],
-        page: 1,
-        pageSize: -1,
-        filters: filters ?? []
-      });
-      return domains.map(domain => ({
-        ...domain,
-        ports: domain.services.map(service => service.port).join(','),
-        services: getServiceNames(domain)
-      }));
+      const { url } = await listDomains(
+        {
+          sort: sortBy ?? [],
+          page: 1,
+          pageSize: -1,
+          filters: filters ?? []
+        },
+        true
+      );
+      return url!;
     } catch (e) {
       console.error(e);
-      return [];
+      return '';
     }
   };
 
@@ -67,16 +66,13 @@ export const Dashboard: React.FC = () => {
   return (
     <div className={classes.root}>
       <Grid row>
-        <Grid tablet={{ col: true }}>
-          <h1>
-            Inventory
-            {showAll
-              ? ' - Global'
-              : currentOrganization
-              ? ' - ' + currentOrganization.name
-              : ''}
-          </h1>{' '}
-        </Grid>
+        <Subnav
+          items={[
+            { title: 'Assets', path: '/inventory', exact: true },
+            { title: 'Domains', path: '/inventory/domains' },
+            { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
+          ]}
+        ></Subnav>
         <Grid style={{ float: 'right' }}>
           {((user?.roles && user.roles.length > 1) ||
             user?.userType === 'globalView' ||
@@ -86,7 +82,7 @@ export const Dashboard: React.FC = () => {
               name="showAll"
               label="Show all organizations"
               checked={showAll}
-              onChange={e => setShowAll(e.target.checked)}
+              onChange={(e) => setShowAll(e.target.checked)}
               className={classes.showAll}
             />
           )}
@@ -102,11 +98,7 @@ export const Dashboard: React.FC = () => {
         count={count}
         pageSize={PAGE_SIZE}
       />
-      <Export<Domain>
-        name="domains"
-        fieldsToExport={['name', 'ip', 'id', 'ports', 'services', 'updatedAt']}
-        getDataToExport={fetchDomainsExport}
-      />
+      <Export<Domain> name="domains" getDataToExport={fetchDomainsExport} />
     </div>
   );
 };

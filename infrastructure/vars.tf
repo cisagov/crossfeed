@@ -158,6 +158,16 @@ variable worker_ecs_role_name {
   default = "crossfeed-worker-staging"
 }
 
+variable webscraper_bucket_name {
+  type    = string
+  default = "crossfeed-staging-webscraper"
+}
+
+variable export_bucket_name {
+  type    = string
+  default = "cisa-crossfeed-staging-exports"
+}
+
 variable user_pool_name {
   type    = string
   default = "crossfeed-staging"
@@ -181,4 +191,49 @@ variable ssm_user_pool_client_id {
 variable ses_support_email {
   type    = string
   default = "support@staging.crossfeed.cyber.dhs.gov"
+}
+
+variable matomo_ecs_cluster_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_ecs_task_definition_family {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_ecs_log_group_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_db_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable matomo_db_instance_class {
+  type    = string
+  default = "db.t3.micro"
+}
+
+variable matomo_ecs_role_name {
+  type    = string
+  default = "crossfeed-matomo-staging"
+}
+
+variable es_instance_type {
+  type    = string
+  default = "t2.micro.elasticsearch"
+}
+
+variable es_instance_count {
+  type    = number
+  default = 1
+}
+
+variable es_instance_volume_size {
+  type    = number
+  default = 100
 }

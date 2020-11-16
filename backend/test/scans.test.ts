@@ -3,6 +3,7 @@ import app from '../src/api/app';
 import { User, Scan, connectToDatabase, Organization } from '../src/models';
 import { createUserToken } from './util';
 import { handler as scheduler } from '../src/tasks/scheduler';
+import { Organizations } from 'aws-sdk';
 
 jest.mock('../src/tasks/scheduler', () => ({
   handler: jest.fn()
@@ -76,13 +77,15 @@ describe('scan', () => {
         name,
         arguments: {},
         frequency: 999999,
-        isGranular: false
+        isGranular: false,
+        isSingleScan: false
       }).save();
       const scan2 = await Scan.create({
         name: name + '-2',
         arguments: {},
         frequency: 999999,
-        isGranular: true
+        isGranular: true,
+        isSingleScan: false
       }).save();
       const response = await request(app)
         .get('/granularScans')
@@ -122,7 +125,8 @@ describe('scan', () => {
           arguments: arguments_,
           frequency,
           isGranular: false,
-          organizations: []
+          organizations: [],
+          isSingleScan: false
         })
         .expect(200);
 
@@ -163,7 +167,8 @@ describe('scan', () => {
           arguments: arguments_,
           frequency,
           isGranular: true,
-          organizations: [organization.id]
+          organizations: [organization.id],
+          isSingleScan: false
         })
         .expect(200);
       expect(response.body.name).toEqual(name);
@@ -193,7 +198,8 @@ describe('scan', () => {
           arguments: arguments_,
           frequency,
           isGranular: false,
-          organizations: []
+          organizations: [],
+          isSingleScan: false
         })
         .expect(403);
       expect(response.body).toEqual({});
@@ -222,7 +228,8 @@ describe('scan', () => {
           arguments: arguments_,
           frequency,
           isGranular: false,
-          organizations: []
+          organizations: [],
+          isSingleScan: false
         })
         .expect(200);
 
@@ -235,7 +242,8 @@ describe('scan', () => {
         name: 'censys',
         arguments: {},
         frequency: 999999,
-        isGranular: false
+        isGranular: false,
+        isSingleScan: false
       }).save();
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
@@ -259,7 +267,8 @@ describe('scan', () => {
           arguments: arguments_,
           frequency,
           isGranular: true,
-          organizations: [organization.id]
+          organizations: [organization.id],
+          isSingleScan: false
         })
         .expect(200);
 
@@ -336,6 +345,39 @@ describe('scan', () => {
       expect(response.body).toEqual({});
     });
   });
+  describe('get', () => {
+    it('get by globalView should succeed', async () => {
+      const scan = await Scan.create({
+        name: 'censys',
+        arguments: {},
+        frequency: 999999
+      }).save();
+      const response = await request(app)
+        .get(`/scans/${scan.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalView'
+          })
+        )
+        .expect(200);
+      expect(response.body.scan.name).toEqual('censys');
+    });
+
+    it('get by regular user on a scan not from their org should fail', async () => {
+      const scan = await Scan.create({
+        name: 'censys',
+        arguments: {},
+        frequency: 999999
+      }).save();
+      const response = await request(app)
+        .get(`/scans/${scan.id}`)
+        .set('Authorization', createUserToken({}))
+        .expect(403);
+
+      expect(response.body).toEqual({});
+    });
+  });
 });
 
 describe('scheduler invoke', () => {
@@ -366,5 +408,46 @@ describe('scheduler invoke', () => {
 
     expect(response.body).toEqual({});
     expect(scheduler).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('run scan', () => {
+  it('run scan should manualRunPending to true', async () => {
+    const scan = await Scan.create({
+      name: 'censys',
+      arguments: {},
+      frequency: 999999,
+      lastRun: new Date()
+    }).save();
+    const response = await request(app)
+      .post(`/scans/${scan.id}/run`)
+      .set(
+        'Authorization',
+        createUserToken({
+          userType: 'globalAdmin'
+        })
+      )
+      .expect(200);
+
+    expect(response.body.manualRunPending).toEqual(true);
+  });
+  it('runScan by globalView should fail', async () => {
+    const scan = await Scan.create({
+      name: 'censys',
+      arguments: {},
+      frequency: 999999,
+      lastRun: new Date()
+    }).save();
+    const response = await request(app)
+      .post(`/scans/${scan.id}/run`)
+      .set(
+        'Authorization',
+        createUserToken({
+          userType: 'globalView'
+        })
+      )
+      .expect(403);
+
+    expect(response.body).toEqual({});
   });
 });
