@@ -31,7 +31,8 @@ const Feeds = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [apiGet, pageState]);
+    // eslint-disable-next-line
+  }, [apiGet]);
 
   useEffect(() => {
     fetchSavedSearches();
