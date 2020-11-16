@@ -39,8 +39,6 @@ const fetchAllResults = async (filters, options, hits): Promise<Domain[]> => {
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { organizationId, organizationName } = commandOptions;
-
   console.log('Running saved search');
 
   await connectToDatabase();
@@ -72,7 +70,11 @@ export const handler = async (commandOptions: CommandOptions) => {
     search.save();
 
     if (search.createVulnerabilities) {
-      const results = await fetchAllResults(filters, options, hits);
+      const results = await fetchAllResults(
+        filters,
+        search.searchRestrictions,
+        hits
+      );
       const vulnerabilities: Vulnerability[] = results.map((domain) =>
         plainToClass(Vulnerability, {
           domain: domain,
