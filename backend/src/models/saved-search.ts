@@ -47,6 +47,7 @@ export class SavedSearch extends BaseEntity {
   })
   createVulnerabilities: boolean;
 
+  // Content of vulnerability when search is configured to create vulnerabilities from results
   @Column({ type: 'jsonb', default: '{}' })
   vulnerabilityTemplate: Partial<Vulnerability> & {
     title: string;
