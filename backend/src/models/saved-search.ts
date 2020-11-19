@@ -52,12 +52,6 @@ export class SavedSearch extends BaseEntity {
     title: string;
   };
 
-  @Column({ type: 'jsonb', default: '{}' })
-  searchRestrictions: {
-    organizationIds: string[];
-    matchAllOrganizations: boolean;
-  };
-
   @ManyToOne((type) => User, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE'

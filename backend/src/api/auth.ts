@@ -59,7 +59,7 @@ export const login = async (event, context) => {
   };
 };
 
-const userTokenBody = (user): UserToken => ({
+export const userTokenBody = (user): UserToken => ({
   id: user.id,
   email: user.email,
   userType: user.userType,

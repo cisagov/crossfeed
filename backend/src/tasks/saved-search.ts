@@ -3,12 +3,18 @@ import {
   SavedSearch,
   connectToDatabase,
   Domain,
-  Vulnerability
+  Vulnerability,
+  User
 } from '../models';
 import ESClient from './es-client';
 import { buildRequest } from '../api/search/buildRequest';
 import { plainToClass } from 'class-transformer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
+import {
+  getOrgMemberships,
+  isGlobalViewAdmin,
+  userTokenBody
+} from '../api/auth';
 
 const client = new ESClient();
 
@@ -50,13 +56,21 @@ export const handler = async (commandOptions: CommandOptions) => {
       sortField: search.sortField,
       filters: search.filters
     };
+    const user = await User.findOne(search.createdBy);
+    const event = {
+      requestContext: { authorizer: userTokenBody(user) }
+    } as any;
+    const restrictions = {
+      organizationIds: getOrgMemberships(event),
+      matchAllOrganizations: isGlobalViewAdmin(event)
+    };
     const request = buildRequest(
       {
         current: 1,
         resultsPerPage: 1,
         ...filters
       },
-      search.searchRestrictions
+      restrictions
     );
     let searchResults;
     try {
@@ -70,11 +84,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     search.save();
 
     if (search.createVulnerabilities) {
-      const results = await fetchAllResults(
-        filters,
-        search.searchRestrictions,
-        hits
-      );
+      const results = await fetchAllResults(filters, restrictions, hits);
       const vulnerabilities: Vulnerability[] = results.map((domain) =>
         plainToClass(Vulnerability, {
           domain: domain,

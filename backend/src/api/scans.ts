@@ -138,7 +138,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: true,
-    description: 'Updates saved searches'
+    description: 'Performs saved searches to update their search results'
   }
 };
 

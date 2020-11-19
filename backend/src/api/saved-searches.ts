@@ -8,13 +8,8 @@ import {
 } from 'class-validator';
 import { connectToDatabase, SavedSearch, Vulnerability } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
-import {
-  isOrgAdmin,
-  isGlobalWriteAdmin,
-  getOrgMemberships,
-  isGlobalViewAdmin
-} from './auth';
-import { FindManyOptions, In } from 'typeorm';
+import { isGlobalWriteAdmin, isGlobalViewAdmin } from './auth';
+import { FindManyOptions } from 'typeorm';
 
 export const del = wrapHandler(async (event) => {
   const id = event.pathParameters?.searchId;
@@ -100,11 +95,7 @@ export const create = wrapHandler(async (event) => {
   await connectToDatabase();
   const search = await SavedSearch.create({
     ...body,
-    createdBy: { id: event.requestContext.authorizer!.id },
-    searchRestrictions: {
-      organizationIds: getOrgMemberships(event),
-      matchAllOrganizations: isGlobalViewAdmin(event)
-    }
+    createdBy: { id: event.requestContext.authorizer!.id }
   });
   const res = await SavedSearch.save(search);
   return {
