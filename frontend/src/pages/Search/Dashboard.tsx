@@ -109,7 +109,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
     if (term) {
       setSearchTerm(term as string);
     }
-  }, [setSearchTerm]);
+  }, [setSearchTerm, props.location.search]);
 
   return (
     <div className={classes.root}>
