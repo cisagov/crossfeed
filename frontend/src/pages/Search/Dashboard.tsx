@@ -30,6 +30,7 @@ import {
 import { useAuthContext } from 'context';
 import { FilterTags } from './FilterTags';
 import { SavedSearch, Vulnerability } from 'types';
+import { parse } from 'querystring';
 
 export const DashboardUI: React.FC<ContextType & { location: any }> = (
   props
@@ -104,8 +105,11 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
 
   useEffect(() => {
     // Search on initial load
-    setSearchTerm(searchTerm);
-  }, [setSearchTerm, searchTerm]);
+    const term = parse(props.location.search.replace(/^\?/, "")).q;
+    if (term) {
+      setSearchTerm(term as string);
+    }
+  }, [setSearchTerm]);
 
   return (
     <div className={classes.root}>
