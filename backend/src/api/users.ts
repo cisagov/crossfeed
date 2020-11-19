@@ -20,6 +20,7 @@ import {
   isOrgAdmin,
   isGlobalWriteAdmin
 } from './auth';
+import { randomBytes } from 'crypto';
 
 export const del = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
@@ -197,6 +198,19 @@ export const invite = wrapHandler(async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(updated)
+  };
+});
+
+export const generateApiKey = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const user = await User.findOne(getUserId(event));
+  if (!user || !event.body) {
+    return NotFound;
+  }
+  user.apiKey = await randomBytes(16).toString('hex');
+  return {
+    statusCode: 200,
+    body: JSON.stringify(user)
   };
 });
 

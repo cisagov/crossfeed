@@ -13,4 +13,5 @@ export interface User {
   roles: Role[];
   dateAcceptedTerms: Date | null;
   acceptedTermsVersion: string | null;
+  apiKey: string | undefined;
 }

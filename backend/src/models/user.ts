@@ -80,6 +80,12 @@ export class User extends BaseEntity {
   })
   roles: Role[];
 
+  @Column({
+    type: 'text',
+    nullable: true
+  })
+  apiKey: string | null;
+
   @BeforeInsert()
   @BeforeUpdate()
   setFullName() {

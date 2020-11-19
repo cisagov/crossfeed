@@ -4,13 +4,27 @@ import { useAuthContext } from 'context';
 import { Button } from '@trussworks/react-uswds';
 
 const Settings: React.FC = () => {
-  const { logout, user } = useAuthContext();
+  const { logout, user, setUser, apiPost } = useAuthContext();
+
+  const generateApiKey = async () => {
+    if (!user) return;
+    const { apiKey } = await apiPost<{ apiKey: string }>(
+      '/users/me/generateApiKey'
+    );
+    setUser({ ...user, apiKey });
+  };
 
   return (
     <div className={classes.root}>
       <h1>My Account</h1>
       <h2>Name: {user && user.fullName}</h2>
       <h2>Email: {user && user.email}</h2>
+      <h2>
+        API Key: {user?.apiKey ? user.apiKey : 'None'}{' '}
+        <Button type="button" onClick={generateApiKey}>
+          {user?.apiKey ? 'Regenerate' : 'Generate'}
+        </Button>
+      </h2>
       <h2>
         Member of:{' '}
         {user &&
