@@ -4,7 +4,8 @@ import {
   IsObject,
   IsArray,
   IsNumber,
-  IsBoolean
+  IsBoolean,
+  IsOptional
 } from 'class-validator';
 import { connectToDatabase, SavedSearch, Vulnerability } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
@@ -18,14 +19,28 @@ export const del = wrapHandler(async (event) => {
     return NotFound;
   }
 
-  if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  const where = isGlobalWriteAdmin(event)
+    ? {}
+    : { createdBy: { id: event.requestContext.authorizer!.id } };
 
   await connectToDatabase();
-  const result = await SavedSearch.delete(id);
-  return {
-    statusCode: 200,
-    body: JSON.stringify(result)
-  };
+  const search = await SavedSearch.findOne(
+    {
+      id,
+      ...where
+    },
+    {
+      relations: []
+    }
+  );
+  if (search) {
+    const result = await SavedSearch.delete({ ...where, id });
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  }
+  return NotFound;
 });
 
 class NewSavedSearch {
@@ -54,6 +69,7 @@ class NewSavedSearch {
   createVulnerabilities: boolean;
 
   @IsObject()
+  @IsOptional()
   vulnerabilityTemplate: Partial<Vulnerability>;
 }
 
@@ -64,7 +80,7 @@ export const update = wrapHandler(async (event) => {
   if (!id || !isUUID(id)) {
     return NotFound;
   }
-  const where = isGlobalViewAdmin(event)
+  const where = isGlobalWriteAdmin(event)
     ? {}
     : { createdBy: { id: event.requestContext.authorizer!.id } };
 
