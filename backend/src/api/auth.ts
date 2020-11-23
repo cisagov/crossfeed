@@ -46,7 +46,15 @@ function getKey(header, callback) {
   });
 }
 
-/** Returns redirect url to initiate login.gov OIDC flow */
+/**
+ * @swagger
+ *
+ * /auth/login:
+ *  post:
+ *    description: Returns redirect url to initiate login.gov OIDC flow
+ *    tags:
+ *    - Auth
+ */
 export const login = async (event, context) => {
   const { url, state, nonce } = await loginGov.login();
   return {
@@ -73,7 +81,15 @@ const userTokenBody = (user): UserToken => ({
     }))
 });
 
-/** Processes login.gov OIDC callback and returns user token */
+/**
+ * @swagger
+ *
+ * /auth/callback:
+ *  post:
+ *    description: Processes Cognito JWT auth token (or login.gov OIDC callback, if enabled). Returns a user authorization token that can be used for subsequent requests to the API.
+ *    tags:
+ *    - Auth
+ */
 export const callback = async (event, context) => {
   let userInfo: UserInfo;
   try {

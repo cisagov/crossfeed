@@ -17,6 +17,8 @@ import * as scanTasks from './scan-tasks';
 import * as stats from './stats';
 import { listenForDockerEvents } from './docker-events';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import * as swaggerUi from 'swagger-ui-express';
+import * as swaggerJSDoc from 'swagger-jsdoc';
 
 if (
   (process.env.IS_OFFLINE || process.env.IS_LOCAL) &&
@@ -115,6 +117,15 @@ app.get('/plugins/Morpheus/images/logo.svg', (req, res) =>
 );
 app.get('/index.php', (req, res) => res.redirect('/matomo/index.php'));
 
+/**
+ * @swagger
+ *
+ * /matomo:
+ *  get:
+ *    description: All paths under /matomo proxy to a Matomo instance, which is used to handle and process user analytics. A global admin user can access this page from the "My Account" page.
+ *    tags:
+ *    - Analytics
+ */
 const matomoProxy = createProxyMiddleware({
   target: process.env.MATOMO_URL,
   headers: { HTTP_X_FORWARDED_URI: '/matomo' },
@@ -174,6 +185,42 @@ app.use(
   },
   matomoProxy
 );
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Crossfeed API Documentation',
+      description: `See <a href="https://docs.crossfeed.cyber.dhs.gov/">https://docs.crossfeed.cyber.dhs.gov</a> for more information about Crossfeed.`
+    }
+  },
+  // Path to the API docs
+  apis: ['./src/api/**.ts']
+};
+const swaggerUiOptions = {
+  customCss: `.topbar { display: none; }`
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+app.use(
+  '/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, swaggerUiOptions)
+);
+
+/**
+ * @swagger
+ *
+ * /swagger.json:
+ *  get:
+ *    description: OpenAPI JSON specification for the Crossfeed API.
+ *    tags:
+ *    - Docs
+ */
+app.get('/swagger.json', (req: express.Request, res: express.Response) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
 
 // Routes that require an authenticated user, without
 // needing to sign the terms of service yet
