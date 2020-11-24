@@ -78,6 +78,8 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
         }
   );
 
+  console.log(filters);
+
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
   > = (e) => onChange(e.target.name, e.target.value);
@@ -102,14 +104,6 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
       setResultsScrolled(false);
     }
   };
-
-  useEffect(() => {
-    // Search on initial load
-    const term = parse(props.location.search.replace(/^\?/, "")).q;
-    if (term) {
-      setSearchTerm(term as string);
-    }
-  }, [setSearchTerm, props.location.search]);
 
   return (
     <div className={classes.root}>

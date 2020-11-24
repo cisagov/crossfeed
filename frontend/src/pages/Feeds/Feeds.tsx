@@ -3,7 +3,7 @@ import { Paper, makeStyles } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { useAuthContext } from 'context';
 import { SavedSearch } from 'types';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Subnav } from 'components';
 
 const Feeds = () => {
@@ -16,6 +16,7 @@ const Feeds = () => {
     resultsPerPage: 20,
     totalPages: 0
   });
+  const history = useHistory();
 
   const fetchSavedSearches = useCallback(async () => {
     try {
@@ -61,14 +62,10 @@ const Feeds = () => {
         <div className={classes.content}>
           <div className={classes.panel}>
             {savedSearches.map((search: SavedSearch) => (
-              <Link
-                to={{
-                  pathname: '/inventory',
-                  search: search.searchPath,
-                  state: {
-                    search
-                  }
-                }}
+              <a
+                href={
+                  '/inventory' + search.searchPath + '&searchId=' + search.id
+                }
                 key={search.id}
                 style={{ textDecoration: 'none' }}
               >
@@ -109,7 +106,7 @@ const Feeds = () => {
                     </div>
                   </div>
                 </Paper>
-              </Link>
+              </a>
             ))}
           </div>
         </div>
