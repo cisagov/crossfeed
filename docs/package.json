@@ -12,7 +12,9 @@
     "serve": "gatsby serve",
     "federalist": "npm run federalist:build && npm run federalist:copy",
     "federalist:build": "gatsby build --prefix-paths",
-    "federalist:copy": "mkdir -p _site && rm -rf _site/* && cp -r public/* _site/"
+    "federalist:copy": "mkdir -p _site && rm -rf _site/* && cp -r public/* _site/",
+    "codegen": "swagger-jsdoc -d ./src/swaggerDef.js -o ./src/generated/swagger.json",
+    "postinstall": "npm run codegen"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",

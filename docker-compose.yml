@@ -55,7 +55,9 @@ services:
       - MINIO_SECRET_KEY=aws_secret_key
 
   docs:
-    build: ./docs
+    build:
+      context: ./
+      dockerfile: ./docs/Dockerfile
     volumes:
       - ./docs/src:/app/src
       - ./docs/gatsby-config.js:/app/gatsby-config.js
