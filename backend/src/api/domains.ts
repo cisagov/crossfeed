@@ -261,26 +261,38 @@ export const get = wrapHandler(async (event) => {
   let result = await Domain.findOne(
     { id, ...where },
     {
-      relations: ['services', 'organization', 'vulnerabilities', 'webpages']
+      relations: ['services', 'organization', 'vulnerabilities']
     }
   );
+
+  let domainWebpages = await Domain.findOne(
+    {id, ...where },
+    {
+      relations: ['webpages']
+    }
+  );
+  let topLevelDirectories = [""];
   //delete result?.webpages[0];
   //console.log(typeof(result?.webpages));
   //console.log(typeof(result?.vulnerabilities));
-  if (result?.webpages) {
-    const webpages = generateWebpageTree(result?.webpages);
-    console.log(Object.keys(webpages)); //top level directories
+  if (domainWebpages?.webpages) {
+    const webpages = generateWebpageTree(domainWebpages?.webpages);
+    //console.log(Object.keys(webpages)); //top level directories
     //console.log(webpages[Object.keys(webpages)[2]]); //log webpages under 3rd top level directory
-
-    console.log(Object.keys(result.webpages));
-    console.log(result.webpages);
+    topLevelDirectories = Object.keys(webpages);
+  
+    
+    console.log(topLevelDirectories);
     //console.log(webpages);
   }
   
 
   return {
     statusCode: result ? 200 : 404,
-    body: result ? JSON.stringify(result) : ''
+    body: result ? JSON.stringify({
+      result: result,
+      webdirectories: topLevelDirectories
+    }) : ''
   };
 });
 

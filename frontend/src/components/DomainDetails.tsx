@@ -49,6 +49,7 @@ export const generateWebpageTree = (pages: Webpage[]) => {
 
 export const DomainDetails: React.FC<Props> = (props) => {
   const { domainId } = props;
+  const { apiGet } = useAuthContext();
   const { getDomain } = useDomainApi(false);
   const { user } = useAuthContext();
   const [domain, setDomain] = useState<Domain>();
@@ -57,7 +58,10 @@ export const DomainDetails: React.FC<Props> = (props) => {
   const fetchDomain = useCallback(async () => {
     try {
       setDomain(undefined);
-      const result = await getDomain(domainId);
+      let { result, topLevelDirectories } = await apiGet<{
+        result: Domain;
+        topLevelDirectories: String[];
+      }>(`/domain/${domainId}`);
       setDomain(result);
     } catch (e) {
       console.error(e);
