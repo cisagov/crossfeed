@@ -14,7 +14,7 @@ sidenav: contributing
 1.  Generate DB schema:
 
     - `cd backend && npm run syncdb`
-    - (run `npm run syncdb -- -d dangerouslyforce` to drop and recreate)
+    - (run `npm run syncdb -- -d dangerouslyforce` to drop and recreate the database)
 
 1.  Navigate to [localhost](http://localhost) in a browser.
 
@@ -30,13 +30,13 @@ If you want to view a local version of Kibana, you should first comment out the 
 
 The scheduler lambda function is set to run on a 5-minute interval when deployed.
 
-When running locally, the scheduler function runs every 1 minute, for convenience. To run it manually, click on the "Manually run scheduler" button on the Scans page.
+When running locally, the scheduler function runs every 30 seconds, for convenience. To manually trigger a run immediately, click on the "Manually run scheduler" button on the Scans page.
 
 You can check scheduler logs locally by checking the backend container logs.
 
 #### Running tests
 
-To run tests, first make sure you have already started crossfeed with `docker-compose`. Then run:
+To run tests, first make sure you have already started Crossfeed with `docker-compose`. Then run:
 
 ```bash
 cd backend
@@ -87,7 +87,7 @@ If the `worker_ecs_repository_url` output from Terraform changes, you will need 
 
 #### Generating censys types
 
-To re-generate the censysIpv4 type file, run:
+To re-generate the censysIpv4 and censysCertificates type files, run:
 
 ```bash
 npm run codegen
@@ -95,15 +95,15 @@ npm run codegen
 
 ### Documentation
 
-The documentation files are stored in the `docs` directory and served from a Jekyll site. To work on this, you should first comment out the "docs" section of `docker-compose.yml` and then run:
+The documentation files are stored in the `docs` directory and served from a Gatsby site. To work on this, you should run:
 
 ```bash
-docker-compose up docs
+docker-compose up
 ```
 
 You can then open up [http://localhost:4000][http://localhost:4000] in your browser.
 
-See [uswds-jekyll](https://github.com/18F/uswds-jekyll) for more information on theme customizations that can be done.
+See [federalist-uswds-gatsby](https://github.com/18F/federalist-uswds-gatsby) for more information on theme customizations that can be done.
 
 ### Matomo
 
