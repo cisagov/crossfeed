@@ -1,0 +1,44 @@
+{
+  "name": "federalist-uswds-gatsby",
+  "description": "A Federalist template using USWDS 2.0 + Gatsby",
+  "version": "1.0.0",
+  "scripts": {
+    "clean": "rimraf .cache public _site",
+    "build": "gatsby build",
+    "reset": "npx rimraf .git",
+    "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "federalist": "npm run federalist:build && npm run federalist:copy",
+    "federalist:build": "gatsby build --prefix-paths",
+    "federalist:copy": "mkdir -p _site && rm -rf _site/* && cp -r public/* _site/"
+  },
+  "dependencies": {
+    "gatsby": "^2.25.3",
+    "gatsby-awesome-pagination": "^0.3.6",
+    "gatsby-plugin-manifest": "^2.5.2",
+    "gatsby-plugin-netlify-cms": "^4.3.17",
+    "gatsby-plugin-offline": "^3.2.38",
+    "gatsby-plugin-react-helmet": "^3.3.14",
+    "gatsby-plugin-sass": "^2.4.2",
+    "gatsby-source-filesystem": "^2.4.2",
+    "gatsby-transformer-remark": "^2.9.2",
+    "netlify-cms-app": "^2.13.3",
+    "node-sass": "^4.14.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-helmet": "^6.1.0",
+    "uswds": "^2.9.0"
+  },
+  "devDependencies": {
+    "eslint-config-react-app": "^5.2.1",
+    "prettier": "^2.1.2",
+    "rimraf": "^3.0.2"
+  },
+  "engines": {
+    "node": "14.x.x",
+    "npm": "6.x.x"
+  }
+}
