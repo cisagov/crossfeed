@@ -8,3 +8,4 @@ matomo-db-data
 nvd-dump
 minio-data
 **/node_modules
+**/.cache
