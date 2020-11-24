@@ -54,14 +54,15 @@ services:
       - MINIO_ACCESS_KEY=aws_access_key
       - MINIO_SECRET_KEY=aws_secret_key
 
-  # docs:
-  #   image: jekyll/jekyll:4.0
-  #   volumes:
-  #     - ./docs:/srv/jekyll
-  #     - ./docs/.bundle-cache:/usr/local/bundle
-  #   command: jekyll serve --incremental
-  #   ports:
-  #     - "4000:4000"
+  docs:
+    build:
+      context: ./
+      dockerfile: ./docs/Dockerfile
+    volumes:
+      - ./docs/src:/app/src
+      - ./docs/gatsby-config.js:/app/gatsby-config.js
+    ports:
+      - "4000:4000"
 
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0

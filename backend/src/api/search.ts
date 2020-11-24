@@ -24,6 +24,15 @@ class SearchBody {
   filters: { field: string; values: any[]; type: string }[];
 }
 
+/**
+ * @swagger
+ *
+ * /search:
+ *  post:
+ *    description: Perform a search on all assets using Elasticsearch.
+ *    tags:
+ *    - Search
+ */
 export const search = wrapHandler(async (event) => {
   const searchBody = await validateBody(SearchBody, event.body);
   const options = {

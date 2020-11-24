@@ -115,6 +115,15 @@ app.get('/plugins/Morpheus/images/logo.svg', (req, res) =>
 );
 app.get('/index.php', (req, res) => res.redirect('/matomo/index.php'));
 
+/**
+ * @swagger
+ *
+ * /matomo:
+ *  get:
+ *    description: All paths under /matomo proxy to a Matomo instance, which is used to handle and process user analytics. A global admin user can access this page from the "My Account" page.
+ *    tags:
+ *    - Analytics
+ */
 const matomoProxy = createProxyMiddleware({
   target: process.env.MATOMO_URL,
   headers: { HTTP_X_FORWARDED_URI: '/matomo' },

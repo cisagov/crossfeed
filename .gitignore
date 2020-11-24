@@ -40,7 +40,6 @@ es-data
 matomo-data
 matomo-db-data
 nvd-dump
+minio-data
 
 **.pyc
-
-minio-data
