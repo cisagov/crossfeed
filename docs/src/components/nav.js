@@ -52,7 +52,13 @@ const Nav = ({ navigation, secondaryLinks }) => (
         <ul className="usa-nav__secondary-links">
           {secondaryLinks.map((secondaryLink, idx) => (
             <li key={idx} className="usa-nav__secondary-item">
-              <Link to={secondaryLink.link}>{secondaryLink.text}</Link>
+              {secondaryLink.link.startsWith('http') ? (
+                <a target="_blank" href={secondaryLink.link}>
+                  {secondaryLink.text}
+                </a>
+              ) : (
+                <Link to={secondaryLink.link}>aaa{secondaryLink.text}</Link>
+              )}
             </li>
           ))}
         </ul>

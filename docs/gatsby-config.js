@@ -8,7 +8,7 @@ module.exports = {
         items: [{ text: 'Home', link: '/' }],
       },
       {
-        items: [{ text: 'User Guide', link: '/usage' }],
+        items: [{ text: 'User Guide', link: '/product-overview' }],
       },
       {
         items: [{ text: 'Contributing', link: '/contributing' }],
@@ -137,6 +137,9 @@ module.exports = {
               directory: `${__dirname}/src/documentation-pages`,
             },
           },
+          {
+            resolve: `gatsby-remark-prismjs`,
+          }
         ],
       },
     },

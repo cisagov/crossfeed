@@ -5,6 +5,7 @@
  */
 import './src/styles/index.scss';
 import 'uswds';
+import "prismjs/themes/prism-solarizedlight.css";
 
 import { siteMetadata } from './gatsby-config';
 
