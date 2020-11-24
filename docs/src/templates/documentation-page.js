@@ -32,8 +32,13 @@ const DocumentationPage = ({ data }) => {
             <main
               id="main-content"
               className="usa-layout-docs__main desktop:grid-col-9 usa-prose"
-              dangerouslySetInnerHTML={{ __html: html }}
-            ></main>
+            >
+              <h2>{frontmatter.title}</h2>
+              <div
+                className="usa-prose"
+                dangerouslySetInnerHTML={{ __html: html }}
+              />
+            </main>
           </div>
         </div>
       </div>
