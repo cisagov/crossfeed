@@ -139,7 +139,7 @@ module.exports = {
           },
           {
             resolve: `gatsby-remark-prismjs`,
-          }
+          },
         ],
       },
     },
