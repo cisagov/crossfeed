@@ -1,6 +1,6 @@
 ---
 title: Deployment
-sidenav: false
+sidenav: contributing
 ---
 
 ## Manual Deployment

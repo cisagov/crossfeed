@@ -1,6 +1,6 @@
 ---
 title: Getting started
-sidenav: false
+sidenav: user-guide
 ---
 
 ## Accepting an Invite

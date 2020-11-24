@@ -1,6 +1,6 @@
 ---
 title: Customization
-sidenav: false
+sidenav: user-guide
 ---
 
 ## Creating your own instance of Crossfeed

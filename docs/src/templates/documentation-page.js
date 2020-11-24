@@ -3,7 +3,7 @@ import { graphql } from 'gatsby';
 
 import Layout from '../components/layout';
 import SEO from '../components/seo';
-import Sidenav from '../components/sidenav';
+import Sidenav, { SidenavContributing, SidenavUserGuide } from '../components/sidenav';
 
 /*
   This template is for a single page that does not have a date associated with it. For example, an about page.
@@ -11,7 +11,7 @@ import Sidenav from '../components/sidenav';
 
 const DocumentationPage = ({ data }) => {
   const { markdownRemark } = data;
-  const { frontmatter, html } = markdownRemark;
+  const { frontmatter, html, fields } = markdownRemark;
 
   return (
     <Layout>
@@ -19,7 +19,8 @@ const DocumentationPage = ({ data }) => {
       <div className="usa-layout-docs usa-section">
         <div className="grid-container">
           <div className="grid-row grid-gap">
-            {frontmatter.sidenav && <Sidenav />}
+            {frontmatter.sidenav === "contributing" && <SidenavContributing name={fields.name} />}
+            {frontmatter.sidenav === "user-guide" && <SidenavUserGuide name={fields.name} />}
 
             <main id="main-content" className="usa-layout-docs__main desktop:grid-col-9 usa-prose"
               dangerouslySetInnerHTML={{ __html: html }}>
@@ -43,6 +44,9 @@ export const pageQuery = graphql`
       frontmatter {
         title
         sidenav
+      }
+      fields {
+        name
       }
     }
   }

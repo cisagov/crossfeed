@@ -1,6 +1,6 @@
 ---
 title: Document with sidenav
-sidenav: true
+sidenav: contributing
 ---
 
 # Section heading (h1)

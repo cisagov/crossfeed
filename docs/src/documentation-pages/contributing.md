@@ -1,6 +1,6 @@
 ---
 title: Contribution Guidelines
-sidenav: false
+sidenav: contributing
 ---
 
 - Submit a pull request with your changes.

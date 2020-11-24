@@ -127,7 +127,20 @@ module.exports = {
         path: `${__dirname}/src/documentation-pages`,
       },
     },
-    `gatsby-transformer-remark`,
+    {
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        plugins: [
+          {
+            resolve: "gatsby-remark-embed-markdown",
+            options: {
+              // Example code links are relative to this dir.
+              directory: `${__dirname}/src/documentation-pages`,
+            }
+          }
+        ]
+      }
+    },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {

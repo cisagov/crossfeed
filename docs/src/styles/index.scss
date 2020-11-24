@@ -12,6 +12,8 @@ $theme-font-path: '../../node_modules/uswds/src/fonts';
 
 $theme-hero-image: '#{$theme-image-path}/hero.png';
 
+$theme-show-notifications: false;
+
 // Your custom changes to variables go here
 // Uncomment to see this working
 // $theme-color-primary-darker: 'black';
@@ -55,11 +57,4 @@ $theme-hero-image: '#{$theme-image-path}/hero.png';
     top: 50%;
     transform: translate(-60%, -60%);
   }
-  // .usa-media-block__img {
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   width: 100%;
-  //   height: 100%;
-  // }
 }

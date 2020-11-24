@@ -1,6 +1,6 @@
 ---
 title: Administration
-sidenav: false
+sidenav: user-guide
 ---
 
 ## Access control

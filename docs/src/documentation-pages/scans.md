@@ -1,6 +1,6 @@
 ---
 title: Scanning FAQ
-sidenav: false
+sidenav: none
 ---
 
 ### What is Crossfeed?
