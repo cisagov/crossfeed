@@ -15,6 +15,9 @@
     "federalist:copy": "mkdir -p _site && rm -rf _site/* && cp -r public/* _site/"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/react-fontawesome": "^0.1.13",
     "gatsby": "^2.25.3",
     "gatsby-awesome-pagination": "^0.3.6",
     "gatsby-plugin-manifest": "^2.5.2",
@@ -30,6 +33,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-helmet": "^6.1.0",
+    "swagger-jsdoc": "^5.0.1",
+    "swagger-ui-react": "^3.37.0",
     "uswds": "^2.9.0"
   },
   "devDependencies": {

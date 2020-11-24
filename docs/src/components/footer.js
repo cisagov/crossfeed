@@ -3,7 +3,7 @@ import logo from '../../node_modules/uswds/dist/img/logo-img.png';
 
 const Footer = () => (
   <footer className="usa-footer site-footer" role="contentinfo">
-    <div className="footer-section-bottom bg-base-lighter">
+    {/* <div className="footer-section-bottom bg-base-lighter">
       <div className="grid-container">
         <div className="grid-row padding-3">
           <div className="tablet:grid-col">
@@ -30,7 +30,7 @@ const Footer = () => (
           </div>
         </div>
       </div>
-    </div>
+    </div> */}
   </footer>
 );
 

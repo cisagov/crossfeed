@@ -10,11 +10,11 @@ const Hero = () => (
     <div className="grid-container">
       <div className="usa-hero__callout">
         <h2 className="usa-hero__heading">
-          <span className="usa-hero__heading--alt">Crossfeed:</span>Bring visibility to public vulnerabilities
+          {/* <span className="usa-hero__heading--alt">Understand your infrastructure.</span> */}
+          Understand your infrastructure.
         </h2>
         <p>
-          Support the callout with some short explanatory text. You don’t need
-          more than a couple of sentences.
+          Crossfeed lets you monitor and discover the extent of your public-facing infrastructure, as well as bring visibility to vulnerabilities.
         </p>
         <a className="usa-button" href="/">
           Learn more

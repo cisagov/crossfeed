@@ -9,7 +9,7 @@ const Tagline = () => (
     <div className="grid-row grid-gap">
       <div className="tablet:grid-col-4">
         <h2 className="font-heading-xl margin-top-0 tablet:margin-bottom-0">
-          Analyze your assets
+          About Crossfeed
         </h2>
       </div>
       <div className="tablet:grid-col-8 usa-prose">

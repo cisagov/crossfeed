@@ -1,5 +1,9 @@
 import React from 'react';
 import circle from '../../node_modules/uswds/dist/img/circle-124.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBoxes, faExclamationTriangle, faTasks, faChartLine } from '@fortawesome/free-solid-svg-icons'
+
+
 
 /*
   Use this section to highlight key elements of your site. Some sites will only have two while others may have six to eight. 
@@ -10,56 +14,61 @@ const Highlights = () => (
     <div className="grid-container">
       <div className="usa-graphic-list__row grid-row grid-gap">
         <div className="usa-media-block tablet:grid-col">
-          <img className="usa-media-block__img" src={circle} alt="Alt text" />
+          <div className="icon-circle-container">
+            <img className="usa-media-block__img" src={circle} alt="Alt text" />
+            <FontAwesomeIcon icon={faBoxes} size={"4x"} />
+          </div>
+
           <div className="usa-media-block__body">
             <h3 className="usa-graphic-list__heading">
-              Graphic headings can vary.
+              Analyze your entire inventory of public-facing sites.
             </h3>
             <p>
-              Graphic headings can be used a few different ways, depending on
-              what your landing page is for. Highlight your values, specific
-              program areas, or results.
+              Users only have to give Crossfeed a root domain, and it will discover related assets that they may not have been aware of before. Crossfeed can discover all related subdomains and help users understand when certain websites or webpages were unintentionally exposed.
             </p>
           </div>
         </div>
         <div className="usa-media-block tablet:grid-col">
-          <img className="usa-media-block__img" src={circle} alt="Alt text" />
+          <div className="icon-circle-container">
+            <img className="usa-media-block__img" src={circle} alt="Alt text" />
+            <FontAwesomeIcon icon={faExclamationTriangle} size={"4x"} />
+          </div>
           <div className="usa-media-block__body">
             <h3 className="usa-graphic-list__heading">
-              Stick to 6 or fewer words.
+              Manage and triage your vulnerabilities.
             </h3>
             <p>
-              Keep body text to about 30 words. They can be shorter, but try to
-              be somewhat balanced across all four. It creates a clean
-              appearance with good spacing.
+              Users can view detailed information about CVEs on the Vulnerabilities page, as well as mark vulnerabilities identified by Crossfeed with different statuses, such as “False Positive” or “Remediated.”
             </p>
           </div>
         </div>
       </div>
       <div className="usa-graphic-list__row grid-row grid-gap">
         <div className="usa-media-block tablet:grid-col">
-          <img className="usa-media-block__img" src={circle} alt="Alt text" />
+          <div className="icon-circle-container">
+            <img className="usa-media-block__img" src={circle} alt="Alt text" />
+            <FontAwesomeIcon icon={faTasks} size={"4x"} />
+          </div>
           <div className="usa-media-block__body">
             <h3 className="usa-graphic-list__heading">
-              Never highlight anything without a goal.
+              Control automated scans on your assets.
             </h3>
             <p>
-              For anything you want to highlight here, understand what your
-              users know now, and what activity or impression you want from them
-              after they see it.
+              Users can view a list of which scans were performed on their assets and enable or disable certain scans at any time. Additionally, all Internet traffic from Crossfeed to customers’ assets are clearly marked and identifiable as so.
             </p>
           </div>
         </div>
         <div className="usa-media-block tablet:grid-col">
-          <img className="usa-media-block__img" src={circle} alt="Alt text" />
+          <div className="icon-circle-container">
+            <img className="usa-media-block__img" src={circle} alt="Alt text" />
+            <FontAwesomeIcon icon={faChartLine} size={"4x"} />
+          </div>
           <div className="usa-media-block__body">
             <h3 className="usa-graphic-list__heading">
-              Could also have 2 or 6.
+              View an “at-a-glance” dashboard for a risk summary overview.
             </h3>
             <p>
-              In addition to your goal, find out your users’ goals. What do they
-              want to know or do that supports your mission? Use these headings
-              to show those.
+              Users have access to a “Risk Summary” dashboard that has graphs / charts to highlight the most important vulnerabilities and assets to focus on.
             </p>
           </div>
         </div>

@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    author: 'Foo',
+    author: 'CISA',
     title: `Crossfeed`,
     description: `Crossfeed is a tool that continuously enumerates and monitors an organization's public-facing attack surface in order to discover assets and flag potential security flaws.`,
     navigation: [
@@ -8,14 +8,17 @@ module.exports = {
         items: [{ text: 'Home', link: '/' }],
       },
       {
-        items: [{ text: 'Blog', link: '/blog' }],
+        items: [{ text: 'User Guide', link: '/usage' }],
       },
       {
-        items: [{ text: 'Document', link: '/document' }],
+        items: [{ text: 'Contributing', link: '/contributing' }],
+      },
+      {
+        items: [{ text: 'Scanning FAQ', link: '/scans' }],
       },
       {
         items: [
-          { text: 'Document with sidenav', link: '/document-with-sidenav' },
+          { text: 'API Reference', link: '/api-reference' },
         ],
       },
       {
@@ -28,8 +31,7 @@ module.exports = {
       },
     ],
     secondaryLinks: [
-      { text: 'Secondary link', link: '/' },
-      { text: 'Another secondary link', link: '/' },
+      { text: 'Find Crossfeed on GitHub', link: 'https://github.com/cisagov/crossfeed' },
     ],
 
     /**
@@ -103,6 +105,7 @@ module.exports = {
   plugins: [
     `gatsby-plugin-sass`,
     `gatsby-plugin-react-helmet`,
+    // `gatsby-plugin-fontawesome-css`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
