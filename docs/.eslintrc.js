@@ -5,13 +5,14 @@ module.exports = {
   extends: 'react-app',
   rules: {
     'jsx-a11y/label-has-associated-control': [
-    'error',
-    {
-      'labelComponents': [],
-      'labelAttributes': [],
-      'controlComponents': [],
-      'assert': 'htmlFor',
-      'depth': 25
-    }
-  ],
-}
+      'error',
+      {
+        labelComponents: [],
+        labelAttributes: [],
+        controlComponents: [],
+        assert: 'htmlFor',
+        depth: 25,
+      },
+    ],
+  },
+};

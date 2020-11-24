@@ -24,7 +24,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     name: 'sourceName',
     value: fileNode.sourceInstanceName,
   });
-  
+
   createNodeField({
     node,
     name: 'name',
@@ -59,7 +59,7 @@ async function createBlogPages(createPage, graphql) {
       path: 'blog/' + node.fields.name,
       component: postTemplate,
       context: {
-        name: node.fields.name
+        name: node.fields.name,
       },
     });
   });
@@ -74,7 +74,7 @@ async function createMarkdownPages(createPage, graphql) {
       path: node.fields.name,
       component: pageTemplate,
       context: {
-        name: node.fields.name
+        name: node.fields.name,
       },
     });
   });

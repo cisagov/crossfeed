@@ -16,16 +16,16 @@ const SearchPage = ({ data, location }) => {
     searchEndpoint.searchParams.append('query', query);
 
     fetch(searchEndpoint)
-      .then(r => {
+      .then((r) => {
         if (r.ok) {
           return r.json();
         }
         throw new Error(r.statusText);
       })
-      .then(posts => {
+      .then((posts) => {
         setResults(posts.web.results);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }, [query, access_key, affiliate, endpoint]);
 
   return (

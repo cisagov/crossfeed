@@ -21,7 +21,7 @@ const SearchForm = ({ navigation, secondaryLinks }) => {
   );
   const { affiliate, endpoint, inline } = site.siteMetadata.searchgov;
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const query = e.currentTarget.query.value;
     if (inline) {

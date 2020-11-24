@@ -17,9 +17,7 @@ module.exports = {
         items: [{ text: 'Scanning FAQ', link: '/scans' }],
       },
       {
-        items: [
-          { text: 'API Reference', link: '/api-reference' },
-        ],
+        items: [{ text: 'API Reference', link: '/api-reference' }],
       },
       {
         title: 'Document submenu',
@@ -31,34 +29,36 @@ module.exports = {
       },
     ],
     secondaryLinks: [
-      { text: 'Find Crossfeed on GitHub', link: 'https://github.com/cisagov/crossfeed' },
+      {
+        text: 'Find Crossfeed on GitHub',
+        link: 'https://github.com/cisagov/crossfeed',
+      },
     ],
 
     /**
      * Search.gov configuration
-     * 
+     *
      * 1. Create an account with Search.gov https://search.usa.gov/signup
      * 2. Add a new site.
      * 3. Add your site/affiliate name here.
      */
     searchgov: {
-      
       // You should not change this.
       endpoint: 'https://search.usa.gov',
-      
+
       // replace this with your search.gov account
       affiliate: 'federalist-uswds-example',
-      
+
       // replace with your access key
       access_key: '...',
-      
+
       // this renders the results within the page instead of sending to user to search.gov
-      inline: true, 
+      inline: true,
     },
 
     /**
      * Digital Analytics Program (DAP) configuration
-     * 
+     *
      * USAID   - Agency for International Development
      * USDA    - Department of Agriculture
      * DOC     - Department of Commerce
@@ -89,7 +89,6 @@ module.exports = {
      */
     dap: {
       // agency: 'your-agency',
-
       // Optional
       // subagency: 'your-subagency',
     },
@@ -132,14 +131,14 @@ module.exports = {
       options: {
         plugins: [
           {
-            resolve: "gatsby-remark-embed-markdown",
+            resolve: 'gatsby-remark-embed-markdown',
             options: {
               // Example code links are relative to this dir.
               directory: `${__dirname}/src/documentation-pages`,
-            }
-          }
-        ]
-      }
+            },
+          },
+        ],
+      },
     },
     {
       resolve: `gatsby-plugin-manifest`,

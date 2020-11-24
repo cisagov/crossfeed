@@ -82,6 +82,7 @@ ga: {
 ### Easy mode
 
 #### From Federalist
+
 This will create a copy of this repo in a Github repository of your choice and add it to your Federalist dashboard.
 
 - From [Federalist](https://federalistapp-staging.18f.gov/sites) click the "+ Add Site" button.
@@ -89,6 +90,7 @@ This will create a copy of this repo in a Github repository of your choice and a
 - Follow the instructions
 
 #### From Github
+
 This will create a copy of this repo in a Github repository of your choice but you will need to add it your [Federalist dashbord](https://federalistapp-staging.18f.gov/sites/new).
 
 - Click the "Use this template" button above or [here](https://github.com/18F/federalist-uswds-gatsby/generate).
@@ -98,12 +100,15 @@ This will create a copy of this repo in a Github repository of your choice but y
 ### Hard mode
 
 #### With `npx` (requires node)
+
     $ npx degit https://github.com/18F/federalist-uswds-gatsby#main <destination-folder>
     $ cd <destination-folder>
 
 #### Push to your Github repository
+
 - [Create a new Github repository](https://help.github.com/en/github/getting-started-with-github/create-a-repo).
 - Follow the instructions form Github or
+
 ```
     $ git init
     $ git symbolic-ref HEAD refs/heads/main
@@ -114,25 +119,30 @@ This will create a copy of this repo in a Github repository of your choice but y
 ```
 
 ### Installation for development
+
     $ git clone https://github.com/18F/federalist-uswds-gatsby
     $ cd federalist-uswds-gatsby
 
 ### Running the application
 
 #### With locally installed `node`
+
     $ npm install
     $ npm run develop
 
 To build but not serve the site, run `npm run build`.
 
 #### With Docker
+
     $ docker-compose run node npm install
     $ docker-compose up
 
 To build but not serve the site, run:
+
 ```
 docker-compose run node npm run build
 ```
+
 .
 
 Note that when built by Federalist, `npm run federalist` is used instead of

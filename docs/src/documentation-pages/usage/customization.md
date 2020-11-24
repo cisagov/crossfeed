@@ -36,6 +36,7 @@ The public key is the value of `test_key.pem` and the private key is the value o
 ### Verifying a request
 
 One can then verify that requests are coming from Crossfeed by providing you with the following parts of the request:
+
 - Value of the `Date` header
 - Value of the `Signature` header
 - Request method
