@@ -10,12 +10,13 @@ import {
   IsUUID
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Domain, connectToDatabase } from '../models';
+import { Domain, connectToDatabase, Webpage } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
 import { isGlobalViewAdmin, getOrgMemberships } from './auth';
 import S3Client from '../tasks/s3-client';
 import * as Papa from 'papaparse';
+import { json } from 'body-parser';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
@@ -257,15 +258,46 @@ export const get = wrapHandler(async (event) => {
     return NotFound;
   }
 
-  const result = await Domain.findOne(
+  let result = await Domain.findOne(
     { id, ...where },
     {
       relations: ['services', 'organization', 'vulnerabilities', 'webpages']
     }
   );
+  //delete result?.webpages[0];
+  //console.log(typeof(result?.webpages));
+  //console.log(typeof(result?.vulnerabilities));
+  if (result?.webpages) {
+    const webpages = generateWebpageTree(result?.webpages);
+    console.log(Object.keys(webpages)); //top level directories
+    //console.log(webpages[Object.keys(webpages)[2]]); //log webpages under 3rd top level directory
+
+    console.log(Object.keys(result.webpages));
+    console.log(result.webpages);
+    //console.log(webpages);
+  }
+  
 
   return {
     statusCode: result ? 200 : 404,
     body: result ? JSON.stringify(result) : ''
   };
 });
+
+export const generateWebpageTree = (pages: any[]) => {
+  const tree: any = {};
+  for (const page of pages) {
+    const url = new URL(page.url);
+    const parts = url.pathname.split('/').filter((path) => path !== '');
+    let root = tree;
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (parts[i] in root) root = root[parts[i]];
+      else {
+        root[parts[i]] = {};
+        root = root[parts[i]];
+      }
+    }
+    root[parts[parts.length - 1]] = page;
+  }
+  return tree;
+};
