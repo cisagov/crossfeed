@@ -56,7 +56,6 @@ services:
 
   docs:
     build: ./docs
-    # working_dir: /app
     volumes:
       - ./docs/src:/app/src
       - ./docs/gatsby-config.js:/app/gatsby-config.js
