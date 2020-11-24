@@ -130,19 +130,4 @@ Webpage scraping is done by the `webscraper` scan. This scan uses the `scrapy` P
 rate limits and respecting robots.txt as well.
 
 When a webpage is scraped, basic information such as the URL and status code are stored in the database through the `Webpage` model. However,
-webpage contents are not stored in the database; instead, they are uploaded to S3. The S3 directory is structured as follows
-(below is a local directory, which is then copied to S3):
-
-![webpage structure](https://github.com/cisagov/crossfeed/raw/cfcfba2cc736c39a5f241a64ce75428782062862/docs/contributing/img/webpage%20structure.png)
-
-Essentially, each webpage is stored in a folder with a name equal to a hash of its URL (this name is also stored in the `s3Key`
-attribute of the `Webpage` model). Inside this folder are folders with timestamps corresponding to each scan, as well as a `latest`
-folder for the information for the latest scan.
-
-In each subfolder, `body.txt` contains the response contents, while `item.json` contains basic metadata about the webpage
-(URL, status code). In the future, these subfolders will also store screenshots and other large information.
-
-When `searchSync` runs, for each webpage that needs to be synced, it reads from `latest/body.txt` and sets this to the contents of
-`webpage_body` in the object that is finally uploaded to Elasticsearch. This means that while Elasticsearch contains all webpage
-contents, it uses S3 as a source of truth for the webpage body but the database as a source of truth for the webpage paths /
-other info.
+webpage contents and headers are not stored in the database; instead, they are directly uploaded to Elasticsearch.
