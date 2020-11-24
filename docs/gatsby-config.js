@@ -17,15 +17,8 @@ module.exports = {
         items: [{ text: 'Scanning FAQ', link: '/scans' }],
       },
       {
+        title: '',
         items: [{ text: 'API Reference', link: '/api-reference' }],
-      },
-      {
-        title: 'Document submenu',
-        items: [
-          { text: 'Navigation link', link: '/' },
-          { text: 'Navigation link', link: '/' },
-          { text: 'Navigation link', link: '/' },
-        ],
       },
     ],
     secondaryLinks: [

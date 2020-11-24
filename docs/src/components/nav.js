@@ -13,6 +13,7 @@ const Nav = ({ navigation, secondaryLinks }) => (
       <ul className="usa-accordion usa-nav__primary">
         {navigation.map((navGroup, idx) => (
           <li key={idx} className="usa-nav__primary-item">
+            {!navGroup.items && console.warn(navGroup)}
             {navGroup.items.length > 1 ? (
               <>
                 <button
@@ -57,7 +58,7 @@ const Nav = ({ navigation, secondaryLinks }) => (
                   {secondaryLink.text}
                 </a>
               ) : (
-                <Link to={secondaryLink.link}>aaa{secondaryLink.text}</Link>
+                <Link to={secondaryLink.link}>{secondaryLink.text}</Link>
               )}
             </li>
           ))}

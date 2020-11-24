@@ -3,7 +3,7 @@ title: Development Setup
 sidenav: contributing
 ---
 
-## Quickstart
+### Quickstart
 
 1.  Copy root `dev.env.example` file to a `.env` file, and change values as desired:
     - `cp dev.env.example .env`
@@ -26,7 +26,7 @@ sidenav: contributing
 
 If you want to view a local version of Kibana, you should first comment out the "kib" section of `docker-compose.yml` and then navigate to [http://localhost:5601](http://localhost:5601).
 
-### Running the scheduler lambda function locally
+#### Running the scheduler lambda function locally
 
 The scheduler lambda function is set to run on a 5-minute interval when deployed.
 
@@ -34,7 +34,7 @@ When running locally, the scheduler function runs every 1 minute, for convenienc
 
 You can check scheduler logs locally by checking the backend container logs.
 
-### Running tests
+#### Running tests
 
 To run tests, first make sure you have already started crossfeed with `docker-compose`. Then run:
 
@@ -56,13 +56,13 @@ pip install -r worker/requirements.txt
 pytest
 ```
 
-## Fargate worker
+### Fargate worker
 
 In order to run scans locally or work on scanning infrastructure,
 you will need to set up the Fargate worker and rebuild it periodically
 when worker code changes.
 
-### Running locally
+#### Running locally
 
 Each time you make changes to the worker code, you should run:
 
@@ -75,7 +75,7 @@ To run the scheduler, click on "Manually run scheduler" on the Scans page.
 You can then run `docker ps` or ( `docker ps -a | head -n 3` ) to view running / stopped Docker containers,
 and check their logs with `docker logs [containername]` .
 
-### Publishing
+#### Publishing
 
 Run:
 
@@ -85,7 +85,7 @@ npm run deploy-worker
 
 If the `worker_ecs_repository_url` output from Terraform changes, you will need to modify `./src/tools/deploy-worker.sh`.
 
-### Generating censys types
+#### Generating censys types
 
 To re-generate the censysIpv4 type file, run:
 
@@ -93,7 +93,7 @@ To re-generate the censysIpv4 type file, run:
 npm run codegen
 ```
 
-## Documentation
+### Documentation
 
 The documentation files are stored in the `docs` directory and served from a Jekyll site. To work on this, you should first comment out the "docs" section of `docker-compose.yml` and then run:
 
@@ -105,7 +105,7 @@ You can then open up [http://localhost:4000][http://localhost:4000] in your brow
 
 See [uswds-jekyll](https://github.com/18F/uswds-jekyll) for more information on theme customizations that can be done.
 
-## Matomo
+### Matomo
 
 [Matomo](https://matomo.org/) is an open source analytics platform. We host an instance of Matomo as part of Crossfeed to collect analytics
 on its usage.

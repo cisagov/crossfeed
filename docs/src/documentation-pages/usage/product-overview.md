@@ -5,9 +5,9 @@ sidenav: user-guide
 
 Crossfeed is a self-service tool that continuously monitors an organization's public-facing attack surface. users can use Crossfeed in order to view a snapshot of their organization's assets from an attacker's perspective and make informed risk decisions about their assets.
 
-## What Crossfeed does
+### What Crossfeed does
 
-### Features
+#### Features
 
 - Aggregates data from various public sources (Censys, Project Sonar, etc.) as well as performing custom enumeration techniques and indexing accessible services. All results are stored in a central database and made accessible for easy digestion.
 
@@ -17,7 +17,7 @@ Crossfeed is a self-service tool that continuously monitors an organization's pu
 
 - Enables asset analysis and visualizations, as well as user-specific dashboards.
 
-### Potential use cases
+#### Potential use cases
 
 With Crossfeed, an analyst can:
 
@@ -25,7 +25,7 @@ With Crossfeed, an analyst can:
 
 - Automatically scan and notify users of vulnerabilities for newly-released CVEs related to Internet-facing services.
 
-### Design details
+#### Design details
 
 Crossfeed is hosted in Amazon Web Services (AWS) and utilizes the [Serverless Framework](https://www.serverless.com/) to coordinate scans.
 
@@ -37,13 +37,13 @@ Tech Stack:
 
 For an architectural diagram and more information, see [Architecture](/contributing/architecture/).
 
-#### Security details
+##### Security details
 
 Crossfeed has been developed using modern software development practices such as continuous integration / continuous deployment and utilizes standard cloud security controls. Access controls are in place to ensure that only authorized users may view data on the Crossfeed platform, with authentication handled via Cognito or login.gov.
 
 Crossfeed's scan data is collected entirely from open source information available to anyone on the Internet, and is stored on a cloud database that is in a private subnet and thus not directly accessible from the public Internet. The database is encrypted at rest through Amazon RDS.
 
-### Data Sources
+#### Data Sources
 
 For Crossfeed scans, active and passive modes are defined as follows:
 
