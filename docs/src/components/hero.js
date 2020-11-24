@@ -14,9 +14,9 @@ const Hero = () => (
           Understand your infrastructure.
         </h2>
         <p>
-          Crossfeed lets you monitor and discover the extent of your public-facing infrastructure, as well as bring visibility to vulnerabilities.
+          Crossfeed lets you monitor and discover your public-facing infrastructure, as well as bring better visibility to vulnerabilities.
         </p>
-        <a className="usa-button" href="/">
+        <a className="usa-button" href="#highlights">
           Learn more
         </a>
       </div>

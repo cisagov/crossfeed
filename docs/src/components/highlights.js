@@ -10,7 +10,7 @@ import { faBoxes, faExclamationTriangle, faTasks, faChartLine } from '@fortaweso
 */
 
 const Highlights = () => (
-  <section className="usa-graphic-list usa-section usa-section--dark">
+  <section className="usa-graphic-list usa-section usa-section--dark" id="highlights">
     <div className="grid-container">
       <div className="usa-graphic-list__row grid-row grid-gap">
         <div className="usa-media-block tablet:grid-col">
@@ -71,6 +71,16 @@ const Highlights = () => (
               Users have access to a “Risk Summary” dashboard that has graphs / charts to highlight the most important vulnerabilities and assets to focus on.
             </p>
           </div>
+        </div>
+      </div>
+    
+      <div className="usa-graphic-list__row grid-row grid-gap">
+      <div className="usa-media-block tablet:grid-col">
+        <a className="usa-button usa-button--big usa-button--accent-cool" href="/usage"
+         style={{margin: "auto", display: "block"}}
+        >
+          Get started
+        </a>
         </div>
       </div>
     </div>
