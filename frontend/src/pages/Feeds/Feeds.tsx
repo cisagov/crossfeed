@@ -61,53 +61,73 @@ const Feeds = () => {
         ></Subnav>
         <div className={classes.content}>
           <div className={classes.panel}>
-            {savedSearches.map((search: SavedSearch) => (
-              <a
-                href={
-                  '/inventory' + search.searchPath + '&searchId=' + search.id
-                }
-                key={search.id}
-                style={{ textDecoration: 'none' }}
-              >
-                <Paper
-                  elevation={0}
-                  classes={{ root: classes.cardRoot }}
-                  aria-label="view domain details"
+            {savedSearches.map((search: SavedSearch) => {
+              const filterDisplay: string[] = [];
+              const filterMap: { [name: string]: string } = {
+                'services.port': 'Port',
+                fromRootDomain: 'Root Domain',
+                'vulnerabilities.cve': 'CVE',
+                'vulnerabilities.severity': 'Severity',
+                ip: 'IP',
+                name: 'Domain'
+              };
+              if (search.searchTerm)
+                filterDisplay.push(`Search: ${search.searchTerm}`);
+              for (const filter of search.filters) {
+                const label =
+                  filter.field in filterMap
+                    ? filterMap[filter.field]
+                    : filter.field;
+                filterDisplay.push(`${label}: ${filter.values.join(', ')}`);
+              }
+              return (
+                <a
+                  href={
+                    '/inventory' + search.searchPath + '&searchId=' + search.id
+                  }
+                  key={search.id}
+                  style={{ textDecoration: 'none' }}
                 >
-                  <div className={classes.cardInner}>
-                    <div className={classes.domainRow}>
-                      <div className={classes.cardAlerts}>
-                        <h4>{search.count} items</h4>
-                      </div>
-                      <div className={classes.cardDetails}>
-                        <h3>{search.name}</h3>
-                        <p>{search.searchTerm}</p>
-                      </div>
-                      <div className={classes.cardActions}>
-                        <button
-                          className={classes.button}
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            editSearch(search.id);
-                          }}
-                        >
-                          EDIT
-                        </button>
-                        <button
-                          className={classes.button}
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            deleteSearch(search.id);
-                          }}
-                        >
-                          DELETE
-                        </button>
+                  <Paper
+                    elevation={0}
+                    classes={{ root: classes.cardRoot }}
+                    aria-label="view domain details"
+                  >
+                    <div className={classes.cardInner}>
+                      <div className={classes.domainRow}>
+                        <div className={classes.cardAlerts}>
+                          <h4>{search.count} items</h4>
+                        </div>
+                        <div className={classes.cardDetails}>
+                          <h3>{search.name}</h3>
+                          <p>{filterDisplay.join(', ')}</p>
+                        </div>
+                        <div className={classes.cardActions}>
+                          <button
+                            className={classes.button}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              editSearch(search.id);
+                            }}
+                          >
+                            EDIT
+                          </button>
+                          <button
+                            className={classes.button}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              deleteSearch(search.id);
+                            }}
+                          >
+                            DELETE
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Paper>
-              </a>
-            ))}
+                  </Paper>
+                </a>
+              );
+            })}
           </div>
         </div>
 
@@ -261,7 +281,7 @@ const useStyles = makeStyles((theme) => ({
       color: '#A9AEB1',
       fontWeight: 400,
       fontSize: '1rem',
-      wordBreak: 'break-all'
+      wordBreak: 'normal'
     }
   },
   cardActions: {
