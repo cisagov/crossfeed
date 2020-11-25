@@ -3,8 +3,13 @@ import { Paper, makeStyles } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { useAuthContext } from 'context';
 import { SavedSearch } from 'types';
-import { Link, useHistory } from 'react-router-dom';
 import { Subnav } from 'components';
+import {
+  Overlay,
+  ModalContainer,
+  Button,
+  Modal
+} from '@trussworks/react-uswds';
 
 const Feeds = () => {
   const classes = useStyles();
@@ -16,7 +21,8 @@ const Feeds = () => {
     resultsPerPage: 20,
     totalPages: 0
   });
-  const history = useHistory();
+  const [showModal, setShowModal] = useState<Boolean>(false);
+  const [selectedSearch, setSelectedSearch] = useState<string>('');
 
   const fetchSavedSearches = useCallback(async () => {
     try {
@@ -55,8 +61,8 @@ const Feeds = () => {
       <div className={classes.contentWrapper}>
         <Subnav
           items={[
-            { title: 'My Saved Searches', path: '/feeds', exact: true },
-            { title: 'Default Searches', path: '/feeds/default' }
+            { title: 'My Saved Searches', path: '/feeds', exact: true }
+            // { title: 'Default Searches', path: '/feeds/default' }
           ]}
         ></Subnav>
         <div className={classes.content}>
@@ -116,7 +122,8 @@ const Feeds = () => {
                             className={classes.button}
                             onClick={(event) => {
                               event.stopPropagation();
-                              deleteSearch(search.id);
+                              setShowModal(true);
+                              setSelectedSearch(search.id);
                             }}
                           >
                             DELETE
@@ -161,6 +168,42 @@ const Feeds = () => {
           />
         </Paper>
       </div>
+      {showModal && (
+        <div>
+          <Overlay />
+          <ModalContainer>
+            <Modal
+              actions={
+                <>
+                  <Button
+                    outline
+                    type="button"
+                    onClick={() => {
+                      setShowModal(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      deleteSearch(selectedSearch);
+                      setShowModal(false);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </>
+              }
+              title={<h2>Delete search?</h2>}
+            >
+              <p>
+                Are you sure that you would like to delete this saved search?
+              </p>
+            </Modal>
+          </ModalContainer>
+        </div>
+      )}
     </div>
   );
 };
