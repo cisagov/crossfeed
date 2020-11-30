@@ -4,7 +4,8 @@ export interface ContextType {
     value: string,
     filterType: 'all' | 'any' | 'none'
   ): void;
-  clearFilters(except?: string[]): any;
+  clearFilters: any;
+  saveSearch: any;
   removeFilter(
     name: string,
     value: string,

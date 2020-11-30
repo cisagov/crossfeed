@@ -113,14 +113,14 @@ export const DomainDetails: React.FC<Props> = (props) => {
       value: `${differenceInCalendarDays(
         Date.now(),
         parseISO(domain.createdAt)
-      )} ago`
+      )} days ago`
     });
     ret.push({
       label: 'Last Seen',
       value: `${differenceInCalendarDays(
         Date.now(),
         parseISO(domain.updatedAt)
-      )} ago`
+      )} days ago`
     });
     if (domain.country) {
       ret.push({

@@ -1,4 +1,4 @@
-version: "3.4"
+version: '3.4'
 
 services:
   db:
@@ -7,7 +7,7 @@ services:
       - ./postgres-data:/var/lib/postgresql/data
       - ./backend/db-init:/docker-entrypoint-initdb.d
     ports:
-      - "5432:5432"
+      - '5432:5432'
     env_file:
       - ./.env
     networks:
@@ -21,7 +21,7 @@ services:
     volumes:
       - ./frontend/src:/app/src
     ports:
-      - "80:3000"
+      - '80:3000'
     env_file:
       - ./.env
     tty: true
@@ -34,7 +34,7 @@ services:
     networks:
       - backend
     ports:
-      - "3000:3000"
+      - '3000:3000'
     env_file:
       - ./.env
     depends_on:
@@ -43,7 +43,7 @@ services:
   minio:
     image: bitnami/minio:2020.9.26
     user: root
-    command: "minio server /data"
+    command: 'minio server /data'
     networks:
       - backend
     volumes:
@@ -53,6 +53,8 @@ services:
     environment:
       - MINIO_ACCESS_KEY=aws_access_key
       - MINIO_SECRET_KEY=aws_secret_key
+    logging:
+      driver: none
 
   docs:
     build:
@@ -71,8 +73,8 @@ services:
     environment:
       - discovery.type=single-node
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    command: ["elasticsearch", "-Elogger.level=WARN"]
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    command: ['elasticsearch', '-Elogger.level=WARN']
     networks:
       - backend
     ulimits:
@@ -84,6 +86,8 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+    logging:
+      driver: none
 
   # kib:
   #   image: docker.elastic.co/kibana/kibana:7.9.0
@@ -105,6 +109,8 @@ services:
       - ./matomo-db-data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=password
+    logging:
+      driver: none
 
   matomo:
     image: matomo:3.14.1
@@ -122,6 +128,8 @@ services:
       - MATOMO_DATABASE_DBNAME=matomo
       - MATOMO_GENERAL_PROXY_URI_HEADER=1
       - MATOMO_GENERAL_ASSUME_SECURE_PROTOCOL=1
+    logging:
+      driver: none
 
 volumes:
   postgres-data:

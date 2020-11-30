@@ -7,16 +7,34 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Typography
+  Typography,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  TextareaAutosize
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { withSearch } from '@elastic/react-search-ui';
 import { FilterDrawer } from './FilterDrawer';
 import { ContextType } from '../../context/SearchProvider';
 import { SortBar } from './SortBar';
+import {
+  Button,
+  Overlay,
+  Modal,
+  ModalContainer,
+  TextInput,
+  Label,
+  Dropdown
+} from '@trussworks/react-uswds';
+import { useAuthContext } from 'context';
 import { FilterTags } from './FilterTags';
+import { SavedSearch, Vulnerability } from 'types';
+import { useBeforeunload } from 'react-beforeunload';
 
-export const DashboardUI: React.FC<ContextType> = (props) => {
+export const DashboardUI: React.FC<ContextType & { location: any }> = (
+  props
+) => {
   const {
     current,
     setCurrent,
@@ -33,11 +51,57 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
     setSort,
     totalPages,
     totalResults,
-    setSearchTerm
+    setSearchTerm,
+    searchTerm
   } = props;
   const classes = useStyles();
   const [selectedDomain, setSelectedDomain] = useState('');
   const [resultsScrolled, setResultsScrolled] = useState(false);
+  const { apiPost, apiPut } = useAuthContext();
+
+  const search:
+    | (SavedSearch & {
+        editing?: boolean;
+      })
+    | undefined = localStorage.getItem('savedSearch')
+    ? JSON.parse(localStorage.getItem('savedSearch')!)
+    : undefined;
+
+  const [showSaveSearch, setShowSaveSearch] = useState<Boolean>(
+    search && search.editing ? true : false
+  );
+
+  const [savedSearchValues, setSavedSearchValues] = useState<
+    Partial<SavedSearch> & {
+      name: string;
+      vulnerabilityTemplate: Partial<Vulnerability>;
+    }
+  >(
+    search
+      ? search
+      : {
+          name: '',
+          vulnerabilityTemplate: { title: '' },
+          createVulnerabilities: false
+        }
+  );
+
+  const onTextChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLSelectElement
+  > = (e) => onChange(e.target.name, e.target.value);
+
+  const onChange = (name: string, value: any) => {
+    setSavedSearchValues((values) => ({
+      ...values,
+      [name]: value
+    }));
+  };
+
+  const onVulnerabilityTemplateChange = (e: any) => {
+    (savedSearchValues.vulnerabilityTemplate as any)[e.target.name] =
+      e.target.value;
+    setSavedSearchValues(savedSearchValues);
+  };
 
   const handleResultScroll = (e: React.UIEvent<HTMLElement>) => {
     if (e.currentTarget.scrollTop > 0) {
@@ -48,9 +112,18 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
   };
 
   useEffect(() => {
-    // Search on initial load
-    setSearchTerm('');
-  }, [setSearchTerm]);
+    if (props.location.search === '') {
+      // Search on initial load
+      setSearchTerm('');
+    }
+    return () => {
+      localStorage.removeItem('savedSearch');
+    };
+  }, [setSearchTerm, props.location.search]);
+
+  useBeforeunload((event) => {
+    localStorage.removeItem('savedSearch');
+  });
 
   return (
     <div className={classes.root}>
@@ -59,8 +132,8 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
         removeFilter={removeFilter}
         filters={filters}
         facets={facets}
+        clearFilters={filters.length > 0 ? () => clearFilters([]) : undefined}
       />
-
       <div className={classes.contentWrapper}>
         <Subnav
           items={[
@@ -76,7 +149,12 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
           sortDirection={sortDirection}
           setSort={setSort}
           isFixed={resultsScrolled}
-          clearFilters={filters.length > 0 ? () => clearFilters([]) : undefined}
+          saveSearch={
+            filters.length > 0 || searchTerm
+              ? () => setShowSaveSearch(true)
+              : undefined
+          }
+          existingSavedSearch={search}
         />
         <div className={classes.content}>
           <div className={classes.panel} onScroll={handleResultScroll}>
@@ -96,7 +174,7 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
         <Paper classes={{ root: classes.pagination }}>
           <span>
             <strong>
-              {(current - 1) * resultsPerPage + 1} -{' '}
+              {totalResults === 0 ? 0 : (current - 1) * resultsPerPage + 1} -{' '}
               {Math.min(
                 (current - 1) * resultsPerPage + resultsPerPage,
                 totalResults
@@ -134,6 +212,142 @@ export const DashboardUI: React.FC<ContextType> = (props) => {
           </FormControl>
         </Paper>
       </div>
+
+      {showSaveSearch && (
+        <div>
+          <Overlay />
+          <ModalContainer>
+            <Modal
+              className={classes.saveSearchModal}
+              actions={
+                <>
+                  <Button
+                    outline
+                    type="button"
+                    onClick={() => {
+                      setShowSaveSearch(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={async () => {
+                      const body = {
+                        body: {
+                          ...savedSearchValues,
+                          searchTerm,
+                          filters,
+                          count: totalResults,
+                          searchPath: window.location.search,
+                          sortField,
+                          sortDirection
+                        }
+                      };
+                      if (search) {
+                        await apiPut('/saved-searches/' + search.id, body);
+                      } else {
+                        await apiPost('/saved-searches/', body);
+                      }
+                      setShowSaveSearch(false);
+                    }}
+                  >
+                    Save
+                  </Button>
+                </>
+              }
+              title={search ? <h2>Update Search</h2> : <h2>Save Search</h2>}
+            >
+              <FormGroup>
+                <Label htmlFor="name">Name Your Search</Label>
+                <TextInput
+                  required
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={savedSearchValues.name}
+                  onChange={onTextChange}
+                />
+                <p>When a new result is found:</p>
+                {/* <FormControlLabel
+                  control={
+                    <Checkbox
+                      // checked={gilad}
+                      // onChange={handleChange}
+                      name="email"
+                    />
+                  }
+                  label="Email me"
+                /> */}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={savedSearchValues.createVulnerabilities}
+                      onChange={(e) =>
+                        onChange(e.target.name, e.target.checked)
+                      }
+                      id="createVulnerabilities"
+                      name="createVulnerabilities"
+                    />
+                  }
+                  label="Create a vulnerability"
+                />
+                {savedSearchValues.createVulnerabilities && (
+                  <>
+                    <Label htmlFor="title">Title</Label>
+                    <TextInput
+                      required
+                      id="title"
+                      name="title"
+                      type="text"
+                      value={savedSearchValues.vulnerabilityTemplate.title}
+                      onChange={onVulnerabilityTemplateChange}
+                    />
+                    <Label htmlFor="description">Description</Label>
+                    <TextareaAutosize
+                      required
+                      id="description"
+                      name="description"
+                      style={{ padding: 10 }}
+                      rowsMin={2}
+                      value={
+                        savedSearchValues.vulnerabilityTemplate.description
+                      }
+                      onChange={onVulnerabilityTemplateChange}
+                    />
+                    <Label htmlFor="description">Severity</Label>
+                    <Dropdown
+                      id="severity"
+                      name="severity"
+                      onChange={onVulnerabilityTemplateChange}
+                      value={
+                        savedSearchValues.vulnerabilityTemplate
+                          .severity as string
+                      }
+                      style={{ display: 'inline-block', width: '150px' }}
+                    >
+                      <option value="None">None</option>
+                      <option value="Low">Low</option>
+                      <option value="Medium">Medium</option>
+                      <option value="High">High</option>
+                      <option value="Critical">Critical</option>
+                    </Dropdown>
+                  </>
+                )}
+                {/* <h3>Collaborators</h3>
+                <p>
+                  Collaborators can view vulnerabilities, and domains within
+                  this search. Adding a team will make all members
+                  collaborators.
+                </p>
+                <button className={classes.addButton} >
+                  <AddCircleOutline></AddCircleOutline> ADD
+                </button> */}
+              </FormGroup>
+            </Modal>
+          </ModalContainer>
+        </div>
+      )}
     </div>
   );
 };
@@ -150,6 +364,7 @@ export const Dashboard = withSearch(
     setSearchTerm,
     autocompletedResults,
     clearFilters,
+    saveSearch,
     sortDirection,
     sortField,
     setSort,
@@ -169,6 +384,7 @@ export const Dashboard = withSearch(
     setSearchTerm,
     autocompletedResults,
     clearFilters,
+    saveSearch,
     sortDirection,
     sortField,
     setSort,
@@ -245,5 +461,13 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'center'
+  },
+  saveSearchModal: {},
+  addButton: {
+    outline: 'none',
+    border: 'none',
+    color: '#71767A',
+    background: 'none',
+    cursor: 'pointer'
   }
 }));

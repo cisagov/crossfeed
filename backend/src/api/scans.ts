@@ -133,6 +133,12 @@ export const SCAN_SCHEMA: ScanSchema = {
     cpu: '1024',
     memory: '4096',
     description: 'Scrapes all webpages on a given domain, respecting robots.txt'
+  },
+  savedSearch: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    description: 'Performs saved searches to update their search results'
   }
 };
 
