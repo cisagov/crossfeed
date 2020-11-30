@@ -54,6 +54,16 @@ export const SidenavUserGuide = ({ name }) => (
       <ul className="usa-sidenav">
         <li className="usa-sidenav__item">
           <Link
+            to="/product-overview"
+            className={classNames({
+              'usa-current': name === 'product-overview',
+            })}
+          >
+            Crossfeed Product Overview
+          </Link>
+        </li>
+        <li className="usa-sidenav__item">
+          <Link
             to="/usage"
             className={classNames({ 'usa-current': name === 'usage' })}
           >

@@ -59,8 +59,10 @@ services:
       context: ./
       dockerfile: ./docs/Dockerfile
     volumes:
-      - ./docs/src:/app/src
-      - ./docs/gatsby-config.js:/app/gatsby-config.js
+      - ./docs/src:/app/docs/src
+      - ./docs/gatsby-browser.js:/app/docs/gatsby-browser.js
+      - ./docs/gatsby-config.js:/app/docs/gatsby-config.js
+      - ./docs/gatsby-node.js:/app/docs/gatsby-node.js
     ports:
       - "4000:4000"
 

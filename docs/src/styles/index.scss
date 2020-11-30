@@ -48,6 +48,7 @@ $theme-show-notifications: false;
   }
 }
 
+// Icons on front page
 .icon-circle-container {
   position: relative;
   
@@ -57,4 +58,13 @@ $theme-show-notifications: false;
     top: 50%;
     transform: translate(-60%, -60%);
   }
+}
+
+// Code highlighting
+code {
+  font-size: 75% !important;
+}
+.gatsby-highlight > pre > code {
+  padding-top: 5px;
+  padding-bottom: 5px;
 }

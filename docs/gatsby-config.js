@@ -8,7 +8,7 @@ module.exports = {
         items: [{ text: 'Home', link: '/' }],
       },
       {
-        items: [{ text: 'User Guide', link: '/usage' }],
+        items: [{ text: 'User Guide', link: '/product-overview' }],
       },
       {
         items: [{ text: 'Contributing', link: '/contributing' }],
@@ -17,15 +17,8 @@ module.exports = {
         items: [{ text: 'Scanning FAQ', link: '/scans' }],
       },
       {
+        title: '',
         items: [{ text: 'API Reference', link: '/api-reference' }],
-      },
-      {
-        title: 'Document submenu',
-        items: [
-          { text: 'Navigation link', link: '/' },
-          { text: 'Navigation link', link: '/' },
-          { text: 'Navigation link', link: '/' },
-        ],
       },
     ],
     secondaryLinks: [
@@ -136,6 +129,9 @@ module.exports = {
               // Example code links are relative to this dir.
               directory: `${__dirname}/src/documentation-pages`,
             },
+          },
+          {
+            resolve: `gatsby-remark-prismjs`,
           },
         ],
       },

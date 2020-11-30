@@ -3,7 +3,7 @@ title: Development Setup
 sidenav: contributing
 ---
 
-## Quickstart
+### Quickstart
 
 1.  Copy root `dev.env.example` file to a `.env` file, and change values as desired:
     - `cp dev.env.example .env`
@@ -14,7 +14,7 @@ sidenav: contributing
 1.  Generate DB schema:
 
     - `cd backend && npm run syncdb`
-    - (run `npm run syncdb -- -d dangerouslyforce` to drop and recreate)
+    - (run `npm run syncdb -- -d dangerouslyforce` to drop and recreate the database)
 
 1.  Navigate to [localhost](http://localhost) in a browser.
 
@@ -26,17 +26,17 @@ sidenav: contributing
 
 If you want to view a local version of Kibana, you should first comment out the "kib" section of `docker-compose.yml` and then navigate to [http://localhost:5601](http://localhost:5601).
 
-### Running the scheduler lambda function locally
+#### Running the scheduler lambda function locally
 
 The scheduler lambda function is set to run on a 5-minute interval when deployed.
 
-When running locally, the scheduler function runs every 1 minute, for convenience. To run it manually, click on the "Manually run scheduler" button on the Scans page.
+When running locally, the scheduler function runs every 30 seconds, for convenience. To manually trigger a run immediately, click on the "Manually run scheduler" button on the Scans page.
 
 You can check scheduler logs locally by checking the backend container logs.
 
-### Running tests
+#### Running tests
 
-To run tests, first make sure you have already started crossfeed with `docker-compose`. Then run:
+To run tests, first make sure you have already started Crossfeed with `docker-compose`. Then run:
 
 ```bash
 cd backend
@@ -56,13 +56,13 @@ pip install -r worker/requirements.txt
 pytest
 ```
 
-## Fargate worker
+### Fargate worker
 
 In order to run scans locally or work on scanning infrastructure,
 you will need to set up the Fargate worker and rebuild it periodically
 when worker code changes.
 
-### Running locally
+#### Running locally
 
 Each time you make changes to the worker code, you should run:
 
@@ -75,7 +75,7 @@ To run the scheduler, click on "Manually run scheduler" on the Scans page.
 You can then run `docker ps` or ( `docker ps -a | head -n 3` ) to view running / stopped Docker containers,
 and check their logs with `docker logs [containername]` .
 
-### Publishing
+#### Publishing
 
 Run:
 
@@ -85,27 +85,27 @@ npm run deploy-worker
 
 If the `worker_ecs_repository_url` output from Terraform changes, you will need to modify `./src/tools/deploy-worker.sh`.
 
-### Generating censys types
+#### Generating censys types
 
-To re-generate the censysIpv4 type file, run:
+To re-generate the censysIpv4 and censysCertificates type files, run:
 
 ```bash
 npm run codegen
 ```
 
-## Documentation
+### Documentation
 
-The documentation files are stored in the `docs` directory and served from a Jekyll site. To work on this, you should first comment out the "docs" section of `docker-compose.yml` and then run:
+The documentation files are stored in the `docs` directory and served from a Gatsby site. To work on this, you should run:
 
 ```bash
-docker-compose up docs
+docker-compose up
 ```
 
 You can then open up [http://localhost:4000][http://localhost:4000] in your browser.
 
-See [uswds-jekyll](https://github.com/18F/uswds-jekyll) for more information on theme customizations that can be done.
+See [federalist-uswds-gatsby](https://github.com/18F/federalist-uswds-gatsby) for more information on theme customizations that can be done.
 
-## Matomo
+### Matomo
 
 [Matomo](https://matomo.org/) is an open source analytics platform. We host an instance of Matomo as part of Crossfeed to collect analytics
 on its usage.
