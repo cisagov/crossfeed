@@ -10,6 +10,7 @@ import {
   Button,
   Modal
 } from '@trussworks/react-uswds';
+import { NoResults } from 'components/NoResults';
 
 const Feeds = () => {
   const classes = useStyles();
@@ -21,6 +22,7 @@ const Feeds = () => {
     resultsPerPage: 20,
     totalPages: 0
   });
+  const [noResults, setNoResults] = useState(false);
   const [showModal, setShowModal] = useState<Boolean>(false);
   const [selectedSearch, setSelectedSearch] = useState<string>('');
 
@@ -37,6 +39,7 @@ const Feeds = () => {
           totalResults: res.count,
           totalPages: Math.ceil(res.count / pageState.resultsPerPage)
         }));
+        if (res.count === 0) setNoResults(true);
       } catch (e) {
         console.error(e);
       }
@@ -62,13 +65,17 @@ const Feeds = () => {
     <div className={classes.root}>
       <div className={classes.contentWrapper}>
         <Subnav
-          items={[
-            { title: 'My Saved Searches', path: '/feeds', exact: true }
-            // { title: 'Default Searches', path: '/feeds/default' }
-          ]}
+          items={[{ title: 'My Saved Searches', path: '/feeds', exact: true }]}
         ></Subnav>
         <div className={classes.content}>
           <div className={classes.panel}>
+            {noResults && (
+              <NoResults
+                message={
+                  "You don't currently have any saved searches. Try creating a saved search from a search result in your inventory."
+                }
+              ></NoResults>
+            )}
             {savedSearches.map((search: SavedSearch) => {
               const filterDisplay: string[] = [];
               const filterMap: { [name: string]: string } = {

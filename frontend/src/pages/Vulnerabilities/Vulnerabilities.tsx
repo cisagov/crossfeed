@@ -63,6 +63,7 @@ export const Vulnerabilities: React.FC = () => {
     JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
   );
   const listClasses = useStyles();
+  const [noResults, setNoResults] = useState(false);
 
   const columns: Column<Vulnerability>[] = [
     {
@@ -363,6 +364,7 @@ export const Vulnerabilities: React.FC = () => {
       const { result, count } = resp;
       setVulnerabilities(result);
       setPageCount(Math.ceil(count / 25));
+      if (count === 0) setNoResults(true);
     },
     [vulnerabilitiesSearch]
   );
@@ -438,6 +440,10 @@ export const Vulnerabilities: React.FC = () => {
         tableRef={tableRef}
         initialFilterBy={initialFilterBy}
         initialSortBy={initialSortBy}
+        noResults={noResults}
+        noResultsMessage={
+          "We don't see any vulnerabilities that match these criteria."
+        }
       />
       <Export<Vulnerability>
         name="vulnerabilities"

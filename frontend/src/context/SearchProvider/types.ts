@@ -38,6 +38,7 @@ export interface ContextType {
   totalPages: number;
   totalResults: number;
   wasSearched: boolean;
+  noResults: boolean;
 }
 
 export interface Result {
