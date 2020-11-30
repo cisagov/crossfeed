@@ -166,7 +166,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                   value={searchTerm}
                   onChange={(value) => {
                     if (location.pathname !== '/inventory')
-                      history.push('/inventory');
+                      history.push('/inventory?q=' + value);
                     setSearchTerm(value, {
                       shouldClearFilters: false,
                       autocompleteResults: false

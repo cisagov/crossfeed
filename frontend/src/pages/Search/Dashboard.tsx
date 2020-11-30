@@ -104,11 +104,10 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
   };
 
   useEffect(() => {
-    // const term = parse(props.location.search).q;
-    // if (!searchTerm && !term) {
-    //   // Search on initial load
-    //   setSearchTerm('');
-    // }
+    if (props.location.search === '') {
+      // Search on initial load
+      setSearchTerm('');
+    }
     return () => {
       localStorage.removeItem('savedSearch');
     };
