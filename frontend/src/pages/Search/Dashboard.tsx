@@ -30,7 +30,7 @@ import {
 import { useAuthContext } from 'context';
 import { FilterTags } from './FilterTags';
 import { SavedSearch, Vulnerability } from 'types';
-import { parse } from 'querystring';
+import { useBeforeunload } from 'react-beforeunload';
 
 export const DashboardUI: React.FC<ContextType & { location: any }> = (
   props
@@ -60,8 +60,8 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
   const [showSaveSearch, setShowSaveSearch] = useState<Boolean>(false);
   const { apiPost, apiPut } = useAuthContext();
 
-  const search: SavedSearch | undefined = props.location.state
-    ? props.location.state.search
+  const search: SavedSearch | undefined = localStorage.getItem('savedSearch')
+    ? JSON.parse(localStorage.getItem('savedSearch')!)
     : undefined;
   const [savedSearchValues, setSavedSearchValues] = useState<
     Partial<SavedSearch> & {
@@ -77,8 +77,6 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
           createVulnerabilities: false
         }
   );
-
-  console.log(filters);
 
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
@@ -104,6 +102,21 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
       setResultsScrolled(false);
     }
   };
+
+  useEffect(() => {
+    // const term = parse(props.location.search).q;
+    // if (!searchTerm && !term) {
+    //   // Search on initial load
+    //   setSearchTerm('');
+    // }
+    return () => {
+      localStorage.removeItem('savedSearch');
+    };
+  }, [setSearchTerm]);
+
+  useBeforeunload((event) => {
+    localStorage.removeItem('savedSearch');
+  });
 
   return (
     <div className={classes.root}>

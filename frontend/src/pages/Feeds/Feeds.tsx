@@ -91,6 +91,9 @@ const Feeds = () => {
                   href={
                     '/inventory' + search.searchPath + '&searchId=' + search.id
                   }
+                  onClick={() => {
+                    localStorage.setItem('savedSearch', JSON.stringify(search));
+                  }}
                   key={search.id}
                   style={{ textDecoration: 'none' }}
                 >
