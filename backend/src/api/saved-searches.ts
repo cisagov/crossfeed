@@ -126,13 +126,12 @@ export const list = wrapHandler(async (event) => {
     ? {}
     : { createdBy: { id: event.requestContext.authorizer!.id } };
 
-  const pageSize = event.pathParameters?.pageSize
-    ? parseInt(event.pathParameters.pageSize)
+  const pageSize = event.query?.pageSize
+    ? parseInt(event.query.pageSize)
     : PAGE_SIZE;
-  const page = event.pathParameters?.page
-    ? parseInt(event.pathParameters?.page)
-    : 1;
+  const page = event.query?.page ? parseInt(event.query?.page) : 1;
 
+  console.log(event.query);
   const result = await SavedSearch.findAndCount({
     where,
     take: pageSize,

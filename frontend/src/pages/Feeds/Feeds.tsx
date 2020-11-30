@@ -24,28 +24,30 @@ const Feeds = () => {
   const [showModal, setShowModal] = useState<Boolean>(false);
   const [selectedSearch, setSelectedSearch] = useState<string>('');
 
-  const fetchSavedSearches = useCallback(async () => {
-    try {
-      let res = await apiGet<{ result: SavedSearch[]; count: number }>(
-        `/saved-searches/?page=${pageState.current}`
-      );
-      setSavedSearches(res.result);
-      setPageState((pageState) => ({
-        ...pageState,
-        totalResults: res.count,
-        totalPages: Math.ceil(pageState.totalResults / pageState.resultsPerPage)
-      }));
-    } catch (e) {
-      console.error(e);
-    }
-    // eslint-disable-next-line
-  }, [apiGet]);
+  const fetchSavedSearches = useCallback(
+    async (page: number) => {
+      try {
+        let res = await apiGet<{ result: SavedSearch[]; count: number }>(
+          `/saved-searches/?page=${page}&pageSize=${pageState.resultsPerPage}`
+        );
+        setSavedSearches(res.result);
+        setPageState((pageState) => ({
+          ...pageState,
+          current: page,
+          totalResults: res.count,
+          totalPages: Math.ceil(res.count / pageState.resultsPerPage)
+        }));
+      } catch (e) {
+        console.error(e);
+      }
+      // eslint-disable-next-line
+    },
+    [apiGet, pageState.resultsPerPage]
+  );
 
   useEffect(() => {
-    fetchSavedSearches();
+    fetchSavedSearches(1);
   }, [fetchSavedSearches]);
-
-  const editSearch = async (id: string) => {};
 
   const deleteSearch = async (id: string) => {
     try {
@@ -92,6 +94,7 @@ const Feeds = () => {
                     '/inventory' + search.searchPath + '&searchId=' + search.id
                   }
                   onClick={() => {
+                    console.log('bbb');
                     localStorage.setItem('savedSearch', JSON.stringify(search));
                   }}
                   key={search.id}
@@ -116,7 +119,10 @@ const Feeds = () => {
                             className={classes.button}
                             onClick={(event) => {
                               event.stopPropagation();
-                              editSearch(search.id);
+                              localStorage.setItem(
+                                'savedSearch',
+                                JSON.stringify({ ...search, editing: true })
+                              );
                             }}
                           >
                             EDIT
@@ -124,7 +130,7 @@ const Feeds = () => {
                           <button
                             className={classes.button}
                             onClick={(event) => {
-                              event.stopPropagation();
+                              event.preventDefault();
                               setShowModal(true);
                               setSelectedSearch(search.id);
                             }}
@@ -160,11 +166,7 @@ const Feeds = () => {
             count={pageState.totalPages}
             page={pageState.current}
             onChange={(_, page) => {
-              setPageState((pageState) => ({
-                ...pageState,
-                page: page
-              }));
-              fetchSavedSearches();
+              fetchSavedSearches(page);
             }}
             color="primary"
             size="small"

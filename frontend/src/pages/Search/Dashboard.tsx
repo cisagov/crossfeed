@@ -57,12 +57,20 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
   const classes = useStyles();
   const [selectedDomain, setSelectedDomain] = useState('');
   const [resultsScrolled, setResultsScrolled] = useState(false);
-  const [showSaveSearch, setShowSaveSearch] = useState<Boolean>(false);
   const { apiPost, apiPut } = useAuthContext();
 
-  const search: SavedSearch | undefined = localStorage.getItem('savedSearch')
+  const search:
+    | (SavedSearch & {
+        editing?: boolean;
+      })
+    | undefined = localStorage.getItem('savedSearch')
     ? JSON.parse(localStorage.getItem('savedSearch')!)
     : undefined;
+
+  const [showSaveSearch, setShowSaveSearch] = useState<Boolean>(
+    search && search.editing ? true : false
+  );
+
   const [savedSearchValues, setSavedSearchValues] = useState<
     Partial<SavedSearch> & {
       name: string;
@@ -111,7 +119,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
     return () => {
       localStorage.removeItem('savedSearch');
     };
-  }, [setSearchTerm]);
+  }, [setSearchTerm, props.location.search]);
 
   useBeforeunload((event) => {
     localStorage.removeItem('savedSearch');
@@ -248,7 +256,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
                   </Button>
                 </>
               }
-              title={<h2>Save Search</h2>}
+              title={search ? <h2>Update Search</h2> : <h2>Save Search</h2>}
             >
               <FormGroup>
                 <Label htmlFor="name">Name Your Search</Label>

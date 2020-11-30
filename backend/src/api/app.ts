@@ -32,6 +32,7 @@ const handlerToExpress = (handler) => async (req, res, next) => {
   const { statusCode, body } = await handler(
     {
       pathParameters: req.params,
+      query: req.query,
       requestContext: req.requestContext,
       body: JSON.stringify(req.body || '{}'),
       headers: req.headers,
