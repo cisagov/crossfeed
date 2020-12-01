@@ -70,6 +70,7 @@ export default function buildState(response, resultsPerPage) {
     results,
     totalPages,
     totalResults,
+    noResults: totalResults === 0,
     ...(facets && { facets })
   };
 }

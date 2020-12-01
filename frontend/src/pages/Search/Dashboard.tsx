@@ -31,6 +31,7 @@ import { useAuthContext } from 'context';
 import { FilterTags } from './FilterTags';
 import { SavedSearch, Vulnerability } from 'types';
 import { useBeforeunload } from 'react-beforeunload';
+import { NoResults } from 'components/NoResults';
 
 export const DashboardUI: React.FC<ContextType & { location: any }> = (
   props
@@ -52,7 +53,8 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
     totalPages,
     totalResults,
     setSearchTerm,
-    searchTerm
+    searchTerm,
+    noResults
   } = props;
   const classes = useStyles();
   const [selectedDomain, setSelectedDomain] = useState('');
@@ -156,6 +158,11 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
           }
           existingSavedSearch={search}
         />
+        {noResults && (
+          <NoResults
+            message={"We don't see any results that match your criteria."}
+          ></NoResults>
+        )}
         <div className={classes.content}>
           <div className={classes.panel} onScroll={handleResultScroll}>
             {results.map((result) => (
@@ -372,7 +379,8 @@ export const Dashboard = withSearch(
     setResultsPerPage,
     current,
     setCurrent,
-    totalPages
+    totalPages,
+    noResults
   }: ContextType) => ({
     addFilter,
     removeFilter,
@@ -392,7 +400,8 @@ export const Dashboard = withSearch(
     setResultsPerPage,
     current,
     setCurrent,
-    totalPages
+    totalPages,
+    noResults
   })
 )(DashboardUI);
 
