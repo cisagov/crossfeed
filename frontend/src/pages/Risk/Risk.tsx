@@ -471,18 +471,6 @@ const Risk: React.FC = (props) => {
                 data={latestVulnsGroupedArr}
                 showLatest={true}
               ></VulnerabilityCard>
-              {/* <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
-                <div className={cardClasses.inner}>
-                  {stats.domains.numVulnerabilities.length > 0 && (
-                    <div className={cardClasses.cardSmall}>
-                      <div className={cardClasses.header}>
-                        <h2>Latest Feeds</h2>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </Paper> */}
-
               {stats.domains.services.length > 0 && (
                 <Paper elevation={0} className={cardClasses.cardRoot}>
                   <div className={cardClasses.cardSmall}>

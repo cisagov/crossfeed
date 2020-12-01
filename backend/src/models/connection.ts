@@ -9,7 +9,8 @@ import {
   Role,
   ScanTask,
   Webpage,
-  ApiKey
+  ApiKey,
+  SavedSearch
 } from '.';
 
 let connection: Connection | null = null;
@@ -32,7 +33,8 @@ const connectDb = async (logging?: boolean) => {
       Role,
       ScanTask,
       Webpage,
-      ApiKey
+      ApiKey,
+      SavedSearch
     ],
     synchronize: false,
     name: 'default',

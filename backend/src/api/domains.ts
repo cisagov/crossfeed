@@ -177,6 +177,15 @@ class DomainSearch {
   }
 }
 
+/**
+ * @swagger
+ *
+ * /domain/search:
+ *  post:
+ *    description: List domains by specifying a filter.
+ *    tags:
+ *    - Domains
+ */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
     return {
@@ -203,6 +212,15 @@ export const list = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /domain/export:
+ *  post:
+ *    description: Export domains to a CSV file by specifying a filter.
+ *    tags:
+ *    - Domains
+ */
 export const export_ = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
     return {
@@ -244,6 +262,19 @@ export const export_ = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /domain/{id}:
+ *  get:
+ *    description: Get information about a particular domain.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Domain id
+ *    tags:
+ *    - Domains
+ */
 export const get = wrapHandler(async (event) => {
   let where = {};
   if (isGlobalViewAdmin(event)) {
