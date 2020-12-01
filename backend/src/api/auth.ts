@@ -185,7 +185,7 @@ export const authorize = async (event) => {
         { key: event.authorizationToken },
         { relations: ['user'] }
       );
-      if (!apiKey) throw 'No API key matches ' + event.authorizationToken;
+      if (!apiKey) throw 'Invalid API key';
       parsed = { id: apiKey.user.id };
       apiKey.lastUsed = new Date();
       apiKey.save();
