@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './Settings.module.css';
 import { useAuthContext } from 'context';
-import { Button } from '@trussworks/react-uswds';
+import {
+  Button,
+  Modal,
+  ModalContainer,
+  Overlay
+} from '@trussworks/react-uswds';
 import { Table } from 'components';
 import { ApiKey } from 'types/api-key';
 import { Column } from 'react-table';
@@ -10,11 +15,19 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 
 const Settings: React.FC = () => {
   const { logout, user, setUser, apiPost, apiDelete } = useAuthContext();
+  const [showModal, setShowModal] = useState<Boolean>(false);
+  const [apiKey, setApiKey] = useState<string>('');
 
   const generateApiKey = async () => {
     if (!user) return;
-    const apiKey = await apiPost<ApiKey>('/api-keys');
+    const apiKey = await apiPost<
+      ApiKey & {
+        key: string;
+      }
+    >('/api-keys');
     setUser({ ...user, apiKeys: user.apiKeys.concat([apiKey]) });
+    setApiKey(apiKey.key);
+    setShowModal(true);
   };
 
   const deleteApiKey = async (key: string) => {
@@ -29,7 +42,7 @@ const Settings: React.FC = () => {
   const columns: Column<ApiKey>[] = [
     {
       Header: 'Key',
-      accessor: 'key',
+      accessor: ({ lastFour }) => '*'.repeat(12) + lastFour,
       width: 200,
       disableFilters: true,
       id: 'key'
@@ -87,7 +100,7 @@ const Settings: React.FC = () => {
       </h2>
       <h2>API Keys:</h2>
       {(!user?.apiKeys || user.apiKeys.length === 0) && <p>No API Keys</p>}
-      {user?.apiKeys && (
+      {user?.apiKeys && user.apiKeys.length > 0 && (
         <Table<ApiKey> columns={columns} data={user?.apiKeys} />
       )}
       <br></br>
@@ -96,6 +109,35 @@ const Settings: React.FC = () => {
       </Button>
       <br></br>
       <br></br>
+
+      {showModal && (
+        <div>
+          <Overlay />
+          <ModalContainer>
+            <Modal
+              actions={
+                <>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      setShowModal(false);
+                    }}
+                  >
+                    Ok
+                  </Button>
+                </>
+              }
+              title={<h2>Copy API Key</h2>}
+            >
+              <p>
+                Please copy your API key now, as you will not be able to see it
+                again:
+              </p>
+              <code>{apiKey}</code>
+            </Modal>
+          </ModalContainer>
+        </div>
+      )}
       {user?.userType === 'globalAdmin' && (
         <>
           <a href={`${process.env.REACT_APP_API_URL}/matomo/index.php`}>

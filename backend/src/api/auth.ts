@@ -3,6 +3,7 @@ import { User, connectToDatabase, ApiKey } from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import * as jwksClient from 'jwks-rsa';
+import { createHash } from 'crypto';
 
 export interface UserToken {
   email: string;
@@ -182,7 +183,11 @@ export const authorize = async (event) => {
     // Test if API key, e.g. a 32 digit hex string
     if (/^[A-Fa-f0-9]{32}$/.test(event.authorizationToken)) {
       const apiKey = await ApiKey.findOne(
-        { key: event.authorizationToken },
+        {
+          hashedKey: createHash('sha256')
+            .update(event.authorizationToken)
+            .digest('hex')
+        },
         { relations: ['user'] }
       );
       if (!apiKey) throw 'Invalid API key';

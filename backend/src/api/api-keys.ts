@@ -2,7 +2,7 @@ import { isUUID } from 'class-validator';
 import { connectToDatabase, ApiKey } from '../models';
 import { wrapHandler, NotFound } from './helpers';
 import { getUserId } from './auth';
-import { randomBytes } from 'crypto';
+import { randomBytes, createHash } from 'crypto';
 
 export const del = wrapHandler(async (event) => {
   await connectToDatabase();
@@ -29,14 +29,16 @@ export const del = wrapHandler(async (event) => {
 
 export const generate = wrapHandler(async (event) => {
   await connectToDatabase();
-  const key = await ApiKey.create({
-    createdAt: new Date(),
-    key: randomBytes(16).toString('hex'),
+  const key = randomBytes(16).toString('hex');
+  // Store a hash of the API key instead of the key itself
+  let apiKey = await ApiKey.create({
+    hashedKey: createHash('sha256').update(key).digest('hex'),
+    lastFour: key.substr(-4),
     user: { id: getUserId(event) }
   });
-  key.save();
+  apiKey = await apiKey.save();
   return {
     statusCode: 200,
-    body: JSON.stringify(key)
+    body: JSON.stringify({ ...apiKey, key: key })
   };
 });

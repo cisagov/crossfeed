@@ -5,6 +5,7 @@ export interface ApiKey {
   createdAt: string;
   updatedAt: string;
   user: User;
-  key: string;
+  hashedKey: string;
+  lastFour: string;
   lastUsed: string;
 }
