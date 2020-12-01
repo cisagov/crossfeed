@@ -57,7 +57,14 @@ export const useDomainApi = (showAll?: boolean) => {
 
   const getDomain = useCallback(
     async (domainId: string) => {
-      return await apiGet<Domain>(`/domain/${domainId}`);
+      const {result, directories} = await apiGet<{
+        result : Domain;
+        directories : any[]
+      }>(`/domain/${domainId}`);
+      return {
+        result,
+        directories
+      }
     },
     [apiGet]
   );
