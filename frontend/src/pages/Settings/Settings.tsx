@@ -45,11 +45,11 @@ const Settings: React.FC = () => {
     },
     {
       Header: 'Last Used',
-      accessor: ({ lastRun }) =>
-        lastRun ? `${formatDistanceToNow(parseISO(lastRun))} ago` : 'Never',
+      accessor: ({ lastUsed }) =>
+        lastUsed ? `${formatDistanceToNow(parseISO(lastUsed))} ago` : 'Never',
       width: 50,
       minWidth: 50,
-      id: 'lastRun',
+      id: 'lastUsed',
       disableFilters: true
     },
     {

@@ -6,5 +6,5 @@ export interface ApiKey {
   updatedAt: string;
   user: User;
   key: string;
-  lastRun: string;
+  lastUsed: string;
 }

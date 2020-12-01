@@ -171,6 +171,8 @@ export const authorize = async (event) => {
       );
       if (!apiKey) throw 'No API key matches ' + event.authorizationToken;
       parsed = { id: apiKey.user.id };
+      apiKey.lastUsed = new Date();
+      apiKey.save();
     } else {
       parsed = jwt.verify(
         event.authorizationToken,

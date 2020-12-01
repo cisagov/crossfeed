@@ -1,6 +1,5 @@
 import {
   Entity,
-  Index,
   Column,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -8,7 +7,7 @@ import {
   BaseEntity,
   ManyToOne
 } from 'typeorm';
-import { Organization, User } from './';
+import { User } from './';
 
 @Entity()
 export class ApiKey extends BaseEntity {

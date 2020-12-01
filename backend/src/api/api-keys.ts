@@ -1,25 +1,7 @@
-import {
-  IsString,
-  isUUID,
-  IsBoolean,
-  IsOptional,
-  IsEmail
-} from 'class-validator';
-import { User, connectToDatabase, Role, Organization, ApiKey } from '../models';
-import {
-  validateBody,
-  wrapHandler,
-  NotFound,
-  Unauthorized,
-  sendEmail
-} from './helpers';
-import {
-  getUserId,
-  canAccessUser,
-  isGlobalViewAdmin,
-  isOrgAdmin,
-  isGlobalWriteAdmin
-} from './auth';
+import { isUUID } from 'class-validator';
+import { connectToDatabase, ApiKey } from '../models';
+import { wrapHandler, NotFound } from './helpers';
+import { getUserId } from './auth';
 import { randomBytes } from 'crypto';
 
 export const del = wrapHandler(async (event) => {
