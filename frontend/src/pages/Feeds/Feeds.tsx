@@ -39,7 +39,7 @@ const Feeds = () => {
           totalResults: res.count,
           totalPages: Math.ceil(res.count / pageState.resultsPerPage)
         }));
-        if (res.count === 0) setNoResults(true);
+        setNoResults(res.count === 0);
       } catch (e) {
         console.error(e);
       }

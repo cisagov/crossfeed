@@ -364,7 +364,7 @@ export const Vulnerabilities: React.FC = () => {
       const { result, count } = resp;
       setVulnerabilities(result);
       setPageCount(Math.ceil(count / 25));
-      if (count === 0) setNoResults(true);
+      setNoResults(count === 0);
     },
     [vulnerabilitiesSearch]
   );
