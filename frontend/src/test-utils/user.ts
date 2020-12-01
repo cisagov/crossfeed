@@ -14,5 +14,5 @@ export const testUser: AuthUser = {
   dateAcceptedTerms: new Date(),
   acceptedTermsVersion: 'v1-user',
   isRegistered: true,
-  apiKey: ''
+  apiKeys: []
 };

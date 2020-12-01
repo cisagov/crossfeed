@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsEmail
 } from 'class-validator';
-import { User, connectToDatabase, Role, Organization } from '../models';
+import { User, connectToDatabase, Role, Organization, ApiKey } from '../models';
 import {
   validateBody,
   wrapHandler,
@@ -201,23 +201,10 @@ export const invite = wrapHandler(async (event) => {
   };
 });
 
-export const generateApiKey = wrapHandler(async (event) => {
-  await connectToDatabase();
-  const user = await User.findOne(getUserId(event));
-  if (!user || !event.body) {
-    return NotFound;
-  }
-  user.apiKey = await randomBytes(16).toString('hex');
-  return {
-    statusCode: 200,
-    body: JSON.stringify(user)
-  };
-});
-
 export const me = wrapHandler(async (event) => {
   await connectToDatabase();
   const result = await User.findOne(getUserId(event), {
-    relations: ['roles', 'roles.organization']
+    relations: ['roles', 'roles.organization', 'apiKeys']
   });
   return {
     statusCode: 200,

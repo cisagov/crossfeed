@@ -15,6 +15,7 @@ import * as scans from './scans';
 import * as users from './users';
 import * as scanTasks from './scan-tasks';
 import * as stats from './stats';
+import * as apiKeys from './api-keys';
 import { listenForDockerEvents } from './docker-events';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
@@ -123,6 +124,7 @@ const matomoProxy = createProxyMiddleware({
   },
   onProxyReq: function (proxyReq, req, res) {
     // Only pass the MATOMO_SESSID cookie to Matomo.
+    if (!proxyReq.getHeader('Cookie')) return;
     const cookies = cookie.parse(proxyReq.getHeader('Cookie'));
     const newCookies = cookie.serialize(
       'MATOMO_SESSID',
@@ -181,10 +183,6 @@ const authenticatedNoTermsRoute = express.Router();
 authenticatedNoTermsRoute.use(checkUserLoggedIn);
 authenticatedNoTermsRoute.get('/users/me', handlerToExpress(users.me));
 authenticatedNoTermsRoute.post(
-  '/users/me/generateApiKey',
-  handlerToExpress(users.generateApiKey)
-);
-authenticatedNoTermsRoute.post(
   '/users/me/acceptTerms',
   handlerToExpress(users.acceptTerms)
 );
@@ -197,6 +195,9 @@ app.use(authenticatedNoTermsRoute);
 const authenticatedRoute = express.Router();
 authenticatedRoute.use(checkUserLoggedIn);
 authenticatedRoute.use(checkUserSignedTerms);
+
+authenticatedRoute.post('/api-keys', handlerToExpress(apiKeys.generate));
+authenticatedRoute.delete('/api-keys/:keyId', handlerToExpress(apiKeys.del));
 
 authenticatedRoute.post('/search', handlerToExpress(search.search));
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));

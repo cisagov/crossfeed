@@ -8,7 +8,8 @@ import {
   User,
   Role,
   ScanTask,
-  Webpage
+  Webpage,
+  ApiKey
 } from '.';
 
 let connection: Connection | null = null;
@@ -30,7 +31,8 @@ const connectDb = async (logging?: boolean) => {
       User,
       Role,
       ScanTask,
-      Webpage
+      Webpage,
+      ApiKey
     ],
     synchronize: false,
     name: 'default',

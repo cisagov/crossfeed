@@ -1,5 +1,5 @@
 import loginGov from './login-gov';
-import { User, connectToDatabase } from '../models';
+import { User, connectToDatabase, ApiKey } from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import * as jwksClient from 'jwks-rsa';
@@ -161,11 +161,22 @@ export const callback = async (event, context) => {
 /** Confirms that a user is authorized */
 export const authorize = async (event) => {
   try {
-    const parsed: UserToken = jwt.verify(
-      event.authorizationToken,
-      process.env.JWT_SECRET!
-    ) as UserToken;
     await connectToDatabase();
+    let parsed: Partial<UserToken>;
+    // Test if API key, e.g. a 32 digit hex string
+    if (/^[A-Fa-f0-9]{32}$/.test(event.authorizationToken)) {
+      const apiKey = await ApiKey.findOne(
+        { key: event.authorizationToken },
+        { relations: ['user'] }
+      );
+      if (!apiKey) throw 'No API key matches ' + event.authorizationToken;
+      parsed = { id: apiKey.user.id };
+    } else {
+      parsed = jwt.verify(
+        event.authorizationToken,
+        process.env.JWT_SECRET!
+      ) as UserToken;
+    }
     const user = await User.findOne(
       {
         id: parsed.id
