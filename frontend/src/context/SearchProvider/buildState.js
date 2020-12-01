@@ -1,4 +1,4 @@
-import buildStateFacets from "./buildStateFacets";
+import buildStateFacets from './buildStateFacets';
 
 function buildTotalPages(resultsPerPage, totalResults) {
   if (!resultsPerPage) return 0;
@@ -11,7 +11,7 @@ function buildTotalResults(hits) {
 }
 
 function getHighlight(hit, fieldName) {
-  if (hit._source.title === "Rocky Mountain" && fieldName === "title") {
+  if (hit._source.title === 'Rocky Mountain' && fieldName === 'title') {
     window.hit = hit;
     window.fieldName = fieldName;
   }
@@ -36,14 +36,14 @@ function buildResults(hits) {
     return { raw: value, ...(snippet && { snippet }) };
   };
 
-  return hits.map(record => {
+  return hits.map((record) => {
     const hit = Object.entries(record._source)
       .map(([fieldName, fieldValue]) => [
         fieldName,
         toObject(fieldValue, getHighlight(record, fieldName))
       ])
       .reduce(addEachKeyValueToObject, {});
-    return {...hit, inner_hits: record.inner_hits};
+    return { ...hit, inner_hits: record.inner_hits };
   });
 }
 
@@ -70,6 +70,7 @@ export default function buildState(response, resultsPerPage) {
     results,
     totalPages,
     totalResults,
+    noResults: totalResults === 0,
     ...(facets && { facets })
   };
 }

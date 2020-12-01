@@ -27,6 +27,19 @@ import {
 import { In } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 
+/**
+ * @swagger
+ *
+ * /organizations/{id}:
+ *  delete:
+ *    description: Delete a particular organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *    tags:
+ *    - Organizations
+ */
 export const del = wrapHandler(async (event) => {
   const id = event.pathParameters?.organizationId;
 
@@ -63,6 +76,19 @@ class NewOrganization extends NewOrganizationNonGlobalAdmins {
   ipBlocks: string[];
 }
 
+/**
+ * @swagger
+ *
+ * /organizations/{id}:
+ *  put:
+ *    description: Update a particular organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *    tags:
+ *    - Organizations
+ */
 export const update = wrapHandler(async (event) => {
   const id = event.pathParameters?.organizationId;
 
@@ -97,6 +123,15 @@ export const update = wrapHandler(async (event) => {
   return NotFound;
 });
 
+/**
+ * @swagger
+ *
+ * /organizations:
+ *  post:
+ *    description: Create a new organization.
+ *    tags:
+ *    - Organizations
+ */
 export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   const body = await validateBody(NewOrganization, event.body);
@@ -112,6 +147,15 @@ export const create = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /organizations:
+ *  get:
+ *    description: List organizations that the user is a member of or has access to.
+ *    tags:
+ *    - Organizations
+ */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
     return {
@@ -136,6 +180,19 @@ export const list = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /organizations/{id}:
+ *  get:
+ *    description: Get information about a particular organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *    tags:
+ *    - Organizations
+ */
 export const get = wrapHandler(async (event) => {
   const id = event.pathParameters?.organizationId;
 
@@ -170,6 +227,22 @@ class UpdateBody {
   enabled: boolean;
 }
 
+/**
+ * @swagger
+ *
+ * /organizations/{id}/granularScans/{scanId}/update:
+ *  post:
+ *    description: Enable or disable a scan for a particular organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *      - in: path
+ *        name: scanId
+ *        description: Role id
+ *    tags:
+ *    - Organizations
+ */
 export const updateScan = wrapHandler(async (event) => {
   const organizationId = event.pathParameters?.organizationId;
 
@@ -219,6 +292,22 @@ export const updateScan = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /organizations/{id}/roles/{roleId}/approve:
+ *  post:
+ *    description: Approve a role within an organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *      - in: path
+ *        name: roleId
+ *        description: Role id
+ *    tags:
+ *    - Organizations
+ */
 export const approveRole = wrapHandler(async (event) => {
   const organizationId = event.pathParameters?.organizationId;
   if (!isOrgAdmin(event, organizationId)) return Unauthorized;
@@ -248,6 +337,22 @@ export const approveRole = wrapHandler(async (event) => {
   return NotFound;
 });
 
+/**
+ * @swagger
+ *
+ * /organizations/{id}/roles/{roleId}/remove:
+ *  post:
+ *    description: Remove a role within an organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *      - in: path
+ *        name: roleId
+ *        description: Role id
+ *    tags:
+ *    - Organizations
+ */
 export const removeRole = wrapHandler(async (event) => {
   const organizationId = event.pathParameters?.organizationId;
   if (!isOrgAdmin(event, organizationId)) return Unauthorized;
@@ -268,6 +373,15 @@ export const removeRole = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /organizations/public:
+ *  get:
+ *    description: List organizations that are set to be public.
+ *    tags:
+ *    - Organizations
+ */
 export const listPublicNames = wrapHandler(async (event) => {
   await connectToDatabase();
   const result = await Organization.find({

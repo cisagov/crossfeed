@@ -15,6 +15,7 @@ import * as scans from './scans';
 import * as users from './users';
 import * as scanTasks from './scan-tasks';
 import * as stats from './stats';
+import * as savedSearches from './saved-searches';
 import { listenForDockerEvents } from './docker-events';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
@@ -31,6 +32,7 @@ const handlerToExpress = (handler) => async (req, res, next) => {
   const { statusCode, body } = await handler(
     {
       pathParameters: req.params,
+      query: req.query,
       requestContext: req.requestContext,
       body: JSON.stringify(req.body || '{}'),
       headers: req.headers,
@@ -115,6 +117,15 @@ app.get('/plugins/Morpheus/images/logo.svg', (req, res) =>
 );
 app.get('/index.php', (req, res) => res.redirect('/matomo/index.php'));
 
+/**
+ * @swagger
+ *
+ * /matomo:
+ *  get:
+ *    description: All paths under /matomo proxy to a Matomo instance, which is used to handle and process user analytics. A global admin user can access this page from the "My Account" page.
+ *    tags:
+ *    - Analytics
+ */
 const matomoProxy = createProxyMiddleware({
   target: process.env.MATOMO_URL,
   headers: { HTTP_X_FORWARDED_URI: '/matomo' },
@@ -213,6 +224,23 @@ authenticatedRoute.get(
 authenticatedRoute.put(
   '/vulnerabilities/:vulnerabilityId',
   handlerToExpress(vulnerabilities.update)
+);
+authenticatedRoute.get('/saved-searches', handlerToExpress(savedSearches.list));
+authenticatedRoute.post(
+  '/saved-searches',
+  handlerToExpress(savedSearches.create)
+);
+authenticatedRoute.get(
+  '/saved-searches/:searchId',
+  handlerToExpress(savedSearches.get)
+);
+authenticatedRoute.put(
+  '/saved-searches/:searchId',
+  handlerToExpress(savedSearches.update)
+);
+authenticatedRoute.delete(
+  '/saved-searches/:searchId',
+  handlerToExpress(savedSearches.del)
 );
 authenticatedRoute.get('/scans', handlerToExpress(scans.list));
 authenticatedRoute.get('/granularScans', handlerToExpress(scans.listGranular));

@@ -7,6 +7,7 @@ import { handler as portscanner } from './tasks/portscanner';
 import { handler as wappalyzer } from './tasks/wappalyzer';
 import { handler as censysIpv4 } from './tasks/censysIpv4';
 import { handler as censysCertificates } from './tasks/censysCertificates';
+import { handler as savedSearch } from './tasks/saved-search';
 import { handler as sslyze } from './tasks/sslyze';
 import { handler as searchSync } from './tasks/search-sync';
 import { handler as intrigueIdent } from './tasks/intrigue-ident';
@@ -38,6 +39,7 @@ async function main() {
     wappalyzer,
     intrigueIdent,
     webscraper,
+    savedSearch,
     testProxy
   }[scanName || 'testProxy'];
   if (!scanFn) {
