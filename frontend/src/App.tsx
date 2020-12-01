@@ -30,6 +30,7 @@ import {
   TermsOfUse,
   SearchPage,
   LoginGovCallback,
+  Feeds,
   Dashboard
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
@@ -120,6 +121,7 @@ const App: React.FC = () => (
                 />
                 <RouteGuard path="/inventory/alerts" component={Alerts} />
 
+                <RouteGuard path="/feeds" component={Feeds} />
                 <RouteGuard path="/scans/:scanId" component={Scan} />
                 <RouteGuard path="/scans" component={Scans} />
                 <RouteGuard path="/organizations" component={Organizations} />

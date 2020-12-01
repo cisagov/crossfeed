@@ -8,17 +8,27 @@ import {
 } from '@material-ui/core';
 import { ArrowUpward, ArrowDownward } from '@material-ui/icons';
 import { ContextType } from '../../context/SearchProvider';
+import { SavedSearch } from 'types';
 
 interface Props {
   sortField: ContextType['sortField'];
   sortDirection?: ContextType['sortDirection'];
   setSort: ContextType['setSort'];
-  clearFilters?(): void;
+  saveSearch?(): void;
   isFixed: boolean;
+  existingSavedSearch?: SavedSearch;
 }
 
 export const SortBar: React.FC<Props> = (props) => {
-  const { sortField, sortDirection, setSort, clearFilters, children } = props;
+  const {
+    sortField,
+    sortDirection,
+    setSort,
+    saveSearch,
+    children,
+    existingSavedSearch
+  } = props;
+
   const classes = useStyles(props);
 
   const toggleDirection = () => {
@@ -65,8 +75,10 @@ export const SortBar: React.FC<Props> = (props) => {
       </div>
       {children}
       <div>
-        {clearFilters && (
-          <button onClick={clearFilters}>Clear All Filters</button>
+        {saveSearch && (
+          <button onClick={saveSearch}>
+            {existingSavedSearch ? 'Update Saved Search' : 'Save Search'}
+          </button>
         )}
       </div>
     </div>
@@ -91,7 +103,8 @@ const useStyles = makeStyles((theme) => ({
       border: 'none',
       color: '#71767A',
       background: 'none',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      textDecoration: 'underline'
     },
     '& *:focus': {
       outline: 'none !important'
