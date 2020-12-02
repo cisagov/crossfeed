@@ -163,6 +163,19 @@ class VulnerabilitySearch {
   }
 }
 
+/**
+ * @swagger
+ *
+ * /vulnerabilities/{id}:
+ *  put:
+ *    description: Update a particular vulnerability.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Vulnerability id
+ *    tags:
+ *    - Vulnerabilities
+ */
 export const update = wrapHandler(async (event) => {
   await connectToDatabase();
   const id = event.pathParameters?.vulnerabilityId;
@@ -211,6 +224,15 @@ export const update = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /vulnerabilities/search:
+ *  post:
+ *    description: List vulnerabilities by specifying a filter.
+ *    tags:
+ *    - Vulnerabilities
+ */
 export const list = wrapHandler(async (event) => {
   await connectToDatabase();
   const search = await validateBody(VulnerabilitySearch, event.body);
@@ -224,6 +246,15 @@ export const list = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /vulnerabilities/export:
+ *  post:
+ *    description: Export vulnerabilities to a CSV file by specifying a filter.
+ *    tags:
+ *    - Vulnerabilities
+ */
 export const export_ = wrapHandler(async (event) => {
   await connectToDatabase();
   const search = await validateBody(VulnerabilitySearch, event.body);
@@ -265,6 +296,19 @@ export const export_ = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /vulnerabilities/{id}:
+ *  get:
+ *    description: Get information about a particular vulnerability.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Vulnerability id
+ *    tags:
+ *    - Vulnerabilities
+ */
 export const get = wrapHandler(async (event) => {
   await connectToDatabase();
   const id = event.pathParameters?.vulnerabilityId;

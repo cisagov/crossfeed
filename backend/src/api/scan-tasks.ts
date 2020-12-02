@@ -85,6 +85,15 @@ class ScanTaskSearch {
   }
 }
 
+/**
+ * @swagger
+ *
+ * /scan-tasks/search:
+ *  post:
+ *    description: List scantasks by specifying a filter.
+ *    tags:
+ *    - Scan Tasks
+ */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) {
     return Unauthorized;
@@ -104,6 +113,19 @@ export const list = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /scan-tasks/{id}/kill:
+ *  delete:
+ *    description: Kill a particular scantask. Calling this endpoint does not kill the actual Fargate task, but just marks the task as "failed" in the database.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Scantask id
+ *    tags:
+ *    - Scan Tasks
+ */
 export const kill = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) {
     return Unauthorized;
@@ -136,6 +158,19 @@ export const kill = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /scan-tasks/{id}/logs:
+ *  get:
+ *    description: Retrieve logs from a particular scantask.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Scantask id
+ *    tags:
+ *    - Scan Tasks
+ */
 export const logs = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) {
     return Unauthorized;

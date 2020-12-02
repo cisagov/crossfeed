@@ -63,6 +63,13 @@ exports[`Header component matches snapshot 1`] = `
             >
               Inventory
             </a>
+            <a
+              class="makeStyles-link-16"
+              href="/feeds"
+              style="outline: none;"
+            >
+              Feeds
+            </a>
           </div>
           <div
             class="makeStyles-lgNav-10"

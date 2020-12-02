@@ -17,6 +17,7 @@ interface Props {
   removeFilter: ContextType['removeFilter'];
   filters: ContextType['filters'];
   facets: ContextType['facets'];
+  clearFilters: ContextType['clearFilters'];
 }
 
 const FiltersApplied: React.FC = () => {
@@ -30,7 +31,7 @@ const FiltersApplied: React.FC = () => {
 };
 
 export const FilterDrawer: React.FC<Props> = (props) => {
-  const { filters, addFilter, removeFilter, facets } = props;
+  const { filters, addFilter, removeFilter, facets, clearFilters } = props;
   const classes = useStyles();
 
   const filtersByColumn = useMemo(
@@ -61,10 +62,23 @@ export const FilterDrawer: React.FC<Props> = (props) => {
     ? facets['vulnerabilities.severity'][0].data
     : [];
 
+  // Always show all severities
+  for (const value of ['Critical', 'High', 'Medium', 'Low']) {
+    if (!severityFacet.find((severity) => value === severity.value))
+      severityFacet.push({ value, count: 0 });
+  }
+
   return (
     <Wrapper>
       <div className={classes.header}>
-        <FaFilter /> <h3>Filter</h3>
+        <div className={classes.filter}>
+          <FaFilter /> <h3>Filter</h3>
+        </div>
+        {clearFilters && (
+          <div>
+            <button onClick={clearFilters}>Clear All Filters</button>
+          </div>
+        )}
       </div>
       <Accordion elevation={0} square>
         <AccordionSummary expandIcon={<ExpandMore />}>
@@ -249,11 +263,20 @@ const useStyles = makeStyles((theme) => ({
     flexFlow: 'row nowrap',
     padding: '0 1rem',
     minHeight: 60,
+    justifyContent: 'space-between',
     '& h3': {
       fontSize: '1.3rem',
       fontWeight: 400,
       margin: 0,
       marginLeft: '1rem'
+    },
+    '& button': {
+      outline: 'none',
+      border: 'none',
+      color: '#71767A',
+      background: 'none',
+      cursor: 'pointer',
+      textDecoration: 'underline'
     }
   },
   details: {
@@ -273,6 +296,14 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '0.7rem',
       color: theme.palette.primary.main,
       marginRight: 3
+    }
+  },
+  filter: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    alignItems: 'center',
+    '& > span': {
+      display: 'block'
     }
   }
 }));

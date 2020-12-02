@@ -140,6 +140,12 @@ export const SCAN_SCHEMA: ScanSchema = {
     cpu: '1024',
     memory: '4096',
     description: 'Scrapes all webpages on a given domain, respecting robots.txt'
+  },
+  savedSearch: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    description: 'Performs saved searches to update their search results'
   }
 };
 
@@ -165,6 +171,19 @@ class NewScan {
   organizations: string[];
 }
 
+/**
+ * @swagger
+ *
+ * /scans/{id}:
+ *  delete:
+ *    description: Delete a particular scan.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Scan id
+ *    tags:
+ *    - Scans
+ */
 export const del = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
@@ -179,6 +198,19 @@ export const del = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /scans/{id}:
+ *  put:
+ *    description: Update a particular scan.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Scan id
+ *    tags:
+ *    - Scans
+ */
 export const update = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
@@ -205,6 +237,15 @@ export const update = wrapHandler(async (event) => {
   return NotFound;
 });
 
+/**
+ * @swagger
+ *
+ * /scans:
+ *  post:
+ *    description: Create a new scan.
+ *    tags:
+ *    - Scans
+ */
 export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
@@ -221,6 +262,19 @@ export const create = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /scans/{id}:
+ *  get:
+ *    description: Get information about a particular scan.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Scan id
+ *    tags:
+ *    - Scans
+ */
 export const get = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) return Unauthorized;
   await connectToDatabase();
@@ -255,6 +309,15 @@ export const get = wrapHandler(async (event) => {
   return NotFound;
 });
 
+/**
+ * @swagger
+ *
+ * /scans:
+ *  get:
+ *    description: List scans.
+ *    tags:
+ *    - Scans
+ */
 export const list = wrapHandler(async (event) => {
   // if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
@@ -273,6 +336,15 @@ export const list = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /granularScans:
+ *  get:
+ *    description: List granular scans. These scans are retrieved by a standard organization admin user, who is then able to enable or disable these particular scans.
+ *    tags:
+ *    - Scans
+ */
 export const listGranular = wrapHandler(async (event) => {
   await connectToDatabase();
   const scans = await Scan.find({
@@ -290,6 +362,15 @@ export const listGranular = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /scheduler/invoke:
+ *  post:
+ *    description: Manually invoke scheduler to run scheduled scans.
+ *    tags:
+ *    - Scans
+ */
 export const invokeScheduler = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   const lambdaClient = new LambdaClient();
@@ -308,6 +389,19 @@ export const invokeScheduler = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /scans/{id}/run:
+ *  post:
+ *    description: Manually run a particular scan.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Scan id
+ *    tags:
+ *    - Scans
+ */
 export const runScan = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();

@@ -16,6 +16,7 @@ import {
 import { TableHead } from './TableHead';
 import { TableBody } from './TableBody';
 import classes from './styles.module.scss';
+import { NoResults } from '../NoResults';
 
 interface TableProps<T extends object> {
   columns: Column<T>[];
@@ -30,6 +31,8 @@ interface TableProps<T extends object> {
   renderPagination?: (table: TableInstance<T>) => JSX.Element;
   renderExpanded?: (row: Row<T>) => JSX.Element;
   tableRef?: React.Ref<TableInstance<T>>;
+  noResults?: boolean;
+  noResultsMessage?: string;
 }
 
 export const Table = <T extends object>(props: TableProps<T>) => {
@@ -106,6 +109,9 @@ export const Table = <T extends object>(props: TableProps<T>) => {
             <TableBody<T> {...instance} renderExpanded={renderExpanded} />
           </UsaTable>
         </div>
+        {props.noResults && (
+          <NoResults message={props.noResultsMessage!}></NoResults>
+        )}
         {renderPagination && renderPagination(instance)}
         {count ? (
           <p className="text-center">

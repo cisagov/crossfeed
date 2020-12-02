@@ -5,44 +5,48 @@ on:
       - master
     paths:
       - "docs/**"
+      - "backend/**"
       - ".github/workflows/docs.yml"
   pull_request:
     branches:
       - master
     paths:
       - "docs/**"
+      - "backend/**"
       - ".github/workflows/docs.yml"
 
+defaults:
+  run:
+    working-directory: ./docs
+
 jobs:
-  build:
+  deploy:
     name: Build docs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.3
-      - uses: actions/setup-ruby@v1.1.2
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/setup-node@v2.1.2
         with:
-          ruby-version: "2.6"
-      - uses: actions/cache@v2
+          node-version: '12.14'
+      - name: Restore npm cache
+        uses: actions/cache@v2
         with:
-          path: vendor/bundle
-          key: gems-${{ hashFiles('**/docs/Gemfile.lock') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            gems-
-      - run: bundle config path vendor/bundle
-      - run: gem install bundler:2.1.4
-      - run: bundle install --jobs 4 --retry 3
-        working-directory: ./docs
-      - run: bundle exec jekyll build
-        working-directory: ./docs
-        env:
-          JEKYLL_ENV: production
-      - run: echo "docs.crossfeed.cyber.dhs.gov" >> docs/_site/CNAME
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: crazy-max/ghaction-github-pages@v2.1.3
+        uses: crazy-max/ghaction-github-pages@v2.2.0
         with:
           keep_history: true
           target-branch: gh-pages
-          build_dir: docs/_site
+          build_dir: docs/public
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

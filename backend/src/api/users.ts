@@ -21,6 +21,19 @@ import {
   isGlobalWriteAdmin
 } from './auth';
 
+/**
+ * @swagger
+ *
+ * /users/{id}:
+ *  delete:
+ *    description: Delete a particular user.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: User id
+ *    tags:
+ *    - Users
+ */
 export const del = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
@@ -35,6 +48,19 @@ export const del = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /users/{id}:
+ *  put:
+ *    description: Update a particular user.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: User id
+ *    tags:
+ *    - Users
+ */
 export const update = wrapHandler(async (event) => {
   if (!canAccessUser(event, event.pathParameters?.userId)) return Unauthorized;
   await connectToDatabase();
@@ -126,6 +152,15 @@ If you encounter any difficulties, please feel free to reply to this email (supp
   );
 };
 
+/**
+ * @swagger
+ *
+ * /users:
+ *  post:
+ *    description: Invite a new user.
+ *    tags:
+ *    - Users
+ */
 export const invite = wrapHandler(async (event) => {
   const body = await validateBody(NewUser, event.body);
   // Invoker must be either an organization or global admin
@@ -200,6 +235,15 @@ export const invite = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /users/me:
+ *  get:
+ *    description: Get information about the current user.
+ *    tags:
+ *    - Users
+ */
 export const me = wrapHandler(async (event) => {
   await connectToDatabase();
   const result = await User.findOne(getUserId(event), {
@@ -211,6 +255,15 @@ export const me = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /users/me/acceptTerms:
+ *  post:
+ *    description: Accept the latest terms of service.
+ *    tags:
+ *    - Users
+ */
 export const acceptTerms = wrapHandler(async (event) => {
   await connectToDatabase();
   const user = await User.findOne(getUserId(event), {
@@ -228,6 +281,15 @@ export const acceptTerms = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /users:
+ *  get:
+ *    description: List users.
+ *    tags:
+ *    - Users
+ */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) return Unauthorized;
   await connectToDatabase();

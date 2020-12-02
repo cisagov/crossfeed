@@ -202,6 +202,11 @@ const Risk: React.FC = (props) => {
             history.push(
               `/inventory/vulnerabilities?domain=${event.data.label}&severity=${event.id}`
             );
+          } else if (type === 'ports') {
+            history.push(
+              `/inventory?filters[0][field]=services.port&filters[0][values][0]=n_${event.data.label}_n&filters[0][type]=any`
+            );
+            window.location.reload();
           }
         }}
         padding={0.5}
@@ -259,7 +264,11 @@ const Risk: React.FC = (props) => {
             {data.length > 0 &&
               data.slice(0, 4).map((vuln) => (
                 <Tooltip
-                  title={truncateText(vuln.description, 120)}
+                  title={
+                    <span style={{ fontSize: 14 }}>
+                      {truncateText(vuln.description, 120)}
+                    </span>
+                  }
                   placement="right"
                   arrow
                   key={vuln.title}
@@ -471,18 +480,6 @@ const Risk: React.FC = (props) => {
                 data={latestVulnsGroupedArr}
                 showLatest={true}
               ></VulnerabilityCard>
-              {/* <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
-                <div className={cardClasses.inner}>
-                  {stats.domains.numVulnerabilities.length > 0 && (
-                    <div className={cardClasses.cardSmall}>
-                      <div className={cardClasses.header}>
-                        <h2>Latest Feeds</h2>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </Paper> */}
-
               {stats.domains.services.length > 0 && (
                 <Paper elevation={0} className={cardClasses.cardRoot}>
                   <div className={cardClasses.cardSmall}>

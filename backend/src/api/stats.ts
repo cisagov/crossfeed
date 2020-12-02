@@ -40,6 +40,15 @@ class StatsSearch {
   filters?: StatsFilters;
 }
 
+/**
+ * @swagger
+ *
+ * /stats:
+ *  get:
+ *    description: Get stats.
+ *    tags:
+ *    - Stats
+ */
 export const get = wrapHandler(async (event) => {
   await connectToDatabase();
   const search = await validateBody(StatsSearch, event.body);

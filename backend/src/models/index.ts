@@ -8,3 +8,4 @@ export * from './user';
 export * from './role';
 export * from './scan-task';
 export * from './webpage';
+export * from './saved-search';
