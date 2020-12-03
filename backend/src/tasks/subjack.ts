@@ -2,9 +2,8 @@ import { CommandOptions } from './ecs-client';
 import * as buffer from 'buffer';
 import { spawnSync } from 'child_process';
 import getAllDomains from './helpers/getAllDomains';
-import { writeFileSync } from 'fs';
-import { domain } from 'process';
-import { Vulnerability } from 'src/models';
+import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'fs';
+import { Domain, Vulnerability } from '../models';
 import { plainToClass } from 'class-transformer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 
@@ -24,17 +23,28 @@ export const handler = async (commandOptions: CommandOptions) => {
   console.log('Running subjack on organization', organizationName);
 
   const domains = await getAllDomains([organizationId!]);
-
   if (domains.length === 0) {
     console.log('no domains, returning');
     return;
   }
+  domains[0].name = 'enmxxtjnqrnl.x.pipedream.net';
+  const domainsMap: { [domain: string]: Domain } = {};
+  for (const domain of domains) domainsMap[domain.name] = domain;
 
+  mkdirSync('/app/worker/subjack', { recursive: true });
   writeFileSync(INPUT_PATH, domains.map((domain) => domain.name).join('\n'));
-
   const { stdout, stderr, status } = spawnSync(
     'subjack',
-    ['-w', INPUT_PATH, '-t', '10', '-o', OUTPUT_PATH],
+    [
+      '-c',
+      'subjack/fingerprints.json',
+      '-w',
+      INPUT_PATH,
+      '-t',
+      '10',
+      '-o',
+      OUTPUT_PATH
+    ],
     {
       env: {
         ...process.env,
@@ -54,26 +64,37 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   const vulnerabilities: Vulnerability[] = [];
 
-  const output = stdout.toString();
-  const results: SubjackResult[] = JSON.parse(output);
-  for (const index in results) {
-    const result = results[index];
-    if (result.vulnerable) {
-      vulnerabilities.push(
-        plainToClass(Vulnerability, {
-          domain: domains[index],
-          lastSeen: new Date(Date.now()),
-          title: `Subdomain takeover`,
-          severity: 'High',
-          state: 'open',
-          source: 'subjack',
-          description: ``
-        })
-      );
+  // A file is only written if any vulnerable subdomains were found
+  if (existsSync(OUTPUT_PATH)) {
+    const output = String(readFileSync(OUTPUT_PATH));
+    const results: SubjackResult[] = JSON.parse(output);
+    for (const result of results) {
+      if (result.vulnerable) {
+        vulnerabilities.push(
+          plainToClass(Vulnerability, {
+            domain: domainsMap[result.subdomain],
+            lastSeen: new Date(Date.now()),
+            title: `Subdomain takeover - ${result.service}`,
+            severity: 'High',
+            state: 'open',
+            source: 'subjack',
+            description: `This subdomain appears to be vulnerable to subdomain takeover via ${result.service}. An attacker may be able to register the nonexistent site on ${result.service}, leading to defacement.`,
+            references: [
+              {
+                url:
+                  'https://developer.mozilla.org/en-US/docs/Web/Security/Subdomain_takeovers',
+                name: 'Subdomain takeovers - Mozilla',
+                source: '',
+                tags: []
+              }
+            ]
+          })
+        );
+      }
     }
-  }
 
-  await saveVulnerabilitiesToDb(vulnerabilities, false);
+    await saveVulnerabilitiesToDb(vulnerabilities, false);
+  }
 
   console.log(
     `Subjack finished, discovered ${vulnerabilities.length} vulnerabilities`

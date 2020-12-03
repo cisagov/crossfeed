@@ -55,6 +55,10 @@ RUN rbenv install 2.6.5 && rbenv global 2.6.5 && gem install bundler:2.1.4
 RUN git clone https://github.com/intrigueio/intrigue-ident.git && cd intrigue-ident && git checkout e97f974417147df8fa27dcd8f73b7efbb587b942 && bundle install --jobs=4
 RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/bin/intrigue-ident && chmod +x /usr/bin/intrigue-ident
 
+# Download subjack fingerprints
+
+RUN mkdir subjack && curl --silent https://raw.githubusercontent.com/haccer/subjack/master/fingerprints.json --output subjack/fingerprints.json
+
 # Python dependencies
 
 COPY worker/requirements.txt worker/requirements.txt

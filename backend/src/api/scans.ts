@@ -79,8 +79,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
-    description:
-      'Open source tool that fingerprints web technologies based on HTTP responses'
+    description: 'Open source tool that detects subdomain takeovers'
   },
   sslyze: {
     type: 'fargate',

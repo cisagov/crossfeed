@@ -13,6 +13,7 @@ import { handler as searchSync } from './tasks/search-sync';
 import { handler as intrigueIdent } from './tasks/intrigue-ident';
 import { handler as cve } from './tasks/cve';
 import { handler as webscraper } from './tasks/webscraper';
+import { handler as subjack } from './tasks/subjack';
 import { handler as testProxy } from './tasks/test-proxy';
 
 /**
@@ -40,7 +41,8 @@ async function main() {
     intrigueIdent,
     webscraper,
     savedSearch,
-    testProxy
+    testProxy,
+    subjack
   }[scanName || 'testProxy'];
   if (!scanFn) {
     throw new Error('Invalid scan name ' + scanName);
