@@ -21,9 +21,9 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     'organization',
     null
   );
-  const [recentOrganizations, setRecentOrganizations] = usePersistentState<
-    Organization[]
-  >('organization', null);
+  const [showAllOrganizations, setShowAllOrganizations] = usePersistentState<
+    boolean
+  >('showAllOrganizations', false);
   const cookies = useMemo(() => new Cookies(), []);
 
   const logout = useCallback(async () => {
@@ -119,6 +119,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         refreshUser,
         setOrganization: setOrg,
         currentOrganization: extendedOrg,
+        showAllOrganizations: showAllOrganizations,
+        setShowAllOrganizations: setShowAllOrganizations,
         login: setToken,
         logout,
         setLoading: () => {},

@@ -55,13 +55,15 @@ export const stateMap: { [key: string]: string } = {
 };
 
 export const Vulnerabilities: React.FC = () => {
-  const { user, currentOrganization, apiPost, apiPut } = useAuthContext();
+  const {
+    currentOrganization,
+    apiPost,
+    apiPut,
+    showAllOrganizations
+  } = useAuthContext();
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const tableRef = useRef<TableInstance<Vulnerability>>(null);
-  const [showAll, setShowAll] = useState<boolean>(
-    JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
-  );
   const listClasses = useStyles();
   const [noResults, setNoResults] = useState(false);
 
@@ -209,11 +211,6 @@ export const Vulnerabilities: React.FC = () => {
     }
   };
 
-  const updateShowAll = (state: boolean) => {
-    setShowAll(state);
-    localStorage.setItem('showGlobal', JSON.stringify(state));
-  };
-
   const comments: { [key: string]: string } = {};
 
   const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
@@ -342,7 +339,9 @@ export const Vulnerabilities: React.FC = () => {
               order: sort[0]?.desc ? 'DESC' : 'ASC',
               filters: {
                 ...tableFilters,
-                organization: showAll ? undefined : currentOrganization?.id
+                organization: showAllOrganizations
+                  ? undefined
+                  : currentOrganization?.id
               },
               pageSize
             }
@@ -353,7 +352,7 @@ export const Vulnerabilities: React.FC = () => {
         return;
       }
     },
-    [apiPost, currentOrganization, showAll]
+    [apiPost, currentOrganization, showAllOrganizations]
   );
 
   const fetchVulnerabilities = useCallback(
@@ -410,7 +409,7 @@ export const Vulnerabilities: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <Grid row>
+      <Grid row style={{ marginBottom: '1rem' }}>
         <Subnav
           items={[
             { title: 'Assets', path: '/inventory', exact: true },
@@ -418,20 +417,6 @@ export const Vulnerabilities: React.FC = () => {
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
         ></Subnav>
-        <Grid style={{ float: 'right' }}>
-          {((user?.roles && user.roles.length > 1) ||
-            user?.userType === 'globalView' ||
-            user?.userType === 'globalAdmin') && (
-            <Checkbox
-              id="showAll"
-              name="showAll"
-              label="Show all organizations"
-              checked={showAll}
-              onChange={(e) => updateShowAll(e.target.checked)}
-              className={classes.showAll}
-            />
-          )}
-        </Grid>
       </Grid>
       <Table<Vulnerability>
         renderPagination={renderPagination}

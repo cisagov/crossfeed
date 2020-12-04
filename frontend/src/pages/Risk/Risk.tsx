@@ -54,18 +54,15 @@ let colorScale = scaleLinear<string>()
 
 const Risk: React.FC = (props) => {
   const history = useHistory();
-  const { currentOrganization, user, apiPost } = useAuthContext();
+  const {
+    currentOrganization,
+    showAllOrganizations,
+    user,
+    apiPost
+  } = useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
-  const [showAll, setShowAll] = useState<boolean>(
-    JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
-  );
   const cardClasses = useStyles(props);
-
-  const updateShowAll = (state: boolean) => {
-    setShowAll(state);
-    localStorage.setItem('showGlobal', JSON.stringify(state));
-  };
 
   const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
@@ -93,7 +90,7 @@ const Risk: React.FC = (props) => {
       const { result } = await apiPost<ApiResponse>('/stats', {
         body: {
           filters:
-            !orgId && showAll
+            !orgId && showAllOrganizations
               ? {}
               : {
                   organization: orgId ? orgId : currentOrganization?.id
@@ -107,7 +104,7 @@ const Risk: React.FC = (props) => {
         .range(['#c7e8ff', '#135787']);
       setStats(result);
     },
-    [showAll, apiPost, currentOrganization]
+    [showAllOrganizations, apiPost, currentOrganization]
   );
 
   useEffect(() => {
@@ -359,7 +356,7 @@ const Risk: React.FC = (props) => {
     type: string;
   }) => (
     <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
-      <div className={cardClasses.inner}>
+      <div>
         <div className={classes.chart}>
           <div className={cardClasses.header}>
             <h2>{title}</h2>
@@ -454,23 +451,6 @@ const Risk: React.FC = (props) => {
 
   return (
     <div className={classes.root}>
-      <Grid row>
-        <Grid style={{ float: 'right' }}>
-          {((user?.roles && user.roles.length > 1) ||
-            user?.userType === 'globalView' ||
-            user?.userType === 'globalAdmin') && (
-            <Checkbox
-              id="showAll"
-              name="showAll"
-              label="Show all organizations"
-              checked={showAll}
-              onChange={(e) => updateShowAll(e.target.checked)}
-              className={classes.showAll}
-            />
-          )}
-        </Grid>
-      </Grid>
-
       <div className={cardClasses.contentWrapper}>
         {stats && (
           <div className={cardClasses.content}>
@@ -533,7 +513,7 @@ const Risk: React.FC = (props) => {
 
             <div className={cardClasses.panel}>
               <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
-                <div className={cardClasses.inner}>
+                <div>
                   {stats.domains.numVulnerabilities.length > 0 && (
                     <div className={cardClasses.cardBig}>
                       <div className={cardClasses.header}>
@@ -643,7 +623,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     paddingLeft: 20,
     paddingTop: 1
-    // fontSize: '20px'
   },
   footer: {
     float: 'right',
@@ -655,7 +634,6 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: '400'
     }
   },
-  inner: {},
   root: {
     position: 'relative',
     flex: '1',
@@ -672,7 +650,8 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     display: 'flex',
     flexFlow: 'column nowrap',
-    overflowY: 'hidden'
+    overflowY: 'hidden',
+    marginTop: '1rem'
   },
   content: {
     display: 'flex',

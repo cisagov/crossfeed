@@ -10,7 +10,8 @@ import {
   List,
   Select,
   MenuItem,
-  FormControl
+  FormControl,
+  TextField
 } from '@material-ui/core';
 import {
   Menu as MenuIcon,
@@ -23,6 +24,8 @@ import logo from '../assets/cisa_logo.png';
 import { withSearch } from '@elastic/react-search-ui';
 import { ContextType } from 'context/SearchProvider';
 import { SearchBar } from 'components';
+import { Autocomplete } from '@material-ui/lab';
+import { Organization } from 'types';
 
 const GLOBAL_ADMIN = 4;
 const ORG_ADMIN = 2;
@@ -38,13 +41,38 @@ interface NavItemType {
   exact: boolean;
 }
 
+interface ShowAllOrganizations {
+  name: string;
+}
+
 const HeaderNoCtx: React.FC<ContextType> = (props) => {
   const { searchTerm, setSearchTerm } = props;
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  const { currentOrganization, user, logout } = useAuthContext();
+  const {
+    currentOrganization,
+    setOrganization,
+    setShowAllOrganizations,
+    user,
+    logout,
+    apiGet
+  } = useAuthContext();
   const [navOpen, setNavOpen] = useState(false);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+
+  const fetchOrganizations = async () => {
+    try {
+      let rows = await apiGet<Organization[]>('/organizations/');
+      setOrganizations(rows);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchOrganizations();
+  }, []);
 
   let userLevel = 0;
   if (user && user.isRegistered) {
@@ -80,8 +108,6 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       exact: true
     }
   ].filter(({ users }) => (users & userLevel) > 0);
-
-  console.log(user);
 
   const userMenu: NavItemType = {
     title: (
@@ -179,30 +205,44 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                   }}
                 />
                 <div className={classes.spacing} />
-                <FormControl variant="outlined">
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={currentOrganization ? currentOrganization.id : ''}
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                    }}
-                    className={classes.selectOrg}
-                  >
-                    {currentOrganization && (
-                      <MenuItem
-                        selected={true}
-                        value={currentOrganization.id}
-                        key={currentOrganization.id}
-                      >
-                        {currentOrganization.name}
-                      </MenuItem>
-                    )}
-
-                    <MenuItem value={20}>CISA</MenuItem>
-                    <MenuItem value={30}>All My Organizations</MenuItem>
-                  </Select>
-                </FormControl>
+                <Autocomplete
+                  options={[{ name: 'All Organizations' }].concat(
+                    organizations
+                  )}
+                  className={classes.selectOrg}
+                  classes={{
+                    option: classes.option
+                  }}
+                  value={currentOrganization ?? undefined}
+                  disableClearable
+                  blurOnSelect
+                  selectOnFocus
+                  getOptionLabel={(option) => option.name}
+                  renderOption={(option) => (
+                    <React.Fragment>{option.name}</React.Fragment>
+                  )}
+                  onChange={(
+                    event: any,
+                    value: Organization | ShowAllOrganizations | undefined
+                  ) => {
+                    if (value && 'id' in value) {
+                      setOrganization(value);
+                      setShowAllOrganizations(false);
+                    } else {
+                      setShowAllOrganizations(true);
+                    }
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      inputProps={{
+                        ...params.inputProps,
+                        autoComplete: 'new-password' // disable autocomplete and autofill
+                      }}
+                    />
+                  )}
+                />
                 <NavItem {...userMenu} />
               </>
             )}
@@ -344,18 +384,28 @@ const useStyles = makeStyles((theme) => ({
   selectOrg: {
     border: '1px solid #FFFFFF',
     borderRadius: '5px',
-    maxWidth: '200px',
-    minWidth: '100px',
-    color: 'white',
+    width: '200px',
     padding: '3px',
-    textDecoration: 'none',
     '& svg': {
       color: 'white'
     },
-    height: '45px',
-    '* focus': {
-      outline: 'none'
+    '& input': {
+      color: 'white',
+      width: '100%'
     },
-    fontSize: '14px'
+    '& input:focus': {
+      outlineWidth: 0
+    },
+    '& fieldset': {
+      borderStyle: 'none'
+    },
+    height: '45px'
+  },
+  option: {
+    fontSize: 15,
+    '& > span': {
+      marginRight: 10,
+      fontSize: 18
+    }
   }
 }));

@@ -12,19 +12,15 @@ import { usePersistentState, useDomainApi } from 'hooks';
 const PAGE_SIZE = 25;
 
 export const Dashboard: React.FC = () => {
-  const { user } = useAuthContext();
+  const { user, showAllOrganizations } = useAuthContext();
   const tableRef = useRef<TableInstance<Domain>>(null);
   const columns = useMemo(() => createColumns(), []);
   const [domains, setDomains] = useState<Domain[]>([]);
 
   const [count, setCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
-  const [showAll, setShowAll] = usePersistentState<boolean>(
-    'showGlobal',
-    false
-  );
 
-  const { listDomains } = useDomainApi(showAll);
+  const { listDomains } = useDomainApi(showAllOrganizations);
 
   const fetchDomains = useCallback(
     async (q: Query<Domain>) => {
@@ -65,7 +61,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <Grid row>
+      <Grid row style={{ marginBottom: '1rem' }}>
         <Subnav
           items={[
             { title: 'Assets', path: '/inventory', exact: true },
@@ -73,20 +69,6 @@ export const Dashboard: React.FC = () => {
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
         ></Subnav>
-        <Grid style={{ float: 'right' }}>
-          {((user?.roles && user.roles.length > 1) ||
-            user?.userType === 'globalView' ||
-            user?.userType === 'globalAdmin') && (
-            <Checkbox
-              id="showAll"
-              name="showAll"
-              label="Show all organizations"
-              checked={showAll}
-              onChange={(e) => setShowAll(e.target.checked)}
-              className={classes.showAll}
-            />
-          )}
-        </Grid>
       </Grid>
       <Table<Domain>
         renderPagination={renderPagination}
