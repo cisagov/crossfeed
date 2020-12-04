@@ -51,7 +51,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500
   },
   active: {
-    borderBottom: `2px solid ${theme.palette.primary.main}`
+    borderBottom: `2px solid ${theme.palette.primary.main}`,
+    color: theme.palette.primary.main
   },
   flex: {
     flex: 1
