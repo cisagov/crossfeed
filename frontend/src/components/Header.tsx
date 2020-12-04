@@ -214,6 +214,23 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                     option: classes.option
                   }}
                   value={currentOrganization ?? undefined}
+                  filterOptions={(options, state) => {
+                    // If already selected, show all
+                    if (
+                      options.find(
+                        (option) =>
+                          option.name.toLowerCase() ===
+                          state.inputValue.toLowerCase()
+                      )
+                    ) {
+                      return options;
+                    }
+                    return options.filter((option) =>
+                      option.name
+                        .toLowerCase()
+                        .includes(state.inputValue.toLowerCase())
+                    );
+                  }}
                   disableClearable
                   blurOnSelect
                   selectOnFocus
