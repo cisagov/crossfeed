@@ -8,25 +8,35 @@
     // font-weight: 500;
   }
 
-  .tableWrapper {
-    width: 100%;
-    position: relative;
-    background-color: #fff;
-    padding: 1rem;
+  .tableInner {
+    overflow-x: auto;
+    border: 1px solid #dcdee0;
     border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
-
-    @media screen and (min-width: 640px) {
-      padding: 2rem;
+    box-sizing: border-box;
+    td,
+    th {
+      border: 0px solid #dcdee0;
+      box-shadow: inset 0px -1px 0px #dcdee0;
+      height: 60px;
     }
-    .tableInner {
-      overflow-x: auto;
+    input,
+    select {
+      height: 35px;
+      border: 1px solid #dcdee0;
+      box-sizing: border-box;
+      border-radius: 2px;
+    }
+    th {
+      font-style: normal;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 130%;
     }
   }
 }
 
 .td {
-  background-color: #f0f0f0;
+  background-color: #f9f9f9 !important;
   border-color: white;
   text-overflow: ellipsis;
   white-space: normal;
@@ -37,10 +47,11 @@
 }
 
 .subComponentTd {
-  background-color: white;
+  background-color: #f9f9f9;
   border-color: white;
 }
 
 .th {
   vertical-align: top;
+  background-color: #f0f0f0 !important;
 }

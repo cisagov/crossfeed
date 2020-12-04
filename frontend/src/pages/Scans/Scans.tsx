@@ -16,10 +16,7 @@ export const Scans: React.FC = () => {
   return (
     <div className={classes.root}>
       <Header>
-        <div className="">
-          <div className="usa-navbar">
-            <h1>{titles[currentView]}</h1>
-          </div>
+        <div>
           {user?.userType === 'globalView' ||
             (user?.userType === 'globalAdmin' && (
               <PrimaryNav

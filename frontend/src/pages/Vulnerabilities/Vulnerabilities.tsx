@@ -82,6 +82,13 @@ export const Vulnerabilities: React.FC = () => {
       Filter: ColumnFilter
     },
     {
+      Header: 'Severity',
+      id: 'severity',
+      accessor: ({ severity }) => severity,
+      width: 100,
+      Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
+    },
+    {
       Header: 'Domain',
       id: 'domain',
       accessor: ({ domain }) => (
@@ -97,13 +104,6 @@ export const Vulnerabilities: React.FC = () => {
       accessor: 'cpe',
       width: 100,
       Filter: ColumnFilter
-    },
-    {
-      Header: 'Severity',
-      id: 'severity',
-      accessor: ({ severity }) => severity,
-      width: 100,
-      Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
     },
     {
       Header: 'Days Open',
@@ -177,8 +177,12 @@ export const Vulnerabilities: React.FC = () => {
         <span
           {...row.getToggleRowExpandedProps()}
           className="text-center display-block"
+          style={{
+            fontSize: '16px',
+            cursor: 'pointer'
+          }}
         >
-          {row.isExpanded ? <FaMinus /> : <FaPlus />}
+          {row.isExpanded ? 'HIDE DETAILS' : 'DETAILS'}
         </span>
       ),
       disableFilters: true
