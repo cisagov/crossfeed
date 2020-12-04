@@ -197,7 +197,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
 const Accordion = withStyles({
   root: {
     backgroundColor: '#f4f4f4',
-    border: '1px solid rgba(0,0,0,.125)',
+    borderTop: '1px solid rgba(0,0,0,.125)',
+    borderBottom: '1px solid rgba(0,0,0,.125)',
     boxShadow: 'none',
     '&:not(:last-child)': {
       borderBottom: 0
@@ -252,7 +253,11 @@ const Wrapper = withStyles({
     flex: '0 0 250px',
     backgroundColor: '#f4f4f4',
     color: '#3D4551',
-    overflowY: 'auto'
+    overflowY: 'auto',
+    zIndex: 10,
+    borderRadius: 0,
+    borderRight: '1px solid #C3C5C7',
+    boxShadow: 'none'
   }
 })(Paper);
 
