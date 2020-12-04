@@ -258,6 +258,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                       variant="outlined"
                       inputProps={{
                         ...params.inputProps,
+                        id: 'autocomplete-input',
                         autoComplete: 'new-password' // disable autocomplete and autofill
                       }}
                     />
