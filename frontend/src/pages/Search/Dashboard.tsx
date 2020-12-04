@@ -83,7 +83,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
       ? search
       : {
           name: '',
-          vulnerabilityTemplate: { title: '' },
+          vulnerabilityTemplate: {},
           createVulnerabilities: false
         }
   );

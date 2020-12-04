@@ -14,7 +14,5 @@ export interface SavedSearch {
   sortField: string;
   sortDirection: string;
   createVulnerabilities: boolean;
-  vulnerabilityTemplate: Partial<Vulnerability> & {
-    title: string;
-  };
+  vulnerabilityTemplate: Partial<Vulnerability>;
 }
