@@ -111,7 +111,7 @@ export const ResultCard: React.FC<Props> = (props) => {
   const data = [];
   if (products.length > 0) {
     data.push({
-      label: `product${products.length > 1 ? 's' : ''}`,
+      label: `Product${products.length > 1 ? 's' : ''}`,
       count: products.length,
       value: filterExpanded(
         [...Array.from(new Set(products))],
@@ -125,7 +125,7 @@ export const ResultCard: React.FC<Props> = (props) => {
   }
   if (cves.length > 0) {
     data.push({
-      label: `cve${cves.length > 1 ? 's' : ''}`,
+      label: `CVE${cves.length > 1 ? 's' : ''}`,
       count: cves.length,
       value: filterExpanded(cves, Boolean(expanded.vulns), 10).join(', '),
       onExpand: () => toggleExpanded('vulns'),
@@ -182,7 +182,7 @@ export const ResultCard: React.FC<Props> = (props) => {
               <div className={classes.lastSeen}>
                 <span className={classes.label}>
                   <span className={classes.count}>{ports.length}</span>
-                  {` port${ports.length > 1 ? 's' : ''}`}
+                  {` Port${ports.length > 1 ? 's' : ''}`}
                 </span>
                 <span className={classes.data}>{ports.join(', ')}</span>
               </div>
