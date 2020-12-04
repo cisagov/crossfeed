@@ -163,9 +163,9 @@ export const ResultCard: React.FC<Props> = (props) => {
       classes={{ root: classes.root }}
       aria-label="view domain details"
     >
-      <div className={classes.inner}>
+      <div className={classes.inner} onClick={onClick}>
         <button className={classes.domainRow}>
-          <h4 onClick={onClick}>{name.raw}</h4>
+          <h4>{name.raw}</h4>
           <div className={classes.lastSeen}>
             <span className={classes.label}>Last Seen</span>
             <span className={classes.data}>{lastSeen} ago</span>
@@ -201,7 +201,13 @@ export const ResultCard: React.FC<Props> = (props) => {
             <span className={classes.data}>
               {value}
               {expansionText && (
-                <button className={classes.expandMore} onClick={onExpand}>
+                <button
+                  className={classes.expandMore}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    if (onExpand) onExpand();
+                  }}
+                >
                   {expansionText}
                 </button>
               )}
@@ -229,7 +235,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   inner: {
-    padding: '1.5rem'
+    padding: '1.5rem',
+    cursor: 'pointer'
   },
   domainRow: {
     width: '100%',
