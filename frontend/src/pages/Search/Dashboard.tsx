@@ -466,7 +466,8 @@ const useStyles = makeStyles(() => ({
     '& *:focus': {
       outline: 'none !important'
     },
-    borderRadius: 0
+    borderRadius: 0,
+    zIndex: 9
   },
   pageSize: {
     '& > p': {
