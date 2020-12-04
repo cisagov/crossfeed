@@ -6,13 +6,13 @@ import { Domain } from 'types';
 import { createColumns } from './columns';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { Grid, Checkbox } from '@trussworks/react-uswds';
-import { usePersistentState, useDomainApi } from 'hooks';
+import { Grid } from '@trussworks/react-uswds';
+import { useDomainApi } from 'hooks';
 
 const PAGE_SIZE = 25;
 
 export const Dashboard: React.FC = () => {
-  const { user, showAllOrganizations } = useAuthContext();
+  const { showAllOrganizations } = useAuthContext();
   const tableRef = useRef<TableInstance<Domain>>(null);
   const columns = useMemo(() => createColumns(), []);
   const [domains, setDomains] = useState<Domain[]>([]);

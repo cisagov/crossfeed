@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { NavLink, Link, useHistory, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -8,9 +8,6 @@ import {
   Drawer,
   ListItem,
   List,
-  Select,
-  MenuItem,
-  FormControl,
   TextField
 } from '@material-ui/core';
 import {
@@ -41,10 +38,6 @@ interface NavItemType {
   exact: boolean;
 }
 
-interface ShowAllOrganizations {
-  name: string;
-}
-
 const HeaderNoCtx: React.FC<ContextType> = (props) => {
   const { searchTerm, setSearchTerm } = props;
   const classes = useStyles();
@@ -53,6 +46,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   const {
     currentOrganization,
     setOrganization,
+    showAllOrganizations,
     setShowAllOrganizations,
     user,
     logout,
@@ -61,18 +55,18 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   const [navOpen, setNavOpen] = useState(false);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
 
-  const fetchOrganizations = async () => {
+  const fetchOrganizations = useCallback(async () => {
     try {
       let rows = await apiGet<Organization[]>('/organizations/');
       setOrganizations(rows);
     } catch (e) {
       console.error(e);
     }
-  };
+  }, [apiGet, setOrganizations]);
 
   React.useEffect(() => {
     fetchOrganizations();
-  }, []);
+  }, [fetchOrganizations]);
 
   let userLevel = 0;
   if (user && user.isRegistered) {
@@ -213,7 +207,11 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                   classes={{
                     option: classes.option
                   }}
-                  value={currentOrganization ?? undefined}
+                  value={
+                    showAllOrganizations
+                      ? { name: 'All Organizations' }
+                      : currentOrganization ?? undefined
+                  }
                   filterOptions={(options, state) => {
                     // If already selected, show all
                     if (
@@ -240,7 +238,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                   )}
                   onChange={(
                     event: any,
-                    value: Organization | ShowAllOrganizations | undefined
+                    value:
+                      | Organization
+                      | {
+                          name: string;
+                        }
+                      | undefined
                   ) => {
                     if (value && 'id' in value) {
                       setOrganization(value);

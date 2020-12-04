@@ -3,7 +3,6 @@ import classes from './Risk.module.scss';
 import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
-import { Checkbox, Grid } from '@trussworks/react-uswds';
 import { Chip, makeStyles, Paper, Tooltip } from '@material-ui/core';
 import { geoCentroid } from 'd3-geo';
 import {

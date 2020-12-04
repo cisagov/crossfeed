@@ -18,7 +18,7 @@ import {
 } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import { Grid, Checkbox, Dropdown, Button } from '@trussworks/react-uswds';
+import { Grid, Dropdown, Button } from '@trussworks/react-uswds';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { differenceInCalendarDays, parseISO, format } from 'date-fns';
