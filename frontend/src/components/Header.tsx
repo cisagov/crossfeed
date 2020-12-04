@@ -7,7 +7,10 @@ import {
   IconButton,
   Drawer,
   ListItem,
-  List
+  List,
+  Select,
+  MenuItem,
+  FormControl
 } from '@material-ui/core';
 import {
   Menu as MenuIcon,
@@ -77,6 +80,8 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       exact: true
     }
   ].filter(({ users }) => (users & userLevel) > 0);
+
+  console.log(user);
 
   const userMenu: NavItemType = {
     title: (
@@ -173,6 +178,31 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                     });
                   }}
                 />
+                <div className={classes.spacing} />
+                <FormControl variant="outlined">
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={currentOrganization ? currentOrganization.id : ''}
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                    }}
+                    className={classes.selectOrg}
+                  >
+                    {currentOrganization && (
+                      <MenuItem
+                        selected={true}
+                        value={currentOrganization.id}
+                        key={currentOrganization.id}
+                      >
+                        {currentOrganization.name}
+                      </MenuItem>
+                    )}
+
+                    <MenuItem value={20}>CISA</MenuItem>
+                    <MenuItem value={30}>All My Organizations</MenuItem>
+                  </Select>
+                </FormControl>
                 <NavItem {...userMenu} />
               </>
             )}
@@ -310,5 +340,22 @@ const useStyles = makeStyles((theme) => ({
   },
   mobileNav: {
     padding: `${theme.spacing(2)}px ${theme.spacing()}px`
+  },
+  selectOrg: {
+    border: '1px solid #FFFFFF',
+    borderRadius: '5px',
+    maxWidth: '200px',
+    minWidth: '100px',
+    color: 'white',
+    padding: '3px',
+    textDecoration: 'none',
+    '& svg': {
+      color: 'white'
+    },
+    height: '45px',
+    '* focus': {
+      outline: 'none'
+    },
+    fontSize: '14px'
   }
 }));

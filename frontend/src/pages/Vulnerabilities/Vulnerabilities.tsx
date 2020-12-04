@@ -69,15 +69,18 @@ export const Vulnerabilities: React.FC = () => {
     {
       Header: 'Title',
       accessor: 'title',
-      Cell: ({ value, row }: CellProps<Vulnerability>) => (
-        <a
-          href={`https://nvd.nist.gov/vuln/detail/${row.original.cve}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {value} {extLink}
-        </a>
-      ),
+      Cell: ({ value, row }: CellProps<Vulnerability>) =>
+        row.original.cve ? (
+          <a
+            href={`https://nvd.nist.gov/vuln/detail/${row.original.cve}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {value} {extLink}
+          </a>
+        ) : (
+          <p>{row.original.title}</p>
+        ),
       width: 800,
       Filter: ColumnFilter
     },
