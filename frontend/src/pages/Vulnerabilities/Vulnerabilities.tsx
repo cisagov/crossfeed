@@ -18,7 +18,7 @@ import {
 } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import { Grid, Checkbox, Dropdown, Button } from '@trussworks/react-uswds';
+import { Grid, Dropdown, Button } from '@trussworks/react-uswds';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { differenceInCalendarDays, parseISO, format } from 'date-fns';
@@ -55,13 +55,15 @@ export const stateMap: { [key: string]: string } = {
 };
 
 export const Vulnerabilities: React.FC = () => {
-  const { user, currentOrganization, apiPost, apiPut } = useAuthContext();
+  const {
+    currentOrganization,
+    apiPost,
+    apiPut,
+    showAllOrganizations
+  } = useAuthContext();
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const tableRef = useRef<TableInstance<Vulnerability>>(null);
-  const [showAll, setShowAll] = useState<boolean>(
-    JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
-  );
   const listClasses = useStyles();
   const [noResults, setNoResults] = useState(false);
 
@@ -69,15 +71,18 @@ export const Vulnerabilities: React.FC = () => {
     {
       Header: 'Title',
       accessor: 'title',
-      Cell: ({ value, row }: CellProps<Vulnerability>) => (
-        <a
-          href={`https://nvd.nist.gov/vuln/detail/${row.original.cve}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {value} {extLink}
-        </a>
-      ),
+      Cell: ({ value, row }: CellProps<Vulnerability>) =>
+        row.original.cve ? (
+          <a
+            href={`https://nvd.nist.gov/vuln/detail/${row.original.cve}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {value} {extLink}
+          </a>
+        ) : (
+          <p>{row.original.title}</p>
+        ),
       width: 800,
       Filter: ColumnFilter
     },
@@ -204,11 +209,6 @@ export const Vulnerabilities: React.FC = () => {
     } catch (e) {
       console.error(e);
     }
-  };
-
-  const updateShowAll = (state: boolean) => {
-    setShowAll(state);
-    localStorage.setItem('showGlobal', JSON.stringify(state));
   };
 
   const comments: { [key: string]: string } = {};
@@ -339,7 +339,9 @@ export const Vulnerabilities: React.FC = () => {
               order: sort[0]?.desc ? 'DESC' : 'ASC',
               filters: {
                 ...tableFilters,
-                organization: showAll ? undefined : currentOrganization?.id
+                organization: showAllOrganizations
+                  ? undefined
+                  : currentOrganization?.id
               },
               pageSize
             }
@@ -350,7 +352,7 @@ export const Vulnerabilities: React.FC = () => {
         return;
       }
     },
-    [apiPost, currentOrganization, showAll]
+    [apiPost, currentOrganization, showAllOrganizations]
   );
 
   const fetchVulnerabilities = useCallback(
@@ -407,7 +409,7 @@ export const Vulnerabilities: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <Grid row>
+      <Grid row style={{ marginBottom: '1rem' }}>
         <Subnav
           items={[
             { title: 'Assets', path: '/inventory', exact: true },
@@ -415,20 +417,6 @@ export const Vulnerabilities: React.FC = () => {
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
         ></Subnav>
-        <Grid style={{ float: 'right' }}>
-          {((user?.roles && user.roles.length > 1) ||
-            user?.userType === 'globalView' ||
-            user?.userType === 'globalAdmin') && (
-            <Checkbox
-              id="showAll"
-              name="showAll"
-              label="Show all organizations"
-              checked={showAll}
-              onChange={(e) => updateShowAll(e.target.checked)}
-              className={classes.showAll}
-            />
-          )}
-        </Grid>
       </Grid>
       <Table<Vulnerability>
         renderPagination={renderPagination}

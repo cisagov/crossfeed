@@ -21,12 +21,17 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     'organization',
     null
   );
+  const [showAllOrganizations, setShowAllOrganizations] = usePersistentState<
+    boolean
+  >('showAllOrganizations', false);
   const cookies = useMemo(() => new Cookies(), []);
 
   const logout = useCallback(async () => {
     localStorage.clear();
     await Auth.signOut();
-    cookies.remove('crossfeed-token', { domain: process.env.REACT_APP_COOKIE_DOMAIN });
+    cookies.remove('crossfeed-token', {
+      domain: process.env.REACT_APP_COOKIE_DOMAIN
+    });
     window.location.reload();
   }, [cookies]);
 
@@ -114,6 +119,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         refreshUser,
         setOrganization: setOrg,
         currentOrganization: extendedOrg,
+        showAllOrganizations: showAllOrganizations,
+        setShowAllOrganizations: setShowAllOrganizations,
         login: setToken,
         logout,
         setLoading: () => {},

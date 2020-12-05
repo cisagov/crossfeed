@@ -280,7 +280,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
               <Accordion className={classes.accordion} key={vuln.id}>
                 <AccordionSummary expandIcon={<ExpandMore />}>
                   <Typography className={classes.accordionHeading}>
-                    {vuln.cve}
+                    {vuln.title}
                   </Typography>
                   <Typography className={classes.vulnDescription}>
                     {vuln.severity}
