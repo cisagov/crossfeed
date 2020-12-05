@@ -33,6 +33,7 @@ import {
 import ReactMarkdown from 'react-markdown';
 import { Subnav } from 'components';
 import { parse } from 'query-string';
+import { getSeverityColor } from 'pages/Risk/Risk';
 
 export interface ApiResponse {
   result: Vulnerability[];
@@ -84,7 +85,19 @@ export const Vulnerabilities: React.FC = () => {
     {
       Header: 'Severity',
       id: 'severity',
-      accessor: ({ severity }) => severity,
+      accessor: ({ severity }) => (
+        <span
+          style={{
+            borderBottom: `6px solid ${getSeverityColor({
+              id: severity ?? ''
+            })}`,
+            width: '80px'
+          }}
+          // className={classes.severity}
+        >
+          {severity}
+        </span>
+      ),
       width: 100,
       Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
     },

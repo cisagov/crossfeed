@@ -31,3 +31,24 @@
     margin: 30px 0;
   }
 }
+
+.severity {
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    height: 6px;
+    width: 80px;
+    background: #cb5a5e;
+    background: repeating-linear-gradient(
+      -45deg,
+      #cb5a5e,
+      #cb5a5e 12px,
+      transparent 10px,
+      transparent 23px
+    );
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-bottom: 0;
+  }
+}

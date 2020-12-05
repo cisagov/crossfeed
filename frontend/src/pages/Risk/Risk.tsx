@@ -52,6 +52,14 @@ let colorScale = scaleLinear<string>()
   .domain([0, 1])
   .range(['#c7e8ff', '#135787']);
 
+export const getSeverityColor = ({ id }: { id: string }) => {
+  if (id === 'None') return 'rgb(255, 255, 255)';
+  else if (id === 'Low') return '#F8DFE2';
+  else if (id === 'Medium') return '#F2938C';
+  else if (id === 'High') return '#B51D09';
+  else return '#540C03';
+};
+
 const Risk: React.FC = (props) => {
   const history = useHistory();
   const { currentOrganization, user, apiPost } = useAuthContext();
@@ -73,14 +81,6 @@ const Risk: React.FC = (props) => {
 
   const getSingleColor = () => {
     return '#FFBC78';
-  };
-
-  const getSeverityColor = ({ id }: { id: string }) => {
-    if (id === 'None') return 'rgb(255, 255, 255)';
-    else if (id === 'Low') return '#F8DFE2';
-    else if (id === 'Medium') return '#F2938C';
-    else if (id === 'High') return '#B51D09';
-    else return '#540C03';
   };
 
   const truncateText = (text: string, len: number) => {

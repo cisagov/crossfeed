@@ -41,8 +41,9 @@
   text-overflow: ellipsis;
   white-space: normal;
   > div {
-    max-height: 50px;
     overflow: auto;
+    display: flex;
+    align-content: center;
   }
 }
 

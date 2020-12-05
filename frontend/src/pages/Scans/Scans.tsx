@@ -9,8 +9,6 @@ export const Scans: React.FC = () => {
   const { user } = useAuthContext();
   const [currentView, setCurrentView] = useState<number>(0);
 
-  const titles = ['Scans', 'Scan Tasks'];
-
   const views = [<ScansView />, <ScanTasksView />];
 
   return (

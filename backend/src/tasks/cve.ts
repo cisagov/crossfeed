@@ -3,7 +3,8 @@ import {
   connectToDatabase,
   Vulnerability,
   Service,
-  Webpage
+  Webpage,
+  Product
 } from '../models';
 import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
@@ -34,13 +35,14 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
   const hostsToCheck: Array<{
     domain: Domain;
     service: Service;
+    product: Product;
     cpes: string[];
   }> = [];
 
   for (const domain of allDomains) {
     for (const service of domain.services) {
-      const cpes = new Set<string>();
       for (const product of service.products) {
+        const cpes = new Set<string>();
         if (
           product.cpe &&
           product.version &&
@@ -53,13 +55,13 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
             }
           }
         }
-      }
-      if (cpes.size > 0)
         hostsToCheck.push({
           domain: domain,
           service: service,
+          product: product,
           cpes: Array.from(cpes)
         });
+      }
     }
   }
   if (hostsToCheck.length === 0) {
@@ -97,6 +99,7 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
     for (const line of split) {
       const parts = line.split(' ');
       if (parts.length < 5) continue;
+      console.log(hostsToCheck[parseInt(parts[0])]);
       const domain = hostsToCheck[parseInt(parts[0])].domain;
 
       const service = hostsToCheck[parseInt(parts[0])].service;
@@ -123,7 +126,8 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
           state: 'open',
           source: 'cpe2cve',
           needsPopulation: true,
-          service: service
+          service: service,
+          product: hostsToCheck[parseInt(parts[0])].product
         })
       );
     }
