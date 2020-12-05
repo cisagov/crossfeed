@@ -332,7 +332,7 @@ export const Vulnerabilities: React.FC = () => {
       filters: Filters<Vulnerability>,
       sort: SortingRule<Vulnerability>[],
       page: number,
-      pageSize: number = 25,
+      pageSize: number = 15,
       doExport = false
     ): Promise<ApiResponse | undefined> => {
       try {
@@ -392,7 +392,7 @@ export const Vulnerabilities: React.FC = () => {
       if (!resp) return;
       const { result, count } = resp;
       setVulnerabilities(result);
-      setPageCount(Math.ceil(count / 25));
+      setPageCount(Math.ceil(count / 15));
       setNoResults(count === 0);
     },
     [vulnerabilitiesSearch]

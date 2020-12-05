@@ -1,8 +1,5 @@
 import React, { PropsWithChildren } from 'react';
 import { TableInstance } from 'react-table';
-import { PaginatorIndicatorIcon } from './PaginatorIndicatorIcon';
-import { PaginatorButton } from './PaginatorButton';
-import classes from '*.module.css';
 import { Button, makeStyles, Paper } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 
@@ -30,28 +27,21 @@ const useStyles = makeStyles((theme) => ({
 
 export const Paginator = <T extends object>({
   table: {
-    canPreviousPage,
-    canNextPage,
-    previousPage,
-    nextPage,
     pageCount,
     gotoPage,
     state: { pageIndex: idx }
   }
 }: PropsWithChildren<PaginatorProps<T>>) => {
-  const startIdx = idx >= 2 ? idx - 2 : 0;
-  const endIdx = idx <= pageCount - 3 ? idx + 3 : pageCount;
-  const listSize = endIdx - startIdx;
   const classes = useStyles();
 
   return (
     <Paper classes={{ root: classes.pagination }}>
       <span>
         <strong>
-          {pageCount === 0 ? 0 : idx * 10 + 1} -{' '}
-          {Math.min(idx * 10 + 10, pageCount * 10)}
+          {pageCount === 0 ? 0 : idx * 15} -{' '}
+          {Math.min(idx * 15 + 15, pageCount * 15)}
         </strong>{' '}
-        of <strong>{pageCount * 10}</strong>
+        of <strong>{pageCount * 15}</strong>
       </span>
       <Pagination
         count={pageCount}
@@ -67,46 +57,4 @@ export const Paginator = <T extends object>({
       </Button>
     </Paper>
   );
-
-  // return (
-  //   <div className="grid-row flex-justify-center margin-top-4">
-  //     <PaginatorButton onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-  //       <PaginatorIndicatorIcon left />
-  //       <PaginatorIndicatorIcon left pad />
-  //       First
-  //     </PaginatorButton>
-  //     <PaginatorButton
-  //       onClick={() => previousPage()}
-  //       disabled={!canPreviousPage}
-  //     >
-  //       <PaginatorIndicatorIcon left pad />
-  //       Previous
-  //     </PaginatorButton>
-  //     {Array.from({ length: listSize }).map((_, i) => {
-  //       const pageNum = i + startIdx;
-  //       return (
-  //         <PaginatorButton
-  //           isPageNumber
-  //           active={pageNum === idx}
-  //           key={pageNum}
-  //           onClick={() => gotoPage(pageNum)}
-  //         >
-  //           {pageNum + 1}
-  //         </PaginatorButton>
-  //       );
-  //     })}
-  //     <PaginatorButton onClick={nextPage} disabled={!canNextPage}>
-  //       Next
-  //       <PaginatorIndicatorIcon pad />
-  //     </PaginatorButton>
-  //     <PaginatorButton
-  //       onClick={() => gotoPage(pageCount - 1)}
-  //       disabled={!canNextPage}
-  //     >
-  //       Last
-  //       <PaginatorIndicatorIcon pad />
-  //       <PaginatorIndicatorIcon />
-  //     </PaginatorButton>
-  //   </div>
-  // );
 };
