@@ -435,8 +435,8 @@ export const Vulnerabilities: React.FC = () => {
   }
 
   return (
-    <div className={classes.root}>
-      <Grid row style={{ marginBottom: '1rem' }}>
+    <div>
+      <div className={listClasses.contentWrapper}>
         <Subnav
           items={[
             { title: 'Assets', path: '/inventory', exact: true },
@@ -444,26 +444,28 @@ export const Vulnerabilities: React.FC = () => {
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
         ></Subnav>
-      </Grid>
-      <Table<Vulnerability>
-        renderPagination={renderPagination}
-        columns={columns}
-        data={vulnerabilities}
-        pageCount={pageCount}
-        fetchData={fetchVulnerabilities}
-        renderExpanded={renderExpandedVulnerability}
-        tableRef={tableRef}
-        initialFilterBy={initialFilterBy}
-        initialSortBy={initialSortBy}
-        noResults={noResults}
-        noResultsMessage={
-          "We don't see any vulnerabilities that match these criteria."
-        }
-      />
-      <Export<Vulnerability>
-        name="vulnerabilities"
-        getDataToExport={fetchVulnerabilitiesExport}
-      />
+        <div className={classes.root}>
+          <Table<Vulnerability>
+            renderPagination={renderPagination}
+            columns={columns}
+            data={vulnerabilities}
+            pageCount={pageCount}
+            fetchData={fetchVulnerabilities}
+            renderExpanded={renderExpandedVulnerability}
+            tableRef={tableRef}
+            initialFilterBy={initialFilterBy}
+            initialSortBy={initialSortBy}
+            noResults={noResults}
+            noResultsMessage={
+              "We don't see any vulnerabilities that match these criteria."
+            }
+          />
+          <Export<Vulnerability>
+            name="vulnerabilities"
+            getDataToExport={fetchVulnerabilitiesExport}
+          />
+        </div>
+      </div>
     </div>
   );
 };
@@ -472,6 +474,14 @@ const useStyles = makeStyles((theme) => ({
   listRoot: {
     width: '100%',
     backgroundColor: theme.palette.background.paper
+  },
+  contentWrapper: {
+    position: 'relative',
+    flex: '1 1 auto',
+    height: '100%',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    overflowY: 'hidden'
   }
 }));
 
