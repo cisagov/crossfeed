@@ -70,7 +70,7 @@ export const Vulnerabilities: React.FC = () => {
 
   const columns: Column<Vulnerability>[] = [
     {
-      Header: 'Title',
+      Header: 'Vulnerability',
       accessor: 'title',
       Cell: ({ value, row }: CellProps<Vulnerability>) =>
         row.original.cve ? (
@@ -164,7 +164,7 @@ export const Vulnerabilities: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'State',
+      Header: 'Status',
       id: 'state',
       width: 100,
       maxWidth: 200,
@@ -205,8 +205,9 @@ export const Vulnerabilities: React.FC = () => {
           {...row.getToggleRowExpandedProps()}
           className="text-center display-block"
           style={{
-            fontSize: '16px',
-            cursor: 'pointer'
+            fontSize: '14px',
+            cursor: 'pointer',
+            color: '#484D51'
           }}
         >
           {row.isExpanded ? 'HIDE DETAILS' : 'DETAILS'}

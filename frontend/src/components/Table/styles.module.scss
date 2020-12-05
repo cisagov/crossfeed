@@ -40,6 +40,7 @@
   border-color: white;
   text-overflow: ellipsis;
   white-space: normal;
+  color: #3d4551;
   > div {
     overflow: auto;
     display: flex;
@@ -55,4 +56,5 @@
 .th {
   vertical-align: top;
   background-color: #f0f0f0 !important;
+  color: #3d4551;
 }
