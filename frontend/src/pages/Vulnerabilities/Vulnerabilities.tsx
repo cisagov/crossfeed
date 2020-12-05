@@ -119,7 +119,16 @@ export const Vulnerabilities: React.FC = () => {
     {
       Header: 'Product',
       id: 'cpe',
-      accessor: 'cpe',
+      accessor: ({ cpe, service }) => {
+        const product =
+          service &&
+          service.products.find(
+            (product) => cpe && product.cpe && cpe.includes(product.cpe)
+          );
+        if (product)
+          return product.name + (product.version ? ' ' + product.version : '');
+        else return cpe;
+      },
       width: 100,
       Filter: ColumnFilter
     },

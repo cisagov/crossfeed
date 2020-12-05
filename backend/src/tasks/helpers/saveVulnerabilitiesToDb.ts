@@ -14,7 +14,6 @@ export default async (
         "cwe" = excluded."cwe",
         "updatedAt" = now(),
         "cpe" = excluded."cpe",
-        "product" = excluded."product",
         "serviceId" = excluded."serviceId"`;
     if (updateState) {
       query += ',"state" = excluded."state","substate" = excluded."substate"';
