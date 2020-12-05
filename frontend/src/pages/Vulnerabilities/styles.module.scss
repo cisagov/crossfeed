@@ -33,14 +33,18 @@
     display: block;
     height: 6px;
     width: 80px;
-    background: #cb5a5e;
+    background: #fff;
     background: repeating-linear-gradient(
       -45deg,
-      #cb5a5e,
-      #cb5a5e 12px,
-      transparent 10px,
-      transparent 23px
+      #fff 25%,
+      transparent 25%,
+      transparent 50%,
+      #fff 50%,
+      #fff 75%,
+      transparent 75%,
+      transparent 100%
     );
+    background-size: 16px 8px;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     border-bottom: 0;

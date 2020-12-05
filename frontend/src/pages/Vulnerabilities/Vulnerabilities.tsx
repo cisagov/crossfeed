@@ -92,7 +92,7 @@ export const Vulnerabilities: React.FC = () => {
     {
       Header: 'Severity',
       id: 'severity',
-      accessor: ({ severity }) => (
+      accessor: ({ severity, substate }) => (
         <span
           style={{
             borderBottom: `6px solid ${getSeverityColor({
@@ -100,7 +100,7 @@ export const Vulnerabilities: React.FC = () => {
             })}`,
             width: '80px'
           }}
-          // className={classes.severity}
+          className={substate === 'unconfirmed' ? classes.severity : undefined}
         >
           {severity}
         </span>
