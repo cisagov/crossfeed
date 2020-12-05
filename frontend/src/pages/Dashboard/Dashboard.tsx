@@ -9,7 +9,7 @@ import classes from './styles.module.scss';
 import { Grid } from '@trussworks/react-uswds';
 import { useDomainApi } from 'hooks';
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 15;
 
 export const Dashboard: React.FC = () => {
   const { showAllOrganizations } = useAuthContext();
@@ -77,10 +77,8 @@ export const Dashboard: React.FC = () => {
         data={domains}
         pageCount={pageCount}
         fetchData={fetchDomains}
-        count={count}
         pageSize={PAGE_SIZE}
       />
-      <Export<Domain> name="domains" getDataToExport={fetchDomainsExport} />
     </div>
   );
 };

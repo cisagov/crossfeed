@@ -29,7 +29,7 @@ export const Paginator = <T extends object>({
   table: {
     pageCount,
     gotoPage,
-    state: { pageIndex: idx }
+    state: { pageIndex, pageSize }
   }
 }: PropsWithChildren<PaginatorProps<T>>) => {
   const classes = useStyles();
@@ -38,16 +38,16 @@ export const Paginator = <T extends object>({
     <Paper classes={{ root: classes.pagination }}>
       <span>
         <strong>
-          {pageCount === 0 ? 0 : idx * 15} -{' '}
-          {Math.min(idx * 15 + 15, pageCount * 15)}
+          {pageCount === 0 ? 0 : pageIndex * pageSize + 1} -{' '}
+          {Math.min(pageIndex * pageSize + pageSize, pageCount * pageSize)}
         </strong>{' '}
-        of <strong>{pageCount * 15}</strong>
+        of <strong>{pageCount * pageSize}</strong>
       </span>
       <Pagination
         count={pageCount}
-        page={idx}
+        page={pageIndex + 1}
         onChange={(_, page) => {
-          gotoPage(page);
+          gotoPage(page - 1);
         }}
         color="primary"
         size="small"

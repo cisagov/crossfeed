@@ -47,6 +47,8 @@ const formatDate = (date: string) => {
 
 const extLink = <FaExternalLinkAlt style={{ width: 12 }}></FaExternalLinkAlt>;
 
+const PAGE_SIZE = 15;
+
 export const stateMap: { [key: string]: string } = {
   unconfirmed: 'Unconfirmed',
   exploitable: 'Exploitable',
@@ -115,7 +117,6 @@ export const Vulnerabilities: React.FC = () => {
       width: 800,
       Filter: ColumnFilter
     },
-    // To replace with product once we store that with vulnerabilities
     {
       Header: 'Product',
       id: 'cpe',
@@ -332,7 +333,7 @@ export const Vulnerabilities: React.FC = () => {
       filters: Filters<Vulnerability>,
       sort: SortingRule<Vulnerability>[],
       page: number,
-      pageSize: number = 15,
+      pageSize: number = PAGE_SIZE,
       doExport = false
     ): Promise<ApiResponse | undefined> => {
       try {
@@ -392,7 +393,7 @@ export const Vulnerabilities: React.FC = () => {
       if (!resp) return;
       const { result, count } = resp;
       setVulnerabilities(result);
-      setPageCount(Math.ceil(count / 15));
+      setPageCount(Math.ceil(count / PAGE_SIZE));
       setNoResults(count === 0);
     },
     [vulnerabilitiesSearch]
@@ -456,6 +457,7 @@ export const Vulnerabilities: React.FC = () => {
             initialFilterBy={initialFilterBy}
             initialSortBy={initialSortBy}
             noResults={noResults}
+            pageSize={PAGE_SIZE}
             noResultsMessage={
               "We don't see any vulnerabilities that match these criteria."
             }

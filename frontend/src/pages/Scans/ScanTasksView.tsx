@@ -125,7 +125,7 @@ export const ScanTasksView: React.FC = () => {
               <h4>Actions</h4>
               <a
                 href="# "
-                onClick={e => {
+                onClick={(e) => {
                   e.preventDefault();
                   killScanTask(row.index);
                 }}
@@ -219,7 +219,7 @@ export const ScanTasksView: React.FC = () => {
               sort: sort[0]?.id ?? 'createdAt',
               order: sort[0]?.desc ? 'DESC' : 'ASC',
               filters: filters
-                .filter(f => Boolean(f.value))
+                .filter((f) => Boolean(f.value))
                 .reduce(
                   (accum, next) => ({
                     ...accum,
@@ -253,7 +253,6 @@ export const ScanTasksView: React.FC = () => {
         data={scanTasks}
         pageCount={pageCount}
         fetchData={fetchScanTasks}
-        count={count}
         pageSize={PAGE_SIZE}
         initialSortBy={[
           {
