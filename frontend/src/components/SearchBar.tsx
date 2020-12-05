@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     zIndex: 101,
     width: '100%',
-    maxWidth: 500,
+    maxWidth: 400,
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
     flexFlow: 'row nowrap',

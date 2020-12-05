@@ -50,21 +50,21 @@ exports[`Header component matches snapshot 1`] = `
           >
             <a
               aria-current="page"
-              class="makeStyles-link-16 makeStyles-activeLink-14"
+              class="makeStyles-link-18 makeStyles-activeLink-16"
               href="/"
               style="outline: none;"
             >
               Overview
             </a>
             <a
-              class="makeStyles-link-16"
+              class="makeStyles-link-18"
               href="/inventory"
               style="outline: none;"
             >
               Inventory
             </a>
             <a
-              class="makeStyles-link-16"
+              class="makeStyles-link-18"
               href="/feeds"
               style="outline: none;"
             >
@@ -78,14 +78,14 @@ exports[`Header component matches snapshot 1`] = `
             class="makeStyles-spacing-4"
           />
           <div
-            class="makeStyles-wrapper-18"
+            class="makeStyles-wrapper-20"
           >
             <div
-              class="makeStyles-inner-19"
+              class="makeStyles-inner-21"
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root makeStyles-icon-21"
+                class="MuiSvgIcon-root makeStyles-icon-23"
                 focusable="false"
                 viewBox="0 0 24 24"
               >
@@ -95,16 +95,87 @@ exports[`Header component matches snapshot 1`] = `
               </svg>
               <form>
                 <input
-                  class="makeStyles-inp-20"
+                  class="makeStyles-inp-22"
                   placeholder="Search for a domain, vuln type, port, service, IP"
                   value=""
                 />
               </form>
             </div>
           </div>
+          <div
+            class="makeStyles-spacing-4"
+          />
+          <div
+            aria-expanded="false"
+            class="MuiAutocomplete-root makeStyles-selectOrg-12 MuiAutocomplete-hasPopupIcon"
+            role="combobox"
+          >
+            <div
+              class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
+            >
+              <div
+                class="MuiInputBase-root MuiOutlinedInput-root MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiOutlinedInput-adornedEnd"
+              >
+                <input
+                  aria-autocomplete="list"
+                  aria-invalid="false"
+                  autocapitalize="none"
+                  autocomplete="new-password"
+                  class="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd"
+                  id="autocomplete-input"
+                  spellcheck="false"
+                  type="text"
+                  value=""
+                />
+                <div
+                  class="MuiAutocomplete-endAdornment"
+                >
+                  <button
+                    aria-label="Open"
+                    class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-popupIndicator"
+                    tabindex="-1"
+                    title="Open"
+                    type="button"
+                  >
+                    <span
+                      class="MuiIconButton-label"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M7 10l5 5 5-5z"
+                        />
+                      </svg>
+                    </span>
+                    <span
+                      class="MuiTouchRipple-root"
+                    />
+                  </button>
+                </div>
+                <fieldset
+                  aria-hidden="true"
+                  class="PrivateNotchedOutline-root-26 MuiOutlinedInput-notchedOutline"
+                  style="padding-left: 8px;"
+                >
+                  <legend
+                    class="PrivateNotchedOutline-legend-27"
+                    style="width: 0.01px;"
+                  >
+                    <span>
+                      ​
+                    </span>
+                  </legend>
+                </fieldset>
+              </div>
+            </div>
+          </div>
           <a
             aria-current="page"
-            class="makeStyles-link-16 makeStyles-link-16"
+            class="makeStyles-link-18 makeStyles-link-18"
             href="/"
             style="outline: none;"
           >
