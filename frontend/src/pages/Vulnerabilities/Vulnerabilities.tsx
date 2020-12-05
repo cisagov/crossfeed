@@ -460,10 +460,10 @@ export const Vulnerabilities: React.FC = () => {
               "We don't see any vulnerabilities that match these criteria."
             }
           />
-          <Export<Vulnerability>
+          {/* <Export<Vulnerability>
             name="vulnerabilities"
             getDataToExport={fetchVulnerabilitiesExport}
-          />
+          /> */}
         </div>
       </div>
     </div>
