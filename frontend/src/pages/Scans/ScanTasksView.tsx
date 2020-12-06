@@ -54,8 +54,7 @@ const Log = ({ url, token }: { url: string; token: string }) => {
 export const ScanTasksView: React.FC = () => {
   const { apiPost, token } = useAuthContext();
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
-  const [count, setCount] = useState(0);
-  const [pageCount, setPageCount] = useState(0);
+  const [totalResults, setTotalResults] = useState(0);
   const [errors, setErrors] = useState<Errors>({});
 
   const killScanTask = async (index: number) => {
@@ -231,8 +230,7 @@ export const ScanTasksView: React.FC = () => {
           }
         );
         setScanTasks(result);
-        setCount(count);
-        setPageCount(Math.ceil(count / PAGE_SIZE));
+        setTotalResults(count);
       } catch (e) {
         console.error(e);
       }
@@ -241,7 +239,7 @@ export const ScanTasksView: React.FC = () => {
   );
 
   const renderPagination = (table: TableInstance<ScanTask>) => (
-    <Paginator table={table} />
+    <Paginator table={table} totalResults={totalResults} />
   );
 
   return (
@@ -251,7 +249,7 @@ export const ScanTasksView: React.FC = () => {
         renderPagination={renderPagination}
         columns={columns}
         data={scanTasks}
-        pageCount={pageCount}
+        pageCount={Math.ceil(totalResults / PAGE_SIZE)}
         fetchData={fetchScanTasks}
         pageSize={PAGE_SIZE}
         initialSortBy={[

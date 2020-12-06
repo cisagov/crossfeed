@@ -5,6 +5,7 @@ import { Pagination } from '@material-ui/lab';
 
 interface PaginatorProps<T extends object> {
   table: TableInstance<T>;
+  totalResults: number;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +31,8 @@ export const Paginator = <T extends object>({
     pageCount,
     gotoPage,
     state: { pageIndex, pageSize }
-  }
+  },
+  totalResults
 }: PropsWithChildren<PaginatorProps<T>>) => {
   const classes = useStyles();
 
@@ -39,9 +41,9 @@ export const Paginator = <T extends object>({
       <span>
         <strong>
           {pageCount === 0 ? 0 : pageIndex * pageSize + 1} -{' '}
-          {Math.min(pageIndex * pageSize + pageSize, pageCount * pageSize)}
+          {Math.min(pageIndex * pageSize + pageSize, totalResults)}
         </strong>{' '}
-        of <strong>{pageCount * pageSize}</strong>
+        of <strong>{totalResults}</strong>
       </span>
       <Pagination
         count={pageCount}

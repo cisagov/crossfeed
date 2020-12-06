@@ -16,19 +16,16 @@ export const Dashboard: React.FC = () => {
   const tableRef = useRef<TableInstance<Domain>>(null);
   const columns = useMemo(() => createColumns(), []);
   const [domains, setDomains] = useState<Domain[]>([]);
-
-  const [count, setCount] = useState(0);
-  const [pageCount, setPageCount] = useState(0);
+  const [totalResults, setTotalResults] = useState(0);
 
   const { listDomains } = useDomainApi(showAllOrganizations);
 
   const fetchDomains = useCallback(
     async (q: Query<Domain>) => {
       try {
-        const { domains, count, pageCount } = await listDomains(q);
+        const { domains, count } = await listDomains(q);
         setDomains(domains);
-        setCount(count);
-        setPageCount(pageCount);
+        setTotalResults(count);
       } catch (e) {
         console.error(e);
       }
@@ -56,7 +53,7 @@ export const Dashboard: React.FC = () => {
   };
 
   const renderPagination = (table: TableInstance<Domain>) => (
-    <Paginator table={table} />
+    <Paginator table={table} totalResults={totalResults} />
   );
 
   return (
@@ -75,7 +72,7 @@ export const Dashboard: React.FC = () => {
         tableRef={tableRef}
         columns={columns}
         data={domains}
-        pageCount={pageCount}
+        pageCount={Math.ceil(totalResults / PAGE_SIZE)}
         fetchData={fetchDomains}
         pageSize={PAGE_SIZE}
       />

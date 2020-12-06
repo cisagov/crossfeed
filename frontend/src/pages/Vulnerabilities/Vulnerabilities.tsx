@@ -18,8 +18,7 @@ import {
 } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import { Grid, Dropdown, Button } from '@trussworks/react-uswds';
-import { FaMinus, FaPlus } from 'react-icons/fa';
+import { Dropdown, Button } from '@trussworks/react-uswds';
 import { Link } from 'react-router-dom';
 import { differenceInCalendarDays, parseISO, format } from 'date-fns';
 import { FaExternalLinkAlt } from 'react-icons/fa';
@@ -65,7 +64,7 @@ export const Vulnerabilities: React.FC = () => {
     showAllOrganizations
   } = useAuthContext();
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
-  const [pageCount, setPageCount] = useState(0);
+  const [totalResults, setTotalResults] = useState(0);
   const tableRef = useRef<TableInstance<Vulnerability>>(null);
   const listClasses = useStyles();
   const [noResults, setNoResults] = useState(false);
@@ -393,7 +392,7 @@ export const Vulnerabilities: React.FC = () => {
       if (!resp) return;
       const { result, count } = resp;
       setVulnerabilities(result);
-      setPageCount(Math.ceil(count / PAGE_SIZE));
+      setTotalResults(count);
       setNoResults(count === 0);
     },
     [vulnerabilitiesSearch]
@@ -412,7 +411,7 @@ export const Vulnerabilities: React.FC = () => {
   };
 
   const renderPagination = (table: TableInstance<Vulnerability>) => (
-    <Paginator table={table} />
+    <Paginator table={table} totalResults={totalResults} />
   );
 
   const initialFilterBy: Filters<Vulnerability> = [];
@@ -450,7 +449,7 @@ export const Vulnerabilities: React.FC = () => {
             renderPagination={renderPagination}
             columns={columns}
             data={vulnerabilities}
-            pageCount={pageCount}
+            pageCount={Math.ceil(totalResults / PAGE_SIZE)}
             fetchData={fetchVulnerabilities}
             renderExpanded={renderExpandedVulnerability}
             tableRef={tableRef}
