@@ -44,16 +44,20 @@ export const TableHead = <T extends object>({
               );
             })}
           </tr>
-          <tr {...rest}>
-            {headerGroup.headers.map((column) => {
-              const { key, ...rest } = column.getHeaderProps();
-              return (
-                <th {...rest} key={key} className={classes.thFilter}>
-                  <div>{column.canFilter ? column.render('Filter') : null}</div>
-                </th>
-              );
-            })}
-          </tr>
+          {headerGroup.headers.find((column) => column.canFilter) && (
+            <tr {...rest}>
+              {headerGroup.headers.map((column) => {
+                const { key, ...rest } = column.getHeaderProps();
+                return (
+                  <th {...rest} key={key} className={classes.thFilter}>
+                    <div>
+                      {column.canFilter ? column.render('Filter') : null}
+                    </div>
+                  </th>
+                );
+              })}
+            </tr>
+          )}
         </React.Fragment>
       );
     })}
