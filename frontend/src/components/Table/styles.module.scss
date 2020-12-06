@@ -1,7 +1,7 @@
 .root {
   :global .usa-table {
     width: 100%;
-    margin: 0;
+    margin: 8px 0 0 0;
     color: black !important;
     font-family: Source Sans Pro Web, Helvetica Neue, Helvetica, Arial,
       sans-serif;
@@ -17,20 +17,17 @@
     th {
       border: 0px solid #dcdee0;
       box-shadow: inset 0px -1px 0px #dcdee0;
-      height: 60px;
     }
     input,
     select {
       height: 35px;
+      margin: 0px;
       border: 1px solid #dcdee0;
       box-sizing: border-box;
       border-radius: 2px;
     }
-    th {
-      font-style: normal;
-      font-weight: bold;
-      font-size: 16px;
-      line-height: 130%;
+    select {
+      padding-top: 5px;
     }
   }
 }
@@ -46,6 +43,8 @@
     display: flex;
     align-content: center;
   }
+  height: 54px;
+  margin: 0;
 }
 
 .subComponentTd {
@@ -57,4 +56,13 @@
   vertical-align: top;
   background-color: #f0f0f0 !important;
   color: #3d4551;
+  font-size: 16px;
+  height: 50px;
+  padding-left: 15px !important;
+}
+
+.thFilter {
+  background-color: #f4f4f4 !important;
+  height: 54px;
+  padding: 10px !important;
 }
