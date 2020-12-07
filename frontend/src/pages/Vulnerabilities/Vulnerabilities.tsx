@@ -9,13 +9,7 @@ import {
 } from 'react-table';
 import { Query } from 'types';
 import { useAuthContext } from 'context';
-import {
-  Table,
-  Paginator,
-  Export,
-  ColumnFilter,
-  selectFilter
-} from 'components';
+import { Table, Paginator, ColumnFilter, selectFilter } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
 import { Dropdown, Button } from '@trussworks/react-uswds';
@@ -411,7 +405,14 @@ export const Vulnerabilities: React.FC = () => {
   };
 
   const renderPagination = (table: TableInstance<Vulnerability>) => (
-    <Paginator table={table} totalResults={totalResults} />
+    <Paginator
+      table={table}
+      totalResults={totalResults}
+      export={{
+        name: 'vulnerabilities',
+        getDataToExport: fetchVulnerabilitiesExport
+      }}
+    />
   );
 
   const initialFilterBy: Filters<Vulnerability> = [];
@@ -461,10 +462,6 @@ export const Vulnerabilities: React.FC = () => {
               "We don't see any vulnerabilities that match these criteria."
             }
           />
-          {/* <Export<Vulnerability>
-            name="vulnerabilities"
-            getDataToExport={fetchVulnerabilitiesExport}
-          /> */}
         </div>
       </div>
     </div>

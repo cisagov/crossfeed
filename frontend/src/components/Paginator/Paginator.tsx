@@ -2,10 +2,13 @@ import React, { PropsWithChildren } from 'react';
 import { TableInstance } from 'react-table';
 import { Button, makeStyles, Paper } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
+import { exportCSV, ExportProps } from 'components/ImportExport';
+import { useAuthContext } from 'context';
 
 interface PaginatorProps<T extends object> {
   table: TableInstance<T>;
   totalResults: number;
+  export?: ExportProps<T>;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -26,16 +29,19 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export const Paginator = <T extends object>({
-  table: {
-    pageCount,
-    gotoPage,
-    state: { pageIndex, pageSize }
-  },
-  totalResults
-}: PropsWithChildren<PaginatorProps<T>>) => {
+export const Paginator = <T extends object>(
+  props: PropsWithChildren<PaginatorProps<T>>
+) => {
+  const { setLoading } = useAuthContext();
   const classes = useStyles();
-
+  const {
+    table: {
+      pageCount,
+      gotoPage,
+      state: { pageIndex, pageSize }
+    },
+    totalResults
+  } = props;
   return (
     <Paper classes={{ root: classes.pagination }}>
       <span>
@@ -54,9 +60,14 @@ export const Paginator = <T extends object>({
         color="primary"
         size="small"
       />
-      <Button style={{ right: '5rem', position: 'absolute' }}>
-        Export Results
-      </Button>
+      {props.export && (
+        <Button
+          style={{ right: '5rem', position: 'absolute' }}
+          onClick={() => props.export && exportCSV(props.export, setLoading)}
+        >
+          Export Results
+        </Button>
+      )}
     </Paper>
   );
 };

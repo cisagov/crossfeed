@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useMemo, useRef } from 'react';
 import { TableInstance } from 'react-table';
 import { Query } from 'types';
-import { Table, Paginator, Export, Subnav } from 'components';
+import { Table, Paginator, Subnav } from 'components';
 import { Domain } from 'types';
 import { createColumns } from './columns';
 import { useAuthContext } from 'context';
@@ -53,7 +53,14 @@ export const Dashboard: React.FC = () => {
   };
 
   const renderPagination = (table: TableInstance<Domain>) => (
-    <Paginator table={table} totalResults={totalResults} />
+    <Paginator
+      table={table}
+      totalResults={totalResults}
+      export={{
+        name: 'domains',
+        getDataToExport: fetchDomainsExport
+      }}
+    />
   );
 
   return (
