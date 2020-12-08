@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
     flex: 0,
     display: 'flex',
     flexFlow: 'row nowrap',
-    justifyContent: 'flex-start',
     alignItems: 'center',
     padding: '1rem 2rem',
     '& > span': {
@@ -25,7 +24,13 @@ const useStyles = makeStyles((theme) => ({
     },
     '& *:focus': {
       outline: 'none !important'
-    }
+    },
+    width: '100%',
+    justifyContent: 'flex-start'
+  },
+  exportButton: {
+    justifyContent: 'flex-end',
+    marginLeft: 'auto'
   }
 }));
 
@@ -62,7 +67,7 @@ export const Paginator = <T extends object>(
       />
       {props.export && (
         <Button
-          style={{ right: '5rem', position: 'absolute' }}
+          className={classes.exportButton}
           onClick={() => props.export && exportCSV(props.export, setLoading)}
         >
           Export Results
