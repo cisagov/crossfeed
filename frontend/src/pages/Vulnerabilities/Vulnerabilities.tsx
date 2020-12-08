@@ -445,6 +445,7 @@ export const Vulnerabilities: React.FC = () => {
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
         ></Subnav>
+        <br></br>
         <div className={classes.root}>
           <Table<Vulnerability>
             renderPagination={renderPagination}

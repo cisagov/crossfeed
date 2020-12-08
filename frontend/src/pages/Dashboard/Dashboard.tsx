@@ -6,7 +6,6 @@ import { Domain } from 'types';
 import { createColumns } from './columns';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { Grid } from '@trussworks/react-uswds';
 import { useDomainApi } from 'hooks';
 
 const PAGE_SIZE = 15;
@@ -65,15 +64,14 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <Grid row style={{ marginBottom: '1rem' }}>
-        <Subnav
-          items={[
-            { title: 'Assets', path: '/inventory', exact: true },
-            { title: 'Domains', path: '/inventory/domains' },
-            { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
-          ]}
-        ></Subnav>
-      </Grid>
+      <Subnav
+        items={[
+          { title: 'Assets', path: '/inventory', exact: true },
+          { title: 'Domains', path: '/inventory/domains' },
+          { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
+        ]}
+      ></Subnav>
+      <br></br>
       <Table<Domain>
         renderPagination={renderPagination}
         tableRef={tableRef}
