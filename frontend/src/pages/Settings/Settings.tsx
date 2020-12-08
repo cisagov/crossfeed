@@ -99,6 +99,15 @@ const Settings: React.FC = () => {
             .join(', ')}
       </h2>
       <h2>API Keys:</h2>
+      <p>
+        <a
+          href="https://docs.crossfeed.cyber.dhs.gov/api-reference"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Read API documentation
+        </a>
+      </p>
       {(!user?.apiKeys || user.apiKeys.length === 0) && <p>No API Keys</p>}
       {user?.apiKeys && user.apiKeys.length > 0 && (
         <Table<ApiKey> columns={columns} data={user?.apiKeys} />
