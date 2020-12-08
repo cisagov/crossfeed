@@ -81,7 +81,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     if (userLevel > 0) {
       fetchOrganizations();
     }
-  }, [fetchOrganizations]);
+  }, [fetchOrganizations, userLevel]);
 
   const navItems: NavItemType[] = [
     {
