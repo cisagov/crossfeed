@@ -21,14 +21,26 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     'organization',
     null
   );
+  const [showAllOrganizations, setShowAllOrganizations] = usePersistentState<
+    boolean
+  >('showAllOrganizations', false);
   const cookies = useMemo(() => new Cookies(), []);
 
   const logout = useCallback(async () => {
+    const shouldReload = !!token;
+
     localStorage.clear();
     await Auth.signOut();
-    cookies.remove('crossfeed-token', { domain: process.env.REACT_APP_COOKIE_DOMAIN });
-    window.location.reload();
-  }, [cookies]);
+    cookies.remove('crossfeed-token', {
+      domain: process.env.REACT_APP_COOKIE_DOMAIN
+    });
+
+    if (shouldReload) {
+      // Refresh the page only if the token was previously defined
+      // (i.e. it is now invalid / has expired now).
+      window.location.reload();
+    }
+  }, [cookies, token]);
 
   const handleError = useCallback(
     async (e: Error) => {
@@ -114,6 +126,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         refreshUser,
         setOrganization: setOrg,
         currentOrganization: extendedOrg,
+        showAllOrganizations: showAllOrganizations,
+        setShowAllOrganizations: setShowAllOrganizations,
         login: setToken,
         logout,
         setLoading: () => {},

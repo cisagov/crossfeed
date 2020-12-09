@@ -111,7 +111,7 @@ export const ResultCard: React.FC<Props> = (props) => {
   const data = [];
   if (products.length > 0) {
     data.push({
-      label: `product${products.length > 1 ? 's' : ''}`,
+      label: `Product${products.length > 1 ? 's' : ''}`,
       count: products.length,
       value: filterExpanded(
         [...Array.from(new Set(products))],
@@ -125,7 +125,7 @@ export const ResultCard: React.FC<Props> = (props) => {
   }
   if (cves.length > 0) {
     data.push({
-      label: `cve${cves.length > 1 ? 's' : ''}`,
+      label: `CVE${cves.length > 1 ? 's' : ''}`,
       count: cves.length,
       value: filterExpanded(cves, Boolean(expanded.vulns), 10).join(', '),
       onExpand: () => toggleExpanded('vulns'),
@@ -163,9 +163,9 @@ export const ResultCard: React.FC<Props> = (props) => {
       classes={{ root: classes.root }}
       aria-label="view domain details"
     >
-      <div className={classes.inner}>
+      <div className={classes.inner} onClick={onClick}>
         <button className={classes.domainRow}>
-          <h4 onClick={onClick}>{name.raw}</h4>
+          <h4>{name.raw}</h4>
           <div className={classes.lastSeen}>
             <span className={classes.label}>Last Seen</span>
             <span className={classes.data}>{lastSeen} ago</span>
@@ -182,7 +182,7 @@ export const ResultCard: React.FC<Props> = (props) => {
               <div className={classes.lastSeen}>
                 <span className={classes.label}>
                   <span className={classes.count}>{ports.length}</span>
-                  {` port${ports.length > 1 ? 's' : ''}`}
+                  {` Port${ports.length > 1 ? 's' : ''}`}
                 </span>
                 <span className={classes.data}>{ports.join(', ')}</span>
               </div>
@@ -201,7 +201,13 @@ export const ResultCard: React.FC<Props> = (props) => {
             <span className={classes.data}>
               {value}
               {expansionText && (
-                <button className={classes.expandMore} onClick={onExpand}>
+                <button
+                  className={classes.expandMore}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    if (onExpand) onExpand();
+                  }}
+                >
                   {expansionText}
                 </button>
               )}
@@ -229,7 +235,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   inner: {
-    padding: '1.5rem'
+    padding: '1.5rem',
+    cursor: 'pointer'
   },
   domainRow: {
     width: '100%',

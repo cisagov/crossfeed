@@ -26,8 +26,27 @@
   }
 }
 
-.showAll {
-  @media screen and (min-width: 640px) {
-    margin: 30px 0;
+.severity {
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    height: 6px;
+    width: 80px;
+    background: #fff;
+    background: repeating-linear-gradient(
+      -45deg,
+      #fff 25%,
+      transparent 25%,
+      transparent 50%,
+      #fff 50%,
+      #fff 75%,
+      transparent 75%,
+      transparent 100%
+    );
+    background-size: 16px 8px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-bottom: 0;
   }
 }

@@ -83,7 +83,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
       ? search
       : {
           name: '',
-          vulnerabilityTemplate: { title: '' },
+          vulnerabilityTemplate: {},
           createVulnerabilities: false
         }
   );
@@ -181,13 +181,17 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
         <Paper classes={{ root: classes.pagination }}>
           <span>
             <strong>
-              {totalResults === 0 ? 0 : (current - 1) * resultsPerPage + 1} -{' '}
+              {(totalResults === 0
+                ? 0
+                : (current - 1) * resultsPerPage + 1
+              ).toLocaleString()}{' '}
+              -{' '}
               {Math.min(
                 (current - 1) * resultsPerPage + resultsPerPage,
                 totalResults
-              )}
+              ).toLocaleString()}
             </strong>{' '}
-            of <strong>{totalResults}</strong>
+            of <strong>{totalResults.toLocaleString()}</strong>
           </span>
           <Pagination
             count={totalPages}
@@ -461,7 +465,9 @@ const useStyles = makeStyles(() => ({
     },
     '& *:focus': {
       outline: 'none !important'
-    }
+    },
+    borderRadius: 0,
+    zIndex: 9
   },
   pageSize: {
     '& > p': {

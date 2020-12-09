@@ -58,7 +58,7 @@ describe('saved-search', () => {
       expect(response.body.name).toEqual(name);
     });
     describe('update', () => {
-      it('update by globalAdmin should succeed', async () => {
+      it('update by globalAdmin should fail', async () => {
         const body = {
           name: 'test-' + Math.random(),
           count: 3,
@@ -83,12 +83,7 @@ describe('saved-search', () => {
             })
           )
           .send(body)
-          .expect(200);
-        expect(response.body.name).toEqual(body.name);
-        expect(response.body.searchTerm).toEqual(body.searchTerm);
-        expect(response.body.createVulnerabilities).toEqual(
-          body.createVulnerabilities
-        );
+          .expect(404);
       });
       it('update by standard user with access should succeed', async () => {
         const user = await User.create({
@@ -198,7 +193,7 @@ describe('saved-search', () => {
       });
     });
     describe('delete', () => {
-      it('delete by globalAdmin should succeed', async () => {
+      it('delete by globalAdmin should fail', async () => {
         const search = await SavedSearch.create({
           name: 'test-' + Math.random(),
           count: 3,
@@ -218,8 +213,7 @@ describe('saved-search', () => {
               userType: 'globalAdmin'
             })
           )
-          .expect(200);
-        expect(response.body.affected).toEqual(1);
+          .expect(404);
       });
       it('delete by user with access should succeed', async () => {
         const user = await User.create({
@@ -328,7 +322,7 @@ describe('saved-search', () => {
       });
     });
     describe('list', () => {
-      it('list by globalView should succeed', async () => {
+      it('list by globalView should return none', async () => {
         const search = await SavedSearch.create({
           name: 'test-' + Math.random(),
           count: 3,
@@ -349,7 +343,7 @@ describe('saved-search', () => {
             })
           )
           .expect(200);
-        expect(response.body.count).toBeGreaterThanOrEqual(1);
+        expect(response.body.count).toEqual(0);
       });
       it('list by user should only get their search', async () => {
         const user = await User.create({
@@ -404,7 +398,7 @@ describe('saved-search', () => {
       });
     });
     describe('get', () => {
-      it('get by globalView should succeed', async () => {
+      it('get by globalView should fail', async () => {
         const search = await SavedSearch.create({
           name: 'test-' + Math.random(),
           count: 3,
@@ -424,8 +418,7 @@ describe('saved-search', () => {
               userType: 'globalView'
             })
           )
-          .expect(200);
-        expect(response.body.name).toEqual(search.name);
+          .expect(404);
       });
       it('get by a user should pass', async () => {
         const user = await User.create({

@@ -1,38 +1,30 @@
 import React, { useCallback, useState, useMemo, useRef } from 'react';
 import { TableInstance } from 'react-table';
 import { Query } from 'types';
-import { Table, Paginator, Export, Subnav } from 'components';
+import { Table, Paginator, Subnav } from 'components';
 import { Domain } from 'types';
 import { createColumns } from './columns';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { Grid, Checkbox } from '@trussworks/react-uswds';
-import { usePersistentState, useDomainApi } from 'hooks';
+import { useDomainApi } from 'hooks';
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 15;
 
 export const Dashboard: React.FC = () => {
-  const { user } = useAuthContext();
+  const { showAllOrganizations } = useAuthContext();
   const tableRef = useRef<TableInstance<Domain>>(null);
   const columns = useMemo(() => createColumns(), []);
   const [domains, setDomains] = useState<Domain[]>([]);
+  const [totalResults, setTotalResults] = useState(0);
 
-  const [count, setCount] = useState(0);
-  const [pageCount, setPageCount] = useState(0);
-  const [showAll, setShowAll] = usePersistentState<boolean>(
-    'showGlobal',
-    false
-  );
-
-  const { listDomains } = useDomainApi(showAll);
+  const { listDomains } = useDomainApi(showAllOrganizations);
 
   const fetchDomains = useCallback(
     async (q: Query<Domain>) => {
       try {
-        const { domains, count, pageCount } = await listDomains(q);
+        const { domains, count } = await listDomains(q);
         setDomains(domains);
-        setCount(count);
-        setPageCount(pageCount);
+        setTotalResults(count);
       } catch (e) {
         console.error(e);
       }
@@ -60,45 +52,35 @@ export const Dashboard: React.FC = () => {
   };
 
   const renderPagination = (table: TableInstance<Domain>) => (
-    <Paginator table={table} />
+    <Paginator
+      table={table}
+      totalResults={totalResults}
+      export={{
+        name: 'domains',
+        getDataToExport: fetchDomainsExport
+      }}
+    />
   );
 
   return (
     <div className={classes.root}>
-      <Grid row>
-        <Subnav
-          items={[
-            { title: 'Assets', path: '/inventory', exact: true },
-            { title: 'Domains', path: '/inventory/domains' },
-            { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
-          ]}
-        ></Subnav>
-        <Grid style={{ float: 'right' }}>
-          {((user?.roles && user.roles.length > 1) ||
-            user?.userType === 'globalView' ||
-            user?.userType === 'globalAdmin') && (
-            <Checkbox
-              id="showAll"
-              name="showAll"
-              label="Show all organizations"
-              checked={showAll}
-              onChange={(e) => setShowAll(e.target.checked)}
-              className={classes.showAll}
-            />
-          )}
-        </Grid>
-      </Grid>
+      <Subnav
+        items={[
+          { title: 'Assets', path: '/inventory', exact: true },
+          { title: 'Domains', path: '/inventory/domains' },
+          { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
+        ]}
+      ></Subnav>
+      <br></br>
       <Table<Domain>
         renderPagination={renderPagination}
         tableRef={tableRef}
         columns={columns}
         data={domains}
-        pageCount={pageCount}
+        pageCount={Math.ceil(totalResults / PAGE_SIZE)}
         fetchData={fetchDomains}
-        count={count}
         pageSize={PAGE_SIZE}
       />
-      <Export<Domain> name="domains" getDataToExport={fetchDomainsExport} />
     </div>
   );
 };

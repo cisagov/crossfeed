@@ -11,6 +11,7 @@ import {
   BeforeUpdate
 } from 'typeorm';
 import { Role } from './';
+import { ApiKey } from './api-key';
 
 @Entity()
 export class User extends BaseEntity {
@@ -72,6 +73,13 @@ export class User extends BaseEntity {
    * while globalAdmin allows universally administering Crossfeed */
   @Column('text', { default: 'standard' })
   userType: 'standard' | 'globalView' | 'globalAdmin';
+
+  /** List of the user's API keys */
+  @OneToMany((type) => ApiKey, (key) => key.user, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  apiKeys: ApiKey[];
 
   /** The roles for organizations which the user belongs to */
   @OneToMany((type) => Role, (role) => role.user, {

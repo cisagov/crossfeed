@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput } from '@trussworks/react-uswds';
 import { ColumnInstance } from 'react-table';
-import { FaTimes } from 'react-icons/fa';
+import { FaSearch, FaTimes } from 'react-icons/fa';
 import classes from './styles.module.scss';
 
 interface Props {
@@ -33,7 +33,9 @@ export const ColumnFilter: React.FC<Props> = ({
         onChange={(e) => {
           setSearch(e.target.value);
         }}
+        className={classes.input}
       />
+      <FaSearch className={classes.searchIcon}></FaSearch>
       {filterValue && (
         <button type="button" className={classes.clearFilter} onClick={clear}>
           <FaTimes />

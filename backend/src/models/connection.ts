@@ -9,6 +9,7 @@ import {
   Role,
   ScanTask,
   Webpage,
+  ApiKey,
   SavedSearch
 } from '.';
 
@@ -32,6 +33,7 @@ const connectDb = async (logging?: boolean) => {
       Role,
       ScanTask,
       Webpage,
+      ApiKey,
       SavedSearch
     ],
     synchronize: false,

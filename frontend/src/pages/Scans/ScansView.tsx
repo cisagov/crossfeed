@@ -250,6 +250,7 @@ const ScansView: React.FC = () => {
   return (
     <>
       <Table<Scan> columns={columns} data={scans} fetchData={fetchScans} />
+      <br></br>
       <Button type="submit" outline onClick={invokeScheduler}>
         Manually run scheduler
       </Button>

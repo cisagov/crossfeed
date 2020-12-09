@@ -9,7 +9,6 @@ import {
 } from 'class-validator';
 import { connectToDatabase, SavedSearch, Vulnerability } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
-import { isGlobalWriteAdmin, isGlobalViewAdmin } from './auth';
 import { FindManyOptions } from 'typeorm';
 
 export const del = wrapHandler(async (event) => {
@@ -19,9 +18,7 @@ export const del = wrapHandler(async (event) => {
     return NotFound;
   }
 
-  const where = isGlobalWriteAdmin(event)
-    ? {}
-    : { createdBy: { id: event.requestContext.authorizer!.id } };
+  const where = { createdBy: { id: event.requestContext.authorizer!.id } };
 
   await connectToDatabase();
   const search = await SavedSearch.findOne(
@@ -80,9 +77,7 @@ export const update = wrapHandler(async (event) => {
   if (!id || !isUUID(id)) {
     return NotFound;
   }
-  const where = isGlobalWriteAdmin(event)
-    ? {}
-    : { createdBy: { id: event.requestContext.authorizer!.id } };
+  const where = { createdBy: { id: event.requestContext.authorizer!.id } };
 
   const body = await validateBody(NewSavedSearch, event.body);
   await connectToDatabase();
@@ -122,9 +117,7 @@ export const create = wrapHandler(async (event) => {
 
 export const list = wrapHandler(async (event) => {
   await connectToDatabase();
-  const where = isGlobalViewAdmin(event)
-    ? {}
-    : { createdBy: { id: event.requestContext.authorizer!.id } };
+  const where = { createdBy: { id: event.requestContext.authorizer!.id } };
 
   const pageSize = event.query?.pageSize
     ? parseInt(event.query.pageSize)
@@ -149,9 +142,7 @@ export const list = wrapHandler(async (event) => {
 
 export const get = wrapHandler(async (event) => {
   const id = event.pathParameters?.searchId;
-  const where = isGlobalViewAdmin(event)
-    ? {}
-    : { createdBy: { id: event.requestContext.authorizer!.id } };
+  const where = { createdBy: { id: event.requestContext.authorizer!.id } };
 
   await connectToDatabase();
   const result = await SavedSearch.findOne(
