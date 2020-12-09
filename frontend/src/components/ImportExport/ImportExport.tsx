@@ -13,7 +13,7 @@ interface ImportProps<T> {
   onImport: (e: T[]) => void;
 }
 
-interface ExportProps<T> {
+export interface ExportProps<T> {
   // Plural name of the model.
   name: string;
 
@@ -33,7 +33,7 @@ export const Import = <T extends object>(props: ImportProps<T>) => {
     if (!event.target.files || !event.target.files.length) {
       return;
     }
-    setLoading(l => l + 1);
+    setLoading((l) => l + 1);
     const results: T[] = await new Promise((resolve, reject) =>
       Papa.parse(event.target.files![0], {
         header: true,
@@ -42,7 +42,7 @@ export const Import = <T extends object>(props: ImportProps<T>) => {
           errors.length ? reject(errors) : resolve(data as T[])
       })
     );
-    setLoading(l => l - 1);
+    setLoading((l) => l - 1);
     onImport(results);
   };
   return (
@@ -53,40 +53,42 @@ export const Import = <T extends object>(props: ImportProps<T>) => {
           File must be in a CSV format, with the same header as the exported
           file.
         </Label>
-        <FileInput id="import" accept=".csv" onChange={e => parseCSV(e)} />
+        <FileInput id="import" accept=".csv" onChange={(e) => parseCSV(e)} />
       </FormGroup>
     </form>
   );
 };
 
+export const exportCSV = async <T extends object>(
+  props: ExportProps<T>,
+  setLoading: React.Dispatch<React.SetStateAction<number>>
+) => {
+  const filename = `${props.name}-${new Date().toISOString()}`;
+  setLoading((l) => l + 1);
+  const data = await props.getDataToExport();
+  if (typeof data === 'string') {
+    setLoading((l) => l - 1);
+    window.open(data);
+    return;
+  }
+  const csv = Papa.unparse({
+    fields: props.fieldsToExport ?? [],
+    data: data
+  });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  FileSaver.saveAs(blob, `${filename}.csv`);
+  setLoading((l) => l - 1);
+};
+
 export const Export = <T extends object>(props: ExportProps<T>) => {
   const { setLoading } = useAuthContext();
-  const { name, fieldsToExport = [], getDataToExport } = props;
-
-  const downloadCSV = async (filename: string) => {
-    setLoading(l => l + 1);
-    const data = await getDataToExport();
-    if (typeof data === "string") {
-      setLoading(l => l - 1);
-      window.open(data);
-      return;
-    }
-    const csv = Papa.unparse({
-      fields: fieldsToExport,
-      data: data
-    });
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-    FileSaver.saveAs(blob, `${filename}.csv`);
-    setLoading(l => l - 1);
-  };
-
   return (
     <form>
-      <h2>Export {name}</h2>
+      <h2>Export {props.name}</h2>
       <Button
         type="button"
         outline
-        onClick={() => downloadCSV(`${name}-${new Date().toISOString()}`)}
+        onClick={() => exportCSV(props, setLoading)}
       >
         Export as CSV
       </Button>

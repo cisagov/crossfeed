@@ -18,6 +18,8 @@ export interface AuthContextType extends ReturnType<typeof useApi> {
   token: string | null;
   currentOrganization?: CurrentOrganization | null;
   setOrganization: (organization: CurrentOrganization) => void;
+  showAllOrganizations: boolean;
+  setShowAllOrganizations: (showAllOrganizations: boolean) => void;
   refreshUser: () => Promise<void>;
   setLoading: React.Dispatch<React.SetStateAction<number>>;
   maximumRole: 'user' | 'admin';

@@ -50,21 +50,21 @@ exports[`Header component matches snapshot 1`] = `
           >
             <a
               aria-current="page"
-              class="makeStyles-link-16 makeStyles-activeLink-14"
+              class="makeStyles-link-18 makeStyles-activeLink-16"
               href="/"
               style="outline: none;"
             >
               Overview
             </a>
             <a
-              class="makeStyles-link-16"
+              class="makeStyles-link-18"
               href="/inventory"
               style="outline: none;"
             >
               Inventory
             </a>
             <a
-              class="makeStyles-link-16"
+              class="makeStyles-link-18"
               href="/feeds"
               style="outline: none;"
             >
@@ -78,14 +78,14 @@ exports[`Header component matches snapshot 1`] = `
             class="makeStyles-spacing-4"
           />
           <div
-            class="makeStyles-wrapper-18"
+            class="makeStyles-wrapper-20"
           >
             <div
-              class="makeStyles-inner-19"
+              class="makeStyles-inner-21"
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root makeStyles-icon-21"
+                class="MuiSvgIcon-root makeStyles-icon-23"
                 focusable="false"
                 viewBox="0 0 24 24"
               >
@@ -95,7 +95,7 @@ exports[`Header component matches snapshot 1`] = `
               </svg>
               <form>
                 <input
-                  class="makeStyles-inp-20"
+                  class="makeStyles-inp-22"
                   placeholder="Search for a domain, vuln type, port, service, IP"
                   value=""
                 />
@@ -104,7 +104,7 @@ exports[`Header component matches snapshot 1`] = `
           </div>
           <a
             aria-current="page"
-            class="makeStyles-link-16 makeStyles-link-16"
+            class="makeStyles-link-18 makeStyles-link-18"
             href="/"
             style="outline: none;"
           >

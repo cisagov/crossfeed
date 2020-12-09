@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { NavLink, Link, useHistory, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -7,7 +7,8 @@ import {
   IconButton,
   Drawer,
   ListItem,
-  List
+  List,
+  TextField
 } from '@material-ui/core';
 import {
   Menu as MenuIcon,
@@ -20,6 +21,8 @@ import logo from '../assets/cisa_logo.png';
 import { withSearch } from '@elastic/react-search-ui';
 import { ContextType } from 'context/SearchProvider';
 import { SearchBar } from 'components';
+import { Autocomplete } from '@material-ui/lab';
+import { Organization } from 'types';
 
 const GLOBAL_ADMIN = 4;
 const ORG_ADMIN = 2;
@@ -40,8 +43,26 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  const { currentOrganization, user, logout } = useAuthContext();
+  const {
+    currentOrganization,
+    setOrganization,
+    showAllOrganizations,
+    setShowAllOrganizations,
+    user,
+    logout,
+    apiGet
+  } = useAuthContext();
   const [navOpen, setNavOpen] = useState(false);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+
+  const fetchOrganizations = useCallback(async () => {
+    try {
+      let rows = await apiGet<Organization[]>('/organizations/');
+      setOrganizations(rows);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet, setOrganizations]);
 
   let userLevel = 0;
   if (user && user.isRegistered) {
@@ -55,6 +76,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       userLevel = GLOBAL_ADMIN;
     }
   }
+
+  React.useEffect(() => {
+    if (userLevel > 0) {
+      fetchOrganizations();
+    }
+  }, [fetchOrganizations, userLevel]);
 
   const navItems: NavItemType[] = [
     {
@@ -173,6 +200,76 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                     });
                   }}
                 />
+                {organizations.length > 1 && (
+                  <>
+                    <div className={classes.spacing} />
+                    <Autocomplete
+                      options={[{ name: 'All Organizations' }].concat(
+                        organizations
+                      )}
+                      className={classes.selectOrg}
+                      classes={{
+                        option: classes.option
+                      }}
+                      value={
+                        showAllOrganizations
+                          ? { name: 'All Organizations' }
+                          : currentOrganization ?? undefined
+                      }
+                      filterOptions={(options, state) => {
+                        // If already selected, show all
+                        if (
+                          options.find(
+                            (option) =>
+                              option.name.toLowerCase() ===
+                              state.inputValue.toLowerCase()
+                          )
+                        ) {
+                          return options;
+                        }
+                        return options.filter((option) =>
+                          option.name
+                            .toLowerCase()
+                            .includes(state.inputValue.toLowerCase())
+                        );
+                      }}
+                      disableClearable
+                      blurOnSelect
+                      selectOnFocus
+                      getOptionLabel={(option) => option.name}
+                      renderOption={(option) => (
+                        <React.Fragment>{option.name}</React.Fragment>
+                      )}
+                      onChange={(
+                        event: any,
+                        value:
+                          | Organization
+                          | {
+                              name: string;
+                            }
+                          | undefined
+                      ) => {
+                        if (value && 'id' in value) {
+                          setOrganization(value);
+                          setShowAllOrganizations(false);
+                        } else {
+                          setShowAllOrganizations(true);
+                        }
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          inputProps={{
+                            ...params.inputProps,
+                            id: 'autocomplete-input',
+                            autoComplete: 'new-password' // disable autocomplete and autofill
+                          }}
+                        />
+                      )}
+                    />
+                  </>
+                )}
                 <NavItem {...userMenu} />
               </>
             )}
@@ -310,5 +407,28 @@ const useStyles = makeStyles((theme) => ({
   },
   mobileNav: {
     padding: `${theme.spacing(2)}px ${theme.spacing()}px`
+  },
+  selectOrg: {
+    border: '1px solid #FFFFFF',
+    borderRadius: '5px',
+    width: '200px',
+    padding: '3px',
+    '& svg': {
+      color: 'white'
+    },
+    '& input': {
+      color: 'white',
+      width: '100%'
+    },
+    '& input:focus': {
+      outlineWidth: 0
+    },
+    '& fieldset': {
+      borderStyle: 'none'
+    },
+    height: '45px'
+  },
+  option: {
+    fontSize: 15
   }
 }));

@@ -8,4 +8,5 @@ export * from './user';
 export * from './role';
 export * from './scan-task';
 export * from './webpage';
+export * from './api-key';
 export * from './saved-search';

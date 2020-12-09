@@ -14,13 +14,11 @@ import {
   useMatomo
 } from '@datapunt/matomo-tracker-react';
 import {
-  Alerts,
   Domain,
   AuthLogin,
   AuthCreateAccount,
   Scans,
   Scan,
-  Logs,
   Risk,
   Organizations,
   Organization,
@@ -119,7 +117,6 @@ const App: React.FC = () => (
                   path="/inventory/vulnerabilities"
                   component={Vulnerabilities}
                 />
-                <RouteGuard path="/inventory/alerts" component={Alerts} />
 
                 <RouteGuard path="/feeds" component={Feeds} />
                 <RouteGuard path="/scans/:scanId" component={Scan} />
@@ -127,7 +124,6 @@ const App: React.FC = () => (
                 <RouteGuard path="/organizations" component={Organizations} />
                 <RouteGuard path="/organization" component={Organization} />
                 <RouteGuard path="/users" component={Users} />
-                <RouteGuard path="/logs" component={Logs} />
                 <RouteGuard path="/settings" component={Settings} />
               </Switch>
             </Layout>

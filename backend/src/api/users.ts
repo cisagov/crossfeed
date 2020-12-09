@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsEmail
 } from 'class-validator';
-import { User, connectToDatabase, Role, Organization } from '../models';
+import { User, connectToDatabase, Role, Organization, ApiKey } from '../models';
 import {
   validateBody,
   wrapHandler,
@@ -20,6 +20,7 @@ import {
   isOrgAdmin,
   isGlobalWriteAdmin
 } from './auth';
+import { randomBytes } from 'crypto';
 
 /**
  * @swagger
@@ -247,7 +248,7 @@ export const invite = wrapHandler(async (event) => {
 export const me = wrapHandler(async (event) => {
   await connectToDatabase();
   const result = await User.findOne(getUserId(event), {
-    relations: ['roles', 'roles.organization']
+    relations: ['roles', 'roles.organization', 'apiKeys']
   });
   return {
     statusCode: 200,
