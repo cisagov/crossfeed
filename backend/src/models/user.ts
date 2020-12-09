@@ -11,6 +11,7 @@ import {
   BeforeUpdate
 } from 'typeorm';
 import { Role } from './';
+import { Alert } from './alert';
 import { ApiKey } from './api-key';
 
 @Entity()
@@ -87,6 +88,13 @@ export class User extends BaseEntity {
     onUpdate: 'CASCADE'
   })
   roles: Role[];
+
+  /** List of the user's alerts */
+  @OneToMany((type) => ApiKey, (alert) => alert.user, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  alerts: Alert[];
 
   @BeforeInsert()
   @BeforeUpdate()

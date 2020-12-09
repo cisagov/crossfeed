@@ -5,6 +5,13 @@ scheduler:
     - schedule: rate(5 minutes)
   reservedConcurrency: 1
 
+notifier:
+  handler: src/tasks/notifier.handler
+  timeout: 900
+  events:
+    - schedule: rate(15 minutes)
+  reservedConcurrency: 1
+
 syncdb:
   handler: src/tasks/syncdb.handler
 

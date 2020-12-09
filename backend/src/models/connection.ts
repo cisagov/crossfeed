@@ -12,6 +12,7 @@ import {
   ApiKey,
   SavedSearch
 } from '.';
+import { Alert } from './alert';
 
 let connection: Connection | null = null;
 
@@ -34,7 +35,8 @@ const connectDb = async (logging?: boolean) => {
       ScanTask,
       Webpage,
       ApiKey,
-      SavedSearch
+      SavedSearch,
+      Alert
     ],
     synchronize: false,
     name: 'default',
