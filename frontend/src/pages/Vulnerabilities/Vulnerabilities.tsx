@@ -93,7 +93,7 @@ export const Vulnerabilities: React.FC = () => {
             })}`,
             width: '80px'
           }}
-          className={substate === 'unconfirmed' ? classes.severity : undefined}
+          // className={substate === 'unconfirmed' ? classes.severity : undefined}
         >
           {severity}
         </span>
