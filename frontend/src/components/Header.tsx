@@ -64,10 +64,6 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     }
   }, [apiGet, setOrganizations]);
 
-  React.useEffect(() => {
-    fetchOrganizations();
-  }, [fetchOrganizations]);
-
   let userLevel = 0;
   if (user && user.isRegistered) {
     if (user.userType === 'standard') {
@@ -80,6 +76,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       userLevel = GLOBAL_ADMIN;
     }
   }
+
+  React.useEffect(() => {
+    if (userLevel > 0) {
+      fetchOrganizations();
+    }
+  }, [fetchOrganizations, userLevel]);
 
   const navItems: NavItemType[] = [
     {
