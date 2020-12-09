@@ -5,12 +5,14 @@ import {
   Organization,
   ScanTask,
   Alert,
+  AlertType,
   Vulnerability,
   Domain
 } from '../models';
 import { SCAN_SCHEMA } from '../api/scans';
 import { In, MoreThan, IsNull, Not, SelectQueryBuilder } from 'typeorm';
 import { addSeconds } from 'date-fns';
+import { sendEmail } from 'src/api/helpers';
 
 // These arguments are currently used only for testing purposes.
 interface Event {
@@ -55,8 +57,8 @@ export const handler: Handler<Event> = async (event) => {
       return qs;
     };
 
-    if (alert.type === 'newDomain') {
-      const cnt = await filterQuery(
+    if (alert.type === AlertType.NEW_DOMAIN) {
+      const count = await filterQuery(
         Domain.createQueryBuilder('domain').andWhere(
           'domain.createdAt > :date',
           {
@@ -64,20 +66,25 @@ export const handler: Handler<Event> = async (event) => {
           }
         )
       ).getCount();
-      console.warn('domains found', cnt);
-    } else if (alert.type === 'newVulnerability') {
-      const cnt = await filterQuery(
+      await sendEmail(alert.user.email,
+        `Crossfeed - ${count} new domains found`,
+        `${count} new domains were found on Crossfeed. Please check ${process.env.FRONTEND_DOMAIN} to see details on the latest notifications.`
+      );
+    } else if (alert.type === AlertType.NEW_VULNERABILITY) {
+      const count = await filterQuery(
         Vulnerability.createQueryBuilder('vulnerability')
           .leftJoinAndSelect('vulnerability.domain', 'domain')
           .andWhere('vulnerability.createdAt > :date', {
             date: alert.notifiedAt
           })
       ).getCount();
-      console.warn('vulns found', cnt);
+      await sendEmail(alert.user.email,
+        `Crossfeed - ${count} new vulnerabilities found`,
+        `${count} new vulnerabilities were found on Crossfeed. Please check ${process.env.FRONTEND_DOMAIN} to see details on the latest notifications.`
+      );
     } else {
       console.error('Invalid alert type ' + alert.type);
     }
-    // TODO: send email
     alert.notifiedAt = newNotifiedAt;
     alert.nextNotifiedAt = addSeconds(newNotifiedAt, alert.frequency);
   }
