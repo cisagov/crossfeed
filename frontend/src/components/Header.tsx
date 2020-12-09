@@ -200,72 +200,76 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                     });
                   }}
                 />
-                <div className={classes.spacing} />
-                <Autocomplete
-                  options={[{ name: 'All Organizations' }].concat(
-                    organizations
-                  )}
-                  className={classes.selectOrg}
-                  classes={{
-                    option: classes.option
-                  }}
-                  value={
-                    showAllOrganizations
-                      ? { name: 'All Organizations' }
-                      : currentOrganization ?? undefined
-                  }
-                  filterOptions={(options, state) => {
-                    // If already selected, show all
-                    if (
-                      options.find(
-                        (option) =>
-                          option.name.toLowerCase() ===
-                          state.inputValue.toLowerCase()
-                      )
-                    ) {
-                      return options;
-                    }
-                    return options.filter((option) =>
-                      option.name
-                        .toLowerCase()
-                        .includes(state.inputValue.toLowerCase())
-                    );
-                  }}
-                  disableClearable
-                  blurOnSelect
-                  selectOnFocus
-                  getOptionLabel={(option) => option.name}
-                  renderOption={(option) => (
-                    <React.Fragment>{option.name}</React.Fragment>
-                  )}
-                  onChange={(
-                    event: any,
-                    value:
-                      | Organization
-                      | {
-                          name: string;
-                        }
-                      | undefined
-                  ) => {
-                    if (value && 'id' in value) {
-                      setOrganization(value);
-                      setShowAllOrganizations(false);
-                    } else {
-                      setShowAllOrganizations(true);
-                    }
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      inputProps={{
-                        ...params.inputProps,
-                        id: 'autocomplete-input',
-                        autoComplete: 'new-password' // disable autocomplete and autofill
+                {organizations.length > 1 && (
+                  <>
+                    <div className={classes.spacing} />
+                    <Autocomplete
+                      options={[{ name: 'All Organizations' }].concat(
+                        organizations
+                      )}
+                      className={classes.selectOrg}
+                      classes={{
+                        option: classes.option
                       }}
+                      value={
+                        showAllOrganizations
+                          ? { name: 'All Organizations' }
+                          : currentOrganization ?? undefined
+                      }
+                      filterOptions={(options, state) => {
+                        // If already selected, show all
+                        if (
+                          options.find(
+                            (option) =>
+                              option.name.toLowerCase() ===
+                              state.inputValue.toLowerCase()
+                          )
+                        ) {
+                          return options;
+                        }
+                        return options.filter((option) =>
+                          option.name
+                            .toLowerCase()
+                            .includes(state.inputValue.toLowerCase())
+                        );
+                      }}
+                      disableClearable
+                      blurOnSelect
+                      selectOnFocus
+                      getOptionLabel={(option) => option.name}
+                      renderOption={(option) => (
+                        <React.Fragment>{option.name}</React.Fragment>
+                      )}
+                      onChange={(
+                        event: any,
+                        value:
+                          | Organization
+                          | {
+                              name: string;
+                            }
+                          | undefined
+                      ) => {
+                        if (value && 'id' in value) {
+                          setOrganization(value);
+                          setShowAllOrganizations(false);
+                        } else {
+                          setShowAllOrganizations(true);
+                        }
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          inputProps={{
+                            ...params.inputProps,
+                            id: 'autocomplete-input',
+                            autoComplete: 'new-password' // disable autocomplete and autofill
+                          }}
+                        />
+                      )}
                     />
-                  )}
-                />
+                  </>
+                )}
                 <NavItem {...userMenu} />
               </>
             )}
