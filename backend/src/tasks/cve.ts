@@ -3,8 +3,7 @@ import {
   connectToDatabase,
   Vulnerability,
   Service,
-  Webpage,
-  Product
+  Webpage
 } from '../models';
 import { spawnSync, execSync } from 'child_process';
 import { plainToClass } from 'class-transformer';
@@ -55,11 +54,12 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
           }
         }
       }
-      hostsToCheck.push({
-        domain: domain,
-        service: service,
-        cpes: Array.from(cpes)
-      });
+      if (cpes.size > 0)
+        hostsToCheck.push({
+          domain: domain,
+          service: service,
+          cpes: Array.from(cpes)
+        });
     }
   }
   if (hostsToCheck.length === 0) {
@@ -97,7 +97,6 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
     for (const line of split) {
       const parts = line.split(' ');
       if (parts.length < 5) continue;
-      console.log(hostsToCheck[parseInt(parts[0])]);
       const domain = hostsToCheck[parseInt(parts[0])].domain;
 
       const service = hostsToCheck[parseInt(parts[0])].service;
