@@ -27,13 +27,20 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const cookies = useMemo(() => new Cookies(), []);
 
   const logout = useCallback(async () => {
+    const shouldReload = !!token;
+
     localStorage.clear();
     await Auth.signOut();
     cookies.remove('crossfeed-token', {
       domain: process.env.REACT_APP_COOKIE_DOMAIN
     });
-    window.location.reload();
-  }, [cookies]);
+
+    if (shouldReload) {
+      // Refresh the page only if the token was previously defined
+      // (i.e. it is now invalid / has expired now).
+      window.location.reload();
+    }
+  }, [cookies, token]);
 
   const handleError = useCallback(
     async (e: Error) => {
