@@ -2,7 +2,7 @@ import { validateBody, wrapHandler } from './helpers';
 import { getOrgMemberships, isGlobalViewAdmin } from './auth';
 import { buildRequest } from './search/buildRequest';
 import ESClient from '../tasks/es-client';
-import { IsArray, IsInt, IsObject, IsString } from 'class-validator';
+import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
 class SearchBody {
   @IsInt()
   current: number;
@@ -21,6 +21,10 @@ class SearchBody {
 
   @IsArray()
   filters: { field: string; values: any[]; type: string }[];
+
+  @IsOptional()
+  @IsString()
+  organizationId?: string;
 }
 
 /**
@@ -34,10 +38,23 @@ class SearchBody {
  */
 export const search = wrapHandler(async (event) => {
   const searchBody = await validateBody(SearchBody, event.body);
-  const options = {
-    organizationIds: getOrgMemberships(event),
-    matchAllOrganizations: isGlobalViewAdmin(event)
-  };
+  let options;
+  if (
+    searchBody.organizationId &&
+    (getOrgMemberships(event).includes(searchBody.organizationId) ||
+      isGlobalViewAdmin(event))
+  ) {
+    //Search for a specific organization
+    options = {
+      organizationIds: [searchBody.organizationId],
+      matchAllOrganizations: false
+    };
+  } else {
+    options = {
+      organizationIds: getOrgMemberships(event),
+      matchAllOrganizations: isGlobalViewAdmin(event)
+    };
+  }
   const request = buildRequest(searchBody, options);
 
   const client = new ESClient();
