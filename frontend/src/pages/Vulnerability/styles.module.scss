@@ -1,0 +1,13 @@
+.root {
+  width: 100%;
+  padding: 1rem;
+
+  @media screen and (min-width: 640px) {
+    padding: 2rem 1.5rem;
+  }
+
+  .inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}

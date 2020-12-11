@@ -25,6 +25,7 @@ import {
   Users,
   Settings,
   Vulnerabilities,
+  Vulnerability,
   TermsOfUse,
   SearchPage,
   LoginGovCallback,
@@ -116,6 +117,10 @@ const App: React.FC = () => (
                 <RouteGuard
                   path="/inventory/vulnerabilities"
                   component={Vulnerabilities}
+                />
+                <RouteGuard
+                  path="/inventory/vulnerability/:vulnerabilityId"
+                  component={Vulnerability}
                 />
 
                 <RouteGuard path="/feeds" component={Feeds} />
