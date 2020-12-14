@@ -51,8 +51,8 @@ services:
     ports:
       - 9000:9000
     environment:
-      - MINIO_ACCESS_KEY=aws_access_key
-      - MINIO_SECRET_KEY=aws_secret_key
+      - MINIO_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
+      - MINIO_SECRET_KEY=${AWS_SECRET_ACCESS_KEY}
     logging:
       driver: none
 
@@ -66,7 +66,7 @@ services:
       - ./docs/gatsby-config.js:/app/docs/gatsby-config.js
       - ./docs/gatsby-node.js:/app/docs/gatsby-node.js
     ports:
-      - "4000:4000"
+      - '4000:4000'
 
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0

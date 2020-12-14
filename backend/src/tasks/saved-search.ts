@@ -1,11 +1,5 @@
 import { CommandOptions } from './ecs-client';
-import {
-  SavedSearch,
-  connectToDatabase,
-  Domain,
-  Vulnerability,
-  User
-} from '../models';
+import { SavedSearch, connectToDatabase, Vulnerability, User } from '../models';
 import ESClient from './es-client';
 import { buildRequest } from '../api/search/buildRequest';
 import { plainToClass } from 'class-transformer';
@@ -15,34 +9,9 @@ import {
   isGlobalViewAdmin,
   userTokenBody
 } from '../api/auth';
+import { fetchAllResults } from 'src/api/search';
 
 const client = new ESClient();
-
-const fetchAllResults = async (filters, options, hits): Promise<Domain[]> => {
-  const RESULTS_PER_PAGE = 100;
-  let results: Domain[] = [];
-  for (let cur = 0; cur < Math.max(hits / RESULTS_PER_PAGE); cur++) {
-    const request = buildRequest(
-      {
-        current: cur + 1,
-        resultsPerPage: RESULTS_PER_PAGE,
-        ...filters
-      },
-      options
-    );
-    let searchResults;
-    try {
-      searchResults = await client.searchDomains(request);
-    } catch (e) {
-      console.error(e.meta.body.error);
-      continue;
-    }
-    results = results.concat(
-      searchResults.body.hits.hits.map((res) => res._source as Domain)
-    );
-  }
-  return results;
-};
 
 export const handler = async (commandOptions: CommandOptions) => {
   console.log('Running saved search');
@@ -84,7 +53,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     search.save();
 
     if (search.createVulnerabilities) {
-      const results = await fetchAllResults(filters, restrictions, hits);
+      const results = await fetchAllResults(filters, restrictions);
       const vulnerabilities: Vulnerability[] = results.map((domain) =>
         plainToClass(Vulnerability, {
           domain: domain,
