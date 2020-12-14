@@ -2,7 +2,6 @@ import * as request from 'supertest';
 import app from '../src/api/app';
 import { User, Domain, connectToDatabase, Organization } from '../src/models';
 import { createUserToken } from './util';
-
 import '../src/tasks/es-client';
 
 jest.mock('../src/tasks/es-client');
@@ -11,6 +10,8 @@ const searchDomains = require('../src/tasks/es-client')
 jest.mock('../src/api/search/buildRequest');
 const buildRequest = require('../src/api/search/buildRequest')
   .buildRequest as jest.Mock;
+
+const saveCSV = require('../src/tasks/s3-client').saveCSV as jest.Mock;
 
 describe('search', () => {
   let organization;
@@ -73,6 +74,30 @@ describe('search', () => {
         matchAllOrganizations: false,
         organizationIds: [organization.id]
       });
+    });
+
+    it('export by regular user should work', async () => {
+      const response = await request(app)
+        .post('/search/export')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [{ org: organization.id, role: 'user' }]
+          })
+        )
+        .send({
+          current: 1,
+          resultsPerPage: 25,
+          searchTerm: 'term',
+          sortDirection: 'asc',
+          sortField: 'name',
+          filters: []
+        })
+        .expect(200);
+      expect(response.body).toEqual({ url: 'http://mock_url' });
+      expect(saveCSV).toBeCalledTimes(1);
+      expect(saveCSV.mock.calls[0][0]).toContain(name);
+      expect(saveCSV.mock.calls[0][0]).not.toContain(name + '-2');
     });
   });
 });

@@ -66,11 +66,11 @@ export const fetchAllResults = async (
 /**
  * @swagger
  *
- * /domain/export:
+ * /search/export:
  *  post:
- *    description: Export domains to a CSV file by specifying a filter.
+ *    description: Export a search result to a CSV file by specifying an elasticsearch query
  *    tags:
- *    - Domains
+ *    - Search
  */
 export const export_ = wrapHandler(async (event) => {
   const searchBody = await validateBody(SearchBody, event.body);
@@ -82,15 +82,15 @@ export const export_ = wrapHandler(async (event) => {
   results = results.map((res) => {
     res.organization = res.organization.name;
     res.ports = res.services.map((service) => service.port).join(', ');
-    const allServices: { [key: string]: string } = {};
+    const products: { [key: string]: string } = {};
     for (const service of res.services) {
       for (const product of service.products) {
         if (product.name)
-          allServices[product.name.toLowerCase()] =
+          products[product.name.toLowerCase()] =
             product.name + (product.version ? ` ${product.version}` : '');
       }
     }
-    res.products = Object.values(allServices).join(', ');
+    res.products = Object.values(products).join(', ');
     return res;
   });
   const client = new S3Client();
