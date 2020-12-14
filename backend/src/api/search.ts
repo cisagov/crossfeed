@@ -35,7 +35,7 @@ export const fetchAllResults = async (
   }
 ): Promise<Domain[]> => {
   const client = new ESClient();
-  const RESULTS_PER_PAGE = 100;
+  const RESULTS_PER_PAGE = 1000;
   let results: Domain[] = [];
   let current = 1;
   while (true) {
