@@ -460,7 +460,7 @@ export const Vulnerabilities: React.FC = () => {
             noResults={noResults}
             pageSize={PAGE_SIZE}
             noResultsMessage={
-              "We don't see any vulnerabilities that match these criteria."
+              "We don't see any vulnerabilities that match your criteria."
             }
           />
         </div>
