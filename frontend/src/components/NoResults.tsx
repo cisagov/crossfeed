@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, makeStyles, Paper } from '@material-ui/core';
+import { makeStyles, Paper } from '@material-ui/core';
 import logo from '../assets/crossfeed_blue.svg';
 
 interface Props {
