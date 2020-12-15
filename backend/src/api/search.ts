@@ -2,7 +2,7 @@ import { validateBody, wrapHandler } from './helpers';
 import { getOrgMemberships, isGlobalViewAdmin } from './auth';
 import { buildRequest } from './search/buildRequest';
 import ESClient from '../tasks/es-client';
-import { IsArray, IsInt, IsObject, IsString } from 'class-validator';
+import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
 import { Domain } from 'domain';
 import S3Client from '../tasks/s3-client';
 import * as Papa from 'papaparse';
@@ -25,6 +25,10 @@ class SearchBody {
 
   @IsArray()
   filters: { field: string; values: any[]; type: string }[];
+
+  @IsOptional()
+  @IsString()
+  organizationId?: string;
 }
 
 export const fetchAllResults = async (
@@ -130,10 +134,23 @@ export const export_ = wrapHandler(async (event) => {
  */
 export const search = wrapHandler(async (event) => {
   const searchBody = await validateBody(SearchBody, event.body);
-  const options = {
-    organizationIds: getOrgMemberships(event),
-    matchAllOrganizations: isGlobalViewAdmin(event)
-  };
+  let options;
+  if (
+    searchBody.organizationId &&
+    (getOrgMemberships(event).includes(searchBody.organizationId) ||
+      isGlobalViewAdmin(event))
+  ) {
+    //Search for a specific organization
+    options = {
+      organizationIds: [searchBody.organizationId],
+      matchAllOrganizations: false
+    };
+  } else {
+    options = {
+      organizationIds: getOrgMemberships(event),
+      matchAllOrganizations: isGlobalViewAdmin(event)
+    };
+  }
   const request = buildRequest(searchBody, options);
 
   const client = new ESClient();

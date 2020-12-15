@@ -9,7 +9,11 @@ interface ApiResponse {
 }
 
 export const SearchProvider: React.FC = ({ children }) => {
-  const { apiPost } = useAuthContext();
+  const {
+    apiPost,
+    currentOrganization,
+    showAllOrganizations
+  } = useAuthContext();
 
   const config = {
     debug: false,
@@ -55,15 +59,19 @@ export const SearchProvider: React.FC = ({ children }) => {
         sortDirection,
         sortField
       } = state;
+      let body: any = {
+        current,
+        filters,
+        resultsPerPage,
+        searchTerm,
+        sortDirection,
+        sortField
+      };
+      if (!showAllOrganizations && currentOrganization) {
+        body.organizationId = currentOrganization.id;
+      }
       const responseJson = await apiPost<ApiResponse>('/search', {
-        body: {
-          current,
-          filters,
-          resultsPerPage,
-          searchTerm,
-          sortDirection,
-          sortField
-        }
+        body
       });
       const responseJsonWithDisjunctiveFacetCounts = await applyDisjunctiveFaceting(
         responseJson,
