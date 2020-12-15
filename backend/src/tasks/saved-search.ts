@@ -9,7 +9,7 @@ import {
   isGlobalViewAdmin,
   userTokenBody
 } from '../api/auth';
-import { fetchAllResults } from 'src/api/search';
+import { fetchAllResults } from '../api/search';
 
 const client = new ESClient();
 
