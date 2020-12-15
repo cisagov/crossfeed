@@ -140,7 +140,6 @@ export const search = wrapHandler(async (event) => {
   let searchResults;
   try {
     searchResults = await client.searchDomains(request);
-    console.log(searchResults.body);
   } catch (e) {
     console.error(e.meta.body.error);
     throw e;

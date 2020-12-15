@@ -11,7 +11,48 @@ jest.mock('../src/api/search/buildRequest');
 const buildRequest = require('../src/api/search/buildRequest')
   .buildRequest as jest.Mock;
 
+jest.mock('../src/tasks/s3-client');
 const saveCSV = require('../src/tasks/s3-client').saveCSV as jest.Mock;
+
+const body = {
+  hits: {
+    hits: [
+      {
+        _source: {
+          name: 'test',
+          ip: 'test',
+          organization: {
+            name: 'test'
+          },
+          services: [
+            {
+              port: 443,
+              products: []
+            }
+          ]
+        }
+      },
+      {
+        _source: {
+          name: 'test2',
+          ip: 'test',
+          organization: {
+            name: 'test'
+          },
+          services: [
+            {
+              port: 443,
+              products: []
+            }
+          ]
+        }
+      }
+    ]
+  }
+};
+
+// Used to track the number of times searchDomains has been called, e.g. the page requested
+let numTimesSearched = 0;
 
 describe('search', () => {
   let organization;
@@ -26,9 +67,20 @@ describe('search', () => {
   });
   describe('search', () => {
     it('search by global admin should work', async () => {
-      searchDomains.mockImplementation(() => ({
-        body: [1, 2, 3]
-      }));
+      searchDomains.mockImplementation(() => {
+        if (numTimesSearched > 0) {
+          return {
+            body: {
+              hits: {
+                hits: []
+              }
+            }
+          };
+        } else {
+          numTimesSearched += 1;
+          return { body };
+        }
+      });
       const response = await request(app)
         .post('/search')
         .set(
@@ -50,9 +102,10 @@ describe('search', () => {
         matchAllOrganizations: true,
         organizationIds: []
       });
-      expect(response.body).toEqual([1, 2, 3]);
+      expect(response.body).toEqual(body);
     });
     it('search by regular user should work', async () => {
+      numTimesSearched = 0;
       const response = await request(app)
         .post('/search')
         .set(
@@ -77,6 +130,7 @@ describe('search', () => {
     });
 
     it('export by regular user should work', async () => {
+      numTimesSearched = 0;
       const response = await request(app)
         .post('/search/export')
         .set(
@@ -96,8 +150,7 @@ describe('search', () => {
         .expect(200);
       expect(response.body).toEqual({ url: 'http://mock_url' });
       expect(saveCSV).toBeCalledTimes(1);
-      expect(saveCSV.mock.calls[0][0]).toContain(name);
-      expect(saveCSV.mock.calls[0][0]).not.toContain(name + '-2');
+      expect(saveCSV.mock.calls[0][0]).toContain('test');
     });
   });
 });
