@@ -1,18 +1,22 @@
 import { Handler } from 'aws-lambda';
 import {
   connectToDatabase,
-  Scan,
-  Organization,
-  ScanTask,
   Alert,
   AlertType,
   Vulnerability,
   Domain
 } from '../models';
 import { SCAN_SCHEMA } from '../api/scans';
-import { In, MoreThan, IsNull, Not, SelectQueryBuilder } from 'typeorm';
+import {
+  In,
+  MoreThan,
+  IsNull,
+  Not,
+  SelectQueryBuilder,
+  LessThanOrEqual
+} from 'typeorm';
 import { addSeconds } from 'date-fns';
-import { sendEmail } from 'src/api/helpers';
+import { sendEmail } from '../api/helpers';
 
 // These arguments are currently used only for testing purposes.
 interface Event {
@@ -30,9 +34,9 @@ export const handler: Handler<Event> = async (event) => {
   const alerts = await Alert.find({
     where: {
       ...where,
-      nextNotifiedAt: MoreThan(new Date(Date.now()))
+      nextNotifiedAt: LessThanOrEqual(new Date(Date.now()))
     },
-    relations: ['user', 'user.roles'],
+    relations: ['user', 'user.roles', 'user.roles.organization'],
     order: {
       nextNotifiedAt: 'DESC'
     }
@@ -66,10 +70,19 @@ export const handler: Handler<Event> = async (event) => {
           }
         )
       ).getCount();
-      await sendEmail(alert.user.email,
-        `Crossfeed - ${count} new domains found`,
-        `${count} new domains were found on Crossfeed. Please check ${process.env.FRONTEND_DOMAIN} to see details on the latest notifications.`
-      );
+      if (count > 0) {
+        await sendEmail(
+          alert.user.email,
+          `Crossfeed - ${count} ${
+            count === 1 ? 'new domain found' : 'new domains found'
+          }`,
+          `${count} ${
+            count === 1 ? 'new domain was found' : 'new domains were found'
+          } on Crossfeed. Please check ${
+            process.env.FRONTEND_DOMAIN
+          } to see details on the latest notifications.`
+        );
+      }
     } else if (alert.type === AlertType.NEW_VULNERABILITY) {
       const count = await filterQuery(
         Vulnerability.createQueryBuilder('vulnerability')
@@ -78,15 +91,29 @@ export const handler: Handler<Event> = async (event) => {
             date: alert.notifiedAt
           })
       ).getCount();
-      await sendEmail(alert.user.email,
-        `Crossfeed - ${count} new vulnerabilities found`,
-        `${count} new vulnerabilities were found on Crossfeed. Please check ${process.env.FRONTEND_DOMAIN} to see details on the latest notifications.`
-      );
+      if (count > 0) {
+        await sendEmail(
+          alert.user.email,
+          `Crossfeed - ${count} ${
+            count === 1
+              ? 'new vulnerability found'
+              : 'new vulnerabilities found'
+          }`,
+          `${count} ${
+            count === 1
+              ? 'new vulnerability was found'
+              : 'new vulnerabilities were found'
+          } on Crossfeed. Please check ${
+            process.env.FRONTEND_DOMAIN
+          } to see details on the latest notifications.`
+        );
+      }
     } else {
       console.error('Invalid alert type ' + alert.type);
     }
     alert.notifiedAt = newNotifiedAt;
     alert.nextNotifiedAt = addSeconds(newNotifiedAt, alert.frequency);
+    await alert.save();
   }
 
   console.log('Finished running notifier.');
