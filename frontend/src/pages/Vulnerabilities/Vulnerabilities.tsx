@@ -195,23 +195,13 @@ export const Vulnerabilities: React.FC = () => {
     {
       Header: 'Details',
       Cell: ({ row }: CellProps<Vulnerability>) => (
-        // <span
-        //   {...row.getToggleRowExpandedProps()}
-        //   className="text-center display-block"
-        //   style={{
-        //     fontSize: '14px',
-        //     cursor: 'pointer',
-        //     color: '#484D51'
-        //   }}
-        // >
-        //   {row.isExpanded ? 'HIDE DETAILS' : 'DETAILS'}
-        // </span>
         <Link
           to={`/inventory/vulnerability/${row.original.id}`}
           style={{
             fontSize: '14px',
             cursor: 'pointer',
-            color: '#484D51'
+            color: '#484D51',
+            textDecoration: 'none'
           }}
         >
           DETAILS
