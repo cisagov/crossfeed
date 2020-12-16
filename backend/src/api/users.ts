@@ -248,7 +248,7 @@ export const invite = wrapHandler(async (event) => {
 export const me = wrapHandler(async (event) => {
   await connectToDatabase();
   const result = await User.findOne(getUserId(event), {
-    relations: ['roles', 'roles.organization', 'apiKeys']
+    relations: ['roles', 'roles.organization', 'apiKeys', 'alerts']
   });
   return {
     statusCode: 200,

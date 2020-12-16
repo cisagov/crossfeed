@@ -16,6 +16,7 @@ import * as users from './users';
 import * as scanTasks from './scan-tasks';
 import * as stats from './stats';
 import * as apiKeys from './api-keys';
+import * as alerts from './alerts';
 import * as savedSearches from './saved-searches';
 import { listenForDockerEvents } from './docker-events';
 import { createProxyMiddleware } from 'http-proxy-middleware';
@@ -209,6 +210,9 @@ authenticatedRoute.use(checkUserSignedTerms);
 
 authenticatedRoute.post('/api-keys', handlerToExpress(apiKeys.generate));
 authenticatedRoute.delete('/api-keys/:keyId', handlerToExpress(apiKeys.del));
+
+authenticatedRoute.post('/alerts', handlerToExpress(alerts.create));
+authenticatedRoute.delete('/alerts/:alertId', handlerToExpress(alerts.del));
 
 authenticatedRoute.post('/search', handlerToExpress(search.search));
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));

@@ -90,7 +90,7 @@ export class User extends BaseEntity {
   roles: Role[];
 
   /** List of the user's alerts */
-  @OneToMany((type) => ApiKey, (alert) => alert.user, {
+  @OneToMany((type) => Alert, (alert) => alert.user, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   })
