@@ -1,46 +1,70 @@
 .root {
   :global .usa-table {
     width: 100%;
-    margin: 0;
+    margin: 8px 0 0 0;
     color: black !important;
     font-family: Source Sans Pro Web, Helvetica Neue, Helvetica, Arial,
       sans-serif;
     // font-weight: 500;
   }
 
-  .tableWrapper {
-    width: 100%;
-    position: relative;
-    background-color: #fff;
-    padding: 1rem;
+  .tableInner {
+    overflow-x: auto;
+    border: 1px solid #dcdee0;
     border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
-
-    @media screen and (min-width: 640px) {
-      padding: 2rem;
+    box-sizing: border-box;
+    td,
+    th {
+      border: 0px solid #dcdee0;
+      box-shadow: inset 0px -1px 0px #dcdee0;
     }
-    .tableInner {
-      overflow-x: auto;
+    input,
+    select {
+      height: 35px;
+      margin: 0px;
+      border: 1px solid #dcdee0;
+      box-sizing: border-box;
+      border-radius: 2px;
+    }
+    select {
+      padding-top: 5px;
+      width: 90%;
     }
   }
 }
 
 .td {
-  background-color: #f0f0f0;
+  background-color: #f9f9f9 !important;
   border-color: white;
   text-overflow: ellipsis;
   white-space: normal;
+  color: #3d4551;
   > div {
-    max-height: 50px;
     overflow: auto;
+    display: flex;
+    align-content: center;
   }
+  height: 54px;
+  margin: 0;
+  padding: 0.7rem !important;
 }
 
 .subComponentTd {
-  background-color: white;
+  background-color: #f9f9f9;
   border-color: white;
 }
 
 .th {
   vertical-align: top;
+  background-color: #f0f0f0 !important;
+  color: #3d4551;
+  font-size: 16px;
+  height: 50px;
+  padding-left: 15px !important;
+}
+
+.thFilter {
+  background-color: #f4f4f4 !important;
+  height: 54px;
+  padding: 10px !important;
 }

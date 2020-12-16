@@ -9,17 +9,10 @@ import {
 } from 'react-table';
 import { Query } from 'types';
 import { useAuthContext } from 'context';
-import {
-  Table,
-  Paginator,
-  Export,
-  ColumnFilter,
-  selectFilter
-} from 'components';
+import { Table, Paginator, ColumnFilter, selectFilter } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import { Grid, Dropdown, Button } from '@trussworks/react-uswds';
-import { FaMinus, FaPlus } from 'react-icons/fa';
+import { Dropdown, Button } from '@trussworks/react-uswds';
 import { Link } from 'react-router-dom';
 import { differenceInCalendarDays, parseISO, format } from 'date-fns';
 import { FaExternalLinkAlt } from 'react-icons/fa';
@@ -33,6 +26,7 @@ import {
 import ReactMarkdown from 'react-markdown';
 import { Subnav } from 'components';
 import { parse } from 'query-string';
+import { getSeverityColor } from 'pages/Risk/Risk';
 
 export interface ApiResponse {
   result: Vulnerability[];
@@ -45,6 +39,8 @@ const formatDate = (date: string) => {
 };
 
 const extLink = <FaExternalLinkAlt style={{ width: 12 }}></FaExternalLinkAlt>;
+
+const PAGE_SIZE = 15;
 
 export const stateMap: { [key: string]: string } = {
   unconfirmed: 'Unconfirmed',
@@ -62,14 +58,14 @@ export const Vulnerabilities: React.FC = () => {
     showAllOrganizations
   } = useAuthContext();
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
-  const [pageCount, setPageCount] = useState(0);
+  const [totalResults, setTotalResults] = useState(0);
   const tableRef = useRef<TableInstance<Vulnerability>>(null);
   const listClasses = useStyles();
   const [noResults, setNoResults] = useState(false);
 
   const columns: Column<Vulnerability>[] = [
     {
-      Header: 'Title',
+      Header: 'Vulnerability',
       accessor: 'title',
       Cell: ({ value, row }: CellProps<Vulnerability>) =>
         row.original.cve ? (
@@ -87,6 +83,25 @@ export const Vulnerabilities: React.FC = () => {
       Filter: ColumnFilter
     },
     {
+      Header: 'Severity',
+      id: 'severity',
+      accessor: ({ severity, substate }) => (
+        <span
+          style={{
+            borderBottom: `6px solid ${getSeverityColor({
+              id: severity ?? ''
+            })}`,
+            width: '80px'
+          }}
+          // className={substate === 'unconfirmed' ? classes.severity : undefined}
+        >
+          {severity}
+        </span>
+      ),
+      width: 100,
+      Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
+    },
+    {
       Header: 'Domain',
       id: 'domain',
       accessor: ({ domain }) => (
@@ -95,20 +110,21 @@ export const Vulnerabilities: React.FC = () => {
       width: 800,
       Filter: ColumnFilter
     },
-    // To replace with product once we store that with vulnerabilities
     {
       Header: 'Product',
       id: 'cpe',
-      accessor: 'cpe',
+      accessor: ({ cpe, service }) => {
+        const product =
+          service &&
+          service.products.find(
+            (product) => cpe && product.cpe && cpe.includes(product.cpe)
+          );
+        if (product)
+          return product.name + (product.version ? ' ' + product.version : '');
+        else return cpe;
+      },
       width: 100,
       Filter: ColumnFilter
-    },
-    {
-      Header: 'Severity',
-      id: 'severity',
-      accessor: ({ severity }) => severity,
-      width: 100,
-      Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
     },
     {
       Header: 'Days Open',
@@ -142,7 +158,7 @@ export const Vulnerabilities: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'State',
+      Header: 'Status',
       id: 'state',
       width: 100,
       maxWidth: 200,
@@ -182,8 +198,13 @@ export const Vulnerabilities: React.FC = () => {
         <span
           {...row.getToggleRowExpandedProps()}
           className="text-center display-block"
+          style={{
+            fontSize: '14px',
+            cursor: 'pointer',
+            color: '#484D51'
+          }}
         >
-          {row.isExpanded ? <FaMinus /> : <FaPlus />}
+          {row.isExpanded ? 'HIDE DETAILS' : 'DETAILS'}
         </span>
       ),
       disableFilters: true
@@ -305,7 +326,7 @@ export const Vulnerabilities: React.FC = () => {
       filters: Filters<Vulnerability>,
       sort: SortingRule<Vulnerability>[],
       page: number,
-      pageSize: number = 25,
+      pageSize: number = PAGE_SIZE,
       doExport = false
     ): Promise<ApiResponse | undefined> => {
       try {
@@ -365,7 +386,7 @@ export const Vulnerabilities: React.FC = () => {
       if (!resp) return;
       const { result, count } = resp;
       setVulnerabilities(result);
-      setPageCount(Math.ceil(count / 25));
+      setTotalResults(count);
       setNoResults(count === 0);
     },
     [vulnerabilitiesSearch]
@@ -384,7 +405,14 @@ export const Vulnerabilities: React.FC = () => {
   };
 
   const renderPagination = (table: TableInstance<Vulnerability>) => (
-    <Paginator table={table} />
+    <Paginator
+      table={table}
+      totalResults={totalResults}
+      export={{
+        name: 'vulnerabilities',
+        getDataToExport: fetchVulnerabilitiesExport
+      }}
+    />
   );
 
   const initialFilterBy: Filters<Vulnerability> = [];
@@ -408,8 +436,8 @@ export const Vulnerabilities: React.FC = () => {
   }
 
   return (
-    <div className={classes.root}>
-      <Grid row style={{ marginBottom: '1rem' }}>
+    <div>
+      <div className={listClasses.contentWrapper}>
         <Subnav
           items={[
             { title: 'Assets', path: '/inventory', exact: true },
@@ -417,26 +445,26 @@ export const Vulnerabilities: React.FC = () => {
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
         ></Subnav>
-      </Grid>
-      <Table<Vulnerability>
-        renderPagination={renderPagination}
-        columns={columns}
-        data={vulnerabilities}
-        pageCount={pageCount}
-        fetchData={fetchVulnerabilities}
-        renderExpanded={renderExpandedVulnerability}
-        tableRef={tableRef}
-        initialFilterBy={initialFilterBy}
-        initialSortBy={initialSortBy}
-        noResults={noResults}
-        noResultsMessage={
-          "We don't see any vulnerabilities that match these criteria."
-        }
-      />
-      <Export<Vulnerability>
-        name="vulnerabilities"
-        getDataToExport={fetchVulnerabilitiesExport}
-      />
+        <br></br>
+        <div className={classes.root}>
+          <Table<Vulnerability>
+            renderPagination={renderPagination}
+            columns={columns}
+            data={vulnerabilities}
+            pageCount={Math.ceil(totalResults / PAGE_SIZE)}
+            fetchData={fetchVulnerabilities}
+            renderExpanded={renderExpandedVulnerability}
+            tableRef={tableRef}
+            initialFilterBy={initialFilterBy}
+            initialSortBy={initialSortBy}
+            noResults={noResults}
+            pageSize={PAGE_SIZE}
+            noResultsMessage={
+              "We don't see any vulnerabilities that match your criteria."
+            }
+          />
+        </div>
+      </div>
     </div>
   );
 };
@@ -445,6 +473,14 @@ const useStyles = makeStyles((theme) => ({
   listRoot: {
     width: '100%',
     backgroundColor: theme.palette.background.paper
+  },
+  contentWrapper: {
+    position: 'relative',
+    flex: '1 1 auto',
+    height: '100%',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    overflowY: 'hidden'
   }
 }));
 

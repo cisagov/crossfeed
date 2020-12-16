@@ -17,7 +17,7 @@ import {
 } from '@material-ui/icons';
 import { NavItem } from './NavItem';
 import { useAuthContext } from 'context';
-import logo from '../assets/cisa_logo.png';
+import logo from '../assets/crossfeed.svg';
 import { withSearch } from '@elastic/react-search-ui';
 import { ContextType } from 'context/SearchProvider';
 import { SearchBar } from 'components';
@@ -64,10 +64,6 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     }
   }, [apiGet, setOrganizations]);
 
-  React.useEffect(() => {
-    fetchOrganizations();
-  }, [fetchOrganizations]);
-
   let userLevel = 0;
   if (user && user.isRegistered) {
     if (user.userType === 'standard') {
@@ -80,6 +76,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       userLevel = GLOBAL_ADMIN;
     }
   }
+
+  React.useEffect(() => {
+    if (userLevel > 0) {
+      fetchOrganizations();
+    }
+  }, [fetchOrganizations, userLevel]);
 
   const navItems: NavItemType[] = [
     {
@@ -198,72 +200,76 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                     });
                   }}
                 />
-                <div className={classes.spacing} />
-                <Autocomplete
-                  options={[{ name: 'All Organizations' }].concat(
-                    organizations
-                  )}
-                  className={classes.selectOrg}
-                  classes={{
-                    option: classes.option
-                  }}
-                  value={
-                    showAllOrganizations
-                      ? { name: 'All Organizations' }
-                      : currentOrganization ?? undefined
-                  }
-                  filterOptions={(options, state) => {
-                    // If already selected, show all
-                    if (
-                      options.find(
-                        (option) =>
-                          option.name.toLowerCase() ===
-                          state.inputValue.toLowerCase()
-                      )
-                    ) {
-                      return options;
-                    }
-                    return options.filter((option) =>
-                      option.name
-                        .toLowerCase()
-                        .includes(state.inputValue.toLowerCase())
-                    );
-                  }}
-                  disableClearable
-                  blurOnSelect
-                  selectOnFocus
-                  getOptionLabel={(option) => option.name}
-                  renderOption={(option) => (
-                    <React.Fragment>{option.name}</React.Fragment>
-                  )}
-                  onChange={(
-                    event: any,
-                    value:
-                      | Organization
-                      | {
-                          name: string;
-                        }
-                      | undefined
-                  ) => {
-                    if (value && 'id' in value) {
-                      setOrganization(value);
-                      setShowAllOrganizations(false);
-                    } else {
-                      setShowAllOrganizations(true);
-                    }
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      inputProps={{
-                        ...params.inputProps,
-                        id: 'autocomplete-input',
-                        autoComplete: 'new-password' // disable autocomplete and autofill
+                {organizations.length > 1 && (
+                  <>
+                    <div className={classes.spacing} />
+                    <Autocomplete
+                      options={[{ name: 'All Organizations' }].concat(
+                        organizations
+                      )}
+                      className={classes.selectOrg}
+                      classes={{
+                        option: classes.option
                       }}
+                      value={
+                        showAllOrganizations
+                          ? { name: 'All Organizations' }
+                          : currentOrganization ?? undefined
+                      }
+                      filterOptions={(options, state) => {
+                        // If already selected, show all
+                        if (
+                          options.find(
+                            (option) =>
+                              option.name.toLowerCase() ===
+                              state.inputValue.toLowerCase()
+                          )
+                        ) {
+                          return options;
+                        }
+                        return options.filter((option) =>
+                          option.name
+                            .toLowerCase()
+                            .includes(state.inputValue.toLowerCase())
+                        );
+                      }}
+                      disableClearable
+                      blurOnSelect
+                      selectOnFocus
+                      getOptionLabel={(option) => option.name}
+                      renderOption={(option) => (
+                        <React.Fragment>{option.name}</React.Fragment>
+                      )}
+                      onChange={(
+                        event: any,
+                        value:
+                          | Organization
+                          | {
+                              name: string;
+                            }
+                          | undefined
+                      ) => {
+                        if (value && 'id' in value) {
+                          setOrganization(value);
+                          setShowAllOrganizations(false);
+                        } else {
+                          setShowAllOrganizations(true);
+                        }
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          inputProps={{
+                            ...params.inputProps,
+                            id: 'autocomplete-input',
+                            autoComplete: 'new-password' // disable autocomplete and autofill
+                          }}
+                        />
+                      )}
                     />
-                  )}
-                />
+                  </>
+                )}
                 <NavItem {...userMenu} />
               </>
             )}
@@ -332,8 +338,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   logo: {
-    display: 'none',
-    height: 60,
+    width: 150,
     padding: theme.spacing(),
     paddingLeft: 0,
     [theme.breakpoints.up('sm')]: {

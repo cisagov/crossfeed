@@ -40,7 +40,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
       // (i.e. it is now invalid / has expired now).
       window.location.reload();
     }
-  }, [cookies]);
+  }, [cookies, token]);
 
   const handleError = useCallback(
     async (e: Error) => {
