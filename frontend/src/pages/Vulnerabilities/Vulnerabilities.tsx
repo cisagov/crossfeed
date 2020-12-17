@@ -232,95 +232,6 @@ export const Vulnerabilities: React.FC = () => {
     }
   };
 
-  const comments: { [key: string]: string } = {};
-
-  const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
-    const { original } = row;
-    return (
-      <div className={classes.expandedRoot}>
-        <h3>Details</h3>
-        <div className={classes.desc}>
-          <p>{original.description}</p>
-          <h4>References</h4>
-          {original.references &&
-            original.references.map((ref, index) => (
-              <p key={index}>
-                <a href={ref.url} target="_blank" rel="noopener noreferrer">
-                  {ref.url} {extLink}
-                </a>
-                {ref.tags.length > 0 ? ' - ' + ref.tags.join(',') : ''}
-              </p>
-            ))}
-          <h4>Vulnerability history</h4>
-          <List className={`${listClasses.listRoot}`}>
-            {original.actions &&
-              original.actions.map((action, index) => {
-                let primary: JSX.Element = <></>;
-                let secondary: JSX.Element = <></>;
-                if (action.type === 'state-change' && action.substate) {
-                  const val = action.automatic ? (
-                    <>
-                      State automatically changed to{' '}
-                      {stateMap[action.substate].toLowerCase()}
-                    </>
-                  ) : (
-                    <>
-                      State changed to {action.state} (
-                      {stateMap[action.substate].toLowerCase()}) by{' '}
-                      {action.userName}
-                    </>
-                  );
-                  primary = (
-                    <>
-                      {val} on {formatDate(action.date)}
-                    </>
-                  );
-                } else if (action.type === 'comment' && action.value) {
-                  primary = (
-                    <ReactMarkdown source={action.value} linkTarget="_blank" />
-                  );
-                  secondary = <>{action.userName}</>;
-                }
-                return (
-                  <ListItem button divider={true} key={index}>
-                    <ListItemText
-                      primary={primary}
-                      secondary={secondary}
-                    ></ListItemText>
-                  </ListItem>
-                );
-              })}
-            <ListItem button divider={true} key="initial">
-              <ListItemText
-                primary={'Opened on ' + formatDate(original.createdAt)}
-              ></ListItemText>
-            </ListItem>
-          </List>
-
-          <TextareaAutosize
-            style={{ width: 300, padding: 10 }}
-            rowsMin={2}
-            placeholder="Leave a Comment"
-            onChange={(e) => (comments[original.id] = e.target.value)}
-          />
-          <br></br>
-          <Button
-            type="button"
-            style={{ width: 150 }}
-            outline
-            onClick={() => {
-              updateVulnerability(row.index, {
-                comment: comments[original.id]
-              });
-            }}
-          >
-            Comment
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
   const vulnerabilitiesSearch = useCallback(
     async (
       filters: Filters<Vulnerability>,
@@ -453,7 +364,6 @@ export const Vulnerabilities: React.FC = () => {
             data={vulnerabilities}
             pageCount={Math.ceil(totalResults / PAGE_SIZE)}
             fetchData={fetchVulnerabilities}
-            renderExpanded={renderExpandedVulnerability}
             tableRef={tableRef}
             initialFilterBy={initialFilterBy}
             initialSortBy={initialSortBy}
