@@ -19,7 +19,7 @@ import PQueue from 'p-queue';
 import pRetry from 'p-retry';
 import axios from 'axios';
 
-interface IpToDomainsMap {
+export interface IpToDomainsMap {
   [ip: string]: Domain[];
 }
 
