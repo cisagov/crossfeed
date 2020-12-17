@@ -198,6 +198,10 @@ authenticatedRoute.post('/search', handlerToExpress(search.search));
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
 authenticatedRoute.post('/domain/export', handlerToExpress(domains.export_));
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
+authenticatedRoute.get(
+  '/domain/:domainId/:directory',
+  handlerToExpress(domains.sites)
+); //used for sitemap directory expansion
 authenticatedRoute.post(
   '/vulnerabilities/search',
   handlerToExpress(vulnerabilities.list)

@@ -57,13 +57,13 @@ export const useDomainApi = (showAll?: boolean) => {
 
   const getDomain = useCallback(
     async (domainId: string) => {
-      const {result, directories} = await apiGet<{
+      const {result, webdirectories} = await apiGet<{
         result : Domain;
-        directories : any[]
+        webdirectories : string[]
       }>(`/domain/${domainId}`);
       return {
         result,
-        directories
+        webdirectories
       }
     },
     [apiGet]

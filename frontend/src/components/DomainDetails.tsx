@@ -47,25 +47,29 @@ export const generateWebpageTree = (pages: Webpage[]) => {
   return tree;
 };
 
+interface subdomainValues {
+  key: string;
+  value: string;
+}
+
 export const DomainDetails: React.FC<Props> = (props) => {
   const { domainId } = props;
-  //const { apiGet } = useAuthContext();
+  const { apiGet } = useAuthContext();
   const { getDomain } = useDomainApi(false);
   const { user } = useAuthContext();
   const [domain, setDomain] = useState<Domain>();
-  const [directories,setDirectories] = useState<any[]>();
+  const [directories, setDirectories] = useState<string[]>();
   const classes = useStyles();
+  const [expandSite, setExpandSite] = useState<string>();
+  const [subdomains, setSubdomains] = useState<subdomainValues []>();
 
-  const fetchDomain = useCallback(async () => {
+  const fetchDomain = useCallback( async () => {
     try {
       setDomain(undefined);
-      /*let { result, topLevelDirectories } = await apiGet<{
-        result: Domain;
-        topLevelDirectories: String[];
-      }>(`/domain/${domainId}`);*/
-      let {result, directories} = await getDomain(domainId);
+      setDirectories([""]);
+      const {result, webdirectories} = await getDomain(domainId);
       setDomain(result);
-      setDirectories(directories);
+      setDirectories(webdirectories);
     } catch (e) {
       console.error(e);
     }
@@ -74,6 +78,16 @@ export const DomainDetails: React.FC<Props> = (props) => {
   useEffect(() => {
     fetchDomain();
   }, [fetchDomain]);
+
+  const getSitemap = useCallback( async() => {
+    try{
+
+      const { result } = await apiGet<any>(`/domain/${domainId}/${expandSite}`);
+    }
+    catch(e) {
+      console.error(e);
+    }
+  } , [domainId, expandSite]);
 
   const webInfo = useMemo(() => {
     if (!domain) {
@@ -164,6 +178,65 @@ export const DomainDetails: React.FC<Props> = (props) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   };
 
+  
+
+  //should be given a dictionary: 1 if directory has subdirectories, and 0 if not
+  //expandmore if there are, and nothing if not
+  const generateWebpageTopLevel = (keys: any, prefix = '') => {
+    return (
+      <List
+        className={`${classes.listRoot}${prefix ? ' ' + classes.nested : ''}`}
+      >
+        {Object.keys(keys).map((key) => {
+            let newPrefix = prefix + '/' + keys[key];
+            return (
+              <>
+                <ListItem
+                  button
+                  onClick={async() => {
+                    setExpandSite(key);
+                    //let subdomain = await getSitemap();
+                    setSubdomains(await apiGet<any>(`/domain/${domainId}/${keys[key]}`));
+                    console.log(subdomains);
+                    console.log("clicked");
+                    setHiddenRows((hiddenRows: any) => {
+                      hiddenRows[newPrefix] = 
+                        newPrefix in hiddenRows ? !hiddenRows[newPrefix] : true;
+                      return { ...hiddenRows };
+                    });
+                  }}
+                  key={newPrefix}
+                >
+                  <ListItemText primary={(prefix ? '' : '/') + keys[key] + '/'} />
+                  {hiddenRows[newPrefix] ? <ExpandLess /> : <ExpandMore />} 
+                  
+                </ListItem>
+                <Collapse
+                  in={hiddenRows[newPrefix]}
+                  timeout="auto"
+                  unmountOnExit
+                  //in List below subdomains.map( something => )
+
+                  /*{subdomains && subdomains.map((sub) => {
+                      return <ListItemText primary={sub}></ListItemText> 
+                    }) }*/
+                >
+                  <List>
+                  {subdomains && Object.keys(subdomains).map((sub) => {
+                      //return <ListItemText primary={subdomains[sub]}></ListItemText> 
+                    }) }
+                  <ListItemText primary={'test'}></ListItemText> 
+                  </List>
+                </Collapse>
+              </>
+            );  
+        }
+        )
+      }
+      </List>
+    );
+  };
+
   const generateWebpageList = (tree: any, prefix = '') => {
     return (
       <List
@@ -235,10 +308,20 @@ export const DomainDetails: React.FC<Props> = (props) => {
       ? 'https://'
       : 'http://') + domain.name;
 
-  const { webpages = [] } = domain;
-  webpages.sort((a, b) => (a.url > b.url ? 1 : -1));
-  const webpageTree = generateWebpageTree(webpages);
-  const webpageList = generateWebpageList(webpageTree);
+  //const { webpages = [] } = domain;
+  //webpages.sort((a, b) => (a.url > b.url ? 1 : -1));
+  //console.log(directories);
+  //const webpageTree = generateWebpageTree(webpages);
+  //const webpageList = generateWebpageList(webpageTree);
+  console.log("TEST");
+  console.log(directories);
+  //const webpageDirectories = generateWebpageTopLevel(['This', 'is', 'a', 'test']);
+  //if (directories){
+  const webpageDirectories = generateWebpageTopLevel(directories);
+  //}
+ 
+  //
+  
 
   return (
     <Paper classes={{ root: classes.root }}>
@@ -408,10 +491,10 @@ export const DomainDetails: React.FC<Props> = (props) => {
             })}
           </div>
         )}
-        {domain.webpages?.length > 0 && (
+        {directories && directories.length > 0 && (
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Site Map</h4>
-            {webpageList}
+            {webpageDirectories}
           </div>
         )}
       </div>

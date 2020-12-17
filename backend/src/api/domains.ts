@@ -258,44 +258,39 @@ export const get = wrapHandler(async (event) => {
     return NotFound;
   }
 
-  let result = await Domain.findOne(
+  const result = await Domain.findOne(
     { id, ...where },
     {
       relations: ['services', 'organization', 'vulnerabilities']
     }
   );
-
-  let domainWebpages = await Domain.findOne(
-    {id, ...where },
+  // separate database call so that we don't have to remove all the webpages from the "result" object prior to returning it to the frontend
+  const domainWebpages = await Domain.findOne(
+    { id, ...where },
     {
       relations: ['webpages']
     }
   );
-  let topLevelDirectories = [""];
-  //delete result?.webpages[0];
-  //console.log(typeof(result?.webpages));
-  //console.log(typeof(result?.vulnerabilities));
+  let topLevelDirectories: string[] = [];
+  //if domain has webpages, generate the tree in backend, and send only the top level directory names to the front end
   if (domainWebpages?.webpages) {
     const webpages = generateWebpageTree(domainWebpages?.webpages);
-    //console.log(Object.keys(webpages)); //top level directories
-    //console.log(webpages[Object.keys(webpages)[2]]); //log webpages under 3rd top level directory
+
     topLevelDirectories = Object.keys(webpages);
-  
-    
-    console.log(topLevelDirectories);
-    //console.log(webpages);
+    topLevelDirectories.shift(); //removes "undefined" value which represents the root directory
   }
-  
 
   return {
     statusCode: result ? 200 : 404,
-    body: result ? JSON.stringify({
-      result: result,
-      webdirectories: topLevelDirectories
-    }) : ''
+    body: result
+      ? JSON.stringify({
+          result: result,
+          webdirectories: topLevelDirectories
+        })
+      : ''
   };
 });
-
+// used to generate the sitemap tree in the backend to reduce data sent over the network
 export const generateWebpageTree = (pages: any[]) => {
   const tree: any = {};
   for (const page of pages) {
@@ -313,3 +308,60 @@ export const generateWebpageTree = (pages: any[]) => {
   }
   return tree;
 };
+
+let nested: any = [];
+const treeToList = (tree: any) => {
+  Object.keys(tree).map((key) => {
+    //console.log(key);
+    if (tree[key] && tree[key]['url']) {
+      nested.push({
+        key: key,
+        value: tree[key]['url']
+      });
+
+      treeToList(tree[key]);
+    }
+  });
+  return nested;
+};
+
+//API handler for generating a specific branch of the site map tree, and returning a list of {page name: url}.
+export const sites = wrapHandler(async (event) => {
+  let where = {};
+  if (isGlobalViewAdmin(event)) {
+    where = {};
+  } else {
+    where = { organization: In(getOrgMemberships(event)) };
+  }
+  await connectToDatabase();
+  const id = event.pathParameters?.domainId;
+  if (!isUUID(id)) {
+    return NotFound;
+  }
+
+  const domainWebpages = await Domain.findOne(
+    { id, ...where },
+    {
+      relations: ['webpages']
+    }
+  );
+  let result: any = {};
+  const directory = event.pathParameters?.directory;
+  if (domainWebpages?.webpages && directory) {
+    const webpages = generateWebpageTree(domainWebpages?.webpages);
+
+    nested = [];
+
+    result = webpages[directory];
+
+    const webpageList = treeToList(result);
+    console.log(webpageList);
+
+    result = webpageList;
+  }
+
+  return {
+    statusCode: result ? 200 : 404,
+    body: result ? JSON.stringify({ result: result }) : ''
+  };
+});
