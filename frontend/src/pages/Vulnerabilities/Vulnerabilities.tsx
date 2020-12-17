@@ -16,13 +16,7 @@ import { Dropdown, Button } from '@trussworks/react-uswds';
 import { Link } from 'react-router-dom';
 import { differenceInCalendarDays, parseISO, format } from 'date-fns';
 import { FaExternalLinkAlt } from 'react-icons/fa';
-import {
-  TextareaAutosize,
-  List,
-  ListItem,
-  ListItemText,
-  makeStyles
-} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import ReactMarkdown from 'react-markdown';
 import { Subnav } from 'components';
 import { parse } from 'query-string';
@@ -33,10 +27,6 @@ export interface ApiResponse {
   count: number;
   url?: string;
 }
-
-const formatDate = (date: string) => {
-  return format(parseISO(date), 'MM-dd-yyyy');
-};
 
 const extLink = <FaExternalLinkAlt style={{ width: 12 }}></FaExternalLinkAlt>;
 
