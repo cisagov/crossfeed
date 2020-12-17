@@ -33,10 +33,6 @@ class SignRequests:
 
     def request(self, flow):
         try:
-            if flow.request.host == "api.spyse.com":
-                # Block spyse requests
-                flow.kill()
-            
             if self.user_agent:
                 flow.request.headers["User-Agent"] = self.user_agent
 
