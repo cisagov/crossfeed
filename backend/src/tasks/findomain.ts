@@ -18,7 +18,14 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   for (const rootDomain of rootDomains) {
     try {
-      const args = ['-it', rootDomain, '-u', OUT_PATH];
+      const args = [
+        '--exclude-sources',
+        'spyse',
+        '-it',
+        rootDomain,
+        '-u',
+        OUT_PATH
+      ];
       console.log('Running findomain with args', args);
       spawnSync('findomain', args, { stdio: 'pipe' });
       const output = String(readFileSync(OUT_PATH));
