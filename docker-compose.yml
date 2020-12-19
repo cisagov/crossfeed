@@ -51,8 +51,8 @@ services:
     ports:
       - 9000:9000
     environment:
-      - MINIO_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
-      - MINIO_SECRET_KEY=${AWS_SECRET_ACCESS_KEY}
+      - MINIO_ACCESS_KEY=aws_access_key
+      - MINIO_SECRET_KEY=aws_secret_key
     logging:
       driver: none
 
