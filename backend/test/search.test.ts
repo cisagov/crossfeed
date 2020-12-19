@@ -51,9 +51,6 @@ const body = {
   }
 };
 
-// Used to track the number of times searchDomains has been called, e.g. the page requested
-let numTimesSearched = 0;
-
 describe('search', () => {
   let organization;
   beforeAll(async () => {
@@ -65,22 +62,23 @@ describe('search', () => {
       isPassive: false
     }).save();
   });
+  beforeEach(async () => {
+    searchDomains
+      .mockImplementationOnce(() => {
+        return { body };
+      })
+      .mockImplementationOnce(() => {
+        return {
+          body: {
+            hits: {
+              hits: []
+            }
+          }
+        };
+      });
+  });
   describe('search', () => {
     it('search by global admin should work', async () => {
-      searchDomains.mockImplementation(() => {
-        if (numTimesSearched > 0) {
-          return {
-            body: {
-              hits: {
-                hits: []
-              }
-            }
-          };
-        } else {
-          numTimesSearched += 1;
-          return { body };
-        }
-      });
       const response = await request(app)
         .post('/search')
         .set(
@@ -105,7 +103,6 @@ describe('search', () => {
       expect(response.body).toEqual(body);
     });
     it('search by regular user should work', async () => {
-      numTimesSearched = 0;
       const response = await request(app)
         .post('/search')
         .set(
@@ -130,7 +127,6 @@ describe('search', () => {
     });
 
     it('export by regular user should work', async () => {
-      numTimesSearched = 0;
       const response = await request(app)
         .post('/search/export')
         .set(
