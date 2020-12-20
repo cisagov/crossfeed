@@ -3,6 +3,8 @@
 
 FROM node:latest
 
+# test
+
 WORKDIR /app/docs
 COPY ./docs/package* ./
 
