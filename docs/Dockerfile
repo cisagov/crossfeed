@@ -10,8 +10,7 @@ RUN npm ci
 
 # Generate swagger definitions
 COPY ./backend ../backend
-RUN npm run codegen
-
 COPY ./docs .
+RUN npm run codegen
 
 CMD [ "npm", "run", "develop", "--", "-H", "0.0.0.0", "--port", "4000"]
