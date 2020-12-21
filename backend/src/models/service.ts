@@ -226,7 +226,7 @@ export class Service extends BaseEntity {
       }
     }
 
-    if (this.shodanResults) {
+    if (this.shodanResults && this.shodanResults.product) {
       const product: Product = {
         name: this.shodanResults.product,
         version: this.shodanResults.version,
