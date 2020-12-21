@@ -5,5 +5,5 @@ export default async (services: Service[]): Promise<string[]> => {
     (a.service || '').localeCompare(b.service || '')
   );
   expect(services).toMatchSnapshot('helpers.saveServicesToDb');
-  return ['1234'];
+  return ['8831089d-f220-4bb5-893f-6b1ae5e7ca5a'];
 };

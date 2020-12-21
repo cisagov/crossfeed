@@ -1,7 +1,12 @@
 import * as nock from 'nock';
-import { connectToDatabase, Domain, Organization, Scan } from '../../models';
+import {
+  connectToDatabase,
+  Domain,
+  Organization,
+  Scan,
+  Vulnerability
+} from '../../models';
 import { handler as shodan } from '../shodan';
-jest.mock('../helpers/saveServicesToDb');
 
 const RealDate = Date;
 
@@ -108,7 +113,15 @@ const shodanResponse = [
         data: '\nRecursion: enabled\nResolver ID: AMS',
         asn: 'AS13335',
         transport: 'udp',
-        ip_str: '1.1.1.1'
+        ip_str: '1.1.1.1',
+        vulns: {
+          'CVE-1234-1234': {
+            verified: true,
+            references: [],
+            cvss: '5',
+            summary: 'A vulnerability'
+          }
+        }
       }
     ],
     asn: 'AS13335',
@@ -180,7 +193,8 @@ describe('shodan', () => {
           id: null,
           updatedAt: null,
           createdAt: null,
-          syncedAt: null
+          syncedAt: null,
+          name: null
         }))
     ).toMatchSnapshot();
     expect(domains.filter((e) => !e.organization).length).toEqual(0);
@@ -191,14 +205,34 @@ describe('shodan', () => {
         `/shodan/host/153.126.148.60,31.134.10.156,1.1.1.1?key=${process.env.SHODAN_API_KEY}`
       )
       .reply(200, shodanResponse);
-    console.log(organization.id);
     await shodan({
       organizationId: organization.id,
       organizationName: 'organizationName',
-      scanId: 'd0f51c16-a64a-4ed0-8373-d66485bfc678',
+      scanId: scan.id,
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
     });
     await checkDomains(organization);
+  });
+  test('creates vulnerability', async () => {
+    nock('https://api.shodan.io')
+      .get(
+        `/shodan/host/153.126.148.60,31.134.10.156,1.1.1.1?key=${process.env.SHODAN_API_KEY}`
+      )
+      .reply(200, shodanResponse);
+    await shodan({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: scan.id,
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+    await checkDomains(organization);
+    const domain = await Domain.findOne({ name: 'first_file_testdomain12' });
+    const vulns = await Vulnerability.find({
+      domain: domain
+    });
+    expect(vulns).toHaveLength(1);
+    expect(vulns[0].title).toEqual('CVE-1234-1234');
   });
 });

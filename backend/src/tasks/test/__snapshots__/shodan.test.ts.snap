@@ -11,11 +11,33 @@ Array [
     "fromRootDomain": null,
     "id": null,
     "ip": "153.126.148.60",
-    "name": "first_file_testdomain1",
+    "name": null,
     "organization": null,
     "reverseName": "first_file_testdomain1",
     "screenshot": null,
-    "services": Array [],
+    "services": Array [
+      Object {
+        "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.
+* CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN
+A001 OK Capability completed.
+* ID NIL
+A002 OK ID completed.
+A003 BAD Error in IMAP command received by server.
+",
+        "censysIpv4Results": Object {},
+        "censysMetadata": Object {},
+        "createdAt": null,
+        "id": null,
+        "intrigueIdentResults": Object {},
+        "lastSeen": 2019-04-22T10:20:30.000Z,
+        "port": 993,
+        "products": Array [],
+        "service": null,
+        "shodanResults": Object {},
+        "updatedAt": null,
+        "wappalyzerResults": Array [],
+      },
+    ],
     "ssl": null,
     "syncedAt": null,
     "updatedAt": null,
@@ -29,11 +51,29 @@ Array [
     "fromRootDomain": null,
     "id": null,
     "ip": "1.1.1.1",
-    "name": "first_file_testdomain12",
+    "name": null,
     "organization": null,
     "reverseName": "first_file_testdomain12",
     "screenshot": null,
-    "services": Array [],
+    "services": Array [
+      Object {
+        "banner": "
+Recursion: enabled
+Resolver ID: AMS",
+        "censysIpv4Results": Object {},
+        "censysMetadata": Object {},
+        "createdAt": null,
+        "id": null,
+        "intrigueIdentResults": Object {},
+        "lastSeen": 2019-04-22T10:20:30.000Z,
+        "port": 53,
+        "products": Array [],
+        "service": null,
+        "shodanResults": Object {},
+        "updatedAt": null,
+        "wappalyzerResults": Array [],
+      },
+    ],
     "ssl": null,
     "syncedAt": null,
     "updatedAt": null,
@@ -47,7 +87,7 @@ Array [
     "fromRootDomain": null,
     "id": null,
     "ip": "31.134.10.156",
-    "name": "first_file_testdomain2",
+    "name": null,
     "organization": null,
     "reverseName": "first_file_testdomain2",
     "screenshot": null,
@@ -59,102 +99,101 @@ Array [
 ]
 `;
 
-exports[`shodan basic test: helpers.saveServicesToDb 1`] = `
+exports[`shodan creates vulnerability 1`] = `
 Array [
-  Service {
-    "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.
+  Object {
+    "asn": null,
+    "censysCertificatesResults": Object {},
+    "cloudHosted": false,
+    "country": null,
+    "createdAt": null,
+    "fromRootDomain": null,
+    "id": null,
+    "ip": "153.126.148.60",
+    "name": null,
+    "organization": null,
+    "reverseName": "first_file_testdomain1",
+    "screenshot": null,
+    "services": Array [
+      Object {
+        "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.
 * CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN
 A001 OK Capability completed.
 * ID NIL
 A002 OK ID completed.
 A003 BAD Error in IMAP command received by server.
 ",
-    "discoveredBy": Object {
-      "id": "d0f51c16-a64a-4ed0-8373-d66485bfc678",
-    },
-    "domain": Domain {
-      "asn": null,
-      "censysCertificatesResults": Object {},
-      "cloudHosted": false,
-      "country": null,
-      "createdAt": 2020-12-22T04:16:59.642Z,
-      "fromRootDomain": null,
-      "id": "5abb8989-4f15-4cf9-b661-ead0d66e9796",
-      "ip": "153.126.148.60",
-      "name": "first_file_testdomain1",
-      "organization": Organization {
-        "createdAt": 2020-12-22T04:16:59.612Z,
-        "id": "0071d91f-6e8a-4159-b958-7895b48a68a1",
-        "inviteOnly": true,
-        "ipBlocks": Array [],
-        "isPassive": false,
-        "name": "test-0.5888505160814219",
-        "rootDomains": Array [
-          "test-0.14487301045697154",
-        ],
-        "updatedAt": 2020-12-22T04:16:59.612Z,
+        "censysIpv4Results": Object {},
+        "censysMetadata": Object {},
+        "createdAt": null,
+        "id": null,
+        "intrigueIdentResults": Object {},
+        "lastSeen": 2019-04-22T10:20:30.000Z,
+        "port": 993,
+        "products": Array [],
+        "service": null,
+        "shodanResults": Object {},
+        "updatedAt": null,
+        "wappalyzerResults": Array [],
       },
-      "reverseName": "first_file_testdomain1",
-      "screenshot": null,
-      "ssl": null,
-      "syncedAt": null,
-      "updatedAt": 2020-12-22T04:16:59.642Z,
-    },
-    "lastSeen": 2019-04-22T10:20:30.000Z,
-    "port": 993,
-    "shodanResults": Object {
-      "cpe": undefined,
-      "product": undefined,
-      "version": undefined,
-    },
+    ],
+    "ssl": null,
+    "syncedAt": null,
+    "updatedAt": null,
   },
-]
-`;
-
-exports[`shodan basic test: helpers.saveServicesToDb 2`] = `
-Array [
-  Service {
-    "banner": "
+  Object {
+    "asn": null,
+    "censysCertificatesResults": Object {},
+    "cloudHosted": false,
+    "country": null,
+    "createdAt": null,
+    "fromRootDomain": null,
+    "id": null,
+    "ip": "1.1.1.1",
+    "name": null,
+    "organization": null,
+    "reverseName": "first_file_testdomain12",
+    "screenshot": null,
+    "services": Array [
+      Object {
+        "banner": "
 Recursion: enabled
 Resolver ID: AMS",
-    "discoveredBy": Object {
-      "id": "d0f51c16-a64a-4ed0-8373-d66485bfc678",
-    },
-    "domain": Domain {
-      "asn": null,
-      "censysCertificatesResults": Object {},
-      "cloudHosted": false,
-      "country": null,
-      "createdAt": 2020-12-22T04:16:59.663Z,
-      "fromRootDomain": null,
-      "id": "c5e5921d-a799-4f68-a441-311d8494e577",
-      "ip": "1.1.1.1",
-      "name": "first_file_testdomain12",
-      "organization": Organization {
-        "createdAt": 2020-12-22T04:16:59.612Z,
-        "id": "0071d91f-6e8a-4159-b958-7895b48a68a1",
-        "inviteOnly": true,
-        "ipBlocks": Array [],
-        "isPassive": false,
-        "name": "test-0.5888505160814219",
-        "rootDomains": Array [
-          "test-0.14487301045697154",
-        ],
-        "updatedAt": 2020-12-22T04:16:59.612Z,
+        "censysIpv4Results": Object {},
+        "censysMetadata": Object {},
+        "createdAt": null,
+        "id": null,
+        "intrigueIdentResults": Object {},
+        "lastSeen": 2019-04-22T10:20:30.000Z,
+        "port": 53,
+        "products": Array [],
+        "service": null,
+        "shodanResults": Object {},
+        "updatedAt": null,
+        "wappalyzerResults": Array [],
       },
-      "reverseName": "first_file_testdomain12",
-      "screenshot": null,
-      "ssl": null,
-      "syncedAt": null,
-      "updatedAt": 2020-12-22T04:16:59.663Z,
-    },
-    "lastSeen": 2019-04-22T10:20:30.000Z,
-    "port": 53,
-    "shodanResults": Object {
-      "cpe": undefined,
-      "product": undefined,
-      "version": undefined,
-    },
+    ],
+    "ssl": null,
+    "syncedAt": null,
+    "updatedAt": null,
+  },
+  Object {
+    "asn": null,
+    "censysCertificatesResults": Object {},
+    "cloudHosted": false,
+    "country": null,
+    "createdAt": null,
+    "fromRootDomain": null,
+    "id": null,
+    "ip": "31.134.10.156",
+    "name": null,
+    "organization": null,
+    "reverseName": "first_file_testdomain2",
+    "screenshot": null,
+    "services": Array [],
+    "ssl": null,
+    "syncedAt": null,
+    "updatedAt": null,
   },
 ]
 `;
