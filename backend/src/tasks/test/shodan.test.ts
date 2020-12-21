@@ -152,21 +152,30 @@ describe('shodan', () => {
       arguments: {},
       frequency: 999
     }).save();
-    await Domain.create({
-      name: 'first_file_testdomain1',
-      ip: '153.126.148.60',
-      organization
-    }).save();
-    await Domain.create({
-      name: 'first_file_testdomain2',
-      ip: '31.134.10.156',
-      organization
-    }).save();
-    await Domain.create({
-      name: 'first_file_testdomain12',
-      ip: '1.1.1.1',
-      organization
-    }).save();
+    const domains: Domain[] = [];
+    domains.push(
+      await Domain.create({
+        name: 'first_file_testdomain1',
+        ip: '153.126.148.60',
+        organization
+      }).save()
+    );
+    domains.push(
+      await Domain.create({
+        name: 'first_file_testdomain2',
+        ip: '31.134.10.156',
+        organization
+      }).save()
+    );
+    domains.push(
+      await Domain.create({
+        name: 'first_file_testdomain12',
+        ip: '1.1.1.1',
+        organization
+      }).save()
+    );
+
+    jest.mock('../helpers/getIps', () => domains);
   });
 
   afterEach(async () => {

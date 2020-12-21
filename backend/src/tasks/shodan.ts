@@ -70,7 +70,6 @@ export const handler = async (commandOptions: CommandOptions) => {
         .join(',')}?key=${process.env.SHODAN_API_KEY}`
     );
 
-    console.log(data);
     // If only one item is returned, the response will not be an array
     if (!Array.isArray(data)) {
       data = [data];
