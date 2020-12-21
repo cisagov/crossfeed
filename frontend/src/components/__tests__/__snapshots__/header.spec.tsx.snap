@@ -42,7 +42,7 @@ exports[`Header component matches snapshot 1`] = `
             <img
               alt="Crossfeed Icon Navigate Home"
               class="makeStyles-logo-3"
-              src="cisa_logo.png"
+              src="crossfeed.svg"
             />
           </a>
           <div

@@ -342,7 +342,6 @@ export const Vulnerabilities: React.FC = () => {
         <Subnav
           items={[
             { title: 'Assets', path: '/inventory', exact: true },
-            { title: 'Domains', path: '/inventory/domains' },
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
         ></Subnav>
@@ -360,7 +359,7 @@ export const Vulnerabilities: React.FC = () => {
             noResults={noResults}
             pageSize={PAGE_SIZE}
             noResultsMessage={
-              "We don't see any vulnerabilities that match these criteria."
+              "We don't see any vulnerabilities that match your criteria."
             }
           />
         </div>

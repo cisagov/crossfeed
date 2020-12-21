@@ -11,7 +11,8 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-  TextareaAutosize
+  TextareaAutosize,
+  Button
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { withSearch } from '@elastic/react-search-ui';
@@ -19,7 +20,7 @@ import { FilterDrawer } from './FilterDrawer';
 import { ContextType } from '../../context/SearchProvider';
 import { SortBar } from './SortBar';
 import {
-  Button,
+  Button as USWDSButton,
   Overlay,
   Modal,
   ModalContainer,
@@ -32,6 +33,7 @@ import { FilterTags } from './FilterTags';
 import { SavedSearch, Vulnerability } from 'types';
 import { useBeforeunload } from 'react-beforeunload';
 import { NoResults } from 'components/NoResults';
+import { exportCSV } from 'components/ImportExport';
 
 export const DashboardUI: React.FC<ContextType & { location: any }> = (
   props
@@ -59,7 +61,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
   const classes = useStyles();
   const [selectedDomain, setSelectedDomain] = useState('');
   const [resultsScrolled, setResultsScrolled] = useState(false);
-  const { apiPost, apiPut } = useAuthContext();
+  const { apiPost, apiPut, setLoading } = useAuthContext();
 
   const search:
     | (SavedSearch & {
@@ -127,6 +129,25 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
     localStorage.removeItem('savedSearch');
   });
 
+  const fetchDomainsExport = async (): Promise<string> => {
+    try {
+      const { url } = await apiPost('/search/export', {
+        body: {
+          current,
+          filters,
+          resultsPerPage,
+          searchTerm,
+          sortDirection,
+          sortField
+        }
+      });
+      return url!;
+    } catch (e) {
+      console.error(e);
+      return '';
+    }
+  };
+
   return (
     <div className={classes.root}>
       <FilterDrawer
@@ -140,7 +161,6 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
         <Subnav
           items={[
             { title: 'Assets', path: '/inventory', exact: true },
-            { title: 'Domains', path: '/inventory/domains' },
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
         >
@@ -221,6 +241,20 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
               ))}
             </Select>
           </FormControl>
+          <Button
+            className={classes.exportButton}
+            onClick={() =>
+              exportCSV(
+                {
+                  name: 'domains',
+                  getDataToExport: fetchDomainsExport
+                },
+                setLoading
+              )
+            }
+          >
+            Export Results
+          </Button>
         </Paper>
       </div>
 
@@ -232,7 +266,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
               className={classes.saveSearchModal}
               actions={
                 <>
-                  <Button
+                  <USWDSButton
                     outline
                     type="button"
                     onClick={() => {
@@ -240,8 +274,8 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
                     }}
                   >
                     Cancel
-                  </Button>
-                  <Button
+                  </USWDSButton>
+                  <USWDSButton
                     type="button"
                     onClick={async () => {
                       const body = {
@@ -264,7 +298,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
                     }}
                   >
                     Save
-                  </Button>
+                  </USWDSButton>
                 </>
               }
               title={search ? <h2>Update Search</h2> : <h2>Save Search</h2>}
@@ -468,6 +502,10 @@ const useStyles = makeStyles(() => ({
     },
     borderRadius: 0,
     zIndex: 9
+  },
+  exportButton: {
+    justifyContent: 'flex-end',
+    marginLeft: 'auto'
   },
   pageSize: {
     '& > p': {
