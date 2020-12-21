@@ -266,7 +266,6 @@ export class Service extends BaseEntity {
       for (const prop in product) {
         if (!product[prop]) delete product[prop];
       }
-      console.log(product);
       if (product.cpe && productDict[product.cpe])
         productDict[product.cpe] = { ...productDict[product.cpe], ...product };
       else if (product.cpe) productDict[product.cpe] = product;

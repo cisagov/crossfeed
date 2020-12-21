@@ -64,12 +64,17 @@ export const handler = async (commandOptions: CommandOptions) => {
   const chunks = chunk(domainsWithIPs, CHUNK_SIZE);
 
   for (const domainChunk of chunks) {
-    const { data } = await axios.get<ShodanResponse[]>(
+    let { data } = await axios.get<ShodanResponse[]>(
       `https://api.shodan.io/shodan/host/${domainChunk
         .map((domain) => domain.ip)
         .join(',')}?key=${process.env.SHODAN_API_KEY}`
     );
 
+    console.log(data);
+    // If only one item is returned, the response will not be an array
+    if (!Array.isArray(data)) {
+      data = [data];
+    }
     for (const item of data) {
       const domains = ipToDomainsMap[item.ip_str];
       for (const domain of domains) {
