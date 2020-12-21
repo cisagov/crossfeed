@@ -1,6 +1,5 @@
 import { Domain, Service, Vulnerability } from '../models';
 import { plainToClass } from 'class-transformer';
-import * as portscanner from 'portscanner';
 import getIps from './helpers/getIps';
 import { CommandOptions } from './ecs-client';
 import saveServicesToDb from './helpers/saveServicesToDb';
@@ -40,6 +39,10 @@ interface ShodanResponse {
   }[];
 }
 
+const sleep = (milliseconds) => {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+};
+
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
@@ -66,13 +69,12 @@ export const handler = async (commandOptions: CommandOptions) => {
         .map((domain) => domain.ip)
         .join(',')}?key=${process.env.SHODAN_API_KEY}`
     );
-    const services: Service[] = [];
-    const vulns: Vulnerability[] = [];
+
     for (const item of data) {
       const domains = ipToDomainsMap[item.ip_str];
       for (const domain of domains) {
         for (const service of item.data) {
-          services.push(
+          const [serviceId] = await saveServicesToDb([
             plainToClass(Service, {
               domain: domain,
               discoveredBy: { id: commandOptions.scanId },
@@ -85,8 +87,9 @@ export const handler = async (commandOptions: CommandOptions) => {
                 cpe: service.cpe
               }
             })
-          );
+          ]);
           if (service.vulns) {
+            const vulns: Vulnerability[] = [];
             for (const cve in service.vulns) {
               vulns.push(
                 plainToClass(Vulnerability, {
@@ -102,16 +105,17 @@ export const handler = async (commandOptions: CommandOptions) => {
                   state: 'open',
                   source: 'shodan',
                   description: service.vulns[cve].summary,
-                  needsPopulation: true
+                  needsPopulation: true,
+                  service: { id: serviceId }
                 })
               );
             }
+            await saveVulnerabilitiesToDb(vulns, false);
           }
         }
       }
     }
-    await saveServicesToDb(services);
-    await saveVulnerabilitiesToDb(vulns, false);
+    await sleep(1000); // Wait for Shodan rate limit
   }
 
   console.log(`Shodan finished for ${domainsWithIPs.length} domains`);
