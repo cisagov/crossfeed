@@ -4,6 +4,7 @@ import {
   Domain,
   Organization,
   Scan,
+  Service,
   Vulnerability
 } from '../../models';
 import { handler as shodan } from '../shodan';
@@ -45,7 +46,10 @@ const shodanResponse = [
           '* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.\n* CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN\r\nA001 OK Capability completed.\r\n* ID NIL\r\nA002 OK ID completed.\r\nA003 BAD Error in IMAP command received by server.\r\n',
         asn: 'AS7684',
         transport: 'tcp',
-        ip_str: '153.126.148.60'
+        ip_str: '153.126.148.60',
+        product: 'Test',
+        version: '1.1',
+        cpe: ['1234']
       }
     ],
     asn: 'AS7684',
@@ -138,6 +142,7 @@ const shodanResponse = [
 describe('shodan', () => {
   let organization;
   let scan;
+  const domains: Domain[] = [];
   beforeEach(async () => {
     await connectToDatabase();
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
@@ -152,7 +157,6 @@ describe('shodan', () => {
       arguments: {},
       frequency: 999
     }).save();
-    const domains: Domain[] = [];
     domains.push(
       await Domain.create({
         name: 'first_file_testdomain1',
@@ -236,12 +240,41 @@ describe('shodan', () => {
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
     });
-    await checkDomains(organization);
-    const domain = await Domain.findOne({ name: 'first_file_testdomain12' });
+    const domain = await Domain.findOne({ id: domains[2].id });
     const vulns = await Vulnerability.find({
       domain: domain
     });
     expect(vulns).toHaveLength(1);
     expect(vulns[0].title).toEqual('CVE-1234-1234');
+  });
+  test('populates shodanResults and products', async () => {
+    nock('https://api.shodan.io')
+      .get(
+        `/shodan/host/153.126.148.60,31.134.10.156,1.1.1.1?key=${process.env.SHODAN_API_KEY}`
+      )
+      .reply(200, shodanResponse);
+    await shodan({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: scan.id,
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+    const service = await Service.findOne({ domain: domains[0], port: 993 });
+    expect(service).not.toBeUndefined();
+    expect(service!.shodanResults).toEqual({
+      product: 'Test',
+      version: '1.1',
+      cpe: ['1234']
+    });
+    expect(service!.products).toHaveLength(1);
+    expect(service!.products).toEqual([
+      {
+        name: 'Test',
+        version: '1.1',
+        cpe: '1234',
+        tags: []
+      }
+    ]);
   });
 });

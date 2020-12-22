@@ -68,9 +68,9 @@ export const handler = async (commandOptions: CommandOptions) => {
       `Scanning ${domainChunk.length} domains beginning with ${domainChunk[0].name}`
     );
     let { data } = await axios.get<ShodanResponse[]>(
-      `https://api.shodan.io/shodan/host/${domainChunk
-        .map((domain) => domain.ip)
-        .join(',')}?key=${process.env.SHODAN_API_KEY}`
+      `https://api.shodan.io/shodan/host/${encodeURI(
+        domainChunk.map((domain) => domain.ip).join(',')
+      )}?key=${process.env.SHODAN_API_KEY}`
     );
 
     // If only one item is returned, the response will not be an array
