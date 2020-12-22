@@ -124,7 +124,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         }
       }
     }
-    await sleep(1000); // Wait for Shodan rate limit
+    await sleep(1000); // Wait for Shodan rate limit of 1 request / second
   }
 
   console.log(`Shodan finished for ${domainsWithIPs.length} domains`);

@@ -87,6 +87,7 @@ First, make sure you set the following SSM variables manually through the AWS Co
 - `/crossfeed/staging/APP_JWT_SECRET`
 - `/crossfeed/staging/CENSYS_API_ID`
 - `/crossfeed/staging/CENSYS_API_SECRET`
+- `/crossfeed/staging/SHODAN_API_KEY`
 - `/crossfeed/staging/LOGIN_GOV_REDIRECT_URI`
 - `/crossfeed/staging/LOGIN_GOV_BASE_URL`
 - `/crossfeed/staging/LOGIN_GOV_JWT_KEY`
