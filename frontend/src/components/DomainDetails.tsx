@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Paper,
   makeStyles,
@@ -53,6 +53,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
   const { user } = useAuthContext();
   const [domain, setDomain] = useState<Domain>();
   const classes = useStyles();
+  const history = useHistory();
 
   const fetchDomain = useCallback(async () => {
     try {
@@ -261,7 +262,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
           <div className={classes.section}>
             <h4 className={classes.subtitle}>Vulnerabilities</h4>
             <Accordion className={classes.accordionHeaderRow} disabled>
-              <AccordionSummary expandIcon={<ExpandMore />}>
+              <AccordionSummary>
                 <Typography className={classes.accordionHeading}>
                   Title
                 </Typography>
@@ -277,8 +278,15 @@ export const DomainDetails: React.FC<Props> = (props) => {
               </AccordionSummary>
             </Accordion>
             {domain.vulnerabilities.map((vuln) => (
-              <Accordion className={classes.accordion} key={vuln.id}>
-                <AccordionSummary expandIcon={<ExpandMore />}>
+              <Accordion
+                className={classes.accordion}
+                key={vuln.id}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  history.push('/inventory/vulnerability/' + vuln.id);
+                }}
+              >
+                <AccordionSummary>
                   <Typography className={classes.accordionHeading}>
                     {vuln.title}
                   </Typography>
@@ -297,39 +305,6 @@ export const DomainDetails: React.FC<Props> = (props) => {
                       : ''}
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails>
-                  <DefinitionList
-                    items={[
-                      {
-                        label: 'CVE',
-                        value: vuln.cve ?? 'N/A'
-                      },
-                      {
-                        label: 'Severity',
-                        value: vuln.severity ?? 'N/A'
-                      },
-                      {
-                        label: 'CVSS',
-                        value: vuln.cvss?.toString() ?? 'N/A'
-                      },
-                      {
-                        label: 'CPE',
-                        value: vuln.cpe ?? 'N/A'
-                      },
-                      {
-                        label: 'State',
-                        value:
-                          `${vuln.state} (${stateMap[
-                            vuln.substate
-                          ].toLowerCase()})` ?? 'N/A'
-                      },
-                      {
-                        label: 'Description',
-                        value: vuln.description ?? 'N/A'
-                      }
-                    ]}
-                  />
-                </AccordionDetails>
               </Accordion>
             ))}
           </div>
