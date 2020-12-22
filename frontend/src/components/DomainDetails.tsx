@@ -21,7 +21,6 @@ import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
 import { differenceInCalendarDays, parseISO } from 'date-fns';
-import { stateMap } from 'pages/Vulnerabilities/Vulnerabilities';
 import { Webpage } from 'types/webpage';
 import { useAuthContext } from 'context';
 
