@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 import {
   TableInstance,
-  Row,
   Filters,
   SortingRule,
   CellProps,
@@ -12,12 +11,11 @@ import { useAuthContext } from 'context';
 import { Table, Paginator, ColumnFilter, selectFilter } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import { Dropdown, Button } from '@trussworks/react-uswds';
+import { Dropdown } from '@trussworks/react-uswds';
 import { Link } from 'react-router-dom';
-import { differenceInCalendarDays, parseISO, format } from 'date-fns';
+import { differenceInCalendarDays, parseISO } from 'date-fns';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import { makeStyles } from '@material-ui/core';
-import ReactMarkdown from 'react-markdown';
 import { Subnav } from 'components';
 import { parse } from 'query-string';
 import { getSeverityColor } from 'pages/Risk/Risk';
@@ -369,10 +367,6 @@ export const Vulnerabilities: React.FC = () => {
 };
 
 const useStyles = makeStyles((theme) => ({
-  listRoot: {
-    width: '100%',
-    backgroundColor: theme.palette.background.paper
-  },
   contentWrapper: {
     position: 'relative',
     flex: '1 1 auto',
