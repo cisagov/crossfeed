@@ -64,6 +64,9 @@ export const handler = async (commandOptions: CommandOptions) => {
   const chunks = chunk(domainsWithIPs, CHUNK_SIZE);
 
   for (const domainChunk of chunks) {
+    console.log(
+      `Scanning ${domainChunk.length} domains beginning with ${domainChunk[0].name}`
+    );
     let { data } = await axios.get<ShodanResponse[]>(
       `https://api.shodan.io/shodan/host/${domainChunk
         .map((domain) => domain.ip)
@@ -92,7 +95,9 @@ export const handler = async (commandOptions: CommandOptions) => {
               }
             })
           ]);
+          console.log(service);
           if (service.vulns) {
+            console.log('creating vulnerability');
             const vulns: Vulnerability[] = [];
             for (const cve in service.vulns) {
               vulns.push(
