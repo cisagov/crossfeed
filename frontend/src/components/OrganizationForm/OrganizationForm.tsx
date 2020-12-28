@@ -9,7 +9,6 @@ export interface OrganizationFormValues {
   rootDomains: string;
   ipBlocks: string;
   isPassive: boolean;
-  inviteOnly: boolean;
 }
 
 export const OrganizationForm: React.FC<{
@@ -21,8 +20,7 @@ export const OrganizationForm: React.FC<{
     name: organization ? organization.name : '',
     rootDomains: organization ? organization.rootDomains.join(', ') : '',
     ipBlocks: organization ? organization.ipBlocks.join(', ') : '',
-    isPassive: organization ? organization.isPassive : false,
-    inviteOnly: organization ? organization.inviteOnly : false
+    isPassive: organization ? organization.isPassive : false
   });
 
   const { user } = useAuthContext();
@@ -31,10 +29,10 @@ export const OrganizationForm: React.FC<{
 
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
-  > = e => onChange(e.target.name, e.target.value);
+  > = (e) => onChange(e.target.name, e.target.value);
 
   const onChange = (name: string, value: any) => {
-    setValues(values => ({
+    setValues((values) => ({
       ...values,
       [name]: value
     }));
@@ -42,20 +40,19 @@ export const OrganizationForm: React.FC<{
 
   return (
     <form
-      onSubmit={async e => {
+      onSubmit={async (e) => {
         e.preventDefault();
         await onSubmit({
           rootDomains:
             values.rootDomains === ''
               ? []
-              : values.rootDomains.split(',').map(domain => domain.trim()),
+              : values.rootDomains.split(',').map((domain) => domain.trim()),
           ipBlocks:
             values.ipBlocks === ''
               ? []
-              : values.ipBlocks.split(',').map(ip => ip.trim()),
+              : values.ipBlocks.split(',').map((ip) => ip.trim()),
           name: values.name,
-          isPassive: values.isPassive,
-          inviteOnly: values.inviteOnly
+          isPassive: values.isPassive
         });
         if (!organization) setValues(defaultValues);
       }}
@@ -71,44 +68,36 @@ export const OrganizationForm: React.FC<{
         value={values.name}
         onChange={onTextChange}
       />
-      {user?.userType === 'globalAdmin' && <>
-        <Label htmlFor="rootDomains">Root Domains</Label>
-        <TextInput
-          required
-          id="rootDomains"
-          name="rootDomains"
-          className={classes.textField}
-          type="text"
-          value={values.rootDomains}
-          onChange={onTextChange}
-        />
-        <Label htmlFor="ipBlocks">IP Blocks (Optional)</Label>
-        <TextInput
-          id="ipBlocks"
-          name="ipBlocks"
-          className={classes.textField}
-          type="text"
-          value={values.ipBlocks}
-          onChange={onTextChange}
-        />
-      </>}
+      {user?.userType === 'globalAdmin' && (
+        <>
+          <Label htmlFor="rootDomains">Root Domains</Label>
+          <TextInput
+            required
+            id="rootDomains"
+            name="rootDomains"
+            className={classes.textField}
+            type="text"
+            value={values.rootDomains}
+            onChange={onTextChange}
+          />
+          <Label htmlFor="ipBlocks">IP Blocks (Optional)</Label>
+          <TextInput
+            id="ipBlocks"
+            name="ipBlocks"
+            className={classes.textField}
+            type="text"
+            value={values.ipBlocks}
+            onChange={onTextChange}
+          />
+        </>
+      )}
       <br></br>
       <Checkbox
         id="isPassive"
         name="isPassive"
         label="Passive mode"
         checked={values.isPassive}
-        onChange={e => {
-          onChange(e.target.name, e.target.checked);
-        }}
-      />
-      <br></br>
-      <Checkbox
-        id="inviteOnly"
-        name="inviteOnly"
-        label="Invite only"
-        checked={values.inviteOnly}
-        onChange={e => {
+        onChange={(e) => {
           onChange(e.target.name, e.target.checked);
         }}
       />

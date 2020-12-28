@@ -12,6 +12,7 @@ export const authCtx: AuthContextType = {
   setUser: jest.fn(),
   setOrganization: jest.fn(),
   setShowAllOrganizations: jest.fn(),
+  setFeedbackMessage: jest.fn(),
   refreshUser: jest.fn(),
   setLoading: jest.fn(),
   apiGet: jest.fn(),

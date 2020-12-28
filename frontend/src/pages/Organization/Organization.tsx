@@ -8,23 +8,35 @@ import {
   ScanTask,
   User,
   Scan,
-  ScanSchema
+  ScanSchema,
+  OrganizationTag
 } from 'types';
-import { FaGlobe, FaNetworkWired, FaClock, FaUsers } from 'react-icons/fa';
 import { Column } from 'react-table';
 import { Subnav, Table } from 'components';
-import { OrganizationForm } from 'components/OrganizationForm';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { Label, TextInput, Button, Dropdown } from '@trussworks/react-uswds';
-import { makeStyles } from '@material-ui/core';
+import { Label, TextInput, Dropdown } from '@trussworks/react-uswds';
+import {
+  Chip,
+  makeStyles,
+  Switch as SwitchInput,
+  Button,
+  Snackbar
+} from '@material-ui/core';
 import { ChevronRight } from '@material-ui/icons';
+import { Alert } from '@material-ui/lab';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
 }
 
 export const Organization: React.FC = () => {
-  const { apiGet, apiPut, apiPost, user } = useAuthContext();
+  const {
+    apiGet,
+    apiPut,
+    apiPost,
+    user,
+    setFeedbackMessage
+  } = useAuthContext();
   const { organizationId } = useParams<{ organizationId: string }>();
   const [organization, setOrganization] = useState<OrganizationType>();
   const [userRoles, setUserRoles] = useState<Role[]>([]);
@@ -32,7 +44,6 @@ export const Organization: React.FC = () => {
   const [scans, setScans] = useState<Scan[]>([]);
   const [scanSchema, setScanSchema] = useState<ScanSchema>({});
   const [errors, setErrors] = useState<Errors>({});
-  const [message, setMessage] = useState<string>('');
   const [newUserValues, setNewUserValues] = useState<{
     firstName: string;
     lastName: string;
@@ -287,11 +298,15 @@ export const Organization: React.FC = () => {
 
   const updateOrganization = async (body: any) => {
     try {
+      console.log(organization);
       const org = await apiPut('/organizations/' + organization?.id, {
-        body
+        body: organization
       });
       setOrganization(org);
-      setMessage('Organization successfully updated');
+      setFeedbackMessage({
+        message: 'Organization successfully updated',
+        type: 'success'
+      });
     } catch (e) {
       setErrors({
         global:
@@ -381,45 +396,81 @@ export const Organization: React.FC = () => {
     }));
   };
 
+  const ListInput = (props: {
+    type: 'rootDomains' | 'ipBlocks' | 'tags';
+    label: string;
+  }) => {
+    if (!organization) return <></>;
+    const elements: (string | OrganizationTag)[] = organization[props.type];
+    return (
+      <div className={oldClasses.headerRow}>
+        <label>{props.label}</label>
+        <span>
+          {elements &&
+            elements.map((value: string | OrganizationTag, index: number) => (
+              <Chip
+                className={classes.chipDisabled}
+                key={index}
+                label={typeof value === 'string' ? value : value.name}
+                onDelete={() => {
+                  organization[props.type].splice(index, 1);
+                  setOrganization({ ...organization });
+                }}
+              ></Chip>
+            ))}
+          <Chip
+            label="ADD"
+            variant="outlined"
+            color="secondary"
+            onClick={() => {
+              if (props.type !== 'tags') {
+                const val = prompt('name?');
+                if (val) {
+                  organization[props.type].push(val);
+                  setOrganization({ ...organization });
+                }
+              } else {
+                const val = prompt('name?');
+                // if (val) {
+                //   organization[props.type].push({ name: val });
+                //   setOrganization(organization);
+                // }
+              }
+            }}
+          />
+        </span>
+      </div>
+    );
+  };
+
   if (!organization) return null;
 
   const views = [
     <>
-      <div className={oldClasses.headerRow}>
-        <label>
-          <FaNetworkWired />
-          Root Domains
-        </label>
-        <span>{organization.rootDomains.join(', ')}</span>
-      </div>
+      <ListInput label="Root Domains" type="rootDomains"></ListInput>
+      <ListInput label="IP Blocks" type="ipBlocks"></ListInput>
+      <ListInput label="Tags" type="tags"></ListInput>
 
       <div className={oldClasses.headerRow}>
-        <label>
-          <FaGlobe />
-          IP Blocks
-        </label>
-        <span>{organization.ipBlocks.join(', ')}</span>
+        <label>Passive Mode</label>
+        <span>
+          <SwitchInput
+            checked={organization.isPassive}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setOrganization({
+                ...organization,
+                isPassive: event.target.checked
+              });
+            }}
+            color="primary"
+          />
+        </span>
       </div>
-
-      <div className={oldClasses.headerRow}>
-        <label>
-          <FaClock />
-          Passive Mode
-        </label>
-        <span>{organization.isPassive ? 'Yes' : 'No'}</span>
-      </div>
-
-      <div className={oldClasses.headerRow}>
-        <label>
-          <FaUsers />
-          Invite Only
-        </label>
-        <span>{organization.inviteOnly ? 'Yes' : 'No'}</span>
-      </div>
+      <Button variant="contained" color="primary" onClick={updateOrganization}>
+        Save
+      </Button>
     </>,
     <>
-      {' '}
-      <h1>Organization Users</h1>
       <Table<Role> columns={userRoleColumns} data={userRoles} />
       <h2>Invite a user</h2>
       <form onSubmit={onInviteUserSubmit} className={oldClasses.form}>
@@ -471,25 +522,15 @@ export const Organization: React.FC = () => {
           </option>
         </Dropdown>
         <br></br>
-        <Button type="submit">Invite User</Button>
+        <Button type="submit" color="primary">
+          Invite User
+        </Button>
       </form>
     </>,
     <>
-      <h1>Customize Scans</h1>
       <Table<Scan> columns={scanColumns} data={scans} fetchData={fetchScans} />
-      <h1>Organization Scan History</h1>
+      <h2>Organization Scan History</h2>
       <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} />
-    </>,
-
-    <>
-      <h1>Update Organization</h1>
-      {errors.global && <p className={oldClasses.error}>{errors.global}</p>}
-      {message && <p>{message}</p>}
-      <OrganizationForm
-        onSubmit={updateOrganization}
-        organization={organization}
-        type="update"
-      ></OrganizationForm>
     </>
   ];
 
@@ -497,7 +538,15 @@ export const Organization: React.FC = () => {
     <div>
       <div className={classes.header}>
         <h1 className={classes.headerLabel}>
-          Organizations{' '}
+          <Link
+            to="/organizations"
+            style={{
+              textDecoration: 'none',
+              color: '#C9C9C9'
+            }}
+          >
+            Organizations
+          </Link>
           <ChevronRight
             style={{
               verticalAlign: 'middle',
@@ -541,10 +590,6 @@ export const Organization: React.FC = () => {
             path="/organizations/:organizationId/scans"
             render={() => views[2]}
           />
-          <Route
-            path="/organizations/:organizationId/edit"
-            render={() => views[3]}
-          />
         </Switch>
       </div>
     </div>
@@ -564,6 +609,11 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontStyle: 'normal',
     fontSize: '24px'
+  },
+  chipDisabled: {
+    background: '#C4C4C4',
+    color: 'white',
+    marginRight: '10px'
   }
 }));
 

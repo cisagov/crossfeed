@@ -56,13 +56,6 @@ export const Organizations: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Invite Only',
-      accessor: ({ inviteOnly }) => (inviteOnly ? 'Yes' : 'No'),
-      id: 'inviteOnly',
-      width: 50,
-      disableFilters: true
-    },
-    {
       Header: 'Details',
       id: 'details',
       Cell: ({ row }: { row: CellProps<Organization> }) => (
@@ -174,13 +167,7 @@ export const Organizations: React.FC = () => {
           ></OrganizationForm>
           <ImportExport<Organization>
             name="organizations"
-            fieldsToExport={[
-              'name',
-              'rootDomains',
-              'ipBlocks',
-              'isPassive',
-              'inviteOnly'
-            ]}
+            fieldsToExport={['name', 'rootDomains', 'ipBlocks', 'isPassive']}
             onImport={async (results) => {
               // TODO: use a batch call here instead.
               let createdOrganizations = [];

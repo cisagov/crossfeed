@@ -1,14 +1,4 @@
-import {
-  IsInt,
-  IsPositive,
-  IsString,
-  IsIn,
-  isUUID,
-  IsObject,
-  IsArray,
-  IsBoolean,
-  IsOptional
-} from 'class-validator';
+import { IsString, isUUID, IsArray, IsBoolean } from 'class-validator';
 import {
   Organization,
   connectToDatabase,
@@ -63,9 +53,6 @@ class NewOrganizationNonGlobalAdmins {
 
   @IsBoolean()
   isPassive: boolean;
-
-  @IsBoolean()
-  inviteOnly: boolean;
 }
 
 class NewOrganization extends NewOrganizationNonGlobalAdmins {
@@ -366,29 +353,6 @@ export const removeRole = wrapHandler(async (event) => {
   const result = await Role.delete({
     organization: { id: organizationId },
     id
-  });
-  return {
-    statusCode: 200,
-    body: JSON.stringify(result)
-  };
-});
-
-/**
- * @swagger
- *
- * /organizations/public:
- *  get:
- *    description: List organizations that are set to be public.
- *    tags:
- *    - Organizations
- */
-export const listPublicNames = wrapHandler(async (event) => {
-  await connectToDatabase();
-  const result = await Organization.find({
-    select: ['name', 'id'],
-    where: {
-      inviteOnly: false
-    }
   });
   return {
     statusCode: 200,

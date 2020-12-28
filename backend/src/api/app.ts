@@ -271,10 +271,6 @@ authenticatedRoute.get(
 
 authenticatedRoute.get('/organizations', handlerToExpress(organizations.list));
 authenticatedRoute.get(
-  '/organizations/public',
-  handlerToExpress(organizations.listPublicNames)
-);
-authenticatedRoute.get(
   '/organizations/:organizationId',
   handlerToExpress(organizations.get)
 );
