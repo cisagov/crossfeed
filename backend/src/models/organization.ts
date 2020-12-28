@@ -10,7 +10,7 @@ import {
   ManyToMany,
   ManyToOne
 } from 'typeorm';
-import { Domain, Role, Scan, ScanTask } from '.';
+import { Domain, Role, Scan, ScanTask, OrganizationTag } from '.';
 import { User } from './user';
 
 @Entity()
@@ -63,6 +63,12 @@ export class Organization extends BaseEntity {
     onUpdate: 'CASCADE'
   })
   granularScans: Scan[];
+
+  @ManyToMany((type) => OrganizationTag, (tag) => tag.organizations, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  tags: OrganizationTag[];
 
   @ManyToOne((type) => User, {
     onDelete: 'SET NULL',

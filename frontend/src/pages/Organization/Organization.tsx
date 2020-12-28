@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route, useParams, Switch } from 'react-router-dom';
 import { useAuthContext } from 'context';
-import classes from './styles.module.scss';
+import oldClasses from './styles.module.scss';
 import {
   Organization as OrganizationType,
   Role,
@@ -12,36 +12,25 @@ import {
 } from 'types';
 import { FaGlobe, FaNetworkWired, FaClock, FaUsers } from 'react-icons/fa';
 import { Column } from 'react-table';
-import { Table } from 'components';
+import { Subnav, Table } from 'components';
 import { OrganizationForm } from 'components/OrganizationForm';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import {
-  PrimaryNav,
-  Header,
-  Label,
-  TextInput,
-  Button,
-  Dropdown
-} from '@trussworks/react-uswds';
+import { Label, TextInput, Button, Dropdown } from '@trussworks/react-uswds';
+import { makeStyles } from '@material-ui/core';
+import { ChevronRight } from '@material-ui/icons';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
 }
 
 export const Organization: React.FC = () => {
-  const {
-    currentOrganization,
-    apiGet,
-    apiPut,
-    apiPost,
-    user
-  } = useAuthContext();
+  const { apiGet, apiPut, apiPost, user } = useAuthContext();
+  const { organizationId } = useParams<{ organizationId: string }>();
   const [organization, setOrganization] = useState<OrganizationType>();
   const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
   const [scans, setScans] = useState<Scan[]>([]);
   const [scanSchema, setScanSchema] = useState<ScanSchema>({});
-  const [currentView, setCurrentView] = useState<number>(0);
   const [errors, setErrors] = useState<Errors>({});
   const [message, setMessage] = useState<string>('');
   const [newUserValues, setNewUserValues] = useState<{
@@ -56,6 +45,7 @@ export const Organization: React.FC = () => {
     email: '',
     role: ''
   });
+  const classes = useStyles();
 
   const dateAccessor = (date?: string) => {
     return !date || new Date(date).getTime() === new Date(0).getTime()
@@ -231,12 +221,9 @@ export const Organization: React.FC = () => {
   ];
 
   const fetchOrganization = useCallback(async () => {
-    if (!currentOrganization) {
-      return;
-    }
     try {
       const organization = await apiGet<OrganizationType>(
-        `/organizations/${currentOrganization.id}`
+        `/organizations/${organizationId}`
       );
       organization.scanTasks.sort(
         (a, b) =>
@@ -248,7 +235,7 @@ export const Organization: React.FC = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [apiGet, setOrganization, currentOrganization]);
+  }, [apiGet, setOrganization, organizationId]);
 
   const fetchScans = useCallback(async () => {
     try {
@@ -258,7 +245,10 @@ export const Organization: React.FC = () => {
       }>('/granularScans/');
 
       if (user?.userType !== 'globalAdmin')
-        scans = scans.filter((scan) => scan.name !== 'censysIpv4' && scan.name !== 'censysCertificates');
+        scans = scans.filter(
+          (scan) =>
+            scan.name !== 'censysIpv4' && scan.name !== 'censysCertificates'
+        );
 
       setScans(scans);
       setScanSchema(schema);
@@ -391,16 +381,11 @@ export const Organization: React.FC = () => {
     }));
   };
 
-  if (!organization)
-    return (
-      <div className={classes.root}>
-        <h1>No current organization</h1>
-      </div>
-    );
+  if (!organization) return null;
 
   const views = [
     <>
-      <div className={classes.headerRow}>
+      <div className={oldClasses.headerRow}>
         <label>
           <FaNetworkWired />
           Root Domains
@@ -408,7 +393,7 @@ export const Organization: React.FC = () => {
         <span>{organization.rootDomains.join(', ')}</span>
       </div>
 
-      <div className={classes.headerRow}>
+      <div className={oldClasses.headerRow}>
         <label>
           <FaGlobe />
           IP Blocks
@@ -416,7 +401,7 @@ export const Organization: React.FC = () => {
         <span>{organization.ipBlocks.join(', ')}</span>
       </div>
 
-      <div className={classes.headerRow}>
+      <div className={oldClasses.headerRow}>
         <label>
           <FaClock />
           Passive Mode
@@ -424,7 +409,7 @@ export const Organization: React.FC = () => {
         <span>{organization.isPassive ? 'Yes' : 'No'}</span>
       </div>
 
-      <div className={classes.headerRow}>
+      <div className={oldClasses.headerRow}>
         <label>
           <FaUsers />
           Invite Only
@@ -437,14 +422,14 @@ export const Organization: React.FC = () => {
       <h1>Organization Users</h1>
       <Table<Role> columns={userRoleColumns} data={userRoles} />
       <h2>Invite a user</h2>
-      <form onSubmit={onInviteUserSubmit} className={classes.form}>
-        {errors.global && <p className={classes.error}>{errors.global}</p>}
+      <form onSubmit={onInviteUserSubmit} className={oldClasses.form}>
+        {errors.global && <p className={oldClasses.error}>{errors.global}</p>}
         <Label htmlFor="firstName">First Name</Label>
         <TextInput
           required
           id="firstName"
           name="firstName"
-          className={classes.textField}
+          className={oldClasses.textField}
           type="text"
           value={newUserValues.firstName}
           onChange={onInviteUserTextChange}
@@ -454,7 +439,7 @@ export const Organization: React.FC = () => {
           required
           id="lastName"
           name="lastName"
-          className={classes.textField}
+          className={oldClasses.textField}
           type="text"
           value={newUserValues.lastName}
           onChange={onInviteUserTextChange}
@@ -464,7 +449,7 @@ export const Organization: React.FC = () => {
           required
           id="email"
           name="email"
-          className={classes.textField}
+          className={oldClasses.textField}
           type="text"
           value={newUserValues.email}
           onChange={onInviteUserTextChange}
@@ -474,7 +459,7 @@ export const Organization: React.FC = () => {
           required
           id="role"
           name="role"
-          className={classes.textField}
+          className={oldClasses.textField}
           onChange={onInviteUserTextChange}
           value={newUserValues.role}
         >
@@ -498,7 +483,7 @@ export const Organization: React.FC = () => {
 
     <>
       <h1>Update Organization</h1>
-      {errors.global && <p className={classes.error}>{errors.global}</p>}
+      {errors.global && <p className={oldClasses.error}>{errors.global}</p>}
       {message && <p>{message}</p>}
       <OrganizationForm
         onSubmit={updateOrganization}
@@ -509,59 +494,77 @@ export const Organization: React.FC = () => {
   ];
 
   return (
-    <div className={classes.root}>
-      <Header>
-        <div className="usa-nav-container">
-          <div className="usa-navbar">
-            <h1>{organization.name}</h1>
-          </div>
-          <PrimaryNav
-            items={[
-              <a
-                key="one"
-                href="# "
-                onClick={() => {
-                  setCurrentView(0);
-                }}
-                className="usa-nav__link"
-              >
-                <span>Overview</span>
-              </a>,
-              <a
-                key="two"
-                href="# "
-                onClick={() => {
-                  setCurrentView(1);
-                }}
-              >
-                <span>Manage Users</span>
-              </a>,
-              <a
-                key="three"
-                href="# "
-                onClick={() => {
-                  setCurrentView(2);
-                }}
-              >
-                <span>Manage Scans</span>
-              </a>,
-              <a
-                key="four"
-                href="# "
-                onClick={() => {
-                  setCurrentView(3);
-                }}
-              >
-                <span>Update organization</span>
-              </a>
-            ]}
-            onToggleMobileNav={function noRefCheck() {}}
+    <div>
+      <div className={classes.header}>
+        <h1 className={classes.headerLabel}>
+          Organizations{' '}
+          <ChevronRight
+            style={{
+              verticalAlign: 'middle',
+              lineHeight: '100%',
+              fontSize: '26px'
+            }}
+          ></ChevronRight>
+          <span style={{ color: '#07648D' }}>{organization.name}</span>
+        </h1>
+        <Subnav
+          items={[
+            {
+              title: 'Settings',
+              path: `/organizations/${organizationId}`,
+              exact: true
+            },
+            {
+              title: 'Members',
+              path: `/organizations/${organizationId}/members`
+            },
+            { title: 'Scans', path: `/organizations/${organizationId}/scans` }
+          ]}
+          styles={{
+            background: '#F9F9F9',
+            paddingLeft: '15%'
+          }}
+        ></Subnav>
+      </div>
+      <div className={oldClasses.root}>
+        <Switch>
+          <Route
+            path="/organizations/:organizationId"
+            exact
+            render={() => views[0]}
           />
-        </div>
-      </Header>
-      {views[currentView]}
+          <Route
+            path="/organizations/:organizationId/members"
+            render={() => views[1]}
+          />
+          <Route
+            path="/organizations/:organizationId/scans"
+            render={() => views[2]}
+          />
+          <Route
+            path="/organizations/:organizationId/edit"
+            render={() => views[3]}
+          />
+        </Switch>
+      </div>
     </div>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  header: {
+    background: '#F9F9F9'
+  },
+  headerLabel: {
+    margin: 0,
+    paddingTop: '1.5rem',
+    paddingBottom: '0.5rem',
+    marginLeft: '15%',
+    color: '#C9C9C9',
+    fontWeight: 500,
+    fontStyle: 'normal',
+    fontSize: '24px'
+  }
+}));
 
 export default Organization;

@@ -8,30 +8,22 @@ import {
 } from '@trussworks/react-uswds';
 import { Query } from 'types';
 import { Table, ImportExport } from 'components';
-import { Column } from 'react-table';
+import { CellProps, Column } from 'react-table';
 import { Organization } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { OrganizationForm } from 'components/OrganizationForm';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 interface Errors extends Partial<Organization> {
   global?: string;
 }
 
 export const Organizations: React.FC = () => {
-  const {
-    currentOrganization,
-    user,
-    setOrganization,
-    apiGet,
-    apiPost,
-    apiDelete
-  } = useAuthContext();
+  const { user, apiGet, apiPost, apiDelete } = useAuthContext();
   const [showModal, setShowModal] = useState<Boolean>(false);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const history = useHistory();
 
   const columns: Column<Organization>[] = [
     {
@@ -71,28 +63,21 @@ export const Organizations: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Make Current',
-      id: 'makeCurrent',
-      Cell: ({ row }: { row: { index: number } }) =>
-        currentOrganization &&
-        currentOrganization.id === organizations[row.index].id ? (
-          <p>Current</p>
-        ) : (
-          <a
-            style={{ color: 'black' }}
-            href="# "
-            onClick={() => {
-              setOrganization(organizations[row.index]);
-              if (currentOrganization?.userIsAdmin) {
-                history.push('/organization');
-              } else {
-                history.push('/');
-              }
-            }}
-          >
-            Make Current
-          </a>
-        ),
+      Header: 'Details',
+      id: 'details',
+      Cell: ({ row }: { row: CellProps<Organization> }) => (
+        <Link
+          to={`/organizations/${row.original.id}`}
+          style={{
+            fontSize: '14px',
+            cursor: 'pointer',
+            color: '#484D51',
+            textDecoration: 'none'
+          }}
+        >
+          DETAILS
+        </Link>
+      ),
       width: 50,
       disableFilters: true
     },

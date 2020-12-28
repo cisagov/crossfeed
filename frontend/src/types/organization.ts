@@ -12,4 +12,11 @@ export interface Organization {
   isPassive: boolean;
   inviteOnly: boolean;
   granularScans: Scan[];
+  tags: OrganizationTag[];
+}
+
+export interface OrganizationTag {
+  id: string;
+  name: string;
+  organizations: Organization[];
 }
