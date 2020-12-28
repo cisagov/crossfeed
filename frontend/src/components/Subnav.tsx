@@ -43,6 +43,7 @@ const useStyles = (styles: any) =>
       display: 'flex',
       flexFlow: 'row nowrap',
       alignItems: 'center',
+      paddingLeft: '15%',
       ...styles
     },
     link: {

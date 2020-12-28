@@ -117,8 +117,9 @@ const App: React.FC = () => (
                 />
 
                 <RouteGuard path="/feeds" component={Feeds} />
+                <RouteGuard path="/scans" component={Scans} exact />
+                <RouteGuard path="/scans/history" component={Scans} exact />
                 <RouteGuard path="/scans/:scanId" component={Scan} />
-                <RouteGuard path="/scans" component={Scans} />
                 <RouteGuard
                   path="/organizations/:organizationId"
                   component={Organization}

@@ -570,8 +570,7 @@ export const Organization: React.FC = () => {
             { title: 'Scans', path: `/organizations/${organizationId}/scans` }
           ]}
           styles={{
-            background: '#F9F9F9',
-            paddingLeft: '15%'
+            background: '#F9F9F9'
           }}
         ></Subnav>
       </div>
