@@ -20,7 +20,8 @@ import {
   makeStyles,
   Switch as SwitchInput,
   Button,
-  TextField
+  TextField,
+  Paper
 } from '@material-ui/core';
 import { ChevronRight } from '@material-ui/icons';
 import { Autocomplete, createFilterOptions } from '@material-ui/lab';
@@ -499,7 +500,7 @@ export const Organization: React.FC = () => {
   if (!organization) return null;
 
   const views = [
-    <>
+    <Paper className={classes.settingsWrapper}>
       <ListInput label="Root Domains" type="rootDomains"></ListInput>
       <ListInput label="IP Blocks" type="ipBlocks"></ListInput>
       <ListInput label="Tags" type="tags"></ListInput>
@@ -522,7 +523,7 @@ export const Organization: React.FC = () => {
       <Button variant="contained" color="primary" onClick={updateOrganization}>
         Save
       </Button>
-    </>,
+    </Paper>,
     <>
       <Table<Role> columns={userRoleColumns} data={userRoles} />
       <h2>Invite a user</h2>
@@ -666,6 +667,13 @@ const useStyles = makeStyles((theme) => ({
     background: '#C4C4C4',
     color: 'white',
     marginRight: '10px'
+  },
+  settingsWrapper: {
+    boxSizing: 'border-box',
+    border: '0px',
+    boxShadow: 'none',
+    borderRadius: '0px',
+    padding: '25px'
   }
 }));
 
