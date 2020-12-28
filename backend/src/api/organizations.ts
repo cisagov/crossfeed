@@ -5,7 +5,8 @@ import {
   Role,
   ScanTask,
   Scan,
-  User
+  User,
+  OrganizationTag
 } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
@@ -159,6 +160,33 @@ export const list = wrapHandler(async (event) => {
   }
   const result = await Organization.find({
     where
+  });
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result)
+  };
+});
+
+/**
+ * @swagger
+ *
+ * /organizations/tags:
+ *  get:
+ *    description: Fetchs all possible organization tags
+ *    tags:
+ *    - Organizations
+ */
+export const getTags = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify([])
+    };
+  }
+  await connectToDatabase();
+  const result = await OrganizationTag.find({
+    select: ['id', 'name']
   });
 
   return {

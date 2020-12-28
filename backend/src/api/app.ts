@@ -271,6 +271,10 @@ authenticatedRoute.get(
 
 authenticatedRoute.get('/organizations', handlerToExpress(organizations.list));
 authenticatedRoute.get(
+  '/organizations/tags',
+  handlerToExpress(organizations.getTags)
+);
+authenticatedRoute.get(
   '/organizations/:organizationId',
   handlerToExpress(organizations.get)
 );

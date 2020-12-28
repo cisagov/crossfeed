@@ -20,13 +20,17 @@ import {
   makeStyles,
   Switch as SwitchInput,
   Button,
-  Snackbar
+  TextField
 } from '@material-ui/core';
 import { ChevronRight } from '@material-ui/icons';
-import { Alert } from '@material-ui/lab';
+import { Autocomplete, createFilterOptions } from '@material-ui/lab';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
+}
+
+interface AutocompleteType extends Partial<OrganizationTag> {
+  title?: string;
 }
 
 export const Organization: React.FC = () => {
@@ -39,6 +43,7 @@ export const Organization: React.FC = () => {
   } = useAuthContext();
   const { organizationId } = useParams<{ organizationId: string }>();
   const [organization, setOrganization] = useState<OrganizationType>();
+  const [tags, setTags] = useState<AutocompleteType[]>([]);
   const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
   const [scans, setScans] = useState<Scan[]>([]);
@@ -57,6 +62,7 @@ export const Organization: React.FC = () => {
     role: ''
   });
   const classes = useStyles();
+  const [tagValue, setTagValue] = React.useState<AutocompleteType | null>(null);
 
   const dateAccessor = (date?: string) => {
     return !date || new Date(date).getTime() === new Date(0).getTime()
@@ -243,6 +249,8 @@ export const Organization: React.FC = () => {
       setOrganization(organization);
       setUserRoles(organization.userRoles);
       setScanTasks(organization.scanTasks);
+      const tags = await apiGet<OrganizationTag[]>(`/organizations/tags`);
+      setTags(tags);
     } catch (e) {
       console.error(e);
     }
@@ -400,6 +408,7 @@ export const Organization: React.FC = () => {
     type: 'rootDomains' | 'ipBlocks' | 'tags';
     label: string;
   }) => {
+    const filter = createFilterOptions<AutocompleteType>();
     if (!organization) return <></>;
     const elements: (string | OrganizationTag)[] = organization[props.type];
     return (
@@ -418,6 +427,49 @@ export const Organization: React.FC = () => {
                 }}
               ></Chip>
             ))}
+          {props.type === 'tags' && (
+            <Autocomplete
+              value={tagValue}
+              onChange={(event, newValue) => {
+                if (typeof newValue === 'string') {
+                  setTagValue({
+                    name: newValue
+                  });
+                } else {
+                  setTagValue(newValue);
+                }
+              }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+
+                // Suggest the creation of a new value
+                if (params.inputValue !== '') {
+                  filtered.push({
+                    name: params.inputValue,
+                    title: `Add "${params.inputValue}"`
+                  });
+                }
+
+                return filtered;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              options={tags}
+              getOptionLabel={(option) => {
+                return option.name ?? '';
+              }}
+              renderOption={(option) => {
+                if (option.title) return option.title;
+                return option.name ?? '';
+              }}
+              style={{ width: 150 }}
+              freeSolo
+              renderInput={(params) => (
+                <TextField {...params} variant="outlined" />
+              )}
+            />
+          )}
           <Chip
             label="ADD"
             variant="outlined"
@@ -430,11 +482,12 @@ export const Organization: React.FC = () => {
                   setOrganization({ ...organization });
                 }
               } else {
-                const val = prompt('name?');
-                // if (val) {
-                //   organization[props.type].push({ name: val });
-                //   setOrganization(organization);
-                // }
+                if (tagValue) {
+                  if (!organization.tags) organization.tags = [];
+                  organization.tags.push(tagValue as any);
+                  console.log(organization);
+                  setOrganization({ ...organization });
+                }
               }
             }}
           />
