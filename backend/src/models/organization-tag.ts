@@ -9,7 +9,7 @@ import {
   JoinTable,
   Column
 } from 'typeorm';
-import { Organization } from '.';
+import { Organization, Scan } from '.';
 
 @Entity()
 @Index(['name'], { unique: true })
@@ -32,4 +32,11 @@ export class OrganizationTag extends BaseEntity {
   })
   @JoinTable()
   organizations: Organization[];
+
+  @ManyToMany((type) => Scan, (scan) => scan.tags, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  @JoinTable()
+  scans: Scan[];
 }

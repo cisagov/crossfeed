@@ -88,7 +88,7 @@ export const Organization: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Status',
+      Header: 'Role',
       accessor: ({ approved, role, user }) => {
         if (approved) {
           if (user.invitePending) {
@@ -444,7 +444,14 @@ export const Organization: React.FC = () => {
                 const filtered = filter(options, params);
 
                 // Suggest the creation of a new value
-                if (params.inputValue !== '') {
+                if (
+                  params.inputValue !== '' &&
+                  !filtered.find(
+                    (tag) =>
+                      tag.name?.toLowerCase() ===
+                      params.inputValue.toLowerCase()
+                  )
+                ) {
                   filtered.push({
                     name: params.inputValue,
                     title: `Add "${params.inputValue}"`

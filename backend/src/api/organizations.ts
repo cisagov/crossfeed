@@ -62,6 +62,9 @@ class NewOrganization extends NewOrganizationNonGlobalAdmins {
 
   @IsArray()
   ipBlocks: string[];
+
+  @IsArray()
+  tags: OrganizationTag[];
 }
 
 /**
@@ -85,7 +88,9 @@ export const update = wrapHandler(async (event) => {
   }
 
   if (!isOrgAdmin(event, id)) return Unauthorized;
-  const body = await validateBody(
+  const body = await validateBody<
+    NewOrganization | NewOrganizationNonGlobalAdmins
+  >(
     isGlobalWriteAdmin(event)
       ? NewOrganization
       : NewOrganizationNonGlobalAdmins,
@@ -101,6 +106,15 @@ export const update = wrapHandler(async (event) => {
     }
   );
   if (org) {
+    if ('tags' in body) {
+      for (const index in body.tags) {
+        if (!body.tags[index].id) {
+          const tag = OrganizationTag.create(body.tags[index]);
+          await tag.save();
+          body.tags[index] = tag;
+        }
+      }
+    }
     Organization.merge(org, body);
     await Organization.save(org);
     return {
@@ -215,7 +229,7 @@ export const get = wrapHandler(async (event) => {
 
   await connectToDatabase();
   const result = await Organization.findOne(id, {
-    relations: ['userRoles', 'userRoles.user', 'granularScans']
+    relations: ['userRoles', 'userRoles.user', 'granularScans', 'tags']
   });
 
   if (result) {
