@@ -162,6 +162,9 @@ class NewScan {
 
   @IsUUID('all', { each: true })
   organizations: string[];
+
+  @IsUUID('all', { each: true })
+  tags: string[];
 }
 
 /**
@@ -219,7 +222,8 @@ export const update = wrapHandler(async (event) => {
   if (scan) {
     Scan.merge(scan, {
       ...body,
-      organizations: body.organizations.map((id) => ({ id }))
+      organizations: body.organizations.map((id) => ({ id })),
+      tags: body.tags.map((id) => ({ id }))
     });
     const res = await Scan.save(scan);
     return {
@@ -246,6 +250,7 @@ export const create = wrapHandler(async (event) => {
   const scan = await Scan.create({
     ...body,
     organizations: body.organizations.map((id) => ({ id })),
+    tags: body.tags.map((id) => ({ id })),
     createdBy: { id: event.requestContext.authorizer!.id }
   });
   const res = await Scan.save(scan);

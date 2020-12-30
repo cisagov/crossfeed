@@ -2,7 +2,12 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import classes from './styles.module.scss';
-import { Organization as OrganizationType, Scan, ScanSchema } from 'types';
+import {
+  Organization as OrganizationType,
+  OrganizationTag,
+  Scan,
+  ScanSchema
+} from 'types';
 import { Header } from '@trussworks/react-uswds';
 import { OrganizationOption } from 'pages/Scans/ScansView';
 import { ScanForm, ScanFormValues } from 'components/ScanForm';
@@ -27,6 +32,7 @@ const ScanComponent: React.FC = () => {
   const [organizationOptions, setOrganizationOptions] = useState<
     OrganizationOption[]
   >([]);
+  const [tags, setTags] = useState<OrganizationTag[]>([]);
   const [scanSchema, setScanSchema] = useState<ScanSchema>({});
   const [values, setValues] = useState<ScanFormValues>({
     name: 'scan.name',
@@ -35,7 +41,8 @@ const ScanComponent: React.FC = () => {
     frequency: 1,
     frequencyUnit: 'minute',
     isGranular: false,
-    isSingleScan: false
+    isSingleScan: false,
+    tags: []
   });
 
   const fetchScan = useCallback(async () => {
@@ -51,6 +58,8 @@ const ScanComponent: React.FC = () => {
       setOrganizationOptions(
         organizations.map((e) => ({ label: e.name, value: e.id }))
       );
+      const tags = await apiGet<OrganizationTag[]>(`/organizations/tags`);
+      setTags(tags);
     } catch (e) {
       console.error(e);
     }
@@ -64,7 +73,8 @@ const ScanComponent: React.FC = () => {
           ...body,
           organizations: body.organizations
             ? body.organizations.map((e) => e.value)
-            : []
+            : [],
+          tags: body.tags ? body.tags.map((e) => e.value) : []
         }
       });
       setMessage('Scan successfully updated');
@@ -142,6 +152,7 @@ const ScanComponent: React.FC = () => {
       {message && <p>{message}</p>}
       <ScanForm
         organizationOption={organizationOptions}
+        tags={tags}
         propValues={values}
         global={isGlobal}
         onSubmit={onSubmit}
