@@ -68,6 +68,7 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.worker_signature_private_key.arn}",
           "${data.aws_ssm_parameter.censys_api_id.arn}",
           "${data.aws_ssm_parameter.censys_api_secret.arn}",
+          "${data.aws_ssm_parameter.shodan_api_key.arn}",
           "${aws_ssm_parameter.es_endpoint.arn}",
           "${aws_ssm_parameter.webscraper_s3_bucket_name.arn}"
         ]
@@ -210,6 +211,10 @@ resource "aws_ecs_task_definition" "worker" {
         "valueFrom": "${data.aws_ssm_parameter.censys_api_secret.arn}"
       },
       {
+        "name": "SHODAN_API_KEY",
+        "valueFrom": "${data.aws_ssm_parameter.shodan_api_key.arn}"
+      },
+      {
         "name": "WORKER_SIGNATURE_PUBLIC_KEY",
         "valueFrom": "${data.aws_ssm_parameter.worker_signature_public_key.arn}"
       },
@@ -256,6 +261,8 @@ resource "aws_cloudwatch_log_group" "worker" {
 data "aws_ssm_parameter" "censys_api_id" { name = var.ssm_censys_api_id }
 
 data "aws_ssm_parameter" "censys_api_secret" { name = var.ssm_censys_api_secret }
+
+data "aws_ssm_parameter" "shodan_api_key" { name = var.ssm_shodan_api_key }
 
 data "aws_ssm_parameter" "worker_signature_public_key" { name = var.ssm_worker_signature_public_key }
 
