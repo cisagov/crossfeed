@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shodan basic test 1`] = `
+Array [
+  Object {
+    "asn": null,
+    "censysCertificatesResults": Object {},
+    "cloudHosted": false,
+    "country": null,
+    "createdAt": null,
+    "fromRootDomain": null,
+    "id": null,
+    "ip": "153.126.148.60",
+    "name": null,
+    "organization": null,
+    "reverseName": "first_file_testdomain1",
+    "screenshot": null,
+    "services": Array [
+      Object {
+        "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.
+* CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN
+A001 OK Capability completed.
+* ID NIL
+A002 OK ID completed.
+A003 BAD Error in IMAP command received by server.
+",
+        "censysIpv4Results": Object {},
+        "censysMetadata": Object {},
+        "createdAt": null,
+        "id": null,
+        "intrigueIdentResults": Object {},
+        "lastSeen": 2019-04-22T10:20:30.000Z,
+        "port": 993,
+        "products": Array [
+          Object {
+            "cpe": "1234",
+            "name": "Test",
+            "tags": Array [],
+            "version": "1.1",
+          },
+        ],
+        "service": null,
+        "shodanResults": Object {
+          "cpe": Array [
+            "1234",
+          ],
+          "product": "Test",
+          "version": "1.1",
+        },
+        "updatedAt": null,
+        "wappalyzerResults": Array [],
+      },
+    ],
+    "ssl": null,
+    "syncedAt": null,
+    "updatedAt": null,
+  },
+  Object {
+    "asn": null,
+    "censysCertificatesResults": Object {},
+    "cloudHosted": false,
+    "country": null,
+    "createdAt": null,
+    "fromRootDomain": null,
+    "id": null,
+    "ip": "1.1.1.1",
+    "name": null,
+    "organization": null,
+    "reverseName": "first_file_testdomain12",
+    "screenshot": null,
+    "services": Array [
+      Object {
+        "banner": "
+Recursion: enabled
+Resolver ID: AMS",
+        "censysIpv4Results": Object {},
+        "censysMetadata": Object {},
+        "createdAt": null,
+        "id": null,
+        "intrigueIdentResults": Object {},
+        "lastSeen": 2019-04-22T10:20:30.000Z,
+        "port": 53,
+        "products": Array [],
+        "service": null,
+        "shodanResults": Object {},
+        "updatedAt": null,
+        "wappalyzerResults": Array [],
+      },
+    ],
+    "ssl": null,
+    "syncedAt": null,
+    "updatedAt": null,
+  },
+  Object {
+    "asn": null,
+    "censysCertificatesResults": Object {},
+    "cloudHosted": false,
+    "country": null,
+    "createdAt": null,
+    "fromRootDomain": null,
+    "id": null,
+    "ip": "31.134.10.156",
+    "name": null,
+    "organization": null,
+    "reverseName": "first_file_testdomain2",
+    "screenshot": null,
+    "services": Array [],
+    "ssl": null,
+    "syncedAt": null,
+    "updatedAt": null,
+  },
+]
+`;

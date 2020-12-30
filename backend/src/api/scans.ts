@@ -75,6 +75,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Open source tool that fingerprints web technologies based on HTTP responses'
   },
+  shodan: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Fetch passive port, banner, and vulnerability data from shodan'
+  },
   sslyze: {
     type: 'fargate',
     isPassive: true,

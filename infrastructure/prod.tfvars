@@ -23,6 +23,7 @@ ssm_worker_signature_public_key   = "/crossfeed/prod/WORKER_SIGNATURE_PUBLIC_KEY
 ssm_worker_signature_private_key  = "/crossfeed/prod/WORKER_SIGNATURE_PRIVATE_KEY"
 ssm_censys_api_id                 = "/crossfeed/prod/CENSYS_API_ID"
 ssm_censys_api_secret             = "/crossfeed/prod/CENSYS_API_SECRET"
+ssm_shodan_api_key                = "/crossfeed/prod/SHODAN_API_KEY"
 cloudfront_name                   = "Crossfeed Prod Frontend"
 db_group_name                     = "crossfeed-prod-db-group"
 worker_ecs_repository_name        = "crossfeed-prod-worker"

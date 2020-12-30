@@ -163,6 +163,17 @@ export class Service extends BaseEntity {
     }[];
   };
 
+  /** Shodan results */
+  @Column({
+    type: 'jsonb',
+    default: {}
+  })
+  shodanResults: {
+    product: string;
+    version: string;
+    cpe?: string[];
+  } | null;
+
   /** Wappalyzer output */
   @Column({
     type: 'jsonb',
@@ -215,6 +226,18 @@ export class Service extends BaseEntity {
       }
     }
 
+    if (this.shodanResults && this.shodanResults.product) {
+      const product: Product = {
+        name: this.shodanResults.product,
+        version: this.shodanResults.version,
+        tags: []
+      };
+      if (this.shodanResults.cpe && this.shodanResults.cpe.length > 0) {
+        product.cpe = this.shodanResults.cpe[0];
+      }
+      products.push(product);
+    }
+
     if (this.censysMetadata && Object.values(this.censysMetadata).length > 0) {
       let cpe;
 
@@ -243,7 +266,6 @@ export class Service extends BaseEntity {
       for (const prop in product) {
         if (!product[prop]) delete product[prop];
       }
-      console.log(product);
       if (product.cpe && productDict[product.cpe])
         productDict[product.cpe] = { ...productDict[product.cpe], ...product };
       else if (product.cpe) productDict[product.cpe] = product;
