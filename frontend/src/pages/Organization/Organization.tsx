@@ -21,7 +21,12 @@ import {
   Switch as SwitchInput,
   Button,
   TextField,
-  Paper
+  Paper,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
 } from '@material-ui/core';
 import { ChevronRight } from '@material-ui/icons';
 import { Autocomplete, createFilterOptions } from '@material-ui/lab';
@@ -64,6 +69,12 @@ export const Organization: React.FC = () => {
   });
   const classes = useStyles();
   const [tagValue, setTagValue] = React.useState<AutocompleteType | null>(null);
+  const [inputValue, setInputValue] = React.useState('');
+  const [dialog, setDialog] = React.useState<{
+    open: boolean;
+    type?: 'rootDomains' | 'ipBlocks' | 'tags';
+    label?: string;
+  }>({ open: false });
 
   const dateAccessor = (date?: string) => {
     return !date || new Date(date).getTime() === new Date(0).getTime()
@@ -404,12 +415,12 @@ export const Organization: React.FC = () => {
       [name]: value
     }));
   };
+  const filter = createFilterOptions<AutocompleteType>();
 
   const ListInput = (props: {
     type: 'rootDomains' | 'ipBlocks' | 'tags';
     label: string;
   }) => {
-    const filter = createFilterOptions<AutocompleteType>();
     if (!organization) return <></>;
     const elements: (string | OrganizationTag)[] = organization[props.type];
     return (
@@ -428,75 +439,16 @@ export const Organization: React.FC = () => {
                 }}
               ></Chip>
             ))}
-          {props.type === 'tags' && (
-            <Autocomplete
-              value={tagValue}
-              onChange={(event, newValue) => {
-                if (typeof newValue === 'string') {
-                  setTagValue({
-                    name: newValue
-                  });
-                } else {
-                  setTagValue(newValue);
-                }
-              }}
-              filterOptions={(options, params) => {
-                const filtered = filter(options, params);
-
-                // Suggest the creation of a new value
-                if (
-                  params.inputValue !== '' &&
-                  !filtered.find(
-                    (tag) =>
-                      tag.name?.toLowerCase() ===
-                      params.inputValue.toLowerCase()
-                  )
-                ) {
-                  filtered.push({
-                    name: params.inputValue,
-                    title: `Add "${params.inputValue}"`
-                  });
-                }
-
-                return filtered;
-              }}
-              selectOnFocus
-              clearOnBlur
-              handleHomeEndKeys
-              options={tags}
-              getOptionLabel={(option) => {
-                return option.name ?? '';
-              }}
-              renderOption={(option) => {
-                if (option.title) return option.title;
-                return option.name ?? '';
-              }}
-              style={{ width: 150 }}
-              freeSolo
-              renderInput={(params) => (
-                <TextField {...params} variant="outlined" />
-              )}
-            />
-          )}
           <Chip
             label="ADD"
             variant="outlined"
             color="secondary"
             onClick={() => {
-              if (props.type !== 'tags') {
-                const val = prompt('name?');
-                if (val) {
-                  organization[props.type].push(val);
-                  setOrganization({ ...organization });
-                }
-              } else {
-                if (tagValue) {
-                  if (!organization.tags) organization.tags = [];
-                  organization.tags.push(tagValue as any);
-                  console.log(organization);
-                  setOrganization({ ...organization });
-                }
-              }
+              setDialog({
+                open: true,
+                type: props.type,
+                label: props.label
+              });
             }}
           />
         </span>
@@ -508,10 +460,113 @@ export const Organization: React.FC = () => {
 
   const views = [
     <Paper className={classes.settingsWrapper}>
+      <Dialog
+        open={dialog.open}
+        onClose={() => setDialog({ open: false })}
+        aria-labelledby="form-dialog-title"
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle id="form-dialog-title">
+          Add {dialog.label && dialog.label.slice(0, -1)}
+        </DialogTitle>
+        <DialogContent>
+          {dialog.type === 'tags' ? (
+            <>
+              <DialogContentText>
+                Select an existing tag or add a new one.
+              </DialogContentText>
+              <Autocomplete
+                value={tagValue}
+                onChange={(event, newValue) => {
+                  if (typeof newValue === 'string') {
+                    setTagValue({
+                      name: newValue
+                    });
+                  } else {
+                    setTagValue(newValue);
+                  }
+                }}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params);
+                  // Suggest the creation of a new value
+                  if (
+                    params.inputValue !== '' &&
+                    !filtered.find(
+                      (tag) =>
+                        tag.name?.toLowerCase() ===
+                        params.inputValue.toLowerCase()
+                    )
+                  ) {
+                    filtered.push({
+                      name: params.inputValue,
+                      title: `Add "${params.inputValue}"`
+                    });
+                  }
+                  return filtered;
+                }}
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                options={tags}
+                getOptionLabel={(option) => {
+                  return option.name ?? '';
+                }}
+                renderOption={(option) => {
+                  if (option.title) return option.title;
+                  return option.name ?? '';
+                }}
+                fullWidth
+                freeSolo
+                renderInput={(params) => (
+                  <TextField {...params} variant="outlined" />
+                )}
+              />
+            </>
+          ) : (
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label={dialog.label && dialog.label.slice(0, -1)}
+              type="text"
+              fullWidth
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={() => setDialog({ open: false })}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              if (dialog.type && dialog.type !== 'tags') {
+                if (inputValue) {
+                  organization[dialog.type].push(inputValue);
+                  setOrganization({ ...organization });
+                }
+              } else {
+                if (tagValue) {
+                  if (!organization.tags) organization.tags = [];
+                  organization.tags.push(tagValue as any);
+                  setOrganization({ ...organization });
+                }
+              }
+              setDialog({ open: false });
+              setInputValue('');
+              setTagValue(null);
+            }}
+          >
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
       <ListInput label="Root Domains" type="rootDomains"></ListInput>
       <ListInput label="IP Blocks" type="ipBlocks"></ListInput>
       <ListInput label="Tags" type="tags"></ListInput>
-
       <div className={oldClasses.headerRow}>
         <label>Passive Mode</label>
         <span>
@@ -527,6 +582,9 @@ export const Organization: React.FC = () => {
           />
         </span>
       </div>
+      <Button variant="outlined" onClick={fetchOrganization}>
+        Cancel
+      </Button>{' '}
       <Button variant="contained" color="primary" onClick={updateOrganization}>
         Save
       </Button>
@@ -680,7 +738,9 @@ const useStyles = makeStyles((theme) => ({
     border: '0px',
     boxShadow: 'none',
     borderRadius: '0px',
-    padding: '25px'
+    padding: '25px',
+    maxWidth: '900px',
+    margin: '0 auto'
   }
 }));
 
