@@ -97,7 +97,7 @@ describe('stats', () => {
         .expect(200);
       expect(response.body.result).toMatchSnapshot(standard);
       expect(response.body.result.domains.numVulnerabilities[0].id).toEqual(
-        domain.name + '|High'
+        domain.name + '|Critical'
       );
     });
     it('get by globalView should filter domains to a single org if specified', async () => {
@@ -158,7 +158,7 @@ describe('stats', () => {
         .expect(200);
       expect(response.body.result).toMatchSnapshot(standard);
       expect(response.body.result.domains.numVulnerabilities[0].id).toEqual(
-        domain.name + '|High'
+        domain.name + '|Critical'
       );
     });
   });

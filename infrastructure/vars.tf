@@ -123,6 +123,11 @@ variable ssm_censys_api_secret {
   default = "/crossfeed/staging/CENSYS_API_SECRET"
 }
 
+variable ssm_shodan_api_key {
+  type    = string
+  default = "/crossfeed/staging/SHODAN_API_KEY"
+}
+
 variable cloudfront_name {
   type    = string
   default = "Crossfeed Staging Frontend"

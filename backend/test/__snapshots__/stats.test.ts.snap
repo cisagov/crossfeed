@@ -65,7 +65,7 @@ Object {
         "needsPopulation": false,
         "notes": "",
         "references": Array [],
-        "severity": "High",
+        "severity": "Critical",
         "source": "cpe2cve",
         "state": "open",
         "substate": "unconfirmed",
@@ -77,14 +77,14 @@ Object {
       Object {
         "count": "1",
         "description": "",
-        "severity": "High",
+        "severity": "Critical",
         "title": "vuln title",
       },
     ],
     "severity": Array [
       Object {
-        "id": "High",
-        "label": "High",
+        "id": "Critical",
+        "label": "Critical",
         "value": 1,
       },
     ],
@@ -157,7 +157,7 @@ Object {
         "needsPopulation": false,
         "notes": "",
         "references": Array [],
-        "severity": "High",
+        "severity": "Critical",
         "source": "cpe2cve",
         "state": "open",
         "substate": "unconfirmed",
@@ -169,14 +169,14 @@ Object {
       Object {
         "count": "1",
         "description": "",
-        "severity": "High",
+        "severity": "Critical",
         "title": "vuln title",
       },
     ],
     "severity": Array [
       Object {
-        "id": "High",
-        "label": "High",
+        "id": "Critical",
+        "label": "Critical",
         "value": 1,
       },
     ],

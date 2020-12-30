@@ -23,6 +23,7 @@ ssm_worker_signature_public_key   = "/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_
 ssm_worker_signature_private_key  = "/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY"
 ssm_censys_api_id                 = "/crossfeed/staging/CENSYS_API_ID"
 ssm_censys_api_secret             = "/crossfeed/staging/CENSYS_API_SECRET"
+ssm_shodan_api_key                = "/crossfeed/staging/SHODAN_API_KEY"
 cloudfront_name                   = "Crossfeed Staging Frontend"
 db_group_name                     = "crossfeed-staging-db-group"
 worker_ecs_repository_name        = "crossfeed-staging-worker"

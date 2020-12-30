@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 import {
   TableInstance,
-  Row,
   Filters,
   SortingRule,
   CellProps,
@@ -12,18 +11,11 @@ import { useAuthContext } from 'context';
 import { Table, Paginator, ColumnFilter, selectFilter } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import { Dropdown, Button } from '@trussworks/react-uswds';
+import { Dropdown } from '@trussworks/react-uswds';
 import { Link } from 'react-router-dom';
-import { differenceInCalendarDays, parseISO, format } from 'date-fns';
+import { differenceInCalendarDays, parseISO } from 'date-fns';
 import { FaExternalLinkAlt } from 'react-icons/fa';
-import {
-  TextareaAutosize,
-  List,
-  ListItem,
-  ListItemText,
-  makeStyles
-} from '@material-ui/core';
-import ReactMarkdown from 'react-markdown';
+import { makeStyles } from '@material-ui/core';
 import { Subnav } from 'components';
 import { parse } from 'query-string';
 import { getSeverityColor } from 'pages/Risk/Risk';
@@ -33,10 +25,6 @@ export interface ApiResponse {
   count: number;
   url?: string;
 }
-
-const formatDate = (date: string) => {
-  return format(parseISO(date), 'MM-dd-yyyy');
-};
 
 const extLink = <FaExternalLinkAlt style={{ width: 12 }}></FaExternalLinkAlt>;
 
@@ -195,17 +183,17 @@ export const Vulnerabilities: React.FC = () => {
     {
       Header: 'Details',
       Cell: ({ row }: CellProps<Vulnerability>) => (
-        <span
-          {...row.getToggleRowExpandedProps()}
-          className="text-center display-block"
+        <Link
+          to={`/inventory/vulnerability/${row.original.id}`}
           style={{
             fontSize: '14px',
             cursor: 'pointer',
-            color: '#484D51'
+            color: '#484D51',
+            textDecoration: 'none'
           }}
         >
-          {row.isExpanded ? 'HIDE DETAILS' : 'DETAILS'}
-        </span>
+          DETAILS
+        </Link>
       ),
       disableFilters: true
     }
@@ -230,95 +218,6 @@ export const Vulnerabilities: React.FC = () => {
     } catch (e) {
       console.error(e);
     }
-  };
-
-  const comments: { [key: string]: string } = {};
-
-  const renderExpandedVulnerability = (row: Row<Vulnerability>) => {
-    const { original } = row;
-    return (
-      <div className={classes.expandedRoot}>
-        <h3>Details</h3>
-        <div className={classes.desc}>
-          <p>{original.description}</p>
-          <h4>References</h4>
-          {original.references &&
-            original.references.map((ref, index) => (
-              <p key={index}>
-                <a href={ref.url} target="_blank" rel="noopener noreferrer">
-                  {ref.url} {extLink}
-                </a>
-                {ref.tags.length > 0 ? ' - ' + ref.tags.join(',') : ''}
-              </p>
-            ))}
-          <h4>Vulnerability history</h4>
-          <List className={`${listClasses.listRoot}`}>
-            {original.actions &&
-              original.actions.map((action, index) => {
-                let primary: JSX.Element = <></>;
-                let secondary: JSX.Element = <></>;
-                if (action.type === 'state-change' && action.substate) {
-                  const val = action.automatic ? (
-                    <>
-                      State automatically changed to{' '}
-                      {stateMap[action.substate].toLowerCase()}
-                    </>
-                  ) : (
-                    <>
-                      State changed to {action.state} (
-                      {stateMap[action.substate].toLowerCase()}) by{' '}
-                      {action.userName}
-                    </>
-                  );
-                  primary = (
-                    <>
-                      {val} on {formatDate(action.date)}
-                    </>
-                  );
-                } else if (action.type === 'comment' && action.value) {
-                  primary = (
-                    <ReactMarkdown source={action.value} linkTarget="_blank" />
-                  );
-                  secondary = <>{action.userName}</>;
-                }
-                return (
-                  <ListItem button divider={true} key={index}>
-                    <ListItemText
-                      primary={primary}
-                      secondary={secondary}
-                    ></ListItemText>
-                  </ListItem>
-                );
-              })}
-            <ListItem button divider={true} key="initial">
-              <ListItemText
-                primary={'Opened on ' + formatDate(original.createdAt)}
-              ></ListItemText>
-            </ListItem>
-          </List>
-
-          <TextareaAutosize
-            style={{ width: 300, padding: 10 }}
-            rowsMin={2}
-            placeholder="Leave a Comment"
-            onChange={(e) => (comments[original.id] = e.target.value)}
-          />
-          <br></br>
-          <Button
-            type="button"
-            style={{ width: 150 }}
-            outline
-            onClick={() => {
-              updateVulnerability(row.index, {
-                comment: comments[original.id]
-              });
-            }}
-          >
-            Comment
-          </Button>
-        </div>
-      </div>
-    );
   };
 
   const vulnerabilitiesSearch = useCallback(
@@ -441,7 +340,6 @@ export const Vulnerabilities: React.FC = () => {
         <Subnav
           items={[
             { title: 'Assets', path: '/inventory', exact: true },
-            { title: 'Domains', path: '/inventory/domains' },
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
         ></Subnav>
@@ -453,14 +351,13 @@ export const Vulnerabilities: React.FC = () => {
             data={vulnerabilities}
             pageCount={Math.ceil(totalResults / PAGE_SIZE)}
             fetchData={fetchVulnerabilities}
-            renderExpanded={renderExpandedVulnerability}
             tableRef={tableRef}
             initialFilterBy={initialFilterBy}
             initialSortBy={initialSortBy}
             noResults={noResults}
             pageSize={PAGE_SIZE}
             noResultsMessage={
-              "We don't see any vulnerabilities that match these criteria."
+              "We don't see any vulnerabilities that match your criteria."
             }
           />
         </div>
@@ -470,10 +367,6 @@ export const Vulnerabilities: React.FC = () => {
 };
 
 const useStyles = makeStyles((theme) => ({
-  listRoot: {
-    width: '100%',
-    backgroundColor: theme.palette.background.paper
-  },
   contentWrapper: {
     position: 'relative',
     flex: '1 1 auto',
