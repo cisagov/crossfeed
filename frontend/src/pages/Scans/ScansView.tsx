@@ -62,11 +62,11 @@ const ScansView: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Run per organization',
-      accessor: ({ isGranular }) => (isGranular ? 'Yes' : 'No'),
+      Header: 'Tags',
+      accessor: ({ tags }) => tags.map((tag) => tag.name).join(', '),
       width: 150,
       minWidth: 150,
-      id: 'granular',
+      id: 'tags',
       disableFilters: true
     },
     {

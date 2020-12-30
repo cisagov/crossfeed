@@ -37,6 +37,5 @@ export class OrganizationTag extends BaseEntity {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   })
-  @JoinTable()
   scans: Scan[];
 }

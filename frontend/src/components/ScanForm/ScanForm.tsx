@@ -12,7 +12,6 @@ import {
 import MultiSelect from 'pages/Scans/MultiSelect';
 import { OrganizationOption } from 'pages/Scans/ScansView';
 import { Link } from 'react-router-dom';
-import { useAuthContext } from 'context';
 
 export interface ScanFormValues {
   name: string;
@@ -106,6 +105,7 @@ export const ScanForm: React.FC<{
     propValues.frequencyUnit,
     propValues.organizations,
     propValues.tags,
+    tags,
     scan,
     scanSchema,
     values.name
@@ -119,7 +119,6 @@ export const ScanForm: React.FC<{
     <Form
       onSubmit={async (e) => {
         e.preventDefault();
-        console.log(values.tags);
         await onSubmit({
           name: values.name,
           arguments: values.arguments,

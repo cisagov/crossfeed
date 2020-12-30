@@ -12,10 +12,6 @@ import { Header } from '@trussworks/react-uswds';
 import { OrganizationOption } from 'pages/Scans/ScansView';
 import { ScanForm, ScanFormValues } from 'components/ScanForm';
 
-interface Errors extends Partial<OrganizationType> {
-  global?: string;
-}
-
 export const setFrequency = async (body: ScanFormValues) => {
   if (body.isSingleScan) body.frequency = 1;
   if (body.frequencyUnit === 'minute') body.frequency *= 60;
@@ -25,10 +21,8 @@ export const setFrequency = async (body: ScanFormValues) => {
 
 const ScanComponent: React.FC = () => {
   const { scanId } = useParams();
-  const { apiGet, apiPut } = useAuthContext();
+  const { apiGet, apiPut, setFeedbackMessage } = useAuthContext();
   const [scan, setScan] = useState<Scan>();
-  const [errors, setErrors] = useState<Errors>({});
-  const [message, setMessage] = useState<string>('');
   const [organizationOptions, setOrganizationOptions] = useState<
     OrganizationOption[]
   >([]);
@@ -77,10 +71,14 @@ const ScanComponent: React.FC = () => {
           tags: body.tags ? body.tags.map((e) => e.value) : []
         }
       });
-      setMessage('Scan successfully updated');
+      setFeedbackMessage({
+        message: 'Scan successfully updated',
+        type: 'success'
+      });
     } catch (e) {
-      setErrors({
-        global: e.message ?? e.toString()
+      setFeedbackMessage({
+        message: 'Error updating scan',
+        type: 'error'
       });
       console.log(e);
     }
@@ -122,7 +120,11 @@ const ScanComponent: React.FC = () => {
       }
       setValues((values) => ({
         ...values,
-        organizations: defaultOrganizations
+        organizations: defaultOrganizations,
+        tags: scan.tags.map((tag) => ({
+          label: tag.name,
+          value: tag.id
+        }))
       }));
     }
   };
@@ -148,8 +150,6 @@ const ScanComponent: React.FC = () => {
           </div>
         </div>
       </Header>
-      {errors.global && <p className={classes.error}>{errors.global}</p>}
-      {message && <p>{message}</p>}
       <ScanForm
         organizationOption={organizationOptions}
         tags={tags}

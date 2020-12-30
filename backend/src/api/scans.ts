@@ -292,7 +292,7 @@ export const get = wrapHandler(async (event) => {
       id: id
     },
     {
-      relations: ['organizations']
+      relations: ['organizations', 'tags']
     }
   );
 
@@ -326,7 +326,7 @@ export const get = wrapHandler(async (event) => {
 export const list = wrapHandler(async (event) => {
   // if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
-  const result = await Scan.find();
+  const result = await Scan.find({ relations: ['tags'] });
   const organizations = await Organization.find();
   return {
     statusCode: 200,
