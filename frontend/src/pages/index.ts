@@ -1,6 +1,7 @@
 export * from './AuthLogin';
 export * from './AuthCreateAccount';
 export * from './Domain';
+export * from './Vulnerability';
 export * from './TermsOfUse';
 export * from './Search';
 export * from './LoginGovCallback';
