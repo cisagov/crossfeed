@@ -12,6 +12,8 @@ export interface Organization {
   isPassive: boolean;
   granularScans: Scan[];
   tags: OrganizationTag[];
+  parentOrganization: Organization;
+  suborganizations: Organization[];
 }
 
 export interface OrganizationTag {

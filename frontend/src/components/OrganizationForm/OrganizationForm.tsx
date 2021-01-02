@@ -25,7 +25,8 @@ export const OrganizationForm: React.FC<{
   setOpen: (open: boolean) => void;
   onSubmit: (values: Object) => Promise<void>;
   type: string;
-}> = ({ organization, onSubmit, type, open, setOpen }) => {
+  parentOrganization?: Organization;
+}> = ({ organization, onSubmit, type, open, setOpen, parentOrganization }) => {
   const defaultValues = () => ({
     name: organization ? organization.name : '',
     rootDomains: organization ? organization.rootDomains.join(', ') : '',
@@ -55,7 +56,9 @@ export const OrganizationForm: React.FC<{
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle id="form-dialog-title">Create new organization</DialogTitle>
+      <DialogTitle id="form-dialog-title">
+        Create new {parentOrganization ? 'Team' : 'Organization'}
+      </DialogTitle>
       <DialogContent>
         <TextField
           margin="dense"
@@ -124,13 +127,16 @@ export const OrganizationForm: React.FC<{
                   : values.ipBlocks.split(',').map((ip) => ip.trim()),
               name: values.name,
               isPassive: values.isPassive,
-              tags: values.tags
+              tags: values.tags,
+              parentOrganization: parentOrganization
+                ? parentOrganization.id
+                : undefined
             });
             if (!organization) setValues(defaultValues);
             setOpen(false);
           }}
         >
-          Add
+          Save
         </Button>
       </DialogActions>
     </Dialog>

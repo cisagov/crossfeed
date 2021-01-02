@@ -1,4 +1,11 @@
-import { IsString, isUUID, IsArray, IsBoolean } from 'class-validator';
+import {
+  IsString,
+  isUUID,
+  IsArray,
+  IsBoolean,
+  IsUUID,
+  IsOptional
+} from 'class-validator';
 import {
   Organization,
   connectToDatabase,
@@ -54,6 +61,10 @@ class NewOrganizationNonGlobalAdmins {
 
   @IsBoolean()
   isPassive: boolean;
+
+  @IsUUID()
+  @IsOptional()
+  parentOrganization?: string;
 }
 
 class NewOrganization extends NewOrganizationNonGlobalAdmins {
@@ -121,6 +132,7 @@ export const update = wrapHandler(async (event) => {
       : NewOrganizationNonGlobalAdmins,
     event.body
   );
+
   await connectToDatabase();
   const org = await Organization.findOne(
     {
@@ -134,7 +146,8 @@ export const update = wrapHandler(async (event) => {
     if ('tags' in body) {
       body.tags = await findOrCreateTags(body.tags);
     }
-    Organization.merge(org, body);
+
+    Organization.merge(org, { ...body, parentOrganization: undefined });
     await Organization.save(org);
     return {
       statusCode: 200,
@@ -163,7 +176,8 @@ export const create = wrapHandler(async (event) => {
   }
   const organization = await Organization.create({
     ...body,
-    createdBy: { id: event.requestContext.authorizer!.id }
+    createdBy: { id: event.requestContext.authorizer!.id },
+    parentOrganization: { id: body.parentOrganization }
   });
   const res = await organization.save();
   return {
@@ -189,11 +203,9 @@ export const list = wrapHandler(async (event) => {
     };
   }
   await connectToDatabase();
-  let where = {};
-  if (isGlobalViewAdmin(event)) {
-    where = {};
-  } else {
-    where = { id: In(getOrgMemberships(event)) };
+  let where: any = { parentOrganization: null };
+  if (!isGlobalViewAdmin(event)) {
+    where = { id: In(getOrgMemberships(event)), parentOrganization: null };
   }
   const result = await Organization.find({
     where,
@@ -253,7 +265,14 @@ export const get = wrapHandler(async (event) => {
 
   await connectToDatabase();
   const result = await Organization.findOne(id, {
-    relations: ['userRoles', 'userRoles.user', 'granularScans', 'tags']
+    relations: [
+      'userRoles',
+      'userRoles.user',
+      'granularScans',
+      'tags',
+      'parentOrganization',
+      'suborganizations'
+    ]
   });
 
   if (result) {

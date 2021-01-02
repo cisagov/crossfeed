@@ -30,6 +30,7 @@ import {
 } from '@material-ui/core';
 import { ChevronRight } from '@material-ui/icons';
 import { Autocomplete, createFilterOptions } from '@material-ui/lab';
+import { OrganizationList } from 'components/OrganizationList';
 
 interface Errors extends Partial<OrganizationType> {
   global?: string;
@@ -647,6 +648,9 @@ export const Organization: React.FC = () => {
       </form>
     </>,
     <>
+      <OrganizationList parentOrganization={organization}></OrganizationList>
+    </>,
+    <>
       <Table<Scan> columns={scanColumns} data={scans} fetchData={fetchScans} />
       <h2>Organization Scan History</h2>
       <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} />
@@ -666,6 +670,26 @@ export const Organization: React.FC = () => {
           >
             Organizations
           </Link>
+          {organization.parentOrganization && (
+            <>
+              <ChevronRight
+                style={{
+                  verticalAlign: 'middle',
+                  lineHeight: '100%',
+                  fontSize: '26px'
+                }}
+              ></ChevronRight>
+              <Link
+                to={'/organizations/' + organization.parentOrganization.id}
+                style={{
+                  textDecoration: 'none',
+                  color: '#C9C9C9'
+                }}
+              >
+                {organization.parentOrganization.name}
+              </Link>
+            </>
+          )}
           <ChevronRight
             style={{
               verticalAlign: 'middle',
@@ -686,6 +710,7 @@ export const Organization: React.FC = () => {
               title: 'Members',
               path: `/organizations/${organizationId}/members`
             },
+            { title: 'Teams', path: `/organizations/${organizationId}/teams` },
             { title: 'Scans', path: `/organizations/${organizationId}/scans` }
           ]}
           styles={{
@@ -705,8 +730,12 @@ export const Organization: React.FC = () => {
             render={() => views[1]}
           />
           <Route
-            path="/organizations/:organizationId/scans"
+            path="/organizations/:organizationId/teams"
             render={() => views[2]}
+          />
+          <Route
+            path="/organizations/:organizationId/scans"
+            render={() => views[3]}
           />
         </Switch>
       </div>
