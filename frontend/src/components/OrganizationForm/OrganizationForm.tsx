@@ -1,34 +1,43 @@
 import React, { useState } from 'react';
-import classes from './styles.module.scss';
-import { Organization } from 'types';
-import { Label, TextInput, Checkbox, Button } from '@trussworks/react-uswds';
-import { useAuthContext } from 'context';
+import { Organization, OrganizationTag } from 'types';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
+  Switch,
+  Button,
+  FormControlLabel
+} from '@material-ui/core';
 
 export interface OrganizationFormValues {
   name: string;
   rootDomains: string;
   ipBlocks: string;
   isPassive: boolean;
+  tags: OrganizationTag[];
 }
 
 export const OrganizationForm: React.FC<{
   organization?: Organization;
+  open: boolean;
+  setOpen: (open: boolean) => void;
   onSubmit: (values: Object) => Promise<void>;
   type: string;
-}> = ({ organization, onSubmit, type }) => {
+}> = ({ organization, onSubmit, type, open, setOpen }) => {
   const defaultValues = () => ({
     name: organization ? organization.name : '',
     rootDomains: organization ? organization.rootDomains.join(', ') : '',
     ipBlocks: organization ? organization.ipBlocks.join(', ') : '',
-    isPassive: organization ? organization.isPassive : false
+    isPassive: organization ? organization.isPassive : false,
+    tags: []
   });
-
-  const { user } = useAuthContext();
 
   const [values, setValues] = useState<OrganizationFormValues>(defaultValues);
 
   const onTextChange: React.ChangeEventHandler<
-    HTMLInputElement | HTMLSelectElement
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
   > = (e) => onChange(e.target.name, e.target.value);
 
   const onChange = (name: string, value: any) => {
@@ -39,72 +48,91 @@ export const OrganizationForm: React.FC<{
   };
 
   return (
-    <form
-      onSubmit={async (e) => {
-        e.preventDefault();
-        await onSubmit({
-          rootDomains:
-            values.rootDomains === ''
-              ? []
-              : values.rootDomains.split(',').map((domain) => domain.trim()),
-          ipBlocks:
-            values.ipBlocks === ''
-              ? []
-              : values.ipBlocks.split(',').map((ip) => ip.trim()),
-          name: values.name,
-          isPassive: values.isPassive
-        });
-        if (!organization) setValues(defaultValues);
-      }}
-      className={classes.form}
+    <Dialog
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="form-dialog-title"
+      maxWidth="xs"
+      fullWidth
     >
-      <Label htmlFor="name">Name</Label>
-      <TextInput
-        required
-        id="name"
-        name="name"
-        className={classes.textField}
-        type="text"
-        value={values.name}
-        onChange={onTextChange}
-      />
-      {user?.userType === 'globalAdmin' && (
-        <>
-          <Label htmlFor="rootDomains">Root Domains</Label>
-          <TextInput
-            required
-            id="rootDomains"
-            name="rootDomains"
-            className={classes.textField}
-            type="text"
-            value={values.rootDomains}
-            onChange={onTextChange}
-          />
-          <Label htmlFor="ipBlocks">IP Blocks (Optional)</Label>
-          <TextInput
-            id="ipBlocks"
-            name="ipBlocks"
-            className={classes.textField}
-            type="text"
-            value={values.ipBlocks}
-            onChange={onTextChange}
-          />
-        </>
-      )}
-      <br></br>
-      <Checkbox
-        id="isPassive"
-        name="isPassive"
-        label="Passive mode"
-        checked={values.isPassive}
-        onChange={(e) => {
-          onChange(e.target.name, e.target.checked);
-        }}
-      />
-      <br></br>
-      <Button type="submit">
-        {type === 'update' ? 'Update' : 'Create'} Organization
-      </Button>
-    </form>
+      <DialogTitle id="form-dialog-title">Create new organization</DialogTitle>
+      <DialogContent>
+        <TextField
+          margin="dense"
+          id="name"
+          name="name"
+          label="Organization Name"
+          type="text"
+          fullWidth
+          value={values.name}
+          onChange={onTextChange}
+        />
+        <TextField
+          margin="dense"
+          id="rootDomains"
+          name="rootDomains"
+          label="Root Domains"
+          type="text"
+          fullWidth
+          value={values.rootDomains}
+          onChange={onTextChange}
+        />
+        <TextField
+          margin="dense"
+          id="ipBlocks"
+          name="ipBlocks"
+          label="IP Blocks"
+          type="text"
+          fullWidth
+          value={values.ipBlocks}
+          onChange={onTextChange}
+        />
+        <br></br>
+        <br></br>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={values.isPassive}
+              name="isPassive"
+              onChange={(e) => {
+                onChange(e.target.name, e.target.checked);
+              }}
+              color="primary"
+            />
+          }
+          label="Passive Mode"
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button variant="outlined" onClick={() => setOpen(false)}>
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={async () => {
+            await onSubmit({
+              rootDomains:
+                values.rootDomains === ''
+                  ? []
+                  : values.rootDomains
+                      .split(',')
+                      .map((domain) => domain.trim()),
+              ipBlocks:
+                values.ipBlocks === ''
+                  ? []
+                  : values.ipBlocks.split(',').map((ip) => ip.trim()),
+              name: values.name,
+              isPassive: values.isPassive,
+              tags: values.tags
+            });
+            if (!organization) setValues(defaultValues);
+            setOpen(false);
+          }}
+        >
+          Add
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };

@@ -1,19 +1,25 @@
-import classes from './Organizations.module.scss';
+import oldClasses from './Organizations.module.scss';
 import React, { useCallback, useState } from 'react';
-import {
-  Button,
-  ModalContainer,
-  Overlay,
-  Modal
-} from '@trussworks/react-uswds';
-import { Query } from 'types';
-import { Table, ImportExport } from 'components';
-import { CellProps, Column } from 'react-table';
+import { ModalContainer, Overlay, Modal } from '@trussworks/react-uswds';
+import { ImportExport } from 'components';
+import { Add } from '@material-ui/icons';
 import { Organization } from 'types';
-import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { OrganizationForm } from 'components/OrganizationForm';
-import { Link } from 'react-router-dom';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  makeStyles,
+  Paper,
+  TextField,
+  Button
+} from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { Autocomplete } from '@material-ui/lab';
 
 interface Errors extends Partial<Organization> {
   global?: string;
@@ -24,86 +30,19 @@ export const Organizations: React.FC = () => {
   const [showModal, setShowModal] = useState<Boolean>(false);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-
-  const columns: Column<Organization>[] = [
-    {
-      Header: 'Name',
-      accessor: 'name',
-      width: 200,
-      disableFilters: true,
-      id: 'name'
-    },
-    {
-      Header: 'Root Domains',
-      accessor: ({ rootDomains }) => rootDomains.join(', '),
-      width: 150,
-      minWidth: 150,
-      id: 'rootDomains',
-      disableFilters: true
-    },
-    {
-      Header: 'IP Blocks',
-      accessor: ({ ipBlocks }) => ipBlocks.join(', '),
-      id: 'ipBlocks',
-      width: 200,
-      disableFilters: true
-    },
-    {
-      Header: 'Passive',
-      accessor: ({ isPassive }) => (isPassive ? 'Yes' : 'No'),
-      id: 'isPassive',
-      width: 50,
-      disableFilters: true
-    },
-    {
-      Header: 'Details',
-      id: 'details',
-      Cell: ({ row }: { row: CellProps<Organization> }) => (
-        <Link
-          to={`/organizations/${row.original.id}`}
-          style={{
-            fontSize: '14px',
-            cursor: 'pointer',
-            color: '#484D51',
-            textDecoration: 'none'
-          }}
-        >
-          DETAILS
-        </Link>
-      ),
-      width: 50,
-      disableFilters: true
-    },
-    {
-      Header: 'Delete',
-      id: 'delete',
-      Cell: ({ row }: { row: { index: number } }) => (
-        <span
-          onClick={() => {
-            setShowModal(true);
-            setSelectedRow(row.index);
-          }}
-        >
-          <FaTimes className="margin-x-auto display-block" />
-        </span>
-      ),
-      width: 50,
-      disableFilters: true
-    }
-  ];
+  const classes = useStyles();
+  const history = useHistory();
   const [errors, setErrors] = useState<Errors>({});
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const fetchOrganizations = useCallback(
-    async (query: Query<Organization>) => {
-      try {
-        let rows = await apiGet<Organization[]>('/organizations/');
-        setOrganizations(rows);
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    [apiGet]
-  );
+  const fetchOrganizations = useCallback(async () => {
+    try {
+      let rows = await apiGet<Organization[]>('/organizations/');
+      setOrganizations(rows);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet]);
 
   const deleteRow = async (index: number) => {
     try {
@@ -147,93 +86,143 @@ export const Organizations: React.FC = () => {
         setShowModal(false);
       }
     });
-  }, [apiGet]);
+    fetchOrganizations();
+  }, [apiGet, fetchOrganizations]);
 
   return (
-    <div className={classes.root}>
-      <h1>Organizations</h1>
-      <Table<Organization>
-        columns={columns}
-        data={organizations}
-        fetchData={fetchOrganizations}
-      />
-      {user?.userType === 'globalAdmin' && (
-        <>
-          <h2>Add an organization</h2>
-          {errors.global && <p className={classes.error}>{errors.global}</p>}
-          <OrganizationForm
-            onSubmit={onSubmit}
-            type="create"
-          ></OrganizationForm>
-          <ImportExport<Organization>
-            name="organizations"
-            fieldsToExport={['name', 'rootDomains', 'ipBlocks', 'isPassive']}
-            onImport={async (results) => {
-              // TODO: use a batch call here instead.
-              let createdOrganizations = [];
-              for (let result of results) {
-                createdOrganizations.push(
-                  await apiPost('/organizations/', {
-                    body: {
-                      ...result,
-                      // These fields are initially parsed as strings, so they need
-                      // to be converted to arrays.
-                      ipBlocks: (
-                        ((result.ipBlocks as unknown) as string) || ''
-                      ).split(','),
-                      rootDomains: (
-                        ((result.rootDomains as unknown) as string) || ''
-                      ).split(',')
-                    }
-                  })
-                );
-              }
-              setOrganizations(organizations.concat(...createdOrganizations));
-            }}
-            getDataToExport={() => organizations}
-          />
-        </>
-      )}
-      {showModal && (
-        <div>
-          <Overlay />
-          <ModalContainer>
-            <Modal
-              actions={
-                <>
-                  <Button
-                    outline
-                    type="button"
-                    onClick={() => {
-                      setShowModal(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      deleteRow(selectedRow);
-                      setShowModal(false);
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </>
-              }
-              title={<h2>Delete organization?</h2>}
+    <div>
+      <div className={classes.header}>
+        <h1 className={classes.headerLabel}>Organizations</h1>
+      </div>
+      <div className={oldClasses.root}>
+        <Grid
+          container
+          spacing={2}
+          style={{ margin: '0 auto', marginTop: '1rem', maxWidth: '1000px' }}
+        >
+          <Grid item>
+            <Paper
+              elevation={0}
+              classes={{ root: classes.cardRoot }}
+              style={{ border: '1px dashed #C9C9C9', textAlign: 'center' }}
+              onClick={() => setDialogOpen(true)}
             >
+              <h1>Create New Organization</h1>
               <p>
-                Are you sure you would like to delete the{' '}
-                <code>{organizations[selectedRow].name}</code> organization?
-                This will irreversibly delete all associated domains.
+                <Add></Add>
               </p>
-            </Modal>
-          </ModalContainer>
-        </div>
-      )}
+            </Paper>
+          </Grid>
+          {organizations.map((org) => (
+            <Grid item key={org.id}>
+              <Paper
+                elevation={0}
+                classes={{ root: classes.cardRoot }}
+                onClick={() => {
+                  history.push('/organizations/' + org.id);
+                }}
+              >
+                <h1>{org.name}</h1>
+                <p>{org.userRoles ? org.userRoles.length : 0} members</p>
+                {org.tags && org.tags.length > 0 && (
+                  <p>Tags: {org.tags.map((tag) => tag.name).join(', ')}</p>
+                )}
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+        <OrganizationForm
+          onSubmit={onSubmit}
+          open={dialogOpen}
+          setOpen={setDialogOpen}
+          type="create"
+        ></OrganizationForm>
+        {user?.userType === 'globalAdmin' && (
+          <>
+            <ImportExport<Organization>
+              name="organizations"
+              fieldsToExport={[
+                'name',
+                'rootDomains',
+                'ipBlocks',
+                'isPassive',
+                'tags'
+              ]}
+              onImport={async (results) => {
+                // TODO: use a batch call here instead.
+                let createdOrganizations = [];
+                for (let result of results) {
+                  createdOrganizations.push(
+                    await apiPost('/organizations/', {
+                      body: {
+                        ...result,
+                        // These fields are initially parsed as strings, so they need
+                        // to be converted to arrays.
+                        ipBlocks: (
+                          ((result.ipBlocks as unknown) as string) || ''
+                        ).split(','),
+                        rootDomains: (
+                          ((result.rootDomains as unknown) as string) || ''
+                        ).split(','),
+                        tags: (((result.tags as unknown) as string) || '')
+                          .split(',')
+                          .map((tag) => ({
+                            name: tag
+                          }))
+                      }
+                    })
+                  );
+                }
+                setOrganizations(organizations.concat(...createdOrganizations));
+              }}
+              getDataToExport={() =>
+                organizations.map(
+                  (org) =>
+                    ({
+                      ...org,
+                      tags: org.tags.map((tag) => tag.name)
+                    } as any)
+                )
+              }
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  header: {
+    background: '#F9F9F9'
+  },
+  headerLabel: {
+    margin: 0,
+    paddingTop: '1.5rem',
+    paddingBottom: '1rem',
+    marginLeft: '15%',
+    fontWeight: 500,
+    fontStyle: 'normal',
+    fontSize: '24px',
+    color: '#07648D'
+  },
+  cardRoot: {
+    cursor: 'pointer',
+    boxSizing: 'border-box',
+    border: '2px solid #DCDEE0',
+    height: 150,
+    width: 200,
+    borderRadius: '5px',
+    padding: '1rem',
+    color: '#3D4551',
+    '& h1': {
+      fontSize: '20px',
+      margin: 0
+    },
+    '& p': {
+      fontSize: '14px'
+    }
+  }
+}));
 
 export default Organizations;

@@ -67,6 +67,31 @@ class NewOrganization extends NewOrganizationNonGlobalAdmins {
   tags: OrganizationTag[];
 }
 
+const findOrCreateTags = async (
+  tags: OrganizationTag[]
+): Promise<OrganizationTag[]> => {
+  const finalTags: OrganizationTag[] = [];
+  for (const tag of tags) {
+    if (!tag.id) {
+      // If no id is supplied, first check to see if a tag with this name exists
+      const found = await OrganizationTag.findOne({
+        where: { name: tag.name }
+      });
+      if (found) {
+        finalTags.push(found);
+      } else {
+        // If not, create it
+        const created = OrganizationTag.create(tag);
+        await created.save();
+        finalTags.push(created);
+      }
+    } else {
+      finalTags.push(tag);
+    }
+  }
+  return finalTags;
+};
+
 /**
  * @swagger
  *
@@ -107,13 +132,7 @@ export const update = wrapHandler(async (event) => {
   );
   if (org) {
     if ('tags' in body) {
-      for (const index in body.tags) {
-        if (!body.tags[index].id) {
-          const tag = OrganizationTag.create(body.tags[index]);
-          await tag.save();
-          body.tags[index] = tag;
-        }
-      }
+      body.tags = await findOrCreateTags(body.tags);
     }
     Organization.merge(org, body);
     await Organization.save(org);
@@ -138,11 +157,15 @@ export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   const body = await validateBody(NewOrganization, event.body);
   await connectToDatabase();
+
+  if ('tags' in body) {
+    body.tags = await findOrCreateTags(body.tags);
+  }
   const organization = await Organization.create({
     ...body,
     createdBy: { id: event.requestContext.authorizer!.id }
   });
-  const res = await Organization.save(organization);
+  const res = await organization.save();
   return {
     statusCode: 200,
     body: JSON.stringify(res)
@@ -173,7 +196,8 @@ export const list = wrapHandler(async (event) => {
     where = { id: In(getOrgMemberships(event)) };
   }
   const result = await Organization.find({
-    where
+    where,
+    relations: ['userRoles', 'tags']
   });
 
   return {
