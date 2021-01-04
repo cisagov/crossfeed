@@ -6,9 +6,16 @@ import {
   isUUID,
   IsObject,
   IsBoolean,
-  IsUUID
+  IsUUID,
+  IsArray
 } from 'class-validator';
-import { Scan, connectToDatabase, Organization, ScanTask } from '../models';
+import {
+  Scan,
+  connectToDatabase,
+  Organization,
+  ScanTask,
+  OrganizationTag
+} from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { isGlobalWriteAdmin, isGlobalViewAdmin } from './auth';
 import LambdaClient from '../tasks/lambda-client';
@@ -170,8 +177,8 @@ class NewScan {
   @IsUUID('all', { each: true })
   organizations: string[];
 
-  @IsUUID('all', { each: true })
-  tags: string[];
+  @IsArray()
+  tags: OrganizationTag[];
 }
 
 /**
@@ -230,7 +237,7 @@ export const update = wrapHandler(async (event) => {
     Scan.merge(scan, {
       ...body,
       organizations: body.organizations.map((id) => ({ id })),
-      tags: body.tags.map((id) => ({ id }))
+      tags: body.tags
     });
     const res = await Scan.save(scan);
     return {
@@ -257,7 +264,7 @@ export const create = wrapHandler(async (event) => {
   const scan = await Scan.create({
     ...body,
     organizations: body.organizations.map((id) => ({ id })),
-    tags: body.tags.map((id) => ({ id })),
+    tags: body.tags,
     createdBy: { id: event.requestContext.authorizer!.id }
   });
   const res = await Scan.save(scan);

@@ -214,7 +214,7 @@ const ScansView: React.FC = () => {
           organizations: body.organizations
             ? body.organizations.map((e) => e.value)
             : [],
-          tags: body.tags ? body.tags.map((e) => e.value) : []
+          tags: body.tags ? body.tags.map((e) => ({ id: e.value })) : []
         }
       });
       setScans(scans.concat(scan));

@@ -1,6 +1,12 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { User, Scan, connectToDatabase, Organization } from '../src/models';
+import {
+  User,
+  Scan,
+  connectToDatabase,
+  Organization,
+  OrganizationTag
+} from '../src/models';
 import { createUserToken } from './util';
 import { handler as scheduler } from '../src/tasks/scheduler';
 import { Organizations } from 'aws-sdk';
@@ -126,7 +132,8 @@ describe('scan', () => {
           frequency,
           isGranular: false,
           organizations: [],
-          isSingleScan: false
+          isSingleScan: false,
+          tags: []
         })
         .expect(200);
 
@@ -135,6 +142,7 @@ describe('scan', () => {
       expect(response.body.frequency).toEqual(frequency);
       expect(response.body.isGranular).toEqual(false);
       expect(response.body.organizations).toEqual([]);
+      expect(response.body.tags).toEqual([]);
       expect(response.body.createdBy.id).toEqual(user.id);
     });
     it('create a granular scan by globalAdmin should succeed', async () => {
@@ -147,11 +155,15 @@ describe('scan', () => {
       const name = 'censys';
       const arguments_ = { a: 'b' };
       const frequency = 999999;
+      const tag = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      }).save();
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        tags: [tag]
       }).save();
       const response = await request(app)
         .post('/scans')
@@ -168,7 +180,8 @@ describe('scan', () => {
           frequency,
           isGranular: true,
           organizations: [organization.id],
-          isSingleScan: false
+          isSingleScan: false,
+          tags: [tag]
         })
         .expect(200);
       expect(response.body.name).toEqual(name);
@@ -180,6 +193,7 @@ describe('scan', () => {
           id: organization.id
         }
       ]);
+      expect(response.body.tags[0].id).toEqual(tag.id);
     });
     it('create by globalView should fail', async () => {
       const name = 'censys';
@@ -229,7 +243,8 @@ describe('scan', () => {
           frequency,
           isGranular: false,
           organizations: [],
-          isSingleScan: false
+          isSingleScan: false,
+          tags: []
         })
         .expect(200);
 
@@ -245,11 +260,15 @@ describe('scan', () => {
         isGranular: false,
         isSingleScan: false
       }).save();
+      const tag = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      }).save();
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false
+        isPassive: false,
+        tags: [tag]
       }).save();
       const name = 'findomain';
       const arguments_ = { a: 'b2' };
@@ -268,7 +287,8 @@ describe('scan', () => {
           frequency,
           isGranular: true,
           organizations: [organization.id],
-          isSingleScan: false
+          isSingleScan: false,
+          tags: [tag]
         })
         .expect(200);
 
@@ -281,6 +301,7 @@ describe('scan', () => {
           id: organization.id
         }
       ]);
+      expect(response.body.tags[0].id).toEqual(tag.id);
     });
     it('update by globalView should fail', async () => {
       const scan = await Scan.create({

@@ -36,7 +36,8 @@ describe('organizations', () => {
           ipBlocks: [],
           name,
           rootDomains: ['cisa.gov'],
-          isPassive: false
+          isPassive: false,
+          tags: [{ name: 'test' }]
         })
         .expect(200);
       expect(response.body).toMatchSnapshot({
@@ -46,10 +47,12 @@ describe('organizations', () => {
         name: expect.any(String),
         createdBy: {
           id: expect.any(String)
-        }
+        },
+        tags: expect.any(Array)
       });
       expect(response.body.createdBy.id).toEqual(user.id);
       expect(response.body.name).toEqual(name);
+      expect(response.body.tags[0].name).toEqual('test');
     });
     it("can't add organization with the same name", async () => {
       const user = await User.create({
@@ -72,7 +75,8 @@ describe('organizations', () => {
           ipBlocks: [],
           name,
           rootDomains: ['cisa.gov'],
-          isPassive: false
+          isPassive: false,
+          tags: []
         });
       // .expect(200);
       const response = await request(app)
@@ -88,7 +92,8 @@ describe('organizations', () => {
           ipBlocks: [],
           name,
           rootDomains: ['cisa.gov'],
-          isPassive: false
+          isPassive: false,
+          tags: []
         })
         .expect(500);
       expect(response.body).toMatchSnapshot();
@@ -125,6 +130,7 @@ describe('organizations', () => {
       const rootDomains = ['test-' + Math.random()];
       const ipBlocks = ['1.1.1.1'];
       const isPassive = true;
+      const tags = [{ name: 'test' }];
       const response = await request(app)
         .put(`/organizations/${organization.id}`)
         .set(
@@ -137,13 +143,15 @@ describe('organizations', () => {
           name,
           rootDomains,
           ipBlocks,
-          isPassive
+          isPassive,
+          tags
         })
         .expect(200);
       expect(response.body.name).toEqual(name);
       expect(response.body.rootDomains).toEqual(rootDomains);
       expect(response.body.ipBlocks).toEqual(ipBlocks);
       expect(response.body.isPassive).toEqual(isPassive);
+      expect(response.body.tags[0].name).toEqual(tags[0].name);
     });
     it('update by org admin should update everything but rootDomains and ipBlocks', async () => {
       const organization = await Organization.create({
@@ -305,37 +313,6 @@ describe('organizations', () => {
         .expect(200);
       expect(response.body.length).toEqual(1);
       expect(response.body[0].id).toEqual(organization.id);
-    });
-  });
-  describe('listPublicNames', () => {
-    it('listPublicNames by non-org member should succeed', async () => {
-      const organization = await Organization.create({
-        name: 'test-' + Math.random(),
-        rootDomains: ['test-' + Math.random()],
-        ipBlocks: [],
-        isPassive: false
-      }).save();
-      const response = await request(app)
-        .get(`/organizations/public`)
-        .set('Authorization', createUserToken({}))
-        .expect(200);
-      expect(response.body.length).toBeGreaterThanOrEqual(1);
-      expect(
-        response.body.map((e) => e.id).indexOf(organization.id)
-      ).not.toEqual(-1);
-    });
-    it('listPublicNames with bad auth key should fail', async () => {
-      const organization = await Organization.create({
-        name: 'test-' + Math.random(),
-        rootDomains: ['test-' + Math.random()],
-        ipBlocks: [],
-        isPassive: false
-      }).save();
-      const response = await request(app)
-        .get(`/organizations/public`)
-        .set('Authorization', '')
-        .expect(401);
-      expect(response.body).toEqual({});
     });
   });
   describe('get', () => {
