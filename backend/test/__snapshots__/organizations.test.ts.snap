@@ -1,21 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`organizations create can't add organization with the same name 1`] = `Object {}`;
-
-exports[`organizations create create by globalAdmin should succeed 1`] = `
-Object {
-  "createdAt": Any<String>,
-  "createdBy": Object {
-    "id": Any<String>,
-  },
-  "id": Any<String>,
-  "inviteOnly": true,
-  "ipBlocks": Array [],
-  "isPassive": false,
-  "name": Any<String>,
-  "rootDomains": Array [
-    "cisa.gov",
-  ],
-  "updatedAt": Any<String>,
-}
-`;
