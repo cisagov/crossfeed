@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, Route, useParams, Switch } from 'react-router-dom';
 import { useAuthContext } from 'context';
-import oldClasses from './styles.module.scss';
 import {
   Organization as OrganizationType,
   Role,
@@ -434,7 +433,7 @@ export const Organization: React.FC = () => {
     if (!organization) return <></>;
     const elements: (string | OrganizationTag)[] = organization[props.type];
     return (
-      <div className={oldClasses.headerRow}>
+      <div className={classes.headerRow}>
         <label>{props.label}</label>
         <span>
           {elements &&
@@ -585,7 +584,7 @@ export const Organization: React.FC = () => {
       <ListInput label="Root Domains" type="rootDomains"></ListInput>
       <ListInput label="IP Blocks" type="ipBlocks"></ListInput>
       <ListInput label="Tags" type="tags"></ListInput>
-      <div className={oldClasses.headerRow}>
+      <div className={classes.headerRow}>
         <label>Passive Mode</label>
         <span>
           <SwitchInput
@@ -742,7 +741,7 @@ export const Organization: React.FC = () => {
           }}
         ></Subnav>
       </div>
-      <div className={oldClasses.root}>
+      <div className={classes.root}>
         <Switch>
           <Route
             path="/organizations/:organizationId"
@@ -814,6 +813,49 @@ const useStyles = makeStyles((theme) => ({
   },
   textField: {
     background: '#F5F5F5 !important'
+  },
+  root: {
+    maxWidth: '1400px',
+    margin: '0 auto',
+    '@media screen and (min-width: 480px)': {
+      padding: '1rem 1rem'
+    },
+    '@media screen and (min-width: 640px)': {
+      padding: '1rem 1.5rem'
+    },
+    '@media screen and (min-width: 1024px)': {
+      padding: '1rem 2rem'
+    }
+  },
+  headerRow: {
+    padding: '0.5rem 0',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '16px',
+    flexWrap: 'wrap',
+    '& label': {
+      flex: '1 0 100%',
+      fontWeight: 'bolder',
+      display: 'flex',
+      alignItems: 'center',
+      padding: '0.5rem 0',
+      '@media screen and (min-width: 640px)': {
+        flex: '0 0 220px',
+        padding: 0
+      }
+    },
+    '& span': {
+      display: 'block',
+      flex: '1 1 auto',
+      marginLeft: 'calc(1rem + 20px)',
+      '@media screen and (min-width: 640px)': {
+        marginLeft: 'calc(1rem + 20px)'
+      },
+      '@media screen and (min-width: 1024px)': {
+        marginLeft: 0
+      }
+    }
   }
 }));
 
