@@ -40,16 +40,6 @@ describe('organizations', () => {
           tags: [{ name: 'test' }]
         })
         .expect(200);
-      expect(response.body).toMatchSnapshot({
-        createdAt: expect.any(String),
-        updatedAt: expect.any(String),
-        id: expect.any(String),
-        name: expect.any(String),
-        createdBy: {
-          id: expect.any(String)
-        },
-        tags: expect.any(Array)
-      });
       expect(response.body.createdBy.id).toEqual(user.id);
       expect(response.body.name).toEqual(name);
       expect(response.body.tags[0].name).toEqual('test');
@@ -77,8 +67,8 @@ describe('organizations', () => {
           rootDomains: ['cisa.gov'],
           isPassive: false,
           tags: []
-        });
-      // .expect(200);
+        })
+        .expect(200);
       const response = await request(app)
         .post('/organizations/')
         .set(

@@ -1,5 +1,11 @@
 import { handler as scheduler } from '../scheduler';
-import { connectToDatabase, Scan, Organization, ScanTask } from '../../models';
+import {
+  connectToDatabase,
+  Scan,
+  Organization,
+  ScanTask,
+  OrganizationTag
+} from '../../models';
 
 jest.mock('../ecs-client');
 const { runCommand, getNumTasks } = require('../ecs-client');
@@ -400,6 +406,143 @@ describe('scheduler', () => {
         frequency: 999,
         isGranular: true,
         organizations: [organization, organization2]
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(2);
+      expect(runCommand).toHaveBeenCalledWith(
+        expect.objectContaining({
+          organizationId: organization.id,
+          scanId: scan.id,
+          scanName: scan.name
+        })
+      );
+      expect(runCommand).toHaveBeenCalledWith(
+        expect.objectContaining({
+          organizationId: organization2.id,
+          scanId: scan.id,
+          scanName: scan.name
+        })
+      );
+
+      let scanTask = await ScanTask.findOne(
+        runCommand.mock.calls[0][0].scanTaskId
+      );
+      expect(scanTask?.status).toEqual('requested');
+
+      scanTask = await ScanTask.findOne(runCommand.mock.calls[1][0].scanTaskId);
+      expect(scanTask?.status).toEqual('requested');
+    });
+    test('should run a granular scan on associated tags', async () => {
+      const tag1 = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      }).save();
+      const tag2 = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false,
+        tags: [tag1]
+      }).save();
+      const organization2 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false,
+        tags: [tag1]
+      }).save();
+      const organization3 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false,
+        tags: [tag2]
+      }).save();
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999,
+        isGranular: true,
+        tags: [tag1]
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(2);
+      expect(runCommand).toHaveBeenCalledWith(
+        expect.objectContaining({
+          organizationId: organization.id,
+          scanId: scan.id,
+          scanName: scan.name
+        })
+      );
+      expect(runCommand).toHaveBeenCalledWith(
+        expect.objectContaining({
+          organizationId: organization2.id,
+          scanId: scan.id,
+          scanName: scan.name
+        })
+      );
+
+      let scanTask = await ScanTask.findOne(
+        runCommand.mock.calls[0][0].scanTaskId
+      );
+      expect(scanTask?.status).toEqual('requested');
+
+      scanTask = await ScanTask.findOne(runCommand.mock.calls[1][0].scanTaskId);
+      expect(scanTask?.status).toEqual('requested');
+    });
+    test('should only run a scan once if an organization and its tag is enabled', async () => {
+      const tag1 = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      }).save();
+      const tag2 = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false,
+        tags: [tag1]
+      }).save();
+      const organization2 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false,
+        tags: [tag1]
+      }).save();
+      const organization3 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false,
+        tags: [tag2]
+      }).save();
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999,
+        isGranular: true,
+        organizations: [organization, organization2],
+        tags: [tag1]
       }).save();
 
       await scheduler(
