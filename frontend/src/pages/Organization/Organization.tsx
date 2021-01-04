@@ -14,7 +14,6 @@ import {
 import { Column } from 'react-table';
 import { Subnav, Table } from 'components';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { Label, Dropdown } from '@trussworks/react-uswds';
 import {
   Chip,
   makeStyles,
@@ -26,7 +25,11 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup
 } from '@material-ui/core';
 import { ChevronRight, ControlPoint } from '@material-ui/icons';
 import { Autocomplete, createFilterOptions } from '@material-ui/lab';
@@ -625,6 +628,10 @@ export const Organization: React.FC = () => {
       >
         <DialogTitle id="form-dialog-title">Add Member</DialogTitle>
         <DialogContent>
+          <p style={{ color: '#3D4551' }}>
+            Organization members can view Organization-specific vulnerabilities,
+            domains, and notes.
+          </p>
           <TextField
             margin="dense"
             id="email"
@@ -634,23 +641,31 @@ export const Organization: React.FC = () => {
             fullWidth
             value={newUserValues.email}
             onChange={onInviteUserTextChange}
+            variant="filled"
+            InputProps={{
+              className: classes.textField
+            }}
           />
-          <Label htmlFor="role">Organization Role</Label>
-          <Dropdown
-            required
-            id="role"
+          <br></br>
+          <br></br>
+          <FormLabel component="legend">Role</FormLabel>
+          <RadioGroup
+            aria-label="role"
             name="role"
-            className={oldClasses.textField}
-            onChange={onInviteUserTextChange}
             value={newUserValues.role}
+            onChange={onInviteUserTextChange}
           >
-            <option key="standard" value="standard">
-              Standard
-            </option>
-            <option key="admin" value="admin">
-              Administrator
-            </option>
-          </Dropdown>
+            <FormControlLabel
+              value="standard"
+              control={<Radio color="primary" />}
+              label="Standard"
+            />
+            <FormControlLabel
+              value="admin"
+              control={<Radio color="primary" />}
+              label="Administrator"
+            />
+          </RadioGroup>
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={() => setDialog({ open: false })}>
@@ -796,6 +811,9 @@ const useStyles = makeStyles((theme) => ({
   orgName: {
     background: '#F5F5F5 !important',
     paddingBottom: '10px'
+  },
+  textField: {
+    background: '#F5F5F5 !important'
   }
 }));
 
