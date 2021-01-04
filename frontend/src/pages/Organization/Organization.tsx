@@ -131,14 +131,6 @@ export const Organization: React.FC = () => {
           organization?.userRoles[row.index].approved;
         return (
           <>
-            <Button
-              onClick={() => {
-                removeUser(row.index);
-              }}
-              color="secondary"
-            >
-              <p>Edit</p>
-            </Button>
             {isApproved ? (
               <Button
                 onClick={() => {
@@ -445,7 +437,7 @@ export const Organization: React.FC = () => {
           {elements &&
             elements.map((value: string | OrganizationTag, index: number) => (
               <Chip
-                className={classes.chipDisabled}
+                className={classes.chip}
                 key={index}
                 label={typeof value === 'string' ? value : value.name}
                 onDelete={() => {
@@ -583,6 +575,9 @@ export const Organization: React.FC = () => {
         value={organization.name}
         disabled
         variant="filled"
+        InputProps={{
+          className: classes.orgName
+        }}
       ></TextField>
       <ListInput label="Root Domains" type="rootDomains"></ListInput>
       <ListInput label="IP Blocks" type="ipBlocks"></ListInput>
@@ -780,8 +775,8 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '26px'
     }
   },
-  chipDisabled: {
-    background: '#C4C4C4',
+  chip: {
+    backgroundColor: '#C4C4C4',
     color: 'white',
     marginRight: '10px'
   },
@@ -797,6 +792,10 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end'
+  },
+  orgName: {
+    background: '#F5F5F5 !important',
+    paddingBottom: '10px'
   }
 }));
 
