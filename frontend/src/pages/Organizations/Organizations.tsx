@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core';
 import { OrganizationList } from 'components/OrganizationList';
 
 export const Organizations: React.FC = () => {
-  const { user, apiGet, apiPost, apiDelete } = useAuthContext();
+  const { user, apiGet, apiPost } = useAuthContext();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const classes = useStyles();
 
@@ -19,18 +19,6 @@ export const Organizations: React.FC = () => {
       console.error(e);
     }
   }, [apiGet]);
-
-  const deleteRow = async (index: number) => {
-    try {
-      let row = organizations[index];
-      await apiDelete(`/organizations/${row.id}`);
-      setOrganizations(
-        organizations.filter((organization) => organization.id !== row.id)
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   React.useEffect(() => {
     fetchOrganizations();
