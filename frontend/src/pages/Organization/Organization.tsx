@@ -698,7 +698,7 @@ export const Organization: React.FC = () => {
 
   if (!organization.parentOrganization) {
     navItems = navItems.concat([
-      { title: 'Teams', path: `/organizations/${organizationId}/teams` },
+      // { title: 'Teams', path: `/organizations/${organizationId}/teams` },
       { title: 'Scans', path: `/organizations/${organizationId}/scans` }
     ]);
   }
