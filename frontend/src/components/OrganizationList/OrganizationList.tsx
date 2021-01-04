@@ -47,7 +47,7 @@ export const OrganizationList: React.FC<{
     else {
       setOrganizations(parentOrganization.suborganizations);
     }
-  }, [fetchOrganizations]);
+  }, [fetchOrganizations, parentOrganization]);
 
   return (
     <>

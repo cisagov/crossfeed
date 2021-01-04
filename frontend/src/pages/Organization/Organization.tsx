@@ -14,7 +14,7 @@ import {
 import { Column } from 'react-table';
 import { Subnav, Table } from 'components';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { Label, TextInput, Dropdown } from '@trussworks/react-uswds';
+import { Label, Dropdown } from '@trussworks/react-uswds';
 import {
   Chip,
   makeStyles,
@@ -28,13 +28,9 @@ import {
   DialogContentText,
   DialogTitle
 } from '@material-ui/core';
-import { ChevronRight } from '@material-ui/icons';
+import { ChevronRight, ControlPoint } from '@material-ui/icons';
 import { Autocomplete, createFilterOptions } from '@material-ui/lab';
 import { OrganizationList } from 'components/OrganizationList';
-
-interface Errors extends Partial<OrganizationType> {
-  global?: string;
-}
 
 interface AutocompleteType extends Partial<OrganizationTag> {
   title?: string;
@@ -55,7 +51,6 @@ export const Organization: React.FC = () => {
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
   const [scans, setScans] = useState<Scan[]>([]);
   const [scanSchema, setScanSchema] = useState<ScanSchema>({});
-  const [errors, setErrors] = useState<Errors>({});
   const [newUserValues, setNewUserValues] = useState<{
     firstName: string;
     lastName: string;
@@ -119,30 +114,51 @@ export const Organization: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Action',
+      Header: () => {
+        return (
+          <div style={{ justifyContent: 'flex-center' }}>
+            <Button color="secondary" onClick={() => setDialog({ open: true })}>
+              <ControlPoint style={{ marginRight: '10px' }}></ControlPoint>
+              Add member
+            </Button>
+          </div>
+        );
+      },
       id: 'action',
       Cell: ({ row }: { row: { index: number } }) => {
         const isApproved =
           !organization?.userRoles[row.index] ||
           organization?.userRoles[row.index].approved;
-        return isApproved ? (
-          <Link
-            to="#"
-            onClick={() => {
-              removeUser(row.index);
-            }}
-          >
-            <p>Remove</p>
-          </Link>
-        ) : (
-          <Link
-            to="#"
-            onClick={() => {
-              approveUser(row.index);
-            }}
-          >
-            <p>Approve</p>
-          </Link>
+        return (
+          <>
+            <Button
+              onClick={() => {
+                removeUser(row.index);
+              }}
+              color="secondary"
+            >
+              <p>Edit</p>
+            </Button>
+            {isApproved ? (
+              <Button
+                onClick={() => {
+                  removeUser(row.index);
+                }}
+                color="secondary"
+              >
+                <p>Remove</p>
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  approveUser(row.index);
+                }}
+                color="secondary"
+              >
+                <p>Approve</p>
+              </Button>
+            )}
+          </>
         );
       },
       disableFilters: true
@@ -329,11 +345,12 @@ export const Organization: React.FC = () => {
         type: 'success'
       });
     } catch (e) {
-      setErrors({
-        global:
+      setFeedbackMessage({
+        message:
           e.status === 422
-            ? 'Error when submitting organization entry.'
-            : e.message ?? e.toString()
+            ? 'Error updating organization'
+            : e.message ?? e.toString(),
+        type: 'error'
       });
       console.error(e);
     }
@@ -359,11 +376,10 @@ export const Organization: React.FC = () => {
             )
       });
     } catch (e) {
-      setErrors({
-        global:
-          e.status === 422
-            ? 'Error when updating scan.'
-            : e.message ?? e.toString()
+      setFeedbackMessage({
+        message:
+          e.status === 422 ? 'Error updating scan' : e.message ?? e.toString(),
+        type: 'error'
       });
       console.error(e);
     }
@@ -373,8 +389,7 @@ export const Organization: React.FC = () => {
     fetchOrganization();
   }, [fetchOrganization]);
 
-  const onInviteUserSubmit: React.FormEventHandler = async (e) => {
-    e.preventDefault();
+  const onInviteUserSubmit = async () => {
     try {
       let body = {
         firstName: newUserValues.firstName,
@@ -396,18 +411,17 @@ export const Organization: React.FC = () => {
         setUserRoles(userRoles.concat([newRole]));
       }
     } catch (e) {
-      setErrors({
-        global:
-          e.status === 422
-            ? 'Error when submitting user entry.'
-            : e.message ?? e.toString()
+      setFeedbackMessage({
+        message:
+          e.status === 422 ? 'Error inviting user' : e.message ?? e.toString(),
+        type: 'error'
       });
       console.log(e);
     }
   };
 
   const onInviteUserTextChange: React.ChangeEventHandler<
-    HTMLInputElement | HTMLSelectElement
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
   > = (e) => onInviteUserChange(e.target.name, e.target.value);
 
   const onInviteUserChange = (name: string, value: any) => {
@@ -565,6 +579,11 @@ export const Organization: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <TextField
+        value={organization.name}
+        disabled
+        variant="filled"
+      ></TextField>
       <ListInput label="Root Domains" type="rootDomains"></ListInput>
       <ListInput label="IP Blocks" type="ipBlocks"></ListInput>
       <ListInput label="Tags" type="tags"></ListInput>
@@ -583,69 +602,77 @@ export const Organization: React.FC = () => {
           />
         </span>
       </div>
-      <Button variant="outlined" onClick={fetchOrganization}>
-        Cancel
-      </Button>{' '}
-      <Button variant="contained" color="primary" onClick={updateOrganization}>
-        Save
-      </Button>
+      <div className={classes.buttons}>
+        <Button
+          variant="outlined"
+          style={{ marginRight: '10px', color: '#565C65' }}
+          onClick={fetchOrganization}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          onClick={updateOrganization}
+          style={{ background: '#565C65', color: 'white' }}
+        >
+          Save
+        </Button>
+      </div>
     </Paper>,
     <>
       <Table<Role> columns={userRoleColumns} data={userRoles} />
-      <h2>Invite a user</h2>
-      <form onSubmit={onInviteUserSubmit} className={oldClasses.form}>
-        {errors.global && <p className={oldClasses.error}>{errors.global}</p>}
-        <Label htmlFor="firstName">First Name</Label>
-        <TextInput
-          required
-          id="firstName"
-          name="firstName"
-          className={oldClasses.textField}
-          type="text"
-          value={newUserValues.firstName}
-          onChange={onInviteUserTextChange}
-        />
-        <Label htmlFor="lastName">Last Name</Label>
-        <TextInput
-          required
-          id="lastName"
-          name="lastName"
-          className={oldClasses.textField}
-          type="text"
-          value={newUserValues.lastName}
-          onChange={onInviteUserTextChange}
-        />
-        <Label htmlFor="email">Email</Label>
-        <TextInput
-          required
-          id="email"
-          name="email"
-          className={oldClasses.textField}
-          type="text"
-          value={newUserValues.email}
-          onChange={onInviteUserTextChange}
-        />
-        <Label htmlFor="role">Organization Role</Label>
-        <Dropdown
-          required
-          id="role"
-          name="role"
-          className={oldClasses.textField}
-          onChange={onInviteUserTextChange}
-          value={newUserValues.role}
-        >
-          <option key="standard" value="standard">
-            Standard
-          </option>
-          <option key="admin" value="admin">
-            Administrator
-          </option>
-        </Dropdown>
-        <br></br>
-        <Button type="submit" color="primary">
-          Invite User
-        </Button>
-      </form>
+      <Dialog
+        open={dialog.open}
+        onClose={() => setDialog({ open: false })}
+        aria-labelledby="form-dialog-title"
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle id="form-dialog-title">Add Member</DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="dense"
+            id="email"
+            name="email"
+            label="Email"
+            type="text"
+            fullWidth
+            value={newUserValues.email}
+            onChange={onInviteUserTextChange}
+          />
+          <Label htmlFor="role">Organization Role</Label>
+          <Dropdown
+            required
+            id="role"
+            name="role"
+            className={oldClasses.textField}
+            onChange={onInviteUserTextChange}
+            value={newUserValues.role}
+          >
+            <option key="standard" value="standard">
+              Standard
+            </option>
+            <option key="admin" value="admin">
+              Administrator
+            </option>
+          </Dropdown>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={() => setDialog({ open: false })}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={async () => {
+              onInviteUserSubmit();
+              setDialog({ open: false });
+            }}
+          >
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>,
     <>
       <OrganizationList parentOrganization={organization}></OrganizationList>
@@ -657,35 +684,34 @@ export const Organization: React.FC = () => {
     </>
   ];
 
+  let navItems = [
+    {
+      title: 'Settings',
+      path: `/organizations/${organizationId}`,
+      exact: true
+    },
+    {
+      title: 'Members',
+      path: `/organizations/${organizationId}/members`
+    }
+  ];
+
+  if (!organization.parentOrganization) {
+    navItems = navItems.concat([
+      { title: 'Teams', path: `/organizations/${organizationId}/teams` },
+      { title: 'Scans', path: `/organizations/${organizationId}/scans` }
+    ]);
+  }
+
   return (
     <div>
       <div className={classes.header}>
         <h1 className={classes.headerLabel}>
-          <Link
-            to="/organizations"
-            style={{
-              textDecoration: 'none',
-              color: '#C9C9C9'
-            }}
-          >
-            Organizations
-          </Link>
+          <Link to="/organizations">Organizations</Link>
           {organization.parentOrganization && (
             <>
-              <ChevronRight
-                style={{
-                  verticalAlign: 'middle',
-                  lineHeight: '100%',
-                  fontSize: '26px'
-                }}
-              ></ChevronRight>
-              <Link
-                to={'/organizations/' + organization.parentOrganization.id}
-                style={{
-                  textDecoration: 'none',
-                  color: '#C9C9C9'
-                }}
-              >
+              <ChevronRight></ChevronRight>
+              <Link to={'/organizations/' + organization.parentOrganization.id}>
                 {organization.parentOrganization.name}
               </Link>
             </>
@@ -700,19 +726,7 @@ export const Organization: React.FC = () => {
           <span style={{ color: '#07648D' }}>{organization.name}</span>
         </h1>
         <Subnav
-          items={[
-            {
-              title: 'Settings',
-              path: `/organizations/${organizationId}`,
-              exact: true
-            },
-            {
-              title: 'Members',
-              path: `/organizations/${organizationId}/members`
-            },
-            { title: 'Teams', path: `/organizations/${organizationId}/teams` },
-            { title: 'Scans', path: `/organizations/${organizationId}/scans` }
-          ]}
+          items={navItems}
           styles={{
             background: '#F9F9F9'
           }}
@@ -755,7 +769,16 @@ const useStyles = makeStyles((theme) => ({
     color: '#C9C9C9',
     fontWeight: 500,
     fontStyle: 'normal',
-    fontSize: '24px'
+    fontSize: '24px',
+    '& a': {
+      textDecoration: 'none',
+      color: '#C9C9C9'
+    },
+    '& svg': {
+      verticalAlign: 'middle',
+      lineHeight: '100%',
+      fontSize: '26px'
+    }
   },
   chipDisabled: {
     background: '#C4C4C4',
@@ -770,6 +793,10 @@ const useStyles = makeStyles((theme) => ({
     padding: '25px',
     maxWidth: '900px',
     margin: '0 auto'
+  },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 }));
 
