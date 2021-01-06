@@ -67,14 +67,17 @@ export class Organization extends BaseEntity {
   })
   tags: OrganizationTag[];
 
-  @ManyToOne((type) => Organization, { onDelete: 'CASCADE', nullable: true })
-  parentOrganization: Organization;
+  @ManyToOne((type) => Organization, (org) => org.children, {
+    onDelete: 'CASCADE',
+    nullable: true
+  })
+  parent: Organization;
 
-  @OneToMany((type) => Organization, (org) => org.parentOrganization, {
+  @OneToMany((type) => Organization, (org) => org.parent, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   })
-  suborganizations: Organization[];
+  children: Organization[];
 
   @ManyToOne((type) => User, {
     onDelete: 'SET NULL',

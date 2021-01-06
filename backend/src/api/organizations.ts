@@ -75,7 +75,7 @@ class NewOrganization extends NewOrganizationNonGlobalAdmins {
 
   @IsUUID()
   @IsOptional()
-  parentOrganization?: string;
+  parent?: string;
 }
 
 const findOrCreateTags = async (
@@ -147,7 +147,7 @@ export const update = wrapHandler(async (event) => {
       body.tags = await findOrCreateTags(body.tags);
     }
 
-    Organization.merge(org, { ...body, parentOrganization: undefined });
+    Organization.merge(org, { ...body, parent: undefined });
     await Organization.save(org);
     return {
       statusCode: 200,
@@ -177,7 +177,7 @@ export const create = wrapHandler(async (event) => {
   const organization = await Organization.create({
     ...body,
     createdBy: { id: event.requestContext.authorizer!.id },
-    parentOrganization: { id: body.parentOrganization }
+    parent: { id: body.parent }
   });
   const res = await organization.save();
   return {
@@ -203,9 +203,9 @@ export const list = wrapHandler(async (event) => {
     };
   }
   await connectToDatabase();
-  let where: any = { parentOrganization: null };
+  let where: any = { parent: null };
   if (!isGlobalViewAdmin(event)) {
-    where = { id: In(getOrgMemberships(event)), parentOrganization: null };
+    where = { id: In(getOrgMemberships(event)), parent: null };
   }
   const result = await Organization.find({
     where,
@@ -270,8 +270,8 @@ export const get = wrapHandler(async (event) => {
       'userRoles.user',
       'granularScans',
       'tags',
-      'parentOrganization',
-      'suborganizations'
+      'parent',
+      'children'
     ]
   });
 

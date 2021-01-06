@@ -7,8 +7,8 @@ import { OrganizationForm } from 'components/OrganizationForm';
 import { useAuthContext } from 'context';
 
 export const OrganizationList: React.FC<{
-  parentOrganization?: Organization;
-}> = ({ parentOrganization }) => {
+  parent?: Organization;
+}> = ({ parent }) => {
   const { apiPost, apiGet, setFeedbackMessage } = useAuthContext();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -43,11 +43,11 @@ export const OrganizationList: React.FC<{
   }, [apiGet]);
 
   React.useEffect(() => {
-    if (!parentOrganization) fetchOrganizations();
+    if (!parent) fetchOrganizations();
     else {
-      setOrganizations(parentOrganization.suborganizations);
+      setOrganizations(parent.children);
     }
-  }, [fetchOrganizations, parentOrganization]);
+  }, [fetchOrganizations, parent]);
 
   return (
     <>
@@ -63,7 +63,7 @@ export const OrganizationList: React.FC<{
             style={{ border: '1px dashed #C9C9C9', textAlign: 'center' }}
             onClick={() => setDialogOpen(true)}
           >
-            <h1>Create New {parentOrganization ? 'Team' : 'Organization'}</h1>
+            <h1>Create New {parent ? 'Team' : 'Organization'}</h1>
             <p>
               <Add></Add>
             </p>
@@ -92,7 +92,7 @@ export const OrganizationList: React.FC<{
         open={dialogOpen}
         setOpen={setDialogOpen}
         type="create"
-        parentOrganization={parentOrganization}
+        parent={parent}
       ></OrganizationForm>
     </>
   );

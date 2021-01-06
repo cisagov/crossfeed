@@ -684,7 +684,7 @@ export const Organization: React.FC = () => {
       </Dialog>
     </>,
     <>
-      <OrganizationList parentOrganization={organization}></OrganizationList>
+      <OrganizationList parent={organization}></OrganizationList>
     </>,
     <>
       <Table<Scan> columns={scanColumns} data={scans} fetchData={fetchScans} />
@@ -705,7 +705,7 @@ export const Organization: React.FC = () => {
     }
   ];
 
-  if (!organization.parentOrganization) {
+  if (!organization.parent) {
     navItems = navItems.concat([
       // { title: 'Teams', path: `/organizations/${organizationId}/teams` },
       { title: 'Scans', path: `/organizations/${organizationId}/scans` }
@@ -717,11 +717,11 @@ export const Organization: React.FC = () => {
       <div className={classes.header}>
         <h1 className={classes.headerLabel}>
           <Link to="/organizations">Organizations</Link>
-          {organization.parentOrganization && (
+          {organization.parent && (
             <>
               <ChevronRight></ChevronRight>
-              <Link to={'/organizations/' + organization.parentOrganization.id}>
-                {organization.parentOrganization.name}
+              <Link to={'/organizations/' + organization.parent.id}>
+                {organization.parent.name}
               </Link>
             </>
           )}
