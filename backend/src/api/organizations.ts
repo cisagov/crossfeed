@@ -92,7 +92,7 @@ const findOrCreateTags = async (
         finalTags.push(found);
       } else {
         // If not, create it
-        const created = OrganizationTag.create(tag);
+        const created = OrganizationTag.create({ name: tag.name });
         await created.save();
         finalTags.push(created);
       }
