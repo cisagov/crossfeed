@@ -75,7 +75,6 @@ describe('Header component', () => {
     [
       'Overview',
       'Inventory',
-      'Organization Settings',
       'My Organizations',
       'My Account',
       'My Settings',
@@ -99,7 +98,6 @@ describe('Header component', () => {
       'Overview',
       'Inventory',
       'Scans',
-      'Organization Settings',
       'Manage Organizations',
       'Manage Users',
       'My Account',

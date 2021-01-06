@@ -10,7 +10,7 @@ import {
   ManyToMany,
   ManyToOne
 } from 'typeorm';
-import { Domain, Role, Scan, ScanTask } from '.';
+import { Domain, Role, Scan, ScanTask, OrganizationTag } from '.';
 import { User } from './user';
 
 @Entity()
@@ -37,9 +37,6 @@ export class Organization extends BaseEntity {
   @Column()
   isPassive: boolean;
 
-  @Column({ default: true })
-  inviteOnly: boolean;
-
   @OneToMany((type) => Domain, (domain) => domain.organization, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
@@ -63,6 +60,30 @@ export class Organization extends BaseEntity {
     onUpdate: 'CASCADE'
   })
   granularScans: Scan[];
+
+  @ManyToMany((type) => OrganizationTag, (tag) => tag.organizations, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  tags: OrganizationTag[];
+
+  /**
+   * The organization's parent organization, if any.
+   * Organizations without a parent organization are
+   * shown to users as 'Organizations', while organizations
+   * with a parent organization are shown to users as 'Teams'
+   */
+  @ManyToOne((type) => Organization, (org) => org.children, {
+    onDelete: 'CASCADE',
+    nullable: true
+  })
+  parent: Organization;
+
+  @OneToMany((type) => Organization, (org) => org.parent, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  children: Organization[];
 
   @ManyToOne((type) => User, {
     onDelete: 'SET NULL',

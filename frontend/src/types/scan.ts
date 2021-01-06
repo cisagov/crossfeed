@@ -1,3 +1,5 @@
+import { OrganizationTag } from './organization';
+
 export interface Scan {
   id: string;
   name: string;
@@ -7,6 +9,7 @@ export interface Scan {
   isGranular: boolean;
   isSingleScan: boolean;
   organizations: [];
+  tags: OrganizationTag[];
 }
 
 // ScanSchema. TODO: synchronize this with the ScanSchema type in the backend.

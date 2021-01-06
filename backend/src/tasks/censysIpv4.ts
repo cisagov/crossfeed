@@ -1,10 +1,4 @@
-import {
-  connectToDatabase,
-  Domain,
-  Organization,
-  Scan,
-  Service
-} from '../models';
+import { connectToDatabase, Domain, Scan, Service } from '../models';
 import { plainToClass } from 'class-transformer';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
@@ -18,6 +12,7 @@ import got from 'got';
 import PQueue from 'p-queue';
 import pRetry from 'p-retry';
 import axios from 'axios';
+import getScanOrganizations from './helpers/getScanOrganizations';
 
 export interface IpToDomainsMap {
   [ip: string]: Domain[];
@@ -140,16 +135,16 @@ export const handler = async (commandOptions: CommandOptions) => {
   await connectToDatabase();
   const scan = await Scan.findOne(
     { id: commandOptions.scanId },
-    { relations: ['organizations'] }
+    { relations: ['organizations', 'tags', 'tags.organizations'] }
   );
 
+  let orgs: string[] | undefined = undefined;
   // censysIpv4 is a global scan, so organizationId is only specified for tests.
-  // Otherwise, scan.organizations can be used for granular control of censys.
-  const orgs = organizationId
-    ? [organizationId]
-    : scan?.organizations?.length
-    ? undefined
-    : scan?.organizations.map((org) => org.id);
+  // Otherwise, scan.organizations can be used for granular control of censysIpv4.
+  if (organizationId) orgs = [organizationId];
+  else if (scan?.isGranular) {
+    orgs = getScanOrganizations(scan).map((org) => org.id);
+  }
 
   const allDomains = await getAllDomains(orgs);
 

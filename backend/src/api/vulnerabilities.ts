@@ -7,13 +7,12 @@ import {
   isUUID,
   IsOptional,
   IsObject,
-  IsNumber,
   IsUUID
 } from 'class-validator';
-import { plainToClass, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { Vulnerability, connectToDatabase, User } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
-import { SelectQueryBuilder, In } from 'typeorm';
+import { SelectQueryBuilder } from 'typeorm';
 import {
   getOrgMemberships,
   isGlobalViewAdmin,

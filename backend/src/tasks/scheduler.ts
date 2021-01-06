@@ -3,6 +3,7 @@ import { connectToDatabase, Scan, Organization, ScanTask } from '../models';
 import ECSClient from './ecs-client';
 import { SCAN_SCHEMA } from '../api/scans';
 import { In, IsNull, Not } from 'typeorm';
+import getScanOrganizations from './helpers/getScanOrganizations';
 
 class Scheduler {
   ecs: ECSClient;
@@ -174,7 +175,7 @@ class Scheduler {
         }
         await this.launchScanTask({ scan });
       } else if (scan.isGranular) {
-        for (const organization of scan.organizations) {
+        for (const organization of getScanOrganizations(scan)) {
           if (!(await shouldRunScan({ organization, scan }))) {
             continue;
           }
@@ -296,7 +297,7 @@ export const handler: Handler<Event> = async (event) => {
   const orgWhere = event.organizationId ? { id: event.organizationId } : {};
   const scans = await Scan.find({
     where: scanWhere,
-    relations: ['organizations']
+    relations: ['organizations', 'tags', 'tags.organizations']
   });
   const organizations = await Organization.find({
     where: orgWhere
