@@ -20,4 +20,5 @@ export interface OrganizationTag {
   id: string;
   name: string;
   organizations: Organization[];
+  scans: Scan[];
 }

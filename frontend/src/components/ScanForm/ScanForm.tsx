@@ -162,6 +162,7 @@ export const ScanForm: React.FC<{
           onChange={onTextChange}
         /> */}
       {(values.name === 'censysIpv4' ||
+        values.name === 'webscraper' ||
         values.name === 'censysCertificates' ||
         (schemaUpdated && !scanSchema[values.name].global) ||
         !global) && (

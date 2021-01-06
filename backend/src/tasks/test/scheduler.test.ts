@@ -508,7 +508,7 @@ describe('scheduler', () => {
       scanTask = await ScanTask.findOne(runCommand.mock.calls[1][0].scanTaskId);
       expect(scanTask?.status).toEqual('requested');
     });
-    test('should only run a scan once if an organization and its tag is enabled', async () => {
+    test('should only run a scan once if an organization and its tag are both enabled', async () => {
       const tag1 = await OrganizationTag.create({
         name: 'test-' + Math.random()
       }).save();

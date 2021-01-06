@@ -40,9 +40,8 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   await connectToDatabase();
 
-  await connectToDatabase();
   const scan = await Scan.findOne(
-    { id: commandOptions.scanId },
+    { id: scanId },
     { relations: ['organizations', 'tags', 'tags.organizations'] }
   );
 

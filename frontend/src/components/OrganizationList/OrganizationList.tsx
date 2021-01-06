@@ -70,6 +70,7 @@ export const OrganizationList: React.FC<{
           </Paper>
         </Grid>
         {organizations.map((org) => (
+          // TODO: Add functionality to delete organizations
           <Grid item key={org.id}>
             <Paper
               elevation={0}

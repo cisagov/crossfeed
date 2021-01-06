@@ -329,7 +329,6 @@ export const Organization: React.FC = () => {
 
   const updateOrganization = async (body: any) => {
     try {
-      console.log(organization);
       const org = await apiPut('/organizations/' + organization?.id, {
         body: organization
       });
@@ -430,7 +429,7 @@ export const Organization: React.FC = () => {
     type: 'rootDomains' | 'ipBlocks' | 'tags';
     label: string;
   }) => {
-    if (!organization) return <></>;
+    if (!organization) return null;
     const elements: (string | OrganizationTag)[] = organization[props.type];
     return (
       <div className={classes.headerRow}>
@@ -629,7 +628,8 @@ export const Organization: React.FC = () => {
         <DialogContent>
           <p style={{ color: '#3D4551' }}>
             Organization members can view Organization-specific vulnerabilities,
-            domains, and notes.
+            domains, and notes. Organization administrators can additionally
+            manage members and update the organization.
           </p>
           <TextField
             margin="dense"

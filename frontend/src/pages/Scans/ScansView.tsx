@@ -176,12 +176,12 @@ const ScansView: React.FC = () => {
         organizations: Organization[];
         schema: ScanSchema;
       }>('/scans/');
+      const tags = await apiGet<OrganizationTag[]>(`/organizations/tags`);
       setScans(scans);
       setScanSchema(schema);
       setOrganizationOptions(
         organizations.map((e) => ({ label: e.name, value: e.id }))
       );
-      const tags = await apiGet<OrganizationTag[]>(`/organizations/tags`);
       setTags(tags);
     } catch (e) {
       console.error(e);
