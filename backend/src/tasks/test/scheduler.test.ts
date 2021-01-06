@@ -736,7 +736,6 @@ describe('scheduler', () => {
       expect(
         await ScanTask.count({
           where: {
-            scan: scan2,
             status: 'queued'
           }
         })
