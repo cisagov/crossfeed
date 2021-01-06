@@ -1,49 +1,58 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route, useParams, Switch } from 'react-router-dom';
 import { useAuthContext } from 'context';
-import classes from './styles.module.scss';
 import {
   Organization as OrganizationType,
   Role,
   ScanTask,
   User,
   Scan,
-  ScanSchema
+  ScanSchema,
+  OrganizationTag
 } from 'types';
-import { FaGlobe, FaNetworkWired, FaClock, FaUsers } from 'react-icons/fa';
 import { Column } from 'react-table';
-import { Table } from 'components';
-import { OrganizationForm } from 'components/OrganizationForm';
+import { Subnav, Table } from 'components';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import {
-  PrimaryNav,
-  Header,
-  Label,
-  TextInput,
+  Chip,
+  makeStyles,
+  Switch as SwitchInput,
   Button,
-  Dropdown
-} from '@trussworks/react-uswds';
+  TextField,
+  Paper,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup
+} from '@material-ui/core';
+import { ChevronRight, ControlPoint } from '@material-ui/icons';
+import { Autocomplete, createFilterOptions } from '@material-ui/lab';
+import { OrganizationList } from 'components/OrganizationList';
 
-interface Errors extends Partial<OrganizationType> {
-  global?: string;
+interface AutocompleteType extends Partial<OrganizationTag> {
+  title?: string;
 }
 
 export const Organization: React.FC = () => {
   const {
-    currentOrganization,
     apiGet,
     apiPut,
     apiPost,
-    user
+    user,
+    setFeedbackMessage
   } = useAuthContext();
+  const { organizationId } = useParams<{ organizationId: string }>();
   const [organization, setOrganization] = useState<OrganizationType>();
+  const [tags, setTags] = useState<AutocompleteType[]>([]);
   const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
   const [scans, setScans] = useState<Scan[]>([]);
   const [scanSchema, setScanSchema] = useState<ScanSchema>({});
-  const [currentView, setCurrentView] = useState<number>(0);
-  const [errors, setErrors] = useState<Errors>({});
-  const [message, setMessage] = useState<string>('');
   const [newUserValues, setNewUserValues] = useState<{
     firstName: string;
     lastName: string;
@@ -56,6 +65,14 @@ export const Organization: React.FC = () => {
     email: '',
     role: ''
   });
+  const classes = useStyles();
+  const [tagValue, setTagValue] = React.useState<AutocompleteType | null>(null);
+  const [inputValue, setInputValue] = React.useState('');
+  const [dialog, setDialog] = React.useState<{
+    open: boolean;
+    type?: 'rootDomains' | 'ipBlocks' | 'tags';
+    label?: string;
+  }>({ open: false });
 
   const dateAccessor = (date?: string) => {
     return !date || new Date(date).getTime() === new Date(0).getTime()
@@ -80,7 +97,7 @@ export const Organization: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Status',
+      Header: 'Role',
       accessor: ({ approved, role, user }) => {
         if (approved) {
           if (user.invitePending) {
@@ -99,30 +116,43 @@ export const Organization: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Action',
+      Header: () => {
+        return (
+          <div style={{ justifyContent: 'flex-center' }}>
+            <Button color="secondary" onClick={() => setDialog({ open: true })}>
+              <ControlPoint style={{ marginRight: '10px' }}></ControlPoint>
+              Add member
+            </Button>
+          </div>
+        );
+      },
       id: 'action',
       Cell: ({ row }: { row: { index: number } }) => {
         const isApproved =
           !organization?.userRoles[row.index] ||
           organization?.userRoles[row.index].approved;
-        return isApproved ? (
-          <Link
-            to="#"
-            onClick={() => {
-              removeUser(row.index);
-            }}
-          >
-            <p>Remove</p>
-          </Link>
-        ) : (
-          <Link
-            to="#"
-            onClick={() => {
-              approveUser(row.index);
-            }}
-          >
-            <p>Approve</p>
-          </Link>
+        return (
+          <>
+            {isApproved ? (
+              <Button
+                onClick={() => {
+                  removeUser(row.index);
+                }}
+                color="secondary"
+              >
+                <p>Remove</p>
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  approveUser(row.index);
+                }}
+                color="secondary"
+              >
+                <p>Approve</p>
+              </Button>
+            )}
+          </>
         );
       },
       disableFilters: true
@@ -231,12 +261,9 @@ export const Organization: React.FC = () => {
   ];
 
   const fetchOrganization = useCallback(async () => {
-    if (!currentOrganization) {
-      return;
-    }
     try {
       const organization = await apiGet<OrganizationType>(
-        `/organizations/${currentOrganization.id}`
+        `/organizations/${organizationId}`
       );
       organization.scanTasks.sort(
         (a, b) =>
@@ -245,10 +272,12 @@ export const Organization: React.FC = () => {
       setOrganization(organization);
       setUserRoles(organization.userRoles);
       setScanTasks(organization.scanTasks);
+      const tags = await apiGet<OrganizationTag[]>(`/organizations/tags`);
+      setTags(tags);
     } catch (e) {
       console.error(e);
     }
-  }, [apiGet, setOrganization, currentOrganization]);
+  }, [apiGet, setOrganization, organizationId]);
 
   const fetchScans = useCallback(async () => {
     try {
@@ -258,7 +287,10 @@ export const Organization: React.FC = () => {
       }>('/granularScans/');
 
       if (user?.userType !== 'globalAdmin')
-        scans = scans.filter((scan) => scan.name !== 'censysIpv4' && scan.name !== 'censysCertificates');
+        scans = scans.filter(
+          (scan) =>
+            scan.name !== 'censysIpv4' && scan.name !== 'censysCertificates'
+        );
 
       setScans(scans);
       setScanSchema(schema);
@@ -298,16 +330,20 @@ export const Organization: React.FC = () => {
   const updateOrganization = async (body: any) => {
     try {
       const org = await apiPut('/organizations/' + organization?.id, {
-        body
+        body: organization
       });
       setOrganization(org);
-      setMessage('Organization successfully updated');
+      setFeedbackMessage({
+        message: 'Organization successfully updated',
+        type: 'success'
+      });
     } catch (e) {
-      setErrors({
-        global:
+      setFeedbackMessage({
+        message:
           e.status === 422
-            ? 'Error when submitting organization entry.'
-            : e.message ?? e.toString()
+            ? 'Error updating organization'
+            : e.message ?? e.toString(),
+        type: 'error'
       });
       console.error(e);
     }
@@ -333,11 +369,10 @@ export const Organization: React.FC = () => {
             )
       });
     } catch (e) {
-      setErrors({
-        global:
-          e.status === 422
-            ? 'Error when updating scan.'
-            : e.message ?? e.toString()
+      setFeedbackMessage({
+        message:
+          e.status === 422 ? 'Error updating scan' : e.message ?? e.toString(),
+        type: 'error'
       });
       console.error(e);
     }
@@ -347,8 +382,7 @@ export const Organization: React.FC = () => {
     fetchOrganization();
   }, [fetchOrganization]);
 
-  const onInviteUserSubmit: React.FormEventHandler = async (e) => {
-    e.preventDefault();
+  const onInviteUserSubmit = async () => {
     try {
       let body = {
         firstName: newUserValues.firstName,
@@ -370,18 +404,17 @@ export const Organization: React.FC = () => {
         setUserRoles(userRoles.concat([newRole]));
       }
     } catch (e) {
-      setErrors({
-        global:
-          e.status === 422
-            ? 'Error when submitting user entry.'
-            : e.message ?? e.toString()
+      setFeedbackMessage({
+        message:
+          e.status === 422 ? 'Error inviting user' : e.message ?? e.toString(),
+        type: 'error'
       });
       console.log(e);
     }
   };
 
   const onInviteUserTextChange: React.ChangeEventHandler<
-    HTMLInputElement | HTMLSelectElement
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
   > = (e) => onInviteUserChange(e.target.name, e.target.value);
 
   const onInviteUserChange = (name: string, value: any) => {
@@ -390,178 +423,440 @@ export const Organization: React.FC = () => {
       [name]: value
     }));
   };
+  const filter = createFilterOptions<AutocompleteType>();
 
-  if (!organization)
+  const ListInput = (props: {
+    type: 'rootDomains' | 'ipBlocks' | 'tags';
+    label: string;
+  }) => {
+    if (!organization) return null;
+    const elements: (string | OrganizationTag)[] = organization[props.type];
     return (
-      <div className={classes.root}>
-        <h1>No current organization</h1>
+      <div className={classes.headerRow}>
+        <label>{props.label}</label>
+        <span>
+          {elements &&
+            elements.map((value: string | OrganizationTag, index: number) => (
+              <Chip
+                className={classes.chip}
+                key={index}
+                label={typeof value === 'string' ? value : value.name}
+                onDelete={() => {
+                  organization[props.type].splice(index, 1);
+                  setOrganization({ ...organization });
+                }}
+              ></Chip>
+            ))}
+          <Chip
+            label="ADD"
+            variant="outlined"
+            color="secondary"
+            onClick={() => {
+              setDialog({
+                open: true,
+                type: props.type,
+                label: props.label
+              });
+            }}
+          />
+        </span>
       </div>
     );
+  };
+
+  if (!organization) return null;
 
   const views = [
-    <>
+    <Paper className={classes.settingsWrapper}>
+      <Dialog
+        open={dialog.open}
+        onClose={() => setDialog({ open: false })}
+        aria-labelledby="form-dialog-title"
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle id="form-dialog-title">
+          Add {dialog.label && dialog.label.slice(0, -1)}
+        </DialogTitle>
+        <DialogContent>
+          {dialog.type === 'tags' ? (
+            <>
+              <DialogContentText>
+                Select an existing tag or add a new one.
+              </DialogContentText>
+              <Autocomplete
+                value={tagValue}
+                onChange={(event, newValue) => {
+                  if (typeof newValue === 'string') {
+                    setTagValue({
+                      name: newValue
+                    });
+                  } else {
+                    setTagValue(newValue);
+                  }
+                }}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params);
+                  // Suggest the creation of a new value
+                  if (
+                    params.inputValue !== '' &&
+                    !filtered.find(
+                      (tag) =>
+                        tag.name?.toLowerCase() ===
+                        params.inputValue.toLowerCase()
+                    )
+                  ) {
+                    filtered.push({
+                      name: params.inputValue,
+                      title: `Add "${params.inputValue}"`
+                    });
+                  }
+                  return filtered;
+                }}
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                options={tags}
+                getOptionLabel={(option) => {
+                  return option.name ?? '';
+                }}
+                renderOption={(option) => {
+                  if (option.title) return option.title;
+                  return option.name ?? '';
+                }}
+                fullWidth
+                freeSolo
+                renderInput={(params) => (
+                  <TextField {...params} variant="outlined" />
+                )}
+              />
+            </>
+          ) : (
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label={dialog.label && dialog.label.slice(0, -1)}
+              type="text"
+              fullWidth
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={() => setDialog({ open: false })}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              if (dialog.type && dialog.type !== 'tags') {
+                if (inputValue) {
+                  organization[dialog.type].push(inputValue);
+                  setOrganization({ ...organization });
+                }
+              } else {
+                if (tagValue) {
+                  if (!organization.tags) organization.tags = [];
+                  organization.tags.push(tagValue as any);
+                  setOrganization({ ...organization });
+                }
+              }
+              setDialog({ open: false });
+              setInputValue('');
+              setTagValue(null);
+            }}
+          >
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <TextField
+        value={organization.name}
+        disabled
+        variant="filled"
+        InputProps={{
+          className: classes.orgName
+        }}
+      ></TextField>
+      <ListInput label="Root Domains" type="rootDomains"></ListInput>
+      <ListInput label="IP Blocks" type="ipBlocks"></ListInput>
+      <ListInput label="Tags" type="tags"></ListInput>
       <div className={classes.headerRow}>
-        <label>
-          <FaNetworkWired />
-          Root Domains
-        </label>
-        <span>{organization.rootDomains.join(', ')}</span>
+        <label>Passive Mode</label>
+        <span>
+          <SwitchInput
+            checked={organization.isPassive}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setOrganization({
+                ...organization,
+                isPassive: event.target.checked
+              });
+            }}
+            color="primary"
+          />
+        </span>
       </div>
-
-      <div className={classes.headerRow}>
-        <label>
-          <FaGlobe />
-          IP Blocks
-        </label>
-        <span>{organization.ipBlocks.join(', ')}</span>
-      </div>
-
-      <div className={classes.headerRow}>
-        <label>
-          <FaClock />
-          Passive Mode
-        </label>
-        <span>{organization.isPassive ? 'Yes' : 'No'}</span>
-      </div>
-
-      <div className={classes.headerRow}>
-        <label>
-          <FaUsers />
-          Invite Only
-        </label>
-        <span>{organization.inviteOnly ? 'Yes' : 'No'}</span>
-      </div>
-    </>,
-    <>
-      {' '}
-      <h1>Organization Users</h1>
-      <Table<Role> columns={userRoleColumns} data={userRoles} />
-      <h2>Invite a user</h2>
-      <form onSubmit={onInviteUserSubmit} className={classes.form}>
-        {errors.global && <p className={classes.error}>{errors.global}</p>}
-        <Label htmlFor="firstName">First Name</Label>
-        <TextInput
-          required
-          id="firstName"
-          name="firstName"
-          className={classes.textField}
-          type="text"
-          value={newUserValues.firstName}
-          onChange={onInviteUserTextChange}
-        />
-        <Label htmlFor="lastName">Last Name</Label>
-        <TextInput
-          required
-          id="lastName"
-          name="lastName"
-          className={classes.textField}
-          type="text"
-          value={newUserValues.lastName}
-          onChange={onInviteUserTextChange}
-        />
-        <Label htmlFor="email">Email</Label>
-        <TextInput
-          required
-          id="email"
-          name="email"
-          className={classes.textField}
-          type="text"
-          value={newUserValues.email}
-          onChange={onInviteUserTextChange}
-        />
-        <Label htmlFor="role">Organization Role</Label>
-        <Dropdown
-          required
-          id="role"
-          name="role"
-          className={classes.textField}
-          onChange={onInviteUserTextChange}
-          value={newUserValues.role}
+      <div className={classes.buttons}>
+        <Button
+          variant="outlined"
+          style={{ marginRight: '10px', color: '#565C65' }}
+          onClick={fetchOrganization}
         >
-          <option key="standard" value="standard">
-            Standard
-          </option>
-          <option key="admin" value="admin">
-            Administrator
-          </option>
-        </Dropdown>
-        <br></br>
-        <Button type="submit">Invite User</Button>
-      </form>
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          onClick={updateOrganization}
+          style={{ background: '#565C65', color: 'white' }}
+        >
+          Save
+        </Button>
+      </div>
+    </Paper>,
+    <>
+      <Table<Role> columns={userRoleColumns} data={userRoles} />
+      <Dialog
+        open={dialog.open}
+        onClose={() => setDialog({ open: false })}
+        aria-labelledby="form-dialog-title"
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle id="form-dialog-title">Add Member</DialogTitle>
+        <DialogContent>
+          <p style={{ color: '#3D4551' }}>
+            Organization members can view Organization-specific vulnerabilities,
+            domains, and notes. Organization administrators can additionally
+            manage members and update the organization.
+          </p>
+          <TextField
+            margin="dense"
+            id="email"
+            name="email"
+            label="Email"
+            type="text"
+            fullWidth
+            value={newUserValues.email}
+            onChange={onInviteUserTextChange}
+            variant="filled"
+            InputProps={{
+              className: classes.textField
+            }}
+          />
+          <br></br>
+          <br></br>
+          <FormLabel component="legend">Role</FormLabel>
+          <RadioGroup
+            aria-label="role"
+            name="role"
+            value={newUserValues.role}
+            onChange={onInviteUserTextChange}
+          >
+            <FormControlLabel
+              value="standard"
+              control={<Radio color="primary" />}
+              label="Standard"
+            />
+            <FormControlLabel
+              value="admin"
+              control={<Radio color="primary" />}
+              label="Administrator"
+            />
+          </RadioGroup>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={() => setDialog({ open: false })}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={async () => {
+              onInviteUserSubmit();
+              setDialog({ open: false });
+            }}
+          >
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>,
     <>
-      <h1>Customize Scans</h1>
+      <OrganizationList parent={organization}></OrganizationList>
+    </>,
+    <>
       <Table<Scan> columns={scanColumns} data={scans} fetchData={fetchScans} />
-      <h1>Organization Scan History</h1>
+      <h2>Organization Scan History</h2>
       <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} />
-    </>,
-
-    <>
-      <h1>Update Organization</h1>
-      {errors.global && <p className={classes.error}>{errors.global}</p>}
-      {message && <p>{message}</p>}
-      <OrganizationForm
-        onSubmit={updateOrganization}
-        organization={organization}
-        type="update"
-      ></OrganizationForm>
     </>
   ];
 
+  let navItems = [
+    {
+      title: 'Settings',
+      path: `/organizations/${organizationId}`,
+      exact: true
+    },
+    {
+      title: 'Members',
+      path: `/organizations/${organizationId}/members`
+    }
+  ];
+
+  if (!organization.parent) {
+    navItems = navItems.concat([
+      // { title: 'Teams', path: `/organizations/${organizationId}/teams` },
+      { title: 'Scans', path: `/organizations/${organizationId}/scans` }
+    ]);
+  }
+
   return (
-    <div className={classes.root}>
-      <Header>
-        <div className="usa-nav-container">
-          <div className="usa-navbar">
-            <h1>{organization.name}</h1>
-          </div>
-          <PrimaryNav
-            items={[
-              <a
-                key="one"
-                href="# "
-                onClick={() => {
-                  setCurrentView(0);
-                }}
-                className="usa-nav__link"
-              >
-                <span>Overview</span>
-              </a>,
-              <a
-                key="two"
-                href="# "
-                onClick={() => {
-                  setCurrentView(1);
-                }}
-              >
-                <span>Manage Users</span>
-              </a>,
-              <a
-                key="three"
-                href="# "
-                onClick={() => {
-                  setCurrentView(2);
-                }}
-              >
-                <span>Manage Scans</span>
-              </a>,
-              <a
-                key="four"
-                href="# "
-                onClick={() => {
-                  setCurrentView(3);
-                }}
-              >
-                <span>Update organization</span>
-              </a>
-            ]}
-            onToggleMobileNav={function noRefCheck() {}}
+    <div>
+      <div className={classes.header}>
+        <h1 className={classes.headerLabel}>
+          <Link to="/organizations">Organizations</Link>
+          {organization.parent && (
+            <>
+              <ChevronRight></ChevronRight>
+              <Link to={'/organizations/' + organization.parent.id}>
+                {organization.parent.name}
+              </Link>
+            </>
+          )}
+          <ChevronRight
+            style={{
+              verticalAlign: 'middle',
+              lineHeight: '100%',
+              fontSize: '26px'
+            }}
+          ></ChevronRight>
+          <span style={{ color: '#07648D' }}>{organization.name}</span>
+        </h1>
+        <Subnav
+          items={navItems}
+          styles={{
+            background: '#F9F9F9'
+          }}
+        ></Subnav>
+      </div>
+      <div className={classes.root}>
+        <Switch>
+          <Route
+            path="/organizations/:organizationId"
+            exact
+            render={() => views[0]}
           />
-        </div>
-      </Header>
-      {views[currentView]}
+          <Route
+            path="/organizations/:organizationId/members"
+            render={() => views[1]}
+          />
+          <Route
+            path="/organizations/:organizationId/teams"
+            render={() => views[2]}
+          />
+          <Route
+            path="/organizations/:organizationId/scans"
+            render={() => views[3]}
+          />
+        </Switch>
+      </div>
     </div>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  header: {
+    background: '#F9F9F9'
+  },
+  headerLabel: {
+    margin: 0,
+    paddingTop: '1.5rem',
+    paddingBottom: '0.5rem',
+    marginLeft: '15%',
+    color: '#C9C9C9',
+    fontWeight: 500,
+    fontStyle: 'normal',
+    fontSize: '24px',
+    '& a': {
+      textDecoration: 'none',
+      color: '#C9C9C9'
+    },
+    '& svg': {
+      verticalAlign: 'middle',
+      lineHeight: '100%',
+      fontSize: '26px'
+    }
+  },
+  chip: {
+    backgroundColor: '#C4C4C4',
+    color: 'white',
+    marginRight: '10px'
+  },
+  settingsWrapper: {
+    boxSizing: 'border-box',
+    border: '0px',
+    boxShadow: 'none',
+    borderRadius: '0px',
+    padding: '25px',
+    maxWidth: '900px',
+    margin: '0 auto'
+  },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+  orgName: {
+    background: '#F5F5F5 !important',
+    paddingBottom: '10px'
+  },
+  textField: {
+    background: '#F5F5F5 !important'
+  },
+  root: {
+    maxWidth: '1400px',
+    margin: '0 auto',
+    '@media screen and (min-width: 480px)': {
+      padding: '1rem 1rem'
+    },
+    '@media screen and (min-width: 640px)': {
+      padding: '1rem 1.5rem'
+    },
+    '@media screen and (min-width: 1024px)': {
+      padding: '1rem 2rem'
+    }
+  },
+  headerRow: {
+    padding: '0.5rem 0',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '16px',
+    flexWrap: 'wrap',
+    '& label': {
+      flex: '1 0 100%',
+      fontWeight: 'bolder',
+      display: 'flex',
+      alignItems: 'center',
+      padding: '0.5rem 0',
+      '@media screen and (min-width: 640px)': {
+        flex: '0 0 220px',
+        padding: 0
+      }
+    },
+    '& span': {
+      display: 'block',
+      flex: '1 1 auto',
+      marginLeft: 'calc(1rem + 20px)',
+      '@media screen and (min-width: 640px)': {
+        marginLeft: 'calc(1rem + 20px)'
+      },
+      '@media screen and (min-width: 1024px)': {
+        marginLeft: 0
+      }
+    }
+  }
+}));
 
 export default Organization;

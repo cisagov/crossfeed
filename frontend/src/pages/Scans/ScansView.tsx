@@ -8,7 +8,7 @@ import {
 } from '@trussworks/react-uswds';
 import { Table, ImportExport } from 'components';
 import { Column, CellProps } from 'react-table';
-import { Scan, Organization, ScanSchema } from 'types';
+import { Scan, Organization, ScanSchema, OrganizationTag } from 'types';
 import { FaTimes, FaEdit } from 'react-icons/fa';
 import { FaPlayCircle } from 'react-icons/fa';
 import { useAuthContext } from 'context';
@@ -35,6 +35,7 @@ const ScansView: React.FC = () => {
   const [organizationOptions, setOrganizationOptions] = useState<
     OrganizationOption[]
   >([]);
+  const [tags, setTags] = useState<OrganizationTag[]>([]);
   const [scanSchema, setScanSchema] = useState<ScanSchema>({});
 
   const columns: Column<Scan>[] = [
@@ -61,11 +62,11 @@ const ScansView: React.FC = () => {
       disableFilters: true
     },
     {
-      Header: 'Run per organization',
-      accessor: ({ isGranular }) => (isGranular ? 'Yes' : 'No'),
+      Header: 'Tags',
+      accessor: ({ tags }) => tags.map((tag) => tag.name).join(', '),
       width: 150,
       minWidth: 150,
-      id: 'granular',
+      id: 'tags',
       disableFilters: true
     },
     {
@@ -155,7 +156,8 @@ const ScansView: React.FC = () => {
     frequency: 1,
     frequencyUnit: 'minute',
     isGranular: false,
-    isSingleScan: false
+    isSingleScan: false,
+    tags: []
   });
 
   React.useEffect(() => {
@@ -174,11 +176,13 @@ const ScansView: React.FC = () => {
         organizations: Organization[];
         schema: ScanSchema;
       }>('/scans/');
+      const tags = await apiGet<OrganizationTag[]>(`/organizations/tags`);
       setScans(scans);
       setScanSchema(schema);
       setOrganizationOptions(
         organizations.map((e) => ({ label: e.name, value: e.id }))
       );
+      setTags(tags);
     } catch (e) {
       console.error(e);
     }
@@ -209,7 +213,8 @@ const ScansView: React.FC = () => {
           ...body,
           organizations: body.organizations
             ? body.organizations.map((e) => e.value)
-            : []
+            : [],
+          tags: body.tags ? body.tags.map((e) => ({ id: e.value })) : []
         }
       });
       setScans(scans.concat(scan));
@@ -259,6 +264,7 @@ const ScansView: React.FC = () => {
       {errors.global && <p className={classes.error}>{errors.global}</p>}
       <ScanForm
         organizationOption={organizationOptions}
+        tags={tags}
         propValues={values}
         onSubmit={onSubmit}
         type="create"

@@ -54,7 +54,6 @@ export interface Result {
     raw: {
       createdAt: string;
       id: string;
-      inviteOnly: boolean;
       ipBlocks: any[];
       isPassive: boolean;
       name: string;

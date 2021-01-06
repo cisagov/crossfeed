@@ -122,10 +122,14 @@ const App: React.FC = () => (
                 />
 
                 <RouteGuard path="/feeds" component={Feeds} />
+                <RouteGuard path="/scans" component={Scans} exact />
+                <RouteGuard path="/scans/history" component={Scans} exact />
                 <RouteGuard path="/scans/:scanId" component={Scan} />
-                <RouteGuard path="/scans" component={Scans} />
+                <RouteGuard
+                  path="/organizations/:organizationId"
+                  component={Organization}
+                />
                 <RouteGuard path="/organizations" component={Organizations} />
-                <RouteGuard path="/organization" component={Organization} />
                 <RouteGuard path="/users" component={Users} />
                 <RouteGuard path="/settings" component={Settings} />
               </Switch>

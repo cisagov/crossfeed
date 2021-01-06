@@ -163,6 +163,9 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
             { title: 'Assets', path: '/inventory', exact: true },
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
+          styles={{
+            paddingLeft: '0%'
+          }}
         >
           <FilterTags filters={filters} removeFilter={removeFilter} />
         </Subnav>

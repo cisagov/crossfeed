@@ -83,17 +83,6 @@ export const update = wrapHandler(async (event) => {
     user.lastName = body.lastName ?? user.lastName;
     user.fullName = user.firstName + ' ' + user.lastName;
     await User.save(user);
-
-    if (body.organization) {
-      // Create pending role if organization supplied
-      await Role.insert({
-        user: user,
-        organization: { id: body.organization },
-        approved: false,
-        role: 'user',
-        createdBy: user // User is creating the role themselves.
-      });
-    }
     return {
       statusCode: 200,
       body: JSON.stringify(user)

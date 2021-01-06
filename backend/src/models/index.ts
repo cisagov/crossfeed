@@ -10,3 +10,4 @@ export * from './scan-task';
 export * from './webpage';
 export * from './api-key';
 export * from './saved-search';
+export * from './organization-tag';

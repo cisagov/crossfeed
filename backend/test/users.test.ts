@@ -401,18 +401,14 @@ describe('user', () => {
             userType: 'globalAdmin'
           })
         )
-        .send({ firstName, lastName, organization: orgId })
+        .send({ firstName, lastName })
         .expect(200);
       expect(response.body.firstName).toEqual(firstName);
       expect(response.body.lastName).toEqual(lastName);
       user = await User.findOne(user.id, {
         relations: ['roles', 'roles.organization', 'roles.createdBy']
       });
-      expect(user.roles.length).toEqual(1);
-      expect(user.roles[0].organization.id).toEqual(orgId);
-      expect(user.roles[0].approved).toEqual(false);
-      expect(user.roles[0].role).toEqual('user');
-      expect(user.roles[0].createdBy.id).toEqual(user.id);
+      expect(user.roles.length).toEqual(0);
     });
     it('update by globalView should not work', async () => {
       const response = await request(app)
@@ -423,7 +419,7 @@ describe('user', () => {
             userType: 'globalView'
           })
         )
-        .send({ firstName, lastName, organization: orgId })
+        .send({ firstName, lastName })
         .expect(403);
       expect(response.body).toEqual({});
     });
@@ -431,7 +427,7 @@ describe('user', () => {
       const response = await request(app)
         .put(`/users/${user.id}`)
         .set('Authorization', createUserToken({}))
-        .send({ firstName, lastName, organization: orgId })
+        .send({ firstName, lastName })
         .expect(403);
       expect(response.body).toEqual({});
     });
@@ -444,17 +440,14 @@ describe('user', () => {
             id: user.id
           })
         )
-        .send({ firstName, lastName, organization: orgId })
+        .send({ firstName, lastName })
         .expect(200);
       expect(response.body.firstName).toEqual(firstName);
       expect(response.body.lastName).toEqual(lastName);
       user = await User.findOne(user.id, {
         relations: ['roles', 'roles.organization']
       });
-      expect(user.roles.length).toEqual(1);
-      expect(user.roles[0].organization.id).toEqual(orgId);
-      expect(user.roles[0].approved).toEqual(false);
-      expect(user.roles[0].role).toEqual('user');
+      expect(user.roles.length).toEqual(0);
     });
   });
 });

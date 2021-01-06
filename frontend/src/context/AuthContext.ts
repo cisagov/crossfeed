@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useApi } from 'hooks';
 import { User, Organization } from 'types';
+import { AlertProps } from '@material-ui/lab';
 
 export interface AuthUser extends User {
   isRegistered: boolean;
@@ -22,6 +23,10 @@ export interface AuthContextType extends ReturnType<typeof useApi> {
   setShowAllOrganizations: (showAllOrganizations: boolean) => void;
   refreshUser: () => Promise<void>;
   setLoading: React.Dispatch<React.SetStateAction<number>>;
+  setFeedbackMessage: (message: {
+    message: string;
+    type: AlertProps['severity'];
+  }) => void;
   maximumRole: 'user' | 'admin';
   touVersion: string;
   userMustSign: boolean;

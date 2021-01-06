@@ -15,6 +15,7 @@ import * as readline from 'readline';
 import PQueue from 'p-queue';
 import { chunk } from 'lodash';
 import { In } from 'typeorm';
+import getScanOrganizations from './helpers/getScanOrganizations';
 
 const WEBSCRAPER_DIRECTORY = '/app/worker/webscraper';
 const INPUT_PATH = path.join(WEBSCRAPER_DIRECTORY, 'domains.txt');
@@ -41,16 +42,16 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   const scan = await Scan.findOne(
     { id: scanId },
-    { relations: ['organizations'] }
+    { relations: ['organizations', 'tags', 'tags.organizations'] }
   );
 
+  let orgs: string[] | undefined = undefined;
   // webscraper is a global scan, so organizationId is only specified for tests.
-  // Otherwise, scan.organizations can be used for granular control of censys.
-  const orgs = organizationId
-    ? [organizationId]
-    : scan?.organizations?.length
-    ? scan?.organizations.map((org) => org.id)
-    : undefined;
+  // Otherwise, scan.organizations can be used for granular control of webscraper.
+  if (organizationId) orgs = [organizationId];
+  else if (scan?.isGranular) {
+    orgs = getScanOrganizations(scan).map((org) => org.id);
+  }
 
   const where = orgs?.length ? { id: In(orgs) } : {};
   const organizations = await Organization.find({ where, select: ['id'] });

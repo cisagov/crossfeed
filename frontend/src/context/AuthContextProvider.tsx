@@ -11,6 +11,8 @@ import {
   getUserMustSign
 } from './userStateUtils';
 import Cookies from 'universal-cookie';
+import { Snackbar } from '@material-ui/core';
+import { Alert, AlertProps } from '@material-ui/lab';
 
 export const currentTermsVersion = '1';
 
@@ -24,6 +26,10 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const [showAllOrganizations, setShowAllOrganizations] = usePersistentState<
     boolean
   >('showAllOrganizations', false);
+  const [feedbackMessage, setFeedbackMessage] = useState<{
+    message: string;
+    type: AlertProps['severity'];
+  } | null>(null);
   const cookies = useMemo(() => new Cookies(), []);
 
   const logout = useCallback(async () => {
@@ -134,6 +140,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         maximumRole,
         touVersion,
         userMustSign,
+        setFeedbackMessage,
         ...api
       }}
     >
@@ -142,6 +149,20 @@ export const AuthContextProvider: React.FC = ({ children }) => {
           <div></div>
           <div></div>
         </div>
+      )}
+      {feedbackMessage && (
+        <Snackbar
+          open={!!feedbackMessage}
+          autoHideDuration={5000}
+          onClose={() => setFeedbackMessage(null)}
+        >
+          <Alert
+            onClose={() => setFeedbackMessage(null)}
+            severity={feedbackMessage.type}
+          >
+            {feedbackMessage.message}
+          </Alert>
+        </Snackbar>
       )}
       {children}
     </AuthContext.Provider>

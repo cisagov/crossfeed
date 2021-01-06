@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import classes from './styles.module.scss';
-import { Organization as OrganizationType, Scan, ScanSchema } from 'types';
+import { OrganizationTag, Scan, ScanSchema } from 'types';
 import {
   Button,
   Form,
@@ -13,13 +13,10 @@ import MultiSelect from 'pages/Scans/MultiSelect';
 import { OrganizationOption } from 'pages/Scans/ScansView';
 import { Link } from 'react-router-dom';
 
-interface Errors extends Partial<OrganizationType> {
-  global?: string;
-}
-
 export interface ScanFormValues {
   name: string;
   organizations: OrganizationOption[];
+  tags: OrganizationOption[];
   arguments: any;
   frequency: number;
   frequencyUnit: string;
@@ -30,15 +27,16 @@ export interface ScanFormValues {
 export const ScanForm: React.FC<{
   propValues: ScanFormValues;
   organizationOption: OrganizationOption[];
+  tags: OrganizationTag[];
   global?: any;
   onSubmit: (values: any) => Promise<void>;
-  //'create' or 'edit'
-  type: string;
+  type: 'create' | 'edit';
   scan?: Scan;
   scanSchema: ScanSchema;
 }> = ({
   propValues,
   organizationOption,
+  tags,
   global,
   onSubmit,
   type,
@@ -52,11 +50,13 @@ export const ScanForm: React.FC<{
     frequencyUnit: scan ? propValues.frequencyUnit : 'minute',
     isGranular: scan ? scan.isGranular : false,
     isSingleScan: scan ? scan.isSingleScan : false,
-    organizations: scan ? propValues.organizations : []
+    organizations: scan ? propValues.organizations : [],
+    tags: scan ? propValues.tags : []
   });
   const [organizationOptions, setOrganizationOptions] = useState<
     OrganizationOption[]
   >(organizationOption);
+  const [tagOptions, setTagOptions] = useState<OrganizationOption[]>([]);
   const [values, setValues] = useState<ScanFormValues>(setDefault());
   const [schemaUpdated, setSchemaUpdated] = useState<boolean>(false);
 
@@ -76,9 +76,11 @@ export const ScanForm: React.FC<{
       [name]: value
     }));
   };
+
   const setDefaultValues = useCallback(async () => {
     try {
       setOrganizationOptions(organizationOption);
+      setTagOptions(tags.map((tag) => ({ label: tag.name, value: tag.id })));
       if (scanSchema && scanSchema[values.name]) {
         setSchemaUpdated(true);
       }
@@ -90,7 +92,8 @@ export const ScanForm: React.FC<{
           frequencyUnit: propValues.frequencyUnit,
           isGranular: scan.isGranular,
           isSingleScan: scan.isSingleScan,
-          organizations: propValues.organizations
+          organizations: propValues.organizations,
+          tags: propValues.tags
         }));
       }
     } catch (e) {
@@ -101,6 +104,8 @@ export const ScanForm: React.FC<{
     propValues.frequency,
     propValues.frequencyUnit,
     propValues.organizations,
+    propValues.tags,
+    tags,
     scan,
     scanSchema,
     values.name
@@ -118,6 +123,7 @@ export const ScanForm: React.FC<{
           name: values.name,
           arguments: values.arguments,
           organizations: values.organizations,
+          tags: values.tags,
           frequency: values.frequency,
           frequencyUnit: values.frequencyUnit,
           isGranular: values.isGranular,
@@ -155,48 +161,40 @@ export const ScanForm: React.FC<{
           value={values.arguments}
           onChange={onTextChange}
         /> */}
-      {type === 'edit' &&
-        (values.name === 'censysIpv4' ||
-          values.name === 'censysCertificates' ||
-          values.name === 'webscraper' ||
-          !global) && (
-          <Checkbox
-            id="isGranular"
-            label="Limit enabled organizations"
-            name="isGranular"
-            checked={values.isGranular}
-            onChange={(e) => onChange('isGranular', e.target.checked)}
-          />
-        )}
-      {type === 'create' &&
-        (values.name === 'censysIpv4' ||
+      {(values.name === 'censysIpv4' ||
+        values.name === 'webscraper' ||
         values.name === 'censysCertificates' ||
-          values.name === 'webscraper' ||
-          (schemaUpdated && !scanSchema[values.name].global)) && (
-          <Checkbox
-            id="isGranular"
-            label="Limit enabled organizations"
-            name="isGranular"
-            checked={values.isGranular}
-            onChange={(e) => onChange('isGranular', e.target.checked)}
+        (schemaUpdated && !scanSchema[values.name].global) ||
+        !global) && (
+        <Checkbox
+          id="isGranular"
+          label="Limit enabled organizations"
+          name="isGranular"
+          checked={values.isGranular}
+          onChange={(e) => onChange('isGranular', e.target.checked)}
+        />
+      )}
+      {values.isGranular && (
+        <>
+          <Label htmlFor="organizations">Enabled Organizations</Label>
+          <MultiSelect
+            name="organizations"
+            options={organizationOptions}
+            value={values.organizations}
+            onChange={(e) => onChange('organizations', e)}
+            zIndex={100}
           />
-        )}
-      {values.isGranular &&
-        (values.name === 'censysIpv4' ||
-        values.name === 'censysCertificates' ||
-          (schemaUpdated && !scanSchema[values.name].global) ||
-          !global) && (
-          <>
-            <Label htmlFor="organizations">Enabled Organizations</Label>
-            <MultiSelect
-              name="organizations"
-              options={organizationOptions}
-              value={values.organizations}
-              onChange={(e) => onChange('organizations', e)}
-            />
-            <br />
-          </>
-        )}
+          <Label htmlFor="tags">Enabled Organization Tags</Label>
+          <MultiSelect
+            name="tags"
+            options={tagOptions}
+            value={values.tags}
+            onChange={(e) => onChange('tags', e)}
+            zIndex={99}
+          />
+          <br />
+        </>
+      )}
       <Checkbox
         id="isSingleScan"
         label="Run scan once"
@@ -239,11 +237,15 @@ export const ScanForm: React.FC<{
       <br />
       {type === 'edit' && (
         <Link to={`/scans`}>
-          <Button type="button" outline> Return to Scans</Button>
+          <Button type="button" outline>
+            {' '}
+            Return to Scans
+          </Button>
         </Link>
       )}
-      {type === 'edit' && <Button type="submit">Save Changes</Button>}
-      {type === 'create' && <Button type="submit">Create Scan</Button>}
+      <Button type="submit">
+        {type === 'edit' ? 'Save Changes' : 'Create Scan'}
+      </Button>
     </Form>
   );
 };

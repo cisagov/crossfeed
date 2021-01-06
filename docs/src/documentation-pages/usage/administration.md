@@ -36,6 +36,6 @@ This tab allows you to manage users across all organizations, as well as invite 
 
 The following functionality is available to organization admins.
 
-#### Organization settings
+#### Organization details
 
-This tab lets an admin invite users to their organization or update their organization settings.
+This page lets an admin invite users to their organization or update their organization settings.

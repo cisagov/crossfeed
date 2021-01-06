@@ -85,9 +85,6 @@ const Settings: React.FC = () => {
   return (
     <div className={classes.root}>
       <h1>My Account</h1>
-      <Button type="button" onClick={logout}>
-        Logout
-      </Button>
       <h2>Name: {user && user.fullName}</h2>
       <h2>Email: {user && user.email}</h2>
       <h2>
@@ -156,6 +153,9 @@ const Settings: React.FC = () => {
           <br />
         </>
       )}
+      <Button type="button" onClick={logout}>
+        Logout
+      </Button>
     </div>
   );
 };

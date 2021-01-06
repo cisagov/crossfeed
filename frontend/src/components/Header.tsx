@@ -115,27 +115,21 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     exact: false,
     nested: [
       {
-        title: 'Manage Users',
-        path: '/users',
-        users: GLOBAL_ADMIN,
-        exact: true
-      },
-      {
         title: 'Manage Organizations',
         path: '/organizations',
         users: GLOBAL_ADMIN,
         exact: true
       },
       {
-        title: 'Organization Settings',
-        path: '/organization',
-        users: ORG_ADMIN | GLOBAL_ADMIN,
-        exact: true
-      },
-      {
         title: 'My Organizations',
         path: '/organizations',
         users: ORG_USER | ORG_ADMIN,
+        exact: true
+      },
+      {
+        title: 'Manage Users',
+        path: '/users',
+        users: GLOBAL_ADMIN,
         exact: true
       },
       {

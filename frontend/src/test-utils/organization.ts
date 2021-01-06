@@ -8,6 +8,5 @@ export const testOrganization = {
   userRoles: [],
   scanTasks: [],
   isPassive: false,
-  inviteOnly: false,
   granularScans: []
 };

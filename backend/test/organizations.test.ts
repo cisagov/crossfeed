@@ -7,7 +7,8 @@ import {
   connectToDatabase,
   Scan,
   ScanTask,
-  User
+  User,
+  OrganizationTag
 } from '../src/models';
 
 describe('organizations', () => {
@@ -37,20 +38,12 @@ describe('organizations', () => {
           name,
           rootDomains: ['cisa.gov'],
           isPassive: false,
-          inviteOnly: true
+          tags: [{ name: 'test' }]
         })
         .expect(200);
-      expect(response.body).toMatchSnapshot({
-        createdAt: expect.any(String),
-        updatedAt: expect.any(String),
-        id: expect.any(String),
-        name: expect.any(String),
-        createdBy: {
-          id: expect.any(String)
-        }
-      });
       expect(response.body.createdBy.id).toEqual(user.id);
       expect(response.body.name).toEqual(name);
+      expect(response.body.tags[0].name).toEqual('test');
     });
     it("can't add organization with the same name", async () => {
       const user = await User.create({
@@ -74,9 +67,9 @@ describe('organizations', () => {
           name,
           rootDomains: ['cisa.gov'],
           isPassive: false,
-          inviteOnly: true
-        });
-      // .expect(200);
+          tags: []
+        })
+        .expect(200);
       const response = await request(app)
         .post('/organizations/')
         .set(
@@ -91,7 +84,7 @@ describe('organizations', () => {
           name,
           rootDomains: ['cisa.gov'],
           isPassive: false,
-          inviteOnly: true
+          tags: []
         })
         .expect(500);
       expect(response.body).toMatchSnapshot();
@@ -110,8 +103,7 @@ describe('organizations', () => {
           ipBlocks: [],
           name,
           rootDomains: ['cisa.gov'],
-          isPassive: false,
-          inviteOnly: true
+          isPassive: false
         })
         .expect(403);
       expect(response.body).toEqual({});
@@ -129,7 +121,7 @@ describe('organizations', () => {
       const rootDomains = ['test-' + Math.random()];
       const ipBlocks = ['1.1.1.1'];
       const isPassive = true;
-      const inviteOnly = false;
+      const tags = [{ name: 'test' }];
       const response = await request(app)
         .put(`/organizations/${organization.id}`)
         .set(
@@ -143,14 +135,14 @@ describe('organizations', () => {
           rootDomains,
           ipBlocks,
           isPassive,
-          inviteOnly
+          tags
         })
         .expect(200);
       expect(response.body.name).toEqual(name);
       expect(response.body.rootDomains).toEqual(rootDomains);
       expect(response.body.ipBlocks).toEqual(ipBlocks);
       expect(response.body.isPassive).toEqual(isPassive);
-      expect(response.body.inviteOnly).toEqual(inviteOnly);
+      expect(response.body.tags[0].name).toEqual(tags[0].name);
     });
     it('update by org admin should update everything but rootDomains and ipBlocks', async () => {
       const organization = await Organization.create({
@@ -163,7 +155,6 @@ describe('organizations', () => {
       const rootDomains = ['test-' + Math.random()];
       const ipBlocks = ['1.1.1.1'];
       const isPassive = true;
-      const inviteOnly = false;
       const response = await request(app)
         .put(`/organizations/${organization.id}`)
         .set(
@@ -176,15 +167,13 @@ describe('organizations', () => {
           name,
           rootDomains,
           ipBlocks,
-          isPassive,
-          inviteOnly
+          isPassive
         })
         .expect(200);
       expect(response.body.name).toEqual(name);
       expect(response.body.rootDomains).toEqual(organization.rootDomains);
       expect(response.body.ipBlocks).toEqual(organization.ipBlocks);
       expect(response.body.isPassive).toEqual(isPassive);
-      expect(response.body.inviteOnly).toEqual(inviteOnly);
     });
     it('update by globalView should fail', async () => {
       const organization = await Organization.create({
@@ -197,7 +186,6 @@ describe('organizations', () => {
       const rootDomains = ['test-' + Math.random()];
       const ipBlocks = ['1.1.1.1'];
       const isPassive = true;
-      const inviteOnly = false;
       const response = await request(app)
         .put(`/organizations/${organization.id}`)
         .set(
@@ -210,8 +198,7 @@ describe('organizations', () => {
           name,
           rootDomains,
           ipBlocks,
-          isPassive,
-          inviteOnly
+          isPassive
         })
         .expect(403);
       expect(response.body).toEqual({});
@@ -317,39 +304,6 @@ describe('organizations', () => {
         .expect(200);
       expect(response.body.length).toEqual(1);
       expect(response.body[0].id).toEqual(organization.id);
-    });
-  });
-  describe('listPublicNames', () => {
-    it('listPublicNames by non-org member should succeed', async () => {
-      const organization = await Organization.create({
-        name: 'test-' + Math.random(),
-        rootDomains: ['test-' + Math.random()],
-        ipBlocks: [],
-        isPassive: false,
-        inviteOnly: false
-      }).save();
-      const response = await request(app)
-        .get(`/organizations/public`)
-        .set('Authorization', createUserToken({}))
-        .expect(200);
-      expect(response.body.length).toBeGreaterThanOrEqual(1);
-      expect(
-        response.body.map((e) => e.id).indexOf(organization.id)
-      ).not.toEqual(-1);
-    });
-    it('listPublicNames with bad auth key should fail', async () => {
-      const organization = await Organization.create({
-        name: 'test-' + Math.random(),
-        rootDomains: ['test-' + Math.random()],
-        ipBlocks: [],
-        isPassive: false,
-        inviteOnly: false
-      }).save();
-      const response = await request(app)
-        .get(`/organizations/public`)
-        .set('Authorization', '')
-        .expect(401);
-      expect(response.body).toEqual({});
     });
   });
   describe('get', () => {
@@ -813,6 +767,38 @@ describe('organizations', () => {
         )
         .expect(403);
       expect(response.body).toEqual({});
+    });
+  });
+  describe('getTags', () => {
+    it('getTags by globalAdmin should work', async () => {
+      const tag = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      });
+      const response = await request(app)
+        .get(`/organizations/tags`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalAdmin'
+          })
+        )
+        .expect(200);
+      expect(response.body.length).toBeGreaterThanOrEqual(1);
+    });
+    it('getTags by standard user should return no tags', async () => {
+      const tag = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      });
+      const response = await request(app)
+        .get(`/organizations/tags`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'standard'
+          })
+        )
+        .expect(200);
+      expect(response.body).toHaveLength(0);
     });
   });
 });
