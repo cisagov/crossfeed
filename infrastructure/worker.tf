@@ -282,6 +282,7 @@ resource "aws_ssm_parameter" "webscraper_s3_bucket_name" {
 resource "aws_s3_bucket" "webscraper_bucket" {
   bucket = var.webscraper_bucket_name
   acl    = "private"
+  force_destroy = true # TODO: delete this bucket
 
   server_side_encryption_configuration {
     rule {
