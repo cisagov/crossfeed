@@ -26,6 +26,9 @@ export class OrganizationTag extends BaseEntity {
   @Column()
   name: string;
 
+  /**
+   * Organizations that are labeled with this tag
+   */
   @ManyToMany((type) => Organization, (organization) => organization.tags, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
@@ -33,6 +36,9 @@ export class OrganizationTag extends BaseEntity {
   @JoinTable()
   organizations: Organization[];
 
+  /**
+   * Scans that have this tag enabled, and will run against all tagged organizations
+   */
   @ManyToMany((type) => Scan, (scan) => scan.tags, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'

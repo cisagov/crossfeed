@@ -7,7 +7,8 @@ import {
   connectToDatabase,
   Scan,
   ScanTask,
-  User
+  User,
+  OrganizationTag
 } from '../src/models';
 
 describe('organizations', () => {
@@ -766,6 +767,38 @@ describe('organizations', () => {
         )
         .expect(403);
       expect(response.body).toEqual({});
+    });
+  });
+  describe('getTags', () => {
+    it('getTags by globalAdmin should work', async () => {
+      const tag = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      });
+      const response = await request(app)
+        .get(`/organizations/tags`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalAdmin'
+          })
+        )
+        .expect(200);
+      expect(response.body.length).toBeGreaterThanOrEqual(1);
+    });
+    it('getTags by standard user should return no tags', async () => {
+      const tag = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      });
+      const response = await request(app)
+        .get(`/organizations/tags`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'standard'
+          })
+        )
+        .expect(200);
+      expect(response.body).toHaveLength(0);
     });
   });
 });

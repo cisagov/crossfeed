@@ -61,10 +61,6 @@ class NewOrganizationNonGlobalAdmins {
 
   @IsBoolean()
   isPassive: boolean;
-
-  @IsUUID()
-  @IsOptional()
-  parentOrganization?: string;
 }
 
 class NewOrganization extends NewOrganizationNonGlobalAdmins {
@@ -76,6 +72,10 @@ class NewOrganization extends NewOrganizationNonGlobalAdmins {
 
   @IsArray()
   tags: OrganizationTag[];
+
+  @IsUUID()
+  @IsOptional()
+  parentOrganization?: string;
 }
 
 const findOrCreateTags = async (
@@ -223,12 +223,12 @@ export const list = wrapHandler(async (event) => {
  *
  * /organizations/tags:
  *  get:
- *    description: Fetchs all possible organization tags
+ *    description: Fetchs all possible organization tags (must be global admin)
  *    tags:
  *    - Organizations
  */
 export const getTags = wrapHandler(async (event) => {
-  if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
+  if (!isGlobalViewAdmin(event)) {
     return {
       statusCode: 200,
       body: JSON.stringify([])
