@@ -4,6 +4,7 @@ scheduler:
   events:
     - schedule: rate(5 minutes)
   reservedConcurrency: 1
+  memorySize: 4096
 
 syncdb:
   handler: src/tasks/syncdb.handler
