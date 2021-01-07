@@ -1,15 +1,13 @@
 import React, { useContext } from 'react';
 import { useApi } from 'hooks';
-import { User, Organization } from 'types';
+import { User, Organization, OrganizationTag } from 'types';
 import { AlertProps } from '@material-ui/lab';
 
 export interface AuthUser extends User {
   isRegistered: boolean;
 }
 
-export interface CurrentOrganization extends Organization {
-  userIsAdmin?: boolean | null;
-}
+export type CurrentOrganization = Organization | OrganizationTag;
 
 export interface AuthContextType extends ReturnType<typeof useApi> {
   login(token: string): void;

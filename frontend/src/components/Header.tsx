@@ -67,11 +67,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   let userLevel = 0;
   if (user && user.isRegistered) {
     if (user.userType === 'standard') {
-      if (currentOrganization?.userIsAdmin) {
-        userLevel = ORG_ADMIN;
-      } else {
-        userLevel = ORG_USER;
-      }
+      userLevel = ORG_USER;
     } else {
       userLevel = GLOBAL_ADMIN;
     }
