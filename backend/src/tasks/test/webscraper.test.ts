@@ -82,7 +82,10 @@ describe('webscraper', () => {
     });
     const webpages = await Webpage.find({
       where: { domain },
-      relations: ['discoveredBy']
+      relations: ['discoveredBy'],
+      order: {
+        url: 'DESC'
+      },
     });
     expect(
       (spawn as jest.Mock).mock.calls.map((e) => [e[0], e[1]])
