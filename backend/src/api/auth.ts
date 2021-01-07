@@ -1,5 +1,5 @@
 import loginGov from './login-gov';
-import { User, connectToDatabase, ApiKey } from '../models';
+import { User, connectToDatabase, ApiKey, OrganizationTag } from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import * as jwksClient from 'jwks-rsa';
@@ -262,6 +262,20 @@ export const isOrgAdmin = (
 export const getOrgMemberships = (event: APIGatewayProxyEvent): string[] => {
   if (!event.requestContext.authorizer) return [];
   return event.requestContext.authorizer.roles.map((role) => role.org);
+};
+
+/** Returns the organizations belonging to a tag */
+export const getTagOrganizations = async (
+  event: APIGatewayProxyEvent,
+  id: string
+): Promise<string[]> => {
+  if (!isGlobalViewAdmin(event)) return [];
+  const tag = await OrganizationTag.findOne(
+    { id },
+    { relations: ['organizations'] }
+  );
+  if (tag) return tag?.organizations.map((org) => org.id);
+  return [];
 };
 
 /** Returns a user's id */

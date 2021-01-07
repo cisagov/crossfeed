@@ -61,7 +61,13 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
   const classes = useStyles();
   const [selectedDomain, setSelectedDomain] = useState('');
   const [resultsScrolled, setResultsScrolled] = useState(false);
-  const { apiPost, apiPut, setLoading } = useAuthContext();
+  const {
+    apiPost,
+    apiPut,
+    setLoading,
+    showAllOrganizations,
+    currentOrganization
+  } = useAuthContext();
 
   const search:
     | (SavedSearch & {
@@ -131,15 +137,21 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
 
   const fetchDomainsExport = async (): Promise<string> => {
     try {
+      const body: any = {
+        current,
+        filters,
+        resultsPerPage,
+        searchTerm,
+        sortDirection,
+        sortField
+      };
+      if (!showAllOrganizations && currentOrganization) {
+        if ('rootDomains' in currentOrganization)
+          body.organizationId = currentOrganization.id;
+        else body.tagId = currentOrganization.id;
+      }
       const { url } = await apiPost('/search/export', {
-        body: {
-          current,
-          filters,
-          resultsPerPage,
-          searchTerm,
-          sortDirection,
-          sortField
-        }
+        body
       });
       return url!;
     } catch (e) {
