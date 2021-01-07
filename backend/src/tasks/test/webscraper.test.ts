@@ -85,7 +85,7 @@ describe('webscraper', () => {
       relations: ['discoveredBy'],
       order: {
         url: 'DESC'
-      },
+      }
     });
     expect(
       (spawn as jest.Mock).mock.calls.map((e) => [e[0], e[1]])
