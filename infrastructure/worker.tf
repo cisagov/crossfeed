@@ -119,7 +119,6 @@ resource "aws_iam_role_policy" "worker_task_role_policy" {
             "s3:GetObjectAcl"
         ],
         "Resource": [
-          "${aws_s3_bucket.webscraper_bucket.arn}/*",
           "${aws_s3_bucket.export_bucket.arn}/*"
         ]
     },
@@ -129,7 +128,6 @@ resource "aws_iam_role_policy" "worker_task_role_policy" {
           "s3:ListBucket"
       ],
       "Resource": [
-        "${aws_s3_bucket.webscraper_bucket.arn}",
         "${aws_s3_bucket.export_bucket.arn}"
       ]
     }
@@ -267,17 +265,6 @@ data "aws_ssm_parameter" "shodan_api_key" { name = var.ssm_shodan_api_key }
 data "aws_ssm_parameter" "worker_signature_public_key" { name = var.ssm_worker_signature_public_key }
 
 data "aws_ssm_parameter" "worker_signature_private_key" { name = var.ssm_worker_signature_private_key }
-
-resource "aws_ssm_parameter" "webscraper_s3_bucket_name" {
-  name      = "/crossfeed/${var.stage}/WEBSCRAPER_S3_BUCKET_NAME"
-  type      = "String"
-  value     = aws_s3_bucket.webscraper_bucket.id
-  overwrite = true
-
-  tags = {
-    Project = var.project
-  }
-}
 
 resource "aws_s3_bucket" "export_bucket" {
   bucket = var.export_bucket_name
