@@ -66,7 +66,7 @@ export const get = wrapHandler(async (event) => {
         org: search.filters?.organization
       });
     }
-    return qs.cache(15 * 60 * 1000);
+    return qs.cache(15 * 60 * 1000); // 15 minutes
   };
 
   const performQuery = async (qs: SelectQueryBuilder<any>) => {
