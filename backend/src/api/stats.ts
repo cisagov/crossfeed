@@ -1,6 +1,6 @@
 import { ValidateNested, IsOptional, IsObject, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Domain, connectToDatabase, Vulnerability } from '../models';
+import { Domain, connectToDatabase, Vulnerability, Service } from '../models';
 import { validateBody, wrapHandler } from './helpers';
 import { SelectQueryBuilder } from 'typeorm';
 import { isGlobalViewAdmin, getOrgMemberships } from './auth';
@@ -66,7 +66,7 @@ export const get = wrapHandler(async (event) => {
         org: search.filters?.organization
       });
     }
-    return qs;
+    return qs.cache(15 * 60 * 1000); // 15 minutes
   };
 
   const performQuery = async (qs: SelectQueryBuilder<any>) => {
@@ -81,11 +81,11 @@ export const get = wrapHandler(async (event) => {
   const MAX_RESULTS = 50;
 
   const services = await performQuery(
-    Domain.createQueryBuilder('domain')
-      .innerJoinAndSelect('domain.services', 'services')
-      .where('services.service IS NOT NULL')
-      .select('services.service as id, count(*) as value')
-      .groupBy('services.service')
+    Service.createQueryBuilder('service')
+      .innerJoinAndSelect('service.domain', 'domain')
+      .where('service IS NOT NULL')
+      .select('service as id, count(*) as value')
+      .groupBy('service')
       .orderBy('value', 'DESC')
   );
   const ports = await performQuery(

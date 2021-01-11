@@ -41,7 +41,8 @@ const connectDb = async (logging?: boolean) => {
     synchronize: false,
     name: 'default',
     dropSchema: false,
-    logging: logging ?? false
+    logging: logging ?? false,
+    cache: true
   });
   return connection;
 };
