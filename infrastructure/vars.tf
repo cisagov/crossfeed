@@ -163,11 +163,6 @@ variable worker_ecs_role_name {
   default = "crossfeed-worker-staging"
 }
 
-variable webscraper_bucket_name {
-  type    = string
-  default = "crossfeed-staging-webscraper"
-}
-
 variable export_bucket_name {
   type    = string
   default = "cisa-crossfeed-staging-exports"
