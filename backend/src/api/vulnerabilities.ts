@@ -134,7 +134,7 @@ class VulnerabilitySearch {
     return qs;
   }
 
-  async getResults(event) {
+  async getResults(event): Promise<[Vulnerability[], number]> {
     const pageSize = this.pageSize || PAGE_SIZE;
     const sort =
       this.sort === 'domain'
@@ -158,7 +158,7 @@ class VulnerabilitySearch {
         orgs: getOrgMemberships(event)
       });
     }
-    return await qs.getManyAndCount();
+    return [await qs.getMany(), 10000];
   }
 }
 
