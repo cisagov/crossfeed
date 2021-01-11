@@ -5,6 +5,7 @@ import { CommandOptions } from './ecs-client';
 import saveServicesToDb from './helpers/saveServicesToDb';
 import { chunk } from 'lodash';
 import axios from 'axios';
+import pRetry from 'p-retry';
 import { IpToDomainsMap, sanitizeStringField } from './censysIpv4';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 
@@ -67,62 +68,75 @@ export const handler = async (commandOptions: CommandOptions) => {
     console.log(
       `Scanning ${domainChunk.length} domains beginning with ${domainChunk[0].name}`
     );
-    let { data } = await axios.get<ShodanResponse[]>(
-      `https://api.shodan.io/shodan/host/${encodeURI(
-        domainChunk.map((domain) => domain.ip).join(',')
-      )}?key=${process.env.SHODAN_API_KEY}`
-    );
+    try {
+      let { data } = await pRetry(
+        () =>
+          axios.get<ShodanResponse[]>(
+            `https://api.shodan.io/shodan/host/${encodeURI(
+              domainChunk.map((domain) => domain.ip).join(',')
+            )}?key=${process.env.SHODAN_API_KEY}`
+          ),
+        {
+          // Perform less retries on jest to make tests faster
+          retries: typeof jest === 'undefined' ? 5 : 2,
+          minTimeout: 1000
+        }
+      );
 
-    // If only one item is returned, the response will not be an array
-    if (!Array.isArray(data)) {
-      data = [data];
-    }
-    for (const item of data) {
-      const domains = ipToDomainsMap[item.ip_str];
-      for (const domain of domains) {
-        for (const service of item.data) {
-          const [serviceId] = await saveServicesToDb([
-            plainToClass(Service, {
-              domain: domain,
-              discoveredBy: { id: commandOptions.scanId },
-              port: service.port,
-              lastSeen: new Date(Date.now()),
-              banner: sanitizeStringField(service.data),
-              shodanResults: {
-                product: service.product,
-                version: service.version,
-                cpe: service.cpe
+      // If only one item is returned, the response will not be an array
+      if (!Array.isArray(data)) {
+        data = [data];
+      }
+      for (const item of data) {
+        const domains = ipToDomainsMap[item.ip_str];
+        for (const domain of domains) {
+          for (const service of item.data) {
+            const [serviceId] = await saveServicesToDb([
+              plainToClass(Service, {
+                domain: domain,
+                discoveredBy: { id: commandOptions.scanId },
+                port: service.port,
+                lastSeen: new Date(Date.now()),
+                banner: sanitizeStringField(service.data),
+                shodanResults: {
+                  product: service.product,
+                  version: service.version,
+                  cpe: service.cpe
+                }
+              })
+            ]);
+            if (service.vulns) {
+              console.log('creating vulnerability');
+              const vulns: Vulnerability[] = [];
+              for (const cve in service.vulns) {
+                vulns.push(
+                  plainToClass(Vulnerability, {
+                    domain: domain,
+                    lastSeen: new Date(Date.now()),
+                    title: cve,
+                    cve: cve,
+                    cpe:
+                      service.cpe && service.cpe.length > 0
+                        ? service.cpe[0]
+                        : null,
+                    cvss: service.vulns[cve].cvss,
+                    state: 'open',
+                    source: 'shodan',
+                    description: service.vulns[cve].summary,
+                    needsPopulation: true,
+                    service: { id: serviceId }
+                  })
+                );
               }
-            })
-          ]);
-          if (service.vulns) {
-            console.log('creating vulnerability');
-            const vulns: Vulnerability[] = [];
-            for (const cve in service.vulns) {
-              vulns.push(
-                plainToClass(Vulnerability, {
-                  domain: domain,
-                  lastSeen: new Date(Date.now()),
-                  title: cve,
-                  cve: cve,
-                  cpe:
-                    service.cpe && service.cpe.length > 0
-                      ? service.cpe[0]
-                      : null,
-                  cvss: service.vulns[cve].cvss,
-                  state: 'open',
-                  source: 'shodan',
-                  description: service.vulns[cve].summary,
-                  needsPopulation: true,
-                  service: { id: serviceId }
-                })
-              );
+              await saveVulnerabilitiesToDb(vulns, false);
             }
-            await saveVulnerabilitiesToDb(vulns, false);
           }
         }
       }
+    } catch (e) {
+      console.error(e);
     }
+
     await sleep(1000); // Wait for Shodan rate limit of 1 request / second
   }
 
