@@ -149,7 +149,7 @@ class VulnerabilitySearch {
       .orderBy(sort, this.order);
 
     if (pageSize !== -1) {
-      qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
+      qs = qs.offset(pageSize * (this.page - 1)).limit(pageSize);
     }
 
     this.filterResultQueryset(qs);
@@ -233,7 +233,7 @@ export const update = wrapHandler(async (event) => {
  *    - Vulnerabilities
  */
 export const list = wrapHandler(async (event) => {
-  await connectToDatabase();
+  await connectToDatabase(true);
   const search = await validateBody(VulnerabilitySearch, event.body);
   const [result, count] = await search.getResults(event);
   return {
