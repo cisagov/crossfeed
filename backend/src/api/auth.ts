@@ -264,7 +264,7 @@ export const getOrgMemberships = (event: APIGatewayProxyEvent): string[] => {
   return event.requestContext.authorizer.roles.map((role) => role.org);
 };
 
-/** Returns the organizations belonging to a tag */
+/** Returns the organizations belonging to a tag, if the user can access the tag */
 export const getTagOrganizations = async (
   event: APIGatewayProxyEvent,
   id: string
