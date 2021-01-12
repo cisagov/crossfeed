@@ -101,7 +101,7 @@ describe('vulnerabilities', () => {
         )
         .send({})
         .expect(200);
-      expect(response.body.count).toEqual(1);
+      expect(response.body.count).toEqual(10000);
       expect(response.body.result[0].id).toEqual(vulnerability.id);
     });
     it('list by globalView should return vulnerabilities from all orgs', async () => {
@@ -146,7 +146,7 @@ describe('vulnerabilities', () => {
           filters: { title }
         })
         .expect(200);
-      expect(response.body.count).toEqual(2);
+      expect(response.body.count).toEqual(10000);
     });
     it('list by globalView with org filter should work', async () => {
       const organization = await Organization.create({
@@ -190,7 +190,7 @@ describe('vulnerabilities', () => {
           filters: { organization: organization.id }
         })
         .expect(200);
-      expect(response.body.count).toEqual(1);
+      expect(response.body.count).toEqual(10000);
       expect(response.body.result[0].id).toEqual(vulnerability.id);
     });
     it('list by org user with custom pageSize should work', async () => {
@@ -224,7 +224,7 @@ describe('vulnerabilities', () => {
           pageSize: 1
         })
         .expect(200);
-      expect(response.body.count).toEqual(2);
+      expect(response.body.count).toEqual(10000);
       expect(response.body.result.length).toEqual(1);
     });
     it('list by org user with pageSize of -1 should return all results', async () => {
@@ -258,7 +258,7 @@ describe('vulnerabilities', () => {
           pageSize: -1
         })
         .expect(200);
-      expect(response.body.count).toEqual(2);
+      expect(response.body.count).toEqual(10000);
       expect(response.body.result.length).toEqual(2);
     });
   });

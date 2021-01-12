@@ -134,7 +134,7 @@ class VulnerabilitySearch {
     return qs;
   }
 
-  async getResults(event) {
+  async getResults(event): Promise<[Vulnerability[], number]> {
     const pageSize = this.pageSize || PAGE_SIZE;
     const sort =
       this.sort === 'domain'
@@ -149,7 +149,7 @@ class VulnerabilitySearch {
       .orderBy(sort, this.order);
 
     if (pageSize !== -1) {
-      qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
+      qs = qs.offset(pageSize * (this.page - 1)).limit(pageSize);
     }
 
     this.filterResultQueryset(qs);
@@ -158,7 +158,7 @@ class VulnerabilitySearch {
         orgs: getOrgMemberships(event)
       });
     }
-    return await qs.getManyAndCount();
+    return [await qs.getMany(), 10000];
   }
 }
 
@@ -233,7 +233,7 @@ export const update = wrapHandler(async (event) => {
  *    - Vulnerabilities
  */
 export const list = wrapHandler(async (event) => {
-  await connectToDatabase();
+  await connectToDatabase(true);
   const search = await validateBody(VulnerabilitySearch, event.body);
   const [result, count] = await search.getResults(event);
   return {
