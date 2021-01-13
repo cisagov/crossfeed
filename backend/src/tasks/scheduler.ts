@@ -56,7 +56,7 @@ class Scheduler {
     scanTask =
       scanTask ??
       (await ScanTask.create({
-        organizations: global ? undefined : organizations,
+        organizations: global ? [] : organizations,
         scan,
         type,
         status: 'created'
@@ -173,22 +173,16 @@ class Scheduler {
           continue;
         }
         await this.launchScanTask({ scan });
-      } else if (scan.isGranular) {
-        for (const organization of getScanOrganizations(scan)) {
-          if (!(await shouldRunScan({ organization, scan }))) {
-            continue;
-          }
-          await this.launchScanTask({ organizations: [organization], scan });
-        }
       } else {
-        for (const organization of this.organizations) {
+        const organizations = scan.isGranular ? getScanOrganizations(scan): this.organizations;
+        for (const organization of organizations) {
           if (!(await shouldRunScan({ organization, scan }))) {
             continue;
           }
           await this.launchScanTask({ organizations: [organization], scan });
         }
       }
-      //if atleast 1 new scan task was launched for this scan, update the scan
+      // If at least 1 new scan task was launched for this scan, update the scan
       if (this.numLaunchedTasks > prev_numLaunchedTasks) {
         scan.lastRun = new Date();
         scan.manualRunPending = false;
@@ -241,12 +235,13 @@ const shouldRunScan = async ({
     ScanTask.createQueryBuilder('scan_task')
       .leftJoinAndSelect('scan_task.organizations', 'organizations')
       .where('scan_task."scanId" = :id', { id: scan.id })
-      .andWhere('scan_task.status IN (:statuses)', {
+      .andWhere('scan_task.status IN (:...statuses)', {
         statuses: ['created', 'queued', 'requested', 'started']
       })
       .groupBy('scan_task.id,organizations.id')
       .orderBy('scan_task."createdAt"', 'DESC')
   ).getOne();
+
   if (lastRunningScanTask) {
     // Don't run another task if there's already a running or queued task.
     return false;
@@ -255,7 +250,7 @@ const shouldRunScan = async ({
     ScanTask.createQueryBuilder('scan_task')
       .leftJoinAndSelect('scan_task.organizations', 'organizations')
       .andWhere('scan_task."scanId" = :id', { id: scan.id })
-      .andWhere('scan_task.status IN (:statuses)', {
+      .andWhere('scan_task.status IN (:...statuses)', {
         statuses: ['finished', 'failed']
       })
       .andWhere('scan_task."finishedAt" IS NOT NULL')
