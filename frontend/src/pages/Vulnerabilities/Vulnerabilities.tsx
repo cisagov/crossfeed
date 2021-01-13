@@ -250,6 +250,11 @@ export const Vulnerabilities: React.FC = () => {
             tableFilters['substate'] = substate.toLowerCase().replace(' ', '-');
           delete tableFilters['state'];
         }
+        if (!showAllOrganizations && currentOrganization) {
+          if ('rootDomains' in currentOrganization)
+            tableFilters['organization'] = currentOrganization.id;
+          else tableFilters['tag'] = currentOrganization.id;
+        }
         return await apiPost<ApiResponse>(
           doExport ? '/vulnerabilities/export' : '/vulnerabilities/search',
           {
@@ -257,12 +262,7 @@ export const Vulnerabilities: React.FC = () => {
               page,
               sort: sort[0]?.id ?? 'createdAt',
               order: sort[0]?.desc ? 'DESC' : 'ASC',
-              filters: {
-                ...tableFilters,
-                organization: showAllOrganizations
-                  ? undefined
-                  : currentOrganization?.id
-              },
+              filters: tableFilters,
               pageSize
             }
           }

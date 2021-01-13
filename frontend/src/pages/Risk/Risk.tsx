@@ -89,11 +89,13 @@ const Risk: React.FC = (props) => {
       const { result } = await apiPost<ApiResponse>('/stats', {
         body: {
           filters:
-            !orgId && showAllOrganizations
+            (!orgId && showAllOrganizations) || !currentOrganization
               ? {}
-              : {
+              : orgId || 'rootDomains' in currentOrganization
+              ? {
                   organization: orgId ? orgId : currentOrganization?.id
                 }
+              : { tag: currentOrganization.id }
         }
       });
       const max = Math.max(...result.vulnerabilities.byOrg.map((p) => p.value));

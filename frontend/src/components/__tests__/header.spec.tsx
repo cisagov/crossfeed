@@ -27,7 +27,7 @@ describe('Header component', () => {
     const { queryByText } = render(<Header />, {
       authContext: {
         user: { ...testUser, userType: 'standard', isRegistered: false },
-        currentOrganization: { ...testOrganization, userIsAdmin: false }
+        currentOrganization: { ...testOrganization }
       }
     });
     [
@@ -47,7 +47,7 @@ describe('Header component', () => {
     const { getByText, queryByText } = render(<Header />, {
       authContext: {
         user: { ...testUser, userType: 'standard', isRegistered: true },
-        currentOrganization: { ...testOrganization, userIsAdmin: false }
+        currentOrganization: { ...testOrganization }
       }
     });
     [
@@ -69,7 +69,7 @@ describe('Header component', () => {
     const { getByText, queryByText } = render(<Header />, {
       authContext: {
         user: { ...testUser, userType: 'standard', isRegistered: true },
-        currentOrganization: { ...testOrganization, userIsAdmin: true }
+        currentOrganization: { ...testOrganization }
       }
     });
     [
@@ -91,7 +91,7 @@ describe('Header component', () => {
     const { getByText, queryByText } = render(<Header />, {
       authContext: {
         user: { ...testUser, userType: 'globalAdmin', isRegistered: true },
-        currentOrganization: { ...testOrganization, userIsAdmin: true }
+        currentOrganization: { ...testOrganization }
       }
     });
     [

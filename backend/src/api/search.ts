@@ -1,8 +1,12 @@
 import { validateBody, wrapHandler } from './helpers';
-import { getOrgMemberships, isGlobalViewAdmin } from './auth';
+import {
+  getOrgMemberships,
+  getTagOrganizations,
+  isGlobalViewAdmin
+} from './auth';
 import { buildRequest } from './search/buildRequest';
 import ESClient from '../tasks/es-client';
-import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsInt, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Domain } from 'domain';
 import S3Client from '../tasks/s3-client';
 import * as Papa from 'papaparse';
@@ -27,8 +31,12 @@ class SearchBody {
   filters: { field: string; values: any[]; type: string }[];
 
   @IsOptional()
-  @IsString()
+  @IsUUID()
   organizationId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  tagId?: string;
 }
 
 export const fetchAllResults = async (
@@ -67,6 +75,38 @@ export const fetchAllResults = async (
   return results;
 };
 
+const getOptions = async (
+  searchBody: SearchBody,
+  event
+): Promise<{
+  organizationIds: string[];
+  matchAllOrganizations: boolean;
+}> => {
+  let options;
+  if (
+    searchBody.organizationId &&
+    (getOrgMemberships(event).includes(searchBody.organizationId) ||
+      isGlobalViewAdmin(event))
+  ) {
+    //Search for a specific organization
+    options = {
+      organizationIds: [searchBody.organizationId],
+      matchAllOrganizations: false
+    };
+  } else if (searchBody.tagId) {
+    options = {
+      organizationIds: await getTagOrganizations(event, searchBody.tagId),
+      matchAllOrganizations: false
+    };
+  } else {
+    options = {
+      organizationIds: getOrgMemberships(event),
+      matchAllOrganizations: isGlobalViewAdmin(event)
+    };
+  }
+  return options;
+};
+
 /**
  * @swagger
  *
@@ -78,10 +118,7 @@ export const fetchAllResults = async (
  */
 export const export_ = wrapHandler(async (event) => {
   const searchBody = await validateBody(SearchBody, event.body);
-  const options = {
-    organizationIds: getOrgMemberships(event),
-    matchAllOrganizations: isGlobalViewAdmin(event)
-  };
+  const options = await getOptions(searchBody, event);
   let results: any = await fetchAllResults(searchBody, options);
   results = results.map((res) => {
     res.organization = res.organization.name;
@@ -134,23 +171,7 @@ export const export_ = wrapHandler(async (event) => {
  */
 export const search = wrapHandler(async (event) => {
   const searchBody = await validateBody(SearchBody, event.body);
-  let options;
-  if (
-    searchBody.organizationId &&
-    (getOrgMemberships(event).includes(searchBody.organizationId) ||
-      isGlobalViewAdmin(event))
-  ) {
-    //Search for a specific organization
-    options = {
-      organizationIds: [searchBody.organizationId],
-      matchAllOrganizations: false
-    };
-  } else {
-    options = {
-      organizationIds: getOrgMemberships(event),
-      matchAllOrganizations: isGlobalViewAdmin(event)
-    };
-  }
+  const options = await getOptions(searchBody, event);
   const request = buildRequest(searchBody, options);
 
   const client = new ESClient();
