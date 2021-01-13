@@ -24,10 +24,9 @@ import { SearchBar } from 'components';
 import { Autocomplete } from '@material-ui/lab';
 import { Organization, OrganizationTag } from 'types';
 
-const GLOBAL_ADMIN = 4;
-const ORG_ADMIN = 2;
-const ORG_USER = 1;
-const ALL_USERS = GLOBAL_ADMIN | ORG_ADMIN | ORG_USER;
+const GLOBAL_ADMIN = 2;
+const STANDARD_USER = 1;
+const ALL_USERS = GLOBAL_ADMIN | STANDARD_USER;
 
 interface NavItemType {
   title: string | JSX.Element;
@@ -60,7 +59,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   let userLevel = 0;
   if (user && user.isRegistered) {
     if (user.userType === 'standard') {
-      userLevel = ORG_USER;
+      userLevel = STANDARD_USER;
     } else {
       userLevel = GLOBAL_ADMIN;
     }
@@ -125,7 +124,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       {
         title: 'My Organizations',
         path: '/organizations',
-        users: ORG_USER | ORG_ADMIN,
+        users: STANDARD_USER,
         exact: true
       },
       {
