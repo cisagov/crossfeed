@@ -39,7 +39,10 @@ describe('scheduler', () => {
     expect(runCommand).toHaveBeenCalledTimes(1);
     expect(runCommand).toHaveBeenCalledWith(
       expect.objectContaining({
-        organizationId: organization.id,
+        organizations: [{
+          id: organization.id,
+          name: organization.name
+        }],
         scanId: scan.id,
         scanName: scan.name
       })
@@ -419,14 +422,16 @@ describe('scheduler', () => {
       expect(runCommand).toHaveBeenCalledTimes(2);
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: organization.id,
+          organizations: [
+            {id: organization.id, name: organization.name}],
           scanId: scan.id,
           scanName: scan.name
         })
       );
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: organization2.id,
+          organizations: [
+            {id: organization2.id, name: organization2.name}],
           scanId: scan.id,
           scanName: scan.name
         })
@@ -487,14 +492,16 @@ describe('scheduler', () => {
       expect(runCommand).toHaveBeenCalledTimes(2);
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: organization.id,
+          organizations: [
+            {id: organization.id, name: organization.name}],
           scanId: scan.id,
           scanName: scan.name
         })
       );
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: organization2.id,
+          organizations: [
+            {id: organization2.id, name: organization2.name}],
           scanId: scan.id,
           scanName: scan.name
         })
@@ -556,14 +563,16 @@ describe('scheduler', () => {
       expect(runCommand).toHaveBeenCalledTimes(2);
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: organization.id,
+          organizations: [
+            {id: organization.id, name: organization.name}],
           scanId: scan.id,
           scanName: scan.name
         })
       );
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: organization2.id,
+          organizations: [
+            {id: organization2.id, name: organization2.name}],
           scanId: scan.id,
           scanName: scan.name
         })

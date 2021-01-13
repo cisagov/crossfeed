@@ -49,11 +49,24 @@ export class Organization extends BaseEntity {
   })
   userRoles: Role[];
 
+  /**
+   * Corresponds to "organization" property of ScanTask.
+   * Deprecated, replaced by "allScanTasks" property.
+   */
   @OneToMany((type) => ScanTask, (scanTask) => scanTask.organization, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   })
   scanTasks: ScanTask[];
+
+  /**
+   * Corresponds to "organizations" property of ScanTask.
+   */
+  @ManyToMany((type) => ScanTask, (scanTask) => scanTask.organizations, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  allScanTasks: ScanTask[];
 
   @ManyToMany((type) => Scan, (scan) => scan.organizations, {
     onDelete: 'CASCADE',

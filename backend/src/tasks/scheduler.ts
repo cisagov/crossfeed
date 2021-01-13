@@ -2,7 +2,7 @@ import { Handler } from 'aws-lambda';
 import { connectToDatabase, Scan, Organization, ScanTask } from '../models';
 import ECSClient from './ecs-client';
 import { SCAN_SCHEMA } from '../api/scans';
-import { In, IsNull, Not } from 'typeorm';
+import { In, IsNull, Not, Raw } from 'typeorm';
 import getScanOrganizations from './helpers/getScanOrganizations';
 
 class Scheduler {
@@ -38,13 +38,13 @@ class Scheduler {
   }
 
   launchSingleScanTask = async ({
-    organization = undefined,
+    organizations = [],
     scan,
     chunkNumber,
     numChunks,
     scanTask
   }: {
-    organization?: Organization;
+    organizations?: Organization[];
     scan: Scan;
     chunkNumber?: number;
     numChunks?: number;
@@ -56,7 +56,7 @@ class Scheduler {
     scanTask =
       scanTask ??
       (await ScanTask.create({
-        organization: global ? undefined : organization,
+        organizations: global ? undefined : organizations,
         scan,
         type,
         status: 'created'
@@ -65,8 +65,7 @@ class Scheduler {
     const commandOptions = scanTask.input
       ? JSON.parse(scanTask.input)
       : {
-          organizationId: organization?.id,
-          organizationName: organization?.name,
+          organizations: organizations.map((e) => ({ name: e.name, id: e.id })),
           scanId: scan.id,
           scanName: scan.name,
           scanTaskId: scanTask.id,
@@ -128,10 +127,10 @@ class Scheduler {
   };
 
   launchScanTask = async ({
-    organization = undefined,
+    organizations = [],
     scan
   }: {
-    organization?: Organization;
+    organizations?: Organization[];
     scan: Scan;
   }) => {
     let { numChunks } = SCAN_SCHEMA[scan.name];
@@ -142,14 +141,14 @@ class Scheduler {
       }
       for (let chunkNumber = 0; chunkNumber < numChunks; chunkNumber++) {
         await this.launchSingleScanTask({
-          organization,
+          organizations,
           scan,
           chunkNumber,
           numChunks: numChunks
         });
       }
     } else {
-      await this.launchSingleScanTask({ organization, scan });
+      await this.launchSingleScanTask({ organizations, scan });
     }
   };
 
@@ -179,14 +178,14 @@ class Scheduler {
           if (!(await shouldRunScan({ organization, scan }))) {
             continue;
           }
-          await this.launchScanTask({ organization, scan });
+          await this.launchScanTask({ organizations: [organization], scan });
         }
       } else {
         for (const organization of this.organizations) {
           if (!(await shouldRunScan({ organization, scan }))) {
             continue;
           }
-          await this.launchScanTask({ organization, scan });
+          await this.launchScanTask({ organizations: [organization], scan });
         }
       }
       //if atleast 1 new scan task was launched for this scan, update the scan
@@ -221,36 +220,48 @@ const shouldRunScan = async ({
     // Always run these scans.
     return true;
   }
-  const orgFilter = global ? {} : { organization: { id: organization?.id } };
-  const lastRunningScanTask = await ScanTask.findOne(
-    {
-      scan: { id: scan.id },
-      status: In(['created', 'queued', 'requested', 'started']),
-      ...orgFilter
-    },
-    {
-      order: {
-        createdAt: 'DESC'
-      }
+  const filterQuery = (qs) => {
+    /**
+     * Perform a filter to find a matching ScanTask that ran on the current org.
+     * The first filter checks for ScanTasks with the "organization" property set to the current org,
+     * and the second filter checks for ScanTasks that are assigned to multiple orgnaizations.
+     */
+    if (global) {
+      return qs;
+    } else {
+      return qs.andWhere(
+        'scan_task."organizationId" = :org OR organizations.id = :org',
+        {
+          org: organization?.id
+        }
+      );
     }
-  );
+  };
+  const lastRunningScanTask = await filterQuery(
+    ScanTask.createQueryBuilder('scan_task')
+      .leftJoinAndSelect('scan_task.organizations', 'organizations')
+      .where('scan_task."scanId" = :id', { id: scan.id })
+      .andWhere('scan_task.status IN (:statuses)', {
+        statuses: ['created', 'queued', 'requested', 'started']
+      })
+      .groupBy('scan_task.id,organizations.id')
+      .orderBy('scan_task."createdAt"', 'DESC')
+  ).getOne();
   if (lastRunningScanTask) {
     // Don't run another task if there's already a running or queued task.
     return false;
   }
-  const lastFinishedScanTask = await ScanTask.findOne(
-    {
-      scan: { id: scan.id },
-      status: In(['finished', 'failed']),
-      finishedAt: Not(IsNull()),
-      ...orgFilter
-    },
-    {
-      order: {
-        finishedAt: 'DESC'
-      }
-    }
-  );
+  const lastFinishedScanTask = await filterQuery(
+    ScanTask.createQueryBuilder('scan_task')
+      .leftJoinAndSelect('scan_task.organizations', 'organizations')
+      .andWhere('scan_task."scanId" = :id', { id: scan.id })
+      .andWhere('scan_task.status IN (:statuses)', {
+        statuses: ['finished', 'failed']
+      })
+      .andWhere('scan_task."finishedAt" IS NOT NULL')
+      .groupBy('scan_task.id,organizations.id')
+      .orderBy('scan_task."finishedAt"', 'DESC')
+  ).getOne();
 
   if (
     lastFinishedScanTask &&
