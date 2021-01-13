@@ -1,20 +1,14 @@
-import { Organization } from 'types';
+import { Organization, OrganizationTag } from 'types';
 import { AuthUser, CurrentOrganization } from './AuthContext';
 
 const currentTermsVersion = process.env.REACT_APP_TERMS_VERSION;
 
 export const getExtendedOrg = (
-  org: Organization | null,
+  org: Organization | OrganizationTag | null,
   user: AuthUser | null
 ) => {
   let current: CurrentOrganization | null =
     org ?? user?.roles[0]?.organization ?? null;
-  if (current) {
-    current.userIsAdmin =
-      user?.userType === 'globalAdmin' ||
-      user?.roles.find((role) => role.organization.id === current?.id)?.role ===
-        'admin';
-  }
   return current;
 };
 

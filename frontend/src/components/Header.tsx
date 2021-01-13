@@ -22,12 +22,11 @@ import { withSearch } from '@elastic/react-search-ui';
 import { ContextType } from 'context/SearchProvider';
 import { SearchBar } from 'components';
 import { Autocomplete } from '@material-ui/lab';
-import { Organization } from 'types';
+import { Organization, OrganizationTag } from 'types';
 
-const GLOBAL_ADMIN = 4;
-const ORG_ADMIN = 2;
-const ORG_USER = 1;
-const ALL_USERS = GLOBAL_ADMIN | ORG_ADMIN | ORG_USER;
+const GLOBAL_ADMIN = 2;
+const STANDARD_USER = 1;
+const ALL_USERS = GLOBAL_ADMIN | STANDARD_USER;
 
 interface NavItemType {
   title: string | JSX.Element;
@@ -53,29 +52,31 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     apiGet
   } = useAuthContext();
   const [navOpen, setNavOpen] = useState(false);
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
-
-  const fetchOrganizations = useCallback(async () => {
-    try {
-      let rows = await apiGet<Organization[]>('/organizations/');
-      setOrganizations(rows);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [apiGet, setOrganizations]);
+  const [organizations, setOrganizations] = useState<
+    (Organization | OrganizationTag)[]
+  >([]);
 
   let userLevel = 0;
   if (user && user.isRegistered) {
     if (user.userType === 'standard') {
-      if (currentOrganization?.userIsAdmin) {
-        userLevel = ORG_ADMIN;
-      } else {
-        userLevel = ORG_USER;
-      }
+      userLevel = STANDARD_USER;
     } else {
       userLevel = GLOBAL_ADMIN;
     }
   }
+
+  const fetchOrganizations = useCallback(async () => {
+    try {
+      let rows = await apiGet<Organization[]>('/organizations/');
+      let tags: (OrganizationTag | Organization)[] = [];
+      if (userLevel === GLOBAL_ADMIN) {
+        tags = await apiGet<OrganizationTag[]>('/organizations/tags');
+      }
+      setOrganizations(tags.concat(rows));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet, setOrganizations, userLevel]);
 
   React.useEffect(() => {
     if (userLevel > 0) {
@@ -123,7 +124,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       {
         title: 'My Organizations',
         path: '/organizations',
-        users: ORG_USER | ORG_ADMIN,
+        users: STANDARD_USER,
         exact: true
       },
       {

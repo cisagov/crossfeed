@@ -15,6 +15,7 @@ import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder } from 'typeorm';
 import {
   getOrgMemberships,
+  getTagOrganizations,
   isGlobalViewAdmin,
   isGlobalWriteAdmin
 } from './auth';
@@ -55,6 +56,10 @@ class VulnerabilityFilters {
   @IsUUID()
   @IsOptional()
   organization?: string;
+
+  @IsUUID()
+  @IsOptional()
+  tag?: string;
 }
 
 class VulnerabilitySearch {
@@ -90,7 +95,7 @@ class VulnerabilitySearch {
   // If set to -1, returns all results.
   pageSize?: number;
 
-  filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>) {
+  async filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>, event) {
     if (this.filters?.id) {
       qs.andWhere('vulnerability.id = :id', {
         id: this.filters.id
@@ -131,6 +136,11 @@ class VulnerabilitySearch {
         org: this.filters.organization
       });
     }
+    if (this.filters?.tag) {
+      qs.andWhere('organization.id IN (:...orgs)', {
+        orgs: await getTagOrganizations(event, this.filters.tag)
+      });
+    }
     return qs;
   }
 
@@ -152,7 +162,7 @@ class VulnerabilitySearch {
       qs = qs.offset(pageSize * (this.page - 1)).limit(pageSize);
     }
 
-    this.filterResultQueryset(qs);
+    await this.filterResultQueryset(qs, event);
     if (!isGlobalViewAdmin(event)) {
       qs.andWhere('organization.id IN (:...orgs)', {
         orgs: getOrgMemberships(event)

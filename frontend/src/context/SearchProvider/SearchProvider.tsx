@@ -68,7 +68,9 @@ export const SearchProvider: React.FC = ({ children }) => {
         sortField
       };
       if (!showAllOrganizations && currentOrganization) {
-        body.organizationId = currentOrganization.id;
+        if ('rootDomains' in currentOrganization)
+          body.organizationId = currentOrganization.id;
+        else body.tagId = currentOrganization.id;
       }
       const responseJson = await apiPost<ApiResponse>('/search', {
         body
