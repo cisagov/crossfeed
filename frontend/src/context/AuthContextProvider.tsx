@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { Auth } from 'aws-amplify';
 import { AuthContext, AuthUser } from './AuthContext';
-import { User, Organization } from 'types';
+import { User, Organization, OrganizationTag } from 'types';
 import { useApi } from 'hooks/useApi';
 import { usePersistentState } from 'hooks';
 import {
@@ -19,10 +19,9 @@ export const currentTermsVersion = '1';
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [token, setToken] = usePersistentState<string | null>('token', null);
-  const [org, setOrg] = usePersistentState<Organization | null>(
-    'organization',
-    null
-  );
+  const [org, setOrg] = usePersistentState<
+    Organization | OrganizationTag | null
+  >('organization', null);
   const [showAllOrganizations, setShowAllOrganizations] = usePersistentState<
     boolean
   >('showAllOrganizations', false);

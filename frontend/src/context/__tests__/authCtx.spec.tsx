@@ -36,12 +36,12 @@ const InnerTestComp: React.FC<Props> = ({ onLogin, onSetOrg }) => {
       <div data-testid="userMustSign">{userMustSign.toString()}</div>
       <div data-testid="maxRole">{maximumRole}</div>
       <div data-testid="touVersion">{touVersion}</div>
-      <button data-testid="login" onClick={e => onLogin && onLogin(login)}>
+      <button data-testid="login" onClick={(e) => onLogin && onLogin(login)}>
         login
       </button>
       <button
         data-testid="setOrg"
-        onClick={e => onSetOrg && onSetOrg(setOrganization)}
+        onClick={(e) => onSetOrg && onSetOrg(setOrganization)}
       >
         setOrg
       </button>
@@ -49,14 +49,14 @@ const InnerTestComp: React.FC<Props> = ({ onLogin, onSetOrg }) => {
   );
 };
 
-const TestComp: React.FC<Props> = props => (
+const TestComp: React.FC<Props> = (props) => (
   <AuthContextProvider>
     <InnerTestComp {...props} />
   </AuthContextProvider>
 );
 
 afterEach(() => {
-  Object.values(mockedApi).forEach(fn => fn.mockReset());
+  Object.values(mockedApi).forEach((fn) => fn.mockReset());
 });
 
 afterAll(() => {
@@ -94,8 +94,7 @@ it('parses extendedOrg for provided organization', async () => {
   await wait(() => {
     expect(getByTestId('org')).toHaveTextContent(
       JSON.stringify({
-        ...testOrganization,
-        userIsAdmin: false
+        ...testOrganization
       })
     );
   });
