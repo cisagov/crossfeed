@@ -55,7 +55,7 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(helmet.hsts());
+app.use(helmet.hsts({ maxAge: 31536000 }));
 app.use(cookieParser());
 
 app.get('/', handlerToExpress(healthcheck));
