@@ -32,16 +32,16 @@ data "archive_file" "security_headers" {
 }
 
 resource "aws_lambda_function" "security_headers" {
-  filename         = "lambdas/security_headers.zip"
-  function_name    = var.frontend_lambda_function
-  role             = aws_iam_role.frontend_lambda_iam.arn
-  handler          = "index.handler"
-  runtime          = "nodejs12.x"
-  publish          = true
+  filename      = "lambdas/security_headers.zip"
+  function_name = var.frontend_lambda_function
+  role          = aws_iam_role.frontend_lambda_iam.arn
+  handler       = "index.handler"
+  runtime       = "nodejs12.x"
+  publish       = true
 }
 
 resource "aws_iam_role" "frontend_lambda_iam" {
-  name = "frontend_lambda_iam"
+  name               = "frontend_lambda_iam"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -89,9 +89,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
 
     lambda_function_association {
-      event_type = "origin-response"
+      event_type   = "origin-response"
       include_body = false
-      lambda_arn = aws_lambda_function.security_headers.qualified_arn
+      lambda_arn   = aws_lambda_function.security_headers.qualified_arn
     }
 
     viewer_protocol_policy = "redirect-to-https"
@@ -115,9 +115,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
 
     lambda_function_association {
-      event_type = "origin-response"
+      event_type   = "origin-response"
       include_body = false
-      lambda_arn = aws_lambda_function.security_headers.qualified_arn
+      lambda_arn   = aws_lambda_function.security_headers.qualified_arn
     }
 
     viewer_protocol_policy = "redirect-to-https"
