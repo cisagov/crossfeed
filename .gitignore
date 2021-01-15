@@ -43,3 +43,4 @@ nvd-dump
 minio-data
 
 **.pyc
+infrastructure/lambdas/security_headers.zip

@@ -25,6 +25,43 @@ locals {
   s3_origin_id = "myS3Origin"
 }
 
+data "archive_file" "security_headers" {
+  type        = "zip"
+  source_dir  = "lambdas/security_headers"
+  output_path = "lambdas/security_headers.zip"
+}
+
+resource "aws_lambda_function" "security_headers" {
+  filename         = "lambdas/security_headers.zip"
+  function_name    = var.frontend_lambda_function
+  role             = aws_iam_role.frontend_lambda_iam.arn
+  handler          = "index.handler"
+  runtime          = "nodejs12.x"
+  publish          = true
+}
+
+resource "aws_iam_role" "frontend_lambda_iam" {
+  name = "frontend_lambda_iam"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": [
+          "lambda.amazonaws.com",
+          "edgelambda.amazonaws.com"
+        ]
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name = aws_s3_bucket.frontend_bucket.bucket_regional_domain_name
@@ -51,6 +88,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       }
     }
 
+    lambda_function_association {
+      event_type = "origin-response"
+      include_body = false
+      lambda_arn = aws_lambda_function.security_headers.qualified_arn
+    }
+
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
     default_ttl            = 0
@@ -69,6 +112,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       cookies {
         forward = "none"
       }
+    }
+
+    lambda_function_association {
+      event_type = "origin-response"
+      include_body = false
+      lambda_arn = aws_lambda_function.security_headers.qualified_arn
     }
 
     viewer_protocol_policy = "redirect-to-https"
