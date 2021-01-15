@@ -2,7 +2,7 @@ import { Handler } from 'aws-lambda';
 import { connectToDatabase, Scan, Organization, ScanTask } from '../models';
 import ECSClient from './ecs-client';
 import { SCAN_SCHEMA } from '../api/scans';
-import { In, IsNull, Not, Raw } from 'typeorm';
+import { In, IsNull, Not } from 'typeorm';
 import getScanOrganizations from './helpers/getScanOrganizations';
 import { chunk } from 'lodash';
 
