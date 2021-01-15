@@ -21,7 +21,10 @@ export interface CommandOptions {
   // Used only for testing to scope down global scans to a single domain.
   domainId?: string;
 
-  /** Deprecated, replaced by "organizations" property. */
+  /** These properties are not specified when creating a ScanTask (as a single ScanTask
+   * can correspond to multiple organizations), but they are input into the the
+   * specific task function that runs per organization.
+   */
   organizationId?: string;
   organizationName?: string;
 }

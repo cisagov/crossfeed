@@ -25,7 +25,7 @@ async function main() {
   );
   console.log('commandOptions are', commandOptions);
 
-  const { scanName } = commandOptions;
+  const { scanName, organizations = [] } = commandOptions;
 
   const scanFn = {
     amass,
@@ -54,7 +54,17 @@ async function main() {
     bootstrap();
   }
 
-  await scanFn(commandOptions);
+  // Since a single ScanTask can correspond to multiple organizations,
+  // we run scanFn for each particular organization here by passing
+  // in the current organization's name and id into commandOptions.
+  for (const organization of organizations) {
+    await scanFn({
+      ...commandOptions,
+      organizations: [],
+      organizationId: organization.id,
+      organizationName: organization.name
+    });
+  }
 }
 
 main();
