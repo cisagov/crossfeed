@@ -224,7 +224,7 @@ const shouldRunScan = async ({
       return qs;
     } else {
       return qs.andWhere(
-        'scan_task."organizationId" = :org OR organizations.id = :org',
+        '(scan_task."organizationId" = :org OR organizations.id = :org)',
         {
           org: organization?.id
         }

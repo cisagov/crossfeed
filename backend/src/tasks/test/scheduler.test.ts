@@ -741,6 +741,12 @@ describe('scheduler', () => {
       expect(
         await ScanTask.count({
           where: {
+            scan,
+            status: 'queued'
+          }
+        }) + await ScanTask.count({
+          where: {
+            scan: scan2,
             status: 'queued'
           }
         })
@@ -863,8 +869,8 @@ describe('scheduler', () => {
     expect(runCommand).toHaveBeenCalledTimes(0);
   });
   test('should not change lastRun time of the second scan if the first scan runs', async () => {
-    //Make scan run before scan2. Scan2 should have already run, and doesn't need to run again.
-    //The scheduler should not change scan2.lastRun during its second call
+    // Make scan run before scan2. Scan2 should have already run, and doesn't need to run again.
+    // The scheduler should not change scan2.lastRun during its second call
     const scan = await Scan.create({
       name: 'findomain',
       arguments: {},
@@ -884,7 +890,7 @@ describe('scheduler', () => {
       isPassive: false
     }).save();
 
-    //run scheduler on scan2, this establishes a finished recent scantask for scan2
+    // Run scheduler on scan2, this establishes a finished recent scantask for scan2
     await scheduler(
       {
         scanIds: [scan2.id],
@@ -896,7 +902,7 @@ describe('scheduler', () => {
     scan2 = (await Scan.findOne(scan2.id))!;
     expect(runCommand).toHaveBeenCalledTimes(1);
 
-    //run scheduler on both scans, scan should be run, but scan2 should be skipped
+    // Run scheduler on both scans, scan should be run, but scan2 should be skipped
     await scheduler(
       {
         scanIds: [scan.id, scan2.id],
@@ -908,7 +914,8 @@ describe('scheduler', () => {
     expect(runCommand).toHaveBeenCalledTimes(2);
 
     const newscan2 = (await Scan.findOne(scan2.id))!;
-    //expect scan2's lastRun was not edited during the second call to scheduler
+    
+    // Expect scan2's lastRun was not edited during the second call to scheduler
     expect(newscan2.lastRun).toEqual(scan2.lastRun);
   });
 });
