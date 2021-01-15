@@ -48,6 +48,11 @@ variable frontend_bucket {
   default = "staging.crossfeed.cyber.dhs.gov"
 }
 
+variable frontend_lambda_function {
+  type    = string
+  default = "crossfeed-security-headers-staging"
+}
+
 variable frontend_cert_arn {
   type    = string
   default = "arn:aws:acm:us-east-1:563873274798:certificate/7c6a5980-80e3-47a4-9f21-cbda44b6f34c"
