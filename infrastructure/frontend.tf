@@ -41,7 +41,7 @@ resource "aws_lambda_function" "security_headers" {
 }
 
 resource "aws_iam_role" "frontend_lambda_iam" {
-  name               = "frontend_lambda_iam"
+  name               = "frontend_lambda_iam_${var.stage}"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
