@@ -4,6 +4,7 @@ import ECSClient from './ecs-client';
 import { SCAN_SCHEMA } from '../api/scans';
 import { In, IsNull, Not, Raw } from 'typeorm';
 import getScanOrganizations from './helpers/getScanOrganizations';
+import { chunk } from 'lodash';
 
 class Scheduler {
   ecs: ECSClient;
@@ -13,17 +14,20 @@ class Scheduler {
   scans: Scan[];
   organizations: Organization[];
   queuedScanTasks: ScanTask[];
+  orgsPerScanTask: number;
 
   constructor() {}
 
   async initialize({
     scans,
     organizations,
-    queuedScanTasks
+    queuedScanTasks,
+    orgsPerScanTask
   }: {
     scans: Scan[];
     organizations: Organization[];
     queuedScanTasks: ScanTask[];
+    orgsPerScanTask: number;
   }) {
     this.scans = scans;
     this.organizations = organizations;
@@ -32,6 +36,7 @@ class Scheduler {
     this.numExistingTasks = await this.ecs.getNumTasks();
     this.numLaunchedTasks = 0;
     this.maxConcurrentTasks = Number(process.env.FARGATE_MAX_CONCURRENCY!);
+    this.orgsPerScanTask = orgsPerScanTask;
 
     console.log('Number of running Fargate tasks: ', this.numExistingTasks);
     console.log('Number of queued scan tasks: ', this.queuedScanTasks.length);
@@ -177,11 +182,17 @@ class Scheduler {
         const organizations = scan.isGranular
           ? getScanOrganizations(scan)
           : this.organizations;
+        const orgsToLaunch: Organization[] = [];
         for (const organization of organizations) {
           if (!(await shouldRunScan({ organization, scan }))) {
             continue;
           }
-          await this.launchScanTask({ organizations: [organization], scan });
+          orgsToLaunch.push(organization);
+        }
+        // Split the organizations in orgsToLaunch into chunks of size
+        // this.orgsPerScanTask, then launch organizations for each one.
+        for (const orgs of chunk(orgsToLaunch, this.orgsPerScanTask)) {
+          await this.launchScanTask({ organizations: orgs, scan });
         }
       }
       // If at least 1 new scan task was launched for this scan, update the scan
@@ -288,9 +299,16 @@ interface Event {
   // If specified, limits scheduling to list of scans.
   scanIds?: string[];
 
-  // If specified, limits scheduling to a particular organization
-  // (includes global scans on all organizations as well)
-  organizationId?: string;
+  // If specified, limits scheduling to list of organizations
+  // (includes global scans on all organizations as well).
+  organizationIds?: string[];
+
+  // Number of organizations that should be batched into each ScanTask.
+  // Increase this number when there are many organizations, in order to batch
+  // many organizations into a smaller number of ScanTasks, rather than having
+  // to have one ScanTask per organization.
+  // Defaults to process.env.SCHEDULER_ORGS_PER_SCANTASK or 1.
+  orgsPerScanTask?: number;
 }
 
 export const handler: Handler<Event> = async (event) => {
@@ -302,7 +320,9 @@ export const handler: Handler<Event> = async (event) => {
     scanIds.push(event.scanId);
   }
   const scanWhere = scanIds.length ? { id: In(scanIds) } : {};
-  const orgWhere = event.organizationId ? { id: event.organizationId } : {};
+  const orgWhere = event.organizationIds?.length
+    ? { id: In(event.organizationIds) }
+    : {};
   const scans = await Scan.find({
     where: scanWhere,
     relations: ['organizations', 'tags', 'tags.organizations']
@@ -323,7 +343,15 @@ export const handler: Handler<Event> = async (event) => {
   });
 
   const scheduler = new Scheduler();
-  await scheduler.initialize({ scans, organizations, queuedScanTasks });
+  await scheduler.initialize({
+    scans,
+    organizations,
+    queuedScanTasks,
+    orgsPerScanTask:
+      event.orgsPerScanTask ||
+      parseInt(process.env.SCHEDULER_ORGS_PER_SCANTASK || '') ||
+      1
+  });
   await scheduler.runQueued();
   await scheduler.run();
   console.log('Finished running scheduler.');
