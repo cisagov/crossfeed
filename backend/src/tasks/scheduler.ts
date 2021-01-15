@@ -174,7 +174,9 @@ class Scheduler {
         }
         await this.launchScanTask({ scan });
       } else {
-        const organizations = scan.isGranular ? getScanOrganizations(scan): this.organizations;
+        const organizations = scan.isGranular
+          ? getScanOrganizations(scan)
+          : this.organizations;
         for (const organization of organizations) {
           if (!(await shouldRunScan({ organization, scan }))) {
             continue;

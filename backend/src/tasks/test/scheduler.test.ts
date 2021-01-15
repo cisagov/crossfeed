@@ -739,17 +739,18 @@ describe('scheduler', () => {
       expect(runCommand).toHaveBeenCalledTimes(1);
 
       expect(
-        await ScanTask.count({
+        (await ScanTask.count({
           where: {
             scan,
             status: 'queued'
           }
-        }) + await ScanTask.count({
-          where: {
-            scan: scan2,
-            status: 'queued'
-          }
-        })
+        })) +
+          (await ScanTask.count({
+            where: {
+              scan: scan2,
+              status: 'queued'
+            }
+          }))
       ).toEqual(1);
 
       // Queue has opened up.
@@ -914,7 +915,7 @@ describe('scheduler', () => {
     expect(runCommand).toHaveBeenCalledTimes(2);
 
     const newscan2 = (await Scan.findOne(scan2.id))!;
-    
+
     // Expect scan2's lastRun was not edited during the second call to scheduler
     expect(newscan2.lastRun).toEqual(scan2.lastRun);
   });
