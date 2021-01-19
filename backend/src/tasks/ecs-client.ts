@@ -3,8 +3,15 @@ import { SCAN_SCHEMA } from '../api/scans';
 import * as Docker from 'dockerode';
 
 export interface CommandOptions {
-  organizationId?: string;
-  organizationName?: string;
+  /** A list of organizations (id and name) that this
+   * ScanTask must run on. */
+  organizations?: [
+    {
+      name: string;
+      id: string;
+    }
+  ];
+
   scanId: string;
   scanName: string;
   scanTaskId: string;
@@ -13,6 +20,13 @@ export interface CommandOptions {
 
   // Used only for testing to scope down global scans to a single domain.
   domainId?: string;
+
+  /** These properties are not specified when creating a ScanTask (as a single ScanTask
+   * can correspond to multiple organizations), but they are input into the the
+   * specific task function that runs per organization.
+   */
+  organizationId?: string;
+  organizationName?: string;
 }
 
 const toSnakeCase = (input) => input.replace(/ /g, '-');
