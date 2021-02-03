@@ -125,7 +125,7 @@ jobs:
         run: npm run build-worker
         working-directory: ./backend
   deploy:
-    needs: [security, build_worker, lint, test, test_python]
+    needs: [build_worker, lint, test, test_python]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/production')
     steps:
