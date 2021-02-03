@@ -13,7 +13,11 @@ import { Type } from 'class-transformer';
 import { Domain, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
-import { isGlobalViewAdmin, getOrgMemberships, getTagOrganizations } from './auth';
+import {
+  isGlobalViewAdmin,
+  getOrgMemberships,
+  getTagOrganizations
+} from './auth';
 import S3Client from '../tasks/s3-client';
 import * as Papa from 'papaparse';
 

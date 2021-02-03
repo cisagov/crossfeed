@@ -5,7 +5,8 @@ import {
   Domain,
   connectToDatabase,
   Organization,
-  Vulnerability, OrganizationTag
+  Vulnerability,
+  OrganizationTag
 } from '../src/models';
 import { createUserToken } from './util';
 jest.mock('../src/tasks/s3-client');
