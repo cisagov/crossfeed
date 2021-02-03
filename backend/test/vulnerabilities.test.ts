@@ -5,7 +5,8 @@ import {
   Domain,
   connectToDatabase,
   Organization,
-  Vulnerability
+  Vulnerability,
+  OrganizationTag
 } from '../src/models';
 import { createUserToken } from './util';
 jest.mock('../src/tasks/s3-client');
@@ -188,6 +189,55 @@ describe('vulnerabilities', () => {
         )
         .send({
           filters: { organization: organization.id }
+        })
+        .expect(200);
+      expect(response.body.count).toEqual(10000);
+      expect(response.body.result[0].id).toEqual(vulnerability.id);
+    });
+    it('list by globalView with tag filter should work', async () => {
+      const tag = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      });
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false,
+        tags: [tag]
+      }).save();
+      const organization2 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const domain = await Domain.create({
+        name: 'test-' + Math.random(),
+        organization
+      }).save();
+      const title = 'test-' + Math.random();
+      const vulnerability = await Vulnerability.create({
+        title: title + '-1',
+        domain
+      }).save();
+      const domain2 = await Domain.create({
+        name: 'test-' + Math.random(),
+        organization: organization2
+      }).save();
+      const vulnerability2 = await Vulnerability.create({
+        title: title + '-2',
+        domain: domain2
+      }).save();
+      const response = await request(app)
+        .post('/vulnerabilities/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalView'
+          })
+        )
+        .send({
+          filters: { tag: tag.id }
         })
         .expect(200);
       expect(response.body.count).toEqual(10000);

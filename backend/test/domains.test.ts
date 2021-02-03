@@ -4,7 +4,8 @@ import {
   Domain,
   connectToDatabase,
   Organization,
-  Webpage
+  Webpage,
+  OrganizationTag
 } from '../src/models';
 import { createUserToken } from './util';
 jest.mock('../src/tasks/s3-client');
@@ -132,6 +133,41 @@ describe('domains', () => {
         )
         .send({
           filters: { organization: organization.id }
+        })
+        .expect(200);
+      expect(response.body.count).toEqual(1);
+      expect(response.body.result[0].id).toEqual(domain.id);
+    });
+    it('list by globalView with tag filter should only return domains from orgs with that tag', async () => {
+      const tag = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      });
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false,
+        tags: [tag]
+      }).save();
+      const name = 'test-' + Math.random();
+      const domain = await Domain.create({
+        name,
+        organization
+      }).save();
+      await Domain.create({
+        name: name + '-2',
+        organization: organization2
+      }).save();
+      const response = await request(app)
+        .post('/domain/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: 'globalView'
+          })
+        )
+        .send({
+          filters: { tag: tag.id }
         })
         .expect(200);
       expect(response.body.count).toEqual(1);
