@@ -13,7 +13,7 @@ import { Type } from 'class-transformer';
 import { Domain, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
-import { isGlobalViewAdmin, getOrgMemberships } from './auth';
+import { isGlobalViewAdmin, getOrgMemberships, getTagOrganizations } from './auth';
 import S3Client from '../tasks/s3-client';
 import * as Papa from 'papaparse';
 
@@ -43,6 +43,10 @@ class DomainFilters {
   @IsString()
   @IsOptional()
   vulnerability?: string;
+
+  @IsUUID()
+  @IsOptional()
+  tag?: string;
 }
 
 class DomainSearch {
@@ -69,7 +73,7 @@ class DomainSearch {
   // If set to -1, returns all results.
   pageSize?: number;
 
-  filterResultQueryset(qs: SelectQueryBuilder<Domain>) {
+  async filterResultQueryset(qs: SelectQueryBuilder<Domain>) {
     if (this.filters?.reverseName) {
       qs.andWhere('domain.name ILIKE :name', {
         name: `%${this.filters?.reverseName}%`
@@ -102,6 +106,11 @@ class DomainSearch {
         }
       );
     }
+    if (this.filters?.tag) {
+      qs.andWhere('organization.id IN (:...orgs)', {
+        orgs: await getTagOrganizations(event, this.filters.tag)
+      });
+    }
     return qs;
   }
 
@@ -128,7 +137,7 @@ class DomainSearch {
       });
     }
 
-    this.filterResultQueryset(qs);
+    await this.filterResultQueryset(qs);
     return await qs.getMany();
   }
 
