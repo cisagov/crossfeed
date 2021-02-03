@@ -102,6 +102,11 @@ class DomainSearch {
         org: this.filters.organization
       });
     }
+    if (this.filters?.tag) {
+      qs.andWhere('domain."organizationId" IN (:...orgs)', {
+        orgs: await getTagOrganizations(event, this.filters.tag)
+      });
+    }
     if (this.filters?.vulnerability) {
       qs.andHaving(
         'COUNT(CASE WHEN vulnerabilities.title ILIKE :title THEN 1 END) >= 1',
@@ -109,11 +114,6 @@ class DomainSearch {
           title: `%${this.filters?.vulnerability}%`
         }
       );
-    }
-    if (this.filters?.tag) {
-      qs.andWhere('domain."organizationId" IN (:...orgs)', {
-        orgs: await getTagOrganizations(event, this.filters.tag)
-      });
     }
     return qs;
   }
