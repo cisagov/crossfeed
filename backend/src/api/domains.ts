@@ -77,7 +77,7 @@ class DomainSearch {
   // If set to -1, returns all results.
   pageSize?: number;
 
-  async filterResultQueryset(qs: SelectQueryBuilder<Domain>) {
+  async filterResultQueryset(qs: SelectQueryBuilder<Domain>, event) {
     if (this.filters?.reverseName) {
       qs.andWhere('domain.name ILIKE :name', {
         name: `%${this.filters?.reverseName}%`
@@ -141,7 +141,7 @@ class DomainSearch {
       });
     }
 
-    await this.filterResultQueryset(qs);
+    await this.filterResultQueryset(qs, event);
     return await qs.getMany();
   }
 
