@@ -30,7 +30,7 @@ describe('scheduler', () => {
     await scheduler(
       {
         scanId: scan.id,
-        organizationId: organization.id
+        organizationIds: [organization.id]
       },
       {} as any,
       () => void 0
@@ -39,7 +39,12 @@ describe('scheduler', () => {
     expect(runCommand).toHaveBeenCalledTimes(1);
     expect(runCommand).toHaveBeenCalledWith(
       expect.objectContaining({
-        organizationId: organization.id,
+        organizations: [
+          {
+            id: organization.id,
+            name: organization.name
+          }
+        ],
         scanId: scan.id,
         scanName: scan.name
       })
@@ -77,7 +82,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -109,7 +114,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -140,7 +145,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -178,7 +183,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -209,7 +214,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -242,7 +247,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -268,7 +273,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -301,7 +306,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -338,7 +343,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -371,7 +376,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -419,14 +424,14 @@ describe('scheduler', () => {
       expect(runCommand).toHaveBeenCalledTimes(2);
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: organization.id,
+          organizations: [{ id: organization.id, name: organization.name }],
           scanId: scan.id,
           scanName: scan.name
         })
       );
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: organization2.id,
+          organizations: [{ id: organization2.id, name: organization2.name }],
           scanId: scan.id,
           scanName: scan.name
         })
@@ -487,14 +492,14 @@ describe('scheduler', () => {
       expect(runCommand).toHaveBeenCalledTimes(2);
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: organization.id,
+          organizations: [{ id: organization.id, name: organization.name }],
           scanId: scan.id,
           scanName: scan.name
         })
       );
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: organization2.id,
+          organizations: [{ id: organization2.id, name: organization2.name }],
           scanId: scan.id,
           scanName: scan.name
         })
@@ -556,14 +561,14 @@ describe('scheduler', () => {
       expect(runCommand).toHaveBeenCalledTimes(2);
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: organization.id,
+          organizations: [{ id: organization.id, name: organization.name }],
           scanId: scan.id,
           scanName: scan.name
         })
       );
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: organization2.id,
+          organizations: [{ id: organization2.id, name: organization2.name }],
           scanId: scan.id,
           scanName: scan.name
         })
@@ -599,7 +604,7 @@ describe('scheduler', () => {
       expect(runCommand).toHaveBeenCalledTimes(20);
       expect(runCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          organizationId: undefined,
+          organizations: [],
           scanId: scan.id,
           scanName: scan.name
         })
@@ -655,7 +660,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -675,7 +680,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -695,7 +700,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -726,7 +731,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanIds: [scan.id, scan2.id],
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -734,11 +739,18 @@ describe('scheduler', () => {
       expect(runCommand).toHaveBeenCalledTimes(1);
 
       expect(
-        await ScanTask.count({
+        (await ScanTask.count({
           where: {
+            scan,
             status: 'queued'
           }
-        })
+        })) +
+          (await ScanTask.count({
+            where: {
+              scan: scan2,
+              status: 'queued'
+            }
+          }))
       ).toEqual(1);
 
       // Queue has opened up.
@@ -746,7 +758,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanIds: [scan.id, scan2.id],
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -772,7 +784,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -793,7 +805,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -814,7 +826,7 @@ describe('scheduler', () => {
       await scheduler(
         {
           scanId: scan.id,
-          organizationId: organization.id
+          organizationIds: [organization.id]
         },
         {} as any,
         () => void 0
@@ -858,8 +870,8 @@ describe('scheduler', () => {
     expect(runCommand).toHaveBeenCalledTimes(0);
   });
   test('should not change lastRun time of the second scan if the first scan runs', async () => {
-    //Make scan run before scan2. Scan2 should have already run, and doesn't need to run again.
-    //The scheduler should not change scan2.lastRun during its second call
+    // Make scan run before scan2. Scan2 should have already run, and doesn't need to run again.
+    // The scheduler should not change scan2.lastRun during its second call
     const scan = await Scan.create({
       name: 'findomain',
       arguments: {},
@@ -879,11 +891,11 @@ describe('scheduler', () => {
       isPassive: false
     }).save();
 
-    //run scheduler on scan2, this establishes a finished recent scantask for scan2
+    // Run scheduler on scan2, this establishes a finished recent scantask for scan2
     await scheduler(
       {
         scanIds: [scan2.id],
-        organizationId: organization.id
+        organizationIds: [organization.id]
       },
       {} as any,
       () => void 0
@@ -891,11 +903,11 @@ describe('scheduler', () => {
     scan2 = (await Scan.findOne(scan2.id))!;
     expect(runCommand).toHaveBeenCalledTimes(1);
 
-    //run scheduler on both scans, scan should be run, but scan2 should be skipped
+    // Run scheduler on both scans, scan should be run, but scan2 should be skipped
     await scheduler(
       {
         scanIds: [scan.id, scan2.id],
-        organizationId: organization.id
+        organizationIds: [organization.id]
       },
       {} as any,
       () => void 0
@@ -903,7 +915,152 @@ describe('scheduler', () => {
     expect(runCommand).toHaveBeenCalledTimes(2);
 
     const newscan2 = (await Scan.findOne(scan2.id))!;
-    //expect scan2's lastRun was not edited during the second call to scheduler
+
+    // Expect scan2's lastRun was not edited during the second call to scheduler
     expect(newscan2.lastRun).toEqual(scan2.lastRun);
+  });
+  describe('org batching', () => {
+    test('should run one scantask per org by default', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const organization2 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const organization3 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationIds: [organization.id, organization2.id, organization3.id]
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(3);
+      expect(runCommand).toHaveBeenCalledWith(
+        expect.objectContaining({
+          organizations: [
+            {
+              id: organization.id,
+              name: organization.name
+            }
+          ],
+          scanId: scan.id,
+          scanName: scan.name
+        })
+      );
+      expect(runCommand).toHaveBeenCalledWith(
+        expect.objectContaining({
+          organizations: [
+            {
+              id: organization2.id,
+              name: organization2.name
+            }
+          ],
+          scanId: scan.id,
+          scanName: scan.name
+        })
+      );
+      expect(runCommand).toHaveBeenCalledWith(
+        expect.objectContaining({
+          organizations: [
+            {
+              id: organization3.id,
+              name: organization3.name
+            }
+          ],
+          scanId: scan.id,
+          scanName: scan.name
+        })
+      );
+    });
+
+    test('should batch two orgs per scantask when specified', async () => {
+      const scan = await Scan.create({
+        name: 'findomain',
+        arguments: {},
+        frequency: 999
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const organization2 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const organization3 = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+
+      await scheduler(
+        {
+          scanId: scan.id,
+          organizationIds: [
+            organization.id,
+            organization2.id,
+            organization3.id
+          ],
+          orgsPerScanTask: 2
+        },
+        {} as any,
+        () => void 0
+      );
+
+      expect(runCommand).toHaveBeenCalledTimes(2);
+      expect(runCommand).toHaveBeenCalledWith(
+        expect.objectContaining({
+          organizations: [
+            {
+              id: organization.id,
+              name: organization.name
+            },
+            {
+              id: organization2.id,
+              name: organization2.name
+            }
+          ],
+          scanId: scan.id,
+          scanName: scan.name
+        })
+      );
+      expect(runCommand).toHaveBeenCalledWith(
+        expect.objectContaining({
+          organizations: [
+            {
+              id: organization3.id,
+              name: organization3.name
+            }
+          ],
+          scanId: scan.id,
+          scanName: scan.name
+        })
+      );
+    });
   });
 });
