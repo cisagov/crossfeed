@@ -111,7 +111,7 @@ class DomainSearch {
       );
     }
     if (this.filters?.tag) {
-      qs.andWhere('organization.id IN (:...orgs)', {
+      qs.andWhere('domain."organizationId" IN (:...orgs)', {
         orgs: await getTagOrganizations(event, this.filters.tag)
       });
     }
