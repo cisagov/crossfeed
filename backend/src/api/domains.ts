@@ -136,7 +136,7 @@ class DomainSearch {
     }
 
     if (!isGlobalViewAdmin(event)) {
-      qs.andHaving('domain."organizationId" IN (:...orgs)', {
+      qs.andWhere('domain."organizationId" IN (:...orgs)', {
         orgs: getOrgMemberships(event)
       });
     }
