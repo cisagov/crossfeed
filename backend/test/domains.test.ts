@@ -141,7 +141,7 @@ describe('domains', () => {
     it('list by globalView with tag filter should only return domains from orgs with that tag', async () => {
       const tag = await OrganizationTag.create({
         name: 'test-' + Math.random()
-      });
+      }).save();
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],

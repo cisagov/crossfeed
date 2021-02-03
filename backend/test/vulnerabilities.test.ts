@@ -197,7 +197,7 @@ describe('vulnerabilities', () => {
     it('list by globalView with tag filter should work', async () => {
       const tag = await OrganizationTag.create({
         name: 'test-' + Math.random()
-      });
+      }).save();
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],

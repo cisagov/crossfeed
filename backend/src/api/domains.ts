@@ -102,6 +102,11 @@ class DomainSearch {
         org: this.filters.organization
       });
     }
+    if (this.filters?.tag) {
+      qs.andWhere('domain."organizationId" IN (:...orgs)', {
+        orgs: await getTagOrganizations(event, this.filters.tag)
+      });
+    }
     if (this.filters?.vulnerability) {
       qs.andHaving(
         'COUNT(CASE WHEN vulnerabilities.title ILIKE :title THEN 1 END) >= 1',
@@ -109,11 +114,6 @@ class DomainSearch {
           title: `%${this.filters?.vulnerability}%`
         }
       );
-    }
-    if (this.filters?.tag) {
-      qs.andWhere('organization.id IN (:...orgs)', {
-        orgs: await getTagOrganizations(event, this.filters.tag)
-      });
     }
     return qs;
   }
@@ -145,7 +145,7 @@ class DomainSearch {
     return await qs.getMany();
   }
 
-  filterCountQueryset(qs: SelectQueryBuilder<Domain>) {
+  async filterCountQueryset(qs: SelectQueryBuilder<Domain>, event) {
     if (this.filters?.reverseName) {
       qs.andWhere('domain.name ILIKE :name', {
         name: `%${this.filters?.reverseName}%`
@@ -169,6 +169,11 @@ class DomainSearch {
         org: this.filters.organization
       });
     }
+    if (this.filters?.tag) {
+      qs.andWhere('domain."organizationId" IN (:...orgs)', {
+        orgs: await getTagOrganizations(event, this.filters.tag)
+      });
+    }
     if (this.filters?.vulnerability) {
       qs.andWhere('vulnerabilities.title ILIKE :title', {
         title: `%${this.filters?.vulnerability}%`
@@ -185,7 +190,7 @@ class DomainSearch {
         orgs: getOrgMemberships(event)
       });
     }
-    this.filterCountQueryset(qs);
+    await this.filterCountQueryset(qs, event);
     return await qs.getCount();
   }
 }
