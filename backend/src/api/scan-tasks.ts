@@ -68,20 +68,7 @@ class ScanTaskSearch {
       .take(PAGE_SIZE);
 
     this.filterResultQueryset(qs);
-    return await qs.getMany();
-  }
-
-  filterCountQueryset(qs: SelectQueryBuilder<ScanTask>) {
-    return this.filterResultQueryset(qs);
-  }
-
-  async getCount(event) {
-    const qs = ScanTask.createQueryBuilder('scan_task').leftJoinAndSelect(
-      'scan_task.scan',
-      'scan'
-    );
-    this.filterCountQueryset(qs);
-    return await qs.getCount();
+    return qs.getManyAndCount();
   }
 }
 
@@ -100,10 +87,7 @@ export const list = wrapHandler(async (event) => {
   }
   await connectToDatabase();
   const search = await validateBody(ScanTaskSearch, event.body);
-  const [result, count] = await Promise.all([
-    search.getResults(event),
-    search.getCount(event)
-  ]);
+  const [result, count] = await search.getResults(event);
   return {
     statusCode: 200,
     body: JSON.stringify({
