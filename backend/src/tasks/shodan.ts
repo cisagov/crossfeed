@@ -106,29 +106,30 @@ export const handler = async (commandOptions: CommandOptions) => {
               })
             ]);
             if (service.vulns) {
-              console.log('creating vulnerability');
-              const vulns: Vulnerability[] = [];
-              for (const cve in service.vulns) {
-                vulns.push(
-                  plainToClass(Vulnerability, {
-                    domain: domain,
-                    lastSeen: new Date(Date.now()),
-                    title: cve,
-                    cve: cve,
-                    cpe:
-                      service.cpe && service.cpe.length > 0
-                        ? service.cpe[0]
-                        : null,
-                    cvss: service.vulns[cve].cvss,
-                    state: 'open',
-                    source: 'shodan',
-                    description: service.vulns[cve].summary,
-                    needsPopulation: true,
-                    service: { id: serviceId }
-                  })
-                );
-              }
-              await saveVulnerabilitiesToDb(vulns, false);
+              // Don't create vulns from shodan now -- too many false positives.
+              // console.log('creating vulnerability');
+              // const vulns: Vulnerability[] = [];
+              // for (const cve in service.vulns) {
+              //   vulns.push(
+              //     plainToClass(Vulnerability, {
+              //       domain: domain,
+              //       lastSeen: new Date(Date.now()),
+              //       title: cve,
+              //       cve: cve,
+              //       cpe:
+              //         service.cpe && service.cpe.length > 0
+              //           ? service.cpe[0]
+              //           : null,
+              //       cvss: service.vulns[cve].cvss,
+              //       state: 'open',
+              //       source: 'shodan',
+              //       description: service.vulns[cve].summary,
+              //       needsPopulation: true,
+              //       service: { id: serviceId }
+              //     })
+              //   );
+              // }
+              // await saveVulnerabilitiesToDb(vulns, false);
             }
           }
         }
