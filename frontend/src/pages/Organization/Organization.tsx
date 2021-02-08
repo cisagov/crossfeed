@@ -599,13 +599,14 @@ export const Organization: React.FC = () => {
         </span>
       </div>
       <div className={classes.buttons}>
-        <Button
-          variant="outlined"
-          style={{ marginRight: '10px', color: '#565C65' }}
-          onClick={fetchOrganization}
-        >
-          Cancel
-        </Button>
+        <Link to={`/organizations`}>
+          <Button
+            variant="outlined"
+            style={{ marginRight: '10px', color: '#565C65' }}
+          >
+            Cancel
+          </Button>
+        </Link>
         <Button
           variant="contained"
           onClick={updateOrganization}

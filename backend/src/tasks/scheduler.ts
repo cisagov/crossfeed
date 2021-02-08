@@ -109,7 +109,7 @@ class Scheduler {
         scanTask.fargateTaskArn = taskArn;
         if (typeof jest === 'undefined') {
           console.log(
-            `Successfully invoked ${scan.name} scan with fargate, with ECS task ARN ${taskArn}` +
+            `Successfully invoked ${scan.name} scan with fargate on ${organizations.length} organizations, with ECS task ARN ${taskArn}` +
               (commandOptions.numChunks
                 ? `, Chunk ${commandOptions.chunkNumber}/${commandOptions.numChunks}`
                 : '')
@@ -175,6 +175,7 @@ class Scheduler {
       if (global) {
         // Global scans are not associated with an organization.
         if (!(await shouldRunScan({ scan }))) {
+          console.log('Skipping running scan: ', scan.name);
           continue;
         }
         await this.launchScanTask({ scan });
@@ -185,6 +186,12 @@ class Scheduler {
         const orgsToLaunch: Organization[] = [];
         for (const organization of organizations) {
           if (!(await shouldRunScan({ organization, scan }))) {
+            console.log(
+              'Skipping running scan: ',
+              scan.name,
+              ' on organization: ',
+              organization.name
+            );
             continue;
           }
           orgsToLaunch.push(organization);
