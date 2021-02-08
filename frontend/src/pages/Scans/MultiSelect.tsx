@@ -35,8 +35,8 @@ export default (
           borderColor: '#565c65',
           borderWidth: 1,
           marginTop: '0.5rem',
-          height: '2.5rem',
-          borderRadius: 0
+          minHeight: '2.5rem',
+          borderRadius: 0,
         })
       }}
     />
