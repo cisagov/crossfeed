@@ -15,6 +15,7 @@ import { handler as cve } from './tasks/cve';
 import { handler as webscraper } from './tasks/webscraper';
 import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
+import { SCAN_SCHEMA } from './api/scans';
 
 /**
  * Worker entrypoint.
@@ -54,16 +55,23 @@ async function main() {
     bootstrap();
   }
 
-  // Since a single ScanTask can correspond to multiple organizations,
-  // we run scanFn for each particular organization here by passing
-  // in the current organization's name and id into commandOptions.
-  for (const organization of organizations) {
-    await scanFn({
-      ...commandOptions,
-      organizations: [],
-      organizationId: organization.id,
-      organizationName: organization.name
-    });
+  const { global } = SCAN_SCHEMA[scanName];
+
+  if (global) {
+    await scanFn(commandOptions);
+  } else {
+    // For non-global scans, since a single ScanTask can correspond to
+    // multiple organizations, we run scanFn for each particular
+    // organization here by passing in the current organization's
+    // name and id into commandOptions.
+    for (const organization of organizations) {
+      await scanFn({
+        ...commandOptions,
+        organizations: [],
+        organizationId: organization.id,
+        organizationName: organization.name
+      });
+    }
   }
 }
 
