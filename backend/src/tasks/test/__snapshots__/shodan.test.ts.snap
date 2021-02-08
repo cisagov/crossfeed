@@ -33,16 +33,24 @@ A003 BAD Error in IMAP command received by server.
         "port": 993,
         "products": Array [
           Object {
-            "cpe": "1234",
-            "name": "Test",
+            "cpe": "cpe:/a:igor_sysoev:nginx:1.18.0",
+            "name": "nginx",
             "tags": Array [],
-            "version": "1.1",
+            "vendor": "igor sysoev",
+            "version": "1.18.0",
+          },
+          Object {
+            "cpe": "cpe:/a:atlassian:confluence",
+            "name": "confluence",
+            "tags": Array [],
+            "vendor": "atlassian",
           },
         ],
         "service": null,
         "shodanResults": Object {
           "cpe": Array [
-            "1234",
+            "cpe:/a:igor_sysoev:nginx:1.18.0",
+            "cpe:/a:atlassian:confluence",
           ],
           "product": "Test",
           "version": "1.1",
