@@ -136,62 +136,13 @@ class DomainSearch {
     }
 
     if (!isGlobalViewAdmin(event)) {
-      qs.andHaving('domain."organizationId" IN (:...orgs)', {
+      qs.andWhere('domain."organizationId" IN (:...orgs)', {
         orgs: getOrgMemberships(event)
       });
     }
 
     await this.filterResultQueryset(qs, event);
-    return await qs.getMany();
-  }
-
-  async filterCountQueryset(qs: SelectQueryBuilder<Domain>, event) {
-    if (this.filters?.reverseName) {
-      qs.andWhere('domain.name ILIKE :name', {
-        name: `%${this.filters?.reverseName}%`
-      });
-    }
-    if (this.filters?.ip) {
-      qs.andWhere('domain.ip LIKE :ip', { ip: `%${this.filters?.ip}%` });
-    }
-    if (this.filters?.port) {
-      qs.andWhere('services.port = :port', {
-        port: this.filters?.port
-      });
-    }
-    if (this.filters?.service) {
-      qs.andWhere('services.service ILIKE :service', {
-        service: `%${this.filters?.service}%`
-      });
-    }
-    if (this.filters?.organization) {
-      qs.andWhere('domain."organizationId" = :org', {
-        org: this.filters.organization
-      });
-    }
-    if (this.filters?.tag) {
-      qs.andWhere('domain."organizationId" IN (:...orgs)', {
-        orgs: await getTagOrganizations(event, this.filters.tag)
-      });
-    }
-    if (this.filters?.vulnerability) {
-      qs.andWhere('vulnerabilities.title ILIKE :title', {
-        title: `%${this.filters?.vulnerability}%`
-      });
-    }
-  }
-
-  async getCount(event) {
-    const qs = Domain.createQueryBuilder('domain')
-      .leftJoin('domain.services', 'services')
-      .leftJoin('domain.vulnerabilities', 'vulnerabilities', "state = 'open'");
-    if (!isGlobalViewAdmin(event)) {
-      qs.andWhere('domain."organizationId" IN (:...orgs)', {
-        orgs: getOrgMemberships(event)
-      });
-    }
-    await this.filterCountQueryset(qs, event);
-    return await qs.getCount();
+    return qs.getManyAndCount();
   }
 }
 
@@ -216,10 +167,7 @@ export const list = wrapHandler(async (event) => {
   }
   await connectToDatabase();
   const search = await validateBody(DomainSearch, event.body);
-  const [result, count] = await Promise.all([
-    search.getResults(event),
-    search.getCount(event)
-  ]);
+  const [result, count] = await search.getResults(event);
 
   return {
     statusCode: 200,
@@ -251,10 +199,7 @@ export const export_ = wrapHandler(async (event) => {
   }
   await connectToDatabase();
   const search = await validateBody(DomainSearch, event.body);
-  const [result, count] = await Promise.all([
-    search.getResults(event),
-    search.getCount(event)
-  ]);
+  const [result, count] = await search.getResults(event);
   const client = new S3Client();
   const url = await client.saveCSV(
     Papa.unparse({

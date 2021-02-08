@@ -168,7 +168,7 @@ class VulnerabilitySearch {
         orgs: getOrgMemberships(event)
       });
     }
-    return [await qs.getMany(), 10000];
+    return qs.getManyAndCount();
   }
 }
 
