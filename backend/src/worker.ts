@@ -28,8 +28,6 @@ async function main() {
 
   const { scanName, organizations = [] } = commandOptions;
 
-  const { global } = SCAN_SCHEMA[scanName];
-
   const scanFn = {
     amass,
     censys,
@@ -56,6 +54,8 @@ async function main() {
   } else {
     bootstrap();
   }
+
+  const { global } = SCAN_SCHEMA[scanName];
 
   if (global) {
     await scanFn(commandOptions);
