@@ -160,7 +160,7 @@ export const callback = async (event, context) => {
   }
 
   const token = jwt.sign(userTokenBody(user), process.env.JWT_SECRET!, {
-    expiresIn: '1 day',
+    expiresIn: '3 days',
     header: {
       typ: 'JWT'
     }
