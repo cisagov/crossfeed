@@ -8,7 +8,7 @@ export const handler: Handler = async (event) => {
       email: event.email
     });
     if (user) {
-      user.userType = 'globalAdmin';
+      user.userType = event.role || 'globalAdmin';
       await User.save(user);
     }
   }
