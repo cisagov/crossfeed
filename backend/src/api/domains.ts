@@ -98,12 +98,12 @@ class DomainSearch {
       );
     }
     if (this.filters?.organization) {
-      qs.andWhere('domain."organizationId" = :org', {
+      qs.andWhere('organization.id = :org', {
         org: this.filters.organization
       });
     }
     if (this.filters?.tag) {
-      qs.andWhere('domain."organizationId" IN (:...orgs)', {
+      qs.andWhere('organization.id IN (:...orgs)', {
         orgs: await getTagOrganizations(event, this.filters.tag)
       });
     }
@@ -127,16 +127,17 @@ class DomainSearch {
         'vulnerabilities',
         "state = 'open'"
       )
+      .leftJoinAndSelect('domain.organization', 'organization')
       .orderBy(`domain.${this.sort}`, this.order)
       .groupBy(
-        'domain.id, domain.ip, domain.name, domain."organizationId", services.id, vulnerabilities.id'
+        'domain.id, domain.ip, domain.name, organization.id, services.id, vulnerabilities.id'
       );
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
     }
 
     if (!isGlobalViewAdmin(event)) {
-      qs.andWhere('domain."organizationId" IN (:...orgs)', {
+      qs.andWhere('organization.id IN (:...orgs)', {
         orgs: getOrgMemberships(event)
       });
     }
@@ -210,9 +211,13 @@ export const export_ = wrapHandler(async (event) => {
         'ports',
         'services',
         'createdAt',
-        'updatedAt'
+        'updatedAt',
+        'organizationName'
       ],
-      data: result
+      data: result.map((e) => ({
+        ...e,
+        organizationName: e.organization?.name
+      }))
     }),
     'domains'
   );
