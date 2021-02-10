@@ -82,6 +82,9 @@ describe('domains', () => {
         })
         .expect(200);
       expect(response.body.count).toEqual(1);
+      expect(response.body.result[0].organization.name).toEqual(
+        organization.name
+      );
     });
     it('list by globalView should return domains from all orgs', async () => {
       const name = 'test-' + Math.random();
