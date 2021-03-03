@@ -167,6 +167,76 @@ describe('wappalyzer', () => {
     expect(service2?.wappalyzerResults).toEqual(wappalyzerResponse);
   });
 
+  test('saves exchange products properly', async () => {
+    const wappalyzerResponse = [
+      {
+        name: 'Microsoft Exchange Server',
+        categories: [ 30 ],
+        slug: 'microsoft-exchange-server',
+        version: '15.2.595',
+        icon: 'Microsoft.png',
+        website: 'https://www.microsoft.com/en-us/microsoft-365/exchange/email',
+        cpe: 'cpe:/a:microsoft:exchange_server'
+      }
+    ];
+    const scope = nock(/https?:\/\/example2?\.com/)
+      .persist()
+      .get('/')
+      .times(2)
+      .reply(200, 'somedata');
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const testServices = [
+      await Service.create({
+        port: 443
+      }).save(),
+      await Service.create({
+        port: 443
+      }).save()
+    ] as Service[];
+    const testDomains = [
+      await Domain.create({
+        ...testDomain,
+        services: [testServices[0]],
+        organization
+      }).save(),
+      await Domain.create({
+        ...testDomain,
+        name: 'example2.com',
+        services: [testServices[1]],
+        organization
+      }).save()
+    ] as LiveDomain[];
+    testDomains[0].url = 'https://example2.com';
+    testDomains[0].service = testServices[0];
+    testDomains[1].url = 'https://example2.com';
+    testDomains[1].service = testServices[1];
+    getLiveWebsitesMock.mockResolvedValue(testDomains);
+    wappalyzer
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce(wappalyzerResponse);
+
+    await handler(commandOptions);
+    scope.done();
+    expect(wappalyzer).toHaveBeenCalledTimes(2);
+    expect(logSpy).toHaveBeenLastCalledWith(
+      'Wappalyzer finished for 2 domains'
+    );
+    const service1 = await Service.findOne(testServices[0].id);
+    expect(service1?.wappalyzerResults).toEqual([]);
+
+    const service2 = await Service.findOne(testServices[1].id);
+    expect(service2?.wappalyzerResults).toEqual(wappalyzerResponse);
+
+    console.warn(service2?.products);
+    expect(service2?.products).toEqual([{"cpe": "cpe:/a:microsoft:exchange_server:2019:cumulative_update_5", "icon": "Microsoft.png", "name": "Microsoft Exchange Server", "tags": [null], "version": "15.2.595"}]);
+  });
+
+
   test('logs error on wappalyzer failure', async () => {
     testDomain.services = [httpsService];
     testDomain.url = 'https://example.com';

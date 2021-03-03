@@ -14,6 +14,32 @@ import { Domain } from './domain';
 import { Scan } from './scan';
 import { CpeParser } from '@thefaultvault/tfv-cpe-parser';
 
+const EXCHANGE_BUILD_NUMBER_TO_CPE = {
+  // TODO: Add additional build numbers from https://docs.microsoft.com/en-us/exchange/new-features/build-numbers-and-release-dates?view=exchserver-2019
+  '15.2.792.3': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
+  '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_7',
+  '15.2.659.4': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_6',
+  '15.2.595.3': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_5',
+  '15.2.529.5': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_4',
+  '15.2.464.5': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_3',
+  '15.2.397.3': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_2',
+  '15.2.330.5': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_1',
+  // '15.2.221.12': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
+  // '15.2.196.0': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
+  '15.1.2176.2': 'cpe:/a:microsoft:exchange_server:2016:cumulative_update_19',
+  '15.1.2106.2': 'cpe:/a:microsoft:exchange_server:2016:cumulative_update_18',
+  '15.1.2044.4': 'cpe:/a:microsoft:exchange_server:2016:cumulative_update_17',
+  '15.1.1979.3': 'cpe:/a:microsoft:exchange_server:2016:cumulative_update_16',
+  
+  '15.0.1497.2': 'cpe:/a:microsoft:exchange_server:2013:cumulative_update_23',
+  // '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
+  // '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
+  // '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
+  // '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
+  // '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
+  // '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
+}
+
 const filterProducts = (product: Product) => {
   // Filter out false positives.
   const { cpe, version } = product;
@@ -206,8 +232,18 @@ export class Service extends BaseEntity {
           version: wappalyzerResult.version,
           cpe: wappalyzerResult.cpe,
           icon: wappalyzerResult.icon,
-          tags: wappalyzerResult.categories.map((cat) => cat.name)
+          tags: (wappalyzerResult.categories || []).map((cat) => cat.name)
         };
+        if (product.cpe === "cpe:/a:microsoft:exchange_server") {
+          // Translate detected Exchange build numbers to actual CPEs.
+          const { version } = wappalyzerResult;
+          for (const possibleVersion in EXCHANGE_BUILD_NUMBER_TO_CPE) {
+            if (possibleVersion.startsWith(version)) {
+              product.cpe = EXCHANGE_BUILD_NUMBER_TO_CPE[possibleVersion];
+              break;
+            }
+          }
+        }
         products.push(product);
       }
     }
