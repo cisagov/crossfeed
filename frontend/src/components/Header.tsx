@@ -17,7 +17,7 @@ import {
 } from '@material-ui/icons';
 import { NavItem } from './NavItem';
 import { useAuthContext } from 'context';
-import logo from '../assets/cisa_logo.png';
+import logo from '../assets/crossfeed.svg';
 import { withSearch } from '@elastic/react-search-ui';
 import { ContextType } from 'context/SearchProvider';
 import { SearchBar } from 'components';
