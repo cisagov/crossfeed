@@ -30,15 +30,15 @@ const EXCHANGE_BUILD_NUMBER_TO_CPE = {
   '15.1.2106.2': 'cpe:/a:microsoft:exchange_server:2016:cumulative_update_18',
   '15.1.2044.4': 'cpe:/a:microsoft:exchange_server:2016:cumulative_update_17',
   '15.1.1979.3': 'cpe:/a:microsoft:exchange_server:2016:cumulative_update_16',
-  
-  '15.0.1497.2': 'cpe:/a:microsoft:exchange_server:2013:cumulative_update_23',
+
+  '15.0.1497.2': 'cpe:/a:microsoft:exchange_server:2013:cumulative_update_23'
   // '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
   // '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
   // '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
   // '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
   // '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
   // '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
-}
+};
 
 const filterProducts = (product: Product) => {
   // Filter out false positives.
@@ -234,7 +234,7 @@ export class Service extends BaseEntity {
           icon: wappalyzerResult.icon,
           tags: (wappalyzerResult.categories || []).map((cat) => cat.name)
         };
-        if (product.cpe === "cpe:/a:microsoft:exchange_server") {
+        if (product.cpe === 'cpe:/a:microsoft:exchange_server') {
           // Translate detected Exchange build numbers to actual CPEs.
           const { version } = wappalyzerResult;
           for (const possibleVersion in EXCHANGE_BUILD_NUMBER_TO_CPE) {

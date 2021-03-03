@@ -171,7 +171,7 @@ describe('wappalyzer', () => {
     const wappalyzerResponse = [
       {
         name: 'Microsoft Exchange Server',
-        categories: [ 30 ],
+        categories: [30],
         slug: 'microsoft-exchange-server',
         version: '15.2.595',
         icon: 'Microsoft.png',
@@ -233,9 +233,16 @@ describe('wappalyzer', () => {
     expect(service2?.wappalyzerResults).toEqual(wappalyzerResponse);
 
     console.warn(service2?.products);
-    expect(service2?.products).toEqual([{"cpe": "cpe:/a:microsoft:exchange_server:2019:cumulative_update_5", "icon": "Microsoft.png", "name": "Microsoft Exchange Server", "tags": [null], "version": "15.2.595"}]);
+    expect(service2?.products).toEqual([
+      {
+        cpe: 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_5',
+        icon: 'Microsoft.png',
+        name: 'Microsoft Exchange Server',
+        tags: [null],
+        version: '15.2.595'
+      }
+    ]);
   });
-
 
   test('logs error on wappalyzer failure', async () => {
     testDomain.services = [httpsService];
