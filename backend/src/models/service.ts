@@ -207,18 +207,36 @@ export class Service extends BaseEntity {
     default: []
   })
   wappalyzerResults: {
-    name: string;
-    slug: string;
-    version: string;
-    icon: string;
-    website: string;
-    confidence: number;
-    cpe?: string;
-    categories: {
-      name: string;
-      slug: string;
-      id: number;
-    }[];
+    technology?: {
+      name?: string;
+      categories?: number[];
+      slug?: string;
+      url?: string[];
+      headers?: any[];
+      dns?: any[];
+      cookies?: any[];
+      dom?: any[];
+      html?: any[];
+      css?: any[];
+      certIssuer?: any[];
+      robots?: any[];
+      meta?: any[];
+      scripts?: any[];
+      js?: any;
+      implies?: any[];
+      excludes?: any[];
+      icon?: string;
+      website?: string;
+      cpe?: string;
+    };
+    pattern?: {
+      value?: string;
+      regex?: string;
+      confidence?: number;
+      version?: string;
+    };
+    // Actual detected version
+    version?: string;
   }[];
 
   @BeforeInsert()
@@ -227,16 +245,18 @@ export class Service extends BaseEntity {
     const products: Product[] = [];
     if (this.wappalyzerResults) {
       for (const wappalyzerResult of this.wappalyzerResults) {
+        const { technology = {}, version = '' } = wappalyzerResult;
         const product = {
-          name: wappalyzerResult.name,
-          version: wappalyzerResult.version,
-          cpe: wappalyzerResult.cpe,
-          icon: wappalyzerResult.icon,
-          tags: (wappalyzerResult.categories || []).map((cat) => cat.name)
+          name: technology.name!,
+          version,
+          cpe: technology.cpe,
+          icon: technology.icon,
+          tags: []
+          // TODO: Lookup category names from Wappalyzer.
+          // tags: (technology.categories || []).map((cat) => cat.name)
         };
         if (product.cpe === 'cpe:/a:microsoft:exchange_server') {
           // Translate detected Exchange build numbers to actual CPEs.
-          const { version } = wappalyzerResult;
           for (const possibleVersion in EXCHANGE_BUILD_NUMBER_TO_CPE) {
             if (possibleVersion.startsWith(version)) {
               product.cpe = EXCHANGE_BUILD_NUMBER_TO_CPE[possibleVersion];

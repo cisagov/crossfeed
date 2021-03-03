@@ -62,7 +62,7 @@ export interface Service {
       result?: boolean;
     }[];
   };
-  wappalyzerResults: Technology[];
+  wappalyzerResults: WappalyzerResult[];
   products: Product[];
 }
 
@@ -95,17 +95,35 @@ export interface SSLInfo {
   bits: string | null;
 }
 
-export interface Technology {
-  name: string;
-  slug: string;
-  version: string;
-  icon: string;
-  website: string;
-  confidence: number;
-  cpe?: string;
-  categories: {
-    name: string;
-    slug: string;
-    id: number;
-  }[];
+export interface WappalyzerResult {
+  technology?: {
+    name?: string,
+    categories?: number[];
+    slug?: string;
+    url?: string[];
+    headers?: any[];
+    dns?: any[];
+    cookies?: any[];
+    dom?: any[];
+    html?: any[];
+    css?: any[];
+    certIssuer?: any[];
+    robots?: any[];
+    meta?: any[];
+    scripts?: any[];
+    js?: any,
+    implies?: any[];
+    excludes?: any[];
+    icon?: string;
+    website?: string;
+    cpe?: string;
+  },
+  pattern?: {
+    value?: string;
+    regex?: string;
+    confidence?: number;
+    version?: string;
+  },
+  // Actual detected version
+  version?: string;
 }

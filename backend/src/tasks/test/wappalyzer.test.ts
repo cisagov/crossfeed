@@ -25,14 +25,35 @@ httpService.port = 80;
 
 const wappalyzerResponse = [
   {
-    name: 'Drupal',
-    slug: 'drupal',
-    categories: [{ id: 1, slug: 'cms', name: 'CMS', priority: 1 }],
-    confidence: 100,
-    version: '8',
-    icon: 'Drupal.svg',
-    website: 'https://drupal.org',
-    cpe: 'cpe:/a:drupal:drupal'
+    technology: {
+      name: 'jQuery',
+      categories: [59],
+      slug: 'jquery',
+      url: [],
+      headers: [],
+      dns: [],
+      cookies: [],
+      dom: [],
+      html: [],
+      css: [],
+      certIssuer: [],
+      robots: [],
+      meta: [],
+      scripts: [[Object], [Object], [Object]],
+      js: { 'jQuery.fn.jquery': [Array] },
+      implies: [],
+      excludes: [],
+      icon: 'jQuery.svg',
+      website: 'https://jquery.com',
+      cpe: 'cpe:/a:jquery:jquery'
+    },
+    pattern: {
+      value: 'jquery.*\\.js(?:\\?ver(?:sion)?=([\\d.]+))?',
+      regex: /jquery.*\.js(?:\?ver(?:sion)?=([\d.]+))?/i,
+      confidence: 100,
+      version: '\\1'
+    },
+    version: ''
   }
 ];
 
