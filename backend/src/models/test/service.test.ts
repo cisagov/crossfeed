@@ -11,14 +11,15 @@ describe('service', () => {
     }).save();
     service.wappalyzerResults = [
       {
-        cpe: 'cpe1',
-        name: 'name',
-        version: 'version',
-        slug: 'slug',
-        icon: 'icon',
-        website: 'website',
-        confidence: 0,
-        categories: []
+        technology: {
+          cpe: 'cpe1',
+          name: 'name',
+          slug: 'slug',
+          icon: 'icon',
+          website: 'website',
+          categories: []
+        },
+        version: 'version'
       }
     ];
     await service.save();
@@ -30,14 +31,15 @@ describe('service', () => {
     }).save();
     service.wappalyzerResults = [
       {
-        cpe: 'cpe:/a:apache:tomcat',
-        name: 'name',
-        version: '1.1',
-        slug: 'slug',
-        icon: 'icon',
-        website: 'website',
-        confidence: 0,
-        categories: []
+        technology: {
+          cpe: 'cpe:/a:apache:tomcat',
+          name: 'name',
+          slug: 'slug',
+          icon: 'icon',
+          website: 'website',
+          categories: []
+        },
+        version: '1.1'
       }
     ];
     await service.save();
@@ -49,14 +51,15 @@ describe('service', () => {
     }).save();
     service.wappalyzerResults = [
       {
-        cpe: 'cpe:/a:software',
-        name: 'name',
-        version: '',
-        slug: 'slug',
-        icon: 'icon',
-        website: 'website',
-        confidence: 0,
-        categories: []
+        technology: {
+          cpe: 'cpe:/a:software',
+          name: 'name',
+          slug: 'slug',
+          icon: 'icon',
+          website: 'website',
+          categories: []
+        },
+        version: ''
       }
     ];
     service.intrigueIdentResults = {
@@ -96,14 +99,15 @@ describe('service', () => {
     }).save();
     service.wappalyzerResults = [
       {
-        cpe: 'cpe:/a:software',
-        name: 'name',
-        version: '1.1',
-        slug: 'slug',
-        icon: 'icon',
-        website: 'website',
-        confidence: 0,
-        categories: []
+        technology: {
+          cpe: 'cpe:/a:software',
+          name: 'name',
+          slug: 'slug',
+          icon: 'icon',
+          website: 'website',
+          categories: []
+        },
+        version: '1.1'
       }
     ];
     service.intrigueIdentResults = {
