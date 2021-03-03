@@ -179,7 +179,9 @@ describe('cve', () => {
       port: 80,
       wappalyzerResults: [
         {
-          cpe: 'cpe:/a:10web:form_maker:1.0.0',
+          technology: {
+            cpe: 'cpe:/a:10web:form_maker:1.0.0'
+          },
           version: '1.0.0'
         }
       ]
