@@ -1,12 +1,9 @@
 import {
-  IsInt,
-  IsPositive,
   IsString,
-  IsIn,
   isUUID,
-  IsObject,
   IsArray,
   IsBoolean,
+  IsUUID,
   IsOptional
 } from 'class-validator';
 import {
@@ -15,7 +12,8 @@ import {
   Role,
   ScanTask,
   Scan,
-  User
+  User,
+  OrganizationTag
 } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
@@ -27,6 +25,19 @@ import {
 import { In } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 
+/**
+ * @swagger
+ *
+ * /organizations/{id}:
+ *  delete:
+ *    description: Delete a particular organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *    tags:
+ *    - Organizations
+ */
 export const del = wrapHandler(async (event) => {
   const id = event.pathParameters?.organizationId;
 
@@ -50,9 +61,6 @@ class NewOrganizationNonGlobalAdmins {
 
   @IsBoolean()
   isPassive: boolean;
-
-  @IsBoolean()
-  inviteOnly: boolean;
 }
 
 class NewOrganization extends NewOrganizationNonGlobalAdmins {
@@ -61,8 +69,53 @@ class NewOrganization extends NewOrganizationNonGlobalAdmins {
 
   @IsArray()
   ipBlocks: string[];
+
+  @IsArray()
+  tags: OrganizationTag[];
+
+  @IsUUID()
+  @IsOptional()
+  parent?: string;
 }
 
+const findOrCreateTags = async (
+  tags: OrganizationTag[]
+): Promise<OrganizationTag[]> => {
+  const finalTags: OrganizationTag[] = [];
+  for (const tag of tags) {
+    if (!tag.id) {
+      // If no id is supplied, first check to see if a tag with this name exists
+      const found = await OrganizationTag.findOne({
+        where: { name: tag.name }
+      });
+      if (found) {
+        finalTags.push(found);
+      } else {
+        // If not, create it
+        const created = OrganizationTag.create({ name: tag.name });
+        await created.save();
+        finalTags.push(created);
+      }
+    } else {
+      finalTags.push(tag);
+    }
+  }
+  return finalTags;
+};
+
+/**
+ * @swagger
+ *
+ * /organizations/{id}:
+ *  put:
+ *    description: Update a particular organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *    tags:
+ *    - Organizations
+ */
 export const update = wrapHandler(async (event) => {
   const id = event.pathParameters?.organizationId;
 
@@ -71,12 +124,15 @@ export const update = wrapHandler(async (event) => {
   }
 
   if (!isOrgAdmin(event, id)) return Unauthorized;
-  const body = await validateBody(
+  const body = await validateBody<
+    NewOrganization | NewOrganizationNonGlobalAdmins
+  >(
     isGlobalWriteAdmin(event)
       ? NewOrganization
       : NewOrganizationNonGlobalAdmins,
     event.body
   );
+
   await connectToDatabase();
   const org = await Organization.findOne(
     {
@@ -87,7 +143,11 @@ export const update = wrapHandler(async (event) => {
     }
   );
   if (org) {
-    Organization.merge(org, body);
+    if ('tags' in body) {
+      body.tags = await findOrCreateTags(body.tags);
+    }
+
+    Organization.merge(org, { ...body, parent: undefined });
     await Organization.save(org);
     return {
       statusCode: 200,
@@ -97,21 +157,44 @@ export const update = wrapHandler(async (event) => {
   return NotFound;
 });
 
+/**
+ * @swagger
+ *
+ * /organizations:
+ *  post:
+ *    description: Create a new organization.
+ *    tags:
+ *    - Organizations
+ */
 export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   const body = await validateBody(NewOrganization, event.body);
   await connectToDatabase();
+
+  if ('tags' in body) {
+    body.tags = await findOrCreateTags(body.tags);
+  }
   const organization = await Organization.create({
     ...body,
-    createdBy: { id: event.requestContext.authorizer!.id }
+    createdBy: { id: event.requestContext.authorizer!.id },
+    parent: { id: body.parent }
   });
-  const res = await Organization.save(organization);
+  const res = await organization.save();
   return {
     statusCode: 200,
     body: JSON.stringify(res)
   };
 });
 
+/**
+ * @swagger
+ *
+ * /organizations:
+ *  get:
+ *    description: List organizations that the user is a member of or has access to.
+ *    tags:
+ *    - Organizations
+ */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
     return {
@@ -120,14 +203,13 @@ export const list = wrapHandler(async (event) => {
     };
   }
   await connectToDatabase();
-  let where = {};
-  if (isGlobalViewAdmin(event)) {
-    where = {};
-  } else {
-    where = { id: In(getOrgMemberships(event)) };
+  let where: any = { parent: null };
+  if (!isGlobalViewAdmin(event)) {
+    where = { id: In(getOrgMemberships(event)), parent: null };
   }
   const result = await Organization.find({
-    where
+    where,
+    relations: ['userRoles', 'tags']
   });
 
   return {
@@ -136,6 +218,46 @@ export const list = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /organizations/tags:
+ *  get:
+ *    description: Fetchs all possible organization tags (must be global admin)
+ *    tags:
+ *    - Organizations
+ */
+export const getTags = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event)) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify([])
+    };
+  }
+  await connectToDatabase();
+  const result = await OrganizationTag.find({
+    select: ['id', 'name']
+  });
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result)
+  };
+});
+
+/**
+ * @swagger
+ *
+ * /organizations/{id}:
+ *  get:
+ *    description: Get information about a particular organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *    tags:
+ *    - Organizations
+ */
 export const get = wrapHandler(async (event) => {
   const id = event.pathParameters?.organizationId;
 
@@ -143,7 +265,14 @@ export const get = wrapHandler(async (event) => {
 
   await connectToDatabase();
   const result = await Organization.findOne(id, {
-    relations: ['userRoles', 'userRoles.user', 'granularScans']
+    relations: [
+      'userRoles',
+      'userRoles.user',
+      'granularScans',
+      'tags',
+      'parent',
+      'children'
+    ]
   });
 
   if (result) {
@@ -170,6 +299,22 @@ class UpdateBody {
   enabled: boolean;
 }
 
+/**
+ * @swagger
+ *
+ * /organizations/{id}/granularScans/{scanId}/update:
+ *  post:
+ *    description: Enable or disable a scan for a particular organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *      - in: path
+ *        name: scanId
+ *        description: Role id
+ *    tags:
+ *    - Organizations
+ */
 export const updateScan = wrapHandler(async (event) => {
   const organizationId = event.pathParameters?.organizationId;
 
@@ -219,6 +364,22 @@ export const updateScan = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /organizations/{id}/roles/{roleId}/approve:
+ *  post:
+ *    description: Approve a role within an organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *      - in: path
+ *        name: roleId
+ *        description: Role id
+ *    tags:
+ *    - Organizations
+ */
 export const approveRole = wrapHandler(async (event) => {
   const organizationId = event.pathParameters?.organizationId;
   if (!isOrgAdmin(event, organizationId)) return Unauthorized;
@@ -248,6 +409,22 @@ export const approveRole = wrapHandler(async (event) => {
   return NotFound;
 });
 
+/**
+ * @swagger
+ *
+ * /organizations/{id}/roles/{roleId}/remove:
+ *  post:
+ *    description: Remove a role within an organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *      - in: path
+ *        name: roleId
+ *        description: Role id
+ *    tags:
+ *    - Organizations
+ */
 export const removeRole = wrapHandler(async (event) => {
   const organizationId = event.pathParameters?.organizationId;
   if (!isOrgAdmin(event, organizationId)) return Unauthorized;
@@ -261,20 +438,6 @@ export const removeRole = wrapHandler(async (event) => {
   const result = await Role.delete({
     organization: { id: organizationId },
     id
-  });
-  return {
-    statusCode: 200,
-    body: JSON.stringify(result)
-  };
-});
-
-export const listPublicNames = wrapHandler(async (event) => {
-  await connectToDatabase();
-  const result = await Organization.find({
-    select: ['name', 'id'],
-    where: {
-      inviteOnly: false
-    }
   });
   return {
     statusCode: 200,

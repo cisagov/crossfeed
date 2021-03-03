@@ -1,8 +1,9 @@
 import loginGov from './login-gov';
-import { User, connectToDatabase } from '../models';
+import { User, connectToDatabase, ApiKey, OrganizationTag } from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import * as jwksClient from 'jwks-rsa';
+import { createHash } from 'crypto';
 
 export interface UserToken {
   email: string;
@@ -46,7 +47,15 @@ function getKey(header, callback) {
   });
 }
 
-/** Returns redirect url to initiate login.gov OIDC flow */
+/**
+ * @swagger
+ *
+ * /auth/login:
+ *  post:
+ *    description: Returns redirect url to initiate login.gov OIDC flow
+ *    tags:
+ *    - Auth
+ */
 export const login = async (event, context) => {
   const { url, state, nonce } = await loginGov.login();
   return {
@@ -59,7 +68,7 @@ export const login = async (event, context) => {
   };
 };
 
-const userTokenBody = (user): UserToken => ({
+export const userTokenBody = (user): UserToken => ({
   id: user.id,
   email: user.email,
   userType: user.userType,
@@ -73,7 +82,15 @@ const userTokenBody = (user): UserToken => ({
     }))
 });
 
-/** Processes login.gov OIDC callback and returns user token */
+/**
+ * @swagger
+ *
+ * /auth/callback:
+ *  post:
+ *    description: Processes Cognito JWT auth token (or login.gov OIDC callback, if enabled). Returns a user authorization token that can be used for subsequent requests to the API.
+ *    tags:
+ *    - Auth
+ */
 export const callback = async (event, context) => {
   let userInfo: UserInfo;
   try {
@@ -143,7 +160,7 @@ export const callback = async (event, context) => {
   }
 
   const token = jwt.sign(userTokenBody(user), process.env.JWT_SECRET!, {
-    expiresIn: '1 day',
+    expiresIn: '3 days',
     header: {
       typ: 'JWT'
     }
@@ -161,11 +178,28 @@ export const callback = async (event, context) => {
 /** Confirms that a user is authorized */
 export const authorize = async (event) => {
   try {
-    const parsed: UserToken = jwt.verify(
-      event.authorizationToken,
-      process.env.JWT_SECRET!
-    ) as UserToken;
     await connectToDatabase();
+    let parsed: Partial<UserToken>;
+    // Test if API key, e.g. a 32 digit hex string
+    if (/^[A-Fa-f0-9]{32}$/.test(event.authorizationToken)) {
+      const apiKey = await ApiKey.findOne(
+        {
+          hashedKey: createHash('sha256')
+            .update(event.authorizationToken)
+            .digest('hex')
+        },
+        { relations: ['user'] }
+      );
+      if (!apiKey) throw 'Invalid API key';
+      parsed = { id: apiKey.user.id };
+      apiKey.lastUsed = new Date();
+      apiKey.save();
+    } else {
+      parsed = jwt.verify(
+        event.authorizationToken,
+        process.env.JWT_SECRET!
+      ) as UserToken;
+    }
     const user = await User.findOne(
       {
         id: parsed.id
@@ -200,11 +234,11 @@ export const isGlobalWriteAdmin = (event: APIGatewayProxyEvent) => {
 
 /** Check if a user has global view permissions */
 export const isGlobalViewAdmin = (event: APIGatewayProxyEvent) => {
-  return (
-    event.requestContext.authorizer &&
+  return event.requestContext.authorizer &&
     (event.requestContext.authorizer.userType === 'globalView' ||
       event.requestContext.authorizer.userType === 'globalAdmin')
-  );
+    ? true
+    : false;
 };
 
 /** Checks if the current user is allowed to access (modify) a user with id userId */
@@ -228,6 +262,20 @@ export const isOrgAdmin = (
 export const getOrgMemberships = (event: APIGatewayProxyEvent): string[] => {
   if (!event.requestContext.authorizer) return [];
   return event.requestContext.authorizer.roles.map((role) => role.org);
+};
+
+/** Returns the organizations belonging to a tag, if the user can access the tag */
+export const getTagOrganizations = async (
+  event: APIGatewayProxyEvent,
+  id: string
+): Promise<string[]> => {
+  if (!isGlobalViewAdmin(event)) return [];
+  const tag = await OrganizationTag.findOne(
+    { id },
+    { relations: ['organizations'] }
+  );
+  if (tag) return tag?.organizations.map((org) => org.id);
+  return [];
 };
 
 /** Returns a user's id */

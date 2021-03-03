@@ -48,6 +48,11 @@ variable frontend_bucket {
   default = "staging.crossfeed.cyber.dhs.gov"
 }
 
+variable frontend_lambda_function {
+  type    = string
+  default = "crossfeed-security-headers-staging"
+}
+
 variable frontend_cert_arn {
   type    = string
   default = "arn:aws:acm:us-east-1:563873274798:certificate/7c6a5980-80e3-47a4-9f21-cbda44b6f34c"
@@ -123,6 +128,11 @@ variable ssm_censys_api_secret {
   default = "/crossfeed/staging/CENSYS_API_SECRET"
 }
 
+variable ssm_shodan_api_key {
+  type    = string
+  default = "/crossfeed/staging/SHODAN_API_KEY"
+}
+
 variable cloudfront_name {
   type    = string
   default = "Crossfeed Staging Frontend"
@@ -156,11 +166,6 @@ variable worker_ecs_log_group_name {
 variable worker_ecs_role_name {
   type    = string
   default = "crossfeed-worker-staging"
-}
-
-variable webscraper_bucket_name {
-  type    = string
-  default = "crossfeed-staging-webscraper"
 }
 
 variable export_bucket_name {

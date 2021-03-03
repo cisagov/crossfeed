@@ -25,11 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
-      - uses: actions/setup-node@v2.1.2
+      - uses: actions/setup-node@v2.1.5
         with:
           node-version: '12.14'
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -44,11 +44,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
-      - uses: actions/setup-node@v2.1.2
+      - uses: actions/setup-node@v2.1.5
         with:
           node-version: '12.14'
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -63,11 +63,11 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v2.3.4
-      - uses: actions/setup-node@v2.1.2
+      - uses: actions/setup-node@v2.1.5
         with:
           node-version: '12.14'
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -85,11 +85,11 @@ jobs:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/production')
     steps:
       - uses: actions/checkout@v2.3.4
-      - uses: actions/setup-node@v2.1.2
+      - uses: actions/setup-node@v2.1.5
         with:
           node-version: '12.14'
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}

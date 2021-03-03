@@ -68,33 +68,26 @@ class ScanTaskSearch {
       .take(PAGE_SIZE);
 
     this.filterResultQueryset(qs);
-    return await qs.getMany();
-  }
-
-  filterCountQueryset(qs: SelectQueryBuilder<ScanTask>) {
-    return this.filterResultQueryset(qs);
-  }
-
-  async getCount(event) {
-    const qs = ScanTask.createQueryBuilder('scan_task').leftJoinAndSelect(
-      'scan_task.scan',
-      'scan'
-    );
-    this.filterCountQueryset(qs);
-    return await qs.getCount();
+    return qs.getManyAndCount();
   }
 }
 
+/**
+ * @swagger
+ *
+ * /scan-tasks/search:
+ *  post:
+ *    description: List scantasks by specifying a filter.
+ *    tags:
+ *    - Scan Tasks
+ */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) {
     return Unauthorized;
   }
   await connectToDatabase();
   const search = await validateBody(ScanTaskSearch, event.body);
-  const [result, count] = await Promise.all([
-    search.getResults(event),
-    search.getCount(event)
-  ]);
+  const [result, count] = await search.getResults(event);
   return {
     statusCode: 200,
     body: JSON.stringify({
@@ -104,6 +97,19 @@ export const list = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /scan-tasks/{id}/kill:
+ *  delete:
+ *    description: Kill a particular scantask. Calling this endpoint does not kill the actual Fargate task, but just marks the task as "failed" in the database.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Scantask id
+ *    tags:
+ *    - Scan Tasks
+ */
 export const kill = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) {
     return Unauthorized;
@@ -136,6 +142,19 @@ export const kill = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /scan-tasks/{id}/logs:
+ *  get:
+ *    description: Retrieve logs from a particular scantask.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Scantask id
+ *    tags:
+ *    - Scan Tasks
+ */
 export const logs = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) {
     return Unauthorized;

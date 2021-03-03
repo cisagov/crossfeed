@@ -10,6 +10,15 @@ export interface Organization {
   userRoles: Role[];
   scanTasks: ScanTask[];
   isPassive: boolean;
-  inviteOnly: boolean;
   granularScans: Scan[];
+  tags: OrganizationTag[];
+  parent: Organization;
+  children: Organization[];
+}
+
+export interface OrganizationTag {
+  id: string;
+  name: string;
+  organizations: Organization[];
+  scans: Scan[];
 }

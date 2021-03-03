@@ -7,12 +7,15 @@ import { handler as portscanner } from './tasks/portscanner';
 import { handler as wappalyzer } from './tasks/wappalyzer';
 import { handler as censysIpv4 } from './tasks/censysIpv4';
 import { handler as censysCertificates } from './tasks/censysCertificates';
+import { handler as savedSearch } from './tasks/saved-search';
 import { handler as sslyze } from './tasks/sslyze';
 import { handler as searchSync } from './tasks/search-sync';
 import { handler as intrigueIdent } from './tasks/intrigue-ident';
 import { handler as cve } from './tasks/cve';
 import { handler as webscraper } from './tasks/webscraper';
+import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
+import { SCAN_SCHEMA } from './api/scans';
 
 /**
  * Worker entrypoint.
@@ -23,7 +26,7 @@ async function main() {
   );
   console.log('commandOptions are', commandOptions);
 
-  const { scanName } = commandOptions;
+  const { scanName, organizations = [] } = commandOptions;
 
   const scanFn = {
     amass,
@@ -38,6 +41,8 @@ async function main() {
     wappalyzer,
     intrigueIdent,
     webscraper,
+    savedSearch,
+    shodan,
     testProxy
   }[scanName || 'testProxy'];
   if (!scanFn) {
@@ -50,7 +55,24 @@ async function main() {
     bootstrap();
   }
 
-  await scanFn(commandOptions);
+  const { global } = SCAN_SCHEMA[scanName];
+
+  if (global) {
+    await scanFn(commandOptions);
+  } else {
+    // For non-global scans, since a single ScanTask can correspond to
+    // multiple organizations, we run scanFn for each particular
+    // organization here by passing in the current organization's
+    // name and id into commandOptions.
+    for (const organization of organizations) {
+      await scanFn({
+        ...commandOptions,
+        organizations: [],
+        organizationId: organization.id,
+        organizationName: organization.name
+      });
+    }
+  }
 }
 
 main();

@@ -102,14 +102,6 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
       const service = hostsToCheck[parseInt(parts[0])].service;
 
       const cvss = parseFloat(parts[3]);
-      let severity: string;
-
-      if (cvss === 0) severity = 'None';
-      else if (cvss < 4) severity = 'Low';
-      else if (cvss < 7) severity = 'Medium';
-      else if (cvss < 9) severity = 'High';
-      else severity = 'Critical';
-
       vulnerabilities.push(
         plainToClass(Vulnerability, {
           domain: domain,
@@ -119,7 +111,6 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
           cwe: parts[4],
           cpe: parts[2],
           cvss,
-          severity,
           state: 'open',
           source: 'cpe2cve',
           needsPopulation: true,

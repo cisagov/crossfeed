@@ -15,6 +15,8 @@ import * as scans from './scans';
 import * as users from './users';
 import * as scanTasks from './scan-tasks';
 import * as stats from './stats';
+import * as apiKeys from './api-keys';
+import * as savedSearches from './saved-searches';
 import { listenForDockerEvents } from './docker-events';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
@@ -31,6 +33,7 @@ const handlerToExpress = (handler) => async (req, res, next) => {
   const { statusCode, body } = await handler(
     {
       pathParameters: req.params,
+      query: req.query,
       requestContext: req.requestContext,
       body: JSON.stringify(req.body || '{}'),
       headers: req.headers,
@@ -52,7 +55,7 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(helmet.hsts());
+app.use(helmet.hsts({ maxAge: 31536000, preload: true }));
 app.use(cookieParser());
 
 app.get('/', handlerToExpress(healthcheck));
@@ -115,6 +118,15 @@ app.get('/plugins/Morpheus/images/logo.svg', (req, res) =>
 );
 app.get('/index.php', (req, res) => res.redirect('/matomo/index.php'));
 
+/**
+ * @swagger
+ *
+ * /matomo:
+ *  get:
+ *    description: All paths under /matomo proxy to a Matomo instance, which is used to handle and process user analytics. A global admin user can access this page from the "My Account" page.
+ *    tags:
+ *    - Analytics
+ */
 const matomoProxy = createProxyMiddleware({
   target: process.env.MATOMO_URL,
   headers: { HTTP_X_FORWARDED_URI: '/matomo' },
@@ -123,6 +135,7 @@ const matomoProxy = createProxyMiddleware({
   },
   onProxyReq: function (proxyReq, req, res) {
     // Only pass the MATOMO_SESSID cookie to Matomo.
+    if (!proxyReq.getHeader('Cookie')) return;
     const cookies = cookie.parse(proxyReq.getHeader('Cookie'));
     const newCookies = cookie.serialize(
       'MATOMO_SESSID',
@@ -194,7 +207,11 @@ const authenticatedRoute = express.Router();
 authenticatedRoute.use(checkUserLoggedIn);
 authenticatedRoute.use(checkUserSignedTerms);
 
+authenticatedRoute.post('/api-keys', handlerToExpress(apiKeys.generate));
+authenticatedRoute.delete('/api-keys/:keyId', handlerToExpress(apiKeys.del));
+
 authenticatedRoute.post('/search', handlerToExpress(search.search));
+authenticatedRoute.post('/search/export', handlerToExpress(search.export_));
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
 authenticatedRoute.post('/domain/export', handlerToExpress(domains.export_));
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
@@ -213,6 +230,23 @@ authenticatedRoute.get(
 authenticatedRoute.put(
   '/vulnerabilities/:vulnerabilityId',
   handlerToExpress(vulnerabilities.update)
+);
+authenticatedRoute.get('/saved-searches', handlerToExpress(savedSearches.list));
+authenticatedRoute.post(
+  '/saved-searches',
+  handlerToExpress(savedSearches.create)
+);
+authenticatedRoute.get(
+  '/saved-searches/:searchId',
+  handlerToExpress(savedSearches.get)
+);
+authenticatedRoute.put(
+  '/saved-searches/:searchId',
+  handlerToExpress(savedSearches.update)
+);
+authenticatedRoute.delete(
+  '/saved-searches/:searchId',
+  handlerToExpress(savedSearches.del)
 );
 authenticatedRoute.get('/scans', handlerToExpress(scans.list));
 authenticatedRoute.get('/granularScans', handlerToExpress(scans.listGranular));
@@ -237,8 +271,8 @@ authenticatedRoute.get(
 
 authenticatedRoute.get('/organizations', handlerToExpress(organizations.list));
 authenticatedRoute.get(
-  '/organizations/public',
-  handlerToExpress(organizations.listPublicNames)
+  '/organizations/tags',
+  handlerToExpress(organizations.getTags)
 );
 authenticatedRoute.get(
   '/organizations/:organizationId',

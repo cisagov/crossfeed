@@ -1,7 +1,8 @@
 import {
   APIGatewayProxyHandler,
   APIGatewayProxyEvent,
-  APIGatewayProxyResult
+  APIGatewayProxyResult,
+  Handler
 } from 'aws-lambda';
 import { ValidationOptions, validateOrReject } from 'class-validator';
 import { ClassType } from 'class-transformer/ClassTransformer';
@@ -39,7 +40,14 @@ export const makeResponse = (
   };
 };
 
-type WrapHandler = (handler: APIGatewayProxyHandler) => APIGatewayProxyHandler;
+type WrapHandler = (
+  handler: Handler<
+    APIGatewayProxyEvent & {
+      query?: any;
+    },
+    APIGatewayProxyResult
+  >
+) => APIGatewayProxyHandler;
 export const wrapHandler: WrapHandler = (handler) => async (
   event,
   context,

@@ -17,6 +17,7 @@ import got from 'got';
 import PQueue from 'p-queue';
 import pRetry from 'p-retry';
 import axios from 'axios';
+import getScanOrganizations from './helpers/getScanOrganizations';
 
 interface CommonNameToDomainsMap {
   [commonName: string]: Domain[];
@@ -141,16 +142,16 @@ export const handler = async (commandOptions: CommandOptions) => {
   await connectToDatabase();
   const scan = await Scan.findOne(
     { id: commandOptions.scanId },
-    { relations: ['organizations'] }
+    { relations: ['organizations', 'tags', 'tags.organizations'] }
   );
 
+  let orgs: string[] | undefined = undefined;
   // censysCertificates is a global scan, so organizationId is only specified for tests.
   // Otherwise, scan.organizations can be used for granular control of censys.
-  const orgs = organizationId
-    ? [organizationId]
-    : scan?.organizations?.length
-    ? undefined
-    : scan?.organizations.map((org) => org.id);
+  if (organizationId) orgs = [organizationId];
+  else if (scan?.isGranular) {
+    orgs = getScanOrganizations(scan).map((org) => org.id);
+  }
 
   const allDomains = await getAllDomains(orgs);
 

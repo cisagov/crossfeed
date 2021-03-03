@@ -68,8 +68,8 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.worker_signature_private_key.arn}",
           "${data.aws_ssm_parameter.censys_api_id.arn}",
           "${data.aws_ssm_parameter.censys_api_secret.arn}",
-          "${aws_ssm_parameter.es_endpoint.arn}",
-          "${aws_ssm_parameter.webscraper_s3_bucket_name.arn}"
+          "${data.aws_ssm_parameter.shodan_api_key.arn}",
+          "${aws_ssm_parameter.es_endpoint.arn}"
         ]
     }
   ]
@@ -118,7 +118,6 @@ resource "aws_iam_role_policy" "worker_task_role_policy" {
             "s3:GetObjectAcl"
         ],
         "Resource": [
-          "${aws_s3_bucket.webscraper_bucket.arn}/*",
           "${aws_s3_bucket.export_bucket.arn}/*"
         ]
     },
@@ -128,7 +127,6 @@ resource "aws_iam_role_policy" "worker_task_role_policy" {
           "s3:ListBucket"
       ],
       "Resource": [
-        "${aws_s3_bucket.webscraper_bucket.arn}",
         "${aws_s3_bucket.export_bucket.arn}"
       ]
     }
@@ -210,6 +208,10 @@ resource "aws_ecs_task_definition" "worker" {
         "valueFrom": "${data.aws_ssm_parameter.censys_api_secret.arn}"
       },
       {
+        "name": "SHODAN_API_KEY",
+        "valueFrom": "${data.aws_ssm_parameter.shodan_api_key.arn}"
+      },
+      {
         "name": "WORKER_SIGNATURE_PUBLIC_KEY",
         "valueFrom": "${data.aws_ssm_parameter.worker_signature_public_key.arn}"
       },
@@ -220,10 +222,6 @@ resource "aws_ecs_task_definition" "worker" {
       {
         "name": "ELASTICSEARCH_ENDPOINT",
         "valueFrom": "${aws_ssm_parameter.es_endpoint.arn}"
-      },
-      {
-        "name": "WEBSCRAPER_S3_BUCKET_NAME",
-        "valueFrom": "${aws_ssm_parameter.webscraper_s3_bucket_name.arn}"
       }
     ]
   }
@@ -257,38 +255,11 @@ data "aws_ssm_parameter" "censys_api_id" { name = var.ssm_censys_api_id }
 
 data "aws_ssm_parameter" "censys_api_secret" { name = var.ssm_censys_api_secret }
 
+data "aws_ssm_parameter" "shodan_api_key" { name = var.ssm_shodan_api_key }
+
 data "aws_ssm_parameter" "worker_signature_public_key" { name = var.ssm_worker_signature_public_key }
 
 data "aws_ssm_parameter" "worker_signature_private_key" { name = var.ssm_worker_signature_private_key }
-
-resource "aws_ssm_parameter" "webscraper_s3_bucket_name" {
-  name      = "/crossfeed/${var.stage}/WEBSCRAPER_S3_BUCKET_NAME"
-  type      = "String"
-  value     = aws_s3_bucket.webscraper_bucket.id
-  overwrite = true
-
-  tags = {
-    Project = var.project
-  }
-}
-
-resource "aws_s3_bucket" "webscraper_bucket" {
-  bucket = var.webscraper_bucket_name
-  acl    = "private"
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
-
-  tags = {
-    Project = var.project
-    Stage   = var.stage
-  }
-}
 
 resource "aws_s3_bucket" "export_bucket" {
   bucket = var.export_bucket_name

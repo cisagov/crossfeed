@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { NavLink, Link, useHistory } from 'react-router-dom';
+import React, { useCallback, useState } from 'react';
+import { NavLink, Link, useHistory, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   AppBar,
@@ -7,7 +7,8 @@ import {
   IconButton,
   Drawer,
   ListItem,
-  List
+  List,
+  TextField
 } from '@material-ui/core';
 import {
   Menu as MenuIcon,
@@ -16,15 +17,16 @@ import {
 } from '@material-ui/icons';
 import { NavItem } from './NavItem';
 import { useAuthContext } from 'context';
-import logo from '../assets/cisa_logo.png';
+import logo from '../assets/crossfeed.svg';
 import { withSearch } from '@elastic/react-search-ui';
 import { ContextType } from 'context/SearchProvider';
 import { SearchBar } from 'components';
+import { Autocomplete } from '@material-ui/lab';
+import { Organization, OrganizationTag } from 'types';
 
-const GLOBAL_ADMIN = 4;
-const ORG_ADMIN = 2;
-const ORG_USER = 1;
-const ALL_USERS = GLOBAL_ADMIN | ORG_ADMIN | ORG_USER;
+const GLOBAL_ADMIN = 2;
+const STANDARD_USER = 1;
+const ALL_USERS = GLOBAL_ADMIN | STANDARD_USER;
 
 interface NavItemType {
   title: string | JSX.Element;
@@ -39,21 +41,48 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   const { searchTerm, setSearchTerm } = props;
   const classes = useStyles();
   const history = useHistory();
-  const { currentOrganization, user, logout } = useAuthContext();
+  const location = useLocation();
+  const {
+    currentOrganization,
+    setOrganization,
+    showAllOrganizations,
+    setShowAllOrganizations,
+    user,
+    logout,
+    apiGet
+  } = useAuthContext();
   const [navOpen, setNavOpen] = useState(false);
+  const [organizations, setOrganizations] = useState<
+    (Organization | OrganizationTag)[]
+  >([]);
 
   let userLevel = 0;
   if (user && user.isRegistered) {
     if (user.userType === 'standard') {
-      if (currentOrganization?.userIsAdmin) {
-        userLevel = ORG_ADMIN;
-      } else {
-        userLevel = ORG_USER;
-      }
+      userLevel = STANDARD_USER;
     } else {
       userLevel = GLOBAL_ADMIN;
     }
   }
+
+  const fetchOrganizations = useCallback(async () => {
+    try {
+      let rows = await apiGet<Organization[]>('/organizations/');
+      let tags: (OrganizationTag | Organization)[] = [];
+      if (userLevel === GLOBAL_ADMIN) {
+        tags = await apiGet<OrganizationTag[]>('/organizations/tags');
+      }
+      setOrganizations(tags.concat(rows));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet, setOrganizations, userLevel]);
+
+  React.useEffect(() => {
+    if (userLevel > 0) {
+      fetchOrganizations();
+    }
+  }, [fetchOrganizations, userLevel]);
 
   const navItems: NavItemType[] = [
     {
@@ -68,6 +97,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       users: ALL_USERS,
       exact: false
     },
+    { title: 'Feeds', path: '/feeds', users: ALL_USERS, exact: false },
     {
       title: 'Scans',
       path: '/scans',
@@ -86,27 +116,21 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     exact: false,
     nested: [
       {
-        title: 'Manage Users',
-        path: '/users',
-        users: GLOBAL_ADMIN,
-        exact: true
-      },
-      {
         title: 'Manage Organizations',
         path: '/organizations',
         users: GLOBAL_ADMIN,
         exact: true
       },
       {
-        title: 'Organization Settings',
-        path: '/organization',
-        users: ORG_ADMIN | GLOBAL_ADMIN,
+        title: 'My Organizations',
+        path: '/organizations',
+        users: STANDARD_USER,
         exact: true
       },
       {
-        title: 'My Organizations',
-        path: '/organizations',
-        users: ORG_USER | ORG_ADMIN,
+        title: 'Manage Users',
+        path: '/users',
+        users: GLOBAL_ADMIN,
         exact: true
       },
       {
@@ -160,15 +184,87 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
             {userLevel > 0 && (
               <>
                 <SearchBar
+                  initialValue={searchTerm}
                   value={searchTerm}
                   onChange={(value) => {
-                    history.push('/inventory');
+                    if (location.pathname !== '/inventory')
+                      history.push('/inventory?q=' + value);
                     setSearchTerm(value, {
                       shouldClearFilters: false,
                       autocompleteResults: false
                     });
                   }}
                 />
+                {organizations.length > 1 && (
+                  <>
+                    <div className={classes.spacing} />
+                    <Autocomplete
+                      options={[{ name: 'All Organizations' }].concat(
+                        organizations
+                      )}
+                      className={classes.selectOrg}
+                      classes={{
+                        option: classes.option
+                      }}
+                      value={
+                        showAllOrganizations
+                          ? { name: 'All Organizations' }
+                          : currentOrganization ?? undefined
+                      }
+                      filterOptions={(options, state) => {
+                        // If already selected, show all
+                        if (
+                          options.find(
+                            (option) =>
+                              option.name.toLowerCase() ===
+                              state.inputValue.toLowerCase()
+                          )
+                        ) {
+                          return options;
+                        }
+                        return options.filter((option) =>
+                          option.name
+                            .toLowerCase()
+                            .includes(state.inputValue.toLowerCase())
+                        );
+                      }}
+                      disableClearable
+                      blurOnSelect
+                      selectOnFocus
+                      getOptionLabel={(option) => option.name}
+                      renderOption={(option) => (
+                        <React.Fragment>{option.name}</React.Fragment>
+                      )}
+                      onChange={(
+                        event: any,
+                        value:
+                          | Organization
+                          | {
+                              name: string;
+                            }
+                          | undefined
+                      ) => {
+                        if (value && 'id' in value) {
+                          setOrganization(value);
+                          setShowAllOrganizations(false);
+                        } else {
+                          setShowAllOrganizations(true);
+                        }
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          inputProps={{
+                            ...params.inputProps,
+                            id: 'autocomplete-input',
+                            autoComplete: 'new-password' // disable autocomplete and autofill
+                          }}
+                        />
+                      )}
+                    />
+                  </>
+                )}
                 <NavItem {...userMenu} />
               </>
             )}
@@ -237,8 +333,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   logo: {
-    display: 'none',
-    height: 60,
+    width: 150,
     padding: theme.spacing(),
     paddingLeft: 0,
     [theme.breakpoints.up('sm')]: {
@@ -306,5 +401,28 @@ const useStyles = makeStyles((theme) => ({
   },
   mobileNav: {
     padding: `${theme.spacing(2)}px ${theme.spacing()}px`
+  },
+  selectOrg: {
+    border: '1px solid #FFFFFF',
+    borderRadius: '5px',
+    width: '200px',
+    padding: '3px',
+    '& svg': {
+      color: 'white'
+    },
+    '& input': {
+      color: 'white',
+      width: '100%'
+    },
+    '& input:focus': {
+      outlineWidth: 0
+    },
+    '& fieldset': {
+      borderStyle: 'none'
+    },
+    height: '45px'
+  },
+  option: {
+    fontSize: 15
   }
 }));

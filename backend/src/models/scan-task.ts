@@ -6,7 +6,9 @@ import {
   BaseEntity,
   ManyToOne,
   JoinColumn,
-  Column
+  Column,
+  ManyToMany,
+  JoinTable
 } from 'typeorm';
 import { Scan, Organization } from '.';
 
@@ -21,11 +23,29 @@ export class ScanTask extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  /**
+   * Organization that this specific ScanTask runs on.
+   * Deprecated, replaced by "organizations" property.
+   */
   @ManyToOne((type) => Organization, (organization) => organization.scanTasks, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   })
   organization: Organization;
+
+  /**
+   * Organizations that this specific ScanTask runs on.
+   */
+  @ManyToMany(
+    (type) => Organization,
+    (organization) => organization.allScanTasks,
+    {
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    }
+  )
+  @JoinTable()
+  organizations: Organization[];
 
   @ManyToOne((type) => Scan, (scan) => scan.scanTasks, {
     onDelete: 'SET NULL',

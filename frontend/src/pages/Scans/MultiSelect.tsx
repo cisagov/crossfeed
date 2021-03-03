@@ -3,7 +3,7 @@ import Select, { components } from 'react-select';
 import { Props } from 'react-select';
 import arrow from './arrow-both.svg';
 
-const DropdownIndicator: React.FC<any> = props => {
+const DropdownIndicator: React.FC<any> = (props) => {
   return (
     <components.DropdownIndicator {...props}>
       <img src={arrow} alt="Expand" style={{ width: 8, marginRight: 3 }} />
@@ -11,7 +11,11 @@ const DropdownIndicator: React.FC<any> = props => {
   );
 };
 
-export default (props: Props) => {
+export default (
+  props: Props & {
+    zIndex: number;
+  }
+) => {
   return (
     <Select
       isMulti
@@ -24,15 +28,15 @@ export default (props: Props) => {
         container: (provided, state) => ({
           ...provided,
           maxWidth: '30rem',
-          zIndex: 99
+          zIndex: props.zIndex
         }),
         control: (provided, state) => ({
           ...provided,
           borderColor: '#565c65',
           borderWidth: 1,
           marginTop: '0.5rem',
-          height: '2.5rem',
-          borderRadius: 0
+          minHeight: '2.5rem',
+          borderRadius: 0,
         })
       }}
     />

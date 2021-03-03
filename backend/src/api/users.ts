@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsEmail
 } from 'class-validator';
-import { User, connectToDatabase, Role, Organization } from '../models';
+import { User, connectToDatabase, Role, Organization, ApiKey } from '../models';
 import {
   validateBody,
   wrapHandler,
@@ -20,7 +20,21 @@ import {
   isOrgAdmin,
   isGlobalWriteAdmin
 } from './auth';
+import { randomBytes } from 'crypto';
 
+/**
+ * @swagger
+ *
+ * /users/{id}:
+ *  delete:
+ *    description: Delete a particular user.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: User id
+ *    tags:
+ *    - Users
+ */
 export const del = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   await connectToDatabase();
@@ -35,6 +49,19 @@ export const del = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /users/{id}:
+ *  put:
+ *    description: Update a particular user.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: User id
+ *    tags:
+ *    - Users
+ */
 export const update = wrapHandler(async (event) => {
   if (!canAccessUser(event, event.pathParameters?.userId)) return Unauthorized;
   await connectToDatabase();
@@ -56,17 +83,6 @@ export const update = wrapHandler(async (event) => {
     user.lastName = body.lastName ?? user.lastName;
     user.fullName = user.firstName + ' ' + user.lastName;
     await User.save(user);
-
-    if (body.organization) {
-      // Create pending role if organization supplied
-      await Role.insert({
-        user: user,
-        organization: { id: body.organization },
-        approved: false,
-        role: 'user',
-        createdBy: user // User is creating the role themselves.
-      });
-    }
     return {
       statusCode: 200,
       body: JSON.stringify(user)
@@ -126,6 +142,15 @@ If you encounter any difficulties, please feel free to reply to this email (supp
   );
 };
 
+/**
+ * @swagger
+ *
+ * /users:
+ *  post:
+ *    description: Invite a new user.
+ *    tags:
+ *    - Users
+ */
 export const invite = wrapHandler(async (event) => {
   const body = await validateBody(NewUser, event.body);
   // Invoker must be either an organization or global admin
@@ -200,10 +225,19 @@ export const invite = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /users/me:
+ *  get:
+ *    description: Get information about the current user.
+ *    tags:
+ *    - Users
+ */
 export const me = wrapHandler(async (event) => {
   await connectToDatabase();
   const result = await User.findOne(getUserId(event), {
-    relations: ['roles', 'roles.organization']
+    relations: ['roles', 'roles.organization', 'apiKeys']
   });
   return {
     statusCode: 200,
@@ -211,6 +245,15 @@ export const me = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /users/me/acceptTerms:
+ *  post:
+ *    description: Accept the latest terms of service.
+ *    tags:
+ *    - Users
+ */
 export const acceptTerms = wrapHandler(async (event) => {
   await connectToDatabase();
   const user = await User.findOne(getUserId(event), {
@@ -228,6 +271,15 @@ export const acceptTerms = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /users:
+ *  get:
+ *    description: List users.
+ *    tags:
+ *    - Users
+ */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) return Unauthorized;
   await connectToDatabase();

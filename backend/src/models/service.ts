@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { Domain } from './domain';
 import { Scan } from './scan';
+import { CpeParser } from '@thefaultvault/tfv-cpe-parser';
 
 const filterProducts = (product: Product) => {
   // Filter out false positives.
@@ -163,6 +164,17 @@ export class Service extends BaseEntity {
     }[];
   };
 
+  /** Shodan results */
+  @Column({
+    type: 'jsonb',
+    default: {}
+  })
+  shodanResults: {
+    product: string;
+    version: string;
+    cpe?: string[];
+  } | null;
+
   /** Wappalyzer output */
   @Column({
     type: 'jsonb',
@@ -215,6 +227,25 @@ export class Service extends BaseEntity {
       }
     }
 
+    // Shodan stores all CPEs in the cpe array,
+    // but stores product name / version in the product and version
+    // keys for only one of those CPEs, so those two keys
+    // are not useful for our purposes.
+    if (this.shodanResults?.cpe && this.shodanResults.cpe.length > 0) {
+      for (const cpe of this.shodanResults.cpe) {
+        const parser = new CpeParser();
+        const parsed = parser.parse(cpe);
+        const product: Product = {
+          name: parsed.product,
+          version: parsed.version,
+          vendor: parsed.vendor,
+          cpe,
+          tags: []
+        };
+        products.push(product);
+      }
+    }
+
     if (this.censysMetadata && Object.values(this.censysMetadata).length > 0) {
       let cpe;
 
@@ -243,7 +274,6 @@ export class Service extends BaseEntity {
       for (const prop in product) {
         if (!product[prop]) delete product[prop];
       }
-      console.log(product);
       if (product.cpe && productDict[product.cpe])
         productDict[product.cpe] = { ...productDict[product.cpe], ...product };
       else if (product.cpe) productDict[product.cpe] = product;

@@ -7,15 +7,15 @@ import {
   isUUID,
   IsOptional,
   IsObject,
-  IsNumber,
   IsUUID
 } from 'class-validator';
-import { plainToClass, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { Vulnerability, connectToDatabase, User } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
-import { SelectQueryBuilder, In } from 'typeorm';
+import { SelectQueryBuilder } from 'typeorm';
 import {
   getOrgMemberships,
+  getTagOrganizations,
   isGlobalViewAdmin,
   isGlobalWriteAdmin
 } from './auth';
@@ -56,6 +56,10 @@ class VulnerabilityFilters {
   @IsUUID()
   @IsOptional()
   organization?: string;
+
+  @IsUUID()
+  @IsOptional()
+  tag?: string;
 }
 
 class VulnerabilitySearch {
@@ -91,7 +95,7 @@ class VulnerabilitySearch {
   // If set to -1, returns all results.
   pageSize?: number;
 
-  filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>) {
+  async filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>, event) {
     if (this.filters?.id) {
       qs.andWhere('vulnerability.id = :id', {
         id: this.filters.id
@@ -132,10 +136,15 @@ class VulnerabilitySearch {
         org: this.filters.organization
       });
     }
+    if (this.filters?.tag) {
+      qs.andWhere('organization.id IN (:...orgs)', {
+        orgs: await getTagOrganizations(event, this.filters.tag)
+      });
+    }
     return qs;
   }
 
-  async getResults(event) {
+  async getResults(event): Promise<[Vulnerability[], number]> {
     const pageSize = this.pageSize || PAGE_SIZE;
     const sort =
       this.sort === 'domain'
@@ -150,19 +159,32 @@ class VulnerabilitySearch {
       .orderBy(sort, this.order);
 
     if (pageSize !== -1) {
-      qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
+      qs = qs.offset(pageSize * (this.page - 1)).limit(pageSize);
     }
 
-    this.filterResultQueryset(qs);
+    await this.filterResultQueryset(qs, event);
     if (!isGlobalViewAdmin(event)) {
       qs.andWhere('organization.id IN (:...orgs)', {
         orgs: getOrgMemberships(event)
       });
     }
-    return await qs.getManyAndCount();
+    return qs.getManyAndCount();
   }
 }
 
+/**
+ * @swagger
+ *
+ * /vulnerabilities/{id}:
+ *  put:
+ *    description: Update a particular vulnerability.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Vulnerability id
+ *    tags:
+ *    - Vulnerabilities
+ */
 export const update = wrapHandler(async (event) => {
   await connectToDatabase();
   const id = event.pathParameters?.vulnerabilityId;
@@ -211,8 +233,17 @@ export const update = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /vulnerabilities/search:
+ *  post:
+ *    description: List vulnerabilities by specifying a filter.
+ *    tags:
+ *    - Vulnerabilities
+ */
 export const list = wrapHandler(async (event) => {
-  await connectToDatabase();
+  await connectToDatabase(true);
   const search = await validateBody(VulnerabilitySearch, event.body);
   const [result, count] = await search.getResults(event);
   return {
@@ -224,6 +255,15 @@ export const list = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /vulnerabilities/export:
+ *  post:
+ *    description: Export vulnerabilities to a CSV file by specifying a filter.
+ *    tags:
+ *    - Vulnerabilities
+ */
 export const export_ = wrapHandler(async (event) => {
   await connectToDatabase();
   const search = await validateBody(VulnerabilitySearch, event.body);
@@ -265,6 +305,19 @@ export const export_ = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /vulnerabilities/{id}:
+ *  get:
+ *    description: Get information about a particular vulnerability.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Vulnerability id
+ *    tags:
+ *    - Vulnerabilities
+ */
 export const get = wrapHandler(async (event) => {
   await connectToDatabase();
   const id = event.pathParameters?.vulnerabilityId;

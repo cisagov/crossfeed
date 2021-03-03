@@ -1,0 +1,49 @@
+{
+  "name": "federalist-uswds-gatsby",
+  "description": "A Federalist template using USWDS 2.0 + Gatsby",
+  "version": "1.0.0",
+  "scripts": {
+    "clean": "rimraf .cache public _site",
+    "build": "gatsby build",
+    "reset": "npx rimraf .git",
+    "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "lint": "prettier --check \"**/*.{js,jsx,json,md}\"",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "codegen": "swagger-jsdoc -d ./src/swaggerDef.js -o ./src/generated/swagger.json",
+    "postinstall": "npm run codegen"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/react-fontawesome": "^0.1.13",
+    "classnames": "^2.2.6",
+    "gatsby": "^2.25.3",
+    "gatsby-awesome-pagination": "^0.3.6",
+    "gatsby-plugin-manifest": "^2.5.2",
+    "gatsby-plugin-netlify-cms": "^4.3.17",
+    "gatsby-plugin-offline": "^3.2.38",
+    "gatsby-plugin-react-helmet": "^3.3.14",
+    "gatsby-plugin-sass": "^2.4.2",
+    "gatsby-remark-embed-markdown": "^0.0.4",
+    "gatsby-remark-prismjs": "^3.8.0",
+    "gatsby-source-filesystem": "^2.4.2",
+    "gatsby-transformer-remark": "^2.9.2",
+    "netlify-cms-app": "^2.13.3",
+    "prismjs": "^1.22.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-helmet": "^6.1.0",
+    "sass": "^1.29.0",
+    "swagger-jsdoc": "^5.0.1",
+    "swagger-ui-react": "^3.37.0",
+    "uswds": "^2.9.0"
+  },
+  "devDependencies": {
+    "eslint-config-react-app": "^5.2.1",
+    "prettier": "^2.1.2",
+    "rimraf": "^3.0.2"
+  }
+}

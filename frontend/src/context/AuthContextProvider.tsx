@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { Auth } from 'aws-amplify';
 import { AuthContext, AuthUser } from './AuthContext';
-import { User, Organization } from 'types';
+import { User, Organization, OrganizationTag } from 'types';
 import { useApi } from 'hooks/useApi';
 import { usePersistentState } from 'hooks';
 import {
@@ -11,24 +11,41 @@ import {
   getUserMustSign
 } from './userStateUtils';
 import Cookies from 'universal-cookie';
+import { Snackbar } from '@material-ui/core';
+import { Alert, AlertProps } from '@material-ui/lab';
 
 export const currentTermsVersion = '1';
 
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [token, setToken] = usePersistentState<string | null>('token', null);
-  const [org, setOrg] = usePersistentState<Organization | null>(
-    'organization',
-    null
-  );
+  const [org, setOrg] = usePersistentState<
+    Organization | OrganizationTag | null
+  >('organization', null);
+  const [showAllOrganizations, setShowAllOrganizations] = usePersistentState<
+    boolean
+  >('showAllOrganizations', false);
+  const [feedbackMessage, setFeedbackMessage] = useState<{
+    message: string;
+    type: AlertProps['severity'];
+  } | null>(null);
   const cookies = useMemo(() => new Cookies(), []);
 
   const logout = useCallback(async () => {
+    const shouldReload = !!token;
+
     localStorage.clear();
     await Auth.signOut();
-    cookies.remove('crossfeed-token', { domain: process.env.REACT_APP_COOKIE_DOMAIN });
-    window.location.reload();
-  }, [cookies]);
+    cookies.remove('crossfeed-token', {
+      domain: process.env.REACT_APP_COOKIE_DOMAIN
+    });
+
+    if (shouldReload) {
+      // Refresh the page only if the token was previously defined
+      // (i.e. it is now invalid / has expired now).
+      window.location.reload();
+    }
+  }, [cookies, token]);
 
   const handleError = useCallback(
     async (e: Error) => {
@@ -114,12 +131,15 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         refreshUser,
         setOrganization: setOrg,
         currentOrganization: extendedOrg,
+        showAllOrganizations: showAllOrganizations,
+        setShowAllOrganizations: setShowAllOrganizations,
         login: setToken,
         logout,
         setLoading: () => {},
         maximumRole,
         touVersion,
         userMustSign,
+        setFeedbackMessage,
         ...api
       }}
     >
@@ -128,6 +148,20 @@ export const AuthContextProvider: React.FC = ({ children }) => {
           <div></div>
           <div></div>
         </div>
+      )}
+      {feedbackMessage && (
+        <Snackbar
+          open={!!feedbackMessage}
+          autoHideDuration={5000}
+          onClose={() => setFeedbackMessage(null)}
+        >
+          <Alert
+            onClose={() => setFeedbackMessage(null)}
+            severity={feedbackMessage.type}
+          >
+            {feedbackMessage.message}
+          </Alert>
+        </Snackbar>
       )}
       {children}
     </AuthContext.Provider>

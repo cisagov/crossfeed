@@ -4,7 +4,8 @@ export interface ContextType {
     value: string,
     filterType: 'all' | 'any' | 'none'
   ): void;
-  clearFilters(except?: string[]): any;
+  clearFilters: any;
+  saveSearch: any;
   removeFilter(
     name: string,
     value: string,
@@ -37,6 +38,7 @@ export interface ContextType {
   totalPages: number;
   totalResults: number;
   wasSearched: boolean;
+  noResults: boolean;
 }
 
 export interface Result {
@@ -52,7 +54,6 @@ export interface Result {
     raw: {
       createdAt: string;
       id: string;
-      inviteOnly: boolean;
       ipBlocks: any[];
       isPassive: boolean;
       name: string;

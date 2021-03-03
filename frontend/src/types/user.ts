@@ -1,4 +1,5 @@
 import { Role } from './role';
+import { ApiKey } from './api-key';
 
 export interface User {
   id: string;
@@ -13,4 +14,5 @@ export interface User {
   roles: Role[];
   dateAcceptedTerms: Date | null;
   acceptedTermsVersion: string | null;
+  apiKeys: ApiKey[];
 }

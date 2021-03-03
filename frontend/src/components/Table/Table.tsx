@@ -16,6 +16,7 @@ import {
 import { TableHead } from './TableHead';
 import { TableBody } from './TableBody';
 import classes from './styles.module.scss';
+import { NoResults } from '../NoResults';
 
 interface TableProps<T extends object> {
   columns: Column<T>[];
@@ -23,13 +24,14 @@ interface TableProps<T extends object> {
   initialSortBy?: SortingRule<T>[];
   initialFilterBy?: Filters<T>;
   pageCount?: number;
-  count?: number;
   pageSize?: number;
   fetchData?: (query: Query<T>) => void;
   disableFilters?: boolean;
   renderPagination?: (table: TableInstance<T>) => JSX.Element;
   renderExpanded?: (row: Row<T>) => JSX.Element;
   tableRef?: React.Ref<TableInstance<T>>;
+  noResults?: boolean;
+  noResultsMessage?: string;
 }
 
 export const Table = <T extends object>(props: TableProps<T>) => {
@@ -40,7 +42,6 @@ export const Table = <T extends object>(props: TableProps<T>) => {
     initialFilterBy,
     pageCount = 0,
     pageSize = 20,
-    count,
     fetchData,
     disableFilters = false,
     renderPagination,
@@ -66,7 +67,6 @@ export const Table = <T extends object>(props: TableProps<T>) => {
       autoResetSortBy: false,
       disableFilters,
       pageCount,
-      count,
       stateReducer,
       initialState: {
         sortBy: initialSortBy ?? [],
@@ -99,23 +99,16 @@ export const Table = <T extends object>(props: TableProps<T>) => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.tableWrapper}>
-        <div className={classes.tableInner}>
-          <UsaTable {...instance.getTableProps()} bordered={true}>
-            <TableHead<T> {...instance} />
-            <TableBody<T> {...instance} renderExpanded={renderExpanded} />
-          </UsaTable>
-        </div>
-        {renderPagination && renderPagination(instance)}
-        {count ? (
-          <p className="text-center">
-            Showing {pageIndex * pageSize + 1}-
-            {Math.min(count, (pageIndex + 1) * pageSize)} of {count}
-          </p>
-        ) : (
-          ''
-        )}
+      <div className={classes.tableInner}>
+        <UsaTable {...instance.getTableProps()} bordered={false}>
+          <TableHead<T> {...instance} />
+          <TableBody<T> {...instance} renderExpanded={renderExpanded} />
+        </UsaTable>
       </div>
+      {props.noResults && (
+        <NoResults message={props.noResultsMessage!}></NoResults>
+      )}
+      {renderPagination && renderPagination(instance)}
     </div>
   );
 };

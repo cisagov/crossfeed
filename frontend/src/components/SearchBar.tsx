@@ -11,6 +11,7 @@ interface Props
   }[];
   onSelectResult?(id: string): void;
   onChange(value: string): void;
+  initialValue: string;
 }
 
 const defaultPlaceholder = 'Search for a domain, vuln type, port, service, IP';
@@ -20,6 +21,7 @@ type Timer = ReturnType<typeof setTimeout>;
 export const SearchBar = React.forwardRef<HTMLInputElement, Props>(
   (props, ref) => {
     const {
+      initialValue,
       className,
       placeholder,
       autocompletedResults,
@@ -29,7 +31,7 @@ export const SearchBar = React.forwardRef<HTMLInputElement, Props>(
     } = props;
     const [hasFocus, setHasFocus] = useState(false);
     const [focusTimer, setFocusTimer] = useState<Timer>();
-    const [query, setQuery] = useState<string>('');
+    const [query, setQuery] = useState<string>(initialValue);
     const classes = useStyles({ inpFocused: hasFocus });
 
     const { value } = props;
@@ -100,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     zIndex: 101,
     width: '100%',
-    maxWidth: 500,
+    maxWidth: 400,
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
     flexFlow: 'row nowrap',

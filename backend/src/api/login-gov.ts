@@ -7,7 +7,7 @@ const loginGov: any = {
 };
 
 const jwkSet = {
-  keys: [JSON.parse(process.env.LOGIN_GOV_JWT_KEY!)]
+  keys: [JSON.parse(process.env.LOGIN_GOV_JWT_KEY ?? '{}')]
 };
 
 const clientOptions: ClientMetadata = {

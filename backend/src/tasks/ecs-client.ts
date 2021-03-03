@@ -3,8 +3,15 @@ import { SCAN_SCHEMA } from '../api/scans';
 import * as Docker from 'dockerode';
 
 export interface CommandOptions {
-  organizationId?: string;
-  organizationName?: string;
+  /** A list of organizations (id and name) that this
+   * ScanTask must run on. */
+  organizations?: [
+    {
+      name: string;
+      id: string;
+    }
+  ];
+
   scanId: string;
   scanName: string;
   scanTaskId: string;
@@ -13,6 +20,13 @@ export interface CommandOptions {
 
   // Used only for testing to scope down global scans to a single domain.
   domainId?: string;
+
+  /** These properties are not specified when creating a ScanTask (as a single ScanTask
+   * can correspond to multiple organizations), but they are input into the the
+   * specific task function that runs per organization.
+   */
+  organizationId?: string;
+  organizationName?: string;
 }
 
 const toSnakeCase = (input) => input.replace(/ /g, '-');
@@ -83,10 +97,10 @@ class ECSClient {
             `CENSYS_API_ID=${process.env.CENSYS_API_ID}`,
             `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`,
             `WORKER_USER_AGENT=${process.env.WORKER_USER_AGENT}`,
+            `SHODAN_API_KEY=${process.env.SHODAN_API_KEY}`,
             `WORKER_SIGNATURE_PUBLIC_KEY=${process.env.WORKER_SIGNATURE_PUBLIC_KEY}`,
             `WORKER_SIGNATURE_PRIVATE_KEY=${process.env.WORKER_SIGNATURE_PRIVATE_KEY}`,
             `ELASTICSEARCH_ENDPOINT=${process.env.ELASTICSEARCH_ENDPOINT}`,
-            `WEBSCRAPER_S3_BUCKET_NAME=${process.env.WEBSCRAPER_S3_BUCKET_NAME}`,
             `AWS_ACCESS_KEY_ID=${process.env.AWS_ACCESS_KEY_ID}`,
             `AWS_SECRET_ACCESS_KEY=${process.env.AWS_SECRET_ACCESS_KEY}`
           ]

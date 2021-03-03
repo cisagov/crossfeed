@@ -3,7 +3,6 @@ import classes from './Risk.module.scss';
 import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
-import { Checkbox, Grid } from '@trussworks/react-uswds';
 import { Chip, makeStyles, Paper, Tooltip } from '@material-ui/core';
 import { geoCentroid } from 'd3-geo';
 import {
@@ -52,20 +51,25 @@ let colorScale = scaleLinear<string>()
   .domain([0, 1])
   .range(['#c7e8ff', '#135787']);
 
+export const getSeverityColor = ({ id }: { id: string }) => {
+  if (id === 'None') return 'rgb(255, 255, 255)';
+  else if (id === 'Low') return '#F8DFE2';
+  else if (id === 'Medium') return '#F2938C';
+  else if (id === 'High') return '#B51D09';
+  else return '#540C03';
+};
+
 const Risk: React.FC = (props) => {
   const history = useHistory();
-  const { currentOrganization, user, apiPost } = useAuthContext();
+  const {
+    currentOrganization,
+    showAllOrganizations,
+    user,
+    apiPost
+  } = useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
-  const [showAll, setShowAll] = useState<boolean>(
-    JSON.parse(localStorage.getItem('showGlobal') ?? 'false')
-  );
   const cardClasses = useStyles(props);
-
-  const updateShowAll = (state: boolean) => {
-    setShowAll(state);
-    localStorage.setItem('showGlobal', JSON.stringify(state));
-  };
 
   const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
@@ -73,14 +77,6 @@ const Risk: React.FC = (props) => {
 
   const getSingleColor = () => {
     return '#FFBC78';
-  };
-
-  const getSeverityColor = ({ id }: { id: string }) => {
-    if (id === 'None') return 'rgb(255, 255, 255)';
-    else if (id === 'Low') return '#F8DFE2';
-    else if (id === 'Medium') return '#F2938C';
-    else if (id === 'High') return '#B51D09';
-    else return '#540C03';
   };
 
   const truncateText = (text: string, len: number) => {
@@ -93,11 +89,13 @@ const Risk: React.FC = (props) => {
       const { result } = await apiPost<ApiResponse>('/stats', {
         body: {
           filters:
-            !orgId && showAll
+            (!orgId && showAllOrganizations) || !currentOrganization
               ? {}
-              : {
+              : orgId || 'rootDomains' in currentOrganization
+              ? {
                   organization: orgId ? orgId : currentOrganization?.id
                 }
+              : { tag: currentOrganization.id }
         }
       });
       const max = Math.max(...result.vulnerabilities.byOrg.map((p) => p.value));
@@ -107,7 +105,7 @@ const Risk: React.FC = (props) => {
         .range(['#c7e8ff', '#135787']);
       setStats(result);
     },
-    [showAll, apiPost, currentOrganization]
+    [showAllOrganizations, apiPost, currentOrganization]
   );
 
   useEffect(() => {
@@ -202,6 +200,11 @@ const Risk: React.FC = (props) => {
             history.push(
               `/inventory/vulnerabilities?domain=${event.data.label}&severity=${event.id}`
             );
+          } else if (type === 'ports') {
+            history.push(
+              `/inventory?filters[0][field]=services.port&filters[0][values][0]=n_${event.data.label}_n&filters[0][type]=any`
+            );
+            window.location.reload();
           }
         }}
         padding={0.5}
@@ -259,7 +262,11 @@ const Risk: React.FC = (props) => {
             {data.length > 0 &&
               data.slice(0, 4).map((vuln) => (
                 <Tooltip
-                  title={truncateText(vuln.description, 120)}
+                  title={
+                    <span style={{ fontSize: 14 }}>
+                      {truncateText(vuln.description, 120)}
+                    </span>
+                  }
                   placement="right"
                   arrow
                   key={vuln.title}
@@ -350,7 +357,7 @@ const Risk: React.FC = (props) => {
     type: string;
   }) => (
     <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
-      <div className={cardClasses.inner}>
+      <div>
         <div className={classes.chart}>
           <div className={cardClasses.header}>
             <h2>{title}</h2>
@@ -445,23 +452,6 @@ const Risk: React.FC = (props) => {
 
   return (
     <div className={classes.root}>
-      <Grid row>
-        <Grid style={{ float: 'right' }}>
-          {((user?.roles && user.roles.length > 1) ||
-            user?.userType === 'globalView' ||
-            user?.userType === 'globalAdmin') && (
-            <Checkbox
-              id="showAll"
-              name="showAll"
-              label="Show all organizations"
-              checked={showAll}
-              onChange={(e) => updateShowAll(e.target.checked)}
-              className={classes.showAll}
-            />
-          )}
-        </Grid>
-      </Grid>
-
       <div className={cardClasses.contentWrapper}>
         {stats && (
           <div className={cardClasses.content}>
@@ -471,18 +461,6 @@ const Risk: React.FC = (props) => {
                 data={latestVulnsGroupedArr}
                 showLatest={true}
               ></VulnerabilityCard>
-              {/* <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
-                <div className={cardClasses.inner}>
-                  {stats.domains.numVulnerabilities.length > 0 && (
-                    <div className={cardClasses.cardSmall}>
-                      <div className={cardClasses.header}>
-                        <h2>Latest Feeds</h2>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </Paper> */}
-
               {stats.domains.services.length > 0 && (
                 <Paper elevation={0} className={cardClasses.cardRoot}>
                   <div className={cardClasses.cardSmall}>
@@ -536,7 +514,7 @@ const Risk: React.FC = (props) => {
 
             <div className={cardClasses.panel}>
               <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
-                <div className={cardClasses.inner}>
+                <div>
                   {stats.domains.numVulnerabilities.length > 0 && (
                     <div className={cardClasses.cardBig}>
                       <div className={cardClasses.header}>
@@ -646,7 +624,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     paddingLeft: 20,
     paddingTop: 1
-    // fontSize: '20px'
   },
   footer: {
     float: 'right',
@@ -658,7 +635,6 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: '400'
     }
   },
-  inner: {},
   root: {
     position: 'relative',
     flex: '1',
@@ -675,7 +651,8 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     display: 'flex',
     flexFlow: 'column nowrap',
-    overflowY: 'hidden'
+    overflowY: 'hidden',
+    marginTop: '1rem'
   },
   content: {
     display: 'flex',

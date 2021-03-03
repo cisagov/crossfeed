@@ -10,7 +10,7 @@ import {
   JoinTable,
   ManyToOne
 } from 'typeorm';
-import { ScanTask, Organization } from '.';
+import { ScanTask, Organization, OrganizationTag } from '.';
 import { User } from './user';
 
 @Entity()
@@ -70,6 +70,17 @@ export class Scan extends BaseEntity {
   )
   @JoinTable()
   organizations: Organization[];
+
+  /**
+   * If the scan is granular, specifies organization tags that the
+   * scan will run on.
+   */
+  @ManyToMany((type) => OrganizationTag, (tag) => tag.scans, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  @JoinTable()
+  tags: OrganizationTag[];
 
   @ManyToOne((type) => User, {
     onDelete: 'SET NULL',

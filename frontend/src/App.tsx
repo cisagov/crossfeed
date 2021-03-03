@@ -14,23 +14,22 @@ import {
   useMatomo
 } from '@datapunt/matomo-tracker-react';
 import {
-  Alerts,
   Domain,
   AuthLogin,
   AuthCreateAccount,
   Scans,
   Scan,
-  Logs,
   Risk,
   Organizations,
   Organization,
   Users,
   Settings,
   Vulnerabilities,
+  Vulnerability,
   TermsOfUse,
   SearchPage,
   LoginGovCallback,
-  Dashboard
+  Feeds
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
 import './styles.scss';
@@ -113,19 +112,25 @@ const App: React.FC = () => (
                   path="/inventory/domain/:domainId"
                   component={Domain}
                 />
-                <RouteGuard path="/inventory/domains" component={Dashboard} />
                 <RouteGuard
                   path="/inventory/vulnerabilities"
                   component={Vulnerabilities}
                 />
-                <RouteGuard path="/inventory/alerts" component={Alerts} />
+                <RouteGuard
+                  path="/inventory/vulnerability/:vulnerabilityId"
+                  component={Vulnerability}
+                />
 
+                <RouteGuard path="/feeds" component={Feeds} />
+                <RouteGuard path="/scans" component={Scans} exact />
+                <RouteGuard path="/scans/history" component={Scans} exact />
                 <RouteGuard path="/scans/:scanId" component={Scan} />
-                <RouteGuard path="/scans" component={Scans} />
+                <RouteGuard
+                  path="/organizations/:organizationId"
+                  component={Organization}
+                />
                 <RouteGuard path="/organizations" component={Organizations} />
-                <RouteGuard path="/organization" component={Organization} />
                 <RouteGuard path="/users" component={Users} />
-                <RouteGuard path="/logs" component={Logs} />
                 <RouteGuard path="/settings" component={Settings} />
               </Switch>
             </Layout>

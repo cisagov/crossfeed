@@ -13,7 +13,11 @@ import { Type } from 'class-transformer';
 import { Domain, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
-import { isGlobalViewAdmin, getOrgMemberships } from './auth';
+import {
+  isGlobalViewAdmin,
+  getOrgMemberships,
+  getTagOrganizations
+} from './auth';
 import S3Client from '../tasks/s3-client';
 import * as Papa from 'papaparse';
 
@@ -43,6 +47,10 @@ class DomainFilters {
   @IsString()
   @IsOptional()
   vulnerability?: string;
+
+  @IsUUID()
+  @IsOptional()
+  tag?: string;
 }
 
 class DomainSearch {
@@ -69,7 +77,7 @@ class DomainSearch {
   // If set to -1, returns all results.
   pageSize?: number;
 
-  filterResultQueryset(qs: SelectQueryBuilder<Domain>) {
+  async filterResultQueryset(qs: SelectQueryBuilder<Domain>, event) {
     if (this.filters?.reverseName) {
       qs.andWhere('domain.name ILIKE :name', {
         name: `%${this.filters?.reverseName}%`
@@ -90,8 +98,13 @@ class DomainSearch {
       );
     }
     if (this.filters?.organization) {
-      qs.andWhere('domain."organizationId" = :org', {
+      qs.andWhere('organization.id = :org', {
         org: this.filters.organization
+      });
+    }
+    if (this.filters?.tag) {
+      qs.andWhere('organization.id IN (:...orgs)', {
+        orgs: await getTagOrganizations(event, this.filters.tag)
       });
     }
     if (this.filters?.vulnerability) {
@@ -114,69 +127,35 @@ class DomainSearch {
         'vulnerabilities',
         "state = 'open'"
       )
+      .leftJoinAndSelect('domain.organization', 'organization')
       .orderBy(`domain.${this.sort}`, this.order)
       .groupBy(
-        'domain.id, domain.ip, domain.name, domain."organizationId", services.id, vulnerabilities.id'
+        'domain.id, domain.ip, domain.name, organization.id, services.id, vulnerabilities.id'
       );
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
     }
 
     if (!isGlobalViewAdmin(event)) {
-      qs.andHaving('domain."organizationId" IN (:...orgs)', {
+      qs.andWhere('organization.id IN (:...orgs)', {
         orgs: getOrgMemberships(event)
       });
     }
 
-    this.filterResultQueryset(qs);
-    return await qs.getMany();
-  }
-
-  filterCountQueryset(qs: SelectQueryBuilder<Domain>) {
-    if (this.filters?.reverseName) {
-      qs.andWhere('domain.name ILIKE :name', {
-        name: `%${this.filters?.reverseName}%`
-      });
-    }
-    if (this.filters?.ip) {
-      qs.andWhere('domain.ip LIKE :ip', { ip: `%${this.filters?.ip}%` });
-    }
-    if (this.filters?.port) {
-      qs.andWhere('services.port = :port', {
-        port: this.filters?.port
-      });
-    }
-    if (this.filters?.service) {
-      qs.andWhere('services.service ILIKE :service', {
-        service: `%${this.filters?.service}%`
-      });
-    }
-    if (this.filters?.organization) {
-      qs.andWhere('domain."organizationId" = :org', {
-        org: this.filters.organization
-      });
-    }
-    if (this.filters?.vulnerability) {
-      qs.andWhere('vulnerabilities.title ILIKE :title', {
-        title: `%${this.filters?.vulnerability}%`
-      });
-    }
-  }
-
-  async getCount(event) {
-    const qs = Domain.createQueryBuilder('domain')
-      .leftJoin('domain.services', 'services')
-      .leftJoin('domain.vulnerabilities', 'vulnerabilities', "state = 'open'");
-    if (!isGlobalViewAdmin(event)) {
-      qs.andWhere('domain."organizationId" IN (:...orgs)', {
-        orgs: getOrgMemberships(event)
-      });
-    }
-    this.filterCountQueryset(qs);
-    return await qs.getCount();
+    await this.filterResultQueryset(qs, event);
+    return qs.getManyAndCount();
   }
 }
 
+/**
+ * @swagger
+ *
+ * /domain/search:
+ *  post:
+ *    description: List domains by specifying a filter.
+ *    tags:
+ *    - Domains
+ */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
     return {
@@ -189,10 +168,7 @@ export const list = wrapHandler(async (event) => {
   }
   await connectToDatabase();
   const search = await validateBody(DomainSearch, event.body);
-  const [result, count] = await Promise.all([
-    search.getResults(event),
-    search.getCount(event)
-  ]);
+  const [result, count] = await search.getResults(event);
 
   return {
     statusCode: 200,
@@ -203,6 +179,15 @@ export const list = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /domain/export:
+ *  post:
+ *    description: Export domains to a CSV file by specifying a filter.
+ *    tags:
+ *    - Domains
+ */
 export const export_ = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
     return {
@@ -215,10 +200,7 @@ export const export_ = wrapHandler(async (event) => {
   }
   await connectToDatabase();
   const search = await validateBody(DomainSearch, event.body);
-  const [result, count] = await Promise.all([
-    search.getResults(event),
-    search.getCount(event)
-  ]);
+  const [result, count] = await search.getResults(event);
   const client = new S3Client();
   const url = await client.saveCSV(
     Papa.unparse({
@@ -229,9 +211,13 @@ export const export_ = wrapHandler(async (event) => {
         'ports',
         'services',
         'createdAt',
-        'updatedAt'
+        'updatedAt',
+        'organizationName'
       ],
-      data: result
+      data: result.map((e) => ({
+        ...e,
+        organizationName: e.organization?.name
+      }))
     }),
     'domains'
   );
@@ -244,6 +230,19 @@ export const export_ = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /domain/{id}:
+ *  get:
+ *    description: Get information about a particular domain.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Domain id
+ *    tags:
+ *    - Domains
+ */
 export const get = wrapHandler(async (event) => {
   let where = {};
   if (isGlobalViewAdmin(event)) {

@@ -8,7 +8,10 @@ import {
   User,
   Role,
   ScanTask,
-  Webpage
+  Webpage,
+  ApiKey,
+  SavedSearch,
+  OrganizationTag
 } from '.';
 
 let connection: Connection | null = null;
@@ -30,12 +33,16 @@ const connectDb = async (logging?: boolean) => {
       User,
       Role,
       ScanTask,
-      Webpage
+      Webpage,
+      ApiKey,
+      SavedSearch,
+      OrganizationTag
     ],
     synchronize: false,
     name: 'default',
     dropSchema: false,
-    logging: logging ?? false
+    logging: logging ?? false,
+    cache: true
   });
   return connection;
 };

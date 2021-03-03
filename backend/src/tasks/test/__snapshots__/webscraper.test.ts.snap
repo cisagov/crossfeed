@@ -25,15 +25,15 @@ Array [
 
 exports[`webscraper basic test 3`] = `
 Array [
-  "https://docs.crossfeed.cyber.dhs.gov/scans/",
-  "https://docs.crossfeed.cyber.dhs.gov/contributing/",
-  "https://docs.crossfeed.cyber.dhs.gov/usage/",
-  "https://docs.crossfeed.cyber.dhs.gov",
-  "https://docs.crossfeed.cyber.dhs.gov/contributing/deployment/",
-  "https://docs.crossfeed.cyber.dhs.gov/contributing/architecture/",
   "https://docs.crossfeed.cyber.dhs.gov/usage/customization/",
   "https://docs.crossfeed.cyber.dhs.gov/usage/administration/",
+  "https://docs.crossfeed.cyber.dhs.gov/usage/",
+  "https://docs.crossfeed.cyber.dhs.gov/scans/",
   "https://docs.crossfeed.cyber.dhs.gov/contributing/setup/",
+  "https://docs.crossfeed.cyber.dhs.gov/contributing/deployment/",
+  "https://docs.crossfeed.cyber.dhs.gov/contributing/architecture/",
+  "https://docs.crossfeed.cyber.dhs.gov/contributing/",
+  "https://docs.crossfeed.cyber.dhs.gov",
 ]
 `;
 
@@ -43,11 +43,11 @@ Array [
   "200",
   "200",
   "200",
-  "200",
-  "200",
-  "200",
-  "200",
   "400",
+  "200",
+  "200",
+  "200",
+  "200",
 ]
 `;
 
