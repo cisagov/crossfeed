@@ -120,6 +120,46 @@ describe('cve', () => {
     }
   });
 
+  test('product with cpe with no version in it should create no vulns', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const service = await Service.create({
+      domain,
+      port: 80,
+      wappalyzerResults: [
+        {
+          technology: {
+            cpe: 'cpe:/a:10web:form_maker'
+          },
+          version: ''
+        }
+      ]
+    }).save();
+    await cve({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vulnerabilities = await Vulnerability.find({
+      where: {
+        domain: domain,
+        service: service
+      }
+    });
+    expect(vulnerabilities.length).toEqual(0);
+  });
+
   test('product with cpe without version in it', async () => {
     const organization = await Organization.create({
       name: 'test-' + Math.random(),
@@ -137,7 +177,9 @@ describe('cve', () => {
       port: 80,
       wappalyzerResults: [
         {
-          cpe: 'cpe:/a:10web:form_maker',
+          technology: {
+            cpe: 'cpe:/a:10web:form_maker'
+          },
           version: '1.0.0'
         }
       ]
