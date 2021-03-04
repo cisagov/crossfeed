@@ -18,7 +18,20 @@ import * as zlib from 'zlib';
  * The CVE scan creates vulnerabilities based on existing
  * data (such as product version numbers / CPEs, webpages)
  * that have already been collected from other scans.
- */
+ * 
+ * To manually test the CVE tools from your command line, run:
+
+nvdsync -cve_feed cve-1.1.json.gz nvd-dump
+
+cpe2cve -d ' ' -d2 , -o ' ' -o2 , -cpe 2 -e 2 -matches 3 -cve 2 -cvss 4 -cwe 5 -require_version nvd-dump/nvdcve-1.1-2*.json.gz
+
+Then input:
+
+0 cpe:/a:microsoft:exchange_server:2019:cumulative_update_3
+
+Press ctrl + D to end input.
+
+*/
 
 const productMap = {
   'cpe:/a:microsoft:asp.net': ['cpe:/a:microsoft:.net_framework']
@@ -26,6 +39,21 @@ const productMap = {
 
 // The number of domains to process at once
 const BATCH_SIZE = 1000;
+
+/**
+ * Construct a CPE to be added. If the CPE doesn't already contain
+ * the version, then add the version to the CPE.
+ */
+const constructCPE = (cpe, version) => {
+  if (
+    cpe?.indexOf(String(version)) > -1 ||
+    cpe.indexOf('exchange_server') > -1
+  ) {
+    // CPE already has the product version. Just return it.
+    return cpe;
+  }
+  return `${cpe}:${version}`;
+};
 
 /**
  * Scan for new vulnerabilities based on version numbers of identified CPEs
@@ -46,10 +74,11 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
           product.version &&
           String(product.version).split('.').length > 1
         ) {
-          cpes.add(product.cpe + ':' + product.version);
+          cpes.add(constructCPE(product.cpe, product.version));
           if (productMap[product.cpe]) {
+            // Add alternate variants of the CPE as well.
             for (const cpe of productMap[product.cpe]) {
-              cpes.add(cpe + ':' + product.version);
+              cpes.add(constructCPE(cpe, product.version));
             }
           }
         }

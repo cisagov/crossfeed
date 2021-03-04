@@ -25,14 +25,35 @@ httpService.port = 80;
 
 const wappalyzerResponse = [
   {
-    name: 'Drupal',
-    slug: 'drupal',
-    categories: [{ id: 1, slug: 'cms', name: 'CMS', priority: 1 }],
-    confidence: 100,
-    version: '8',
-    icon: 'Drupal.svg',
-    website: 'https://drupal.org',
-    cpe: 'cpe:/a:drupal:drupal'
+    technology: {
+      name: 'jQuery',
+      categories: [59],
+      slug: 'jquery',
+      url: [],
+      headers: [],
+      dns: [],
+      cookies: [],
+      dom: [],
+      html: [],
+      css: [],
+      certIssuer: [],
+      robots: [],
+      meta: [],
+      scripts: [[Object], [Object], [Object]],
+      js: { 'jQuery.fn.jquery': [Array] },
+      implies: [],
+      excludes: [],
+      icon: 'jQuery.svg',
+      website: 'https://jquery.com',
+      cpe: 'cpe:/a:jquery:jquery'
+    },
+    pattern: {
+      value: 'jquery.*\\.js(?:\\?ver(?:sion)?=([\\d.]+))?',
+      regex: /jquery.*\.js(?:\?ver(?:sion)?=([\d.]+))?/i,
+      confidence: 100,
+      version: '\\1'
+    },
+    version: ''
   }
 ];
 
@@ -150,9 +171,7 @@ describe('wappalyzer', () => {
     testDomains[1].url = 'https://example2.com';
     testDomains[1].service = testServices[1];
     getLiveWebsitesMock.mockResolvedValue(testDomains);
-    wappalyzer
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce(wappalyzerResponse);
+    wappalyzer.mockReturnValueOnce([]).mockReturnValueOnce(wappalyzerResponse);
 
     await handler(commandOptions);
     scope.done();
@@ -165,6 +184,84 @@ describe('wappalyzer', () => {
 
     const service2 = await Service.findOne(testServices[1].id);
     expect(service2?.wappalyzerResults).toEqual(wappalyzerResponse);
+  });
+
+  test.only('saves exchange products properly', async () => {
+    const wappalyzerResponse = [
+      {
+        technology: {
+          name: 'Microsoft Exchange Server',
+          categories: [30],
+          slug: 'microsoft-exchange-server',
+          icon: 'Microsoft.png',
+          website:
+            'https://www.microsoft.com/en-us/microsoft-365/exchange/email',
+          cpe: 'cpe:/a:microsoft:exchange_server'
+        },
+        version: '15.2.595'
+      }
+    ];
+    const scope = nock(/https?:\/\/example2?\.com/)
+      .persist()
+      .get('/')
+      .times(2)
+      .reply(200, 'somedata');
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const testServices = [
+      await Service.create({
+        port: 443
+      }).save(),
+      await Service.create({
+        port: 443
+      }).save()
+    ] as Service[];
+    const testDomains = [
+      await Domain.create({
+        ...testDomain,
+        services: [testServices[0]],
+        organization
+      }).save(),
+      await Domain.create({
+        ...testDomain,
+        name: 'example2.com',
+        services: [testServices[1]],
+        organization
+      }).save()
+    ] as LiveDomain[];
+    testDomains[0].url = 'https://example2.com';
+    testDomains[0].service = testServices[0];
+    testDomains[1].url = 'https://example2.com';
+    testDomains[1].service = testServices[1];
+    getLiveWebsitesMock.mockResolvedValue(testDomains);
+    wappalyzer.mockReturnValueOnce([]).mockReturnValueOnce(wappalyzerResponse);
+
+    await handler(commandOptions);
+    scope.done();
+    expect(wappalyzer).toHaveBeenCalledTimes(2);
+    expect(logSpy).toHaveBeenLastCalledWith(
+      'Wappalyzer finished for 2 domains'
+    );
+    const service1 = await Service.findOne(testServices[0].id);
+    expect(service1?.wappalyzerResults).toEqual([]);
+
+    const service2 = await Service.findOne(testServices[1].id);
+    expect(service2?.wappalyzerResults).toEqual(wappalyzerResponse);
+
+    console.warn(service2?.products);
+    expect(service2?.products).toEqual([
+      {
+        cpe: 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_5',
+        icon: 'Microsoft.png',
+        name: 'Microsoft Exchange Server',
+        tags: [],
+        version: '15.2.595'
+      }
+    ]);
   });
 
   test('logs error on wappalyzer failure', async () => {

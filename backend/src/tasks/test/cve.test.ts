@@ -119,6 +119,173 @@ describe('cve', () => {
       );
     }
   });
+
+  test('product with cpe with no version in it should create no vulns', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const service = await Service.create({
+      domain,
+      port: 80,
+      wappalyzerResults: [
+        {
+          technology: {
+            cpe: 'cpe:/a:10web:form_maker'
+          },
+          version: ''
+        }
+      ]
+    }).save();
+    await cve({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vulnerabilities = await Vulnerability.find({
+      where: {
+        domain: domain,
+        service: service
+      }
+    });
+    expect(vulnerabilities.length).toEqual(0);
+  });
+
+  test('product with cpe without version in it', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const service = await Service.create({
+      domain,
+      port: 80,
+      wappalyzerResults: [
+        {
+          technology: {
+            cpe: 'cpe:/a:10web:form_maker'
+          },
+          version: '1.0.0'
+        }
+      ]
+    }).save();
+    await cve({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vulnerabilities = await Vulnerability.find({
+      where: {
+        domain: domain,
+        service: service
+      }
+    });
+    expect(vulnerabilities.length).toEqual(2);
+    expect(vulnerabilities.map((e) => e.cve).sort()).toEqual([
+      'CVE-2019-10866',
+      'CVE-2019-11590'
+    ]);
+  });
+
+  test('product with cpe with version in it', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const service = await Service.create({
+      domain,
+      port: 80,
+      wappalyzerResults: [
+        {
+          technology: {
+            cpe: 'cpe:/a:10web:form_maker:1.0.0'
+          },
+          version: '1.0.0'
+        }
+      ]
+    }).save();
+    await cve({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vulnerabilities = await Vulnerability.find({
+      where: {
+        domain: domain,
+        service: service
+      }
+    });
+    expect(vulnerabilities.length).toEqual(2);
+    expect(vulnerabilities.map((e) => e.cve).sort()).toEqual([
+      'CVE-2019-10866',
+      'CVE-2019-11590'
+    ]);
+  });
+
+  test('product with exchange cpe with version in it', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const service = await Service.create({
+      domain,
+      port: 80,
+      wappalyzerResults: [
+        {
+          technology: {
+            name: 'Microsoft Exchange Server',
+            categories: [30],
+            slug: 'microsoft-exchange-server',
+            icon: 'Microsoft.png',
+            website:
+              'https://www.microsoft.com/en-us/microsoft-365/exchange/email',
+            cpe: 'cpe:/a:microsoft:exchange_server'
+          },
+          version: '15.2.595'
+        }
+      ]
+    }).save();
+    await cve({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+  });
+
   test('should exit if no matching domains with cpes', async () => {
     const organization = await Organization.create({
       name: 'test-' + Math.random(),
