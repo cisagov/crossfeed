@@ -101,7 +101,7 @@ The documentation files are stored in the `docs` directory and served from a Gat
 docker-compose up
 ```
 
-You can then open up [http://localhost:4000][http://localhost:4000] in your browser.
+You can then open up [http://localhost:4000](http://localhost:4000) in your browser.
 
 See [federalist-uswds-gatsby](https://github.com/18F/federalist-uswds-gatsby) for more information on theme customizations that can be done.
 
