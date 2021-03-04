@@ -8,7 +8,7 @@ import pRetry from 'p-retry';
 /**
  * Chunk sizes. These values are small during testing to facilitate testing.
  */
-export const DOMAIN_CHUNK_SIZE = typeof jest === 'undefined' ? 100 : 10;
+export const DOMAIN_CHUNK_SIZE = typeof jest === 'undefined' ? 50 : 10;
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, domainId } = commandOptions;

@@ -37,8 +37,13 @@ const productMap = {
   'cpe:/a:microsoft:asp.net': ['cpe:/a:microsoft:.net_framework']
 };
 
-// The number of domains to process at once
-const BATCH_SIZE = 500;
+// The number of domains to fetch from the database
+// at once.
+const DOMAIN_BATCH_SIZE = 1000;
+
+// The number of domains to send to cpe2cve at once.
+// This should be a small enough number
+const CPE2CVE_BATCH_SIZE = 50;
 
 /**
  * Construct a CPE to be added. If the CPE doesn't already contain
@@ -100,18 +105,18 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
     stdio: [process.stdin, process.stdout, process.stderr]
   });
 
-  const numBatches = hostsToCheck.length / BATCH_SIZE;
+  const numBatches = hostsToCheck.length / CPE2CVE_BATCH_SIZE;
   for (let batch = 0; batch < numBatches; batch++) {
     let input = '';
-    console.log(`Starting batch ${batch} / ${numBatches}`);
+    console.log(`\tcpe2cve: starting batch ${batch} / ${numBatches}`);
     for (
-      let index = BATCH_SIZE * batch;
-      index < Math.min(BATCH_SIZE * (batch + 1), hostsToCheck.length);
+      let index = CPE2CVE_BATCH_SIZE * batch;
+      index < Math.min(CPE2CVE_BATCH_SIZE * (batch + 1), hostsToCheck.length);
       index++
     ) {
       input += `${index} ${hostsToCheck[index].cpes.join(',')}\n`;
-      if (index % 500 == 0) {
-        console.log(`${index} ${hostsToCheck[index].cpes.join(',')}`);
+      if (index % 100 == 0) {
+        console.log(`\t${index} ${hostsToCheck[index].cpes.join(',')}`);
       }
     }
     let res: Buffer;
@@ -329,16 +334,32 @@ export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId } = commandOptions;
 
   await connectToDatabase();
-  const allDomains = await Domain.find({
-    select: ['id', 'name', 'ip', 'ssl'],
-    relations: ['services'],
-    where: organizationId ? { organization: { id: organizationId } } : undefined
-  });
-  await identifyPassiveCVEsFromCPEs(allDomains);
 
-  // await identifyUnexpectedWebpages(allDomains);
+  // Fetch all domains in batches.
+  for (let batchNum = 0; ; batchNum++) {
+    const domains = await Domain.find({
+      select: ['id', 'name', 'ip', 'ssl'],
+      relations: ['services'],
+      where: organizationId
+        ? { organization: { id: organizationId } }
+        : undefined,
+      skip: batchNum * DOMAIN_BATCH_SIZE,
+      take: DOMAIN_BATCH_SIZE
+    });
 
-  await identifyExpiringCerts(allDomains);
+    if (domains.length == 0) {
+      // No more domains
+      break;
+    }
+
+    console.log(`Running batch ${batchNum}`);
+
+    await identifyPassiveCVEsFromCPEs(domains);
+
+    await identifyExpiringCerts(domains);
+  }
+
+  // await identifyUnexpectedWebpages(domains);
 
   await adjustVulnerabilities('open');
   await adjustVulnerabilities('closed');
