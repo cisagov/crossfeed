@@ -96,14 +96,15 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
         });
     }
   }
-  if (hostsToCheck.length === 0) {
-    console.warn('No hosts to check - no domains with CPEs found.');
-    return;
-  }
 
   spawnSync('nvdsync', ['-cve_feed', 'cve-1.1.json.gz', 'nvd-dump'], {
     stdio: [process.stdin, process.stdout, process.stderr]
   });
+
+  if (hostsToCheck.length === 0) {
+    console.warn('No hosts to check - no domains with CPEs found.');
+    return;
+  }
 
   const numBatches = hostsToCheck.length / CPE2CVE_BATCH_SIZE;
   for (let batch = 0; batch < numBatches; batch++) {
