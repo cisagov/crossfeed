@@ -47,7 +47,6 @@
     "file-saver": "^2.0.2",
     "jwt-decode": "^2.2.0",
     "material-table": "^1.69.0",
-    "node-sass": "^4.13.1",
     "papaparse": "^5.3.0",
     "prettier": "2.1.2",
     "query-string": "^6.13.3",
