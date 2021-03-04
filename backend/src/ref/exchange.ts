@@ -1,5 +1,5 @@
 export const EXCHANGE_BUILD_NUMBER_TO_CPE = {
-  // Converts exchange short build numbers to CPEs.
+  // Converts Microsoft Exchange short build numbers (which are detected by wappalyzer) to their corresponding CPEs.
   // Taken from: https://docs.microsoft.com/en-us/exchange/new-features/build-numbers-and-release-dates?view=exchserver-2019
   '15.2.792.3': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_8',
   '15.2.721.2': 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_7',
