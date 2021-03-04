@@ -6,12 +6,13 @@ import { wappalyzer } from './helpers/simple-wappalyzer';
 
 const wappalyze = async (domain: LiveDomain): Promise<void> => {
   try {
+    // domain.url = 'https://autodiscover.cityofpensacola.com';
     const { data, status, headers } = await axios.get(domain.url, {
       validateStatus: () => true
     });
-    const result = await wappalyzer({ url: domain.url, data, headers });
+    const result = wappalyzer({ url: domain.url, data, headers });
     if (result.length > 0) {
-      domain.service.wappalyzerResults = result;
+      domain.service.wappalyzerResults = result.filter((e) => e?.technology);
       await domain.service.save();
     }
   } catch (e) {
