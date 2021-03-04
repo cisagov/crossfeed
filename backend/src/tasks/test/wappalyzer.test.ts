@@ -252,7 +252,6 @@ describe('wappalyzer', () => {
     const service2 = await Service.findOne(testServices[1].id);
     expect(service2?.wappalyzerResults).toEqual(wappalyzerResponse);
 
-    console.warn(service2?.products);
     expect(service2?.products).toEqual([
       {
         cpe: 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_5',
