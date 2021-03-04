@@ -38,7 +38,7 @@ const productMap = {
 };
 
 // The number of domains to process at once
-const BATCH_SIZE = 1000;
+const BATCH_SIZE = 500;
 
 /**
  * Construct a CPE to be added. If the CPE doesn't already contain
@@ -103,13 +103,16 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
   const numBatches = hostsToCheck.length / BATCH_SIZE;
   for (let batch = 0; batch < numBatches; batch++) {
     let input = '';
+    console.log(`Starting batch ${batch} / ${numBatches}`);
     for (
       let index = BATCH_SIZE * batch;
       index < Math.min(BATCH_SIZE * (batch + 1), hostsToCheck.length);
       index++
     ) {
       input += `${index} ${hostsToCheck[index].cpes.join(',')}\n`;
-      console.log(`${index} ${hostsToCheck[index].cpes.join(',')}`);
+      if (index % 500 == 0) {
+        console.log(`${index} ${hostsToCheck[index].cpes.join(',')}`);
+      }
     }
     let res: Buffer;
     try {
