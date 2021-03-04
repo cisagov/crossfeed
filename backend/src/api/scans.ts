@@ -118,7 +118,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     isPassive: true,
     global: true,
     cpu: '1024',
-    memory: '4096',
+    memory: '8192',
     description: 'Matches detected software versions to CVEs from NIST NVD'
   },
   searchSync: {
