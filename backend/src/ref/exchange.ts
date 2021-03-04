@@ -195,5 +195,5 @@ export const EXCHANGE_BUILD_NUMBER_TO_CPE = {
   '4.0.994': 'cpe:/a:microsoft:exchange_server:4.0:sp3',
   '4.0.993': 'cpe:/a:microsoft:exchange_server:4.0:sp2',
   '4.0.838': 'cpe:/a:microsoft:exchange_server:4.0:sp1',
-  '4.0.837': 'cpe:/a:microsoft:exchange_server:4.0:-',
+  '4.0.837': 'cpe:/a:microsoft:exchange_server:4.0:-'
 };
