@@ -6,6 +6,7 @@ import { wappalyzer } from './helpers/simple-wappalyzer';
 
 const wappalyze = async (domain: LiveDomain): Promise<void> => {
   try {
+    // domain.url = 'https://autodiscover.cityofpensacola.com';
     const { data, status, headers } = await axios.get(domain.url, {
       validateStatus: () => true
     });
