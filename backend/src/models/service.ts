@@ -13,7 +13,7 @@ import {
 import { Domain } from './domain';
 import { Scan } from './scan';
 import { CpeParser } from '@thefaultvault/tfv-cpe-parser';
-import { EXCHANGE_BUILD_NUMBER_TO_CPE } from '../exchange';
+import { EXCHANGE_BUILD_NUMBER_TO_CPE } from '../ref/exchange';
 
 const filterProducts = (product: Product) => {
   // Filter out false positives.
