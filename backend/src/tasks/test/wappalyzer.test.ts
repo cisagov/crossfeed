@@ -171,9 +171,7 @@ describe('wappalyzer', () => {
     testDomains[1].url = 'https://example2.com';
     testDomains[1].service = testServices[1];
     getLiveWebsitesMock.mockResolvedValue(testDomains);
-    wappalyzer
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce(wappalyzerResponse);
+    wappalyzer.mockReturnValueOnce([]).mockReturnValueOnce(wappalyzerResponse);
 
     await handler(commandOptions);
     scope.done();
@@ -188,16 +186,19 @@ describe('wappalyzer', () => {
     expect(service2?.wappalyzerResults).toEqual(wappalyzerResponse);
   });
 
-  test('saves exchange products properly', async () => {
+  test.only('saves exchange products properly', async () => {
     const wappalyzerResponse = [
       {
-        name: 'Microsoft Exchange Server',
-        categories: [30],
-        slug: 'microsoft-exchange-server',
-        version: '15.2.595',
-        icon: 'Microsoft.png',
-        website: 'https://www.microsoft.com/en-us/microsoft-365/exchange/email',
-        cpe: 'cpe:/a:microsoft:exchange_server'
+        technology: {
+          name: 'Microsoft Exchange Server',
+          categories: [30],
+          slug: 'microsoft-exchange-server',
+          icon: 'Microsoft.png',
+          website:
+            'https://www.microsoft.com/en-us/microsoft-365/exchange/email',
+          cpe: 'cpe:/a:microsoft:exchange_server'
+        },
+        version: '15.2.595'
       }
     ];
     const scope = nock(/https?:\/\/example2?\.com/)
@@ -237,9 +238,7 @@ describe('wappalyzer', () => {
     testDomains[1].url = 'https://example2.com';
     testDomains[1].service = testServices[1];
     getLiveWebsitesMock.mockResolvedValue(testDomains);
-    wappalyzer
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce(wappalyzerResponse);
+    wappalyzer.mockReturnValueOnce([]).mockReturnValueOnce(wappalyzerResponse);
 
     await handler(commandOptions);
     scope.done();
@@ -259,7 +258,7 @@ describe('wappalyzer', () => {
         cpe: 'cpe:/a:microsoft:exchange_server:2019:cumulative_update_5',
         icon: 'Microsoft.png',
         name: 'Microsoft Exchange Server',
-        tags: [null],
+        tags: [],
         version: '15.2.595'
       }
     ]);

@@ -248,6 +248,44 @@ describe('cve', () => {
     ]);
   });
 
+  test('product with exchange cpe with version in it', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const service = await Service.create({
+      domain,
+      port: 80,
+      wappalyzerResults: [
+        {
+          technology: {
+            name: 'Microsoft Exchange Server',
+            categories: [30],
+            slug: 'microsoft-exchange-server',
+            icon: 'Microsoft.png',
+            website:
+              'https://www.microsoft.com/en-us/microsoft-365/exchange/email',
+            cpe: 'cpe:/a:microsoft:exchange_server'
+          },
+          version: '15.2.595'
+        }
+      ]
+    }).save();
+    await cve({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+  });
+
   test('should exit if no matching domains with cpes', async () => {
     const organization = await Organization.create({
       name: 'test-' + Math.random(),

@@ -45,8 +45,11 @@ const BATCH_SIZE = 1000;
  * the version, then add the version to the CPE.
  */
 const constructCPE = (cpe, version) => {
-  if (cpe?.indexOf(String(version)) > -1) {
-    // CPE already has the product version. Just add it.
+  if (
+    cpe?.indexOf(String(version)) > -1 ||
+    cpe.indexOf('exchange_server') > -1
+  ) {
+    // CPE already has the product version. Just return it.
     return cpe;
   }
   return `${cpe}:${version}`;
