@@ -173,6 +173,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
         <Subnav
           items={[
             { title: 'Assets', path: '/inventory', exact: true },
+            { title: 'Domains', path: '/inventory/domains' },
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
           styles={{

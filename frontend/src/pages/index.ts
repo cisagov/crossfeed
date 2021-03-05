@@ -1,5 +1,6 @@
 export * from './AuthLogin';
 export * from './AuthCreateAccount';
+export * from './Dashboard';
 export * from './Domain';
 export * from './Vulnerability';
 export * from './TermsOfUse';

@@ -340,6 +340,7 @@ export const Vulnerabilities: React.FC = () => {
         <Subnav
           items={[
             { title: 'Assets', path: '/inventory', exact: true },
+            { title: 'Domains', path: '/inventory/domains' },
             { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
           ]}
         ></Subnav>
