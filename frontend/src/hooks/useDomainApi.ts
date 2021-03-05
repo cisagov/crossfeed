@@ -16,13 +16,11 @@ const PAGE_SIZE = 25;
 
 export const useDomainApi = (showAll?: boolean) => {
   const { currentOrganization, apiPost, apiGet } = useAuthContext();
-  const orgId = currentOrganization?.id;
-
   const listDomains = useCallback(
     async (query: DomainQuery, doExport = false) => {
       const { page, sort, filters, pageSize = PAGE_SIZE } = query;
 
-      const tableFilters = filters
+      const tableFilters: any = filters
         .filter((f) => Boolean(f.value))
         .reduce(
           (accum, next) => ({
@@ -32,16 +30,19 @@ export const useDomainApi = (showAll?: boolean) => {
           {}
         );
 
+        if (!showAll && currentOrganization) {
+          if ('rootDomains' in currentOrganization)
+            tableFilters['organization'] = currentOrganization.id;
+          else tableFilters['tag'] = currentOrganization.id;
+        }
+
       const { result, count, url } = await apiPost<ApiResponse>(doExport ? '/domain/export': '/domain/search', {
         body: {
           pageSize,
           page,
           sort: sort[0]?.id ?? 'name',
           order: sort[0]?.desc ? 'DESC' : 'ASC',
-          filters: {
-            ...tableFilters,
-            organization: showAll ? undefined : orgId
-          }
+          filters: tableFilters
         }
       });
 
@@ -52,7 +53,7 @@ export const useDomainApi = (showAll?: boolean) => {
         pageCount: Math.ceil(count / pageSize)
       };
     },
-    [orgId, apiPost, showAll]
+    [apiPost, showAll, currentOrganization]
   );
 
   const getDomain = useCallback(
