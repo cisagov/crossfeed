@@ -5,7 +5,8 @@ import {
   connectToDatabase,
   Organization,
   Webpage,
-  OrganizationTag
+  OrganizationTag,
+  Service
 } from '../src/models';
 import { createUserToken } from './util';
 jest.mock('../src/tasks/s3-client');
@@ -36,6 +37,22 @@ describe('domains', () => {
         name,
         organization
       }).save();
+      await Service.create({
+        port: 443,
+        wappalyzerResults: [
+          {
+            technology: {
+              cpe: 'cpe:/a:software',
+              name: 'technology name',
+              slug: 'slug',
+              icon: 'icon',
+              website: 'website',
+              categories: []
+            },
+            version: '0.0.1'
+          }
+        ]
+      }).save();
       await Domain.create({
         name: name + '-2',
         organization: organization2
@@ -55,6 +72,9 @@ describe('domains', () => {
       expect(response.body).toEqual({ url: 'http://mock_url' });
       expect(saveCSV).toBeCalledTimes(1);
       expect(saveCSV.mock.calls[0][0]).toContain(name);
+      expect(saveCSV.mock.calls[0][0]).toContain('technology name');
+      expect(saveCSV.mock.calls[0][0]).toContain('0.0.1');
+      expect(saveCSV.mock.calls[0][0]).toContain('443');
       expect(saveCSV.mock.calls[0][0]).not.toContain(name + '-2');
     });
   });

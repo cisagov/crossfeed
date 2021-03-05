@@ -209,8 +209,22 @@ export const export_ = wrapHandler(async (event) => {
   }
   await connectToDatabase();
   const search = await validateBody(DomainSearch, event.body);
-  const [result, count] = await search.getResults(event);
+  let [result] = await search.getResults(event);
   const client = new S3Client();
+  result = result.map((res: any) => {
+    res.organization = res.organization.name;
+    res.ports = res.services.map((service) => service.port).join(', ');
+    const products: { [key: string]: string } = {};
+    for (const service of res.services) {
+      for (const product of service.products) {
+        if (product.name)
+          products[product.name.toLowerCase()] =
+            product.name + (product.version ? ` ${product.version}` : '');
+      }
+    }
+    res.products = Object.values(products).join(', ');
+    return res;
+  });
   const url = await client.saveCSV(
     Papa.unparse({
       fields: [
@@ -218,15 +232,12 @@ export const export_ = wrapHandler(async (event) => {
         'ip',
         'id',
         'ports',
-        'services',
+        'products',
         'createdAt',
         'updatedAt',
-        'organizationName'
+        'organization'
       ],
-      data: result.map((e) => ({
-        ...e,
-        organizationName: e.organization?.name
-      }))
+      data: result
     }),
     'domains'
   );
