@@ -261,6 +261,25 @@ data "aws_ssm_parameter" "worker_signature_public_key" { name = var.ssm_worker_s
 
 data "aws_ssm_parameter" "worker_signature_private_key" { name = var.ssm_worker_signature_private_key }
 
+resource "aws_s3_bucket" "webscraper_bucket" {
+  bucket        = "crossfeed-${var.stage}-webscraper"
+  acl           = "private"
+  force_destroy = true # TODO: delete this bucket
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
 resource "aws_s3_bucket" "export_bucket" {
   bucket = var.export_bucket_name
   acl    = "private"

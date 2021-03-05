@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-      "start": "docker-compose up --build"
+      "start": "docker-compose build --parallel && docker-compose up --force-recreate"
     },
     "repository": {
       "type": "git",
