@@ -29,7 +29,8 @@ import {
   TermsOfUse,
   SearchPage,
   LoginGovCallback,
-  Feeds
+  Feeds,
+  Domains
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
 import './styles.scss';
@@ -112,6 +113,7 @@ const App: React.FC = () => (
                   path="/inventory/domain/:domainId"
                   component={Domain}
                 />
+                <RouteGuard path="/inventory/domains" component={Domains} />
                 <RouteGuard
                   path="/inventory/vulnerabilities"
                   component={Vulnerabilities}
