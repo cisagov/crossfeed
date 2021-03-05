@@ -17,7 +17,6 @@ resource "aws_db_instance" "db" {
   max_allocated_storage   = 1000
   storage_type            = "gp2"
   engine                  = "postgres"
-  engine_version          = "11.8" #change to fit desired PostgresQL version
   skip_final_snapshot     = true
   availability_zone       = data.aws_availability_zones.available.names[0]
   multi_az                = false
@@ -37,6 +36,14 @@ resource "aws_db_instance" "db" {
   tags = {
     Project = "Crossfeed"
   }
+}
+
+resource "aws_cloud9_environment_ec2" "db_bastion" {
+  instance_type               = "t3.micro"
+  name                        = "crossfeed-db-bastion-${var.stage}"
+  subnet_id                   = aws_ssm_parameter.lambda_subnet_id.value
+  description                 = "Bastion instance to access the Crossfeed database"
+  automatic_stop_time_minutes = 30
 }
 
 resource "aws_ssm_parameter" "lambda_sg_id" {
