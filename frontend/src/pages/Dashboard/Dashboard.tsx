@@ -66,9 +66,9 @@ export const Dashboard: React.FC = () => {
     <div className={classes.root}>
       <Subnav
         items={[
-          { title: 'Assets', path: '/inventory', exact: true },
-          { title: 'Domains', path: '/inventory/domains' },
-          { title: 'Vulnerabilities', path: '/inventory/vulnerabilities' }
+          { title: 'Search Results', path: '/inventory', exact: true },
+          { title: 'All Domains', path: '/inventory/domains' },
+          { title: 'All Vulnerabilities', path: '/inventory/vulnerabilities' }
         ]}
       ></Subnav>
       <br></br>
