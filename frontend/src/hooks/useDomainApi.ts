@@ -16,8 +16,6 @@ const PAGE_SIZE = 25;
 
 export const useDomainApi = (showAll?: boolean) => {
   const { currentOrganization, apiPost, apiGet } = useAuthContext();
-  const orgId = currentOrganization?.id;
-
   const listDomains = useCallback(
     async (query: DomainQuery, doExport = false) => {
       const { page, sort, filters, pageSize = PAGE_SIZE } = query;
@@ -55,7 +53,7 @@ export const useDomainApi = (showAll?: boolean) => {
         pageCount: Math.ceil(count / pageSize)
       };
     },
-    [orgId, apiPost, showAll, currentOrganization]
+    [apiPost, showAll, currentOrganization]
   );
 
   const getDomain = useCallback(
