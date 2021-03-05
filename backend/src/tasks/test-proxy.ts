@@ -21,7 +21,7 @@ const WEBSCRAPER_DIRECTORY = '/app/worker/webscraper';
  * Crossfeed test user agent.
  *
  * To run the test, run:
- * docker-compose up --build
+ * npm start (from the root directory)
  * cd backend && docker run -e WORKER_TEST=true --network="crossfeed_backend" -t crossfeed-worker
  *
  * In the future, we can point these URLs to a locally running web server
