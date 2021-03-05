@@ -49,13 +49,17 @@ const CPE2CVE_BATCH_SIZE = 50;
  * Construct a CPE to be added. If the CPE doesn't already contain
  * the version, then add the version to the CPE.
  */
-const constructCPE = (cpe, version) => {
+const constructCPE = (cpe: string, version: string) => {
   if (
     cpe?.indexOf(String(version)) > -1 ||
     cpe.indexOf('exchange_server') > -1
   ) {
     // CPE already has the product version. Just return it.
     return cpe;
+  }
+  if (cpe.endsWith(':')) {
+    // Remove trailing colons from CPE, if present
+    cpe = cpe.slice(0, -1);
   }
   return `${cpe}:${version}`;
 };
