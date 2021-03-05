@@ -50,6 +50,11 @@ Array [
 ]
 `;
 
+exports[`cve product with cpe with trailing colon: execSync.input 1`] = `
+"0 cpe:/a:10web:form_maker::1.0.0
+"
+`;
+
 exports[`cve product with cpe with version in it: execSync.input 1`] = `
 "0 cpe:/a:10web:form_maker:1.0.0
 "
