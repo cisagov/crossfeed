@@ -128,6 +128,10 @@ module.exports = {
             options: {
               // Example code links are relative to this dir.
               directory: `${__dirname}/src/documentation-pages`,
+              prompt: {
+                user: 'root',
+                host: 'localhost',
+              },
             },
           },
           {
