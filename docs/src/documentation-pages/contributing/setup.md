@@ -6,12 +6,15 @@ sidenav: contributing
 ### Quickstart
 
 1.  Copy root `dev.env.example` file to a `.env` file, and change values as desired:
+
     - `cp dev.env.example .env`
 
 1.  Build the crossfeed-worker Docker image:
+
     - `cd backend && npm run build-worker`
 
 1.  Start entire environment from the root directory using Docker Compose:
+
     - `npm start`
 
 1.  Generate DB schema:
