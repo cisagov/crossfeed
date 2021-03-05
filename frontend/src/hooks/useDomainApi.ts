@@ -55,7 +55,7 @@ export const useDomainApi = (showAll?: boolean) => {
         pageCount: Math.ceil(count / pageSize)
       };
     },
-    [orgId, apiPost, showAll]
+    [orgId, apiPost, showAll, currentOrganization]
   );
 
   const getDomain = useCallback(
