@@ -33,11 +33,12 @@ describe('domains', () => {
   describe('export', () => {
     it('export by org user should only return domains from that org', async () => {
       const name = 'test-' + Math.random();
-      await Domain.create({
+      const domain = await Domain.create({
         name,
         organization
       }).save();
       await Service.create({
+        domain,
         port: 443,
         wappalyzerResults: [
           {
