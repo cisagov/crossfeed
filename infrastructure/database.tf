@@ -38,14 +38,6 @@ resource "aws_db_instance" "db" {
   }
 }
 
-resource "aws_cloud9_environment_ec2" "db_bastion" {
-  instance_type               = "t3.micro"
-  name                        = "crossfeed-db-bastion-${var.stage}"
-  subnet_id                   = aws_ssm_parameter.lambda_subnet_id.value
-  description                 = "Bastion instance to access the Crossfeed database"
-  automatic_stop_time_minutes = 30
-}
-
 resource "aws_ssm_parameter" "lambda_sg_id" {
   name      = var.ssm_lambda_sg
   type      = "String"
