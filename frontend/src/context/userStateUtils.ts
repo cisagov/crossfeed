@@ -24,7 +24,7 @@ export const getTouVersion = (maxRole: string) => {
 };
 
 export const getUserMustSign = (user: AuthUser | null, touVersion: string) => {
-  const approvedEmailAddresses = ['@cisa.dhs.gov'];
+  const approvedEmailAddresses = ['@cisa.dhs.gov', '@associates.cisa.dhs.gov'];
   for (let email of approvedEmailAddresses) {
     if (user?.email.endsWith(email)) return false;
   }
