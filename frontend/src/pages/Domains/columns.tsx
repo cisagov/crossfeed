@@ -30,6 +30,12 @@ export const createColumns: CreateColumns = () => [
     )
   },
   {
+    Header: 'Organization',
+    accessor: e => e.organization.name,
+    id: 'organizationName',
+    Filter: ColumnFilter
+  },
+  {
     Header: 'Domain',
     accessor: 'name',
     id: 'reverseName',

@@ -46,6 +46,10 @@ class DomainFilters {
 
   @IsString()
   @IsOptional()
+  organizationName?: string;
+
+  @IsString()
+  @IsOptional()
   vulnerability?: string;
 
   @IsUUID()
@@ -100,6 +104,11 @@ class DomainSearch {
     if (this.filters?.organization) {
       qs.andWhere('organization.id = :org', {
         org: this.filters.organization
+      });
+    }
+    if (this.filters?.organizationName) {
+      qs.andWhere('organization.name ILIKE :name', {
+        name: `%${this.filters?.organizationName}%`
       });
     }
     if (this.filters?.tag) {

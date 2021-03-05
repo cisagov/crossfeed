@@ -10,7 +10,7 @@ import { useDomainApi } from 'hooks';
 
 const PAGE_SIZE = 15;
 
-export const Dashboard: React.FC = () => {
+export const Domains: React.FC = () => {
   const { showAllOrganizations } = useAuthContext();
   const tableRef = useRef<TableInstance<Domain>>(null);
   const columns = useMemo(() => createColumns(), []);
