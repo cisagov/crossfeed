@@ -120,9 +120,7 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
       index++
     ) {
       input += `${index} ${hostsToCheck[index].cpes.join(',')}\n`;
-      if (index % 100 == 0) {
-        console.log(`\t${index} ${hostsToCheck[index].cpes.join(',')}`);
-      }
+      console.log(`\t${index} ${hostsToCheck[index].cpes.join(',')}`);
     }
     let res: Buffer;
     try {
