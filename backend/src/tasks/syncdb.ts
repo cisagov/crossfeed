@@ -13,6 +13,8 @@ import * as Sentencer from 'sentencer';
 import * as services from './sample_data/services.json';
 import * as cpes from './sample_data/cpes.json';
 import * as vulnerabilities from './sample_data/vulnerabilities.json';
+import * as nouns from './sample_data/nouns.json';
+import * as adjectives from './sample_data/adjectives.json';
 import { sample } from 'lodash';
 import { handler as searchSync } from './search-sync';
 import { In } from 'typeorm';
@@ -46,6 +48,13 @@ export const handler: Handler = async (event) => {
 
   if (type === 'populate') {
     console.log('Populating the database with some sample data...');
+    Sentencer.configure({
+      nounList: nouns,
+      adjectiveList: adjectives,
+      actions: {
+        entity: () => sample(['city', 'county', 'agency', 'department'])
+      }
+    });
     const organizationIds: string[] = [];
     let tag = await OrganizationTag.findOne(
       { name: SAMPLE_TAG_NAME },
@@ -62,8 +71,9 @@ export const handler: Handler = async (event) => {
     }
     for (let i = 0; i <= NUM_SAMPLE_ORGS; i++) {
       const organization = await Organization.create({
-        name: Sentencer.make('{{ noun }} {{ nouns }}').replace(/\b\w/g, (l) =>
-          l.toUpperCase()
+        name: Sentencer.make('{{ adjective }} {{ entity }}').replace(
+          /\b\w/g,
+          (l) => l.toUpperCase()
         ), // Capitalize organization names
         rootDomains: ['crossfeed.local'],
         ipBlocks: [],
