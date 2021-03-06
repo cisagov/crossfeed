@@ -5,7 +5,6 @@
  */
 
 const path = require('path');
-const { paginate } = require('gatsby-awesome-pagination');
 
 // Adds the source "name" from the filesystem plugin to the markdown remark nodes
 // so we can filter by it.
