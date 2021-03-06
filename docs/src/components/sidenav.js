@@ -7,86 +7,52 @@ import classNames from 'classnames';
   add "sidenav: contributing" or "sidenav: user-guide" in the front-matter of your markdown pages
 */
 
-export const SidenavContributing = ({ name }) => (
-  <aside className="usa-layout-docs-sidenav desktop:grid-col-3 padding-bottom-4">
-    <nav>
-      <ul className="usa-sidenav">
-        <li className="usa-sidenav__item">
-          <Link
-            to="/contributing"
-            className={classNames({ 'usa-current': name === 'contributing' })}
-          >
-            Contribution Guidelines
-          </Link>
-        </li>
-        <li className="usa-sidenav__item">
-          <Link
-            to="/setup"
-            className={classNames({ 'usa-current': name === 'setup' })}
-          >
-            Development Setup
-          </Link>
-        </li>
-        <li className="usa-sidenav__item">
-          <Link
-            to="/architecture"
-            className={classNames({ 'usa-current': name === 'architecture' })}
-          >
-            Architecture
-          </Link>
-        </li>
-        <li className="usa-sidenav__item">
-          <Link
-            to="/deployment"
-            className={classNames({ 'usa-current': name === 'deployment' })}
-          >
-            Deployment
-          </Link>
-        </li>
-      </ul>
-    </nav>
-  </aside>
+const Sidenav = ({ current, items }) => {
+  const SidenavItem = ({ link, children }) => {
+    return (
+      <li className="usa-sidenav__item">
+        <Link
+          to={link}
+          className={classNames({ 'usa-current': '/' + current === link })}
+        >
+          {children}
+        </Link>
+      </li>
+    );
+  };
+  return (
+    <aside className="usa-layout-docs-sidenav desktop:grid-col-3 padding-bottom-4">
+      <nav> 
+        <ul className="usa-sidenav">
+          {items.map((item) => (
+            <SidenavItem link={item.link}>{item.text}</SidenavItem>
+          ))}
+        </ul>
+      </nav>
+    </aside>
+  );
+};
+
+export const SidenavContributing = props => (
+  <Sidenav
+    items={[
+      { text: 'Contribution Guidelines', link: '/contributing' },
+      { text: 'Development Setup', link: '/setup' },
+      { text: 'Architecture', link: '/architecture' },
+      { text: 'Deployment', link: '/deployment' },
+    ]}
+    {...props}
+  />
 );
 
-export const SidenavUserGuide = ({ name }) => (
-  <aside className="usa-layout-docs-sidenav desktop:grid-col-3 padding-bottom-4">
-    <nav>
-      <ul className="usa-sidenav">
-        <li className="usa-sidenav__item">
-          <Link
-            to="/product-overview"
-            className={classNames({
-              'usa-current': name === 'product-overview',
-            })}
-          >
-            Crossfeed Product Overview
-          </Link>
-        </li>
-        <li className="usa-sidenav__item">
-          <Link
-            to="/usage"
-            className={classNames({ 'usa-current': name === 'usage' })}
-          >
-            Getting Started
-          </Link>
-        </li>
-        <li className="usa-sidenav__item">
-          <Link
-            to="/administration"
-            className={classNames({ 'usa-current': name === 'administration' })}
-          >
-            Administration
-          </Link>
-        </li>
-        <li className="usa-sidenav__item">
-          <Link
-            to="/customization"
-            className={classNames({ 'usa-current': name === 'customization' })}
-          >
-            Customization
-          </Link>
-        </li>
-      </ul>
-    </nav>
-  </aside>
+export const SidenavUserGuide = props => (
+  <Sidenav
+    items={[
+      { text: 'Crossfeed Product Overview', link: '/product-overview' },
+      { text: 'Getting Started', link: '/usage' },
+      { text: 'Administration', link: '/administration' },
+      { text: 'Customization', link: '/customization' },
+    ]}
+    {...props}
+  />
 );

@@ -127,13 +127,7 @@ npm run codegen
 
 ### Documentation
 
-The documentation files are stored in the `docs` directory and served from a Gatsby site. To work on this, you should run:
-
-```bash
-docker-compose up
-```
-
-You can then open up [http://localhost:4000](http://localhost:4000) in your browser.
+The documentation files are stored in the `docs` directory and served from a Gatsby site. To work on this, you should run `npm start` from before. You can then open up [http://localhost:4000](http://localhost:4000) in your browser to view the docs.
 
 The docs are based on the [federalist-uswds-gatsby](https://github.com/18F/federalist-uswds-gatsby) theme. See that repository for more information on additional theme customizations that can be done.
 
