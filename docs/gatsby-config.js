@@ -108,13 +108,6 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `blog-posts`,
-        path: `${__dirname}/src/blog-posts`,
-      },
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
         name: `documentation-pages`,
         path: `${__dirname}/src/documentation-pages`,
       },
@@ -130,8 +123,15 @@ module.exports = {
               directory: `${__dirname}/src/documentation-pages`,
             },
           },
+          `gatsby-remark-autolink-headers`,
           {
             resolve: `gatsby-remark-prismjs`,
+            options: {
+              prompt: {
+                user: 'root',
+                host: 'localhost',
+              },
+            },
           },
         ],
       },

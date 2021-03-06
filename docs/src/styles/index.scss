@@ -68,3 +68,12 @@ code {
   padding-top: 5px;
   padding-bottom: 5px;
 }
+
+// Sidenav for documentation pages
+.usa-layout-docs-sidenav {
+  position: sticky;
+  top: 0;
+  width: auto;
+  flex-basis: 25%;
+  align-self: start;
+}

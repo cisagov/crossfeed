@@ -41,6 +41,8 @@ cd backend
 npm run deploy-worker
 ```
 
+If the `worker_ecs_repository_url` output from Terraform changes, you will need to modify `./src/tools/deploy-worker.sh`.
+
 ### Frontend
 
 Deploying the frontend involves building the React code, uploading it to an S3 bucket, then invalidating the Cloudfront cache:
