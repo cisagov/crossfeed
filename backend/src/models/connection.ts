@@ -51,8 +51,5 @@ export const connectToDatabase = async (logging?: boolean) => {
   if (!connection?.isConnected) {
     connection = await connectDb(logging);
   }
-  if (typeof jest === 'undefined') {
-    console.log('=> DB Connected');
-  }
   return connection;
 };
