@@ -25,13 +25,13 @@ sidenav: contributing
    npm start
    ```
 
-5. Generate the initial DB schema and sample data:
+5. Generate the initial DB schema and populate it with sample data:
 
    ```bash
    cd backend
    # Generate schema
    npm run syncdb
-   # Generate sample data
+   # Populate sample data
    npm run syncdb -- -d populate
    ```
 
@@ -41,7 +41,7 @@ sidenav: contributing
    cd backend
    # Generate schema
    docker-compose exec backend npx sls invoke local -f syncdb
-   # Generate sample data
+   # Populate sample data
    docker-compose exec backend npx sls invoke local -f syncdb -d populate
    ```
 
