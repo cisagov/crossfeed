@@ -93,9 +93,10 @@ export const Table = <T extends object>(props: TableProps<T>) => {
       fetchData({
         sort: sortBy,
         page: pageIndex + 1,
+        pageSize,
         filters
       });
-  }, [fetchData, sortBy, filters, pageIndex]);
+  }, [fetchData, sortBy, filters, pageIndex, pageSize]);
 
   return (
     <div className={classes.root}>
