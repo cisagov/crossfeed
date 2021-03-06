@@ -37,9 +37,9 @@ export const handler: Handler = async (event) => {
     // Create indices on elasticsearch only when not using tests.
     const client = new ESClient();
     if (dangerouslyforce) {
-      console.log("Deleting all data in elasticsearch...");
+      console.log('Deleting all data in elasticsearch...');
       await client.deleteAll();
-      console.log("Done.");
+      console.log('Done.');
     }
     await client.syncDomainsIndex();
   }
