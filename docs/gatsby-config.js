@@ -128,14 +128,17 @@ module.exports = {
             options: {
               // Example code links are relative to this dir.
               directory: `${__dirname}/src/documentation-pages`,
+            },
+          },
+          `gatsby-remark-autolink-headers`,
+          {
+            resolve: `gatsby-remark-prismjs`,
+            options: {
               prompt: {
                 user: 'root',
                 host: 'localhost',
               },
             },
-          },
-          {
-            resolve: `gatsby-remark-prismjs`,
           },
         ],
       },

@@ -7,22 +7,41 @@ import classNames from 'classnames';
   add "sidenav: contributing" or "sidenav: user-guide" in the front-matter of your markdown pages
 */
 
-const Sidenav = ({ current, items }) => {
+const Sidenav = ({ current, headings, items }) => {
   const SidenavItem = ({ link, children }) => {
+    const isSelected = '/' + current === link;
+
     return (
-      <li className="usa-sidenav__item">
-        <Link
-          to={link}
-          className={classNames({ 'usa-current': '/' + current === link })}
-        >
-          {children}
-        </Link>
-      </li>
+      <>
+        <li className="usa-sidenav__item">
+          <Link to={link} className={classNames({ 'usa-current': isSelected })}>
+            {children}
+          </Link>
+          {isSelected && (
+            <ul class="usa-sidenav__sublist">
+              {headings.map(({ value, depth }) => (
+                <li className="usa-sidenav__item">
+                  <a href={`#${value.replace(/\s/g, '-').toLowerCase()}`}>
+                    <span
+                      style={{
+                        display: 'block',
+                        paddingLeft: `${depth - 3}em`,
+                      }}
+                    >
+                      {value}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      </>
     );
   };
   return (
     <aside className="usa-layout-docs-sidenav desktop:grid-col-3 padding-bottom-4">
-      <nav> 
+      <nav>
         <ul className="usa-sidenav">
           {items.map((item) => (
             <SidenavItem link={item.link}>{item.text}</SidenavItem>
@@ -33,7 +52,7 @@ const Sidenav = ({ current, items }) => {
   );
 };
 
-export const SidenavContributing = props => (
+export const SidenavContributing = (props) => (
   <Sidenav
     items={[
       { text: 'Contribution Guidelines', link: '/contributing' },
@@ -45,7 +64,7 @@ export const SidenavContributing = props => (
   />
 );
 
-export const SidenavUserGuide = props => (
+export const SidenavUserGuide = (props) => (
   <Sidenav
     items={[
       { text: 'Crossfeed Product Overview', link: '/product-overview' },
