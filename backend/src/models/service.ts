@@ -41,6 +41,14 @@ const filterProducts = (product: Product) => {
   return true;
 };
 
+const mapProducts = (product: Product) => {
+  if (!product.name) {
+    // Some products don't have names, so use a sensible default.
+    product.name = product.cpe || 'Unknown';
+  }
+  return product;
+};
+
 export interface Product {
   // Common name
   name: string;
@@ -313,6 +321,7 @@ export class Service extends BaseEntity {
 
     this.products = Object.values(productDict)
       .concat(misc)
-      .filter(filterProducts);
+      .filter(filterProducts)
+      .map(mapProducts);
   }
 }

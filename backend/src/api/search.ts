@@ -88,7 +88,7 @@ const getOptions = async (
     (getOrgMemberships(event).includes(searchBody.organizationId) ||
       isGlobalViewAdmin(event))
   ) {
-    //Search for a specific organization
+    // Search for a specific organization
     options = {
       organizationIds: [searchBody.organizationId],
       matchAllOrganizations: false

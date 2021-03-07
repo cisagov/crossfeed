@@ -67,6 +67,7 @@ services:
       - ./docs/gatsby-node.js:/app/docs/gatsby-node.js
     ports:
       - '4000:4000'
+      - '44475:44475'
 
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0
