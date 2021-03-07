@@ -44,10 +44,10 @@ const filterProducts = (product: Product) => {
 const mapProducts = (product: Product) => {
   if (!product.name) {
     // Some products don't have names, so use a sensible default.
-    product.name = product.cpe || "Unknown";
+    product.name = product.cpe || 'Unknown';
   }
   return product;
-}
+};
 
 export interface Product {
   // Common name
