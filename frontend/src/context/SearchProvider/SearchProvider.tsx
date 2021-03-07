@@ -84,5 +84,7 @@ export const SearchProvider: React.FC = ({ children }) => {
     }
   };
 
-  return <ESProvider config={config}>{children}</ESProvider>;
+  // Use an organization-specific key so that the search results
+  // page properly resets when the current organization is changed.
+  return <ESProvider config={config} key={`es-provider-${currentOrganization?.name}-${showAllOrganizations}`}>{children}</ESProvider>;
 };
