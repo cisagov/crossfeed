@@ -3,7 +3,7 @@ title: Crossfeed Product Overview
 sidenav: user-guide
 ---
 
-Crossfeed is a self-service tool that continuously monitors an organization's public-facing attack surface. users can use Crossfeed in order to view a snapshot of their organization's assets from an attacker's perspective and make informed risk decisions about their assets.
+Crossfeed is a self-service tool that continuously monitors an organization's public-facing attack surface. Users can use Crossfeed in order to view a snapshot of their organization's assets from an attacker's perspective and make informed risk decisions about their assets.
 
 ### What Crossfeed does
 

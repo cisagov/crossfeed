@@ -5,6 +5,7 @@
  */
 
 const path = require('path');
+const { createFilePath } = require('gatsby-source-filesystem');
 
 // Adds the source "name" from the filesystem plugin to the markdown remark nodes
 // so we can filter by it.
@@ -29,6 +30,17 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     name: 'name',
     value: fileNode.name,
   });
+
+  const slug = createFilePath({
+    node,
+    getNode,
+    basePath: `src/documentation-pages`,
+  });
+  createNodeField({
+    node,
+    name: 'slug',
+    value: slug,
+  });
 };
 
 exports.createPages = async ({ actions, graphql }) => {
@@ -43,7 +55,7 @@ async function createMarkdownPages(createPage, graphql) {
 
   pages.forEach(({ node }) => {
     createPage({
-      path: node.fields.name,
+      path: node.fields.slug,
       component: pageTemplate,
       context: {
         name: node.fields.name,
@@ -60,6 +72,7 @@ async function markdownQuery(graphql, source) {
           node {
             fields {
               name
+              slug
             }
           }
         }

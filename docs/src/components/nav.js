@@ -13,7 +13,6 @@ const Nav = ({ navigation, secondaryLinks }) => (
       <ul className="usa-accordion usa-nav__primary">
         {navigation.map((navGroup, idx) => (
           <li key={idx} className="usa-nav__primary-item">
-            {!navGroup.items && console.warn(navGroup)}
             {navGroup.items.length > 1 ? (
               <>
                 <button
@@ -41,6 +40,7 @@ const Nav = ({ navigation, secondaryLinks }) => (
               <Link
                 className="usa-nav__link"
                 activeClassName="usa-current"
+                partiallyActive={navGroup.items[0].link !== '/'}
                 to={navGroup.items[0].link}
               >
                 <span>{navGroup.items[0].text}</span>
