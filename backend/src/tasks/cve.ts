@@ -33,13 +33,8 @@ Press ctrl + D to end input.
 
 */
 
-// Stores alternate CPEs. Sometimes, CPEs are renamed or equivalent to other CPEs,
-// so we want to input all variants so we get all applicable vulnerabilities.
 const productMap = {
-  'cpe:/a:microsoft:asp.net': ['cpe:/a:microsoft:.net_framework'],
-  'cpe:/a:microsoft:internet_information_server': [
-    'cpe:/a:microsoft:internet_information_services'
-  ]
+  'cpe:/a:microsoft:asp.net': ['cpe:/a:microsoft:.net_framework']
 };
 
 // The number of domains to fetch from the database
@@ -88,21 +83,11 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
           product.version &&
           String(product.version).split('.').length > 1
         ) {
-          const cpe = constructCPE(product.cpe, product.version);
-          cpes.add(cpe);
+          cpes.add(constructCPE(product.cpe, product.version));
           if (productMap[product.cpe]) {
             // Add alternate variants of the CPE as well.
-            for (const productMapCPE in productMap) {
-              if (cpe.indexOf(productMapCPE) > -1) {
-                for (const alternateCPE of productMap[product.cpe]) {
-                  cpes.add(
-                    constructCPE(
-                      cpe.replace(productMapCPE, alternateCPE),
-                      product.version
-                    )
-                  );
-                }
-              }
+            for (const cpe of productMap[product.cpe]) {
+              cpes.add(constructCPE(cpe, product.version));
             }
           }
         }
