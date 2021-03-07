@@ -8,10 +8,21 @@ module.exports = {
         items: [{ text: 'Home', link: '/' }],
       },
       {
-        items: [{ text: 'User Guide', link: '/user-guide/' }],
+        items: [
+          {
+            text: 'User Guide',
+            link: '/user-guide/quickstart/',
+            // If rootLink is specified, this navigation item will be
+            // highlighted as current when the user navigates to sub-pages whose
+            // paths start with the given rootLink.
+            rootLink: '/user-guide/',
+          },
+        ],
       },
       {
-        items: [{ text: 'Development', link: '/dev/' }],
+        items: [
+          { text: 'Development', link: '/dev/setup/', rootLink: '/dev/' },
+        ],
       },
       {
         items: [{ text: 'Scanning FAQ', link: '/scans/' }],

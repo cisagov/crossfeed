@@ -10,13 +10,13 @@ import classNames from 'classnames';
 
 const SIDENAV_ITEMS = {
   dev: [
-    { text: 'Development Setup', link: '/dev/' },
+    { text: 'Development Setup', link: '/dev/setup/' },
     { text: 'Architecture', link: '/dev/architecture/' },
     { text: 'Deployment', link: '/dev/deployment/' },
     { text: 'Contribution Guidelines', link: '/dev/guidelines/' },
   ],
   'user-guide': [
-    { text: 'Quickstart', link: '/user-guide/' },
+    { text: 'Quickstart', link: '/user-guide/quickstart/' },
     {
       text: 'Crossfeed Product Overview',
       link: '/user-guide/product-overview/',

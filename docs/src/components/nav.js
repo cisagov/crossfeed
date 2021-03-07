@@ -38,11 +38,23 @@ const Nav = ({ navigation, secondaryLinks }) => (
               </>
             ) : (
               <Link
-                className="usa-nav__link"
+                className={
+                  `usa-nav__link ` +
+                  (window.location.pathname.startsWith(
+                    navGroup.items[0].rootLink
+                  )
+                    ? 'usa-current'
+                    : '')
+                }
                 activeClassName="usa-current"
-                partiallyActive={navGroup.items[0].link !== '/'}
                 to={navGroup.items[0].link}
               >
+                {console.log(
+                  navGroup.items[0].text,
+                  window.location.pathname.startsWith(
+                    navGroup.items[0].rootLink
+                  )
+                )}
                 <span>{navGroup.items[0].text}</span>
               </Link>
             )}

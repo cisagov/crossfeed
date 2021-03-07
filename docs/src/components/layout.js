@@ -25,6 +25,7 @@ const Layout = ({ children }) => {
             items {
               text
               link
+              rootLink
             }
           }
           secondaryLinks {
