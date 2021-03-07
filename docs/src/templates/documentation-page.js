@@ -19,10 +19,10 @@ const DocumentationPage = ({ data, location }) => {
         <div className="grid-container">
           <div className="grid-row grid-gap">
             {frontmatter.sidenav === 'contributing' && (
-              <SidenavContributing current={fields.name} headings={headings} />
+              <SidenavContributing current={fields.slug} headings={headings} />
             )}
             {frontmatter.sidenav === 'user-guide' && (
-              <SidenavUserGuide current={fields.name} headings={headings} />
+              <SidenavUserGuide current={fields.slug} headings={headings} />
             )}
             <main
               id="main-content"
@@ -52,7 +52,7 @@ export const pageQuery = graphql`
         sidenav
       }
       fields {
-        name
+        slug
       }
       headings {
         value

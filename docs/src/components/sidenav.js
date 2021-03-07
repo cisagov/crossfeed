@@ -9,7 +9,7 @@ import classNames from 'classnames';
 
 const Sidenav = ({ current, headings, items }) => {
   const SidenavItem = ({ link, children }) => {
-    const isSelected = '/' + current === link;
+    const isSelected = current === link;
 
     return (
       <>
@@ -55,10 +55,10 @@ const Sidenav = ({ current, headings, items }) => {
 export const SidenavContributing = (props) => (
   <Sidenav
     items={[
-      { text: 'Contribution Guidelines', link: '/contributing' },
-      { text: 'Development Setup', link: '/setup' },
-      { text: 'Architecture', link: '/architecture' },
-      { text: 'Deployment', link: '/deployment' },
+      { text: 'Contribution Guidelines', link: '/contributing/' },
+      { text: 'Development Setup', link: '/contributing/setup/' },
+      { text: 'Architecture', link: '/contributing/architecture/' },
+      { text: 'Deployment', link: '/contributing/deployment/' },
     ]}
     {...props}
   />
@@ -67,10 +67,10 @@ export const SidenavContributing = (props) => (
 export const SidenavUserGuide = (props) => (
   <Sidenav
     items={[
-      { text: 'Crossfeed Product Overview', link: '/product-overview' },
-      { text: 'Getting Started', link: '/usage' },
-      { text: 'Administration', link: '/administration' },
-      { text: 'Customization', link: '/customization' },
+      { text: 'Crossfeed Product Overview', link: '/usage/product-overview/' },
+      { text: 'Getting Started', link: '/usage/' },
+      { text: 'Administration', link: '/usage/administration/' },
+      { text: 'Customization', link: '/usage/customization/' },
     ]}
     {...props}
   />
