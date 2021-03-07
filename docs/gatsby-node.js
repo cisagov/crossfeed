@@ -46,8 +46,11 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
 exports.createPages = async ({ actions, graphql }) => {
   const { createPage, createRedirect } = actions;
 
-  createRedirect({ fromPath: '/usage', toPath: '/user-guide/quickstart', isPermanent: false });
-
+  createRedirect({
+    fromPath: '/usage',
+    toPath: '/user-guide/quickstart',
+    isPermanent: false,
+  });
 
   await createMarkdownPages(createPage, graphql);
 };

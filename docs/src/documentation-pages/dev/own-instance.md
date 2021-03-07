@@ -10,7 +10,6 @@ To deploy Crossfeed for the first time in a fresh AWS environment, you need to d
 - Configure User Agent and request signing
 - Configure other environment variables
 
-
 ### Set up a custom domain for the frontend
 
 Pick a custom domain for your frontend and create an [ACM certificate](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html) for your domain. Then, set the `frontend_domain` and `frontend_cert_arn` variables in `infrastructure/stage.tfvars` and `infrastructure/prod.tfvars` accordingly.
@@ -74,7 +73,6 @@ First, make sure you set the following SSM variables manually through the AWS Co
 - `/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY`
 - `/crossfeed/staging/REACT_APP_TERMS_VERSION`
 
-
 ### Use Terraform
 
 Run `cd infrastructure`. Then, run `cp stage.config .env` and change the variables in `.env` to use a bucket you have access to to store state.
@@ -133,7 +131,6 @@ You can call the `SignRequests.verify_signature` method (found in `backend/worke
 the above four parts of a request. Crossfeed will later have an admin UI that allows admins to run this check directly from the web interface.
 
 Note that when deploying Crossfeed to AWS, the worker signature public and private keys should also be set as SSM secrets (such as `/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_KEY` and `/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY`).
-
 
 ### Configure other environment variables
 

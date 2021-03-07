@@ -18,7 +18,11 @@ const DocumentationPage = ({ data, location }) => {
       <div className="usa-layout-docs usa-section">
         <div className="grid-container">
           <div className="grid-row grid-gap">
-            <Sidenav sidenav={frontmatter.sidenav} current={fields.slug} headings={headings} />
+            <Sidenav
+              sidenav={frontmatter.sidenav}
+              current={fields.slug}
+              headings={headings}
+            />
             <main
               id="main-content"
               className="usa-layout-docs__main desktop:grid-col-9 usa-prose"

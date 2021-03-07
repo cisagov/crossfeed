@@ -9,19 +9,21 @@ import classNames from 'classnames';
 */
 
 const SIDENAV_ITEMS = {
-  'dev': [
-    { text: 'Development Setup', link: '/dev/setup/' },
+  dev: [
+    { text: 'Development Setup', link: '/dev/' },
     { text: 'Architecture', link: '/dev/architecture/' },
     { text: 'Deployment', link: '/dev/deployment/' },
     { text: 'Contribution Guidelines', link: '/dev/guidelines/' },
   ],
   'user-guide': [
-    { text: 'Crossfeed Product Overview', link: '/usage/product-overview/' },
-    { text: 'Getting Started', link: '/usage/' },
-    { text: 'Administration', link: '/usage/administration/' },
-  ]
+    { text: 'Quickstart', link: '/user-guide/' },
+    {
+      text: 'Crossfeed Product Overview',
+      link: '/user-guide/product-overview/',
+    },
+    { text: 'Administration', link: '/user-guide/administration/' },
+  ],
 };
-
 
 const SidenavBase = ({ current, headings, items }) => {
   const SidenavItem = ({ link, children }) => {
@@ -36,20 +38,22 @@ const SidenavBase = ({ current, headings, items }) => {
           {isSelected && (
             <ul className="usa-sidenav__sublist">
               {/* Only include level 3 headings (###) */}
-              {headings.filter(e => e.depth === 3).map(({ value, depth }) => (
-                <li className="usa-sidenav__item" key={value}>
-                  <a href={`#${value.replace(/\s/g, '-').toLowerCase()}`}>
-                    <span
-                      style={{
-                        display: 'block',
-                        paddingLeft: `${depth - 3}em`,
-                      }}
-                    >
-                      {value}
-                    </span>
-                  </a>
-                </li>
-              ))}
+              {headings
+                .filter((e) => e.depth === 3)
+                .map(({ value, depth }) => (
+                  <li className="usa-sidenav__item" key={value}>
+                    <a href={`#${value.replace(/\s/g, '-').toLowerCase()}`}>
+                      <span
+                        style={{
+                          display: 'block',
+                          paddingLeft: `${depth - 3}em`,
+                        }}
+                      >
+                        {value}
+                      </span>
+                    </a>
+                  </li>
+                ))}
             </ul>
           )}
         </li>
@@ -61,7 +65,9 @@ const SidenavBase = ({ current, headings, items }) => {
       <nav>
         <ul className="usa-sidenav">
           {items.map((item) => (
-            <SidenavItem link={item.link} key={item.link}>{item.text}</SidenavItem>
+            <SidenavItem link={item.link} key={item.link}>
+              {item.text}
+            </SidenavItem>
           ))}
         </ul>
       </nav>
@@ -71,5 +77,5 @@ const SidenavBase = ({ current, headings, items }) => {
 
 export const Sidenav = (props) => {
   const items = SIDENAV_ITEMS[props.sidenav];
-  return items ? <SidenavBase items={items} {...props} />: null;
+  return items ? <SidenavBase items={items} {...props} /> : null;
 };

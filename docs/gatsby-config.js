@@ -8,10 +8,10 @@ module.exports = {
         items: [{ text: 'Home', link: '/' }],
       },
       {
-        items: [{ text: 'User Guide', link: '/usage/product-overview/' }],
+        items: [{ text: 'User Guide', link: '/user-guide/' }],
       },
       {
-        items: [{ text: 'Development', link: '/dev/setup/' }],
+        items: [{ text: 'Development', link: '/dev/' }],
       },
       {
         items: [{ text: 'Scanning FAQ', link: '/scans/' }],
@@ -96,6 +96,7 @@ module.exports = {
   pathPrefix: process.env.BASEURL || '/',
   plugins: [
     `gatsby-plugin-sass`,
+    `gatsby-plugin-sharp`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -132,6 +133,12 @@ module.exports = {
               },
             },
           },
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 590,
+            },
+          },
         ],
       },
     },
@@ -147,7 +154,7 @@ module.exports = {
         icon: `src/images/logo.png`, // This path is relative to the root of the site.
       },
     },
-    `gatsby-plugin-meta-redirect`
+    `gatsby-plugin-meta-redirect`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
