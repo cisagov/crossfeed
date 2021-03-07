@@ -8,17 +8,17 @@ module.exports = {
         items: [{ text: 'Home', link: '/' }],
       },
       {
-        items: [{ text: 'User Guide', link: '/usage/product-overview' }],
+        items: [{ text: 'User Guide', link: '/usage/product-overview/' }],
       },
       {
-        items: [{ text: 'Contributing', link: '/contributing' }],
+        items: [{ text: 'Development', link: '/dev/setup/' }],
       },
       {
-        items: [{ text: 'Scanning FAQ', link: '/scans' }],
+        items: [{ text: 'Scanning FAQ', link: '/scans/' }],
       },
       {
         title: '',
-        items: [{ text: 'API Reference', link: '/api-reference' }],
+        items: [{ text: 'API Reference', link: '/api-reference/' }],
       },
     ],
     secondaryLinks: [
@@ -97,7 +97,6 @@ module.exports = {
   plugins: [
     `gatsby-plugin-sass`,
     `gatsby-plugin-react-helmet`,
-    // `gatsby-plugin-fontawesome-css`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -148,7 +147,7 @@ module.exports = {
         icon: `src/images/logo.png`, // This path is relative to the root of the site.
       },
     },
-    `gatsby-plugin-netlify-cms`,
+    `gatsby-plugin-meta-redirect`
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,

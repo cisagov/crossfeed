@@ -3,7 +3,7 @@ import { graphql } from 'gatsby';
 
 import Layout from '../components/layout';
 import SEO from '../components/seo';
-import { SidenavContributing, SidenavUserGuide } from '../components/sidenav';
+import { Sidenav } from '../components/sidenav';
 
 /*
   This template is for a single page that does not have a date associated with it. For example, an about page.
@@ -18,12 +18,7 @@ const DocumentationPage = ({ data, location }) => {
       <div className="usa-layout-docs usa-section">
         <div className="grid-container">
           <div className="grid-row grid-gap">
-            {frontmatter.sidenav === 'contributing' && (
-              <SidenavContributing current={fields.slug} headings={headings} />
-            )}
-            {frontmatter.sidenav === 'user-guide' && (
-              <SidenavUserGuide current={fields.slug} headings={headings} />
-            )}
+            <Sidenav sidenav={frontmatter.sidenav} current={fields.slug} headings={headings} />
             <main
               id="main-content"
               className="usa-layout-docs__main desktop:grid-col-9 usa-prose"

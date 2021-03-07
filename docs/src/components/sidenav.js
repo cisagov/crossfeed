@@ -4,10 +4,26 @@ import classNames from 'classnames';
 
 /*
   The sidenav is not loaded by default on the main pages. To include this navigation you can
-  add "sidenav: contributing" or "sidenav: user-guide" in the front-matter of your markdown pages
+  add "sidenav: [sidenav name]" in the front-matter of your markdown pages.
+  The keys of SIDENAV_ITEMS specify allowed sidenav names.
 */
 
-const Sidenav = ({ current, headings, items }) => {
+const SIDENAV_ITEMS = {
+  'dev': [
+    { text: 'Development Setup', link: '/dev/setup/' },
+    { text: 'Architecture', link: '/dev/architecture/' },
+    { text: 'Deployment', link: '/dev/deployment/' },
+    { text: 'Contribution Guidelines', link: '/dev/guidelines/' },
+  ],
+  'user-guide': [
+    { text: 'Crossfeed Product Overview', link: '/usage/product-overview/' },
+    { text: 'Getting Started', link: '/usage/' },
+    { text: 'Administration', link: '/usage/administration/' },
+  ]
+};
+
+
+const SidenavBase = ({ current, headings, items }) => {
   const SidenavItem = ({ link, children }) => {
     const isSelected = current === link;
 
@@ -18,9 +34,10 @@ const Sidenav = ({ current, headings, items }) => {
             {children}
           </Link>
           {isSelected && (
-            <ul class="usa-sidenav__sublist">
-              {headings.map(({ value, depth }) => (
-                <li className="usa-sidenav__item">
+            <ul className="usa-sidenav__sublist">
+              {/* Only include level 3 headings (###) */}
+              {headings.filter(e => e.depth === 3).map(({ value, depth }) => (
+                <li className="usa-sidenav__item" key={value}>
                   <a href={`#${value.replace(/\s/g, '-').toLowerCase()}`}>
                     <span
                       style={{
@@ -44,7 +61,7 @@ const Sidenav = ({ current, headings, items }) => {
       <nav>
         <ul className="usa-sidenav">
           {items.map((item) => (
-            <SidenavItem link={item.link}>{item.text}</SidenavItem>
+            <SidenavItem link={item.link} key={item.link}>{item.text}</SidenavItem>
           ))}
         </ul>
       </nav>
@@ -52,26 +69,7 @@ const Sidenav = ({ current, headings, items }) => {
   );
 };
 
-export const SidenavContributing = (props) => (
-  <Sidenav
-    items={[
-      { text: 'Contribution Guidelines', link: '/contributing/' },
-      { text: 'Development Setup', link: '/contributing/setup/' },
-      { text: 'Architecture', link: '/contributing/architecture/' },
-      { text: 'Deployment', link: '/contributing/deployment/' },
-    ]}
-    {...props}
-  />
-);
-
-export const SidenavUserGuide = (props) => (
-  <Sidenav
-    items={[
-      { text: 'Crossfeed Product Overview', link: '/usage/product-overview/' },
-      { text: 'Getting Started', link: '/usage/' },
-      { text: 'Administration', link: '/usage/administration/' },
-      { text: 'Customization', link: '/usage/customization/' },
-    ]}
-    {...props}
-  />
-);
+export const Sidenav = (props) => {
+  const items = SIDENAV_ITEMS[props.sidenav];
+  return items ? <SidenavBase items={items} {...props} />: null;
+};

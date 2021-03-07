@@ -1,6 +1,6 @@
 ---
 title: Development Setup
-sidenav: contributing
+sidenav: dev
 ---
 
 ### Quickstart

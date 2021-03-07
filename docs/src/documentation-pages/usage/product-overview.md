@@ -35,7 +35,7 @@ Tech Stack:
 - Backend: Node.js (TypeScript), Serverless Framework, PostgreSQL
 - Scans: Node.js (TypeScript), runs in AWS Fargate and Lambda
 
-For an architectural diagram and more information, see [Architecture](/contributing/architecture/).
+For an architectural diagram and more information, see [Architecture](/dev/architecture/).
 
 ##### Security details
 

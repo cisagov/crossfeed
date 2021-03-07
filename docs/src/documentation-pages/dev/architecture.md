@@ -1,6 +1,6 @@
 ---
 title: Architecture
-sidenav: contributing
+sidenav: dev
 ---
 
 ### Overall architecture
