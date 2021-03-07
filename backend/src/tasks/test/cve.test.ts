@@ -330,6 +330,38 @@ describe('cve', () => {
     ]);
   });
 
+  test('product with IIS cpe should include alternate cpes defined in productMap', async () => {
+    const organization = await Organization.create({
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
+      ipBlocks: [],
+      isPassive: false
+    }).save();
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      organization
+    }).save();
+    const service = await Service.create({
+      domain,
+      port: 80,
+      wappalyzerResults: [
+        {
+          technology: {
+            cpe: 'cpe:/a:microsoft:internet_information_server'
+          },
+          version: '7.5'
+        }
+      ]
+    }).save();
+    await cve({
+      organizationId: organization.id,
+      scanId: 'scanId',
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+  });
+
   test('should exit if no matching domains with cpes', async () => {
     const organization = await Organization.create({
       name: 'test-' + Math.random(),
