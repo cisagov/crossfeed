@@ -50,7 +50,7 @@ Array [
 ]
 `;
 
-exports[`cve product with IIS cpe: execSync.input 1`] = `
+exports[`cve product with IIS cpe should include alternate cpes defined in productMap: execSync.input 1`] = `
 "0 cpe:/a:microsoft:internet_information_server:7.5,cpe:/a:microsoft:internet_information_services:7.5
 "
 `;
