@@ -384,16 +384,15 @@ const Risk: React.FC = (props) => {
                     const centroid = geoCentroid(geo);
                     const name: string = geo.properties.name;
                     return (
-                      <>
+                      <React.Fragment key={geo.rsmKey}>
                         <Geography
-                          key={geo.rsmKey}
                           geography={geo}
                           fill={colorScale(cur ? Math.log(cur.value) : 0)}
                           onClick={() => {
                             if (cur) fetchStats(cur.orgId);
                           }}
                         />
-                        <g key={geo.rsmKey + '-name'}>
+                        <g>
                           {centroid[0] > -160 &&
                             centroid[0] < -67 &&
                             (Object.keys(offsets).indexOf(name) === -1 ? (
@@ -419,7 +418,7 @@ const Risk: React.FC = (props) => {
                               </Annotation>
                             ))}
                         </g>
-                      </>
+                      </React.Fragment>
                     );
                   })
                 }
