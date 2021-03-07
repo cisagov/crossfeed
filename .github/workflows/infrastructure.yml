@@ -36,6 +36,7 @@ jobs:
         run: terraform fmt -recursive -check -diff
 
   staging:
+    timeout-minutes: 4320
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
@@ -72,6 +73,7 @@ jobs:
         run: rm stage.plan || true
 
   prod:
+    timeout-minutes: 4320
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
