@@ -25,15 +25,27 @@ sidenav: contributing
    npm start
    ```
 
-5. Generate the initial DB schema:
+5. Generate the initial DB schema and populate it with sample data:
 
    ```bash
-   cd backend && npm run syncdb
+   cd backend
+   # Generate schema
+   npm run syncdb
+   # Populate sample data
+   npm run syncdb -- -d populate
    ```
 
-   If you need to drop and recreate the database, you can run `npm run syncdb -- -d dangerouslyforce`.
+   If you are on Windows, the above commands may not work. Instead, you should run:
 
-   If you are on Windows and the above command doesn't work, try running the following command instead: `docker-compose exec backend npx sls invoke local -f syncdb`.
+   ```bash
+   cd backend
+   # Generate schema
+   docker-compose exec backend npx sls invoke local -f syncdb
+   # Populate sample data
+   docker-compose exec backend npx sls invoke local -f syncdb -d populate
+   ```
+
+   If you ever need to drop and recreate the database, you can run `npm run syncdb -- -d dangerouslyforce`.
 
 6. Navigate to [http://localhost](http://localhost) in a browser.
 
