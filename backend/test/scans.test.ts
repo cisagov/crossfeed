@@ -111,8 +111,9 @@ describe('scan', () => {
       expect(
         response.body.scans.map((e) => e.id).indexOf(scan2.id)
       ).toBeGreaterThanOrEqual(-1);
-      expect(response.body.scans.map((e) => e.id).indexOf(scan3.id)
-      ).toEqual(-1);
+      expect(response.body.scans.map((e) => e.id).indexOf(scan3.id)).toEqual(
+        -1
+      );
     });
   });
   describe('create', () => {
