@@ -68,12 +68,40 @@ code {
   padding-top: 5px;
   padding-bottom: 5px;
 }
+code.language-text {
+  word-break: break-all;
+}
 
 // Sidenav for documentation pages
-.usa-layout-docs-sidenav {
-  position: sticky;
-  top: 0;
-  width: auto;
-  flex-basis: 25%;
-  align-self: start;
+@media only screen and (min-width: 1024px) {
+  .usa-layout-docs-sidenav {
+    position: sticky;
+    top: 0;
+    width: auto;
+    flex-basis: 25%;
+    align-self: start;
+  }
+}
+
+// API Reference
+.swagger-ui {
+  // Hide title 
+  div.info {
+    display: none;
+  }
+  .wrapper {
+    padding: 0;
+  }
+  h4.opblock-tag {
+    padding: 5px;
+    padding-left: 0;
+    font-size: initial;
+  }
+  .opblock-summary {
+    padding: 0 !important;
+    border: none;
+    .opblock-summary-path {
+      // font-size: initial;
+    }
+  }
 }

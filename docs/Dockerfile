@@ -1,9 +1,15 @@
 # This file is built with Docker context in the main directory (not ./docs)
 # so that ./backend is accessible.
 
-FROM node:14-buster-slim
+FROM node:15-buster-slim
 
 WORKDIR /app/docs
+
+RUN apt-get update && apt-get install -y \
+    libvips-dev \
+    glib2.0-dev \
+ && rm -rf /var/lib/apt/lists/*
+
 COPY ./docs/package* ./
 
 RUN npm ci

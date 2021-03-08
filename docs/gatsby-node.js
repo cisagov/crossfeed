@@ -44,7 +44,13 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
 };
 
 exports.createPages = async ({ actions, graphql }) => {
-  const { createPage } = actions;
+  const { createPage, createRedirect } = actions;
+
+  createRedirect({
+    fromPath: '/usage',
+    toPath: '/user-guide/quickstart',
+    isPermanent: false,
+  });
 
   await createMarkdownPages(createPage, graphql);
 };
@@ -58,7 +64,7 @@ async function createMarkdownPages(createPage, graphql) {
       path: node.fields.slug,
       component: pageTemplate,
       context: {
-        name: node.fields.name,
+        name: node.fields.slug,
       },
     });
   });
@@ -86,3 +92,19 @@ async function markdownQuery(graphql, source) {
 
   return result.data.allMarkdownRemark.edges;
 }
+
+exports.onCreateWebpackConfig = ({ actions }) => {
+  actions.setWebpackConfig({
+    module: {
+      rules: [
+        {
+          test: /\.html$/,
+          loader: 'html-loader',
+          options: {
+            minimize: false,
+          },
+        },
+      ],
+    },
+  });
+};
