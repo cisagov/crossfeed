@@ -70,12 +70,14 @@ code {
 }
 
 // Sidenav for documentation pages
-.usa-layout-docs-sidenav {
-  position: sticky;
-  top: 0;
-  width: auto;
-  flex-basis: 25%;
-  align-self: start;
+@media only screen and (min-width: 1024px) {
+  .usa-layout-docs-sidenav {
+    position: sticky;
+    top: 0;
+    width: auto;
+    flex-basis: 25%;
+    align-self: start;
+  }
 }
 
 // API Reference
