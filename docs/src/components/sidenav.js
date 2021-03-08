@@ -11,6 +11,7 @@ import classNames from 'classnames';
 const SIDENAV_ITEMS = {
   dev: [
     { text: 'Quickstart', link: '/dev/quickstart/' },
+    { text: 'Overall System Architecture', link: '/dev/architecture/' },
     { text: 'Frontend', link: '/dev/frontend/' },
     { text: 'REST API', link: '/dev/rest-api/' },
     { text: 'Database', link: '/dev/database/' },
@@ -18,7 +19,6 @@ const SIDENAV_ITEMS = {
     // { text: 'Scheduler', link: '/dev/scheduler/' },
     { text: 'Search', link: '/dev/search/' },
     { text: 'Analytics', link: '/dev/analytics/' },
-    { text: 'Overall System Architecture', link: '/dev/architecture/' },
     { text: 'Deployment', link: '/dev/deployment/' },
     { text: 'Contribution Guidelines', link: '/dev/guidelines/' },
   ],

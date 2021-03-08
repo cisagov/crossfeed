@@ -6,6 +6,7 @@ import SEO from '../components/seo';
 import { Sidenav } from '../components/sidenav';
 import SwaggerUI from 'swagger-ui-react';
 import spec from '../generated/swagger.json';
+import * as diagramHTML from './architecture-diagram.html';
 
 /*
   This template is for a single page that does not have a date associated with it. For example, an about page.
@@ -37,6 +38,14 @@ const DocumentationPage = ({ data, location }) => {
               {fields.slug === '/api-reference/' && (
                 <div style={{ marginTop: 20 }}>
                   <SwaggerUI spec={spec} />
+                </div>
+              )}
+              {fields.slug === '/dev/architecture/' && (
+                <div style={{ marginTop: 20 }}>
+                  <iframe
+                    srcDoc={diagramHTML}
+                    style={{ width: '100%', minHeight: 800, border: 0 }}
+                  ></iframe>
                 </div>
               )}
             </main>
