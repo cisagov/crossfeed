@@ -34,7 +34,7 @@ const DocumentationPage = ({ data, location }) => {
                 className="usa-prose"
                 dangerouslySetInnerHTML={{ __html: html }}
               />
-              {fields.name === 'api-reference' && (
+              {fields.slug === '/api-reference/' && (
                 <div style={{ marginTop: 20 }}>
                   <SwaggerUI spec={spec} />
                 </div>
@@ -50,7 +50,7 @@ const DocumentationPage = ({ data, location }) => {
 export const pageQuery = graphql`
   query($name: String!) {
     markdownRemark(
-      fields: { sourceName: { eq: "documentation-pages" }, name: { eq: $name } }
+      fields: { sourceName: { eq: "documentation-pages" }, slug: { eq: $name } }
     ) {
       html
       frontmatter {
@@ -59,7 +59,6 @@ export const pageQuery = graphql`
       }
       fields {
         slug
-        name
       }
       headings {
         value

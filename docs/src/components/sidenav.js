@@ -10,8 +10,15 @@ import classNames from 'classnames';
 
 const SIDENAV_ITEMS = {
   dev: [
-    { text: 'Development Setup', link: '/dev/setup/' },
-    { text: 'Architecture', link: '/dev/architecture/' },
+    { text: 'Quickstart', link: '/dev/quickstart/' },
+    { text: 'Frontend', link: '/dev/frontend/' },
+    { text: 'REST API', link: '/dev/rest-api/' },
+    { text: 'Database', link: '/dev/database/' },
+    { text: 'Worker', link: '/dev/worker/' },
+    // { text: 'Scheduler', link: '/dev/scheduler/' },
+    { text: 'Search', link: '/dev/search/' },
+    { text: 'Analytics', link: '/dev/analytics/' },
+    { text: 'Overall System Architecture', link: '/dev/architecture/' },
     { text: 'Deployment', link: '/dev/deployment/' },
     { text: 'Contribution Guidelines', link: '/dev/guidelines/' },
   ],

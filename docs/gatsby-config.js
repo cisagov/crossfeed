@@ -21,7 +21,7 @@ module.exports = {
       },
       {
         items: [
-          { text: 'Development', link: '/dev/setup/', rootLink: '/dev/' },
+          { text: 'Development', link: '/dev/quickstart/', rootLink: '/dev/' },
         ],
       },
       {

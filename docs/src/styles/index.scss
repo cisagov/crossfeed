@@ -68,6 +68,9 @@ code {
   padding-top: 5px;
   padding-bottom: 5px;
 }
+code.language-text {
+  word-break: break-all;
+}
 
 // Sidenav for documentation pages
 @media only screen and (min-width: 1024px) {

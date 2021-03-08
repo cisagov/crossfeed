@@ -1,6 +1,5 @@
 ---
 title: Crossfeed API
-# sidenav: user-guide
 ---
 
 The Crossfeed API can be used to programmatically access and modify Crossfeed's data.

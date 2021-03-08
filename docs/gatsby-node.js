@@ -64,7 +64,7 @@ async function createMarkdownPages(createPage, graphql) {
       path: node.fields.slug,
       component: pageTemplate,
       context: {
-        name: node.fields.name,
+        name: node.fields.slug,
       },
     });
   });
