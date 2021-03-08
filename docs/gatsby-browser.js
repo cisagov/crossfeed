@@ -3,6 +3,7 @@
  *
  * See: https://www.gatsbyjs.org/docs/browser-apis/
  */
+import 'swagger-ui-react/swagger-ui.css';
 import './src/styles/index.scss';
 import 'uswds';
 import 'prismjs/themes/prism-coy.css';

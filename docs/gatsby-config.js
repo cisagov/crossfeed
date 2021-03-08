@@ -8,17 +8,28 @@ module.exports = {
         items: [{ text: 'Home', link: '/' }],
       },
       {
-        items: [{ text: 'User Guide', link: '/usage/product-overview' }],
+        items: [
+          {
+            text: 'User Guide',
+            link: '/user-guide/quickstart/',
+            // If rootLink is specified, this navigation item will be
+            // highlighted as current when the user navigates to sub-pages whose
+            // paths start with the given rootLink.
+            rootLink: '/user-guide/',
+          },
+        ],
       },
       {
-        items: [{ text: 'Contributing', link: '/contributing' }],
+        items: [
+          { text: 'Development', link: '/dev/quickstart/', rootLink: '/dev/' },
+        ],
       },
       {
-        items: [{ text: 'Scanning FAQ', link: '/scans' }],
+        items: [{ text: 'Scanning FAQ', link: '/scans/' }],
       },
       {
         title: '',
-        items: [{ text: 'API Reference', link: '/api-reference' }],
+        items: [{ text: 'API Reference', link: '/api-reference/' }],
       },
     ],
     secondaryLinks: [
@@ -96,8 +107,8 @@ module.exports = {
   pathPrefix: process.env.BASEURL || '/',
   plugins: [
     `gatsby-plugin-sass`,
+    `gatsby-plugin-sharp`,
     `gatsby-plugin-react-helmet`,
-    // `gatsby-plugin-fontawesome-css`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -133,14 +144,20 @@ module.exports = {
               },
             },
           },
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 590,
+            },
+          },
         ],
       },
     },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `Crossfeed Documentation`,
+        short_name: `Crossfeed`,
         start_url: `/`,
         background_color: `#663399`,
         theme_color: `#663399`,
@@ -148,7 +165,7 @@ module.exports = {
         icon: `src/images/logo.png`, // This path is relative to the root of the site.
       },
     },
-    `gatsby-plugin-netlify-cms`,
+    `gatsby-plugin-meta-redirect`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,

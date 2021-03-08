@@ -5,7 +5,7 @@ sidenav: user-guide
 
 ### Access control
 
-Every user in Crossfeed has one of the following user types:
+Every user in Crossfeed is one of the following user types:
 
 | User type    | Description                                                                                |
 | ------------ | ------------------------------------------------------------------------------------------ |
@@ -19,23 +19,3 @@ Standard users must be assigned a role for each organization that determines wha
 | --------- | ---------------------------------------------------------------------------------- |
 | Admin     | Can invite / remove users, edit domains, schedule scans for their own organization |
 | User      | Can only view information for their own organization                               |
-
-### Global admins
-
-The following functionality is only available to global admins (and global view users can view this information).
-
-#### Manage organizations
-
-In the "Manage organizations" tab, you can create a new organization. Make sure you specify the organization's root domains.
-
-#### Manage users
-
-This tab allows you to manage users across all organizations, as well as invite a user to a new organization.
-
-### Organization admins
-
-The following functionality is available to organization admins.
-
-#### Organization details
-
-This page lets an admin invite users to their organization or update their organization settings.

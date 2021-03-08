@@ -1,5 +1,6 @@
 import { Link } from 'gatsby';
 import React from 'react';
+import { Location } from '@reach/router';
 
 import close from '../../node_modules/uswds/dist/img/close.svg';
 import SearchForm from './search-form';
@@ -37,14 +38,22 @@ const Nav = ({ navigation, secondaryLinks }) => (
                 </ul>
               </>
             ) : (
-              <Link
-                className="usa-nav__link"
-                activeClassName="usa-current"
-                partiallyActive={navGroup.items[0].link !== '/'}
-                to={navGroup.items[0].link}
-              >
-                <span>{navGroup.items[0].text}</span>
-              </Link>
+              <Location>
+                {({ location }) => (
+                  <Link
+                    className={
+                      `usa-nav__link ` +
+                      (location.pathname.startsWith(navGroup.items[0].rootLink)
+                        ? 'usa-current'
+                        : '')
+                    }
+                    activeClassName="usa-current"
+                    to={navGroup.items[0].link}
+                  >
+                    <span>{navGroup.items[0].text}</span>
+                  </Link>
+                )}
+              </Location>
             )}
           </li>
         ))}
