@@ -1,6 +1,6 @@
 {
-  "name": "federalist-uswds-gatsby",
-  "description": "A Federalist template using USWDS 2.0 + Gatsby",
+  "name": "crossfeed-docs",
+  "description": "Crossfeed Documentation",
   "version": "1.0.0",
   "scripts": {
     "clean": "rimraf .cache public _site",
