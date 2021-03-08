@@ -7,6 +7,7 @@ WORKDIR /app/docs
 
 RUN apt-get update && apt-get install -y \
     libvips-dev \
+    glib2.0-dev \
  && rm -rf /var/lib/apt/lists/*
 
 COPY ./docs/package* ./
