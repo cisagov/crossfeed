@@ -36,7 +36,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y libvips-dev glib2.0-dev && npm ci
+        run: sudo apt-get update && sudo apt-get install -y libvips-dev glib2.0-dev && npm ci && npm run codegen
       - name: Lint
         run: npm run lint
       - name: Build
