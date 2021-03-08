@@ -364,7 +364,8 @@ export const listGranular = wrapHandler(async (event) => {
   const scans = await Scan.find({
     select: ['id', 'name', 'isGranular'],
     where: {
-      isGranular: true
+      isGranular: true,
+      isSingleScan: false
     }
   });
   return {

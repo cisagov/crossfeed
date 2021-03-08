@@ -93,6 +93,13 @@ describe('scan', () => {
         isGranular: true,
         isSingleScan: false
       }).save();
+      const scan3 = await Scan.create({
+        name: name + '-3',
+        arguments: {},
+        frequency: 999999,
+        isGranular: true,
+        isSingleScan: true
+      }).save();
       const response = await request(app)
         .get('/granularScans')
         .set('Authorization', createUserToken({}))
@@ -104,6 +111,8 @@ describe('scan', () => {
       expect(
         response.body.scans.map((e) => e.id).indexOf(scan2.id)
       ).toBeGreaterThanOrEqual(-1);
+      expect(response.body.scans.map((e) => e.id).indexOf(scan3.id)
+      ).toEqual(-1);
     });
   });
   describe('create', () => {
