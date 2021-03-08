@@ -79,7 +79,7 @@ const checkUserLoggedIn = async (req, res, next) => {
 
 const checkUserSignedTerms = (req, res, next) => {
   // Bypass ToU for CISA emails
-  const approvedEmailAddresses = ['@cisa.dhs.gov'];
+  const approvedEmailAddresses = ['@cisa.dhs.gov', '@associates.cisa.dhs.gov'];
   if (process.env.NODE_ENV === 'test')
     approvedEmailAddresses.push('@crossfeed.cisa.gov');
   for (const email of approvedEmailAddresses) {
