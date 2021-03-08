@@ -1,5 +1,5 @@
 # Needed for local development for certain binaries
-FROM node:current-buster
+FROM node:12-buster
 
 WORKDIR /app
 COPY ./package* ./
