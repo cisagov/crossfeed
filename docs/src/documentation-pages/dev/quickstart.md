@@ -1,11 +1,13 @@
 ---
-title: Development Setup
-sidenav: contributing
+title: Quickstart
+sidenav: dev
 ---
 
-### Quickstart
+This quickstart describes the initial setup required to run an instance of Crossfeed on your local computer.
 
-1. Install [Node.js](https://nodejs.org/en/download/) and [Docker Compose](https://docs.docker.com/compose/install/).
+### Initial Setup
+
+1. Install [Node.js](https://nodejs.org/en/download/) and [Docker Compose](https://docs.docker.com/compose/install/). Make sure the Docker daemon is running.
 
 2. Copy root `dev.env.example` file to a `.env` file.
 
@@ -57,7 +59,7 @@ sidenav: contributing
 
 8. Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save.
 
-#### Running tests
+### Running tests
 
 To run tests, first make sure you have already started Crossfeed with `npm start` (or, at bare minimum, that the database container is running). Then run:
 
@@ -75,13 +77,11 @@ pip install -r worker/requirements.txt
 pytest
 ```
 
-To view a code coverage report (a minimum code coverage threshold is checked in CI), run `npm test -- --collectCoverage`.
+To view a code coverage report (a minimum code coverage threshold is checked in CI), run `npm test -- --collectCoverage`. You can then view a HTML coverage report in the `coverage/lcov-report` directory.
 
-You can then view a HTML coverage report in the `coverage/lcov-report` directory.
+### Monitoring Docker containers
 
-#### Monitoring Docker logs
-
-To check Docker containers, you can run:
+To see which Docker containers are running, you can run:
 
 ```bash{outputLines: 2-10}
 docker ps
@@ -102,60 +102,20 @@ You can then check the logs of a particular container by specifying a container'
 docker logs crossfeed_backend_1 --follow
 ```
 
-### Running scans locally
+### Further information
 
-In order to run scans locally or work on scanning infrastructure,
-you will need to set up the Fargate worker and rebuild it periodically
-when worker code changes.
+To see more information about the design and development of each component of Crossfeed,
+see the following links:
 
-#### Building the worker Docker image
-
-Each time you make changes to the worker code, you should run the following command to re-build the worker docker image:
-
-```bash
-npm run build-worker
-```
-
-#### Running workers locally
-
-To run a worker locally, just create a scan from the Crossfeed UI.
-When running locally, the scheduler function runs every 30 seconds, for convenience, so it will
-start your worker soon. To manually trigger a run immediately, click on the "Manually run scheduler" button on the Scans page.
-
-Once a worker has started, it is accessible as a running Docker container.
-You can examine it by running `docker ps` or ( `docker ps -a | head -n 3` for stopped workers ) to view Docker containers.
-and check its logs with `docker logs [containername]` .
-
-You can check the scheduler logs locally by checking the backend container logs.
-
-#### Generating censys types
-
-The `censysIpv4.ts` and `censysCertificates.ts` type files in the `backend/src/models/generated` files have been
-automatically generated from Censys's published schemas. If you need to re-generate these type files, run:
-
-```bash
-npm run codegen
-```
+- [Frontend](frontend.md) for the React frontend.
+- [REST API](rest-api.md) for the REST API.
+- [Database](database.md) for the database models stored in Postgres.
+- [Worker](worker.md) for the worker system and adding new scans and data sources.
+- [Search](search.md) for the search infrastructure and setup with Elasticsearch.
+- [Analytics](analytics.md) for the analytics setup with Matomo.
 
 ### Documentation
 
 The documentation files are stored in the `docs` directory and served from a Gatsby site. To work on this, you should run `npm start` from before. You can then open up [http://localhost:4000](http://localhost:4000) in your browser to view the docs.
 
 The docs are based on the [federalist-uswds-gatsby](https://github.com/18F/federalist-uswds-gatsby) theme. See that repository for more information on additional theme customizations that can be done.
-
-### Matomo for Analytics
-
-[Matomo](https://matomo.org/) is an open source analytics platform. We host an instance of Matomo as part of Crossfeed to collect analytics
-on its usage.
-
-Before you run Matomo for the first time locally, you must run `./setup-matomo.sh`.
-
-You can access Matomo by clicking on the "Matomo" button from the "My Account" page. Click
-through the original setup (keep the default values for database connection, etc.),
-then set the superuser username and password to "root" and "password" (for development only; for deployment to production, you should generate a random password).
-
-### Kibana
-
-By default, Kibana is disabled because it adds a lot of overhead to local development and isn't required for normally running Crossfeed locally.
-
-If you want to view a local version of Kibana (if you, for example, want to inspect the data of the local Elasticsearch instance), you should first uncomment the "kib" section of `docker-compose.yml` and then navigate to [http://localhost:5601](http://localhost:5601).

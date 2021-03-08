@@ -96,7 +96,7 @@ const Highlights = () => (
         <div className="usa-media-block tablet:grid-col">
           <a
             className="usa-button usa-button--big usa-button--accent-cool"
-            href="/product-overview"
+            href="/user-guide/"
             style={{ margin: 'auto', display: 'block' }}
           >
             Get started

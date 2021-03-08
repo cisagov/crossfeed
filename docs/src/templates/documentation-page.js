@@ -3,7 +3,10 @@ import { graphql } from 'gatsby';
 
 import Layout from '../components/layout';
 import SEO from '../components/seo';
-import { SidenavContributing, SidenavUserGuide } from '../components/sidenav';
+import { Sidenav } from '../components/sidenav';
+import SwaggerUI from 'swagger-ui-react';
+import spec from '../generated/swagger.json';
+import * as diagramHTML from './architecture-diagram.html';
 
 /*
   This template is for a single page that does not have a date associated with it. For example, an about page.
@@ -18,12 +21,11 @@ const DocumentationPage = ({ data, location }) => {
       <div className="usa-layout-docs usa-section">
         <div className="grid-container">
           <div className="grid-row grid-gap">
-            {frontmatter.sidenav === 'contributing' && (
-              <SidenavContributing current={fields.name} headings={headings} />
-            )}
-            {frontmatter.sidenav === 'user-guide' && (
-              <SidenavUserGuide current={fields.name} headings={headings} />
-            )}
+            <Sidenav
+              sidenav={frontmatter.sidenav}
+              current={fields.slug}
+              headings={headings}
+            />
             <main
               id="main-content"
               className="usa-layout-docs__main desktop:grid-col-9 usa-prose"
@@ -33,6 +35,19 @@ const DocumentationPage = ({ data, location }) => {
                 className="usa-prose"
                 dangerouslySetInnerHTML={{ __html: html }}
               />
+              {fields.slug === '/api-reference/' && (
+                <div style={{ marginTop: 20 }}>
+                  <SwaggerUI spec={spec} />
+                </div>
+              )}
+              {fields.slug === '/dev/architecture/' && (
+                <div style={{ marginTop: 20 }}>
+                  <iframe
+                    srcDoc={diagramHTML}
+                    style={{ width: '100%', minHeight: 800, border: 0 }}
+                  ></iframe>
+                </div>
+              )}
             </main>
           </div>
         </div>
@@ -44,7 +59,7 @@ const DocumentationPage = ({ data, location }) => {
 export const pageQuery = graphql`
   query($name: String!) {
     markdownRemark(
-      fields: { sourceName: { eq: "documentation-pages" }, name: { eq: $name } }
+      fields: { sourceName: { eq: "documentation-pages" }, slug: { eq: $name } }
     ) {
       html
       frontmatter {
@@ -52,7 +67,7 @@ export const pageQuery = graphql`
         sidenav
       }
       fields {
-        name
+        slug
       }
       headings {
         value

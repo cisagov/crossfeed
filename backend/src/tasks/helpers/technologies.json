@@ -30,7 +30,7 @@
         "cats": [
             59
         ],
-        "cpe": "telerik:ui_for_asp.net_ajax",
+        "cpe": "cpe:/a:telerik:ui_for_asp.net_ajax",
         "js": {
             "Telerik": ""
         },
