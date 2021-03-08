@@ -36,7 +36,7 @@ resource "aws_lambda_function" "security_headers" {
   function_name = var.frontend_lambda_function
   role          = aws_iam_role.frontend_lambda_iam.arn
   handler       = "index.handler"
-  runtime       = "nodejs12.x"
+  runtime       = "nodejs14.x"
   publish       = true
 }
 
