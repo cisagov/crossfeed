@@ -49,12 +49,6 @@ const Nav = ({ navigation, secondaryLinks }) => (
                 activeClassName="usa-current"
                 to={navGroup.items[0].link}
               >
-                {console.log(
-                  navGroup.items[0].text,
-                  window.location.pathname.startsWith(
-                    navGroup.items[0].rootLink
-                  )
-                )}
                 <span>{navGroup.items[0].text}</span>
               </Link>
             )}

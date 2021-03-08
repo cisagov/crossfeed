@@ -77,3 +77,26 @@ code {
   flex-basis: 25%;
   align-self: start;
 }
+
+// API Reference
+.swagger-ui {
+  // Hide title 
+  div.info {
+    display: none;
+  }
+  .wrapper {
+    padding: 0;
+  }
+  h4.opblock-tag {
+    padding: 5px;
+    padding-left: 0;
+    font-size: initial;
+  }
+  .opblock-summary {
+    padding: 0 !important;
+    border: none;
+    .opblock-summary-path {
+      // font-size: initial;
+    }
+  }
+}

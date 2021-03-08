@@ -4,6 +4,8 @@ import { graphql } from 'gatsby';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { Sidenav } from '../components/sidenav';
+import SwaggerUI from 'swagger-ui-react';
+import spec from '../generated/swagger.json';
 
 /*
   This template is for a single page that does not have a date associated with it. For example, an about page.
@@ -32,6 +34,11 @@ const DocumentationPage = ({ data, location }) => {
                 className="usa-prose"
                 dangerouslySetInnerHTML={{ __html: html }}
               />
+              {fields.name === 'api-reference' && (
+                <div style={{ marginTop: 20 }}>
+                  <SwaggerUI spec={spec} />
+                </div>
+              )}
             </main>
           </div>
         </div>
@@ -52,6 +59,7 @@ export const pageQuery = graphql`
       }
       fields {
         slug
+        name
       }
       headings {
         value
