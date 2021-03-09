@@ -39,7 +39,8 @@ const productMap = {
   'cpe:/a:microsoft:asp.net': ['cpe:/a:microsoft:.net_framework'],
   'cpe:/a:microsoft:internet_information_server': [
     'cpe:/a:microsoft:internet_information_services'
-  ]
+  ],
+  'cpe:/a:microsoft:iis': ['cpe:/a:microsoft:internet_information_services']
 };
 
 // The number of domains to fetch from the database
@@ -90,18 +91,16 @@ const identifyPassiveCVEsFromCPEs = async (allDomains: Domain[]) => {
         ) {
           const cpe = constructCPE(product.cpe, product.version);
           cpes.add(cpe);
-          if (productMap[product.cpe]) {
-            // Add alternate variants of the CPE as well.
-            for (const productMapCPE in productMap) {
-              if (cpe.indexOf(productMapCPE) > -1) {
-                for (const alternateCPE of productMap[product.cpe]) {
-                  cpes.add(
-                    constructCPE(
-                      cpe.replace(productMapCPE, alternateCPE),
-                      product.version
-                    )
-                  );
-                }
+          // Add alternate variants of the CPE as well.
+          for (const productMapCPE in productMap) {
+            if (cpe.indexOf(productMapCPE) > -1) {
+              for (const alternateCPE of productMap[productMapCPE]) {
+                cpes.add(
+                  constructCPE(
+                    cpe.replace(productMapCPE, alternateCPE),
+                    product.version
+                  )
+                );
               }
             }
           }

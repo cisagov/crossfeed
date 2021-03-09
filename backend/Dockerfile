@@ -1,5 +1,4 @@
-# Needed for local development for certain binaries
-FROM node:12-buster
+FROM node:14-buster-slim
 
 WORKDIR /app
 COPY ./package* ./
