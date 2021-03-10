@@ -71,10 +71,9 @@ export class User extends BaseEntity {
 
   @Column({
     nullable: true,
-    type: 'timestamp',
+    type: 'timestamp'
   })
   lastLoggedIn: Date;
-  
 
   /** The user's type. globalView allows access to all organizations
    * while globalAdmin allows universally administering Crossfeed */

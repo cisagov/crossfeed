@@ -121,9 +121,9 @@ export const callback = async (event, context) => {
       body: ''
     };
   }
-  
+
   userInfo.email = userInfo.email.toLowerCase();
-   
+
   // Look up user by email
   await connectToDatabase();
   let user = await User.findOne(
@@ -154,8 +154,8 @@ export const callback = async (event, context) => {
     user[idKey] = userInfo.sub;
     await user.save();
   }
-  
-  user.lastLoggedIn = new Date((new Date()).getTime());
+
+  user.lastLoggedIn = new Date(new Date().getTime());
   await user.save();
 
   // Update user status if accepting invite
