@@ -15,6 +15,7 @@ export interface UserToken {
   }[];
   dateAcceptedTerms: Date | undefined;
   acceptedTermsVersion: string | undefined;
+  lastLoggedIn: Date | undefined;
 }
 
 interface CognitoUserToken {
@@ -74,6 +75,7 @@ export const userTokenBody = (user): UserToken => ({
   userType: user.userType,
   dateAcceptedTerms: user.dateAcceptedTerms,
   acceptedTermsVersion: user.acceptedTermsVersion,
+  lastLoggedIn: user.lastLoggedIn,
   roles: user.roles
     .filter((role) => role.approved)
     .map((role) => ({
@@ -119,8 +121,10 @@ export const callback = async (event, context) => {
       body: ''
     };
   }
-
-  userInfo.email = userInfo.email.toLowerCase();
+  
+   userInfo.email = userInfo.email.toLowerCase();
+   
+ 
 
   // Look up user by email
   await connectToDatabase();
