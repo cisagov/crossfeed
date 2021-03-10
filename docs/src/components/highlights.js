@@ -9,7 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 /*
-  Use this section to highlight key elements of your site. Some sites will only have two while others may have six to eight. 
+  Use this section to highlight key elements of your site. Some sites will only have two while others may have six to eight.
 */
 
 const Highlights = () => (

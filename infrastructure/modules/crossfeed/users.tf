@@ -22,10 +22,10 @@ resource "aws_cognito_user_pool" "pool" {
   }
 }
 
-resource "aws_cognito_user_pool_domain" "auth_domain" {
-  domain       = var.user_pool_domain
-  user_pool_id = aws_cognito_user_pool.pool.id
-}
+# resource "aws_cognito_user_pool_domain" "auth_domain" {
+#   domain       = var.user_pool_domain
+#   user_pool_id = aws_cognito_user_pool.pool.id
+# }
 
 resource "aws_cognito_user_pool_client" "client" {
   name                                 = "crossfeed"

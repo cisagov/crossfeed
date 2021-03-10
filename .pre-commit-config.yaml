@@ -1,0 +1,32 @@
+repos:
+  - repo: git://github.com/golangci/golangci-lint
+    rev: v1.37.0
+    hooks:
+      - id: golangci-lint
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-yaml
+#      - id: detect-private-key
+      - id: no-commit-to-branch
+        args: [--branch, master, --pattern, '\d\.\d\.\d']
+      - id: trailing-whitespace
+
+#   - repo: git://github.com/igorshubovych/markdownlint-cli
+#     rev: v0.26.0
+#     hooks:
+#       - id: markdownlint
+
+  - repo: git://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.45.0
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_docs
+      - id: terraform_tflint
+
+#   - repo: git://github.com/detailyang/pre-commit-shell
+#     rev: 1.0.5
+#     hooks:
+#       - id: shell-lint

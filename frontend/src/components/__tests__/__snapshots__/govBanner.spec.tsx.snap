@@ -24,7 +24,7 @@ exports[`Gov Banner Component matches snapshot 1`] = `
         <button
           class="makeStyles-text-5 makeStyles-btn-6 makeStyles-btnExpand-7"
         >
-          Here's how you know 
+          Here's how you know
           <svg
             aria-hidden="true"
             class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"

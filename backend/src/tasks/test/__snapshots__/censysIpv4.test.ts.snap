@@ -1281,7 +1281,7 @@ on this server.</p>
 
 	<!-- Include YT library and this directive -->
 	<script src=\\"https://www.youtube.com/iframe_api\\"></script>
-	<script src=\\"build/vendor/vendor.min.js\\"></script>	
+	<script src=\\"build/vendor/vendor.min.js\\"></script>
 	<script src=\\"env.js\\"></script>
 	<script src=\\"components/welcome/welcome.min.js\\"></script>
 
@@ -1322,7 +1322,7 @@ on this server.</p>
 
 	<!-- Include YT library and this directive -->
 	<script src=\\"https://www.youtube.com/iframe_api\\"></script>
-	<script src=\\"build/vendor/vendor.min.js\\"></script>	
+	<script src=\\"build/vendor/vendor.min.js\\"></script>
 	<script src=\\"env.js\\"></script>
 	<script src=\\"components/welcome/welcome.min.js\\"></script>
 
@@ -1579,7 +1579,7 @@ on this server.</p>
     ============================-->
     <section id=\\"product-qaasbox\\" class=\\"wow fadeIn\\">
       <div class=\\"container\\">
-    
+
         <header class=\\"section-header\\">
           <h3>QaaSBox, Quality Testing Simplified </h3>
           <p>Unbox Quality-As-A-Solution software and a platform for your product that empowers your product management, development and test experts to adapt STLC at ease for achieving quality testing. QaaSBox enables the users gain competitive advantage and achieve faster go-to-market cycle. <br>
@@ -1589,9 +1589,9 @@ on this server.</p>
         <div class=\\"facts-img\\">
           <!-- <img src=\\"img/facts-img.png\\" alt=\\"\\" class=\\"img-fluid\\"> -->
           <img src=\\"img/qb_products_home.png\\" alt=\\"\\" class=\\"img-fluid\\" height=\\"1000px\\">
-    
+
         </div>
-    
+
         <!--==========================
               Call To Action Section
             ============================-->
@@ -1603,7 +1603,7 @@ on this server.</p>
           </div>
         </section>
         <!-- #call-to-action -->
-    
+
       </div>
     </section>
 
@@ -1659,7 +1659,7 @@ on this server.</p>
 
       </div>
     </section>
-    
+
     <!-- End Products Section-->
     <!--==========================
       Services Section
@@ -1942,7 +1942,7 @@ on this server.</p>
               <h2 class=\\"title\\"><a href=\\"#\\">Qutrix Mission</a></h2>
               <p>
               <center> To accomplish a purposeful existence in the industry, <br> <br>
-		By creating employment opportunity for deserving, 
+		By creating employment opportunity for deserving,
 		By treating suppliers as valuable as customers,
 		By partnering with visionary customers & investors
 	      </center>
@@ -2360,7 +2360,7 @@ on this server.</p>
 
     </div>
 
-  
+
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src=\\"https://www.googletagmanager.com/gtag/js?id=UA-79964405-2\\"></script>
   <script>
@@ -2615,7 +2615,7 @@ on this server.</p>
     ============================-->
     <section id=\\"product-qaasbox\\" class=\\"wow fadeIn\\">
       <div class=\\"container\\">
-    
+
         <header class=\\"section-header\\">
           <h3>QaaSBox, Quality Testing Simplified </h3>
           <p>Unbox Quality-As-A-Solution software and a platform for your product that empowers your product management, development and test experts to adapt STLC at ease for achieving quality testing. QaaSBox enables the users gain competitive advantage and achieve faster go-to-market cycle. <br>
@@ -2625,9 +2625,9 @@ on this server.</p>
         <div class=\\"facts-img\\">
           <!-- <img src=\\"img/facts-img.png\\" alt=\\"\\" class=\\"img-fluid\\"> -->
           <img src=\\"img/qb_products_home.png\\" alt=\\"\\" class=\\"img-fluid\\" height=\\"1000px\\">
-    
+
         </div>
-    
+
         <!--==========================
               Call To Action Section
             ============================-->
@@ -2639,7 +2639,7 @@ on this server.</p>
           </div>
         </section>
         <!-- #call-to-action -->
-    
+
       </div>
     </section>
 
@@ -2695,7 +2695,7 @@ on this server.</p>
 
       </div>
     </section>
-    
+
     <!-- End Products Section-->
     <!--==========================
       Services Section
@@ -2978,7 +2978,7 @@ on this server.</p>
               <h2 class=\\"title\\"><a href=\\"#\\">Qutrix Mission</a></h2>
               <p>
               <center> To accomplish a purposeful existence in the industry, <br> <br>
-		By creating employment opportunity for deserving, 
+		By creating employment opportunity for deserving,
 		By treating suppliers as valuable as customers,
 		By partnering with visionary customers & investors
 	      </center>
@@ -3396,7 +3396,7 @@ on this server.</p>
 
     </div>
 
-  
+
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src=\\"https://www.googletagmanager.com/gtag/js?id=UA-79964405-2\\"></script>
   <script>
@@ -4086,16 +4086,16 @@ on this server.</p>
       },
       Object {
         "banner": "these characters should not show up in the snapshot:
-              null: 
-              another null: 
-              another null: 
+              null:
+              another null:
+              another null:
               ",
         "censysIpv4Results": Object {
           "http": Object {
             "get": Object {
               "body": "these characters should not show up in the snapshot:
-              null: 
-              another null: 
+              null:
+              another null:
               another null: \\\\n              ",
             },
           },
@@ -4317,22 +4317,22 @@ on this server.</p>
     <div class=\\"unhandled-error-cont tenant-error-cont has-logo\\">
       <div class=\\"error-header\\">
         <span class=\\"error-icon\\">
-          
+
           <span class=\\"error-logo\\" style=\\"background-image: url('https://assets.mindvalley.com/api/v1/assets/e65ae7f0-3886-4b55-a067-05f14a2e8d39.png');\\"></span>
-          
+
         </span>
         <h3 class=\\"error-title\\">Mindvalley</h3>
-        
+
           <h3 class=\\"error-subtitle\\">Oops!, something went wrong</h3>
-        
+
       </div>
       <div class=\\"error-body\\">
         <p class=\\"error-message\\">
-          
+
           Callback URL mismatch.<br/>
           The provided redirect_uri is not in the list of allowed callback URLs.<br/>
           Please go to the <a target=\\"_new\\" href=\\"https://manage.auth0.com/#/applications/OaAEsHvSvZbs15WsyEGJJ6SemaoA2Zo6/settings\\">Application Settings page</a> and make sure you are sending a valid callback url from your application.
-          
+
         </p>
       </div>
       <div class=\\"error-footer\\">
@@ -4344,31 +4344,31 @@ on this server.</p>
           </span>
           <span class=\\"footer-group\\">
             <h4 class=\\"footer-group-title\\">SUPPORT</h4>
-            
-              
+
+
               <a href=\\"https://support.mindvalley.com/en/\\" class=\\"footer-group-link has-icon customer-support\\">Get Help</a>
-              
-              
+
+
               <a href=\\"mailto:support@mindvalley.com\\" class=\\"footer-group-link has-icon mail\\">support@mindvalley.com</a>
-              
-            
+
+
           </span>
         </div>
         <div class=\\"error-details\\">
           <p class=\\"error-status\\">
-            
-            <strong>unauthorized_client</strong>: Callback URL mismatch. http://45.79.207.117/auth/mindvalley/callback?origin=http%3A%2F%2F45.79.207.117%2F is not in the list of allowed callback URLs
-            
-          </p>
-          
-          <a href=\\"https://manage.auth0.com/#/logs/\\" target=\\"_new\\" class=\\"view-logs-btn\\">VIEW LOG</a>
-          
 
-          
+            <strong>unauthorized_client</strong>: Callback URL mismatch. http://45.79.207.117/auth/mindvalley/callback?origin=http%3A%2F%2F45.79.207.117%2F is not in the list of allowed callback URLs
+
+          </p>
+
+          <a href=\\"https://manage.auth0.com/#/logs/\\" target=\\"_new\\" class=\\"view-logs-btn\\">VIEW LOG</a>
+
+
+
           <span class=\\"error-id\\">
             <span class=\\"error-id-title\\">TRACKING ID: </span><span class=\\"error-id-content\\">54463be5f6a5f27cd315</span>
           </span>
-          
+
         </div>
       </div>
     </div>
@@ -4391,22 +4391,22 @@ on this server.</p>
     <div class=\\"unhandled-error-cont tenant-error-cont has-logo\\">
       <div class=\\"error-header\\">
         <span class=\\"error-icon\\">
-          
+
           <span class=\\"error-logo\\" style=\\"background-image: url('https://assets.mindvalley.com/api/v1/assets/e65ae7f0-3886-4b55-a067-05f14a2e8d39.png');\\"></span>
-          
+
         </span>
         <h3 class=\\"error-title\\">Mindvalley</h3>
-        
+
           <h3 class=\\"error-subtitle\\">Oops!, something went wrong</h3>
-        
+
       </div>
       <div class=\\"error-body\\">
         <p class=\\"error-message\\">
-          
+
           Callback URL mismatch.<br/>
           The provided redirect_uri is not in the list of allowed callback URLs.<br/>
           Please go to the <a target=\\"_new\\" href=\\"https://manage.auth0.com/#/applications/OaAEsHvSvZbs15WsyEGJJ6SemaoA2Zo6/settings\\">Application Settings page</a> and make sure you are sending a valid callback url from your application.
-          
+
         </p>
       </div>
       <div class=\\"error-footer\\">
@@ -4418,31 +4418,31 @@ on this server.</p>
           </span>
           <span class=\\"footer-group\\">
             <h4 class=\\"footer-group-title\\">SUPPORT</h4>
-            
-              
+
+
               <a href=\\"https://support.mindvalley.com/en/\\" class=\\"footer-group-link has-icon customer-support\\">Get Help</a>
-              
-              
+
+
               <a href=\\"mailto:support@mindvalley.com\\" class=\\"footer-group-link has-icon mail\\">support@mindvalley.com</a>
-              
-            
+
+
           </span>
         </div>
         <div class=\\"error-details\\">
           <p class=\\"error-status\\">
-            
-            <strong>unauthorized_client</strong>: Callback URL mismatch. http://45.79.207.117/auth/mindvalley/callback?origin=http%3A%2F%2F45.79.207.117%2F is not in the list of allowed callback URLs
-            
-          </p>
-          
-          <a href=\\"https://manage.auth0.com/#/logs/\\" target=\\"_new\\" class=\\"view-logs-btn\\">VIEW LOG</a>
-          
 
-          
+            <strong>unauthorized_client</strong>: Callback URL mismatch. http://45.79.207.117/auth/mindvalley/callback?origin=http%3A%2F%2F45.79.207.117%2F is not in the list of allowed callback URLs
+
+          </p>
+
+          <a href=\\"https://manage.auth0.com/#/logs/\\" target=\\"_new\\" class=\\"view-logs-btn\\">VIEW LOG</a>
+
+
+
           <span class=\\"error-id\\">
             <span class=\\"error-id-title\\">TRACKING ID: </span><span class=\\"error-id-content\\">54463be5f6a5f27cd315</span>
           </span>
-          
+
         </div>
       </div>
     </div>

@@ -1,0 +1,11 @@
+{
+  "default": true,
+  "first-header-h1": false,
+  "first-line-h1": false,
+  "line_length": false,
+  "no-multiple-blanks": false,
+  "fenced-code-language": false,
+  "no-inline-html": {
+    "allowed_elements": ["br", "pre"]
+  }
+}

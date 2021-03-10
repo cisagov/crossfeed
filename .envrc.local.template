@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+
+export USE_AWS_VAULT=true
+export ENVIRONMENT=stage

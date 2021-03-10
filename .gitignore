@@ -43,3 +43,6 @@ nvd-dump
 minio-data
 
 **.pyc
+
+# direnv
+.envrc.local
