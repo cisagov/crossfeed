@@ -122,10 +122,8 @@ export const callback = async (event, context) => {
     };
   }
   
-   userInfo.email = userInfo.email.toLowerCase();
+  userInfo.email = userInfo.email.toLowerCase();
    
- 
-
   // Look up user by email
   await connectToDatabase();
   let user = await User.findOne(
