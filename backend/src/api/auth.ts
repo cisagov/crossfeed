@@ -152,6 +152,9 @@ export const callback = async (event, context) => {
     user[idKey] = userInfo.sub;
     await user.save();
   }
+  
+  user.lastLoggedIn = new Date((new Date()).getTime());
+  await user.save();
 
   // Update user status if accepting invite
   if (user.invitePending) {
