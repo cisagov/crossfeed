@@ -6,14 +6,26 @@ import { Add } from '@material-ui/icons';
 import { OrganizationForm } from 'components/OrganizationForm';
 import { useAuthContext } from 'context';
 
+const GLOBAL_ADMIN = 2;
+const STANDARD_USER = 1;
+
 export const OrganizationList: React.FC<{
   parent?: Organization;
 }> = ({ parent }) => {
-  const { apiPost, apiGet, setFeedbackMessage } = useAuthContext();
+  const { apiPost, apiGet, setFeedbackMessage, user } = useAuthContext();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const history = useHistory();
   const classes = useStyles();
+
+  let userLevel = 0;
+  if (user && user.isRegistered) {
+    if (user.userType === 'standard') {
+      userLevel = STANDARD_USER;
+    } else {
+      userLevel = GLOBAL_ADMIN;
+    }
+  }
 
   const onSubmit = async (body: Object) => {
     try {
@@ -56,19 +68,23 @@ export const OrganizationList: React.FC<{
         spacing={2}
         style={{ margin: '0 auto', marginTop: '1rem', maxWidth: '1000px' }}
       >
-        <Grid item>
-          <Paper
-            elevation={0}
-            classes={{ root: classes.cardRoot }}
-            style={{ border: '1px dashed #C9C9C9', textAlign: 'center' }}
-            onClick={() => setDialogOpen(true)}
-          >
-            <h1>Create New {parent ? 'Team' : 'Organization'}</h1>
-            <p>
-              <Add></Add>
-            </p>
-          </Paper>
-        </Grid>
+        {userLevel === GLOBAL_ADMIN ?(
+          <Grid item>
+            <Paper
+              elevation={0}
+              classes={{ root: classes.cardRoot }}
+              style={{ border: '1px dashed #C9C9C9', textAlign: 'center' }}
+              onClick={() => setDialogOpen(true)}
+            >
+              <h1>Create New {parent ? 'Team' : 'Organization'}</h1>
+              <p>
+                <Add></Add>
+              </p>
+            </Paper>
+          </Grid>
+        ) : (
+          ""
+        )}
         {organizations.map((org) => (
           // TODO: Add functionality to delete organizations
           <Grid item key={org.id}>
