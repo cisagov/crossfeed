@@ -89,7 +89,9 @@ export const SCAN_SCHEMA: ScanSchema = {
     isPassive: true,
     global: false,
     description:
-      'Fetch passive port, banner, and vulnerability data from shodan'
+      'Fetch passive port, banner, and vulnerability data from shodan',
+    cpu: '1024',
+    memory: '8192'
   },
   sslyze: {
     type: 'fargate',
