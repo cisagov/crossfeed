@@ -15,6 +15,7 @@ export interface UserToken {
   }[];
   dateAcceptedTerms: Date | undefined;
   acceptedTermsVersion: string | undefined;
+  lastLoggedIn: Date | undefined;
 }
 
 interface CognitoUserToken {
@@ -74,6 +75,7 @@ export const userTokenBody = (user): UserToken => ({
   userType: user.userType,
   dateAcceptedTerms: user.dateAcceptedTerms,
   acceptedTermsVersion: user.acceptedTermsVersion,
+  lastLoggedIn: user.lastLoggedIn,
   roles: user.roles
     .filter((role) => role.approved)
     .map((role) => ({
@@ -152,6 +154,9 @@ export const callback = async (event, context) => {
     user[idKey] = userInfo.sub;
     await user.save();
   }
+
+  user.lastLoggedIn = new Date(Date.now());
+  await user.save();
 
   // Update user status if accepting invite
   if (user.invitePending) {
