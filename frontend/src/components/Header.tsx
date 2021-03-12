@@ -286,7 +286,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                   button
                   component={NavLink}
                   to={path}
-                  activeClassName={classes.activeMobileLink}
+                  activeClassName={path === location.pathname ? classes.activeMobileLink:''}
                   onClick={onClick ? onClick : undefined}
                 >
                   {title}
@@ -298,7 +298,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                   key={nested.title.toString()}
                   component={NavLink}
                   to={nested.onClick ? '#' : nested.path}
-                  activeClassName={classes.activeMobileLink}
+                  activeClassName={path === location.pathname ? classes.activeMobileLink:''}
                   onClick={nested.onClick ? nested.onClick : undefined}
                 >
                   {nested.title}
