@@ -134,9 +134,6 @@ describe('auth', () => {
         response.body.user.lastLoggedIn > time_1 &&
           response.body.user.lastLoggedIn < time_2
       );
-      const user = await User.findOne(response.body.user.id);
-      expect(user?.firstName).toEqual('');
-      expect(user?.lastName).toEqual('');
       process.env.USE_COGNITO = '';
     });
   });
