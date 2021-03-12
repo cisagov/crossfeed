@@ -284,9 +284,10 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
               {path && (
                 <ListItem
                   button
+                  exact
                   component={NavLink}
                   to={path}
-                  activeClassName={path === location.pathname ? classes.activeMobileLink:''}
+                  activeClassName={classes.activeMobileLink}
                   onClick={onClick ? onClick : undefined}
                 >
                   {title}
@@ -295,10 +296,11 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
               {nested?.map((nested) => (
                 <ListItem
                   button
+                  exact
                   key={nested.title.toString()}
                   component={NavLink}
                   to={nested.onClick ? '#' : nested.path}
-                  activeClassName={path === location.pathname ? classes.activeMobileLink:''}
+                  activeClassName={classes.activeMobileLink}
                   onClick={nested.onClick ? nested.onClick : undefined}
                 >
                   {nested.title}
