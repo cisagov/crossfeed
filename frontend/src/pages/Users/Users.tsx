@@ -25,7 +25,7 @@ export const Users: React.FC = () => {
   const [showModal, setShowModal] = useState<Boolean>(false);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [users, setUsers] = useState<User[]>([]);
-
+  
   const columns: Column<User>[] = [
     {
       Header: 'Name',
