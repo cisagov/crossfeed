@@ -59,7 +59,7 @@ const Settings: React.FC = () => {
     {
       Header: 'Last Used',
       accessor: ({ lastUsed }) =>
-        lastUsed ? `${formatDistanceToNow(parseISO(lastUsed))} ago` : 'Never',
+        lastUsed ? `${formatDistanceToNow(parseISO(lastUsed))} ago` : 'None',
       width: 50,
       minWidth: 50,
       id: 'lastUsed',
