@@ -115,6 +115,8 @@ export const handler = async (commandOptions: CommandOptions) => {
                     lastSeen: new Date(Date.now()),
                     title: cve,
                     cve: cve,
+                    // Shodan CPE information is unreliable,
+                    // so don't add it in for now.
                     // cpe:
                     //   service.cpe && service.cpe.length > 0
                     //     ? service.cpe[0]
@@ -122,7 +124,6 @@ export const handler = async (commandOptions: CommandOptions) => {
                     cvss: service.vulns[cve].cvss,
                     state: 'open',
                     source: 'shodan',
-                    description: service.vulns[cve].summary,
                     needsPopulation: true,
                     service: { id: serviceId }
                   })

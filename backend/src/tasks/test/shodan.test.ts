@@ -142,7 +142,7 @@ const shodanResponse = [
 describe('shodan', () => {
   let organization;
   let scan;
-  const domains: Domain[] = [];
+  let domains: Domain[] = [];
   beforeEach(async () => {
     await connectToDatabase();
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
@@ -157,33 +157,30 @@ describe('shodan', () => {
       arguments: {},
       frequency: 999
     }).save();
-    domains.push(
+    domains = [
       await Domain.create({
         name: 'first_file_testdomain1',
         ip: '153.126.148.60',
         organization
-      }).save()
-    );
-    domains.push(
+      }).save(),
       await Domain.create({
         name: 'first_file_testdomain2',
         ip: '31.134.10.156',
         organization
-      }).save()
-    );
-    domains.push(
+      }).save(),
       await Domain.create({
         name: 'first_file_testdomain12',
         ip: '1.1.1.1',
         organization
       }).save()
-    );
+    ];
 
     jest.mock('../helpers/getIps', () => domains);
   });
 
   afterEach(async () => {
     global.Date = RealDate;
+    jest.unmock('../helpers/getIps');
   });
 
   const checkDomains = async (organization) => {
@@ -246,6 +243,54 @@ describe('shodan', () => {
     });
     expect(vulns).toHaveLength(1);
     expect(vulns[0].title).toEqual('CVE-1234-1234');
+  });
+  test('updates existing vulnerability', async () => {
+    const domain = await Domain.findOne({ id: domains[2].id });
+    const service = await Service.create({
+      domain,
+      port: 443
+    }).save();
+    const vulnerability = await Vulnerability.create({
+      domain,
+      cve: 'CVE-1234-1234',
+      lastSeen: new Date(Date.now()),
+      cpe: 'cpe1',
+      title: 'CVE-1234-1234',
+      description: '123',
+      state: 'closed',
+      substate: 'remediated',
+      source: 'cpe2cve',
+      service
+    }).save();
+    nock('https://api.shodan.io')
+      .get(
+        `/shodan/host/153.126.148.60,31.134.10.156,1.1.1.1?key=${process.env.SHODAN_API_KEY}`
+      )
+      .reply(200, shodanResponse);
+    await shodan({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: scan.id,
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+    const vulns = await Vulnerability.find({
+      where: { domain },
+      relations: ['service']
+    });
+    expect(vulns).toHaveLength(1);
+
+    // These fields should stay the same
+    expect(vulns[0].title).toEqual('CVE-1234-1234');
+    expect(vulns[0].id).toEqual(vulnerability.id);
+    expect(vulns[0].cpe).toEqual(vulnerability.cpe);
+    expect(vulns[0].state).toEqual(vulnerability.state);
+    expect(vulns[0].service.id).toEqual(service.id);
+    expect(vulns[0].source).toEqual(vulnerability.source);
+
+    // These fields should be updated
+    expect(vulns[0].cvss).toEqual('5');
+    expect(vulns[0].updatedAt).not.toEqual(vulnerability.updatedAt);
   });
   test('populates shodanResults and products', async () => {
     nock('https://api.shodan.io')
