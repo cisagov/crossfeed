@@ -155,7 +155,7 @@ export const callback = async (event, context) => {
     await user.save();
   }
 
-  user.lastLoggedIn = new Date();
+  user.lastLoggedIn = new Date(Date.now());
   await user.save();
 
   // Update user status if accepting invite
