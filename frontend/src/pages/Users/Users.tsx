@@ -14,7 +14,7 @@ import { Column } from 'react-table';
 import { User } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
-import { formatDistanceToNow, parseISO, format } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 
 interface Errors extends Partial<User> {
   global?: string;
