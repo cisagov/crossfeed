@@ -85,7 +85,7 @@ export const Users: React.FC = () => {
     },
     {
       Header: 'Last Logged In',
-      accessor: ({ lastLoggedIn }) => (lastLoggedIn ? `${formatDistanceToNow(parseISO(lastLoggedIn as string))} ago` : "None"),
+      accessor: ({ lastLoggedIn }) => (lastLoggedIn ? `${formatDistanceToNow(parseISO(lastLoggedIn))} ago` : "None"),
       width: 50,
       minWidth: 50,
       id: 'lastLoggedIn',
