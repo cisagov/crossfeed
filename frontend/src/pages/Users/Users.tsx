@@ -25,7 +25,7 @@ export const Users: React.FC = () => {
   const [showModal, setShowModal] = useState<Boolean>(false);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [users, setUsers] = useState<User[]>([]);
-  
+
   const columns: Column<User>[] = [
     {
       Header: 'Name',
@@ -85,7 +85,7 @@ export const Users: React.FC = () => {
     },
     {
       Header: 'Last Logged In',
-      accessor: ({ lastLoggedIn }) => (lastLoggedIn ? `${formatDistanceToNow(parseISO(lastLoggedIn))} ago` : "None"),
+      accessor: ({ lastLoggedIn }) => (lastLoggedIn ? `${formatDistanceToNow(new Date(lastLoggedIn))} ago` : "None"),
       width: 50,
       minWidth: 50,
       id: 'lastLoggedIn',
