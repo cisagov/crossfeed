@@ -14,6 +14,7 @@ import { Column } from 'react-table';
 import { User } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
+import { formatDistanceToNow, parseISO, format } from 'date-fns';
 
 interface Errors extends Partial<User> {
   global?: string;
@@ -80,6 +81,14 @@ export const Users: React.FC = () => {
       width: 50,
       minWidth: 50,
       id: 'acceptedTermsVersion',
+      disableFilters: true
+    },
+    {
+      Header: 'Last Logged In',
+      accessor: ({ lastLoggedIn }) => format(parseISO(lastLoggedIn), 'MM-dd-yyyy'),
+      width: 50,
+      minWidth: 50,
+      id: 'lastLoggedIn',
       disableFilters: true
     },
     {
