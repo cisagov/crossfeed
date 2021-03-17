@@ -73,7 +73,7 @@ export class User extends BaseEntity {
     nullable: true,
     type: 'timestamp'
   })
-  lastLoggedIn: Date;
+  lastLoggedIn: Date | null;
 
   /** The user's type. globalView allows access to all organizations
    * while globalAdmin allows universally administering Crossfeed */
