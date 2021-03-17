@@ -7,7 +7,7 @@ This quickstart describes the initial setup required to run an instance of Cross
 
 ### Initial Setup
 
-1. Install [Node.js](https://nodejs.org/en/download/) and [Docker Compose](https://docs.docker.com/compose/install/). Make sure the Docker daemon is running.
+1. Install [Node.js](https://nodejs.org/en/download/) 14 and [Docker Compose](https://docs.docker.com/compose/install/). Make sure the Docker daemon is running.
 
 2. Copy root `dev.env.example` file to a `.env` file.
 
@@ -28,16 +28,6 @@ This quickstart describes the initial setup required to run an instance of Cross
    ```
 
 5. Generate the initial DB schema and populate it with sample data:
-
-   ```bash
-   cd backend
-   # Generate schema
-   npm run syncdb
-   # Populate sample data
-   npm run syncdb -- -d populate
-   ```
-
-   If you are on Windows, the above commands may not work. Instead, you should run:
 
    ```bash
    cd backend

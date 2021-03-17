@@ -1,7 +1,7 @@
 # This file is built with Docker context in the main directory (not ./docs)
 # so that ./backend is accessible.
 
-FROM node:15-buster-slim
+FROM node:14-buster-slim
 
 WORKDIR /app/docs
 

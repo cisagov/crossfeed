@@ -284,6 +284,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
               {path && (
                 <ListItem
                   button
+                  exact
                   component={NavLink}
                   to={path}
                   activeClassName={classes.activeMobileLink}
@@ -295,6 +296,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
               {nested?.map((nested) => (
                 <ListItem
                   button
+                  exact
                   key={nested.title.toString()}
                   component={NavLink}
                   to={nested.onClick ? '#' : nested.path}

@@ -31,6 +31,30 @@ Here is a list of database models used by Crossfeed:
 | Scan            | A Scan is a scheduled data collection job.                                                   |
 | ScanTask        | A ScanTask represents a specific run, at a certain time and date, of a Scan.                 |
 
+### Syncing the database
+
+You should sync the database using the `syncdb` command whenever models change and
+you want to update the database schemas.
+
+```bash
+cd backend
+# Generate schema
+docker-compose exec backend npx sls invoke local -f syncdb
+# Populate sample data
+docker-compose exec backend npx sls invoke local -f syncdb -d populate
+```
+
+If you are using Node 14, you might be able to run the following commands to
+sync a bit faster (without needing to wait for compilation):
+
+```bash
+cd backend && npm install
+# Generate schema
+npm run syncdb
+# Populate sample data
+npm run syncdb -- -d populate
+```
+
 ### Manual access
 
 To manually access the database, we use AWS Session Manager. This way, we don't need to run an EC2 bastion instance that's exposed to the public Internet.

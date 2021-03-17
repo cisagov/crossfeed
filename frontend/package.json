@@ -96,6 +96,7 @@
     "yargs-parser": "18.1.2"
   },
   "devDependencies": {
+    "decamelize": "^5.0.0",
     "jest-environment-jsdom-sixteen": "^1.0.3"
   }
 }

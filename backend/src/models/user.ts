@@ -75,6 +75,7 @@ export class User extends BaseEntity {
   })
   lastLoggedIn: Date | null;
 
+
   /** The user's type. globalView allows access to all organizations
    * while globalAdmin allows universally administering Crossfeed */
   @Column('text', { default: 'standard' })

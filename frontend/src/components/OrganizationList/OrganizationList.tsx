@@ -9,7 +9,7 @@ import { useAuthContext } from 'context';
 export const OrganizationList: React.FC<{
   parent?: Organization;
 }> = ({ parent }) => {
-  const { apiPost, apiGet, setFeedbackMessage } = useAuthContext();
+  const { apiPost, apiGet, setFeedbackMessage, user } = useAuthContext();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const history = useHistory();
@@ -56,19 +56,21 @@ export const OrganizationList: React.FC<{
         spacing={2}
         style={{ margin: '0 auto', marginTop: '1rem', maxWidth: '1000px' }}
       >
-        <Grid item>
-          <Paper
-            elevation={0}
-            classes={{ root: classes.cardRoot }}
-            style={{ border: '1px dashed #C9C9C9', textAlign: 'center' }}
-            onClick={() => setDialogOpen(true)}
-          >
-            <h1>Create New {parent ? 'Team' : 'Organization'}</h1>
-            <p>
-              <Add></Add>
-            </p>
-          </Paper>
-        </Grid>
+        {user?.userType === 'globalAdmin' && (
+          <Grid item>
+            <Paper
+              elevation={0}
+              classes={{ root: classes.cardRoot }}
+              style={{ border: '1px dashed #C9C9C9', textAlign: 'center' }}
+              onClick={() => setDialogOpen(true)}
+            >
+              <h1>Create New {parent ? 'Team' : 'Organization'}</h1>
+              <p>
+                <Add></Add>
+              </p>
+            </Paper>
+          </Grid>
+        )}
         {organizations.map((org) => (
           // TODO: Add functionality to delete organizations
           <Grid item key={org.id}>
