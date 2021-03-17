@@ -106,7 +106,7 @@ const ScansView: React.FC = () => {
       accessor: (args: Scan) => {
         return !args.lastRun ||
           new Date(args.lastRun).getTime() === new Date(0).getTime()
-          ? 'Never'
+          ? 'None'
           : `${formatDistanceToNow(parseISO(args.lastRun))} ago`;
       },
       width: 200,
