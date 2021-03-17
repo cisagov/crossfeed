@@ -14,5 +14,6 @@ export interface User {
   roles: Role[];
   dateAcceptedTerms: Date | null;
   acceptedTermsVersion: string | null;
+  lastLoggedIn: Date | null;
   apiKeys: ApiKey[];
 }
