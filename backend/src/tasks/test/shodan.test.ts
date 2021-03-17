@@ -227,7 +227,7 @@ describe('shodan', () => {
     });
     await checkDomains(organization);
   });
-  test.skip('creates vulnerability', async () => {
+  test('creates vulnerability', async () => {
     nock('https://api.shodan.io')
       .get(
         `/shodan/host/153.126.148.60,31.134.10.156,1.1.1.1?key=${process.env.SHODAN_API_KEY}`
