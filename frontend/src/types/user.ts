@@ -12,8 +12,8 @@ export interface User {
   userType: 'standard' | 'globalView' | 'globalAdmin';
   email: string;
   roles: Role[];
-  dateAcceptedTerms: Date | null;
+  dateAcceptedTerms: string | null;
   acceptedTermsVersion: string | null;
-  lastLoggedIn: Date | null;
+  lastLoggedIn: string | null;
   apiKeys: ApiKey[];
 }
