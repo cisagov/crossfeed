@@ -14,7 +14,7 @@ import { Column } from 'react-table';
 import { User } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 
 interface Errors extends Partial<User> {
   global?: string;
@@ -69,7 +69,7 @@ export const Users: React.FC = () => {
     },
     {
       Header: 'Date ToU Signed',
-      accessor: ({ dateAcceptedTerms }) => dateAcceptedTerms,
+      accessor: ({ dateAcceptedTerms }) => dateAcceptedTerms ? `${formatDistanceToNow(parseISO(dateAcceptedTerms))} ago` : "None",
       width: 50,
       minWidth: 50,
       id: 'dateAcceptedTerms',
@@ -85,7 +85,7 @@ export const Users: React.FC = () => {
     },
     {
       Header: 'Last Logged In',
-      accessor: ({ lastLoggedIn }) => (lastLoggedIn ? `${formatDistanceToNow(lastLoggedIn)} ago` : "None"),
+      accessor: ({ lastLoggedIn }) => lastLoggedIn ? `${formatDistanceToNow(parseISO(lastLoggedIn))} ago` : "None",
       width: 50,
       minWidth: 50,
       id: 'lastLoggedIn',
