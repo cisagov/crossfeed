@@ -6,7 +6,8 @@ import {
   connectToDatabase,
   Organization,
   ScanTask,
-  Scan
+  Scan,
+  UserType
 } from '../src/models';
 import { createUserToken } from './util';
 jest.mock('../src/tasks/ecs-client');
@@ -42,7 +43,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(200);
@@ -82,7 +83,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .send({
@@ -130,7 +131,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .expect(200);
@@ -154,7 +155,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .expect(400);
@@ -178,7 +179,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(403);
@@ -205,7 +206,7 @@ describe('domains', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(200)

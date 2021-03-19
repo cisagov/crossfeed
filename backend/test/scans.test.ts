@@ -5,7 +5,8 @@ import {
   Scan,
   connectToDatabase,
   Organization,
-  OrganizationTag
+  OrganizationTag,
+  UserType
 } from '../src/models';
 import { createUserToken } from './util';
 import { handler as scheduler } from '../src/tasks/scheduler';
@@ -43,7 +44,7 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .expect(200);
@@ -70,7 +71,7 @@ describe('scan', () => {
     //     .set(
     //       'Authorization',
     //       createUserToken({
-    //         userType: 'globalView'
+    //         userType: UserType.GLOBAL_VIEW
     //       })
     //     )
     //     .expect(403);
@@ -137,7 +138,7 @@ describe('scan', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        userType: 'globalAdmin'
+        userType: UserType.GLOBAL_ADMIN
       }).save();
       const name = 'censys';
       const arguments_ = { a: 'b' };
@@ -148,7 +149,7 @@ describe('scan', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .send({
@@ -175,7 +176,7 @@ describe('scan', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        userType: 'globalAdmin'
+        userType: UserType.GLOBAL_ADMIN
       }).save();
       const name = 'censys';
       const arguments_ = { a: 'b' };
@@ -196,7 +197,7 @@ describe('scan', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .send({
@@ -229,7 +230,7 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .send({
@@ -259,7 +260,7 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .send({
@@ -303,7 +304,7 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .send({
@@ -342,7 +343,7 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .send({
@@ -366,7 +367,7 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .expect(200);
@@ -384,7 +385,7 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(403);
@@ -403,7 +404,7 @@ describe('scan', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(200);
@@ -433,7 +434,7 @@ describe('scheduler invoke', () => {
       .set(
         'Authorization',
         createUserToken({
-          userType: 'globalAdmin'
+          userType: UserType.GLOBAL_ADMIN
         })
       )
       .expect(200);
@@ -447,7 +448,7 @@ describe('scheduler invoke', () => {
       .set(
         'Authorization',
         createUserToken({
-          userType: 'globalView'
+          userType: UserType.GLOBAL_VIEW
         })
       )
       .expect(403);
@@ -470,7 +471,7 @@ describe('run scan', () => {
       .set(
         'Authorization',
         createUserToken({
-          userType: 'globalAdmin'
+          userType: UserType.GLOBAL_ADMIN
         })
       )
       .expect(200);
@@ -489,7 +490,7 @@ describe('run scan', () => {
       .set(
         'Authorization',
         createUserToken({
-          userType: 'globalView'
+          userType: UserType.GLOBAL_VIEW
         })
       )
       .expect(403);

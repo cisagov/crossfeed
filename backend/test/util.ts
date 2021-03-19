@@ -8,7 +8,7 @@ export function createUserToken(user: Partial<UserToken> = {}) {
     {
       roles: [],
       id: DUMMY_USER_ID,
-      userType: 'standard',
+      userType: UserType.STANDARD,
       dateAcceptedTerms: new Date('2020-08-03T13:58:31.715Z'),
       ...user
     },

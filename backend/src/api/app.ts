@@ -19,6 +19,7 @@ import * as apiKeys from './api-keys';
 import * as savedSearches from './saved-searches';
 import { listenForDockerEvents } from './docker-events';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import { UserType } from '../models';
 
 if (
   (process.env.IS_OFFLINE || process.env.IS_LOCAL) &&
@@ -79,6 +80,7 @@ const checkUserLoggedIn = async (req, res, next) => {
 
 const checkUserSignedTerms = (req, res, next) => {
   // Bypass ToU for CISA emails
+  // req.requestContext.authorizer.email = 'test@associates.cisa.dhs.gov';
   const approvedEmailAddresses = ['@cisa.dhs.gov', '@associates.cisa.dhs.gov'];
   if (process.env.NODE_ENV === 'test')
     approvedEmailAddresses.push('@crossfeed.cisa.gov');
@@ -101,7 +103,7 @@ const checkUserSignedTerms = (req, res, next) => {
 };
 
 const getMaximumRole = (user) => {
-  if (user?.userType === 'globalView') return 'user';
+  if (user?.userType === UserType.GLOBAL_VIEW) return 'user';
   return user && user.roles && user.roles.find((role) => role.role === 'admin')
     ? 'admin'
     : 'user';
@@ -180,7 +182,7 @@ app.use(
     const user = (await auth.authorize({
       authorizationToken: req.cookies['crossfeed-token']
     })) as auth.UserToken;
-    if (user.userType !== 'globalAdmin') {
+    if (user.userType !== UserType.GLOBAL_ADMIN) {
       return res.status(401).send('Unauthorized');
     }
     return next();

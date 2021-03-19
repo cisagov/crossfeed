@@ -12,6 +12,6 @@ export default async () => {
     lastName: '',
     email: Math.random() + '@crossfeed.cisa.gov',
     id: DUMMY_USER_ID,
-    userType: 'standard'
+    userType: UserType.STANDARD
   }).save();
 };

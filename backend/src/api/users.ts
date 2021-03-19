@@ -3,7 +3,8 @@ import {
   isUUID,
   IsBoolean,
   IsOptional,
-  IsEmail
+  IsEmail,
+  IsEnum
 } from 'class-validator';
 import { User, connectToDatabase, Role, Organization, ApiKey } from '../models';
 import {
@@ -13,6 +14,7 @@ import {
   Unauthorized,
   sendEmail
 } from './helpers';
+import { UserType } from '../models/user';
 import {
   getUserId,
   canAccessUser,
@@ -20,7 +22,6 @@ import {
   isOrgAdmin,
   isGlobalWriteAdmin
 } from './auth';
-import { randomBytes } from 'crypto';
 
 /**
  * @swagger
@@ -70,6 +71,10 @@ export const update = wrapHandler(async (event) => {
     return NotFound;
   }
   const body = await validateBody(NewUser, event.body);
+  if (!isGlobalWriteAdmin(event) && body.userType) {
+    // Non-global admins can't set userType
+    return Unauthorized;
+  }
   const user = await User.findOne(
     {
       id: id
@@ -109,6 +114,10 @@ class NewUser {
   @IsBoolean()
   @IsOptional()
   organizationAdmin: string;
+
+  @IsEnum(UserType)
+  @IsOptional()
+  userType: UserType;
 }
 
 const sendInviteEmail = async (email: string, organization?: Organization) => {
@@ -158,6 +167,10 @@ export const invite = wrapHandler(async (event) => {
     if (!isOrgAdmin(event, body.organization)) return Unauthorized;
   } else {
     if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  }
+  if (!isGlobalWriteAdmin(event) && body.userType) {
+    // Non-global admins can't set userType
+    return Unauthorized;
   }
 
   await connectToDatabase();

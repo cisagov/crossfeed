@@ -1,6 +1,6 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { User, connectToDatabase, Organization, Role } from '../src/models';
+import { User, connectToDatabase, Organization, Role, UserType } from '../src/models';
 import { createUserToken, DUMMY_USER_ID } from './util';
 
 const nodemailer = require('nodemailer'); //Doesn't work with import
@@ -293,7 +293,7 @@ describe('user', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(200);
@@ -325,7 +325,7 @@ describe('user', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .expect(200);
@@ -342,7 +342,7 @@ describe('user', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(403);
@@ -398,7 +398,7 @@ describe('user', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .send({ firstName, lastName })
@@ -416,7 +416,7 @@ describe('user', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .send({ firstName, lastName })

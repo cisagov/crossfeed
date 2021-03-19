@@ -1,5 +1,5 @@
 import loginGov from './login-gov';
-import { User, connectToDatabase, ApiKey, OrganizationTag } from '../models';
+import { User, connectToDatabase, ApiKey, OrganizationTag, UserType } from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import * as jwksClient from 'jwks-rsa';
@@ -8,7 +8,7 @@ import { createHash } from 'crypto';
 export interface UserToken {
   email: string;
   id: string;
-  userType: 'standard' | 'globalView' | 'globalAdmin';
+  userType: UserType,
   roles: {
     org: string;
     role: 'user' | 'admin';
@@ -144,7 +144,7 @@ export const callback = async (event, context) => {
       [idKey]: userInfo.sub,
       firstName: '',
       lastName: '',
-      userType: process.env.IS_OFFLINE ? 'globalAdmin' : 'standard',
+      userType: process.env.IS_OFFLINE ? UserType.GLOBAL_ADMIN : UserType.STANDARD,
       roles: []
     });
     await user.save();
@@ -232,7 +232,7 @@ export const authorize = async (event) => {
 /** Check if a user has global write admin permissions */
 export const isGlobalWriteAdmin = (event: APIGatewayProxyEvent) => {
   return event.requestContext.authorizer &&
-    event.requestContext.authorizer.userType === 'globalAdmin'
+    event.requestContext.authorizer.userType === UserType.GLOBAL_ADMIN
     ? true
     : false;
 };
@@ -240,8 +240,8 @@ export const isGlobalWriteAdmin = (event: APIGatewayProxyEvent) => {
 /** Check if a user has global view permissions */
 export const isGlobalViewAdmin = (event: APIGatewayProxyEvent) => {
   return event.requestContext.authorizer &&
-    (event.requestContext.authorizer.userType === 'globalView' ||
-      event.requestContext.authorizer.userType === 'globalAdmin')
+    (event.requestContext.authorizer.userType === UserType.GLOBAL_VIEW ||
+      event.requestContext.authorizer.userType === UserType.GLOBAL_ADMIN)
     ? true
     : false;
 };
