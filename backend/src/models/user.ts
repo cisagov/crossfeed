@@ -13,6 +13,11 @@ import {
 import { Role } from './';
 import { ApiKey } from './api-key';
 
+export enum UserType {
+  STANDARD = 'standard',
+  GLOBAL_VIEW = 'globalView',
+  GLOBAL_ADMIN = 'globalAdmin'
+}
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -69,10 +74,16 @@ export class User extends BaseEntity {
   })
   acceptedTermsVersion: string | null;
 
+  @Column({
+    nullable: true,
+    type: 'timestamp'
+  })
+  lastLoggedIn: Date | null;
+
   /** The user's type. globalView allows access to all organizations
    * while globalAdmin allows universally administering Crossfeed */
-  @Column('text', { default: 'standard' })
-  userType: 'standard' | 'globalView' | 'globalAdmin';
+  @Column('text', { default: UserType.STANDARD })
+  userType: UserType;
 
   /** List of the user's API keys */
   @OneToMany((type) => ApiKey, (key) => key.user, {

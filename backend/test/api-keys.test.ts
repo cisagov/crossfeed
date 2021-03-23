@@ -1,6 +1,6 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { User, connectToDatabase, ApiKey } from '../src/models';
+import { User, connectToDatabase, ApiKey, UserType } from '../src/models';
 import { createUserToken } from './util';
 
 jest.mock('../src/tasks/scheduler', () => ({
@@ -17,7 +17,7 @@ describe('api-key', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        userType: 'standard'
+        userType: UserType.STANDARD
       }).save();
       const response = await request(app)
         .post('/api-keys')
@@ -25,7 +25,7 @@ describe('api-key', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'standard'
+            userType: UserType.STANDARD
           })
         )
         .send({})
@@ -36,7 +36,7 @@ describe('api-key', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'standard'
+            userType: UserType.STANDARD
           })
         )
         .expect(200);
@@ -56,7 +56,7 @@ describe('api-key', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        userType: 'standard'
+        userType: UserType.STANDARD
       }).save();
       const apiKey = await ApiKey.create({
         hashedKey: '1234',
@@ -69,7 +69,7 @@ describe('api-key', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'standard'
+            userType: UserType.STANDARD
           })
         )
         .send({})
@@ -81,7 +81,7 @@ describe('api-key', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'standard'
+            userType: UserType.STANDARD
           })
         )
         .expect(200);
@@ -93,13 +93,13 @@ describe('api-key', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        userType: 'standard'
+        userType: UserType.STANDARD
       }).save();
       const user1 = await User.create({
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        userType: 'globalAdmin'
+        userType: UserType.GLOBAL_ADMIN
       }).save();
       const apiKey = await ApiKey.create({
         hashedKey: '1234',
@@ -112,7 +112,7 @@ describe('api-key', () => {
           'Authorization',
           createUserToken({
             id: user1.id,
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .send({})
@@ -124,7 +124,7 @@ describe('api-key', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'standard'
+            userType: UserType.STANDARD
           })
         )
         .expect(200);
@@ -136,7 +136,7 @@ describe('api-key', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        userType: 'standard'
+        userType: UserType.STANDARD
       }).save();
       const response = await request(app)
         .post('/api-keys')
@@ -144,7 +144,7 @@ describe('api-key', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'standard'
+            userType: UserType.STANDARD
           })
         )
         .send({})
@@ -156,7 +156,7 @@ describe('api-key', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'standard'
+            userType: UserType.STANDARD
           })
         )
         .expect(200);
@@ -175,7 +175,7 @@ describe('api-key', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        userType: 'standard'
+        userType: UserType.STANDARD
       }).save();
       const response = await request(app)
         .post('/api-keys')
@@ -183,7 +183,7 @@ describe('api-key', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'standard'
+            userType: UserType.STANDARD
           })
         )
         .send({})
@@ -199,7 +199,7 @@ describe('api-key', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        userType: 'standard'
+        userType: UserType.STANDARD
       }).save();
       const response = await request(app)
         .post('/api-keys')
@@ -207,7 +207,7 @@ describe('api-key', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'standard'
+            userType: UserType.STANDARD
           })
         )
         .send({})
@@ -219,7 +219,7 @@ describe('api-key', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'standard'
+            userType: UserType.STANDARD
           })
         )
         .send({})

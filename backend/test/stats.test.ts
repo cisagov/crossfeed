@@ -6,7 +6,8 @@ import {
   connectToDatabase,
   Organization,
   Vulnerability,
-  Service
+  Service,
+  UserType
 } from '../src/models';
 import { createUserToken } from './util';
 
@@ -149,7 +150,7 @@ describe('stats', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .send({

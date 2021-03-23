@@ -6,7 +6,7 @@ import {
   Label,
   ModalContainer,
   Overlay,
-  Modal
+  Modal,
 } from '@trussworks/react-uswds';
 import { Organization } from 'types';
 import { Table, ImportExport } from 'components';
@@ -14,6 +14,8 @@ import { Column } from 'react-table';
 import { User } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { Radio, RadioGroup, FormControlLabel } from '@material-ui/core';
 
 interface Errors extends Partial<User> {
   global?: string;
@@ -68,7 +70,7 @@ export const Users: React.FC = () => {
     },
     {
       Header: 'Date ToU Signed',
-      accessor: ({ dateAcceptedTerms }) => dateAcceptedTerms,
+      accessor: ({ dateAcceptedTerms }) => dateAcceptedTerms ? `${formatDistanceToNow(parseISO(dateAcceptedTerms))} ago` : "None",
       width: 50,
       minWidth: 50,
       id: 'dateAcceptedTerms',
@@ -80,6 +82,14 @@ export const Users: React.FC = () => {
       width: 50,
       minWidth: 50,
       id: 'acceptedTermsVersion',
+      disableFilters: true
+    },
+    {
+      Header: 'Last Logged In',
+      accessor: ({ lastLoggedIn }) => lastLoggedIn ? `${formatDistanceToNow(parseISO(lastLoggedIn))} ago` : "None",
+      width: 50,
+      minWidth: 50,
+      id: 'lastLoggedIn',
       disableFilters: true
     },
     {
@@ -105,12 +115,12 @@ export const Users: React.FC = () => {
     lastName: string;
     email: string;
     organization?: Organization;
-    role: string;
+    userType: string;
   }>({
     firstName: '',
     lastName: '',
     email: '',
-    role: ''
+    userType: ''
   });
 
   const fetchUsers = useCallback(async () => {
@@ -143,7 +153,7 @@ export const Users: React.FC = () => {
         firstName: values.firstName,
         lastName: values.lastName,
         email: values.email,
-        role: values.role
+        userType: values.userType
       };
       const user = await apiPost('/users/', {
         body
@@ -217,16 +227,29 @@ export const Users: React.FC = () => {
           value={values.email}
           onChange={onTextChange}
         />
-        <Label htmlFor="role">Role</Label>
-        <TextInput
-          required
-          id="role"
-          name="role"
-          className={classes.textField}
-          type="text"
-          value={values.role}
-          onChange={onTextChange}
-        />
+        <Label htmlFor="userType">User Type</Label>
+          <RadioGroup
+            aria-label="User Type"
+            name="userType"
+            value={values.userType}
+            onChange={onTextChange}
+          >
+            <FormControlLabel
+              value="standard"
+              control={<Radio color="primary" />}
+              label="Standard"
+            />
+            <FormControlLabel
+              value="globalView"
+              control={<Radio color="primary" />}
+              label="Global View"
+            />
+            <FormControlLabel
+              value="globalAdmin"
+              control={<Radio color="primary" />}
+              label="Global Administrator"
+            />
+          </RadioGroup>
         <br></br>
         <Button type="submit">Invite User</Button>
       </form>

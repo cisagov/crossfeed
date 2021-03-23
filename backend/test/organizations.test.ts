@@ -8,7 +8,8 @@ import {
   Scan,
   ScanTask,
   User,
-  OrganizationTag
+  OrganizationTag,
+  UserType
 } from '../src/models';
 
 describe('organizations', () => {
@@ -21,7 +22,7 @@ describe('organizations', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        userType: 'globalAdmin'
+        userType: UserType.GLOBAL_ADMIN
       }).save();
       const name = 'test-' + Math.random();
       const response = await request(app)
@@ -30,7 +31,7 @@ describe('organizations', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .send({
@@ -50,7 +51,7 @@ describe('organizations', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        userType: 'globalAdmin'
+        userType: UserType.GLOBAL_ADMIN
       }).save();
       const name = 'test-' + Math.random();
       await request(app)
@@ -59,7 +60,7 @@ describe('organizations', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .send({
@@ -76,7 +77,7 @@ describe('organizations', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .send({
@@ -96,7 +97,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .send({
@@ -127,7 +128,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .send({
@@ -191,7 +192,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .send({
@@ -217,7 +218,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .expect(200);
@@ -253,7 +254,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(403);
@@ -273,7 +274,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(200);
@@ -319,7 +320,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(403);
@@ -550,7 +551,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .send({
@@ -593,7 +594,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .expect(200);
@@ -622,7 +623,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(403);
@@ -693,7 +694,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .expect(200);
@@ -716,7 +717,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(403);
@@ -779,7 +780,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .expect(200);
@@ -794,7 +795,7 @@ describe('organizations', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'standard'
+            userType: UserType.STANDARD
           })
         )
         .expect(200);

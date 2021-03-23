@@ -1,5 +1,11 @@
 import loginGov from './login-gov';
-import { User, connectToDatabase, ApiKey, OrganizationTag } from '../models';
+import {
+  User,
+  connectToDatabase,
+  ApiKey,
+  OrganizationTag,
+  UserType
+} from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import * as jwksClient from 'jwks-rsa';
@@ -8,13 +14,14 @@ import { createHash } from 'crypto';
 export interface UserToken {
   email: string;
   id: string;
-  userType: 'standard' | 'globalView' | 'globalAdmin';
+  userType: UserType;
   roles: {
     org: string;
     role: 'user' | 'admin';
   }[];
   dateAcceptedTerms: Date | undefined;
   acceptedTermsVersion: string | undefined;
+  lastLoggedIn: Date | undefined;
 }
 
 interface CognitoUserToken {
@@ -74,6 +81,7 @@ export const userTokenBody = (user): UserToken => ({
   userType: user.userType,
   dateAcceptedTerms: user.dateAcceptedTerms,
   acceptedTermsVersion: user.acceptedTermsVersion,
+  lastLoggedIn: user.lastLoggedIn,
   roles: user.roles
     .filter((role) => role.approved)
     .map((role) => ({
@@ -142,7 +150,9 @@ export const callback = async (event, context) => {
       [idKey]: userInfo.sub,
       firstName: '',
       lastName: '',
-      userType: process.env.IS_OFFLINE ? 'globalAdmin' : 'standard',
+      userType: process.env.IS_OFFLINE
+        ? UserType.GLOBAL_ADMIN
+        : UserType.STANDARD,
       roles: []
     });
     await user.save();
@@ -152,6 +162,9 @@ export const callback = async (event, context) => {
     user[idKey] = userInfo.sub;
     await user.save();
   }
+
+  user.lastLoggedIn = new Date(Date.now());
+  await user.save();
 
   // Update user status if accepting invite
   if (user.invitePending) {
@@ -227,7 +240,7 @@ export const authorize = async (event) => {
 /** Check if a user has global write admin permissions */
 export const isGlobalWriteAdmin = (event: APIGatewayProxyEvent) => {
   return event.requestContext.authorizer &&
-    event.requestContext.authorizer.userType === 'globalAdmin'
+    event.requestContext.authorizer.userType === UserType.GLOBAL_ADMIN
     ? true
     : false;
 };
@@ -235,8 +248,8 @@ export const isGlobalWriteAdmin = (event: APIGatewayProxyEvent) => {
 /** Check if a user has global view permissions */
 export const isGlobalViewAdmin = (event: APIGatewayProxyEvent) => {
   return event.requestContext.authorizer &&
-    (event.requestContext.authorizer.userType === 'globalView' ||
-      event.requestContext.authorizer.userType === 'globalAdmin')
+    (event.requestContext.authorizer.userType === UserType.GLOBAL_VIEW ||
+      event.requestContext.authorizer.userType === UserType.GLOBAL_ADMIN)
     ? true
     : false;
 };

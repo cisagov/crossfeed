@@ -6,25 +6,34 @@ export default async (
 ): Promise<void> => {
   await connectToDatabase();
   for (const vulnerability of vulnerabilities) {
-    let query = `("domainId", "title") DO UPDATE
-    SET "lastSeen" = excluded."lastSeen",
-        "cvss" = excluded."cvss",
-        "severity" = excluded."severity",
-        "cve" = excluded."cve",
-        "cwe" = excluded."cwe",
-        "updatedAt" = now(),
-        "cpe" = excluded."cpe",
-        "serviceId" = excluded."serviceId"`;
-    if (updateState) {
-      query += ',"state" = excluded."state","substate" = excluded."substate"';
-    }
-    if (vulnerability.description) {
-      query += ',"description" = excluded."description"';
-    }
+    const updatedValues = Object.keys(vulnerability).filter((key) => {
+      const allowedFields = [
+        'lastSeen',
+        'cvss',
+        'severity',
+        'cve',
+        'cwe',
+        'cpe',
+        'serviceId',
+        'description',
+        ...(updateState ? ['state', 'substate'] : [])
+      ];
+      return (
+        vulnerability[key] !== undefined && allowedFields.indexOf(key) > -1
+      );
+    });
     await Vulnerability.createQueryBuilder()
       .insert()
       .values(vulnerability)
-      .onConflict(query)
+      .onConflict(
+        `
+            ("domainId", "title") DO UPDATE
+            SET ${updatedValues
+              .map((val) => `"${val}" = excluded."${val}",`)
+              .join('\n')}
+                "updatedAt" = now()
+          `
+      )
       .execute();
   }
 };

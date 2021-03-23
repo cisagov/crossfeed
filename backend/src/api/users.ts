@@ -3,7 +3,8 @@ import {
   isUUID,
   IsBoolean,
   IsOptional,
-  IsEmail
+  IsEmail,
+  IsEnum
 } from 'class-validator';
 import { User, connectToDatabase, Role, Organization, ApiKey } from '../models';
 import {
@@ -13,6 +14,7 @@ import {
   Unauthorized,
   sendEmail
 } from './helpers';
+import { UserType } from '../models/user';
 import {
   getUserId,
   canAccessUser,
@@ -20,7 +22,6 @@ import {
   isOrgAdmin,
   isGlobalWriteAdmin
 } from './auth';
-import { randomBytes } from 'crypto';
 
 /**
  * @swagger
@@ -70,6 +71,10 @@ export const update = wrapHandler(async (event) => {
     return NotFound;
   }
   const body = await validateBody(NewUser, event.body);
+  if (!isGlobalWriteAdmin(event) && body.userType) {
+    // Non-global admins can't set userType
+    return Unauthorized;
+  }
   const user = await User.findOne(
     {
       id: id
@@ -82,6 +87,7 @@ export const update = wrapHandler(async (event) => {
     user.firstName = body.firstName ?? user.firstName;
     user.lastName = body.lastName ?? user.lastName;
     user.fullName = user.firstName + ' ' + user.lastName;
+    user.userType = body.userType ?? user.userType;
     await User.save(user);
     return {
       statusCode: 200,
@@ -109,6 +115,10 @@ class NewUser {
   @IsBoolean()
   @IsOptional()
   organizationAdmin: string;
+
+  @IsEnum(UserType)
+  @IsOptional()
+  userType: UserType;
 }
 
 const sendInviteEmail = async (email: string, organization?: Organization) => {
@@ -159,6 +169,10 @@ export const invite = wrapHandler(async (event) => {
   } else {
     if (!isGlobalWriteAdmin(event)) return Unauthorized;
   }
+  if (!isGlobalWriteAdmin(event) && body.userType) {
+    // Non-global admins can't set userType
+    return Unauthorized;
+  }
 
   await connectToDatabase();
 
@@ -183,8 +197,15 @@ export const invite = wrapHandler(async (event) => {
     await User.save(user);
     await sendInviteEmail(user.email, organization);
   } else if (!user.firstName && !user.lastName) {
+    // Only set the user first name and last name the first time the user is invited.
     user.firstName = body.firstName;
     user.lastName = body.lastName;
+    await User.save(user);
+  }
+
+  // Always update the userType, if specified in the request.
+  if (body.userType) {
+    user.userType = body.userType;
     await User.save(user);
   }
 

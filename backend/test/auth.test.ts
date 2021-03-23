@@ -116,5 +116,25 @@ describe('auth', () => {
       expect(user.cognitoId).toBeTruthy();
       process.env.USE_COGNITO = '';
     });
+
+    it('verify that the lastLoggedIn value is added to the database and updated', async () => {
+      process.env.USE_COGNITO = '1';
+      const time_1 = new Date(Date.now());
+      const response = await request(app)
+        .post('/auth/callback')
+        .send({
+          token: 'TOKEN_test4@crossfeed.cisa.gov'
+        })
+        .expect(200);
+      const time_2 = new Date(Date.now());
+      expect(response.body.token).toBeTruthy();
+      expect(response.body.user).toBeTruthy();
+      expect(response.body.user.lastLoggedIn).toBeTruthy();
+      expect(
+        response.body.user.lastLoggedIn > time_1 &&
+          response.body.user.lastLoggedIn < time_2
+      );
+      process.env.USE_COGNITO = '';
+    });
   });
 });

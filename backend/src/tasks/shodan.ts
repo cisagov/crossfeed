@@ -106,30 +106,30 @@ export const handler = async (commandOptions: CommandOptions) => {
               })
             ]);
             if (service.vulns) {
-              // Don't create vulns from shodan now -- too many false positives.
-              // console.log('creating vulnerability');
-              // const vulns: Vulnerability[] = [];
-              // for (const cve in service.vulns) {
-              //   vulns.push(
-              //     plainToClass(Vulnerability, {
-              //       domain: domain,
-              //       lastSeen: new Date(Date.now()),
-              //       title: cve,
-              //       cve: cve,
-              //       cpe:
-              //         service.cpe && service.cpe.length > 0
-              //           ? service.cpe[0]
-              //           : null,
-              //       cvss: service.vulns[cve].cvss,
-              //       state: 'open',
-              //       source: 'shodan',
-              //       description: service.vulns[cve].summary,
-              //       needsPopulation: true,
-              //       service: { id: serviceId }
-              //     })
-              //   );
-              // }
-              // await saveVulnerabilitiesToDb(vulns, false);
+              const vulns: Vulnerability[] = [];
+              for (const cve in service.vulns) {
+                // console.log('Creating vulnerability', cve);
+                vulns.push(
+                  plainToClass(Vulnerability, {
+                    domain: domain,
+                    lastSeen: new Date(Date.now()),
+                    title: cve,
+                    cve: cve,
+                    // Shodan CPE information is unreliable,
+                    // so don't add it in for now.
+                    // cpe:
+                    //   service.cpe && service.cpe.length > 0
+                    //     ? service.cpe[0]
+                    //     : null,
+                    cvss: service.vulns[cve].cvss,
+                    state: 'open',
+                    source: 'shodan',
+                    needsPopulation: true,
+                    service: { id: serviceId }
+                  })
+                );
+              }
+              await saveVulnerabilitiesToDb(vulns, false);
             }
           }
         }
