@@ -204,7 +204,10 @@ export const invite = wrapHandler(async (event) => {
   }
 
   // Always update the userType, if specified in the request.
-  user.userType = body.userType ?? user.userType;
+  if (body.userType) {
+    user.userType = body.userType;
+    await User.save(user);
+  }
 
   if (organization) {
     // Create approved role if organization supplied

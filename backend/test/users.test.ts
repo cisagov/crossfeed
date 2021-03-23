@@ -314,7 +314,7 @@ describe('user', () => {
       expect(role.createdBy.id).toEqual(adminUser.id);
       expect(role.approvedBy.id).toEqual(DUMMY_USER_ID);
     });
-    it.only('invite existing user by global admin that updates user type should work', async () => {
+    it('invite existing user by global admin that updates user type should work', async () => {
       const adminUser = await User.create({
         firstName: 'first',
         lastName: 'last',
