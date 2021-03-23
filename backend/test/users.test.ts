@@ -59,6 +59,77 @@ describe('user', () => {
         })
         .expect(403);
     });
+    it('invite by a global admin should work', async () => {
+      const firstName = 'first name';
+      const lastName = 'last name';
+      const email = Math.random() + '@crossfeed.cisa.gov';
+      const response = await request(app)
+        .post('/users')
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: UserType.GLOBAL_ADMIN
+          })
+        )
+        .send({
+          firstName,
+          lastName,
+          email
+        })
+        .expect(200);
+      expect(response.body.email).toEqual(email);
+      expect(response.body.invitePending).toEqual(true);
+      expect(response.body.firstName).toEqual(firstName);
+      expect(response.body.lastName).toEqual(lastName);
+      expect(response.body.roles).toEqual([]);
+      expect(response.body.userType).toEqual(UserType.STANDARD);
+    });
+    it('invite by a global admin should work if setting user type', async () => {
+      const firstName = 'first name';
+      const lastName = 'last name';
+      const email = Math.random() + '@crossfeed.cisa.gov';
+      const response = await request(app)
+        .post('/users')
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: UserType.GLOBAL_ADMIN
+          })
+        )
+        .send({
+          firstName,
+          lastName,
+          email,
+          userType: UserType.GLOBAL_ADMIN
+        })
+        .expect(200);
+      expect(response.body.email).toEqual(email);
+      expect(response.body.invitePending).toEqual(true);
+      expect(response.body.firstName).toEqual(firstName);
+      expect(response.body.lastName).toEqual(lastName);
+      expect(response.body.roles).toEqual([]);
+      expect(response.body.userType).toEqual(UserType.GLOBAL_ADMIN);
+    });
+    it('invite by a global view should not work', async () => {
+      const firstName = 'first name';
+      const lastName = 'last name';
+      const email = Math.random() + '@crossfeed.cisa.gov';
+      const response = await request(app)
+        .post('/users')
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: UserType.GLOBAL_VIEW
+          })
+        )
+        .send({
+          firstName,
+          lastName,
+          email
+        })
+        .expect(403);
+      expect(response.body).toEqual({});
+    });
     it('invite by an organization admin should work', async () => {
       const firstName = 'first name';
       const lastName = 'last name';
@@ -92,6 +163,29 @@ describe('user', () => {
       })) as Role;
       expect(role.createdBy.id).toEqual(DUMMY_USER_ID);
       expect(role.approvedBy.id).toEqual(DUMMY_USER_ID);
+    });
+    it('invite by an organization admin should not work if setting user type', async () => {
+      const firstName = 'first name';
+      const lastName = 'last name';
+      const email = Math.random() + '@crossfeed.cisa.gov';
+      const response = await request(app)
+        .post('/users')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [{ org: organization.id, role: 'admin' }]
+          })
+        )
+        .send({
+          firstName,
+          lastName,
+          email,
+          organization: organization.id,
+          organizationAdmin: false,
+          userType: UserType.GLOBAL_ADMIN
+        })
+        .expect(403);
+      expect(response.body).toEqual({});
     });
     it('invite existing user by a different organization admin should work, and should not modify other user details', async () => {
       const firstName = 'first name';
@@ -219,6 +313,69 @@ describe('user', () => {
       })) as Role;
       expect(role.createdBy.id).toEqual(adminUser.id);
       expect(role.approvedBy.id).toEqual(DUMMY_USER_ID);
+    });
+    it.only('invite existing user by global admin that updates user type should work', async () => {
+      const adminUser = await User.create({
+        firstName: 'first',
+        lastName: 'last',
+        email: Math.random() + '@crossfeed.cisa.gov'
+      }).save();
+      const email = Math.random() + '@crossfeed.cisa.gov';
+      const user = await User.create({
+        firstName: 'first',
+        lastName: 'last',
+        email
+      }).save();
+      const response = await request(app)
+        .post('/users')
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: UserType.GLOBAL_ADMIN
+          })
+        )
+        .send({
+          firstName: 'first',
+          lastName: 'last',
+          email,
+          userType: UserType.GLOBAL_ADMIN
+        })
+        .expect(200);
+      expect(response.body.id).toEqual(user.id);
+      expect(response.body.email).toEqual(email);
+      expect(response.body.invitePending).toEqual(false);
+      expect(response.body.firstName).toEqual('first');
+      expect(response.body.lastName).toEqual('last');
+      expect(response.body.roles).toEqual([]);
+      expect(response.body.userType).toEqual(UserType.GLOBAL_ADMIN);
+    });
+    it('invite existing user by global view should not work', async () => {
+      const adminUser = await User.create({
+        firstName: 'first',
+        lastName: 'last',
+        email: Math.random() + '@crossfeed.cisa.gov'
+      }).save();
+      const email = Math.random() + '@crossfeed.cisa.gov';
+      const user = await User.create({
+        firstName: 'first',
+        lastName: 'last',
+        email
+      }).save();
+      const response = await request(app)
+        .post('/users')
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: UserType.GLOBAL_VIEW
+          })
+        )
+        .send({
+          firstName: 'first',
+          lastName: 'last',
+          email
+        })
+        .expect(403);
+      expect(response.body).toEqual({});
     });
   });
   describe('me', () => {
@@ -415,6 +572,26 @@ describe('user', () => {
         relations: ['roles', 'roles.organization', 'roles.createdBy']
       });
       expect(user.roles.length).toEqual(0);
+      expect(user.userType).toEqual(UserType.STANDARD);
+    });
+    it('update by globalAdmin that updates user type should work', async () => {
+      const response = await request(app)
+        .put(`/users/${user.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: UserType.GLOBAL_ADMIN
+          })
+        )
+        .send({ firstName, lastName, userType: UserType.GLOBAL_ADMIN })
+        .expect(200);
+      expect(response.body.firstName).toEqual(firstName);
+      expect(response.body.lastName).toEqual(lastName);
+      user = await User.findOne(user.id, {
+        relations: ['roles', 'roles.organization', 'roles.createdBy']
+      });
+      expect(user.roles.length).toEqual(0);
+      expect(user.userType).toEqual(UserType.GLOBAL_ADMIN);
     });
     it('update by globalView should not work', async () => {
       const response = await request(app)
@@ -454,6 +631,19 @@ describe('user', () => {
         relations: ['roles', 'roles.organization']
       });
       expect(user.roles.length).toEqual(0);
+    });
+    it('update by regular user on themselves should not work if changing user type', async () => {
+      const response = await request(app)
+        .put(`/users/${user.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            id: user.id
+          })
+        )
+        .send({ firstName, lastName, userType: UserType.GLOBAL_ADMIN })
+        .expect(403);
+      expect(response.body).toEqual({});
     });
   });
 });

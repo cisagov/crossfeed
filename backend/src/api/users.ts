@@ -87,6 +87,7 @@ export const update = wrapHandler(async (event) => {
     user.firstName = body.firstName ?? user.firstName;
     user.lastName = body.lastName ?? user.lastName;
     user.fullName = user.firstName + ' ' + user.lastName;
+    user.userType = body.userType ?? user.userType;
     await User.save(user);
     return {
       statusCode: 200,
@@ -196,10 +197,14 @@ export const invite = wrapHandler(async (event) => {
     await User.save(user);
     await sendInviteEmail(user.email, organization);
   } else if (!user.firstName && !user.lastName) {
+    // Only set the user first name and last name the first time the user is invited.
     user.firstName = body.firstName;
     user.lastName = body.lastName;
     await User.save(user);
   }
+
+  // Always update the userType, if specified in the request.
+  user.userType = body.userType ?? user.userType;
 
   if (organization) {
     // Create approved role if organization supplied
