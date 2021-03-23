@@ -8,7 +8,8 @@ import {
   Scan,
   ScanTask,
   User,
-  SavedSearch
+  SavedSearch,
+  UserType
 } from '../src/models';
 
 describe('saved-search', () => {
@@ -21,7 +22,7 @@ describe('saved-search', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        userType: 'standard'
+        userType: UserType.STANDARD
       }).save();
       const name = 'test-' + Math.random();
       const response = await request(app)
@@ -30,7 +31,7 @@ describe('saved-search', () => {
           'Authorization',
           createUserToken({
             id: user.id,
-            userType: 'standard'
+            userType: UserType.STANDARD
           })
         )
         .send({
@@ -79,7 +80,7 @@ describe('saved-search', () => {
           .set(
             'Authorization',
             createUserToken({
-              userType: 'globalAdmin'
+              userType: UserType.GLOBAL_ADMIN
             })
           )
           .send(body)
@@ -90,7 +91,7 @@ describe('saved-search', () => {
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const body = {
           name: 'test-' + Math.random(),
@@ -115,7 +116,7 @@ describe('saved-search', () => {
           .set(
             'Authorization',
             createUserToken({
-              userType: 'standard',
+              userType: UserType.STANDARD,
               id: user.id
             })
           )
@@ -132,13 +133,13 @@ describe('saved-search', () => {
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const user1 = await User.create({
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const body = {
           name: 'test-' + Math.random(),
@@ -158,7 +159,7 @@ describe('saved-search', () => {
           .set(
             'Authorization',
             createUserToken({
-              userType: 'standard',
+              userType: UserType.STANDARD,
               id: user1.id
             })
           )
@@ -184,7 +185,7 @@ describe('saved-search', () => {
           .set(
             'Authorization',
             createUserToken({
-              userType: 'globalView'
+              userType: UserType.GLOBAL_VIEW
             })
           )
           .send(body)
@@ -210,7 +211,7 @@ describe('saved-search', () => {
           .set(
             'Authorization',
             createUserToken({
-              userType: 'globalAdmin'
+              userType: UserType.GLOBAL_ADMIN
             })
           )
           .expect(404);
@@ -220,7 +221,7 @@ describe('saved-search', () => {
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const search = await SavedSearch.create({
           name: 'test-' + Math.random(),
@@ -239,7 +240,7 @@ describe('saved-search', () => {
           .set(
             'Authorization',
             createUserToken({
-              userType: 'standard',
+              userType: UserType.STANDARD,
               id: user.id
             })
           )
@@ -251,13 +252,13 @@ describe('saved-search', () => {
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const user1 = await User.create({
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const search = await SavedSearch.create({
           name: 'test-' + Math.random(),
@@ -276,7 +277,7 @@ describe('saved-search', () => {
           .set(
             'Authorization',
             createUserToken({
-              userType: 'standard',
+              userType: UserType.STANDARD,
               id: user1.id
             })
           )
@@ -288,13 +289,13 @@ describe('saved-search', () => {
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const user1 = await User.create({
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const search = await SavedSearch.create({
           name: 'test-' + Math.random(),
@@ -313,7 +314,7 @@ describe('saved-search', () => {
           .set(
             'Authorization',
             createUserToken({
-              userType: 'globalView',
+              userType: UserType.GLOBAL_VIEW,
               id: user1.id
             })
           )
@@ -339,7 +340,7 @@ describe('saved-search', () => {
           .set(
             'Authorization',
             createUserToken({
-              userType: 'globalView'
+              userType: UserType.GLOBAL_VIEW
             })
           )
           .expect(200);
@@ -350,13 +351,13 @@ describe('saved-search', () => {
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const user1 = await User.create({
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const search = await SavedSearch.create({
           name: 'test-' + Math.random(),
@@ -389,7 +390,7 @@ describe('saved-search', () => {
             'Authorization',
             createUserToken({
               id: user.id,
-              userType: 'standard'
+              userType: UserType.STANDARD
             })
           )
           .expect(200);
@@ -415,7 +416,7 @@ describe('saved-search', () => {
           .set(
             'Authorization',
             createUserToken({
-              userType: 'globalView'
+              userType: UserType.GLOBAL_VIEW
             })
           )
           .expect(404);
@@ -425,7 +426,7 @@ describe('saved-search', () => {
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const search = await SavedSearch.create({
           name: 'test-' + Math.random(),
@@ -445,7 +446,7 @@ describe('saved-search', () => {
             'Authorization',
             createUserToken({
               id: user.id,
-              userType: 'standard'
+              userType: UserType.STANDARD
             })
           )
           .expect(200);
@@ -456,13 +457,13 @@ describe('saved-search', () => {
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const user1 = await User.create({
           firstName: '',
           lastName: '',
           email: Math.random() + '@crossfeed.cisa.gov',
-          userType: 'standard'
+          userType: UserType.STANDARD
         }).save();
         const search = await SavedSearch.create({
           name: 'test-' + Math.random(),
@@ -482,7 +483,7 @@ describe('saved-search', () => {
             'Authorization',
             createUserToken({
               id: user.id,
-              userType: 'standard'
+              userType: UserType.STANDARD
             })
           )
           .expect(404);

@@ -6,7 +6,8 @@ import {
   connectToDatabase,
   Organization,
   Vulnerability,
-  OrganizationTag
+  OrganizationTag,
+  UserType
 } from '../src/models';
 import { createUserToken } from './util';
 jest.mock('../src/tasks/s3-client');
@@ -140,7 +141,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .send({
@@ -184,7 +185,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .send({
@@ -233,7 +234,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .send({
@@ -395,7 +396,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalView'
+            userType: UserType.GLOBAL_VIEW
           })
         )
         .expect(200);
@@ -466,7 +467,7 @@ describe('vulnerabilities', () => {
         .set(
           'Authorization',
           createUserToken({
-            userType: 'globalAdmin'
+            userType: UserType.GLOBAL_ADMIN
           })
         )
         .send({

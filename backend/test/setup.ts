@@ -1,5 +1,5 @@
 import { handler as syncdb } from '../src/tasks/syncdb';
-import { User, connectToDatabase } from '../src/models';
+import { User, connectToDatabase, UserType } from '../src/models';
 import { DUMMY_USER_ID } from './util';
 
 export default async () => {
@@ -12,6 +12,6 @@ export default async () => {
     lastName: '',
     email: Math.random() + '@crossfeed.cisa.gov',
     id: DUMMY_USER_ID,
-    userType: 'standard'
+    userType: UserType.STANDARD
   }).save();
 };

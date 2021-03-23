@@ -1,5 +1,5 @@
 import { Handler } from 'aws-lambda';
-import { connectToDatabase, User } from '../models';
+import { connectToDatabase, User, UserType } from '../models';
 
 export const handler: Handler = async (event) => {
   await connectToDatabase(true);
@@ -8,7 +8,7 @@ export const handler: Handler = async (event) => {
       email: event.email
     });
     if (user) {
-      user.userType = event.role || 'globalAdmin';
+      user.userType = event.role || UserType.GLOBAL_ADMIN;
       await User.save(user);
     }
   }
