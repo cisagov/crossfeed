@@ -1,6 +1,12 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { User, Domain, connectToDatabase, Organization, UserType } from '../src/models';
+import {
+  User,
+  Domain,
+  connectToDatabase,
+  Organization,
+  UserType
+} from '../src/models';
 import { createUserToken } from './util';
 import '../src/tasks/es-client';
 

@@ -1,5 +1,5 @@
 import { handler as syncdb } from '../src/tasks/syncdb';
-import { User, connectToDatabase } from '../src/models';
+import { User, connectToDatabase, UserType } from '../src/models';
 import { DUMMY_USER_ID } from './util';
 
 export default async () => {

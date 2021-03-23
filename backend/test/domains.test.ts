@@ -6,7 +6,8 @@ import {
   Organization,
   Webpage,
   OrganizationTag,
-  Service
+  Service,
+  UserType
 } from '../src/models';
 import { createUserToken } from './util';
 jest.mock('../src/tasks/s3-client');

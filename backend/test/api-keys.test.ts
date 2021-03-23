@@ -56,7 +56,7 @@ describe('api-key', () => {
         firstName: '',
         lastName: '',
         email: Math.random() + '@crossfeed.cisa.gov',
-        UserType.STANDARD
+        userType: UserType.STANDARD
       }).save();
       const apiKey = await ApiKey.create({
         hashedKey: '1234',

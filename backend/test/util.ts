@@ -1,4 +1,5 @@
 import * as jwt from 'jsonwebtoken';
+import { UserType } from '../src/models';
 import { UserToken } from '../src/api/auth';
 
 export const DUMMY_USER_ID = 'c1afb49c-2216-4e3c-ac52-aa9480956ce9';

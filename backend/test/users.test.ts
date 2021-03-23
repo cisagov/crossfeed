@@ -1,6 +1,12 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { User, connectToDatabase, Organization, Role, UserType } from '../src/models';
+import {
+  User,
+  connectToDatabase,
+  Organization,
+  Role,
+  UserType
+} from '../src/models';
 import { createUserToken, DUMMY_USER_ID } from './util';
 
 const nodemailer = require('nodemailer'); //Doesn't work with import

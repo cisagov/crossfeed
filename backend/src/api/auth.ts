@@ -1,5 +1,11 @@
 import loginGov from './login-gov';
-import { User, connectToDatabase, ApiKey, OrganizationTag, UserType } from '../models';
+import {
+  User,
+  connectToDatabase,
+  ApiKey,
+  OrganizationTag,
+  UserType
+} from '../models';
 import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import * as jwksClient from 'jwks-rsa';
@@ -8,7 +14,7 @@ import { createHash } from 'crypto';
 export interface UserToken {
   email: string;
   id: string;
-  userType: UserType,
+  userType: UserType;
   roles: {
     org: string;
     role: 'user' | 'admin';
@@ -144,7 +150,9 @@ export const callback = async (event, context) => {
       [idKey]: userInfo.sub,
       firstName: '',
       lastName: '',
-      userType: process.env.IS_OFFLINE ? UserType.GLOBAL_ADMIN : UserType.STANDARD,
+      userType: process.env.IS_OFFLINE
+        ? UserType.GLOBAL_ADMIN
+        : UserType.STANDARD,
       roles: []
     });
     await user.save();

@@ -13,12 +13,11 @@ import {
 import { Role } from './';
 import { ApiKey } from './api-key';
 
-
 export enum UserType {
   STANDARD = 'standard',
   GLOBAL_VIEW = 'globalView',
   GLOBAL_ADMIN = 'globalAdmin'
-};
+}
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')

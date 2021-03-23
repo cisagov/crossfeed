@@ -6,7 +6,8 @@ import {
   connectToDatabase,
   Organization,
   Vulnerability,
-  Service
+  Service,
+  UserType
 } from '../src/models';
 import { createUserToken } from './util';
 
