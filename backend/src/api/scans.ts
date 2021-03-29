@@ -152,6 +152,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     memory: '4096',
     description: 'Scrapes all webpages on a given domain, respecting robots.txt'
   },
+  hibp: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Finds emails that have appeared in breaches related to a given domain'
+  },
   savedSearch: {
     type: 'fargate',
     isPassive: true,
