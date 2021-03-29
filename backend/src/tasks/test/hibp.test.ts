@@ -18,17 +18,17 @@ const axios = require('axios');
 
 const hibpResponse_1 = {
   testEmail_1: ['Breach_1'],
-  'testEmail_2': ['Breach_2'],
-  'testEmail_3': ['Breach_3'],
-  'testEmail_4': ['Breach_4'],
-  'testEmail_5': ['Breach_2'],
-  'testEmail_6': ['Breach_2'],
-  'testEmail_7': ['Breach_5'],
-  'testEmail_8': ['Breach_5'],
-  'testEmail_9': ['Breach_6']
+  testEmail_2: ['Breach_2'],
+  testEmail_3: ['Breach_3'],
+  testEmail_4: ['Breach_4'],
+  testEmail_5: ['Breach_2'],
+  testEmail_6: ['Breach_2'],
+  testEmail_7: ['Breach_5'],
+  testEmail_8: ['Breach_5'],
+  testEmail_9: ['Breach_6']
 };
 
-const hibpResponse_2 = { 'testEmail_10': ['Breach_7'] };
+const hibpResponse_2 = { testEmail_10: ['Breach_7'] };
 
 const hibpResponse_3 = {};
 
@@ -41,8 +41,7 @@ const breachResponse = [
     AddedDate: '2017-10-26T23:35:45Z',
     ModifiedDate: '2017-12-10T21:44:27Z',
     PwnCount: 8393093,
-    Description:
-      'Mock Breach number 1',
+    Description: 'Mock Breach number 1',
     LogoPath:
       'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_1.png',
     DataClasses: ['Email addresses', 'IP addresses', 'Names', 'Passwords'],
@@ -60,9 +59,9 @@ const breachResponse = [
     AddedDate: '2020-11-15T00:59:50Z',
     ModifiedDate: '2020-11-15T01:07:10Z',
     PwnCount: 8661578,
-    Description:
-      'Mock Breach number 2',
-    LogoPath: 'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_2.png',
+    Description: 'Mock Breach number 2',
+    LogoPath:
+      'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_2.png',
     DataClasses: [
       'Email addresses',
       'IP addresses',
@@ -86,9 +85,9 @@ const breachResponse = [
     AddedDate: '2016-10-08T07:46:05Z',
     ModifiedDate: '2016-10-08T07:46:05Z',
     PwnCount: 6414191,
-    Description:
-      'Mock Breach number 3',
-    LogoPath: 'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_3.png',
+    Description: 'Mock Breach number 3',
+    LogoPath:
+      'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_3.png',
     DataClasses: ['Email addresses', 'Passwords'],
     IsVerified: false,
     IsFabricated: false,
@@ -104,8 +103,7 @@ const breachResponse = [
     AddedDate: '2016-07-08T01:55:03Z',
     ModifiedDate: '2016-07-08T01:55:03Z',
     PwnCount: 4009640,
-    Description:
-      'Mock Breach number 4',
+    Description: 'Mock Breach number 4',
     LogoPath:
       'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_4.png',
     DataClasses: [
@@ -129,16 +127,10 @@ const breachResponse = [
     AddedDate: '2018-07-08T01:55:03Z',
     ModifiedDate: '2018-07-08T01:55:03Z',
     PwnCount: 389292,
-    Description:
-      'Mock Breach number 5',
+    Description: 'Mock Breach number 5',
     LogoPath:
       'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_4.png',
-    DataClasses: [
-      'Email addresses',
-      'IP addresses',
-      'Passwords',
-      'Usernames'
-    ],
+    DataClasses: ['Email addresses', 'IP addresses', 'Passwords', 'Usernames'],
     IsVerified: true,
     IsFabricated: false,
     IsSensitive: false,
@@ -153,8 +145,7 @@ const breachResponse = [
     AddedDate: '2017-03-08T01:55:03Z',
     ModifiedDate: '2017-03-08T01:55:03Z',
     PwnCount: 7829238,
-    Description:
-      'Mock Breach number 6',
+    Description: 'Mock Breach number 6',
     LogoPath:
       'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_4.png',
     DataClasses: [
@@ -177,9 +168,9 @@ const breachResponse = [
     AddedDate: '2017-10-08T07:46:05Z',
     ModifiedDate: '2017-10-08T07:46:05Z',
     PwnCount: 3929020,
-    Description:
-      'Mock Breach number 7',
-    LogoPath: 'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_3.png',
+    Description: 'Mock Breach number 7',
+    LogoPath:
+      'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_3.png',
     DataClasses: ['Email addresses', 'Passwords'],
     IsVerified: false,
     IsFabricated: false,
@@ -358,11 +349,11 @@ describe('hibp', () => {
       structuredData: {
         emails: {
           testEmail_1: ['Breach_1'],
-          'testEmail_2': ['Breach_2'],
-          'testEmail_3': ['Breach_2'],
-          'testEmail_4': ['Breach_2'],
-          'testEmail_5': ['Breach_2'],
-          'testEmail_6': ['Breach_1']
+          testEmail_2: ['Breach_2'],
+          testEmail_3: ['Breach_2'],
+          testEmail_4: ['Breach_2'],
+          testEmail_5: ['Breach_2'],
+          testEmail_6: ['Breach_1']
         }
       },
       substate: 'remediated',
