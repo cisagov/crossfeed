@@ -75,7 +75,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         plainToClass(Vulnerability, {
           domain: domain,
           lastSeen: new Date(Date.now()),
-          title: 'Exposed Email',
+          title: 'Exposed Emails',
           //cve: cve,
           // Shodan CPE information is unreliable,
           // so don't add it in for now.

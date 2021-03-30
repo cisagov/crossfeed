@@ -18,7 +18,7 @@ const axios = require('axios');
 
 const hibpResponse_1 = {
   testEmail_1: ['Breach_1'],
-  testEmail_2: ['Breach_2'],
+  testEmail_2: ['Breach_4'],
   testEmail_3: ['Breach_3'],
   testEmail_4: ['Breach_4'],
   testEmail_5: ['Breach_2'],
@@ -329,7 +329,7 @@ describe('hibp', () => {
       domain: domain
     });
     expect(vulns).toHaveLength(1);
-    expect(vulns[0].title).toEqual('Exposed Email');
+    expect(vulns[0].title).toEqual('Exposed Emails');
     expect(vulns[0].source).toEqual('hibp');
   });
   test('updates existing vulnerability', async () => {
@@ -350,15 +350,12 @@ describe('hibp', () => {
         emails: {
           testEmail_1: ['Breach_1'],
           testEmail_2: ['Breach_2'],
-          testEmail_3: ['Breach_2'],
-          testEmail_4: ['Breach_2'],
-          testEmail_5: ['Breach_2'],
-          testEmail_6: ['Breach_1']
+          testEmail_3: ['Breach_3'],
+          testEmail_4: ['Breach_4']
         }
       },
       substate: 'remediated',
-      source: 'cpe2cve',
-      service
+      source: 'hibp'
     }).save();
     nock('https://haveibeenpwned.com', {
       reqheaders: {
@@ -406,7 +403,6 @@ describe('hibp', () => {
     expect(vulns[0].id).toEqual(vulnerability.id);
     expect(vulns[0].cpe).toEqual(vulnerability.cpe);
     expect(vulns[0].state).toEqual(vulnerability.state);
-    expect(vulns[0].service.id).toEqual(service.id);
     expect(vulns[0].source).toEqual(vulnerability.source);
 
     // These fields should be updated
