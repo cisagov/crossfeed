@@ -174,10 +174,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                 alt="Crossfeed Icon Navigate Home"
               />
             </Link>
-            <div className={classes.mdNav}>{desktopNavItems.slice(0, 3)}</div>
-            <div className={classes.lgNav}>
-              {desktopNavItems.slice(3, navItems.length)}
-            </div>
+            <div className={classes.lgNav}>{desktopNavItems.slice()}</div>
 
             <div className={classes.spacing} />
 
@@ -330,7 +327,7 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
     display: 'block',
-    [theme.breakpoints.up('lg')]: {
+    [theme.breakpoints.up(1330)]: {
       display: 'none'
     }
   },
@@ -389,16 +386,10 @@ const useStyles = makeStyles((theme) => ({
     border: 'none',
     textDecoration: 'none'
   },
-  mdNav: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'block'
-    }
-  },
   lgNav: {
     display: 'none',
-    [theme.breakpoints.up('lg')]: {
-      display: 'block'
+    [theme.breakpoints.up(1330)]: {
+      display: 'inline'
     }
   },
   mobileNav: {
