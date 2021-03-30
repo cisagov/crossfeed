@@ -68,7 +68,6 @@ export const handler = async (commandOptions: CommandOptions) => {
     console.log(
       `Got ${Object.keys(results).length} emails for domain ${domain.name}`
     );
-    // TODO: save results to db.
 
     if (Object.keys(results).length !== 0) {
       vulns.push(
@@ -76,26 +75,16 @@ export const handler = async (commandOptions: CommandOptions) => {
           domain: domain,
           lastSeen: new Date(Date.now()),
           title: 'Exposed Emails',
-          //cve: cve,
-          // Shodan CPE information is unreliable,
-          // so don't add it in for now.
-          // cpe:
-          //   service.cpe && service.cpe.length > 0
-          //     ? service.cpe[0]
-          //     : null,
-          //cvss: service.vulns[cve].cvss,
           state: 'open',
           source: 'hibp',
-          needsPopulation: true,
+          needsPopulation: false,
           structuredData: { emails: results }
-          //service: { id: serviceId }
+          
         })
       );
       await saveVulnerabilitiesToDb(vulns, false);
       console.log(results);
     }
-    //for (const [key, value] of Object.entries(results)) {
-    //  console.log(key, value);
-    //}
+    
   }
 };
