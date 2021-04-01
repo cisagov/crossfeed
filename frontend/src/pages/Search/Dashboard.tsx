@@ -211,7 +211,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
             ))}
           </div>
           <div className={classes.panel}>
-            {selectedDomain && <DomainDetails domainId={selectedDomain} />}
+            {selectedDomain && !noResults && <DomainDetails domainId={selectedDomain} />}
           </div>
         </div>
         <Paper classes={{ root: classes.pagination }}>
