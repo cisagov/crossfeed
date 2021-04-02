@@ -154,7 +154,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         totalNumWebpages += scrapedWebpages.length;
         scrapedWebpages = [];
       }
-      resolve();
+      resolve(undefined);
     });
     readInterface.on('SIGINT', reject);
     readInterface.on('SIGCONT', reject);
