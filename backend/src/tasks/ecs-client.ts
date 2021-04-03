@@ -5,12 +5,10 @@ import * as Docker from 'dockerode';
 export interface CommandOptions {
   /** A list of organizations (id and name) that this
    * ScanTask must run on. */
-  organizations?: [
-    {
-      name: string;
-      id: string;
-    }
-  ];
+  organizations?: {
+    name: string;
+    id: string;
+  }[];
 
   scanId: string;
   scanName: string;
