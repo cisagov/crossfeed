@@ -17,7 +17,7 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
       domain.name,
     {
       headers: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     }
   ).json();
@@ -51,7 +51,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     'https://haveibeenpwned.com/api/v2/breaches',
     {
       headers: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     }
   ).json();

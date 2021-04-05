@@ -133,6 +133,11 @@ variable ssm_shodan_api_key {
   default = "/crossfeed/staging/SHODAN_API_KEY"
 }
 
+variable ssm_hibp_api_key {
+  type    = string
+  default = "/crossfeed/staging/HIBP_API_KEY"
+}
+
 variable cloudfront_name {
   type    = string
   default = "Crossfeed Staging Frontend"
