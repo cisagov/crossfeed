@@ -16,6 +16,8 @@ import {
 import { scaleLinear } from 'd3-scale';
 import { Link, useHistory } from 'react-router-dom';
 import { Vulnerability } from 'types';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface Point {
   id: string;
@@ -449,9 +451,41 @@ const Risk: React.FC = (props) => {
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
+  const generatePDF = () => {
+    const input = document.getElementById('wrapper')!;
+    html2canvas(input, {allowTaint:false, useCORS:true})
+    .then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = 190;
+      const pageHeight = 290;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      const doc = new jsPDF('p', 'mm');
+      let position = 0;
+      doc.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        doc.addPage();
+        doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+      doc.save('Crossfeed_Report.pdf')
+    });
+  }
+
+
   return (
     <div className={classes.root}>
-      <div className={cardClasses.contentWrapper}>
+      <p>
+          <button
+            onClick={generatePDF}
+            className={classes.backLink}
+          >
+            Generate Report
+          </button>
+      </p>
+      <div id = 'wrapper' className={cardClasses.contentWrapper}>
         {stats && (
           <div className={cardClasses.content}>
             <div className={cardClasses.panel}>
@@ -459,6 +493,7 @@ const Risk: React.FC = (props) => {
                 title={'Latest Vulnerabilities'}
                 data={latestVulnsGroupedArr}
                 showLatest={true}
+              
               ></VulnerabilityCard>
               {stats.domains.services.length > 0 && (
                 <Paper elevation={0} className={cardClasses.cardRoot}>
