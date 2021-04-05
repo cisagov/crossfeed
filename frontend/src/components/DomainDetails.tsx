@@ -97,31 +97,50 @@ export const DomainDetails: React.FC<Props> = (props) => {
     );
   }, [domain]);
 
+  function days(daytype: any) {
+    return differenceInCalendarDays(
+      Date.now(),
+      parseISO(daytype));
+  }
+
   const overviewInfo = useMemo(() => {
     if (!domain) {
       return [];
     }
     const ret = [];
+
+  let firstSeenDays = days(domain.createdAt);
+
     if (domain.ip) {
       ret.push({
         label: 'IP',
         value: domain.ip
       });
     }
-    ret.push({
-      label: 'First Seen',
-      value: `${differenceInCalendarDays(
-        Date.now(),
-        parseISO(domain.createdAt)
-      )} days ago`
-    });
-    ret.push({
-      label: 'Last Seen',
-      value: `${differenceInCalendarDays(
-        Date.now(),
-        parseISO(domain.updatedAt)
-      )} days ago`
-    });
+
+    (firstSeenDays > 1) ?
+      ret.push({
+        label: 'First Seen',
+        value: `${firstSeenDays} days ago`
+      }) :
+      ret.push({
+        label: 'First Seen',
+        value: `${firstSeenDays} day ago`
+      });
+
+    let lastSeenDays = days(domain.updatedAt);
+
+    (lastSeenDays > 1) ?
+      ret.push({
+        label: 'Last Seen',
+        value: `${lastSeenDays} days ago`
+      }) :
+      ret.push({
+        label: 'Last Seen',
+        value: `${lastSeenDays} day ago`
+      });
+
+
     if (domain.country) {
       ret.push({
         label: 'Country',
@@ -297,10 +316,11 @@ export const DomainDetails: React.FC<Props> = (props) => {
                   </Typography>
                   <Typography className={classes.vulnDescription}>
                     {vuln.createdAt
-                      ? `${differenceInCalendarDays(
-                          Date.now(),
-                          parseISO(vuln.createdAt)
-                        )} days ago`
+                      ?
+                      (days(vuln.createdAt) > 1) ?
+                        `${days(vuln.createdAt)} days ago`
+                        :
+                        `${days(vuln.createdAt)} day ago`
                       : ''}
                   </Typography>
                 </AccordionSummary>
@@ -341,10 +361,11 @@ export const DomainDetails: React.FC<Props> = (props) => {
                     </Typography>
                     <Typography className={classes.lastSeen}>
                       {service.lastSeen
-                        ? `${differenceInCalendarDays(
-                            Date.now(),
-                            parseISO(service.lastSeen)
-                          )} days ago`
+                        ?
+                        (days(service.lastSeen) > 1) ?
+                          `${days(service.lastSeen)} days ago`
+                          :
+                          `${days(service.lastSeen)} day ago`
                         : ''}
                     </Typography>
                   </AccordionSummary>
@@ -361,7 +382,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
                             value:
                               (user?.userType === 'globalView' ||
                                 user?.userType === 'globalAdmin') &&
-                              service.banner
+                                service.banner
                                 ? service.banner
                                 : 'None'
                           }
