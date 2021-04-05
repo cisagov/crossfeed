@@ -18,6 +18,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { Vulnerability } from 'types';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
+import { Button as USWDSButton } from '@trussworks/react-uswds';
 
 interface Point {
   id: string;
@@ -478,12 +479,13 @@ const Risk: React.FC = (props) => {
   return (
     <div className={classes.root}>
       <p>
-          <button
-            onClick={generatePDF}
-            className={classes.backLink}
-          >
-            Generate Report
-          </button>
+        <USWDSButton
+          outline
+          type="button"
+          onClick={generatePDF}
+        >            
+        Generate Report
+        </USWDSButton>
       </p>
       <div id = 'wrapper' className={cardClasses.contentWrapper}>
         {stats && (
@@ -493,7 +495,6 @@ const Risk: React.FC = (props) => {
                 title={'Latest Vulnerabilities'}
                 data={latestVulnsGroupedArr}
                 showLatest={true}
-              
               ></VulnerabilityCard>
               {stats.domains.services.length > 0 && (
                 <Paper elevation={0} className={cardClasses.cardRoot}>
