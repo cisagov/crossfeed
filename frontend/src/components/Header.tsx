@@ -327,7 +327,7 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
     display: 'block',
-    [theme.breakpoints.up(1330)]: {
+    [theme.breakpoints.up('lg')]: {
       display: 'none'
     }
   },
@@ -388,7 +388,7 @@ const useStyles = makeStyles((theme) => ({
   },
   lgNav: {
     display: 'none',
-    [theme.breakpoints.up(1330)]: {
+    [theme.breakpoints.up('lg')]: {
       display: 'inline'
     }
   },
