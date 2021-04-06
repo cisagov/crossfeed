@@ -253,28 +253,28 @@ describe('hibp', () => {
   test('basic test', async () => {
     nock('https://haveibeenpwned.com', {
       reqheaders: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
       .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_1')
       .reply(200, hibpResponse_1);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
       .get('/api/v2/breaches')
       .reply(200, breachResponse);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
       .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_2')
       .reply(200, hibpResponse_2);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
       .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_3')
@@ -291,28 +291,28 @@ describe('hibp', () => {
   test('creates vulnerability', async () => {
     nock('https://haveibeenpwned.com', {
       reqheaders: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
       .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_1')
       .reply(200, hibpResponse_1);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
       .get('/api/v2/breaches')
       .reply(200, breachResponse);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
       .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_2')
       .reply(200, hibpResponse_2);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
       .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_3')
@@ -359,28 +359,28 @@ describe('hibp', () => {
     }).save();
     nock('https://haveibeenpwned.com', {
       reqheaders: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
       .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_1')
       .reply(200, hibpResponse_1);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
       .get('/api/v2/breaches')
       .reply(200, breachResponse);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
       .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_2')
       .reply(200, hibpResponse_2);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
-        Authorization: 'Bearer ' + process.env.HIBP_TOKEN!
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
       .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_3')
