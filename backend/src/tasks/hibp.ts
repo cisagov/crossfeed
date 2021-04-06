@@ -34,7 +34,7 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
       shouldCountBreach(breachesDict[e])
     );
     if (filtered.length > 0) {
-      finalResults[email + "@" + domain.name] = filtered;
+      finalResults[email + '@' + domain.name] = filtered;
     }
   }
 
@@ -80,12 +80,10 @@ export const handler = async (commandOptions: CommandOptions) => {
           needsPopulation: false,
           structuredData: { emails: results },
           description: `Emails associated with ${domain.name} have been exposed in a breach. See Data field for a list of emails`
-          
         })
       );
       await saveVulnerabilitiesToDb(vulns, false);
       console.log(results);
     }
-    
   }
 };
