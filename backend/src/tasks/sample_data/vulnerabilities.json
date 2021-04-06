@@ -865,5 +865,71 @@
         "source": "cpe2cve",
         "notes": "",
         "actions": []
+    },
+    {
+        "title": "Exposed Emails",
+        "cve": null,
+        "cwe": null,
+        "cpe": null,
+        "description": "Emails associated with this Domain have been exposed in a breach. See Data field for a list of emails",
+        "cvss": null,
+        "severity": null,
+        "needsPopulation": false,
+        "state": "open",
+        "substate": "unconfirmed",
+        "source": "hibp",
+        "structuredData": { "emails": {
+            "Email_11":["breach12","breach17"],
+            "Email_13":["breach14","breach3"],
+            "Email_64":["breach24"],
+            "Email_32":["breach22"],
+            "Email_17":["breach54","breach2"]
+        } },
+        "notes": "",
+        "actions": []
+    },
+    {
+        "title": "Exposed Emails",
+        "cve": null,
+        "cwe": null,
+        "cpe": null,
+        "description": "Emails associated with this Domain have been exposed in a breach. See Data field for a list of emails",
+        "cvss": null,
+        "severity": null,
+        "needsPopulation": false,
+        "state": "open",
+        "substate": "unconfirmed",
+        "source": "hibp",
+        "structuredData": { "emails": {
+            "Email_18":["breach16","breach17"],
+            "Email_14":["breach764","breach87"],
+            "Email_98":["breach32"],
+            "Email_34":["breach45"],
+            "Email_65":["breach76","breach2"]
+        } },
+        "notes": "",
+        "actions": []
+    },
+    {
+        "title": "Exposed Emails",
+        "cve": null,
+        "cwe": null,
+        "cpe": null,
+        "description": "Emails associated with this Domain have been exposed in a breach. See Data field for a list of emails",
+        "cvss": null,
+        "severity": null,
+        "needsPopulation": false,
+        "state": "open",
+        "substate": "unconfirmed",
+        "source": "hibp",
+        "structuredData": { "emails": {
+            "Email_15":["breach25","breach17"],
+            "Email_32":["breach4","breach87"],
+            "Email_76":["breach374"],
+            "Email_13":["breach13"],
+            "Email_62":["breach54","breach2"]
+        } },
+        "notes": "",
+        "actions": []
     }
 ]
