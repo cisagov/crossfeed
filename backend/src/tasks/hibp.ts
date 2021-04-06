@@ -34,7 +34,7 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
       shouldCountBreach(breachesDict[e])
     );
     if (filtered.length > 0) {
-      finalResults[email] = filtered;
+      finalResults[email + "@" + domain.name] = filtered;
     }
   }
 
@@ -78,7 +78,8 @@ export const handler = async (commandOptions: CommandOptions) => {
           state: 'open',
           source: 'hibp',
           needsPopulation: false,
-          structuredData: { emails: results }
+          structuredData: { emails: results },
+          description: `Emails associated with ${domain.name} have been exposed in a breach. See Data field for a list of emails`
           
         })
       );

@@ -406,7 +406,7 @@ describe('hibp', () => {
     expect(vulns[0].source).toEqual(vulnerability.source);
 
     // These fields should be updated
-    expect(vulns[0].structuredData['emails']['testEmail_2']).toEqual([
+    expect(vulns[0].structuredData['emails']['testEmail_2@test-domain_1']).toEqual([
       'Breach_4'
     ]);
     expect(vulns[0].updatedAt).not.toEqual(vulnerability.updatedAt);
