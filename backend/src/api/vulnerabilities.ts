@@ -95,6 +95,11 @@ class VulnerabilitySearch {
   // If set to -1, returns all results.
   pageSize?: number;
 
+  @IsString()
+  @IsOptional()
+  @IsIn(['title'])
+  groupBy?: 'title';
+
   async filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>, event) {
     if (this.filters?.id) {
       qs.andWhere('vulnerability.id = :id', {
@@ -146,6 +151,7 @@ class VulnerabilitySearch {
 
   async getResults(event): Promise<[Vulnerability[], number]> {
     const pageSize = this.pageSize || PAGE_SIZE;
+    const groupBy = this.groupBy;
     const sort =
       this.sort === 'domain'
         ? 'domain.name'
@@ -154,9 +160,14 @@ class VulnerabilitySearch {
         : `vulnerability.${this.sort}`;
     let qs = Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
-      .leftJoinAndSelect('domain.organization', 'organization')
-      .leftJoinAndSelect('vulnerability.service', 'service')
+      .leftJoinAndSelect('domain.organization', 'organization');
+    
+    if (groupBy) {
+      qs = qs.groupBy("title, cve, description, severity").select(["title", "cve", "description", "severity", "count(*) as cnt"]).orderBy("cnt", "DESC");
+    } else {
+      qs = qs.leftJoinAndSelect('vulnerability.service', 'service')
       .orderBy(sort, this.order);
+    }
 
     if (pageSize !== -1) {
       qs = qs.offset(pageSize * (this.page - 1)).limit(pageSize);
@@ -168,7 +179,15 @@ class VulnerabilitySearch {
         orgs: getOrgMemberships(event)
       });
     }
-    return qs.getManyAndCount();
+
+    if (groupBy) {
+        const results = await qs.getRawMany();
+        // TODO: allow pagination of grouped-by results. For now, we just
+        // return one page max of grouped-by results.
+        return [results, results.length];
+    } else {
+      return qs.getManyAndCount();
+    }
   }
 }
 

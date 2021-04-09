@@ -116,7 +116,12 @@ const App: React.FC = () => (
                 <RouteGuard path="/inventory/domains" component={Domains} />
                 <RouteGuard
                   path="/inventory/vulnerabilities"
+                  exact
                   component={Vulnerabilities}
+                />
+                <RouteGuard
+                  path="/inventory/vulnerabilities/grouped"
+                  component={(props) => <Vulnerabilities {...props} groupBy="title"/>}
                 />
                 <RouteGuard
                   path="/inventory/vulnerability/:vulnerabilityId"
