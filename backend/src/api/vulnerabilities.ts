@@ -161,12 +161,16 @@ class VulnerabilitySearch {
     let qs = Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
       .leftJoinAndSelect('domain.organization', 'organization');
-    
+
     if (groupBy) {
-      qs = qs.groupBy("title, cve, description, severity").select(["title", "cve", "description", "severity", "count(*) as cnt"]).orderBy("cnt", "DESC");
+      qs = qs
+        .groupBy('title, cve, description, severity')
+        .select(['title', 'cve', 'description', 'severity', 'count(*) as cnt'])
+        .orderBy('cnt', 'DESC');
     } else {
-      qs = qs.leftJoinAndSelect('vulnerability.service', 'service')
-      .orderBy(sort, this.order);
+      qs = qs
+        .leftJoinAndSelect('vulnerability.service', 'service')
+        .orderBy(sort, this.order);
     }
 
     if (pageSize !== -1) {
@@ -181,10 +185,10 @@ class VulnerabilitySearch {
     }
 
     if (groupBy) {
-        const results = await qs.getRawMany();
-        // TODO: allow pagination of grouped-by results. For now, we just
-        // return one page max of grouped-by results.
-        return [results, results.length];
+      const results = await qs.getRawMany();
+      // TODO: allow pagination of grouped-by results. For now, we just
+      // return one page max of grouped-by results.
+      return [results, results.length];
     } else {
       return qs.getManyAndCount();
     }
