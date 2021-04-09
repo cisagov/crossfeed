@@ -197,12 +197,12 @@ export const createColumns = (updateVulnerability: any) => [
     },
     {
       Header: 'Count',
-      id: 'cnt',
+      accessor: 'cnt',
       disableFilters: true
     },
     {
       Header: 'Description',
-      id: "description",
+      accessor: "description",
       disableFilters: true
     }
   ] as Column<Vulnerability>[];
