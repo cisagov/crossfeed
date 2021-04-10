@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { formatDistanceToNow } from 'date-fns';
 import { Link, useHistory } from 'react-router-dom';
 import {
   Paper,
@@ -110,17 +111,11 @@ export const DomainDetails: React.FC<Props> = (props) => {
     }
     ret.push({
       label: 'First Seen',
-      value: `${differenceInCalendarDays(
-        Date.now(),
-        parseISO(domain.createdAt)
-      )} days ago`
+      value: `${formatDistanceToNow(parseISO(domain.createdAt), { addSuffix: true })}`
     });
     ret.push({
       label: 'Last Seen',
-      value: `${differenceInCalendarDays(
-        Date.now(),
-        parseISO(domain.updatedAt)
-      )} days ago`
+      value: `${formatDistanceToNow(parseISO(domain.updatedAt), { addSuffix: true })}`
     });
     if (domain.country) {
       ret.push({
@@ -297,10 +292,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
                   </Typography>
                   <Typography className={classes.vulnDescription}>
                     {vuln.createdAt
-                      ? `${differenceInCalendarDays(
-                          Date.now(),
-                          parseISO(vuln.createdAt)
-                        )} days ago`
+                      ? `${formatDistanceToNow(parseISO(vuln.createdAt), { addSuffix: true })}`
                       : ''}
                   </Typography>
                 </AccordionSummary>
@@ -341,10 +333,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
                     </Typography>
                     <Typography className={classes.lastSeen}>
                       {service.lastSeen
-                        ? `${differenceInCalendarDays(
-                            Date.now(),
-                            parseISO(service.lastSeen)
-                          )} days ago`
+                        ? `${formatDistanceToNow(parseISO(service.lastSeen), { addSuffix: true })}`
                         : ''}
                     </Typography>
                   </AccordionSummary>
@@ -361,7 +350,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
                             value:
                               (user?.userType === 'globalView' ||
                                 user?.userType === 'globalAdmin') &&
-                              service.banner
+                                service.banner
                                 ? service.banner
                                 : 'None'
                           }
