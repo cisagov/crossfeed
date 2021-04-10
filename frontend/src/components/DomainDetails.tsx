@@ -98,11 +98,20 @@ export const DomainDetails: React.FC<Props> = (props) => {
     );
   }, [domain]);
 
+  function days(daytype: any) {
+    return differenceInCalendarDays(
+      Date.now(),
+      parseISO(daytype));
+  }
+
   const overviewInfo = useMemo(() => {
     if (!domain) {
       return [];
     }
     const ret = [];
+
+  let firstSeenDays = days(domain.createdAt);
+
     if (domain.ip) {
       ret.push({
         label: 'IP',

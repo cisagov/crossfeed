@@ -5,6 +5,7 @@ COPY ./package* ./
 
 RUN npm ci
 
+
 COPY . .
 
 ENV IS_OFFLINE "true"
