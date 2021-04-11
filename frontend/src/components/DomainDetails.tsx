@@ -21,7 +21,7 @@ import {
 import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
-import {  parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { Webpage } from 'types/webpage';
 import { useAuthContext } from 'context';
 
@@ -103,8 +103,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
       return [];
     }
     const ret = [];
-
-   if (domain.ip) {
+    if (domain.ip) {
       ret.push({
         label: 'IP',
         value: domain.ip
