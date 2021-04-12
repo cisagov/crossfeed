@@ -901,11 +901,11 @@
         "substate": "unconfirmed",
         "source": "hibp",
         "structuredData": { "emails": {
-            "Email_18@crossfeed.local@crossfeed.local":["breach16","breach17"],
-            "Email_14@crossfeed.local@crossfeed.local":["breach764","breach87"],
-            "Email_98@crossfeed.local@crossfeed.local":["breach32"],
-            "Email_34@crossfeed.local@crossfeed.local":["breach45"],
-            "Email_65@crossfeed.local@crossfeed.local":["breach76","breach2"]
+            "Email_18@crossfeed.local":["breach16","breach17"],
+            "Email_14@crossfeed.local":["breach764","breach87"],
+            "Email_98@crossfeed.local":["breach32"],
+            "Email_34@crossfeed.local":["breach45"],
+            "Email_65@crossfeed.local":["breach76","breach2"]
         } },
         "notes": "",
         "actions": []
@@ -923,11 +923,11 @@
         "substate": "unconfirmed",
         "source": "hibp",
         "structuredData": { "emails": {
-            "Email_15@crossfeed.local@crossfeed.local@crossfeed.local":["breach25","breach17"],
-            "Email_32@crossfeed.local@crossfeed.local@crossfeed.local":["breach4","breach87"],
-            "Email_76@crossfeed.local@crossfeed.local@crossfeed.local":["breach374"],
-            "Email_13@crossfeed.local@crossfeed.local@crossfeed.local":["breach13"],
-            "Email_62@crossfeed.local@crossfeed.local@crossfeed.local":["breach54","breach2"]
+            "Email_15@crossfeed.local":["breach25","breach17"],
+            "Email_32@crossfeed.local":["breach4","breach87"],
+            "Email_76@crossfeed.local":["breach374"],
+            "Email_13@crossfeed.local":["breach13"],
+            "Email_62@crossfeed.local":["breach54","breach2"]
         } },
         "notes": "",
         "actions": []
