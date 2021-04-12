@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { formatDistanceToNow } from 'date-fns';
+import { parseISO, formatDistanceToNow } from 'date-fns';
 import { Link, useHistory } from 'react-router-dom';
 import {
   Paper,
@@ -21,7 +21,6 @@ import {
 import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
-import { parseISO } from 'date-fns';
 import { Webpage } from 'types/webpage';
 import { useAuthContext } from 'context';
 
