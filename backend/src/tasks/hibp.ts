@@ -79,7 +79,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           source: 'hibp',
           needsPopulation: false,
           structuredData: { emails: results },
-          description: `Emails associated with ${domain.name} have been exposed in a breach. See Data field for a list of emails`
+          description: `Emails associated with ${domain.name} have been exposed in a breach.`
         })
       );
       await saveVulnerabilitiesToDb(vulns, false);
