@@ -349,7 +349,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
                             value:
                               (user?.userType === 'globalView' ||
                                 user?.userType === 'globalAdmin') &&
-                                service.banner
+                              service.banner
                                 ? service.banner
                                 : 'None'
                           }
