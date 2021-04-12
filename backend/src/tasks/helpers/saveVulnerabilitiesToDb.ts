@@ -16,6 +16,7 @@ export default async (
         'cpe',
         'serviceId',
         'description',
+        'structuredData',
         ...(updateState ? ['state', 'substate'] : [])
       ];
       return (

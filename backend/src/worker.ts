@@ -15,6 +15,7 @@ import { handler as cve } from './tasks/cve';
 import { handler as webscraper } from './tasks/webscraper';
 import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
+import { handler as hibp } from './tasks/hibp';
 import { SCAN_SCHEMA } from './api/scans';
 
 /**
@@ -43,6 +44,7 @@ async function main() {
     webscraper,
     savedSearch,
     shodan,
+    hibp,
     testProxy
   }[scanName || 'testProxy'];
   if (!scanFn) {

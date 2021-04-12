@@ -176,7 +176,8 @@ export const ScanTasksView: React.FC = () => {
         'cve',
         'webscraper',
         'intrigueIdent',
-        'shodan'
+        'shodan',
+        'hibp'
       ]),
       disableSortBy: true
     },
