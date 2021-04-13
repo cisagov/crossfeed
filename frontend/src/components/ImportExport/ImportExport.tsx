@@ -53,7 +53,11 @@ export const Import = <T extends object>(props: ImportProps<T>) => {
           File must be in a CSV format, with the same header as the exported
           file.
         </Label>
-        <FileInput id="import" accept=".csv" onChange={(e) => parseCSV(e)} />
+        <FileInput 
+          id="file-input-specific" 
+          name="file-input-specific" 
+          accept=".csv" 
+          onChange={(e) => parseCSV(e)} />
       </FormGroup>
     </form>
   );
