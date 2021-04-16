@@ -8,9 +8,9 @@ import { handler as syncdb } from '../tasks/syncdb';
  * with some sample data.
  * */
 
-process.env.DB_HOST = 'localhost';
+process.env.DB_HOST = 'db';
 process.env.DB_USERNAME = 'crossfeed';
 process.env.DB_PASSWORD = 'password';
-process.env.ELASTICSEARCH_ENDPOINT = 'http://localhost:9200';
+process.env.ELASTICSEARCH_ENDPOINT = 'http://es:9200';
 
 syncdb(process.argv[2] === '-d' ? process.argv[3] : '', {} as any, () => null);
