@@ -330,8 +330,8 @@ describe('vulnerabilities', () => {
         domain
       }).save();
       const vulnerability2 = await Vulnerability.create({
-        title: 'CVE-9999-0001',
-        cve: 'CVE-9999-0001',
+        title: 'CVE-9999-0002',
+        cve: 'CVE-9999-0002',
         severity: 'High',
         domain
       }).save();
