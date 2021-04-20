@@ -15,7 +15,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   for (const domain of domainsWithIPs) {
     try {
       console.log(domain.name);
-      var child = spawnSync(
+      let child = spawnSync(
         'dnstwist',
         ['-r', '--tld', './worker/common_tlds.dict', '-f', 'json', domain.name],
         {
@@ -25,7 +25,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           encoding: 'utf-8'
         }
       );
-      var savedOutput = String(child.stdout);
+      let savedOutput = String(child.stdout);
       const results = JSON.parse(savedOutput);
       console.log(
         `Got ${Object.keys(results).length} similar domains for domain ${domain.name}`
