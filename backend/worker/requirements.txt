@@ -4,3 +4,5 @@ mitmproxy==5.2
 cryptography==2.9
 pytest==6.0.1
 scrapy==2.3.0
+dnspython>=1.14.0
+dnstwist
