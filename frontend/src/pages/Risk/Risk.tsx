@@ -458,9 +458,6 @@ const Risk: React.FC = (props) => {
     const input = document.getElementById('wrapper')!;
     input.style.width = '1400px';
     await delay(500);
-    // const cln = input.cloneNode(true)
-    // const html = cln.parentElement!;
-    // await delay(500);
 
     html2canvas(input, {
       scrollX:0,
@@ -490,7 +487,7 @@ const Risk: React.FC = (props) => {
   };
 
   return (
-    <div id = 'root' className={classes.root}>
+    <div className={classes.root}>
       <p>
         <USWDSButton
           outline
@@ -503,7 +500,7 @@ const Risk: React.FC = (props) => {
       <div id = 'wrapper' className={cardClasses.contentWrapper}>
         {stats && (
           <div className={cardClasses.content}>
-            <div id = 'panel1' className={cardClasses.panel}>
+            <div className={cardClasses.panel}>
               <VulnerabilityCard
                 title={'Latest Vulnerabilities'}
                 data={latestVulnsGroupedArr}
@@ -560,7 +557,7 @@ const Risk: React.FC = (props) => {
               )}
             </div>
 
-            <div id = 'panel2' className={cardClasses.panel}>
+            <div className={cardClasses.panel}>
               <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
                 <div>
                   {stats.domains.numVulnerabilities.length > 0 && (
@@ -568,7 +565,7 @@ const Risk: React.FC = (props) => {
                       <div className={cardClasses.header}>
                         <h2>Open Vulnerabilities by Domain</h2>
                       </div>
-                      <div id = 'chartLarge' className={cardClasses.chartLarge}>
+                      <div className={cardClasses.chartLarge}>
                         {stats.domains.numVulnerabilities.length === 0 ? (
                           <h3>No open vulnerabilities</h3>
                         ) : (
