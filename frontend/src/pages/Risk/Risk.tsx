@@ -452,32 +452,45 @@ const Risk: React.FC = (props) => {
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
-  const generatePDF = () => {
+  const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+  
+  const generatePDF = async () => {
     const input = document.getElementById('wrapper')!;
-    html2canvas(input, {allowTaint:false, useCORS:true})
-    .then((canvas) => {
+    input.style.width = '1400px';
+    await delay(500);
+    // const cln = input.cloneNode(true)
+    // const html = cln.parentElement!;
+    // await delay(500);
+
+    html2canvas(input, {
+      scrollX:0,
+      scrollY:0,
+      onclone: async function(document){
+        document.getElementById('wrapper')!.style.width = '1400px';
+      },
+    }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgWidth = 190;
       const pageHeight = 290;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       let heightLeft = imgHeight;
-      const doc = new jsPDF('p', 'mm');
+      const pdf = new jsPDF('p', 'mm');
       let position = 0;
-      doc.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+      pdf.addImage(imgData, 'PNG', 10, 5, imgWidth, imgHeight);
       heightLeft -= pageHeight;
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight;
-        doc.addPage();
-        doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
-      doc.save('Crossfeed_Report.pdf')
+      pdf.save('Crossfeed_Report.pdf')
     });
-  }
-
+    input.style.removeProperty('width');
+  };
 
   return (
-    <div className={classes.root}>
+    <div id = 'root' className={classes.root}>
       <p>
         <USWDSButton
           outline
@@ -490,7 +503,7 @@ const Risk: React.FC = (props) => {
       <div id = 'wrapper' className={cardClasses.contentWrapper}>
         {stats && (
           <div className={cardClasses.content}>
-            <div className={cardClasses.panel}>
+            <div id = 'panel1' className={cardClasses.panel}>
               <VulnerabilityCard
                 title={'Latest Vulnerabilities'}
                 data={latestVulnsGroupedArr}
@@ -547,7 +560,7 @@ const Risk: React.FC = (props) => {
               )}
             </div>
 
-            <div className={cardClasses.panel}>
+            <div id = 'panel2' className={cardClasses.panel}>
               <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
                 <div>
                   {stats.domains.numVulnerabilities.length > 0 && (
@@ -555,7 +568,7 @@ const Risk: React.FC = (props) => {
                       <div className={cardClasses.header}>
                         <h2>Open Vulnerabilities by Domain</h2>
                       </div>
-                      <div className={cardClasses.chartLarge}>
+                      <div id = 'chartLarge' className={cardClasses.chartLarge}>
                         {stats.domains.numVulnerabilities.length === 0 ? (
                           <h3>No open vulnerabilities</h3>
                         ) : (
