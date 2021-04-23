@@ -360,8 +360,20 @@ describe('vulnerabilities', () => {
       expect(response.body.count).toEqual(2);
       expect(response.body.result.length).toEqual(2);
       expect(response.body.result).toEqual([
-        { cve: 'CVE-9999-0001', severity: 'High', cnt: '2' },
-        { cve: 'CVE-9999-0003', severity: 'High', cnt: '1' }
+        {
+          cve: 'CVE-9999-0001',
+          severity: 'High',
+          cnt: '2',
+          description: '',
+          title: 'CVE-9999-0001'
+        },
+        {
+          cve: 'CVE-9999-0003',
+          severity: 'High',
+          cnt: '1',
+          description: '',
+          title: 'CVE-9999-0003'
+        }
       ]);
     });
   });

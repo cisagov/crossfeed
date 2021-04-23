@@ -43,7 +43,7 @@ export const Vulnerabilities: React.FC<{groupBy?: string}> = ({ groupBy = undefi
   const listClasses = useStyles();
   const [noResults, setNoResults] = useState(false);
 
-  const updateVulnerability = async (
+  const updateVulnerability = useCallback(async (
     index: number,
     body: { [key: string]: string }
   ) => {
@@ -62,7 +62,7 @@ export const Vulnerabilities: React.FC<{groupBy?: string}> = ({ groupBy = undefi
     } catch (e) {
       console.error(e);
     }
-  };
+  }, [setVulnerabilities, apiPut, vulnerabilities]);
   const columns = useMemo(() => createColumns(updateVulnerability), [updateVulnerability]);
   const groupedColumns = useMemo(() => createGroupedColumns(), []);
 
