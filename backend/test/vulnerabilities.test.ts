@@ -323,6 +323,10 @@ describe('vulnerabilities', () => {
         name: 'test-' + Math.random(),
         organization
       }).save();
+      const domain2 = await Domain.create({
+        name: 'test-' + Math.random(),
+        organization
+      }).save();
       const vulnerability = await Vulnerability.create({
         title: 'CVE-9999-0001',
         cve: 'CVE-9999-0001',
@@ -330,10 +334,10 @@ describe('vulnerabilities', () => {
         domain
       }).save();
       const vulnerability2 = await Vulnerability.create({
-        title: 'CVE-9999-0002',
-        cve: 'CVE-9999-0002',
+        title: 'CVE-9999-0001',
+        cve: 'CVE-9999-0001',
         severity: 'High',
-        domain
+        domain: domain2
       }).save();
       const vulnerability3 = await Vulnerability.create({
         title: 'CVE-9999-0003',
