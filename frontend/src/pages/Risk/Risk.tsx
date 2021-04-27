@@ -16,6 +16,9 @@ import {
 import { scaleLinear } from 'd3-scale';
 import { Link, useHistory } from 'react-router-dom';
 import { Vulnerability } from 'types';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
+import { Button as USWDSButton } from '@trussworks/react-uswds';
 
 interface Point {
   id: string;
@@ -449,9 +452,52 @@ const Risk: React.FC = (props) => {
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
+  const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+  
+  const generatePDF = async () => {
+    const input = document.getElementById('wrapper')!;
+    input.style.width = '1400px';
+    await delay(500);
+
+    html2canvas(input, {
+      scrollX:0,
+      scrollY:0,
+      onclone: async function(document){
+        document.getElementById('wrapper')!.style.width = '1400px';
+      },
+    }).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = 190;
+      const pageHeight = 290;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      const pdf = new jsPDF('p', 'mm');
+      let position = 0;
+      pdf.addImage(imgData, 'PNG', 10, 5, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+      pdf.save('Crossfeed_Report.pdf')
+    });
+    input.style.removeProperty('width');
+  };
+
   return (
     <div className={classes.root}>
-      <div className={cardClasses.contentWrapper}>
+      <p>
+        <USWDSButton
+          outline
+          type="button"
+          onClick={generatePDF}
+        >            
+        Generate Report
+        </USWDSButton>
+      </p>
+      <div id = 'wrapper' className={cardClasses.contentWrapper}>
         {stats && (
           <div className={cardClasses.content}>
             <div className={cardClasses.panel}>
