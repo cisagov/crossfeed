@@ -17,12 +17,11 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
       domain.name,
     {
       headers: {
-        Authorization: 'Bearer ' + process.env.HIBP_API_KEY! 
-
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     }
   ).json();
-  
+
   const AddressResults = {};
   const BreachResults = {};
   const finalResults = {};
@@ -40,13 +39,13 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
       AddressResults[email + '@' + domain.name] = filtered;
       for (const breach of filtered) {
         if (!(breach in BreachResults)) {
-          BreachResults[breach] = breachesDict[breach]
+          BreachResults[breach] = breachesDict[breach];
         }
       }
     }
   }
-  finalResults["Emails"] = AddressResults;
-  finalResults["Breaches"] = BreachResults;
+  finalResults['Emails'] = AddressResults;
+  finalResults['Breaches'] = BreachResults;
   return finalResults;
 }
 
@@ -75,10 +74,12 @@ export const handler = async (commandOptions: CommandOptions) => {
   for (const domain of domainsWithIPs) {
     const results = await lookupEmails(breachesDict, domain);
     console.log(
-      `Got ${Object.keys(results["Emails"]).length} emails for domain ${domain.name}`
+      `Got ${Object.keys(results['Emails']).length} emails for domain ${
+        domain.name
+      }`
     );
 
-    if (Object.keys(results["Emails"]).length !== 0) {
+    if (Object.keys(results['Emails']).length !== 0) {
       vulns.push(
         plainToClass(Vulnerability, {
           domain: domain,
@@ -87,16 +88,16 @@ export const handler = async (commandOptions: CommandOptions) => {
           state: 'open',
           source: 'hibp',
           needsPopulation: false,
-          structuredData: { 
-            emails: results["Emails"],
-            breaches: results["Breaches"]
-           },
+          structuredData: {
+            emails: results['Emails'],
+            breaches: results['Breaches']
+          },
           description: `Emails associated with ${domain.name} have been exposed in a breach.`
         })
       );
       await saveVulnerabilitiesToDb(vulns, false);
-      console.log(results["Emails"]);
-      console.log(results["Breaches"]);
+      console.log(results['Emails']);
+      console.log(results['Breaches']);
     }
   }
 };
