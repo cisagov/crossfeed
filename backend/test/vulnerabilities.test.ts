@@ -312,6 +312,70 @@ describe('vulnerabilities', () => {
       expect(response.body.count).toEqual(2);
       expect(response.body.result.length).toEqual(2);
     });
+    it('list by org user with groupBy set should group results', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const domain = await Domain.create({
+        name: 'test-' + Math.random(),
+        organization
+      }).save();
+      const domain2 = await Domain.create({
+        name: 'test-' + Math.random(),
+        organization
+      }).save();
+      const vulnerability = await Vulnerability.create({
+        title: 'CVE-9999-0001',
+        cve: 'CVE-9999-0001',
+        severity: 'High',
+        domain
+      }).save();
+      const vulnerability2 = await Vulnerability.create({
+        title: 'CVE-9999-0001',
+        cve: 'CVE-9999-0001',
+        severity: 'High',
+        domain: domain2
+      }).save();
+      const vulnerability3 = await Vulnerability.create({
+        title: 'CVE-9999-0003',
+        cve: 'CVE-9999-0003',
+        severity: 'High',
+        domain
+      }).save();
+      const response = await request(app)
+        .post('/vulnerabilities/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [{ org: organization.id, role: 'user' }]
+          })
+        )
+        .send({
+          groupBy: 'title'
+        })
+        .expect(200);
+      expect(response.body.count).toEqual(2);
+      expect(response.body.result.length).toEqual(2);
+      expect(response.body.result).toEqual([
+        {
+          cve: 'CVE-9999-0001',
+          severity: 'High',
+          cnt: '2',
+          description: '',
+          title: 'CVE-9999-0001'
+        },
+        {
+          cve: 'CVE-9999-0003',
+          severity: 'High',
+          cnt: '1',
+          description: '',
+          title: 'CVE-9999-0003'
+        }
+      ]);
+    });
   });
   describe('get', () => {
     it("get by org user should work for vulnerability in the user's org", async () => {
