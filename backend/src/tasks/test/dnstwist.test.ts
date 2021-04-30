@@ -131,11 +131,33 @@ describe('dnstwist', () => {
     });
 
     const vuln = await Vulnerability.find({
-      domain: domain
+      domain: domain, 
     });
 
     expect(vuln[0].title).toEqual('DNSTwist Domains');
     expect(vuln).toHaveLength(1);
     expect(vuln[0].source).toEqual('dnstwist');
+    const results = {
+      'domains': [
+        {
+          'fuzzer': 'Homoglyph',
+          'domain-name': 'test-domain.one',
+          'dns-a': ['21.22.23.24']
+        },
+        {
+          'fuzzer': 'Original',
+          'domain-name': 'test-domain.two',
+          'dns-a': ['01.02.03.04'],
+          'dns-mx': ['localhost']
+        },
+        {
+          'fuzzer': 'tls',
+          'domain-name': 'test-domain.three',
+          'dns-a': ['10.11.12.13'],
+          'dns-ns': ['example.link']
+        }
+      ]
+    };
+    expect(vuln[0].structuredData).toEqual(results);
   });
 });
