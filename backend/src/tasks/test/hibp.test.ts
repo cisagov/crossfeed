@@ -365,14 +365,19 @@ describe('hibp', () => {
             Description: 'Mock Breach number 1',
             LogoPath:
               'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_1.png',
-            DataClasses: ['Email addresses', 'IP addresses', 'Names', 'Passwords'],
+            DataClasses: [
+              'Email addresses',
+              'IP addresses',
+              'Names',
+              'Passwords'
+            ],
             IsVerified: true,
             IsFabricated: false,
             IsSensitive: false,
             IsRetired: false,
             IsSpamList: false
           },
-          Breach_2:{
+          Breach_2: {
             Name: 'Breach_2',
             Title: 'Breach_2',
             Domain: 'Breach_2.com',
@@ -398,7 +403,7 @@ describe('hibp', () => {
             IsRetired: false,
             IsSpamList: false
           },
-          Breach_3:{
+          Breach_3: {
             Name: 'Breach_3',
             Title: 'Breach_3',
             Domain: 'Breach_3.com',
@@ -416,7 +421,7 @@ describe('hibp', () => {
             IsRetired: false,
             IsSpamList: false
           },
-          Breach_4:{
+          Breach_4: {
             Name: 'Breach_4',
             Title: 'Breach_4',
             Domain: 'Breach_4.com',
@@ -497,9 +502,9 @@ describe('hibp', () => {
     expect(
       vulns[0].structuredData['emails']['testEmail_2@test-domain_1']
     ).toEqual(['Breach_4']);
-    expect(
-      vulns[0].structuredData['breaches']['Breach_1']['PwnCount']
-    ).toEqual(8393093);
+    expect(vulns[0].structuredData['breaches']['Breach_1']['PwnCount']).toEqual(
+      8393093
+    );
     expect(vulns[0].updatedAt).not.toEqual(vulnerability.updatedAt);
   });
 });
