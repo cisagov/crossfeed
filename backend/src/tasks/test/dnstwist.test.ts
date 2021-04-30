@@ -17,7 +17,7 @@ jest.mock('child_process', () => ({
 describe('dnstwist', () => {
   let scan;
   let organization;
-  let domains: Domain[] = [];
+  const domains: Domain[] = [];
   beforeAll(async () => {
     (spawnSync as jest.Mock).mockImplementation(() => ({
       status: 0,

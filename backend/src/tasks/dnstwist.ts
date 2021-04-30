@@ -7,7 +7,7 @@ import { spawnSync } from 'child_process';
 
 async function runDNSTwist(domain: Domain) {
   console.log(domain.name);
-  let child = spawnSync(
+  const child = spawnSync(
     'dnstwist',
     ['-r', '--tld', './worker/common_tlds.dict', '-f', 'json', domain.name],
     {
@@ -17,7 +17,7 @@ async function runDNSTwist(domain: Domain) {
       encoding: 'utf-8'
     }
   );
-  let savedOutput = String(child.stdout);
+  const savedOutput = String(child.stdout);
   const finalResults = JSON.parse(savedOutput);
   console.log(
     `Got ${Object.keys(finalResults).length} similar domains for domain ${
