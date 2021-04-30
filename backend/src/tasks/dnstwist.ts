@@ -1,9 +1,31 @@
-import { Domain, Service, Vulnerability } from '../models';
+import { Domain, Vulnerability } from '../models';
 import getIps from './helpers/getIps';
 import { CommandOptions } from './ecs-client';
 import { plainToClass } from 'class-transformer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { spawnSync } from 'child_process';
+
+async function runDNSTwist(domain: Domain) {
+  console.log(domain.name);
+  let child = spawnSync(
+    'dnstwist',
+    ['-r', '--tld', './worker/common_tlds.dict', '-f', 'json', domain.name],
+    {
+      cwd: process.cwd(),
+      env: process.env,
+      stdio: 'pipe',
+      encoding: 'utf-8'
+    }
+  );
+  let savedOutput = String(child.stdout);
+  const finalResults = JSON.parse(savedOutput);
+  console.log(
+    `Got ${Object.keys(finalResults).length} similar domains for domain ${
+      domain.name
+    }`
+  );
+  return finalResults;
+}
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
@@ -14,22 +36,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   const vulns: Vulnerability[] = [];
   for (const domain of domainsWithIPs) {
     try {
-      console.log(domain.name);
-      let child = spawnSync(
-        'dnstwist',
-        ['-r', '--tld', './worker/common_tlds.dict', '-f', 'json', domain.name],
-        {
-          cwd: process.cwd(),
-          env: process.env,
-          stdio: 'pipe',
-          encoding: 'utf-8'
-        }
-      );
-      let savedOutput = String(child.stdout);
-      const results = JSON.parse(savedOutput);
-      console.log(
-        `Got ${Object.keys(results).length} similar domains for domain ${domain.name}`
-      );
+      const results = await runDNSTwist(domain);
 
       if (Object.keys(results).length !== 0) {
         vulns.push(
@@ -46,8 +53,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         );
         await saveVulnerabilitiesToDb(vulns, false);
         console.log(results);
-      }
-      else {
+      } else {
         continue;
       }
     } catch (e) {
