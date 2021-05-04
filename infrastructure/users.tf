@@ -9,8 +9,9 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   email_configuration {
-    email_sending_account = "DEVELOPER"
-    source_arn            = aws_ses_email_identity.default.arn
+    email_sending_account  = "DEVELOPER"
+    source_arn             = aws_ses_email_identity.default.arn
+    reply_to_email_address = var.ses_support_email_replyto
   }
 
   verification_message_template {
@@ -24,7 +25,7 @@ resource "aws_cognito_user_pool" "pool" {
 }
 
 resource "aws_ses_email_identity" "default" {
-  email = var.ses_support_email
+  email = var.ses_support_email_sender
 }
 
 resource "aws_cognito_user_pool_domain" "auth_domain" {
