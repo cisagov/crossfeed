@@ -159,6 +159,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Finds emails that have appeared in breaches related to a given domain'
   },
+  LookingGlass: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+    'Finds Vulnerabilities and Malware for given Agency'
+  },
   savedSearch: {
     type: 'fargate',
     isPassive: true,
