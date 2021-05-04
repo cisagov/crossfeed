@@ -247,14 +247,34 @@ const Risk: React.FC = (props) => {
   const VulnerabilityCard = ({
     title,
     showLatest,
+    showCommon,
     data
   }: {
     title: string;
     showLatest: boolean;
+    showCommon: boolean;
     data: VulnerabilityCount[];
   }) => (
     <Paper elevation={0} className={cardClasses.cardRoot}>
       <div className={cardClasses.cardSmall}>
+      {showLatest && (
+            <div className={cardClasses.seeAll}>
+              <h4>
+                <Link to="/inventory/vulnerabilities?sort=createdAt&desc=false">
+                  See All
+                </Link>
+              </h4>
+            </div>
+          )}
+          {showCommon && (
+            <div className={cardClasses.seeAll}>
+              <h4>
+                <Link to="/inventory/vulnerabilities/grouped">
+                  See All
+                </Link>
+              </h4>
+            </div>
+          )}
         <div className={cardClasses.header}>
           <h2>{title}</h2>
         </div>
@@ -320,16 +340,6 @@ const Risk: React.FC = (props) => {
                 </Tooltip>
               ))}
           </div>
-
-          {showLatest && (
-            <div className={cardClasses.footer}>
-              <h4>
-                <Link to="/inventory/vulnerabilities?sort=createdAt&desc=false">
-                  See all latest vulnerabilites
-                </Link>
-              </h4>
-            </div>
-          )}
         </div>
       </div>
     </Paper>
@@ -488,15 +498,11 @@ const Risk: React.FC = (props) => {
   return (
     <div className={classes.root}>
       <p>
-        <USWDSButton
-          outline
-          type="button"
-          onClick={generatePDF}
-        >            
-        Generate Report
+        <USWDSButton outline type="button" onClick={generatePDF}>
+          Generate Report
         </USWDSButton>
       </p>
-      <div id = 'wrapper' className={cardClasses.contentWrapper}>
+      <div id="wrapper" className={cardClasses.contentWrapper}>
         {stats && (
           <div className={cardClasses.content}>
             <div className={cardClasses.panel}>
@@ -504,6 +510,7 @@ const Risk: React.FC = (props) => {
                 title={'Latest Vulnerabilities'}
                 data={latestVulnsGroupedArr}
                 showLatest={true}
+                showCommon={false}
               ></VulnerabilityCard>
               {stats.domains.services.length > 0 && (
                 <Paper elevation={0} className={cardClasses.cardRoot}>
@@ -521,7 +528,6 @@ const Risk: React.FC = (props) => {
                   </div>
                 </Paper>
               )}
-
               {stats.domains.ports.length > 0 && (
                 <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
                   <div className={cardClasses.cardSmall}>
@@ -561,6 +567,13 @@ const Risk: React.FC = (props) => {
                 <div>
                   {stats.domains.numVulnerabilities.length > 0 && (
                     <div className={cardClasses.cardBig}>
+                      <div className={cardClasses.seeAll}>
+                        <h4>
+                          <Link to="/inventory/vulnerabilities/grouped">
+                            See All
+                          </Link>
+                        </h4>
+                      </div>
                       <div className={cardClasses.header}>
                         <h2>Open Vulnerabilities by Domain</h2>
                       </div>
@@ -585,6 +598,7 @@ const Risk: React.FC = (props) => {
                 title={'Most Common Vulnerabilities'}
                 data={stats.vulnerabilities.mostCommonVulnerabilities}
                 showLatest={false}
+                showCommon={true}
               ></VulnerabilityCard>
 
               {user?.userType === 'globalView' ||
@@ -669,13 +683,13 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 20,
     paddingTop: 1
   },
-  footer: {
+  seeAll: {
     float: 'right',
-    position: 'relative',
-    bottom: 20,
+    marginTop: '5px',
+    marginRight:'20px',
     '& h4 a': {
       color: '#71767A',
-      fontSize: '14px',
+      fontSize: '12px',
       fontWeight: '400'
     }
   },
