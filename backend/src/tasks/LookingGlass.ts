@@ -1,4 +1,10 @@
-import { Domain, Service, Vulnerability } from '../models';
+import {
+  Organization,
+  Domain,
+  Service,
+  Vulnerability,
+  connectToDatabase
+} from '../models';
 import getIps from './helpers/getIps';
 import { CommandOptions } from './ecs-client';
 import got from 'got';
@@ -6,8 +12,8 @@ import { plainToClass } from 'class-transformer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { Object } from 'aws-sdk/clients/appflow';
 
-const username: string = 'dane.jensen@associates.cisa.dhs.gov';
-const passcode: string = 'Telescope&Moon77';
+const username: string = "username";
+const passcode: string = "password";
 // let url:string = '/auth/login'
 
 async function getAuth() {
@@ -31,7 +37,7 @@ async function POST(resource, token, modifier) {
   // let h1 = {'Content-Type': 'application/json, application/transit+json', 'Accept': 'application/json, application/transit+json', 'x-lg-session': token, 'User-Agent': 'CISA-VulnerabilityManagement'}
   const h1 = {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer 30f41661a577424fbd791b865dac9efe'
+    Authorization: 'Bearer Token'
   };
   const results: any[] = await got
     .post(url, {
@@ -41,6 +47,13 @@ async function POST(resource, token, modifier) {
     .json();
   console.log(results);
   return results;
+}
+
+async function getOrg(organizationId: string) {
+  await connectToDatabase();
+
+  const organization = await Organization.findOne(organizationId);
+  return organization;
 }
 
 async function collectionByWorkspace(workspaceID, token) {
@@ -74,6 +87,10 @@ async function getThreatInfo(token, collectionID) {
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
+  if (typeof organizationId === 'string') {
+    const Org = getOrg(organizationId);
+    console.log(Org);
+  }
 
   console.log('Running hibp on organization', organizationName);
   const domainsWithIPs = await getIps(organizationId);
@@ -100,20 +117,3 @@ export const handler = async (commandOptions: CommandOptions) => {
     }
   }
 };
-
-// def connect(self, resource, user, passcode):
-//         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-//         url = resource
-
-//         r = requests.post(url, json=params, headers=h1)
-//         if r.status_code == 200:
-//             try:
-//                 parsed_json = json.loads(r.text)
-//                 return parsed_json
-
-//             except:
-//                 pass
-
-//         else:
-//             result =  'Bad status code response: %s' % r.status_code
-//             return result
