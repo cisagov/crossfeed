@@ -3,7 +3,7 @@ import classes from './Risk.module.scss';
 import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
-import { Chip, makeStyles, Paper, Tooltip } from '@material-ui/core';
+import { makeStyles, Paper, Tooltip } from '@material-ui/core';
 import { geoCentroid } from 'd3-geo';
 import {
   ComposableMap,
@@ -298,18 +298,17 @@ const Risk: React.FC = (props) => {
                     elevation={0}
                     className={cardClasses.miniCardRoot}
                     aria-label="view domain details"
+                    onClick= {() => {
+                      history.push(
+                        '/inventory/vulnerabilities?title=' +
+                          vuln.title +
+                          (vuln.domain ? '&domain=' + vuln.domain.name : '')
+                      );
+                    }}
                   >
                     <div className={cardClasses.cardInner}>
+                      <div className={cardClasses.vulnCount}>{vuln.count}</div>
                       <div className={cardClasses.miniCardLeft}>
-                        <Chip
-                          label={vuln.count}
-                          style={{
-                            marginRight: 10,
-                            color: '#D83933',
-                            backgroundColor: 'white',
-                            border: '1px solid #71767A'
-                          }}
-                        />
                         {vuln.title}
                       </div>
                       <div className={cardClasses.miniCardCenter}>
@@ -326,17 +325,17 @@ const Risk: React.FC = (props) => {
                       </div>
                       <button
                         className={cardClasses.button}
-                        onClick={() => {
-                          history.push(
-                            '/inventory/vulnerabilities?title=' +
-                              vuln.title +
-                              (vuln.domain ? '&domain=' + vuln.domain.name : '')
-                          );
-                        }}
                       >
                         DETAILS
                       </button>
                     </div>
+                    {<hr
+                      style={{
+                        border: '1px solid #F0F0F0',
+                        position: 'relative',
+                        maxWidth: '90%'
+                      }}
+                    />}
                   </Paper>
                 </Tooltip>
               ))}
@@ -680,9 +679,9 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     width: '100%',
     color: '#07648D',
+    fontWeight: 'bold',
     paddingLeft: 20,
-    paddingTop: 1,
-    fontWeight: 'bold'
+    paddingTop: 1
   },
   seeAll: {
     float: 'right',
@@ -730,10 +729,15 @@ const useStyles = makeStyles((theme) => ({
   miniCardRoot: {
     boxSizing: 'border-box',
     marginBottom: '1rem',
-    border: '2px solid #DCDEE0',
     '& em': {
       fontStyle: 'normal',
       backgroundColor: 'yellow'
+    },
+    '&:hover': {
+      background: '#FCFCFC',
+      boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.15)',
+      borderRadius: '4px',
+      cursor: 'pointer'
     },
     height: 45,
     width: '100%',
@@ -746,9 +750,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     '& div': {
       display: 'inline',
-      fontSize: '16px',
-      fontWeight: '400',
-      color: '#3D4551'
+      fontSize: '14px',
+      fontWeight: 'bold'
     },
     '& button': {
       justifyContent: 'flex-end'
@@ -758,7 +761,9 @@ const useStyles = makeStyles((theme) => ({
   miniCardLeft: {
     display: 'flex',
     flex: 1,
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    color: '#3D4551'
+
   },
   miniCardCenter: {
     display: 'flex',
@@ -769,11 +774,17 @@ const useStyles = makeStyles((theme) => ({
     outline: 'none',
     border: 'none',
     background: 'none',
-    color: theme.palette.secondary.main,
+    color: '#07648D',
     margin: '0 0.2rem',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    fontSize: '12px'
   },
   underlined: {
-    width: '80px'
+    width: '80px',
+    fontWeight: 'normal'
+  },
+  vulnCount: {
+    color: '#B51D09',
+    flex: 0.5
   }
 }));
