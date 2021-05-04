@@ -126,6 +126,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1rem',
     fontWeight: 300,
     background: 'none',
+    "&::placeholder": {
+      color: '#71767A'
+    },
     '&:focus': {
       outline: 'none !important'
     }
@@ -136,7 +139,7 @@ const useStyles = makeStyles((theme) => ({
     top: '50%',
     transform: 'translateY(-50%)',
     fontSize: '1.5rem',
-    color: theme.palette.grey[300]
+    color: '#71767A'
   },
   autocompleteRoot: {
     position: 'absolute',
