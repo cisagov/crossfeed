@@ -163,8 +163,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
-    description:
-    'Finds Vulnerabilities and Malware for given Agency'
+    description: 'Finds Vulnerabilities and Malware for given Agency'
   },
   savedSearch: {
     type: 'fargate',
