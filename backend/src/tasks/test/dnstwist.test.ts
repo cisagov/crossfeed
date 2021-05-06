@@ -69,33 +69,6 @@ describe('dnstwist', () => {
     jest.unmock('../helpers/getIps');
   });
 
-  const checkDomains = async (organization) => {
-    const domains = await Domain.find({
-      where: { organization },
-      relations: ['organization', 'services']
-    });
-    expect(
-      domains
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((e) => ({
-          ...e,
-          services: e.services.map((s) => ({
-            ...s,
-            id: null,
-            updatedAt: null,
-            createdAt: null
-          })),
-          organization: null,
-          id: null,
-          updatedAt: null,
-          createdAt: null,
-          syncedAt: null,
-          name: null
-        }))
-    ).toMatchSnapshot();
-    expect(domains.filter((e) => !e.organization).length).toEqual(0);
-  };
-
   test('basic test', async () => {
     await dnstwist({
       organizationId: organization.id,
@@ -104,8 +77,6 @@ describe('dnstwist', () => {
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
     });
-
-    await checkDomains(organization);
   });
 
   test('creates vulnerability', async () => {
