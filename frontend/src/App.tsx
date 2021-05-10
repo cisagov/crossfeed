@@ -95,7 +95,13 @@ const App: React.FC = () => (
                   unauth={AuthLogin}
                   component={Risk}
                 />
-
+                <RouteGuard
+                  exact
+                  path="/signup"
+                  render={() => <Redirect to="/inventory" />}
+                  unauth={(props) => <AuthLogin {...props} showSignUp={true} />}
+                  component={Risk}
+                />
                 <Route
                   exact
                   path="/login-gov-callback"
