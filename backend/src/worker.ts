@@ -16,7 +16,7 @@ import { handler as webscraper } from './tasks/webscraper';
 import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
 import { handler as hibp } from './tasks/hibp';
-import { handler as LookingGlass } from './tasks/LookingGlass';
+import { handler as lookingGlass } from './tasks/lookingGlass';
 import { SCAN_SCHEMA } from './api/scans';
 
 /**
@@ -46,7 +46,7 @@ async function main() {
     savedSearch,
     shodan,
     hibp,
-    LookingGlass,
+    lookingGlass,
     testProxy
   }[scanName || 'testProxy'];
   if (!scanFn) {
