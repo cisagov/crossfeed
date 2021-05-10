@@ -99,6 +99,42 @@ async function getThreatInfo(token, collectionID) {
   return data;
 }
 
+async function saveAndPullDomains(response, organizationId, scanId, Org){
+  let domains: Domain[] = []
+  let data = response
+  for (const l of data['results']) {
+    const current_Domain = plainToClass(Domain, {
+      name: l['left']['name'],
+      ip: l['left']['name'],
+      organization: { id: organizationId },
+      fromRootDomain: Org['rootDomains'][0],
+      discoveredBy: { id: scanId }
+    });
+    domains.push(current_Domain);
+  }
+  await saveDomainsToDb(domains)
+
+  await connectToDatabase();
+
+  let pulledDomains = Domain.createQueryBuilder('domain')
+    .leftJoinAndSelect('domain.organization', 'organization')
+    .andWhere('ip IS NOT NULL');
+
+  if (organizationId) {
+    pulledDomains = pulledDomains.andWhere('domain.organization=:org', {
+      org: organizationId
+    });
+  }
+  if (scanId){
+    pulledDomains = pulledDomains.andWhere('domain.discoveredBy=:scan',{
+      scan: scanId
+    })
+  }
+
+  return pulledDomains.getMany();
+
+}
+
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName, scanId } = commandOptions;
 
@@ -128,6 +164,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       console.log(line['name']);
       //Query LookingGlass for the Threat info
       const data = await getThreatInfo(sessionToken, collectionID);
+      let responseDomains: Domain[]= await saveAndPullDomains(data,organizationId,scanId,Org)
       for (const l of data['results']) {
         //Create a dictionary of relevant fields from the API request
         if (typeof Org === 'object') {
@@ -164,29 +201,28 @@ export const handler = async (commandOptions: CommandOptions) => {
           }
           //if the Domain hasn't been used create a new Domain and a new Vulnerability
           else {
-            const current_Domain = plainToClass(Domain, {
-              name: l['left']['name'],
-              ip: l['left']['name'],
-              organization: { id: organizationId },
-              fromRootDomain: Org['rootDomains'][0],
-              discoveredBy: { id: scanId }
-            });
-            domains.push(current_Domain);
+            for (const x of responseDomains){
+              if (x.name == l['left']['name']){
+                let current_Domain = x
+
+                const V = {
+                  domain: current_Domain,
+                  lastSeen: new Date(Date.now()),
+                  title: 'Looking Glass Data',
+                  state: 'open',
+                  source: 'lookingGlass',
+                  needsPopulation: false,
+                  structuredData: {
+                    lookingGlassData: [val]
+                  },
+                  description: `These are Vulnerabilities and Malware found by LookingGlass for ${organizationName}`
+                };
+                Vulns_list.push(V);
+              }
+            }
             ipsAndDomains.push(l['left']['name']);
 
-            const V = {
-              domain: current_Domain,
-              lastSeen: new Date(Date.now()),
-              title: 'Looking Glass Data',
-              state: 'open',
-              source: 'lookingGlass',
-              needsPopulation: false,
-              structuredData: {
-                lookingGlassData: [val]
-              },
-              description: `These are Vulnerabilities and Malware found by LookingGlass for ${organizationName}`
-            };
-            Vulns_list.push(V);
+            
           }
         }
       }
@@ -194,7 +230,6 @@ export const handler = async (commandOptions: CommandOptions) => {
       for (const v of Vulns_list) {
         Vulnerabilities.push(plainToClass(Vulnerability, v));
       }
-      await saveDomainsToDb(domains);
       await saveVulnerabilitiesToDb(Vulnerabilities, false);
     }
   }
