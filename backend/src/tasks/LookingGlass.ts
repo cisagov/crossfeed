@@ -125,13 +125,13 @@ async function saveAndPullDomains(response, organizationId, scanId, Org) {
       org: organizationId
     });
   }
-  if (scanId) {
-    pulledDomains = pulledDomains.andWhere('domain.discoveredBy=:scan', {
-      scan: scanId
-    });
-  }
-
-  return pulledDomains.getMany();
+  // if (scanId) {
+  //   pulledDomains = pulledDomains.andWhere('domain.discoveredBy=:scan', {
+  //     scan: scanId
+  //   });
+  // }
+  const D = await pulledDomains.getMany();
+  return D;
 }
 
 export const handler = async (commandOptions: CommandOptions) => {
@@ -140,10 +140,10 @@ export const handler = async (commandOptions: CommandOptions) => {
   const Org = await getOrg(organizationId);
   console.log(Org);
 
-  console.log('Running hibp on organization', organizationName);
+  console.log('Running lookingGlass on organization', organizationName);
   const domainsWithIPs = await getIps(organizationId);
   const results = await getAuth();
-  console.log('Here are the Results');
+  console.log('Authentication Results');
   console.log(results);
   const sessionToken: string = results['result']['e_session-key_s'];
 
@@ -153,9 +153,8 @@ export const handler = async (commandOptions: CommandOptions) => {
   const collections = await collectionByWorkspace(workspaceID, sessionToken);
   const ipsAndDomains: string[] = [];
   const domains: Domain[] = [];
-  const Vulns_list: object[] = [];
+  const Vulns_list: any = [];
   const Vulnerabilities: Vulnerability[] = [];
-  console.log(collections);
   for (const line of collections['result']) {
     //Match the organization to the LookingGlass Collection
     if (organizationName == line['name']) {
@@ -196,19 +195,21 @@ export const handler = async (commandOptions: CommandOptions) => {
             val['vulnOrMal'] = 'Malware';
           }
           //if the Domain already exists and add this vuln to the associated vulnerability
-          if (l['left']['name'] in ipsAndDomains) {
+          if (ipsAndDomains.includes(l['left']['name'])) {
+            console.log('Duplicate Value found');
             for (const Vuln of Vulns_list) {
-              if (Vuln['domain'].name == l['left']['name']) {
+              if (l['left']['name'] == Vuln['domain'].name) {
                 Vuln['structuredData']['lookingGlassData'].push(val);
               }
             }
           }
           //if the Domain hasn't been used create a new Domain and a new Vulnerability
           else {
+            console.log('New Domain');
             for (const x of responseDomains) {
+              console.log(x);
               if (x.name == l['left']['name']) {
                 const current_Domain = x;
-
                 const V = {
                   domain: current_Domain,
                   lastSeen: new Date(Date.now()),
@@ -228,11 +229,11 @@ export const handler = async (commandOptions: CommandOptions) => {
           }
         }
       }
-
       for (const v of Vulns_list) {
         Vulnerabilities.push(plainToClass(Vulnerability, v));
       }
       await saveVulnerabilitiesToDb(Vulnerabilities, false);
+      console.log('Vulnerabilities Saved to Db');
     }
   }
 };
