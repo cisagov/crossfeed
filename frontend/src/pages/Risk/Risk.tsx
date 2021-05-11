@@ -72,6 +72,7 @@ const Risk: React.FC = (props) => {
   } = useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
   const cardClasses = useStyles(props);
 
   const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
@@ -257,24 +258,22 @@ const Risk: React.FC = (props) => {
   }) => (
     <Paper elevation={0} className={cardClasses.cardRoot}>
       <div className={cardClasses.cardSmall}>
-      {showLatest && (
-            <div className={cardClasses.seeAll}>
-              <h4>
-                <Link to="/inventory/vulnerabilities?sort=createdAt&desc=false">
-                  See All
-                </Link>
-              </h4>
-            </div>
-          )}
-          {showCommon && (
-            <div className={cardClasses.seeAll}>
-              <h4>
-                <Link to="/inventory/vulnerabilities/grouped">
-                  See All
-                </Link>
-              </h4>
-            </div>
-          )}
+        {showLatest && (
+          <div className={cardClasses.seeAll}>
+            <h4>
+              <Link to="/inventory/vulnerabilities?sort=createdAt&desc=false">
+                See All
+              </Link>
+            </h4>
+          </div>
+        )}
+        {showCommon && (
+          <div className={cardClasses.seeAll}>
+            <h4>
+              <Link to="/inventory/vulnerabilities/grouped">See All</Link>
+            </h4>
+          </div>
+        )}
         <div className={cardClasses.header}>
           <h2>{title}</h2>
         </div>
@@ -298,7 +297,7 @@ const Risk: React.FC = (props) => {
                     elevation={0}
                     className={cardClasses.miniCardRoot}
                     aria-label="view domain details"
-                    onClick= {() => {
+                    onClick={() => {
                       history.push(
                         '/inventory/vulnerabilities?title=' +
                           vuln.title +
@@ -323,19 +322,17 @@ const Risk: React.FC = (props) => {
                           {vuln.severity}
                         </p>
                       </div>
-                      <button
-                        className={cardClasses.button}
-                      >
-                        DETAILS
-                      </button>
+                      <button className={cardClasses.button}>DETAILS</button>
                     </div>
-                    {<hr
-                      style={{
-                        border: '1px solid #F0F0F0',
-                        position: 'relative',
-                        maxWidth: '90%'
-                      }}
-                    />}
+                    {
+                      <hr
+                        style={{
+                          border: '1px solid #F0F0F0',
+                          position: 'relative',
+                          maxWidth: '100%'
+                        }}
+                      />
+                    }
                   </Paper>
                 </Tooltip>
               ))}
@@ -452,7 +449,7 @@ const Risk: React.FC = (props) => {
       if (vuln.title in latestVulnsGrouped)
         latestVulnsGrouped[vuln.title].count++;
       else {
-        latestVulnsGrouped[vuln.title] = { ...vuln, count: 1 };
+        latestVulnsGrouped[vuln.title] = { ...vuln, count: 1};
       }
     }
   }
@@ -461,44 +458,50 @@ const Risk: React.FC = (props) => {
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
-  const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
-  
+  const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
   const generatePDF = async () => {
+    setIsLoading(true);
     const input = document.getElementById('wrapper')!;
     input.style.width = '1400px';
-    await delay(500);
-
-    html2canvas(input, {
-      scrollX:0,
-      scrollY:0,
-      onclone: async function(document){
-        document.getElementById('wrapper')!.style.width = '1400px';
-      },
+    await delay(1);
+    await html2canvas(input, {
+      scrollX: 0,
+      scrollY: 0,
+      ignoreElements: function (element) {
+        if ('mapWrapper' === element.id) {
+          return true;
+        }
+        return false;
+      }
     }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgWidth = 190;
-      const pageHeight = 290;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
       const pdf = new jsPDF('p', 'mm');
-      let position = 0;
-      pdf.addImage(imgData, 'PNG', 10, 5, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-      pdf.save('Crossfeed_Report.pdf')
+      pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+      pdf.save('Crossfeed_Report.pdf');
     });
     input.style.removeProperty('width');
+    setIsLoading(false);
   };
 
   return (
     <div className={classes.root}>
+    {isLoading && (
+    <div className="cisa-crossfeed-loading">
+          <div></div>
+          <div></div>
+    </div>
+    )}
       <p>
-        <USWDSButton outline type="button" onClick={generatePDF}>
+        <USWDSButton
+          outline
+          type="button"
+          onClick={() => {
+            generatePDF();
+          }}
+        >
           Generate Report
         </USWDSButton>
       </p>
@@ -601,31 +604,33 @@ const Risk: React.FC = (props) => {
                 showCommon={true}
               ></VulnerabilityCard>
 
-              {user?.userType === 'globalView' ||
-                (user?.userType === 'globalAdmin' && (
-                  <>
-                    <MapCard
-                      title={'State Vulnerabilities'}
-                      geoUrl={geoStateUrl}
-                      findFn={(geo) =>
-                        stats?.vulnerabilities.byOrg.find(
-                          (p) => p.label === geo.properties.name
-                        )
-                      }
-                      type={'state'}
-                    ></MapCard>
-                    <MapCard
-                      title={'County Vulnerabilities'}
-                      geoUrl={geoStateUrl}
-                      findFn={(geo) =>
-                        stats?.vulnerabilities.byOrg.find(
-                          (p) => p.label === geo.properties.name + ' Counties'
-                        )
-                      }
-                      type={'county'}
-                    ></MapCard>
-                  </>
-                ))}
+              <div id="mapWrapper">
+                {user?.userType === 'globalView' ||
+                  (user?.userType === 'globalAdmin' && (
+                    <>
+                      <MapCard
+                        title={'State Vulnerabilities'}
+                        geoUrl={geoStateUrl}
+                        findFn={(geo) =>
+                          stats?.vulnerabilities.byOrg.find(
+                            (p) => p.label === geo.properties.name
+                          )
+                        }
+                        type={'state'}
+                      ></MapCard>
+                      <MapCard
+                        title={'County Vulnerabilities'}
+                        geoUrl={geoStateUrl}
+                        findFn={(geo) =>
+                          stats?.vulnerabilities.byOrg.find(
+                            (p) => p.label === geo.properties.name + ' Counties'
+                          )
+                        }
+                        type={'county'}
+                      ></MapCard>
+                    </>
+                  ))}
+              </div>
             </div>
           </div>
         )}
@@ -649,7 +654,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cardSmall: {
     width: '100%',
-    height: '350px',
+    height: '340px',
     '& h3': {
       textAlign: 'center'
     },
@@ -664,14 +669,14 @@ const useStyles = makeStyles((theme) => ({
   },
   cardBig: {
     width: '100%',
-    height: '700px',
+    height: '750px',
     '& h3': {
       textAlign: 'center'
     },
     overflow: 'hidden'
   },
   body: {
-    padding: 20
+    padding: '20px 30px'
   },
   header: {
     height: '60px',
@@ -686,7 +691,7 @@ const useStyles = makeStyles((theme) => ({
   seeAll: {
     float: 'right',
     marginTop: '5px',
-    marginRight:'20px',
+    marginRight: '20px',
     '& h4 a': {
       color: '#71767A',
       fontSize: '12px',
@@ -739,6 +744,9 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: '4px',
       cursor: 'pointer'
     },
+    '&:last-child hr': {
+      display: 'none'
+    },
     height: 45,
     width: '100%',
     borderRadius: '4px'
@@ -763,7 +771,6 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     justifyContent: 'flex-start',
     color: '#3D4551'
-
   },
   miniCardCenter: {
     display: 'flex',
