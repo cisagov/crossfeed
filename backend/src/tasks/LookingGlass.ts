@@ -1,7 +1,6 @@
 import {
   Organization,
   Domain,
-  Service,
   Vulnerability,
   connectToDatabase
 } from '../models';
@@ -10,10 +9,8 @@ import { CommandOptions } from './ecs-client';
 import got from 'got';
 import { plainToClass } from 'class-transformer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
-import { Object } from 'aws-sdk/clients/appflow';
 import { exit } from 'process';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
-import { passportJwtSecret } from 'jwks-rsa';
 
 async function getAuth() {
   const results: any[] = await got
