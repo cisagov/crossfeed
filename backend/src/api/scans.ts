@@ -159,6 +159,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Finds emails that have appeared in breaches related to a given domain'
   },
+  dnstwist: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Domain name permutation engine for detecting similar registered domains.'
+  },
   savedSearch: {
     type: 'fargate',
     isPassive: true,
