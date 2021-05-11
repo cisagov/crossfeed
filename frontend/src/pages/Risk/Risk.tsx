@@ -464,7 +464,7 @@ const Risk: React.FC = (props) => {
     setIsLoading(true);
     const input = document.getElementById('wrapper')!;
     input.style.width = '1400px';
-    await delay(10);
+    await delay(1);
     await html2canvas(input, {
       scrollX: 0,
       scrollY: 0,
@@ -473,9 +473,6 @@ const Risk: React.FC = (props) => {
           return true;
         }
         return false;
-      },
-      onclone: async function (document) {
-        document.getElementById('wrapper')!.style.width = '1400px';
       }
     }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
