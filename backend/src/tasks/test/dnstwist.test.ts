@@ -77,6 +77,16 @@ describe('dnstwist', () => {
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
     });
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      ip: '0.0.0.0',
+      organization
+    }).save();
+    const vulns = await Vulnerability.find({
+      domain: domain
+    });
+    expect(vulns.length).toEqual(0);
   });
 
   test('creates vulnerability', async () => {
