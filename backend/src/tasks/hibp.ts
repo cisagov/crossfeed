@@ -1,5 +1,4 @@
-import { Domain, Service, Vulnerability } from '../models';
-import getIps from './helpers/getIps';
+import { Domain, Service, Vulnerability, connectToDatabase } from '../models';
 import { CommandOptions } from './ecs-client';
 import got from 'got';
 import { plainToClass } from 'class-transformer';
@@ -10,6 +9,23 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
  * that have shown up in breaches using the Have I
  * Been Pwned Enterprise API.
  */
+ async function getIps(organizationId?: String): Promise<Domain[]> {
+  await connectToDatabase();
+
+  let domains = Domain.createQueryBuilder('domain')
+    .leftJoinAndSelect('domain.organization', 'organization')
+    .andWhere('ip IS NOT NULL');
+
+  if (organizationId) {
+    domains = domains.andWhere('domain.organization=:org', {
+      org: organizationId
+    });
+  }
+  domains = domains.andWhere('domain.ipOnly=:bool', {
+    bool: false
+  });
+  return domains.getMany();
+ }
 
 async function lookupEmails(breachesDict: any, domain: Domain) {
   try {
@@ -49,8 +65,7 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
     finalResults['Breaches'] = BreachResults;
     return finalResults;
   } catch (error) {
-    console.error(`Domain ${domain.name} failed to run due to the following error:`);
-    console.log(error['HTTPError'])
+    console.error(`Error Occured when trying to access the HIPB API using the domain: ${domain.name} `);
     return 0
   }
   
@@ -60,9 +75,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
   console.log('Running hibp on organization', organizationName);
-  console.log("Before getIps")
   const domainsWithIPs = await getIps(organizationId);
-  console.log("After getIps / before breaches api call")
   const breaches: any[] = await got(
     'https://haveibeenpwned.com/api/v2/breaches',
     {
@@ -71,7 +84,6 @@ export const handler = async (commandOptions: CommandOptions) => {
       }
     }
   ).json();
-  console.log("After API call")
   const breachesDict = {};
   for (const breach of breaches) {
     breachesDict[breach.Name] = breach;
@@ -107,8 +119,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           })
         );
         await saveVulnerabilitiesToDb(vulns, false);
-        console.log(results['Emails']);
-        console.log(results['Breaches']);
+      
       }}
     
   }

@@ -46,6 +46,13 @@ export class Domain extends BaseEntity {
   })
   fromRootDomain: string;
 
+  /**Domain was created only using IPs */
+  @Column({
+    nullable: true,
+    default:false
+  })
+  ipOnly: boolean;
+
   @ManyToOne((type) => Scan, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE'

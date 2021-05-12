@@ -79,6 +79,15 @@ async function collectionByWorkspace(workspaceID, token) {
   return data;
 }
 
+function ValidateIPaddress(ipaddress) 
+{
+ if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress))
+  {
+    return (true)
+  }
+return (false)
+}
+
 async function getThreatInfo(token, collectionID) {
   const resource = '/api/graph/query';
   const modifier = {
@@ -100,14 +109,28 @@ async function saveAndPullDomains(response, organizationId, scanId, Org) {
   const domains: Domain[] = [];
   const data = response;
   for (const l of data['results']) {
-    const current_Domain = plainToClass(Domain, {
-      name: l['left']['name'],
-      ip: l['left']['name'],
-      organization: { id: organizationId },
-      fromRootDomain: Org['rootDomains'][0],
-      discoveredBy: { id: scanId }
-    });
-    domains.push(current_Domain);
+    if (ValidateIPaddress(l['left']['name'])){
+      const current_Domain = plainToClass(Domain, {
+        name: l['left']['name'],
+        ip: l['left']['name'],
+        organization: { id: organizationId },
+        fromRootDomain: Org['rootDomains'][0],
+        ipOnly:true,
+        discoveredBy: { id: scanId }
+      });
+      domains.push(current_Domain);
+    }
+    else{
+      const current_Domain = plainToClass(Domain, {
+        name: l['left']['name'],
+        ip: l['left']['name'],
+        organization: { id: organizationId },
+        fromRootDomain: Org['rootDomains'][0],
+        ipOnly:false,
+        discoveredBy: { id: scanId }
+      });
+      domains.push(current_Domain);
+    }
   }
   await saveDomainsToDb(domains);
 
@@ -204,7 +227,6 @@ export const handler = async (commandOptions: CommandOptions) => {
           else {
             console.log('New Domain');
             for (const x of responseDomains) {
-              console.log(x);
               if (x.name == l['left']['name']) {
                 const current_Domain = x;
                 const V = {
