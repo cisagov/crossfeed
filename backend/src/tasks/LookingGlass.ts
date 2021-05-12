@@ -79,13 +79,15 @@ async function collectionByWorkspace(workspaceID, token) {
   return data;
 }
 
-function ValidateIPaddress(ipaddress) 
-{
- if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress))
-  {
-    return (true)
+function ValidateIPaddress(ipaddress) {
+  if (
+    /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
+      ipaddress
+    )
+  ) {
+    return true;
   }
-return (false)
+  return false;
 }
 
 async function getThreatInfo(token, collectionID) {
@@ -109,24 +111,23 @@ async function saveAndPullDomains(response, organizationId, scanId, Org) {
   const domains: Domain[] = [];
   const data = response;
   for (const l of data['results']) {
-    if (ValidateIPaddress(l['left']['name'])){
+    if (ValidateIPaddress(l['left']['name'])) {
       const current_Domain = plainToClass(Domain, {
         name: l['left']['name'],
         ip: l['left']['name'],
         organization: { id: organizationId },
         fromRootDomain: Org['rootDomains'][0],
-        ipOnly:true,
+        ipOnly: true,
         discoveredBy: { id: scanId }
       });
       domains.push(current_Domain);
-    }
-    else{
+    } else {
       const current_Domain = plainToClass(Domain, {
         name: l['left']['name'],
         ip: l['left']['name'],
         organization: { id: organizationId },
         fromRootDomain: Org['rootDomains'][0],
-        ipOnly:false,
+        ipOnly: false,
         discoveredBy: { id: scanId }
       });
       domains.push(current_Domain);

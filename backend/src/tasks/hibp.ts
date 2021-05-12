@@ -9,7 +9,7 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
  * that have shown up in breaches using the Have I
  * Been Pwned Enterprise API.
  */
- async function getIps(organizationId?: String): Promise<Domain[]> {
+async function getIps(organizationId?: String): Promise<Domain[]> {
   await connectToDatabase();
 
   let domains = Domain.createQueryBuilder('domain')
@@ -25,7 +25,7 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
     bool: false
   });
   return domains.getMany();
- }
+}
 
 async function lookupEmails(breachesDict: any, domain: Domain) {
   try {
@@ -38,16 +38,16 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
         }
       }
     ).json();
-  
+
     const AddressResults = {};
     const BreachResults = {};
     const finalResults = {};
-  
+
     const shouldCountBreach = (breach) =>
       breach.DataClasses.indexOf('Passwords') > -1 &&
       breach.IsVerified === true &&
       breach.BreachDate > '2016-01-01';
-  
+
     for (const email in results) {
       const filtered = (results[email] || []).filter((e) =>
         shouldCountBreach(breachesDict[e])
@@ -65,10 +65,11 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
     finalResults['Breaches'] = BreachResults;
     return finalResults;
   } catch (error) {
-    console.error(`Error Occured when trying to access the HIPB API using the domain: ${domain.name} `);
-    return 0
+    console.error(
+      `Error Occured when trying to access the HIPB API using the domain: ${domain.name} `
+    );
+    return 0;
   }
-  
 }
 
 export const handler = async (commandOptions: CommandOptions) => {
@@ -92,16 +93,15 @@ export const handler = async (commandOptions: CommandOptions) => {
   const services: Service[] = [];
   const vulns: Vulnerability[] = [];
   for (const domain of domainsWithIPs) {
-    console.log(domain.name)
+    console.log(domain.name);
     const results = await lookupEmails(breachesDict, domain);
-    if(results){
-      
+    if (results) {
       console.log(
-      `Got ${Object.keys(results['Emails']).length} emails for domain ${
-        domain.name
-      }`
+        `Got ${Object.keys(results['Emails']).length} emails for domain ${
+          domain.name
+        }`
       );
-    
+
       if (Object.keys(results['Emails']).length !== 0) {
         vulns.push(
           plainToClass(Vulnerability, {
@@ -119,8 +119,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           })
         );
         await saveVulnerabilitiesToDb(vulns, false);
-      
-      }}
-    
+      }
+    }
   }
 };

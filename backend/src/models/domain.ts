@@ -49,7 +49,7 @@ export class Domain extends BaseEntity {
   /**Domain was created only using IPs */
   @Column({
     nullable: true,
-    default:false
+    default: false
   })
   ipOnly: boolean;
 
