@@ -39,17 +39,6 @@ you want to update the database schemas.
 ```bash
 cd backend
 # Generate schema
-docker-compose exec backend npx sls invoke local -f syncdb
-# Populate sample data
-docker-compose exec backend npx sls invoke local -f syncdb -d populate
-```
-
-If you are using Node 14, you might be able to run the following commands to
-sync a bit faster (without needing to wait for compilation):
-
-```bash
-cd backend && npm install
-# Generate schema
 npm run syncdb
 # Populate sample data
 npm run syncdb -- -d populate

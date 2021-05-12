@@ -32,9 +32,9 @@ This quickstart describes the initial setup required to run an instance of Cross
    ```bash
    cd backend
    # Generate schema
-   docker-compose exec backend npx sls invoke local -f syncdb
+   npm run syncdb
    # Populate sample data
-   docker-compose exec backend npx sls invoke local -f syncdb -d populate
+   npm run syncdb -- -d populate
    ```
 
    If you ever need to drop and recreate the database, you can run `npm run syncdb -- -d dangerouslyforce`.

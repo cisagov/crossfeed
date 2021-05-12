@@ -95,7 +95,13 @@ const App: React.FC = () => (
                   unauth={AuthLogin}
                   component={Risk}
                 />
-
+                <RouteGuard
+                  exact
+                  path="/signup"
+                  render={() => <Redirect to="/inventory" />}
+                  unauth={(props) => <AuthLogin {...props} showSignUp={true} />}
+                  component={Risk}
+                />
                 <Route
                   exact
                   path="/login-gov-callback"
@@ -116,7 +122,14 @@ const App: React.FC = () => (
                 <RouteGuard path="/inventory/domains" component={Domains} />
                 <RouteGuard
                   path="/inventory/vulnerabilities"
+                  exact
                   component={Vulnerabilities}
+                />
+                <RouteGuard
+                  path="/inventory/vulnerabilities/grouped"
+                  component={(props) => (
+                    <Vulnerabilities {...props} groupBy="title" />
+                  )}
                 />
                 <RouteGuard
                   path="/inventory/vulnerability/:vulnerabilityId"

@@ -46,25 +46,25 @@ exports[`Header component matches snapshot 1`] = `
             />
           </a>
           <div
-            class="makeStyles-mdNav-9"
+            class="makeStyles-lgNav-9"
           >
             <a
               aria-current="page"
-              class="makeStyles-link-18 makeStyles-activeLink-16"
+              class="makeStyles-link-17 makeStyles-activeLink-15"
               href="/"
               style="outline: none;"
             >
               Overview
             </a>
             <a
-              class="makeStyles-link-18"
+              class="makeStyles-link-17"
               href="/inventory"
               style="outline: none;"
             >
               Inventory
             </a>
             <a
-              class="makeStyles-link-18"
+              class="makeStyles-link-17"
               href="/feeds"
               style="outline: none;"
             >
@@ -72,20 +72,17 @@ exports[`Header component matches snapshot 1`] = `
             </a>
           </div>
           <div
-            class="makeStyles-lgNav-10"
-          />
-          <div
             class="makeStyles-spacing-4"
           />
           <div
-            class="makeStyles-wrapper-20"
+            class="makeStyles-wrapper-19"
           >
             <div
-              class="makeStyles-inner-21"
+              class="makeStyles-inner-20"
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root makeStyles-icon-23"
+                class="MuiSvgIcon-root makeStyles-icon-22"
                 focusable="false"
                 viewBox="0 0 24 24"
               >
@@ -95,7 +92,7 @@ exports[`Header component matches snapshot 1`] = `
               </svg>
               <form>
                 <input
-                  class="makeStyles-inp-22"
+                  class="makeStyles-inp-21"
                   placeholder="Search for a domain, vuln type, port, service, IP"
                   value=""
                 />
@@ -104,7 +101,7 @@ exports[`Header component matches snapshot 1`] = `
           </div>
           <a
             aria-current="page"
-            class="makeStyles-link-18 makeStyles-link-18"
+            class="makeStyles-link-17 makeStyles-link-17"
             href="/"
             style="outline: none;"
           >

@@ -92,9 +92,10 @@ export const sendEmail = async (
   });
 
   await transporter.sendMail({
-    from: process.env.CROSSFEED_SUPPORT_EMAIL!,
+    from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
     to: recipient,
     subject: subject,
-    text: body
+    text: body,
+    replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
   });
 };
