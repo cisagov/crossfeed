@@ -166,6 +166,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Domain name permutation engine for detecting similar registered domains.'
   },
+  peDomainSync: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Add/update domains for PE tagged organizations.'
+  },
   savedSearch: {
     type: 'fargate',
     isPassive: true,
