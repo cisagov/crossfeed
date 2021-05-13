@@ -170,8 +170,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
-    description:
-      'Add/update domains for PE tagged organizations.'
+    description: 'Add/update domains for PE tagged organizations.'
   },
   savedSearch: {
     type: 'fargate',
