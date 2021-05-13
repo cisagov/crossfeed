@@ -17,7 +17,7 @@ import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
 import { handler as hibp } from './tasks/hibp';
 import { handler as dnstwist } from './tasks/dnstwist';
-import { handler as peReport } from './tasks/peDomainSync';
+import { handler as peDomainSync } from './tasks/peDomainSync';
 import { SCAN_SCHEMA } from './api/scans';
 
 /**
