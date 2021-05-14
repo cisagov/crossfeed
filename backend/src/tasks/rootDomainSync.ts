@@ -6,7 +6,7 @@ import saveDomainsToDb from './helpers/saveDomainsToDb';
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
-  console.log('Adding organization', organizationName);
+  console.log('Syncing domains from', organizationName);
 
   const rootDomains = await getRootDomains(organizationId!);
 

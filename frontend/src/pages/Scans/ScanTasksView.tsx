@@ -179,7 +179,7 @@ export const ScanTasksView: React.FC = () => {
         'shodan',
         'dnstwist',
         'hibp',
-        'peDomainSync'
+        'rootDomainSync'
       ]),
       disableSortBy: true
     },
