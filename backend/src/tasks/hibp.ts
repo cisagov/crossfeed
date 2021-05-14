@@ -21,6 +21,9 @@ async function getIps(organizationId?: String): Promise<Domain[]> {
       org: organizationId
     });
   }
+  domains = domains.andWhere('domain.name LIKE :gov', {
+    gov: '%.gov'
+  });
   domains = domains.andWhere('domain.ipOnly=:bool', {
     bool: false
   });
