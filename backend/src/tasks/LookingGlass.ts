@@ -4,7 +4,6 @@ import {
   Vulnerability,
   connectToDatabase
 } from '../models';
-import getIps from './helpers/getIps';
 import { CommandOptions } from './ecs-client';
 import got from 'got';
 import { plainToClass } from 'class-transformer';
@@ -12,43 +11,20 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { exit } from 'process';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 
-async function getAuth() {
-  const results: any[] = await got
-    .post('https://delta.lookingglasscyber.com' + '/auth/login', {
-      json: {
-        params: {
-          username: process.env.LG_USERNAME,
-          password: process.env.LG_PASSWORD
-        }
-      },
-      headers: {
-        'Content-Type': 'application/json, application/transit+json',
-        Accept: 'application/json, application/transit+json',
-        'User-Agent': 'CISA-VulnerabilityManagement'
-      }
-    })
-    .json();
-  console.log(results);
-  return results;
-}
-
-async function POST(resource, token, modifier) {
+async function POST(resource, modifier) {
   const api = resource;
   const url = 'https://delta.lookingglasscyber.com' + api;
   const params = modifier;
-  // let h1 = {'Content-Type': 'application/json, application/transit+json', 'Accept': 'application/json, application/transit+json', 'x-lg-session': token, 'User-Agent': 'CISA-VulnerabilityManagement'}
   const h1 = {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + process.env.LG_API_KEY
   };
-  const results: any[] = await got
+  return got
     .post(url, {
       json: params,
       headers: h1
     })
     .json();
-  console.log(results);
-  return results;
 }
 
 async function getOrg(organizationId: string | undefined) {
@@ -67,15 +43,16 @@ async function getOrg(organizationId: string | undefined) {
   }
 }
 
-async function collectionByWorkspace(workspaceID, token) {
-  const resource = '/api/collections/get-collections-by-workspace';
-  const modifier = {
-    params: {
-      'workspace-id': workspaceID,
-      attributes: ['collection-id', 'name', 'tic-score', 'assigned-to']
-    }
-  };
-  const data = await POST(resource, token, modifier);
+async function collectionByWorkspace() {
+  const resource =
+    'https://delta.lookingglasscyber.com/api/v1/workspaces/' +
+    'NCATS POV' +
+    '/collections';
+
+  const data: object[] = await got(resource, {
+    headers: { Authorization: 'Bearer ' + process.env.LG_API_KEY }
+  }).json();
+
   return data;
 }
 
@@ -90,7 +67,7 @@ function ValidateIPaddress(ipaddress) {
   return false;
 }
 
-async function getThreatInfo(token, collectionID) {
+async function getThreatInfo(collectionID) {
   const resource = '/api/graph/query';
   const modifier = {
     query: [
@@ -103,7 +80,7 @@ async function getThreatInfo(token, collectionID) {
     limit: 100000,
     workspaceIds: []
   };
-  const data = await POST(resource, token, modifier);
+  const data = await POST(resource, modifier);
   return data;
 }
 
@@ -146,11 +123,6 @@ async function saveAndPullDomains(response, organizationId, scanId, Org) {
       org: organizationId
     });
   }
-  // if (scanId) {
-  //   pulledDomains = pulledDomains.andWhere('domain.discoveredBy=:scan', {
-  //     scan: scanId
-  //   });
-  // }
   const D = await pulledDomains.getMany();
   return D;
 }
@@ -159,30 +131,22 @@ export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName, scanId } = commandOptions;
 
   const Org = await getOrg(organizationId);
-  console.log(Org);
 
   console.log('Running lookingGlass on organization', organizationName);
-  const domainsWithIPs = await getIps(organizationId);
-  const results = await getAuth();
-  console.log('Authentication Results');
-  console.log(results);
-  const sessionToken: string = results['result']['e_session-key_s'];
 
-  const orgID = results['result']['e_org_z'];
-  const workspaceID = results['result']['e_user-default-workspace_z'];
-  const userID = results['result']['e_user_z'];
-  const collections = await collectionByWorkspace(workspaceID, sessionToken);
+  const collections: any = await collectionByWorkspace();
   const ipsAndDomains: string[] = [];
   const domains: Domain[] = [];
   const Vulns_list: any = [];
   const Vulnerabilities: Vulnerability[] = [];
-  for (const line of collections['result']) {
+
+  for (const line of collections) {
     //Match the organization to the LookingGlass Collection
     if (organizationName == line['name']) {
-      const collectionID = line['collection-id'];
+      const collectionID = line['id'];
       console.log(line['name']);
       //Query LookingGlass for the Threat info
-      const data = await getThreatInfo(sessionToken, collectionID);
+      const data: any = await getThreatInfo(collectionID);
       const responseDomains: Domain[] = await saveAndPullDomains(
         data,
         organizationId,
@@ -215,9 +179,9 @@ export const handler = async (commandOptions: CommandOptions) => {
           } else {
             val['vulnOrMal'] = 'Malware';
           }
+
           //if the Domain already exists and add this vuln to the associated vulnerability
           if (ipsAndDomains.includes(l['left']['name'])) {
-            console.log('Duplicate Value found');
             for (const Vuln of Vulns_list) {
               if (l['left']['name'] == Vuln['domain'].name) {
                 Vuln['structuredData']['lookingGlassData'].push(val);
@@ -226,7 +190,6 @@ export const handler = async (commandOptions: CommandOptions) => {
           }
           //if the Domain hasn't been used create a new Domain and a new Vulnerability
           else {
-            console.log('New Domain');
             for (const x of responseDomains) {
               if (x.name == l['left']['name']) {
                 const current_Domain = x;

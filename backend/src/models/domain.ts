@@ -46,7 +46,7 @@ export class Domain extends BaseEntity {
   })
   fromRootDomain: string;
 
-  /**Domain was created only using IPs */
+  /** Set to true if the domain only has an associated IP address, but not a domain name. In this case, the `name` field is set to the IP address. */
   @Column({
     nullable: true,
     default: false

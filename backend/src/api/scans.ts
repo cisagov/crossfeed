@@ -163,7 +163,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
-    description: 'Finds Vulnerabilities and Malware for given Agency'
+    description: 'Finds vulnerabilities and malware from the LookingGlass API'
   },
   savedSearch: {
     type: 'fargate',
