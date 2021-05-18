@@ -4,6 +4,8 @@ on:
   schedule:
     - cron:  '0 1 * * *' # every day at 1 AM
   workflow_dispatch:
+  push:
+    - security
 
 jobs:
   backend:
@@ -69,6 +71,28 @@ jobs:
         run: npm ci
       - name: Security
         run: npm audit
+      # - name: Create issue
+      #   if: failure()
+      #   uses: imjohnbo/issue-bot@v3.0
+      #   with:
+      #     labels: "vulnerabilities, docs"
+      #     title: "Vulnerabilities found in docs"
+      #     body: |
+      #       ### Agenda
+
+      #       - [ ] Start the recording
+      #       - [ ] Check-ins
+      #       - [ ] Discussion points
+      #       - [ ] Post the recording
+                    
+      #       ### Discussion Points
+      #       Add things to discuss below
+
+      #       - [Work this week](https://github.com/orgs/github/projects/3)
+      #     pinned: false
+      #     close-previous: false
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   backend_python:
     runs-on: ubuntu-latest
     defaults:
