@@ -40,7 +40,7 @@
     "classnames": "^2.2.6",
     "d3-scale": "^3.2.3",
     "dompurify": "^2.1.1",
-    "eslint": "^6.8.0",
+    "eslint": "^7.26.0",
     "eslint-config-prettier": "^6.12.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.2",
