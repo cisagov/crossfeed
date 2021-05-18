@@ -171,6 +171,12 @@ export const SCAN_SCHEMA: ScanSchema = {
     isPassive: true,
     global: true,
     description: 'Performs saved searches to update their search results'
+  },
+  peReport: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    description: 'Generates pdf report.'
   }
 };
 
