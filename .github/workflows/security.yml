@@ -71,28 +71,6 @@ jobs:
         run: npm ci
       - name: Security
         run: npm audit
-      # - name: Create issue
-      #   if: failure()
-      #   uses: imjohnbo/issue-bot@v3.0
-      #   with:
-      #     labels: "vulnerabilities, docs"
-      #     title: "Vulnerabilities found in docs"
-      #     body: |
-      #       ### Agenda
-
-      #       - [ ] Start the recording
-      #       - [ ] Check-ins
-      #       - [ ] Discussion points
-      #       - [ ] Post the recording
-                    
-      #       ### Discussion Points
-      #       Add things to discuss below
-
-      #       - [Work this week](https://github.com/orgs/github/projects/3)
-      #     pinned: false
-      #     close-previous: false
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   backend_python:
     runs-on: ubuntu-latest
     defaults:
@@ -100,10 +78,10 @@ jobs:
         working-directory: ./backend
     steps:
       - uses: actions/checkout@v2.3.4
-      - name: Set up Python 3.7
+      - name: Set up Python 3.8
         uses: actions/setup-python@v2.2.2
         with:
-          python-version: 3.7
+          python-version: 3.8
       - uses: actions/cache@v2.1.5
         with:
           path: ~/.cache/pip

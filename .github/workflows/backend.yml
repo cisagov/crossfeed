@@ -73,10 +73,10 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v2.3.4
-      - name: Set up Python 3.7
+      - name: Set up Python 3.8
         uses: actions/setup-python@v2.2.2
         with:
-          python-version: 3.7
+          python-version: 3.8
       - uses: actions/cache@v2.1.5
         with:
           path: ~/.cache/pip
