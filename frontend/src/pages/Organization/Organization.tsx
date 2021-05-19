@@ -281,10 +281,12 @@ export const Organization: React.FC = () => {
 
   const fetchScans = useCallback(async () => {
     try {
-      const { scans, schema } = await apiGet<{
+      const response = await apiGet<{
         scans: Scan[];
         schema: ScanSchema;
       }>('/granularScans/');
+      let { scans } = response;
+      const { schema } = response;
 
       if (user?.userType !== 'globalAdmin')
         scans = scans.filter(
