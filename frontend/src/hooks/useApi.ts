@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { API } from 'aws-amplify';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 
@@ -66,11 +66,13 @@ export const useApi = (onError?: OnError) => {
   );
 
   const api = {
-    apiGet: useCallback(apiMethod(API.get.bind(API), 'get'), [apiMethod]),
-    apiPost: useCallback(apiMethod(API.post.bind(API), 'post'), [apiMethod]),
-    apiDelete: useCallback(apiMethod(API.del.bind(API), 'del'), [apiMethod]),
-    apiPut: useCallback(apiMethod(API.put.bind(API), 'put'), [apiMethod]),
-    apiPatch: useCallback(apiMethod(API.patch.bind(API), 'patch'), [apiMethod])
+    apiGet: useMemo(() => apiMethod(API.get.bind(API), 'get'), [apiMethod]),
+    apiPost: useMemo(() => apiMethod(API.post.bind(API), 'post'), [apiMethod]),
+    apiDelete: useMemo(() => apiMethod(API.del.bind(API), 'del'), [apiMethod]),
+    apiPut: useMemo(() => apiMethod(API.put.bind(API), 'put'), [apiMethod]),
+    apiPatch: useMemo(() => apiMethod(API.patch.bind(API), 'patch'), [
+      apiMethod
+    ])
   };
 
   return {

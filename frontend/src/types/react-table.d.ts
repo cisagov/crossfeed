@@ -108,7 +108,7 @@ declare module 'react-table' {
       UseResizeColumnsColumnProps<D>,
       UseSortByColumnProps<D> {}
 
-  export interface Cell<D extends object = {}, V = any>
+  export interface Cell<D extends object = {}>
     extends UseGroupByCellProps<D>,
       UseRowStateCellProps<D> {}
 
