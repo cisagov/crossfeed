@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, testUser, testOrganization } from 'test-utils';
 import { Header } from '../Header';
-import { wait, getByTestId } from '@testing-library/react';
+import { wait } from '@testing-library/react';
 
 jest.mock('@elastic/react-search-ui', () => ({
   withSearch: () => (comp: any) => comp

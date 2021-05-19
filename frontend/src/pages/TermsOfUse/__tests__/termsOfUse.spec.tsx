@@ -30,7 +30,7 @@ afterAll(() => {
 const adminOnly = [
   /By creating a Crossfeed\s*administrator\s*account/,
   /You have authority to authorize scanning\/evaluation/,
-  /You are authorized to make the above certifications on your organization\’s behalf/
+  /You are authorized to make the above certifications on your organization’s behalf/
 ];
 
 it('matches admin snapshot', () => {

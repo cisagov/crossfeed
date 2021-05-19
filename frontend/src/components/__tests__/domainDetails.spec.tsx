@@ -1,7 +1,4 @@
 import { generateWebpageTree } from 'components/DomainDetails';
-import React from 'react';
-import { render, fireEvent, testUser, testOrganization } from 'test-utils';
-import { Header } from '../Header';
 
 describe('generateWebpageTree', () => {
   it('no path', () => {
