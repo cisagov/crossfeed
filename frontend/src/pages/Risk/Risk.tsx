@@ -130,8 +130,8 @@ const Risk: React.FC = (props) => {
         data={data as any}
         innerRadius={0.5}
         padAngle={0.7}
-        radialLabelsSkipAngle={10}
-        slicesLabelsSkipAngle={10}
+        arcLabelsSkipAngle={10}
+        arcLinkLabelsSkipAngle={10}
         colors={colors}
         margin={{
           left: 30,
