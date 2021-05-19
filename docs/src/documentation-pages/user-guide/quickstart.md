@@ -7,8 +7,7 @@ sidenav: user-guide
 
 Standard users of Crossfeed can only access the platform after being invited to
 an organization by another user. When invited, you will receive an email invite
-to a Crossfeed organization. You will then be prompted to create a user account
-with login.gov.
+to a Crossfeed organization. You will then be prompted to create a user account.
 
 ### Overview
 

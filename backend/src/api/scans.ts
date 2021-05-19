@@ -165,6 +165,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: false,
     description: 'Finds vulnerabilities and malware from the LookingGlass API'
   },
+  dnstwist: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Domain name permutation engine for detecting similar registered domains.'
+  },
   savedSearch: {
     type: 'fargate',
     isPassive: true,

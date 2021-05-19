@@ -198,9 +198,16 @@ variable ssm_user_pool_client_id {
   default = "/crossfeed/staging/USER_POOL_CLIENT_ID"
 }
 
-variable ses_support_email {
-  type    = string
-  default = "support@staging.crossfeed.cyber.dhs.gov"
+variable ses_support_email_sender {
+  type        = string
+  description = "Email address from which SES emails are sent"
+  default     = "noreply@staging.crossfeed.cyber.dhs.gov"
+}
+
+variable ses_support_email_replyto {
+  type        = string
+  description = "Email address set in the Reply-To header for SES emails"
+  default     = "support@staging.crossfeed.cyber.dhs.gov"
 }
 
 variable matomo_ecs_cluster_name {

@@ -42,14 +42,16 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
       }
     ).json();
 
-    const AddressResults = {};
-    const BreachResults = {};
-    const finalResults = {};
+
+  const AddressResults = {};
+  const BreachResults = {};
+  const finalResults = {};
 
     const shouldCountBreach = (breach) =>
       breach.DataClasses.indexOf('Passwords') > -1 &&
       breach.IsVerified === true &&
       breach.BreachDate > '2016-01-01';
+
 
     for (const email in results) {
       const filtered = (results[email] || []).filter((e) =>
@@ -61,6 +63,7 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
           if (!(breach in BreachResults)) {
             BreachResults[breach] = breachesDict[breach];
           }
+
         }
       }
     }
@@ -98,6 +101,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   for (const domain of domainsWithIPs) {
     console.log(domain.name);
     const results = await lookupEmails(breachesDict, domain);
+
     if (results) {
       console.log(
         `Got ${Object.keys(results['Emails']).length} emails for domain ${
@@ -123,6 +127,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         );
         await saveVulnerabilitiesToDb(vulns, false);
       }
+
     }
   }
 };

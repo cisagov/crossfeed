@@ -178,7 +178,8 @@ export const ScanTasksView: React.FC = () => {
         'intrigueIdent',
         'shodan',
         'hibp',
-        'lookingGlass'
+        'lookingGlass',
+        'dnstwist'
       ]),
       disableSortBy: true
     },

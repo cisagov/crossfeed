@@ -17,6 +17,7 @@ import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
 import { handler as hibp } from './tasks/hibp';
 import { handler as lookingGlass } from './tasks/LookingGlass';
+import { handler as dnstwist } from './tasks/dnstwist';
 import { SCAN_SCHEMA } from './api/scans';
 
 /**
@@ -47,6 +48,7 @@ async function main() {
     shodan,
     hibp,
     lookingGlass,
+    dnstwist,
     testProxy
   }[scanName || 'testProxy'];
   if (!scanFn) {

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { AuthForm } from 'components';
 import { Button } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
-import { AmplifyAuthenticator, AmplifySignUp, AmplifySelectMfaType } from '@aws-amplify/ui-react';
+import { AmplifyAuthenticator, AmplifySignUp, AmplifySelectMfaType, AmplifySignIn } from '@aws-amplify/ui-react';
 import { Translations, onAuthUIStateChange } from '@aws-amplify/ui-components';
 import { I18n } from "aws-amplify";
 
@@ -24,7 +24,7 @@ interface Errors extends Partial<FormData> {
   global?: string;
 }
 
-export const AuthLogin: React.FC = () => {
+export const AuthLogin: React.FC<{showSignUp?: boolean}> = ({showSignUp = false}) => {
   const { apiPost, refreshUser } = useAuthContext();
   const [errors, setErrors] = useState<Errors>({});
 
@@ -63,13 +63,14 @@ export const AuthLogin: React.FC = () => {
     }
   };
 
-  // console.error(AmplifyTotpSetup);
   if (process.env.REACT_APP_USE_COGNITO) {
     return (
     <AuthForm>
       <h1>Welcome to Crossfeed</h1>
       <AmplifyAuthenticator usernameAlias="email">
         <AmplifySelectMfaType MFATypes={{TOTP: true}} />
+        {/* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */}
+        <AmplifySignIn slot="sign-in" hideSignUp={!showSignUp && !(process.env.NODE_ENV === 'development')} />
         <AmplifySignUp
             slot="sign-up"
             formFields={[
