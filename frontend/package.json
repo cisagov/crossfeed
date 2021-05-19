@@ -44,6 +44,7 @@
     "dompurify": "^2.1.1",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^6.12.0",
+    "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.2",
     "file-saver": "^2.0.2",
@@ -76,7 +77,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
-    "lint": "eslint 'src/*.{ts,tsx,js,jsx}' && prettier .",
+    "lint": "eslint 'src/*.{ts,tsx,js,jsx}' && prettier . --check",
     "lint:fix": "eslint 'src/*.{ts,tsx,js,jsx}' --fix && prettier . --write",
     "typecheck": "tsc --noEmit",
     "postinstall": "npx npm-force-resolutions"
