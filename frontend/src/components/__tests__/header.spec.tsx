@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, testUser, testOrganization } from 'test-utils';
 import { Header } from '../Header';
-import { wait } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 
 jest.mock('@elastic/react-search-ui', () => ({
   withSearch: () => (comp: any) => comp
@@ -18,7 +18,7 @@ describe('Header component', () => {
     expect(queryByTestId('mobilenav')).not.toBeInTheDocument();
     expect(getByLabelText('toggle mobile menu')).toBeInTheDocument();
     fireEvent.click(getByLabelText('toggle mobile menu'));
-    await wait(() => {
+    await waitFor(() => {
       expect(getByTestId('mobilenav')).toBeInTheDocument();
     });
   });
