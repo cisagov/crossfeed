@@ -76,8 +76,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
-    "lint": "eslint 'src/*.{ts,tsx,js,jsx}'",
-    "lint:fix": "eslint 'src/*.{ts,tsx,js,jsx}' --fix",
+    "lint": "eslint 'src/*.{ts,tsx,js,jsx}' && prettier .",
+    "lint:fix": "eslint 'src/*.{ts,tsx,js,jsx}' --fix && prettier . --write",
     "typecheck": "tsc --noEmit",
     "postinstall": "npx npm-force-resolutions"
   },
