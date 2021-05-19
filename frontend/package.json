@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aws-amplify/api-graphql": "^2.0.0",
     "@aws-amplify/auth": "^3.4.4",
     "@aws-amplify/ui-components": "^0.8.4",
     "@aws-amplify/ui-react": "^0.2.21",
@@ -13,6 +14,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@nivo/bar": "^0.69.1",
+    "@nivo/core": "^0.69.0",
     "@nivo/pie": "^0.69.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.4",
