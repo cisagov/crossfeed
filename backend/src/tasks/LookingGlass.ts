@@ -11,20 +11,82 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { exit } from 'process';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 
-async function POST(resource, modifier) {
-  const api = resource;
-  const url = 'https://delta.lookingglasscyber.com' + api;
-  const params = modifier;
-  const h1 = {
-    'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + process.env.LG_API_KEY
-  };
-  return got
-    .post(url, {
-      json: params,
-      headers: h1
-    })
-    .json();
+interface LGCollectionsResponse {
+  children: any[];
+  createdAt: string;
+  createdBy: string;
+  id: string;
+  name: string;
+  ticScore: number;
+  updatedAt: string;
+  updatedBy: string;
+}
+
+interface LGThreatResponse {
+  totalHits: number;
+  results: {
+    firstSeen: number;
+    lastSeen: number;
+    sources: string[];
+    right: {
+      ticClassificationScores: number[];
+      threatId: string;
+      classifications: string[];
+      ticScore: number;
+      ticCriticality: number;
+      ticSourceScore: number;
+      ticObsInfluence: number;
+      ref: {
+        type: string;
+        id: string;
+      };
+      threatCategories: string[];
+      name: string;
+      type: string;
+      threatName: string;
+    };
+    left: {
+      collectionIds: string[];
+      classifications: string[];
+      ticScore: number;
+      owners: string[];
+      ref: {
+        type: string;
+        id: number;
+      };
+      name: string;
+      type: string;
+      threatNames: string[];
+      locations: {
+        city: string;
+        country: string;
+        region: string;
+        geoPoint: {
+          long: number;
+          lat: number;
+        };
+        countryName: string;
+        sources: string[];
+        country2Digit: string;
+        lastSeen: number;
+      }[];
+      ipv4: number;
+      asns: number[];
+      threatIds: string[];
+      cidrv4s: string[];
+    };
+    ref: {
+      type: string;
+      right: {
+        type: string;
+        id: string;
+      };
+      left: {
+        type: string;
+        id: string;
+      };
+    };
+  }[];
 }
 
 async function getOrg(organizationId: string | undefined) {
@@ -49,11 +111,9 @@ async function collectionByWorkspace() {
     'NCATS POV' +
     '/collections';
 
-  const data: object[] = await got(resource, {
+  return (await got(resource, {
     headers: { Authorization: 'Bearer ' + process.env.LG_API_KEY }
-  }).json();
-
-  return data;
+  }).json()) as LGCollectionsResponse[];
 }
 
 function ValidateIPaddress(ipaddress) {
@@ -68,7 +128,7 @@ function ValidateIPaddress(ipaddress) {
 }
 
 async function getThreatInfo(collectionID) {
-  const resource = '/api/graph/query';
+  const resource = 'https://delta.lookingglasscyber.com/api/graph/query';
   const modifier = {
     query: [
       'and',
@@ -80,8 +140,16 @@ async function getThreatInfo(collectionID) {
     limit: 100000,
     workspaceIds: []
   };
-  const data = await POST(resource, modifier);
-  return data;
+  const h1 = {
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer ' + process.env.LG_API_KEY
+  };
+  return (got
+    .post(resource, {
+      json: modifier,
+      headers: h1
+    })
+    .json() as unknown) as LGThreatResponse[];
 }
 
 async function saveAndPullDomains(response, organizationId, scanId, Org) {
@@ -134,7 +202,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   console.log('Running lookingGlass on organization', organizationName);
 
-  const collections: any = await collectionByWorkspace();
+  const collections: LGCollectionsResponse[] = await collectionByWorkspace();
   const ipsAndDomains: string[] = [];
   const domains: Domain[] = [];
   const Vulns_list: any = [];
@@ -146,7 +214,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       const collectionID = line['id'];
       console.log(line['name']);
       //Query LookingGlass for the Threat info
-      const data: any = await getThreatInfo(collectionID);
+      const data: LGThreatResponse[] = await getThreatInfo(collectionID);
       const responseDomains: Domain[] = await saveAndPullDomains(
         data,
         organizationId,
