@@ -281,7 +281,7 @@ export const Organization: React.FC = () => {
 
   const fetchScans = useCallback(async () => {
     try {
-      let { scans, schema } = await apiGet<{
+      const { scans, schema } = await apiGet<{
         scans: Scan[];
         schema: ScanSchema;
       }>('/granularScans/');
@@ -384,7 +384,7 @@ export const Organization: React.FC = () => {
 
   const onInviteUserSubmit = async () => {
     try {
-      let body = {
+      const body = {
         firstName: newUserValues.firstName,
         lastName: newUserValues.lastName,
         email: newUserValues.email,
@@ -394,7 +394,7 @@ export const Organization: React.FC = () => {
       const user: User = await apiPost('/users/', {
         body
       });
-      let newRole = user.roles[user.roles.length - 1];
+      const newRole = user.roles[user.roles.length - 1];
       newRole.user = user;
       if (userRoles.find((role) => role.user.id === user.id)) {
         setUserRoles(
@@ -467,7 +467,7 @@ export const Organization: React.FC = () => {
   if (!organization) return null;
 
   const views = [
-    <Paper className={classes.settingsWrapper}>
+    <Paper className={classes.settingsWrapper} key={0}>
       <Dialog
         open={dialog.open}
         onClose={() => setDialog({ open: false })}
@@ -616,7 +616,7 @@ export const Organization: React.FC = () => {
         </Button>
       </div>
     </Paper>,
-    <>
+    <React.Fragment key={1}>
       <Table<Role> columns={userRoleColumns} data={userRoles} />
       <Dialog
         open={dialog.open}
@@ -683,15 +683,15 @@ export const Organization: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </>,
-    <>
+    </React.Fragment>,
+    <React.Fragment key={2}>
       <OrganizationList parent={organization}></OrganizationList>
-    </>,
-    <>
+    </React.Fragment>,
+    <React.Fragment key={3}>
       <Table<Scan> columns={scanColumns} data={scans} fetchData={fetchScans} />
       <h2>Organization Scan History</h2>
       <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} />
-    </>
+    </React.Fragment>
   ];
 
   let navItems = [

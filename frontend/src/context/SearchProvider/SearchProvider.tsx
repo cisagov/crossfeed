@@ -59,7 +59,7 @@ export const SearchProvider: React.FC = ({ children }) => {
         sortDirection,
         sortField
       } = state;
-      let body: any = {
+      const body: any = {
         current,
         filters,
         resultsPerPage,

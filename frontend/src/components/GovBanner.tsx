@@ -102,7 +102,7 @@ export const GovBanner: React.FC = () => {
               className={clsx(classes.text, classes.btn, classes.btnExpand)}
               onClick={() => setExpanded((exp) => !exp)}
             >
-              Here's how you know{' '}
+              Here&apos;s how you know{' '}
               {expanded ? (
                 <ExpandLess fontSize="small" />
               ) : (

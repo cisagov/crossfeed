@@ -131,7 +131,7 @@ export const Users: React.FC = () => {
 
   const fetchUsers = useCallback(async () => {
     try {
-      let rows = await apiGet<User[]>('/users/');
+      const rows = await apiGet<User[]>('/users/');
       setUsers(rows);
     } catch (e) {
       console.error(e);
@@ -140,7 +140,7 @@ export const Users: React.FC = () => {
 
   const deleteRow = async (index: number) => {
     try {
-      let row = users[index];
+      const row = users[index];
       await apiDelete(`/users/${row.id}`);
       setUsers(users.filter((user) => user.id !== row.id));
     } catch (e) {
@@ -155,7 +155,7 @@ export const Users: React.FC = () => {
   const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
     try {
-      let body = {
+      const body = {
         firstName: values.firstName,
         lastName: values.lastName,
         email: values.email,
@@ -269,8 +269,8 @@ export const Users: React.FC = () => {
         fieldsToExport={['firstName', 'lastName', 'email', 'roles', 'userType']}
         onImport={async (results) => {
           // TODO: use a batch call here instead.
-          let createdUsers = [];
-          for (let result of results) {
+          const createdUsers = [];
+          for (const result of results) {
             const parsedRoles: {
               organization: string;
               role: string;

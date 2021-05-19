@@ -35,7 +35,7 @@ export const OrganizationList: React.FC<{
 
   const fetchOrganizations = useCallback(async () => {
     try {
-      let rows = await apiGet<Organization[]>('/organizations/');
+      const rows = await apiGet<Organization[]>('/organizations/');
       setOrganizations(rows);
     } catch (e) {
       console.error(e);
