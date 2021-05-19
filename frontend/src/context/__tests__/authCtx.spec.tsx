@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, getByText } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { testUser, testOrganization, wait, fireEvent } from 'test-utils';
 import { useAuthContext } from '../AuthContext';
 import { AuthContextProvider } from 'context/AuthContextProvider';
