@@ -1,1 +1,1 @@
-export * from "./Domains";
+export * from './Domains';

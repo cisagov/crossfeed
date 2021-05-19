@@ -61,7 +61,7 @@ it('renders additional info for administrators', () => {
     }
   });
   expect(getByText('ToU version v5-admin')).toBeInTheDocument();
-  adminOnly.forEach(copy => {
+  adminOnly.forEach((copy) => {
     expect(getByText(copy)).toBeInTheDocument();
   });
 });
@@ -74,7 +74,7 @@ it('renders less info for non-administrators', () => {
     }
   });
   expect(getByText('ToU version v5-user')).toBeInTheDocument();
-  adminOnly.forEach(copy => {
+  adminOnly.forEach((copy) => {
     expect(queryByText(copy)).not.toBeInTheDocument();
   });
 });

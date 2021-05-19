@@ -13,7 +13,7 @@ interface Props {
   onDeselect(value: string): void;
 }
 
-export const FacetFilter: React.FC<Props> = props => {
+export const FacetFilter: React.FC<Props> = (props) => {
   const classes = useStyles();
   const { options, selected, onSelect, onDeselect } = props;
 
@@ -33,14 +33,14 @@ export const FacetFilter: React.FC<Props> = props => {
     <>
       <FormGroup classes={{ root: classes.root }}>
         {/* <input className={classes.inp} placeholder="Filter" /> */}
-        {options.map(opt => (
+        {options.map((opt) => (
           <FormControlLabel
             classes={{ label: classes.label, root: classes.formControl }}
             key={opt.value}
             control={
               <Checkbox
                 checked={selected.includes(opt.value)}
-                onChange={e => handleChange(e, opt.value)}
+                onChange={(e) => handleChange(e, opt.value)}
               />
             }
             label={
@@ -56,7 +56,7 @@ export const FacetFilter: React.FC<Props> = props => {
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     paddingTop: 0,

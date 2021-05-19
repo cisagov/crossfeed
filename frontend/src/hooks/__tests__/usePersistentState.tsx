@@ -23,7 +23,7 @@ const TestComp: React.FC<TestCompProps> = ({
   return (
     <div>
       <div data-testid="state">{state}</div>
-      <button data-testid="setState" onClick={e => onclick(setState)}>
+      <button data-testid="setState" onClick={(e) => onclick(setState)}>
         btn
       </button>
     </div>

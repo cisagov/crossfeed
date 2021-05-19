@@ -36,7 +36,7 @@ export default (
           borderWidth: 1,
           marginTop: '0.5rem',
           minHeight: '2.5rem',
-          borderRadius: 0,
+          borderRadius: 0
         })
       }}
     />

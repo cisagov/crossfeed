@@ -23,9 +23,9 @@ export const MTable = <T extends object>(props: Props<T>) => {
   return (
     <Table {...instance.getTableProps} {...rest}>
       <TableHead classes={{ root: classes.head }}>
-        {instance.headerGroups.map(group => (
+        {instance.headerGroups.map((group) => (
           <TableRow {...group.getHeaderGroupProps()}>
-            {group.headers.map(column => (
+            {group.headers.map((column) => (
               <TableCell
                 {...column.getHeaderProps()}
                 classes={{ root: classes.cell }}
@@ -37,13 +37,13 @@ export const MTable = <T extends object>(props: Props<T>) => {
         ))}
       </TableHead>
       <TableBody {...instance.getTableBodyProps()}>
-        {instance.rows.map(row => {
+        {instance.rows.map((row) => {
           instance.prepareRow(row);
           const { key, ...rest } = row.getRowProps();
           return (
             <React.Fragment key={key}>
               <TableRow {...rest}>
-                {row.cells.map(cell => (
+                {row.cells.map((cell) => (
                   <TableCell
                     {...cell.getCellProps()}
                     classes={{ root: classes.cell }}
@@ -61,7 +61,7 @@ export const MTable = <T extends object>(props: Props<T>) => {
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   head: {
     backgroundColor: '#E8EAEC'
   },

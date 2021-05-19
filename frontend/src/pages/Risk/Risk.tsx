@@ -449,7 +449,7 @@ const Risk: React.FC = (props) => {
       if (vuln.title in latestVulnsGrouped)
         latestVulnsGrouped[vuln.title].count++;
       else {
-        latestVulnsGrouped[vuln.title] = { ...vuln, count: 1};
+        latestVulnsGrouped[vuln.title] = { ...vuln, count: 1 };
       }
     }
   }
@@ -488,12 +488,12 @@ const Risk: React.FC = (props) => {
 
   return (
     <div className={classes.root}>
-    {isLoading && (
-    <div className="cisa-crossfeed-loading">
+      {isLoading && (
+        <div className="cisa-crossfeed-loading">
           <div></div>
           <div></div>
-    </div>
-    )}
+        </div>
+      )}
       <p>
         <USWDSButton
           outline
