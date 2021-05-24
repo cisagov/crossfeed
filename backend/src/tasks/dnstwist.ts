@@ -9,10 +9,8 @@ async function runDNSTwist(domain: Domain) {
   console.log(domain.name);
   const child = spawnSync(
     'dnstwist',
-    ['-r', '--tld', './worker/common_tlds.dict', '-f', 'json', domain.name],
+    ['-r','-w', '--tld', './worker/common_tlds.dict', '-f', 'json', domain.name],
     {
-      cwd: process.cwd(),
-      env: process.env,
       stdio: 'pipe',
       encoding: 'utf-8'
     }
@@ -37,7 +35,6 @@ export const handler = async (commandOptions: CommandOptions) => {
   for (const domain of domainsWithIPs) {
     try {
       const results = await runDNSTwist(domain);
-
       if (Object.keys(results).length !== 0) {
         vulns.push(
           plainToClass(Vulnerability, {
@@ -52,7 +49,6 @@ export const handler = async (commandOptions: CommandOptions) => {
           })
         );
         await saveVulnerabilitiesToDb(vulns, false);
-        console.log(results);
       } else {
         continue;
       }
