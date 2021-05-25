@@ -117,9 +117,7 @@ async function collectionByWorkspace() {
 }
 
 function ValidateIPaddress(ipaddress) {
-  if (
-    /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/.test(ipaddress)
-  ) {
+  if (/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/.test(ipaddress)) {
     return true;
   }
   return false;

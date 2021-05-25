@@ -104,7 +104,6 @@ class ECSClient {
             `AWS_ACCESS_KEY_ID=${process.env.AWS_ACCESS_KEY_ID}`,
             `AWS_SECRET_ACCESS_KEY=${process.env.AWS_SECRET_ACCESS_KEY}`,
             `LG_API_KEY=${process.env.LG_API_KEY}`
-            
           ]
         } as any);
         await container.start();
