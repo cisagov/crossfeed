@@ -9,7 +9,7 @@ async function runDNSTwist(domain: Domain) {
   console.log(domain.name);
   const child = spawnSync(
     'dnstwist',
-    ['-r','-w', '--tld', './worker/common_tlds.dict', '-f', 'json', domain.name],
+    ['-w','-r', '--tld', './worker/common_tlds.dict', '-f', 'json', domain.name],
     {
       stdio: 'pipe',
       encoding: 'utf-8'
