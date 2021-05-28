@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '14'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -40,7 +40,7 @@ jobs:
         with:
           node-version: '15'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -62,7 +62,7 @@ jobs:
         with:
           node-version: '14'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -83,7 +83,7 @@ jobs:
         uses: actions/setup-python@v2.2.2
         with:
           python-version: 3.8
-      - uses: actions/cache@v2.1.5
+      - uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/pip
           key: pip-${{ hashFiles('**/requirements.txt') }}
