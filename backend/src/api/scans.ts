@@ -170,7 +170,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
-    description: 'Add domains from root domains by doing a single DNS lookup for each root domain.'
+    description:
+      'Creates domains from root domains by doing a single DNS lookup for each root domain.'
   },
   savedSearch: {
     type: 'fargate',
