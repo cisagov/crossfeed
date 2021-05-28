@@ -7,7 +7,7 @@ export const getExtendedOrg = (
   org: Organization | OrganizationTag | null,
   user: AuthUser | null
 ) => {
-  let current: CurrentOrganization | null =
+  const current: CurrentOrganization | null =
     org ?? user?.roles[0]?.organization ?? null;
   return current;
 };
@@ -25,7 +25,7 @@ export const getTouVersion = (maxRole: string) => {
 
 export const getUserMustSign = (user: AuthUser | null, touVersion: string) => {
   const approvedEmailAddresses = ['@cisa.dhs.gov', '@associates.cisa.dhs.gov'];
-  for (let email of approvedEmailAddresses) {
+  for (const email of approvedEmailAddresses) {
     if (user?.email.endsWith(email)) return false;
   }
   return Boolean(

@@ -11,7 +11,7 @@ const DropdownIndicator: React.FC<any> = (props) => {
   );
 };
 
-export default (
+const MultiSelect = (
   props: Props & {
     zIndex: number;
   }
@@ -36,9 +36,11 @@ export default (
           borderWidth: 1,
           marginTop: '0.5rem',
           minHeight: '2.5rem',
-          borderRadius: 0,
+          borderRadius: 0
         })
       }}
     />
   );
 };
+
+export default MultiSelect;

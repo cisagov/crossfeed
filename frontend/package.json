@@ -3,17 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aws-amplify/api-graphql": "^2.0.0",
     "@aws-amplify/auth": "^3.4.4",
     "@aws-amplify/ui-components": "^0.8.4",
     "@aws-amplify/ui-react": "^0.2.21",
     "@datapunt/matomo-tracker-react": "^0.2.1",
-    "@elastic/react-search-ui": "^1.4.1",
-    "@elastic/react-search-ui-views": "^1.4.1",
+    "@elastic/react-search-ui": "^1.5.1",
+    "@elastic/react-search-ui-views": "^1.5.1",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
-    "@nivo/bar": "^0.62.0",
-    "@nivo/pie": "^0.62.0",
+    "@nivo/bar": "^0.69.1",
+    "@nivo/core": "^0.69.0",
+    "@nivo/pie": "^0.69.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.4",
     "@testing-library/user-event": "^7.2.1",
@@ -40,12 +42,13 @@
     "classnames": "^2.2.6",
     "d3-scale": "^3.2.3",
     "dompurify": "^2.1.1",
-    "eslint": "^6.8.0",
+    "eslint": "^7.26.0",
     "eslint-config-prettier": "^6.12.0",
+    "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.2",
     "file-saver": "^2.0.2",
-    "jspdf": "^2.1.0",
+    "jspdf": "^2.3.1",
     "jwt-decode": "^2.2.0",
     "material-table": "^1.69.0",
     "papaparse": "^5.3.0",
@@ -56,10 +59,10 @@
     "react-dom": "^16.13.0",
     "react-icons": "^3.11.0",
     "react-lazylog": "^4.5.3",
-    "react-markdown": "^4.3.1",
+    "react-markdown": "^6.0.2",
     "react-media": "^1.10.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.4.3",
+    "react-scripts": "^4.0.3",
     "react-select": "^3.1.0",
     "react-simple-maps": "^2.1.2",
     "react-table": "^7.5.1",
@@ -74,10 +77,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
-    "lint": "eslint 'src/*.{ts,tsx,js,jsx}'",
-    "lint:fix": "eslint 'src/*.{ts,tsx,js,jsx}' --fix",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "typecheck": "tsc --noEmit",
-    "preinstall": "npx npm-force-resolutions"
+    "postinstall": "npx npm-force-resolutions"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -94,7 +97,9 @@
     ]
   },
   "resolutions": {
-    "yargs-parser": "18.1.2"
+    "yargs-parser": "18.1.2",
+    "postcss": "7.0.35",
+    "jspdf": "2.3.1"
   },
   "devDependencies": {
     "decamelize": "^5.0.0",

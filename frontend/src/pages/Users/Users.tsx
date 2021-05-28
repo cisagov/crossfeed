@@ -6,7 +6,7 @@ import {
   Label,
   ModalContainer,
   Overlay,
-  Modal,
+  Modal
 } from '@trussworks/react-uswds';
 import { Organization } from 'types';
 import { Table, ImportExport } from 'components';
@@ -70,7 +70,10 @@ export const Users: React.FC = () => {
     },
     {
       Header: 'Date ToU Signed',
-      accessor: ({ dateAcceptedTerms }) => dateAcceptedTerms ? `${formatDistanceToNow(parseISO(dateAcceptedTerms))} ago` : "None",
+      accessor: ({ dateAcceptedTerms }) =>
+        dateAcceptedTerms
+          ? `${formatDistanceToNow(parseISO(dateAcceptedTerms))} ago`
+          : 'None',
       width: 50,
       minWidth: 50,
       id: 'dateAcceptedTerms',
@@ -86,7 +89,10 @@ export const Users: React.FC = () => {
     },
     {
       Header: 'Last Logged In',
-      accessor: ({ lastLoggedIn }) => lastLoggedIn ? `${formatDistanceToNow(parseISO(lastLoggedIn))} ago` : "None",
+      accessor: ({ lastLoggedIn }) =>
+        lastLoggedIn
+          ? `${formatDistanceToNow(parseISO(lastLoggedIn))} ago`
+          : 'None',
       width: 50,
       minWidth: 50,
       id: 'lastLoggedIn',
@@ -125,7 +131,7 @@ export const Users: React.FC = () => {
 
   const fetchUsers = useCallback(async () => {
     try {
-      let rows = await apiGet<User[]>('/users/');
+      const rows = await apiGet<User[]>('/users/');
       setUsers(rows);
     } catch (e) {
       console.error(e);
@@ -134,7 +140,7 @@ export const Users: React.FC = () => {
 
   const deleteRow = async (index: number) => {
     try {
-      let row = users[index];
+      const row = users[index];
       await apiDelete(`/users/${row.id}`);
       setUsers(users.filter((user) => user.id !== row.id));
     } catch (e) {
@@ -149,7 +155,7 @@ export const Users: React.FC = () => {
   const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
     try {
-      let body = {
+      const body = {
         firstName: values.firstName,
         lastName: values.lastName,
         email: values.email,
@@ -228,28 +234,28 @@ export const Users: React.FC = () => {
           onChange={onTextChange}
         />
         <Label htmlFor="userType">User Type</Label>
-          <RadioGroup
-            aria-label="User Type"
-            name="userType"
-            value={values.userType}
-            onChange={onTextChange}
-          >
-            <FormControlLabel
-              value="standard"
-              control={<Radio color="primary" />}
-              label="Standard"
-            />
-            <FormControlLabel
-              value="globalView"
-              control={<Radio color="primary" />}
-              label="Global View"
-            />
-            <FormControlLabel
-              value="globalAdmin"
-              control={<Radio color="primary" />}
-              label="Global Administrator"
-            />
-          </RadioGroup>
+        <RadioGroup
+          aria-label="User Type"
+          name="userType"
+          value={values.userType}
+          onChange={onTextChange}
+        >
+          <FormControlLabel
+            value="standard"
+            control={<Radio color="primary" />}
+            label="Standard"
+          />
+          <FormControlLabel
+            value="globalView"
+            control={<Radio color="primary" />}
+            label="Global View"
+          />
+          <FormControlLabel
+            value="globalAdmin"
+            control={<Radio color="primary" />}
+            label="Global Administrator"
+          />
+        </RadioGroup>
         <br></br>
         <Button type="submit">Invite User</Button>
       </form>
@@ -263,8 +269,8 @@ export const Users: React.FC = () => {
         fieldsToExport={['firstName', 'lastName', 'email', 'roles', 'userType']}
         onImport={async (results) => {
           // TODO: use a batch call here instead.
-          let createdUsers = [];
-          for (let result of results) {
+          const createdUsers = [];
+          for (const result of results) {
             const parsedRoles: {
               organization: string;
               role: string;
