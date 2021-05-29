@@ -15,8 +15,8 @@ All requests sent from CISA's instance of Crossfeed (except for requests to thir
 Mozilla/5.0 (compatible; Crossfeed/1.0; +https://docs.crossfeed.cyber.dhs.gov/scans/)
 ```
 
-All requests are also signed in order to allow verification that the request was actually sent from CISA Crossfeed. To verify a request, please note down the request URL, "Date" header and the "Signature" header, and send them to <a href="mailto:support@crossfeed.cyber.dhs.gov">support@crossfeed.cyber.dhs.gov</a>.
+All requests are also signed in order to allow verification that the request was actually sent from CISA Crossfeed. To verify a request, please note down the request URL, "Date" header and the "Signature" header, and send them to <a href="mailto:vulnerability@cisa.dhs.gov">vulnerability@cisa.dhs.gov</a>.
 
 ### Who can I contact with further questions?
 
-Please contact <a href="mailto:support@crossfeed.cyber.dhs.gov">support@crossfeed.cyber.dhs.gov</a>.
+Please contact <a href="mailto:vulnerability@cisa.dhs.gov">vulnerability@cisa.dhs.gov</a>.

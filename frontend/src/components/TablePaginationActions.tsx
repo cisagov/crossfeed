@@ -79,7 +79,7 @@ export const TablePaginationActions = (props: Props) => {
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexShrink: 0,
     marginLeft: theme.spacing(2.5)

@@ -1,6 +1,6 @@
-import React, { PropsWithChildren } from "react";
-import { TableInstance, Row } from "react-table";
-import classes from "./styles.module.scss";
+import React, { PropsWithChildren } from 'react';
+import { TableInstance, Row } from 'react-table';
+import classes from './styles.module.scss';
 
 interface TableBodyProps<T extends object> extends TableInstance<T> {
   renderExpanded?: (row: Row<T>) => JSX.Element;
@@ -11,7 +11,7 @@ export const TableBody = <T extends object>({
   prepareRow,
   visibleColumns,
   getTableBodyProps,
-  renderExpanded,
+  renderExpanded
 }: PropsWithChildren<TableBodyProps<T>>) => {
   return (
     <tbody {...getTableBodyProps()}>
@@ -25,9 +25,7 @@ export const TableBody = <T extends object>({
                 const { key, ...rest } = cell.getCellProps();
                 return (
                   <td key={key} {...rest} className={classes.td}>
-                    <div style={{maxHeight: 50}}>
-                    {cell.render("Cell")}
-                    </div>
+                    <div style={{ maxHeight: 50 }}>{cell.render('Cell')}</div>
                   </td>
                 );
               })}

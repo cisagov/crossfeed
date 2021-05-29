@@ -133,6 +133,11 @@ variable ssm_shodan_api_key {
   default = "/crossfeed/staging/SHODAN_API_KEY"
 }
 
+variable ssm_hibp_api_key {
+  type    = string
+  default = "/crossfeed/staging/HIBP_API_KEY"
+}
+
 variable cloudfront_name {
   type    = string
   default = "Crossfeed Staging Frontend"
@@ -193,9 +198,16 @@ variable ssm_user_pool_client_id {
   default = "/crossfeed/staging/USER_POOL_CLIENT_ID"
 }
 
-variable ses_support_email {
-  type    = string
-  default = "support@staging.crossfeed.cyber.dhs.gov"
+variable ses_support_email_sender {
+  type        = string
+  description = "Email address from which SES emails are sent"
+  default     = "noreply@staging.crossfeed.cyber.dhs.gov"
+}
+
+variable ses_support_email_replyto {
+  type        = string
+  description = "Email address set in the Reply-To header for SES emails"
+  default     = "support@staging.crossfeed.cyber.dhs.gov"
 }
 
 variable matomo_ecs_cluster_name {

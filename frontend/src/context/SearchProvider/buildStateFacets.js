@@ -7,7 +7,7 @@ function getValueFacet(aggregations, fieldName) {
       {
         field: fieldName,
         type: 'value',
-        data: value.buckets.map(bucket => ({
+        data: value.buckets.map((bucket) => ({
           // Boolean values and date values require using `key_as_string`
           value: bucket.key_as_string || bucket.key,
           count: bucket.doc_count

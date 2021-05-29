@@ -31,7 +31,7 @@ export const createColumns: CreateColumns = () => [
   },
   {
     Header: 'Organization',
-    accessor: e => e.organization.name,
+    accessor: (e) => e.organization.name,
     id: 'organizationName',
     Filter: ColumnFilter
   },

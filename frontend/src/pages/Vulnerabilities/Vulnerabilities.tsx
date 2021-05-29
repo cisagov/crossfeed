@@ -1,32 +1,20 @@
-import React, { useState, useCallback, useRef } from 'react';
-import {
-  TableInstance,
-  Filters,
-  SortingRule,
-  CellProps,
-  Column
-} from 'react-table';
+import React, { useState, useCallback, useRef, useMemo } from 'react';
+import { TableInstance, Filters, SortingRule } from 'react-table';
 import { Query } from 'types';
 import { useAuthContext } from 'context';
-import { Table, Paginator, ColumnFilter, selectFilter } from 'components';
+import { Table, Paginator } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import { Dropdown } from '@trussworks/react-uswds';
-import { Link } from 'react-router-dom';
-import { differenceInCalendarDays, parseISO } from 'date-fns';
-import { FaExternalLinkAlt } from 'react-icons/fa';
 import { makeStyles } from '@material-ui/core';
 import { Subnav } from 'components';
 import { parse } from 'query-string';
-import { getSeverityColor } from 'pages/Risk/Risk';
+import { createColumns, createGroupedColumns } from './columns';
 
 export interface ApiResponse {
   result: Vulnerability[];
   count: number;
   url?: string;
 }
-
-const extLink = <FaExternalLinkAlt style={{ width: 12 }}></FaExternalLinkAlt>;
 
 const PAGE_SIZE = 15;
 
@@ -38,7 +26,12 @@ export const stateMap: { [key: string]: string } = {
   remediated: 'Remediated'
 };
 
-export const Vulnerabilities: React.FC = () => {
+export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
+  groupBy = undefined
+}: {
+  children?: React.ReactNode;
+  groupBy?: string;
+}) => {
   const {
     currentOrganization,
     apiPost,
@@ -51,183 +44,47 @@ export const Vulnerabilities: React.FC = () => {
   const listClasses = useStyles();
   const [noResults, setNoResults] = useState(false);
 
-  const columns: Column<Vulnerability>[] = [
-    {
-      Header: 'Vulnerability',
-      accessor: 'title',
-      Cell: ({ value, row }: CellProps<Vulnerability>) =>
-        row.original.cve ? (
-          <a
-            href={`https://nvd.nist.gov/vuln/detail/${row.original.cve}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {value} {extLink}
-          </a>
-        ) : (
-          <p>{row.original.title}</p>
-        ),
-      width: 800,
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'Severity',
-      id: 'severity',
-      accessor: ({ severity, substate }) => (
-        <span
-          style={{
-            borderBottom: `6px solid ${getSeverityColor({
-              id: severity ?? ''
-            })}`,
-            width: '80px'
-          }}
-          // className={substate === 'unconfirmed' ? classes.severity : undefined}
-        >
-          {severity}
-        </span>
-      ),
-      width: 100,
-      Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
-    },
-    {
-      Header: 'Domain',
-      id: 'domain',
-      accessor: ({ domain }) => (
-        <Link to={`/inventory/domain/${domain.id}`}>{domain?.name}</Link>
-      ),
-      width: 800,
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'Product',
-      id: 'cpe',
-      accessor: ({ cpe, service }) => {
-        const product =
-          service &&
-          service.products.find(
-            (product) => cpe && product.cpe && cpe.includes(product.cpe)
-          );
-        if (product)
-          return product.name + (product.version ? ' ' + product.version : '');
-        else return cpe;
-      },
-      width: 100,
-      Filter: ColumnFilter
-    },
-    {
-      Header: 'Days Open',
-      id: 'createdAt',
-      accessor: ({ createdAt, actions }) => {
-        // Calculates the total number of days a vulnerability has been open
-        let daysOpen = 0;
-        let lastOpenDate = createdAt;
-        let lastState = 'open';
-        actions.reverse();
-        for (const action of actions) {
-          if (action.state === 'closed' && lastState === 'open') {
-            daysOpen += differenceInCalendarDays(
-              parseISO(action.date),
-              parseISO(lastOpenDate)
-            );
-            lastState = 'closed';
-          } else if (action.state === 'open' && lastState === 'closed') {
-            lastOpenDate = action.date;
-            lastState = 'open';
+  const updateVulnerability = useCallback(
+    async (index: number, body: { [key: string]: string }) => {
+      try {
+        const res = await apiPut<Vulnerability>(
+          '/vulnerabilities/' + vulnerabilities[index].id,
+          {
+            body: body
           }
-        }
-        if (lastState === 'open') {
-          daysOpen += differenceInCalendarDays(
-            new Date(),
-            parseISO(lastOpenDate)
-          );
-        }
-        return daysOpen;
-      },
-      disableFilters: true
+        );
+        const vulnCopy = [...vulnerabilities];
+        vulnCopy[index].state = res.state;
+        vulnCopy[index].substate = res.substate;
+        vulnCopy[index].actions = res.actions;
+        setVulnerabilities(vulnCopy);
+      } catch (e) {
+        console.error(e);
+      }
     },
-    {
-      Header: 'Status',
-      id: 'state',
-      width: 100,
-      maxWidth: 200,
-      accessor: 'state',
-      Filter: selectFilter([
-        'open',
-        'open (unconfirmed)',
-        'open (exploitable)',
-        'closed',
-        'closed (false positive)',
-        'closed (accepted risk)',
-        'closed (remediated)'
-      ]),
-      Cell: ({ row }: CellProps<Vulnerability>) => (
-        <Dropdown
-          id="state-dropdown"
-          name="state-dropdown"
-          onChange={(e) => {
-            updateVulnerability(row.index, {
-              substate: e.target.value
-            });
-          }}
-          value={row.original.substate}
-          style={{ display: 'inline-block', width: '200px' }}
-        >
-          <option value="unconfirmed">Open (Unconfirmed)</option>
-          <option value="exploitable">Open (Exploitable)</option>
-          <option value="false-positive">Closed (False Positive)</option>
-          <option value="accepted-risk">Closed (Accepted Risk)</option>
-          <option value="remediated">Closed (Remediated)</option>
-        </Dropdown>
-      )
-    },
-    {
-      Header: 'Details',
-      Cell: ({ row }: CellProps<Vulnerability>) => (
-        <Link
-          to={`/inventory/vulnerability/${row.original.id}`}
-          style={{
-            fontSize: '14px',
-            cursor: 'pointer',
-            color: '#484D51',
-            textDecoration: 'none'
-          }}
-        >
-          DETAILS
-        </Link>
-      ),
-      disableFilters: true
-    }
-  ];
-
-  const updateVulnerability = async (
-    index: number,
-    body: { [key: string]: string }
-  ) => {
-    try {
-      const res = await apiPut<Vulnerability>(
-        '/vulnerabilities/' + vulnerabilities[index].id,
-        {
-          body: body
-        }
-      );
-      const vulnCopy = [...vulnerabilities];
-      vulnCopy[index].state = res.state;
-      vulnCopy[index].substate = res.substate;
-      vulnCopy[index].actions = res.actions;
-      setVulnerabilities(vulnCopy);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+    [setVulnerabilities, apiPut, vulnerabilities]
+  );
+  const columns = useMemo(() => createColumns(updateVulnerability), [
+    updateVulnerability
+  ]);
+  const groupedColumns = useMemo(() => createGroupedColumns(), []);
 
   const vulnerabilitiesSearch = useCallback(
-    async (
-      filters: Filters<Vulnerability>,
-      sort: SortingRule<Vulnerability>[],
-      page: number,
-      pageSize: number = PAGE_SIZE,
-      doExport = false
-    ): Promise<ApiResponse | undefined> => {
+    async ({
+      filters,
+      sort,
+      page,
+      pageSize = PAGE_SIZE,
+      doExport = false,
+      groupBy = undefined
+    }: {
+      filters: Filters<Vulnerability>;
+      sort: SortingRule<Vulnerability>[];
+      page: number;
+      pageSize?: number;
+      doExport?: boolean;
+      groupBy?: string;
+    }): Promise<ApiResponse | undefined> => {
       try {
         const tableFilters: {
           [key: string]: string | undefined;
@@ -263,7 +120,8 @@ export const Vulnerabilities: React.FC = () => {
               sort: sort[0]?.id ?? 'createdAt',
               order: sort[0]?.desc ? 'DESC' : 'ASC',
               filters: tableFilters,
-              pageSize
+              pageSize,
+              groupBy
             }
           }
         );
@@ -277,29 +135,30 @@ export const Vulnerabilities: React.FC = () => {
 
   const fetchVulnerabilities = useCallback(
     async (query: Query<Vulnerability>) => {
-      const resp = await vulnerabilitiesSearch(
-        query.filters,
-        query.sort,
-        query.page
-      );
+      const resp = await vulnerabilitiesSearch({
+        filters: query.filters,
+        sort: query.sort,
+        page: query.page,
+        groupBy
+      });
       if (!resp) return;
       const { result, count } = resp;
       setVulnerabilities(result);
       setTotalResults(count);
       setNoResults(count === 0);
     },
-    [vulnerabilitiesSearch]
+    [vulnerabilitiesSearch, groupBy]
   );
 
   const fetchVulnerabilitiesExport = async (): Promise<string> => {
     const { sortBy, filters } = tableRef.current?.state ?? {};
-    const { url } = (await vulnerabilitiesSearch(
-      filters!,
-      sortBy!,
-      1,
-      -1,
-      true
-    )) as ApiResponse;
+    const { url } = (await vulnerabilitiesSearch({
+      filters: filters!,
+      sort: sortBy!,
+      page: 1,
+      pageSize: -1,
+      doExport: true
+    })) as ApiResponse;
     return url!;
   };
 
@@ -348,7 +207,7 @@ export const Vulnerabilities: React.FC = () => {
         <div className={classes.root}>
           <Table<Vulnerability>
             renderPagination={renderPagination}
-            columns={columns}
+            columns={groupBy ? groupedColumns : columns}
             data={vulnerabilities}
             pageCount={Math.ceil(totalResults / PAGE_SIZE)}
             fetchData={fetchVulnerabilities}

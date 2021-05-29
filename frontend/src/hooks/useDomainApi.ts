@@ -30,21 +30,24 @@ export const useDomainApi = (showAll?: boolean) => {
           {}
         );
 
-        if (!showAll && currentOrganization) {
-          if ('rootDomains' in currentOrganization)
-            tableFilters['organization'] = currentOrganization.id;
-          else tableFilters['tag'] = currentOrganization.id;
-        }
+      if (!showAll && currentOrganization) {
+        if ('rootDomains' in currentOrganization)
+          tableFilters['organization'] = currentOrganization.id;
+        else tableFilters['tag'] = currentOrganization.id;
+      }
 
-      const { result, count, url } = await apiPost<ApiResponse>(doExport ? '/domain/export': '/domain/search', {
-        body: {
-          pageSize,
-          page,
-          sort: sort[0]?.id ?? 'name',
-          order: sort[0]?.desc ? 'DESC' : 'ASC',
-          filters: tableFilters
+      const { result, count, url } = await apiPost<ApiResponse>(
+        doExport ? '/domain/export' : '/domain/search',
+        {
+          body: {
+            pageSize,
+            page,
+            sort: sort[0]?.id ?? 'name',
+            order: sort[0]?.desc ? 'DESC' : 'ASC',
+            filters: tableFilters
+          }
         }
-      });
+      );
 
       return {
         domains: result,
