@@ -144,7 +144,7 @@ variable ssm_lg_api_key {
 }
 
 variable ssm_lg_workspace_name {
-  type = string
+  type    = string
   default = "/crossfeed/staging/LG_WORKSPACE_NAME"
 }
 
