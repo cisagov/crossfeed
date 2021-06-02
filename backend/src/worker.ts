@@ -16,7 +16,7 @@ import { handler as webscraper } from './tasks/webscraper';
 import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
 import { handler as hibp } from './tasks/hibp';
-import { handler as lookingGlass } from './tasks/LookingGlass';
+import { handler as lookingGlass } from './tasks/lookingGlass';
 import { handler as dnstwist } from './tasks/dnstwist';
 import { SCAN_SCHEMA } from './api/scans';
 
