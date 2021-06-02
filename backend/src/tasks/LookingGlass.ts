@@ -89,38 +89,18 @@ interface LGThreatResponse {
   }[];
 }
 
-async function getOrg(organizationId: string | undefined) {
-  await connectToDatabase();
-  if (typeof organizationId === 'string') {
-    const organization = await Organization.findOne(organizationId);
-    if (organization) {
-      return organization;
-    } else {
-      console.log('No organization found');
-      exit;
-    }
-  } else {
-    console.log('No OrganizationId provided');
-    exit;
-  }
-}
-
-async function collectionByWorkspace() {
+async function getCollectionForCurrentWorkspace() {
   const resource =
     'https://delta.lookingglasscyber.com/api/v1/workspaces/' +
-    'NCATS POV' +
+    process.env.LG_WORKSPACE_NAME +
     '/collections';
-
   return (await got(resource, {
     headers: { Authorization: 'Bearer ' + process.env.LG_API_KEY }
   }).json()) as LGCollectionsResponse[];
 }
 
-function ValidateIPaddress(ipaddress) {
-  if (/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/.test(ipaddress)) {
-    return true;
-  }
-  return false;
+function validateIPAddress(ipAddress) {
+  return /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/.test(ipAddress);
 }
 
 async function getThreatInfo(collectionID) {
@@ -136,42 +116,42 @@ async function getThreatInfo(collectionID) {
     limit: 100000,
     workspaceIds: []
   };
-  const h1 = {
-    'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + process.env.LG_API_KEY
-  };
+
   return (got
     .post(resource, {
       json: modifier,
-      headers: h1
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + process.env.LG_API_KEY
+      }
     })
     .json() as unknown) as LGThreatResponse[];
 }
 
-async function saveAndPullDomains(response, organizationId, scanId, Org) {
+async function saveAndPullDomains(response, organizationId, scanId) {
   const domains: Domain[] = [];
   const data = response;
-  for (const l of data['results']) {
-    if (ValidateIPaddress(l['left']['name'])) {
-      const current_Domain = plainToClass(Domain, {
-        name: l['left']['name'],
-        ip: l['left']['name'],
+  for (const l of data.results) {
+    if (validateIPAddress(l.left.name)) {
+      const currentDomain = plainToClass(Domain, {
+        name: l.left.name,
+        ip: l.left.name,
         organization: { id: organizationId },
-        fromRootDomain: Org['rootDomains'][0],
+        fromRootDomain: '',
         ipOnly: true,
         discoveredBy: { id: scanId }
       });
-      domains.push(current_Domain);
+      domains.push(currentDomain);
     } else {
-      const current_Domain = plainToClass(Domain, {
-        name: l['left']['name'],
-        ip: l['left']['name'],
+      const currentDomain = plainToClass(Domain, {
+        name: l.left.name,
+        ip: l.left.name,
         organization: { id: organizationId },
-        fromRootDomain: Org['rootDomains'][0],
+        fromRootDomain: '',
         ipOnly: false,
         discoveredBy: { id: scanId }
       });
-      domains.push(current_Domain);
+      domains.push(currentDomain);
     }
   }
   await saveDomainsToDb(domains);
@@ -182,104 +162,94 @@ async function saveAndPullDomains(response, organizationId, scanId, Org) {
     .leftJoinAndSelect('domain.organization', 'organization')
     .andWhere('ip IS NOT NULL');
 
-  if (organizationId) {
-    pulledDomains = pulledDomains.andWhere('domain.organization=:org', {
-      org: organizationId
-    });
-  }
-  const D = await pulledDomains.getMany();
-  return D;
+  pulledDomains = pulledDomains.andWhere('domain.organization=:org', {
+    org: organizationId
+  });
+
+  return pulledDomains.getMany();
 }
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName, scanId } = commandOptions;
 
-  const Org = await getOrg(organizationId);
-
   console.log('Running lookingGlass on organization', organizationName);
 
-  const collections: LGCollectionsResponse[] = await collectionByWorkspace();
+  const collections: LGCollectionsResponse[] = await getCollectionForCurrentWorkspace();
   const ipsAndDomains: string[] = [];
-  const domains: Domain[] = [];
-  const Vulns_list: any = [];
-  const Vulnerabilities: Vulnerability[] = [];
+  const vulnerabilities: Vulnerability[] = [];
 
   for (const line of collections) {
-    //Match the organization to the LookingGlass Collection
-    if (organizationName == line['name']) {
-      const collectionID = line['id'];
-      console.log(line['name']);
-      //Query LookingGlass for the Threat info
+    // Match the organization to the LookingGlass Collection
+    if (organizationName === line.name) {
+      const collectionID = line.id;
+      console.log(line.name);
+      // Query LookingGlass for the Threat info
       const data: LGThreatResponse[] = await getThreatInfo(collectionID);
       const responseDomains: Domain[] = await saveAndPullDomains(
         data,
         organizationId,
-        scanId,
-        Org
+        scanId
       );
       for (const l of data['results']) {
-        //Create a dictionary of relevant fields from the API request
-        if (typeof Org === 'object') {
-          const val = {
-            firstSeen: new Date(l['firstSeen']),
-            lastSeen: new Date(l['lastSeen']),
-            sources: l['sources'],
-            ref_type: l['ref']['type'],
-            ref_right_type: l['ref']['right']['type'],
-            ref_right_id: l['ref']['right']['id'],
-            ref_left_type: l['ref']['left']['type'],
-            ref_left_id: l['ref']['right']['id'],
+        // Create a dictionary of relevant fields from the API request
 
-            right_ticScore: l['right']['ticScore'],
-            right_classifications: l['right']['classifications'],
-            right_name: l['right']['name'],
+        const val = {
+          firstSeen: new Date(l.firstSeen),
+          lastSeen: new Date(l.lastSeen),
+          sources: l.sources,
+          ref_type: l.ref.type,
+          ref_right_type: l.ref.right.type,
+          ref_right_id: l.ref.right.id,
+          ref_left_type: l.ref.left.type,
+          ref_left_id: l.ref.left.id,
 
-            left_type: l['left']['type'],
-            left_ticScore: l['left']['ticScore'],
-            left_name: l['left']['name']
-          };
-          if (l['right']['classifications'][0] == 'Vulnerable Service') {
-            val['vulnOrMal'] = 'Vulnerability';
-          } else {
-            val['vulnOrMal'] = 'Malware';
-          }
+          right_ticScore: l.right.ticScore,
+          right_classifications: l.right.classifications,
+          right_name: l.right.name,
 
-          //if the Domain already exists and add this vuln to the associated vulnerability
-          if (ipsAndDomains.includes(l['left']['name'])) {
-            for (const Vuln of Vulns_list) {
-              if (l['left']['name'] == Vuln['domain'].name) {
-                Vuln['structuredData']['lookingGlassData'].push(val);
-              }
+          left_type: l.left.type,
+          left_ticScore: l.left.ticScore,
+          left_name: l.left.name
+        };
+        if (l.right.classifications[0] === 'Vulnerable Service') {
+          val['vulnOrMal'] = 'Vulnerability';
+        } else {
+          val['vulnOrMal'] = 'Malware';
+        }
+
+        // If we've already seen this domain, add this vuln to the associated
+        if (ipsAndDomains.includes(l.left.name)) {
+          for (const Vuln of vulnerabilities) {
+            if (l.left.name === Vuln.domain.name) {
+              Vuln.structuredData['lookingGlassData'].push(val);
             }
-          }
-          //if the Domain hasn't been used create a new Domain and a new Vulnerability
-          else {
-            for (const x of responseDomains) {
-              if (x.name == l['left']['name']) {
-                const current_Domain = x;
-                const V = {
-                  domain: current_Domain,
-                  lastSeen: new Date(Date.now()),
-                  title: 'Looking Glass Data',
-                  state: 'open',
-                  source: 'lookingGlass',
-                  needsPopulation: false,
-                  structuredData: {
-                    lookingGlassData: [val]
-                  },
-                  description: `These are Vulnerabilities and Malware found by LookingGlass for ${organizationName}`
-                };
-                Vulns_list.push(V);
-              }
-            }
-            ipsAndDomains.push(l['left']['name']);
           }
         }
+        // If we haven't seen this domain yet, create a new Domain and a new Vulnerability
+        else {
+          for (const domain of responseDomains) {
+            if (domain.name === l.left.name) {
+              const currentDomain = domain;
+              const vulnerability = {
+                domain: currentDomain,
+                lastSeen: new Date(Date.now()),
+                title: 'Looking Glass Data',
+                state: 'open',
+                source: 'lookingGlass',
+                needsPopulation: false,
+                structuredData: {
+                  lookingGlassData: [val]
+                },
+                description: `Vulnerabilities and malware found by LookingGlass.`
+              };
+              vulnerabilities.push(plainToClass(Vulnerability, vulnerability));
+            }
+          }
+          ipsAndDomains.push(l.left.name);
+        }
       }
-      for (const v of Vulns_list) {
-        Vulnerabilities.push(plainToClass(Vulnerability, v));
-      }
-      await saveVulnerabilitiesToDb(Vulnerabilities, false);
+
+      await saveVulnerabilitiesToDb(vulnerabilities, false);
       console.log('Vulnerabilities Saved to Db');
     }
   }
