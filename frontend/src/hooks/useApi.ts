@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { API } from 'aws-amplify';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 
@@ -41,21 +41,21 @@ export const useApi = (onError?: OnError) => {
       path: string,
       init: any = {}
     ) => {
-      const {showLoading = true, ...rest} = init;
+      const { showLoading = true, ...rest } = init;
       try {
         trackEvent({
-          category: "apiMethod",
+          category: 'apiMethod',
           action: methodName,
           name: path,
           documentTitle: document.title
-        })
-        showLoading && setRequestCount(cnt => cnt + 1);
+        });
+        showLoading && setRequestCount((cnt) => cnt + 1);
         const options = await prepareInit(rest);
         const result = await method('crossfeed', path, options);
-        showLoading && setRequestCount(cnt => cnt - 1);
+        showLoading && setRequestCount((cnt) => cnt - 1);
         return result as T;
       } catch (e) {
-        showLoading && setRequestCount(cnt => cnt - 1);
+        showLoading && setRequestCount((cnt) => cnt - 1);
         onError && onError(e);
         throw e;
       }
@@ -66,11 +66,13 @@ export const useApi = (onError?: OnError) => {
   );
 
   const api = {
-    apiGet: useCallback(apiMethod(API.get.bind(API), "get"), [apiMethod]),
-    apiPost: useCallback(apiMethod(API.post.bind(API), "post"), [apiMethod]),
-    apiDelete: useCallback(apiMethod(API.del.bind(API), "del"), [apiMethod]),
-    apiPut: useCallback(apiMethod(API.put.bind(API), "put"), [apiMethod]),
-    apiPatch: useCallback(apiMethod(API.patch.bind(API), "patch"), [apiMethod])
+    apiGet: useMemo(() => apiMethod(API.get.bind(API), 'get'), [apiMethod]),
+    apiPost: useMemo(() => apiMethod(API.post.bind(API), 'post'), [apiMethod]),
+    apiDelete: useMemo(() => apiMethod(API.del.bind(API), 'del'), [apiMethod]),
+    apiPut: useMemo(() => apiMethod(API.put.bind(API), 'put'), [apiMethod]),
+    apiPatch: useMemo(() => apiMethod(API.patch.bind(API), 'patch'), [
+      apiMethod
+    ])
   };
 
   return {

@@ -22,6 +22,8 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
     }
   ).json();
 
+  const AddressResults = {};
+  const BreachResults = {};
   const finalResults = {};
 
   const shouldCountBreach = (breach) =>
@@ -34,10 +36,16 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
       shouldCountBreach(breachesDict[e])
     );
     if (filtered.length > 0) {
-      finalResults[email + '@' + domain.name] = filtered;
+      AddressResults[email + '@' + domain.name] = filtered;
+      for (const breach of filtered) {
+        if (!(breach in BreachResults)) {
+          BreachResults[breach] = breachesDict[breach];
+        }
+      }
     }
   }
-
+  finalResults['Emails'] = AddressResults;
+  finalResults['Breaches'] = BreachResults;
   return finalResults;
 }
 
@@ -66,10 +74,12 @@ export const handler = async (commandOptions: CommandOptions) => {
   for (const domain of domainsWithIPs) {
     const results = await lookupEmails(breachesDict, domain);
     console.log(
-      `Got ${Object.keys(results).length} emails for domain ${domain.name}`
+      `Got ${Object.keys(results['Emails']).length} emails for domain ${
+        domain.name
+      }`
     );
 
-    if (Object.keys(results).length !== 0) {
+    if (Object.keys(results['Emails']).length !== 0) {
       vulns.push(
         plainToClass(Vulnerability, {
           domain: domain,
@@ -78,12 +88,16 @@ export const handler = async (commandOptions: CommandOptions) => {
           state: 'open',
           source: 'hibp',
           needsPopulation: false,
-          structuredData: { emails: results },
+          structuredData: {
+            emails: results['Emails'],
+            breaches: results['Breaches']
+          },
           description: `Emails associated with ${domain.name} have been exposed in a breach.`
         })
       );
       await saveVulnerabilitiesToDb(vulns, false);
-      console.log(results);
+      console.log(results['Emails']);
+      console.log(results['Breaches']);
     }
   }
 };

@@ -8,12 +8,12 @@ interface Props extends PopoverProps {
   }[];
 }
 
-export const AutoCompleteResults: React.FC<Props> = props => {
+export const AutoCompleteResults: React.FC<Props> = (props) => {
   const { values, ...rest } = props;
 
   return (
     <Popover {...rest}>
-      {values.map(value => (
+      {values.map((value) => (
         <MenuItem key={value.id.raw}>{value.text.raw}</MenuItem>
       ))}
     </Popover>

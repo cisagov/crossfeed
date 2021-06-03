@@ -1,9 +1,5 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
-import {
-  TableInstance,
-  Filters,
-  SortingRule,
-} from 'react-table';
+import { TableInstance, Filters, SortingRule } from 'react-table';
 import { Query } from 'types';
 import { useAuthContext } from 'context';
 import { Table, Paginator } from 'components';
@@ -30,7 +26,12 @@ export const stateMap: { [key: string]: string } = {
   remediated: 'Remediated'
 };
 
-export const Vulnerabilities: React.FC<{groupBy?: string}> = ({ groupBy = undefined }: { children?: React.ReactNode, groupBy?: string}) => {
+export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
+  groupBy = undefined
+}: {
+  children?: React.ReactNode;
+  groupBy?: string;
+}) => {
   const {
     currentOrganization,
     apiPost,
@@ -43,40 +44,46 @@ export const Vulnerabilities: React.FC<{groupBy?: string}> = ({ groupBy = undefi
   const listClasses = useStyles();
   const [noResults, setNoResults] = useState(false);
 
-  const updateVulnerability = useCallback(async (
-    index: number,
-    body: { [key: string]: string }
-  ) => {
-    try {
-      const res = await apiPut<Vulnerability>(
-        '/vulnerabilities/' + vulnerabilities[index].id,
-        {
-          body: body
-        }
-      );
-      const vulnCopy = [...vulnerabilities];
-      vulnCopy[index].state = res.state;
-      vulnCopy[index].substate = res.substate;
-      vulnCopy[index].actions = res.actions;
-      setVulnerabilities(vulnCopy);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [setVulnerabilities, apiPut, vulnerabilities]);
-  const columns = useMemo(() => createColumns(updateVulnerability), [updateVulnerability]);
+  const updateVulnerability = useCallback(
+    async (index: number, body: { [key: string]: string }) => {
+      try {
+        const res = await apiPut<Vulnerability>(
+          '/vulnerabilities/' + vulnerabilities[index].id,
+          {
+            body: body
+          }
+        );
+        const vulnCopy = [...vulnerabilities];
+        vulnCopy[index].state = res.state;
+        vulnCopy[index].substate = res.substate;
+        vulnCopy[index].actions = res.actions;
+        setVulnerabilities(vulnCopy);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [setVulnerabilities, apiPut, vulnerabilities]
+  );
+  const columns = useMemo(() => createColumns(updateVulnerability), [
+    updateVulnerability
+  ]);
   const groupedColumns = useMemo(() => createGroupedColumns(), []);
-
 
   const vulnerabilitiesSearch = useCallback(
     async ({
-      filters, sort, page, pageSize  = PAGE_SIZE, doExport  = false, groupBy  = undefined
+      filters,
+      sort,
+      page,
+      pageSize = PAGE_SIZE,
+      doExport = false,
+      groupBy = undefined
     }: {
-      filters: Filters<Vulnerability>,
-      sort: SortingRule<Vulnerability>[],
-      page: number,
-      pageSize?: number,
-      doExport?: boolean,
-      groupBy?: string,
+      filters: Filters<Vulnerability>;
+      sort: SortingRule<Vulnerability>[];
+      page: number;
+      pageSize?: number;
+      doExport?: boolean;
+      groupBy?: string;
     }): Promise<ApiResponse | undefined> => {
       try {
         const tableFilters: {
@@ -200,7 +207,7 @@ export const Vulnerabilities: React.FC<{groupBy?: string}> = ({ groupBy = undefi
         <div className={classes.root}>
           <Table<Vulnerability>
             renderPagination={renderPagination}
-            columns={groupBy ? groupedColumns: columns}
+            columns={groupBy ? groupedColumns : columns}
             data={vulnerabilities}
             pageCount={Math.ceil(totalResults / PAGE_SIZE)}
             fetchData={fetchVulnerabilities}

@@ -127,13 +127,6 @@ module.exports = {
       resolve: `gatsby-transformer-remark`,
       options: {
         plugins: [
-          {
-            resolve: 'gatsby-remark-embed-markdown',
-            options: {
-              // Example code links are relative to this dir.
-              directory: `${__dirname}/src/documentation-pages`,
-            },
-          },
           `gatsby-remark-autolink-headers`,
           {
             resolve: `gatsby-remark-prismjs`,

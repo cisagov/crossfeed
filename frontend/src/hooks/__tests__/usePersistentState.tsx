@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePersistentState } from 'hooks';
-import { render, mocked, fireEvent, wait } from 'test-utils';
+import { render, mocked, fireEvent, waitFor } from 'test-utils';
 
 jest.spyOn(Storage.prototype, 'setItem');
 const setItemMock = mocked(localStorage.setItem);
@@ -23,7 +23,7 @@ const TestComp: React.FC<TestCompProps> = ({
   return (
     <div>
       <div data-testid="state">{state}</div>
-      <button data-testid="setState" onClick={e => onclick(setState)}>
+      <button data-testid="setState" onClick={(e) => onclick(setState)}>
         btn
       </button>
     </div>
@@ -73,10 +73,10 @@ it('updates localStorage on call to setState', async () => {
   expect(setItemMock).toHaveBeenCalledTimes(1);
   expect(setItemMock).toHaveBeenCalledWith('testkey', JSON.stringify('zxcv'));
   fireEvent.click(getByTestId('setState'));
-  await wait(() => {
+  await waitFor(() => {
     expect(getByTestId('state')).toHaveTextContent('newval');
   });
-  await wait(() => {
+  await waitFor(() => {
     expect(setItemMock).toHaveBeenCalledTimes(2);
     expect(setItemMock).toHaveBeenCalledWith(
       'testkey',

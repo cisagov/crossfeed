@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, getByText } from '@testing-library/react';
-import { testUser, testOrganization, wait, fireEvent } from 'test-utils';
+import { render } from '@testing-library/react';
+import { testUser, testOrganization, waitFor, fireEvent } from 'test-utils';
 import { useAuthContext } from '../AuthContext';
 import { AuthContextProvider } from 'context/AuthContextProvider';
 
@@ -68,7 +68,7 @@ const renderLoggedIn = async (user?: any, args?: Omit<Props, 'onLogin'>) => {
   mockedApi.apiGet.mockResolvedValue(user ?? testUser);
   const { getByTestId, ...rest } = render(<TestComp onLogin={cb} {...args} />);
   fireEvent.click(getByTestId('login'));
-  await wait(() => {
+  await waitFor(() => {
     expect(getByTestId('user')).toHaveTextContent(
       JSON.stringify(user ?? testUser)
     );
@@ -91,7 +91,7 @@ it('parses extendedOrg for provided organization', async () => {
   const { getByTestId } = await renderLoggedIn(testUser, { onSetOrg: orgCb });
   expect(getByTestId('org')).toHaveTextContent(JSON.stringify(null));
   fireEvent.click(getByTestId('setOrg'));
-  await wait(() => {
+  await waitFor(() => {
     expect(getByTestId('org')).toHaveTextContent(
       JSON.stringify({
         ...testOrganization
