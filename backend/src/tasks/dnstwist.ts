@@ -1,4 +1,4 @@
-import { Domain, Vulnerability } from '../models';
+import { connectToDatabase, Domain, Vulnerability } from '../models';
 import getIps from './helpers/getIps';
 import { CommandOptions } from './ecs-client';
 import { plainToClass } from 'class-transformer';
@@ -9,21 +9,13 @@ async function runDNSTwist(domain: Domain) {
   console.log(domain.name);
   const child = spawnSync(
     'dnstwist',
-    [
-      '-w',
-      '-r',
-      '--tld',
-      './worker/common_tlds.dict',
-      '-f',
-      'json',
-      domain.name
-    ],
+    ['-r', '--tld', './worker/common_tlds.dict', '-f', 'json', domain.name],
     {
       stdio: 'pipe',
       encoding: 'utf-8'
     }
   );
-  const savedOutput = String(child.stdout);
+  const savedOutput = child.stdout;
   const finalResults = JSON.parse(savedOutput);
   console.log(
     `Got ${Object.keys(finalResults).length} similar domains for domain ${
@@ -36,6 +28,8 @@ async function runDNSTwist(domain: Domain) {
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
+  await connectToDatabase;
+  const date = new Date(Date.now());
   console.log('Running dnstwist on organization', organizationName);
   const domainsWithIPs = await getIps(organizationId);
 
@@ -43,6 +37,33 @@ export const handler = async (commandOptions: CommandOptions) => {
   for (const domain of domainsWithIPs) {
     try {
       const results = await runDNSTwist(domain);
+      const existingVulns = await Vulnerability.find({
+        domain: { id: domain.id },
+        source: 'dnstwist'
+      });
+      let existingDomains: object[] = [];
+      const newDomainNames: String[] = [];
+      if (existingVulns.length > 0) {
+        existingDomains = existingVulns[0].structuredData['domains'];
+      }
+      for (const newDomain of results) {
+        newDomain['date-observed'] = date;
+        newDomainNames.push(newDomain['domain-name']);
+        
+        if (!existingDomains) {
+          existingDomains = [newDomain];
+        // else if dnstwist domain has already been added
+        } else if (existingDomains.some((oldDomain) => oldDomain['domain-name'] === newDomain['domain-name'])) {
+          continue;
+        } else {
+          existingDomains.push(newDomain);
+        }
+      }
+      //filter out any domains that no longer exist
+      const finalResults = existingDomains.filter((domain) =>
+        newDomainNames.includes(domain['domain-name'])
+      );
+
       if (Object.keys(results).length !== 0) {
         vulns.push(
           plainToClass(Vulnerability, {
@@ -52,7 +73,7 @@ export const handler = async (commandOptions: CommandOptions) => {
             state: 'open',
             source: 'dnstwist',
             needsPopulation: false,
-            structuredData: { domains: results },
+            structuredData: { domains: finalResults },
             description: `Registered domains similar to ${domain.name}.`
           })
         );

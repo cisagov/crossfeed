@@ -28,25 +28,19 @@ describe('dnstwist', () => {
                 {
                     "fuzzer": "Homoglyph",
                     "domain-name": "test-domain.one",
-                    "dns-a": ["21.22.23.24"],
-                    "whois-created": "2020-07-23",
-                    "whois-registrar": "Sample1, Inc."
+                    "dns-a": ["21.22.23.24"]
                 },
                 {
                     "fuzzer": "Original",
                     "domain-name": "test-domain.two",
                     "dns-a": ["01.02.03.04"],
-                    "dns-mx": ["localhost"],
-                    "whois-created": "2021-07-23",
-                    "whois-registrar": "Sample2, Inc."
+                    "dns-mx": ["localhost"]
                 },
                 {
                     "fuzzer": "tls",
                     "domain-name": "test-domain.three",
                     "dns-a": ["10.11.12.13"],
-                    "dns-ns": ["example.link"],
-                    "whois-created": "2022-07-23",
-                    "whois-registrar": "Sample3, Inc."
+                    "dns-ns": ["example.link"]
                 }
             ]`,
       stderr: ''
@@ -96,12 +90,6 @@ describe('dnstwist', () => {
   });
 
   test('creates vulnerability', async () => {
-    const organization = await Organization.create({
-      name: 'test-' + Math.random(),
-      rootDomains: ['test-' + Math.random()],
-      ipBlocks: [],
-      isPassive: false
-    }).save();
     const name = 'test-' + Math.random();
     const domain = await Domain.create({
       name,
@@ -130,24 +118,154 @@ describe('dnstwist', () => {
           fuzzer: 'Homoglyph',
           'domain-name': 'test-domain.one',
           'dns-a': ['21.22.23.24'],
-          'whois-created': '2020-07-23',
-          'whois-registrar': 'Sample1, Inc.'
+          "date-observed": "2019-04-22T10:20:30.000Z"
         },
         {
           fuzzer: 'Original',
           'domain-name': 'test-domain.two',
           'dns-a': ['01.02.03.04'],
           'dns-mx': ['localhost'],
-          'whois-created': '2021-07-23',
-          'whois-registrar': 'Sample2, Inc.'
+          "date-observed": "2019-04-22T10:20:30.000Z"
         },
         {
           fuzzer: 'tls',
           'domain-name': 'test-domain.three',
           'dns-a': ['10.11.12.13'],
           'dns-ns': ['example.link'],
-          'whois-created': '2022-07-23',
-          'whois-registrar': 'Sample3, Inc.'
+          "date-observed": "2019-04-22T10:20:30.000Z"
+        }
+      ]
+    };
+    expect(vuln[0].structuredData).toEqual(results);
+  });
+  test('adds new domains to existing dnstwist vulnerabilty and doesnt update the date of the existing one', async () => {
+    
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      ip: '0.0.0.0',
+      organization
+    }).save();
+    //represents the result of an older dnstwist run
+    await Vulnerability.create({
+      source: 'dnstwist',
+      domain,
+      title: 'DNSTwist Domains',
+      structuredData: {
+        domains: [
+          {
+            fuzzer: 'Homoglyph',
+            'domain-name': 'test-domain.one',
+            'dns-a': ['21.22.23.24'],
+            'date-observed': '2018-04-22T10:20:30.000Z'
+          }
+        ]
+      }
+    }).save();
+    await dnstwist({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: scan.id,
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vuln = await Vulnerability.find({
+      domain: domain
+    });
+    expect(vuln[0].title).toEqual('DNSTwist Domains');
+    expect(vuln).toHaveLength(1);
+    expect(vuln[0].source).toEqual('dnstwist');
+    const results = {
+      domains: [
+        {
+          fuzzer: 'Homoglyph',
+          'domain-name': 'test-domain.one',
+          'dns-a': ['21.22.23.24'],
+          "date-observed": "2018-04-22T10:20:30.000Z"
+        },
+        {
+          fuzzer: 'Original',
+          'domain-name': 'test-domain.two',
+          'dns-a': ['01.02.03.04'],
+          'dns-mx': ['localhost'],
+          "date-observed": "2019-04-22T10:20:30.000Z"
+        },
+        {
+          fuzzer: 'tls',
+          'domain-name': 'test-domain.three',
+          'dns-a': ['10.11.12.13'],
+          'dns-ns': ['example.link'],
+          "date-observed": "2019-04-22T10:20:30.000Z"
+        }
+      ]
+    };
+    expect(vuln[0].structuredData).toEqual(results);
+  });
+  test('removes dnstwist domain that no longer exists', async () => {
+    
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      ip: '0.0.0.0',
+      organization
+    }).save();
+    await Vulnerability.create({
+      source: 'dnstwist',
+      domain,
+      title: 'DNSTwist Domains',
+      structuredData: {
+        domains: [
+          {
+            fuzzer: 'Homoglyph',
+            'domain-name': 'test-domain.one',
+            'dns-a': ['21.22.23.24'],
+            'date-observed': '2018-04-22T10:20:30.000Z'
+          },
+          {
+            fuzzer: 'Homoglyph',
+            'domain-name': 'old.test-domain',
+            'dns-a': ['21.22.23.24'],
+            'date-observed': '2018-04-22T10:20:30.000Z'
+          }
+        ]
+      }
+    }).save();
+    await dnstwist({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: scan.id,
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const vuln = await Vulnerability.find({
+      domain: domain
+    });
+    expect(vuln[0].title).toEqual('DNSTwist Domains');
+    expect(vuln).toHaveLength(1);
+    expect(vuln[0].source).toEqual('dnstwist');
+    const results = {
+      domains: [
+        {
+          fuzzer: 'Homoglyph',
+          'domain-name': 'test-domain.one',
+          'dns-a': ['21.22.23.24'],
+          "date-observed": "2018-04-22T10:20:30.000Z"
+        },
+        {
+          fuzzer: 'Original',
+          'domain-name': 'test-domain.two',
+          'dns-a': ['01.02.03.04'],
+          'dns-mx': ['localhost'],
+          "date-observed": "2019-04-22T10:20:30.000Z"
+        },
+        {
+          fuzzer: 'tls',
+          'domain-name': 'test-domain.three',
+          'dns-a': ['10.11.12.13'],
+          'dns-ns': ['example.link'],
+          "date-observed": "2019-04-22T10:20:30.000Z"
         }
       ]
     };
