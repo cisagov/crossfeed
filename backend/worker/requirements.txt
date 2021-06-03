@@ -5,5 +5,4 @@ cryptography==2.9
 pytest==6.0.1
 scrapy==2.3.0
 dnstwist==20201228
-whois==0.9.7
 dnspython==2.1.0

@@ -118,28 +118,27 @@ describe('dnstwist', () => {
           fuzzer: 'Homoglyph',
           'domain-name': 'test-domain.one',
           'dns-a': ['21.22.23.24'],
-          "date-observed": "2019-04-22T10:20:30.000Z"
+          'date-observed': '2019-04-22T10:20:30.000Z'
         },
         {
           fuzzer: 'Original',
           'domain-name': 'test-domain.two',
           'dns-a': ['01.02.03.04'],
           'dns-mx': ['localhost'],
-          "date-observed": "2019-04-22T10:20:30.000Z"
+          'date-observed': '2019-04-22T10:20:30.000Z'
         },
         {
           fuzzer: 'tls',
           'domain-name': 'test-domain.three',
           'dns-a': ['10.11.12.13'],
           'dns-ns': ['example.link'],
-          "date-observed": "2019-04-22T10:20:30.000Z"
+          'date-observed': '2019-04-22T10:20:30.000Z'
         }
       ]
     };
     expect(vuln[0].structuredData).toEqual(results);
   });
   test('adds new domains to existing dnstwist vulnerabilty and doesnt update the date of the existing one', async () => {
-    
     const name = 'test-' + Math.random();
     const domain = await Domain.create({
       name,
@@ -182,28 +181,27 @@ describe('dnstwist', () => {
           fuzzer: 'Homoglyph',
           'domain-name': 'test-domain.one',
           'dns-a': ['21.22.23.24'],
-          "date-observed": "2018-04-22T10:20:30.000Z"
+          'date-observed': '2018-04-22T10:20:30.000Z'
         },
         {
           fuzzer: 'Original',
           'domain-name': 'test-domain.two',
           'dns-a': ['01.02.03.04'],
           'dns-mx': ['localhost'],
-          "date-observed": "2019-04-22T10:20:30.000Z"
+          'date-observed': '2019-04-22T10:20:30.000Z'
         },
         {
           fuzzer: 'tls',
           'domain-name': 'test-domain.three',
           'dns-a': ['10.11.12.13'],
           'dns-ns': ['example.link'],
-          "date-observed": "2019-04-22T10:20:30.000Z"
+          'date-observed': '2019-04-22T10:20:30.000Z'
         }
       ]
     };
     expect(vuln[0].structuredData).toEqual(results);
   });
   test('removes dnstwist domain that no longer exists', async () => {
-    
     const name = 'test-' + Math.random();
     const domain = await Domain.create({
       name,
@@ -251,21 +249,21 @@ describe('dnstwist', () => {
           fuzzer: 'Homoglyph',
           'domain-name': 'test-domain.one',
           'dns-a': ['21.22.23.24'],
-          "date-observed": "2018-04-22T10:20:30.000Z"
+          'date-observed': '2018-04-22T10:20:30.000Z'
         },
         {
           fuzzer: 'Original',
           'domain-name': 'test-domain.two',
           'dns-a': ['01.02.03.04'],
           'dns-mx': ['localhost'],
-          "date-observed": "2019-04-22T10:20:30.000Z"
+          'date-observed': '2019-04-22T10:20:30.000Z'
         },
         {
           fuzzer: 'tls',
           'domain-name': 'test-domain.three',
           'dns-a': ['10.11.12.13'],
           'dns-ns': ['example.link'],
-          "date-observed": "2019-04-22T10:20:30.000Z"
+          'date-observed': '2019-04-22T10:20:30.000Z'
         }
       ]
     };
