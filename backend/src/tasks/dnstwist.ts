@@ -49,11 +49,15 @@ export const handler = async (commandOptions: CommandOptions) => {
       for (const newDomain of results) {
         newDomain['date-observed'] = date;
         newDomainNames.push(newDomain['domain-name']);
-        
+
         if (!existingDomains) {
           existingDomains = [newDomain];
-        // else if dnstwist domain has already been added
-        } else if (existingDomains.some((oldDomain) => oldDomain['domain-name'] === newDomain['domain-name'])) {
+          // else if dnstwist domain has already been added
+        } else if (
+          existingDomains.some(
+            (oldDomain) => oldDomain['domain-name'] === newDomain['domain-name']
+          )
+        ) {
           continue;
         } else {
           existingDomains.push(newDomain);
