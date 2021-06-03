@@ -130,8 +130,8 @@ const Risk: React.FC = (props) => {
         data={data as any}
         innerRadius={0.5}
         padAngle={0.7}
-        radialLabelsSkipAngle={10}
-        slicesLabelsSkipAngle={10}
+        arcLabelsSkipAngle={10}
+        arcLinkLabelsSkipAngle={10}
         colors={colors}
         margin={{
           left: 30,
@@ -159,17 +159,17 @@ const Risk: React.FC = (props) => {
     type: string;
     longXValues?: boolean;
   }) => {
-    let keys = xLabels;
+    const keys = xLabels;
     let dataVal: object[];
     if (type === 'ports') {
       dataVal = data.map((e) => ({ ...e, [xLabels[0]]: e.value })) as any;
     } else {
       // Separate count by severity
-      let domainToSevMap: any = {};
-      for (let point of data) {
-        let split = point.id.split('|');
-        let domain = split[0];
-        let severity = split[1];
+      const domainToSevMap: any = {};
+      for (const point of data) {
+        const split = point.id.split('|');
+        const domain = split[0];
+        const severity = split[1];
         if (!(domain in domainToSevMap)) domainToSevMap[domain] = {};
         domainToSevMap[domain][severity] = point.value;
       }
@@ -180,7 +180,7 @@ const Risk: React.FC = (props) => {
         }))
         .sort((a, b) => {
           let diff = 0;
-          for (var label of xLabels) {
+          for (const label of xLabels) {
             diff += (label in b ? b[label] : 0) - (label in a ? a[label] : 0);
           }
           return diff;
@@ -449,7 +449,7 @@ const Risk: React.FC = (props) => {
       if (vuln.title in latestVulnsGrouped)
         latestVulnsGrouped[vuln.title].count++;
       else {
-        latestVulnsGrouped[vuln.title] = { ...vuln, count: 1};
+        latestVulnsGrouped[vuln.title] = { ...vuln, count: 1 };
       }
     }
   }
@@ -488,12 +488,12 @@ const Risk: React.FC = (props) => {
 
   return (
     <div className={classes.root}>
-    {isLoading && (
-    <div className="cisa-crossfeed-loading">
+      {isLoading && (
+        <div className="cisa-crossfeed-loading">
           <div></div>
           <div></div>
-    </div>
-    )}
+        </div>
+      )}
       <p>
         <USWDSButton
           outline

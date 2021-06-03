@@ -13,7 +13,7 @@ export const Organizations: React.FC = () => {
 
   const fetchOrganizations = useCallback(async () => {
     try {
-      let rows = await apiGet<Organization[]>('/organizations/');
+      const rows = await apiGet<Organization[]>('/organizations/');
       setOrganizations(rows);
     } catch (e) {
       console.error(e);
@@ -44,8 +44,8 @@ export const Organizations: React.FC = () => {
               ]}
               onImport={async (results) => {
                 // TODO: use a batch call here instead.
-                let createdOrganizations = [];
-                for (let result of results) {
+                const createdOrganizations = [];
+                for (const result of results) {
                   createdOrganizations.push(
                     await apiPost('/organizations/', {
                       body: {

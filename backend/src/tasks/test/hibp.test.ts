@@ -352,6 +352,99 @@ describe('hibp', () => {
           testEmail_2: ['Breach_2'],
           testEmail_3: ['Breach_3'],
           testEmail_4: ['Breach_4']
+        },
+        breaches: {
+          breach_1: {
+            Name: 'Breach_1',
+            Title: 'Breach_1',
+            Domain: 'Breach_1.com',
+            BreachDate: '2017-02-01',
+            AddedDate: '2017-10-26T23:35:45Z',
+            ModifiedDate: '2017-12-10T21:44:27Z',
+            PwnCount: 8393093,
+            Description: 'Mock Breach number 1',
+            LogoPath:
+              'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_1.png',
+            DataClasses: [
+              'Email addresses',
+              'IP addresses',
+              'Names',
+              'Passwords'
+            ],
+            IsVerified: true,
+            IsFabricated: false,
+            IsSensitive: false,
+            IsRetired: false,
+            IsSpamList: false
+          },
+          Breach_2: {
+            Name: 'Breach_2',
+            Title: 'Breach_2',
+            Domain: 'Breach_2.com',
+            BreachDate: '2020-03-22',
+            AddedDate: '2020-11-15T00:59:50Z',
+            ModifiedDate: '2020-11-15T01:07:10Z',
+            PwnCount: 8661578,
+            Description: 'Mock Breach number 2',
+            LogoPath:
+              'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_2.png',
+            DataClasses: [
+              'Email addresses',
+              'IP addresses',
+              'Names',
+              'Passwords',
+              'Phone numbers',
+              'Physical addresses',
+              'Usernames'
+            ],
+            IsVerified: true,
+            IsFabricated: false,
+            IsSensitive: false,
+            IsRetired: false,
+            IsSpamList: false
+          },
+          Breach_3: {
+            Name: 'Breach_3',
+            Title: 'Breach_3',
+            Domain: 'Breach_3.com',
+            BreachDate: '2012-01-01',
+            AddedDate: '2016-10-08T07:46:05Z',
+            ModifiedDate: '2016-10-08T07:46:05Z',
+            PwnCount: 6414191,
+            Description: 'Mock Breach number 3',
+            LogoPath:
+              'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_3.png',
+            DataClasses: ['Email addresses', 'Passwords'],
+            IsVerified: false,
+            IsFabricated: false,
+            IsSensitive: false,
+            IsRetired: false,
+            IsSpamList: false
+          },
+          Breach_4: {
+            Name: 'Breach_4',
+            Title: 'Breach_4',
+            Domain: 'Breach_4.com',
+            BreachDate: '2016-04-19',
+            AddedDate: '2016-07-08T01:55:03Z',
+            ModifiedDate: '2016-07-08T01:55:03Z',
+            PwnCount: 4009640,
+            Description: 'Mock Breach number 4',
+            LogoPath:
+              'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_4.png',
+            DataClasses: [
+              'Device information',
+              'Email addresses',
+              'IP addresses',
+              'Passwords',
+              'Usernames'
+            ],
+            IsVerified: true,
+            IsFabricated: false,
+            IsSensitive: false,
+            IsRetired: false,
+            IsSpamList: false
+          }
         }
       },
       substate: 'remediated',
@@ -409,6 +502,9 @@ describe('hibp', () => {
     expect(
       vulns[0].structuredData['emails']['testEmail_2@test-domain_1']
     ).toEqual(['Breach_4']);
+    expect(vulns[0].structuredData['breaches']['Breach_1']['PwnCount']).toEqual(
+      8393093
+    );
     expect(vulns[0].updatedAt).not.toEqual(vulnerability.updatedAt);
   });
 });

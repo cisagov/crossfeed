@@ -6,7 +6,7 @@ import flagIcon from '../assets/us_flag_small.png';
 import govIcon from '../assets/icon-dot-gov.svg';
 import httpsIcon from '../assets/icon-https.svg';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: 'relative',
     width: '100%',
@@ -100,9 +100,9 @@ export const GovBanner: React.FC = () => {
             </div>
             <button
               className={clsx(classes.text, classes.btn, classes.btnExpand)}
-              onClick={() => setExpanded(exp => !exp)}
+              onClick={() => setExpanded((exp) => !exp)}
             >
-              Here's how you know{' '}
+              Here&apos;s how you know{' '}
               {expanded ? (
                 <ExpandLess fontSize="small" />
               ) : (
