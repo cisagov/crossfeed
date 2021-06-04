@@ -1,7 +1,6 @@
 import React from 'react';
 import { TermsOfUse } from '../TermsOfUse';
-import { render, mocked, fireEvent, waitFor } from 'test-utils';
-import * as router from 'react-router-dom';
+import { render, fireEvent, waitFor } from 'test-utils';
 
 // jest.mock('react-router-dom', () => ({
 //   ...jest.requireActual('react-router-dom'),
