@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, mocked, waitFor } from 'test-utils';
-import * as router from 'react-router-dom';
 import { LoginGovCallback } from '../LoginGovCallback';
 
 jest.spyOn(Storage.prototype, 'getItem');
