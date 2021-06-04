@@ -72,5 +72,5 @@ Current data sources on the open source Crossfeed platform are listed below:
 | [Findcdn](https://github.com/cisagov/findcdn)                          | Proposed    | Passive        | Open source tool that identifies if web services are operated behind a Content Delivery Network based on HTTP responses                                          |
 | [Have I been Pwned](https://haveibeenpwned.com/)                       | Proposed    | Passive        | Look up information from the Have I been Pwned API to determine potentially compromised email addresses                                                          |
 | [DnsTwist](https://github.com/elceef/dnstwist)                         | Proposed    | Passive        | Domain name permutation engine for detecting homograph phishing attacks, typo squatting, and brand impersonation potentially compromised email addresses         |
-| Root Domain Sync                                                       | Proposed    | Passive        | Fetch missing IP addresses per domain and sync to the 
-database                                                                                         |
+| Root Domain Sync                                                       | Proposed    | Passive        | Fetch missing IP addresses per domain and sync to the                                                                                                            |
+| database                                                               |
