@@ -106,7 +106,7 @@ function validateIPAddress(ipAddress) {
 async function getThreatInfo(collectionID) {
   const resource = 'https://delta.lookingglasscyber.com/api/graph/query';
   const modifier = {
-    period:"all",
+    period: 'all',
     query: [
       'and',
       ['=', 'type', ['associated-with']],
@@ -191,13 +191,13 @@ export const handler = async (commandOptions: CommandOptions) => {
         organizationId,
         scanId
       );
-      var d = new Date();
+      const d = new Date();
       d.setMonth(d.getMonth() - 1);
-      console.log(d)
+      console.log(d);
       for (const l of data['results']) {
         // Create a dictionary of relevant fields from the API request
-        let lastSeen = new Date(l.firstSeen)
-        if (lastSeen > d){
+        const lastSeen = new Date(l.firstSeen);
+        if (lastSeen > d) {
           const val = {
             firstSeen: new Date(l.firstSeen),
             lastSeen: lastSeen,
@@ -207,11 +207,11 @@ export const handler = async (commandOptions: CommandOptions) => {
             ref_right_id: l.ref.right.id,
             ref_left_type: l.ref.left.type,
             ref_left_id: l.ref.left.id,
-  
+
             right_ticScore: l.right.ticScore,
             right_classifications: l.right.classifications,
             right_name: l.right.name,
-  
+
             left_type: l.left.type,
             left_ticScore: l.left.ticScore,
             left_name: l.left.name
@@ -221,29 +221,31 @@ export const handler = async (commandOptions: CommandOptions) => {
           } else {
             val['vulnOrMal'] = 'Malware';
           }
-  
+
           // If we've already seen this domain, add this vuln to the associated
           if (ipsAndDomains.includes(l.left.name)) {
             for (const Vuln of vulnerabilities) {
               if (l.left.name === Vuln.domain.name) {
-                let matches = false
+                let matches = false;
                 // If the Vuln type already exists for this Domain keep the most recent instance
-                Vuln.structuredData['lookingGlassData'].forEach(function(row,index,array){
-                  if(l.right.name === row.right_name){
-                    if (lastSeen > row.lastSeen){
-                      val.firstSeen = row.firstSeen
-                      array[index] = val
+                Vuln.structuredData['lookingGlassData'].forEach(function (
+                  row,
+                  index,
+                  array
+                ) {
+                  if (l.right.name === row.right_name) {
+                    if (lastSeen > row.lastSeen) {
+                      val.firstSeen = row.firstSeen;
+                      array[index] = val;
+                    } else {
+                      row.firstSeen = val.firstSeen;
                     }
-                    else{
-                      row.firstSeen = val.firstSeen
-                    }
-                    matches = true
-                  } 
-                })
-                if(!matches){
+                    matches = true;
+                  }
+                });
+                if (!matches) {
                   Vuln.structuredData['lookingGlassData'].push(val);
                 }
-                
               }
             }
           }
@@ -264,13 +266,14 @@ export const handler = async (commandOptions: CommandOptions) => {
                   },
                   description: `Vulnerabilities and malware found by LookingGlass.`
                 };
-                vulnerabilities.push(plainToClass(Vulnerability, vulnerability));
+                vulnerabilities.push(
+                  plainToClass(Vulnerability, vulnerability)
+                );
               }
             }
             ipsAndDomains.push(l.left.name);
           }
         }
-        
       }
 
       await saveVulnerabilitiesToDb(vulnerabilities, false);
