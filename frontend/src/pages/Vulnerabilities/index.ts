@@ -1,1 +1,1 @@
-export { default } from "./Vulnerabilities";
+export { default } from './Vulnerabilities';

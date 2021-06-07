@@ -39,7 +39,7 @@ async function getDisjunctiveFacetCounts(state, disunctiveFacetNames) {
   const responses = await Promise.all(
     // Note that this could be optimized by *not* executing a request
     // if not filter is currently applied for that field. Kept simple here for clarity.
-    disunctiveFacetNames.map(facetName => {
+    disunctiveFacetNames.map((facetName) => {
       // let newState = removeFilterByName(state, facetName);
       // let body = buildRequest(newState);
       // body = changeSizeToZero(body);

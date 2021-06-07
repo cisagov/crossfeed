@@ -21,7 +21,7 @@ export const TermsOfUse: React.FC = () => {
   const [errors, setErrors] = useState<Errors>({});
   const { user, setUser, apiPost, maximumRole, touVersion } = useAuthContext();
 
-  const onSubmit: React.FormEventHandler = async e => {
+  const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
     try {
       if (!accepted) throw Error('Must accept terms');
@@ -165,7 +165,7 @@ export const TermsOfUse: React.FC = () => {
         name="accept"
         label="I accept the above Terms and Conditions."
         checked={accepted}
-        onChange={e => setAccepted(e.target.checked)}
+        onChange={(e) => setAccepted(e.target.checked)}
       />
       <p style={{ marginBottom: 0 }}>
         <strong>Name:</strong> {user?.fullName}

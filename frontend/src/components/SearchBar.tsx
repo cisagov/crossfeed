@@ -126,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1rem',
     fontWeight: 300,
     background: 'none',
-    "&::placeholder": {
+    '&::placeholder': {
       color: '#71767A'
     },
     '&:focus': {

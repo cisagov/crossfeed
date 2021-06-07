@@ -172,6 +172,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Domain name permutation engine for detecting similar registered domains.'
   },
+  rootDomainSync: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Creates domains from root domains by doing a single DNS lookup for each root domain.'
+  },
   savedSearch: {
     type: 'fargate',
     isPassive: true,
