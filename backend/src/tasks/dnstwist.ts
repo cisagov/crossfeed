@@ -37,36 +37,24 @@ export const handler = async (commandOptions: CommandOptions) => {
   for (const domain of domainsWithIPs) {
     try {
       const results = await runDNSTwist(domain);
-      const existingVulns = await Vulnerability.find({
+      // Fetch existing dnstwist vulnerability
+      const existingVuln = await Vulnerability.findOne({
         domain: { id: domain.id },
         source: 'dnstwist'
       });
-      let existingDomains: object[] = [];
-      const newDomainNames: String[] = [];
-      if (existingVulns.length > 0) {
-        existingDomains = existingVulns[0].structuredData['domains'];
-      }
-      for (const newDomain of results) {
-        newDomain['date-observed'] = date;
-        newDomainNames.push(newDomain['domain-name']);
-
-        if (!existingDomains) {
-          existingDomains = [newDomain];
-          // else if dnstwist domain has already been added
-        } else if (
-          existingDomains.some(
-            (oldDomain) => oldDomain['domain-name'] === newDomain['domain-name']
-          )
-        ) {
-          continue;
-        } else {
-          existingDomains.push(newDomain);
+      for (const domain of results) {
+        domain['date-observed'] = date;
+        if (existingVuln) {
+          // If domain in existingVuln, keep the existing date-observed
+          existingVuln.structuredData['domains'].map(
+            (existingVulnMap: object[]) => {
+              if (existingVulnMap['domain-name'] === domain['domain-name']) {
+                domain['date-observed'] = existingVulnMap['date-observed'];
+              }
+            }
+          );
         }
       }
-      //filter out any domains that no longer exist
-      const finalResults = existingDomains.filter((domain) =>
-        newDomainNames.includes(domain['domain-name'])
-      );
 
       if (Object.keys(results).length !== 0) {
         vulns.push(
@@ -77,7 +65,7 @@ export const handler = async (commandOptions: CommandOptions) => {
             state: 'open',
             source: 'dnstwist',
             needsPopulation: false,
-            structuredData: { domains: finalResults },
+            structuredData: { domains: results },
             description: `Registered domains similar to ${domain.name}.`
           })
         );
