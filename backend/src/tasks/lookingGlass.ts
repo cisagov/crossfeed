@@ -89,6 +89,26 @@ interface LGThreatResponse {
   }[];
 }
 
+interface ParsedLGResponse{
+  firstSeen: Date;
+  lastSeen: Date;
+  sources: string[];
+  ref_type: string;
+  ref_right_type: string;
+  ref_right_id: string;
+  ref_left_type: string;
+  ref_left_id: string;
+
+  right_ticScore: number,
+  right_classifications: string[];
+  right_name: string
+
+  left_type: string;
+  left_ticScore: number;
+  left_name: string;
+  vulnOrMal: string;
+}
+
 async function getCollectionForCurrentWorkspace() {
   const resource =
     'https://delta.lookingglasscyber.com/api/v1/workspaces/' +
@@ -103,6 +123,10 @@ function validateIPAddress(ipAddress) {
   return /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/.test(ipAddress);
 }
 
+/**
+ * Gets threat information from the LookingGlass API
+ * for the collection with the given ID.
+ */
 async function getThreatInfo(collectionID) {
   const resource = 'https://delta.lookingglasscyber.com/api/graph/query';
   const modifier = {
@@ -126,14 +150,18 @@ async function getThreatInfo(collectionID) {
         Authorization: 'Bearer ' + process.env.LG_API_KEY
       }
     })
-    .json() as unknown) as LGThreatResponse[];
+    .json() as unknown) as LGThreatResponse;
 }
-
-async function saveAndPullDomains(response, organizationId, scanId) {
+/**
+ * Save domains from LookingGlass API response, and retrieve
+ * domains for the given organization.
+ */
+async function saveAndPullDomains(response: LGThreatResponse, organizationId: string, scanId: string) {
   const domains: Domain[] = [];
-  const data = response;
-  for (const l of data.results) {
+  for (const l of response.results) {
     if (validateIPAddress(l.left.name)) {
+      // If l.left.name is an IP address, the domain has no associated
+      // domain name, so mark it as an ip-only domain.
       const currentDomain = plainToClass(Domain, {
         name: l.left.name,
         ip: l.left.name,
@@ -146,7 +174,7 @@ async function saveAndPullDomains(response, organizationId, scanId) {
     } else {
       const currentDomain = plainToClass(Domain, {
         name: l.left.name,
-        ip: l.left.name,
+        ip: "",
         organization: { id: organizationId },
         fromRootDomain: '',
         ipOnly: false,
@@ -157,15 +185,10 @@ async function saveAndPullDomains(response, organizationId, scanId) {
   }
   await saveDomainsToDb(domains);
 
-  await connectToDatabase();
-
   let pulledDomains = Domain.createQueryBuilder('domain')
     .leftJoinAndSelect('domain.organization', 'organization')
-    .andWhere('ip IS NOT NULL');
-
-  pulledDomains = pulledDomains.andWhere('domain.organization=:org', {
-    org: organizationId
-  });
+    .andWhere('ip IS NOT NULL')
+    .andWhere('domain.organization=:org', {org: organizationId});
 
   return pulledDomains.getMany();
 }
@@ -185,20 +208,21 @@ export const handler = async (commandOptions: CommandOptions) => {
       const collectionID = line.id;
       console.log(line.name);
       // Query LookingGlass for the Threat info
-      const data: LGThreatResponse[] = await getThreatInfo(collectionID);
+      const data: LGThreatResponse = await getThreatInfo(collectionID);
       const responseDomains: Domain[] = await saveAndPullDomains(
         data,
-        organizationId,
+        organizationId!,
         scanId
       );
-      const d = new Date();
-      d.setMonth(d.getMonth() - 1);
-      console.log(d);
-      for (const l of data['results']) {
-        // Create a dictionary of relevant fields from the API request
-        const lastSeen = new Date(l.firstSeen);
-        if (lastSeen > d) {
-          const val = {
+      // Only pull domains that have been seen in the last two months.
+      const twoMonthsAgo = new Date();
+      twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
+      console.log(`Pulling domains seen since ${twoMonthsAgo}`);
+      for (const l of data.results) {
+        // Create a dictionary of relevant fields from the API request.
+        const lastSeen = new Date(l.lastSeen);
+        if (lastSeen > twoMonthsAgo) {
+          const val: ParsedLGResponse = {
             firstSeen: new Date(l.firstSeen),
             lastSeen: lastSeen,
             sources: l.sources,
@@ -214,35 +238,38 @@ export const handler = async (commandOptions: CommandOptions) => {
 
             left_type: l.left.type,
             left_ticScore: l.left.ticScore,
-            left_name: l.left.name
+            left_name: l.left.name,
+            vulnOrMal: l.right.classifications[0] === 'Vulnerable Service' ? 'Vulnerability': 'Malware'
           };
-          if (l.right.classifications[0] === 'Vulnerable Service') {
-            val['vulnOrMal'] = 'Vulnerability';
-          } else {
-            val['vulnOrMal'] = 'Malware';
-          }
 
-          // If we've already seen this domain, add this vuln to the associated
+          // If we've already seen this domain, add this val to the structuredData field of the associated vulnerability
           if (ipsAndDomains.includes(l.left.name)) {
             for (const Vuln of vulnerabilities) {
+              //Match current LookingGlass Object with existing Vulnerability
               if (l.left.name === Vuln.domain.name) {
                 let matches = false;
                 // If the Vuln type already exists for this Domain keep the most recent instance
+                // Loop through the previously created Vulnerabilities structuredData to identify duplicates
                 Vuln.structuredData['lookingGlassData'].forEach(function (
                   row,
                   index,
                   array
                 ) {
+                  // Find a duplicate threat types
                   if (l.right.name === row.right_name) {
+                    // If the new value is more recent than existing value, update new values firstSeen date from existing values
+                    // first date and then overwrite the existing value
                     if (lastSeen > row.lastSeen) {
                       val.firstSeen = row.firstSeen;
                       array[index] = val;
+                      // if the existing value is more recent than the new value then update the existing values firstSeen from the new value
                     } else {
                       row.firstSeen = val.firstSeen;
                     }
                     matches = true;
                   }
                 });
+                // If there are isn't a duplicate threat type then add value to the StructuredData
                 if (!matches) {
                   Vuln.structuredData['lookingGlassData'].push(val);
                 }
@@ -253,9 +280,8 @@ export const handler = async (commandOptions: CommandOptions) => {
           else {
             for (const domain of responseDomains) {
               if (domain.name === l.left.name) {
-                const currentDomain = domain;
                 const vulnerability = {
-                  domain: currentDomain,
+                  domain: domain,
                   lastSeen: new Date(Date.now()),
                   title: 'Looking Glass Data',
                   state: 'open',
@@ -264,7 +290,7 @@ export const handler = async (commandOptions: CommandOptions) => {
                   structuredData: {
                     lookingGlassData: [val]
                   },
-                  description: `Vulnerabilities and malware found by LookingGlass.`
+                  description: `Vulnerabilities / malware found by LookingGlass.`
                 };
                 vulnerabilities.push(
                   plainToClass(Vulnerability, vulnerability)
@@ -277,7 +303,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       }
 
       await saveVulnerabilitiesToDb(vulnerabilities, false);
-      console.log('Vulnerabilities Saved to Db');
+      console.log('Vulnerabilities saved to db');
     }
   }
 };

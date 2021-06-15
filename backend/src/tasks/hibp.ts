@@ -5,28 +5,26 @@ import { plainToClass } from 'class-transformer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 
 /**
- * The hibp scan looks up emails from a particular domain
+ * The hibp scan looks up emails from a particular .gov domain
  * that have shown up in breaches using the Have I
  * Been Pwned Enterprise API.
+ * Be aware this scan can only query breaches from .gov domains
  */
 async function getIps(organizationId?: String): Promise<Domain[]> {
   await connectToDatabase();
 
   let domains = Domain.createQueryBuilder('domain')
     .leftJoinAndSelect('domain.organization', 'organization')
-    .andWhere('ip IS NOT NULL');
+    .andWhere('ip IS NOT NULL')
+    .andWhere('domain.name LIKE :gov', {gov: '%.gov'})
+    .andWhere('domain.ipOnly=:bool', {bool: false});
 
   if (organizationId) {
     domains = domains.andWhere('domain.organization=:org', {
       org: organizationId
     });
   }
-  domains = domains.andWhere('domain.name LIKE :gov', {
-    gov: '%.gov'
-  });
-  domains = domains.andWhere('domain.ipOnly=:bool', {
-    bool: false
-  });
+  
   return domains.getMany();
 }
 
@@ -69,9 +67,9 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
     return finalResults;
   } catch (error) {
     console.error(
-      `Error Occured when trying to access the HIPB API using the domain: ${domain.name} `
+      `An error occured when trying to access the HIPB API using the domain: ${domain.name}: ${error} `
     );
-    return 0;
+    return null;
   }
 }
 
