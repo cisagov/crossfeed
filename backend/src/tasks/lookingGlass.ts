@@ -89,7 +89,7 @@ interface LGThreatResponse {
   }[];
 }
 
-interface ParsedLGResponse{
+interface ParsedLGResponse {
   firstSeen: Date;
   lastSeen: Date;
   sources: string[];
@@ -99,9 +99,9 @@ interface ParsedLGResponse{
   ref_left_type: string;
   ref_left_id: string;
 
-  right_ticScore: number,
+  right_ticScore: number;
   right_classifications: string[];
-  right_name: string
+  right_name: string;
 
   left_type: string;
   left_ticScore: number;
@@ -156,7 +156,11 @@ async function getThreatInfo(collectionID) {
  * Save domains from LookingGlass API response, and retrieve
  * domains for the given organization.
  */
-async function saveAndPullDomains(response: LGThreatResponse, organizationId: string, scanId: string) {
+async function saveAndPullDomains(
+  response: LGThreatResponse,
+  organizationId: string,
+  scanId: string
+) {
   const domains: Domain[] = [];
   for (const l of response.results) {
     if (validateIPAddress(l.left.name)) {
@@ -174,7 +178,7 @@ async function saveAndPullDomains(response: LGThreatResponse, organizationId: st
     } else {
       const currentDomain = plainToClass(Domain, {
         name: l.left.name,
-        ip: "",
+        ip: '',
         organization: { id: organizationId },
         fromRootDomain: '',
         ipOnly: false,
@@ -185,10 +189,10 @@ async function saveAndPullDomains(response: LGThreatResponse, organizationId: st
   }
   await saveDomainsToDb(domains);
 
-  let pulledDomains = Domain.createQueryBuilder('domain')
+  const pulledDomains = Domain.createQueryBuilder('domain')
     .leftJoinAndSelect('domain.organization', 'organization')
     .andWhere('ip IS NOT NULL')
-    .andWhere('domain.organization=:org', {org: organizationId});
+    .andWhere('domain.organization=:org', { org: organizationId });
 
   return pulledDomains.getMany();
 }
@@ -239,7 +243,10 @@ export const handler = async (commandOptions: CommandOptions) => {
             left_type: l.left.type,
             left_ticScore: l.left.ticScore,
             left_name: l.left.name,
-            vulnOrMal: l.right.classifications[0] === 'Vulnerable Service' ? 'Vulnerability': 'Malware'
+            vulnOrMal:
+              l.right.classifications[0] === 'Vulnerable Service'
+                ? 'Vulnerability'
+                : 'Malware'
           };
 
           // If we've already seen this domain, add this val to the structuredData field of the associated vulnerability

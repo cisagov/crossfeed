@@ -16,15 +16,15 @@ async function getIps(organizationId?: String): Promise<Domain[]> {
   let domains = Domain.createQueryBuilder('domain')
     .leftJoinAndSelect('domain.organization', 'organization')
     .andWhere('ip IS NOT NULL')
-    .andWhere('domain.name LIKE :gov', {gov: '%.gov'})
-    .andWhere('domain.ipOnly=:bool', {bool: false});
+    .andWhere('domain.name LIKE :gov', { gov: '%.gov' })
+    .andWhere('domain.ipOnly=:bool', { bool: false });
 
   if (organizationId) {
     domains = domains.andWhere('domain.organization=:org', {
       org: organizationId
     });
   }
-  
+
   return domains.getMany();
 }
 

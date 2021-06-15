@@ -11,14 +11,14 @@ import {
 } from '../../models';
 
 const RealDate = Date;
-const Today = new Date
+const Today = new Date();
 
 const LG_response = {
   totaHits: 4,
   results: [
     {
-      firstSeen: Today.getTime()  - (4.5 * 24 * 60 * 60 * 1000),
-      lastSeen: Today.getTime()  - (4 * 24 * 60 * 60 * 1000),
+      firstSeen: Today.getTime() - 4.5 * 24 * 60 * 60 * 1000,
+      lastSeen: Today.getTime() - 4 * 24 * 60 * 60 * 1000,
       sources: ['Shodan Inferred Vulnerability'],
       right: {
         ticClassificationScores: [40],
@@ -86,8 +86,8 @@ const LG_response = {
       }
     },
     {
-      firstSeen: Today.getTime()  - (17 * 24 * 60 * 60 * 1000),
-      lastSeen: Today.getTime()  - (10 * 24 * 60 * 60 * 1000),
+      firstSeen: Today.getTime() - 17 * 24 * 60 * 60 * 1000,
+      lastSeen: Today.getTime() - 10 * 24 * 60 * 60 * 1000,
       sources: ['Shodan Inferred Vulnerability'],
       right: {
         ticClassificationScores: [50],
@@ -155,8 +155,8 @@ const LG_response = {
       }
     },
     {
-      firstSeen: Today.getTime()  - (8 * 24 * 60 * 60 * 1000),
-      lastSeen: Today.getTime()  - (5 * 24 * 60 * 60 * 1000),
+      firstSeen: Today.getTime() - 8 * 24 * 60 * 60 * 1000,
+      lastSeen: Today.getTime() - 5 * 24 * 60 * 60 * 1000,
       sources: ['Shodan Inferred Vulnerability'],
       right: {
         ticClassificationScores: [50],
@@ -224,8 +224,8 @@ const LG_response = {
       }
     },
     {
-      firstSeen: Today.getTime()  - (9 * 24 * 60 * 60 * 1000),
-      lastSeen: Today.getTime()  - (7 * 24 * 60 * 60 * 1000),
+      firstSeen: Today.getTime() - 9 * 24 * 60 * 60 * 1000,
+      lastSeen: Today.getTime() - 7 * 24 * 60 * 60 * 1000,
       sources: ['Shodan Inferred Vulnerability'],
       right: {
         ticClassificationScores: [50],
@@ -295,7 +295,7 @@ const LG_response = {
   ]
 };
 let OrgName;
-let org_Response
+let org_Response;
 
 describe('lookingGlass', () => {
   let organization;
@@ -304,7 +304,7 @@ describe('lookingGlass', () => {
   let scan;
   let domains: Domain[] = [];
   beforeEach(async () => {
-    OrgName = "Collection-" + Math.random();
+    OrgName = 'Collection-' + Math.random();
     org_Response = [
       {
         children: [],
@@ -331,17 +331,17 @@ describe('lookingGlass', () => {
     await connectToDatabase();
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
     tag1 = await OrganizationTag.create({
-      name: "P&E"
+      name: 'P&E'
     }).save;
     tag2 = await OrganizationTag.create({
-      name: "TestOrgID"
+      name: 'TestOrgID'
     }).save;
     organization = await Organization.create({
       name: OrgName,
       rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
       isPassive: false,
-      tags:[tag1,tag2]
+      tags: [tag1, tag2]
     }).save();
     scan = await Scan.create({
       name: 'lookingGlass',
@@ -401,33 +401,36 @@ describe('lookingGlass', () => {
     expect(domains.filter((e) => !e.organization).length).toEqual(0);
   };
   test('basic test', async () => {
-    
     nock('https://delta.lookingglasscyber.com', {
       reqheaders: {
         Authorization: 'Bearer ' + process.env.LG_API_KEY
       }
-    }).get('/api/v1/workspaces/' +
-    encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
-    '/collections')
-    .reply(200, org_Response);
-    
-    nock('https://delta.lookingglasscyber.com',{
-      reqheaders: {
-        Authorization: 'Bearer ' + process.env.LG_API_KEY,
-      }
-    }).post('/api/graph/query',{
-      period: 'all',
-      query: [
-        'and',
-        ['=', 'type', ['associated-with']],
-        ['or', ['=', 'right.type', 'threat'], ['=', 'left.type', 'ipv4']],
-        ['=', 'left.collectionIds', 'Collection_Id_1']
-      ],
-      fields: ['firstSeen', 'lastSeen', 'sources', 'right', 'left'],
-      limit: 100000,
-      workspaceIds: []
     })
-    .reply(200,LG_response);
+      .get(
+        '/api/v1/workspaces/' +
+          encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
+          '/collections'
+      )
+      .reply(200, org_Response);
+
+    nock('https://delta.lookingglasscyber.com', {
+      reqheaders: {
+        Authorization: 'Bearer ' + process.env.LG_API_KEY
+      }
+    })
+      .post('/api/graph/query', {
+        period: 'all',
+        query: [
+          'and',
+          ['=', 'type', ['associated-with']],
+          ['or', ['=', 'right.type', 'threat'], ['=', 'left.type', 'ipv4']],
+          ['=', 'left.collectionIds', 'Collection_Id_1']
+        ],
+        fields: ['firstSeen', 'lastSeen', 'sources', 'right', 'left'],
+        limit: 100000,
+        workspaceIds: []
+      })
+      .reply(200, LG_response);
     await lookingGlass({
       organizationId: organization.id,
       organizationName: OrgName,
@@ -443,28 +446,32 @@ describe('lookingGlass', () => {
       reqheaders: {
         Authorization: 'Bearer ' + process.env.LG_API_KEY
       }
-    }).get('/api/v1/workspaces/' +
-    encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
-    '/collections')
-    .reply(200, org_Response);
-    
-    nock('https://delta.lookingglasscyber.com',{
-      reqheaders: {
-        Authorization: 'Bearer ' + process.env.LG_API_KEY,
-      }
-    }).post('/api/graph/query',{
-      period: 'all',
-      query: [
-        'and',
-        ['=', 'type', ['associated-with']],
-        ['or', ['=', 'right.type', 'threat'], ['=', 'left.type', 'ipv4']],
-        ['=', 'left.collectionIds', 'Collection_Id_1']
-      ],
-      fields: ['firstSeen', 'lastSeen', 'sources', 'right', 'left'],
-      limit: 100000,
-      workspaceIds: []
     })
-    .reply(200,LG_response);
+      .get(
+        '/api/v1/workspaces/' +
+          encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
+          '/collections'
+      )
+      .reply(200, org_Response);
+
+    nock('https://delta.lookingglasscyber.com', {
+      reqheaders: {
+        Authorization: 'Bearer ' + process.env.LG_API_KEY
+      }
+    })
+      .post('/api/graph/query', {
+        period: 'all',
+        query: [
+          'and',
+          ['=', 'type', ['associated-with']],
+          ['or', ['=', 'right.type', 'threat'], ['=', 'left.type', 'ipv4']],
+          ['=', 'left.collectionIds', 'Collection_Id_1']
+        ],
+        fields: ['firstSeen', 'lastSeen', 'sources', 'right', 'left'],
+        limit: 100000,
+        workspaceIds: []
+      })
+      .reply(200, LG_response);
     await lookingGlass({
       organizationId: organization.id,
       organizationName: OrgName,
@@ -491,27 +498,29 @@ describe('lookingGlass', () => {
       title: `Looking Glass Data`,
       description: '123',
       state: 'closed',
-      structuredData: {lookingGlassData:[
-        {
-          firstSeen: Today.getTime()  - (25 * 24 * 60 * 60 * 1000),
-          lastSeen: Today.getTime()  - (15 * 24 * 60 * 60 * 1000),
-          sources: ['Shodan Inferred Vulnerability'],
-          ref_type: 'associated-with',
-          ref_right_type: 'threat',
-          ref_right_id: 'ThreatID_1234',
-          ref_left_type: 'ipv4',
-          ref_left_id: 1234509876,
+      structuredData: {
+        lookingGlassData: [
+          {
+            firstSeen: Today.getTime() - 25 * 24 * 60 * 60 * 1000,
+            lastSeen: Today.getTime() - 15 * 24 * 60 * 60 * 1000,
+            sources: ['Shodan Inferred Vulnerability'],
+            ref_type: 'associated-with',
+            ref_right_type: 'threat',
+            ref_right_id: 'ThreatID_1234',
+            ref_left_type: 'ipv4',
+            ref_left_id: 1234509876,
 
-          right_ticScore: 50,
-          right_classifications: ['Vulnerable Service'],
-          right_name: "test_name",
+            right_ticScore: 50,
+            right_classifications: ['Vulnerable Service'],
+            right_name: 'test_name',
 
-          left_type: 'ipv4',
-          left_ticScore: 50,
-          left_name: '1.123.135.123',
-          vulnOrMal: 'Vulnerable Service'
-        }
-      ]},
+            left_type: 'ipv4',
+            left_ticScore: 50,
+            left_name: '1.123.135.123',
+            vulnOrMal: 'Vulnerable Service'
+          }
+        ]
+      },
       substate: 'remediated',
       source: 'lookingGlass'
     }).save();
@@ -519,28 +528,32 @@ describe('lookingGlass', () => {
       reqheaders: {
         Authorization: 'Bearer ' + process.env.LG_API_KEY
       }
-    }).get('/api/v1/workspaces/' +
-    encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
-    '/collections')
-    .reply(200, org_Response);
-    
-    nock('https://delta.lookingglasscyber.com',{
-      reqheaders: {
-        Authorization: 'Bearer ' + process.env.LG_API_KEY,
-      }
-    }).post('/api/graph/query',{
-      period: 'all',
-      query: [
-        'and',
-        ['=', 'type', ['associated-with']],
-        ['or', ['=', 'right.type', 'threat'], ['=', 'left.type', 'ipv4']],
-        ['=', 'left.collectionIds', 'Collection_Id_1']
-      ],
-      fields: ['firstSeen', 'lastSeen', 'sources', 'right', 'left'],
-      limit: 100000,
-      workspaceIds: []
     })
-    .reply(200,LG_response);
+      .get(
+        '/api/v1/workspaces/' +
+          encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
+          '/collections'
+      )
+      .reply(200, org_Response);
+
+    nock('https://delta.lookingglasscyber.com', {
+      reqheaders: {
+        Authorization: 'Bearer ' + process.env.LG_API_KEY
+      }
+    })
+      .post('/api/graph/query', {
+        period: 'all',
+        query: [
+          'and',
+          ['=', 'type', ['associated-with']],
+          ['or', ['=', 'right.type', 'threat'], ['=', 'left.type', 'ipv4']],
+          ['=', 'left.collectionIds', 'Collection_Id_1']
+        ],
+        fields: ['firstSeen', 'lastSeen', 'sources', 'right', 'left'],
+        limit: 100000,
+        workspaceIds: []
+      })
+      .reply(200, LG_response);
     await lookingGlass({
       organizationId: organization.id,
       organizationName: OrgName,
@@ -560,11 +573,11 @@ describe('lookingGlass', () => {
     expect(vulns[0].cpe).toEqual(vulnerability.cpe);
     expect(vulns[0].state).toEqual(vulnerability.state);
     expect(vulns[0].source).toEqual(vulnerability.source);
-    console.log(vulns[0].structuredData['lookingGlassData'])
+    console.log(vulns[0].structuredData['lookingGlassData']);
     // These fields should be updated
     expect(
       new Date(vulns[0].structuredData['lookingGlassData'][0].lastSeen)
-    ).toEqual(new Date(Today.getTime()  - (7 * 24 * 60 * 60 * 1000)));
+    ).toEqual(new Date(Today.getTime() - 7 * 24 * 60 * 60 * 1000));
     expect(vulns[0].structuredData['lookingGlassData'][0].right_name).toEqual(
       'Vulnerable Product - CiscoWebVPN'
     );
@@ -581,27 +594,29 @@ describe('lookingGlass', () => {
       title: `Looking Glass Data`,
       description: '123',
       state: 'closed',
-      structuredData: {lookingGlassData:[
-        {
-          firstSeen: Today.getTime()  - (25 * 24 * 60 * 60 * 1000),
-          lastSeen: Today.getTime()  - (22 * 24 * 60 * 60 * 1000),
-          sources: ['Shodan Inferred Vulnerability'],
-          ref_type: 'associated-with',
-          ref_right_type: 'threat',
-          ref_right_id: 'ThreatID_1234',
-          ref_left_type: 'ipv4',
-          ref_left_id: 1234509876,
+      structuredData: {
+        lookingGlassData: [
+          {
+            firstSeen: Today.getTime() - 25 * 24 * 60 * 60 * 1000,
+            lastSeen: Today.getTime() - 22 * 24 * 60 * 60 * 1000,
+            sources: ['Shodan Inferred Vulnerability'],
+            ref_type: 'associated-with',
+            ref_right_type: 'threat',
+            ref_right_id: 'ThreatID_1234',
+            ref_left_type: 'ipv4',
+            ref_left_id: 1234509876,
 
-          right_ticScore: 50,
-          right_classifications: ['Vulnerable Service'],
-          right_name: "Scary Malware",
+            right_ticScore: 50,
+            right_classifications: ['Vulnerable Service'],
+            right_name: 'Scary Malware',
 
-          left_type: 'ipv4',
-          left_ticScore: 50,
-          left_name: '100.123.100.123',
-          vulnOrMal: 'Malware'
-        }
-      ]},
+            left_type: 'ipv4',
+            left_ticScore: 50,
+            left_name: '100.123.100.123',
+            vulnOrMal: 'Malware'
+          }
+        ]
+      },
       substate: 'remediated',
       source: 'lookingGlass'
     }).save();
@@ -609,28 +624,32 @@ describe('lookingGlass', () => {
       reqheaders: {
         Authorization: 'Bearer ' + process.env.LG_API_KEY
       }
-    }).get('/api/v1/workspaces/' +
-    encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
-    '/collections')
-    .reply(200, org_Response);
-    
-    nock('https://delta.lookingglasscyber.com',{
-      reqheaders: {
-        Authorization: 'Bearer ' + process.env.LG_API_KEY,
-      }
-    }).post('/api/graph/query',{
-      period: 'all',
-      query: [
-        'and',
-        ['=', 'type', ['associated-with']],
-        ['or', ['=', 'right.type', 'threat'], ['=', 'left.type', 'ipv4']],
-        ['=', 'left.collectionIds', 'Collection_Id_1']
-      ],
-      fields: ['firstSeen', 'lastSeen', 'sources', 'right', 'left'],
-      limit: 100000,
-      workspaceIds: []
     })
-    .reply(200,LG_response);
+      .get(
+        '/api/v1/workspaces/' +
+          encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
+          '/collections'
+      )
+      .reply(200, org_Response);
+
+    nock('https://delta.lookingglasscyber.com', {
+      reqheaders: {
+        Authorization: 'Bearer ' + process.env.LG_API_KEY
+      }
+    })
+      .post('/api/graph/query', {
+        period: 'all',
+        query: [
+          'and',
+          ['=', 'type', ['associated-with']],
+          ['or', ['=', 'right.type', 'threat'], ['=', 'left.type', 'ipv4']],
+          ['=', 'left.collectionIds', 'Collection_Id_1']
+        ],
+        fields: ['firstSeen', 'lastSeen', 'sources', 'right', 'left'],
+        limit: 100000,
+        workspaceIds: []
+      })
+      .reply(200, LG_response);
     await lookingGlass({
       organizationId: organization.id,
       organizationName: OrgName,
@@ -644,9 +663,9 @@ describe('lookingGlass', () => {
     });
     expect(
       new Date(vulns[0].structuredData['lookingGlassData'][0].firstSeen)
-    ).toEqual(new Date(Today.getTime()  - (17 * 24 * 60 * 60 * 1000)));
+    ).toEqual(new Date(Today.getTime() - 17 * 24 * 60 * 60 * 1000));
     expect(
       new Date(vulns[0].structuredData['lookingGlassData'][0].lastSeen)
-    ).toEqual(new Date(Today.getTime()  - (5 * 24 * 60 * 60 * 1000)));
+    ).toEqual(new Date(Today.getTime() - 5 * 24 * 60 * 60 * 1000));
   });
 });
