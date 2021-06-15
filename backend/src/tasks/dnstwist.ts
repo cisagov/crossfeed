@@ -43,13 +43,14 @@ export const handler = async (commandOptions: CommandOptions) => {
         source: 'dnstwist'
       });
       for (const domain of results) {
-        domain['date-observed'] = date;
+        domain['date-first-observed'] = date;
         if (existingVuln) {
           // If domain in existingVuln, keep the existing date-observed
-          existingVuln.structuredData['domains'].map(
+          existingVuln.structuredData['domains'].forEach(
             (existingVulnMap: object[]) => {
               if (existingVulnMap['domain-name'] === domain['domain-name']) {
-                domain['date-observed'] = existingVulnMap['date-observed'];
+                domain['date-first-observed'] =
+                  existingVulnMap['date-first-observed'];
               }
             }
           );
