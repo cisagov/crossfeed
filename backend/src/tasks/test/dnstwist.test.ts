@@ -138,7 +138,7 @@ describe('dnstwist', () => {
     };
     expect(vuln[0].structuredData).toEqual(results);
   });
-  test('adds new domains to existing dnstwist vulnerabilty and doesn\'t update the date of the existing one', async () => {
+  test("adds new domains to existing dnstwist vulnerabilty and doesn't update the date of the existing one", async () => {
     const name = 'test-' + Math.random();
     const domain = await Domain.create({
       name,
