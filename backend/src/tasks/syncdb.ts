@@ -109,7 +109,9 @@ export const handler: Handler = async (event) => {
         }
         // Create a bunch of vulnerabilities for the first service
         for (const vulnData of vulnerabilities) {
-          if (Math.random() < PROB_SAMPLE_VULNERABILITIES) continue;
+          // Sample CVE vulnerabilities, but always add a single instance of other
+          // vulnerabilities (hibp / dnstwist)
+          if (vulnData.title.startsWith("CVE-") && Math.random() < PROB_SAMPLE_VULNERABILITIES) continue;
           await Vulnerability.create({
             ...vulnData,
             domain,
