@@ -528,7 +528,7 @@ const Risk: React.FC = (props) => {
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
-  // create severity object for Open Vulnerability chips
+  // Create severity object for Open Vulnerability chips
   const severities: VulnSeverities[] = [
     { label: 'All', sevList: ['', 'Low', 'Medium', 'High', 'Critical'] },
     { label: 'Critical', sevList: ['Critical'] },
@@ -537,7 +537,6 @@ const Risk: React.FC = (props) => {
     { label: 'Low', sevList: ['Low'] }
   ];
 
-  console.log(stats);
   if (stats) {
     for (const sev of severities) {
       if (
@@ -888,8 +887,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'stretch',
-    flex: '1',
-    overflowY: 'scroll'
+    flex: '1'
   },
   panel: {
     position: 'relative',

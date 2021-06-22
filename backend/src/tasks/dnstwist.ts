@@ -46,7 +46,8 @@ export const handler = async (commandOptions: CommandOptions) => {
             title: 'DNSTwist Domains',
             state: 'open',
             source: 'dnstwist',
-            needsPopulation: false,
+            severity: 'Low',
+            needsPopulation: false,              
             structuredData: { domains: results },
             description: `Registered domains similar to ${domain.name}.`
           })
