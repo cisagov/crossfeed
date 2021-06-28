@@ -92,7 +92,7 @@ export const get = wrapHandler(async (event) => {
     })) as { id: string; value: number; label: string }[];
   };
 
-  const MAX_RESULTS = 50;
+  const MAX_RESULTS = 1000;
 
   const services = await performQuery(
     Service.createQueryBuilder('service')
