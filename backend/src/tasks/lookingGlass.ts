@@ -152,6 +152,7 @@ async function getThreatInfo(collectionID) {
     })
     .json() as unknown) as LGThreatResponse;
 }
+
 /**
  * Save domains from LookingGlass API response, and retrieve
  * domains for the given organization.
@@ -203,15 +204,15 @@ export const handler = async (commandOptions: CommandOptions) => {
   console.log('Running lookingGlass on organization', organizationName);
 
   const collections: LGCollectionsResponse[] = await getCollectionForCurrentWorkspace();
-  const ipsAndDomains: string[] = [];
+  const ipsAndDomains: Set<string> = new Set();
   const vulnerabilities: Vulnerability[] = [];
 
   for (const line of collections) {
     // Match the organization to the LookingGlass Collection
     if (organizationName === line.name) {
       const collectionID = line.id;
-      console.log(line.name);
-      // Query LookingGlass for the Threat info
+
+      // Query LookingGlass for the threat info
       const data: LGThreatResponse = await getThreatInfo(collectionID);
       const responseDomains: Domain[] = await saveAndPullDomains(
         data,
@@ -250,27 +251,27 @@ export const handler = async (commandOptions: CommandOptions) => {
           };
 
           // If we've already seen this domain, add this val to the structuredData field of the associated vulnerability
-          if (ipsAndDomains.includes(l.left.name)) {
-            for (const Vuln of vulnerabilities) {
-              //Match current LookingGlass Object with existing Vulnerability
-              if (l.left.name === Vuln.domain.name) {
+          if (ipsAndDomains.has(l.left.name)) {
+            for (const vuln of vulnerabilities) {
+              // Match current LookingGlass Object with existing Vulnerability
+              if (l.left.name === vuln.domain.name) {
                 let matches = false;
                 // If the Vuln type already exists for this Domain keep the most recent instance
                 // Loop through the previously created Vulnerabilities structuredData to identify duplicates
-                Vuln.structuredData['lookingGlassData'].forEach(function (
+                vuln.structuredData['lookingGlassData'].forEach(function (
                   row,
                   index,
                   array
                 ) {
                   // Find a duplicate threat types
                   if (l.right.name === row.right_name) {
-                    // If the new value is more recent than existing value, update new values firstSeen date from existing values
+                    // If the new value is more recent than existing value, update new value's firstSeen date from existing value's
                     // first date and then overwrite the existing value
                     if (lastSeen > row.lastSeen) {
                       val.firstSeen = row.firstSeen;
                       array[index] = val;
-                      // if the existing value is more recent than the new value then update the existing values firstSeen from the new value
                     } else {
+                      // If the existing value is more recent than the new value then update the existing value's firstSeen from the new value
                       row.firstSeen = val.firstSeen;
                     }
                     matches = true;
@@ -278,7 +279,7 @@ export const handler = async (commandOptions: CommandOptions) => {
                 });
                 // If there are isn't a duplicate threat type then add value to the StructuredData
                 if (!matches) {
-                  Vuln.structuredData['lookingGlassData'].push(val);
+                  vuln.structuredData['lookingGlassData'].push(val);
                 }
               }
             }
@@ -304,7 +305,7 @@ export const handler = async (commandOptions: CommandOptions) => {
                 );
               }
             }
-            ipsAndDomains.push(l.left.name);
+            ipsAndDomains.add(l.left.name);
           }
         }
       }
