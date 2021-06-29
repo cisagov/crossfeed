@@ -109,7 +109,7 @@ describe('dnstwist', () => {
       domain: domain
     });
 
-    expect(vuln[0].title).toEqual('DNSTwist Domains');
+    expect(vuln[0].title).toEqual('DNS Twist Domains');
     expect(vuln).toHaveLength(1);
     expect(vuln[0].source).toEqual('dnstwist');
     const results = {
@@ -149,7 +149,7 @@ describe('dnstwist', () => {
     await Vulnerability.create({
       source: 'dnstwist',
       domain,
-      title: 'DNSTwist Domains',
+      title: 'DNS Twist Domains',
       structuredData: {
         domains: [
           {
@@ -172,7 +172,7 @@ describe('dnstwist', () => {
     const vuln = await Vulnerability.find({
       domain: domain
     });
-    expect(vuln[0].title).toEqual('DNSTwist Domains');
+    expect(vuln[0].title).toEqual('DNS Twist Domains');
     expect(vuln).toHaveLength(1);
     expect(vuln[0].source).toEqual('dnstwist');
     const results = {
@@ -211,7 +211,7 @@ describe('dnstwist', () => {
     await Vulnerability.create({
       source: 'dnstwist',
       domain,
-      title: 'DNSTwist Domains',
+      title: 'DNS Twist Domains',
       structuredData: {
         domains: [
           {
@@ -240,7 +240,7 @@ describe('dnstwist', () => {
     const vuln = await Vulnerability.find({
       domain: domain
     });
-    expect(vuln[0].title).toEqual('DNSTwist Domains');
+    expect(vuln[0].title).toEqual('DNS Twist Domains');
     expect(vuln).toHaveLength(1);
     expect(vuln[0].source).toEqual('dnstwist');
     const results = {

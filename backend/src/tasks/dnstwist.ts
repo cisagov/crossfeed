@@ -27,12 +27,10 @@ async function runDNSTwist(domain: Domain) {
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
-
   await connectToDatabase;
   const date = new Date(Date.now());
   console.log('Running dnstwist on organization', organizationName);
   const domainsWithIPs = await getIps(organizationId);
-
   const vulns: Vulnerability[] = [];
   for (const domain of domainsWithIPs) {
     try {
@@ -42,27 +40,23 @@ export const handler = async (commandOptions: CommandOptions) => {
         domain: { id: domain.id },
         source: 'dnstwist'
       });
-      for (const domain of results) {
-        domain['date-first-observed'] = date;
-        if (existingVuln) {
-          // If domain in existingVuln, keep the existing date-observed
-          existingVuln.structuredData['domains'].forEach(
-            (existingVulnMap: object[]) => {
-              if (existingVulnMap['domain-name'] === domain['domain-name']) {
-                domain['date-first-observed'] =
-                  existingVulnMap['date-first-observed'];
-              }
-            }
-          );
+      const existingVulnsMap = {};
+      if (existingVuln) {
+        for (const domain of existingVuln.structuredData['domains']) {
+          existingVulnsMap[domain['domain-name']] =
+            domain['date-first-observed'];
         }
       }
-
+      for (const domain of results) {
+        domain['date-first-observed'] =
+          existingVulnsMap[domain['domain-name']] || date;
+      }
       if (Object.keys(results).length !== 0) {
         vulns.push(
           plainToClass(Vulnerability, {
             domain: domain,
             lastSeen: new Date(Date.now()),
-            title: 'DNSTwist Domains',
+            title: 'DNS Twist Domains',
             state: 'open',
             source: 'dnstwist',
             needsPopulation: false,
