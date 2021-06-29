@@ -204,8 +204,8 @@ export const handler = async (commandOptions: CommandOptions) => {
   console.log('Running lookingGlass on organization', organizationName);
 
   const collections: LGCollectionsResponse[] = await getCollectionForCurrentWorkspace();
-  const ipsAndDomains: Set<string> = new Set();
   const vulnerabilities: Vulnerability[] = [];
+  const domainDict: {} = {};
 
   for (const line of collections) {
     // Match the organization to the LookingGlass Collection
@@ -250,62 +250,40 @@ export const handler = async (commandOptions: CommandOptions) => {
                 : 'Malware'
           };
 
-          // If we've already seen this domain, add this val to the structuredData field of the associated vulnerability
-          if (ipsAndDomains.has(l.left.name)) {
-            for (const vuln of vulnerabilities) {
-              // Match current LookingGlass Object with existing Vulnerability
-              if (l.left.name === vuln.domain.name) {
-                let matches = false;
-                // If the Vuln type already exists for this Domain keep the most recent instance
-                // Loop through the previously created Vulnerabilities structuredData to identify duplicates
-                vuln.structuredData['lookingGlassData'].forEach(function (
-                  row,
-                  index,
-                  array
-                ) {
-                  // Find a duplicate threat types
-                  if (l.right.name === row.right_name) {
-                    // If the new value is more recent than existing value, update new value's firstSeen date from existing value's
-                    // first date and then overwrite the existing value
-                    if (lastSeen > row.lastSeen) {
-                      val.firstSeen = row.firstSeen;
-                      array[index] = val;
-                    } else {
-                      // If the existing value is more recent than the new value then update the existing value's firstSeen from the new value
-                      row.firstSeen = val.firstSeen;
-                    }
-                    matches = true;
-                  }
-                });
-                // If there are isn't a duplicate threat type then add value to the StructuredData
-                if (!matches) {
-                  vuln.structuredData['lookingGlassData'].push(val);
-                }
-              }
+          // If we havn't seen this domain yet, create a empty dictionary under the domain
+          if (!domainDict[l.left.name]) {
+            domainDict[l.left.name] = {};
+          }
+          // If we have seen this domain and this threat, merge the two by taking the most recent lastDate and oldest firstDate
+          if (domainDict[l.left.name][l.right.name]) {
+            if (lastSeen > domainDict[l.left.name][l.right.name].lastSeen) {
+              domainDict[l.left.name][l.right.name].lastSeen = val.lastSeen;
+            } else {
+              domainDict[l.left.name][l.right.name].firstSeen = val.firstSeen;
             }
           }
-          // If we haven't seen this domain yet, create a new Domain and a new Vulnerability
+          // If we have seen this domain but not this threat, add the val under the domain and threat
           else {
-            for (const domain of responseDomains) {
-              if (domain.name === l.left.name) {
-                const vulnerability = {
-                  domain: domain,
-                  lastSeen: new Date(Date.now()),
-                  title: 'Looking Glass Data',
-                  state: 'open',
-                  source: 'lookingGlass',
-                  needsPopulation: false,
-                  structuredData: {
-                    lookingGlassData: [val]
-                  },
-                  description: `Vulnerabilities / malware found by LookingGlass.`
-                };
-                vulnerabilities.push(
-                  plainToClass(Vulnerability, vulnerability)
-                );
-              }
+            domainDict[l.left.name][l.right.name] = val;
+          }
+
+          for (const domain of responseDomains) {
+            if (domainDict[domain.name]) {
+              const vulnerability = {
+                domain: domain,
+                lastSeen: new Date(Date.now()),
+                title: 'Looking Glass Data',
+                state: 'open',
+                source: 'lookingGlass',
+                needsPopulation: false,
+                structuredData: {
+                  lookingGlassData: domainDict[domain.name]
+                },
+                description: `Vulnerabilities / malware found by LookingGlass.`
+              };
+              console.log(vulnerability);
+              vulnerabilities.push(plainToClass(Vulnerability, vulnerability));
             }
-            ipsAndDomains.add(l.left.name);
           }
         }
       }
