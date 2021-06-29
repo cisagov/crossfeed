@@ -267,7 +267,6 @@ export const handler = async (commandOptions: CommandOptions) => {
             domainDict[l.left.name][l.right.name] = val;
           }
 
-
           for (const domain of responseDomains) {
             if (domainDict[domain.name]) {
               const vulnerability = {
