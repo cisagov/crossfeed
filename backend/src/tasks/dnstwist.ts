@@ -27,8 +27,8 @@ async function runDNSTwist(domain: Domain) {
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
-  await connectToDatabase;
-  const date = new Date(Date.now());
+  await connectToDatabase();
+  const date_now = new Date(Date.now());
   console.log('Running dnstwist on organization', organizationName);
   const domainsWithIPs = await getIps(organizationId);
   const vulns: Vulnerability[] = [];
@@ -49,7 +49,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       }
       for (const domain of results) {
         domain['date-first-observed'] =
-          existingVulnsMap[domain['domain-name']] || date;
+          existingVulnsMap[domain['domain-name']] || date_now;
       }
       if (Object.keys(results).length !== 0) {
         vulns.push(
