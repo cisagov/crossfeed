@@ -267,6 +267,7 @@ export const handler = async (commandOptions: CommandOptions) => {
             domainDict[l.left.name][l.right.name] = val;
           }
 
+
           for (const domain of responseDomains) {
             if (domainDict[domain.name]) {
               const vulnerability = {
@@ -277,7 +278,7 @@ export const handler = async (commandOptions: CommandOptions) => {
                 source: 'lookingGlass',
                 needsPopulation: false,
                 structuredData: {
-                  lookingGlassData: domainDict[domain.name]
+                  lookingGlassData: Object.values(domainDict[domain.name])
                 },
                 description: `Vulnerabilities / malware found by LookingGlass.`
               };
