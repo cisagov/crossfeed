@@ -642,8 +642,7 @@ describe('lookingGlass', () => {
     expect(vulns[0].cpe).toEqual(vulnerability.cpe);
     expect(vulns[0].source).toEqual(vulnerability.source);
     // These fields should be updated
-    expect(vulns[0].state).toEqual('open');
-    console.log(vulns[0].state);
+    expect(vulns[0].state).toEqual(vulnerability.state);
     expect(
       new Date(vulns[0].structuredData['lookingGlassData'][0].lastSeen)
     ).toEqual(new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000));
@@ -739,7 +738,7 @@ describe('lookingGlass', () => {
   });
 
   test('Merge duplicate threats successfully', async () => {
-    console.log('Running Merge test');
+    console.log("Running Merge test")
     const domain = await Domain.findOne({ id: domains[2].id });
     nock('https://delta.lookingglasscyber.com', {
       reqheaders: {
