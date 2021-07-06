@@ -11,11 +11,12 @@ interface Props {
   selected: string[];
   onSelect(value: string): void;
   onDeselect(value: string): void;
+  savedSearch: Boolean;
 }
 
 export const FacetFilter: React.FC<Props> = props => {
   const classes = useStyles();
-  const { options, selected, onSelect, onDeselect } = props;
+  const { options, selected, onSelect, onDeselect, savedSearch } = props;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -31,6 +32,28 @@ export const FacetFilter: React.FC<Props> = props => {
 
   return (
     <>
+      {savedSearch ? (
+      <FormGroup classes={{ root: classes.root }}>
+        {options.map(opt => (
+          <FormControlLabel
+            classes={{ label: classes.label, root: classes.formControl }}
+            key={opt.value}
+            control={
+              <Checkbox
+                checked={selected.includes(opt.value)}
+                onChange={e => handleChange(e, opt.value)}
+              />
+            }
+            label={
+              <>
+                <span>{opt.value}</span>
+                <span className={classes.count}>{opt.count}</span>
+              </>
+            }
+          />
+        ))}
+      </FormGroup>
+      ):(
       <FormGroup classes={{ root: classes.root }}>
         {/* <input className={classes.inp} placeholder="Filter" /> */}
         {options.map(opt => (
@@ -52,6 +75,7 @@ export const FacetFilter: React.FC<Props> = props => {
           />
         ))}
       </FormGroup>
+      )}
     </>
   );
 };
