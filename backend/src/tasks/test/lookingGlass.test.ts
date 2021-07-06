@@ -738,7 +738,7 @@ describe('lookingGlass', () => {
   });
 
   test('Merge duplicate threats successfully', async () => {
-    console.log("Running Merge test")
+    console.log('Running Merge test');
     const domain = await Domain.findOne({ id: domains[2].id });
     nock('https://delta.lookingglasscyber.com', {
       reqheaders: {
