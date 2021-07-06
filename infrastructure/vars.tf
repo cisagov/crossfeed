@@ -138,6 +138,16 @@ variable ssm_hibp_api_key {
   default = "/crossfeed/staging/HIBP_API_KEY"
 }
 
+variable ssm_lg_api_key {
+  type    = string
+  default = "/crossfeed/staging/LG_API_KEY"
+}
+
+variable ssm_lg_workspace_name {
+  type    = string
+  default = "/crossfeed/staging/LG_WORKSPACE_NAME"
+}
+
 variable cloudfront_name {
   type    = string
   default = "Crossfeed Staging Frontend"

@@ -16,6 +16,7 @@ import { handler as webscraper } from './tasks/webscraper';
 import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
 import { handler as hibp } from './tasks/hibp';
+import { handler as lookingGlass } from './tasks/lookingGlass';
 import { handler as dnstwist } from './tasks/dnstwist';
 import { handler as rootDomainSync } from './tasks/rootDomainSync';
 import { SCAN_SCHEMA } from './api/scans';
@@ -47,6 +48,7 @@ async function main() {
     savedSearch,
     shodan,
     hibp,
+    lookingGlass,
     dnstwist,
     testProxy,
     rootDomainSync

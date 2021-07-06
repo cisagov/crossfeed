@@ -200,17 +200,17 @@ describe('hibp', () => {
     }).save();
     domains = [
       await Domain.create({
-        name: 'test-domain_1',
+        name: 'test-domain_1.gov',
         ip: '',
         organization
       }).save(),
       await Domain.create({
-        name: 'test-domain_2',
+        name: 'test-domain_2.gov',
         ip: '',
         organization
       }).save(),
       await Domain.create({
-        name: 'test-domain_3',
+        name: 'test-domain_3.gov',
         ip: '',
         organization
       }).save()
@@ -256,7 +256,7 @@ describe('hibp', () => {
         Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
-      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_1')
+      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_1.gov')
       .reply(200, hibpResponse_1);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
@@ -270,14 +270,14 @@ describe('hibp', () => {
         Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
-      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_2')
+      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_2.gov')
       .reply(200, hibpResponse_2);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
         Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
-      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_3')
+      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_3.gov')
       .reply(200, hibpResponse_3);
     await hibp({
       organizationId: organization.id,
@@ -294,7 +294,7 @@ describe('hibp', () => {
         Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
-      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_1')
+      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_1.gov')
       .reply(200, hibpResponse_1);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
@@ -308,14 +308,14 @@ describe('hibp', () => {
         Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
-      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_2')
+      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_2.gov')
       .reply(200, hibpResponse_2);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
         Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
-      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_3')
+      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_3.gov')
       .reply(200, hibpResponse_3);
     await hibp({
       organizationId: organization.id,
@@ -455,7 +455,7 @@ describe('hibp', () => {
         Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
-      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_1')
+      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_1.gov')
       .reply(200, hibpResponse_1);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
@@ -469,14 +469,14 @@ describe('hibp', () => {
         Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
-      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_2')
+      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_2.gov')
       .reply(200, hibpResponse_2);
     nock('https://haveibeenpwned.com', {
       reqheaders: {
         Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     })
-      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_3')
+      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_3.gov')
       .reply(200, hibpResponse_3);
     await hibp({
       organizationId: organization.id,
@@ -500,7 +500,7 @@ describe('hibp', () => {
 
     // These fields should be updated
     expect(
-      vulns[0].structuredData['emails']['testEmail_2@test-domain_1']
+      vulns[0].structuredData['emails']['testEmail_2@test-domain_1.gov']
     ).toEqual(['Breach_4']);
     expect(vulns[0].structuredData['breaches']['Breach_1']['PwnCount']).toEqual(
       8393093

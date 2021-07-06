@@ -177,8 +177,9 @@ export const ScanTasksView: React.FC = () => {
         'webscraper',
         'intrigueIdent',
         'shodan',
-        'dnstwist',
         'hibp',
+        'lookingGlass',
+        'dnstwist',
         'rootDomainSync'
       ]),
       disableSortBy: true
