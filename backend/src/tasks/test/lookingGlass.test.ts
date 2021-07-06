@@ -10,15 +10,15 @@ import {
   Vulnerability
 } from '../../models';
 
-const RealDate = Date;
-const Today = new Date();
+const realDate = Date;
+const today = new Date();
 
-const LG_response = {
+const lgResponse = {
   totaHits: 4,
   results: [
     {
-      firstSeen: Today.getTime() - 4.5 * 24 * 60 * 60 * 1000,
-      lastSeen: Today.getTime() - 4 * 24 * 60 * 60 * 1000,
+      firstSeen: today.getTime() - 4.5 * 24 * 60 * 60 * 1000,
+      lastSeen: today.getTime() - 4 * 24 * 60 * 60 * 1000,
       sources: ['Shodan Inferred Vulnerability'],
       right: {
         ticClassificationScores: [40],
@@ -86,8 +86,77 @@ const LG_response = {
       }
     },
     {
-      firstSeen: Today.getTime() - 17 * 24 * 60 * 60 * 1000,
-      lastSeen: Today.getTime() - 10 * 24 * 60 * 60 * 1000,
+      firstSeen: today.getTime() - 13 * 24 * 60 * 60 * 1000,
+      lastSeen: today.getTime() - 10 * 24 * 60 * 60 * 1000,
+      sources: ['Shodan Inferred Vulnerability'],
+      right: {
+        ticClassificationScores: [40],
+        threatId: 'ThreatID_1234',
+        classifications: ['Vulnerable Service'],
+        ticScore: 50,
+        ticCriticality: 50,
+        ticSourceScore: 50,
+        ticObsInfluence: 0.5,
+        ref: {
+          type: 'threat',
+          id: 'ThreatID_1234'
+        },
+        threatCategories: ['Vulnerable Service'],
+        name: 'Vulnerable Product - CiscoWebVPN',
+        type: 'threat',
+        threatName: 'Vulnerable Product - CiscoWebVPN'
+      },
+      left: {
+        collectionIds: [
+          'test_collection_id_1',
+          'test_collection_id_2',
+          '].`test_collection_id_3'
+        ],
+        classifications: ['Vulnerable Service'],
+        ticScore: 50,
+        owners: ['owner1', 'owner2', 'owner3'],
+        ref: {
+          type: 'ipv4',
+          id: 1234567
+        },
+        name: '123.123.123.123',
+        type: 'ipv4',
+        threatNames: ['Vulnerable Product - CiscoWebVPN'],
+        locations: [
+          {
+            city: 'testland',
+            country: 'USA',
+            region: 'FL',
+            geoPoint: {
+              lon: -55.55,
+              lat: 55.55
+            },
+            countryName: 'United States',
+            sources: ['Test_Source'],
+            country2Digit: 'US',
+            lastSeen: 1620892865376
+          }
+        ],
+        ipv4: 123456789,
+        asns: [1234],
+        threatIds: ['ThreatID_1234'],
+        cidrv4s: ['123.123.12.0/12', '123.123.0.0/12', '123.0.0.0/1']
+      },
+      ref: {
+        type: 'associated-with',
+        right: {
+          type: 'threat',
+          id: 'ThreatID_1234'
+        },
+        left: {
+          type: 'ipv4',
+          id: 123456789
+        }
+      }
+    },
+    {
+      firstSeen: today.getTime() - 17 * 24 * 60 * 60 * 1000,
+      lastSeen: today.getTime() - 10 * 24 * 60 * 60 * 1000,
       sources: ['Shodan Inferred Vulnerability'],
       right: {
         ticClassificationScores: [50],
@@ -155,8 +224,8 @@ const LG_response = {
       }
     },
     {
-      firstSeen: Today.getTime() - 8 * 24 * 60 * 60 * 1000,
-      lastSeen: Today.getTime() - 5 * 24 * 60 * 60 * 1000,
+      firstSeen: today.getTime() - 8 * 24 * 60 * 60 * 1000,
+      lastSeen: today.getTime() - 5 * 24 * 60 * 60 * 1000,
       sources: ['Shodan Inferred Vulnerability'],
       right: {
         ticClassificationScores: [50],
@@ -224,8 +293,8 @@ const LG_response = {
       }
     },
     {
-      firstSeen: Today.getTime() - 9 * 24 * 60 * 60 * 1000,
-      lastSeen: Today.getTime() - 7 * 24 * 60 * 60 * 1000,
+      firstSeen: today.getTime() - 9 * 24 * 60 * 60 * 1000,
+      lastSeen: today.getTime() - 7 * 24 * 60 * 60 * 1000,
       sources: ['Shodan Inferred Vulnerability'],
       right: {
         ticClassificationScores: [50],
@@ -294,8 +363,8 @@ const LG_response = {
     }
   ]
 };
-let OrgName;
-let org_Response;
+let orgName;
+let orgResponse;
 
 describe('lookingGlass', () => {
   let organization;
@@ -304,14 +373,14 @@ describe('lookingGlass', () => {
   let scan;
   let domains: Domain[] = [];
   beforeEach(async () => {
-    OrgName = 'Collection-' + Math.random();
-    org_Response = [
+    orgName = 'Collection-' + Math.random();
+    orgResponse = [
       {
         children: [],
         createdAt: '2020-05-19T19:09:07.445Z',
         createdBy: 'Created_By_ID_1',
         id: 'Collection_Id_1',
-        name: OrgName,
+        name: orgName,
         ticScore: 50,
         updatedAt: '2020-05-19T19:09:07.445Z',
         updatedBy: '>&,Mx}mU_XG;3ns1Bw}:q+Khu'
@@ -337,7 +406,7 @@ describe('lookingGlass', () => {
       name: 'TestOrgID'
     }).save;
     organization = await Organization.create({
-      name: OrgName,
+      name: orgName,
       rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
       isPassive: false,
@@ -370,7 +439,7 @@ describe('lookingGlass', () => {
   });
 
   afterEach(async () => {
-    global.Date = RealDate;
+    global.Date = realDate;
     jest.unmock('../helpers/getIps');
   });
 
@@ -411,7 +480,7 @@ describe('lookingGlass', () => {
           encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
           '/collections'
       )
-      .reply(200, org_Response);
+      .reply(200, orgResponse);
 
     nock('https://delta.lookingglasscyber.com', {
       reqheaders: {
@@ -430,10 +499,10 @@ describe('lookingGlass', () => {
         limit: 100000,
         workspaceIds: []
       })
-      .reply(200, LG_response);
+      .reply(200, lgResponse);
     await lookingGlass({
       organizationId: organization.id,
-      organizationName: OrgName,
+      organizationName: orgName,
       scanId: scan.id,
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
@@ -452,7 +521,7 @@ describe('lookingGlass', () => {
           encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
           '/collections'
       )
-      .reply(200, org_Response);
+      .reply(200, orgResponse);
 
     nock('https://delta.lookingglasscyber.com', {
       reqheaders: {
@@ -471,10 +540,10 @@ describe('lookingGlass', () => {
         limit: 100000,
         workspaceIds: []
       })
-      .reply(200, LG_response);
+      .reply(200, lgResponse);
     await lookingGlass({
       organizationId: organization.id,
-      organizationName: OrgName,
+      organizationName: orgName,
       scanId: scan.id,
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
@@ -501,8 +570,8 @@ describe('lookingGlass', () => {
       structuredData: {
         lookingGlassData: [
           {
-            firstSeen: Today.getTime() - 25 * 24 * 60 * 60 * 1000,
-            lastSeen: Today.getTime() - 15 * 24 * 60 * 60 * 1000,
+            firstSeen: today.getTime() - 25 * 24 * 60 * 60 * 1000,
+            lastSeen: today.getTime() - 15 * 24 * 60 * 60 * 1000,
             sources: ['Shodan Inferred Vulnerability'],
             ref_type: 'associated-with',
             ref_right_type: 'threat',
@@ -534,7 +603,7 @@ describe('lookingGlass', () => {
           encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
           '/collections'
       )
-      .reply(200, org_Response);
+      .reply(200, orgResponse);
 
     nock('https://delta.lookingglasscyber.com', {
       reqheaders: {
@@ -553,10 +622,10 @@ describe('lookingGlass', () => {
         limit: 100000,
         workspaceIds: []
       })
-      .reply(200, LG_response);
+      .reply(200, lgResponse);
     await lookingGlass({
       organizationId: organization.id,
-      organizationName: OrgName,
+      organizationName: orgName,
       scanId: scan.id,
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
@@ -571,20 +640,20 @@ describe('lookingGlass', () => {
     expect(vulns[0].title).toEqual('Looking Glass Data');
     expect(vulns[0].id).toEqual(vulnerability.id);
     expect(vulns[0].cpe).toEqual(vulnerability.cpe);
-    expect(vulns[0].state).toEqual(vulnerability.state);
     expect(vulns[0].source).toEqual(vulnerability.source);
-    console.log(vulns[0].structuredData['lookingGlassData']);
     // These fields should be updated
+    expect(vulns[0].state).toEqual('open');
+    console.log(vulns[0].state);
     expect(
       new Date(vulns[0].structuredData['lookingGlassData'][0].lastSeen)
-    ).toEqual(new Date(Today.getTime() - 7 * 24 * 60 * 60 * 1000));
+    ).toEqual(new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000));
     expect(vulns[0].structuredData['lookingGlassData'][0].right_name).toEqual(
       'Vulnerable Product - CiscoWebVPN'
     );
     expect(vulns[0].updatedAt).not.toEqual(vulnerability.updatedAt);
   });
 
-  test('Merge duplicates succesfully', async () => {
+  test('Merge duplicates successfully', async () => {
     const domain = await Domain.findOne({ id: domains[1].id });
     const vulnerability = await Vulnerability.create({
       domain,
@@ -597,8 +666,8 @@ describe('lookingGlass', () => {
       structuredData: {
         lookingGlassData: [
           {
-            firstSeen: Today.getTime() - 25 * 24 * 60 * 60 * 1000,
-            lastSeen: Today.getTime() - 22 * 24 * 60 * 60 * 1000,
+            firstSeen: today.getTime() - 25 * 24 * 60 * 60 * 1000,
+            lastSeen: today.getTime() - 22 * 24 * 60 * 60 * 1000,
             sources: ['Shodan Inferred Vulnerability'],
             ref_type: 'associated-with',
             ref_right_type: 'threat',
@@ -630,7 +699,7 @@ describe('lookingGlass', () => {
           encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
           '/collections'
       )
-      .reply(200, org_Response);
+      .reply(200, orgResponse);
 
     nock('https://delta.lookingglasscyber.com', {
       reqheaders: {
@@ -649,10 +718,10 @@ describe('lookingGlass', () => {
         limit: 100000,
         workspaceIds: []
       })
-      .reply(200, LG_response);
+      .reply(200, lgResponse);
     await lookingGlass({
       organizationId: organization.id,
-      organizationName: OrgName,
+      organizationName: orgName,
       scanId: scan.id,
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
@@ -663,9 +732,61 @@ describe('lookingGlass', () => {
     });
     expect(
       new Date(vulns[0].structuredData['lookingGlassData'][0].firstSeen)
-    ).toEqual(new Date(Today.getTime() - 17 * 24 * 60 * 60 * 1000));
+    ).toEqual(new Date(today.getTime() - 17 * 24 * 60 * 60 * 1000));
     expect(
       new Date(vulns[0].structuredData['lookingGlassData'][0].lastSeen)
-    ).toEqual(new Date(Today.getTime() - 5 * 24 * 60 * 60 * 1000));
+    ).toEqual(new Date(today.getTime() - 5 * 24 * 60 * 60 * 1000));
+  });
+
+  test('Merge duplicate threats successfully', async () => {
+    console.log('Running Merge test');
+    const domain = await Domain.findOne({ id: domains[2].id });
+    nock('https://delta.lookingglasscyber.com', {
+      reqheaders: {
+        Authorization: 'Bearer ' + process.env.LG_API_KEY
+      }
+    })
+      .get(
+        '/api/v1/workspaces/' +
+          encodeURIComponent(process.env.LG_WORKSPACE_NAME!) +
+          '/collections'
+      )
+      .reply(200, orgResponse);
+
+    nock('https://delta.lookingglasscyber.com', {
+      reqheaders: {
+        Authorization: 'Bearer ' + process.env.LG_API_KEY
+      }
+    })
+      .post('/api/graph/query', {
+        period: 'all',
+        query: [
+          'and',
+          ['=', 'type', ['associated-with']],
+          ['or', ['=', 'right.type', 'threat'], ['=', 'left.type', 'ipv4']],
+          ['=', 'left.collectionIds', 'Collection_Id_1']
+        ],
+        fields: ['firstSeen', 'lastSeen', 'sources', 'right', 'left'],
+        limit: 100000,
+        workspaceIds: []
+      })
+      .reply(200, lgResponse);
+    await lookingGlass({
+      organizationId: organization.id,
+      organizationName: orgName,
+      scanId: scan.id,
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+    const vulns = await Vulnerability.find({
+      where: { domain },
+      relations: ['service']
+    });
+    expect(
+      new Date(vulns[0].structuredData['lookingGlassData'][0].firstSeen)
+    ).toEqual(new Date(today.getTime() - 13 * 24 * 60 * 60 * 1000));
+    expect(
+      new Date(vulns[0].structuredData['lookingGlassData'][0].lastSeen)
+    ).toEqual(new Date(today.getTime() - 4 * 24 * 60 * 60 * 1000));
   });
 });

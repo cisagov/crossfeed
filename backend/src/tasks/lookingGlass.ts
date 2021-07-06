@@ -254,7 +254,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           if (!domainDict[l.left.name]) {
             domainDict[l.left.name] = {};
           }
-          // If we have seen this domain and this threat, merge the two by taking the most recent lastDate and oldest firstDate
+          // If we have seen this domain and this threat, merge the two by taking the most recent lastSeen and oldest firstSeen
           if (domainDict[l.left.name][l.right.name]) {
             if (lastSeen > domainDict[l.left.name][l.right.name].lastSeen) {
               domainDict[l.left.name][l.right.name].lastSeen = val.lastSeen;
@@ -281,7 +281,6 @@ export const handler = async (commandOptions: CommandOptions) => {
                 },
                 description: `Vulnerabilities / malware found by LookingGlass.`
               };
-              console.log(vulnerability);
               vulnerabilities.push(plainToClass(Vulnerability, vulnerability));
             }
           }
