@@ -258,7 +258,8 @@ export const handler = async (commandOptions: CommandOptions) => {
           if (domainDict[l.left.name][l.right.name]) {
             if (lastSeen > domainDict[l.left.name][l.right.name].lastSeen) {
               domainDict[l.left.name][l.right.name].lastSeen = val.lastSeen;
-            } else {
+            }
+            if (l.firstSeen < domainDict[l.left.name][l.right.name].firstSeen) {
               domainDict[l.left.name][l.right.name].firstSeen = val.firstSeen;
             }
           }
