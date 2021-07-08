@@ -540,7 +540,9 @@ const Risk: React.FC = (props) => {
   if (stats) {
     for (const sev of severities) {
       if (
-        stats.vulnerabilities.severity.some((i) => sev.sevList.includes(i.id))
+        stats.domains.numVulnerabilities.some((i) =>
+          sev.sevList.includes(i.id.split('|')[1])
+        )
       ) {
         sev.disable = false;
       } else {
