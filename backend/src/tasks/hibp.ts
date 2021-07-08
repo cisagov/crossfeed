@@ -1,52 +1,76 @@
-import { Domain, Service, Vulnerability } from '../models';
-import getIps from './helpers/getIps';
+import { Domain, Service, Vulnerability, connectToDatabase } from '../models';
 import { CommandOptions } from './ecs-client';
 import got from 'got';
 import { plainToClass } from 'class-transformer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 
 /**
- * The hibp scan looks up emails from a particular domain
+ * The hibp scan looks up emails from a particular .gov domain
  * that have shown up in breaches using the Have I
  * Been Pwned Enterprise API.
+ * Be aware this scan can only query breaches from .gov domains
  */
+async function getIps(organizationId?: String): Promise<Domain[]> {
+  await connectToDatabase();
+
+  let domains = Domain.createQueryBuilder('domain')
+    .leftJoinAndSelect('domain.organization', 'organization')
+    .andWhere('ip IS NOT NULL')
+    .andWhere('domain.name LIKE :gov', { gov: '%.gov' })
+    .andWhere('domain.ipOnly=:bool', { bool: false });
+
+  if (organizationId) {
+    domains = domains.andWhere('domain.organization=:org', {
+      org: organizationId
+    });
+  }
+
+  return domains.getMany();
+}
 
 async function lookupEmails(breachesDict: any, domain: Domain) {
-  const results: any[] = await got(
-    'https://haveibeenpwned.com/api/v2/enterprisesubscriber/domainsearch/' +
-      domain.name,
-    {
-      headers: {
-        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
+  try {
+    const results: any[] = await got(
+      'https://haveibeenpwned.com/api/v2/enterprisesubscriber/domainsearch/' +
+        domain.name,
+      {
+        headers: {
+          Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
+        }
       }
-    }
-  ).json();
+    ).json();
 
-  const AddressResults = {};
-  const BreachResults = {};
-  const finalResults = {};
+    const AddressResults = {};
+    const BreachResults = {};
+    const finalResults = {};
 
-  const shouldCountBreach = (breach) =>
-    breach.DataClasses.indexOf('Passwords') > -1 &&
-    breach.IsVerified === true &&
-    breach.BreachDate > '2016-01-01';
+    const shouldCountBreach = (breach) =>
+      breach.DataClasses.indexOf('Passwords') > -1 &&
+      breach.IsVerified === true &&
+      breach.BreachDate > '2016-01-01';
 
-  for (const email in results) {
-    const filtered = (results[email] || []).filter((e) =>
-      shouldCountBreach(breachesDict[e])
-    );
-    if (filtered.length > 0) {
-      AddressResults[email + '@' + domain.name] = filtered;
-      for (const breach of filtered) {
-        if (!(breach in BreachResults)) {
-          BreachResults[breach] = breachesDict[breach];
+    for (const email in results) {
+      const filtered = (results[email] || []).filter((e) =>
+        shouldCountBreach(breachesDict[e])
+      );
+      if (filtered.length > 0) {
+        AddressResults[email + '@' + domain.name] = filtered;
+        for (const breach of filtered) {
+          if (!(breach in BreachResults)) {
+            BreachResults[breach] = breachesDict[breach];
+          }
         }
       }
     }
+    finalResults['Emails'] = AddressResults;
+    finalResults['Breaches'] = BreachResults;
+    return finalResults;
+  } catch (error) {
+    console.error(
+      `An error occured when trying to access the HIPB API using the domain: ${domain.name}: ${error} `
+    );
+    return null;
   }
-  finalResults['Emails'] = AddressResults;
-  finalResults['Breaches'] = BreachResults;
-  return finalResults;
 }
 
 export const handler = async (commandOptions: CommandOptions) => {
@@ -54,7 +78,6 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   console.log('Running hibp on organization', organizationName);
   const domainsWithIPs = await getIps(organizationId);
-
   const breaches: any[] = await got(
     'https://haveibeenpwned.com/api/v2/breaches',
     {
@@ -63,7 +86,6 @@ export const handler = async (commandOptions: CommandOptions) => {
       }
     }
   ).json();
-
   const breachesDict = {};
   for (const breach of breaches) {
     breachesDict[breach.Name] = breach;
@@ -72,33 +94,34 @@ export const handler = async (commandOptions: CommandOptions) => {
   const services: Service[] = [];
   const vulns: Vulnerability[] = [];
   for (const domain of domainsWithIPs) {
+    console.log(domain.name);
     const results = await lookupEmails(breachesDict, domain);
-    console.log(
-      `Got ${Object.keys(results['Emails']).length} emails for domain ${
-        domain.name
-      }`
-    );
 
-    if (Object.keys(results['Emails']).length !== 0) {
-      vulns.push(
-        plainToClass(Vulnerability, {
-          domain: domain,
-          lastSeen: new Date(Date.now()),
-          title: 'Exposed Emails',
-          state: 'open',
-          source: 'hibp',
-          severity: 'Low',
-          needsPopulation: false,
-          structuredData: {
-            emails: results['Emails'],
-            breaches: results['Breaches']
-          },
-          description: `Emails associated with ${domain.name} have been exposed in a breach.`
-        })
+    if (results) {
+      console.log(
+        `Got ${Object.keys(results['Emails']).length} emails for domain ${
+          domain.name
+        }`
       );
-      await saveVulnerabilitiesToDb(vulns, false);
-      console.log(results['Emails']);
-      console.log(results['Breaches']);
+
+      if (Object.keys(results['Emails']).length !== 0) {
+        vulns.push(
+          plainToClass(Vulnerability, {
+            domain: domain,
+            lastSeen: new Date(Date.now()),
+            title: 'Exposed Emails',
+            state: 'open',
+            source: 'hibp',
+            needsPopulation: false,
+            structuredData: {
+              emails: results['Emails'],
+              breaches: results['Breaches']
+            },
+            description: `Emails associated with ${domain.name} have been exposed in a breach.`
+          })
+        );
+        await saveVulnerabilitiesToDb(vulns, false);
+      }
     }
   }
 };
