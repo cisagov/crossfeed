@@ -676,6 +676,9 @@ const Risk: React.FC = (props) => {
                           <h3>No open vulnerabilities</h3>
                         ) : (
                           <>
+                            <p className={cardClasses.note}>
+                              *Top 50 domains with open vulnerabilities
+                            </p>
                             <div className={cardClasses.chipWrapper}>
                               {severities.map(
                                 (sevFilter: VulnSeverities, i: number) => (
@@ -805,7 +808,7 @@ const useStyles = makeStyles((theme) => ({
     height: '85%'
   },
   chartLarge: {
-    height: '84.5%',
+    height: '85.5%',
     width: '90%'
   },
   chartHeader: {
@@ -814,7 +817,7 @@ const useStyles = makeStyles((theme) => ({
     '& h5': {
       paddingLeft: 190,
       color: '#71767A',
-      margin: '30px 0 0 0',
+      margin: '10px 0 0 0',
       fontSize: 14
     }
   },
@@ -991,7 +994,14 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'flex-start',
     padding: '5px 10px',
-    marginTop: '20px',
+    marginTop: '5px',
     marginLeft: '15px'
+  },
+  note: {
+    font: '12px',
+    fontFamily: 'Public Sans',
+    margin: '10px 10px 10px 25px',
+    fontStyle: 'italic',
+    color: '#71767A'
   }
 }));
