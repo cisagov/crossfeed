@@ -40,6 +40,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         domain: { id: domain.id },
         source: 'dnstwist'
       });
+      // Map date-first-observed to any domain-name that already exists
       const existingVulnsMap = {};
       if (existingVuln) {
         for (const domain of existingVuln.structuredData['domains']) {
@@ -47,6 +48,8 @@ export const handler = async (commandOptions: CommandOptions) => {
             domain['date-first-observed'];
         }
       }
+      // If an existing domain-name is in the new results, set date-first-observed to the mapped value
+      // Else, set date-first-observed to today's date (dateNow)
       for (const domain of results) {
         domain['date-first-observed'] =
           existingVulnsMap[domain['domain-name']] || dateNow;
