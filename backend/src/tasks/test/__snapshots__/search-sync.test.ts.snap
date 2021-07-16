@@ -8,6 +8,7 @@ Array [
   "syncedAt",
   "ip",
   "fromRootDomain",
+  "ipOnly",
   "reverseName",
   "name",
   "screenshot",

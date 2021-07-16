@@ -1,1074 +1,947 @@
 [
-    {
-        "title": "CVE-2017-15906",
-        "cve": "CVE-2017-15906",
-        "cwe": "CWE-732",
-        "cpe": "cpe:/a:openbsd:openssh:7.4",
-        "description": "The process_open function in sftp-server.c in OpenSSH before 7.6 does not properly prevent write operations in readonly mode, which allows attackers to create zero-length files.",
-        "references": [
-            {
-                "url": "http://www.securityfocus.com/bid/101552",
-                "name": "101552",
-                "tags": [],
-                "source": "BID"
-            },
-            {
-                "url": "https://access.redhat.com/errata/RHSA-2018:0980",
-                "name": "RHSA-2018:0980",
-                "tags": [],
-                "source": "REDHAT"
-            },
-            {
-                "url": "https://github.com/openbsd/src/commit/a6981567e8e215acc1ef690c8dbb30f2d9b00a19",
-                "name": "https://github.com/openbsd/src/commit/a6981567e8e215acc1ef690c8dbb30f2d9b00a19",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "CONFIRM"
-            },
-            {
-                "url": "https://lists.debian.org/debian-lts-announce/2018/09/msg00010.html",
-                "name": "[debian-lts-announce] 20180910 [SECURITY] [DLA 1500-1] openssh security update",
-                "tags": [],
-                "source": "MLIST"
-            },
-            {
-                "url": "https://security.gentoo.org/glsa/201801-05",
-                "name": "GLSA-201801-05",
-                "tags": [],
-                "source": "GENTOO"
-            },
-            {
-                "url": "https://security.netapp.com/advisory/ntap-20180423-0004/",
-                "name": "https://security.netapp.com/advisory/ntap-20180423-0004/",
-                "tags": [],
-                "source": "CONFIRM"
-            },
-            {
-                "url": "https://www.openssh.com/txt/release-7.6",
-                "name": "https://www.openssh.com/txt/release-7.6",
-                "tags": [
-                    "Vendor Advisory"
-                ],
-                "source": "CONFIRM"
-            },
-            {
-                "url": "https://www.oracle.com/security-alerts/cpujan2020.html",
-                "name": "https://www.oracle.com/security-alerts/cpujan2020.html",
-                "tags": [],
-                "source": "MISC"
-            }
+  {
+    "title": "CVE-2017-15906",
+    "cve": "CVE-2017-15906",
+    "cwe": "CWE-732",
+    "cpe": "cpe:/a:openbsd:openssh:7.4",
+    "description": "The process_open function in sftp-server.c in OpenSSH before 7.6 does not properly prevent write operations in readonly mode, which allows attackers to create zero-length files.",
+    "references": [
+      {
+        "url": "http://www.securityfocus.com/bid/101552",
+        "name": "101552",
+        "tags": [],
+        "source": "BID"
+      },
+      {
+        "url": "https://access.redhat.com/errata/RHSA-2018:0980",
+        "name": "RHSA-2018:0980",
+        "tags": [],
+        "source": "REDHAT"
+      },
+      {
+        "url": "https://github.com/openbsd/src/commit/a6981567e8e215acc1ef690c8dbb30f2d9b00a19",
+        "name": "https://github.com/openbsd/src/commit/a6981567e8e215acc1ef690c8dbb30f2d9b00a19",
+        "tags": ["Third Party Advisory"],
+        "source": "CONFIRM"
+      },
+      {
+        "url": "https://lists.debian.org/debian-lts-announce/2018/09/msg00010.html",
+        "name": "[debian-lts-announce] 20180910 [SECURITY] [DLA 1500-1] openssh security update",
+        "tags": [],
+        "source": "MLIST"
+      },
+      {
+        "url": "https://security.gentoo.org/glsa/201801-05",
+        "name": "GLSA-201801-05",
+        "tags": [],
+        "source": "GENTOO"
+      },
+      {
+        "url": "https://security.netapp.com/advisory/ntap-20180423-0004/",
+        "name": "https://security.netapp.com/advisory/ntap-20180423-0004/",
+        "tags": [],
+        "source": "CONFIRM"
+      },
+      {
+        "url": "https://www.openssh.com/txt/release-7.6",
+        "name": "https://www.openssh.com/txt/release-7.6",
+        "tags": ["Vendor Advisory"],
+        "source": "CONFIRM"
+      },
+      {
+        "url": "https://www.oracle.com/security-alerts/cpujan2020.html",
+        "name": "https://www.oracle.com/security-alerts/cpujan2020.html",
+        "tags": [],
+        "source": "MISC"
+      }
+    ],
+    "cvss": 5.3,
+    "severity": "Medium",
+    "needsPopulation": false,
+    "state": "open",
+    "substate": "unconfirmed",
+    "source": "cpe2cve",
+    "notes": "",
+    "actions": []
+  },
+  {
+    "title": "CVE-2018-15473",
+    "cve": "CVE-2018-15473",
+    "cwe": "CWE-362",
+    "cpe": "cpe:/a:openbsd:openssh:7.4",
+    "description": "OpenSSH through 7.7 is prone to a user enumeration vulnerability due to not delaying bailout for an invalid authenticating user until after the packet containing the request has been fully parsed, related to auth2-gss.c, auth2-hostbased.c, and auth2-pubkey.c.",
+    "references": [
+      {
+        "url": "http://www.openwall.com/lists/oss-security/2018/08/15/5",
+        "name": "http://www.openwall.com/lists/oss-security/2018/08/15/5",
+        "tags": ["Mailing List", "Patch", "Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "http://www.securityfocus.com/bid/105140",
+        "name": "105140",
+        "tags": ["Third Party Advisory", "VDB Entry"],
+        "source": "BID"
+      },
+      {
+        "url": "http://www.securitytracker.com/id/1041487",
+        "name": "1041487",
+        "tags": ["Patch", "Third Party Advisory", "VDB Entry"],
+        "source": "SECTRACK"
+      },
+      {
+        "url": "https://access.redhat.com/errata/RHSA-2019:0711",
+        "name": "RHSA-2019:0711",
+        "tags": ["Third Party Advisory"],
+        "source": "REDHAT"
+      },
+      {
+        "url": "https://access.redhat.com/errata/RHSA-2019:2143",
+        "name": "RHSA-2019:2143",
+        "tags": [],
+        "source": "REDHAT"
+      },
+      {
+        "url": "https://bugs.debian.org/906236",
+        "name": "https://bugs.debian.org/906236",
+        "tags": [
+          "Issue Tracking",
+          "Mailing List",
+          "Patch",
+          "Third Party Advisory"
         ],
-        "cvss": 5.3,
-        "severity": "Medium",
-        "needsPopulation": false,
-        "state": "open",
-        "substate": "unconfirmed",
-        "source": "cpe2cve",
-        "notes": "",
-        "actions": []
-    },
-    {
-        "title": "CVE-2018-15473",
-        "cve": "CVE-2018-15473",
-        "cwe": "CWE-362",
-        "cpe": "cpe:/a:openbsd:openssh:7.4",
-        "description": "OpenSSH through 7.7 is prone to a user enumeration vulnerability due to not delaying bailout for an invalid authenticating user until after the packet containing the request has been fully parsed, related to auth2-gss.c, auth2-hostbased.c, and auth2-pubkey.c.",
-        "references": [
-            {
-                "url": "http://www.openwall.com/lists/oss-security/2018/08/15/5",
-                "name": "http://www.openwall.com/lists/oss-security/2018/08/15/5",
-                "tags": [
-                    "Mailing List",
-                    "Patch",
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "http://www.securityfocus.com/bid/105140",
-                "name": "105140",
-                "tags": [
-                    "Third Party Advisory",
-                    "VDB Entry"
-                ],
-                "source": "BID"
-            },
-            {
-                "url": "http://www.securitytracker.com/id/1041487",
-                "name": "1041487",
-                "tags": [
-                    "Patch",
-                    "Third Party Advisory",
-                    "VDB Entry"
-                ],
-                "source": "SECTRACK"
-            },
-            {
-                "url": "https://access.redhat.com/errata/RHSA-2019:0711",
-                "name": "RHSA-2019:0711",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "REDHAT"
-            },
-            {
-                "url": "https://access.redhat.com/errata/RHSA-2019:2143",
-                "name": "RHSA-2019:2143",
-                "tags": [],
-                "source": "REDHAT"
-            },
-            {
-                "url": "https://bugs.debian.org/906236",
-                "name": "https://bugs.debian.org/906236",
-                "tags": [
-                    "Issue Tracking",
-                    "Mailing List",
-                    "Patch",
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://github.com/openbsd/src/commit/779974d35b4859c07bc3cb8a12c74b43b0a7d1e0",
-                "name": "https://github.com/openbsd/src/commit/779974d35b4859c07bc3cb8a12c74b43b0a7d1e0",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://lists.debian.org/debian-lts-announce/2018/08/msg00022.html",
-                "name": "[debian-lts-announce] 20180821 [SECURITY] [DLA-1474-1] openssh security update",
-                "tags": [
-                    "Mailing List",
-                    "Third Party Advisory"
-                ],
-                "source": "MLIST"
-            },
-            {
-                "url": "https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2018-0011",
-                "name": "https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2018-0011",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "CONFIRM"
-            },
-            {
-                "url": "https://security.gentoo.org/glsa/201810-03",
-                "name": "GLSA-201810-03",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "GENTOO"
-            },
-            {
-                "url": "https://security.netapp.com/advisory/ntap-20181101-0001/",
-                "name": "https://security.netapp.com/advisory/ntap-20181101-0001/",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "CONFIRM"
-            },
-            {
-                "url": "https://usn.ubuntu.com/3809-1/",
-                "name": "USN-3809-1",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "UBUNTU"
-            },
-            {
-                "url": "https://www.debian.org/security/2018/dsa-4280",
-                "name": "DSA-4280",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "DEBIAN"
-            },
-            {
-                "url": "https://www.exploit-db.com/exploits/45210/",
-                "name": "45210",
-                "tags": [
-                    "Exploit",
-                    "Third Party Advisory",
-                    "VDB Entry"
-                ],
-                "source": "EXPLOIT-DB"
-            },
-            {
-                "url": "https://www.exploit-db.com/exploits/45233/",
-                "name": "45233",
-                "tags": [
-                    "Exploit",
-                    "Third Party Advisory",
-                    "VDB Entry"
-                ],
-                "source": "EXPLOIT-DB"
-            },
-            {
-                "url": "https://www.exploit-db.com/exploits/45939/",
-                "name": "45939",
-                "tags": [
-                    "Exploit",
-                    "Third Party Advisory",
-                    "VDB Entry"
-                ],
-                "source": "EXPLOIT-DB"
-            },
-            {
-                "url": "https://www.oracle.com/security-alerts/cpujan2020.html",
-                "name": "https://www.oracle.com/security-alerts/cpujan2020.html",
-                "tags": [],
-                "source": "MISC"
-            }
-        ],
-        "cvss": 5.3,
-        "severity": "Medium",
-        "needsPopulation": false,
-        "state": "open",
-        "substate": "unconfirmed",
-        "source": "cpe2cve",
-        "notes": "",
-        "actions": []
-    },
-    {
-        "title": "CVE-2018-15919",
-        "cve": "CVE-2018-15919",
-        "cwe": "CWE-200",
-        "cpe": "cpe:/a:openbsd:openssh:7.4",
-        "description": "Remotely observable behaviour in auth-gss2.c in OpenSSH through 7.8 could be used by remote attackers to detect existence of users on a target system when GSS2 is in use. NOTE: the discoverer states 'We understand that the OpenSSH developers do not want to treat such a username enumeration (or \"oracle\") as a vulnerability.'",
-        "references": [
-            {
-                "url": "http://seclists.org/oss-sec/2018/q3/180",
-                "name": "http://seclists.org/oss-sec/2018/q3/180",
-                "tags": [
-                    "Mailing List",
-                    "Patch",
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "http://www.securityfocus.com/bid/105163",
-                "name": "105163",
-                "tags": [
-                    "Third Party Advisory",
-                    "VDB Entry"
-                ],
-                "source": "BID"
-            },
-            {
-                "url": "https://security.netapp.com/advisory/ntap-20181221-0001/",
-                "name": "https://security.netapp.com/advisory/ntap-20181221-0001/",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "CONFIRM"
-            }
-        ],
-        "cvss": 5.3,
-        "severity": "Medium",
-        "needsPopulation": false,
-        "state": "open",
-        "substate": "unconfirmed",
-        "source": "cpe2cve",
-        "notes": "",
-        "actions": []
-    },
-    {
-        "title": "CVE-2018-20685",
-        "cve": "CVE-2018-20685",
-        "cwe": "CWE-863",
-        "cpe": "cpe:/a:openbsd:openssh:7.4",
-        "description": "In OpenSSH 7.9, scp.c in the scp client allows remote SSH servers to bypass intended access restrictions via the filename of . or an empty filename. The impact is modifying the permissions of the target directory on the client side.",
-        "references": [
-            {
-                "url": "http://www.securityfocus.com/bid/106531",
-                "name": "106531",
-                "tags": [
-                    "Third Party Advisory",
-                    "VDB Entry"
-                ],
-                "source": "BID"
-            },
-            {
-                "url": "https://access.redhat.com/errata/RHSA-2019:3702",
-                "name": "RHSA-2019:3702",
-                "tags": [],
-                "source": "REDHAT"
-            },
-            {
-                "url": "https://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/scp.c.diff?r1=1.197&r2=1.198&f=h",
-                "name": "https://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/scp.c.diff?r1=1.197&r2=1.198&f=h",
-                "tags": [
-                    "Patch",
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://github.com/openssh/openssh-portable/commit/6010c0303a422a9c5fa8860c061bf7105eb7f8b2",
-                "name": "https://github.com/openssh/openssh-portable/commit/6010c0303a422a9c5fa8860c061bf7105eb7f8b2",
-                "tags": [
-                    "Patch",
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://lists.debian.org/debian-lts-announce/2019/03/msg00030.html",
-                "name": "[debian-lts-announce] 20190325 [SECURITY] [DLA 1728-1] openssh security update",
-                "tags": [
-                    "Mailing List",
-                    "Third Party Advisory"
-                ],
-                "source": "MLIST"
-            },
-            {
-                "url": "https://security.gentoo.org/glsa/201903-16",
-                "name": "GLSA-201903-16",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "GENTOO"
-            },
-            {
-                "url": "https://security.gentoo.org/glsa/202007-53",
-                "name": "GLSA-202007-53",
-                "tags": [],
-                "source": "GENTOO"
-            },
-            {
-                "url": "https://security.netapp.com/advisory/ntap-20190215-0001/",
-                "name": "https://security.netapp.com/advisory/ntap-20190215-0001/",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "CONFIRM"
-            },
-            {
-                "url": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
-                "name": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
-                "tags": [
-                    "Patch",
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://usn.ubuntu.com/3885-1/",
-                "name": "USN-3885-1",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "UBUNTU"
-            },
-            {
-                "url": "https://www.debian.org/security/2019/dsa-4387",
-                "name": "DSA-4387",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "DEBIAN"
-            },
-            {
-                "url": "https://www.oracle.com/technetwork/security-advisory/cpuapr2019-5072813.html",
-                "name": "https://www.oracle.com/technetwork/security-advisory/cpuapr2019-5072813.html",
-                "tags": [
-                    "Patch"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
-                "name": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
-                "tags": [],
-                "source": "MISC"
-            }
-        ],
-        "cvss": 5.3,
-        "severity": "Medium",
-        "needsPopulation": false,
-        "state": "open",
-        "substate": "unconfirmed",
-        "source": "cpe2cve",
-        "notes": "",
-        "actions": []
-    },
-    {
-        "title": "CVE-2019-6109",
-        "cve": "CVE-2019-6109",
-        "cwe": "CWE-116",
-        "cpe": "cpe:/a:openbsd:openssh:7.4",
-        "description": "An issue was discovered in OpenSSH 7.9. Due to missing character encoding in the progress display, a malicious server (or Man-in-The-Middle attacker) can employ crafted object names to manipulate the client output, e.g., by using ANSI control codes to hide additional files being transferred. This affects refresh_progress_meter() in progressmeter.c.",
-        "references": [
-            {
-                "url": "http://lists.opensuse.org/opensuse-security-announce/2019-06/msg00058.html",
-                "name": "openSUSE-SU-2019:1602",
-                "tags": [],
-                "source": "SUSE"
-            },
-            {
-                "url": "https://access.redhat.com/errata/RHSA-2019:3702",
-                "name": "RHSA-2019:3702",
-                "tags": [],
-                "source": "REDHAT"
-            },
-            {
-                "url": "https://cvsweb.openbsd.org/src/usr.bin/ssh/progressmeter.c",
-                "name": "https://cvsweb.openbsd.org/src/usr.bin/ssh/progressmeter.c",
-                "tags": [
-                    "Release Notes",
-                    "Vendor Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
-                "name": "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
-                "tags": [
-                    "Release Notes",
-                    "Vendor Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://lists.debian.org/debian-lts-announce/2019/03/msg00030.html",
-                "name": "[debian-lts-announce] 20190325 [SECURITY] [DLA 1728-1] openssh security update",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "MLIST"
-            },
-            {
-                "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/W3YVQ2BPTOVDCFDVNC2GGF5P5ISFG37G/",
-                "name": "FEDORA-2019-0f4190cdb0",
-                "tags": [],
-                "source": "FEDORA"
-            },
-            {
-                "url": "https://security.gentoo.org/glsa/201903-16",
-                "name": "GLSA-201903-16",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "GENTOO"
-            },
-            {
-                "url": "https://security.netapp.com/advisory/ntap-20190213-0001/",
-                "name": "https://security.netapp.com/advisory/ntap-20190213-0001/",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "CONFIRM"
-            },
-            {
-                "url": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
-                "name": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://usn.ubuntu.com/3885-1/",
-                "name": "USN-3885-1",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "UBUNTU"
-            },
-            {
-                "url": "https://www.debian.org/security/2019/dsa-4387",
-                "name": "DSA-4387",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "DEBIAN"
-            },
-            {
-                "url": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
-                "name": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
-                "tags": [],
-                "source": "MISC"
-            }
-        ],
-        "cvss": 6.8,
-        "severity": "Medium",
-        "needsPopulation": false,
-        "state": "open",
-        "substate": "unconfirmed",
-        "source": "cpe2cve",
-        "notes": "",
-        "actions": []
-    },
-    {
-        "title": "CVE-2019-6110",
-        "cve": "CVE-2019-6110",
-        "cwe": "CWE-838",
-        "cpe": "cpe:/a:openbsd:openssh:7.4",
-        "description": "In OpenSSH 7.9, due to accepting and displaying arbitrary stderr output from the server, a malicious server (or Man-in-The-Middle attacker) can manipulate the client output, for example to use ANSI control codes to hide additional files being transferred.",
-        "references": [
-            {
-                "url": "https://cvsweb.openbsd.org/src/usr.bin/ssh/progressmeter.c",
-                "name": "https://cvsweb.openbsd.org/src/usr.bin/ssh/progressmeter.c",
-                "tags": [
-                    "Release Notes",
-                    "Vendor Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
-                "name": "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
-                "tags": [
-                    "Release Notes",
-                    "Vendor Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://security.gentoo.org/glsa/201903-16",
-                "name": "GLSA-201903-16",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "GENTOO"
-            },
-            {
-                "url": "https://security.netapp.com/advisory/ntap-20190213-0001/",
-                "name": "https://security.netapp.com/advisory/ntap-20190213-0001/",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "CONFIRM"
-            },
-            {
-                "url": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
-                "name": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://www.exploit-db.com/exploits/46193/",
-                "name": "46193",
-                "tags": [
-                    "Exploit",
-                    "Third Party Advisory",
-                    "VDB Entry"
-                ],
-                "source": "EXPLOIT-DB"
-            }
-        ],
-        "cvss": 6.8,
-        "severity": "Medium",
-        "needsPopulation": false,
-        "state": "open",
-        "substate": "unconfirmed",
-        "source": "cpe2cve",
-        "notes": "",
-        "actions": []
-    },
-    {
-        "title": "CVE-2019-6111",
-        "cve": "CVE-2019-6111",
-        "cwe": "CWE-22",
-        "cpe": "cpe:/a:openbsd:openssh:7.4",
-        "description": "An issue was discovered in OpenSSH 7.9. Due to the scp implementation being derived from 1983 rcp, the server chooses which files/directories are sent to the client. However, the scp client only performs cursory validation of the object name returned (only directory traversal attacks are prevented). A malicious scp server (or Man-in-The-Middle attacker) can overwrite arbitrary files in the scp client target directory. If recursive operation (-r) is performed, the server can manipulate subdirectories as well (for example, to overwrite the .ssh/authorized_keys file).",
-        "references": [
-            {
-                "url": "http://lists.opensuse.org/opensuse-security-announce/2019-06/msg00058.html",
-                "name": "openSUSE-SU-2019:1602",
-                "tags": [],
-                "source": "SUSE"
-            },
-            {
-                "url": "http://www.openwall.com/lists/oss-security/2019/04/18/1",
-                "name": "[oss-security] 20190417 Announce: OpenSSH 8.0 released",
-                "tags": [],
-                "source": "MLIST"
-            },
-            {
-                "url": "http://www.securityfocus.com/bid/106741",
-                "name": "106741",
-                "tags": [
-                    "Third Party Advisory",
-                    "VDB Entry"
-                ],
-                "source": "BID"
-            },
-            {
-                "url": "https://access.redhat.com/errata/RHSA-2019:3702",
-                "name": "RHSA-2019:3702",
-                "tags": [],
-                "source": "REDHAT"
-            },
-            {
-                "url": "https://bugzilla.redhat.com/show_bug.cgi?id=1677794",
-                "name": "https://bugzilla.redhat.com/show_bug.cgi?id=1677794",
-                "tags": [
-                    "Exploit",
-                    "Issue Tracking",
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
-                "name": "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
-                "tags": [
-                    "Release Notes"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://lists.apache.org/thread.html/c45d9bc90700354b58fb7455962873c44229841880dcb64842fa7d23@%3Cdev.mina.apache.org%3E",
-                "name": "[mina-dev] 20190620 [jira] [Created] (SSHD-925) See if SCP vulnerability CVE-2019-6111 applies and mitigate it if so",
-                "tags": [],
-                "source": "MLIST"
-            },
-            {
-                "url": "https://lists.apache.org/thread.html/c7301cab36a86825359e1b725fc40304d1df56dc6d107c1fe885148b@%3Cdev.mina.apache.org%3E",
-                "name": "[mina-dev] 20190623 [jira] [Comment Edited] (SSHD-925) See if SCP vulnerability CVE-2019-6111 applies and mitigate it if so",
-                "tags": [],
-                "source": "MLIST"
-            },
-            {
-                "url": "https://lists.apache.org/thread.html/d540139359de999b0f1c87d05b715be4d7d4bec771e1ae55153c5c7a@%3Cdev.mina.apache.org%3E",
-                "name": "[mina-dev] 20190820 [jira] [Resolved] (SSHD-925) See if SCP vulnerability CVE-2019-6111 applies and mitigate it if so",
-                "tags": [],
-                "source": "MLIST"
-            },
-            {
-                "url": "https://lists.apache.org/thread.html/e47597433b351d6e01a5d68d610b4ba195743def9730e49561e8cf3f@%3Cdev.mina.apache.org%3E",
-                "name": "[mina-dev] 20190623 [jira] [Commented] (SSHD-925) See if SCP vulnerability CVE-2019-6111 applies and mitigate it if so",
-                "tags": [],
-                "source": "MLIST"
-            },
-            {
-                "url": "https://lists.debian.org/debian-lts-announce/2019/03/msg00030.html",
-                "name": "[debian-lts-announce] 20190325 [SECURITY] [DLA 1728-1] openssh security update",
-                "tags": [
-                    "Mailing List",
-                    "Third Party Advisory"
-                ],
-                "source": "MLIST"
-            },
-            {
-                "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/W3YVQ2BPTOVDCFDVNC2GGF5P5ISFG37G/",
-                "name": "FEDORA-2019-0f4190cdb0",
-                "tags": [],
-                "source": "FEDORA"
-            },
-            {
-                "url": "https://security.gentoo.org/glsa/201903-16",
-                "name": "GLSA-201903-16",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "GENTOO"
-            },
-            {
-                "url": "https://security.netapp.com/advisory/ntap-20190213-0001/",
-                "name": "https://security.netapp.com/advisory/ntap-20190213-0001/",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "CONFIRM"
-            },
-            {
-                "url": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
-                "name": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://usn.ubuntu.com/3885-1/",
-                "name": "USN-3885-1",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "UBUNTU"
-            },
-            {
-                "url": "https://usn.ubuntu.com/3885-2/",
-                "name": "USN-3885-2",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "UBUNTU"
-            },
-            {
-                "url": "https://www.debian.org/security/2019/dsa-4387",
-                "name": "DSA-4387",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "DEBIAN"
-            },
-            {
-                "url": "https://www.exploit-db.com/exploits/46193/",
-                "name": "46193",
-                "tags": [
-                    "Exploit",
-                    "Third Party Advisory",
-                    "VDB Entry"
-                ],
-                "source": "EXPLOIT-DB"
-            },
-            {
-                "url": "https://www.freebsd.org/security/advisories/FreeBSD-EN-19:10.scp.asc",
-                "name": "FreeBSD-EN-19:10",
-                "tags": [],
-                "source": "FREEBSD"
-            },
-            {
-                "url": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
-                "name": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
-                "tags": [],
-                "source": "MISC"
-            }
-        ],
-        "cvss": 5.9,
-        "severity": "Medium",
-        "needsPopulation": false,
-        "state": "open",
-        "substate": "unconfirmed",
-        "source": "cpe2cve",
-        "notes": "",
-        "actions": []
-    },
-    {
-        "title": "CVE-2020-14145",
-        "cve": "CVE-2020-14145",
-        "cwe": "CWE-200",
-        "cpe": "cpe:/a:openbsd:openssh:7.4",
-        "description": "The client side in OpenSSH 5.7 through 8.4 has an Observable Discrepancy leading to an information leak in the algorithm negotiation. This allows man-in-the-middle attackers to target initial connection attempts (where no host key for the server has been cached by the client).",
-        "references": [
-            {
-                "url": "http://www.openwall.com/lists/oss-security/2020/12/02/1",
-                "name": "[oss-security] 20201202 Some mitigation for openssh CVE-2020-14145",
-                "tags": [
-                    "Mailing List",
-                    "Patch",
-                    "Third Party Advisory"
-                ],
-                "source": "MLIST"
-            },
-            {
-                "url": "https://anongit.mindrot.org/openssh.git/commit/?id=b3855ff053f5078ec3d3c653cdaedefaa5fc362d",
-                "name": "https://anongit.mindrot.org/openssh.git/commit/?id=b3855ff053f5078ec3d3c653cdaedefaa5fc362d",
-                "tags": [
-                    "Patch",
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://docs.ssh-mitm.at/CVE-2020-14145.html",
-                "name": "https://docs.ssh-mitm.at/CVE-2020-14145.html",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://github.com/openssh/openssh-portable/compare/V_8_3_P1...V_8_4_P1",
-                "name": "https://github.com/openssh/openssh-portable/compare/V_8_3_P1...V_8_4_P1",
-                "tags": [
-                    "Patch",
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://github.com/ssh-mitm/ssh-mitm/blob/master/ssh_proxy_server/plugins/session/cve202014145.py",
-                "name": "https://github.com/ssh-mitm/ssh-mitm/blob/master/ssh_proxy_server/plugins/session/cve202014145.py",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://security.netapp.com/advisory/ntap-20200709-0004/",
-                "name": "https://security.netapp.com/advisory/ntap-20200709-0004/",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "CONFIRM"
-            },
-            {
-                "url": "https://www.fzi.de/en/news/news/detail-en/artikel/fsa-2020-2-ausnutzung-eines-informationslecks-fuer-gezielte-mitm-angriffe-auf-ssh-clients/",
-                "name": "https://www.fzi.de/en/news/news/detail-en/artikel/fsa-2020-2-ausnutzung-eines-informationslecks-fuer-gezielte-mitm-angriffe-auf-ssh-clients/",
-                "tags": [
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            }
-        ],
-        "cvss": 5.9,
-        "severity": "Medium",
-        "needsPopulation": false,
-        "state": "open",
-        "substate": "unconfirmed",
-        "source": "cpe2cve",
-        "notes": "",
-        "actions": []
-    },
-    {
-        "title": "CVE-2020-15778",
-        "cve": "CVE-2020-15778",
-        "cwe": "CWE-78",
-        "cpe": "cpe:/a:openbsd:openssh:7.4",
-        "description": "scp in OpenSSH through 8.3p1 allows command injection in the scp.c toremote function, as demonstrated by backtick characters in the destination argument. NOTE: the vendor reportedly has stated that they intentionally omit validation of \"anomalous argument transfers\" because that could \"stand a great chance of breaking existing workflows.\"",
-        "references": [
-            {
-                "url": "https://github.com/cpandya2909/CVE-2020-15778/",
-                "name": "https://github.com/cpandya2909/CVE-2020-15778/",
-                "tags": [
-                    "Exploit",
-                    "Third Party Advisory"
-                ],
-                "source": "MISC"
-            },
-            {
-                "url": "https://news.ycombinator.com/item?id=25005567",
-                "name": "https://news.ycombinator.com/item?id=25005567",
-                "tags": [],
-                "source": "MISC"
-            },
-            {
-                "url": "https://security.netapp.com/advisory/ntap-20200731-0007/",
-                "name": "https://security.netapp.com/advisory/ntap-20200731-0007/",
-                "tags": [],
-                "source": "CONFIRM"
-            },
-            {
-                "url": "https://www.openssh.com/security.html",
-                "name": "https://www.openssh.com/security.html",
-                "tags": [
-                    "Vendor Advisory"
-                ],
-                "source": "MISC"
-            }
-        ],
-        "cvss": 7.8,
-        "severity": "High",
-        "needsPopulation": false,
-        "state": "open",
-        "substate": "unconfirmed",
-        "source": "cpe2cve",
-        "notes": "",
-        "actions": []
-    },
-    {
-        "title": "Exposed Emails",
-        "cve": null,
-        "cwe": null,
-        "cpe": null,
-        "description": "Emails associated with this Domain have been exposed in a breach. See Data field for a list of emails",
-        "cvss": null,
-        "severity": null,
-        "needsPopulation": false,
-        "state": "open",
-        "substate": "unconfirmed",
-        "source": "hibp",
-        "structuredData": { 
-        "emails": {
-            "Email_11@crossfeed.local":["breach12","breach17"],
-            "Email_13@crossfeed.local":["breach14","breach3"],
-            "Email_64@crossfeed.local":["breach24"],
-            "Email_32@crossfeed.local":["breach22"],
-            "Email_17@crossfeed.local":["breach54","breach2"]
+        "source": "MISC"
+      },
+      {
+        "url": "https://github.com/openbsd/src/commit/779974d35b4859c07bc3cb8a12c74b43b0a7d1e0",
+        "name": "https://github.com/openbsd/src/commit/779974d35b4859c07bc3cb8a12c74b43b0a7d1e0",
+        "tags": ["Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://lists.debian.org/debian-lts-announce/2018/08/msg00022.html",
+        "name": "[debian-lts-announce] 20180821 [SECURITY] [DLA-1474-1] openssh security update",
+        "tags": ["Mailing List", "Third Party Advisory"],
+        "source": "MLIST"
+      },
+      {
+        "url": "https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2018-0011",
+        "name": "https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2018-0011",
+        "tags": ["Third Party Advisory"],
+        "source": "CONFIRM"
+      },
+      {
+        "url": "https://security.gentoo.org/glsa/201810-03",
+        "name": "GLSA-201810-03",
+        "tags": ["Third Party Advisory"],
+        "source": "GENTOO"
+      },
+      {
+        "url": "https://security.netapp.com/advisory/ntap-20181101-0001/",
+        "name": "https://security.netapp.com/advisory/ntap-20181101-0001/",
+        "tags": ["Third Party Advisory"],
+        "source": "CONFIRM"
+      },
+      {
+        "url": "https://usn.ubuntu.com/3809-1/",
+        "name": "USN-3809-1",
+        "tags": ["Third Party Advisory"],
+        "source": "UBUNTU"
+      },
+      {
+        "url": "https://www.debian.org/security/2018/dsa-4280",
+        "name": "DSA-4280",
+        "tags": ["Third Party Advisory"],
+        "source": "DEBIAN"
+      },
+      {
+        "url": "https://www.exploit-db.com/exploits/45210/",
+        "name": "45210",
+        "tags": ["Exploit", "Third Party Advisory", "VDB Entry"],
+        "source": "EXPLOIT-DB"
+      },
+      {
+        "url": "https://www.exploit-db.com/exploits/45233/",
+        "name": "45233",
+        "tags": ["Exploit", "Third Party Advisory", "VDB Entry"],
+        "source": "EXPLOIT-DB"
+      },
+      {
+        "url": "https://www.exploit-db.com/exploits/45939/",
+        "name": "45939",
+        "tags": ["Exploit", "Third Party Advisory", "VDB Entry"],
+        "source": "EXPLOIT-DB"
+      },
+      {
+        "url": "https://www.oracle.com/security-alerts/cpujan2020.html",
+        "name": "https://www.oracle.com/security-alerts/cpujan2020.html",
+        "tags": [],
+        "source": "MISC"
+      }
+    ],
+    "cvss": 5.3,
+    "severity": "Medium",
+    "needsPopulation": false,
+    "state": "open",
+    "substate": "unconfirmed",
+    "source": "cpe2cve",
+    "notes": "",
+    "actions": []
+  },
+  {
+    "title": "CVE-2018-15919",
+    "cve": "CVE-2018-15919",
+    "cwe": "CWE-200",
+    "cpe": "cpe:/a:openbsd:openssh:7.4",
+    "description": "Remotely observable behaviour in auth-gss2.c in OpenSSH through 7.8 could be used by remote attackers to detect existence of users on a target system when GSS2 is in use. NOTE: the discoverer states 'We understand that the OpenSSH developers do not want to treat such a username enumeration (or \"oracle\") as a vulnerability.'",
+    "references": [
+      {
+        "url": "http://seclists.org/oss-sec/2018/q3/180",
+        "name": "http://seclists.org/oss-sec/2018/q3/180",
+        "tags": ["Mailing List", "Patch", "Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "http://www.securityfocus.com/bid/105163",
+        "name": "105163",
+        "tags": ["Third Party Advisory", "VDB Entry"],
+        "source": "BID"
+      },
+      {
+        "url": "https://security.netapp.com/advisory/ntap-20181221-0001/",
+        "name": "https://security.netapp.com/advisory/ntap-20181221-0001/",
+        "tags": ["Third Party Advisory"],
+        "source": "CONFIRM"
+      }
+    ],
+    "cvss": 5.3,
+    "severity": "Medium",
+    "needsPopulation": false,
+    "state": "open",
+    "substate": "unconfirmed",
+    "source": "cpe2cve",
+    "notes": "",
+    "actions": []
+  },
+  {
+    "title": "CVE-2018-20685",
+    "cve": "CVE-2018-20685",
+    "cwe": "CWE-863",
+    "cpe": "cpe:/a:openbsd:openssh:7.4",
+    "description": "In OpenSSH 7.9, scp.c in the scp client allows remote SSH servers to bypass intended access restrictions via the filename of . or an empty filename. The impact is modifying the permissions of the target directory on the client side.",
+    "references": [
+      {
+        "url": "http://www.securityfocus.com/bid/106531",
+        "name": "106531",
+        "tags": ["Third Party Advisory", "VDB Entry"],
+        "source": "BID"
+      },
+      {
+        "url": "https://access.redhat.com/errata/RHSA-2019:3702",
+        "name": "RHSA-2019:3702",
+        "tags": [],
+        "source": "REDHAT"
+      },
+      {
+        "url": "https://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/scp.c.diff?r1=1.197&r2=1.198&f=h",
+        "name": "https://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/scp.c.diff?r1=1.197&r2=1.198&f=h",
+        "tags": ["Patch", "Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://github.com/openssh/openssh-portable/commit/6010c0303a422a9c5fa8860c061bf7105eb7f8b2",
+        "name": "https://github.com/openssh/openssh-portable/commit/6010c0303a422a9c5fa8860c061bf7105eb7f8b2",
+        "tags": ["Patch", "Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://lists.debian.org/debian-lts-announce/2019/03/msg00030.html",
+        "name": "[debian-lts-announce] 20190325 [SECURITY] [DLA 1728-1] openssh security update",
+        "tags": ["Mailing List", "Third Party Advisory"],
+        "source": "MLIST"
+      },
+      {
+        "url": "https://security.gentoo.org/glsa/201903-16",
+        "name": "GLSA-201903-16",
+        "tags": ["Third Party Advisory"],
+        "source": "GENTOO"
+      },
+      {
+        "url": "https://security.gentoo.org/glsa/202007-53",
+        "name": "GLSA-202007-53",
+        "tags": [],
+        "source": "GENTOO"
+      },
+      {
+        "url": "https://security.netapp.com/advisory/ntap-20190215-0001/",
+        "name": "https://security.netapp.com/advisory/ntap-20190215-0001/",
+        "tags": ["Third Party Advisory"],
+        "source": "CONFIRM"
+      },
+      {
+        "url": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
+        "name": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
+        "tags": ["Patch", "Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://usn.ubuntu.com/3885-1/",
+        "name": "USN-3885-1",
+        "tags": ["Third Party Advisory"],
+        "source": "UBUNTU"
+      },
+      {
+        "url": "https://www.debian.org/security/2019/dsa-4387",
+        "name": "DSA-4387",
+        "tags": ["Third Party Advisory"],
+        "source": "DEBIAN"
+      },
+      {
+        "url": "https://www.oracle.com/technetwork/security-advisory/cpuapr2019-5072813.html",
+        "name": "https://www.oracle.com/technetwork/security-advisory/cpuapr2019-5072813.html",
+        "tags": ["Patch"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
+        "name": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
+        "tags": [],
+        "source": "MISC"
+      }
+    ],
+    "cvss": 5.3,
+    "severity": "Medium",
+    "needsPopulation": false,
+    "state": "open",
+    "substate": "unconfirmed",
+    "source": "cpe2cve",
+    "notes": "",
+    "actions": []
+  },
+  {
+    "title": "CVE-2019-6109",
+    "cve": "CVE-2019-6109",
+    "cwe": "CWE-116",
+    "cpe": "cpe:/a:openbsd:openssh:7.4",
+    "description": "An issue was discovered in OpenSSH 7.9. Due to missing character encoding in the progress display, a malicious server (or Man-in-The-Middle attacker) can employ crafted object names to manipulate the client output, e.g., by using ANSI control codes to hide additional files being transferred. This affects refresh_progress_meter() in progressmeter.c.",
+    "references": [
+      {
+        "url": "http://lists.opensuse.org/opensuse-security-announce/2019-06/msg00058.html",
+        "name": "openSUSE-SU-2019:1602",
+        "tags": [],
+        "source": "SUSE"
+      },
+      {
+        "url": "https://access.redhat.com/errata/RHSA-2019:3702",
+        "name": "RHSA-2019:3702",
+        "tags": [],
+        "source": "REDHAT"
+      },
+      {
+        "url": "https://cvsweb.openbsd.org/src/usr.bin/ssh/progressmeter.c",
+        "name": "https://cvsweb.openbsd.org/src/usr.bin/ssh/progressmeter.c",
+        "tags": ["Release Notes", "Vendor Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
+        "name": "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
+        "tags": ["Release Notes", "Vendor Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://lists.debian.org/debian-lts-announce/2019/03/msg00030.html",
+        "name": "[debian-lts-announce] 20190325 [SECURITY] [DLA 1728-1] openssh security update",
+        "tags": ["Third Party Advisory"],
+        "source": "MLIST"
+      },
+      {
+        "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/W3YVQ2BPTOVDCFDVNC2GGF5P5ISFG37G/",
+        "name": "FEDORA-2019-0f4190cdb0",
+        "tags": [],
+        "source": "FEDORA"
+      },
+      {
+        "url": "https://security.gentoo.org/glsa/201903-16",
+        "name": "GLSA-201903-16",
+        "tags": ["Third Party Advisory"],
+        "source": "GENTOO"
+      },
+      {
+        "url": "https://security.netapp.com/advisory/ntap-20190213-0001/",
+        "name": "https://security.netapp.com/advisory/ntap-20190213-0001/",
+        "tags": ["Third Party Advisory"],
+        "source": "CONFIRM"
+      },
+      {
+        "url": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
+        "name": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
+        "tags": ["Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://usn.ubuntu.com/3885-1/",
+        "name": "USN-3885-1",
+        "tags": ["Third Party Advisory"],
+        "source": "UBUNTU"
+      },
+      {
+        "url": "https://www.debian.org/security/2019/dsa-4387",
+        "name": "DSA-4387",
+        "tags": ["Third Party Advisory"],
+        "source": "DEBIAN"
+      },
+      {
+        "url": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
+        "name": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
+        "tags": [],
+        "source": "MISC"
+      }
+    ],
+    "cvss": 6.8,
+    "severity": "Medium",
+    "needsPopulation": false,
+    "state": "open",
+    "substate": "unconfirmed",
+    "source": "cpe2cve",
+    "notes": "",
+    "actions": []
+  },
+  {
+    "title": "CVE-2019-6110",
+    "cve": "CVE-2019-6110",
+    "cwe": "CWE-838",
+    "cpe": "cpe:/a:openbsd:openssh:7.4",
+    "description": "In OpenSSH 7.9, due to accepting and displaying arbitrary stderr output from the server, a malicious server (or Man-in-The-Middle attacker) can manipulate the client output, for example to use ANSI control codes to hide additional files being transferred.",
+    "references": [
+      {
+        "url": "https://cvsweb.openbsd.org/src/usr.bin/ssh/progressmeter.c",
+        "name": "https://cvsweb.openbsd.org/src/usr.bin/ssh/progressmeter.c",
+        "tags": ["Release Notes", "Vendor Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
+        "name": "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
+        "tags": ["Release Notes", "Vendor Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://security.gentoo.org/glsa/201903-16",
+        "name": "GLSA-201903-16",
+        "tags": ["Third Party Advisory"],
+        "source": "GENTOO"
+      },
+      {
+        "url": "https://security.netapp.com/advisory/ntap-20190213-0001/",
+        "name": "https://security.netapp.com/advisory/ntap-20190213-0001/",
+        "tags": ["Third Party Advisory"],
+        "source": "CONFIRM"
+      },
+      {
+        "url": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
+        "name": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
+        "tags": ["Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://www.exploit-db.com/exploits/46193/",
+        "name": "46193",
+        "tags": ["Exploit", "Third Party Advisory", "VDB Entry"],
+        "source": "EXPLOIT-DB"
+      }
+    ],
+    "cvss": 6.8,
+    "severity": "Medium",
+    "needsPopulation": false,
+    "state": "open",
+    "substate": "unconfirmed",
+    "source": "cpe2cve",
+    "notes": "",
+    "actions": []
+  },
+  {
+    "title": "CVE-2019-6111",
+    "cve": "CVE-2019-6111",
+    "cwe": "CWE-22",
+    "cpe": "cpe:/a:openbsd:openssh:7.4",
+    "description": "An issue was discovered in OpenSSH 7.9. Due to the scp implementation being derived from 1983 rcp, the server chooses which files/directories are sent to the client. However, the scp client only performs cursory validation of the object name returned (only directory traversal attacks are prevented). A malicious scp server (or Man-in-The-Middle attacker) can overwrite arbitrary files in the scp client target directory. If recursive operation (-r) is performed, the server can manipulate subdirectories as well (for example, to overwrite the .ssh/authorized_keys file).",
+    "references": [
+      {
+        "url": "http://lists.opensuse.org/opensuse-security-announce/2019-06/msg00058.html",
+        "name": "openSUSE-SU-2019:1602",
+        "tags": [],
+        "source": "SUSE"
+      },
+      {
+        "url": "http://www.openwall.com/lists/oss-security/2019/04/18/1",
+        "name": "[oss-security] 20190417 Announce: OpenSSH 8.0 released",
+        "tags": [],
+        "source": "MLIST"
+      },
+      {
+        "url": "http://www.securityfocus.com/bid/106741",
+        "name": "106741",
+        "tags": ["Third Party Advisory", "VDB Entry"],
+        "source": "BID"
+      },
+      {
+        "url": "https://access.redhat.com/errata/RHSA-2019:3702",
+        "name": "RHSA-2019:3702",
+        "tags": [],
+        "source": "REDHAT"
+      },
+      {
+        "url": "https://bugzilla.redhat.com/show_bug.cgi?id=1677794",
+        "name": "https://bugzilla.redhat.com/show_bug.cgi?id=1677794",
+        "tags": ["Exploit", "Issue Tracking", "Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
+        "name": "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
+        "tags": ["Release Notes"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://lists.apache.org/thread.html/c45d9bc90700354b58fb7455962873c44229841880dcb64842fa7d23@%3Cdev.mina.apache.org%3E",
+        "name": "[mina-dev] 20190620 [jira] [Created] (SSHD-925) See if SCP vulnerability CVE-2019-6111 applies and mitigate it if so",
+        "tags": [],
+        "source": "MLIST"
+      },
+      {
+        "url": "https://lists.apache.org/thread.html/c7301cab36a86825359e1b725fc40304d1df56dc6d107c1fe885148b@%3Cdev.mina.apache.org%3E",
+        "name": "[mina-dev] 20190623 [jira] [Comment Edited] (SSHD-925) See if SCP vulnerability CVE-2019-6111 applies and mitigate it if so",
+        "tags": [],
+        "source": "MLIST"
+      },
+      {
+        "url": "https://lists.apache.org/thread.html/d540139359de999b0f1c87d05b715be4d7d4bec771e1ae55153c5c7a@%3Cdev.mina.apache.org%3E",
+        "name": "[mina-dev] 20190820 [jira] [Resolved] (SSHD-925) See if SCP vulnerability CVE-2019-6111 applies and mitigate it if so",
+        "tags": [],
+        "source": "MLIST"
+      },
+      {
+        "url": "https://lists.apache.org/thread.html/e47597433b351d6e01a5d68d610b4ba195743def9730e49561e8cf3f@%3Cdev.mina.apache.org%3E",
+        "name": "[mina-dev] 20190623 [jira] [Commented] (SSHD-925) See if SCP vulnerability CVE-2019-6111 applies and mitigate it if so",
+        "tags": [],
+        "source": "MLIST"
+      },
+      {
+        "url": "https://lists.debian.org/debian-lts-announce/2019/03/msg00030.html",
+        "name": "[debian-lts-announce] 20190325 [SECURITY] [DLA 1728-1] openssh security update",
+        "tags": ["Mailing List", "Third Party Advisory"],
+        "source": "MLIST"
+      },
+      {
+        "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/W3YVQ2BPTOVDCFDVNC2GGF5P5ISFG37G/",
+        "name": "FEDORA-2019-0f4190cdb0",
+        "tags": [],
+        "source": "FEDORA"
+      },
+      {
+        "url": "https://security.gentoo.org/glsa/201903-16",
+        "name": "GLSA-201903-16",
+        "tags": ["Third Party Advisory"],
+        "source": "GENTOO"
+      },
+      {
+        "url": "https://security.netapp.com/advisory/ntap-20190213-0001/",
+        "name": "https://security.netapp.com/advisory/ntap-20190213-0001/",
+        "tags": ["Third Party Advisory"],
+        "source": "CONFIRM"
+      },
+      {
+        "url": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
+        "name": "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
+        "tags": ["Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://usn.ubuntu.com/3885-1/",
+        "name": "USN-3885-1",
+        "tags": ["Third Party Advisory"],
+        "source": "UBUNTU"
+      },
+      {
+        "url": "https://usn.ubuntu.com/3885-2/",
+        "name": "USN-3885-2",
+        "tags": ["Third Party Advisory"],
+        "source": "UBUNTU"
+      },
+      {
+        "url": "https://www.debian.org/security/2019/dsa-4387",
+        "name": "DSA-4387",
+        "tags": ["Third Party Advisory"],
+        "source": "DEBIAN"
+      },
+      {
+        "url": "https://www.exploit-db.com/exploits/46193/",
+        "name": "46193",
+        "tags": ["Exploit", "Third Party Advisory", "VDB Entry"],
+        "source": "EXPLOIT-DB"
+      },
+      {
+        "url": "https://www.freebsd.org/security/advisories/FreeBSD-EN-19:10.scp.asc",
+        "name": "FreeBSD-EN-19:10",
+        "tags": [],
+        "source": "FREEBSD"
+      },
+      {
+        "url": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
+        "name": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
+        "tags": [],
+        "source": "MISC"
+      }
+    ],
+    "cvss": 5.9,
+    "severity": "Medium",
+    "needsPopulation": false,
+    "state": "open",
+    "substate": "unconfirmed",
+    "source": "cpe2cve",
+    "notes": "",
+    "actions": []
+  },
+  {
+    "title": "CVE-2020-14145",
+    "cve": "CVE-2020-14145",
+    "cwe": "CWE-200",
+    "cpe": "cpe:/a:openbsd:openssh:7.4",
+    "description": "The client side in OpenSSH 5.7 through 8.4 has an Observable Discrepancy leading to an information leak in the algorithm negotiation. This allows man-in-the-middle attackers to target initial connection attempts (where no host key for the server has been cached by the client).",
+    "references": [
+      {
+        "url": "http://www.openwall.com/lists/oss-security/2020/12/02/1",
+        "name": "[oss-security] 20201202 Some mitigation for openssh CVE-2020-14145",
+        "tags": ["Mailing List", "Patch", "Third Party Advisory"],
+        "source": "MLIST"
+      },
+      {
+        "url": "https://anongit.mindrot.org/openssh.git/commit/?id=b3855ff053f5078ec3d3c653cdaedefaa5fc362d",
+        "name": "https://anongit.mindrot.org/openssh.git/commit/?id=b3855ff053f5078ec3d3c653cdaedefaa5fc362d",
+        "tags": ["Patch", "Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://docs.ssh-mitm.at/CVE-2020-14145.html",
+        "name": "https://docs.ssh-mitm.at/CVE-2020-14145.html",
+        "tags": ["Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://github.com/openssh/openssh-portable/compare/V_8_3_P1...V_8_4_P1",
+        "name": "https://github.com/openssh/openssh-portable/compare/V_8_3_P1...V_8_4_P1",
+        "tags": ["Patch", "Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://github.com/ssh-mitm/ssh-mitm/blob/master/ssh_proxy_server/plugins/session/cve202014145.py",
+        "name": "https://github.com/ssh-mitm/ssh-mitm/blob/master/ssh_proxy_server/plugins/session/cve202014145.py",
+        "tags": ["Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://security.netapp.com/advisory/ntap-20200709-0004/",
+        "name": "https://security.netapp.com/advisory/ntap-20200709-0004/",
+        "tags": ["Third Party Advisory"],
+        "source": "CONFIRM"
+      },
+      {
+        "url": "https://www.fzi.de/en/news/news/detail-en/artikel/fsa-2020-2-ausnutzung-eines-informationslecks-fuer-gezielte-mitm-angriffe-auf-ssh-clients/",
+        "name": "https://www.fzi.de/en/news/news/detail-en/artikel/fsa-2020-2-ausnutzung-eines-informationslecks-fuer-gezielte-mitm-angriffe-auf-ssh-clients/",
+        "tags": ["Third Party Advisory"],
+        "source": "MISC"
+      }
+    ],
+    "cvss": 5.9,
+    "severity": "Medium",
+    "needsPopulation": false,
+    "state": "open",
+    "substate": "unconfirmed",
+    "source": "cpe2cve",
+    "notes": "",
+    "actions": []
+  },
+  {
+    "title": "CVE-2020-15778",
+    "cve": "CVE-2020-15778",
+    "cwe": "CWE-78",
+    "cpe": "cpe:/a:openbsd:openssh:7.4",
+    "description": "scp in OpenSSH through 8.3p1 allows command injection in the scp.c toremote function, as demonstrated by backtick characters in the destination argument. NOTE: the vendor reportedly has stated that they intentionally omit validation of \"anomalous argument transfers\" because that could \"stand a great chance of breaking existing workflows.\"",
+    "references": [
+      {
+        "url": "https://github.com/cpandya2909/CVE-2020-15778/",
+        "name": "https://github.com/cpandya2909/CVE-2020-15778/",
+        "tags": ["Exploit", "Third Party Advisory"],
+        "source": "MISC"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=25005567",
+        "name": "https://news.ycombinator.com/item?id=25005567",
+        "tags": [],
+        "source": "MISC"
+      },
+      {
+        "url": "https://security.netapp.com/advisory/ntap-20200731-0007/",
+        "name": "https://security.netapp.com/advisory/ntap-20200731-0007/",
+        "tags": [],
+        "source": "CONFIRM"
+      },
+      {
+        "url": "https://www.openssh.com/security.html",
+        "name": "https://www.openssh.com/security.html",
+        "tags": ["Vendor Advisory"],
+        "source": "MISC"
+      }
+    ],
+    "cvss": 7.8,
+    "severity": "High",
+    "needsPopulation": false,
+    "state": "open",
+    "substate": "unconfirmed",
+    "source": "cpe2cve",
+    "notes": "",
+    "actions": []
+  },
+  {
+    "title": "Exposed Emails",
+    "cve": null,
+    "cwe": null,
+    "cpe": null,
+    "description": "Emails associated with this Domain have been exposed in a breach. See Data field for a list of emails",
+    "cvss": null,
+    "severity": null,
+    "needsPopulation": false,
+    "state": "open",
+    "substate": "unconfirmed",
+    "source": "hibp",
+    "structuredData": {
+      "emails": {
+        "Email_11@crossfeed.local": ["breach12", "breach17"],
+        "Email_13@crossfeed.local": ["breach14", "breach3"],
+        "Email_64@crossfeed.local": ["breach24"],
+        "Email_32@crossfeed.local": ["breach22"],
+        "Email_17@crossfeed.local": ["breach54", "breach2"]
+      },
+      "breaches": {
+        "breach_12": {
+          "Name": "Breach_12",
+          "Title": "Breach_12",
+          "Domain": "Breach_12.com",
+          "BreachDate": "2017-02-01",
+          "AddedDate": "2017-10-26T23:35:45Z",
+          "ModifiedDate": "2017-12-10T21:44:27Z",
+          "PwnCount": 8393093,
+          "Description": "Mock Breach number 12",
+          "LogoPath": "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_12.png",
+          "DataClasses": [
+            "Email addresses",
+            "IP addresses",
+            "Names",
+            "Passwords"
+          ],
+          "IsVerified": true,
+          "IsFabricated": false,
+          "IsSensitive": false,
+          "IsRetired": false,
+          "IsSpamList": false
         },
-        "breaches":{
-            "breach_12": {
-                "Name": "Breach_12",
-                "Title": "Breach_12",
-                "Domain": "Breach_12.com",
-                "BreachDate": "2017-02-01",
-                "AddedDate": "2017-10-26T23:35:45Z",
-                "ModifiedDate": "2017-12-10T21:44:27Z",
-                "PwnCount": 8393093,
-                "Description": "Mock Breach number 12",
-                "LogoPath":
-                  "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_12.png",
-                "DataClasses": ["Email addresses", "IP addresses", "Names", "Passwords"],
-                "IsVerified": true,
-                "IsFabricated": false,
-                "IsSensitive": false,
-                "IsRetired": false,
-                "IsSpamList": false
-              },
-              "breach_17": {
-                "Name": "Breach_17",
-                "Title": "Breach_17",
-                "Domain": "Breach_17.com",
-                "BreachDate": "2017-02-01",
-                "AddedDate": "2017-10-26T23:35:45Z",
-                "ModifiedDate": "2017-12-10T21:44:27Z",
-                "PwnCount": 8393093,
-                "Description": "Mock Breach number 17",
-                "LogoPath":
-                  "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_17.png",
-                "DataClasses": ["Email addresses", "IP addresses", "Names", "Passwords"],
-                "IsVerified": true,
-                "IsFabricated": false,
-                "IsSensitive": false,
-                "IsRetired": false,
-                "IsSpamList": false
-              },
-              "breach_14": {
-                "Name": "Breach_14",
-                "Title": "Breach_14",
-                "Domain": "Breach_14.com",
-                "BreachDate": "2017-02-01",
-                "AddedDate": "2017-10-26T23:35:45Z",
-                "ModifiedDate": "2017-12-10T21:44:27Z",
-                "PwnCount": 8393093,
-                "Description": "Mock Breach number 14",
-                "LogoPath":
-                  "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_14.png",
-                "DataClasses": ["Email addresses", "IP addresses", "Names", "Passwords"],
-                "IsVerified": true,
-                "IsFabricated": false,
-                "IsSensitive": false,
-                "IsRetired": false,
-                "IsSpamList": false
-              },
-              "breach_3": {
-                "Name": "Breach_3",
-                "Title": "Breach_3",
-                "Domain": "Breach_3.com",
-                "BreachDate": "2017-02-01",
-                "AddedDate": "2017-10-26T23:35:45Z",
-                "ModifiedDate": "2017-12-10T21:44:27Z",
-                "PwnCount": 8393093,
-                "Description": "Mock Breach number 3",
-                "LogoPath":
-                  "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_12.png",
-                "DataClasses": ["Email addresses", "IP addresses", "Names", "Passwords"],
-                "IsVerified": true,
-                "IsFabricated": false,
-                "IsSensitive": false,
-                "IsRetired": false,
-                "IsSpamList": false
-              },
-              "breach_25": {
-                "Name": "Breach_24",
-                "Title": "Breach_24",
-                "Domain": "Breach_24.com",
-                "BreachDate": "2017-02-01",
-                "AddedDate": "2017-10-26T23:35:45Z",
-                "ModifiedDate": "2017-12-10T21:44:27Z",
-                "PwnCount": 8393093,
-                "Description": "Mock Breach number 24",
-                "LogoPath":
-                  "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_24.png",
-                "DataClasses": ["Email addresses", "IP addresses", "Names", "Passwords"],
-                "IsVerified": true,
-                "IsFabricated": false,
-                "IsSensitive": false,
-                "IsRetired": false,
-                "IsSpamList": false
-              },
-              "breach_22": {
-                "Name": "Breach_22",
-                "Title": "Breach_22",
-                "Domain": "Breach_22.com",
-                "BreachDate": "2017-02-01",
-                "AddedDate": "2017-10-26T23:35:45Z",
-                "ModifiedDate": "2017-12-10T21:44:27Z",
-                "PwnCount": 8393093,
-                "Description": "Mock Breach number 22",
-                "LogoPath":
-                  "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_22.png",
-                "DataClasses": ["Email addresses", "IP addresses", "Names", "Passwords"],
-                "IsVerified": true,
-                "IsFabricated": false,
-                "IsSensitive": false,
-                "IsRetired": false,
-                "IsSpamList": false
-              },
-              "breach_54": {
-                "Name": "Breach_54",
-                "Title": "Breach_54",
-                "Domain": "Breach_54.com",
-                "BreachDate": "2017-02-01",
-                "AddedDate": "2017-10-26T23:35:45Z",
-                "ModifiedDate": "2017-12-10T21:44:27Z",
-                "PwnCount": 8393093,
-                "Description": "Mock Breach number 54",
-                "LogoPath":
-                  "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_54.png",
-                "DataClasses": ["Email addresses", "IP addresses", "Names", "Passwords"],
-                "IsVerified": true,
-                "IsFabricated": false,
-                "IsSensitive": false,
-                "IsRetired": false,
-                "IsSpamList": false
-              },
-              "breach_2": {
-                "Name": "Breach_2",
-                "Title": "Breach_2",
-                "Domain": "Breach_2.com",
-                "BreachDate": "2017-02-01",
-                "AddedDate": "2017-10-26T23:35:45Z",
-                "ModifiedDate": "2017-12-10T21:44:27Z",
-                "PwnCount": 8393093,
-                "Description": "Mock Breach number 2",
-                "LogoPath":
-                  "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_2.png",
-                "DataClasses": ["Email addresses", "IP addresses", "Names", "Passwords"],
-                "IsVerified": true,
-                "IsFabricated": false,
-                "IsSensitive": false,
-                "IsRetired": false,
-                "IsSpamList": false
-              }
+        "breach_17": {
+          "Name": "Breach_17",
+          "Title": "Breach_17",
+          "Domain": "Breach_17.com",
+          "BreachDate": "2017-02-01",
+          "AddedDate": "2017-10-26T23:35:45Z",
+          "ModifiedDate": "2017-12-10T21:44:27Z",
+          "PwnCount": 8393093,
+          "Description": "Mock Breach number 17",
+          "LogoPath": "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_17.png",
+          "DataClasses": [
+            "Email addresses",
+            "IP addresses",
+            "Names",
+            "Passwords"
+          ],
+          "IsVerified": true,
+          "IsFabricated": false,
+          "IsSensitive": false,
+          "IsRetired": false,
+          "IsSpamList": false
+        },
+        "breach_14": {
+          "Name": "Breach_14",
+          "Title": "Breach_14",
+          "Domain": "Breach_14.com",
+          "BreachDate": "2017-02-01",
+          "AddedDate": "2017-10-26T23:35:45Z",
+          "ModifiedDate": "2017-12-10T21:44:27Z",
+          "PwnCount": 8393093,
+          "Description": "Mock Breach number 14",
+          "LogoPath": "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_14.png",
+          "DataClasses": [
+            "Email addresses",
+            "IP addresses",
+            "Names",
+            "Passwords"
+          ],
+          "IsVerified": true,
+          "IsFabricated": false,
+          "IsSensitive": false,
+          "IsRetired": false,
+          "IsSpamList": false
+        },
+        "breach_3": {
+          "Name": "Breach_3",
+          "Title": "Breach_3",
+          "Domain": "Breach_3.com",
+          "BreachDate": "2017-02-01",
+          "AddedDate": "2017-10-26T23:35:45Z",
+          "ModifiedDate": "2017-12-10T21:44:27Z",
+          "PwnCount": 8393093,
+          "Description": "Mock Breach number 3",
+          "LogoPath": "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_12.png",
+          "DataClasses": [
+            "Email addresses",
+            "IP addresses",
+            "Names",
+            "Passwords"
+          ],
+          "IsVerified": true,
+          "IsFabricated": false,
+          "IsSensitive": false,
+          "IsRetired": false,
+          "IsSpamList": false
+        },
+        "breach_25": {
+          "Name": "Breach_24",
+          "Title": "Breach_24",
+          "Domain": "Breach_24.com",
+          "BreachDate": "2017-02-01",
+          "AddedDate": "2017-10-26T23:35:45Z",
+          "ModifiedDate": "2017-12-10T21:44:27Z",
+          "PwnCount": 8393093,
+          "Description": "Mock Breach number 24",
+          "LogoPath": "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_24.png",
+          "DataClasses": [
+            "Email addresses",
+            "IP addresses",
+            "Names",
+            "Passwords"
+          ],
+          "IsVerified": true,
+          "IsFabricated": false,
+          "IsSensitive": false,
+          "IsRetired": false,
+          "IsSpamList": false
+        },
+        "breach_22": {
+          "Name": "Breach_22",
+          "Title": "Breach_22",
+          "Domain": "Breach_22.com",
+          "BreachDate": "2017-02-01",
+          "AddedDate": "2017-10-26T23:35:45Z",
+          "ModifiedDate": "2017-12-10T21:44:27Z",
+          "PwnCount": 8393093,
+          "Description": "Mock Breach number 22",
+          "LogoPath": "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_22.png",
+          "DataClasses": [
+            "Email addresses",
+            "IP addresses",
+            "Names",
+            "Passwords"
+          ],
+          "IsVerified": true,
+          "IsFabricated": false,
+          "IsSensitive": false,
+          "IsRetired": false,
+          "IsSpamList": false
+        },
+        "breach_54": {
+          "Name": "Breach_54",
+          "Title": "Breach_54",
+          "Domain": "Breach_54.com",
+          "BreachDate": "2017-02-01",
+          "AddedDate": "2017-10-26T23:35:45Z",
+          "ModifiedDate": "2017-12-10T21:44:27Z",
+          "PwnCount": 8393093,
+          "Description": "Mock Breach number 54",
+          "LogoPath": "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_54.png",
+          "DataClasses": [
+            "Email addresses",
+            "IP addresses",
+            "Names",
+            "Passwords"
+          ],
+          "IsVerified": true,
+          "IsFabricated": false,
+          "IsSensitive": false,
+          "IsRetired": false,
+          "IsSpamList": false
+        },
+        "breach_2": {
+          "Name": "Breach_2",
+          "Title": "Breach_2",
+          "Domain": "Breach_2.com",
+          "BreachDate": "2017-02-01",
+          "AddedDate": "2017-10-26T23:35:45Z",
+          "ModifiedDate": "2017-12-10T21:44:27Z",
+          "PwnCount": 8393093,
+          "Description": "Mock Breach number 2",
+          "LogoPath": "https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_2.png",
+          "DataClasses": [
+            "Email addresses",
+            "IP addresses",
+            "Names",
+            "Passwords"
+          ],
+          "IsVerified": true,
+          "IsFabricated": false,
+          "IsSensitive": false,
+          "IsRetired": false,
+          "IsSpamList": false
         }
-     },
-        "notes": "",
-        "actions": []
+      }
     },
-    {
-        "title": "DNSTwist Domains",
-        "cve": null,
-        "cwe": null,
-        "cpe": null,
-        "description": "Domain name permutation engine for detecting similar registered domains",
-        "cvss": null,
-        "severity": null,
-        "needsPopulation": false,
-        "state": "open",
-        "substate": "unconfirmed",
-        "source": "dnstwist",
-        "structuredData": { "domains": [
-            {
-              "fuzzer": "Homoglyph",
-              "domain-name": "test-domain.one",
-              "dns-a": ["21.22.23.24"]
-            },
-            {
-              "fuzzer": "Original",
-              "domain-name": "test-domain.two",
-              "dns-a": ["01.02.03.04"],
-              "dns-mx": ["localhost"]
-            },
-            {
-              "fuzzer": "tls",
-              "domain-name": "test-domain.three",
-              "dns-a": ["10.11.12.13"],
-              "dns-ns": ["example.link"]
-            }
-          ]
+    "notes": "",
+    "actions": []
+  },
+  {
+    "title": "DNS Twist Domains",
+    "cve": null,
+    "cwe": null,
+    "cpe": null,
+    "description": "Domain name permutation engine for detecting similar registered domains",
+    "cvss": null,
+    "severity": null,
+    "needsPopulation": false,
+    "state": "open",
+    "substate": "unconfirmed",
+    "source": "dnstwist",
+    "structuredData": {
+      "domains": [
+        {
+          "fuzzer": "Homoglyph",
+          "domain-name": "test-domain.one",
+          "dns-a": ["21.22.23.24"],
+          "date-observed": "2019-04-22T10:20:30Z"
         },
-        "notes": "",
-        "actions": []
-    }
+        {
+          "fuzzer": "Original",
+          "domain-name": "test-domain.two",
+          "dns-a": ["01.02.03.04"],
+          "dns-mx": ["localhost"],
+          "date-observed": "2019-04-22T10:20:30Z"
+        },
+        {
+          "fuzzer": "tls",
+          "domain-name": "test-domain.three",
+          "dns-a": ["10.11.12.13"],
+          "dns-ns": ["example.link"],
+          "date-observed": "2019-04-22T10:20:30Z"
+        }
+      ]
+    },
+    "notes": "",
+    "actions": []
+  }
 ]

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`hibp basic test 1`] = `
+exports[`lookingGlass basic test 1`] = `
 Array [
   Object {
     "asn": null,
@@ -10,11 +10,11 @@ Array [
     "createdAt": null,
     "fromRootDomain": null,
     "id": null,
-    "ip": "",
-    "ipOnly": false,
+    "ip": "1.123.135.123",
+    "ipOnly": true,
     "name": null,
     "organization": null,
-    "reverseName": "gov.test-domain_1",
+    "reverseName": "123.135.123.1",
     "screenshot": null,
     "services": Array [],
     "ssl": null,
@@ -29,11 +29,11 @@ Array [
     "createdAt": null,
     "fromRootDomain": null,
     "id": null,
-    "ip": "",
-    "ipOnly": false,
+    "ip": "100.123.100.123",
+    "ipOnly": true,
     "name": null,
     "organization": null,
-    "reverseName": "gov.test-domain_2",
+    "reverseName": "123.100.123.100",
     "screenshot": null,
     "services": Array [],
     "ssl": null,
@@ -48,11 +48,11 @@ Array [
     "createdAt": null,
     "fromRootDomain": null,
     "id": null,
-    "ip": "",
-    "ipOnly": false,
+    "ip": "123.123.123.123",
+    "ipOnly": true,
     "name": null,
     "organization": null,
-    "reverseName": "gov.test-domain_3",
+    "reverseName": "123.123.123.123",
     "screenshot": null,
     "services": Array [],
     "ssl": null,
