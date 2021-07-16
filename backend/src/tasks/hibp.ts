@@ -44,11 +44,8 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
     const BreachResults = {};
     const finalResults = {};
 
-
-  const shouldCountBreach = (breach) =>
-    breach.IsVerified === true &&
-    breach.BreachDate > '2016-01-01';
-
+    const shouldCountBreach = (breach) =>
+      breach.IsVerified === true && breach.BreachDate > '2016-01-01';
 
     for (const email in results) {
       const filtered = (results[email] || []).filter((e) =>
@@ -63,6 +60,14 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
         }
       }
     }
+
+    for (const breach in BreachResults) {
+      if (BreachResults[breach].DataClasses.indexOf('Passwords') > -1) {
+        BreachResults[breach].passwordIncluded = true;
+      } else {
+        BreachResults[breach].passwordIncluded = false;
+      }
+    }
     finalResults['Emails'] = AddressResults;
     finalResults['Breaches'] = BreachResults;
     return finalResults;
@@ -72,19 +77,6 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
     );
     return null;
   }
-
-  for (let breach in BreachResults){
-    if ( BreachResults[breach].DataClasses.indexOf('Passwords') > -1){
-      BreachResults[breach].passwordIncluded = true
-    }
-    else{
-      BreachResults[breach].passwordIncluded = false
-    }
-  }
-  finalResults['Emails'] = AddressResults;
-  finalResults['Breaches'] = BreachResults;
-  return finalResults;
-
 }
 
 export const handler = async (commandOptions: CommandOptions) => {
