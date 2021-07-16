@@ -40,8 +40,8 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
       }
     ).json();
 
-    const AddressResults = {};
-    const BreachResults = {};
+    const addressResults = {};
+    const breachResults = {};
     const finalResults = {};
 
     const shouldCountBreach = (breach) =>
@@ -52,24 +52,24 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
         shouldCountBreach(breachesDict[e])
       );
       if (filtered.length > 0) {
-        AddressResults[email + '@' + domain.name] = filtered;
+        addressResults[email + '@' + domain.name] = filtered;
         for (const breach of filtered) {
-          if (!(breach in BreachResults)) {
-            BreachResults[breach] = breachesDict[breach];
+          if (!(breach in breachResults)) {
+            breachResults[breach] = breachesDict[breach];
           }
         }
       }
     }
 
-    for (const breach in BreachResults) {
-      if (BreachResults[breach].DataClasses.indexOf('Passwords') > -1) {
-        BreachResults[breach].passwordIncluded = true;
+    for (const breach in breachResults) {
+      if (breachResults[breach].DataClasses.indexOf('Passwords') > -1) {
+        breachResults[breach].passwordIncluded = true;
       } else {
-        BreachResults[breach].passwordIncluded = false;
+        breachResults[breach].passwordIncluded = false;
       }
     }
-    finalResults['Emails'] = AddressResults;
-    finalResults['Breaches'] = BreachResults;
+    finalResults['Emails'] = addressResults;
+    finalResults['Breaches'] = breachResults;
     return finalResults;
   } catch (error) {
     console.error(
