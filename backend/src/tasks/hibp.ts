@@ -27,7 +27,7 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
   const finalResults = {};
 
   const shouldCountBreach = (breach) =>
-    breach.DataClasses.indexOf('Passwords') > -1 &&
+    //breach.DataClasses.indexOf('Passwords') > -1 &&
     breach.IsVerified === true &&
     breach.BreachDate > '2016-01-01';
 
@@ -42,6 +42,14 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
           BreachResults[breach] = breachesDict[breach];
         }
       }
+    }
+  }
+  for (let breach in BreachResults){
+    if ( BreachResults[breach].DataClasses.indexOf('Passwords') > -1){
+      BreachResults[breach].PasswordIncluded = true
+    }
+    else{
+      BreachResults[breach].PasswordIncluded = false
     }
   }
   finalResults['Emails'] = AddressResults;
