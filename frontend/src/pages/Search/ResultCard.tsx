@@ -258,7 +258,7 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
       display: 'block',
       fontSize: '1.9rem',
-      color: '#28A0CB',
+      color: '#345d96',
       margin: 0,
       textAlign: 'left',
       wordBreak: 'break-all',
