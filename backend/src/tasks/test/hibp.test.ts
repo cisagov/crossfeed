@@ -148,11 +148,7 @@ const breachResponse = [
     Description: 'Mock Breach number 6',
     LogoPath:
       'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_4.png',
-    DataClasses: [
-      'Device information',
-      'Email addresses',
-      'IP addresses'
-    ],
+    DataClasses: ['Device information', 'Email addresses', 'IP addresses'],
     IsVerified: true,
     IsFabricated: false,
     IsSensitive: false,
@@ -550,6 +546,8 @@ describe('hibp', () => {
     expect(vulns[0].title).toEqual('Exposed Emails');
     expect(vulns[0].source).toEqual('hibp');
     expect(vulns[0].structuredData['breaches']['Breach_6']).toBeTruthy();
-    expect(vulns[0].structuredData['breaches']['Breach_6'].passwordIncluded).toEqual(false);
+    expect(
+      vulns[0].structuredData['breaches']['Breach_6'].passwordIncluded
+    ).toEqual(false);
   });
 });

@@ -11,7 +11,7 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
  * Be aware this scan can only query breaches from .gov domains
  */
 
- interface breachResults {
+interface breachResults {
   Name: string;
   Title: string;
   Domain: string;
@@ -28,7 +28,6 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
   IsRetired: boolean;
   IsSpamList: boolean;
   passwordIncluded: boolean;
-
 }
 
 async function getIps(organizationId?: String): Promise<Domain[]> {
@@ -49,7 +48,10 @@ async function getIps(organizationId?: String): Promise<Domain[]> {
   return domains.getMany();
 }
 
-async function lookupEmails(breachesDict: { [key: string]: breachResults }, domain: Domain) {
+async function lookupEmails(
+  breachesDict: { [key: string]: breachResults },
+  domain: Domain
+) {
   try {
     const results: any[] = await got(
       'https://haveibeenpwned.com/api/v2/enterprisesubscriber/domainsearch/' +
@@ -77,7 +79,8 @@ async function lookupEmails(breachesDict: { [key: string]: breachResults }, doma
         for (const breach of filtered) {
           if (!(breach in breachResults)) {
             breachResults[breach] = breachesDict[breach];
-            breachResults[breach].passwordIncluded = breachResults[breach].DataClasses.indexOf('Passwords') > -1;
+            breachResults[breach].passwordIncluded =
+              breachResults[breach].DataClasses.indexOf('Passwords') > -1;
           }
         }
       }
