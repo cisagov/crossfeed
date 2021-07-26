@@ -10,6 +10,27 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
  * Been Pwned Enterprise API.
  * Be aware this scan can only query breaches from .gov domains
  */
+
+ interface breachResults {
+  Name: string;
+  Title: string;
+  Domain: string;
+  BreachDate: string;
+  AddedDate: string;
+  ModifiedDate: string;
+  PwnCount: number;
+  Description: string;
+  LogoPath: string;
+  DataClasses: string[];
+  IsVerified: boolean;
+  IsFabricated: boolean;
+  IsSensitive: boolean;
+  IsRetired: boolean;
+  IsSpamList: boolean;
+  passwordIncluded: boolean;
+
+}
+
 async function getIps(organizationId?: String): Promise<Domain[]> {
   await connectToDatabase();
 
@@ -28,7 +49,7 @@ async function getIps(organizationId?: String): Promise<Domain[]> {
   return domains.getMany();
 }
 
-async function lookupEmails(breachesDict: any, domain: Domain) {
+async function lookupEmails(breachesDict: { [key: string]: breachResults }, domain: Domain) {
   try {
     const results: any[] = await got(
       'https://haveibeenpwned.com/api/v2/enterprisesubscriber/domainsearch/' +
@@ -56,18 +77,19 @@ async function lookupEmails(breachesDict: any, domain: Domain) {
         for (const breach of filtered) {
           if (!(breach in breachResults)) {
             breachResults[breach] = breachesDict[breach];
+            breachResults[breach].passwordIncluded = breachResults[breach].DataClasses.indexOf('Passwords') > -1;
           }
         }
       }
     }
 
-    for (const breach in breachResults) {
-      if (breachResults[breach].DataClasses.indexOf('Passwords') > -1) {
-        breachResults[breach].passwordIncluded = true;
-      } else {
-        breachResults[breach].passwordIncluded = false;
-      }
-    }
+    // for (const breach in breachResults) {
+    //   if (breachResults[breach].DataClasses.indexOf('Passwords') > -1) {
+    //     breachResults[breach].passwordIncluded = true;
+    //   } else {
+    //     breachResults[breach].passwordIncluded = false;
+    //   }
+    // }
     finalResults['Emails'] = addressResults;
     finalResults['Breaches'] = breachResults;
     return finalResults;
@@ -84,7 +106,7 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   console.log('Running hibp on organization', organizationName);
   const domainsWithIPs = await getIps(organizationId);
-  const breaches: any[] = await got(
+  const breaches: breachResults[] = await got(
     'https://haveibeenpwned.com/api/v2/breaches',
     {
       headers: {
@@ -92,7 +114,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       }
     }
   ).json();
-  const breachesDict = {};
+  const breachesDict: { [key: string]: breachResults } = {};
   for (const breach of breaches) {
     breachesDict[breach.Name] = breach;
   }
