@@ -86,13 +86,6 @@ async function lookupEmails(
       }
     }
 
-    // for (const breach in breachResults) {
-    //   if (breachResults[breach].DataClasses.indexOf('Passwords') > -1) {
-    //     breachResults[breach].passwordIncluded = true;
-    //   } else {
-    //     breachResults[breach].passwordIncluded = false;
-    //   }
-    // }
     finalResults['Emails'] = addressResults;
     finalResults['Breaches'] = breachResults;
     return finalResults;
