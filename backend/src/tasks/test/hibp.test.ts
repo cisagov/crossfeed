@@ -148,12 +148,7 @@ const breachResponse = [
     Description: 'Mock Breach number 6',
     LogoPath:
       'https://haveibeenpwned.com/Content/Images/PwnedLogos/Breach_4.png',
-    DataClasses: [
-      'Device information',
-      'Email addresses',
-      'IP addresses',
-      'Passwords'
-    ],
+    DataClasses: ['Device information', 'Email addresses', 'IP addresses'],
     IsVerified: true,
     IsFabricated: false,
     IsSensitive: false,
@@ -506,5 +501,53 @@ describe('hibp', () => {
       8393093
     );
     expect(vulns[0].updatedAt).not.toEqual(vulnerability.updatedAt);
+  });
+  test('verify breaches without password are included', async () => {
+    nock('https://haveibeenpwned.com', {
+      reqheaders: {
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
+      }
+    })
+      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_1.gov')
+      .reply(200, hibpResponse_1);
+    nock('https://haveibeenpwned.com', {
+      reqheaders: {
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
+      }
+    })
+      .get('/api/v2/breaches')
+      .reply(200, breachResponse);
+    nock('https://haveibeenpwned.com', {
+      reqheaders: {
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
+      }
+    })
+      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_2.gov')
+      .reply(200, hibpResponse_2);
+    nock('https://haveibeenpwned.com', {
+      reqheaders: {
+        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
+      }
+    })
+      .get('/api/v2/enterprisesubscriber/domainsearch/test-domain_3.gov')
+      .reply(200, hibpResponse_3);
+    await hibp({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: scan.id,
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+    const domain = await Domain.findOne({ id: domains[0].id });
+    const vulns = await Vulnerability.find({
+      domain: domain
+    });
+    expect(vulns).toHaveLength(1);
+    expect(vulns[0].title).toEqual('Exposed Emails');
+    expect(vulns[0].source).toEqual('hibp');
+    expect(vulns[0].structuredData['breaches']['Breach_6']).toBeTruthy();
+    expect(
+      vulns[0].structuredData['breaches']['Breach_6'].passwordIncluded
+    ).toEqual(false);
   });
 });
