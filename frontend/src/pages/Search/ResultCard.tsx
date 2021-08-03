@@ -277,7 +277,7 @@ const useStyles = makeStyles((theme) => ({
   },
   label: {
     fontSize: '0.8rem',
-    color: '#71767A',
+    color: '#07648D',
     display: 'block'
   },
   count: {
