@@ -20,6 +20,7 @@ const SIDENAV_ITEMS = {
     { text: 'Search', link: '/dev/search/' },
     { text: 'Analytics', link: '/dev/analytics/' },
     { text: 'Deployment', link: '/dev/deployment/' },
+    { text: 'Setting up your own instance', link: '/dev/own-instance/' },
     { text: 'Contribution Guidelines', link: '/dev/guidelines/' },
   ],
   'user-guide': [
