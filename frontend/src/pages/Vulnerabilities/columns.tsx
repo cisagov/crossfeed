@@ -1,16 +1,17 @@
-import React from "react";
-import { Dropdown } from "@trussworks/react-uswds";
-import { ColumnFilter, selectFilter } from "components";
-import { getSeverityColor } from "pages/Risk/Risk";
-import { FaExternalLinkAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { Column, CellProps } from "react-table";
-import { Vulnerability } from "types";
-import { differenceInCalendarDays, parseISO } from "date-fns";
+import React from 'react';
+import { Dropdown } from '@trussworks/react-uswds';
+import { ColumnFilter, selectFilter } from 'components';
+import { getSeverityColor } from 'pages/Risk/Risk';
+import { FaExternalLinkAlt } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { Column, CellProps } from 'react-table';
+import { Vulnerability } from 'types';
+import { differenceInCalendarDays, parseISO } from 'date-fns';
 
 const extLink = <FaExternalLinkAlt style={{ width: 12 }}></FaExternalLinkAlt>;
 
-export const createColumns = (updateVulnerability: any) => [
+export const createColumns = (updateVulnerability: any) =>
+  [
     {
       Header: 'Vulnerability',
       accessor: 'title',
@@ -158,7 +159,8 @@ export const createColumns = (updateVulnerability: any) => [
     }
   ] as Column<Vulnerability>[];
 
-  export const createGroupedColumns = () => [
+export const createGroupedColumns = () =>
+  [
     {
       Header: 'Vulnerability',
       accessor: 'title',
@@ -202,7 +204,7 @@ export const createColumns = (updateVulnerability: any) => [
     },
     {
       Header: 'Description',
-      accessor: "description",
+      accessor: 'description',
       disableFilters: true
     }
   ] as Column<Vulnerability>[];

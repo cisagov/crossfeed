@@ -67,7 +67,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
 
   const fetchOrganizations = useCallback(async () => {
     try {
-      let rows = await apiGet<Organization[]>('/organizations/');
+      const rows = await apiGet<Organization[]>('/organizations/');
       let tags: (OrganizationTag | Organization)[] = [];
       if (userLevel === GLOBAL_ADMIN) {
         tags = await apiGet<OrganizationTag[]>('/organizations/tags');
@@ -400,6 +400,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5px',
     width: '200px',
     padding: '3px',
+    margin: '10px',
     '& svg': {
       color: 'white'
     },

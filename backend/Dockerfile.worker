@@ -40,10 +40,19 @@ RUN apt-get update && apt-get install -y \
     bzip2 \
     build-essential \
     libssl-dev libreadline-dev zlib1g-dev \
-    python3-pip procps \
+    libncurses5-dev libgdbm-dev libnss3-dev libsqlite3-dev libffi-dev \
+    procps \
   && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g pm2 wait-port
+# Install Python 3.8.10
+RUN curl -O https://www.python.org/ftp/python/3.8.10/Python-3.8.10.tar.xz && \
+  tar -xf Python-3.8.10.tar.xz && \
+  cd Python-3.8.10 && \
+  ./configure --enable-optimizations && \
+  make -j4 && \
+  make install
+
+RUN npm install -g pm2@4 wait-port@0.2.9
 
 # Install intrigue ident v2.0.2
 
@@ -56,7 +65,7 @@ RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/
 # Python dependencies
 
 COPY worker/requirements.txt worker/requirements.txt
-RUN pip3 install -r worker/requirements.txt
+RUN pip3 install --no-cache-dir -r worker/requirements.txt
 
 COPY worker worker
 

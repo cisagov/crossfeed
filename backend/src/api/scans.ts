@@ -159,12 +159,25 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Finds emails that have appeared in breaches related to a given domain'
   },
+  lookingGlass: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'Finds vulnerabilities and malware from the LookingGlass API'
+  },
   dnstwist: {
     type: 'fargate',
     isPassive: true,
     global: false,
     description:
       'Domain name permutation engine for detecting similar registered domains.'
+  },
+  rootDomainSync: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Creates domains from root domains by doing a single DNS lookup for each root domain.'
   },
   savedSearch: {
     type: 'fargate',

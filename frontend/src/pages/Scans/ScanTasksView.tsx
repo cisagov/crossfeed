@@ -59,7 +59,7 @@ export const ScanTasksView: React.FC = () => {
 
   const killScanTask = async (index: number) => {
     try {
-      let row = scanTasks[index];
+      const row = scanTasks[index];
       await apiPost(`/scan-tasks/${row.id}/kill`, {});
       setScanTasks(
         Object.assign([], scanTasks, {
@@ -177,8 +177,10 @@ export const ScanTasksView: React.FC = () => {
         'webscraper',
         'intrigueIdent',
         'shodan',
+        'hibp',
+        'lookingGlass',
         'dnstwist',
-        'hibp'
+        'rootDomainSync'
       ]),
       disableSortBy: true
     },

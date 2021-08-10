@@ -9,6 +9,8 @@ Deployment of CISA Crossfeed is done automatically through GitHub Actions from t
 
 Any code pushed to the `master` branch is automatically deployed to the [staging site](https://staging.crossfeed.cyber.dhs.gov/), and any code pushed to the `production` branch is automatically deployed to the [production site](https://crossfeed.cyber.dhs.gov/).
 
+[Environments](https://docs.github.com/en/actions/reference/environments) are configured to ensure that only specific users with the appropriate permissions can trigger workflows on GitHub Actions or access secrets that perform deployments. At the moment, GitHub Actions jobs that deploy to staging and prod or access credentials for those AWS environments must be [manually approved](https://docs.github.com/en/actions/managing-workflow-runs/reviewing-deployments).
+
 #### Setting up automatic deployment
 
 To set up automatic deployment to your own AWS environment, you must first create an IAM user with enough permissions to the right resources on AWS. Then, set the GitHub repository's secrets `AWS_ACCESS_KEY` and `AWS_SECRET_KEY` to the access credentials of this user.

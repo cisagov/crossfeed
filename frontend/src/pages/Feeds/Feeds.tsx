@@ -29,7 +29,7 @@ const Feeds = () => {
   const fetchSavedSearches = useCallback(
     async (page: number) => {
       try {
-        let res = await apiGet<{ result: SavedSearch[]; count: number }>(
+        const res = await apiGet<{ result: SavedSearch[]; count: number }>(
           `/saved-searches/?page=${page}&pageSize=${pageState.resultsPerPage}`
         );
         setSavedSearches(res.result);
