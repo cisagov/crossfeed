@@ -136,6 +136,7 @@ export const handler = async (commandOptions: CommandOptions) => {
             title: 'Exposed Emails',
             state: 'open',
             source: 'hibp',
+            severity: 'Low',
             needsPopulation: false,
             structuredData: {
               emails: results['Emails'],
