@@ -325,7 +325,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 auto'
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),
     display: 'block',
     [theme.breakpoints.up('lg')]: {
       display: 'none'
