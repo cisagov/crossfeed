@@ -158,15 +158,6 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       <AppBar position="static" elevation={0}>
         <div className={classes.inner}>
           <Toolbar>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              aria-label="toggle mobile menu"
-              color="inherit"
-              onClick={() => setNavOpen((open) => !open)}
-            >
-              <MenuIcon />
-            </IconButton>
             <Link to="/">
               <img
                 src={logo}
@@ -265,6 +256,15 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                 <NavItem {...userMenu} />
               </>
             )}
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              aria-label="toggle mobile menu"
+              color="inherit"
+              onClick={() => setNavOpen((open) => !open)}
+            >
+              <MenuIcon />
+            </IconButton>
           </Toolbar>
         </div>
       </AppBar>
@@ -325,7 +325,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 auto'
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),
     display: 'block',
     [theme.breakpoints.up('lg')]: {
       display: 'none'
