@@ -6,7 +6,6 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { spawnSync } from 'child_process';
 
 async function runDNSTwist(domain: Domain) {
-  console.log(domain.name);
   const child = spawnSync(
     'dnstwist',
     ['-r', '--tld', './worker/common_tlds.dict', '-f', 'json', domain.name],
@@ -62,6 +61,7 @@ export const handler = async (commandOptions: CommandOptions) => {
             title: 'DNS Twist Domains',
             state: 'open',
             source: 'dnstwist',
+            severity: 'Low',
             needsPopulation: false,
             structuredData: { domains: results },
             description: `Registered domains similar to ${domain.name}.`

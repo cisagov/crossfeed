@@ -94,6 +94,12 @@ export class Service extends BaseEntity {
   })
   discoveredBy: Scan;
 
+  @Column({
+    nullable: true,
+    type: 'text'
+  })
+  productSource: string | null;
+
   @Column()
   port: number;
 

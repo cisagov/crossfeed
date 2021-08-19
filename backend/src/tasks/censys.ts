@@ -104,6 +104,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         name: domain.name,
         organization: domain.organization,
         fromRootDomain: domain.fromRootDomain,
+        subdomainSource: 'censys',
         discoveredBy: domain.discoveredBy
       })
     );

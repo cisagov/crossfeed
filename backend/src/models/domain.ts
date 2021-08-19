@@ -46,6 +46,10 @@ export class Domain extends BaseEntity {
   })
   fromRootDomain: string;
 
+  @Column({
+    nullable: true
+  })
+  subdomainSource: string;
   /** Set to true if the domain only has an associated IP address, but not a domain name. In this case, the `name` field is set to the IP address. */
   @Column({
     nullable: true,

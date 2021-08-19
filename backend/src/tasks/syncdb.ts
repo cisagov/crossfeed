@@ -87,6 +87,8 @@ export const handler: Handler = async (event) => {
         const domain = await Domain.create({
           name: Sentencer.make('{{ adjective }}-{{ noun }}.crossfeed.local'),
           ip: ['127', randomNum(), randomNum(), randomNum()].join('.'), // Create random loopback addresses
+          fromRootDomain: 'crossfeed.local',
+          subdomainSource: 'Sample Data',
           organization
         }).save();
         console.log(`\t${domain.name}`);
@@ -97,6 +99,7 @@ export const handler: Handler = async (event) => {
             domain,
             port: serviceData.port,
             service: serviceData.service,
+            productSource: 'wappalyzer',
             wappalyzerResults: [
               {
                 technology: {
@@ -124,6 +127,7 @@ export const handler: Handler = async (event) => {
         }
       }
     }
+
     console.log('Done. Running search sync...');
     for (const organizationId of organizationIds) {
       await searchSync({

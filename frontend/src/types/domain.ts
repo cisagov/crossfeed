@@ -64,6 +64,7 @@ export interface Service {
   };
   wappalyzerResults: WappalyzerResult[];
   products: Product[];
+  productSource: string | null;
 }
 
 export interface Domain {
@@ -82,6 +83,8 @@ export interface Domain {
   organization: Organization;
   ssl: SSLInfo | null;
   censysCertificatesResults: any;
+  fromRootDomain: string | null;
+  subdomainSource: string | null;
 }
 
 export interface SSLInfo {

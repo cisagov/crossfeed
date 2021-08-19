@@ -97,6 +97,30 @@ Object {
   "actions": Any<Array>,
   "cpe": "cpe:/a:10web:form_maker:1.0.0",
   "createdAt": Any<Date>,
+  "cve": "CVE-2019-11590",
+  "cvss": "8.8",
+  "cwe": "CWE-352",
+  "description": "",
+  "id": Any<String>,
+  "lastSeen": 2019-04-22T10:20:30.000Z,
+  "needsPopulation": true,
+  "notes": "",
+  "references": Array [],
+  "severity": "High",
+  "source": "cpe2cve",
+  "state": "open",
+  "structuredData": Object {},
+  "substate": "unconfirmed",
+  "title": "CVE-2019-11590",
+  "updatedAt": Any<Date>,
+}
+`;
+
+exports[`cve simple test: vulnerability 2`] = `
+Object {
+  "actions": Any<Array>,
+  "cpe": "cpe:/a:10web:form_maker:1.0.0",
+  "createdAt": Any<Date>,
   "cve": "CVE-2019-10866",
   "cvss": "9.8",
   "cwe": "CWE-89",
@@ -122,30 +146,6 @@ Object {
   "structuredData": Object {},
   "substate": "unconfirmed",
   "title": "CVE-2019-10866",
-  "updatedAt": Any<Date>,
-}
-`;
-
-exports[`cve simple test: vulnerability 2`] = `
-Object {
-  "actions": Any<Array>,
-  "cpe": "cpe:/a:10web:form_maker:1.0.0",
-  "createdAt": Any<Date>,
-  "cve": "CVE-2019-11590",
-  "cvss": "8.8",
-  "cwe": "CWE-352",
-  "description": "",
-  "id": Any<String>,
-  "lastSeen": 2019-04-22T10:20:30.000Z,
-  "needsPopulation": true,
-  "notes": "",
-  "references": Array [],
-  "severity": "High",
-  "source": "cpe2cve",
-  "state": "open",
-  "structuredData": Object {},
-  "substate": "unconfirmed",
-  "title": "CVE-2019-11590",
   "updatedAt": Any<Date>,
 }
 `;
