@@ -521,6 +521,9 @@ const useStyles = makeStyles(() => ({
   },
   exportButton: {
     justifyContent: 'flex-end',
+    backgroundColor: 'transparent',
+    color: '#005ea2',
+    boxShadow: '0 0 0 2px #005ea2',
     marginLeft: 'auto'
   },
   pageSize: {
