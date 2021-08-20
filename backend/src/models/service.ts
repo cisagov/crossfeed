@@ -94,6 +94,7 @@ export class Service extends BaseEntity {
   })
   discoveredBy: Scan;
 
+  /** Scan that discovered this product/cpe (wappalyzer, intrigue-ident, censys). */
   @Column({
     nullable: true,
     type: 'text'
