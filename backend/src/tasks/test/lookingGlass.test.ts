@@ -631,8 +631,7 @@ describe('lookingGlass', () => {
       scanTaskId: 'scanTaskId'
     });
     const vulns = await Vulnerability.find({
-      where: { domain },
-      relations: ['service']
+      where: { domain }
     });
     expect(vulns).toHaveLength(1);
 
