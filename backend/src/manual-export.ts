@@ -24,7 +24,7 @@ let page = 0;
             body: JSON.stringify({page, sort: "createdAt", order: "ASC", pageSize: PAGE_SIZE}),
             requestContext: {
                 authorizer: {
-                    id: "1288ec32-c0e9-4478-9f42-510c3188ee11",
+                    id: "XXXXX-sample-user",
                     userType: UserType.GLOBAL_ADMIN
                 }
             } as any
