@@ -323,7 +323,8 @@ export const export_ = wrapHandler(async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      url
+      url,
+      count: result.length
     })
   };
 });
