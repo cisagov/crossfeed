@@ -65,6 +65,7 @@ export interface Service {
   wappalyzerResults: WappalyzerResult[];
   products: Product[];
   productSource: string | null;
+  serviceSource: string | null;
 }
 
 export interface Domain {

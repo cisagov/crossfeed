@@ -99,6 +99,7 @@ export const handler: Handler = async (event) => {
             domain,
             port: serviceData.port,
             service: serviceData.service,
+            serviceSource: 'Sample Data',
             productSource: 'wappalyzer',
             wappalyzerResults: [
               {

@@ -49,6 +49,7 @@ A003 BAD Error in IMAP command received by server.
           },
         ],
         "service": null,
+        "serviceSource": "shodan",
         "shodanResults": Object {
           "cpe": Array [
             "cpe:/a:igor_sysoev:nginx:1.18.0",
@@ -95,6 +96,7 @@ Resolver ID: AMS",
         "productSource": null,
         "products": Array [],
         "service": null,
+        "serviceSource": "shodan",
         "shodanResults": Object {},
         "updatedAt": null,
         "wappalyzerResults": Array [],
