@@ -11,9 +11,9 @@ import { UserType } from './models';
  *  cd backend
  *  npm install
  *  NODE_OPTIONS=--max_old_space_size=50240 npx ts-node src/manual-export.ts
- * 
+ *
  * Then, copy the links to a file called "links.txt".
- * 
+ *
  * Finally, to download the links, run:
  *  wget -P export -i links.txt
  */
