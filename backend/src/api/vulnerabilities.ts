@@ -324,7 +324,7 @@ export const export_ = wrapHandler(async (event) => {
     statusCode: 200,
     body: JSON.stringify({
       url,
-      count: result.length
+      resultCount: result.length
     })
   };
 });

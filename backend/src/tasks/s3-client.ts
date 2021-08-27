@@ -41,7 +41,7 @@ class S3Client {
       const url = await this.s3.getSignedUrlPromise('getObject', {
         Bucket: process.env.EXPORT_BUCKET_NAME!,
         Key,
-        Expires: 60 * 5 // 5 minutes
+        Expires: 60 * 60 * 3 // 3 hours
       });
 
       // Do this so exports are accessible when running locally.
