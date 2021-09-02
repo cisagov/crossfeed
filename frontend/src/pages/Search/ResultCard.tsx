@@ -235,7 +235,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   inner: {
-    padding: '0.875rem',
+    padding: '1.5rem',
+    paddingTop: '0.875rem',
     cursor: 'pointer'
   },
   domainRow: {
