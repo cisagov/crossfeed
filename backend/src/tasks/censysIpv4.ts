@@ -23,7 +23,7 @@ const auth = {
   password: process.env.CENSYS_API_SECRET!
 };
 
-const CENSYS_IPV4_ENDPOINT = 'https://censys.io/api/v1/data/ipv4_2018/';
+const CENSYS_IPV4_ENDPOINT = 'https://censys.io/api/v1/data/ipv4_2018';
 
 // Sometimes, a field might contain null characters, but we can't store null
 // characters in a string field in PostgreSQL. For example, a site might have

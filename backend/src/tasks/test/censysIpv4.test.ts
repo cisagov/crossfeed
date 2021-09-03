@@ -128,7 +128,7 @@ describe('censys ipv4', () => {
 
   test('basic test', async () => {
     nock('https://censys.io', authHeaders)
-      .get('/api/v1/data/ipv4_2018/')
+      .get('/api/v1/data/ipv4_2018')
       .reply(200, {
         results: {
           latest: {
@@ -239,7 +239,7 @@ describe('censys ipv4', () => {
 
   test('http failure should retry', async () => {
     nock('https://censys.io', authHeaders)
-      .get('/api/v1/data/ipv4_2018/')
+      .get('/api/v1/data/ipv4_2018')
       .reply(200, {
         results: {
           latest: {
@@ -286,7 +286,7 @@ describe('censys ipv4', () => {
 
   test('repeated http failures should throw an error', async () => {
     nock('https://censys.io', authHeaders)
-      .get('/api/v1/data/ipv4_2018/')
+      .get('/api/v1/data/ipv4_2018')
       .reply(200, {
         results: {
           latest: {
