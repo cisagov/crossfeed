@@ -101,7 +101,7 @@ export class Service extends BaseEntity {
   })
   productSource: string | null;
 
-  /** Scan that discovered this port/service (censys, shodan). */
+  /** Name of scan that discovered this port/service (censys, shodan). */
   @Column({
     nullable: true,
     type: 'text'
