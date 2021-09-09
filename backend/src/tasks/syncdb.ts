@@ -100,7 +100,6 @@ export const handler: Handler = async (event) => {
             port: serviceData.port,
             service: serviceData.service,
             serviceSource: 'Sample Data',
-            productSource: 'wappalyzer',
             wappalyzerResults: [
               {
                 technology: {

@@ -85,7 +85,6 @@ const downloadPath = async (
               domain: matchingDomain,
               lastSeen: new Date(Date.now()),
               serviceSource: 'censysIpv4',
-              productSource: 'censysIpv4',
               censysIpv4Results: JSON.parse(
                 sanitizeStringField(JSON.stringify(item[key]))
               )

@@ -30,7 +30,6 @@ const intrigueIdent = async (domain: LiveDomain): Promise<void> => {
     output.substring(output.indexOf('{'))
   );
   domain.service.intrigueIdentResults = { fingerprint, content };
-  domain.service.productSource = 'intrigue-ident';
   await domain.service.save();
 };
 

@@ -12,7 +12,6 @@ const wappalyze = async (domain: LiveDomain): Promise<void> => {
     const result = wappalyzer({ url: domain.url, data, headers });
     if (result.length > 0) {
       domain.service.wappalyzerResults = result.filter((e) => e?.technology);
-      domain.service.productSource = 'wappalyzer';
       await domain.service.save();
     }
   } catch (e) {
