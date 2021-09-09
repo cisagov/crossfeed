@@ -100,9 +100,3 @@ app.listen(port, () => {
   console.log('App listening on port ' + port);
 });
 
-app.use(function(req,res)
-   {
-
-        res.sendfile('./public/views/index.html');
-       console.log("Not found....I will handle *unhandle* rout here for you");
-});
