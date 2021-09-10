@@ -1,4 +1,4 @@
-The **red** deployment setup is meant for environments in which public access is not available. In this case, we do not use
+The **red** deployment setup is meant for environments in which public access is not available (such as the [COOL](https://github.com/cisagov/cool-system)). In this case, we do not use
 API Gateway or Cloudfront to handle the backend / frontend. Rather, each user needs to spin up a lightweight instance of
 the frontend / backend on their AWS machine. Note that all the scanning and accessing the database is still done via AWS lambda / AWS ECS. The user runs the following on their machine:
 
