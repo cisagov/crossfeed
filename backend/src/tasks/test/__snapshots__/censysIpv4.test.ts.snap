@@ -73,7 +73,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 80,
-        "productSource": "censysIpv4",
         "products": Array [
           Object {
             "cpe": "cpe:/a:apache:httpd",
@@ -308,7 +307,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 443,
-        "productSource": "censysIpv4",
         "products": Array [
           Object {
             "cpe": "cpe:/a:apache:httpd",
@@ -465,7 +463,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 465,
-        "productSource": "censysIpv4",
         "products": Array [],
         "service": "smtp",
         "serviceSource": "censysIpv4",
@@ -578,7 +575,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 993,
-        "productSource": "censysIpv4",
         "products": Array [],
         "service": "imaps",
         "serviceSource": "censysIpv4",
@@ -729,7 +725,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 25,
-        "productSource": "censysIpv4",
         "products": Array [],
         "service": "smtp",
         "serviceSource": "censysIpv4",
@@ -850,7 +845,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 110,
-        "productSource": "censysIpv4",
         "products": Array [
           Object {
             "description": "Dovecot",
@@ -978,7 +972,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 143,
-        "productSource": "censysIpv4",
         "products": Array [
           Object {
             "description": "Dovecot",
@@ -1098,7 +1091,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 995,
-        "productSource": "censysIpv4",
         "products": Array [],
         "service": "pop3s",
         "serviceSource": "censysIpv4",
@@ -1249,7 +1241,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 587,
-        "productSource": "censysIpv4",
         "products": Array [],
         "service": "smtp",
         "serviceSource": "censysIpv4",
@@ -1399,7 +1390,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 80,
-        "productSource": "censysIpv4",
         "products": Array [
           Object {
             "cpe": "cpe:/a:apache:httpd",
@@ -3769,7 +3759,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 443,
-        "productSource": "censysIpv4",
         "products": Array [
           Object {
             "cpe": "cpe:/a:apache:httpd",
@@ -3920,7 +3909,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 22,
-        "productSource": "censysIpv4",
         "products": Array [
           Object {
             "description": "OpenSSH 7.2p2",
@@ -3976,7 +3964,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 27017,
-        "productSource": "censysIpv4",
         "products": Array [],
         "service": "mongodb",
         "serviceSource": "censysIpv4",
@@ -4065,7 +4052,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 80,
-        "productSource": "censysIpv4",
         "products": Array [
           Object {
             "cpe": "cpe:/a:apache:httpd",
@@ -4128,7 +4114,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 53,
-        "productSource": "censysIpv4",
         "products": Array [],
         "service": "dns",
         "serviceSource": "censysIpv4",
@@ -4158,7 +4143,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 8080,
-        "productSource": "censysIpv4",
         "products": Array [],
         "service": "http",
         "serviceSource": "censysIpv4",
@@ -4247,7 +4231,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 80,
-        "productSource": "censysIpv4",
         "products": Array [
           Object {
             "cpe": "cpe:/a:apache:httpd",
@@ -4344,7 +4327,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 5900,
-        "productSource": "censysIpv4",
         "products": Array [],
         "service": "vnc",
         "serviceSource": "censysIpv4",
@@ -4590,7 +4572,6 @@ on this server.</p>
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 80,
-        "productSource": "censysIpv4",
         "products": Array [
           Object {
             "description": "nginx",
@@ -4737,7 +4718,6 @@ a img {
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 80,
-        "productSource": "censysIpv4",
         "products": Array [
           Object {
             "cpe": "cpe:/a:microsoft:iis",
@@ -4929,7 +4909,6 @@ a img {
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 443,
-        "productSource": "censysIpv4",
         "products": Array [
           Object {
             "cpe": "cpe:/a:microsoft:httpapi",
@@ -5004,7 +4983,6 @@ a img {
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 53,
-        "productSource": "censysIpv4",
         "products": Array [],
         "service": "dns",
         "serviceSource": "censysIpv4",
@@ -5054,7 +5032,6 @@ a img {
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 7547,
-        "productSource": "censysIpv4",
         "products": Array [],
         "service": "cwmp",
         "serviceSource": "censysIpv4",
@@ -5110,7 +5087,6 @@ a img {
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 7547,
-        "productSource": "censysIpv4",
         "products": Array [],
         "service": "cwmp",
         "serviceSource": "censysIpv4",

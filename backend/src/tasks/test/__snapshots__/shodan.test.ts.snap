@@ -32,7 +32,6 @@ A003 BAD Error in IMAP command received by server.
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 993,
-        "productSource": null,
         "products": Array [
           Object {
             "cpe": "cpe:/a:igor_sysoev:nginx:1.18.0",
@@ -93,7 +92,6 @@ Resolver ID: AMS",
         "intrigueIdentResults": Object {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 53,
-        "productSource": null,
         "products": Array [],
         "service": null,
         "serviceSource": "shodan",
