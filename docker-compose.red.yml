@@ -13,6 +13,6 @@ services:
       context: ./backend
       dockerfile: ./Dockerfile.red
     volumes:
-      - $HOME/.aws/credentials:/root/.aws/credentials
+      - $HOME/.aws:/root/.aws
     ports:
       - '3000:3000'
