@@ -1,102 +1,65 @@
 // Main entrypoint for red.
+// Essentially, this entrypoint mimics API Gateway by passing down all requests
+// to the crossfeed prod api lambda function.
+import * as express from 'express';
+import * as cors from 'cors';
+import { Lambda } from 'aws-sdk';
 
-import app from './api/app';
+// Name of the lambda function name.
+const API_LAMBDA_FUNCTION_NAME = 'crossfeed-prod-api';
+const AWS_REGION = 'us-east-1';
 
-/**
-
-{
-  "resource": "/my/path",
-  "path": "/my/path",
-  "httpMethod": "GET",
-  "headers": {
-    "header1": "value1",
-    "header2": "value2"
-  },
-  "multiValueHeaders": {
-    "header1": [
-      "value1"
-    ],
-    "header2": [
-      "value1",
-      "value2"
-    ]
-  },
-  "queryStringParameters": {
-    "parameter1": "value1",
-    "parameter2": "value"
-  },
-  "multiValueQueryStringParameters": {
-    "parameter1": [
-      "value1",
-      "value2"
-    ],
-    "parameter2": [
-      "value"
-    ]
-  },
-  "requestContext": {
-    "accountId": "123456789012",
-    "apiId": "id",
-    "authorizer": {
-      "claims": null,
-      "scopes": null
-    },
-    "domainName": "id.execute-api.us-east-1.amazonaws.com",
-    "domainPrefix": "id",
-    "extendedRequestId": "request-id",
-    "httpMethod": "GET",
-    "identity": {
-      "accessKey": null,
-      "accountId": null,
-      "caller": null,
-      "cognitoAuthenticationProvider": null,
-      "cognitoAuthenticationType": null,
-      "cognitoIdentityId": null,
-      "cognitoIdentityPoolId": null,
-      "principalOrgId": null,
-      "sourceIp": "IP",
-      "user": null,
-      "userAgent": "user-agent",
-      "userArn": null,
-      "clientCert": {
-        "clientCertPem": "CERT_CONTENT",
-        "subjectDN": "www.example.com",
-        "issuerDN": "Example issuer",
-        "serialNumber": "a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1",
-        "validity": {
-          "notBefore": "May 28 12:30:02 2019 GMT",
-          "notAfter": "Aug  5 09:36:04 2021 GMT"
-        }
-      }
-    },
-    "path": "/my/path",
-    "protocol": "HTTP/1.1",
-    "requestId": "id=",
-    "requestTime": "04/Mar/2020:19:15:17 +0000",
-    "requestTimeEpoch": 1583349317135,
-    "resourceId": null,
-    "resourcePath": "/my/path",
-    "stage": "$default"
-  },
-  "pathParameters": null,
-  "stageVariables": null,
-  "body": "Hello from Lambda!",
-  "isBase64Encoded": false
+interface LambdaResponse {
+  "isBase64Encoded": boolean,
+  "statusCode": number,
+  "headers": {[x: string]: string},
+  "multiValueHeaders": {[x: string]: string[]},
+  "body": string
 }
 
-{
-    "isBase64Encoded": true|false,
-    "statusCode": httpStatusCode,
-    "headers": { "headerName": "headerValue", ... },
-    "multiValueHeaders": { "headerName": ["headerValue", "headerValue2", ...], ... },
-    "body": "..."
-}
- */
+const app = express();
+app.use(cors());
 
-process.env.RED = "true";
+app.use(async (req, res) => {
+  // See https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+  // for input / output formats for API gateway lambda integration.
+  const input = {
+    "resource": req.path,
+    "path": req.path,
+    "httpMethod": req.method,
+    "headers": req.headers,
+    "multiValueHeaders": {
+    },
+    "queryStringParameters": req.query,
+    "multiValueQueryStringParameters": {
+    },
+    "requestContext": {
+    },
+    "pathParameters": null,
+    "stageVariables": null,
+    "body": req.body,
+    "isBase64Encoded": false
+  };
+  const lambdaClient = new Lambda({
+    region: AWS_REGION
+  });
+  const response = await lambdaClient.invoke({
+    FunctionName: API_LAMBDA_FUNCTION_NAME,
+    InvocationType: 'Event',
+    Payload: JSON.stringify(input)
+  })
+  .promise();
+  console.log("input", input, "response", response);
+  const lambdaResponse: LambdaResponse = JSON.parse(response.Payload!.toString());
+  res.status(lambdaResponse.statusCode);
+  for (const k in lambdaResponse.headers) {
+    res.header(k, lambdaResponse.headers[k]);
+  }
+  res.send(lambdaResponse.body);
+});
+
 
 const port = 3000;
 app.listen(port, () => {
   console.log('App listening on port ' + port);
 });
-

@@ -68,7 +68,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_id   = local.s3_origin_id
   }
 
-  aliases = [var.frontend_domain]
+  # aliases = [var.frontend_domain]
 
   enabled             = true
   is_ipv6_enabled     = true
@@ -150,7 +150,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = var.frontend_cert_arn
+  #   acm_certificate_arn      = var.frontend_cert_arn
+    cloudfront_default_certificate = true
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2019"
   }

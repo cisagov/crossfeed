@@ -9,6 +9,8 @@ RUN npm ci
 
 COPY . .
 
+RUN cp prod.env .env
+
 RUN npm run build
 
 CMD [ "npm", "run", "red" ]
