@@ -7,6 +7,20 @@ The user builds and runs the following Docker containers on their AWS machine:
 - Frontend: Static React code
 - Backend: Express server that handles all routes by invoking the `crossfeed-prod-api` lambda function.
 
+### Setup / install Docker
+
+```bash
+sudo apt-get install -y git chromium-browser
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo groupadd docker
+sudo usermod -aG docker $USER
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+
 ### Setup
 
 At the moment, you can set up by logging into an AWS instance that has access to invoke the Crossfeed lambda functions. Then run the following:
