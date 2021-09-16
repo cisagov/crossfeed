@@ -298,4 +298,12 @@ resource "aws_s3_bucket" "export_bucket" {
     Project = var.project
     Stage   = var.stage
   }
+  
+  lifecycle_rule {
+    id = "all_files"
+    enabled = true
+    expiration {
+      days = 1
+    }
+  }
 }
