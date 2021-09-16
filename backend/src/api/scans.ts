@@ -125,6 +125,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     memory: '8192',
     description: 'Matches detected software versions to CVEs from NIST NVD'
   },
+  dotgov: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    description:
+      'Create organizations based on root domains from the dotgov registrar dataset'
+  },
   searchSync: {
     type: 'fargate',
     isPassive: true,
