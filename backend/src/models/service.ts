@@ -94,7 +94,7 @@ export class Service extends BaseEntity {
   })
   discoveredBy: Scan;
 
-  /** Name of scan that discovered this port/service (censys, shodan). */
+  /** Name of scan that discovered this port/service (censysIpv4, shodan). */
   @Column({
     nullable: true,
     type: 'text'
