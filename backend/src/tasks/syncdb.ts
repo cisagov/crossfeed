@@ -88,7 +88,7 @@ export const handler: Handler = async (event) => {
           name: Sentencer.make('{{ adjective }}-{{ noun }}.crossfeed.local'),
           ip: ['127', randomNum(), randomNum(), randomNum()].join('.'), // Create random loopback addresses
           fromRootDomain: 'crossfeed.local',
-          subdomainSource: 'Sample Data',
+          subdomainSource: 'findomain',
           organization
         }).save();
         console.log(`\t${domain.name}`);
@@ -99,7 +99,7 @@ export const handler: Handler = async (event) => {
             domain,
             port: serviceData.port,
             service: serviceData.service,
-            serviceSource: 'Sample Data',
+            serviceSource: 'shodan',
             wappalyzerResults: [
               {
                 technology: {
