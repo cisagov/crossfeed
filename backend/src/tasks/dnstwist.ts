@@ -6,7 +6,6 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { spawnSync } from 'child_process';
 
 async function runDNSTwist(domain: Domain) {
-  console.log(domain.name);
   const child = spawnSync(
     'dnstwist',
     ['-r', '--tld', './worker/common_tlds.dict', '-f', 'json', domain.name],

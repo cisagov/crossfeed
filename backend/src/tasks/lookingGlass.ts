@@ -275,6 +275,7 @@ export const handler = async (commandOptions: CommandOptions) => {
                 lastSeen: new Date(Date.now()),
                 title: 'Looking Glass Data',
                 state: 'open',
+                severity: 'Low',
                 source: 'lookingGlass',
                 needsPopulation: false,
                 structuredData: {

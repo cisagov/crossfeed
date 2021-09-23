@@ -42,6 +42,7 @@ export const handler = async (commandOptions: CommandOptions) => {
             asn: parsed.addresses[0].asn,
             organization: { id: organizationId },
             fromRootDomain: rootDomain,
+            subdomainSource: 'amass',
             discoveredBy: { id: scanId }
           })
         );

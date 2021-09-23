@@ -40,6 +40,7 @@ export const handler = async (commandOptions: CommandOptions) => {
             ip: split[1],
             organization: { id: organizationId },
             fromRootDomain: rootDomain,
+            subdomainSource: 'findomain',
             discoveredBy: { id: scanId }
           })
         );

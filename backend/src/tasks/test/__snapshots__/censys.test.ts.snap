@@ -12,6 +12,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -23,6 +24,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -34,6 +36,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -45,6 +48,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -56,6 +60,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -67,6 +72,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -78,6 +84,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -89,6 +96,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -100,6 +108,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -111,6 +120,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -122,6 +132,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -133,6 +144,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -144,6 +156,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -155,6 +168,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -166,6 +180,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -177,6 +192,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -188,6 +204,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -199,6 +216,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -210,6 +228,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -221,6 +240,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -232,6 +252,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -243,6 +264,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -254,6 +276,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -265,6 +288,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -276,6 +300,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -287,6 +312,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -298,6 +324,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -309,6 +336,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -320,6 +348,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -331,6 +360,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -342,6 +372,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -353,6 +384,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -364,6 +396,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -375,6 +408,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -386,6 +420,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -397,6 +432,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -408,6 +444,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -419,6 +456,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -430,6 +468,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
   Domain {
     "discoveredBy": Object {
@@ -441,6 +480,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "censys",
   },
 ]
 `;

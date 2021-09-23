@@ -13,6 +13,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "amass",
   },
   Domain {
     "asn": 6762,
@@ -25,6 +26,7 @@ Array [
     "organization": Object {
       "id": "organizationId",
     },
+    "subdomainSource": "amass",
   },
 ]
 `;
