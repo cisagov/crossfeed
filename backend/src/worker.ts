@@ -30,7 +30,7 @@ async function main() {
   );
   console.log('commandOptions are', commandOptions);
 
-  const { scanName, organizations = [] } = commandOptions;
+  const { scanName = 'testProxy', organizations = [] } = commandOptions;
 
   const scanFn = {
     amass,
@@ -52,7 +52,7 @@ async function main() {
     dnstwist,
     testProxy,
     rootDomainSync
-  }[scanName || 'testProxy'];
+  }[scanName];
   if (!scanFn) {
     throw new Error('Invalid scan name ' + scanName);
   }
