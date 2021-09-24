@@ -16,8 +16,9 @@ const WEBSCRAPER_DIRECTORY = '/app/worker/webscraper';
  * This test should be run manually whenever worker dependencies
  * that might affect the proxy are upgraded or new scans are added
  * which require proxy integration (such as adding code in a
- * new language).
- *
+ * new language). If a new scan / tool is added, you may need to add
+ * additional lines of code to this scan so that it tests
+ * that tool out.
  *
  * To run the test, first go to https://webhook.site/, create a new webhook URL,
  * and replace the WEBHOOK_URL_HTTPS and WEBHOOK_ADMIN_URL constants accordingly.
