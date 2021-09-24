@@ -18,8 +18,11 @@ const WEBSCRAPER_DIRECTORY = '/app/worker/webscraper';
  * which require proxy integration (such as adding code in a
  * new language). If a new scan / tool is added, you may need to add
  * additional lines of code to this scan so that it tests
- * that tool out.
- *
+ * that tool out. Here are examples of PRs for which you should run
+ * this scan before merging:
+ * * Bump mitmproxy from 6.0.2 to 7.0.3 https://github.com/cisagov/crossfeed/pull/1193
+ * * Add webscraper scan https://github.com/cisagov/crossfeed/pull/517
+ * 
  * To run the test, first go to https://webhook.site/, create a new webhook URL,
  * and replace the WEBHOOK_URL_HTTPS and WEBHOOK_ADMIN_URL constants accordingly.
  * Then run:
