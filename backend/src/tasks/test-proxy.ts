@@ -22,7 +22,7 @@ const WEBSCRAPER_DIRECTORY = '/app/worker/webscraper';
  * this scan before merging:
  * * Bump mitmproxy from 6.0.2 to 7.0.3 https://github.com/cisagov/crossfeed/pull/1193
  * * Add webscraper scan https://github.com/cisagov/crossfeed/pull/517
- * 
+ *
  * To run the test, first go to https://webhook.site/, create a new webhook URL,
  * and replace the WEBHOOK_URL_HTTPS and WEBHOOK_ADMIN_URL constants accordingly.
  * Then run:
