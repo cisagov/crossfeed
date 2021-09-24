@@ -81,7 +81,7 @@ Optional variables:
 
 ### Use Terraform
 
-Run `cd infrastructure`. Then, create a new bucket on S3 that can be used to store terraform state; make sure you enable bucket versioning and server-side encryption. Then run `cp stage.config .env` and change the variables in `.env` to use this bucket name.
+Run `cd infrastructure`. Then, create a new bucket on S3 that can be used to store terraform state; make sure the bucket is private, bucket versioning is enabled, and server-side encryption is enabled. Then run `cp stage.config .env` and change the variables in `.env` to use this bucket name.
 
 Make sure you configure the default AWS profile using `aws configure` , or set the `AWS_PROFILE` environment variable in `.env`.
 
