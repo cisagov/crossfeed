@@ -38,7 +38,7 @@
     "@types/react-simple-maps": "^1.0.3",
     "@types/react-table": "^7.0.23",
     "autoprefixer": "^9.8.6",
-    "aws-amplify": "^3.3.1",
+    "aws-amplify": "^3.4.3",
     "classnames": "^2.2.6",
     "d3-scale": "^3.2.3",
     "dompurify": "^2.1.1",
