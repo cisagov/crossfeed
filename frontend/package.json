@@ -5,7 +5,7 @@
   "dependencies": {
     "@aws-amplify/api-graphql": "^2.0.0",
     "@aws-amplify/auth": "^3.4.4",
-    "@aws-amplify/ui-components": "^0.8.4",
+    "@aws-amplify/ui-components": "^0.10.4",
     "@aws-amplify/ui-react": "^0.2.21",
     "@datapunt/matomo-tracker-react": "^0.2.1",
     "@elastic/react-search-ui": "^1.5.1",
