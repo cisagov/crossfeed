@@ -42,7 +42,7 @@
     "sass": "^1.29.0",
     "swagger-jsdoc": "^5.0.1",
     "swagger-ui-react": "^3.37.0",
-    "uswds": "^2.9.0"
+    "uswds": "^2.12.1"
   },
   "devDependencies": {
     "eslint-config-react-app": "^5.2.1",
