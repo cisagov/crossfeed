@@ -39,7 +39,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-helmet": "^6.1.0",
-    "sass": "^1.29.0",
+    "sass": "^1.39.0",
     "swagger-jsdoc": "^5.0.1",
     "swagger-ui-react": "^3.37.0",
     "uswds": "^2.9.0"
