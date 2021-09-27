@@ -63,6 +63,11 @@ variable ssm_db_name {
   default = "/crossfeed/staging/DATABASE_NAME"
 }
 
+variable ssm_pe_db_name {
+  type    = string
+  default = "/crossfeed/staging/PE_DATABASE_NAME"
+}
+
 variable ssm_db_host {
   type    = string
   default = "/crossfeed/staging/DATABASE_HOST"
@@ -106,6 +111,16 @@ variable ssm_db_username {
 variable ssm_db_password {
   type    = string
   default = "/crossfeed/staging/DATABASE_PASSWORD"
+}
+
+variable ssm_pe_db_username {
+  type    = string
+  default = "/crossfeed/staging/PE_DATABASE_USER"
+}
+
+variable ssm_pe_db_password {
+  type    = string
+  default = "/crossfeed/staging/PE_DATABASE_PASSWORD"
 }
 
 variable ssm_worker_signature_public_key {
