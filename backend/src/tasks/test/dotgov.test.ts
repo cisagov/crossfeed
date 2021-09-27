@@ -1,6 +1,7 @@
 import {
   handler as dotgov,
   DOTGOV_TAG_NAME,
+  DOTGOV_ORG_SUFFIX,
   DOTGOV_LIST_ENDPOINT
 } from '../dotgov';
 import * as nock from 'nock';
@@ -11,7 +12,7 @@ import {
   OrganizationTag
 } from '../../models';
 
-const HOST = 'https://github.com';
+const HOST = 'https://raw.githubusercontent.com';
 const PATH = DOTGOV_LIST_ENDPOINT.replace(HOST, '');
 
 describe('dotgov', () => {
@@ -23,6 +24,12 @@ describe('dotgov', () => {
       arguments: {},
       frequency: 999
     }).save();
+    // Clean up any OrganizationTag / Organizations created from earlier tests
+    await OrganizationTag.delete({ name: DOTGOV_TAG_NAME });
+    await Organization.createQueryBuilder('organization')
+      .where('name like :name', { name: `%${DOTGOV_ORG_SUFFIX}%` })
+      .delete()
+      .execute();
   });
 
   test('basic test', async () => {
@@ -42,7 +49,6 @@ AFRH.GOV,Federal Agency - Executive,Armed Forces Retirement Home,Armed Forces Re
 GOLDWATERSCHOLARSHIP.GOV,Federal Agency - Executive,Barry Goldwater Scholarship and Excellence in Education Foundation,Barry Goldwater Scholarship and Excellence in Education Foundation,Alexandria,VA,goldwaterao@goldwaterscholarship.gov`
     );
 
-    await OrganizationTag.delete({ name: DOTGOV_TAG_NAME });
     await dotgov({
       organizationId: 'organizationId',
       organizationName: 'organizationName',
@@ -76,7 +82,6 @@ site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.g
 site2.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,domainsecurity@achp.gov`
     );
 
-    await OrganizationTag.delete({ name: DOTGOV_TAG_NAME });
     await dotgov({
       organizationId: 'organizationId',
       organizationName: 'organizationName',
@@ -96,7 +101,7 @@ site2.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,domainsecur
       .getMany();
 
     expect(organizations.length).toEqual(1);
-    expect(organizations[0].name).toEqual('Agency 1');
+    expect(organizations[0].name).toEqual('Agency 1 (dotgov)');
     expect(organizations[0].rootDomains).toEqual(['site1.gov', 'site2.gov']);
   });
 
@@ -106,8 +111,6 @@ site2.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,domainsecur
       `Domain Name,Domain Type,Agency,Organization,City,State,Security Contact Email
 site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.gov`
     );
-
-    await OrganizationTag.delete({ name: DOTGOV_TAG_NAME });
 
     const originalOrganization = await Organization.create({
       name: 'Agency 1',
@@ -134,7 +137,7 @@ site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.g
       .getMany();
 
     expect(organizations.length).toEqual(1);
-    expect(organizations[0].name).toEqual('Agency 1');
+    expect(organizations[0].name).toEqual('Agency 1 (dotgov)');
     expect(organizations[0].rootDomains).toEqual(['site1.gov']);
     expect(organizations[0].id).not.toEqual(originalOrganization.id);
   });
@@ -146,7 +149,6 @@ site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.g
 site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.gov`
     );
 
-    await OrganizationTag.delete({ name: DOTGOV_TAG_NAME });
     const originalTag = await OrganizationTag.create({
       name: DOTGOV_TAG_NAME
     }).save();
@@ -171,7 +173,7 @@ site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.g
       .getMany();
 
     expect(organizations.length).toEqual(1);
-    expect(organizations[0].name).toEqual('Agency 1');
+    expect(organizations[0].name).toEqual('Agency 1 (dotgov)');
     expect(organizations[0].rootDomains).toEqual(['site1.gov']);
   });
 
@@ -182,13 +184,12 @@ site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.g
 site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.gov`
     );
 
-    await OrganizationTag.delete({ name: DOTGOV_TAG_NAME });
     const tag = await OrganizationTag.create({
       name: DOTGOV_TAG_NAME
     }).save();
 
     const originalOrganization = await Organization.create({
-      name: 'Agency 1',
+      name: 'Agency 1 (dotgov)',
       ipBlocks: [],
       tags: [tag],
       isPassive: false,
@@ -208,7 +209,7 @@ site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.g
       .getMany();
 
     expect(organizations.length).toEqual(1);
-    expect(organizations[0].name).toEqual('Agency 1');
+    expect(organizations[0].name).toEqual('Agency 1 (dotgov)');
     expect(organizations[0].rootDomains).toEqual(['site1.gov']);
     expect(organizations[0].id).toEqual(originalOrganization.id);
     expect(organizations[0].isPassive).toEqual(false);

@@ -13,9 +13,16 @@ interface ParsedRow {
   'Security Contact Email': string;
 }
 
+// Only retrieve federal .gov domains
 export const DOTGOV_LIST_ENDPOINT =
-  'https://github.com/cisagov/dotgov-data/blob/main/current-federal.csv';
+  'https://raw.githubusercontent.com/cisagov/dotgov-data/main/current-federal.csv';
+
+// To scan all .gov domains, use the below endpoint:
+// export const DOTGOV_LIST_ENDPOINT =
+//   'https://raw.githubusercontent.com/cisagov/dotgov-data/main/current-full.csv';
+
 export const DOTGOV_TAG_NAME = 'dotgov';
+export const DOTGOV_ORG_SUFFIX = ' (dotgov)';
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { data } = await axios.get(DOTGOV_LIST_ENDPOINT);
@@ -34,10 +41,11 @@ export const handler = async (commandOptions: CommandOptions) => {
     [x: string]: { row: ParsedRow; rootDomains: Set<string> };
   } = {};
   for (const row of parsedRows) {
-    if (!orgsToRootDomainMap[row.Agency]) {
-      orgsToRootDomainMap[row.Agency] = { row, rootDomains: new Set() };
+    const orgName = row.Agency + DOTGOV_ORG_SUFFIX;
+    if (!orgsToRootDomainMap[orgName]) {
+      orgsToRootDomainMap[orgName] = { row, rootDomains: new Set() };
     }
-    orgsToRootDomainMap[row.Agency].rootDomains.add(
+    orgsToRootDomainMap[orgName].rootDomains.add(
       row['Domain Name'].toLowerCase()
     );
   }
@@ -52,12 +60,11 @@ export const handler = async (commandOptions: CommandOptions) => {
     orgsToRootDomainMap
   )) {
     // Create a new organization if needed; else, create the same one.
+    console.log(orgName);
     const organization =
-      (await Organization.createQueryBuilder('organization')
-        .innerJoinAndSelect('organization.tags', 'tags')
-        .where('organization.name = :orgName', { orgName })
-        .andWhere('tags.id = :tagId', { tagId: tag.id })
-        .getOne()) ||
+      (await Organization.findOne({
+        name: orgName
+      })) ||
       (await Organization.create({
         name: orgName,
         tags: [tag],
@@ -65,6 +72,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         isPassive: true,
         rootDomains: []
       }));
+    organization.tags = [tag];
     // Replace existing rootDomains with new rootDomains.
     organization.rootDomains = [...rootDomains];
     await organization.save();

@@ -130,7 +130,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     isPassive: true,
     global: true,
     description:
-      'Create organizations based on root domains from the dotgov registrar dataset'
+      'Create organizations based on root domains from the dotgov registrar dataset. All organizations are created with the "dotgov" tag and have a " (dotgov)" suffix added to their name.'
   },
   searchSync: {
     type: 'fargate',
