@@ -24,6 +24,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.12.3",
     "lodash": "^4.17.21",
+    "node-postgres": "^0.6.2",
     "nodemailer": "^6.6.0",
     "openid-client": "^4.1.1",
     "p-queue": "^6.6.1",
@@ -85,6 +86,7 @@
     "deploy-worker-staging": "./tools/deploy-worker.sh",
     "deploy-worker-prod": "./tools/deploy-worker.sh crossfeed-prod-worker",
     "syncdb": "docker-compose exec -T backend npx ts-node src/tools/run-syncdb.ts",
+    "pesyncdb": "docker-compose exec -T backend npx ts-node src/tools/run-pesyncdb.ts",
     "red": "ts-node src/api-red.ts"
   },
   "author": "",

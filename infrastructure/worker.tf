@@ -64,6 +64,9 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${aws_ssm_parameter.crossfeed_send_db_name.arn}",
           "${data.aws_ssm_parameter.db_username.arn}",
           "${data.aws_ssm_parameter.db_password.arn}",
+          "${data.aws_ssm_parameter.pe_db_username.arn}",
+          "${data.aws_ssm_parameter.pe_db_name.arn}",
+          "${data.aws_ssm_parameter.pe_db_password.arn}",
           "${data.aws_ssm_parameter.worker_signature_public_key.arn}",
           "${data.aws_ssm_parameter.worker_signature_private_key.arn}",
           "${data.aws_ssm_parameter.censys_api_id.arn}",
@@ -201,6 +204,18 @@ resource "aws_ecs_task_definition" "worker" {
       {
         "name": "DB_PASSWORD",
         "valueFrom": "${data.aws_ssm_parameter.db_password.arn}"
+      },
+      {
+        "name": "PE_DB_NAME",
+        "valueFrom": "${aws_ssm_parameter.pe_db_name.arn}"
+      },
+      {
+        "name": "PE_DB_USERNAME",
+        "valueFrom": "${data.aws_ssm_parameter.pe_db_username.arn}"
+      },
+      {
+        "name": "PE_DB_PASSWORD",
+        "valueFrom": "${data.aws_ssm_parameter.pe_db_password.arn}"
       },
       {
         "name": "CENSYS_API_ID",
