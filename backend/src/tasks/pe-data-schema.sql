@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS public.mentions
 CREATE TABLE IF NOT EXISTS public.shodan_insecure_protocols_unverified_vulns
 (
     insecure_product_uid uuid default uuid_generate_v1() NOT NULL,
-    organization_uid uuid NOT NULL,
+    organizations_uid uuid NOT NULL,
     organization text,
     ip text,
     port integer,
@@ -132,14 +132,14 @@ CREATE TABLE IF NOT EXISTS public.shodan_insecure_protocols_unverified_vulns
     hostnames text[],
     isn text,
     asn integer,
-    UNIQUE (root_org, ip, port, protocol, timestamp),
+    UNIQUE (organizations_uid, ip, port, protocol, timestamp),
     PRIMARY KEY (insecure_product_uid)
 );
 --Shodan Veriried Vulnerabilities table
 CREATE TABLE IF NOT EXISTS public.shodan_verified_vulns
 (
     verified_vuln_uid uuid default uuid_generate_v1() NOT NULL,
-    organization_uid uuid NOT NULL,
+    organizations_uid uuid NOT NULL,
     organization text,
     ip text,
     port text,
@@ -165,14 +165,14 @@ CREATE TABLE IF NOT EXISTS public.shodan_verified_vulns
     hostnames text[],
     isn text,
     asn integer,
-    UNIQUE (root_org, ip, port, protocol, timestamp),
+    UNIQUE (organizations_uid, ip, port, protocol, timestamp),
     PRIMARY KEY (verified_vuln_uid)
 );
 --Shodan Assets and IPs table
 CREATE TABLE IF NOT EXISTS public.shodan_assets
 (
     shodan_asset_uid uuid default uuid_generate_v1() NOT NULL,
-    organization_uid uuid NOT NULL,
+    organizations_uid uuid NOT NULL,
     organization text,
     ip text,
     port integer,
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS public.shodan_assets
     hostnames text[],
     isn text,
     asn integer,
-    UNIQUE (root_org, ip, port, protocol, timestamp),
+    UNIQUE (organizations_uid, ip, port, protocol, timestamp),
     PRIMARY KEY (shodan_asset_uid)
 );
 
@@ -194,7 +194,7 @@ CREATE TABLE IF NOT EXISTS public.hibp_breaches
 (
     hibp_breaches_uid uuid default uuid_generate_v1() NOT NULL,
     breach_id uuid NOT NULL,
-    breach_name text NOT NULL
+    breach_name text NOT NULL,
     description text,
     exposed_cred_count bigint,
     breach_date date,
@@ -334,7 +334,7 @@ ALTER TABLE public.alerts
 -- HIBP complete breach view
 Create View vw_breach_complete
 AS
-SELECT creds.hibp_exposed_credentials_uid,creds.email, creds.breach_name, creds.organization, creds.root_domain, creds.sub_domain,
+SELECT creds.hibp_exposed_credentials_uid,creds.email, creds.breach_name, creds.organizations_uid, creds.root_domain, creds.sub_domain,
     b.description, b.breach_date, b.added_date, b.modified_date,  b.data_classes,
     b.password_included, b.is_verified, b.is_fabricated, b.is_sensitive, b.is_retired, b.is_spam_list
 
