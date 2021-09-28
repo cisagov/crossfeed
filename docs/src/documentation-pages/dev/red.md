@@ -21,18 +21,31 @@ sudo chmod +x /usr/local/bin/docker-compose
 ```
 
 
-### Setup
+### Initial setup
 
-At the moment, you can set up by logging into an AWS instance that has access to invoke the Crossfeed lambda functions. Then run the following:
+At the moment, you can set up by logging into an AWS instance that has access to access the Crossfeed AWS environment (such as the terraformer instance in the COOL). Then run the following:
 
 ```
 git clone https://github.com/cisagov/crossfeed.git
 cd crossfeed
 git checkout red
+npm run build-red
 npm run red
 ```
 
 You can then open up `http://localhost` in your browser to see Crossfeed running.
+
+### Updating to latest code
+
+The steps for updating Crossfeed Red are the following:
+
+1. Merge the latest changes from `master` into the `red` branch; you can make a PR on GitHub from master -> red then merge with a merge commit to do so.
+1. In the terraformer instance, run:
+  ```
+  git pull origin red
+  npm run deploy-red
+  npm run red
+  ```
 
 ### Architecture
 
