@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "frontend_bucket" {
 }
 
 data "template_file" "policy_file" {
-  template = "${file("frontend_bucket_policy.tpl")}"
+  template = file("frontend_bucket_policy.tpl")
   vars = {
     bucket_name = var.frontend_bucket
   }
