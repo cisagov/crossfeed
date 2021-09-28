@@ -174,6 +174,7 @@ export const ScanTasksView: React.FC = () => {
         'sslyze',
         'searchSync',
         'cve',
+        'dotgov',
         'webscraper',
         'intrigueIdent',
         'shodan',
