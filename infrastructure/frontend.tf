@@ -70,7 +70,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   # aliases = [var.frontend_domain]
 
-  enabled             = true
+  enabled             = false
   is_ipv6_enabled     = true
   comment             = var.cloudfront_name
   default_root_object = "index.html"
