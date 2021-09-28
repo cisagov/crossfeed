@@ -84,6 +84,7 @@ const downloadPath = async (
               port: Number(key.slice(1)),
               domain: matchingDomain,
               lastSeen: new Date(Date.now()),
+              serviceSource: 'censysIpv4',
               censysIpv4Results: JSON.parse(
                 sanitizeStringField(JSON.stringify(item[key]))
               )

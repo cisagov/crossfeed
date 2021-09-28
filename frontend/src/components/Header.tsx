@@ -400,7 +400,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5px',
     width: '200px',
     padding: '3px',
-    margin: '10px',
+    marginLeft: '20px',
     '& svg': {
       color: 'white'
     },
