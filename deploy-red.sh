@@ -1,13 +1,16 @@
 set -e
 
 # Infrastructure
-cd infrastructure && terraform init -backend-config=prod.config -input=false && terraform fmt -recursive -check -diff && terraform validate && terraform apply -var-file=prod.tfvars
-
+cd infrastructure
+terraform init -backend-config=prod.config -input=false && terraform fmt -recursive -check -diff && terraform validate && terraform apply -var-file=prod.tfvars
+cd ..
 # Worker
-cd backend && npm run deploy-worker-prod
-
+cd backend
+npm run deploy-worker-prod
+cd ..
 # Backend
-cd backend && npm i && npx sls deploy --stage=prod
-
+cd backend
+npm i && npx sls deploy --stage=prod
+cd ..
 # Frontend
 docker-compose -f docker-compose.red.yml build --parallel
