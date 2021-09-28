@@ -207,7 +207,7 @@ resource "aws_ecs_task_definition" "worker" {
       },
       {
         "name": "PE_DB_NAME",
-        "valueFrom": "${aws_ssm_parameter.pe_db_name.arn}"
+        "valueFrom": "${data.aws_ssm_parameter.pe_db_name.arn}"
       },
       {
         "name": "PE_DB_USERNAME",
