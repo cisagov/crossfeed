@@ -26,3 +26,15 @@ On production, go to the terraformer instance and run:
 ```
 aws lambda invoke --function-name crossfeed-staging-pesyncdb --region us-east-1 /dev/stdout
 ```
+
+# Accessing the database
+
+First, retrieve the database credentials by running the following command in the terraformer instance:
+
+```
+aws ssm get-parameter --name "/crossfeed/prod/PE_DATABASE_NAME" --with-decryption
+aws ssm get-parameter --name "/crossfeed/prod/PE_DATABASE_USER" --with-decryption
+aws ssm get-parameter --name "/crossfeed/prod/PE_DATABASE_PASSWORD" --with-decryption
+```
+
+You can use these credentials when connecting with a bastion to access the database.
