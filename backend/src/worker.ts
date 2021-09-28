@@ -12,6 +12,7 @@ import { handler as sslyze } from './tasks/sslyze';
 import { handler as searchSync } from './tasks/search-sync';
 import { handler as intrigueIdent } from './tasks/intrigue-ident';
 import { handler as cve } from './tasks/cve';
+import { handler as dotgov } from './tasks/dotgov';
 import { handler as webscraper } from './tasks/webscraper';
 import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
@@ -40,6 +41,7 @@ async function main() {
     sslyze,
     searchSync,
     cve,
+    dotgov,
     findomain,
     portscanner,
     wappalyzer,
