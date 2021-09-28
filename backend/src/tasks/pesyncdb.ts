@@ -43,4 +43,7 @@ export const handler: Handler = async (event) => {
   // Generate initial PE tables.
   const sql = String(readFileSync(PE_DATA_SCHEMA_PATH));
   await client.query(sql);
+
+  console.log('Done.');
+  client.end();
 };
