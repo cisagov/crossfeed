@@ -3,12 +3,12 @@ service: crossfeed
 custom:
   webpack:
     webpackConfig: 'webpack.backend.config.js'
-  customDomain:
-    domainName: ${file(./env.yml):${self:provider.stage}.DOMAIN, ''}
-    basePath: ''
-    certificateName: ${file(./env.yml):${self:provider.stage}.DOMAIN, ''}
-    stage: ${self:provider.stage}
-    createRoute53Record: true
+  # customDomain:
+  #   domainName: ${file(./env.yml):${self:provider.stage}.DOMAIN, ''}
+  #   basePath: ''
+  #   certificateName: ${file(./env.yml):${self:provider.stage}.DOMAIN, ''}
+  #   stage: ${self:provider.stage}
+  #   createRoute53Record: true
 
 provider:
   name: aws
@@ -57,5 +57,5 @@ functions:
   - ${file(./src/api/functions.yml)}
 
 plugins:
-  - serverless-domain-manager
+  # - serverless-domain-manager
   - serverless-webpack

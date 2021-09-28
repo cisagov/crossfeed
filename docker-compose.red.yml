@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile.red
+    # network_mode: host
+    ports:
+      - '80:5000'
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile.red
+    network_mode: host
+    volumes:
+      - $HOME/.aws:/root/.aws
+    # ports:
+    #   - '3000:3000'

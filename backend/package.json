@@ -86,7 +86,8 @@
     "deploy-worker-staging": "./tools/deploy-worker.sh",
     "deploy-worker-prod": "./tools/deploy-worker.sh crossfeed-prod-worker",
     "syncdb": "docker-compose exec -T backend npx ts-node src/tools/run-syncdb.ts",
-    "pesyncdb": "docker-compose exec -T backend npx ts-node src/tools/run-pesyncdb.ts"
+    "pesyncdb": "docker-compose exec -T backend npx ts-node src/tools/run-pesyncdb.ts",
+    "red": "ts-node src/api-red.ts"
   },
   "author": "",
   "license": "ISC"
