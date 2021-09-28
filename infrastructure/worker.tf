@@ -65,6 +65,7 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.db_username.arn}",
           "${data.aws_ssm_parameter.db_password.arn}",
           "${data.aws_ssm_parameter.pe_db_username.arn}",
+          "${data.aws_ssm_parameter.pe_db_name.arn}",
           "${data.aws_ssm_parameter.pe_db_password.arn}",
           "${data.aws_ssm_parameter.worker_signature_public_key.arn}",
           "${data.aws_ssm_parameter.worker_signature_private_key.arn}",
