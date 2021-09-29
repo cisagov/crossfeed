@@ -11,11 +11,11 @@ const API_LAMBDA_FUNCTION_NAME = 'crossfeed-prod-api';
 const AWS_REGION = 'us-east-1';
 
 interface LambdaResponse {
-  "isBase64Encoded": boolean,
-  "statusCode": number,
-  "headers": {[x: string]: string},
-  "multiValueHeaders": {[x: string]: string[]},
-  "body": string
+  isBase64Encoded: boolean;
+  statusCode: number;
+  headers: { [x: string]: string };
+  multiValueHeaders: { [x: string]: string[] };
+  body: string;
 }
 
 const app = express();
@@ -26,38 +26,48 @@ app.use(async (req, res) => {
   // See https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
   // for input / output formats for API gateway lambda integration.
   let body = JSON.stringify(req.body);
-  if (body === "{}") {
-    body = "";
+  if (body === '{}') {
+    body = '';
   }
   const input = {
-    "resource": "/{any+}",
-    "path": req.path,
-    "httpMethod": req.method,
+    resource: '/{any+}',
+    path: req.path,
+    httpMethod: req.method,
     headers: req.headers,
     multiValueHeaders: {},
-    "queryStringParameters": req.query,
-    "multiValueQueryStringParameters": {},
-    "pathParameters": {
-      "any": req.path.substr(1) // Remove leading slash from path
+    queryStringParameters: req.query,
+    multiValueQueryStringParameters: {},
+    pathParameters: {
+      any: req.path.substr(1) // Remove leading slash from path
     },
-    "stageVariables": null,
-    "requestContext": {},
-    "body": body,
-    "isBase64Encoded": false
+    stageVariables: null,
+    requestContext: {},
+    body: body,
+    isBase64Encoded: false
   };
   const lambdaClient = new Lambda({
     region: AWS_REGION
   });
-  const response = await lambdaClient.invoke({
-    FunctionName: API_LAMBDA_FUNCTION_NAME,
-    InvocationType: 'RequestResponse',
-    Payload: JSON.stringify(input)
-  })
-  .promise();
-  const lambdaResponse: LambdaResponse = JSON.parse(response.Payload!.toString());
-  console.log(input.httpMethod, input.path, lambdaResponse.statusCode)
+  const response = await lambdaClient
+    .invoke({
+      FunctionName: API_LAMBDA_FUNCTION_NAME,
+      InvocationType: 'RequestResponse',
+      Payload: JSON.stringify(input)
+    })
+    .promise();
+  const lambdaResponse: LambdaResponse = JSON.parse(
+    response.Payload!.toString()
+  );
+  console.log(input.httpMethod, input.path, lambdaResponse.statusCode);
   if (lambdaResponse.statusCode >= 400) {
-    console.error('Request failed with status code', lambdaResponse.statusCode, 'input', input, 'response', lambdaResponse);
+    console.error(
+      'Request failed with status code',
+      lambdaResponse.statusCode,
+      'input',
+      input,
+      'response',
+      lambdaResponse
+    );
   }
   res.status(lambdaResponse.statusCode);
   for (const k in lambdaResponse.headers) {
@@ -65,7 +75,6 @@ app.use(async (req, res) => {
   }
   res.send(lambdaResponse.body);
 });
-
 
 const port = 3000;
 app.listen(port, () => {
