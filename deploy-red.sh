@@ -15,6 +15,7 @@ npm i
 npm run deploy-worker-prod
 # Backend
 npx sls deploy --stage=prod
+aws lambda invoke --function-name crossfeed-prod-syncdb --region us-east-1 /dev/stdout
 cd ..
 # Frontend
 docker-compose -f docker-compose.red.yml build --parallel
