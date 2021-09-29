@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "frontend_bucket" {
 }
 
 data "template_file" "policy_file" {
-  template = "${file("frontend_bucket_policy.tpl")}"
+  template = file("frontend_bucket_policy.tpl")
   vars = {
     bucket_name = var.frontend_bucket
   }
@@ -70,7 +70,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   # aliases = [var.frontend_domain]
 
-  enabled             = true
+  enabled             = false
   is_ipv6_enabled     = true
   comment             = var.cloudfront_name
   default_root_object = "index.html"
@@ -150,9 +150,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   viewer_certificate {
-  #   acm_certificate_arn      = var.frontend_cert_arn
+    #   acm_certificate_arn      = var.frontend_cert_arn
     cloudfront_default_certificate = true
-    ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2019"
+    ssl_support_method             = "sni-only"
+    minimum_protocol_version       = "TLSv1"
   }
 }
