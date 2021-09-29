@@ -21,7 +21,9 @@ export const handler: Handler = async (event) => {
     );
   } catch (e) {
     console.log(
-      "Create user failed. This usually means that the user already exists, so you're OK if that was the case. Here's the exact error:", e);
+      "Create user failed. This usually means that the user already exists, so you're OK if that was the case. Here's the exact error:",
+      e
+    );
   }
   try {
     await connection.query(
@@ -29,7 +31,9 @@ export const handler: Handler = async (event) => {
     );
   } catch (e) {
     console.log(
-      "Create database failed. This usually means that the database already exists, so you're OK if that was the case. Here's the exact error:", e);
+      "Create database failed. This usually means that the database already exists, so you're OK if that was the case. Here's the exact error:",
+      e
+    );
   }
 
   // Connect to the PE database.
