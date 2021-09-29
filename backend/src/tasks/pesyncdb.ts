@@ -27,6 +27,13 @@ export const handler: Handler = async (event) => {
   }
   try {
     await connection.query(
+      `GRANT ${process.env.PE_DB_USERNAME} to ${process.env.DB_USERNAME};`
+    );
+  } catch (e) {
+    console.log('Grant role failed. Error:', e);
+  }
+  try {
+    await connection.query(
       `CREATE DATABASE ${process.env.PE_DB_NAME} owner ${process.env.PE_DB_USERNAME};`
     );
   } catch (e) {
