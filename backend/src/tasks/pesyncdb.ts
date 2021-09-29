@@ -24,8 +24,7 @@ export const handler: Handler = async (event) => {
     );
   } catch (e) {
     console.log(
-      "Create user / database failed. This means that the database already exists, so you're OK."
-    ); // , e);
+      "Create user / database failed. This means that the database already exists, so you're probably OK.", e);
   }
 
   // Connect to the PE database.
