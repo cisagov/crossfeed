@@ -11,6 +11,7 @@ syncdb:
   handler: src/tasks/syncdb.handler
 
 pesyncdb:
+  timeout: 900
   handler: src/tasks/pesyncdb.handler
 
 bastion:
