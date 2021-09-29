@@ -2,6 +2,10 @@
 
 set -e
 
+# Load IAM roles correctly for Serverless framework
+# https://github.com/serverless/serverless/issues/5039
+export AWS_SDK_LOAD_CONFIG=true
+
 # Infrastructure
 cd infrastructure
 terraform init -backend-config=prod.config -input=false
