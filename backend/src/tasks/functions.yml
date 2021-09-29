@@ -7,6 +7,7 @@ scheduler:
   memorySize: 4096
 
 syncdb:
+  timeout: 900
   handler: src/tasks/syncdb.handler
 
 pesyncdb:
