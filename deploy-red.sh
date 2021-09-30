@@ -2,6 +2,7 @@
 
 set -e
 
+
 # Infrastructure
 cd infrastructure
 terraform init -backend-config=prod.config -input=false
