@@ -179,6 +179,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Domain name permutation engine for detecting similar registered domains.'
   },
+  syncPEdata: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Add DNStwist and hibp data to the PE database, whcih already exists in Crossfeeds DB.'
+  },
   rootDomainSync: {
     type: 'fargate',
     isPassive: true,
