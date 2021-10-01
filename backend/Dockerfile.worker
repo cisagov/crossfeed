@@ -17,9 +17,9 @@ FROM golang:1.14.6-buster as deps
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
-    wget \
-    unzip \
-    ca-certificates \
+  wget \
+  unzip \
+  ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
 RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/download/1.7.0/findomain-linux -O /usr/bin/findomain && chmod +x /usr/bin/findomain
@@ -35,13 +35,14 @@ FROM node:14-buster-slim
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
-    curl \
-    git \
-    bzip2 \
-    build-essential \
-    libssl-dev libreadline-dev zlib1g-dev \
-    libncurses5-dev libgdbm-dev libnss3-dev libsqlite3-dev libffi-dev \
-    procps \
+  curl \
+  git \
+  bzip2 \
+  libbz2-dev \
+  build-essential \
+  libssl-dev libreadline-dev zlib1g-dev \
+  libncurses5-dev libgdbm-dev libnss3-dev libsqlite3-dev libffi-dev \
+  procps \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Python 3.8.10
