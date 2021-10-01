@@ -1,5 +1,6 @@
 import { CommandOptions } from './ecs-client';
 import { spawnSync } from 'child_process';
+import { ProcessCredentials } from 'aws-sdk';
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
@@ -21,4 +22,20 @@ export const handler = async (commandOptions: CommandOptions) => {
   );
   const savedOutput = child.stdout;
   console.log(savedOutput);
+
+  const child2 = spawnSync(
+    'python3',
+    ['/app/worker/pe_scripts/sync_hibp_pe.py'],
+    {
+      stdio: 'pipe',
+      encoding: 'utf-8',
+      env: {
+        ...process.env,
+        org_name: organizationName,
+        org_id: organizationId,
+      }
+    }
+  );
+  const savedOutput2 = child2.stdout;
+  console.log(savedOutput2);
 };

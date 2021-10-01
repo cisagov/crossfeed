@@ -184,7 +184,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     isPassive: true,
     global: false,
     description:
-      'Add DNStwist and hibp data to the PE database, whcih already exists in Crossfeeds DB.'
+      'Add DNStwist and hibp data to the PE database, which already exists in Crossfeeds DB.'
   },
   rootDomainSync: {
     type: 'fargate',
