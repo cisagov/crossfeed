@@ -16,26 +16,27 @@ export const handler = async (commandOptions: CommandOptions) => {
       encoding: 'utf-8',
       env: {
         ...process.env,
-        PE_USERNAME: process.env.PE_DB_USERNAME
+        org_name: organizationName,
+        org_id: organizationId
       }
     }
   );
   const savedOutput = child.stdout;
   console.log(savedOutput);
 
-  const child2 = spawnSync(
-    'python3',
-    ['/app/worker/pe_scripts/sync_hibp_pe.py'],
-    {
-      stdio: 'pipe',
-      encoding: 'utf-8',
-      env: {
-        ...process.env,
-        org_name: organizationName,
-        org_id: organizationId,
-      }
-    }
-  );
-  const savedOutput2 = child2.stdout;
-  console.log(savedOutput2);
+  //   const child2 = spawnSync(
+  //     'python3',
+  //     ['/app/worker/pe_scripts/sync_hibp_pe.py'],
+  //     {
+  //       stdio: 'pipe',
+  //       encoding: 'utf-8',
+  //       env: {
+  //         ...process.env,
+  //         org_name: organizationName,
+  //         org_id: organizationId
+  //       }
+  //     }
+  //   );
+  //   const savedOutput2 = child2.stdout;
+  //   console.log(savedOutput2);
 };
