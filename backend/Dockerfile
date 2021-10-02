@@ -3,6 +3,10 @@ FROM node:14-buster-slim
 WORKDIR /app
 COPY ./package* ./
 
+RUN apt-get update
+RUN apt-get -y install chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 RUN npm ci
 
 COPY . .
