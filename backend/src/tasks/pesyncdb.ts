@@ -201,7 +201,6 @@ CREATE TABLE IF NOT EXISTS public.shodan_assets
 CREATE TABLE IF NOT EXISTS public.hibp_breaches
 (
     hibp_breaches_uid uuid default uuid_generate_v1() NOT NULL,
-    breach_id uuid NOT NULL,
     breach_name text NOT NULL,
     description text,
     exposed_cred_count bigint,
@@ -215,6 +214,7 @@ CREATE TABLE IF NOT EXISTS public.hibp_breaches
     is_sensitive boolean,
     is_retired boolean,
     is_spam_list boolean,
+    UNIQUE (breach_name),
     PRIMARY KEY (hibp_breaches_uid)
 );
 
@@ -227,7 +227,8 @@ CREATE TABLE IF NOT EXISTS public.hibp_exposed_credentials
     root_domain text,
     sub_domain text,
     breach_name text,
-	breach_id uuid NOT NULL,
+    modified_date timestamp without time zone,
+	  breach_id uuid NOT NULL,
     UNIQUE (email, breach_name),
     PRIMARY KEY (hibp_exposed_credentials_uid)
 );
@@ -349,7 +350,7 @@ SELECT creds.hibp_exposed_credentials_uid,creds.email, creds.breach_name, creds.
     FROM hibp_exposed_credentials as creds
 
     JOIN hibp_breaches as b
-    ON creds.breach_id = b.breach_id;
+    ON creds.breach_id = b.hibp_breaches_uid;
 
 END;
 `;

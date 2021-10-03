@@ -91,7 +91,7 @@ async function lookupEmails(
     return finalResults;
   } catch (error) {
     console.error(
-      `An error occured when trying to access the HIPB API using the domain: ${domain.name}: ${error} `
+      `An error occured when trying to access the HIBP API using the domain: ${domain.name}: ${error} `
     );
     return null;
   }
