@@ -103,6 +103,37 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       path: '/scans',
       users: GLOBAL_ADMIN,
       exact: true
+    },
+    {
+      title: 'Manage Organizations',
+      path: '/organizations',
+      users: GLOBAL_ADMIN,
+      exact: true
+    },
+    {
+      title: 'My Organizations',
+      path: '/organizations',
+      users: STANDARD_USER,
+      exact: true
+    },
+    {
+      title: 'Manage Users',
+      path: '/users',
+      users: GLOBAL_ADMIN,
+      exact: true
+    },
+    {
+      title: 'My Settings',
+      path: '/settings',
+      users: ALL_USERS,
+      exact: true
+    },
+    {
+      title: 'Logout',
+      path: '/settings',
+      users: ALL_USERS,
+      onClick: logout,
+      exact: true
     }
   ].filter(({ users }) => (users & userLevel) > 0);
 
@@ -270,7 +301,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       </AppBar>
 
       <Drawer
-        anchor="left"
+        anchor="right"
         open={navOpen}
         onClose={() => setNavOpen(false)}
         data-testid="mobilenav"
@@ -336,7 +367,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(),
     paddingLeft: 0,
     [theme.breakpoints.up('sm')]: {
-      display: 'block'
+      display: 'none'
     }
   },
   spacing: {
@@ -376,15 +407,19 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600
   },
   userLink: {
-    display: 'flex',
-    alignItems: 'center',
-    marginLeft: '1rem',
-
-    '& svg': {
-      marginRight: theme.spacing()
+    [theme.breakpoints.up('sm')]: {
+      display: 'none'
     },
-    border: 'none',
-    textDecoration: 'none'
+    [theme.breakpoints.up('lg')]: {
+      display: 'flex',
+      alignItems: 'center',
+      marginLeft: '1rem',
+      '& svg': {
+        marginRight: theme.spacing()
+      },
+      border: 'none',
+      textDecoration: 'none'
+    }
   },
   lgNav: {
     display: 'none',
