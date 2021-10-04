@@ -65,13 +65,14 @@ def execute_hibp_emails_values(conn, jsonList, table):
     #     cursor.close()
 
 try:
+    # Connect to PE DB
     try:
         PE_conn = connect(DB_HOST,PE_DB_NAME,PE_DB_USERNAME,PE_DB_PASSWORD)
         print("Connected to PE database.")
     except:
         print("Failed To Connect to PE database")
 
-    # Currently don't have orgs loaded in my DB to test with
+    # Query PE Db to get the Organization UID
     try:
         print(f"Running on organization: {org_name}")
         cur = PE_conn.cursor()
@@ -84,6 +85,7 @@ try:
         print("Failed with Select Statement")
         print(traceback.format_exc())
 
+    # Connect to Crossfeed DB
     try:
         CF_conn = connect(DB_HOST,CF_DB_NAME,CF_DB_USERNAME,CF_DB_PASSWORD)
         print("Connected to crossfeed database.")
@@ -91,6 +93,7 @@ try:
         print("Failed To Connect to crossfeed database")
 
     try:
+        # Get a list of all HIBP Vulns for this organization
         sql = f"""SELECT vuln."structuredData", dom."fromRootDomain", dom."name"
                 FROM domain as dom
                 JOIN vulnerability as vuln 
@@ -99,10 +102,13 @@ try:
                 AND vuln."source" = 'hibp'"""
 
         hibp_resp = query_db(CF_conn, sql,)
-        # json_output = json.dumps(my_query)
+        
         compiled_breaches = {}
+        
+        # Remove duplicate breaches
         for row in hibp_resp:
             compiled_breaches.update(row['structuredData']['breaches'])
+        # Loop through the breaches and create a breach object to insert into PE database
         b_list = []
         for breach in compiled_breaches.values():
             breach_dict = {
@@ -121,14 +127,17 @@ try:
                 "is_spam_list": breach['IsSpamList'],
             }
             b_list.append(breach_dict)
+        # Insert new breaches into the PE DB, update changed breaches
         execute_hibp_breach_values(PE_conn, b_list,"public.hibp_breaches")
+        # Query PE DB for breaches to get Breach_UID
         sql = """SELECT breach."breach_name", breach."hibp_breaches_uid" from public.hibp_breaches as breach"""
         breaches_UIDs = query_db(PE_conn,sql)
-        print(breaches_UIDs)
+        # Create a dictionary of each breach: UID combo
         breach_UIDS_Dict = {}
         for UID in breaches_UIDs:
             breach_UIDS_Dict.update({UID['breach_name']:UID['hibp_breaches_uid']})
-        print(breach_UIDS_Dict)
+        
+        # Loop through each credential exposure and create an hibp_exposed_cred object to insert into db
         creds_list= []
         for row in hibp_resp:
             breaches = row['structuredData']['breaches']
@@ -148,7 +157,9 @@ try:
                     }
                     creds_list.append(cred)
         print("there are ",len(creds_list), " creds found")
+        # Insert new creds into the PE DB
         execute_hibp_emails_values(PE_conn,creds_list,"public.hibp_exposed_credentials")
+        # Close DB connection
         PE_conn.close()
         CF_conn.close()
                 
