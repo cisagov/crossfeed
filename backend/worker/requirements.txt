@@ -8,3 +8,4 @@ dnstwist==20201228
 dnspython==2.1.0
 psycopg2-binary==2.9.1
 pandas==1.3.3
+ppdeep>=20200505

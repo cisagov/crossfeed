@@ -81,20 +81,23 @@ CREATE TABLE IF NOT EXISTS public.executives
 
 -- Reporting Tables ----
 -- Domain Masquerading Table
-CREATE TABLE IF NOT EXISTS public."DNSTwist"
+CREATE TABLE IF NOT EXISTS public."dnstwist_domain_masq"
 (
-    dnstwist_uid uuid default uuid_generate_v1() NOT NULL,
-    "discoveredBy" uuid NOT NULL,
-    "domain-name" text,
-    "dns-a" text,
-    "dns-aaaa" text,
-    "dns-mx" text,
-    "dns-ns" text,
-    fuzzer text,
-    "date-observed" text,
-    "ssdeep-score" text,
+    suspected_domain_uid uuid default uuid_generate_v1() NOT NULL,
     organizations_uid uuid NOT NULL,
-    PRIMARY KEY (dnstwist_uid)
+    "domain_permutation" text,
+    "ipv4" text,
+    "ipv6" text,
+    "mail_server" text,
+    "name_server" text,
+    fuzzer text,
+    "date_observed" text,
+    "ssdeep_score" text,
+    "malicious" boolean,
+    "blocklist_attack_count" integer,
+    "blocklist_report_count" integer,
+    UNIQUE ("domain_permutation"),
+    PRIMARY KEY (suspected_domain_uid)
 );
 
 -- Dark Web Alerts Table
@@ -304,15 +307,9 @@ ALTER TABLE public.ip_addresses
  NOT VALID;
 
 -- One to many relation between Organization and DNSTwist results
-ALTER TABLE public."DNSTwist"
+ALTER TABLE public."dnstwist_domain_masq"
  ADD FOREIGN KEY (organizations_uid)
  REFERENCES public.organizations (organizations_uid)
- NOT VALID;
-
--- One to many relation between Domains and DNSTwist results
-ALTER TABLE public."DNSTwist"
- ADD FOREIGN KEY ("discoveredBy")
- REFERENCES public.domains ("domain_uid")
  NOT VALID;
 
 -- One to many relation between Organization and Shodan Assets
