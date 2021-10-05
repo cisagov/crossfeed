@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS public.root_domains
 (
     root_domain_uid uuid default uuid_generate_v1() NOT NULL,
     organizations_uid uuid NOT NULL,
-    organization_name text, NOT NULL,
+    organization_name text NOT NULL,
     root_domain text NOT NULL,
     ip_address text,
     PRIMARY KEY (root_domain_uid)
