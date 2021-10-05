@@ -137,12 +137,13 @@ CF_conn.close()
 try:
     cursor = PE_conn.cursor()
     columns = domain_list[0].keys()
+    table = "dnstwist_domain_masq"
     sql = """INSERT INTO %s(%s) VALUES %%s 
     ON CONFLICT (domain_permutation) 
     DO UPDATE SET malicious = EXCLUDED.malicious,
         blocklist_attack_count = EXCLUDED.blocklist_attack_count,
         blocklist_report_count = EXCLUDED.blocklist_report_count;""" % (
-        "dnstwist_domain_masq",
+        table,
         ",".join(columns),
     )
     values = [[value for value in dict.values()] for dict in domain_list]
