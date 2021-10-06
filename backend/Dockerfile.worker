@@ -38,8 +38,9 @@ RUN apt-get update && apt-get install -y \
   curl \
   git \
   bzip2 \
-  libbz2-dev \
   build-essential \
+  libbz2-dev \
+  python3-ssdeep \
   libssl-dev libreadline-dev zlib1g-dev \
   libncurses5-dev libgdbm-dev libnss3-dev libsqlite3-dev libffi-dev \
   procps \

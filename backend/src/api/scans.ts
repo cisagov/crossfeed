@@ -186,6 +186,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Add DNStwist and hibp data to the PE database, which already exists in Crossfeeds DB.'
   },
+  peShodan: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Run organization IPs through shodan and circl to find un/verified vulns and save them to PE db '
+  },
   rootDomainSync: {
     type: 'fargate',
     isPassive: true,

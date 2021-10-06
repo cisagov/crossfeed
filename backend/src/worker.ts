@@ -20,6 +20,7 @@ import { handler as hibp } from './tasks/hibp';
 import { handler as lookingGlass } from './tasks/lookingGlass';
 import { handler as dnstwist } from './tasks/dnstwist';
 import { handler as syncPEdata } from './tasks/syncPEdata';
+import { handler as peShodan } from './tasks/peShodan'
 import { handler as rootDomainSync } from './tasks/rootDomainSync';
 import { SCAN_SCHEMA } from './api/scans';
 
@@ -54,6 +55,7 @@ async function main() {
     lookingGlass,
     dnstwist,
     syncPEdata,
+    peShodan,
     testProxy,
     rootDomainSync
   }[scanName || 'testProxy'];
