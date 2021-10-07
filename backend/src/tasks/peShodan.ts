@@ -77,47 +77,27 @@ export const handler = async (commandOptions: CommandOptions) => {
       .where('tags.name = :name', { name: "P&E" })
       .getRawMany();
    
+    const org_string_list : string[] = organizations.map(org => org.organization_name)
+    console.log(org_string_list)
     
-    console.log(organizations)
-    const numOfApis: number = 2
-    const org_chunks = chunkify(organizations, numOfApis, true)
+    const numOfApis: number = 3
+    const org_chunks = chunkify(org_string_list, numOfApis, true)
 
     console.log(org_chunks)
 
     const queue = new PQueue({ concurrency: numOfApis });
-    (async () => {
-    queue.add(async()=>create_child(process.env.PE_SHODAN_API_KEY, org_chunks[0]));
-    })();
-    // const child_1 = spawnSync(
-    //     'python3',
-    //     ['/app/worker/pe_scripts/enrich_shodan_pe.py'],
-    //     {
-    //       stdio: 'pipe',
-    //       encoding: 'utf-8',
-    //       env: {
-    //         ...process.env,
-    //         org_list: org_chunks[0],
-    //         key: process.env.PE_SHODAN_API_KEY
-    //       }
-    //     }
-    //   );
-    //   const savedOutput = child_1.stdout;
-    //   console.log(savedOutput);
-    
 
-    //   const child_2 = spawnSync(
-    //     'python3',
-    //     ['/app/worker/pe_scripts/enrich_shodan_pe.py'],
-    //     {
-    //       stdio: 'pipe',
-    //       encoding: 'utf-8',
-    //       env: {
-    //         ...process.env,
-    //         org_list: org_chunks[1],
-    //         key: process.env.PE_SHODAN_API_KEY_2
-    //       }
-    //     }
-    //   );
-    //   const savedOutput_2 = child_2.stdout;
-    //   console.log(savedOutput_2);
+    console.log(process.env.PE_SHODAN_API_KEY_1);
+
+    (async () => {
+    queue.add(async()=>create_child(process.env.PE_SHODAN_API_KEY_1, org_chunks[0]));
+    })();
+    console.log(process.env.PE_SHODAN_API_KEY_2);
+    (async () => {
+      queue.add(async()=>create_child(process.env.PE_SHODAN_API_KEY_2, org_chunks[1]));
+      })();
+      console.log(process.env.PE_SHODAN_API_KEY_3);
+    (async () => {
+      queue.add(async()=>create_child(process.env.PE_SHODAN_API_KEY_3, org_chunks[2]));
+      })();
 };

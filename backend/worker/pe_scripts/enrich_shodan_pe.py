@@ -17,7 +17,7 @@ DB_HOST = os.environ.get("DB_HOST")
 PE_DB_USERNAME =os.environ.get("PE_DB_USERNAME")
 PE_DB_NAME = os.environ.get("PE_DB_NAME")
 PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
-API_KEY = os.environ.get("PE_SHODAN_API_KEY")
+API_KEY = os.environ.get("key")
 org_list = os.environ.get("org_list")
 
 
@@ -648,9 +648,11 @@ def calculate_metrics(
     )
 
 try:
+    print(API_KEY)
     # print("here is the current org ", json.loads(org_list.replace("'", '"')))
-    print(type(org_list))
-    print(org_list[2])
+    org_list = org_list.split(",")
+    # for org_name in org_list:
+    org_name = org_list[1]
     PE_conn = connect(DB_HOST, PE_DB_NAME, PE_DB_USERNAME, PE_DB_PASSWORD)
     org_uid = get_org_id(PE_conn, org_name )
     close(PE_conn)
