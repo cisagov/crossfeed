@@ -8,6 +8,7 @@ try:
     import time
     import os
     import datetime
+    import json
     from pe_db_functions import connect, close, execute_shodan_data, get_org_id, query_ips
 except:
     print(traceback.format_exc())
@@ -17,8 +18,8 @@ PE_DB_USERNAME =os.environ.get("PE_DB_USERNAME")
 PE_DB_NAME = os.environ.get("PE_DB_NAME")
 PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
 API_KEY = os.environ.get("PE_SHODAN_API_KEY")
-org_id = os.environ.get("org_id")
-org_name = os.environ.get("org_name")
+org_list = os.environ.get("org_list")
+
 
 def get_dates():
     end = datetime.datetime.now()
@@ -647,6 +648,9 @@ def calculate_metrics(
     )
 
 try:
+    # print("here is the current org ", json.loads(org_list.replace("'", '"')))
+    print(type(org_list))
+    print(org_list[2])
     PE_conn = connect(DB_HOST, PE_DB_NAME, PE_DB_USERNAME, PE_DB_PASSWORD)
     org_uid = get_org_id(PE_conn, org_name )
     close(PE_conn)
