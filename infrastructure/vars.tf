@@ -163,6 +163,16 @@ variable "ssm_lg_workspace_name" {
   default = "/crossfeed/staging/LG_WORKSPACE_NAME"
 }
 
+variable "ssm_sixgill_client_id" {
+  type    = string
+  default = "/crossfeed/staging/SIXGILL_CLIENT_ID"
+}
+
+variable "ssm_sixgill_client_secret" {
+  type    = string
+  default = "/crossfeed/staging/SIXGILL_CLIENT_SECRET"
+}
+
 variable "cloudfront_name" {
   type    = string
   default = "Crossfeed Staging Frontend"

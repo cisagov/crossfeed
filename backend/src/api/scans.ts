@@ -186,6 +186,12 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Fetch DNSTwist data, check IPs on blocklist.de, then sync to PE db instance.'
   },
+  peCybersixgill: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'Run P&E Cybersixgill scripts and add to PE db instance.'
+  },
   peHibpSync: {
     type: 'fargate',
     isPassive: true,

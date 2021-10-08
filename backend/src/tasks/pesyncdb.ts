@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS public.alias
     alias_uid uuid default uuid_generate_v1() NOT NULL,
     organizations_uid uuid NOT NULL,
     alias text NOT NULL,
+    UNIQUE (alias),
     PRIMARY KEY (alias_uid)
 );
 
@@ -115,6 +116,9 @@ CREATE TABLE IF NOT EXISTS public.alerts
     threats text,
     title text,
     user_id text,
+    category text,
+    lang text,
+    UNIQUE (sixgill_id),
     organizations_uid uuid NOT NULL,
     PRIMARY KEY (alerts_uid)
 );
@@ -128,17 +132,19 @@ CREATE TABLE IF NOT EXISTS public.mentions
     content text,
     creator text,
     date text,
+    sixgill_mention_id text,
     post_id text,
+    lang text,
     rep_grade text,
     site text,
     site_grade text,
     title text,
     type text,
     url text,
-    tags text,
     comments_count text,
     sub_category text,
-    query text,
+    tags text,
+    UNIQUE (sixgill_mention_id),
     organizations_uid uuid NOT NULL,
     PRIMARY KEY (mentions_uid)
 );

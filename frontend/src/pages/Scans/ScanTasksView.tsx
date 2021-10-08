@@ -182,6 +182,7 @@ export const ScanTasksView: React.FC = () => {
         'lookingGlass',
         'dnstwist',
         'peDomMasq',
+        'peCybersixgill',
         'peHibpSync',
         'rootDomainSync'
       ]),
