@@ -42,6 +42,34 @@ resource "aws_db_instance" "db" {
   }
 }
 
+data "aws_ami" "amazon_linux_2" {
+  most_recent = true
+
+  filter {
+    name   = "owner-alias"
+    values = ["amazon"]
+  }
+
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm*"]
+  }
+}
+
+resource "aws_instance" "db_bastion" {
+  ami           = data.aws_ami.amazon_linux_2.id
+  instance_type = "t3.micro"
+
+  tags = {
+    Project = var.project
+  }
+
+  vpc_security_group_ids = [aws_security_group.allow_internal.id]
+  subnet_id              = [aws_subnet.backend.id]
+}
+
+
 resource "aws_ssm_parameter" "lambda_sg_id" {
   name      = var.ssm_lambda_sg
   type      = "String"
