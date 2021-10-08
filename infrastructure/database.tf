@@ -62,7 +62,7 @@ resource "aws_instance" "db_bastion" {
   }
 
   vpc_security_group_ids = [aws_security_group.allow_internal.id]
-  subnet_id              = [aws_subnet.backend.id]
+  subnet_id              = aws_subnet.backend.id
 }
 
 
