@@ -86,7 +86,7 @@ def search(
     ip_chunks = [ips[i : i + 100] for i in range(0, len(ips), 100)]
     tot_ips = len(ips)
     tot = len(ip_chunks)
-    print(f"Split {tot_ips} into {tot} chunks")
+    print(f"Split {tot_ips} into {tot} chunks",flush=True)
     for i, ips in enumerate(ip_chunks):
         try:
             # Search Shodan
@@ -647,7 +647,7 @@ def calculate_metrics(
     )
 
 try:
-    print("Starting new thread", flush=True)
+    print("Starting new thread")
     
     org_list = json.loads(org_list)
     print(org_list, flush=True)

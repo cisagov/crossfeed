@@ -10,7 +10,13 @@ import PQueue from 'p-queue';
 import { chunk } from 'lodash';
 import * as readline from 'readline'
 
-const create_child =async (APIkey, org_list): Promise<void> =>{
+interface org_api {
+  org_list: string[];
+  api_key: string;
+  thread_num: number;
+}
+
+const create_child =async (APIkey, org_list, thread_num): Promise<void> =>{
   console.log("create Child started ", APIkey )
   
   const child = spawn(
@@ -21,7 +27,7 @@ const create_child =async (APIkey, org_list): Promise<void> =>{
       env: {
         ...process.env,
         org_list: JSON.stringify(org_list),
-        key: APIkey
+        key: APIkey,
       }
     }
   );
@@ -36,10 +42,10 @@ const create_child =async (APIkey, org_list): Promise<void> =>{
     
     await new Promise((resolve, reject) => {
     readInterface.on('line', line => {
-    console.log("stdout", APIkey, line);
+    console.log("thread", thread_num,  line);
     });
     readInterfaceStderr.on('line', line => {
-    console.log("stderr", APIkey, line);
+    console.log("error", thread_num , line);
     });
     child.stdout.on('close', resolve)
     child.stdout.on('SIGINT', reject);
@@ -71,24 +77,32 @@ export const handler = async (commandOptions: CommandOptions) => {
 
 
 
-  const org_obj = [
-    {
-      org_list: org_chunks[0],
-    api_key:API_list[0]
-    },
-    {
-      org_list: org_chunks[1],
-      api_key:API_list[1]
-    },
-    {
-      org_list: org_chunks[2],
-      api_key:API_list[2]
+  var org_obj: org_api[] = []
+  for (let i = 0; i < numOfApis; i++) {
+    const org_api = {
+      org_list: org_chunks[i],
+      api_key: API_list[i],
+      thread_num: i
     }
-  ]
+    org_obj.push(org_api)
+  }
+  //   {
+  //     org_list: org_chunks[0],
+  //   api_key:API_list[0]
+  //   },
+  //   {
+  //     org_list: org_chunks[1],
+  //     api_key:API_list[1]
+  //   },
+  //   {
+  //     org_list: org_chunks[2],
+  //     api_key:API_list[2]
+  //   }
+  // ]
   const queue = new PQueue({ concurrency: numOfApis });
   
   await Promise.all(
-    org_obj.map((obj) => queue.add(() => create_child(obj.api_key, obj.org_list)))
+    org_obj.map((obj) => queue.add(() => create_child(obj.api_key, obj.org_list, obj.thread_num)))
   );
   
       console.log("Finished All IPs")
