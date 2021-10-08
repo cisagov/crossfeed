@@ -148,19 +148,9 @@ variable "ssm_shodan_api_key" {
   default = "/crossfeed/staging/SHODAN_API_KEY"
 }
 
-variable "ssm_pe_shodan_api_key_1" {
+variable "ssm_pe_shodan_api_keys" {
   type    = string
-  default = "/crossfeed/staging/PE_SHODAN_API_KEY_1"
-}
-
-variable "ssm_pe_shodan_api_key_2" {
-  type    = string
-  default = "/crossfeed/staging/PE_SHODAN_API_KEY_2"
-}
-
-variable "ssm_pe_shodan_api_key_3" {
-  type    = string
-  default = "/crossfeed/staging/PE_SHODAN_API_KEY_3"
+  default = "/crossfeed/staging/PE_SHODAN_API_KEYS"
 }
 
 variable "ssm_hibp_api_key" {

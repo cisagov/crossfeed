@@ -61,26 +61,28 @@ export const handler = async (commandOptions: CommandOptions) => {
       .getRawMany();
    
     const org_string_list : string[] = organizations.map(org => org.organization_name)
-    console.log(org_string_list)
     
-    const numOfApis: number = 3
+    const API_keys = process.env.PE_SHODAN_API_KEYS!
+    const API_list = API_keys?.split(', ')
+    const numOfApis: number = API_list.length
     const org_chunks = chunk(org_string_list,org_string_list.length / numOfApis)
-
-
+    console.log(API_list)
     console.log(org_chunks)
+
+
 
   const org_obj = [
     {
       org_list: org_chunks[0],
-    api_key:process.env.PE_SHODAN_API_KEY_1 
+    api_key:API_list[0]
     },
     {
       org_list: org_chunks[1],
-      api_key:process.env.PE_SHODAN_API_KEY_2
+      api_key:API_list[1]
     },
     {
       org_list: org_chunks[2],
-      api_key:process.env.PE_SHODAN_API_KEY_3
+      api_key:API_list[2]
     }
   ]
   const queue = new PQueue({ concurrency: numOfApis });
@@ -88,21 +90,6 @@ export const handler = async (commandOptions: CommandOptions) => {
   await Promise.all(
     org_obj.map((obj) => queue.add(() => create_child(obj.api_key, obj.org_list)))
   );
-    
-
-    // console.log(process.env.PE_SHODAN_API_KEY_1);
-
-    // (async () => {
-    // queue.add(async()=>create_child(process.env.PE_SHODAN_API_KEY_1, org_chunks[0]));
-    // })();
-    
-    // (async () => {
-    //   queue.add(async()=>create_child(process.env.PE_SHODAN_API_KEY_2, org_chunks[1]));
-    //   })();
-      
-    // (async () => {
-    //   queue.add(async()=>create_child(process.env.PE_SHODAN_API_KEY_3, org_chunks[2]));
-    //   })();
-
-    //   console.log("Finished All IPs")
+  
+      console.log("Finished All IPs")
 };
