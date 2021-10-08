@@ -1,5 +1,4 @@
 try:
-    print("Starting now")
     import traceback
     import shodan
     import pandas as pd
@@ -648,15 +647,17 @@ def calculate_metrics(
     )
 
 try:
-    print(API_KEY)
-    # print("here is the current org ", json.loads(org_list.replace("'", '"')))
-    org_list = org_list.split(",")
-    # for org_name in org_list:
-    org_name = org_list[1]
-    PE_conn = connect(DB_HOST, PE_DB_NAME, PE_DB_USERNAME, PE_DB_PASSWORD)
-    org_uid = get_org_id(PE_conn, org_name )
-    close(PE_conn)
-    start, end = get_dates()
-    calculate_metrics( org_uid, start, end )
+    print("Starting new thread", flush=True)
+    
+    org_list = json.loads(org_list)
+    print(org_list, flush=True)
+    for org_name in org_list:
+        print("Running IPs for ",org_name, flush=True)
+        org_name = org_list[1]
+        PE_conn = connect(DB_HOST, PE_DB_NAME, PE_DB_USERNAME, PE_DB_PASSWORD)
+        org_uid = get_org_id(PE_conn, org_name )
+        close(PE_conn)
+        start, end = get_dates()
+        calculate_metrics( org_uid, start, end )
 except:
     print(traceback.format_exc())
