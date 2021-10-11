@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS public.root_domains
     organization_name text NOT NULL,
     root_domain text NOT NULL,
     ip_address text,
+    UNIQUE(root_domain, organizations_uid),
     PRIMARY KEY (root_domain_uid)
 );
 
@@ -47,6 +48,7 @@ CREATE TABLE IF NOT EXISTS public.sub_domains
     sub_domain text NOT NULL,
     root_domain_uid uuid NOT NULL,
     root_domain text NOT NULL,
+    UNIQUE(sub_domain, root_domain_uid),
     PRIMARY KEY (sub_domain_uid)
 );
 
