@@ -19,6 +19,7 @@ import { handler as testProxy } from './tasks/test-proxy';
 import { handler as hibp } from './tasks/hibp';
 import { handler as lookingGlass } from './tasks/lookingGlass';
 import { handler as dnstwist } from './tasks/dnstwist';
+import { handler as peShodan } from './tasks/peShodan'
 import { handler as peDomMasq } from './tasks/peDomMasq';
 import { handler as peHibpSync } from './tasks/peHibpSync';
 import { handler as rootDomainSync } from './tasks/rootDomainSync';
@@ -54,6 +55,7 @@ async function main() {
     hibp,
     lookingGlass,
     dnstwist,
+    peShodan,
     peDomMasq,
     peHibpSync,
     testProxy,

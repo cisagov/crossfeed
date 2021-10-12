@@ -192,6 +192,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: false,
     description: 'Fetch hibp data and sync it with the PE db instance.'
   },
+  peShodan: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    description:
+      'Run organization IPs through shodan and circl to find un/verified vulns and save them to PE db '
+  },
   rootDomainSync: {
     type: 'fargate',
     isPassive: true,
