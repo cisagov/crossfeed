@@ -183,6 +183,7 @@ export const ScanTasksView: React.FC = () => {
         'dnstwist',
         'peShodan',
         'peDomMasq',
+        'peCybersixgill',
         'peHibpSync',
         'rootDomainSync'
       ]),

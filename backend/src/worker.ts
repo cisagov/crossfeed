@@ -21,6 +21,7 @@ import { handler as lookingGlass } from './tasks/lookingGlass';
 import { handler as dnstwist } from './tasks/dnstwist';
 import { handler as peShodan } from './tasks/peShodan'
 import { handler as peDomMasq } from './tasks/peDomMasq';
+import { handler as peCybersixgill } from './tasks/peCybersixgill';
 import { handler as peHibpSync } from './tasks/peHibpSync';
 import { handler as rootDomainSync } from './tasks/rootDomainSync';
 import { SCAN_SCHEMA } from './api/scans';
@@ -57,6 +58,7 @@ async function main() {
     dnstwist,
     peShodan,
     peDomMasq,
+    peCybersixgill,
     peHibpSync,
     testProxy,
     rootDomainSync
