@@ -166,22 +166,7 @@ def intel_get(
     return resp
 
 
-def intel_post(
-    query,
-    date_range="YYYY-MM-DD TO YYYY-MM-DD",
-    partial_content=True,
-    safe_content_size=False,
-    results_size=100,
-    scroll=False,
-    start=0,
-    sort="date",
-    sort_type="desc",
-    highlight=False,
-    custom_highlight_start_tag="start@@",
-    custom_highlight_end_tag="@@end",
-    filters="{'site': ['sixgill', 'twitter'], 'actor': ['John Doe']}",
-    recent_items=False,
-):
+def intel_post(query, frm, scroll, result_size):
     """Get intel items - advanced variation."""
     url = "https://api.cybersixgill.com/intel/intel_items"
     auth = token()
@@ -192,21 +177,17 @@ def intel_post(
     }
     payload = {
         "query": query,
-        "date_range": date_range,
-        "partial_content": partial_content,
-        "safe_content_size": safe_content_size,
-        "results_size": results_size,
+        "partial_content": False,
+        "results_size": result_size,
         "scroll": scroll,
-        "from": start,
-        "sort": sort,
-        "sort_type": sort_type,
-        "highlight": highlight,
-        "custom_highlight_start_tag": custom_highlight_start_tag,
-        "custom_highlight_end_tag": custom_highlight_end_tag,
-        "filters": filters,
-        "recent_items": recent_items,
+        "from": frm,
+        "sort": "date",
+        "sort_type": "desc",
+        "highlight": False,
+        "recent_items": False,
+        "safe_content_size": True,
     }
-    resp = requests.post(url, headers=headers, data=payload).json()
+    resp = requests.post(url, headers=headers, json=payload).json()
     return resp
 
 
@@ -338,9 +319,7 @@ organization, 'organization_id' is then required.
 """
 
 
-def alerts_list(
-    organization_id="organization_id",
-):
+def alerts_list(organization_id, fetch_size, offset):
     """Get actionable alerts by ID using organization_id with optional filters."""
     url = "https://api.cybersixgill.com/alerts/actionable-alert"
     auth = token()
@@ -351,7 +330,10 @@ def alerts_list(
     }
     payload = {
         "organization_id": organization_id,
+        "fetch_size": fetch_size,
+        "offset": offset,
     }
+
     resp = requests.get(url, headers=headers, params=payload)
     return resp
 
@@ -479,19 +461,17 @@ def alert_stats(organization_id="organization_id", threat_level="imminent"):
     return resp
 
 
-def alert_count(
-    organization_id="organization_id",
-):
+def alerts_count(organization_id):
     """Gets the total read and unread actionable alerts by organization."""
-    url = "https://api.cybersixgill.com/alerts/actionable-alert/count"
+    url = "https://api.cybersixgill.com/alerts/actionable_alert/count"
     auth = token()
     headers = {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
         "Cache-Control": "no-cache",
         "Authorization": "Bearer " + auth,
     }
     payload = {"organization_id": organization_id}
-    resp = requests.patch(url, headers=headers, params=payload).json()
+    resp = requests.get(url, headers=headers, params=payload).json()
     return resp
 
 
@@ -678,15 +658,13 @@ def credential_auth(params):
     url = "https://api.cybersixgill.com/credentials/leaks"
     auth = token()
     headers = {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
         "Cache-Control": "no-cache",
         "Authorization": "Bearer " + auth,
     }
 
     resp = requests.get(url, headers=headers, params=params)
-    print(resp)
     resp = resp.json()
-    print(resp)
     return resp
 
 

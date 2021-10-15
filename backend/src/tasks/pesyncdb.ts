@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS public."dnstwist_domain_masq"
     "mail_server" text,
     "name_server" text,
     fuzzer text,
-    "date_observed" text,
+    "date_observed" date,
     "ssdeep_score" text,
     "malicious" boolean,
     "blocklist_attack_count" integer,
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS public.alerts
     alerts_uid uuid default uuid_generate_v1() NOT NULL,
     alert_name text,
     content text,
-    date text,
+    date date,
     sixgill_id text,
     read text,
     severity text,
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS public.mentions
     collection_date text,
     content text,
     creator text,
-    date text,
+    date date,
     sixgill_mention_id text,
     post_id text,
     lang text,
@@ -271,7 +271,7 @@ CREATE TABLE IF NOT EXISTS public.cybersix_exposed_credentials
     breach_date date,
     breach_id integer,
     breach_name text NOT NULL,
-    create_time timestamp without time zone[],
+    create_time text,
     description text,
     domain text,
     email text NOT NULL,
@@ -280,16 +280,19 @@ CREATE TABLE IF NOT EXISTS public.cybersix_exposed_credentials
     login_id text,
     name text,
     phone text,
+    UNIQUE (email, breach_id),
     PRIMARY KEY (csg_exposed_credentials_uid)
 );
 
 -- Top CVEs
 CREATE TABLE IF NOT EXISTS public.top_cves
 (
-   top_cves_uid uuid default uuid_generate_v1() NOT NULL,
-    type text,
-    cve text,
-    description text,
+    top_cves_uid uuid default uuid_generate_v1() NOT NULL,
+    cve_id text,
+    dynamic_rating text,
+    nvd_base_score text,
+    date date,
+    UNIQUE (cve_id, date),
     PRIMARY KEY (top_cves_uid)
 );
 

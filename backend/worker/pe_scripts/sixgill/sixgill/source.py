@@ -3,11 +3,12 @@
 from sixgill.api import (
     get_organization,
     org_assets,
-    intel_get,
     alerts_list,
     org_assets,
     credential_auth,
     dve_top_cves,
+    alerts_count,
+    intel_post,
 )
 import pandas as pd
 
@@ -47,49 +48,95 @@ def mentions(date, aliases):
         mentions += mention
     query = "site:forum_* AND date:" + date + " AND " + "(" + str(mentions) + ")"
     print("\nCyberSixGill Query:\n ", query)
-    resp = intel_get(query)
-    print(resp)
-    df_mentions = pd.DataFrame.from_dict(resp["intel_items"])
-    return df_mentions
+
+    count = 0
+    while count <= 5:
+        try:
+            print(f"Intel post try #{count + 1}")
+            resp = intel_post(query, frm=0, scroll=False, result_size=1)
+            count = 6
+        except:
+            print("Error. Trying intel_post again...")
+            count += 1
+            continue
+    count_total = resp["total_intel_items"]
+    print("Total Mentions: ", count_total)
+
+    i = 0
+    all_mentions = []
+    if count_total < 10000:
+        while i < count_total:
+            # Recommended "from" and "result_size" is 50. The maximum is 400.
+            resp = intel_post(query, frm=i, scroll=False, result_size=200)
+            i = i + 200
+            print(f"\nGetting {i} of {count_total}....")
+            intel_items = resp["intel_items"]
+            df_mentions = pd.DataFrame.from_dict(intel_items)
+            all_mentions.append(df_mentions)
+            df_all_mentions = pd.concat(all_mentions).reset_index(drop=True)
+
+    else:
+        while i < count_total:
+            # Recommended "from" and "result_size" is 50. The maximum is 400.
+            resp = intel_post(query, frm=i, scroll=True, result_size=400)
+            i = i + 400
+            print(f"\nGetting {i} of {count_total}....")
+            intel_items = resp["intel_items"]
+            df_mentions = pd.DataFrame.from_dict(intel_items)
+            all_mentions.append(df_mentions)
+            df_all_mentions = pd.concat(all_mentions).reset_index(drop=True)
+
+    df_all_mentions = pd.concat(all_mentions).reset_index(drop=True)
+    return df_all_mentions
 
 
 def alerts(org_id):
     """Get actionable alerts for an organization."""
-    resp = alerts_list(org_id).json()
-    df_alerts = pd.DataFrame.from_dict(resp)
-    return df_alerts
+    count = alerts_count(org_id)
+    count_total = count["total"]
+    print("Total Alerts: ", count_total)
+
+    # Recommended "fetch_size" is 50. The maximum is 400.
+    fetch_size = 25
+    all_alerts = []
+
+    for offset in range(0, count_total, fetch_size):
+        resp = alerts_list(org_id, fetch_size, offset).json()
+        df_alerts = pd.DataFrame.from_dict(resp)
+        all_alerts.append(df_alerts)
+        df_all_alerts = pd.concat(all_alerts).reset_index(drop=True)
+
+    return df_all_alerts
 
 
 def top_cves(size):
     """Top 10 CVEs mention in the dark web."""
     resp = dve_top_cves(size)
-    print(resp)
-    # df_top_cves = pd.DataFrame(resp)
-    # print(df_top_cves)
-    return  # df_top_cves
+    df_top_cves = pd.DataFrame(resp)
+    return df_top_cves
 
 
-def creds(domain):
+def creds(domain, from_date, to_date):
     skip = 0
     params = {
         "domain": domain,
+        "from_date": from_date,
+        "to_date": to_date,
+        "max_results": 100,
+        "skip": skip,
     }
     resp = credential_auth(params)
     total_hits = resp["total_results"]
     resp = resp["leaks"]
     while total_hits > len(resp):
         skip += 1
-        params["skip"] = skip
-        next_resp = credential_auth(params)
-        resp = resp + next_resp["leaks"]
-
+    params["skip"] = skip
+    next_resp = credential_auth(params)
+    resp = resp + next_resp["leaks"]
     resp = pd.DataFrame(resp)
     df = resp.drop_duplicates(
         subset=["email", "breach_name"], keep="first"
     ).reset_index(drop=True)
-    print(df)
-    print(total_hits)
-    print(df.columns)
     return df
 
 
