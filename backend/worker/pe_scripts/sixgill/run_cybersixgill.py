@@ -30,7 +30,7 @@ org_name = os.environ.get("org_name")
 
 # get todays date formatted YYYY-MM-DD and the startdate 16 days prior
 today = date.today()
-days_back = timedelta(days=16)
+days_back = timedelta(days=30)
 start_date = str(today - days_back)
 end_date = str(today)
 date_span = f"[{start_date} TO {end_date}]"

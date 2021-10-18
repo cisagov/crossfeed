@@ -274,7 +274,7 @@ CREATE TABLE IF NOT EXISTS public.cybersix_exposed_credentials
     breach_date date,
     breach_id integer,
     breach_name text NOT NULL,
-    create_time text,
+    create_time timestamp without time zone,
     description text,
     domain text,
     email text NOT NULL,
