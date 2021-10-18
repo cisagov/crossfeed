@@ -40,3 +40,11 @@ aws ssm get-parameter --name "/crossfeed/prod/PE_DATABASE_PASSWORD" --with-decry
 ```
 
 You can use these credentials when connecting with a bastion to access the database.
+
+## Setting up a bastion
+
+First, get the `db_bastion_instance_id` variable by running the following command from the COOL: `cd infrastructure && terraform output`. This will give you the bastion instance ID.
+
+Also note down the values of PE_DATABASE_NAME, PE_DATABASE_USER, and PE_DATABASE_PASSWORD, as mentioned in the earlier section.
+
+Go to the "Manual access" section of the Database page in the docs to see how to connect through a bastion instance to the database.
