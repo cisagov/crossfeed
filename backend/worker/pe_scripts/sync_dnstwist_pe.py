@@ -73,6 +73,7 @@ try:
     dnstwist_resp = query_db(CF_conn, sql)
 
     domain_list = []
+    perm_list = []
     for row in dnstwist_resp:
         row = row["structuredData"]["domains"]
         for dom in row:
@@ -110,6 +111,13 @@ try:
                     malicious = True
                     attacks = int(str(response).split("attacks: ")[1].split("<")[0])
                     reports = int(str(response).split("reports: ")[1].split("<")[0])
+
+            # Ignore duplicates
+            permutation = dom["domain-name"]
+            if permutation in perm_list:
+                continue
+            else:
+                perm_list.append(permutation)
 
             domain_dict = {
                 "organizations_uid": pe_org_uid,
