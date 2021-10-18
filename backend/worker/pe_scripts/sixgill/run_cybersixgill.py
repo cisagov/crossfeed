@@ -15,6 +15,7 @@ import pandas as pd
 import json
 import datetime
 from datetime import date, timedelta
+import requests
 
 DB_HOST = os.environ.get("DB_HOST")
 PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
@@ -30,7 +31,7 @@ org_name = os.environ.get("org_name")
 
 # get todays date formatted YYYY-MM-DD and the startdate 16 days prior
 today = date.today()
-days_back = timedelta(days=30)
+days_back = timedelta(days=40)
 start_date = str(today - days_back)
 end_date = str(today)
 date_span = f"[{start_date} TO {end_date}]"
@@ -42,6 +43,13 @@ from_date = (to_date - back).strftime("%Y-%m-%d %H:%M:%S")
 to_date = to_date.strftime("%Y-%m-%d %H:%M:%S")
 print(to_date)
 print(from_date)
+
+
+def cve(cveid):
+    """Get CVE data."""
+    url = f"https://cve.circl.lu/api/cve/{cveid}"
+    resp = requests.get(url).json()
+    return resp
 
 
 """Connect to PE Database"""
@@ -183,6 +191,7 @@ try:
             "pds",
             "malware",
             "content_trimmed",
+            "hash",
         ],
         errors="ignore",
     )
@@ -226,7 +235,17 @@ try:
     top_cve_df = top_cves(10)
     top_cve_df["date"] = end_date
     top_cve_df["nvd_base_score"] = top_cve_df["nvd_base_score"].astype("str")
+    # Get CVE description from circl.lu
+    top_cve_df["summary"] = ""
+    for index, row in top_cve_df.iterrows():
+        try:
+            resp = cve(row["cve_id"])
+            summary = resp["summary"]
+        except:
+            summary = ""
+        top_cve_df.at[index, "summary"] = summary
     print("Successfully fetched top cve data.")
+
 except:
     print("Failed fetching top cve data.")
     print(traceback.format_exc())
@@ -277,7 +296,7 @@ except:
     print("Failed fetching credential data.")
     print(traceback.format_exc())
 
-"""Inert Credential Data in PE database"""
+"""Insert Credential Data in PE database"""
 try:
     table = "cybersix_exposed_credentials"
     # Create a list of tupples from the dataframe values

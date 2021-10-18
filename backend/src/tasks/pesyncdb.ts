@@ -295,6 +295,7 @@ CREATE TABLE IF NOT EXISTS public.top_cves
     dynamic_rating text,
     nvd_base_score text,
     date date,
+    summary text,
     UNIQUE (cve_id, date),
     PRIMARY KEY (top_cves_uid)
 );
