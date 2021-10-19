@@ -38,7 +38,7 @@
     "tough-cookie": "^3.0.1",
     "typeorm": "^0.2.26",
     "uuid": "^8.3.0",
-    "wappalyzer": "^6.3.11",
+    "wappalyzer": "^6.8.15",
     "wappalyzer-core": "^6.3.11"
   },
   "devDependencies": {
