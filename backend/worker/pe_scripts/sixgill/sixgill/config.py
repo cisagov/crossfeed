@@ -39,8 +39,8 @@ def token():
     }
     payload = {
         "grant_type": "client_credentials",
-        "client_id": client_id,
-        "client_secret": client_secret,
+        "client_id": SIXGILL_CLIENT_ID,
+        "client_secret": SIXGILL_CLIENT_SECRET,
     }
     resp = requests.post(url, headers=headers, data=payload).json()
     token = resp["access_token"]
