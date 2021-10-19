@@ -13,13 +13,13 @@ interface ParsedRow {
   'Security Contact Email': string;
 }
 
-// Only retrieve federal .gov domains
+// Retrieve all .gov domains
 export const DOTGOV_LIST_ENDPOINT =
-  'https://raw.githubusercontent.com/cisagov/dotgov-data/main/current-federal.csv';
+  'https://raw.githubusercontent.com/cisagov/dotgov-data/main/current-full.csv';
 
-// To scan all .gov domains, use the below endpoint:
+// To scan only federal .gov domains, use the below endpoint:
 // export const DOTGOV_LIST_ENDPOINT =
-//   'https://raw.githubusercontent.com/cisagov/dotgov-data/main/current-full.csv';
+//   'https://raw.githubusercontent.com/cisagov/dotgov-data/main/current-federal.csv';
 
 export const DOTGOV_TAG_NAME = 'dotgov';
 export const DOTGOV_ORG_SUFFIX = ' (dotgov)';
