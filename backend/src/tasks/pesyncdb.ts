@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS public.ip_addresses
     ip_type text,
     sub_domain_uid uuid NOT NULL,
     sub_domain text NOT NULL,
+    UNIQUE(ip_address, sub_domain_uid),
     PRIMARY KEY (ip_address_uid)
 );
 
