@@ -100,6 +100,7 @@ class ECSClient {
             `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`,
             `WORKER_USER_AGENT=${process.env.WORKER_USER_AGENT}`,
             `SHODAN_API_KEY=${process.env.SHODAN_API_KEY}`,
+            `PE_SHODAN_API_KEYS=${process.env.PE_SHODAN_API_KEYS}`,
             `HIBP_API_KEY=${process.env.HIBP_API_KEY}`,
             `WORKER_SIGNATURE_PUBLIC_KEY=${process.env.WORKER_SIGNATURE_PUBLIC_KEY}`,
             `WORKER_SIGNATURE_PRIVATE_KEY=${process.env.WORKER_SIGNATURE_PRIVATE_KEY}`,
@@ -107,7 +108,9 @@ class ECSClient {
             `AWS_ACCESS_KEY_ID=${process.env.AWS_ACCESS_KEY_ID}`,
             `AWS_SECRET_ACCESS_KEY=${process.env.AWS_SECRET_ACCESS_KEY}`,
             `LG_API_KEY=${process.env.LG_API_KEY}`,
-            `LG_WORKSPACE_NAME=${process.env.LG_WORKSPACE_NAME}`
+            `LG_WORKSPACE_NAME=${process.env.LG_WORKSPACE_NAME}`,
+            `SIXGILL_CLIENT_ID=${process.env.SIXGILL_CLIENT_ID}`,
+            `SIXGILL_CLIENT_SECRET=${process.env.SIXGILL_CLIENT_SECRET}`
           ]
         } as any);
         await container.start();

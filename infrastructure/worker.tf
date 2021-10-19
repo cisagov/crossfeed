@@ -72,9 +72,12 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.censys_api_id.arn}",
           "${data.aws_ssm_parameter.censys_api_secret.arn}",
           "${data.aws_ssm_parameter.shodan_api_key.arn}",
+          "${data.aws_ssm_parameter.pe_shodan_api_keys.arn}",
           "${data.aws_ssm_parameter.hibp_api_key.arn}",
           "${data.aws_ssm_parameter.lg_api_key.arn}",
           "${data.aws_ssm_parameter.lg_workspace_name.arn}",
+          "${data.aws_ssm_parameter.sixgill_client_id.arn}",
+          "${data.aws_ssm_parameter.sixgill_client_secret.arn}",
           "${aws_ssm_parameter.es_endpoint.arn}"
         ]
     }
@@ -230,6 +233,10 @@ resource "aws_ecs_task_definition" "worker" {
         "valueFrom": "${data.aws_ssm_parameter.shodan_api_key.arn}"
       },
       {
+        "name": "PE_SHODAN_API_KEYS",
+        "valueFrom": "${data.aws_ssm_parameter.pe_shodan_api_keys.arn}"
+      },
+      {
         "name": "HIBP_API_KEY",
         "valueFrom": "${data.aws_ssm_parameter.hibp_api_key.arn}"
       },
@@ -240,6 +247,14 @@ resource "aws_ecs_task_definition" "worker" {
       {
         "name": "LG_WORKSPACE_NAME",
         "valueFrom": "${data.aws_ssm_parameter.lg_workspace_name.arn}"
+      },
+
+        "name": "SIXGILL_CLIENT_ID",
+        "valueFrom": "${data.aws_ssm_parameter.sixgill_client_id.arn}"
+      },
+
+        "name": "SIXGILL_CLIENT_SECRET",
+        "valueFrom": "${data.aws_ssm_parameter.sixgill_client_secret.arn}"
       },
       {
         "name": "WORKER_SIGNATURE_PUBLIC_KEY",
@@ -287,11 +302,17 @@ data "aws_ssm_parameter" "censys_api_secret" { name = var.ssm_censys_api_secret 
 
 data "aws_ssm_parameter" "shodan_api_key" { name = var.ssm_shodan_api_key }
 
+data "aws_ssm_parameter" "pe_shodan_api_keys" { name = var.ssm_pe_shodan_api_keys }
+
 data "aws_ssm_parameter" "hibp_api_key" { name = var.ssm_hibp_api_key }
 
 data "aws_ssm_parameter" "lg_api_key" { name = var.ssm_lg_api_key }
 
 data "aws_ssm_parameter" "lg_workspace_name" { name = var.ssm_lg_workspace_name }
+
+data "aws_ssm_parameter" "sixgill_client_id" { name = var.ssm_sixgill_client_id }
+
+data "aws_ssm_parameter" "sixgill_client_secret" { name = var.ssm_sixgill_client_secret }
 
 data "aws_ssm_parameter" "worker_signature_public_key" { name = var.ssm_worker_signature_public_key }
 

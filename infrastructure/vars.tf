@@ -148,6 +148,11 @@ variable "ssm_shodan_api_key" {
   default = "/crossfeed/staging/SHODAN_API_KEY"
 }
 
+variable "ssm_pe_shodan_api_keys" {
+  type    = string
+  default = "/crossfeed/staging/PE_SHODAN_API_KEYS"
+}
+
 variable "ssm_hibp_api_key" {
   type    = string
   default = "/crossfeed/staging/HIBP_API_KEY"
@@ -161,6 +166,16 @@ variable "ssm_lg_api_key" {
 variable "ssm_lg_workspace_name" {
   type    = string
   default = "/crossfeed/staging/LG_WORKSPACE_NAME"
+}
+
+variable "ssm_sixgill_client_id" {
+  type    = string
+  default = "/crossfeed/staging/SIXGILL_CLIENT_ID"
+}
+
+variable "ssm_sixgill_client_secret" {
+  type    = string
+  default = "/crossfeed/staging/SIXGILL_CLIENT_SECRET"
 }
 
 variable "cloudfront_name" {
