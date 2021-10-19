@@ -24,19 +24,44 @@ CREATE TABLE IF NOT EXISTS public.organizations
 (
     organizations_uid uuid default uuid_generate_v1() NOT NULL,
     name text NOT NULL,
-    root_domains text[],
     cyhy_db_name text,
+    UNIQUE(name),
     PRIMARY KEY (organizations_uid)
 );
 
--- Organization's Domains Table
-CREATE TABLE IF NOT EXISTS public.domains
+-- Organization's Root Domains Table
+CREATE TABLE IF NOT EXISTS public.root_domains
 (
-    domain_uid uuid default uuid_generate_v1() NOT NULL,
+    root_domain_uid uuid default uuid_generate_v1() NOT NULL,
     organizations_uid uuid NOT NULL,
+    organization_name text NOT NULL,
     root_domain text NOT NULL,
     ip_address text,
-    PRIMARY KEY (domain_uid)
+    UNIQUE(root_domain, organizations_uid),
+    PRIMARY KEY (root_domain_uid)
+);
+
+-- Organization's Sub Domains Table
+CREATE TABLE IF NOT EXISTS public.sub_domains
+(
+    sub_domain_uid uuid default uuid_generate_v1() NOT NULL,
+    sub_domain text NOT NULL,
+    root_domain_uid uuid NOT NULL,
+    root_domain text NOT NULL,
+    UNIQUE(sub_domain, root_domain_uid),
+    PRIMARY KEY (sub_domain_uid)
+);
+
+-- Organization's IPs Table
+CREATE TABLE IF NOT EXISTS public.ip_addresses
+(
+    ip_address_uid uuid default uuid_generate_v1() NOT NULL,
+    ip_address text NOT NULL,
+    ip_type text,
+    sub_domain_uid uuid NOT NULL,
+    sub_domain text NOT NULL,
+    UNIQUE(ip_address, sub_domain_uid),
+    PRIMARY KEY (ip_address_uid)
 );
 
 -- Organization's Aliases Table
@@ -45,6 +70,7 @@ CREATE TABLE IF NOT EXISTS public.alias
     alias_uid uuid default uuid_generate_v1() NOT NULL,
     organizations_uid uuid NOT NULL,
     alias text NOT NULL,
+    UNIQUE (alias),
     PRIMARY KEY (alias_uid)
 );
 
@@ -60,20 +86,23 @@ CREATE TABLE IF NOT EXISTS public.executives
 
 -- Reporting Tables ----
 -- Domain Masquerading Table
-CREATE TABLE IF NOT EXISTS public."DNSTwist"
+CREATE TABLE IF NOT EXISTS public."dnstwist_domain_masq"
 (
-    dnstwist_uid uuid default uuid_generate_v1() NOT NULL,
-    "discoveredBy" uuid NOT NULL,
-    "domain-name" text,
-    "dns-a" text,
-    "dns-aaaa" text,
-    "dns-mx" text,
-    "dns-ns" text,
-    fuzzer text,
-    "date-observed" text,
-    "ssdeep-score" text,
+    suspected_domain_uid uuid default uuid_generate_v1() NOT NULL,
     organizations_uid uuid NOT NULL,
-    PRIMARY KEY (dnstwist_uid)
+    "domain_permutation" text,
+    "ipv4" text,
+    "ipv6" text,
+    "mail_server" text,
+    "name_server" text,
+    fuzzer text,
+    "date_observed" date,
+    "ssdeep_score" text,
+    "malicious" boolean,
+    "blocklist_attack_count" integer,
+    "blocklist_report_count" integer,
+    UNIQUE ("domain_permutation"),
+    PRIMARY KEY (suspected_domain_uid)
 );
 
 -- Dark Web Alerts Table
@@ -82,7 +111,7 @@ CREATE TABLE IF NOT EXISTS public.alerts
     alerts_uid uuid default uuid_generate_v1() NOT NULL,
     alert_name text,
     content text,
-    date text,
+    date date,
     sixgill_id text,
     read text,
     severity text,
@@ -91,6 +120,9 @@ CREATE TABLE IF NOT EXISTS public.alerts
     threats text,
     title text,
     user_id text,
+    category text,
+    lang text,
+    UNIQUE (sixgill_id),
     organizations_uid uuid NOT NULL,
     PRIMARY KEY (alerts_uid)
 );
@@ -103,18 +135,20 @@ CREATE TABLE IF NOT EXISTS public.mentions
     collection_date text,
     content text,
     creator text,
-    date text,
+    date date,
+    sixgill_mention_id text,
     post_id text,
+    lang text,
     rep_grade text,
     site text,
     site_grade text,
     title text,
     type text,
     url text,
-    tags text,
     comments_count text,
     sub_category text,
-    query text,
+    tags text,
+    UNIQUE (sixgill_mention_id),
     organizations_uid uuid NOT NULL,
     PRIMARY KEY (mentions_uid)
 );
@@ -201,7 +235,6 @@ CREATE TABLE IF NOT EXISTS public.shodan_assets
 CREATE TABLE IF NOT EXISTS public.hibp_breaches
 (
     hibp_breaches_uid uuid default uuid_generate_v1() NOT NULL,
-    breach_id uuid NOT NULL,
     breach_name text NOT NULL,
     description text,
     exposed_cred_count bigint,
@@ -215,6 +248,7 @@ CREATE TABLE IF NOT EXISTS public.hibp_breaches
     is_sensitive boolean,
     is_retired boolean,
     is_spam_list boolean,
+    UNIQUE (breach_name),
     PRIMARY KEY (hibp_breaches_uid)
 );
 
@@ -227,7 +261,8 @@ CREATE TABLE IF NOT EXISTS public.hibp_exposed_credentials
     root_domain text,
     sub_domain text,
     breach_name text,
-	breach_id uuid NOT NULL,
+    modified_date timestamp without time zone,
+	  breach_id uuid NOT NULL,
     UNIQUE (email, breach_name),
     PRIMARY KEY (hibp_exposed_credentials_uid)
 );
@@ -240,7 +275,7 @@ CREATE TABLE IF NOT EXISTS public.cybersix_exposed_credentials
     breach_date date,
     breach_id integer,
     breach_name text NOT NULL,
-    create_time timestamp without time zone[],
+    create_time timestamp without time zone,
     description text,
     domain text,
     email text NOT NULL,
@@ -249,36 +284,46 @@ CREATE TABLE IF NOT EXISTS public.cybersix_exposed_credentials
     login_id text,
     name text,
     phone text,
+    UNIQUE (email, breach_id),
     PRIMARY KEY (csg_exposed_credentials_uid)
 );
 
 -- Top CVEs
 CREATE TABLE IF NOT EXISTS public.top_cves
 (
-   top_cves_uid uuid default uuid_generate_v1() NOT NULL,
-    type text,
-    cve text,
-    description text,
+    top_cves_uid uuid default uuid_generate_v1() NOT NULL,
+    cve_id text,
+    dynamic_rating text,
+    nvd_base_score text,
+    date date,
+    summary text,
+    UNIQUE (cve_id, date),
     PRIMARY KEY (top_cves_uid)
 );
 
 -- Table Relationships --
--- One to many relation between Organization and Domains
-ALTER TABLE public.domains
+-- One to many relation between Organization and Root Domains
+ALTER TABLE public.root_domains
  ADD FOREIGN KEY (organizations_uid)
  REFERENCES public.organizations (organizations_uid)
+ NOT VALID;
+
+ -- One to many relation between root domains and sub Domains
+ALTER TABLE public.sub_domains
+ ADD FOREIGN KEY (root_domain_uid)
+ REFERENCES public.root_domains (root_domain_uid)
+ NOT VALID;
+
+ -- One to many relation between sub domains and IPs
+ALTER TABLE public.ip_addresses
+ ADD FOREIGN KEY (sub_domain_uid)
+ REFERENCES public.sub_domains (sub_domain_uid)
  NOT VALID;
 
 -- One to many relation between Organization and DNSTwist results
-ALTER TABLE public."DNSTwist"
+ALTER TABLE public."dnstwist_domain_masq"
  ADD FOREIGN KEY (organizations_uid)
  REFERENCES public.organizations (organizations_uid)
- NOT VALID;
-
--- One to many relation between Domains and DNSTwist results
-ALTER TABLE public."DNSTwist"
- ADD FOREIGN KEY ("discoveredBy")
- REFERENCES public.domains ("domain_uid")
  NOT VALID;
 
 -- One to many relation between Organization and Shodan Assets
@@ -349,7 +394,7 @@ SELECT creds.hibp_exposed_credentials_uid,creds.email, creds.breach_name, creds.
     FROM hibp_exposed_credentials as creds
 
     JOIN hibp_breaches as b
-    ON creds.breach_id = b.breach_id;
+    ON creds.breach_id = b.hibp_breaches_uid;
 
 END;
 `;
