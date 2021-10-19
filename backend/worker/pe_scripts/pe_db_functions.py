@@ -38,11 +38,11 @@ def close(conn):
 def query_ips(conn, org_id):
     sql = f"""SELECT ip.ip_address 
             FROM ip_addresses as ip
-            JOIN public.subdomains as sd 
-            ON sd.sub_domain_uid = ip.sub_domain
+            JOIN public.sub_domains as sd 
+            ON sd.sub_domain_uid = ip.sub_domain_uid
             JOIN public.root_domains AS rd
             ON rd.root_domain_uid = sd.root_domain_uid
-            WHERE rd.organizations_uid = {org_id}
+            WHERE rd.organizations_uid = '{org_id}'
             """
     df = pd.read_sql(sql, conn)
     conn.close()

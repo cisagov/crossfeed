@@ -565,9 +565,9 @@ def calculate_metrics(
     api = shodan.Shodan(API_KEY)
     start = time_to_utc(start_time)
     end = time_to_utc(end_time)
-    conn = connect()
+    conn = connect(DB_HOST,PE_DB_NAME, PE_DB_USERNAME, PE_DB_PASSWORD)
     ip_df = query_ips(conn, org_uid)
-    ips = list(ip_df["ip_addresses"].values)
+    ips = list(ip_df["ip_address"].values)
     # ip_df = pd.read_csv('/app/worker/pe_scripts/ips.csv', encoding="utf-8") #Remove this line and uncomment 3 lines above to go live
     # ips = list(ip_df["IP"].values) #Remove this line and uncomment 3 lines above to go live
     tot_ips = len(ips)
