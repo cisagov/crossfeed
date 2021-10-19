@@ -36,7 +36,7 @@
     "serverless-http": "^2.6.0",
     "ssl-checker": "^2.0.6",
     "tough-cookie": "^3.0.1",
-    "typeorm": "^0.2.26",
+    "typeorm": "^0.2.37",
     "uuid": "^8.3.0",
     "wappalyzer": "^6.3.11",
     "wappalyzer-core": "^6.3.11"
