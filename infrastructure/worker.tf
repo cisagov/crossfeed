@@ -248,11 +248,11 @@ resource "aws_ecs_task_definition" "worker" {
         "name": "LG_WORKSPACE_NAME",
         "valueFrom": "${data.aws_ssm_parameter.lg_workspace_name.arn}"
       },
-
+      {
         "name": "SIXGILL_CLIENT_ID",
         "valueFrom": "${data.aws_ssm_parameter.sixgill_client_id.arn}"
       },
-
+      {
         "name": "SIXGILL_CLIENT_SECRET",
         "valueFrom": "${data.aws_ssm_parameter.sixgill_client_secret.arn}"
       },
