@@ -8,7 +8,15 @@ import { spawnSync } from 'child_process';
 async function runDNSTwist(domain: Domain) {
   const child = spawnSync(
     'dnstwist',
-    ['-r', '--tld', './worker/common_tlds.dict', '-f', 'json', domain.name],
+    [
+      '-r',
+      '-s',
+      '--tld',
+      './worker/common_tlds.dict',
+      '-f',
+      'json',
+      domain.name
+    ],
     {
       stdio: 'pipe',
       encoding: 'utf-8'
