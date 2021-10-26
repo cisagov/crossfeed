@@ -407,7 +407,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600
   },
   userLink: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.down('sm')]: {
       display: 'none'
     },
     [theme.breakpoints.up('lg')]: {
