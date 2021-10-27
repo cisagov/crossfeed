@@ -8,7 +8,9 @@ import {
   Drawer,
   ListItem,
   List,
-  TextField
+  TextField,
+  useMediaQuery,
+  useTheme
 } from '@material-ui/core';
 import {
   Menu as MenuIcon,
@@ -55,6 +57,8 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   const [organizations, setOrganizations] = useState<
     (Organization | OrganizationTag)[]
   >([]);
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down('md'));
 
   let userLevel = 0;
   if (user && user.isRegistered) {
@@ -103,37 +107,6 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       path: '/scans',
       users: GLOBAL_ADMIN,
       exact: true
-    },
-    {
-      title: 'Manage Organizations',
-      path: '/organizations',
-      users: GLOBAL_ADMIN,
-      exact: true
-    },
-    {
-      title: 'My Organizations',
-      path: '/organizations',
-      users: STANDARD_USER,
-      exact: true
-    },
-    {
-      title: 'Manage Users',
-      path: '/users',
-      users: GLOBAL_ADMIN,
-      exact: true
-    },
-    {
-      title: 'My Settings',
-      path: '/settings',
-      users: ALL_USERS,
-      exact: true
-    },
-    {
-      title: 'Logout',
-      path: '/settings',
-      users: ALL_USERS,
-      onClick: logout,
-      exact: true
     }
   ].filter(({ users }) => (users & userLevel) > 0);
 
@@ -180,9 +153,57 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     ].filter(({ users }) => (users & userLevel) > 0)
   };
 
+  const userItemsSmall: NavItemType[] = [
+    {
+      title: 'My Account',
+      path: '#',
+      users: ALL_USERS,
+      exact: true
+    },
+    {
+      title: 'Manage Organizations',
+      path: '/organizations',
+      users: GLOBAL_ADMIN,
+      exact: true
+    },
+    {
+      title: 'My Organizations',
+      path: '/organizations',
+      users: STANDARD_USER,
+      exact: true
+    },
+    {
+      title: 'Manage Users',
+      path: '/users',
+      users: GLOBAL_ADMIN,
+      exact: true
+    },
+    {
+      title: 'My Settings',
+      path: '/settings',
+      users: ALL_USERS,
+      exact: true
+    },
+    {
+      title: 'Logout',
+      path: '/',
+      users: ALL_USERS,
+      onClick: logout,
+      exact: true
+    }
+  ].filter(({ users }) => (users & userLevel) > 0);
+
   const desktopNavItems: JSX.Element[] = navItems.map((item) => (
     <NavItem key={item.title.toString()} {...item} />
   ));
+
+  const navItemsToUse = () => {
+    if (isSmall) {
+      return userItemsSmall;
+    } else {
+      return navItems;
+    }
+  };
 
   return (
     <div>
@@ -284,7 +305,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                     />
                   </>
                 )}
-                <NavItem {...userMenu} />
+                {isSmall ? null : <NavItem {...userMenu} />}
               </>
             )}
             <IconButton
@@ -307,7 +328,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
         data-testid="mobilenav"
       >
         <List className={classes.mobileNav}>
-          {navItems.map(({ title, path, nested, onClick }) => (
+          {navItemsToUse().map(({ title, path, nested, onClick }) => (
             <React.Fragment key={title.toString()}>
               {path && (
                 <ListItem
@@ -366,8 +387,8 @@ const useStyles = makeStyles((theme) => ({
     width: 150,
     padding: theme.spacing(),
     paddingLeft: 0,
-    [theme.breakpoints.up('sm')]: {
-      display: 'none'
+    [theme.breakpoints.down('xl')]: {
+      display: 'flex'
     }
   },
   spacing: {
@@ -408,7 +429,7 @@ const useStyles = makeStyles((theme) => ({
   },
   userLink: {
     [theme.breakpoints.down('sm')]: {
-      display: 'none'
+      display: 'flex'
     },
     [theme.breakpoints.up('lg')]: {
       display: 'flex',
@@ -423,7 +444,7 @@ const useStyles = makeStyles((theme) => ({
   },
   lgNav: {
     display: 'none',
-    [theme.breakpoints.up('lg')]: {
+    [theme.breakpoints.down('xl')]: {
       display: 'inline'
     }
   },
@@ -453,5 +474,8 @@ const useStyles = makeStyles((theme) => ({
   },
   option: {
     fontSize: 15
+  },
+  userItemHidden: {
+    display: 'none'
   }
 }));

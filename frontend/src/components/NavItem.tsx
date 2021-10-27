@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'classnames';
 import { NavLink, useRouteMatch, useHistory } from 'react-router-dom';
-import {
-  Menu,
-  MenuItem,
-  Button,
-  makeStyles,
-  useMediaQuery,
-  useTheme
-} from '@material-ui/core';
+import { Menu, MenuItem, Button, makeStyles } from '@material-ui/core';
 
 interface LinkConfig {
   title: string | JSX.Element;
@@ -32,8 +25,6 @@ export const NavItem: React.FC<Props> = (props) => {
   const [mouseInButton, setMouseInButton] = useState(false);
   const [mouseInMenu, setMouseInMenu] = useState(false);
   const classes = useStyles();
-  const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
   const onClickButton = (e: any) => {
     setAnchor(e.currentTarget);
@@ -59,7 +50,7 @@ export const NavItem: React.FC<Props> = (props) => {
         <NavLink
           to={path}
           activeClassName={path !== '#' ? classes.activeLink : classes.link}
-          className={isSmall ? classes.activeLinkHidden : classes.link}
+          className={classes.link}
           onClick={onClick ? onClick : onClickButton}
           exact={exact}
           style={{ outline: 'none' }}
@@ -68,13 +59,9 @@ export const NavItem: React.FC<Props> = (props) => {
         </NavLink>
       ) : (
         <Button
-          className={
-            isSmall
-              ? classes.activeLinkHidden
-              : clsx(classes.link, {
-                  [classes.activeLink]: !!match
-                })
-          }
+          className={clsx(classes.link, {
+            [classes.activeLink]: !!match
+          })}
           onClick={onClick ? onClick : onClickButton}
           style={{ outline: 'none' }}
         >
@@ -168,8 +155,5 @@ const useStyles = makeStyles((theme) => ({
     '& svg': {
       marginRight: theme.spacing()
     }
-  },
-  activeLinkHidden: {
-    display: 'none'
   }
 }));
