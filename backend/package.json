@@ -18,7 +18,7 @@
     "express": "^4.17.1",
     "global-agent": "^2.1.12",
     "got": "^11.7.0",
-    "helmet": "^4.1.1",
+    "helmet": "^4.6.0",
     "http-proxy-middleware": "^1.0.5",
     "jsdom": "^16.4.0",
     "jsonwebtoken": "^8.5.1",
