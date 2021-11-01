@@ -474,8 +474,5 @@ const useStyles = makeStyles((theme) => ({
   },
   option: {
     fontSize: 15
-  },
-  userItemHidden: {
-    display: 'none'
   }
 }));
