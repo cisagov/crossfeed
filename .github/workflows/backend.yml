@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.4.0
+      - run: aws ses send-email --from noreply@staging.crossfeed.cyber.dhs.gov --destination file://destination.json --message file://message.json
       - uses: actions/setup-node@v2.4.1
         with:
           node-version: '14'
