@@ -3,6 +3,8 @@ title: Quickstart
 sidenav: user-guide
 ---
 
+**Note:** While CISA's instance of Crossfeed is currently not accepting enrollment, it is developed as an open-source tool available on GitHub. The below instructions describe how users can sign up if you stand up your own instance of Crossfeed.
+
 ### Accepting an Invite
 
 Standard users of Crossfeed can only access the platform after being invited to

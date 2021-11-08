@@ -660,4 +660,4 @@ try:
         start, end = get_dates()
         calculate_metrics( org_uid, start, end )
 except:
-    print(traceback.format_exc())
+    print(traceback.format_exc(), flush=True)
