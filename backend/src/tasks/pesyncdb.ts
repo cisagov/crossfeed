@@ -52,16 +52,28 @@ CREATE TABLE IF NOT EXISTS public.sub_domains
     PRIMARY KEY (sub_domain_uid)
 );
 
--- Organization's IPs Table
-CREATE TABLE IF NOT EXISTS public.ip_addresses
+-- Organization's Sub Domains web_assets Link Table
+CREATE TABLE IF NOT EXISTS Sub_domains_Web_assets
 (
-    ip_address_uid uuid default uuid_generate_v1() NOT NULL,
-    ip_address text NOT NULL,
-    ip_type text,
     sub_domain_uid uuid NOT NULL,
-    sub_domain text NOT NULL,
-    UNIQUE(ip_address, sub_domain_uid),
-    PRIMARY KEY (ip_address_uid)
+    asset_uid uuid NOT NULL,
+    PRIMARY KEY (sub_domain_uid, asset_uid)
+);
+
+-- Organization's Web Assets Table
+CREATE TABLE IF NOT EXISTS public.web_assets
+(
+    asset_uid uuid default uuid_generate_v1() NOT NULL,
+    asset_type text Not NULL,
+    asset text NOT NULL,
+    ip_type text,
+    verified boolean,
+    organizations_uid uuid NOT NULL,
+    asset_origin text,
+    report_on boolean DEFAULT TRUE,
+    last_scanned timestamp,
+    UNIQUE(asset, organizations_uid),
+    PRIMARY KEY (asset_uid)
 );
 
 -- Organization's Aliases Table
@@ -314,10 +326,19 @@ ALTER TABLE public.sub_domains
  REFERENCES public.root_domains (root_domain_uid)
  NOT VALID;
 
- -- One to many relation between sub domains and IPs
-ALTER TABLE public.ip_addresses
- ADD FOREIGN KEY (sub_domain_uid)
+ -- many to many relation between sub domains and Web Assets
+ALTER TABLE public.Sub_domains_Web_assets
+ADD FOREIGN KEY (sub_domain_uid)
  REFERENCES public.sub_domains (sub_domain_uid)
+ NOT VALID,
+ADD FOREIGN KEY (asset_uid)
+ REFERENCES public.web_assets (asset_uid)
+ NOT VALID;
+
+-- One to many relation between orgs and web_assets
+ALTER TABLE public.web_assets
+ ADD FOREIGN KEY (organizations_uid)
+ REFERENCES public.organizations (organizations_uid)
  NOT VALID;
 
 -- One to many relation between Organization and DNSTwist results
