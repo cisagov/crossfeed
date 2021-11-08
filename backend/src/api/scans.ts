@@ -163,6 +163,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
+    cpu: '2048',
+    memory: '12288',
     description:
       'Finds emails that have appeared in breaches related to a given domain'
   },
@@ -202,6 +204,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: true,
+    cpu: '2048',
+    memory:'16384',
     description:
       'Run organization IPs through shodan and circl to find un/verified vulns and save them to PE db '
   },

@@ -1,0 +1,8 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [{
+        "Effect": "Allow",
+        "Principal": { "AWS": "arn:aws:iam::687321252557:role/Terraformer" },
+        "Action": "sts:AssumeRole"
+    }]
+}
