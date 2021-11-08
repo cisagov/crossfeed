@@ -34,7 +34,7 @@
     "gatsby-transformer-remark": "^2.9.2",
     "netlify-cms-app": "^2.13.3",
     "prettier": "^2.1.2",
-    "prismjs": "^1.22.0",
+    "prismjs": "^1.25.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
