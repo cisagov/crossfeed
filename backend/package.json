@@ -24,7 +24,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.12.3",
     "lodash": "^4.17.21",
-    "nodemailer": "^6.6.0",
+    "nodemailer": "^6.7.0",
     "openid-client": "^4.1.1",
     "p-queue": "^6.6.1",
     "p-retry": "^4.2.0",
