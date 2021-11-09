@@ -48,22 +48,28 @@ npm run syncdb -- -d populate
 
 To manually access the database, we use AWS Session Manager. This way, we don't need to run an EC2 bastion instance that's exposed to the public Internet.
 
+#### Initial setup
+
 - Install the [Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html) to the AWS CLI on your development machine.
+  - If using Linx (such as being on the COOL terraformer instance), run: `curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb" && sudo dpkg -i session-manager-plugin.deb` and then run `session-manager-plugin`.
 - Set up a Session Manager port forwarding session to allow SSH access to the instance.
 
   ```bash
   # Set this environment variable to the ID of the EC2 bastion instance (which should be in a private subnet, but able to connect to the RDS instance).
   export INSTANCE_ID=
+  # Start the bastion instance.
+  aws ec2 start-instances --instance-ids $INSTANCE_ID
   # Generate an SSH key and send it to the EC2 instance
   # (this only needs to be done once).
+  # If this command doesn't work, update "us-east-1b" with the right
+  # availabilty zone of the bastion instance. You can get this by running `aws ec2 describe-instances --instance-ids $INSTANCE_ID`.
   ssh-keygen -f cisa_bastion_rsa
-  aws ec2-instance-connect send-ssh-public-key \
+  aws ec2-instance-connect send-ssh-public-key --debug \
       --instance-id $INSTANCE_ID \
       --availability-zone us-east-1b \
-      --instance-os-user ec2-user \
+      --instance-os-user ubuntu \
       --ssh-public-key file://cisa_bastion_rsa.pub
 
-  # Start port forwarding.
   aws ssm start-session \
       --target $INSTANCE_ID \
       --document-name AWS-StartPortForwardingSession \
@@ -77,7 +83,7 @@ To manually access the database, we use AWS Session Manager. This way, we don't 
   export RDS_URL=
 
   # Forward RDS instance to localhost:5432
-  ssh ec2-user@localhost \
+  ssh ubuntu@localhost \
       -p 9999 \
       -N \
       -i cisa_bastion_rsa \
