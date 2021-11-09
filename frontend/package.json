@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@aws-amplify/api-graphql": "^2.2.11",
-    "@aws-amplify/auth": "^3.4.4",
+    "@aws-amplify/auth": "^3.4.33",
     "@aws-amplify/ui-components": "^0.8.4",
     "@aws-amplify/ui-react": "^0.2.21",
     "@datapunt/matomo-tracker-react": "^0.2.1",
@@ -38,10 +38,10 @@
     "@types/react-simple-maps": "^1.0.3",
     "@types/react-table": "^7.0.23",
     "autoprefixer": "^9.8.6",
-    "aws-amplify": "^3.3.1",
+    "aws-amplify": "^4.2.8",
     "classnames": "^2.2.6",
     "d3-scale": "^3.2.3",
-    "dompurify": "^2.1.1",
+    "dompurify": "^2.2.2",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^6.12.0",
     "eslint-config-react-app": "^6.0.0",
@@ -62,7 +62,6 @@
     "react-markdown": "^6.0.2",
     "react-media": "^1.10.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^4.0.3",
     "react-select": "^3.1.0",
     "react-simple-maps": "^2.1.2",
     "react-table": "^7.5.1",
@@ -103,6 +102,7 @@
   },
   "devDependencies": {
     "decamelize": "^5.0.0",
-    "jest-environment-jsdom-sixteen": "^1.0.3"
+    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "react-scripts": "^4.0.3"
   }
 }
