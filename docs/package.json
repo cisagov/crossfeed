@@ -19,7 +19,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.13",
     "classnames": "^2.2.6",
-    "gatsby": "^3.13.0",
+    "gatsby": "^3.14.5",
     "netlify-cms-app": "^2.13.3",
     "prettier": "^2.1.2",
     "prismjs": "^1.25.0",
