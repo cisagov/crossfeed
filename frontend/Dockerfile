@@ -1,4 +1,4 @@
-FROM node:14-buster-slim
+FROM node:14-bullseye-slim
 
 WORKDIR /app
 COPY ./package* ./
