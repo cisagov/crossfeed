@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Security
-        run: npm audit
+        run: npm audit --production
   frontend:
     runs-on: ubuntu-latest
     defaults:
@@ -49,8 +49,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Security
-        # TODO: remove postcss omit once CRA supports postcss 8: https://github.com/facebook/create-react-app/issues/9664
-        run: npm audit --omit postcss
+        run: npm audit --production
   docs:
     runs-on: ubuntu-latest
     defaults:
@@ -71,7 +70,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Security
-        run: npm audit
+        run: npm audit --production
   backend_python:
     runs-on: ubuntu-latest
     defaults:
