@@ -5,7 +5,9 @@ data "aws_caller_identity" "current" {}
 resource "aws_elasticsearch_domain" "es" {
   domain_name           = "crossfeed-${var.stage}"
   elasticsearch_version = "7.7"
-  encrypt_at_rest       = true
+  encrypt_at_rest {
+    enabled = true
+  }
 
   cluster_config {
     instance_type            = var.es_instance_type
