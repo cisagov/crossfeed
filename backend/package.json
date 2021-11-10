@@ -27,7 +27,7 @@
     "nodemailer": "^6.7.0",
     "openid-client": "^4.1.1",
     "p-queue": "^6.6.1",
-    "p-retry": "^4.2.0",
+    "p-retry": "^4.6.1",
     "papaparse": "^5.3.0",
     "pg": "^8.3.3",
     "portscanner": "^2.2.0",
