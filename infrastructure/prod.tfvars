@@ -10,7 +10,6 @@ db_name                           = "crossfeed-prod-db2"
 db_port                           = 5432
 db_table_name                     = "cfproddb"
 db_instance_class                 = "db.t3.xlarge"
-db_storage_encrypted              = true
 ssm_lambda_subnet                 = "/crossfeed/prod/SUBNET_ID"
 ssm_lambda_sg                     = "/crossfeed/prod/SG_ID"
 ssm_worker_subnet                 = "/crossfeed/prod/WORKER_SUBNET_ID"

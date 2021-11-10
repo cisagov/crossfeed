@@ -10,7 +10,6 @@ db_name                           = "crossfeed-stage-db"
 db_port                           = 5432
 db_table_name                     = "cfstagingdb"
 db_instance_class                 = "db.t3.micro"
-db_storage_encrypted              = true
 ssm_lambda_subnet                 = "/crossfeed/staging/SUBNET_ID"
 ssm_lambda_sg                     = "/crossfeed/staging/SG_ID"
 ssm_worker_subnet                 = "/crossfeed/staging/WORKER_SUBNET_ID"
