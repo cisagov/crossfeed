@@ -20,7 +20,7 @@
     "got": "^11.7.0",
     "helmet": "^4.1.1",
     "http-proxy-middleware": "^1.0.5",
-    "jsdom": "^16.4.0",
+    "jsdom": "^16.7.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.12.3",
     "lodash": "^4.17.21",
