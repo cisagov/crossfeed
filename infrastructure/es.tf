@@ -5,9 +5,6 @@ data "aws_caller_identity" "current" {}
 resource "aws_elasticsearch_domain" "es" {
   domain_name           = "crossfeed-${var.stage}"
   elasticsearch_version = "7.7"
-  encrypt_at_rest {
-    enabled = true
-  }
 
   cluster_config {
     instance_type            = var.es_instance_type
@@ -45,7 +42,7 @@ POLICY
 
   #   Only supported on certain instance types, so let's only enable this on prod: https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-instance-types.html
   encrypt_at_rest {
-    enabled = false
+    enabled = true
   }
 
   node_to_node_encryption {
