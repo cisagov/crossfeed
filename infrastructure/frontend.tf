@@ -10,6 +10,16 @@ resource "aws_s3_bucket" "frontend_bucket" {
     }
   }
 
+  versioning {
+    enabled    = true
+    mfa_delete = true
+  }
+
+  logging {
+    target_bucket = aws_s3_bucket.logging_bucket.id
+    target_prefix = "frontend_bucket/"
+  }
+
   tags = {
     Project = var.project
     Stage   = var.stage

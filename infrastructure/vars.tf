@@ -103,6 +103,11 @@ variable "ssm_db_password" {
   default = "/crossfeed/staging/DATABASE_PASSWORD"
 }
 
+variable "ssm_matomo_db_password" {
+  type    = string
+  default = "/crossfeed/staging/MATOMO_DATABASE_PASSWORD"
+}
+
 variable "ssm_worker_signature_public_key" {
   type    = string
   default = "/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_KEY"
@@ -176,6 +181,11 @@ variable "worker_ecs_log_group_name" {
 variable "worker_ecs_role_name" {
   type    = string
   default = "crossfeed-worker-staging"
+}
+
+variable "logging_bucket_name" {
+  type    = string
+  default = "cisa-crossfeed-staging-logging"
 }
 
 variable "export_bucket_name" {

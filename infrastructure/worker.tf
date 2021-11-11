@@ -3,6 +3,12 @@ resource "aws_ecr_repository" "worker" {
   image_scanning_configuration {
     scan_on_push = true
   }
+  image_tag_mutability = "IMMUTABLE"
+
+  encryption_configuration {
+    encryption_type = "KMS"
+    kms_key         = aws_kms_key.key.arn
+  }
 
   tags = {
     Project = var.project
@@ -142,6 +148,11 @@ resource "aws_ecs_cluster" "worker" {
   name               = var.worker_ecs_cluster_name
   capacity_providers = ["FARGATE"]
 
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
+
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -259,7 +270,9 @@ resource "aws_ecs_task_definition" "worker" {
 }
 
 resource "aws_cloudwatch_log_group" "worker" {
-  name = var.worker_ecs_log_group_name # should match awslogs-group in service.json
+  name              = var.worker_ecs_log_group_name # should match awslogs-group in service.json
+  retention_in_days = 3653
+  kms_key_id        = aws_kms_key.key.id
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -292,6 +305,16 @@ resource "aws_s3_bucket" "export_bucket" {
         sse_algorithm = "AES256"
       }
     }
+  }
+
+  versioning {
+    enabled    = true
+    mfa_delete = true
+  }
+
+  logging {
+    target_bucket = aws_s3_bucket.logging_bucket.id
+    target_prefix = "export_bucket/"
   }
 
   tags = {
