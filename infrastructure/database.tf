@@ -11,17 +11,18 @@ resource "aws_db_subnet_group" "default" {
 }
 
 resource "aws_db_instance" "db" {
-  identifier              = var.db_name
-  instance_class          = var.db_instance_class
-  allocated_storage       = 100
-  max_allocated_storage   = 1000
-  storage_type            = "gp2"
-  engine                  = "postgres"
-  skip_final_snapshot     = true
-  availability_zone       = data.aws_availability_zones.available.names[0]
-  multi_az                = false
-  backup_retention_period = 35
-  storage_encrypted       = var.db_storage_encrypted
+  identifier                          = var.db_name
+  instance_class                      = var.db_instance_class
+  allocated_storage                   = 100
+  max_allocated_storage               = 1000
+  storage_type                        = "gp2"
+  engine                              = "postgres"
+  skip_final_snapshot                 = true
+  availability_zone                   = data.aws_availability_zones.available.names[0]
+  multi_az                            = false
+  backup_retention_period             = 35
+  storage_encrypted                   = true
+  iam_database_authentication_enabled = true
 
   // database information
   name     = var.db_table_name

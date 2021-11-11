@@ -2,6 +2,24 @@ resource "aws_s3_bucket" "frontend_bucket" {
   bucket = var.frontend_bucket
   acl    = "private"
 
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  versioning {
+    enabled    = true
+    mfa_delete = true
+  }
+
+  logging {
+    target_bucket = aws_s3_bucket.logging_bucket.id
+    target_prefix = "frontend_bucket/"
+  }
+
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -9,7 +27,7 @@ resource "aws_s3_bucket" "frontend_bucket" {
 }
 
 data "template_file" "policy_file" {
-  template = "${file("frontend_bucket_policy.tpl")}"
+  template = file("frontend_bucket_policy.tpl")
   vars = {
     bucket_name = var.frontend_bucket
   }

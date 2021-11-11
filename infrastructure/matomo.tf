@@ -2,6 +2,11 @@ resource "aws_ecs_cluster" "matomo" {
   name               = var.matomo_ecs_cluster_name
   capacity_providers = ["FARGATE"]
 
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
+
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -87,10 +92,6 @@ resource "aws_ecs_task_definition" "matomo" {
         "value": "${aws_db_instance.matomo_db.username}"
       },
       {
-        "name": "MATOMO_DATABASE_PASSWORD",
-        "value": "${aws_db_instance.matomo_db.password}"
-      },
-      {
         "name": "MATOMO_DATABASE_DBNAME",
         "value": "${aws_db_instance.matomo_db.name}"
       },
@@ -101,6 +102,12 @@ resource "aws_ecs_task_definition" "matomo" {
       {
         "name": "MATOMO_GENERAL_ASSUME_SECURE_PROTOCOL",
         "value": "1"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "MATOMO_DATABASE_PASSWORD",
+        "valueFrom": "${aws_ssm_parameter.matomo_db_password.arn}"
       }
     ]
   }
@@ -157,7 +164,9 @@ resource "aws_ecs_service" "matomo" {
 }
 
 resource "aws_cloudwatch_log_group" "matomo" {
-  name = var.matomo_ecs_log_group_name
+  name              = var.matomo_ecs_log_group_name
+  retention_in_days = 3653
+  kms_key_id        = aws_kms_key.key.id
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -170,18 +179,19 @@ resource "random_password" "matomo_db_password" {
 }
 
 resource "aws_db_instance" "matomo_db" {
-  identifier              = var.matomo_db_name
-  instance_class          = var.matomo_db_instance_class
-  allocated_storage       = 20
-  max_allocated_storage   = 1000
-  storage_type            = "gp2"
-  engine                  = "mariadb"
-  engine_version          = "10.4"
-  skip_final_snapshot     = true
-  availability_zone       = data.aws_availability_zones.available.names[0]
-  multi_az                = false
-  backup_retention_period = 35
-  storage_encrypted       = true
+  identifier                          = var.matomo_db_name
+  instance_class                      = var.matomo_db_instance_class
+  allocated_storage                   = 20
+  max_allocated_storage               = 1000
+  storage_type                        = "gp2"
+  engine                              = "mariadb"
+  engine_version                      = "10.4"
+  skip_final_snapshot                 = true
+  availability_zone                   = data.aws_availability_zones.available.names[0]
+  multi_az                            = false
+  backup_retention_period             = 35
+  storage_encrypted                   = true
+  iam_database_authentication_enabled = true
 
   // database information
   name     = "matomo"
@@ -195,5 +205,16 @@ resource "aws_db_instance" "matomo_db" {
   tags = {
     Project = var.project
     Stage   = var.stage
+  }
+}
+
+resource "aws_ssm_parameter" "matomo_db_password" {
+  name      = var.ssm_matomo_db_password
+  type      = "SecureString"
+  value     = random_password.matomo_db_password.result
+  overwrite = true
+
+  tags = {
+    Project = var.project
   }
 }
