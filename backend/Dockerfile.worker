@@ -1,4 +1,4 @@
-FROM node:14-bullseye-slim as build
+FROM node:14-buster-slim as build
 
 WORKDIR /app
 
@@ -30,7 +30,7 @@ RUN go mod init crossfeed-worker
 
 RUN go get github.com/facebookincubator/nvdtools/...@v0.1.4
 
-FROM node:14-bullseye-slim
+FROM node:14-buster-slim
 
 WORKDIR /app
 
