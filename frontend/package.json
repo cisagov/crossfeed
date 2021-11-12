@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@aws-amplify/api-graphql": "^2.2.11",
-    "@aws-amplify/auth": "^3.4.33",
-    "@aws-amplify/ui-components": "^0.8.4",
-    "@aws-amplify/ui-react": "^0.2.21",
+    "@aws-amplify/api-graphql": "^2.2.13",
+    "@aws-amplify/auth": "^4.3.14",
+    "@aws-amplify/ui-components": "^1.9.4",
+    "@aws-amplify/ui-react": "^1.2.24",
     "@datapunt/matomo-tracker-react": "^0.2.1",
     "@elastic/react-search-ui": "^1.5.1",
     "@elastic/react-search-ui-views": "^1.5.1",
@@ -38,7 +38,7 @@
     "@types/react-simple-maps": "^1.0.3",
     "@types/react-table": "^7.0.23",
     "autoprefixer": "^9.8.6",
-    "aws-amplify": "^4.2.8",
+    "aws-amplify": "^4.3.6",
     "classnames": "^2.2.6",
     "d3-scale": "^3.2.3",
     "dompurify": "^2.2.2",
@@ -98,7 +98,7 @@
   "resolutions": {
     "yargs-parser": "18.1.2",
     "postcss": "7.0.35",
-    "jspdf": "2.3.1"
+    "jspdf": "2.4.0"
   },
   "devDependencies": {
     "decamelize": "^5.0.0",
