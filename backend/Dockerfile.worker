@@ -1,4 +1,4 @@
-FROM node:14-alpine as build
+FROM node:14-alpine3.14 as build
 
 WORKDIR /app
 
@@ -26,11 +26,11 @@ RUN go mod init crossfeed-worker
 
 RUN go get github.com/facebookincubator/nvdtools/...@v0.1.4
 
-FROM node:14-alpine
+FROM node:14-alpine3.14
 
 WORKDIR /app
 
-RUN apk add --update --no-cache wget curl git unzip python3=3.8 ruby=2.6.5
+RUN apk add --update --no-cache wget curl git unzip python3=3.9.5-r1 ruby=2.7.4-r0
 
 RUN npm install -g pm2@4 wait-port@0.2.9
 
