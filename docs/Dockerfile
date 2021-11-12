@@ -5,10 +5,7 @@ FROM node:14-alpine
 
 WORKDIR /app/docs
 
-RUN apt-get update && apt-get install -y \
-    libvips-dev \
-    glib2.0-dev \
- && rm -rf /var/lib/apt/lists/*
+RUN apk add --update --no-cache build-base python
 
 COPY ./docs/package* ./
 
