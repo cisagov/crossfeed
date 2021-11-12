@@ -97,7 +97,8 @@
   },
   "resolutions": {
     "yargs-parser": "18.1.2",
-    "postcss": "7.0.35"
+    "postcss": "7.0.35",
+    "jspdf": "2.4.0"
   },
   "devDependencies": {
     "decamelize": "^5.0.0",
