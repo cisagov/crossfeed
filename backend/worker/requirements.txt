@@ -3,6 +3,7 @@ requests==2.24.0
 mitmproxy==7.0.3
 cryptography==3.3.2
 pytest==6.0.1
-scrapy==2.3.0
+# TODO: once scrapy releases version 2.6.0 with this change in it (https://github.com/scrapy/scrapy/issues/5267), switch back to using scrapy from PyPI.
+git+https://github.com/scrapy/scrapy.git@9828cb3f0bcc084c99692f19e65c2ff61a06b35a
 dnstwist==20201228
 dnspython==2.1.0
