@@ -30,7 +30,7 @@ FROM node:14-alpine3.14
 
 WORKDIR /app
 
-RUN apk add --update --no-cache wget build-base curl git unzip openssl-dev linux-headers python3=3.9.5-r1 python3-dev py3-pip ruby=2.7.4-r0 ruby-dev zlib-dev libffi-dev
+RUN apk add --update --no-cache wget build-base curl git unzip openssl-dev linux-headers python3=3.9.5-r1 python3-dev py3-pip ruby=2.7.4-r0 ruby-dev zlib-dev libffi-dev libxml2-dev libxslt-dev
 
 RUN npm install -g pm2@4 wait-port@0.2.9
 
@@ -50,6 +50,7 @@ RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/
 # Python dependencies
 
 COPY worker/requirements.txt worker/requirements.txt
+
 RUN pip install --no-cache-dir -r worker/requirements.txt
 
 COPY worker worker
