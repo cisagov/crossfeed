@@ -49,6 +49,12 @@ interface ScanSchema {
 }
 
 export const SCAN_SCHEMA: ScanSchema = {
+  testProxy: {
+    type: 'fargate',
+    isPassive: false,
+    global: true,
+    description: 'Not a real scan, used to test proxy'
+  },
   censys: {
     type: 'fargate',
     isPassive: true,
