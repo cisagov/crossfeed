@@ -5,7 +5,7 @@ FROM node:14-alpine3.14
 
 WORKDIR /app/docs
 
-RUN apk add --update --no-cache build-base python
+RUN apk add --update --no-cache build-base python3
 
 COPY ./docs/package* ./
 

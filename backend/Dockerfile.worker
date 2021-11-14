@@ -30,19 +30,27 @@ FROM node:14-alpine3.14
 
 WORKDIR /app
 
-RUN apk add --update --no-cache wget curl git unzip python3=3.9.5-r1 ruby=2.7.4-r0
+RUN apk add --update --no-cache wget build-base curl git unzip openssl-dev linux-headers python3=3.9.5-r1 python3-dev py3-pip ruby=2.7.4-r0 ruby-dev zlib-dev
 
 RUN npm install -g pm2@4 wait-port@0.2.9
 
 # Install intrigue ident v2.0.2
 
-RUN git clone https://github.com/intrigueio/intrigue-ident.git && cd intrigue-ident && git checkout e97f974417147df8fa27dcd8f73b7efbb587b942 && bundle install --jobs=4
+# ENV PATH /usr/local/rbenv/shims:/usr/local/rbenv/bin:$PATH
+# ENV RBENV_ROOT /usr/local/rbenv
+# RUN git clone --depth 1 git://github.com/sstephenson/rbenv.git ${RBENV_ROOT} \
+#     &&  git clone --depth 1 https://github.com/sstephenson/ruby-build.git ${RBENV_ROOT}/plugins/ruby-build \
+#     &&  git clone --depth 1 git://github.com/jf/rbenv-gemset.git ${RBENV_ROOT}/plugins/rbenv-gemset \
+#     && ${RBENV_ROOT}/plugins/ruby-build/install.sh
+# RUN rbenv install 2.6.5 && rbenv global 2.6.5 && gem install bundler:2.1.4 || cat /tmp/*
+RUN gem instal bundler:2.1.4
+RUN git clone https://github.com/intrigueio/intrigue-ident.git && cd intrigue-ident && git checkout e97f974417147df8fa27dcd8f73b7efbb587b942 && sed -i 's/2.6.5/2.7.4/g' Gemfile && sed -i 's/2.6.5p114/2.7.4/g' Gemfile.lock && bundle install --jobs=4
 RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/bin/intrigue-ident && chmod +x /usr/bin/intrigue-ident
 
 # Python dependencies
 
 COPY worker/requirements.txt worker/requirements.txt
-RUN pip3 install --no-cache-dir -r worker/requirements.txt
+RUN pip install --no-cache-dir -r worker/requirements.txt
 
 COPY worker worker
 
