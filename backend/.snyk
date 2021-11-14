@@ -5,5 +5,4 @@ ignore:
   SNYK-JS-CLASSVALIDATOR-1730566:
     - class-validator:
         reason: 'Already remediated by setting forbidUnknownValues: true'
-        # expires: '2021-12-14T17:03:03.660Z'
 patch: {}
