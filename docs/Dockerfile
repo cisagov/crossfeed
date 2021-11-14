@@ -5,7 +5,7 @@ FROM node:14-alpine3.14
 
 WORKDIR /app/docs
 
-RUN apk add --update --no-cache build-base python3
+RUN apk add --update --no-cache build-base python3 vips-dev autoconf automake libtool make tiff jpeg zlib zlib-dev pkgconf nasm file gcc musl-dev
 
 COPY ./docs/package* ./
 
