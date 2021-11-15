@@ -32,8 +32,7 @@ module.exports = {
   },
   plugins: [
     new webpack.IgnorePlugin(/^pg-native$/),
-    new webpack.IgnorePlugin(/^canvas$/), // imported by jsdom from simple-wapplyzer, not used so we can ignore.
-    new webpack.IgnorePlugin(/^ssh2$/) // imported by dockerode, doesn't compile properly, not used in production (only used in local development) so we can ignore.
+    new webpack.IgnorePlugin(/^canvas$/) // imported by jsdom from simple-wapplyzer, not used so we can ignore.
   ],
   resolve: {
     modules: ['node_modules', 'scripts'],

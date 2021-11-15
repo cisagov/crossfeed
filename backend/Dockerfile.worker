@@ -1,4 +1,4 @@
-FROM node:14-buster-slim as build
+FROM node:14-alpine3.14 as build
 
 WORKDIR /app
 
@@ -12,15 +12,11 @@ COPY src ./src
 
 RUN npx webpack --config webpack.worker.config.js
 
-FROM golang:1.14.6-buster as deps
+FROM golang:1.14.6-alpine as deps
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    wget \
-    unzip \
-    ca-certificates \
-  && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache wget unzip
 
 RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/download/1.7.0/findomain-linux -O /usr/bin/findomain && chmod +x /usr/bin/findomain
 
@@ -30,42 +26,25 @@ RUN go mod init crossfeed-worker
 
 RUN go get github.com/facebookincubator/nvdtools/...@v0.1.4
 
-FROM node:14-buster-slim
+FROM node:14-alpine3.14
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    curl \
-    git \
-    bzip2 \
-    build-essential \
-    libssl-dev libreadline-dev zlib1g-dev \
-    libncurses5-dev libgdbm-dev libnss3-dev libsqlite3-dev libffi-dev \
-    procps \
-  && rm -rf /var/lib/apt/lists/*
-
-# Install Python 3.8.10
-RUN curl -O https://www.python.org/ftp/python/3.8.10/Python-3.8.10.tar.xz && \
-  tar -xf Python-3.8.10.tar.xz && \
-  cd Python-3.8.10 && \
-  ./configure --enable-optimizations && \
-  make -j4 && \
-  make install
+RUN apk add --update --no-cache wget build-base curl git unzip openssl-dev linux-headers python3=3.9.5-r1 python3-dev py3-pip ruby=2.7.4-r0 ruby-dev zlib-dev libffi-dev libxml2-dev libxslt-dev
 
 RUN npm install -g pm2@4 wait-port@0.2.9
 
-# Install intrigue ident v2.0.2
+# Install intrigue ident v2.0.2. Intrigue ident supports Ruby 2.6.5, but we have 2.7.4, so we update the required Ruby version in the Gemfile so that we can run it with Ruby 2.7.4.
 
-ENV PATH="/root/.rbenv/shims:/root/.rbenv/bin:${PATH}"
-RUN curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer | bash
-RUN rbenv install 2.6.5 && rbenv global 2.6.5 && gem install bundler:2.1.4
-RUN git clone https://github.com/intrigueio/intrigue-ident.git && cd intrigue-ident && git checkout e97f974417147df8fa27dcd8f73b7efbb587b942 && bundle install --jobs=4
+RUN gem install bundler:2.1.4
+RUN git clone https://github.com/intrigueio/intrigue-ident.git && cd intrigue-ident && git checkout e97f974417147df8fa27dcd8f73b7efbb587b942 && sed -i 's/2.6.5/2.7.4/g' Gemfile && sed -i 's/2.6.5p114/2.7.4/g' Gemfile.lock && bundle install --jobs=4
 RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/bin/intrigue-ident && chmod +x /usr/bin/intrigue-ident
 
 # Python dependencies
 
 COPY worker/requirements.txt worker/requirements.txt
-RUN pip3 install --no-cache-dir -r worker/requirements.txt
+
+RUN pip install --no-cache-dir -r worker/requirements.txt
 
 COPY worker worker
 
