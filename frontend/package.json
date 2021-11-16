@@ -69,7 +69,7 @@
     "ts-jest": "^26.4.0",
     "typescript": "^3.9.7",
     "universal-cookie": "^4.0.4",
-    "uswds": "^2.9.0"
+    "uswds": "^2.12.2"
   },
   "scripts": {
     "start": "react-scripts start",
