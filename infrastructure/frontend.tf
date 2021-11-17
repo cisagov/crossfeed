@@ -56,6 +56,9 @@ resource "aws_lambda_function" "security_headers" {
   handler       = "index.handler"
   runtime       = "nodejs12.x"
   publish       = true
+  tracing_config {
+    mode = "Active"
+  }
 }
 
 resource "aws_iam_role" "frontend_lambda_iam" {
@@ -118,6 +121,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     max_ttl                = 0
   }
 
+  logging_config {
+    include_cookies = false
+    bucket          = aws_s3_bucket.logging_bucket.id
+    prefix          = "frontend_cloudfront/"
+  }
+
   ordered_cache_behavior {
     path_pattern     = "/static/*"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -171,5 +180,27 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     acm_certificate_arn      = var.frontend_cert_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2019"
+  }
+
+  web_acl_id = aws_wafv2_web_acl.default.id
+}
+
+resource "aws_wafv2_web_acl" "default" {
+  name  = "crossfeed-${var.stage}-default-acl-rule"
+  scope = "CLOUDFRONT"
+
+  default_action {
+    allow {}
+  }
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "crossfeed-${var.stage}-default-acl-metric"
+    sampled_requests_enabled   = true
   }
 }
