@@ -109,7 +109,7 @@ CONFIG
 resource "aws_cloudwatch_log_group" "es_application" {
   name              = "crossfeed-${var.stage}-es-application"
   retention_in_days = 3653
-  kms_key_id        = aws_kms_key.key.id
+  kms_key_id        = aws_kms_key.key.arn
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -119,7 +119,7 @@ resource "aws_cloudwatch_log_group" "es_application" {
 resource "aws_cloudwatch_log_group" "es_index_slow" {
   name              = "crossfeed-${var.stage}-es-index-slow"
   retention_in_days = 3653
-  kms_key_id        = aws_kms_key.key.id
+  kms_key_id        = aws_kms_key.key.arn
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -129,7 +129,7 @@ resource "aws_cloudwatch_log_group" "es_index_slow" {
 resource "aws_cloudwatch_log_group" "es_search_slow" {
   name              = "crossfeed-${var.stage}-es-search-slow"
   retention_in_days = 3653
-  kms_key_id        = aws_kms_key.key.id
+  kms_key_id        = aws_kms_key.key.arn
   tags = {
     Project = var.project
     Stage   = var.stage

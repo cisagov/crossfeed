@@ -166,7 +166,7 @@ resource "aws_ecs_service" "matomo" {
 resource "aws_cloudwatch_log_group" "matomo" {
   name              = var.matomo_ecs_log_group_name
   retention_in_days = 3653
-  kms_key_id        = aws_kms_key.key.id
+  kms_key_id        = aws_kms_key.key.arn
   tags = {
     Project = var.project
     Stage   = var.stage
