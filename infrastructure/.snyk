@@ -7,4 +7,8 @@ ignore:
         reason: >-
           Security groups are intended to allow access to anywhere in the
           Internet
+  SNYK-CC-AWS-414:
+    - '*':
+        reason: >-
+          AWS RDS MariaDB (used for Matomo) does not support IAM authentication.
 patch: {}
