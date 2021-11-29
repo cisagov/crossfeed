@@ -1,4 +1,3 @@
-# Base image is a pinned version of node:14-alpine3.14 -- see https://hub.docker.com/layers/node/library/node/14-alpine3.14/images/sha256-8fd4c138ab5ea9375285354d5ff2140d275c6d47b24b0651dea6ee0733abbdf7?context=explore.
 FROM node:14-alpine3.14 as build
 
 WORKDIR /app
@@ -27,7 +26,6 @@ RUN go mod init crossfeed-worker
 
 RUN go get github.com/facebookincubator/nvdtools/...@v0.1.4
 
-# Base image is a pinned version of node:14-alpine3.14 -- see https://hub.docker.com/layers/node/library/node/14-alpine3.14/images/sha256-8fd4c138ab5ea9375285354d5ff2140d275c6d47b24b0651dea6ee0733abbdf7?context=explore.
 FROM node:14-alpine3.14
 
 WORKDIR /app
