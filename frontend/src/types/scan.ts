@@ -7,6 +7,7 @@ export interface Scan {
   frequency: number;
   lastRun: string;
   isGranular: boolean;
+  isUserModifiable: boolean;
   isSingleScan: boolean;
   organizations: [];
   tags: OrganizationTag[];

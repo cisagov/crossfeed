@@ -216,6 +216,9 @@ class NewScan {
   isGranular: boolean;
 
   @IsBoolean()
+  isUserModifiable: boolean;
+
+  @IsBoolean()
   isSingleScan: boolean;
 
   @IsUUID('all', { each: true })
@@ -397,16 +400,17 @@ export const list = wrapHandler(async (event) => {
  *
  * /granularScans:
  *  get:
- *    description: List granular scans. These scans are retrieved by a standard organization admin user, who is then able to enable or disable these particular scans.
+ *    description: List user-modifiable scans. These scans are retrieved by a standard organization admin user, who is then able to enable or disable these particular scans.
  *    tags:
  *    - Scans
  */
 export const listGranular = wrapHandler(async (event) => {
   await connectToDatabase();
   const scans = await Scan.find({
-    select: ['id', 'name', 'isGranular'],
+    select: ['id', 'name', 'isUserModifiable'],
     where: {
       isGranular: true,
+      isUserModifiable: true,
       isSingleScan: false
     }
   });

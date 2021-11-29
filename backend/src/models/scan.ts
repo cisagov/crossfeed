@@ -56,6 +56,17 @@ export class Scan extends BaseEntity {
   })
   isGranular: boolean;
 
+  /** Whether the scan is user-modifiable. User-modifiable
+   * scans are granular scans that can be viewed and toggled on/off by
+   * organization admins themselves.
+   */
+  @Column({
+    type: 'boolean',
+    default: false,
+    nullable: true
+  })
+  isUserModifiable: boolean;
+
   /**
    * If the scan is granular, specifies organizations that the
    * scan will run on.
