@@ -61,7 +61,7 @@
     "nock": "^13.0.4",
     "prettier": "^2.1.2",
     "sentencer": "^0.2.1",
-    "serverless": "^2.66.0",
+    "serverless": "^2.67.0",
     "serverless-domain-manager": "^5.0.0",
     "serverless-webpack": "^5.5.5",
     "supertest": "^5.0.0",
