@@ -100,6 +100,14 @@ make plan
 make apply
 ```
 
+**Note:** You will need to manually use the AWS CLI to enable MFA Delete on Terraform-managed S3 buckets (frontend, logging, and backend) because Terraform doesn't support configuring this manually (see https://github.com/hashicorp/terraform-provider-aws/issues/629). See https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiFactorAuthenticationDelete.html for instructions. Sample commands after signing in as the root user:
+
+```
+aws s3api put-bucket-versioning --bucket cisa-crossfeed-staging-logging --versioning-configuration Status=Enabled,MFADelete=Enabled --mfa "SERIAL 123456"
+aws s3api put-bucket-versioning --bucket cisa-crossfeed-staging-exports --versioning-configuration Status=Enabled,MFADelete=Enabled --mfa "SERIAL 123456"
+aws s3api put-bucket-versioning --bucket staging.crossfeed.cyber.dhs.gov --versioning-configuration Status=Enabled,MFADelete=Enabled --mfa "SERIAL 123456"
+```
+
 ### Configure User Agent and request signing
 
 Crossfeed's workers, when performing requets, can optionally send a User Agent identifying the requestor as Crossfeed
