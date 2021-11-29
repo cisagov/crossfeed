@@ -432,7 +432,7 @@ describe('organizations', () => {
         arguments: {},
         frequency: 999999,
         isGranular: true,
-        isUserModifiable: true,
+        isUserModifiable: true
       }).save();
       const response = await request(app)
         .post(
@@ -479,7 +479,7 @@ describe('organizations', () => {
         frequency: 999999,
         organizations: [organization],
         isGranular: true,
-        isUserModifiable: true,
+        isUserModifiable: true
       }).save();
       const response = await request(app)
         .post(
@@ -511,14 +511,14 @@ describe('organizations', () => {
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
-        isPassive: false,
+        isPassive: false
       }).save();
       const scan = await Scan.create({
         name: 'censys',
         arguments: {},
         frequency: 999999,
         isGranular: true,
-        isUserModifiable: true,
+        isUserModifiable: true
       }).save();
       const response = await request(app)
         .post(
@@ -547,7 +547,7 @@ describe('organizations', () => {
         arguments: {},
         frequency: 999999,
         isGranular: true,
-        isUserModifiable: true,
+        isUserModifiable: true
       }).save();
       const response = await request(app)
         .post(
@@ -591,7 +591,7 @@ describe('organizations', () => {
         name: 'censys',
         arguments: {},
         frequency: 999999,
-        isGranular: true,
+        isGranular: true
       }).save();
       const response = await request(app)
         .post(
@@ -606,7 +606,7 @@ describe('organizations', () => {
         .send({
           enabled: true
         })
-        .expect(403);
+        .expect(404);
     });
   });
   describe('approveRole', () => {
