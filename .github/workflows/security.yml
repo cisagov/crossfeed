@@ -15,7 +15,7 @@ jobs:
         working-directory: ./backend
     steps:
       - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.4.1
+      - uses: actions/setup-node@v2.5.0
         with:
           node-version: '14'
       - name: Restore npm cache
@@ -36,7 +36,7 @@ jobs:
         working-directory: ./frontend
     steps:
       - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.4.1
+      - uses: actions/setup-node@v2.5.0
         with:
           node-version: '15'
       - name: Restore npm cache
@@ -57,7 +57,7 @@ jobs:
         working-directory: ./docs
     steps:
       - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.4.1
+      - uses: actions/setup-node@v2.5.0
         with:
           node-version: '14'
       - name: Restore npm cache
