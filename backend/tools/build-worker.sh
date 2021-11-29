@@ -6,4 +6,4 @@
 
 set -e
 
-DOCKER_BUILDKIT=1 docker build -t crossfeed-worker -f Dockerfile.worker .
+DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build -t crossfeed-worker -f Dockerfile.worker .
