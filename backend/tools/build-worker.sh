@@ -6,4 +6,4 @@
 
 set -e
 
-docker build -t crossfeed-worker -f Dockerfile.worker .
+DOCKER_BUILDKIT=1 docker build -t crossfeed-worker -f Dockerfile.worker .
