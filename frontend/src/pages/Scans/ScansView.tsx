@@ -156,6 +156,7 @@ const ScansView: React.FC = () => {
     frequency: 1,
     frequencyUnit: 'minute',
     isGranular: false,
+    isUserModifiable: false,
     isSingleScan: false,
     tags: []
   });

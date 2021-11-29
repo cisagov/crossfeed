@@ -304,7 +304,7 @@ class UpdateBody {
  *
  * /organizations/{id}/granularScans/{scanId}/update:
  *  post:
- *    description: Enable or disable a scan for a particular organization.
+ *    description: Enable or disable a scan for a particular organization; this endpoint can be called by organization admins and only works for user-modifiable scans.
  *    parameters:
  *      - in: path
  *        name: id
@@ -332,7 +332,8 @@ export const updateScan = wrapHandler(async (event) => {
   }
   const scan = await Scan.findOne({
     id: scanId,
-    isGranular: true
+    isGranular: true,
+    isUserModifiable: true
   });
   const organization = await Organization.findOne(
     {
