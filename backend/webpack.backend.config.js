@@ -23,7 +23,7 @@ module.exports = {
   },
   plugins: [
     new webpack.IgnorePlugin(/^pg-native$/),
-    new webpack.IgnorePlugin(/^canvas$/), // imported by jsdom from simple-wapplyzer, not used so we can ignore.
+    new webpack.IgnorePlugin(/^canvas$/) // imported by jsdom from simple-wapplyzer, not used so we can ignore.
   ],
   resolve: {
     modules: ['node_modules', 'scripts'],
