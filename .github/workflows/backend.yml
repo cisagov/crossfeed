@@ -40,7 +40,7 @@ jobs:
       - name: Lint
         run: npm run lint
   test:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v2.4.0
