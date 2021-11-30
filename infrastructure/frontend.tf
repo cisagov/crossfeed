@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "frontend_bucket" {
 
   versioning {
     enabled    = true
-    mfa_delete = true
+    mfa_delete = false
   }
 
   logging {

@@ -38,7 +38,7 @@ resource "aws_s3_bucket" "logging_bucket" {
 
   versioning {
     enabled    = true
-    mfa_delete = true
+    mfa_delete = false
   }
 
   logging {
