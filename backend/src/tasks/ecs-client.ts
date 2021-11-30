@@ -1,3 +1,4 @@
+import type Docker from 'dockerode';
 import { ECS, CloudWatchLogs } from 'aws-sdk';
 import { SCAN_SCHEMA } from '../api/scans';
 
