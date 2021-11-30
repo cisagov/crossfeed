@@ -60,7 +60,7 @@ export const ScanTasksView: React.FC = () => {
   const killScanTask = async (index: number) => {
     try {
       const row = scanTasks[index];
-      await apiPost(`/scan-tasks/${row.id}/kill`, {});
+      await apiPost(`/scan-tasks/${row.id}/kill`, { body: {} });
       setScanTasks(
         Object.assign([], scanTasks, {
           [index]: {

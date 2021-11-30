@@ -209,7 +209,7 @@ export const ScanForm: React.FC<{
         <>
           <Checkbox
             id="isUserModifiable"
-            label="Allow organization admins to toggle this scan on/off"
+            label="Allow any organization's admins to toggle this scan on/off"
             name="isUserModifiable"
             checked={values.isUserModifiable}
             onChange={(e) => onChange('isUserModifiable', e.target.checked)}

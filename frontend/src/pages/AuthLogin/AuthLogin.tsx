@@ -62,7 +62,9 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
     try {
-      const { redirectUrl, state, nonce } = await apiPost('/auth/login', {});
+      const { redirectUrl, state, nonce } = await apiPost('/auth/login', {
+        body: {}
+      });
       localStorage.setItem('state', state);
       localStorage.setItem('nonce', nonce);
       window.location.href = redirectUrl;
