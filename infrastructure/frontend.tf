@@ -123,7 +123,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   logging_config {
     include_cookies = false
-    bucket          = aws_s3_bucket.logging_bucket.id
+    bucket          = aws_s3_bucket.logging_bucket.bucket_domain_name
     prefix          = "frontend_cloudfront/"
   }
 
@@ -182,7 +182,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     minimum_protocol_version = "TLSv1.2_2019"
   }
 
-  web_acl_id = aws_wafv2_web_acl.default.id
+  web_acl_id = aws_wafv2_web_acl.default.arn
 }
 
 resource "aws_wafv2_web_acl" "default" {
