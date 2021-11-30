@@ -3,7 +3,16 @@ title: Quickstart
 sidenav: user-guide
 ---
 
-**Note:** While CISA's instance of Crossfeed is currently not accepting enrollment, it is developed as an open-source tool available on GitHub. The below instructions describe how users can sign up if you stand up your own instance of Crossfeed.
+<p>
+<div class="usa-alert usa-alert--info">
+  <div class="usa-alert__body">
+  <h4 class="usa-alert__heading">Note</h4>
+    <p class="usa-alert__text">
+      While CISA's instance of Crossfeed is currently not accepting public enrollment, it is developed as an open-source tool available on GitHub. The below instructions describe how users can use Crossfeed if granted access to CISA's instance of Crossfeed. If you are a developer and want to set up your own Crossfeed instance, see <a href="/dev/own-instance/">Creating your own instance of Crossfeed</a>.
+    </p>
+  </div>
+</div>
+</p>
 
 ### Accepting an Invite
 
@@ -18,7 +27,33 @@ and risk summary on the "Overview" pane.
 
 ![dashboard](./img/dashboard.png)
 
-### View assets
+### Inviting others
+
+To invite others to your Crossfeed organization, go to My Account -> Manage Organizations and select your organization. Then go to the "Members" tab.
+
+You can add additional users to invite to Crossfeed. All users can view your organization's data, including domains and vulnerabilities. You have two options:
+
+- **Standard:** allows the user only view access to data.
+- **Administrator:** allows the user to view data, invite or remove other users, and turn on / off scans.
+
+Once you invite a user, they will receive an invitation email with instructions on how to sign up if they do not already have a Crossfeed account.
+
+![org members](./img/org members.png)
+
+### Adding root domains
+
+Crossfeed stores a list of **root domains** for each organization. Each root domain and all its subdomains will be scanned by Crossfeed. For example:
+
+- A root domain of **cyber.dhs.gov** will scan cyber.dhs.gov, as well as other subdomains such as www.crossfeed.cyber.dhs.gov and staging.crossfeed.cyber.dhs.gov.
+- A root domain of **cisa.gov** will scan cisa.gov as well as all subdomains, including www.cisa.gov and presidentscup.cisa.gov.
+
+To view which root domains are assigned to your organization, go to My Account -> Manage Organizations and select your organization. Navigate to the "Settings" tab.
+
+If you would like to modify the root domains being scanned for your organization, please send an email to vulnerability@cisa.dhs.gov with the requested changes.
+
+![org settings](./img/org settings.png)
+
+### Viewing assets
 
 You can search for anything, which returns search results, then filter those results. Each search result represents a domain, which can have ports, products, and vulnerabilities associated with it.
 
@@ -40,24 +75,17 @@ Finally, you can click on a vulnerability to view more information about it, suc
 
 ![vuln detail](./img/vuln detail.png)
 
-### Management
+### Tailoring data sources
 
-Administrators have a few additional options for management. All data and users are organized into **organizations** in Crossfeed.
+Crossfeed has two types of scans: active and passive.
 
-![org list](./img/org list.png)
+- **Passive:** Querying data in a non-invasive manner. This includes querying an internal data source or third-party API, or light web traffic (e.g. visiting the index web page of a domain).
+- **Active:** Actively making network requests to target assets in order to identify vulnerabilities. All scans, even if used to detect vulnerabilities, are designed to not be disruptive and do not go beyond benign vulnerability payloads. This also includes more heavy traffic operations such as directory brute forcing.
 
-Each organization has a list of root domains configured, which defines the scope of the assets under it, and can have users (with role either `admin` or `user`) assigned to it.
+You can turn on / off some scans for your organization. To do so, go to My Account -> Manage Organizations and select your organization. Navigate to the "Scans" tab. Here, you can toggle different scans on or off.
 
-![org detail](./img/org detail.png)
+![org scans](./img/org scans.png)
 
-The "Manage Users" screen lets you manage all users who have access to Crossfeed, across all organizations.
+If you would like only passive scans to run on your organization (and disable active scans), go to My Account -> Manage Organizations and select your organization. Navigate to the "Settings" tab. You can then turn on "Passive Mode" to only enable passive scans on your organization.
 
-![user list](./img/user list.png)
-
-Finally, you can view configured scans on the "Scans" tab. These scans allow you to configure the different data sources that feed into Crossfeed.
-
-![scan list](./img/scan list.png)
-
-<!-- Once you are logged in, you can view the domains of your organization on the
-"Dashboard" page. The dashboard shows all domains and subdomains pertaining
-to the user's current organization and shows the detected services for each domain. -->
+![org settings](./img/org settings.png)
