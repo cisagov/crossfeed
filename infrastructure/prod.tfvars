@@ -50,5 +50,5 @@ matomo_db_name                    = "crossfeed-matomo-prod"
 matomo_db_instance_class          = "db.t3.micro"
 matomo_ecs_role_name              = "crossfeed-matomo-prod"
 es_instance_type                  = "t3.medium.elasticsearch"
-es_instance_count                 = 2
-es_instance_volume_size           = 200
+es_instance_count                 = 3
+es_instance_volume_size           = 1000
