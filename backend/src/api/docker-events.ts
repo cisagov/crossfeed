@@ -1,4 +1,3 @@
-import type Docker from 'dockerode';
 import {
   handler as updateScanTaskStatus,
   EventBridgeEvent
@@ -12,7 +11,7 @@ import {
  */
 export const listenForDockerEvents = async () => {
   const Docker = require('dockerode');
-  const docker: Docker = new Docker();
+  const docker: any = new Docker();
   const stream = await docker.getEvents();
   stream.on('data', async (chunk: any) => {
     const message = JSON.parse(Buffer.from(chunk).toString('utf-8'));

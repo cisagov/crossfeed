@@ -1,4 +1,3 @@
-import type Docker from 'dockerode';
 import { ECS, CloudWatchLogs } from 'aws-sdk';
 import { SCAN_SCHEMA } from '../api/scans';
 
@@ -37,7 +36,7 @@ const toSnakeCase = (input) => input.replace(/ /g, '-');
 class ECSClient {
   ecs?: ECS;
   cloudWatchLogs?: CloudWatchLogs;
-  docker?: Docker;
+  docker?: any;
   isLocal: boolean;
 
   constructor(isLocal?: boolean) {
