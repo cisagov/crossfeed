@@ -192,7 +192,7 @@ const ScansView: React.FC = () => {
   const deleteRow = async (index: number) => {
     try {
       const row = scans[index];
-      await apiDelete(`/scans/${row.id}`);
+      await apiDelete(`/scans/${row.id}`, { body: {} });
       setScans(scans.filter((scan) => scan.id !== row.id));
     } catch (e) {
       setErrors({

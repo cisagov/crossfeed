@@ -54,7 +54,7 @@ const Feeds = () => {
 
   const deleteSearch = async (id: string) => {
     try {
-      await apiDelete(`/saved-searches/${id}`);
+      await apiDelete(`/saved-searches/${id}`, { body: {} });
       setSavedSearches(savedSearches.filter((search) => search.id !== id));
     } catch (e) {
       console.log(e);

@@ -141,7 +141,7 @@ export const Users: React.FC = () => {
   const deleteRow = async (index: number) => {
     try {
       const row = users[index];
-      await apiDelete(`/users/${row.id}`);
+      await apiDelete(`/users/${row.id}`, { body: {} });
       setUsers(users.filter((user) => user.id !== row.id));
     } catch (e) {
       setErrors({
