@@ -305,7 +305,7 @@ export const Organization: React.FC = () => {
     try {
       await apiPost(
         `/organizations/${organization?.id}/roles/${organization?.userRoles[user].id}/approve`,
-        {}
+        { body: {} }
       );
       const copy = userRoles.map((role, id) =>
         id === user ? { ...role, approved: true } : role
@@ -320,7 +320,7 @@ export const Organization: React.FC = () => {
     try {
       await apiPost(
         `/organizations/${organization?.id}/roles/${userRoles[user].id}/remove`,
-        {}
+        { body: {} }
       );
       const copy = userRoles.filter((_, ind) => ind !== user);
       setUserRoles(copy);

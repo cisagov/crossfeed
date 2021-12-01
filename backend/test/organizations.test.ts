@@ -420,7 +420,7 @@ describe('organizations', () => {
     });
   });
   describe('update', () => {
-    it('enabling a scan by org admin for an organization should succeed', async () => {
+    it('enabling a user-modifiable scan by org admin for an organization should succeed', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
@@ -431,7 +431,8 @@ describe('organizations', () => {
         name: 'censys',
         arguments: {},
         frequency: 999999,
-        isGranular: true
+        isGranular: true,
+        isUserModifiable: true
       }).save();
       const response = await request(app)
         .post(
@@ -465,7 +466,7 @@ describe('organizations', () => {
         ])
       );
     });
-    it('disabling a scan by org admin for an organization should succeed', async () => {
+    it('disabling a user-modifiable scan by org admin for an organization should succeed', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
@@ -477,7 +478,8 @@ describe('organizations', () => {
         arguments: {},
         frequency: 999999,
         organizations: [organization],
-        isGranular: true
+        isGranular: true,
+        isUserModifiable: true
       }).save();
       const response = await request(app)
         .post(
@@ -504,7 +506,7 @@ describe('organizations', () => {
       expect(updated.name).toEqual(organization.name);
       expect(updated.granularScans).toEqual([]);
     });
-    it('enabling a scan by org user for an organization should fail', async () => {
+    it('enabling a user-modifiable scan by org user for an organization should fail', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
@@ -514,7 +516,9 @@ describe('organizations', () => {
       const scan = await Scan.create({
         name: 'censys',
         arguments: {},
-        frequency: 999999
+        frequency: 999999,
+        isGranular: true,
+        isUserModifiable: true
       }).save();
       const response = await request(app)
         .post(
@@ -531,7 +535,7 @@ describe('organizations', () => {
         })
         .expect(403);
     });
-    it('enabling a scan by globalAdmin for an organization should succeed', async () => {
+    it('enabling a user-modifiable scan by globalAdmin for an organization should succeed', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
@@ -542,7 +546,8 @@ describe('organizations', () => {
         name: 'censys',
         arguments: {},
         frequency: 999999,
-        isGranular: true
+        isGranular: true,
+        isUserModifiable: true
       }).save();
       const response = await request(app)
         .post(
@@ -574,6 +579,34 @@ describe('organizations', () => {
           })
         ])
       );
+    });
+    it('enabling a non-user-modifiable scan by org admin for an organization should fail', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const scan = await Scan.create({
+        name: 'censys',
+        arguments: {},
+        frequency: 999999,
+        isGranular: true
+      }).save();
+      const response = await request(app)
+        .post(
+          `/organizations/${organization.id}/granularScans/${scan.id}/update`
+        )
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [{ org: organization.id, role: 'admin' }]
+          })
+        )
+        .send({
+          enabled: true
+        })
+        .expect(404);
     });
   });
   describe('approveRole', () => {

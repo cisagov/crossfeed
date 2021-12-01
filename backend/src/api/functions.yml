@@ -9,4 +9,4 @@ api:
         path: /{any+} # this matches any path, the token 'any' doesn't mean anything special
         method: ANY
         cors: true
-  provisionedConcurrency: 1
+  # provisionedConcurrency: 1

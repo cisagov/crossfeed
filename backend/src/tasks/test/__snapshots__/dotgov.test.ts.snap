@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dotgov basic test 1`] = `
+Array [
+  Object {
+    "name": "Administrative Conference of the United States (dotgov)",
+    "rootDomains": Array [
+      "acus.gov",
+    ],
+  },
+  Object {
+    "name": "Advisory Council on Historic Preservation (dotgov)",
+    "rootDomains": Array [
+      "achp.gov",
+      "preserveamerica.gov",
+    ],
+  },
+  Object {
+    "name": "American Battle Monuments Commission (dotgov)",
+    "rootDomains": Array [
+      "abmc.gov",
+      "abmcscholar.gov",
+      "nationalmall.gov",
+    ],
+  },
+  Object {
+    "name": "AMTRAK (dotgov)",
+    "rootDomains": Array [
+      "amtrakoig.gov",
+    ],
+  },
+  Object {
+    "name": "Appalachian Regional Commission (dotgov)",
+    "rootDomains": Array [
+      "arc.gov",
+    ],
+  },
+  Object {
+    "name": "Appraisal Subcommittee (dotgov)",
+    "rootDomains": Array [
+      "asc.gov",
+    ],
+  },
+  Object {
+    "name": "Armed Forces Retirement Home (dotgov)",
+    "rootDomains": Array [
+      "afrh.gov",
+    ],
+  },
+  Object {
+    "name": "Barry Goldwater Scholarship and Excellence in Education Foundation (dotgov)",
+    "rootDomains": Array [
+      "goldwaterscholarship.gov",
+    ],
+  },
+]
+`;

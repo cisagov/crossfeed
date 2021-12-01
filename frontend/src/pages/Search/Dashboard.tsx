@@ -509,6 +509,7 @@ const useStyles = makeStyles(() => ({
     flexFlow: 'row nowrap',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    boxShadow: '0px -1px 2px rgba(0, 0, 0, 0.15)',
     padding: '1rem 2rem',
     '& > span': {
       marginRight: '2rem'

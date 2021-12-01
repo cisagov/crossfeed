@@ -49,6 +49,12 @@ interface ScanSchema {
 }
 
 export const SCAN_SCHEMA: ScanSchema = {
+  testProxy: {
+    type: 'fargate',
+    isPassive: false,
+    global: true,
+    description: 'Not a real scan, used to test proxy'
+  },
   censys: {
     type: 'fargate',
     isPassive: true,
@@ -124,6 +130,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     cpu: '1024',
     memory: '8192',
     description: 'Matches detected software versions to CVEs from NIST NVD'
+  },
+  dotgov: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    description:
+      'Create organizations based on root domains from the dotgov registrar dataset. All organizations are created with the "dotgov" tag and have a " (dotgov)" suffix added to their name.'
   },
   searchSync: {
     type: 'fargate',
@@ -201,6 +214,9 @@ class NewScan {
 
   @IsBoolean()
   isGranular: boolean;
+
+  @IsBoolean()
+  isUserModifiable: boolean;
 
   @IsBoolean()
   isSingleScan: boolean;
@@ -384,16 +400,17 @@ export const list = wrapHandler(async (event) => {
  *
  * /granularScans:
  *  get:
- *    description: List granular scans. These scans are retrieved by a standard organization admin user, who is then able to enable or disable these particular scans.
+ *    description: List user-modifiable scans. These scans are retrieved by a standard organization admin user, who is then able to enable or disable these particular scans.
  *    tags:
  *    - Scans
  */
 export const listGranular = wrapHandler(async (event) => {
   await connectToDatabase();
   const scans = await Scan.find({
-    select: ['id', 'name', 'isGranular'],
+    select: ['id', 'name', 'isUserModifiable'],
     where: {
       isGranular: true,
+      isUserModifiable: true,
       isSingleScan: false
     }
   });

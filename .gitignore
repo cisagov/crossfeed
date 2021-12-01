@@ -44,3 +44,5 @@ minio-data
 
 **.pyc
 infrastructure/lambdas/security_headers.zip
+*.hcl
+.iac-data

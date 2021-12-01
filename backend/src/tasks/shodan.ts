@@ -98,6 +98,7 @@ export const handler = async (commandOptions: CommandOptions) => {
                 port: service.port,
                 lastSeen: new Date(Date.now()),
                 banner: sanitizeStringField(service.data),
+                serviceSource: 'shodan',
                 shodanResults: {
                   product: service.product,
                   version: service.version,

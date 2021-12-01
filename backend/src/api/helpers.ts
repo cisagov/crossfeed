@@ -15,7 +15,7 @@ export const validateBody = async <T>(
   body: string | null,
   validateOptions?: ValidationOptions
 ): Promise<T> => {
-  const raw: T = plainToClass(obj, JSON.parse(body ?? '{}'));
+  const raw: any = plainToClass(obj, JSON.parse(body ?? '{}'));
   await validateOrReject(raw, {
     ...validateOptions,
     whitelist: true,

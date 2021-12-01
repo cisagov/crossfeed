@@ -78,13 +78,14 @@ describe('scan', () => {
     // });
   });
   describe('listGranular', () => {
-    it('list by regular user should return all granular scans', async () => {
+    it('list by regular user should return all granular, user-modifiable scans', async () => {
       const name = 'test-' + Math.random();
       const scan1 = await Scan.create({
         name,
         arguments: {},
         frequency: 999999,
         isGranular: false,
+        isUserModifiable: false,
         isSingleScan: false
       }).save();
       const scan2 = await Scan.create({
@@ -92,6 +93,7 @@ describe('scan', () => {
         arguments: {},
         frequency: 999999,
         isGranular: true,
+        isUserModifiable: true,
         isSingleScan: false
       }).save();
       const response = await request(app)
@@ -113,6 +115,7 @@ describe('scan', () => {
         arguments: {},
         frequency: 999999,
         isGranular: true,
+        isUserModifiable: true,
         isSingleScan: false
       }).save();
       const scan2 = await Scan.create({
@@ -158,6 +161,7 @@ describe('scan', () => {
           frequency,
           isGranular: false,
           organizations: [],
+          isUserModifiable: false,
           isSingleScan: false,
           tags: []
         })
@@ -206,6 +210,7 @@ describe('scan', () => {
           frequency,
           isGranular: true,
           organizations: [organization.id],
+          isUserModifiable: false,
           isSingleScan: false,
           tags: [tag]
         })
@@ -239,6 +244,7 @@ describe('scan', () => {
           frequency,
           isGranular: false,
           organizations: [],
+          isUserModifiable: false,
           isSingleScan: false
         })
         .expect(403);
@@ -269,6 +275,7 @@ describe('scan', () => {
           frequency,
           isGranular: false,
           organizations: [],
+          isUserModifiable: false,
           isSingleScan: false,
           tags: []
         })
@@ -314,6 +321,7 @@ describe('scan', () => {
           isGranular: true,
           organizations: [organization.id],
           isSingleScan: false,
+          isUserModifiable: true,
           tags: [tag]
         })
         .expect(200);
@@ -322,6 +330,7 @@ describe('scan', () => {
       expect(response.body.arguments).toEqual(arguments_);
       expect(response.body.frequency).toEqual(frequency);
       expect(response.body.isGranular).toEqual(true);
+      expect(response.body.isUserModifiable).toEqual(true);
       expect(response.body.organizations).toEqual([
         {
           id: organization.id
