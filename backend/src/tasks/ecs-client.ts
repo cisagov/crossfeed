@@ -1,6 +1,5 @@
 import { ECS, CloudWatchLogs } from 'aws-sdk';
 import { SCAN_SCHEMA } from '../api/scans';
-import * as Docker from 'dockerode';
 
 export interface CommandOptions {
   /** A list of organizations (id and name) that this
@@ -37,7 +36,7 @@ const toSnakeCase = (input) => input.replace(/ /g, '-');
 class ECSClient {
   ecs?: ECS;
   cloudWatchLogs?: CloudWatchLogs;
-  docker?: Docker;
+  docker?: any;
   isLocal: boolean;
 
   constructor(isLocal?: boolean) {
@@ -45,6 +44,7 @@ class ECSClient {
       isLocal ??
       (process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false);
     if (this.isLocal) {
+      const Docker = require('dockerode');
       this.docker = new Docker();
     } else {
       this.ecs = new ECS();

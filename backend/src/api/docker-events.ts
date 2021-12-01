@@ -1,4 +1,3 @@
-import * as Docker from 'dockerode';
 import {
   handler as updateScanTaskStatus,
   EventBridgeEvent
@@ -11,7 +10,8 @@ import {
  * This function is only used for runs during local development in order to simulate EventBridge events.
  */
 export const listenForDockerEvents = async () => {
-  const docker = new Docker();
+  const Docker = require('dockerode');
+  const docker: any = new Docker();
   const stream = await docker.getEvents();
   stream.on('data', async (chunk: any) => {
     const message = JSON.parse(Buffer.from(chunk).toString('utf-8'));
