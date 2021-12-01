@@ -749,31 +749,31 @@ const Risk: React.FC = (props) => {
               ></VulnerabilityCard>
 
               <div id="mapWrapper">
-                {user?.userType === 'globalView' ||
-                  (user?.userType === 'globalAdmin' && (
-                    <>
-                      <MapCard
-                        title={'State Vulnerabilities'}
-                        geoUrl={geoStateUrl}
-                        findFn={(geo) =>
-                          stats?.vulnerabilities.byOrg.find(
-                            (p) => p.label === geo.properties.name
-                          )
-                        }
-                        type={'state'}
-                      ></MapCard>
-                      <MapCard
-                        title={'County Vulnerabilities'}
-                        geoUrl={geoStateUrl}
-                        findFn={(geo) =>
-                          stats?.vulnerabilities.byOrg.find(
-                            (p) => p.label === geo.properties.name + ' Counties'
-                          )
-                        }
-                        type={'county'}
-                      ></MapCard>
-                    </>
-                  ))}
+                {(user?.userType === 'globalView' ||
+                  user?.userType === 'globalAdmin') && (
+                  <>
+                    <MapCard
+                      title={'State Vulnerabilities'}
+                      geoUrl={geoStateUrl}
+                      findFn={(geo) =>
+                        stats?.vulnerabilities.byOrg.find(
+                          (p) => p.label === geo.properties.name
+                        )
+                      }
+                      type={'state'}
+                    ></MapCard>
+                    <MapCard
+                      title={'County Vulnerabilities'}
+                      geoUrl={geoStateUrl}
+                      findFn={(geo) =>
+                        stats?.vulnerabilities.byOrg.find(
+                          (p) => p.label === geo.properties.name + ' Counties'
+                        )
+                      }
+                      type={'county'}
+                    ></MapCard>
+                  </>
+                )}
               </div>
             </div>
           </div>
