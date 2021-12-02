@@ -38,6 +38,7 @@ class ECSClient {
   cloudWatchLogs?: CloudWatchLogs;
   docker?: any;
   isLocal: boolean;
+  lastCalledRunTaskDate: Date;
 
   constructor(isLocal?: boolean) {
     this.isLocal =
@@ -50,6 +51,7 @@ class ECSClient {
       this.ecs = new ECS();
       this.cloudWatchLogs = new CloudWatchLogs();
     }
+    this.lastCalledRunTaskDate = new Date();
   }
 
   /**
@@ -57,6 +59,15 @@ class ECSClient {
    * @param commandOptions Command options
    */
   async runCommand(commandOptions: CommandOptions) {
+    // Fargate tasks are throttled so that at most one task can be launched per second. Ensure
+    // we don't reach this limit.
+    // https://stackoverflow.com/questions/53161737/fargate-throttlingexception-rate-exceeded
+    while (
+      new Date().valueOf() - this.lastCalledRunTaskDate.valueOf() <=
+      1000
+    ) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
     const {
       scanId,
       scanName,
@@ -189,7 +200,11 @@ class ECSClient {
           }
         ]
       }
-    } as ECS.RunTaskRequest).promise();
+    } as ECS.RunTaskRequest)
+      .promise()
+      .finally(() => {
+        this.lastCalledRunTaskDate = new Date();
+      });
   }
 
   /**
