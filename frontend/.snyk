@@ -5,7 +5,7 @@ ignore:
   SNYK-JS-CLASSVALIDATOR-1730566:
     - class-validator:
         reason: 'Already remediated by setting forbidUnknownValues: true'
-  SNYK-JS-ANSIREGEX-1583908:
+  SNYK-JS-D3COLOR-1076592:
     - '*':
-        reason: 'Already remediated by upgrading to ansi-regex 5.0.1 in the npm package.json "resolutions" key.'
+        reason: 'Already remediated because no untrusted input can be input as a color, so the vulnerability cannot be triggered in the code'
 patch: {}

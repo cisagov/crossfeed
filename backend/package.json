@@ -86,6 +86,9 @@
     "deploy-worker-prod": "./tools/deploy-worker.sh crossfeed-prod-worker",
     "syncdb": "docker-compose exec -T backend npx ts-node src/tools/run-syncdb.ts"
   },
+  "resolutions": {
+    "ansi-regex": "5.0.1"
+  },
   "author": "",
   "license": "ISC"
 }
