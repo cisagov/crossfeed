@@ -16,7 +16,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "global-agent": "^2.1.12",
+    "global-agent": "^2.2.0",
     "got": "^11.7.0",
     "helmet": "^4.1.1",
     "http-proxy-middleware": "^1.0.5",
