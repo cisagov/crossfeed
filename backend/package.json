@@ -32,7 +32,7 @@
     "pg": "^8.7.1",
     "portscanner": "^2.2.0",
     "serverless-http": "^2.7.0",
-    "ssl-checker": "^2.0.6",
+    "ssl-checker": "^2.0.7",
     "tough-cookie": "^3.0.1",
     "typeorm": "^0.2.41",
     "uuid": "^8.3.2",
