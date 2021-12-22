@@ -23,7 +23,7 @@
     "@types/classnames": "^2.2.9",
     "@types/d3-scale": "^3.0.0",
     "@types/dompurify": "^2.0.4",
-    "@types/faker": "^5.1.2",
+    "@types/faker": "^5.5.9",
     "@types/file-saver": "^2.0.1",
     "@types/jest": "^26.0.14",
     "@types/jwt-decode": "^2.2.1",
