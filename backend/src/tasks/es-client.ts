@@ -1,4 +1,5 @@
 import { Client } from '@elastic/elasticsearch';
+import { Search } from '@elastic/elasticsearch/api/requestParams';
 import { Domain, Webpage } from '../models';
 
 export const DOMAINS_INDEX = 'domains-5';
@@ -106,7 +107,6 @@ class ESClient {
 
   excludeFields = (domain: Domain) => {
     const copy: any = domain;
-    delete copy.ssl;
     delete copy.censysCertificatesResults;
     for (const service in copy.services) {
       delete copy.services[service].censysIpv4Results;
@@ -196,11 +196,17 @@ class ESClient {
    * Searches for domains.
    * @param body Elasticsearch query body.
    */
-  async searchDomains(body: any) {
-    return this.client.search({
+  async searchDomains(body: any, scroll?: string) {
+    let search: Search<Record<string, any>> = {
       index: DOMAINS_INDEX,
       body
-    });
+    };
+    if (scroll) search.scroll = scroll;
+    return this.client.search(search);
+  }
+
+  async scroll(scroll: string, scroll_id: string) {
+    return this.client.scroll({ scroll, scroll_id });
   }
 
   /**
