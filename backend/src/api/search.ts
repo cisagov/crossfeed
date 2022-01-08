@@ -78,7 +78,6 @@ export const fetchAllResults = async (
     results = results.concat(
       searchResults.body.hits.hits.map((res) => res._source as Domain)
     );
-    console.log(results.length);
   }
   return results;
 };
