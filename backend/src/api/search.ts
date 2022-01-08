@@ -49,28 +49,36 @@ export const fetchAllResults = async (
   const client = new ESClient();
   const RESULTS_PER_PAGE = 1000;
   let results: Domain[] = [];
-  let current = 1;
+  let searchResults;
+  const request = buildRequest(
+    {
+      ...filters,
+      resultsPerPage: RESULTS_PER_PAGE
+    },
+    options
+  );
+  try {
+    searchResults = await client.searchDomains(request, '1m');
+  } catch (e) {
+    console.error(e.meta.body.error);
+    return results;
+  }
+  if (searchResults.body.hits.hits.length === 0) return results;
+  results = results.concat(
+    searchResults.body.hits.hits.map((res) => res._source as Domain)
+  );
   while (true) {
-    const request = buildRequest(
-      {
-        ...filters,
-        current,
-        resultsPerPage: RESULTS_PER_PAGE
-      },
-      options
-    );
-    current += 1;
-    let searchResults;
     try {
-      searchResults = await client.searchDomains(request);
+      searchResults = await client.scroll('1m', searchResults.body._scroll_id);
     } catch (e) {
       console.error(e.meta.body.error);
-      continue;
+      return results;
     }
     if (searchResults.body.hits.hits.length === 0) break;
     results = results.concat(
       searchResults.body.hits.hits.map((res) => res._source as Domain)
     );
+    console.log(results.length);
   }
   return results;
 };
