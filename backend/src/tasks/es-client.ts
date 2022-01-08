@@ -197,7 +197,7 @@ class ESClient {
    * @param body Elasticsearch query body.
    */
   async searchDomains(body: any, scroll?: string) {
-    let search: Search<Record<string, any>> = {
+    const search: Search<Record<string, any>> = {
       index: DOMAINS_INDEX,
       body
     };
