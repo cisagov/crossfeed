@@ -52,7 +52,7 @@
     "jwt-decode": "^2.2.0",
     "material-table": "^1.69.0",
     "papaparse": "^5.3.0",
-    "postcss": "^7.0.36",
+    "postcss": "^8.2.13",
     "prettier": "2.1.2",
     "query-string": "^6.13.3",
     "react": "^16.13.0",
@@ -98,7 +98,7 @@
   },
   "resolutions": {
     "yargs-parser": "18.1.2",
-    "postcss": "7.0.36",
+    "postcss": "8.2.13",
     "jspdf": "2.4.0",
     "ansi-regex": "5.0.1"
   },
