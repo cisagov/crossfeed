@@ -15,7 +15,7 @@
   },
   "homepage": "https://github.com/cisagov/crossfeed#readme",
   "dependencies": {
-    "typescript": "^4.2.3"
+    "typescript": "^4.5.2"
   },
   "devDependencies": {
     "@types/node": "^14.14.37"

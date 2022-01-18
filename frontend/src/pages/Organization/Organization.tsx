@@ -636,6 +636,34 @@ export const Organization: React.FC = () => {
           </p>
           <TextField
             margin="dense"
+            id="firstName"
+            name="firstName"
+            label="First Name"
+            type="text"
+            fullWidth
+            value={newUserValues.firstName}
+            onChange={onInviteUserTextChange}
+            variant="filled"
+            InputProps={{
+              className: classes.textField
+            }}
+          />
+          <TextField
+            margin="dense"
+            id="lastName"
+            name="lastName"
+            label="Last Name"
+            type="text"
+            fullWidth
+            value={newUserValues.lastName}
+            onChange={onInviteUserTextChange}
+            variant="filled"
+            InputProps={{
+              className: classes.textField
+            }}
+          />
+          <TextField
+            margin="dense"
             id="email"
             name="email"
             label="Email"

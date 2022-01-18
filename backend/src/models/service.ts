@@ -72,6 +72,7 @@ export interface Product {
 
 @Entity()
 @Index(['port', 'domain'], { unique: true })
+@Index(['domain'])
 export class Service extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
