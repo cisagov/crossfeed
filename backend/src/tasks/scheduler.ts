@@ -195,7 +195,12 @@ class Scheduler {
           await this.launchScanTask({ organizations: orgs, scan });
         }
       }
-      console.log("Launched", this.numLaunchedTasks, "scanTasks for scan", scan.name);
+      console.log(
+        'Launched',
+        this.numLaunchedTasks,
+        'scanTasks for scan',
+        scan.name
+      );
       // If at least 1 new scan task was launched for this scan, update the scan
       if (this.numLaunchedTasks > prev_numLaunchedTasks) {
         scan.lastRun = new Date();
