@@ -1,6 +1,6 @@
 scheduler:
   handler: src/tasks/scheduler.handler
-  timeout: 300
+  timeout: 900
   events:
     - schedule: rate(5 minutes)
   reservedConcurrency: 1
