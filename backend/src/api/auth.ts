@@ -163,8 +163,38 @@ export const callback = async (event, context) => {
     await user.save();
   }
 
-  user.lastLoggedIn = new Date(Date.now());
-  await user.save();
+  //Check to see if user last logged in exists
+  if (user.lastLoggedIn){
+    var LastLoginDate = user.lastLoggedIn
+    var NewLoginDate = new Date(Date.now());
+    
+    // One day in milliseconds
+    const OneDay = 1000 * 60 * 60 * 24;
+ 
+    // Time difference between two dates
+    const DifferenceInTime = NewLoginDate.getTime() - LastLoginDate.getTime();
+    
+    //Number of days between two dates
+    const DifferenceInDays = Math.round(DifferenceInTime / OneDay);
+    
+    //Check the number of days for 180 day expiration period
+    if (DifferenceInDays >= 180){
+      //If Last Login Session was more than 6 months ago, disable account (Throw Error, saying account is disabled)
+      let UserLogin = false
+      throw Error('It has been longer than 180 days since last login, account has been disabled, please send email to "vulnerability@cisa.dhs.gov"');
+    //////Need to add logic here on how to disable account  
+    }
+    
+    //If Shorter than 6 months, continue
+    if (DifferenceInDays < 180){
+      let UserLogin = true
+      await user.save();
+      }
+  else
+    user.lastLoggedIn = new Date(Date.now());
+    await user.save();
+}
+  
 
   // Update user status if accepting invite
   if (user.invitePending) {
