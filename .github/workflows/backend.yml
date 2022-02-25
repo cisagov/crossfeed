@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
@@ -44,7 +44,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
@@ -94,7 +94,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
@@ -117,7 +117,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
@@ -166,7 +166,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/production'
     steps:
       - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
