@@ -39,6 +39,42 @@ resource "aws_db_instance" "db" {
   }
 }
 
+data "aws_ami" "ubuntu" {
+
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  # Canonical
+  owners = ["099720109477"]
+}
+
+resource "aws_instance" "db_accessor" {
+  count         = var.create_db_accessor_instance ? 1 : 0
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.medium"
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+
+  vpc_security_group_ids = [aws_security_group.allow_internal.id]
+  subnet_id              = aws_subnet.backend.id
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
 resource "aws_ssm_parameter" "lambda_sg_id" {
   name      = var.ssm_lambda_sg
   type      = "String"

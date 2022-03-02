@@ -94,7 +94,6 @@ aws iam create-service-linked-role --aws-service-name es.amazonaws.com
 Then run:
 
 ```bash
-npm i -g dotenv-cli
 make init
 make plan
 make apply
