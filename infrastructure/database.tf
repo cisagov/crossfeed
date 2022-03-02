@@ -57,10 +57,64 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"]
 }
 
+resource "tls_private_key" "db_accessor" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "db_accessor" {
+  key_name   = "crossfeed-db-accessor-${var.stage}"
+  public_key = tls_private_key.db_accessor.public_key_openssh
+}
+
+resource "aws_iam_role" "db_accessor" {
+  name               = "crossfeed-db-accessor-${var.stage}"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+#Instance Profile
+resource "aws_iam_instance_profile" "db_accessor" {
+  name = "crossfeed-db-accessor-${var.stage}"
+  role = aws_iam_role.db_accessor.id
+}
+
+#Attach Policies to Instance Role
+resource "aws_iam_policy_attachment" "db_accessor_1" {
+  name       = "crossfeed-db-accessor-${var.stage}"
+  roles      = [aws_iam_role.db_accessor.id]
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_policy_attachment" "db_accessor_2" {
+  name       = "crossfeed-db-accessor-${var.stage}"
+  roles      = [aws_iam_role.db_accessor.id]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+}
+
 resource "aws_instance" "db_accessor" {
   count         = var.create_db_accessor_instance ? 1 : 0
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.medium"
+  #key_name      = "crossfeed-db-accessor-${var.stage}"
 
   tags = {
     Project = var.project
@@ -70,8 +124,11 @@ resource "aws_instance" "db_accessor" {
   vpc_security_group_ids = [aws_security_group.allow_internal.id]
   subnet_id              = aws_subnet.backend.id
 
+  iam_instance_profile = aws_iam_instance_profile.db_accessor.id
+  user_data            = file("./ssm-agent-install.sh")
+
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
