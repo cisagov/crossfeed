@@ -51,7 +51,7 @@ To manually access the database, we use AWS Session Manager. This way, we don't 
 #### Initial setup
 
 - Install the [Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html) to the AWS CLI on your development machine.
-  - If using Linx (such as being on the COOL terraformer instance), run: `curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb" && sudo dpkg -i session-manager-plugin.deb` and then run `session-manager-plugin`.
+  - If using Linux (such as being on the COOL terraformer instance), run: `curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb" && sudo dpkg -i session-manager-plugin.deb` and then run `session-manager-plugin`.
 - Set up a Session Manager port forwarding session to allow SSH access to the instance.
 
   ```bash
