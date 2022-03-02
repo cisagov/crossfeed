@@ -29,8 +29,6 @@ To manually SSH into the accessor instance, we use AWS Session Manager. This way
 - In another terminal, SSH into the instance:
 
   ```bash
-  # Set this environment variable to the URL of the RDS instance (XXX.rds.amazonaws.com)
-  export RDS_URL=
 
   ssh ubuntu@localhost -p 9999 -i accessor_rsa
   ```
