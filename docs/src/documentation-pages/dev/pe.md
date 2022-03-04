@@ -26,7 +26,7 @@ aws ssm put-parameter --name "/crossfeed/staging/PE_DATABASE_PASSWORD" --value "
 Go to the accessor instance and run:
 
 ```
-aws lambda invoke --function-name crossfeed-prod-pesyncdb --log-type Tail --region us-east-1 /dev/stderr --query 'LogResult' --output text | base64 -d
+aws lambda invoke --function-name crossfeed-staging-pesyncdb --log-type Tail --region us-east-1 /dev/stderr --query 'LogResult' --output text | base64 -d
 ```
 
 # Accessing the database
