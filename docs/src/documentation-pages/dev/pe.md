@@ -23,7 +23,7 @@ aws ssm put-parameter --name "/crossfeed/prod/PE_DATABASE_PASSWORD" --value "[ge
 
 ### Sync DB
 
-On production, go to the terraformer instance and run:
+Go to the accessor instance and run:
 
 ```
 aws lambda invoke --function-name crossfeed-prod-pesyncdb --log-type Tail --region us-east-1 /dev/stderr --query 'LogResult' --output text | base64 -d
@@ -31,7 +31,7 @@ aws lambda invoke --function-name crossfeed-prod-pesyncdb --log-type Tail --regi
 
 # Accessing the database
 
-First, retrieve the database credentials by running the following command in the terraformer instance:
+Retrieve the database credentials by running the following command in the terraformer instance:
 
 ```
 aws ssm get-parameter --name "/crossfeed/prod/PE_DATABASE_NAME" --with-decryption
