@@ -11,8 +11,7 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-  TextareaAutosize,
-  Button
+  TextareaAutosize
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { withSearch } from '@elastic/react-search-ui';
