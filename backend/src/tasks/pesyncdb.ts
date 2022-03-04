@@ -8,6 +8,17 @@ import { connectToDatabase } from '../models';
 export const handler: Handler = async (event) => {
   const connection = await connectToDatabase();
 
+  if (
+    !process.env.PE_DB_USERNAME ||
+    !process.env.PE_DB_PASSWORD ||
+    !process.env.PE_DB_NAME ||
+    !process.env.DATABASE_NAME
+  ) {
+    throw Error(
+      'PE_DB_USERNAME, PE_DB_PASSWORD, PE_DB_NAME, DATABASE_NAME must be set.'
+    );
+  }
+
   // Create P&E database and user.
   try {
     await connection.query(

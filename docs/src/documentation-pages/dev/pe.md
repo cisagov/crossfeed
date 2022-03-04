@@ -44,7 +44,7 @@ Retrieve the database credentials by running the following command in the terraf
 ```
 aws ssm get-parameter --name "/crossfeed/staging/DATABASE_HOST" --with-decryption
 aws ssm get-parameter --name "/crossfeed/staging/PE_DB_NAME" --with-decryption
-aws ssm get-parameter --name "/crossfeed/staging/PE_DB_USER" --with-decryption
+aws ssm get-parameter --name "/crossfeed/staging/PE_DB_USERNAME" --with-decryption
 aws ssm get-parameter --name "/crossfeed/staging/PE_DB_PASSWORD" --with-decryption
 ```
 
