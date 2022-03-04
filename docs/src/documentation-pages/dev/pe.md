@@ -16,9 +16,9 @@ npm run pesyncdb
 Before deploying. Generate a secure secret value for a database password, then run the following commands on the terraformer instance:
 
 ```
-aws ssm put-parameter --name "/crossfeed/prod/PE_DATABASE_NAME" --value "pe" --type "SecureString"
-aws ssm put-parameter --name "/crossfeed/prod/PE_DATABASE_USER" --value "pe" --type "SecureString"
-aws ssm put-parameter --name "/crossfeed/prod/PE_DATABASE_PASSWORD" --value "[generated secret password]" --type "SecureString"
+aws ssm put-parameter --name "/crossfeed/staging/PE_DATABASE_NAME" --value "pe" --type "SecureString"
+aws ssm put-parameter --name "/crossfeed/staging/PE_DATABASE_USER" --value "pe" --type "SecureString"
+aws ssm put-parameter --name "/crossfeed/staging/PE_DATABASE_PASSWORD" --value "[generated secret password]" --type "SecureString"
 ```
 
 ### Sync DB
@@ -34,9 +34,17 @@ aws lambda invoke --function-name crossfeed-prod-pesyncdb --log-type Tail --regi
 Retrieve the database credentials by running the following command in the terraformer instance:
 
 ```
-aws ssm get-parameter --name "/crossfeed/prod/PE_DATABASE_NAME" --with-decryption
-aws ssm get-parameter --name "/crossfeed/prod/PE_DATABASE_USER" --with-decryption
-aws ssm get-parameter --name "/crossfeed/prod/PE_DATABASE_PASSWORD" --with-decryption
+aws ssm get-parameter --name "/crossfeed/staging/PE_DATABASE_NAME" --with-decryption
+aws ssm get-parameter --name "/crossfeed/staging/PE_DATABASE_USER" --with-decryption
+aws ssm get-parameter --name "/crossfeed/staging/PE_DATABASE_PASSWORD" --with-decryption
 ```
 
 You can use these credentials when connecting to the database.
+
+# Populate the database with pg dump file
+
+Locate the latest postgres dump file and run:
+
+'''
+pg_restore -U pe -d pe "[path to sql dump file]"
+'''
