@@ -13,19 +13,27 @@ npm run pesyncdb
 
 ### Add credentials to SSM
 
-Before deploying. Generate a secure secret value for a database password, then run the following commands on the terraformer instance:
+Before deploying. Generate a secure secret value for a database password, then run the following commands:
 
 ```
-aws ssm put-parameter --name "/crossfeed/staging/PE_DATABASE_NAME" --value "pe" --type "SecureString"
-aws ssm put-parameter --name "/crossfeed/staging/PE_DATABASE_USER" --value "pe" --type "SecureString"
-aws ssm put-parameter --name "/crossfeed/staging/PE_DATABASE_PASSWORD" --value "[generated secret password]" --type "SecureString"
+aws ssm put-parameter --name "/crossfeed/staging/PE_DB_NAME" --value "pe" --type "SecureString"
+aws ssm put-parameter --name "/crossfeed/staging/PE_DB_USERNAME" --value "pe" --type "SecureString"
+aws ssm put-parameter --name "/crossfeed/staging/PE_DB_PASSWORD" --value "[generated secret password]" --type "SecureString"
 ```
+
+You can generate a secret password by running:
+
+```bash
+python3
+>>> import secrets; print(secrets.token_hex())
+```
+
 
 ### Sync DB
 
-Go to the accessor instance and run:
+Run:
 
-```
+```bash
 aws lambda invoke --function-name crossfeed-staging-pesyncdb --log-type Tail --region us-east-1 /dev/stderr --query 'LogResult' --output text | base64 -d
 ```
 
@@ -34,12 +42,13 @@ aws lambda invoke --function-name crossfeed-staging-pesyncdb --log-type Tail --r
 Retrieve the database credentials by running the following command in the terraformer instance:
 
 ```
+aws ssm get-parameter --name "/crossfeed/staging/DATABASE_HOST" --with-decryption
 aws ssm get-parameter --name "/crossfeed/staging/PE_DATABASE_NAME" --with-decryption
 aws ssm get-parameter --name "/crossfeed/staging/PE_DATABASE_USER" --with-decryption
 aws ssm get-parameter --name "/crossfeed/staging/PE_DATABASE_PASSWORD" --with-decryption
 ```
 
-You can use these credentials when connecting to the database.
+Once you SSH into the accessor instance, you can use these credentials when connecting to the database. The port should be 5432.
 
 # Populate the database with pg dump file
 
