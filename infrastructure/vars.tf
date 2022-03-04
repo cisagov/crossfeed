@@ -275,3 +275,8 @@ variable "create_db_accessor_instance" {
   type        = bool
   default     = false
 }
+
+variable "db_accessor_instance_class" {
+  type    = string
+  default = "t3.micro"
+}

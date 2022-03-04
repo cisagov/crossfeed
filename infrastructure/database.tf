@@ -57,16 +57,6 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"]
 }
 
-resource "tls_private_key" "db_accessor" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-resource "aws_key_pair" "db_accessor" {
-  key_name   = "crossfeed-db-accessor-${var.stage}"
-  public_key = tls_private_key.db_accessor.public_key_openssh
-}
-
 resource "aws_iam_role" "db_accessor" {
   name               = "crossfeed-db-accessor-${var.stage}"
   assume_role_policy = <<EOF
@@ -113,12 +103,14 @@ resource "aws_iam_policy_attachment" "db_accessor_2" {
 resource "aws_instance" "db_accessor" {
   count         = var.create_db_accessor_instance ? 1 : 0
   ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.medium"
-  #key_name      = "crossfeed-db-accessor-${var.stage}"
+  instance_type = var.db_accessor_instance_class
 
   tags = {
     Project = var.project
     Stage   = var.stage
+  }
+  root_block_device {
+    volume_size = 1000
   }
 
   vpc_security_group_ids = [aws_security_group.allow_internal.id]
@@ -128,7 +120,7 @@ resource "aws_instance" "db_accessor" {
   user_data            = file("./ssm-agent-install.sh")
 
   lifecycle {
-    #prevent_destroy = true
+    # prevent_destroy = true
   }
 }
 
