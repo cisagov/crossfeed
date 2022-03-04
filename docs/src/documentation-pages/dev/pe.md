@@ -43,9 +43,9 @@ Retrieve the database credentials by running the following command in the terraf
 
 ```
 aws ssm get-parameter --name "/crossfeed/staging/DATABASE_HOST" --with-decryption
-aws ssm get-parameter --name "/crossfeed/staging/PE_DATABASE_NAME" --with-decryption
-aws ssm get-parameter --name "/crossfeed/staging/PE_DATABASE_USER" --with-decryption
-aws ssm get-parameter --name "/crossfeed/staging/PE_DATABASE_PASSWORD" --with-decryption
+aws ssm get-parameter --name "/crossfeed/staging/PE_DB_NAME" --with-decryption
+aws ssm get-parameter --name "/crossfeed/staging/PE_DB_USER" --with-decryption
+aws ssm get-parameter --name "/crossfeed/staging/PE_DB_PASSWORD" --with-decryption
 ```
 
 Once you SSH into the accessor instance, you can use these credentials when connecting to the database. The port should be 5432.
