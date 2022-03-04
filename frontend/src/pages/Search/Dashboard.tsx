@@ -257,8 +257,10 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
               ))}
             </Select>
           </FormControl>
-          <Button
+          <USWDSButton
             className={classes.exportButton}
+            outline
+            type="button"
             onClick={() =>
               exportCSV(
                 {
@@ -270,7 +272,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
             }
           >
             Export Results
-          </Button>
+          </USWDSButton>
         </Paper>
       </div>
 
@@ -521,9 +523,6 @@ const useStyles = makeStyles(() => ({
   },
   exportButton: {
     justifyContent: 'flex-end',
-    backgroundColor: 'transparent',
-    color: '#005ea2',
-    boxShadow: '0 0 0 2px #005ea2',
     marginLeft: 'auto'
   },
   pageSize: {
