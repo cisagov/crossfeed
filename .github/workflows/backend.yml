@@ -69,7 +69,7 @@ jobs:
       - name: Test
         run: npm run test -- --collectCoverage --silent
       - name: Stop site
-        run: docker-compose down
+        run: docker-compose down && sudo rm -rf postgres-data
       - name: Package
         run: npx sls package
         env:
