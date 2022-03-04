@@ -12,7 +12,7 @@ export interface Organization {
   isPassive: boolean;
   granularScans: Scan[];
   tags: OrganizationTag[];
-  parent: Organization;
+  parent: Organization | null;
   children: Organization[];
 }
 

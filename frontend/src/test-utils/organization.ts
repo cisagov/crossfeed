@@ -6,5 +6,8 @@ export const testOrganization = {
   userRoles: [],
   scanTasks: [],
   isPassive: false,
-  granularScans: []
+  granularScans: [],
+  tags: [],
+  parent: null,
+  children: []
 };
