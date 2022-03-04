@@ -8,7 +8,7 @@ To manually SSH into the accessor instance, we use AWS Session Manager. This way
 
   ```bash
   # Set this environment variable to the ID of the EC2 bastion instance (which should be in a private subnet, but able to connect to the RDS instance).
-  export INSTANCE_ID=i-0066feb5d7b0fe3a4  # Dev instance ID
+  export INSTANCE_ID=i-053b6d4bb95b01b28 # Dev instance ID
   # Generate an SSH key and send it to the EC2 instance
   # (this only needs to be done once).
   ssh-keygen -f accessor_rsa
