@@ -73,6 +73,6 @@ https://www.postgresqltutorial.com/psql-commands/
 
 Locate the latest postgres dump file and run:
 
-'''
+```
 pg_restore -U pe -d pe "[path to sql dump file]"
-'''
+```
