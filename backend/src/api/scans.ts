@@ -49,12 +49,6 @@ interface ScanSchema {
 }
 
 export const SCAN_SCHEMA: ScanSchema = {
-  testProxy: {
-    type: 'fargate',
-    isPassive: false,
-    global: true,
-    description: 'Not a real scan, used to test proxy'
-  },
   censys: {
     type: 'fargate',
     isPassive: true,
@@ -169,6 +163,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
+    cpu: '2048',
+    memory: '12288',
     description:
       'Finds emails that have appeared in breaches related to a given domain'
   },
@@ -184,6 +180,34 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: false,
     description:
       'Domain name permutation engine for detecting similar registered domains.'
+  },
+  peDomMasq: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Fetch DNSTwist data, check IPs on blocklist.de, then sync to PE db instance.'
+  },
+  peCybersixgill: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'Run P&E Cybersixgill scripts and add to PE db instance.'
+  },
+  peHibpSync: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'Fetch hibp data and sync it with the PE db instance.'
+  },
+  peShodan: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    cpu: '2048',
+    memory:'16384',
+    description:
+      'Run organization IPs through shodan and circl to find un/verified vulns and save them to PE db '
   },
   rootDomainSync: {
     type: 'fargate',
@@ -214,9 +238,6 @@ class NewScan {
 
   @IsBoolean()
   isGranular: boolean;
-
-  @IsBoolean()
-  isUserModifiable: boolean;
 
   @IsBoolean()
   isSingleScan: boolean;
@@ -400,17 +421,16 @@ export const list = wrapHandler(async (event) => {
  *
  * /granularScans:
  *  get:
- *    description: List user-modifiable scans. These scans are retrieved by a standard organization admin user, who is then able to enable or disable these particular scans.
+ *    description: List granular scans. These scans are retrieved by a standard organization admin user, who is then able to enable or disable these particular scans.
  *    tags:
  *    - Scans
  */
 export const listGranular = wrapHandler(async (event) => {
   await connectToDatabase();
   const scans = await Scan.find({
-    select: ['id', 'name', 'isUserModifiable'],
+    select: ['id', 'name', 'isGranular'],
     where: {
       isGranular: true,
-      isUserModifiable: true,
       isSingleScan: false
     }
   });
