@@ -3,7 +3,14 @@ requests==2.24.0
 mitmproxy==7.0.3
 cryptography==3.3.2
 pytest==6.0.1
-# TODO: once scrapy releases version 2.6.0 with this change in it (https://github.com/scrapy/scrapy/issues/5267), switch back to using scrapy from PyPI.
-git+https://github.com/scrapy/scrapy.git@9828cb3f0bcc084c99692f19e65c2ff61a06b35a
+scrapy==2.3.0
 dnstwist==20201228
 dnspython==2.1.0
+psycopg2-binary==2.9.3
+# pandas==1.4.1
+shodan==1.25.0
+ppdeep==20200505
+scrubadub==2.0.0
+# presidio-analyzer==2.2.26
+# presidio-anonymizer==2.2.26
+# spacy==3.2.3
