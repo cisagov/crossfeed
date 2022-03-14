@@ -21,6 +21,7 @@ import { handler as peCybersixgill } from './tasks/peCybersixgill';
 import { handler as lookingGlass } from './tasks/lookingGlass';
 import { handler as dnstwist } from './tasks/dnstwist';
 import { handler as rootDomainSync } from './tasks/rootDomainSync';
+import { handler as peShodan } from'./tasks/peShodan';
 import { SCAN_SCHEMA } from './api/scans';
 
 /**
@@ -55,7 +56,8 @@ async function main() {
     lookingGlass,
     dnstwist,
     testProxy,
-    rootDomainSync
+    rootDomainSync,
+    peShodan
   }[scanName];
   if (!scanFn) {
     throw new Error('Invalid scan name ' + scanName);
