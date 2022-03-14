@@ -8,7 +8,7 @@ try:
     import datetime
     import json
     import sys
-    from pe_db.query_db.run import (
+    from pe_db.query_db import (
         execute_shodan_data,
         query_ips,
         getDataSource,
@@ -437,9 +437,9 @@ def search_shodan(thread_name, ips, api_key, start, end, org_uid, org_name, fail
     # Add data_source value
     source = getDataSource("Shodan")
     source_uid = source[0]
-    df["domain_source_uid"] = source_uid
-    risk_df["domain_source_uid"] = source_uid
-    vuln_df["domain_source_uid"] = source_uid
+    df["data_source_uid"] = source_uid
+    risk_df["data_source_uid"] = source_uid
+    vuln_df["data_source_uid"] = source_uid
 
     # Insert data into the PE database
     failed = execute_shodan_data(df, "shodan_assets", thread_name, org_name, failed)
@@ -461,11 +461,10 @@ def run_shodan_thread(api, org_list, thread_name):
     """Run a shodan thread."""
     failed = []
     for org_name in org_list:
-        org_name = org_list[1]
         org_uid = get_org_id(org_name, THREAD_NUM)
         # if org_name not in ["DOL_BLS"]:
         #     continue
-        print(f"{thread_name} Runing IPs for {org_name}")
+        print(f"{thread_name} Running IPs for {org_name}")
         start, end = get_dates()
         try:
             ips_df = query_ips(org_uid)
