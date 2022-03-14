@@ -3,60 +3,193 @@ try:
     import shodan
     import pandas as pd
     import requests
-    from dateutil import parser, tz
     import time
     import os
     import datetime
     import json
-    from pe_db_functions import connect, close, execute_shodan_data, get_org_id, query_ips
+    import sys
+    from pe_db.query_db.run import (
+        execute_shodan_data,
+        query_ips,
+        getDataSource,
+        get_org_id,
+    )
+    import time
 except:
     print(traceback.format_exc())
 
+
 DB_HOST = os.environ.get("DB_HOST")
-PE_DB_USERNAME =os.environ.get("PE_DB_USERNAME")
+PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
 PE_DB_NAME = os.environ.get("PE_DB_NAME")
 PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
 API_KEY = os.environ.get("key")
-org_list = os.environ.get("org_list")
+ORGS_LIST = os.environ.get("org_list")
+THREAD_NUM = os.environ.get("thread_num")
 
 
 def get_dates():
+    """Get dates for the query."""
     end = datetime.datetime.now()
-    d = datetime.timedelta(days = 21)
-    d2 = datetime.timedelta(days=1)
-    start = end - d
-    end = end + d2
-    return start, end
+    days_back = datetime.timedelta(days=30)
+    days_forward = datetime.timedelta(days=1)
+    start = end - days_back
+    end = end + days_forward
+    start_time = time_to_utc(start)
+    end_time = time_to_utc(end)
+    return start_time, end_time
+
 
 def time_to_utc(in_time):
-    """converts time to UTC.  if the time passed in does not have
-    zone information, it is assumed to be the local timezone"""
-    if in_time.tzinfo == None:
-        in_time = in_time.replace(tzinfo=tz.tzlocal())
-    utc_time = in_time.astimezone(tz.tzutc())
+    """Convert time to UTC."""
+    # If time does not have timezone info, assume it is local
+    if in_time.tzinfo is None:
+        local_tz = datetime.datetime.now().astimezone().tzinfo
+        in_time = in_time.replace(tzinfo=local_tz)
+    utc_time = in_time.astimezone(datetime.timezone.utc)
     return utc_time
 
-def search(
-    org_uid,
-    api,
-    ips,
-    start,
-    end,
-    risky_ports,
-    name_dict,
-    risk_dict
-):
-    """searches Shodan API, splits data, and adds in additional information"""
-    data = []
-    risk_data = []
-    vuln_data = []
 
-    # create dictionaries for CVSSv2 vector definitions using https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator
-    auth_dict = {
-        "NONE": "Authentication is not required to access and exploit the vulnerability.",
-        "SINGLE": "One instance of authentication is required to access and exploit the vulnerability.",
-        "MULTIPLE": "Exploiting the vulnerability requires that the attacker authenticate two or more times, even if the same credentials are used each time. An example is an attacker authenticating to an operating system in addition to providing credentials to access an application hosted on that system.",
+def search_circl(cve):
+    """Fetch CVE info from Circl."""
+    re = requests.get(f"https://cve.circl.lu/api/cve/{cve}")
+    return re
+
+
+def is_verified(
+    vulns, cve, av_dict, ac_dict, ci_dict, vuln_data, org_uid, r, d, asn, unverified
+):
+    """Check if a CVE is verified."""
+    v = vulns[cve]
+    if v["verified"]:
+        re = search_circl(cve)
+        r_json = re.json()
+        if r_json is not None:
+            summary = r_json.get("summary", None)
+            product = r_json.get("vulnerable_product", None)
+            attack_vector = r_json.get("access", {}).get("vector")
+            av = av_dict.get(attack_vector, None)
+            attack_complexity = r_json.get("access", {}).get("complexity")
+            ac = ac_dict.get(attack_complexity, None)
+            conf_imp = r_json.get("impact", {}).get("confidentiality")
+            ci = ci_dict.get(conf_imp, None)
+            int_imp = r_json.get("impact", {}).get("integrity")
+            ii = ci_dict.get(int_imp, None)
+            avail_imp = r_json.get("impact", {}).get("availability")
+            ai = ci_dict.get(avail_imp, None)
+            cvss = r_json.get("cvss", None)
+            if cvss == 10:
+                severity = "Critical"
+            elif cvss >= 7:
+                severity = "High"
+            elif cvss >= 4:
+                severity = "Medium"
+            elif cvss > 0:
+                severity = "Low"
+            else:
+                severity = None
+        else:
+            # Set cve info to null if circl has no results
+            summary = ""
+            product = ""
+            attack_vector = ""
+            av = ""
+            attack_complexity = ""
+            ac = ""
+            conf_imp = ""
+            ci = ""
+            int_imp = ""
+            ii = ""
+            avail_imp = ""
+            ai = ""
+            severity = ""
+            cvss = None
+        vuln_data.append(
+            [
+                org_uid,
+                r["org"],
+                r["ip_str"],
+                d["port"],
+                d["_shodan"]["module"],
+                d["timestamp"],
+                cve,
+                severity,
+                cvss,
+                summary,
+                product,
+                attack_vector,
+                av,
+                attack_complexity,
+                ac,
+                conf_imp,
+                ci,
+                int_imp,
+                ii,
+                avail_imp,
+                ai,
+                r["tags"],
+                r["domains"],
+                r["hostnames"],
+                r["isp"],
+                asn,
+            ]
+        )
+    else:
+        unverified.append(cve)
+
+    return unverified, vuln_data
+
+
+def get_shodan_dicts():
+    """Build Shodan dictionaries that hold definitions and naming conventions."""
+    risky_ports = [
+        "ftp",
+        "telnet",
+        "http",
+        "smtp",
+        "pop3",
+        "imap",
+        "netbios",
+        "snmp",
+        "ldap",
+        "smb",
+        "sip",
+        "rdp",
+        "vnc",
+        "kerberos",
+    ]
+    name_dict = {
+        "ftp": "File Transfer Protocol",
+        "telnet": "Telnet",
+        "http": "Hypertext Transfer Protocol",
+        "smtp": "Simple Mail Transfer Protocol",
+        "pop3": "Post Office Protocol 3",
+        "imap": "Internet Message Access Protocol",
+        "netbios": "Network Basic Input/Output System",
+        "snmp": "Simple Network Management Protocol",
+        "ldap": "Lightweight Directory Access Protocol",
+        "smb": "Server Message Block",
+        "sip": "Session Initiation Protocol",
+        "rdp": "Remote Desktop Protocol",
+        "kerberos": "Kerberos",
     }
+    risk_dict = {
+        "ftp": "FTP",
+        "telnet": "Telnet",
+        "http": "HTTP",
+        "smtp": "SMTP",
+        "pop3": "POP3",
+        "imap": "IMAP",
+        "netbios": "NetBIOS",
+        "snmp": "SNMP",
+        "ldap": "LDAP",
+        "smb": "SMB",
+        "sip": "SIP",
+        "rdp": "RDP",
+        "vnc": "VNC",
+        "kerberos": "Kerberos",
+    }
+    # Create dictionaries for CVSSv2 vector definitions using https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator
     av_dict = {
         "NETWORK": "A vulnerability exploitable with network access means the vulnerable software is bound to the network stack and the attacker does not require local network access or local access. Such a vulnerability is often termed “remotely exploitable”. An example of a network attack is an RPC buffer overflow.",
         "ADJACENT_NETWORK": "A vulnerability exploitable with adjacent network access requires the attacker to have access to either the broadcast or collision domain of the vulnerable software. Examples of local networks include local IP subnet, Bluetooth, IEEE 802.11, and local Ethernet segment.",
@@ -72,117 +205,84 @@ def search(
         "PARTIAL": "There is considerable informational disclosure. Access to some system files is possible, but the attacker does not have control over what is obtained, or the scope of the loss is constrained. An example is a vulnerability that divulges only certain tables in a database.",
         "COMPLETE": "There is total information disclosure, resulting in all system files being revealed. The attacker is able to read all of the system's data (memory, files, etc.).",
     }
-    ii_dict = {
-        "NONE": "There is no impact to the integrity of the system",
-        "PARTIAL": "Modification of some system files or information is possible, but the attacker does not have control over what can be modified, or the scope of what the attacker can affect is limited. For example, system or application files may be overwritten or modified, but either the attacker has no control over which files are affected or the attacker can modify files within only a limited context or scope.",
-        "COMPLETE": "There is a total compromise of system integrity. There is a complete loss of system protection, resulting in the entire system being compromised. The attacker is able to modify any files on the target system.",
-    }
-    ai_dict = {
-        "NONE": "There is no impact to the availability of the system",
-        "PARTIAL": "There is reduced performance or interruptions in resource availability. An example is a network-based flood attack that permits a limited number of successful connections to an Internet service.",
-        "COMPLETE": "There is reduced performance or interruptions in resource availability. An example is a network-based flood attack that permits a limited number of successful connections to an Internet service.",
-    }
-    # Wrap the request in a try/ except block to catch errors
+    return risky_ports, name_dict, risk_dict, av_dict, ac_dict, ci_dict
+
+
+def search_shodan(thread_name, ips, api_key, start, end, org_uid, org_name, failed):
+    """Search IPs in the Shodan API."""
+    # Initialize lists to store Shodan results
+    data = []
+    risk_data = []
+    vuln_data = []
+
+    # Build dictionaries for naming conventions and definitions
+    risky_ports, name_dict, risk_dict, av_dict, ac_dict, ci_dict = get_shodan_dicts()
+
+    # Break up IPs into chunks of 100
+    # Throws flake8 E203 error which is ignored in .flake8
     ip_chunks = [ips[i : i + 100] for i in range(0, len(ips), 100)]
     tot_ips = len(ips)
     tot = len(ip_chunks)
-    print(f"Split {tot_ips} into {tot} chunks",flush=True)
-    for i, ips in enumerate(ip_chunks):
-        try:
-            # Search Shodan
+    print(f"{thread_name} Split {tot_ips} IPs into {tot} chunks - {org_name}")
 
-            results = api.host(ips, history=True)
-            for r in results:
-                for d in r["data"]:
-                    if (
-                        time_to_utc(parser.parse(d["timestamp"])) > start
-                        and time_to_utc(parser.parse(d["timestamp"])) < end
-                    ):
-                        prod = d.get("product", None)
-                        serv = d.get("http", {}).get("server")
-                        asn = d.get("ASN", None)
-                        vulns = d.get("vulns", None)
-                        if vulns != None:
-                            cves = list(vulns.keys())
-                            unverified = []
-                            for cve in cves:
-                                v = vulns[cve]
-                                if v["verified"] == True:
-                                    re = requests.get(
-                                        f"https://cve.circl.lu/api/cve/{cve}"
+    # Loop through chunks and search Shodan
+    for i, ip_chunk in enumerate(ip_chunks):
+        try_again = True
+        try_count = 1
+        while try_again:
+            try:
+                api = shodan.Shodan(api_key)
+                results = api.host(ip_chunk, history=True)
+                for r in results:
+                    for d in r["data"]:
+                        # Convert Shodan date string to UTC datetime
+                        shodan_datetime = datetime.datetime.strptime(
+                            d["timestamp"], "%Y-%m-%dT%H:%M:%S.%f"
+                        )
+                        shodan_utc = time_to_utc(shodan_datetime)
+                        # Only include results in the timeframe
+                        if shodan_utc > start and shodan_utc < end:
+                            prod = d.get("product", None)
+                            serv = d.get("http", {}).get("server")
+                            asn = d.get("ASN", None)
+                            vulns = d.get("vulns", None)
+                            if vulns is not None:
+                                cves = list(vulns.keys())
+                                unverified = []
+                                for cve in cves:
+                                    # Check if CVEs are verified
+                                    unverified, vuln_data = is_verified(
+                                        vulns,
+                                        cve,
+                                        av_dict,
+                                        ac_dict,
+                                        ci_dict,
+                                        vuln_data,
+                                        org_uid,
+                                        r,
+                                        d,
+                                        asn,
+                                        unverified,
                                     )
-                                    r_json = re.json()
-                                    if r_json != None:
-                                        summary = r_json.get("summary", None)
-                                        product = r_json.get("vulnerable_product", None)
-                                        attack_vector = r_json.get("access", {}).get(
-                                            "vector"
-                                        )
-                                        av = av_dict.get(attack_vector, None)
-                                        attack_complexity = r_json.get(
-                                            "access", {}
-                                            ).get("complexity")
-                                        ac = ac_dict.get(attack_complexity, None)
-                                        conf_imp = r_json.get("impact", {}).get(
-                                            "confidentiality"
-                                        )
-                                        ci = ci_dict.get(conf_imp, None)
-                                        int_imp = r_json.get("impact", {}).get(
-                                            "integrity"
-                                        )
-                                        ii = ci_dict.get(int_imp, None)
-                                        avail_imp = r_json.get("impact", {}).get(
-                                            "availability"
-                                        )
-                                        ai = ci_dict.get(avail_imp, None)
-                                        cvss = r_json.get("cvss", None)
-                                        if cvss == 10:
-                                            severity = "Critical"
-                                        elif cvss >= 7:
-                                            severity = "High"
-                                        elif cvss >= 4:
-                                            severity = "Medium"
-                                        elif cvss > 0:
-                                            severity = "Low"
-                                        else:
-                                            severity = None
-                                    else:
-                                        # if circl doesn't have the verified vulnerability, set circl information to null
-                                        summary = ""
-                                        product = ""
-                                        attack_vector = ""
-                                        av = ""
-                                        attack_complexity = ""
-                                        ac = ""
-                                        conf_imp = ""
-                                        ci = ""
-                                        int_imp = ""
-                                        ii = ""
-                                        avail_imp = ""
-                                        ai = ""
-                                    vuln_data.append(
+                                if len(unverified) > 0:
+                                    ftype = "Pontentially Vulnerable Product"
+                                    name = prod
+                                    risk = unverified
+                                    mitigation = "Verify asset is up to date, supported by the vendor, and configured securely"
+                                    risk_data.append(
                                         [
                                             org_uid,
                                             r["org"],
                                             r["ip_str"],
                                             d["port"],
                                             d["_shodan"]["module"],
+                                            ftype,
+                                            name,
+                                            risk,
+                                            mitigation,
                                             d["timestamp"],
-                                            cve,
-                                            severity,
-                                            cvss,
-                                            summary,
-                                            product,
-                                            attack_vector,
-                                            av,
-                                            attack_complexity,
-                                            ac,
-                                            conf_imp,
-                                            ci,
-                                            int_imp,
-                                            ii,
-                                            avail_imp,
-                                            ai,
+                                            prod,
+                                            serv,
                                             r["tags"],
                                             r["domains"],
                                             r["hostnames"],
@@ -190,15 +290,11 @@ def search(
                                             asn,
                                         ]
                                     )
-                                else:
-                                    unverified.append(cve)
-                            if len(unverified) > 0:
-                                #
-                                ftype = "Pontentially Vulnerable Product"
-                                name = prod
-                                risk = unverified
-                                # TODO build out mitigation recommendation for potentially vulnerable products
-                                mitigation = "Verify asset is up to date, supported by the vendor, and configured securely"
+                            elif d["_shodan"]["module"] in risky_ports:
+                                ftype = "Insecure Protocol"
+                                name = name_dict[d["_shodan"]["module"]]
+                                risk = [risk_dict[d["_shodan"]["module"]]]
+                                mitigation = "Confirm open port has a required business use for internet exposure and ensure necessary safeguards are in place through TCP wrapping, TLS encryption, or authentication requirements"
                                 risk_data.append(
                                     [
                                         org_uid,
@@ -220,24 +316,13 @@ def search(
                                         asn,
                                     ]
                                 )
-
-                        elif d["_shodan"]["module"] in risky_ports:
-                            ftype = "Insecure Protocol"
-                            name = name_dict[d["_shodan"]["module"]]
-                            risk = [risk_dict[d["_shodan"]["module"]]]
-                            # TODO build out mitigation recommendation for insecure protocols
-                            mitigation = "Confirm open port has a required business use for internet exposure and ensure necessary safeguards are in place through TCP wrapping, TLS encryption, or authentication requirements"
-                            risk_data.append(
-                                [   
+                            data.append(
+                                [
                                     org_uid,
                                     r["org"],
                                     r["ip_str"],
                                     d["port"],
                                     d["_shodan"]["module"],
-                                    ftype,
-                                    name,
-                                    risk,
-                                    mitigation,
                                     d["timestamp"],
                                     prod,
                                     serv,
@@ -248,233 +333,34 @@ def search(
                                     asn,
                                 ]
                             )
-                        data.append(
-                            [
-                                org_uid,
-                                r["org"],
-                                r["ip_str"],
-                                d["port"],
-                                d["_shodan"]["module"],
-                                d["timestamp"],
-                                prod,
-                                serv,
-                                r["tags"],
-                                r["domains"],
-                                r["hostnames"],
-                                r["isp"],
-                                asn,
-                            ]
-                        )
-            time.sleep(1)
-
-        # TODO: Put in a while loop instead of single try and except
-        except shodan.APIError as e: 
-            passed = False
-            count = 2
-            while passed == False:
-                print(f"Calling the API again. Try #{count}")
-                try:
-                    print("Error: {}".format(e))
-
-                    # print error traceback
-                    print(traceback.format_exc())
-
-                    # sleep for 5 seconds
-                    time.sleep(5)
-                    # Search Shodan
-                    results = api.host(ips, history=True)
-                    for r in results:
-                        for d in r["data"]:
-                            if (
-                                time_to_utc(parser.parse(d["timestamp"])) > start
-                                and time_to_utc(parser.parse(d["timestamp"])) < end
-                            ):
-                                prod = d.get("product", None)
-                                serv = d.get("http", {}).get("server")
-                                asn = d.get("ASN", None)
-                                vulns = d.get("vulns", None)
-                                if vulns != None:
-                                    cves = list(vulns.keys())
-                                    unverified = []
-                                    for cve in cves:
-                                        v = vulns[cve]
-                                        if v["verified"] == True:
-                                            re = requests.get(
-                                                f"https://cve.circl.lu/api/cve/{cve}"
-                                            )
-                                            r_json = re.json()
-                                            if r_json != None:
-                                                summary = r_json.get("summary", None)
-                                                product = r_json.get(
-                                                    "vulnerable_product", None
-                                                )
-                                                attack_vector = r_json.get(
-                                                    "access", {}
-                                                    ).get("vector")
-                                                av = av_dict.get(attack_vector, None)
-                                                attack_complexity = r_json.get(
-                                                    "access", {}
-                                                ).get("complexity")
-                                                ac = ac_dict.get(
-                                                    attack_complexity, None
-                                                )
-                                                conf_imp = r_json.get("impact", {}).get(
-                                                    "confidentiality"
-                                                )
-                                                ci = ci_dict.get(conf_imp, None)
-                                                int_imp = r_json.get("impact", {}).get(
-                                                    "integrity"
-                                                )
-                                                ii = ci_dict.get(int_imp, None)
-                                                avail_imp = r_json.get(
-                                                    "impact", {}
-                                                    ).get("availability")
-                                                ai = ci_dict.get(avail_imp, None)
-                                                cvss = r_json.get("cvss", None)
-                                                if cvss == 10:
-                                                    severity = "Critical"
-                                                elif cvss >= 7:
-                                                    severity = "High"
-                                                elif cvss >= 4:
-                                                    severity = "Medium"
-                                                elif cvss > 0:
-                                                    severity = "Low"
-                                                else:
-                                                    severity = None
-                                            else:
-                                                # if circl doesn't have the verified vulnerability, set circl information to null
-                                                summary = ""
-                                                product = ""
-                                                attack_vector = ""
-                                                av = ""
-                                                attack_complexity = ""
-                                                ac = ""
-                                                conf_imp = ""
-                                                ci = ""
-                                                int_imp = ""
-                                                ii = ""
-                                                avail_imp = ""
-                                                ai = ""
-                                            vuln_data.append(
-                                                [
-                                                    org_uid,
-                                                    r["org"],
-                                                    r["ip_str"],
-                                                    d["port"],
-                                                    d["_shodan"]["module"],
-                                                    d["timestamp"],
-                                                    cve,
-                                                    severity,
-                                                    cvss,
-                                                    summary,
-                                                    product,
-                                                    attack_vector,
-                                                    av,
-                                                    attack_complexity,
-                                                    ac,
-                                                    conf_imp,
-                                                    ci,
-                                                    int_imp,
-                                                    ii,
-                                                    avail_imp,
-                                                    ai,
-                                                    r["tags"],
-                                                    r["domains"],
-                                                    r["hostnames"],
-                                                    r["isp"],
-                                                    asn,
-                                                ]
-                                            )
-                                        else:
-                                            unverified.append(cve)
-                                    if len(unverified) > 0:
-                                        #
-                                        ftype = "Pontentially Vulnerable Product"
-                                        name = prod
-                                        risk = unverified
-                                        # TODO build out mitigation recommendation for potentially vulnerable products
-                                        mitigation = "Verify asset is up to date, supported by the vendor, and configured securely"
-                                        risk_data.append(
-                                            [   
-                                                org_uid,
-                                                r["org"],
-                                                r["ip_str"],
-                                                d["port"],
-                                                d["_shodan"]["module"],
-                                                ftype,
-                                                name,
-                                                risk,
-                                                mitigation,
-                                                d["timestamp"],
-                                                prod,
-                                                serv,
-                                                r["tags"],
-                                                r["domains"],
-                                                r["hostnames"],
-                                                r["isp"],
-                                                asn,
-                                            ]
-                                        )
-
-                                elif d["_shodan"]["module"] in risky_ports:
-                                    ftype = "Insecure Protocol"
-                                    name = name_dict[d["_shodan"]["module"]]
-                                    risk = [risk_dict[d["_shodan"]["module"]]]
-                                    # TODO build out mitigation recommendation for insecure protocols
-                                    mitigation = "Confirm open port has a required business use for internet exposure and ensure necessary safeguards are in place through TCP wrapping, TLS encryption, or authentication requirements"
-                                    risk_data.append(
-                                        [   
-                                            org_uid,
-                                            r["org"],
-                                            r["ip_str"],
-                                            d["port"],
-                                            d["_shodan"]["module"],
-                                            ftype,
-                                            name,
-                                            risk,
-                                            mitigation,
-                                            d["timestamp"],
-                                            prod,
-                                            serv,
-                                            r["tags"],
-                                            r["domains"],
-                                            r["hostnames"],
-                                            r["isp"],
-                                            asn,
-                                        ]
-                                    )
-                                data.append(
-                                    [   
-                                        org_uid,
-                                        r["org"],
-                                        r["ip_str"],
-                                        d["port"],
-                                        d["_shodan"]["module"],
-                                        d["timestamp"],
-                                        prod,
-                                        serv,
-                                        r["tags"],
-                                        r["domains"],
-                                        r["hostnames"],
-                                        r["isp"],
-                                        asn,
-                                    ]
-                                )
-                    passed = True
-                except:
-                    print(traceback.format_exc())
-                    count += 1
-                    if count == 7:
-                        break
-                    continue
-        except:
-            print("Error on first try, not caught by Shodan API Exception")
-            print("Will continue to next chunk.")
-            print(traceback.format_exc())
-            continue
+                time.sleep(1)
+                try_again = False
+            except shodan.APIError as e:
+                if try_count == 5:
+                    print(
+                        f"{thread_name} Failed 5 times. Continuing to next chunk - {org_name}"
+                    )
+                    failed.append(
+                        f"{org_name} chunk {i + 1} failed 5 times and skipped"
+                    )
+                    try_again = False
+                print(f"{thread_name} {e} - {org_name}")
+                print(
+                    f"{thread_name} Try #{try_count} failed. Calling the API again. - {org_name}"
+                )
+                try_count += 1
+                # Most likely too many API calls per second so sleep
+                time.sleep(5)
+            except Exception as e:
+                print(f"{thread_name} {e} - {org_name}")
+                print(
+                    f"{thread_name} Not a shodan API error. Continuing to next chunk - {org_name}"
+                )
+                failed.append(f"{org_name} chunk {i + 1} failed and skipped")
+                try_again = False
 
         count = i + 1
-        print(f"{count}/{tot} complete")
+        print(f"{thread_name} {count}/{tot} complete - {org_name}")
 
     df = pd.DataFrame(
         data,
@@ -547,117 +433,72 @@ def search(
             "asn",
         ],
     )
-    conn = connect(DB_HOST,PE_DB_NAME, PE_DB_USERNAME, PE_DB_PASSWORD)
-    execute_shodan_data(conn, df, "shodan_assets")
-    
-    execute_shodan_data(conn, risk_df, "shodan_insecure_protocols_unverified_vulns")
-    
-    execute_shodan_data(conn, vuln_df, "shodan_verified_vulns")
 
-    close(conn)
+    # Add data_source value
+    source = getDataSource("Shodan")
+    source_uid = source[0]
+    df["domain_source_uid"] = source_uid
+    risk_df["domain_source_uid"] = source_uid
+    vuln_df["domain_source_uid"] = source_uid
 
-    return df, risk_df, vuln_df
-
-def calculate_metrics(
-    org_uid, start_time, end_time
-):
-    """retrieves Shodan data and calculates metrics"""
-    api = shodan.Shodan(API_KEY)
-    start = time_to_utc(start_time)
-    end = time_to_utc(end_time)
-    conn = connect(DB_HOST,PE_DB_NAME, PE_DB_USERNAME, PE_DB_PASSWORD)
-    ip_df = query_ips(conn, org_uid)
-    ips = list(ip_df["ip_address"].values)
-    # ip_df = pd.read_csv('/app/worker/pe_scripts/ips.csv', encoding="utf-8") #Remove this line and uncomment 3 lines above to go live
-    # ips = list(ip_df["IP"].values) #Remove this line and uncomment 3 lines above to go live
-    tot_ips = len(ips)
-    risky_ports = [
-        "ftp",
-        "telnet",
-        "http",
-        "smtp",
-        "pop3",
-        "imap",
-        "netbios",
-        "snmp",
-        "ldap",
-        "smb",
-        "sip",
-        "rdp",
-        "vnc",
-        "kerberos",
-    ]
-    protocol_dict = {
-        "ftp": "Clear text protocol, does not encrypt transported data",
-        "telnet": "Clear text protocol, does not encrypt transported data",
-        "http": "Clear text protocol, does not encrypt transported data",
-        "smtp": "Clear text protocol, does not encrypt transported data",
-        "pop3": "Clear text protocol, does not encrypt transported data",
-        "imap": "Clear text protocol, does not encrypt transported data",
-        "netbios": "Clear text protocol, does not encrypt transported data",
-        "snmp": "If version 1 or 2, clear text protocol, does not encrypt transported data",
-        "ldap": "Clear text protocol, does not encrypt transported data",
-        "smb": "Known vulnerabilities",
-        "sip": "Known vulnerabilities",
-        "rdp": "Known vulnerabilities",
-        "vnc": "Known vulnerabilities",
-        "kerberos": "Known vulnerabilities",
-    }
-    name_dict = {
-        "ftp": "File Transfer Protocol",
-        "telnet": "Telnet",
-        "http": "Hypertext Transfer Protocol",
-        "smtp": "Simple Mail Transfer Protocol",
-        "pop3": "Post Office Protocol 3",
-        "imap": "Internet Message Access Protocol",
-        "netbios": "Network Basic Input/Output System",
-        "snmp": "Simple Network Management Protocol",
-        "ldap": "Lightweight Directory Access Protocol",
-        "smb": "Server Message Block",
-        "sip": "Session Initiation Protocol",
-        "rdp": "Remote Desktop Protocol",
-        "kerberos": "Kerberos",
-    }
-    risk_dict = {
-        "ftp": "FTP",
-        "telnet": "Telnet",
-        "http": "HTTP",
-        "smtp": "SMTP",
-        "pop3": "POP3",
-        "imap": "IMAP",
-        "netbios": "NetBIOS",
-        "snmp": "SNMP",
-        "ldap": "LDAP",
-        "smb": "SMB",
-        "sip": "SIP",
-        "rdp": "RDP",
-        "vnc": "VNC",
-        "kerberos": "Kerberos",
-    }
-
-    df, risk_df, vuln_df = search(
-        org_uid,
-        api,
-        ips,
-        start,
-        end,
-        risky_ports,
-        name_dict,
-        risk_dict,
+    # Insert data into the PE database
+    failed = execute_shodan_data(df, "shodan_assets", thread_name, org_name, failed)
+    failed = execute_shodan_data(
+        risk_df,
+        "shodan_insecure_protocols_unverified_vulns",
+        thread_name,
+        org_name,
+        failed,
+    )
+    failed = execute_shodan_data(
+        vuln_df, "shodan_verified_vulns", thread_name, org_name, failed
     )
 
-try:
-    print("Starting new thread")
-    
-    org_list = json.loads(org_list)
-    print(org_list, flush=True)
+    return failed
+
+
+def run_shodan_thread(api, org_list, thread_name):
+    """Run a shodan thread."""
+    failed = []
     for org_name in org_list:
-        print("Running IPs for ",org_name, flush=True)
         org_name = org_list[1]
-        PE_conn = connect(DB_HOST, PE_DB_NAME, PE_DB_USERNAME, PE_DB_PASSWORD)
-        org_uid = get_org_id(PE_conn, org_name )
-        close(PE_conn)
+        org_uid = get_org_id(org_name, THREAD_NUM)
+        # if org_name not in ["DOL_BLS"]:
+        #     continue
+        print(f"{thread_name} Runing IPs for {org_name}")
         start, end = get_dates()
-        calculate_metrics( org_uid, start, end )
-except:
-    print(traceback.format_exc(), flush=True)
+        try:
+            ips_df = query_ips(org_uid)
+            ips = list(ips_df["ip_address"].values)
+        except Exception as e:
+            print(f"{thread_name} Failed fetching IPs for {org_name}.")
+            print(f"{thread_name} {e} - {org_name}")
+            failed.append(f"{org_name} fetching IPs")
+            continue
+
+        if len(ips) <= 0:
+            print(f"{thread_name} No IPs for {org_name}.")
+            failed.append(f"{org_name} has 0 IPs")
+            continue
+
+        failed = search_shodan(
+            thread_name, ips, api, start, end, org_uid, org_name, failed
+        )
+
+    if len(failed) > 0:
+        print(f"{thread_name} Failures: {failed}")
+
+
+def main():
+    try:
+        print("Starting new thread")
+        org_list = json.loads(ORGS_LIST)
+        print(org_list, flush=True)
+        run_shodan_thread(API_KEY, org_list, THREAD_NUM)
+    except:
+        print(traceback.format_exc(), flush=True)
+
+
+if __name__ == "__main__":
+
+    sys.exit(main())
