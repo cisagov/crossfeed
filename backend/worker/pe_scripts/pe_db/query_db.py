@@ -5,12 +5,16 @@ from psycopg2 import OperationalError
 import psycopg2.extras as extras
 import sys
 import pandas as pd
-import logging
+import os
 
+PE_DB_NAME = os.environ.get("PE_DB_NAME")
+PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
+PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
+DB_HOST = os.environ.get("DB_HOST")
 
-from config import config
-
-CONN_PARAMS_DIC = config()
+CF_DB_NAME = os.environ.get("DB_NAME")
+CF_DB_USERNAME = os.environ.get("DB_USERNAME")
+CF_DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 
 def show_psycopg2_exception(err):
@@ -28,7 +32,12 @@ def connect(thread):
     "Connection to postgres database"
     conn = None
     try:
-        conn = psycopg2.connect(**CONN_PARAMS_DIC)
+        conn = psycopg2.connect(
+            host=DB_HOST,
+            database=PE_DB_NAME,
+            user=PE_DB_USERNAME,
+            password=PE_DB_PASSWORD,
+        )
     except OperationalError as err:
         show_psycopg2_exception(err)
         conn = None
