@@ -21,7 +21,7 @@ import { handler as peCybersixgill } from './tasks/peCybersixgill';
 import { handler as lookingGlass } from './tasks/lookingGlass';
 import { handler as dnstwist } from './tasks/dnstwist';
 import { handler as rootDomainSync } from './tasks/rootDomainSync';
-import { handler as peShodan } from'./tasks/peShodan';
+import { handler as peShodan } from './tasks/peShodan';
 import { SCAN_SCHEMA } from './api/scans';
 
 /**
