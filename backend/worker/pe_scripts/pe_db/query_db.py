@@ -83,16 +83,16 @@ def query_orgs(thread):
     return orgs
 
 
-def get_org_id(org_name, thread):
+def get_org_id(org_name):
     try:
         conn = connect(thread)
-        print(f"{thread}: Running on organization: {org_name}")
+        print(f"Running on organization: {org_name}")
         cur = conn.cursor()
         sql = f"""SELECT organizations_uid FROM organizations WHERE name='{org_name}'"""
         cur.execute(sql)
         pe_org_uid = cur.fetchone()[0]
         cur.close()
-        print(f"{thread}: PE_org_uid: {pe_org_uid}")
+        print(f"PE_org_uid: {pe_org_uid}")
         close(conn)
         return pe_org_uid
     except:
@@ -242,7 +242,6 @@ def query_ips(org_id):
             FROM web_assets wa
             WHERE wa.organizations_uid = '{org_id}'
             and wa.report_on = True
-            and wa.asset_type = 'ipv4'
             """
     # to just return ipv4 change last line to the following:
     # and wa.asset_type = 'ipv4'

@@ -18,18 +18,18 @@ function partition(list: string[] = [], n: number = 1) {
     throw new RangeError('n must be a positive integer');
   }
 
-  const q : number = Math.floor( list.length / n );
+  const q: number = Math.floor(list.length / n);
   const r: number = list.length % n;
 
-  let i : number; // denotes the offset of the start of the slice
-  let j : number; // denotes the zero-relative partition number
-  let len : number; // denotes the computed length of the slice
+  let i: number; // denotes the offset of the start of the slice
+  let j: number; // denotes the zero-relative partition number
+  let len: number; // denotes the computed length of the slice
 
   const partitions: any = [];
-  for ( i=0, j=0, len=0; i < list.length; i+=len, ++j ) {
-    len = j < r ? q+1 : q ;
-    const partition = list.slice( i, i+len ) ; 
-    partitions.push( partition ) ;
+  for (i = 0, j = 0, len = 0; i < list.length; i += len, ++j) {
+    len = j < r ? q + 1 : q;
+    const partition = list.slice(i, i + len);
+    partitions.push(partition);
   }
 
   return partitions;
@@ -92,7 +92,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   const API_keys = process.env.PE_SHODAN_API_KEYS!;
   const API_list = API_keys?.split(', ');
   const numOfApis: number = API_list.length;
-  const org_chunks = partition(org_string_list, numOfApis)
+  const org_chunks = partition(org_string_list, numOfApis);
   console.log(API_list);
   console.log(org_chunks);
 
