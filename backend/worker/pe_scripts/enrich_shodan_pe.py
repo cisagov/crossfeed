@@ -461,22 +461,22 @@ def run_shodan_thread(api, org_list, thread_name):
     """Run a shodan thread."""
     failed = []
     for org_name in org_list:
-        org_uid = get_org_id(org_name, THREAD_NUM)
+        org_uid = get_org_id(org_name)
         # if org_name not in ["DOL_BLS"]:
         #     continue
-        print(f"{thread_name} Running IPs for {org_name}")
+        print(f"Running IPs for {org_name}")
         start, end = get_dates()
         try:
             ips_df = query_ips(org_uid)
             ips = list(ips_df["ip_address"].values)
         except Exception as e:
-            print(f"{thread_name} Failed fetching IPs for {org_name}.")
-            print(f"{thread_name} {e} - {org_name}")
+            print(f"Failed fetching IPs for {org_name}.")
+            print(f"{e} - {org_name}")
             failed.append(f"{org_name} fetching IPs")
             continue
 
         if len(ips) <= 0:
-            print(f"{thread_name} No IPs for {org_name}.")
+            print(f"No IPs for {org_name}.")
             failed.append(f"{org_name} has 0 IPs")
             continue
 
@@ -485,7 +485,7 @@ def run_shodan_thread(api, org_list, thread_name):
         )
 
     if len(failed) > 0:
-        print(f"{thread_name} Failures: {failed}")
+        print(f"Failures: {failed}")
 
 
 def main():
@@ -493,7 +493,7 @@ def main():
         print("Starting new thread")
         org_list = json.loads(ORGS_LIST)
         print(org_list, flush=True)
-        run_shodan_thread(API_KEY, org_list, THREAD_NUM)
+        run_shodan_thread(API_KEY, org_list, "")
     except:
         print(traceback.format_exc(), flush=True)
 
