@@ -1245,6 +1245,38 @@ GRANT ALL ON SCHEMA public TO crossfeed;
 INSERT INTO organizations (name, cyhy_db_name)
 VALUES ('Department of Homeland Security', 'DHS');
 
+INSERT INTO organizations (name, cyhy_db_name)
+VALUES ('Department of State', 'DOS');
+
+INSERT INTO data_source(name, description, last_run)
+VALUES ('Shodan', 'IoT scanner', '2022-03-14');
+
+INSERT INTO data_source(name, description, last_run)
+VALUES ('HaveIBeenPwned', 'Credentials', '2022-03-14');
+
+INSERT INTO data_source(name, description, last_run)
+VALUES ('DNSTwist', 'Domain Permutations', '2022-03-14');
+
+INSERT INTO data_source(name, description, last_run)
+VALUES ('DNSMonitor', 'Domain Permutations', '2022-03-14');
+
+INSERT INTO data_source(name, description, last_run)
+VALUES ('CIRCL.lu', 'CVE engine', '2022-03-14');
+
+INSERT INTO data_source(name, description, last_run)
+VALUES ('WhoisXML', 'DNS lookpus', '2022-03-14');
+
+INSERT INTO data_source(name, description, last_run)
+VALUES ('findomain', 'Domain enumerator', '2022-03-14');
+
+INSERT INTO data_source(name, description, last_run)
+VALUES ('Sublist3r', 'Domain Permutations', '2022-03-14');
+
+INSERT INTO data_source(name, description, last_run)
+VALUES ('Cybersixgill', 'Dark web mentions and credentials', '2022-03-14');
+
+INSERT INTO data_source(name, description, last_run)
+VALUES ('unknown', 'Source unknown', '2022-03-14');
 
 --
 -- PostgreSQL database dump complete
