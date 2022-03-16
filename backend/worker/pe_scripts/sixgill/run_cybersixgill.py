@@ -1,4 +1,3 @@
-print("Testing!")
 import traceback
 from sixgill.source import (
     alerts,
@@ -20,13 +19,9 @@ from datetime import date, timedelta
 import requests
 
 DB_HOST = os.environ.get("DB_HOST")
-PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
 PE_DB_NAME = os.environ.get("PE_DB_NAME")
+PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
 PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
-
-CF_DB_USERNAME = os.environ.get("DB_USERNAME")
-CF_DB_NAME = os.environ.get("DB_NAME")
-CF_DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 org_id = os.environ.get("org_id")
 org_name = os.environ.get("org_name")
@@ -56,8 +51,8 @@ def cve(cveid):
 
 def getDataSource(conn, source):
     cur = conn.cursor()
-    sql = f"""SELECT * FROM data_source WHERE name='{source}'"""
-    cur.execute(sql)
+    sql = """SELECT * FROM data_source WHERE name=%s"""
+    cur.execute(sql, (source,))
     source = cur.fetchone()
     cur.close()
     return source
@@ -86,8 +81,8 @@ except:
 try:
     print(f"Running on organization: {org_name}")
     cur = PE_conn.cursor()
-    sql = f"""SELECT * FROM organizations WHERE name='{org_name}'"""
-    cur.execute(sql)
+    sql = """SELECT * FROM organizations WHERE name=%s"""
+    cur.execute(sql, (org_name,))
     pe_org_uid = cur.fetchone()
     cur.close()
     print(f"PE_org_uid: {pe_org_uid}")
@@ -127,15 +122,21 @@ try:
     tuples = [tuple(x) for x in alias_df.to_numpy()]
     # Comma-separated dataframe columns
     cols = ",".join(list(alias_df.columns))
+    assert table in ["alias"]
+    assert [c in ["alias", "organizations_uid"] for c in cols]
     # SQL quert to execute
-    query = """INSERT INTO %s(%s) VALUES %%s
-    ON CONFLICT (alias) DO NOTHING;""" % (
-        table,
-        cols,
-    )
+    query = """INSERT INTO {}({}) VALUES %s
+    ON CONFLICT (alias) DO NOTHING;"""
     cursor = PE_conn.cursor()
     try:
-        extras.execute_values(cursor, query, tuples)
+        extras.execute_values(
+            cursor,
+            query.format(
+                table,
+                cols,
+            ),
+            tuples,
+        )
         PE_conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print("Error: %s" % error)
@@ -183,15 +184,41 @@ try:
     tuples = [tuple(x) for x in alerts_df.to_numpy()]
     # Comma-separated dataframe columns
     cols = ",".join(list(alerts_df.columns))
+    assert table in ["alerts"]
+    assert [
+        c
+        in [
+            "alert_name",
+            "content",
+            "date",
+            "sixgill_id",
+            "read",
+            "severity",
+            "site",
+            "threat_level",
+            "threats",
+            "title",
+            "user_id",
+            "category",
+            "lang",
+            "organizations_uid",
+            "data_source_uid",
+        ]
+        for c in cols
+    ]
     # SQL quert to execute
-    query = """INSERT INTO %s(%s) VALUES %%s
-    ON CONFLICT (sixgill_id) DO NOTHING;""" % (
-        table,
-        cols,
-    )
+    query = """INSERT INTO {}({}) VALUES %s
+    ON CONFLICT (sixgill_id) DO NOTHING;"""
     cursor = PE_conn.cursor()
     try:
-        extras.execute_values(cursor, query, tuples)
+        extras.execute_values(
+            cursor,
+            query.format(
+                table,
+                cols,
+            ),
+            tuples,
+        )
         PE_conn.commit()
         print("Successfully inserted/updated alert data into PE database.")
     except (Exception, psycopg2.DatabaseError) as error:
@@ -285,6 +312,10 @@ except:
 
 """ Run redact script on Mention content and title to remove PII"""
 try:
+    # Make sure both columns are strings
+    mentions_df.loc[:, "title"] = str(mentions_df["title"])
+    mentions_df.loc[:, "content"] = str(mentions_df["content"])
+    # Run redact script
     mentions_df = redact_pii(mentions_df, ["content", "title"])
     print("Success redacting PII")
 except:
@@ -303,15 +334,45 @@ try:
     tuples = [tuple(x) for x in mentions_df.to_numpy()]
     # Comma-separated dataframe columns
     cols = ",".join(list(mentions_df.columns))
+    assert table in ["mentions"]
+    assert [
+        c
+        in [
+            "category",
+            "collection_date",
+            "content",
+            "creator",
+            "date",
+            "sixgill_mention_id",
+            "lang",
+            "post_id",
+            "rep_grade",
+            "site",
+            "site_grade",
+            "sub_category",
+            "title",
+            "type",
+            "url",
+            "comments_count",
+            "tags",
+            "organizations_uid",
+            "data_source_uid",
+        ]
+        for c in cols
+    ]
     # SQL quert to execute
-    query = """INSERT INTO %s(%s) VALUES %%s
-    ON CONFLICT (sixgill_mention_id) DO NOTHING;""" % (
-        table,
-        cols,
-    )
+    query = """INSERT INTO {}({}) VALUES %s
+    ON CONFLICT (sixgill_mention_id) DO NOTHING;"""
     cursor = PE_conn.cursor()
     try:
-        extras.execute_values(cursor, query, tuples)
+        extras.execute_values(
+            cursor,
+            query.format(
+                table,
+                cols,
+            ),
+            tuples,
+        )
         PE_conn.commit()
         print("Successfully inserted/updated mention data into PE database.")
     except (Exception, psycopg2.DatabaseError) as error:
@@ -353,15 +414,32 @@ try:
     tuples = [tuple(x) for x in top_cve_df.to_numpy()]
     # Comma-separated dataframe columns
     cols = ",".join(list(top_cve_df.columns))
-    # SQL quert to execute
-    query = """INSERT INTO %s(%s) VALUES %%s
-    ON CONFLICT (cve_id, date) DO NOTHING;""" % (
-        table,
-        cols,
-    )
+    assert table in ["top_cves"]
+    assert [
+        c
+        in [
+            "cve_id",
+            "dynamic_rating",
+            "nvd_base_score",
+            "date",
+            "summary",
+            "data_source_uid",
+        ]
+        for c in cols
+    ]
+    # SQL query to execute
+    query = """INSERT INTO {}({}) VALUES %s
+    ON CONFLICT (cve_id, date) DO NOTHING;"""
     cursor = PE_conn.cursor()
     try:
-        extras.execute_values(cursor, query, tuples)
+        extras.execute_values(
+            cursor,
+            query.format(
+                table,
+                cols,
+            ),
+            tuples,
+        )
         PE_conn.commit()
         print("Successfully inserted/updated top cve data into PE database.")
     except (Exception, psycopg2.DatabaseError) as error:
@@ -378,7 +456,6 @@ except:
 """Fetch root domains for Credential function"""
 try:
     root_domains = root_domains(sixgill_org_id)
-    print(root_domains)
     # root_domains = json.loads(root_domains.replace("'", '"'))
 except:
     print("Failed fetching root domain data.")
@@ -394,36 +471,175 @@ except:
     print("Failed fetching credential data.")
     print(traceback.format_exc())
 
-"""Split credential data into breach and credential tables"""
-# try:
-#     breach_df = creds_df[["organizations_uid", "description", "breach_name", "modified_date"]]
-
-"""Insert Credential Data in PE database"""
-try:
-    table = "cybersix_exposed_credentials"
-    # Create a list of tupples from the dataframe values
-    tuples = [tuple(x) for x in creds_df.to_numpy()]
-    # Comma-separated dataframe columns
-    cols = ",".join(list(creds_df.columns))
-    # SQL quert to execute
-    query = """INSERT INTO %s(%s) VALUES %%s
-    ON CONFLICT (breach_id, email) DO NOTHING;""" % (
-        table,
-        cols,
-    )
-    cursor = PE_conn.cursor()
+if not creds_df.empty:
+    """Split credential data into breach and credential tables"""
     try:
-        extras.execute_values(cursor, query, tuples)
-        PE_conn.commit()
-        print("Successfully inserted/updated exposed credentials into PE database.")
-    except (Exception, psycopg2.DatabaseError) as error:
-        print("Error: %s" % error)
+        # Change empty and ambiguous breach names
+        creds_df.loc[
+            creds_df["breach_name"] == "", "breach_name"
+        ] = "Cybersixgill_" + creds_df["breach_id"].astype(str)
+
+        creds_df.loc[
+            creds_df["breach_name"] == "Automatic leaked credentials detection",
+            "breach_name",
+        ] = "Cybersixgill_" + creds_df["breach_id"].astype(str)
+        creds_breach_df = creds_df[
+            ["breach_name", "description", "breach_date", "password", "data_source_uid"]
+        ].reset_index()
+
+        # Create password_included column
+        creds_breach_df["password_included"] = creds_breach_df["password"] != ""
+
+        # Group breaches and count the number of credentials
+        count_creds = creds_breach_df.groupby(
+            [
+                "breach_name",
+                "description",
+                "breach_date",
+                "password_included",
+                "data_source_uid",
+            ]
+        ).size()
+        creds_breach_df = count_creds.to_frame(name="exposed_cred_count").reset_index()
+        creds_breach_df["modified_date"] = creds_breach_df["breach_date"]
+    except:
+        print("Failed splitting credential data.")
         print(traceback.format_exc())
-        PE_conn.rollback()
+
+    # Insert breach data into the PE database
+    try:
+        table = "credential_breaches"
+        # Create a list of tuples from the dataframe values
+        tuples = [tuple(x) for x in creds_breach_df.to_numpy()]
+        # Comma-separated dataframe columns
+        cols = ",".join(list(creds_breach_df.columns))
+        assert table in ["credential_breaches"]
+        assert [
+            c
+            in [
+                "breach_name",
+                "description",
+                "breach_date",
+                "password_included",
+                "data_source_uid",
+                "exposed_cred_count",
+                "modified_date",
+            ]
+            for c in cols
+        ]
+        # SQL query to execute
+        query = """INSERT INTO {}({}) VALUES %s
+        ON CONFLICT (breach_name) DO UPDATE SET
+        exposed_cred_count = EXCLUDED.exposed_cred_count,
+        password_included = EXCLUDED.password_included;"""
+        cursor = PE_conn.cursor()
+        try:
+            extras.execute_values(
+                cursor,
+                query.format(
+                    table,
+                    cols,
+                ),
+                tuples,
+            )
+            PE_conn.commit()
+            print("Successfully inserted/updated breaches into PE database.")
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+            PE_conn.rollback()
         cursor.close()
-    cursor.close()
-except:
-    print("Failed inserting exposed credentials into PE database.")
-    print(traceback.format_exc())
+    except Exception as e:
+        print(f"Failed inserting breaches for {org_id}")
+        print(e)
+
+    # Get breach uids and match to credentials
+    try:
+        cur = PE_conn.cursor()
+        sql = """SELECT breach_name, credential_breaches_uid FROM credential_breaches"""
+        cur.execute(sql)
+        pe_orgs = cur.fetchall()
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"There was a problem with your database query {error}")
+
+    breach_dict = dict(pe_orgs)
+    for i, row in creds_df.iterrows():
+        breach_uid = breach_dict[row["breach_name"]]
+        creds_df.at[i, "credential_breaches_uid"] = breach_uid
+
+    # Insert credential data into the PE database
+    creds_df = creds_df.rename(
+        columns={"domain": "sub_domain", "breach_date": "modified_date"}
+    )
+    creds_df = creds_df[
+        [
+            "modified_date",
+            "sub_domain",
+            "email",
+            "hash_type",
+            "name",
+            "login_id",
+            "password",
+            "phone",
+            "breach_name",
+            "organizations_uid",
+            "data_source_uid",
+            "credential_breaches_uid",
+        ]
+    ]
+
+    """Insert Credential Data in PE database"""
+    try:
+        table = "credential_exposures"
+        # Create a list of tuples from the dataframe values
+        tuples = [tuple(x) for x in creds_df.to_numpy()]
+        # Comma-separated dataframe columns
+        cols = ",".join(list(creds_df.columns))
+        assert table in ["credential_exposures"]
+        assert [
+            c
+            in [
+                "modified_date",
+                "sub_domain",
+                "email",
+                "hash_type",
+                "name",
+                "login_id",
+                "password",
+                "phone",
+                "breach_name",
+                "organizations_uid",
+                "data_source_uid",
+                "credential_breaches_uid",
+            ]
+            for c in cols
+        ]
+        # SQL query to execute
+        query = """INSERT INTO {}({}) VALUES %s
+        ON CONFLICT (breach_name, email, name) DO UPDATE SET
+        modified_date = EXCLUDED.modified_date;;"""
+        cursor = PE_conn.cursor()
+        try:
+            extras.execute_values(
+                cursor,
+                query.format(
+                    table,
+                    cols,
+                ),
+                tuples,
+            )
+            PE_conn.commit()
+            print("Successfully inserted/updated exposed credentials into PE database.")
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error: %s" % error)
+            print(traceback.format_exc())
+            PE_conn.rollback()
+            cursor.close()
+        cursor.close()
+    except:
+        print("Failed inserting exposed credentials into PE database.")
+        print(traceback.format_exc())
+else:
+    print("No credentials found")
 
 PE_conn.close()

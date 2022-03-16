@@ -20,8 +20,8 @@ except:
 
 
 DB_HOST = os.environ.get("DB_HOST")
-PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
 PE_DB_NAME = os.environ.get("PE_DB_NAME")
+PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
 PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
 API_KEY = os.environ.get("key")
 ORGS_LIST = os.environ.get("org_list")

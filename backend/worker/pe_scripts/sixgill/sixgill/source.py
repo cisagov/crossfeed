@@ -53,7 +53,7 @@ def mentions(date, aliases):
     mentions = mentions[:-1]
     print(mentions)
     query = "site:forum_* AND date:" + date + " AND " + "(" + str(mentions) + ")"
-    print("\nCyberSixGill Query:\n ", query)
+    print("CyberSixGill Query: ", query)
 
     count = 0
     while count <= 5:
@@ -75,7 +75,7 @@ def mentions(date, aliases):
             # Recommended "from" and "result_size" is 50. The maximum is 400.
             resp = intel_post(query, frm=i, scroll=False, result_size=200)
             i = i + 200
-            print(f"\nGetting {i} of {count_total}....")
+            print(f"Getting {i} of {count_total}....")
             intel_items = resp["intel_items"]
             df_mentions = pd.DataFrame.from_dict(intel_items)
             all_mentions.append(df_mentions)
@@ -86,7 +86,7 @@ def mentions(date, aliases):
             # Recommended "from" and "result_size" is 50. The maximum is 400.
             resp = intel_post(query, frm=i, scroll=True, result_size=400)
             i = i + 400
-            print(f"\nGetting {i} of {count_total}....")
+            print(f"Getting {i} of {count_total}....")
             intel_items = resp["intel_items"]
             df_mentions = pd.DataFrame.from_dict(intel_items)
             all_mentions.append(df_mentions)

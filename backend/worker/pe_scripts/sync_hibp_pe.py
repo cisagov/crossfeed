@@ -13,6 +13,7 @@ PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
 
 org_id = os.environ.get("org_id")
 org_name = os.environ.get("org_name")
+data_path = os.environ.get("data_path")
 
 
 def connect(host, database, user, password):
@@ -58,7 +59,7 @@ def execute_hibp_breach_values(conn, jsonList, table):
     try:
         extras.execute_values(cursor, sql, values)
         conn.commit()
-        print("Data inserted using execute_values() successfully..")
+        print("Data inserted into credential_breaches successfully..")
     except (Exception, psycopg2.DatabaseError) as err:
         print(err)
         cursor.close()
@@ -84,7 +85,7 @@ def execute_hibp_emails_values(conn, jsonList, table):
     # try:
     extras.execute_values(cursor, sql, values)
     conn.commit()
-    print("Data inserted using execute_values() successfully..")
+    print("Data inserted into credential_exposures successfully..")
     # except (Exception, psycopg2.DatabaseError) as err:
     #     show_psycopg2_exception(err)
     #     cursor.close()
@@ -130,15 +131,10 @@ try:
     try:
         # Get a list of all HIBP Vulns for this organization
         try:
-            print("testing the json import")
-            with open(f"/app/worker/pe_scripts/hibpSyncFiles/hibpSync_{org_id}.json", "r") as f:
+            with open(data_path, "r") as f:
                 hibp_resp = json.load(f)
-            # print(hibp_resp)
-            print(type(hibp_resp))
-            print("done testing")
         except:
             print(traceback.format_exc())
-        
 
         compiled_breaches = {}
 
@@ -195,17 +191,14 @@ try:
                         "breach_name": b,
                         "credential_breaches_uid": breach_UIDS_Dict[b],
                         "data_source_uid": source_uid,
-                        "name": None
+                        "name": None,
                     }
                     creds_list.append(cred)
         print("there are ", len(creds_list), " creds found")
         # Insert new creds into the PE DB
-        execute_hibp_emails_values(
-            PE_conn, creds_list, "public.credential_exposures"
-        )
+        execute_hibp_emails_values(PE_conn, creds_list, "public.credential_exposures")
         # Close DB connection
         PE_conn.close()
-        
 
     except:
         print(traceback.format_exc())

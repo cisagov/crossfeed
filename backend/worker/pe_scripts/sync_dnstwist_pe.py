@@ -6,31 +6,20 @@ import requests
 import socket
 import json
 
-PE_CREDENTIALS = json.loads(os.environ.get("peCreds"))
-DB_HOST = PE_CREDENTIALS["DB_HOST"]
-PE_DB_NAME = PE_CREDENTIALS["PE_DB_NAME"]
-PE_DB_USERNAME = PE_CREDENTIALS["PE_DB_USERNAME"]
-PE_DB_PASSWORD = PE_CREDENTIALS["PE_DB_PASSWORD"]
+DB_HOST = os.environ.get("DB_HOST")
+PE_DB_NAME = os.environ.get("PE_DB_NAME")
+PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
+PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
 
 org_name = os.environ.get("org_name")
 data_path = os.environ.get("data_path")
 
-def query_db(conn, query, args=(), one=False):
-    cur = conn.cursor()
-    cur.execute(query, args)
-    r = [
-        dict((cur.description[i][0], value) for i, value in enumerate(row))
-        for row in cur.fetchall()
-    ]
-
-    return (r[0] if r else None) if one else r
-
 
 def getSubdomain(conn, domain):
     cur = conn.cursor()
-    sql = f"""SELECT * FROM sub_domains sd
-        WHERE sd.sub_domain = '{domain}'"""
-    cur.execute(sql)
+    sql = """SELECT * FROM sub_domains sd
+        WHERE sd.sub_domain = %s"""
+    cur.execute(sql, (domain,))
     sub = cur.fetchone()
     cur.close()
     return sub
@@ -38,9 +27,9 @@ def getSubdomain(conn, domain):
 
 def getRootdomain(conn, domain):
     cur = conn.cursor()
-    sql = f"""SELECT * FROM root_domains rd
-        WHERE rd.root_domain = '{domain}'"""
-    cur.execute(sql)
+    sql = """SELECT * FROM root_domains rd
+        WHERE rd.root_domain = %s"""
+    cur.execute(sql, (domain,))
     root = cur.fetchone()
     cur.close()
     return root
@@ -48,11 +37,19 @@ def getRootdomain(conn, domain):
 
 def addRootdomain(conn, root_domain, pe_org_uid, source_uid, org_name):
     ip_address = str(socket.gethostbyname(root_domain))
-    sql = f"""insert into root_domains(root_domain, organizations_uid, organization_name, data_source_uid, ip_address)
-            values ('{root_domain}', '{pe_org_uid}', '{org_name}', '{source_uid}', '{ip_address}');"""
-    print(sql)
+    sql = """insert into root_domains(root_domain, organizations_uid, organization_name, data_source_uid, ip_address)
+            values (%s, %s, %s, %s, %s);"""
     cur = conn.cursor()
-    cur.execute(sql)
+    cur.execute(
+        sql,
+        (
+            root_domain,
+            pe_org_uid,
+            org_name,
+            source_uid,
+            ip_address,
+        ),
+    )
     conn.commit()
     cur.close()
     print(f"Success adding root domain, {root_domain}, to root domain table.")
@@ -65,15 +62,21 @@ def addSubdomain(conn, domain, pe_org_uid, org_name):
 
     try:
         root_domain_uid = getRootdomain(conn, root_domain)[0]
-        print(root_domain_uid)
     except:
         addRootdomain(conn, domain, pe_org_uid, source_uid, org_name)
         root_domain_uid = getRootdomain(conn, root_domain)[0]
-    sql = f"""insert into sub_domains(sub_domain, root_domain_uid, root_domain, data_source_uid)
-            values ('{domain}', '{root_domain_uid}', '{root_domain}', '{source_uid}');"""
-    print(sql)
+    sql = """insert into sub_domains(sub_domain, root_domain_uid, root_domain, data_source_uid)
+            values (%s, %s, %s, %s);"""
     cur = conn.cursor()
-    cur.execute(sql)
+    cur.execute(
+        sql,
+        (
+            domain,
+            root_domain_uid,
+            root_domain,
+            source_uid,
+        ),
+    )
     conn.commit()
     cur.close()
     print(f"Success adding domain, {domain}, to subdomains table.")
@@ -81,11 +84,12 @@ def addSubdomain(conn, domain, pe_org_uid, org_name):
 
 def getDataSource(conn, source):
     cur = conn.cursor()
-    sql = f"""SELECT * FROM data_source WHERE name='{source}'"""
-    cur.execute(sql)
+    sql = """SELECT * FROM data_source WHERE name=%s"""
+    cur.execute(sql, (source,))
     source = cur.fetchone()
     cur.close()
     return source
+
 
 def main():
     """Connect to PE Database"""
@@ -104,8 +108,8 @@ def main():
     try:
         print(f"Running on organization: {org_name}")
         cur = PE_conn.cursor()
-        sql = f"""SELECT organizations_uid FROM organizations WHERE name='{org_name}'"""
-        cur.execute(sql)
+        sql = """SELECT organizations_uid FROM organizations WHERE name=%s"""
+        cur.execute(sql, (org_name,))
         pe_org_uid = cur.fetchone()[0]
         cur.close()
         print(f"PE_org_uid: {pe_org_uid}")
@@ -117,7 +121,6 @@ def main():
     try:
         with open(data_path, "r") as f:
             dnstwist_resp = json.load(f)
-        print(dnstwist_resp)
 
         # Get data source
         source_uid = getDataSource(PE_conn, "DNSTwist")[0]
@@ -127,7 +130,6 @@ def main():
         for row in dnstwist_resp:
             # Get subdomain uid
             sub_domain = row["name"]
-            print(sub_domain)
             row = row["structuredData"]["domains"]
             try:
                 sub_domain_uid = getSubdomain(PE_conn, sub_domain)[0]
@@ -196,7 +198,7 @@ def main():
                     "blocklist_report_count": reports,
                 }
                 domain_list.append(domain_dict)
-            print(perm_list)
+        print(perm_list)
 
     except:
         print("Failed selecting DNSTwist data.")
@@ -205,19 +207,44 @@ def main():
     """Insert cleaned data into PE database."""
     try:
         cursor = PE_conn.cursor()
-        columns = domain_list[0].keys()
+        columns = ",".join(domain_list[0].keys())
         table = "domain_permutations"
-        sql = """INSERT INTO %s(%s) VALUES %%s 
+        assert table in ["domain_permutations"]
+        assert [
+            c
+            in [
+                "organizations_uid",
+                "data_source_uid",
+                "sub_domain_uid",
+                "domain_permutation",
+                "ipv4",
+                "ipv6",
+                "mail_server",
+                "name_server",
+                "fuzzer",
+                "date_observed",
+                "ssdeep_score",
+                "malicious",
+                "blocklist_attack_count",
+                "blocklist_report_count",
+            ]
+            for c in columns
+        ]
+        sql = """INSERT INTO {}({}) VALUES %s 
         ON CONFLICT (domain_permutation,organizations_uid) 
         DO UPDATE SET malicious = EXCLUDED.malicious,
             blocklist_attack_count = EXCLUDED.blocklist_attack_count,
             blocklist_report_count = EXCLUDED.blocklist_report_count,
-            data_source_uid = EXCLUDED.data_source_uid;""" % (
-            table,
-            ",".join(columns),
-        )
+            data_source_uid = EXCLUDED.data_source_uid;"""
         values = [[value for value in dict.values()] for dict in domain_list]
-        extras.execute_values(cursor, sql, values)
+        extras.execute_values(
+            cursor,
+            sql.format(
+                table,
+                columns,
+            ),
+            values,
+        )
         PE_conn.commit()
         print("Data inserted using execute_values() successfully..")
 

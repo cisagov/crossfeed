@@ -3,20 +3,11 @@ import { spawnSync } from 'child_process';
 import { connectToDatabase, Vulnerability } from '../models';
 import * as path from 'path';
 import { writeFileSync } from 'fs';
+import { getPeEnv } from './helpers/getPeEnv';
 
 const DOM_MASQ_DIRECTORY = '/app/worker/pe_scripts/peDomMasq';
 // Call the sync_dnstwist_pe.py script that fetches dnstwist results, checks
 // IPs using the blocklist.de api, then updates the PE db instance
-
-function gePeEnv() {
-  const peCredentials = {
-    DB_HOST: process.env.DB_HOST,
-    PE_DB_NAME: process.env.PE_DB_NAME,
-    PE_DB_USERNAME: process.env.PE_DB_USERNAME,
-    PE_DB_PASSWORD: process.env.PE_DB_PASSWORD
-  };
-  return JSON.stringify(peCredentials);
-}
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
@@ -29,10 +20,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     .where('domain.organizationId = :org_id', { org_id: organizationId })
     .andWhere("vulnerability.source = 'dnstwist'")
     .getRawMany();
-  console.log(data);
-  const file_name = organizationName?.replace(/ /g, '');
-  const input_path = path.join(DOM_MASQ_DIRECTORY, file_name + '.json');
-  console.log(input_path);
+  const input_path = path.join(DOM_MASQ_DIRECTORY, organizationId + '.json');
   writeFileSync(input_path, JSON.stringify(data));
 
   const child = spawnSync(
@@ -42,7 +30,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       stdio: 'pipe',
       encoding: 'utf-8',
       env: {
-        peCreds: gePeEnv(),
+        ...getPeEnv(),
         data_path: input_path,
         org_id: organizationId,
         org_name: organizationName

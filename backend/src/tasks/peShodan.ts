@@ -5,6 +5,7 @@ import { ProcessCredentials } from 'aws-sdk';
 import PQueue from 'p-queue';
 import { chunk } from 'lodash';
 import * as readline from 'readline';
+import { getPeEnv } from './helpers/getPeEnv';
 
 interface org_api {
   org_list: string[];
@@ -43,7 +44,7 @@ const create_child = async (APIkey, org_list, thread_num): Promise<void> => {
     {
       stdio: 'pipe',
       env: {
-        ...process.env,
+        ...getPeEnv(),
         org_list: JSON.stringify(org_list),
         key: APIkey,
         thread_num
@@ -95,7 +96,6 @@ export const handler = async (commandOptions: CommandOptions) => {
   const org_chunks = partition(org_string_list, numOfApis);
   console.log(API_list);
   console.log(org_chunks);
-
 
   const org_obj: org_api[] = [];
   for (let i = 0; i < numOfApis; i++) {
