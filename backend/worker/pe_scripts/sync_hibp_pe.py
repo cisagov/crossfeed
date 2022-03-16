@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import os
 import traceback
 import psycopg2
@@ -10,10 +11,6 @@ DB_HOST = os.environ.get("DB_HOST")
 PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
 PE_DB_NAME = os.environ.get("PE_DB_NAME")
 PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
-
-CF_DB_USERNAME = os.environ.get("DB_USERNAME")
-CF_DB_NAME = os.environ.get("DB_NAME")
-CF_DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 org_id = os.environ.get("org_id")
 org_name = os.environ.get("org_name")
@@ -37,15 +34,26 @@ def query_db(conn, query, args=(), one=False):
 
 def execute_hibp_breach_values(conn, jsonList, table):
     "SQL 'INSERT' of a datafame"
-    columns = jsonList[0].keys()
-    sql = """INSERT INTO %s(%s) VALUES %%s 
+    sql = """INSERT INTO public.credential_breaches (
+        breach_name,
+        description,
+        exposed_cred_count,
+        breach_date,
+        added_date,
+        modified_date,
+        data_classes,
+        password_included,
+        is_verified,
+        is_fabricated,
+        is_sensitive,
+        is_retired,
+        is_spam_list,
+        data_source_uid
+    ) VALUES %s 
     ON CONFLICT (breach_name) 
     DO UPDATE SET modified_date = EXCLUDED.modified_date,
     exposed_cred_count = EXCLUDED.exposed_cred_count,
-    password_included = EXCLUDED.password_included;""" % (
-        table,
-        ",".join(columns),
-    )
+    password_included = EXCLUDED.password_included;"""
     values = [[value for value in dict.values()] for dict in jsonList]
     cursor = conn.cursor()
     try:
@@ -59,13 +67,19 @@ def execute_hibp_breach_values(conn, jsonList, table):
 
 def execute_hibp_emails_values(conn, jsonList, table):
     "SQL 'INSERT' of a datafame"
-    columns = jsonList[0].keys()
-    sql = """INSERT INTO %s(%s) VALUES %%s 
-    ON CONFLICT (email, breach_name) 
-    DO NOTHING;""" % (
-        table,
-        ",".join(columns),
-    )
+    sql = """INSERT INTO public.credential_exposures (
+        email,
+        organizations_uid,
+        root_domain,
+        sub_domain,
+        modified_date,
+        breach_name,
+        credential_breaches_uid,
+        data_source_uid,
+        name
+    ) VALUES %s 
+    ON CONFLICT (email, breach_name, name) 
+    DO NOTHING;"""
     values = [[value for value in dict.values()] for dict in jsonList]
     cursor = conn.cursor()
     # try:
@@ -102,7 +116,7 @@ try:
         cur.execute(sql)
         pe_org_uid = cur.fetchone()[0]
         cur.close()
-        print(f"PE_org_uid: {pe_org_uid}")
+        print(f"PE_org_uid: {pe_org_uid}", flush=True)
     except:
         print("Failed with Select Statement")
         print(traceback.format_exc())
@@ -114,26 +128,18 @@ try:
     except:
         print("Failed fetching the data source.")
 
-    # Connect to Crossfeed DB
-    try:
-        CF_conn = connect(DB_HOST, CF_DB_NAME, CF_DB_USERNAME, CF_DB_PASSWORD)
-        print("Connected to crossfeed database.")
-    except:
-        print("Failed To Connect to crossfeed database")
-
     try:
         # Get a list of all HIBP Vulns for this organization
-        sql = f"""SELECT vuln."structuredData", dom."fromRootDomain", dom."name"
-                FROM domain as dom
-                JOIN vulnerability as vuln 
-                ON vuln."domainId" = dom.id 
-                WHERE dom."organizationId" ='{org_id}' 
-                AND vuln."source" = 'hibp'"""
-
-        hibp_resp = query_db(
-            CF_conn,
-            sql,
-        )
+        try:
+            print("testing the json import", flush=True)
+            with open(f"/app/worker/pe_scripts/hibpSyncFiles/hibpSync_{org_id}.json", "r") as f:
+                hibp_resp = json.load(f)
+            # print(hibp_resp)
+            print(type(hibp_resp))
+            print("done testing")
+        except:
+            print(traceback.format_exc())
+        
 
         compiled_breaches = {}
 
@@ -190,6 +196,7 @@ try:
                         "breach_name": b,
                         "credential_breaches_uid": breach_UIDS_Dict[b],
                         "data_source_uid": source_uid,
+                        "name": None
                     }
                     creds_list.append(cred)
         print("there are ", len(creds_list), " creds found")
@@ -199,7 +206,7 @@ try:
         )
         # Close DB connection
         PE_conn.close()
-        CF_conn.close()
+        
 
     except:
         print(traceback.format_exc())
