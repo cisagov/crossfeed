@@ -96,7 +96,8 @@ export const handler = async (commandOptions: CommandOptions) => {
   console.log(API_list);
   console.log(org_chunks);
 
-  var org_obj: org_api[] = [];
+
+  const org_obj: org_api[] = [];
   for (let i = 0; i < numOfApis; i++) {
     const org_api = {
       org_list: org_chunks[i],

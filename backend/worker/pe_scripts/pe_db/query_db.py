@@ -6,6 +6,8 @@ import psycopg2.extras as extras
 import sys
 import pandas as pd
 import os
+import datetime
+
 
 PE_DB_NAME = os.environ.get("PE_DB_NAME")
 PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
@@ -322,5 +324,10 @@ def getDataSource(source):
     sql = f"""SELECT * FROM data_source WHERE name='{source}'"""
     cur.execute(sql)
     source = cur.fetchone()
+    # Update last_run in data_source table
+    date = datetime.today().strftime("%Y-%m-%d")
+    sql = """update data_source set last_run = '{}'
+            where name = '{}';"""
+    cur.execute(sql.format(date, source))
     cur.close()
     return source

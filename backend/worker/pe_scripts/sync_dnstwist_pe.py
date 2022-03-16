@@ -4,7 +4,16 @@ import psycopg2
 import psycopg2.extras as extras
 import requests
 import socket
+import json
 
+PE_CREDENTIALS = json.loads(os.environ.get("peCreds"))
+DB_HOST = PE_CREDENTIALS["DB_HOST"]
+PE_DB_NAME = PE_CREDENTIALS["PE_DB_NAME"]
+PE_DB_USERNAME = PE_CREDENTIALS["PE_DB_USERNAME"]
+PE_DB_PASSWORD = PE_CREDENTIALS["PE_DB_PASSWORD"]
+
+org_name = os.environ.get("org_name")
+data_path = os.environ.get("data_path"
 
 def query_db(conn, query, args=(), one=False):
     cur = conn.cursor()
@@ -40,7 +49,8 @@ def getRootdomain(conn, domain):
 def addRootdomain(conn, root_domain, pe_org_uid, source_uid, org_name):
     ip_address = str(socket.gethostbyname(root_domain))
     sql = f"""insert into root_domains(root_domain, organizations_uid, organization_name, data_source_uid, ip_address)
-            values ('{root_domain}', '{pe_org_uid}', '{org_name}', '{source_uid}', '{ip_address});"""
+            values ('{root_domain}', '{pe_org_uid}', '{org_name}', '{source_uid}', '{ip_address}');"""
+    print(sql)
     cur = conn.cursor()
     cur.execute(sql)
     conn.commit()
@@ -52,7 +62,7 @@ def addSubdomain(conn, domain, pe_org_uid, org_name):
     source_uid = getDataSource(conn, "findomain")[0]
     root_domain = domain.split(".")[-2:]
     root_domain = ".".join(root_domain)
-    print(root_domain)
+
     try:
         root_domain_uid = getRootdomain(conn, root_domain)[0]
         print(root_domain_uid)
@@ -77,170 +87,146 @@ def getDataSource(conn, source):
     cur.close()
     return source
 
+def main():
+    """Connect to PE Database"""
+    try:
+        PE_conn = psycopg2.connect(
+            host=DB_HOST,
+            database=PE_DB_NAME,
+            user=PE_DB_USERNAME,
+            password=PE_DB_PASSWORD,
+        )
+        print("Connected to PE database.")
+    except:
+        print("Failed connecting to PE database.")
 
-DB_HOST = os.environ.get("DB_HOST")
+    """Select organization from PE Database"""
+    try:
+        print(f"Running on organization: {org_name}")
+        cur = PE_conn.cursor()
+        sql = f"""SELECT organizations_uid FROM organizations WHERE name='{org_name}'"""
+        cur.execute(sql)
+        pe_org_uid = cur.fetchone()[0]
+        cur.close()
+        print(f"PE_org_uid: {pe_org_uid}")
+    except:
+        print("Failed with Select Statement")
+        print(traceback.format_exc())
 
-CF_DB_NAME = os.environ.get("DB_NAME")
-CF_DB_USERNAME = os.environ.get("DB_USERNAME")
-CF_DB_PASSWORD = os.environ.get("DB_PASSWORD")
+    """Fetch DNSTwist data from Crossfeed"""
+    try:
+        with open(data_path, "r") as f:
+            dnstwist_resp = json.load(f)
+        print(dnstwist_resp)
 
-PE_DB_NAME = os.environ.get("PE_DB_NAME")
-PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
-PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
+        # Get data source
+        source_uid = getDataSource(PE_conn, "DNSTwist")[0]
 
-org_id = os.environ.get("org_id")
-org_name = os.environ.get("org_name")
+        domain_list = []
+        perm_list = []
+        for row in dnstwist_resp:
+            # Get subdomain uid
+            sub_domain = row["name"]
+            print(sub_domain)
+            row = row["structuredData"]["domains"]
+            try:
+                sub_domain_uid = getSubdomain(PE_conn, sub_domain)[0]
+            except:
+                # Add and then get it
+                addSubdomain(PE_conn, sub_domain, pe_org_uid, org_name)
+                sub_domain_uid = getSubdomain(PE_conn, sub_domain)[0]
 
+            for dom in row:
+                malicious = False
+                attacks = 0
+                reports = 0
+                if "original" in dom["fuzzer"]:
+                    continue
+                if "dns-a" not in dom:
+                    continue
+                else:
+                    # check IP in Blocklist API
+                    response = requests.get(
+                        "http://api.blocklist.de/api.php?ip=" + str(dom["dns-a"][0])
+                    ).content
 
-"""Connect to PE Database"""
-try:
-    PE_conn = psycopg2.connect(
-        host=DB_HOST, database=PE_DB_NAME, user=PE_DB_USERNAME, password=PE_DB_PASSWORD
-    )
-    print("Connected to PE database.")
-except:
-    print("Failed connecting to PE database.")
+                    if str(response) != "b'attacks: 0<br />reports: 0<br />'":
+                        malicious = True
+                        attacks = int(str(response).split("attacks: ")[1].split("<")[0])
+                        reports = int(str(response).split("reports: ")[1].split("<")[0])
+                if "ssdeep-score" not in dom:
+                    dom["ssdeep-score"] = ""
+                if "dns-mx" not in dom:
+                    dom["dns-mx"] = [""]
+                if "dns-ns" not in dom:
+                    dom["dns-ns"] = [""]
+                if "dns-aaaa" not in dom:
+                    dom["dns-aaaa"] = [""]
+                else:
+                    # check IP in Blocklist API
+                    response = requests.get(
+                        "http://api.blocklist.de/api.php?ip=" + str(dom["dns-aaaa"][0])
+                    ).content
+                    if str(response) != "b'attacks: 0<br />reports: 0<br />'":
+                        malicious = True
+                        attacks = int(str(response).split("attacks: ")[1].split("<")[0])
+                        reports = int(str(response).split("reports: ")[1].split("<")[0])
 
-"""Select organization from PE Database"""
-try:
-    print(f"Running on organization: {org_name}")
-    cur = PE_conn.cursor()
-    sql = f"""SELECT organizations_uid FROM organizations WHERE name='{org_name}'"""
-    cur.execute(sql)
-    pe_org_uid = cur.fetchone()[0]
-    cur.close()
-    print(f"PE_org_uid: {pe_org_uid}")
-except:
-    print("Failed with Select Statement")
-    print(traceback.format_exc())
+                # Ignore duplicates
+                permutation = dom["domain-name"]
+                if permutation in perm_list:
+                    continue
+                else:
+                    perm_list.append(permutation)
 
+                domain_dict = {
+                    "organizations_uid": pe_org_uid,
+                    "data_source_uid": source_uid,
+                    "sub_domain_uid": sub_domain_uid,
+                    "domain_permutation": dom["domain-name"],
+                    "ipv4": dom["dns-a"][0],
+                    "ipv6": dom["dns-aaaa"][0],
+                    "mail_server": dom["dns-mx"][0],
+                    "name_server": dom["dns-ns"][0],
+                    "fuzzer": dom["fuzzer"],
+                    "date_observed": dom["date-first-observed"],
+                    "ssdeep_score": dom["ssdeep-score"],
+                    "malicious": malicious,
+                    "blocklist_attack_count": attacks,
+                    "blocklist_report_count": reports,
+                }
+                domain_list.append(domain_dict)
+            print(perm_list)
 
-"""Connect to Crossfeed's Database"""
-try:
-    CF_conn = psycopg2.connect(
-        host=DB_HOST, database=CF_DB_NAME, user=CF_DB_USERNAME, password=CF_DB_PASSWORD
-    )
-    print("Connected to Crossfeed's database.")
-except:
-    print("Failed connecting to Crossfeed's database.")
+    except:
+        print("Failed selecting DNSTwist data.")
+        print(traceback.format_exc())
 
-"""Collect DNSTwist data from Crossfeed"""
-try:
-    sql = f"""SELECT vuln."structuredData", vuln."domainId", dom."name"
-                FROM domain as dom
-                JOIN vulnerability as vuln
-                ON vuln."domainId" = dom.id
-                WHERE dom."organizationId" ='{org_id}'
-                AND vuln."source" = 'dnstwist'"""
-    dnstwist_resp = query_db(CF_conn, sql)
+    """Insert cleaned data into PE database."""
+    try:
+        cursor = PE_conn.cursor()
+        columns = domain_list[0].keys()
+        table = "domain_permutations"
+        sql = """INSERT INTO %s(%s) VALUES %%s 
+        ON CONFLICT (domain_permutation,organizations_uid) 
+        DO UPDATE SET malicious = EXCLUDED.malicious,
+            blocklist_attack_count = EXCLUDED.blocklist_attack_count,
+            blocklist_report_count = EXCLUDED.blocklist_report_count,
+            data_source_uid = EXCLUDED.data_source_uid;""" % (
+            table,
+            ",".join(columns),
+        )
+        values = [[value for value in dict.values()] for dict in domain_list]
+        extras.execute_values(cursor, sql, values)
+        PE_conn.commit()
+        print("Data inserted using execute_values() successfully..")
 
-    # Get data source
-    source_uid = getDataSource(PE_conn, "DNSTwist")[0]
+    except:
+        print("Failure inserting data into database.")
+        print(traceback.format_exc())
 
-    domain_list = []
-    perm_list = []
-    for row in dnstwist_resp:
-        # Get subdomain uid
-        sub_domain = row["name"]
-        print(sub_domain)
-        row = row["structuredData"]["domains"]
-        try:
-            sub_domain_uid = getSubdomain(PE_conn, sub_domain)[0]
-        except:
-            # Add and then get it
-            addSubdomain(PE_conn, sub_domain, pe_org_uid, org_name)
-            sub_domain_uid = getSubdomain(PE_conn, sub_domain)[0]
-
-        for dom in row:
-            malicious = False
-            attacks = 0
-            reports = 0
-            if "original" in dom["fuzzer"]:
-                continue
-            if "dns-a" not in dom:
-                continue
-            else:
-                # check IP in Blocklist API
-                response = requests.get(
-                    "http://api.blocklist.de/api.php?ip=" + str(dom["dns-a"][0])
-                ).content
-
-                if str(response) != "b'attacks: 0<br />reports: 0<br />'":
-                    malicious = True
-                    attacks = int(str(response).split("attacks: ")[1].split("<")[0])
-                    reports = int(str(response).split("reports: ")[1].split("<")[0])
-            if "ssdeep-score" not in dom:
-                dom["ssdeep-score"] = ""
-            if "dns-mx" not in dom:
-                dom["dns-mx"] = [""]
-            if "dns-ns" not in dom:
-                dom["dns-ns"] = [""]
-            if "dns-aaaa" not in dom:
-                dom["dns-aaaa"] = [""]
-            else:
-                # check IP in Blocklist API
-                response = requests.get(
-                    "http://api.blocklist.de/api.php?ip=" + str(dom["dns-aaaa"][0])
-                ).content
-                if str(response) != "b'attacks: 0<br />reports: 0<br />'":
-                    malicious = True
-                    attacks = int(str(response).split("attacks: ")[1].split("<")[0])
-                    reports = int(str(response).split("reports: ")[1].split("<")[0])
-
-            # Ignore duplicates
-            permutation = dom["domain-name"]
-            if permutation in perm_list:
-                continue
-            else:
-                perm_list.append(permutation)
-
-            domain_dict = {
-                "organizations_uid": pe_org_uid,
-                "data_source_uid": source_uid,
-                "sub_domain_uid": sub_domain_uid,
-                "domain_permutation": dom["domain-name"],
-                "ipv4": dom["dns-a"][0],
-                "ipv6": dom["dns-aaaa"][0],
-                "mail_server": dom["dns-mx"][0],
-                "name_server": dom["dns-ns"][0],
-                "fuzzer": dom["fuzzer"],
-                "date_observed": dom["date-first-observed"],
-                "ssdeep_score": dom["ssdeep-score"],
-                "malicious": malicious,
-                "blocklist_attack_count": attacks,
-                "blocklist_report_count": reports,
-            }
-            domain_list.append(domain_dict)
-        print(perm_list)
-
-except:
-    print("Failed selecting DNSTwist data.")
-    print(traceback.format_exc())
-
-CF_conn.close()
-
-"""Insert cleaned data into PE database."""
-try:
-    cursor = PE_conn.cursor()
-    columns = domain_list[0].keys()
-    table = "domain_permutations"
-    sql = """INSERT INTO %s(%s) VALUES %%s 
-    ON CONFLICT (domain_permutation,organizations_uid) 
-    DO UPDATE SET malicious = EXCLUDED.malicious,
-        blocklist_attack_count = EXCLUDED.blocklist_attack_count,
-        blocklist_report_count = EXCLUDED.blocklist_report_count,
-        data_source_uid = EXCLUDED.data_source_uid;""" % (
-        table,
-        ",".join(columns),
-    )
-    values = [[value for value in dict.values()] for dict in domain_list]
-    extras.execute_values(cursor, sql, values)
-    PE_conn.commit()
-    print("Data inserted using execute_values() successfully..")
-
-except:
-    print("Failure inserting data into database.")
-    print(traceback.format_exc())
+    PE_conn.close()
 
 
-PE_conn.close()
+if __name__ == "__main__":
+    main()

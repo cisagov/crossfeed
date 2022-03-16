@@ -14,9 +14,8 @@ import os
 
 SECRETS = "/app/worker/pe_scripts/sixgill/config/config.ini"
 SECTION = "sixgill"
-
-SIXGILL_CLIENT_ID = "dhscisape-jo2ju4gm90"
-SIXGILL_CLIENT_SECRET = "ce24d20d-8689-4386-9198-941c05519e3b"
+SIXGILL_CLIENT_ID = os.environ.get("SIXGILL_CLIENT_ID")
+SIXGILL_CLIENT_SECRET = os.environ.get("SIXGILL_CLIENT_SECRET")
 
 
 def token():
