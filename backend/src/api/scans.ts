@@ -211,7 +211,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     cpu: '2048',
     memory: '16384',
     description:
-      'Run organization IPs through shodan and circl to find un/verified vulns and save them to PE db '
+      'Run organization IPs through shodan and circl to find un/verified vulns and save them to PE db.'
   },
   rootDomainSync: {
     type: 'fargate',
