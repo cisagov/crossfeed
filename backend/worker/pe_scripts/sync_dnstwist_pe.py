@@ -13,7 +13,7 @@ PE_DB_USERNAME = PE_CREDENTIALS["PE_DB_USERNAME"]
 PE_DB_PASSWORD = PE_CREDENTIALS["PE_DB_PASSWORD"]
 
 org_name = os.environ.get("org_name")
-data_path = os.environ.get("data_path"
+data_path = os.environ.get("data_path")
 
 def query_db(conn, query, args=(), one=False):
     cur = conn.cursor()
