@@ -62,7 +62,6 @@ async function main() {
     peShodan,
     peDomMasq,
     peHibpSync
-
   }[scanName];
   if (!scanFn) {
     throw new Error('Invalid scan name ' + scanName);

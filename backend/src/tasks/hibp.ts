@@ -53,12 +53,16 @@ async function lookupEmails(
   domain: Domain
 ) {
   try {
-    const { data } = await axios.get('https://haveibeenpwned.com/api/v2/enterprisesubscriber/domainsearch/' + domain.name, {
-      headers: {
-        Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
+    const { data } = await axios.get(
+      'https://haveibeenpwned.com/api/v2/enterprisesubscriber/domainsearch/' +
+        domain.name,
+      {
+        headers: {
+          Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
+        }
       }
-  });
-    
+    );
+
     const addressResults = {};
     const breachResults = {};
     const finalResults = {};
@@ -98,11 +102,14 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   console.log('Running hibp on organization', organizationName);
   const domainsWithIPs = await getIps(organizationId);
-  const { data } = await axios.get('https://haveibeenpwned.com/api/v2/breaches', {
+  const { data } = await axios.get(
+    'https://haveibeenpwned.com/api/v2/breaches',
+    {
       headers: {
         Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
-    });
+    }
+  );
   const breachesDict: { [key: string]: breachResults } = {};
   for (const breach of data) {
     breachesDict[breach.Name] = breach;
