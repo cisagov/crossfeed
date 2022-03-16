@@ -10,9 +10,9 @@ headers.
 from configparser import ConfigParser
 import requests
 import os
+from ..run_cybersixgill import getCreds
 
-SIXGILL_CLIENT_ID = os.environ.get("SIXGILL_CLIENT_ID")
-SIXGILL_CLIENT_SECRET = os.environ.get("SIXGILL_CLIENT_SECRET")
+SIXGILL_CLIENT_ID, SIXGILL_CLIENT_SECRET = getCreds()
 
 
 def token():

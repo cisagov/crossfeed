@@ -23,6 +23,7 @@ PE_DB_NAME = os.environ.get("PE_DB_NAME")
 PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
 PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
 
+
 org_id = os.environ.get("org_id")
 org_name = os.environ.get("org_name")
 
@@ -40,6 +41,11 @@ from_date = (to_date - back).strftime("%Y-%m-%d %H:%M:%S")
 to_date = to_date.strftime("%Y-%m-%d %H:%M:%S")
 print(to_date)
 print(from_date)
+
+
+def getCreds():
+    """Pass creds to API calls"""
+    return os.environ.get("SIXGILL_CLIENT_ID"), os.environ.get("SIXGILL_CLIENT_SECRET")
 
 
 def cve(cveid):
