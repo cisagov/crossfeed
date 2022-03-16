@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import os
 import traceback
 import psycopg2
@@ -116,7 +115,7 @@ try:
         cur.execute(sql)
         pe_org_uid = cur.fetchone()[0]
         cur.close()
-        print(f"PE_org_uid: {pe_org_uid}", flush=True)
+        print(f"PE_org_uid: {pe_org_uid}")
     except:
         print("Failed with Select Statement")
         print(traceback.format_exc())
@@ -131,7 +130,7 @@ try:
     try:
         # Get a list of all HIBP Vulns for this organization
         try:
-            print("testing the json import", flush=True)
+            print("testing the json import")
             with open(f"/app/worker/pe_scripts/hibpSyncFiles/hibpSync_{org_id}.json", "r") as f:
                 hibp_resp = json.load(f)
             # print(hibp_resp)
