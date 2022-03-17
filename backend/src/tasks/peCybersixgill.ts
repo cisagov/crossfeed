@@ -1,6 +1,5 @@
 import { CommandOptions } from './ecs-client';
 import { spawnSync } from 'child_process';
-import { getPeEnv } from './helpers/getPeEnv';
 
 // Call the sync_dnstwist_pe.py script that fetches dnstwist results, checks
 // IPs using the blocklist.de api, then updates the PE db instance
@@ -14,7 +13,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       stdio: 'pipe',
       encoding: 'utf-8',
       env: {
-        ...getPeEnv(),
+        ...process.env,
         org_name: organizationName,
         org_id: organizationId
       }
