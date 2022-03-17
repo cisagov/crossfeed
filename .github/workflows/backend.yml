@@ -3,14 +3,14 @@ name: Backend Pipeline
 on:
   push:
     branches:
-      - my-branch
+      - epicfaace-patch-4
       - production
     paths:
       - 'backend/**'
       - '.github/workflows/backend.yml'
   pull_request:
     branches:
-      - my-branch
+      - epicfaace-patch-4
       - production
     paths:
       - 'backend/**'
@@ -114,7 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     concurrency: 1
-    if: github.event_name == 'push' && github.ref == 'refs/heads/my-branch'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/epicfaace-patch-4'
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
