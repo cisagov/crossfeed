@@ -12,6 +12,7 @@ import os
 
 SIXGILL_CLIENT_ID = os.environ.get("SIXGILL_CLIENT_ID")
 SIXGILL_CLIENT_SECRET = os.environ.get("SIXGILL_CLIENT_SECRET")
+print(SIXGILL_CLIENT_ID)
 
 
 def token():
