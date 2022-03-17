@@ -22,6 +22,7 @@ DB_HOST = os.environ.get("DB_HOST")
 PE_DB_NAME = os.environ.get("PE_DB_NAME")
 PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
 PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
+print(PE_DB_USERNAME)
 
 org_id = os.environ.get("org_id")
 org_name = os.environ.get("org_name")
@@ -38,8 +39,6 @@ to_date = datetime.datetime.now()
 back = timedelta(days=16)
 from_date = (to_date - back).strftime("%Y-%m-%d %H:%M:%S")
 to_date = to_date.strftime("%Y-%m-%d %H:%M:%S")
-print(to_date)
-print(from_date)
 
 
 def cve(cveid):

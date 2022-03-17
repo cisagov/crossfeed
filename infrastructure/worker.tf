@@ -214,6 +214,18 @@ resource "aws_ecs_task_definition" "worker" {
         "valueFrom": "${data.aws_ssm_parameter.db_password.arn}"
       },
       {
+        "name": "PE_DB_NAME",
+        "valueFrom": "${data.aws_ssm_parameter.pe_db_name.arn}"
+      },
+      {
+        "name": "PE_DB_USERNAME",
+        "valueFrom": "${data.aws_ssm_parameter.pe_db_username.arn}"
+      },
+      {
+        "name": "PE_DB_PASSWORD",
+        "valueFrom": "${data.aws_ssm_parameter.pe_db_password.arn}"
+      },
+      {
         "name": "CENSYS_API_ID",
         "valueFrom": "${data.aws_ssm_parameter.censys_api_id.arn}"
       },
