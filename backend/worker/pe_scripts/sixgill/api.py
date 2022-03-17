@@ -1,6 +1,4 @@
-"""
-"""
-from sixgill.config import token
+from config import token
 
 # from pprint import pprint
 import requests

@@ -72,6 +72,9 @@ Optional variables:
 - `/crossfeed/staging/CENSYS_API_SECRET`
 - `/crossfeed/staging/SHODAN_API_KEY`
 - `/crossfeed/staging/HIBP_API_KEY`
+- `/crossfeed/staging/SIXGILL_CLIENT_ID`
+- `/crossfeed/staging/SIXGILL_CLIENT_SECRET`
+- `/crossfeed/staging/PE_SHODAN_API_KEYS`
 - `/crossfeed/staging/LG_API_KEY`
 - `/crossfeed/staging/LG_WORKSPACE_NAME`
 - `/crossfeed/staging/LOGIN_GOV_REDIRECT_URI`
