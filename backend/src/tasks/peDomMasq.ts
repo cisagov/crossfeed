@@ -2,7 +2,7 @@ import { CommandOptions } from './ecs-client';
 import { spawnSync } from 'child_process';
 import { connectToDatabase, Vulnerability } from '../models';
 import * as path from 'path';
-import { writeFileSync } from 'fs';
+import { promises as fs } from 'fs';
 import { getPeEnv } from './helpers/getPeEnv';
 
 const DOM_MASQ_DIRECTORY = '/app/worker/pe_scripts/peDomMasq';
@@ -21,7 +21,8 @@ export const handler = async (commandOptions: CommandOptions) => {
     .andWhere("vulnerability.source = 'dnstwist'")
     .getRawMany();
   const input_path = path.join(DOM_MASQ_DIRECTORY, organizationId + '.json');
-  writeFileSync(input_path, JSON.stringify(data));
+
+  await fs.writeFile(input_path, JSON.stringify(data));
 
   const child = spawnSync(
     'python3',
@@ -30,7 +31,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       stdio: 'pipe',
       encoding: 'utf-8',
       env: {
-        ...getPeEnv(),
+        ...process.env,
         data_path: input_path,
         org_id: organizationId,
         org_name: organizationName
