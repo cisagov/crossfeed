@@ -1,5 +1,5 @@
 import traceback
-from sixgill.source import (
+from source import (
     alerts,
     list_organizations,
     alias_organization,
@@ -8,12 +8,11 @@ from sixgill.source import (
     creds,
     top_cves,
 )
-from sixgill.redact import redact_pii
+from redact import redact_pii
 import psycopg2
 import psycopg2.extras as extras
 import os
 import pandas as pd
-import json
 import datetime
 from datetime import date, timedelta
 import requests
@@ -32,7 +31,6 @@ days_back = timedelta(days=40)
 start_date = str(today - days_back)
 end_date = str(today)
 date_span = f"[{start_date} TO {end_date}]"
-
 
 to_date = datetime.datetime.now()
 back = timedelta(days=16)

@@ -118,7 +118,6 @@ export const handler = async (commandOptions: CommandOptions) => {
   const services: Service[] = [];
   const vulns: Vulnerability[] = [];
   for (const domain of domainsWithIPs) {
-    console.log(domain.name);
     const results = await lookupEmails(breachesDict, domain);
 
     if (results) {
