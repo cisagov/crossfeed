@@ -150,7 +150,7 @@ variable "ssm_sixgill_client_id" {
 
 variable "ssm_sixgill_client_secret" {
   type    = string
-  default = "/crossfeed/staging/SIXGILL_CLIENT_ID"
+  default = "/crossfeed/staging/SIXGILL_CLIENT_SECRET"
 }
 
 
