@@ -7,7 +7,6 @@ method uses scheme and returns a token that you must use in your request
 headers.
 """
 
-from configparser import ConfigParser
 import requests
 import os
 
