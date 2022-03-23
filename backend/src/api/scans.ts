@@ -129,7 +129,7 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: true,
     cpu: '1024',
     memory: '8192',
-    description: 'Matches detected software versions to CVEs from NIST NVD'
+    description: 'Matches detected software versions to CVEs from NIST NVD and CISA\'s Known Exploited Vulnerabilities Catalog.'
   },
   dotgov: {
     type: 'fargate',
