@@ -23,6 +23,7 @@ PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
 PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
 print(PE_DB_USERNAME)
 print(PE_DB_NAME)
+print(DB_HOST)
 
 org_id = os.environ.get("org_id")
 org_name = os.environ.get("org_name")
