@@ -21,6 +21,9 @@ DB_HOST = os.environ.get("DB_HOST")
 PE_DB_NAME = os.environ.get("PE_DB_NAME")
 PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
 PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
+SIXGILL_CLIENT_ID = os.environ.get("SIXGILL_CLIENT_ID")
+SIXGILL_CLIENT_SECRET = os.environ.get("SIXGILL_CLIENT_SECRET")
+print(SIXGILL_CLIENT_ID)
 print(PE_DB_USERNAME)
 print(PE_DB_NAME)
 print(DB_HOST)
@@ -110,7 +113,7 @@ except:
     print("Failed fetching Cybersixgill aliases.")
     print(traceback.format_exc())
 
-"""Insert/Update Aliases into PE databse instance"""
+"""Insert/Update Aliases into PE database instance"""
 try:
     # aliases_list = json.loads(aliases.replace("'", '"'))
     alias_df = pd.DataFrame(aliases, columns=["alias"])

@@ -31,7 +31,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       stdio: 'pipe',
       encoding: 'utf-8',
       env: {
-        ...process.env,
+        ...getPeEnv(),
         data_path: input_path,
         org_id: organizationId,
         org_name: organizationName
