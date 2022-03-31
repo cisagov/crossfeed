@@ -320,6 +320,12 @@ data "aws_ssm_parameter" "sixgill_client_id" { name = var.ssm_sixgill_client_id 
 
 data "aws_ssm_parameter" "sixgill_client_secret" { name = var.ssm_sixgill_client_secret }
 
+data "aws_ssm_parameter" "pe_db_name" { name = var.ssm_pe_db_name }
+
+data "aws_ssm_parameter" "pe_db_username" { name = var.ssm_pe_db_username }
+
+data "aws_ssm_parameter" "pe_db_password" { name = var.ssm_pe_db_password }
+
 data "aws_ssm_parameter" "lg_api_key" { name = var.ssm_lg_api_key }
 
 data "aws_ssm_parameter" "lg_workspace_name" { name = var.ssm_lg_workspace_name }
