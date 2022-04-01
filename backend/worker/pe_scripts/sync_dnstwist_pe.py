@@ -11,9 +11,6 @@ PE_DB_NAME = os.environ.get("PE_DB_NAME")
 PE_DB_USERNAME = os.environ.get("PE_DB_USERNAME")
 PE_DB_PASSWORD = os.environ.get("PE_DB_PASSWORD")
 
-print(DB_HOST)
-print(PE_DB_NAME)
-
 org_name = os.environ.get("org_name")
 data_path = os.environ.get("data_path")
 

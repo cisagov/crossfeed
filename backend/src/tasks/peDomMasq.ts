@@ -32,9 +32,6 @@ export const handler = async (commandOptions: CommandOptions) => {
       encoding: 'utf-8',
       env: {
         ...getPeEnv(),
-        PE_DB_USERNAME: process.env.PE_DB_USERNAME,
-        PE_DB_PASSWORD: process.env.PE_DB_PASSWORD,
-        PE_DB_NAME: process.env.PE_DB_NAME,
         data_path: input_path,
         org_id: organizationId,
         org_name: organizationName

@@ -47,10 +47,7 @@ const create_child = async (APIkey, org_list, thread_num): Promise<void> => {
         ...getPeEnv(),
         org_list: JSON.stringify(org_list),
         key: APIkey,
-        thread_num,
-        PE_DB_USERNAME: process.env.PE_DB_USERNAME,
-        PE_DB_PASSWORD: process.env.PE_DB_PASSWORD,
-        PE_DB_NAME: process.env.PE_DB_NAME
+        thread_num
       }
     }
   );

@@ -29,13 +29,10 @@ export const handler = async (commandOptions: CommandOptions) => {
       stdio: 'pipe',
       encoding: 'utf-8',
       env: {
-        ...process.env,
+        ...getPeEnv(),
         data_path: INPUT_PATH,
         org_name: organizationName,
-        org_id: organizationId,
-        PE_DB_USERNAME: process.env.PE_DB_USERNAME,
-        PE_DB_PASSWORD: process.env.PE_DB_PASSWORD,
-        PE_DB_NAME: process.env.PE_DB_NAME
+        org_id: organizationId
       }
     }
   );
