@@ -285,3 +285,14 @@ variable "es_instance_volume_size" {
   type    = number
   default = 100
 }
+
+variable "create_db_accessor_instance" {
+  description = "Whether to create a DB accessor instance. This instance can be used to access RDS and is spun up in a private subnet. It can be accessed using AWS Systems Manager Session Manager."
+  type        = bool
+  default     = false
+}
+
+variable "db_accessor_instance_class" {
+  type    = string
+  default = "t3.micro"
+}
