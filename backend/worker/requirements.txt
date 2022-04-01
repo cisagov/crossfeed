@@ -1,5 +1,5 @@
 requests-http-signature==0.2.0
-requests==2.24.0
+requests>=2.24.0
 mitmproxy==7.0.3
 cryptography==3.3.2
 pytest==6.0.1
