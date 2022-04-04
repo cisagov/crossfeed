@@ -70,6 +70,9 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${aws_ssm_parameter.crossfeed_send_db_name.arn}",
           "${data.aws_ssm_parameter.db_username.arn}",
           "${data.aws_ssm_parameter.db_password.arn}",
+          "${data.aws_ssm_parameter.pe_db_name.arn}",
+          "${data.aws_ssm_parameter.pe_db_username.arn}",
+          "${data.aws_ssm_parameter.pe_db_password.arn}",
           "${data.aws_ssm_parameter.worker_signature_public_key.arn}",
           "${data.aws_ssm_parameter.worker_signature_private_key.arn}",
           "${data.aws_ssm_parameter.censys_api_id.arn}",
@@ -217,6 +220,18 @@ resource "aws_ecs_task_definition" "worker" {
         "valueFrom": "${data.aws_ssm_parameter.db_password.arn}"
       },
       {
+        "name": "PE_DB_NAME",
+        "valueFrom": "${data.aws_ssm_parameter.pe_db_name.arn}"
+      },
+      {
+        "name": "PE_DB_USERNAME",
+        "valueFrom": "${data.aws_ssm_parameter.pe_db_username.arn}"
+      },
+      {
+        "name": "PE_DB_PASSWORD",
+        "valueFrom": "${data.aws_ssm_parameter.pe_db_password.arn}"
+      },
+      {
         "name": "CENSYS_API_ID",
         "valueFrom": "${data.aws_ssm_parameter.censys_api_id.arn}"
       },
@@ -307,6 +322,12 @@ data "aws_ssm_parameter" "pe_shodan_api_keys" { name = var.ssm_pe_shodan_api_key
 data "aws_ssm_parameter" "sixgill_client_id" { name = var.ssm_sixgill_client_id }
 
 data "aws_ssm_parameter" "sixgill_client_secret" { name = var.ssm_sixgill_client_secret }
+
+data "aws_ssm_parameter" "pe_db_name" { name = var.ssm_pe_db_name }
+
+data "aws_ssm_parameter" "pe_db_username" { name = var.ssm_pe_db_username }
+
+data "aws_ssm_parameter" "pe_db_password" { name = var.ssm_pe_db_password }
 
 data "aws_ssm_parameter" "lg_api_key" { name = var.ssm_lg_api_key }
 
