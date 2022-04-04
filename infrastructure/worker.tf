@@ -339,32 +339,41 @@ data "aws_ssm_parameter" "worker_signature_private_key" { name = var.ssm_worker_
 
 resource "aws_s3_bucket" "export_bucket" {
   bucket = var.export_bucket_name
-  acl    = "private"
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
-
-  versioning {
-    enabled    = true
-    mfa_delete = false
-  }
-
-  logging {
-    target_bucket = aws_s3_bucket.logging_bucket.id
-    target_prefix = "export_bucket/"
-  }
-
   tags = {
     Project = var.project
     Stage   = var.stage
   }
+}
 
-  lifecycle_rule {
+resource "aws_s3_bucket_acl" "export_bucket" {
+  bucket = aws_s3_bucket.export_bucket.id
+  acl    = "private"
+}
+resource "aws_s3_bucket_server_side_encryption_configuration" "export_bucket" {
+  bucket = aws_s3_bucket.export_bucket.id
+  rule {
+      apply_server_side_encryption_by_default {
+      sse_algorithm     = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_versioning" "export_bucket" {
+  bucket = aws_s3_bucket.export_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "export_bucket" {
+  bucket = aws_s3_bucket.export_bucket.id
+  target_bucket = aws_s3_bucket.logging_bucket.id
+  target_prefix = "export_bucket/"
+}
+  
+resource "aws_s3_bucket_lifecycle_configuration" "export_bucket" {
+  bucket = aws_s3_bucket.export_bucket.id
+  rule {
     id      = "all_files"
     enabled = true
     expiration {

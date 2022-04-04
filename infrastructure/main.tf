@@ -53,7 +53,7 @@ resource "aws_s3_bucket_versioning" "logging_bucket" {
 }
 
 resource "aws_s3_bucket_logging" "logging_bucket" {
-  target_bucket = aws_s3_bucket.logging_bucket.id
+  bucket = aws_s3_bucket.logging_bucket.id
   target_prefix = "logging_bucket/"
 }
   
