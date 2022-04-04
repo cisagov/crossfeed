@@ -39,8 +39,8 @@ resource "aws_s3_bucket_acl" "logging_bucket" {
 resource "aws_s3_bucket_server_side_encryption_configuration" "logging_bucket" {
   bucket = aws_s3_bucket.logging_bucket.id
   rule {
-      apply_server_side_encryption_by_default {
-      sse_algorithm     = "AES256"
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -53,8 +53,9 @@ resource "aws_s3_bucket_versioning" "logging_bucket" {
 }
 
 resource "aws_s3_bucket_logging" "logging_bucket" {
-  bucket = aws_s3_bucket.logging_bucket.id
+  bucket        = aws_s3_bucket.logging_bucket.id
+  target_bucket = aws_s3_bucket.logging_bucket.id
   target_prefix = "logging_bucket/"
 }
-  
+
 

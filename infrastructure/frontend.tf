@@ -13,8 +13,8 @@ resource "aws_s3_bucket_acl" "frontend_bucket" {
 resource "aws_s3_bucket_server_side_encryption_configuration" "frontend_bucket" {
   bucket = aws_s3_bucket.frontend_bucket.id
   rule {
-      apply_server_side_encryption_by_default {
-      sse_algorithm     = "AES256"
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -26,7 +26,7 @@ resource "aws_s3_bucket_versioning" "frontend_bucket" {
 }
 
 resource "aws_s3_bucket_logging" "frontend_bucket" {
-  bucket = aws_s3_bucket.frontend_bucket.id
+  bucket        = aws_s3_bucket.frontend_bucket.id
   target_bucket = aws_s3_bucket.logging_bucket.id
   target_prefix = "frontend_bucket/"
 }
@@ -40,7 +40,7 @@ data "template_file" "policy_file" {
 
 resource "aws_s3_bucket_policy" "b" {
   bucket = aws_s3_bucket.frontend_bucket.id
-  
+
   policy = data.template_file.policy_file.rendered
 }
 

@@ -352,8 +352,8 @@ resource "aws_s3_bucket_acl" "export_bucket" {
 resource "aws_s3_bucket_server_side_encryption_configuration" "export_bucket" {
   bucket = aws_s3_bucket.export_bucket.id
   rule {
-      apply_server_side_encryption_by_default {
-      sse_algorithm     = "AES256"
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -366,16 +366,16 @@ resource "aws_s3_bucket_versioning" "export_bucket" {
 }
 
 resource "aws_s3_bucket_logging" "export_bucket" {
-  bucket = aws_s3_bucket.export_bucket.id
+  bucket        = aws_s3_bucket.export_bucket.id
   target_bucket = aws_s3_bucket.logging_bucket.id
   target_prefix = "export_bucket/"
 }
-  
+
 resource "aws_s3_bucket_lifecycle_configuration" "export_bucket" {
   bucket = aws_s3_bucket.export_bucket.id
   rule {
-    id      = "all_files"
-    enabled = true
+    id     = "all_files"
+    status = "Enabled"
     expiration {
       days = 1
     }
