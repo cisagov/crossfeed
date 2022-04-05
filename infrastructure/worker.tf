@@ -151,8 +151,7 @@ EOF
 }
 
 resource "aws_ecs_cluster" "worker" {
-  name               = var.worker_ecs_cluster_name
-  capacity_providers = ["FARGATE"]
+  name = var.worker_ecs_cluster_name
 
   setting {
     name  = "containerInsights"
@@ -165,6 +164,10 @@ resource "aws_ecs_cluster" "worker" {
   }
 }
 
+resource "aws_ecs_cluster_capacity_providers" "worker" {
+  cluster_name       = aws_ecs_cluster.worker.name
+  capacity_providers = ["FARGATE"]
+}
 resource "aws_ssm_parameter" "worker_arn" {
   name      = var.ssm_worker_arn
   type      = "String"
@@ -184,6 +187,9 @@ resource "aws_ecs_task_definition" "worker" {
     "name": "main",
     "image": "${aws_ecr_repository.worker.repository_url}:latest",
     "essential": true,
+    "mountPoints": [],
+    "portMappings": [],
+    "volumesFrom": [],
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {

@@ -25,7 +25,7 @@ resource "aws_db_instance" "db" {
   iam_database_authentication_enabled = true
 
   // database information
-  name     = var.db_table_name
+  db_name  = var.db_table_name
   username = data.aws_ssm_parameter.db_username.value
   password = data.aws_ssm_parameter.db_password.value
   port     = var.db_port
@@ -88,12 +88,14 @@ resource "aws_iam_instance_profile" "db_accessor" {
 }
 
 #Attach Policies to Instance Role
-resource "aws_iam_role_policy_attachment" "db_accessor_1" {
+resource "aws_iam_policy_attachment" "db_accessor_1" {
+  name       = "crossfeed-db-accessor-${var.stage}"
   roles      = [aws_iam_role.db_accessor.id]
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-resource "aws_iam_role_policy_attachment" "db_accessor_2" {
+resource "aws_iam_policy_attachment" "db_accessor_2" {
+  name       = "crossfeed-db-accessor-${var.stage}"
   roles      = [aws_iam_role.db_accessor.id]
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
@@ -118,7 +120,8 @@ resource "aws_instance" "db_accessor" {
   user_data            = file("./ssm-agent-install.sh")
 
   lifecycle {
-    # prevent_destroy = true
+    prevent_destroy = true
+    ignore_changes  = [ami]
   }
 }
 

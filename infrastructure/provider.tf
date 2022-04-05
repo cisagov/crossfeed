@@ -1,14 +1,19 @@
 # provider.tf
 
 # Specify the provider and access details
-provider "aws" {
-  shared_credentials_file = "$HOME/.aws/credentials"
-  region                  = var.aws_region
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.0"
+    }
+  }
 }
 
 provider "aws" {
-  alias  = "virginia"
-  region = "us-east-1"
+  shared_credentials_files = ["$HOME/.aws/credentials"]
+  alias                    = "virginia"
+  region                   = "us-east-1"
 }
 
 terraform {
