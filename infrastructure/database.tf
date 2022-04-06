@@ -120,8 +120,8 @@ resource "aws_instance" "db_accessor" {
   user_data            = file("./ssm-agent-install.sh")
 
   lifecycle {
-    prevent_destroy = true
-    ignore_changes  = [ami]
+    # prevent_destroy = true
+    ignore_changes = [ami]
   }
 }
 
