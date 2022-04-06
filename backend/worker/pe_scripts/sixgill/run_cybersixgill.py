@@ -36,8 +36,6 @@ to_date = datetime.datetime.now()
 back = timedelta(days=16)
 from_date = (to_date - back).strftime("%Y-%m-%d %H:%M:%S")
 to_date = to_date.strftime("%Y-%m-%d %H:%M:%S")
-print(to_date)
-print(from_date)
 
 
 def cve(cveid):
@@ -109,7 +107,7 @@ except:
     print("Failed fetching Cybersixgill aliases.")
     print(traceback.format_exc())
 
-"""Insert/Update Aliases into PE databse instance"""
+"""Insert/Update Aliases into PE database instance"""
 try:
     # aliases_list = json.loads(aliases.replace("'", '"'))
     alias_df = pd.DataFrame(aliases, columns=["alias"])

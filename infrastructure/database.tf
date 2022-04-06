@@ -25,7 +25,7 @@ resource "aws_db_instance" "db" {
   iam_database_authentication_enabled = true
 
   // database information
-  name     = var.db_table_name
+  db_name  = var.db_table_name
   username = data.aws_ssm_parameter.db_username.value
   password = data.aws_ssm_parameter.db_password.value
   port     = var.db_port
@@ -121,6 +121,7 @@ resource "aws_instance" "db_accessor" {
 
   lifecycle {
     # prevent_destroy = true
+    ignore_changes = [ami]
   }
 }
 
