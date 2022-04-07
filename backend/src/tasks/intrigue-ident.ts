@@ -18,7 +18,7 @@ const intrigueIdent = async (domain: LiveDomain): Promise<void> => {
       maxBuffer: buffer.constants.MAX_LENGTH
     }
   );
-  if (stderr.toString()) {
+  if (stderr?.toString()) {
     console.error('stderr', stderr.toString());
   }
   if (status !== 0) {
