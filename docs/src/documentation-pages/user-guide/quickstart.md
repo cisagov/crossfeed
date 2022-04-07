@@ -71,7 +71,7 @@ You can also view details of an individual domain.
 
 ![domain detail](./img/domain detail.png)
 
-Finally, you can click on a vulnerability to view more information about it, such as references to links with more information about it, as well as its history and any notes that other Crossfeed users may have added to it.
+Finally, you can click on a vulnerability to view more information about it, such as references to links with more information about it, as well as its history and any notes that other Crossfeed users may have added to it. You can also mark a vulnerability as a false positive from this page.
 
 ![vuln detail](./img/vuln detail.png)
 
