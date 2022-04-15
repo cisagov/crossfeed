@@ -1,7 +1,7 @@
 requests-http-signature==0.2.0
 requests>=2.24.0
-mitmproxy==7.0.3
-cryptography==3.3.2
+mitmproxy==8.0.0
+cryptography==36.0.2
 pytest==6.0.1
 scrapy==2.6.1
 dnstwist==20201228
@@ -12,3 +12,4 @@ ppdeep==20200505
 scrubadub==2.0.0
 
 urllib3>=1.26.5 # not directly required, pinned by Snyk to avoid a vulnerability
+twisted>=22.4.0rc1 # not directly required, pinned by Snyk to avoid a vulnerability

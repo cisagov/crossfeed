@@ -1,5 +1,5 @@
 import traceback
-from sixgill.source import (
+from source import (
     alerts,
     list_organizations,
     alias_organization,
@@ -8,12 +8,11 @@ from sixgill.source import (
     creds,
     top_cves,
 )
-from sixgill.redact import redact_pii
+from redact import redact_pii
 import psycopg2
 import psycopg2.extras as extras
 import os
 import pandas as pd
-import json
 import datetime
 from datetime import date, timedelta
 import requests
@@ -33,13 +32,10 @@ start_date = str(today - days_back)
 end_date = str(today)
 date_span = f"[{start_date} TO {end_date}]"
 
-
 to_date = datetime.datetime.now()
 back = timedelta(days=16)
 from_date = (to_date - back).strftime("%Y-%m-%d %H:%M:%S")
 to_date = to_date.strftime("%Y-%m-%d %H:%M:%S")
-print(to_date)
-print(from_date)
 
 
 def cve(cveid):
@@ -111,7 +107,7 @@ except:
     print("Failed fetching Cybersixgill aliases.")
     print(traceback.format_exc())
 
-"""Insert/Update Aliases into PE databse instance"""
+"""Insert/Update Aliases into PE database instance"""
 try:
     # aliases_list = json.loads(aliases.replace("'", '"'))
     alias_df = pd.DataFrame(aliases, columns=["alias"])

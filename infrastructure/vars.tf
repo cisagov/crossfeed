@@ -63,6 +63,20 @@ variable "ssm_db_host" {
   default = "/crossfeed/staging/DATABASE_HOST"
 }
 
+variable "ssm_pe_db_name" {
+  type    = string
+  default = "/crossfeed/staging/PE_DB_NAME"
+}
+
+variable "ssm_pe_db_username" {
+  type    = string
+  default = "/crossfeed/staging/PE_DB_USERNAME"
+}
+
+variable "ssm_pe_db_password" {
+  type    = string
+  default = "/crossfeed/staging/PE_DB_PASSWORD"
+}
 variable "ssm_lambda_sg" {
   type    = string
   default = "/crossfeed/staging/SG_ID"
@@ -137,6 +151,22 @@ variable "ssm_hibp_api_key" {
   type    = string
   default = "/crossfeed/staging/HIBP_API_KEY"
 }
+
+variable "ssm_pe_shodan_api_keys" {
+  type    = string
+  default = "/crossfeed/staging/PE_SHODAN_API_KEYS"
+}
+
+variable "ssm_sixgill_client_id" {
+  type    = string
+  default = "/crossfeed/staging/SIXGILL_CLIENT_ID"
+}
+
+variable "ssm_sixgill_client_secret" {
+  type    = string
+  default = "/crossfeed/staging/SIXGILL_CLIENT_SECRET"
+}
+
 
 variable "ssm_lg_api_key" {
   type    = string
@@ -268,4 +298,15 @@ variable "es_instance_count" {
 variable "es_instance_volume_size" {
   type    = number
   default = 100
+}
+
+variable "create_db_accessor_instance" {
+  description = "Whether to create a DB accessor instance. This instance can be used to access RDS and is spun up in a private subnet. It can be accessed using AWS Systems Manager Session Manager."
+  type        = bool
+  default     = false
+}
+
+variable "db_accessor_instance_class" {
+  type    = string
+  default = "t3.micro"
 }

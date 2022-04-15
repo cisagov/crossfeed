@@ -1,6 +1,6 @@
 """Scripts for importing Sixgill data into PE Postgres database."""
 
-from sixgill.api import (
+from api import (
     get_organization,
     org_assets,
     alerts_list,
