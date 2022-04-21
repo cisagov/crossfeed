@@ -2,53 +2,94 @@
 # importing pandas as pd
 import pandas as pd
 import scrubadub, scrubadub.detectors.date_of_birth
-import regex as re
+import re
 
 # from presidio_analyzer import AnalyzerEngine
 # from presidio_anonymizer import AnonymizerEngine
-#failing regex
-FL = [
-    "(?:(?<=\s)|(?<=^))[a-zA-Z] \\d{3} \\d{3} \\d{3} \\d{3}(?=$|\s)",
-    "(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{3}-\\d{3}-\\d{2}-\\d{3}-\\d(?=$|\s)",
-    "(?:(?<=\s)|(?<=^))[a-zA-Z]-\\d{3}-\\d{3}-\\d{3}-\\d{3}(?=$|\s)",
-]
-HI_NE_VA = ["(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{8}(?=$|\s)"]
-IL = [
-    "(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{3}-\\d{4}-\\d{4}(?=$|\s)",
-    "(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{11}(?=$|\s)",
-]
-MN_FL_MD_MI = ["(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{12}(?=$|\s)"]
-MO_OK = ["(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{9}(?=$|\s)"]
-MD = ["(?:(?<=\s)|(?<=^))[a-zA-Z]-\\d{3}-\\d{3}-\\d{3}-\\d{3}(?=$|\s)"]
 
-# Working regex
-CA = ["(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{7}(?=$|\s)"]
-CO = ["(?:(?<=\s)|(?<=^))\\d{2}-\\d{3}-\\d{4}(?=$|\s)"]
-ID = ["(?:(?<=\s)|(?<=^))[a-zA-Z]{2}\\d{6}[a-zA-Z](?=$|\s)"]
-IO = ["(?:(?<=\s)|(?<=^))\\d{4}-\\d{2}-\\d{4}(?=$|\s)"]
-IA = ["(?:(?<=\s)|(?<=^))\\d{3}[a-zA-Z]{2}\\d{4}(?=$|\s)"]
-KS = ["(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{2}-\\d{2}-\\d{4}(?=$|\s)"]
-KY = ["(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{2}-\\d{3}-\\d{3}(?=$|\s)"]
-MI = ["(?:(?<=\s)|(?<=^))[a-zA-Z]\\s\\d{3}\\s\\d{3}\\s\\d{3}\\s\\d{3}(?=$|\s)"]
+FL = [
+    r"(?:(?<=\s)|(?<=^))[a-zA-Z] \d{3} \d{3} \d{3} \d{3}(?=$|\s)",
+    r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{3}-\d{3}-\d{2}-\d{3}-\d(?=$|\s)",
+    r"(?:(?<=\s)|(?<=^))[a-zA-Z]-\d{3}-\d{3}-\d{3}-\d{3}(?=$|\s)",
+]
+HI_NE_VA = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{8}(?=$|\s)"]
+IL = [
+    r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{3}-\d{4}-\d{4}(?=$|\s)",
+    r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{11}(?=$|\s)",
+]
+MN_FL_MD_MI = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{12}(?=$|\s)"]
+MO_OK = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{9}(?=$|\s)"]
+MD = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]-\d{3}-\d{3}-\d{3}-\d{3}(?=$|\s)"]
+
+CA = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{7}(?=$|\s)"]
+CO = [r"(?:(?<=\s)|(?<=^))\d{2}-\d{3}-\d{4}(?=$|\s)"]
+ID = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]{2}\d{6}[a-zA-Z](?=$|\s)"]
+IO = [r"(?:(?<=\s)|(?<=^))\d{4}-\d{2}-\d{4}(?=$|\s)"]
+IA = [r"(?:(?<=\s)|(?<=^))\d{3}[a-zA-Z]{2}\d{4}(?=$|\s)"]
+KS = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{2}-\d{2}-\d{4}(?=$|\s)"]
+KY = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{2}-\d{3}-\d{3}(?=$|\s)"]
+MI = [r"(?:(?<=\s)|(?<=^))[a-zA-Z] \d{3} \d{3} \d{3} \d{3}(?=$|\s)"]
 NH = [
-    "(?:(?<=\s)|(?<=^))([0][1-9]|[1][0-2])[a-zA-Z]{3}\\d{2}(0[1-9]|[1-2][0-9]|3[0-1])\\d(?=$|\s)"
+    r"(?:(?<=\s)|(?<=^))([0][1-9]|[1][0-2])[a-zA-Z]{3}\d{2}(0[1-9]|[1-2][0-9]|3[0-1])\d(?=$|\s)"
 ]
 NJ = [
-    "(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{4}-\\d{5}-\\d{5}(?=$|\s)",
-    "(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{14}(?=$|\s)",
+    r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{4}-\d{5}-\d{5}(?=$|\s)",
+    r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{14}(?=$|\s)",
 ]
-NY = ["(?:(?<=\s)|(?<=^))\\d{3} \\d{3} \\d{3}(?=$|\s)"]
-ND = ["(?:(?<=\s)|(?<=^))[a-zA-Z]{3}-\\d{2}-\\d{4}(?=$|\s)"]
-OH = ["(?:(?<=\s)|(?<=^))[a-zA-Z]{3}-\\d{2}-\\d{4}(?=$|\s)"]
-PA = ["(?:(?<=\s)|(?<=^))\\d{2}\\s\\d{3}\\s\\d{3}(?=$|\s)"]
-VT = ["(?:(?<=\s)|(?<=^))\\d{7}[a-zA-Z](?=$|\s)"]
-VA = ["(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{2}-\\d{2}-\\d{4}(?=$|\s)"]
-WA = ["(?:(?<=\s)|(?<=^))[a-zA-Z]{3}\\*\\*[a-zA-Z]{2}\\d{3}[a-zA-Z]\\d(?=$|\s)"]
-WV = ["(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{6}(?=$|\s)"]
-WI = ["(?:(?<=\s)|(?<=^))[a-zA-Z]\\d{3}-\\d{4}-\\d{4}-\\d{2}(?=$|\s)"]
-WY = ["(?:(?<=\s)|(?<=^))\\d{6}-\\d{3}(?=$|\s)"]
+NY = [r"(?:(?<=\s)|(?<=^))\d{3} \d{3} \d{3}(?=$|\s)"]
+ND = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]{3}-\d{2}-\d{4}(?=$|\s)"]
+OH = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]{3}-\d{2}-\d{4}(?=$|\s)"]
+PA = [r"(?:(?<=\s)|(?<=^))\d{2} \d{3} \d{3}(?=$|\s)"]
+VT = [r"(?:(?<=\s)|(?<=^))\d{7}[a-zA-Z](?=$|\s)"]
+VA = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{2}-\d{2}-\d{4}(?=$|\s)"]
+WA = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]{3}\*\*[a-zA-Z]{2}\d{3}[a-zA-Z]\d(?=$|\s)"]
+WV = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{6}(?=$|\s)"]
+WI = [r"(?:(?<=\s)|(?<=^))[a-zA-Z]\d{3}-\d{4}-\d{4}-\d{2}(?=$|\s)"]
+WY = [r"(?:(?<=\s)|(?<=^))\d{6}-\d{3}(?=$|\s)"]
 
 # Build detectors to find Drivers License ID
+class FL_DLFilth(scrubadub.filth.Filth):
+    type = "FL_drivers_license"
+class FL_DLDetector(scrubadub.detectors.RegexDetector):
+    name = "FL_drivers_license"
+    regex = re.compile("|".join(FL), re.IGNORECASE)
+    filth_cls = FL_DLFilth
+
+class HI_NE_VA_DLFilth(scrubadub.filth.Filth):
+    type = "HI_NE_VA_drivers_license"
+class HI_NE_VA_DLDetector(scrubadub.detectors.RegexDetector):
+    name = "HI_NE_VA_drivers_license"
+    regex = re.compile("|".join(HI_NE_VA), re.IGNORECASE)
+    filth_cls = HI_NE_VA_DLFilth
+
+class IL_DLFilth(scrubadub.filth.Filth):
+    type = "IL_drivers_license"
+class IL_DLDetector(scrubadub.detectors.RegexDetector):
+    name = "IL_drivers_license"
+    regex = re.compile("|".join(IL), re.IGNORECASE)
+    filth_cls = IL_DLFilth
+
+class MN_FL_MD_MI_DLFilth(scrubadub.filth.Filth):
+    type = "MN_FL_MD_MI_drivers_license"
+class MN_FL_MD_MI_DLDetector(scrubadub.detectors.RegexDetector):
+    name = "MN_FL_MD_MI_drivers_license"
+    regex = re.compile("|".join(MN_FL_MD_MI), re.IGNORECASE)
+    filth_cls = MN_FL_MD_MI_DLFilth
+
+class MO_OK_DLFilth(scrubadub.filth.Filth):
+    type = "MO_OK_drivers_license"
+class MO_OK_DLDetector(scrubadub.detectors.RegexDetector):
+    name = "MO_OK_drivers_license"
+    regex = re.compile("|".join(MO_OK), re.IGNORECASE)
+    filth_cls = MO_OK_DLFilth
+
+class MD_DLFilth(scrubadub.filth.Filth):
+    type = "MD_drivers_license"
+class MD_DLDetector(scrubadub.detectors.RegexDetector):
+    name = "MD_drivers_license"
+    regex = re.compile("|".join(MD), re.IGNORECASE)
+    filth_cls = MD_DLFilth
+
 class CA_DLFilth(scrubadub.filth.Filth):
     type = "ca_drivers_license"
 class CA_DLDetector(scrubadub.detectors.RegexDetector):
@@ -63,33 +104,12 @@ class CO_DLDetector(scrubadub.detectors.RegexDetector):
     regex = re.compile("|".join(CO), re.IGNORECASE)
     filth_cls = CO_DLFilth
 
-class FL_DLFilth(scrubadub.filth.Filth):
-    type = "fl_drivers_license"
-class FL_DLDetector(scrubadub.detectors.RegexDetector):
-    name = "fl_drivers_license"
-    regex = re.compile("|".join(FL), re.IGNORECASE)
-    filth_cls = FL_DLFilth
-
-class HI_NE_VA_DLFilth(scrubadub.filth.Filth):
-    type = "HI_NE_VA_drivers_license"
-class HI_NE_VA_DLDetector(scrubadub.detectors.RegexDetector):
-    name = "HI_NE_VA_drivers_license"
-    regex = re.compile("|".join(HI_NE_VA), re.IGNORECASE)
-    filth_cls = HI_NE_VA_DLFilth
-
 class ID_DLFilth(scrubadub.filth.Filth):
     type = "ID_drivers_license"
 class ID_DLDetector(scrubadub.detectors.RegexDetector):
     name = "ID_drivers_license"
     regex = re.compile("|".join(ID), re.IGNORECASE)
     filth_cls = ID_DLFilth
-
-class IL_DLFilth(scrubadub.filth.Filth):
-    type = "IL_drivers_license"
-class IL_DLDetector(scrubadub.detectors.RegexDetector):
-    name = "IL_drivers_license"
-    regex = re.compile("|".join(IL), re.IGNORECASE)
-    filth_cls = IL_DLFilth
 
 class IO_DLFilth(scrubadub.filth.Filth):
     type = "IO_drivers_license"
@@ -119,33 +139,12 @@ class KY_DLDetector(scrubadub.detectors.RegexDetector):
     regex = re.compile("|".join(KY), re.IGNORECASE)
     filth_cls = KY_DLFilth
 
-class MD_DLFilth(scrubadub.filth.Filth):
-    type = "MD_drivers_license"
-class MD_DLDetector(scrubadub.detectors.RegexDetector):
-    name = "MD_drivers_license"
-    regex = re.compile("|".join(MD), re.IGNORECASE)
-    filth_cls = MD_DLFilth
-
 class MI_DLFilth(scrubadub.filth.Filth):
     type = "MI_drivers_license"
 class MI_DLDetector(scrubadub.detectors.RegexDetector):
     name = "MI_drivers_license"
     regex = re.compile("|".join(MI), re.IGNORECASE)
     filth_cls = MI_DLFilth
-
-class MN_FL_MD_MI_DLFilth(scrubadub.filth.Filth):
-    type = "MN_FL_MD_MI_drivers_license"
-class MN_FL_MD_MI_DLDetector(scrubadub.detectors.RegexDetector):
-    name = "MN_FL_MD_MI_drivers_license"
-    regex = re.compile("|".join(MN_FL_MD_MI), re.IGNORECASE)
-    filth_cls = MN_FL_MD_MI_DLFilth
-
-class MO_OK_DLFilth(scrubadub.filth.Filth):
-    type = "MO_OK_drivers_license"
-class MO_OK_DLDetector(scrubadub.detectors.RegexDetector):
-    name = "MO_OK_drivers_license"
-    regex = re.compile("|".join(MO_OK), re.IGNORECASE)
-    filth_cls = MO_OK_DLFilth
 
 class NH_DLFilth(scrubadub.filth.Filth):
     type = "NH_drivers_license"
@@ -312,18 +311,23 @@ def scrub(df, column):
     # scrubadub.filth.date_of_birth.DateOfBirthFilth.min_age_years = 5
     scrubber = scrubadub.Scrubber()
     # scrubber.add_detector(scrubadub.detectors.date_of_birth.DateOfBirthDetector())
+    scrubber.remove_detector("url")
+    scrubber.remove_detector("twitter")
+    scrubber.remove_detector("email")
     scrubber.add_detector(SSNDetector)
     scrubber.add_detector(PassportDetector)
     scrubber.add_detector(AlienIdDetector)
-    # scrubber.add_detector(DLDetector)
+    #Test breaking detectors
+    scrubber.add_detector(FL_DLDetector)
+    scrubber.add_detector(HI_NE_VA_DLDetector)
+    scrubber.add_detector(IL_DLDetector)
+    scrubber.add_detector(MN_FL_MD_MI_DLDetector)
+    scrubber.add_detector(MO_OK_DLDetector)
+    scrubber.add_detector(MD_DLDetector)
+    #Working Detectors
     scrubber.add_detector(CA_DLDetector)
     scrubber.add_detector(CO_DLDetector)
-    # scrubber.add_detector(FL_DLDetector)
-    # scrubber.add_detector(HI_NE_VA_DLDetector)
     scrubber.add_detector(ID_DLDetector)
-    # scrubber.add_detector(IL_DLDetector)
-    # scrubber.add_detector(MN_FL_MD_MI_DLDetector)
-    # scrubber.add_detector(MO_OK_DLDetector)
     scrubber.add_detector(NJ_DLDetector)
     scrubber.add_detector(NY_DLDetector)
     scrubber.add_detector(ND_DLDetector)
@@ -340,17 +344,13 @@ def scrub(df, column):
     scrubber.add_detector(IA_DLDetector)
     scrubber.add_detector(KS_DLDetector)
     scrubber.add_detector(KY_DLDetector)
-    # scrubber.add_detector(MD_DLDetector)
     scrubber.add_detector(MI_DLDetector)
-
-    scrubber.remove_detector("url")
-    scrubber.remove_detector("twitter")
-    scrubber.remove_detector("email")
-    scrub = lambda x: scrubber.clean(x)
-    df[column] = df[column].apply(scrub)
+    scruby = lambda x: scrubber.clean(x)
+    df[column] = df[column].apply(scruby)
     # analyzer = AnalyzerEngine()
     # anonymizer = AnonymizerEngine()
     # entities = ["PHONE_NUMBER","CREDIT_CARD","US_DRIVER_LICENSE","US_SSN","EMAIL_ADDRESS","IP_ADDRESS"]
     # scrub_2 = lambda x: anonymizer.anonymize(text=x,analyzer_results=analyzer.analyze(text=x,entities=entities,language='en')).text
     # df[column] = df[column].apply(scrub_2)
     return df
+    

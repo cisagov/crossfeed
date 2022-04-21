@@ -1,21 +1,24 @@
 import traceback
-from source import (
-    alerts,
-    list_organizations,
-    alias_organization,
-    mentions,
-    root_domains,
-    creds,
-    top_cves,
-)
-from redact import redact_pii
-import psycopg2
-import psycopg2.extras as extras
-import os
-import pandas as pd
-import datetime
-from datetime import date, timedelta
-import requests
+try:
+    from source import (
+        alerts,
+        list_organizations,
+        alias_organization,
+        mentions,
+        root_domains,
+        creds,
+        top_cves,
+    )
+    from redact import redact_pii
+    import psycopg2
+    import psycopg2.extras as extras
+    import os
+    import pandas as pd
+    import datetime
+    from datetime import date, timedelta
+    import requests
+except:
+    print(traceback.format_exc())
 
 DB_HOST = os.environ.get("DB_HOST")
 PE_DB_NAME = os.environ.get("PE_DB_NAME")
