@@ -57,7 +57,7 @@ const generateCensysTypes = async (
 /**
  * Converts JSON Schema -> typescript definition
  */
- const generateTypeFromJSONSchema = async (
+const generateTypeFromJSONSchema = async (
   schema: JSONSchema,
   typeName: string,
   fileName: string
@@ -71,8 +71,6 @@ const generateCensysTypes = async (
   );
 };
 
-
-
 (async () => {
   await generateCensysTypes(
     'https://censys.io/static/data/definitions-ipv4-bq.json',
@@ -84,9 +82,12 @@ const generateCensysTypes = async (
     'CensysCertificatesData',
     'censysCertificates.ts'
   );
-  const { data } = await axios.get('https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities_schema.json');
+  const { data } = await axios.get(
+    'https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities_schema.json'
+  );
+  // TODO: once CISA fixes their JSON Schema to be valid JSON, we can remove this .replace() function.
   await generateTypeFromJSONSchema(
-    data,
+    JSON.parse(data.replace(/("dueDate"\: [\s\S]*?\}),/, '$1')),
     'kevData',
     'kev.ts'
   );

@@ -7,12 +7,13 @@ import {
   isUUID,
   IsOptional,
   IsObject,
-  IsUUID
+  IsUUID,
+  IsBoolean
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Vulnerability, connectToDatabase, User } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
-import { SelectQueryBuilder } from 'typeorm';
+import { Column, SelectQueryBuilder } from 'typeorm';
 import {
   getOrgMemberships,
   getTagOrganizations,
@@ -99,6 +100,33 @@ class VulnerabilitySearch {
   @IsOptional()
   @IsIn(['title'])
   groupBy?: 'title';
+
+  /** Set to true if the vulnerability is currently on the CISA Known Exploited Vulnerability (KEV) list. **/
+  @IsBoolean()
+  @IsOptional()
+  @Column({
+    default: false,
+    nullable: true
+  })
+  isKev?: boolean;
+
+  /* KEV results */
+  @IsOptional()
+  @Column({
+    type: 'jsonb',
+    default: {},
+    nullable: true
+  })
+  kevResults?: {
+    cveID: string;
+    vendorProject: string;
+    product: string;
+    vulnerabilityName: string;
+    dateAdded: Date;
+    shortDescription: string;
+    requiredAction: string;
+    dueDate: Date;
+  };
 
   async filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>, event) {
     if (this.filters?.id) {

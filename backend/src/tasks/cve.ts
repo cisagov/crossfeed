@@ -335,6 +335,7 @@ const populateVulnerabilitiesFromKEV = async () => {
       } else vulnerabilitiesMap[vuln.cve] = [vuln];
     }
   }
+};
 
 // Closes or reopens vulnerabilities that need to be updated
 const adjustVulnerabilities = async (type: 'open' | 'closed') => {
