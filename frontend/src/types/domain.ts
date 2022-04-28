@@ -64,6 +64,8 @@ export interface Service {
   };
   wappalyzerResults: WappalyzerResult[];
   products: Product[];
+  productSource: string | null;
+  serviceSource: string | null;
 }
 
 export interface Domain {
@@ -82,6 +84,8 @@ export interface Domain {
   organization: Organization;
   ssl: SSLInfo | null;
   censysCertificatesResults: any;
+  fromRootDomain: string | null;
+  subdomainSource: string | null;
 }
 
 export interface SSLInfo {
@@ -97,7 +101,7 @@ export interface SSLInfo {
 
 export interface WappalyzerResult {
   technology?: {
-    name?: string,
+    name?: string;
     categories?: number[];
     slug?: string;
     url?: string[];
@@ -111,19 +115,19 @@ export interface WappalyzerResult {
     robots?: any[];
     meta?: any[];
     scripts?: any[];
-    js?: any,
+    js?: any;
     implies?: any[];
     excludes?: any[];
     icon?: string;
     website?: string;
     cpe?: string;
-  },
+  };
   pattern?: {
     value?: string;
     regex?: string;
     confidence?: number;
     version?: string;
-  },
+  };
   // Actual detected version
   version?: string;
 }

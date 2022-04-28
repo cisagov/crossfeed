@@ -175,7 +175,6 @@ class Scheduler {
       if (global) {
         // Global scans are not associated with an organization.
         if (!(await shouldRunScan({ scan }))) {
-          console.log('Skipping running scan: ', scan.name);
           continue;
         }
         await this.launchScanTask({ scan });
@@ -186,12 +185,6 @@ class Scheduler {
         const orgsToLaunch: Organization[] = [];
         for (const organization of organizations) {
           if (!(await shouldRunScan({ organization, scan }))) {
-            console.log(
-              'Skipping running scan: ',
-              scan.name,
-              ' on organization: ',
-              organization.name
-            );
             continue;
           }
           orgsToLaunch.push(organization);
@@ -202,6 +195,12 @@ class Scheduler {
           await this.launchScanTask({ organizations: orgs, scan });
         }
       }
+      console.log(
+        'Launched',
+        this.numLaunchedTasks,
+        'scanTasks for scan',
+        scan.name
+      );
       // If at least 1 new scan task was launched for this scan, update the scan
       if (this.numLaunchedTasks > prev_numLaunchedTasks) {
         scan.lastRun = new Date();

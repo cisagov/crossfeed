@@ -46,6 +46,19 @@ export class Domain extends BaseEntity {
   })
   fromRootDomain: string;
 
+  /** Scan that discovered this domain (findomain, amass) */
+  @Column({
+    nullable: true
+  })
+  subdomainSource: string;
+
+  /** Set to true if the domain only has an associated IP address, but not a domain name. In this case, the `name` field is set to the IP address. */
+  @Column({
+    nullable: true,
+    default: false
+  })
+  ipOnly: boolean;
+
   @ManyToOne((type) => Scan, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE'

@@ -21,6 +21,7 @@ export interface ScanFormValues {
   frequency: number;
   frequencyUnit: string;
   isGranular: boolean;
+  isUserModifiable: boolean;
   isSingleScan: boolean;
 }
 
@@ -49,6 +50,7 @@ export const ScanForm: React.FC<{
     frequency: scan ? scan.frequency : 1,
     frequencyUnit: scan ? propValues.frequencyUnit : 'minute',
     isGranular: scan ? scan.isGranular : false,
+    isUserModifiable: scan ? scan.isUserModifiable : false,
     isSingleScan: scan ? scan.isSingleScan : false,
     organizations: scan ? propValues.organizations : [],
     tags: scan ? propValues.tags : []
@@ -91,6 +93,7 @@ export const ScanForm: React.FC<{
           frequency: propValues.frequency,
           frequencyUnit: propValues.frequencyUnit,
           isGranular: scan.isGranular,
+          isUserModifiable: scan.isUserModifiable,
           isSingleScan: scan.isSingleScan,
           organizations: propValues.organizations,
           tags: propValues.tags
@@ -127,6 +130,7 @@ export const ScanForm: React.FC<{
           frequency: values.frequency,
           frequencyUnit: values.frequencyUnit,
           isGranular: values.isGranular,
+          isUserModifiable: values.isUserModifiable,
           isSingleScan: values.isSingleScan
         });
       }}
@@ -171,7 +175,13 @@ export const ScanForm: React.FC<{
           label="Limit enabled organizations"
           name="isGranular"
           checked={values.isGranular}
-          onChange={(e) => onChange('isGranular', e.target.checked)}
+          onChange={(e) => {
+            onChange('isGranular', e.target.checked);
+            if (!e.target.checked) {
+              // Only granular scans can be user-modifiable.
+              onChange('isUserModifiable', false);
+            }
+          }}
         />
       )}
       {values.isGranular && (
@@ -191,6 +201,18 @@ export const ScanForm: React.FC<{
             value={values.tags}
             onChange={(e) => onChange('tags', e)}
             zIndex={99}
+          />
+          <br />
+        </>
+      )}
+      {values.isGranular && (
+        <>
+          <Checkbox
+            id="isUserModifiable"
+            label="Allow any organization's admins to toggle this scan on/off"
+            name="isUserModifiable"
+            checked={values.isUserModifiable}
+            onChange={(e) => onChange('isUserModifiable', e.target.checked)}
           />
           <br />
         </>

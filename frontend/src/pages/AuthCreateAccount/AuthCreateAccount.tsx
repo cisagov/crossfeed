@@ -36,7 +36,7 @@ export const AuthCreateAccount: React.FC = () => {
     });
     setPublicOrgs(publicOrgs);
     if (publicOrgs.length > 0)
-      setValues(values => ({
+      setValues((values) => ({
         ...values,
         organization: publicOrgs[0].id
       }));
@@ -48,16 +48,16 @@ export const AuthCreateAccount: React.FC = () => {
 
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
-  > = e => onChange(e.target.name, e.target.value);
+  > = (e) => onChange(e.target.name, e.target.value);
 
   const onChange = (name: string, value: any) => {
-    setValues(values => ({
+    setValues((values) => ({
       ...values,
       [name]: value
     }));
   };
 
-  const onSubmit: React.FormEventHandler = async e => {
+  const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
     try {
       if (!user) throw Error('Unable to register');
@@ -132,7 +132,7 @@ export const AuthCreateAccount: React.FC = () => {
             onChange={onTextChange}
             value={values.organization}
           >
-            {publicOrgs.map(org => {
+            {publicOrgs.map((org) => {
               return (
                 <option key={org.id} value={org.id}>
                   {org.name}

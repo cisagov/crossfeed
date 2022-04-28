@@ -87,6 +87,8 @@ export const handler: Handler = async (event) => {
         const domain = await Domain.create({
           name: Sentencer.make('{{ adjective }}-{{ noun }}.crossfeed.local'),
           ip: ['127', randomNum(), randomNum(), randomNum()].join('.'), // Create random loopback addresses
+          fromRootDomain: 'crossfeed.local',
+          subdomainSource: 'findomain',
           organization
         }).save();
         console.log(`\t${domain.name}`);
@@ -97,6 +99,7 @@ export const handler: Handler = async (event) => {
             domain,
             port: serviceData.port,
             service: serviceData.service,
+            serviceSource: 'shodan',
             wappalyzerResults: [
               {
                 technology: {
@@ -109,7 +112,13 @@ export const handler: Handler = async (event) => {
         }
         // Create a bunch of vulnerabilities for the first service
         for (const vulnData of vulnerabilities) {
-          if (Math.random() < PROB_SAMPLE_VULNERABILITIES) continue;
+          // Sample CVE vulnerabilities, but always add a single instance of other
+          // vulnerabilities (hibp / dnstwist)
+          if (
+            vulnData.title.startsWith('CVE-') &&
+            Math.random() < PROB_SAMPLE_VULNERABILITIES
+          )
+            continue;
           await Vulnerability.create({
             ...vulnData,
             domain,
@@ -118,6 +127,7 @@ export const handler: Handler = async (event) => {
         }
       }
     }
+
     console.log('Done. Running search sync...');
     for (const organizationId of organizationIds) {
       await searchSync({

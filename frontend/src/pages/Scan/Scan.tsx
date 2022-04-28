@@ -35,6 +35,7 @@ const ScanComponent: React.FC = () => {
     frequency: 1,
     frequencyUnit: 'minute',
     isGranular: false,
+    isUserModifiable: false,
     isSingleScan: false,
     tags: []
   });
@@ -89,7 +90,7 @@ const ScanComponent: React.FC = () => {
   };
 
   const setDefaultValues = async (scan: Scan) => {
-    var oldFrequencyUnit = 'minute';
+    let oldFrequencyUnit = 'minute';
     if (scan.frequency >= 86400) {
       scan.frequency = scan.frequency / (60 * 60 * 24);
       oldFrequencyUnit = 'day';

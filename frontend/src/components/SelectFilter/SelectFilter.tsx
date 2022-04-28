@@ -1,7 +1,7 @@
-import React from "react";
-import { Dropdown } from "@trussworks/react-uswds";
-import { ColumnInstance } from "react-table";
-import classes from "./styles.module.scss";
+import React from 'react';
+import { Dropdown } from '@trussworks/react-uswds';
+import { ColumnInstance } from 'react-table';
+import classes from './styles.module.scss';
 
 interface Props {
   column: ColumnInstance;
@@ -9,7 +9,7 @@ interface Props {
 
 export const selectFilter = (opts: string[]) => {
   const SelectFilter: React.FC<Props> = ({
-    column: { filterValue, setFilter, id },
+    column: { filterValue, setFilter, id }
   }) => {
     return (
       <div className={classes.root}>

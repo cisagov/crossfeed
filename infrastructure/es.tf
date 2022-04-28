@@ -42,7 +42,7 @@ POLICY
 
   #   Only supported on certain instance types, so let's only enable this on prod: https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-instance-types.html
   encrypt_at_rest {
-    enabled = false
+    enabled = true
   }
 
   node_to_node_encryption {
@@ -107,7 +107,9 @@ CONFIG
 }
 
 resource "aws_cloudwatch_log_group" "es_application" {
-  name = "crossfeed-${var.stage}-es-application"
+  name              = "crossfeed-${var.stage}-es-application"
+  retention_in_days = 3653
+  kms_key_id        = aws_kms_key.key.arn
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -115,7 +117,9 @@ resource "aws_cloudwatch_log_group" "es_application" {
 }
 
 resource "aws_cloudwatch_log_group" "es_index_slow" {
-  name = "crossfeed-${var.stage}-es-index-slow"
+  name              = "crossfeed-${var.stage}-es-index-slow"
+  retention_in_days = 3653
+  kms_key_id        = aws_kms_key.key.arn
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -123,7 +127,9 @@ resource "aws_cloudwatch_log_group" "es_index_slow" {
 }
 
 resource "aws_cloudwatch_log_group" "es_search_slow" {
-  name = "crossfeed-${var.stage}-es-search-slow"
+  name              = "crossfeed-${var.stage}-es-search-slow"
+  retention_in_days = 3653
+  kms_key_id        = aws_kms_key.key.arn
   tags = {
     Project = var.project
     Stage   = var.stage

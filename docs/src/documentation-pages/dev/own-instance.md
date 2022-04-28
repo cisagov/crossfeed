@@ -61,21 +61,30 @@ First, make sure you set the following SSM variables manually through the AWS Co
 - `/crossfeed/staging/DATABASE_USER`
 - `/crossfeed/staging/DATABASE_PASSWORD`
 - `/crossfeed/staging/APP_JWT_SECRET`
+- `/crossfeed/staging/REACT_APP_TERMS_VERSION`
+
+Optional variables:
+
+- `/crossfeed/staging/WORKER_USER_AGENT`
+- `/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_KEY`
+- `/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY`
 - `/crossfeed/staging/CENSYS_API_ID`
 - `/crossfeed/staging/CENSYS_API_SECRET`
 - `/crossfeed/staging/SHODAN_API_KEY`
+- `/crossfeed/staging/HIBP_API_KEY`
+- `/crossfeed/staging/SIXGILL_CLIENT_ID`
+- `/crossfeed/staging/SIXGILL_CLIENT_SECRET`
+- `/crossfeed/staging/PE_SHODAN_API_KEYS`
+- `/crossfeed/staging/LG_API_KEY`
+- `/crossfeed/staging/LG_WORKSPACE_NAME`
 - `/crossfeed/staging/LOGIN_GOV_REDIRECT_URI`
 - `/crossfeed/staging/LOGIN_GOV_BASE_URL`
 - `/crossfeed/staging/LOGIN_GOV_JWT_KEY`
 - `/crossfeed/staging/LOGIN_GOV_ISSUER`
-- `/crossfeed/staging/WORKER_USER_AGENT`
-- `/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_KEY`
-- `/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY`
-- `/crossfeed/staging/REACT_APP_TERMS_VERSION`
 
 ### Use Terraform
 
-Run `cd infrastructure`. Then, run `cp stage.config .env` and change the variables in `.env` to use a bucket you have access to to store state.
+Run `cd infrastructure`. Then, create a new bucket on S3 that can be used to store terraform state; make sure the bucket is private, bucket versioning is enabled, and server-side encryption is enabled. Then run `cp stage.config .env` and change the variables in `.env` to use this bucket name.
 
 Make sure you configure the default AWS profile using `aws configure` , or set the `AWS_PROFILE` environment variable in `.env`.
 
@@ -88,7 +97,6 @@ aws iam create-service-linked-role --aws-service-name es.amazonaws.com
 Then run:
 
 ```bash
-npm i -g dotenv-cli
 make init
 make plan
 make apply
@@ -106,6 +114,8 @@ WORKER_USER_AGENT="Crossfeed (Test request from Crossfeed Staging Environment, f
 WORKER_SIGNATURE_PUBLIC_KEY="public key, can have newlines"
 WORKER_SIGNATURE_PRIVATE_KEY="private key, can have newlines"
 ```
+
+Note that when deploying Crossfeed to AWS, the worker signature public and private keys should also be set as SSM secrets (such as `/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_KEY` and `/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY`).
 
 #### Generating RSA keys
 
@@ -129,8 +139,6 @@ One can then verify that requests are coming from Crossfeed by providing you wit
 
 You can call the `SignRequests.verify_signature` method (found in `backend/worker/mitmproxy_sign_requests.py`) to verify a signature with
 the above four parts of a request. Crossfeed will later have an admin UI that allows admins to run this check directly from the web interface.
-
-Note that when deploying Crossfeed to AWS, the worker signature public and private keys should also be set as SSM secrets (such as `/crossfeed/staging/WORKER_SIGNATURE_PUBLIC_KEY` and `/crossfeed/staging/WORKER_SIGNATURE_PRIVATE_KEY`).
 
 ### Configure other environment variables
 

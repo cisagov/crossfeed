@@ -12,11 +12,18 @@ import { handler as sslyze } from './tasks/sslyze';
 import { handler as searchSync } from './tasks/search-sync';
 import { handler as intrigueIdent } from './tasks/intrigue-ident';
 import { handler as cve } from './tasks/cve';
+import { handler as dotgov } from './tasks/dotgov';
 import { handler as webscraper } from './tasks/webscraper';
 import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
 import { handler as hibp } from './tasks/hibp';
+import { handler as peCybersixgill } from './tasks/peCybersixgill';
+import { handler as lookingGlass } from './tasks/lookingGlass';
 import { handler as dnstwist } from './tasks/dnstwist';
+import { handler as rootDomainSync } from './tasks/rootDomainSync';
+import { handler as peShodan } from './tasks/peShodan';
+import { handler as peDomMasq } from './tasks/peDomMasq';
+import { handler as peHibpSync } from './tasks/peHibpSync';
 import { SCAN_SCHEMA } from './api/scans';
 
 /**
@@ -28,7 +35,7 @@ async function main() {
   );
   console.log('commandOptions are', commandOptions);
 
-  const { scanName, organizations = [] } = commandOptions;
+  const { scanName = 'testProxy', organizations = [] } = commandOptions;
 
   const scanFn = {
     amass,
@@ -38,6 +45,7 @@ async function main() {
     sslyze,
     searchSync,
     cve,
+    dotgov,
     findomain,
     portscanner,
     wappalyzer,
@@ -46,9 +54,15 @@ async function main() {
     savedSearch,
     shodan,
     hibp,
+    peCybersixgill,
+    lookingGlass,
     dnstwist,
-    testProxy
-  }[scanName || 'testProxy'];
+    testProxy,
+    rootDomainSync,
+    peShodan,
+    peDomMasq,
+    peHibpSync
+  }[scanName];
   if (!scanFn) {
     throw new Error('Invalid scan name ' + scanName);
   }
@@ -77,6 +91,8 @@ async function main() {
       });
     }
   }
+
+  process.exit();
 }
 
 main();

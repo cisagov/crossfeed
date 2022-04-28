@@ -106,6 +106,7 @@ class ESClient {
 
   excludeFields = (domain: Domain) => {
     const copy: any = domain;
+    delete copy.ssl;
     delete copy.censysCertificatesResults;
     for (const service in copy.services) {
       delete copy.services[service].censysIpv4Results;

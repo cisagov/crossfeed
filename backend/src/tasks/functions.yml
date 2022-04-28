@@ -1,13 +1,18 @@
 scheduler:
   handler: src/tasks/scheduler.handler
-  timeout: 300
+  timeout: 900
   events:
     - schedule: rate(5 minutes)
   reservedConcurrency: 1
   memorySize: 4096
 
 syncdb:
+  timeout: 900
   handler: src/tasks/syncdb.handler
+
+pesyncdb:
+  timeout: 900
+  handler: src/tasks/pesyncdb.handler
 
 bastion:
   timeout: 900

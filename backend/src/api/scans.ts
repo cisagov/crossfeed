@@ -49,6 +49,12 @@ interface ScanSchema {
 }
 
 export const SCAN_SCHEMA: ScanSchema = {
+  testProxy: {
+    type: 'fargate',
+    isPassive: false,
+    global: true,
+    description: 'Not a real scan, used to test proxy'
+  },
   censys: {
     type: 'fargate',
     isPassive: true,
@@ -125,6 +131,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     memory: '8192',
     description: 'Matches detected software versions to CVEs from NIST NVD'
   },
+  dotgov: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    description:
+      'Create organizations based on root domains from the dotgov registrar dataset. All organizations are created with the "dotgov" tag and have a " (dotgov)" suffix added to their name.'
+  },
   searchSync: {
     type: 'fargate',
     isPassive: true,
@@ -156,15 +169,60 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
+    cpu: '2048',
+    memory: '16384',
     description:
       'Finds emails that have appeared in breaches related to a given domain'
+  },
+  lookingGlass: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'Finds vulnerabilities and malware from the LookingGlass API'
   },
   dnstwist: {
     type: 'fargate',
     isPassive: true,
     global: false,
+    cpu: '2048',
+    memory: '16384',
     description:
       'Domain name permutation engine for detecting similar registered domains.'
+  },
+  peDomMasq: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Fetch DNSTwist data, check IPs on blocklist.de, then sync to PE db instance.'
+  },
+  peCybersixgill: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'Run P&E Cybersixgill scripts and add to PE db instance.'
+  },
+  peHibpSync: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'Fetch hibp data and sync it with the PE db instance.'
+  },
+  peShodan: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    cpu: '2048',
+    memory: '16384',
+    description:
+      'Run organization IPs through shodan and circl to find un/verified vulns and save them to PE db.'
+  },
+  rootDomainSync: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Creates domains from root domains by doing a single DNS lookup for each root domain.'
   },
   savedSearch: {
     type: 'fargate',
@@ -188,6 +246,9 @@ class NewScan {
 
   @IsBoolean()
   isGranular: boolean;
+
+  @IsBoolean()
+  isUserModifiable: boolean;
 
   @IsBoolean()
   isSingleScan: boolean;
@@ -371,16 +432,17 @@ export const list = wrapHandler(async (event) => {
  *
  * /granularScans:
  *  get:
- *    description: List granular scans. These scans are retrieved by a standard organization admin user, who is then able to enable or disable these particular scans.
+ *    description: List user-modifiable scans. These scans are retrieved by a standard organization admin user, who is then able to enable or disable these particular scans.
  *    tags:
  *    - Scans
  */
 export const listGranular = wrapHandler(async (event) => {
   await connectToDatabase();
   const scans = await Scan.find({
-    select: ['id', 'name', 'isGranular'],
+    select: ['id', 'name', 'isUserModifiable'],
     where: {
       isGranular: true,
+      isUserModifiable: true,
       isSingleScan: false
     }
   });

@@ -1,0 +1,21 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.22.1
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-CC-TF-73:
+    - '*':
+        reason: >-
+          Security groups are intended to allow access to anywhere in the
+          Internet.
+  SNYK-CC-AWS-414:
+    - '*':
+        reason: >-
+          AWS RDS MariaDB (used for Matomo) does not support IAM authentication.
+  SNYK-CC-TF-126:
+    - '*':
+        reason: ECR registry requires mutable tags in order to deploy a dev and a prod version of the worker.
+  SNYK-CC-TF-127:
+    - '*':
+        reason: MFA delete cannot be enabled until root user access is retrieved on the AWS account.
+
+patch: {}

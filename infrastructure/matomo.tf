@@ -1,11 +1,20 @@
 resource "aws_ecs_cluster" "matomo" {
-  name               = var.matomo_ecs_cluster_name
-  capacity_providers = ["FARGATE"]
+  name = var.matomo_ecs_cluster_name
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 
   tags = {
     Project = var.project
     Stage   = var.stage
   }
+}
+
+resource "aws_ecs_cluster_capacity_providers" "motomo" {
+  cluster_name       = aws_ecs_cluster.matomo.name
+  capacity_providers = ["FARGATE"]
 }
 
 resource "aws_iam_role" "matomo_task_execution_role" {
@@ -87,10 +96,6 @@ resource "aws_ecs_task_definition" "matomo" {
         "value": "${aws_db_instance.matomo_db.username}"
       },
       {
-        "name": "MATOMO_DATABASE_PASSWORD",
-        "value": "${aws_db_instance.matomo_db.password}"
-      },
-      {
         "name": "MATOMO_DATABASE_DBNAME",
         "value": "${aws_db_instance.matomo_db.name}"
       },
@@ -101,6 +106,12 @@ resource "aws_ecs_task_definition" "matomo" {
       {
         "name": "MATOMO_GENERAL_ASSUME_SECURE_PROTOCOL",
         "value": "1"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "MATOMO_DATABASE_PASSWORD",
+        "valueFrom": "${aws_ssm_parameter.matomo_db_password.arn}"
       }
     ]
   }
@@ -157,7 +168,9 @@ resource "aws_ecs_service" "matomo" {
 }
 
 resource "aws_cloudwatch_log_group" "matomo" {
-  name = var.matomo_ecs_log_group_name
+  name              = var.matomo_ecs_log_group_name
+  retention_in_days = 3653
+  kms_key_id        = aws_kms_key.key.arn
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -184,7 +197,7 @@ resource "aws_db_instance" "matomo_db" {
   storage_encrypted       = true
 
   // database information
-  name     = "matomo"
+  db_name  = "matomo"
   username = "matomo"
   password = random_password.matomo_db_password.result
 
@@ -195,5 +208,16 @@ resource "aws_db_instance" "matomo_db" {
   tags = {
     Project = var.project
     Stage   = var.stage
+  }
+}
+
+resource "aws_ssm_parameter" "matomo_db_password" {
+  name      = var.ssm_matomo_db_password
+  type      = "SecureString"
+  value     = random_password.matomo_db_password.result
+  overwrite = true
+
+  tags = {
+    Project = var.project
   }
 }

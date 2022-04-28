@@ -11,8 +11,7 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-  TextareaAutosize,
-  Button
+  TextareaAutosize
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { withSearch } from '@elastic/react-search-ui';
@@ -257,8 +256,10 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
               ))}
             </Select>
           </FormControl>
-          <Button
+          <USWDSButton
             className={classes.exportButton}
+            outline
+            type="button"
             onClick={() =>
               exportCSV(
                 {
@@ -270,7 +271,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
             }
           >
             Export Results
-          </Button>
+          </USWDSButton>
         </Paper>
       </div>
 
@@ -509,6 +510,7 @@ const useStyles = makeStyles(() => ({
     flexFlow: 'row nowrap',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    boxShadow: '0px -1px 2px rgba(0, 0, 0, 0.15)',
     padding: '1rem 2rem',
     '& > span': {
       marginRight: '2rem'

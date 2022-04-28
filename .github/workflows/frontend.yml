@@ -21,34 +21,15 @@ defaults:
     working-directory: ./frontend
 
 jobs:
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.3.4
-      - uses: actions/setup-node@v2.1.5
-        with:
-          node-version: '14'
-      - name: Restore npm cache
-        uses: actions/cache@v2.1.4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
-      - name: Security
-        run: npm audit
-        continue-on-error: true
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
-      - uses: actions/setup-node@v2.1.5
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -62,12 +43,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v2.3.4
-      - uses: actions/setup-node@v2.1.5
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -79,17 +60,19 @@ jobs:
         run: npm run build
       - name: Test
         run: npm run test
-  deploy:
-    needs: [security, lint, test]
+  deploy_staging:
+    needs: [lint, test]
     runs-on: ubuntu-18.04
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/production')
+    environment: staging
+    concurrency: 1
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
-      - uses: actions/checkout@v2.3.4
-      - uses: actions/setup-node@v2.1.5
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -98,23 +81,40 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build Staging
-        if: github.ref == 'refs/heads/master'
         run: cp stage.env .env && npm run build
 
-      - name: Build Production
-        if: github.ref == 'refs/heads/production'
-        run: cp prod.env .env && npm run build
-
       - name: Deploy Staging
-        if: github.ref == 'refs/heads/master'
         run: aws s3 sync build s3://staging.crossfeed.cyber.dhs.gov --delete
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  deploy_prod:
+    needs: [lint, test]
+    runs-on: ubuntu-18.04
+    environment: production
+    concurrency: 1
+    if: github.event_name == 'push' && github.ref == 'refs/heads/production'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - name: Restore npm cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Production
+        run: cp prod.env .env && npm run build
 
       - name: Deploy Production
-        if: github.ref == 'refs/heads/production'
         run: aws s3 sync build s3://crossfeed.cyber.dhs.gov --delete
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -1,6 +1,5 @@
 import { ECS, CloudWatchLogs } from 'aws-sdk';
 import { SCAN_SCHEMA } from '../api/scans';
-import * as Docker from 'dockerode';
 
 export interface CommandOptions {
   /** A list of organizations (id and name) that this
@@ -37,7 +36,7 @@ const toSnakeCase = (input) => input.replace(/ /g, '-');
 class ECSClient {
   ecs?: ECS;
   cloudWatchLogs?: CloudWatchLogs;
-  docker?: Docker;
+  docker?: any;
   isLocal: boolean;
 
   constructor(isLocal?: boolean) {
@@ -45,6 +44,7 @@ class ECSClient {
       isLocal ??
       (process.env.IS_OFFLINE || process.env.IS_LOCAL ? true : false);
     if (this.isLocal) {
+      const Docker = require('dockerode');
       this.docker = new Docker();
     } else {
       this.ecs = new ECS();
@@ -93,16 +93,24 @@ class ECSClient {
             `DB_NAME=${process.env.DB_NAME}`,
             `DB_USERNAME=${process.env.DB_USERNAME}`,
             `DB_PASSWORD=${process.env.DB_PASSWORD}`,
+            `PE_DB_NAME=${process.env.PE_DB_NAME}`,
+            `PE_DB_USERNAME=${process.env.PE_DB_USERNAME}`,
+            `PE_DB_PASSWORD=${process.env.PE_DB_PASSWORD}`,
             `CENSYS_API_ID=${process.env.CENSYS_API_ID}`,
             `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`,
             `WORKER_USER_AGENT=${process.env.WORKER_USER_AGENT}`,
             `SHODAN_API_KEY=${process.env.SHODAN_API_KEY}`,
             `HIBP_API_KEY=${process.env.HIBP_API_KEY}`,
+            `SIXGILL_CLIENT_ID=${process.env.SIXGILL_CLIENT_ID}`,
+            `SIXGILL_CLIENT_SECRET=${process.env.SIXGILL_CLIENT_SECRET}`,
+            `PE_SHODAN_API_KEYS=${process.env.PE_SHODAN_API_KEYS}`,
             `WORKER_SIGNATURE_PUBLIC_KEY=${process.env.WORKER_SIGNATURE_PUBLIC_KEY}`,
             `WORKER_SIGNATURE_PRIVATE_KEY=${process.env.WORKER_SIGNATURE_PRIVATE_KEY}`,
             `ELASTICSEARCH_ENDPOINT=${process.env.ELASTICSEARCH_ENDPOINT}`,
             `AWS_ACCESS_KEY_ID=${process.env.AWS_ACCESS_KEY_ID}`,
-            `AWS_SECRET_ACCESS_KEY=${process.env.AWS_SECRET_ACCESS_KEY}`
+            `AWS_SECRET_ACCESS_KEY=${process.env.AWS_SECRET_ACCESS_KEY}`,
+            `LG_API_KEY=${process.env.LG_API_KEY}`,
+            `LG_WORKSPACE_NAME=${process.env.LG_WORKSPACE_NAME}`
           ]
         } as any);
         await container.start();

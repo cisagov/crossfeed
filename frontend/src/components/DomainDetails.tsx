@@ -166,7 +166,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
           const isWebpage =
             'url' in tree[key] && typeof tree[key]['url'] === 'string';
           if (!isWebpage) {
-            let newPrefix = prefix + '/' + key;
+            const newPrefix = prefix + '/' + key;
             return (
               <>
                 <ListItem

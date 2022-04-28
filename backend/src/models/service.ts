@@ -72,6 +72,7 @@ export interface Product {
 
 @Entity()
 @Index(['port', 'domain'], { unique: true })
+@Index(['domain'])
 export class Service extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -93,6 +94,13 @@ export class Service extends BaseEntity {
     onUpdate: 'CASCADE'
   })
   discoveredBy: Scan;
+
+  /** Name of scan that discovered this port/service (censysIpv4, shodan). */
+  @Column({
+    nullable: true,
+    type: 'text'
+  })
+  serviceSource: string | null;
 
   @Column()
   port: number;

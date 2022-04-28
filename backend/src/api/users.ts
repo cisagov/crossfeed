@@ -138,15 +138,13 @@ You've been invited to join ${
 Crossfeed access instructions:
 
 1. Visit ${process.env.FRONTEND_DOMAIN}/signup.
-2. Select 'Create Account'.
+2. Select "Create Account."
 3. Enter your email address and a new password for Crossfeed.
 4. A confirmation code will be sent to your email. Enter this code when you receive it.
 5. You will be prompted to enable MFA. Scan the QR code with an authenticator app on your phone, such as Microsoft Authenticator. Enter the MFA code you see after scanning.
 6. After configuring your account, you will be redirected to Crossfeed.
 
-On the "Dashboard" tab, you can view information about each subdomain and the associated ports and services detected on each one. The "Scans" tab has a list of enabled scans and the schedule that they run on. The "Risk Summary" tab has a visual summary of identified assets, and the "Vulnerabilities" tab lists discovered vulnerabilities.
-
-For more information on using Crossfeed, view the Crossfeed user guide at https://cisagov.github.io/crossfeed/usage.
+For more information on using Crossfeed, view the Crossfeed user guide at https://docs.crossfeed.cyber.dhs.gov/user-guide/quickstart/. 
 
 If you encounter any difficulties, please feel free to reply to this email (or send an email to ${
       process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO

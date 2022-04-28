@@ -29,7 +29,7 @@ const Feeds = () => {
   const fetchSavedSearches = useCallback(
     async (page: number) => {
       try {
-        let res = await apiGet<{ result: SavedSearch[]; count: number }>(
+        const res = await apiGet<{ result: SavedSearch[]; count: number }>(
           `/saved-searches/?page=${page}&pageSize=${pageState.resultsPerPage}`
         );
         setSavedSearches(res.result);
@@ -54,7 +54,7 @@ const Feeds = () => {
 
   const deleteSearch = async (id: string) => {
     try {
-      await apiDelete(`/saved-searches/${id}`);
+      await apiDelete(`/saved-searches/${id}`, { body: {} });
       setSavedSearches(savedSearches.filter((search) => search.id !== id));
     } catch (e) {
       console.log(e);
