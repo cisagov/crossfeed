@@ -244,6 +244,62 @@ describe('vulnerabilities', () => {
       expect(response.body.count).toEqual(1);
       expect(response.body.result[0].id).toEqual(vulnerability.id);
     });
+    it('list by globalView with isKev filter should work', async () => {
+      const tag = await OrganizationTag.create({
+        name: 'test-' + Math.random()
+      }).save();
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false,
+        tags: [tag]
+      }).save();
+      const domain = await Domain.create({
+        name: 'test-' + Math.random(),
+        organization
+      }).save();
+      const title = 'test-' + Math.random();
+      const vulnerability = await Vulnerability.create({
+        title: title + '-1',
+        isKev: true,
+        domain
+      }).save();
+      const vulnerability2 = await Vulnerability.create({
+        title: title + '-2',
+        isKev: false,
+        domain
+      }).save();
+      const response = await request(app)
+        .post('/vulnerabilities/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: UserType.GLOBAL_VIEW
+          })
+        )
+        .send({
+          filters: { organization: organization.id, isKev: true }
+        })
+        .expect(200);
+      expect(response.body.count).toEqual(1);
+      expect(response.body.result[0].id).toEqual(vulnerability.id);
+
+      const response2 = await request(app)
+        .post('/vulnerabilities/search')
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: UserType.GLOBAL_VIEW
+          })
+        )
+        .send({
+          filters: { organization: organization.id, isKev: false }
+        })
+        .expect(200);
+      expect(response2.body.count).toEqual(1);
+      expect(response2.body.result[0].id).toEqual(vulnerability2.id);
+    });
     it('list by org user with custom pageSize should work', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
@@ -312,7 +368,7 @@ describe('vulnerabilities', () => {
       expect(response.body.count).toEqual(2);
       expect(response.body.result.length).toEqual(2);
     });
-    it('list by org user with groupBy set should group results', async () => {
+    it.only('list by org user with groupBy set should group results', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
@@ -362,6 +418,7 @@ describe('vulnerabilities', () => {
       expect(response.body.result).toEqual([
         {
           cve: 'CVE-9999-0001',
+          isKev: false,
           severity: 'High',
           cnt: '2',
           description: '',
@@ -369,6 +426,7 @@ describe('vulnerabilities', () => {
         },
         {
           cve: 'CVE-9999-0003',
+          isKev: false,
           severity: 'High',
           cnt: '1',
           description: '',

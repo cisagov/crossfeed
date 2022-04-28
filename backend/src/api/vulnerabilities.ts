@@ -174,11 +174,11 @@ class VulnerabilitySearch {
 
     if (groupBy) {
       qs = qs
-        .groupBy('title, cve, isKev, description, severity')
+        .groupBy('title, cve, "isKev", description, severity')
         .select([
           'title',
           'cve',
-          'isKev',
+          '"isKev"',
           'description',
           'severity',
           'count(*) as cnt'
