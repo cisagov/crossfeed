@@ -63,6 +63,20 @@ variable "ssm_db_host" {
   default = "/crossfeed/staging/DATABASE_HOST"
 }
 
+variable "ssm_pe_db_name" {
+  type    = string
+  default = "/crossfeed/staging/PE_DB_NAME"
+}
+
+variable "ssm_pe_db_username" {
+  type    = string
+  default = "/crossfeed/staging/PE_DB_USERNAME"
+}
+
+variable "ssm_pe_db_password" {
+  type    = string
+  default = "/crossfeed/staging/PE_DB_PASSWORD"
+}
 variable "ssm_lambda_sg" {
   type    = string
   default = "/crossfeed/staging/SG_ID"
@@ -284,4 +298,15 @@ variable "es_instance_count" {
 variable "es_instance_volume_size" {
   type    = number
   default = 100
+}
+
+variable "create_db_accessor_instance" {
+  description = "Whether to create a DB accessor instance. This instance can be used to access RDS and is spun up in a private subnet. It can be accessed using AWS Systems Manager Session Manager."
+  type        = bool
+  default     = false
+}
+
+variable "db_accessor_instance_class" {
+  type    = string
+  default = "t3.micro"
 }

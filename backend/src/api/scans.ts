@@ -169,6 +169,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
+    cpu: '2048',
+    memory: '16384',
     description:
       'Finds emails that have appeared in breaches related to a given domain'
   },
@@ -182,6 +184,8 @@ export const SCAN_SCHEMA: ScanSchema = {
     type: 'fargate',
     isPassive: true,
     global: false,
+    cpu: '2048',
+    memory: '16384',
     description:
       'Domain name permutation engine for detecting similar registered domains.'
   },

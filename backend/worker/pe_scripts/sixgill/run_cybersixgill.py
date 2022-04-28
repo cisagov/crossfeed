@@ -1,21 +1,24 @@
 import traceback
-from source import (
-    alerts,
-    list_organizations,
-    alias_organization,
-    mentions,
-    root_domains,
-    creds,
-    top_cves,
-)
-from redact import redact_pii
-import psycopg2
-import psycopg2.extras as extras
-import os
-import pandas as pd
-import datetime
-from datetime import date, timedelta
-import requests
+try:
+    from source import (
+        alerts,
+        list_organizations,
+        alias_organization,
+        mentions,
+        root_domains,
+        creds,
+        top_cves,
+    )
+    from redact import redact_pii
+    import psycopg2
+    import psycopg2.extras as extras
+    import os
+    import pandas as pd
+    import datetime
+    from datetime import date, timedelta
+    import requests
+except:
+    print(traceback.format_exc())
 
 DB_HOST = os.environ.get("DB_HOST")
 PE_DB_NAME = os.environ.get("PE_DB_NAME")
@@ -36,8 +39,6 @@ to_date = datetime.datetime.now()
 back = timedelta(days=16)
 from_date = (to_date - back).strftime("%Y-%m-%d %H:%M:%S")
 to_date = to_date.strftime("%Y-%m-%d %H:%M:%S")
-print(to_date)
-print(from_date)
 
 
 def cve(cveid):
@@ -109,7 +110,7 @@ except:
     print("Failed fetching Cybersixgill aliases.")
     print(traceback.format_exc())
 
-"""Insert/Update Aliases into PE databse instance"""
+"""Insert/Update Aliases into PE database instance"""
 try:
     # aliases_list = json.loads(aliases.replace("'", '"'))
     alias_df = pd.DataFrame(aliases, columns=["alias"])
