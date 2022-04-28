@@ -315,7 +315,7 @@ const populateVulnerabilities = async () => {
 };
 
 // Close open vulnerabilities that haven't been seen in a week.
-const closeOpenVulnerabilities = async (type: 'open' | 'closed') => {
+const closeOpenVulnerabilities = async () => {
   const oneWeekAgo = new Date(
     new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 7)
   );
