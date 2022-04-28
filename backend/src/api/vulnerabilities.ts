@@ -101,7 +101,7 @@ class VulnerabilitySearch {
   @IsIn(['title'])
   groupBy?: 'title';
 
-  /** Set to true if the vulnerability is currently on the CISA Known Exploited Vulnerability (KEV) list. **/
+  /** Set to true if the vulnerability has been on the CISA Known Exploited Vulnerability (KEV) list. **/
   @IsBoolean()
   @IsOptional()
   @Column({
@@ -109,24 +109,6 @@ class VulnerabilitySearch {
     nullable: true
   })
   isKev?: boolean;
-
-  /* KEV results */
-  @IsOptional()
-  @Column({
-    type: 'jsonb',
-    default: {},
-    nullable: true
-  })
-  kevResults?: {
-    cveID: string;
-    vendorProject: string;
-    product: string;
-    vulnerabilityName: string;
-    dateAdded: Date;
-    shortDescription: string;
-    requiredAction: string;
-    dueDate: Date;
-  };
 
   async filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>, event) {
     if (this.filters?.id) {

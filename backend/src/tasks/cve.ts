@@ -10,10 +10,18 @@ import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
-import { LessThan, MoreThan, FindOperator, In, MoreThanOrEqual } from 'typeorm';
+import {
+  LessThan,
+  MoreThan,
+  FindOperator,
+  In,
+  MoreThanOrEqual,
+  Not
+} from 'typeorm';
 import * as fs from 'fs';
 import * as zlib from 'zlib';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { CISACatalogOfKnownExploitedVulnerabilities } from 'src/models/generated/kev';
 
 /**
  * The CVE scan creates vulnerabilities based on existing
@@ -53,7 +61,8 @@ const DOMAIN_BATCH_SIZE = 1000;
 const CPE2CVE_BATCH_SIZE = 50;
 
 // URL for CISA's Known Exploited Vulnerabilities database.
-const KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json";
+const KEV_URL =
+  'https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json';
 
 /**
  * Construct a CPE to be added. If the CPE doesn't already contain
@@ -322,17 +331,23 @@ const populateVulnerabilitiesFromNVD = async () => {
 
 // Populate CVE details from the CISA Known Exploited Vulnerabilities (KEV) database.
 const populateVulnerabilitiesFromKEV = async () => {
-  const { data } = await axios.get(KEV_URL);
-  const { vulnerabilities } = data;
-  const vulnerabilities = await Vulnerability.find({
-    needsPopulation: true
-  });
-  const vulnerabilitiesMap: { [key: string]: Vulnerability[] } = {};
-  for (const vuln of vulnerabilities) {
-    if (vuln.cve) {
-      if (vulnerabilitiesMap[vuln.cve]) {
-        vulnerabilitiesMap[vuln.cve].push(vuln);
-      } else vulnerabilitiesMap[vuln.cve] = [vuln];
+  const response: AxiosResponse<CISACatalogOfKnownExploitedVulnerabilities> = await axios.get(
+    KEV_URL
+  );
+  const { vulnerabilities: kevVulns } = response.data;
+  for (const kevVuln of kevVulns) {
+    const { affected = 0 } = await Vulnerability.update(
+      {
+        isKev: Not(true),
+        cve: kevVuln.cveID
+      },
+      {
+        isKev: true,
+        kevResults: kevVuln as any
+      }
+    );
+    if (affected > 0) {
+      console.log(`KEV ${kevVuln.cveID}: updated ${affected} vulns`);
     }
   }
 };

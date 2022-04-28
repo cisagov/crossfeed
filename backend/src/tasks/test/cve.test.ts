@@ -4,9 +4,9 @@ import {
   Domain,
   connectToDatabase,
   Service,
-  Vulnerability,
-  Webpage
+  Vulnerability
 } from '../../models';
+import * as nock from 'nock';
 
 jest.mock('child_process', () => ({
   spawnSync: () => null,
@@ -702,6 +702,177 @@ describe('cve', () => {
         domain: { id: domain2.id }
       });
       expect(vulns2.length).toEqual(0);
+    });
+  });
+  describe('kev', () => {
+    const kevResponse = {
+      title: 'CISA Catalog of Known Exploited Vulnerabilities',
+      catalogVersion: '2022.04.25',
+      dateReleased: '2022-04-25T15:51:14.1414Z',
+      count: 2,
+      vulnerabilities: [
+        {
+          cveID: 'CVE-2021-27104',
+          vendorProject: 'Accellion',
+          product: 'FTA',
+          vulnerabilityName: 'Accellion FTA OS Command Injection Vulnerability',
+          dateAdded: '2021-11-03',
+          shortDescription:
+            'Accellion FTA 9_12_370 and earlier is affected by OS command execution via a crafted POST request to various admin endpoints.',
+          requiredAction: 'Apply updates per vendor instructions.',
+          dueDate: '2021-11-17'
+        },
+        {
+          cveID: 'CVE-2021-27102',
+          vendorProject: 'Accellion',
+          product: 'FTA',
+          vulnerabilityName: 'Accellion FTA OS Command Injection Vulnerability',
+          dateAdded: '2021-11-03',
+          shortDescription:
+            'Accellion FTA 9_12_411 and earlier is affected by OS command execution via a local web service call.',
+          requiredAction: 'Apply updates per vendor instructions.',
+          dueDate: '2021-11-17'
+        }
+      ]
+    };
+    test('should add kev detail', async () => {
+      nock('https://www.cisa.gov')
+        .get('/sites/default/files/feeds/known_exploited_vulnerabilities.json')
+        .reply(200, kevResponse);
+
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const name = 'test-' + Math.random();
+      const domain = await Domain.create({
+        name,
+        organization
+      }).save();
+      let vulnerability = await Vulnerability.create({
+        domain,
+        cve: 'CVE-2021-27104',
+        lastSeen: new Date(
+          new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 10)
+        ),
+        title: 'CVE-2021-27104',
+        description: '123'
+      }).save();
+      let vulnerability2 = await Vulnerability.create({
+        domain,
+        cve: 'CVE-2021-27102',
+        lastSeen: new Date(
+          new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 10)
+        ),
+        title: 'CVE-2021-27102',
+        description: '123'
+      }).save();
+
+      await cve({
+        organizationId: organization.id,
+        scanId: 'scanId',
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId'
+      });
+
+      vulnerability = (await Vulnerability.findOne({
+        id: vulnerability.id
+      })) as Vulnerability;
+      vulnerability2 = (await Vulnerability.findOne({
+        id: vulnerability2.id
+      })) as Vulnerability;
+
+      expect(vulnerability.isKev).toEqual(true);
+      expect(vulnerability2.isKev).toEqual(true);
+
+      expect(vulnerability.kevResults).toEqual(kevResponse.vulnerabilities[0]);
+      expect(vulnerability2.kevResults).toEqual(kevResponse.vulnerabilities[1]);
+    });
+    test('should not add kev detail to non-kev', async () => {
+      nock('https://www.cisa.gov')
+        .get('/sites/default/files/feeds/known_exploited_vulnerabilities.json')
+        .reply(200, kevResponse);
+
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const name = 'test-' + Math.random();
+      const domain = await Domain.create({
+        name,
+        organization
+      }).save();
+      let vulnerability = await Vulnerability.create({
+        domain,
+        cve: 'CVE-2021-XXXXX',
+        lastSeen: new Date(
+          new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 10)
+        ),
+        title: 'CVE-2021-XXXXX',
+        description: '123'
+      }).save();
+
+      await cve({
+        organizationId: organization.id,
+        scanId: 'scanId',
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId'
+      });
+
+      vulnerability = (await Vulnerability.findOne({
+        id: vulnerability.id
+      })) as Vulnerability;
+
+      expect(vulnerability.isKev).toEqual(false);
+
+      expect(vulnerability.kevResults).toEqual({});
+    });
+    test('should not update existing kev', async () => {
+      nock('https://www.cisa.gov')
+        .get('/sites/default/files/feeds/known_exploited_vulnerabilities.json')
+        .reply(200, kevResponse);
+
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const name = 'test-' + Math.random();
+      const domain = await Domain.create({
+        name,
+        organization
+      }).save();
+      let vulnerability = await Vulnerability.create({
+        domain,
+        cve: 'CVE-2021-27104',
+        lastSeen: new Date(
+          new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 10)
+        ),
+        title: 'CVE-2021-27104',
+        description: '123',
+        isKev: true,
+        kevResults: {}
+      }).save();
+
+      await cve({
+        organizationId: organization.id,
+        scanId: 'scanId',
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId'
+      });
+
+      vulnerability = (await Vulnerability.findOne({
+        id: vulnerability.id
+      })) as Vulnerability;
+
+      expect(vulnerability.isKev).toEqual(true);
+
+      expect(vulnerability.kevResults).toEqual({});
     });
   });
   // describe('identify unexpected webpages', () => {
