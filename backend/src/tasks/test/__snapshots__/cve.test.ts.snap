@@ -71,7 +71,32 @@ exports[`cve product with IIS cpe cpe:/a:microsoft:internet_information_server:8
 "
 `;
 
-exports[`cve product with cpe with no version in it should create no vulns: vulnerability 1`] = `
+exports[`cve product with cpe with trailing colon: execSync.input 1`] = `
+"0 cpe:/a:10web:form_maker::1.0.0
+"
+`;
+
+exports[`cve product with cpe with version in it: execSync.input 1`] = `
+"0 cpe:/a:10web:form_maker:1.0.0
+"
+`;
+
+exports[`cve product with cpe without version in it: execSync.input 1`] = `
+"0 cpe:/a:10web:form_maker:1.0.0
+"
+`;
+
+exports[`cve product with exchange cpe with version in it: execSync.input 1`] = `
+"0 cpe:/a:microsoft:exchange_server:2019:cumulative_update_5
+"
+`;
+
+exports[`cve simple test: execSync.input 1`] = `
+"0 cpe:/a:10web:form_maker:1.0.0
+"
+`;
+
+exports[`cve simple test: vulnerability 1`] = `
 Object {
   "actions": Any<Array>,
   "cpe": "cpe:/a:10web:form_maker:1.0.0",
@@ -107,7 +132,7 @@ Object {
 }
 `;
 
-exports[`cve product with cpe with no version in it should create no vulns: vulnerability 2`] = `
+exports[`cve simple test: vulnerability 2`] = `
 Object {
   "actions": Any<Array>,
   "cpe": "cpe:/a:10web:form_maker:1.0.0",
@@ -131,29 +156,4 @@ Object {
   "title": "CVE-2019-11590",
   "updatedAt": Any<Date>,
 }
-`;
-
-exports[`cve product with cpe with trailing colon: execSync.input 1`] = `
-"0 cpe:/a:10web:form_maker::1.0.0
-"
-`;
-
-exports[`cve product with cpe with version in it: execSync.input 1`] = `
-"0 cpe:/a:10web:form_maker:1.0.0
-"
-`;
-
-exports[`cve product with cpe without version in it: execSync.input 1`] = `
-"0 cpe:/a:10web:form_maker:1.0.0
-"
-`;
-
-exports[`cve product with exchange cpe with version in it: execSync.input 1`] = `
-"0 cpe:/a:microsoft:exchange_server:2019:cumulative_update_5
-"
-`;
-
-exports[`cve simple test: execSync.input 1`] = `
-"0 cpe:/a:10web:form_maker:1.0.0
-"
 `;
