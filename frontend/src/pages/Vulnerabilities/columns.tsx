@@ -50,6 +50,16 @@ export const createColumns = (updateVulnerability: any) =>
       Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
     },
     {
+      Header: 'KEV',
+      id: 'isKev',
+      accessor: ({ isKev }) => (isKev ? 'Yes' : 'No'),
+      width: 50,
+      Filter: selectFilter([
+        { value: 'true', label: 'Yes' },
+        { value: 'false', label: 'No' }
+      ])
+    },
+    {
       Header: 'Domain',
       id: 'domain',
       accessor: ({ domain }) => (

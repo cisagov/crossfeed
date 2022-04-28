@@ -61,6 +61,10 @@ class VulnerabilityFilters {
   @IsUUID()
   @IsOptional()
   tag?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isKev?: boolean;
 }
 
 class VulnerabilitySearch {
@@ -101,15 +105,6 @@ class VulnerabilitySearch {
   @IsIn(['title'])
   groupBy?: 'title';
 
-  /** Set to true if the vulnerability has been on the CISA Known Exploited Vulnerability (KEV) list. **/
-  @IsBoolean()
-  @IsOptional()
-  @Column({
-    default: false,
-    nullable: true
-  })
-  isKev?: boolean;
-
   async filterResultQueryset(qs: SelectQueryBuilder<Vulnerability>, event) {
     if (this.filters?.id) {
       qs.andWhere('vulnerability.id = :id', {
@@ -146,6 +141,11 @@ class VulnerabilitySearch {
         substate: this.filters.substate
       });
     }
+    if (this.filters?.isKev || this.filters?.isKev === false) {
+      qs.andWhere('vulnerability.isKev=:isKev', {
+        isKev: this.filters.isKev
+      });
+    }
     if (this.filters?.organization) {
       qs.andWhere('organization.id = :org', {
         org: this.filters.organization
@@ -174,8 +174,15 @@ class VulnerabilitySearch {
 
     if (groupBy) {
       qs = qs
-        .groupBy('title, cve, description, severity')
-        .select(['title', 'cve', 'description', 'severity', 'count(*) as cnt'])
+        .groupBy('title, cve, isKev, description, severity')
+        .select([
+          'title',
+          'cve',
+          'isKev',
+          'description',
+          'severity',
+          'count(*) as cnt'
+        ])
         .orderBy('cnt', 'DESC');
     } else {
       qs = qs
@@ -310,6 +317,7 @@ export const export_ = wrapHandler(async (event) => {
         'title',
         'description',
         'cve',
+        'isKev',
         'cwe',
         'cpe',
         'description',
