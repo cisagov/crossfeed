@@ -70,6 +70,12 @@ describe('dnstwist', () => {
   });
 
   test('basic test', async () => {
+    const name = 'test-' + Math.random();
+    const domain = await Domain.create({
+      name,
+      ip: '0.0.0.0',
+      organization
+    }).save();
     await dnstwist({
       organizationId: organization.id,
       organizationName: 'organizationName',
@@ -77,12 +83,6 @@ describe('dnstwist', () => {
       scanName: 'scanName',
       scanTaskId: 'scanTaskId'
     });
-    const name = 'test-' + Math.random();
-    const domain = await Domain.create({
-      name,
-      ip: '0.0.0.0',
-      organization
-    }).save();
     const vulns = await Vulnerability.find({
       domain: domain
     });
