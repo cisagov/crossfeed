@@ -314,32 +314,37 @@ const populateVulnerabilities = async () => {
   }
 };
 
-// Closes or reopens vulnerabilities that need to be updated
-const adjustVulnerabilities = async (type: 'open' | 'closed') => {
+// Close open vulnerabilities that haven't been seen in a week.
+const closeOpenVulnerabilities = async (type: 'open' | 'closed') => {
   const oneWeekAgo = new Date(
     new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 7)
   );
-  const where: {
-    state: string;
-    lastSeen: FindOperator<Date>;
-    substate?: string;
-  } = {
-    state: type,
-    lastSeen: type === 'open' ? LessThan(oneWeekAgo) : MoreThan(oneWeekAgo)
-  };
-  // If vulnerability is already closed, we should only reopen if it was remediated
-  if (type === 'closed') {
-    where.substate = 'remediated';
-  }
   const openVulnerabilites = await Vulnerability.find({
-    where
+    where: {
+      state: 'open',
+      lastSeen: LessThan(oneWeekAgo)
+    }
   });
   for (const vulnerability of openVulnerabilites) {
-    vulnerability.setState(
-      type === 'open' ? 'remediated' : 'unconfirmed',
-      true,
-      null
-    );
+    vulnerability.setState('remediated', true, null);
+    await vulnerability.save();
+  }
+};
+
+// Reopen closed vulnerabilities that have been seen in the past week.
+const reopenClosedVulnerabilities = async () => {
+  const oneWeekAgo = new Date(
+    new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 7)
+  );
+  const remediatedVulnerabilities = await Vulnerability.find({
+    where: {
+      state: 'closed',
+      lastSeen: MoreThan(oneWeekAgo),
+      substate: 'remediated'
+    }
+  });
+  for (const vulnerability of remediatedVulnerabilities) {
+    vulnerability.setState('unconfirmed', true, null);
     await vulnerability.save();
   }
 };
@@ -378,8 +383,8 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   // await identifyUnexpectedWebpages(domains);
 
-  await adjustVulnerabilities('open');
-  await adjustVulnerabilities('closed');
+  await closeOpenVulnerabilities();
+  await reopenClosedVulnerabilities();
 
   await populateVulnerabilities();
 };
