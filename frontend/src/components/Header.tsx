@@ -242,6 +242,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                       options={[{ name: 'All Organizations' }].concat(
                         organizations
                       )}
+                      autoComplete={false}
                       className={classes.selectOrg}
                       classes={{
                         option: classes.option
