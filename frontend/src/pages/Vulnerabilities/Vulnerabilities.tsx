@@ -87,7 +87,7 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
     }): Promise<ApiResponse | undefined> => {
       try {
         const tableFilters: {
-          [key: string]: string | undefined;
+          [key: string]: string | boolean | undefined;
         } = filters
           .filter((f) => Boolean(f.value))
           .reduce(
@@ -100,9 +100,11 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
         // If not open or closed, substitute for appropriate substate
         if (
           tableFilters['state'] &&
-          !['open', 'closed'].includes(tableFilters['state'])
+          !['open', 'closed'].includes(tableFilters['state'] as string)
         ) {
-          const substate = tableFilters['state']!.match(/\((.*)\)/)?.pop();
+          const substate = (tableFilters['state'] as string)
+            .match(/\((.*)\)/)
+            ?.pop();
           if (substate)
             tableFilters['substate'] = substate.toLowerCase().replace(' ', '-');
           delete tableFilters['state'];
@@ -111,6 +113,10 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
           if ('rootDomains' in currentOrganization)
             tableFilters['organization'] = currentOrganization.id;
           else tableFilters['tag'] = currentOrganization.id;
+        }
+        if (tableFilters['isKev']) {
+          // Convert string to boolean filter.
+          tableFilters['isKev'] = tableFilters['isKev'] === 'true';
         }
         return await apiPost<ApiResponse>(
           doExport ? '/vulnerabilities/export' : '/vulnerabilities/search',

@@ -7,7 +7,9 @@ interface Props {
   column: ColumnInstance;
 }
 
-export const selectFilter = (opts: string[]) => {
+type Option = { value: any; label: string };
+
+export const selectFilter = (opts: string[] | Option[]) => {
   const SelectFilter: React.FC<Props> = ({
     column: { filterValue, setFilter, id }
   }) => {
@@ -22,9 +24,12 @@ export const selectFilter = (opts: string[]) => {
           }}
         >
           <option value=""></option>
-          {opts.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
+          {(opts as any[]).map((opt) => (
+            <option
+              key={(opt as Option).value || opt}
+              value={(opt as Option).value || opt}
+            >
+              {(opt as Option).label || opt}
             </option>
           ))}
         </Dropdown>

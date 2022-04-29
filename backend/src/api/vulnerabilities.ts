@@ -7,12 +7,13 @@ import {
   isUUID,
   IsOptional,
   IsObject,
-  IsUUID
+  IsUUID,
+  IsBoolean
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Vulnerability, connectToDatabase, User } from '../models';
 import { validateBody, wrapHandler, NotFound } from './helpers';
-import { SelectQueryBuilder } from 'typeorm';
+import { Column, SelectQueryBuilder } from 'typeorm';
 import {
   getOrgMemberships,
   getTagOrganizations,
@@ -60,6 +61,10 @@ class VulnerabilityFilters {
   @IsUUID()
   @IsOptional()
   tag?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isKev?: boolean;
 }
 
 class VulnerabilitySearch {
@@ -136,6 +141,11 @@ class VulnerabilitySearch {
         substate: this.filters.substate
       });
     }
+    if (this.filters?.isKev || this.filters?.isKev === false) {
+      qs.andWhere('vulnerability.isKev=:isKev', {
+        isKev: this.filters.isKev
+      });
+    }
     if (this.filters?.organization) {
       qs.andWhere('organization.id = :org', {
         org: this.filters.organization
@@ -164,8 +174,15 @@ class VulnerabilitySearch {
 
     if (groupBy) {
       qs = qs
-        .groupBy('title, cve, description, severity')
-        .select(['title', 'cve', 'description', 'severity', 'count(*) as cnt'])
+        .groupBy('title, cve, "isKev", description, severity')
+        .select([
+          'title',
+          'cve',
+          '"isKev"',
+          'description',
+          'severity',
+          'count(*) as cnt'
+        ])
         .orderBy('cnt', 'DESC');
     } else {
       qs = qs
@@ -300,6 +317,7 @@ export const export_ = wrapHandler(async (event) => {
         'title',
         'description',
         'cve',
+        'isKev',
         'cwe',
         'cpe',
         'description',
