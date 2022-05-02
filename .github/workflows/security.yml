@@ -14,12 +14,12 @@ jobs:
       run:
         working-directory: ./backend
     steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -35,12 +35,12 @@ jobs:
       run:
         working-directory: ./frontend
     steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '15'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -56,12 +56,12 @@ jobs:
       run:
         working-directory: ./docs
     steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -77,12 +77,12 @@ jobs:
       run:
         working-directory: ./backend
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - name: Set up Python 3.9.5
-        uses: actions/setup-python@v2.3.1
+        uses: actions/setup-python@v3.1.2
         with:
           python-version: 3.9.5
-      - uses: actions/cache@v2.1.7
+      - uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: pip-${{ hashFiles('**/requirements.txt') }}

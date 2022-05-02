@@ -50,6 +50,27 @@ export const createColumns = (updateVulnerability: any) =>
       Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
     },
     {
+      Header: 'KEV',
+      accessor: 'isKev',
+      Cell: ({ value, row }: CellProps<Vulnerability>) =>
+        value ? (
+          <a
+            href={`https://www.cisa.gov/known-exploited-vulnerabilities-catalog`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Yes {extLink}
+          </a>
+        ) : (
+          <p>No</p>
+        ),
+      width: 50,
+      Filter: selectFilter([
+        { value: 'true', label: 'Yes' },
+        { value: 'false', label: 'No' }
+      ])
+    },
+    {
       Header: 'Domain',
       id: 'domain',
       accessor: ({ domain }) => (

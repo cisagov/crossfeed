@@ -25,7 +25,7 @@ resource "aws_db_instance" "db" {
   iam_database_authentication_enabled = true
 
   // database information
-  name     = var.db_table_name
+  db_name  = var.db_table_name
   username = data.aws_ssm_parameter.db_username.value
   password = data.aws_ssm_parameter.db_password.value
   port     = var.db_port
@@ -36,6 +36,92 @@ resource "aws_db_instance" "db" {
 
   tags = {
     Project = "Crossfeed"
+  }
+}
+
+data "aws_ami" "ubuntu" {
+
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  # Canonical
+  owners = ["099720109477"]
+}
+
+resource "aws_iam_role" "db_accessor" {
+  name               = "crossfeed-db-accessor-${var.stage}"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+#Instance Profile
+resource "aws_iam_instance_profile" "db_accessor" {
+  name = "crossfeed-db-accessor-${var.stage}"
+  role = aws_iam_role.db_accessor.id
+}
+
+#Attach Policies to Instance Role
+resource "aws_iam_policy_attachment" "db_accessor_1" {
+  name       = "crossfeed-db-accessor-${var.stage}"
+  roles      = [aws_iam_role.db_accessor.id]
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_policy_attachment" "db_accessor_2" {
+  name       = "crossfeed-db-accessor-${var.stage}"
+  roles      = [aws_iam_role.db_accessor.id]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+}
+
+resource "aws_instance" "db_accessor" {
+  count         = var.create_db_accessor_instance ? 1 : 0
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.db_accessor_instance_class
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+  root_block_device {
+    volume_size = 1000
+  }
+
+  vpc_security_group_ids = [aws_security_group.allow_internal.id]
+  subnet_id              = aws_subnet.backend.id
+
+  iam_instance_profile = aws_iam_instance_profile.db_accessor.id
+  user_data            = file("./ssm-agent-install.sh")
+
+  lifecycle {
+    # prevent_destroy = true
+    ignore_changes = [ami]
   }
 }
 

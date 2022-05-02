@@ -80,11 +80,12 @@
     "lint": "eslint '**/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint '**/*.{ts,tsx,js,jsx}' --fix",
     "preinstall": "npx npm-force-resolutions",
-    "codegen": "ts-node src/tools/generate-censys-types.ts",
+    "codegen": "ts-node src/tools/generate-types.ts",
     "build-worker": "sh ./tools/build-worker.sh",
     "deploy-worker-staging": "./tools/deploy-worker.sh",
     "deploy-worker-prod": "./tools/deploy-worker.sh crossfeed-prod-worker",
-    "syncdb": "docker-compose exec -T backend npx ts-node src/tools/run-syncdb.ts"
+    "syncdb": "docker-compose exec -T backend npx ts-node src/tools/run-syncdb.ts",
+    "pesyncdb": "docker-compose exec -T backend npx ts-node src/tools/run-pesyncdb.ts"
   },
   "resolutions": {
     "ansi-regex": "5.0.1"

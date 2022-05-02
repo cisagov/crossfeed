@@ -24,7 +24,7 @@ jobs:
   format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
 
       - name: Install Terraform
         run: |
@@ -41,7 +41,7 @@ jobs:
     environment: staging
     concurrency: 1
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
 
       - name: Install Terraform
         run: |
@@ -80,7 +80,7 @@ jobs:
     environment: production
     concurrency: 1
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
 
       - name: Install Terraform
         run: |

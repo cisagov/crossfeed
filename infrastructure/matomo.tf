@@ -1,6 +1,5 @@
 resource "aws_ecs_cluster" "matomo" {
-  name               = var.matomo_ecs_cluster_name
-  capacity_providers = ["FARGATE"]
+  name = var.matomo_ecs_cluster_name
 
   setting {
     name  = "containerInsights"
@@ -11,6 +10,11 @@ resource "aws_ecs_cluster" "matomo" {
     Project = var.project
     Stage   = var.stage
   }
+}
+
+resource "aws_ecs_cluster_capacity_providers" "motomo" {
+  cluster_name       = aws_ecs_cluster.matomo.name
+  capacity_providers = ["FARGATE"]
 }
 
 resource "aws_iam_role" "matomo_task_execution_role" {
@@ -193,7 +197,7 @@ resource "aws_db_instance" "matomo_db" {
   storage_encrypted       = true
 
   // database information
-  name     = "matomo"
+  db_name  = "matomo"
   username = "matomo"
   password = random_password.matomo_db_password.result
 

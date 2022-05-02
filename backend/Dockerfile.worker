@@ -30,14 +30,14 @@ FROM node:14-alpine3.14
 
 WORKDIR /app
 
-RUN apk add --update --no-cache wget build-base curl git unzip openssl-dev linux-headers python3=3.9.5-r2 python3-dev py3-pip ruby=2.7.5-r0 ruby-dev zlib-dev libffi-dev libxml2-dev libxslt-dev
+RUN apk add --update --no-cache wget build-base curl git unzip openssl-dev linux-headers python3=3.9.5-r2 python3-dev py3-pip ruby ruby-dev zlib-dev libffi-dev libxml2-dev libxslt-dev postgresql-dev gcc musl-dev py3-pandas py3-scikit-learn cargo
 
 RUN npm install -g pm2@4 wait-port@0.2.9
 
-# Install intrigue ident v2.0.2. Intrigue ident supports Ruby 2.6.5, but we have 2.7.5, so we update the required Ruby version in the Gemfile so that we can run it with Ruby 2.7.5.
+# Install intrigue ident v2.0.2. Intrigue ident supports Ruby 2.6.5, but we have $RUBY_VERSION, so we update the required Ruby version in the Gemfile so that we can run it with Ruby $RUBY_VERSION.
 
 RUN gem install bundler:2.1.4
-RUN git clone https://github.com/intrigueio/intrigue-ident.git && cd intrigue-ident && git checkout e97f974417147df8fa27dcd8f73b7efbb587b942 && sed -i 's/2.6.5/2.7.5/g' Gemfile && sed -i 's/2.6.5p114/2.7.5/g' Gemfile.lock && bundle install --jobs=4
+RUN export RUBY_VERSION=$(ruby -e "print RUBY_VERSION") && git clone https://github.com/intrigueio/intrigue-ident.git && cd intrigue-ident && git checkout e97f974417147df8fa27dcd8f73b7efbb587b942 && sed -i "s/2.6.5/$RUBY_VERSION/g" Gemfile && sed -i "s/2.6.5p114/$RUBY_VERSION/g" Gemfile.lock && bundle install --jobs=4
 RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/bin/intrigue-ident && chmod +x /usr/bin/intrigue-ident
 
 # Python dependencies

@@ -1,8 +1,8 @@
 import { Domain, Service, Vulnerability, connectToDatabase } from '../models';
 import { CommandOptions } from './ecs-client';
-import got from 'got';
 import { plainToClass } from 'class-transformer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
+import axios from 'axios';
 
 /**
  * The hibp scan looks up emails from a particular .gov domain
@@ -53,7 +53,7 @@ async function lookupEmails(
   domain: Domain
 ) {
   try {
-    const results: any[] = await got(
+    const { data } = await axios.get(
       'https://haveibeenpwned.com/api/v2/enterprisesubscriber/domainsearch/' +
         domain.name,
       {
@@ -61,7 +61,7 @@ async function lookupEmails(
           Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
         }
       }
-    ).json();
+    );
 
     const addressResults = {};
     const breachResults = {};
@@ -70,8 +70,8 @@ async function lookupEmails(
     const shouldCountBreach = (breach) =>
       breach.IsVerified === true && breach.BreachDate > '2016-01-01';
 
-    for (const email in results) {
-      const filtered = (results[email] || []).filter((e) =>
+    for (const email in data) {
+      const filtered = (data[email] || []).filter((e) =>
         shouldCountBreach(breachesDict[e])
       );
       if (filtered.length > 0) {
@@ -102,23 +102,22 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   console.log('Running hibp on organization', organizationName);
   const domainsWithIPs = await getIps(organizationId);
-  const breaches: breachResults[] = await got(
+  const { data } = await axios.get(
     'https://haveibeenpwned.com/api/v2/breaches',
     {
       headers: {
         Authorization: 'Bearer ' + process.env.HIBP_API_KEY!
       }
     }
-  ).json();
+  );
   const breachesDict: { [key: string]: breachResults } = {};
-  for (const breach of breaches) {
+  for (const breach of data) {
     breachesDict[breach.Name] = breach;
   }
 
   const services: Service[] = [];
   const vulns: Vulnerability[] = [];
   for (const domain of domainsWithIPs) {
-    console.log(domain.name);
     const results = await lookupEmails(breachesDict, domain);
 
     if (results) {

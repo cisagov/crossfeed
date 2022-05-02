@@ -10,9 +10,18 @@ import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
-import { LessThan, MoreThan, FindOperator, In, MoreThanOrEqual } from 'typeorm';
+import {
+  LessThan,
+  MoreThan,
+  FindOperator,
+  In,
+  MoreThanOrEqual,
+  Not
+} from 'typeorm';
 import * as fs from 'fs';
 import * as zlib from 'zlib';
+import axios, { AxiosResponse } from 'axios';
+import { CISACatalogOfKnownExploitedVulnerabilities } from 'src/models/generated/kev';
 
 /**
  * The CVE scan creates vulnerabilities based on existing
@@ -50,6 +59,10 @@ const DOMAIN_BATCH_SIZE = 1000;
 // The number of domains to send to cpe2cve at once.
 // This should be a small enough number
 const CPE2CVE_BATCH_SIZE = 50;
+
+// URL for CISA's Known Exploited Vulnerabilities database.
+const KEV_URL =
+  'https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json';
 
 /**
  * Construct a CPE to be added. If the CPE doesn't already contain
@@ -271,7 +284,7 @@ interface NvdFile {
 }
 
 // Populate CVE details from the NVD.
-const populateVulnerabilities = async () => {
+const populateVulnerabilitiesFromNVD = async () => {
   const vulnerabilities = await Vulnerability.find({
     needsPopulation: true
   });
@@ -312,34 +325,64 @@ const populateVulnerabilities = async () => {
       }
     }
   }
+
+  //  moment(date, 'YYYY-MM-DD').toDate()
 };
 
-// Closes or reopens vulnerabilities that need to be updated
-const adjustVulnerabilities = async (type: 'open' | 'closed') => {
+// Populate CVE details from the CISA Known Exploited Vulnerabilities (KEV) database.
+const populateVulnerabilitiesFromKEV = async () => {
+  const response: AxiosResponse<CISACatalogOfKnownExploitedVulnerabilities> = await axios.get(
+    KEV_URL
+  );
+  const { vulnerabilities: kevVulns } = response.data;
+  for (const kevVuln of kevVulns) {
+    const { affected = 0 } = await Vulnerability.update(
+      {
+        isKev: Not(true),
+        cve: kevVuln.cveID
+      },
+      {
+        isKev: true,
+        kevResults: kevVuln as any
+      }
+    );
+    if (affected > 0) {
+      console.log(`KEV ${kevVuln.cveID}: updated ${affected} vulns`);
+    }
+  }
+};
+
+// Close open vulnerabilities that haven't been seen in a week.
+const closeOpenVulnerabilities = async () => {
   const oneWeekAgo = new Date(
     new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 7)
   );
-  const where: {
-    state: string;
-    lastSeen: FindOperator<Date>;
-    substate?: string;
-  } = {
-    state: type,
-    lastSeen: type === 'open' ? LessThan(oneWeekAgo) : MoreThan(oneWeekAgo)
-  };
-  // If vulnerability is already closed, we should only reopen if it was remediated
-  if (type === 'closed') {
-    where.substate = 'remediated';
-  }
   const openVulnerabilites = await Vulnerability.find({
-    where
+    where: {
+      state: 'open',
+      lastSeen: LessThan(oneWeekAgo)
+    }
   });
   for (const vulnerability of openVulnerabilites) {
-    vulnerability.setState(
-      type === 'open' ? 'remediated' : 'unconfirmed',
-      true,
-      null
-    );
+    vulnerability.setState('remediated', true, null);
+    await vulnerability.save();
+  }
+};
+
+// Reopen closed vulnerabilities that have been seen in the past week.
+const reopenClosedVulnerabilities = async () => {
+  const oneWeekAgo = new Date(
+    new Date(Date.now()).setDate(new Date(Date.now()).getDate() - 7)
+  );
+  const remediatedVulnerabilities = await Vulnerability.find({
+    where: {
+      state: 'closed',
+      lastSeen: MoreThan(oneWeekAgo),
+      substate: 'remediated'
+    }
+  });
+  for (const vulnerability of remediatedVulnerabilities) {
+    vulnerability.setState('unconfirmed', true, null);
     await vulnerability.save();
   }
 };
@@ -378,8 +421,10 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   // await identifyUnexpectedWebpages(domains);
 
-  await adjustVulnerabilities('open');
-  await adjustVulnerabilities('closed');
+  await closeOpenVulnerabilities();
+  await reopenClosedVulnerabilities();
 
-  await populateVulnerabilities();
+  await populateVulnerabilitiesFromNVD();
+
+  await populateVulnerabilitiesFromKEV();
 };

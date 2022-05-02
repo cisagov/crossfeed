@@ -24,12 +24,12 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -43,12 +43,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -67,12 +67,12 @@ jobs:
     concurrency: 1
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -96,12 +96,12 @@ jobs:
     concurrency: 1
     if: github.event_name == 'push' && github.ref == 'refs/heads/production'
     steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Restore npm cache
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
