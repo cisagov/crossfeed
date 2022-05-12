@@ -13,8 +13,8 @@ resource "aws_db_subnet_group" "default" {
 resource "aws_db_instance" "db" {
   identifier                          = var.db_name
   instance_class                      = var.db_instance_class
-  allocated_storage                   = 100
-  max_allocated_storage               = 1000
+  allocated_storage                   = 1000
+  max_allocated_storage               = 10000
   storage_type                        = "gp2"
   engine                              = "postgres"
   skip_final_snapshot                 = true
