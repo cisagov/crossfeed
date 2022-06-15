@@ -51,7 +51,7 @@ describe('dnstwist', () => {
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
     organization = await Organization.create({
       name: 'test-' + Math.random(),
-      rootDomains: ['test-' + Math.random()],
+      rootDomains: ['test-root-domain'],
       ipBlocks: [],
       isPassive: false
     }).save();
@@ -90,7 +90,7 @@ describe('dnstwist', () => {
   });
 
   test('creates vulnerability', async () => {
-    const name = 'test-' + Math.random();
+    const name = 'test-root-domain';
     const domain = await Domain.create({
       name,
       ip: '0.0.0.0',
@@ -139,7 +139,7 @@ describe('dnstwist', () => {
     expect(vuln[0].structuredData).toEqual(results);
   });
   test("adds new domains to existing dnstwist vulnerabilty and doesn't update the date of the existing one", async () => {
-    const name = 'test-' + Math.random();
+    const name = 'test-root-domain';
     const domain = await Domain.create({
       name,
       ip: '0.0.0.0',
@@ -202,7 +202,7 @@ describe('dnstwist', () => {
     expect(vuln[0].structuredData).toEqual(results);
   });
   test('removes dnstwist domain that no longer exists', async () => {
-    const name = 'test-' + Math.random();
+    const name = 'test-root-domain';
     const domain = await Domain.create({
       name,
       ip: '0.0.0.0',
