@@ -138,6 +138,40 @@ describe('dnstwist', () => {
     };
     expect(vuln[0].structuredData).toEqual(results);
   });
+  test('does not run on sub-domains, only roots', async () => {
+    const name = 'test-root-domain';
+    const root_domain = await Domain.create({
+      name,
+      ip: '0.0.0.0',
+      organization
+    }).save();
+
+    const sub_name = 'test-sub-domain';
+    const sub_domain = await Domain.create({
+      name: sub_name,
+      ip: '10.20.30.40',
+      organization
+    }).save();
+
+    await dnstwist({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: scan.id,
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const root_vuln = await Vulnerability.find({
+      domain: root_domain
+    });
+    const sub_vuln = await Vulnerability.find({
+      domain: sub_domain
+    });
+    expect(sub_vuln).toHaveLength(0);
+    expect(root_vuln).toHaveLength(1);
+    expect(root_vuln[0].title).toEqual('DNS Twist Domains');
+    expect(root_vuln[0].source).toEqual('dnstwist');
+  });
   test("adds new domains to existing dnstwist vulnerabilty and doesn't update the date of the existing one", async () => {
     const name = 'test-root-domain';
     const domain = await Domain.create({
