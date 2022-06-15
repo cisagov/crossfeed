@@ -172,6 +172,25 @@ describe('dnstwist', () => {
     expect(root_vuln[0].title).toEqual('DNS Twist Domains');
     expect(root_vuln[0].source).toEqual('dnstwist');
   });
+  test('root domain not in the domains table', async () => {
+    const root_domain_name = 'test-root-domain';
+    await dnstwist({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: scan.id,
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+    const root_domain = await Domain.findOne({
+      name: root_domain_name
+    });
+    const root_vuln = await Vulnerability.find({
+      domain: root_domain
+    });
+    expect(root_vuln).toHaveLength(1);
+    expect(root_vuln[0].title).toEqual('DNS Twist Domains');
+    expect(root_vuln[0].source).toEqual('dnstwist');
+  });
   test("adds new domains to existing dnstwist vulnerabilty and doesn't update the date of the existing one", async () => {
     const name = 'test-root-domain';
     const domain = await Domain.create({

@@ -4,6 +4,8 @@ import { CommandOptions } from './ecs-client';
 import { plainToClass } from 'class-transformer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { spawnSync } from 'child_process';
+import saveDomainsToDb from './helpers/saveDomainsToDb';
+import * as dns from 'dns';
 
 async function runDNSTwist(domain: string) {
   const child = spawnSync(
@@ -31,16 +33,38 @@ export const handler = async (commandOptions: CommandOptions) => {
   console.log('Running dnstwist on organization', organizationName);
   const root_domains = await getRootDomains(organizationId!);
   const vulns: Vulnerability[] = [];
-  console.log(root_domains);
+  console.log('Root domains:', root_domains);
   for (const root_domain of root_domains) {
     try {
       const results = await runDNSTwist(root_domain);
 
       // Fetch existing domain object
-      const domain = await Domain.findOne({
+      let domain = await Domain.findOne({
         organization: { id: organizationId },
         name: root_domain
       });
+
+      if (!domain) {
+        let ipAddress;
+        const new_domain: Domain[] = [];
+        try {
+          ipAddress = (await dns.promises.lookup(root_domain)).address;
+        } catch (e) {
+          ipAddress = null;
+        }
+        new_domain.push(
+          plainToClass(Domain, {
+            name: root_domain,
+            ip: ipAddress,
+            organization: { id: organizationId }
+          })
+        );
+        await saveDomainsToDb(new_domain);
+        domain = await Domain.findOne({
+          organization: { id: organizationId },
+          name: root_domain
+        });
+      }
 
       // Fetch existing dnstwist vulnerability
       const existingVuln = await Vulnerability.findOne({
