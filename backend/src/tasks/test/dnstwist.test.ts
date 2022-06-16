@@ -51,7 +51,7 @@ describe('dnstwist', () => {
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
     organization = await Organization.create({
       name: 'test-' + Math.random(),
-      rootDomains: ['test-' + Math.random()],
+      rootDomains: ['test-root-domain'],
       ipBlocks: [],
       isPassive: false
     }).save();
@@ -90,7 +90,7 @@ describe('dnstwist', () => {
   });
 
   test('creates vulnerability', async () => {
-    const name = 'test-' + Math.random();
+    const name = 'test-root-domain';
     const domain = await Domain.create({
       name,
       ip: '0.0.0.0',
@@ -138,8 +138,61 @@ describe('dnstwist', () => {
     };
     expect(vuln[0].structuredData).toEqual(results);
   });
+  test('does not run on sub-domains, only roots', async () => {
+    const name = 'test-root-domain';
+    const root_domain = await Domain.create({
+      name,
+      ip: '0.0.0.0',
+      organization
+    }).save();
+
+    const sub_name = 'test-sub-domain';
+    const sub_domain = await Domain.create({
+      name: sub_name,
+      ip: '10.20.30.40',
+      organization
+    }).save();
+
+    await dnstwist({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: scan.id,
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+
+    const root_vuln = await Vulnerability.find({
+      domain: root_domain
+    });
+    const sub_vuln = await Vulnerability.find({
+      domain: sub_domain
+    });
+    expect(sub_vuln).toHaveLength(0);
+    expect(root_vuln).toHaveLength(1);
+    expect(root_vuln[0].title).toEqual('DNS Twist Domains');
+    expect(root_vuln[0].source).toEqual('dnstwist');
+  });
+  test('root domain not in the domains table', async () => {
+    const root_domain_name = 'test-root-domain';
+    await dnstwist({
+      organizationId: organization.id,
+      organizationName: 'organizationName',
+      scanId: scan.id,
+      scanName: 'scanName',
+      scanTaskId: 'scanTaskId'
+    });
+    const root_domain = await Domain.findOne({
+      name: root_domain_name
+    });
+    const root_vuln = await Vulnerability.find({
+      domain: root_domain
+    });
+    expect(root_vuln).toHaveLength(1);
+    expect(root_vuln[0].title).toEqual('DNS Twist Domains');
+    expect(root_vuln[0].source).toEqual('dnstwist');
+  });
   test("adds new domains to existing dnstwist vulnerabilty and doesn't update the date of the existing one", async () => {
-    const name = 'test-' + Math.random();
+    const name = 'test-root-domain';
     const domain = await Domain.create({
       name,
       ip: '0.0.0.0',
@@ -202,7 +255,7 @@ describe('dnstwist', () => {
     expect(vuln[0].structuredData).toEqual(results);
   });
   test('removes dnstwist domain that no longer exists', async () => {
-    const name = 'test-' + Math.random();
+    const name = 'test-root-domain';
     const domain = await Domain.create({
       name,
       ip: '0.0.0.0',
