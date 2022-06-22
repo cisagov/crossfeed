@@ -17,7 +17,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "global-agent": "^2.2.0",
-    "got": "^11.7.0",
+    "got": "^11.8.5",
     "helmet": "^4.1.1",
     "http-proxy-middleware": "^1.0.5",
     "jsdom": "^16.7.0",
