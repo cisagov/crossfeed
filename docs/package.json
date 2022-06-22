@@ -15,6 +15,7 @@
     "postinstall": "npx npm-force-resolutions && npm run codegen"
   },
   "dependencies": {
+    "btoa": "^1.2.1"
   },
   "devDependencies": {
     "eslint-config-react-app": "^5.2.1",
