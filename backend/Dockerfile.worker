@@ -69,6 +69,8 @@ RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/
 COPY worker/requirements.txt worker/requirements.txt
 RUN pip3 install --no-cache-dir -r worker/requirements.txt
 
+RUN python3 -m spacy download en_core_web_lg
+
 COPY worker worker
 
 COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
