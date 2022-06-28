@@ -1,4 +1,3 @@
-print("Testing!")
 import traceback
 from sixgill.source import (
     alerts,
@@ -9,7 +8,6 @@ from sixgill.source import (
     creds,
     top_cves,
 )
-from sixgill.redact import redact_pii
 import psycopg2
 import psycopg2.extras as extras
 import os
@@ -54,15 +52,6 @@ def cve(cveid):
     return resp
 
 
-def getDataSource(conn, source):
-    cur = conn.cursor()
-    sql = f"""SELECT * FROM data_source WHERE name='{source}'"""
-    cur.execute(sql)
-    source = cur.fetchone()
-    cur.close()
-    return source
-
-
 """Connect to PE Database"""
 try:
     PE_conn = psycopg2.connect(
@@ -74,13 +63,6 @@ try:
     print("Connected to PE database.")
 except:
     print("Failed connecting to PE database.")
-
-"""Get the Cybersixgill data source uid"""
-try:
-    source_uid = getDataSource(PE_conn, "Cybersixgill")
-    print("Success fetching the data source")
-except:
-    print("Failed fetching the data source.")
 
 """Select organization from PE Database"""
 try:
@@ -118,8 +100,8 @@ except:
 
 """Insert/Update Aliases into PE databse instance"""
 try:
-    # aliases_list = json.loads(aliases.replace("'", '"'))
-    alias_df = pd.DataFrame(aliases, columns=["alias"])
+    aliases_list = json.loads(aliases.replace("'", '"'))
+    alias_df = pd.DataFrame(aliases_list, columns=["alias"])
     alias_df["organizations_uid"] = pe_org_uid[0]
 
     table = "alias"
@@ -162,22 +144,9 @@ except:
     print("Failed fetching Alert data.")
     print(traceback.format_exc())
 
-""" Run redact script on Alert content and title to remove PII"""
-try:
-    alerts_df = redact_pii(alerts_df, ["content", "title"])
-    print("Success redacting PII")
-except:
-    print("Something failed with the redact.")
-    print(traceback.format_exc())
-
-
 """Insert Alert data into PE database instance."""
 try:
-    alerts_df = alerts_df.drop(
-        columns=["alert_type_id", "sub_alerts", "langcode", "matched_assets"],
-        errors="ignore",
-    )
-    alerts_df["data_source_uid"] = source_uid[0]
+    alerts_df = alerts_df.drop(columns=["sub_alerts", "langcode"])
     table = "alerts"
     # Create a list of tupples from the dataframe values
     tuples = [tuple(x) for x in alerts_df.to_numpy()]
@@ -212,92 +181,28 @@ try:
     # rename columns
     mentions_df = mentions_df.rename(columns={"id": "sixgill_mention_id"})
     # drop unneeded columns (errors = "ignore" adds drop "if exists" functionality)
-
-    try:
-        mentions_df = mentions_df[
-            [
-                "category",
-                "collection_date",
-                "content",
-                "creator",
-                "date",
-                "sixgill_mention_id",
-                "lang",
-                "post_id",
-                "rep_grade",
-                "site",
-                "site_grade",
-                "sub_category",
-                "title",
-                "type",
-                "url",
-                "comments_count",
-                "tags",
-            ]
-        ]
-    except:
-        try:
-            mentions_df = mentions_df[
-                [
-                    "category",
-                    "collection_date",
-                    "content",
-                    "creator",
-                    "date",
-                    "sixgill_mention_id",
-                    "lang",
-                    "post_id",
-                    "rep_grade",
-                    "site",
-                    "site_grade",
-                    "sub_category",
-                    "title",
-                    "type",
-                    "url",
-                    "comments_count",
-                ]
-            ]
-        except:
-            mentions_df = mentions_df[
-                [
-                    "category",
-                    "collection_date",
-                    "content",
-                    "creator",
-                    "date",
-                    "sixgill_mention_id",
-                    "lang",
-                    "post_id",
-                    "rep_grade",
-                    "site",
-                    "site_grade",
-                    "title",
-                    "type",
-                    "url",
-                ]
-            ]
-
+    mentions_df = mentions_df.drop(
+        columns=[
+            "images",
+            "language",
+            "length",
+            "financial",
+            "ips",
+            "pds",
+            "malware",
+            "content_trimmed",
+            "hash",
+        ],
+        errors="ignore",
+    )
     # add associated pe org_id
     mentions_df["organizations_uid"] = pe_org_uid[0]
 except:
     print("Failed fetching mention data.")
     print(traceback.format_exc())
 
-""" Run redact script on Mention content and title to remove PII"""
-try:
-    mentions_df = redact_pii(mentions_df, ["content", "title"])
-    print("Success redacting PII")
-except:
-    print("Something failed with the redact.")
-    print(traceback.format_exc())
-
-
 """Insert mention data into PE database instance."""
 try:
-    mentions_df = mentions_df.apply(
-        lambda col: col.str.replace(r"[\x00|NULL]", "") if col.dtype == object else col
-    )
-    mentions_df["data_source_uid"] = source_uid[0]
     table = "mentions"
     # Create a list of tupples from the dataframe values
     tuples = [tuple(x) for x in mentions_df.to_numpy()]
@@ -347,7 +252,6 @@ except:
 
 """Insert Top CVE Data into PE database"""
 try:
-    top_cve_df["data_source_uid"] = source_uid[0]
     table = "top_cves"
     # Create a list of tupples from the dataframe values
     tuples = [tuple(x) for x in top_cve_df.to_numpy()]
@@ -378,8 +282,7 @@ except:
 """Fetch root domains for Credential function"""
 try:
     root_domains = root_domains(sixgill_org_id)
-    print(root_domains)
-    # root_domains = json.loads(root_domains.replace("'", '"'))
+    root_domains = json.loads(root_domains.replace("'", '"'))
 except:
     print("Failed fetching root domain data.")
     print(traceback.format_exc())
@@ -388,15 +291,10 @@ except:
 try:
     creds_df = creds(root_domains, from_date, to_date)
     creds_df["organizations_uid"] = pe_org_uid[0]
-    creds_df["data_source_uid"] = source_uid[0]
     print("Successfully fetched credential data.")
 except:
     print("Failed fetching credential data.")
     print(traceback.format_exc())
-
-"""Split credential data into breach and credential tables"""
-# try:
-#     breach_df = creds_df[["organizations_uid", "description", "breach_name", "modified_date"]]
 
 """Insert Credential Data in PE database"""
 try:
