@@ -20,7 +20,8 @@ export const usePersistentState = <T extends any = any>(
     localStorage.setItem(key, JSON.stringify(state));
     if (key === 'token') {
       cookies.set('crossfeed-token', state, {
-        domain: process.env.REACT_APP_COOKIE_DOMAIN
+        domain: process.env.REACT_APP_COOKIE_DOMAIN,
+        secure: true
       });
     }
   }, [state, key, cookies]);

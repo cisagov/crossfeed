@@ -48,21 +48,21 @@ locals {
   s3_origin_id = "myS3Origin"
 }
 
-data "archive_file" "security_headers" {
-  type        = "zip"
-  source_dir  = "lambdas/security_headers"
-  output_path = "lambdas/security_headers.zip"
-}
+resource "aws_cloudfront_response_headers_policy" "security_headers" {
+  name = "crossfeed-${var.stage}-security-headers-policy"
 
-resource "aws_lambda_function" "security_headers" {
-  filename      = "lambdas/security_headers.zip"
-  function_name = var.frontend_lambda_function
-  role          = aws_iam_role.frontend_lambda_iam.arn
-  handler       = "index.handler"
-  runtime       = "nodejs12.x"
-  publish       = true
-  tracing_config {
-    mode = "Active"
+
+  security_headers_config {
+    frame_options {
+      frame_option = "SAMEORIGIN"
+      override     = true
+    }
+    strict_transport_security {
+      access_control_max_age_sec = "31536000"
+      include_subdomains         = true
+      override                   = true
+      preload                    = true
+    }
   }
 }
 
@@ -114,16 +114,11 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       }
     }
 
-    lambda_function_association {
-      event_type   = "origin-response"
-      include_body = false
-      lambda_arn   = aws_lambda_function.security_headers.qualified_arn
-    }
-
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.security_headers.id
+    viewer_protocol_policy     = "redirect-to-https"
+    min_ttl                    = 0
+    default_ttl                = 0
+    max_ttl                    = 0
   }
 
   logging_config {
@@ -146,16 +141,11 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       }
     }
 
-    lambda_function_association {
-      event_type   = "origin-response"
-      include_body = false
-      lambda_arn   = aws_lambda_function.security_headers.qualified_arn
-    }
-
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 2628000
-    max_ttl                = 2628000
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.security_headers.id
+    viewer_protocol_policy     = "redirect-to-https"
+    min_ttl                    = 0
+    default_ttl                = 2628000
+    max_ttl                    = 2628000
   }
 
   tags = {
