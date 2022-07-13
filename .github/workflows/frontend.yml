@@ -2,70 +2,16 @@ name: Frontend Pipeline
 
 on:
   push:
-    branches:
-      - master
-      - production
-    paths:
-      - 'frontend/**'
-      - '.github/workflows/frontend.yml'
-  pull_request:
-    branches:
-      - master
-      - production
-    paths:
-      - 'frontend/**'
-      - '.github/workflows/frontend.yml'
 
 defaults:
   run:
     working-directory: ./frontend
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - name: Restore npm cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
-      - name: Lint
-        run: npm run lint
-  test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - name: Restore npm cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
-      - name: Build
-        run: npm run build
-      - name: Test
-        run: npm run test
   deploy_staging:
-    needs: [lint, test]
     runs-on: ubuntu-18.04
     environment: staging
     concurrency: 1
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -78,43 +24,9 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
-      - name: Build Staging
-        run: cp stage.env .env && npm run build
 
-      - name: Deploy Staging
-        run: aws s3 sync build s3://staging.crossfeed.cyber.dhs.gov --delete
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-  deploy_prod:
-    needs: [lint, test]
-    runs-on: ubuntu-18.04
-    environment: production
-    concurrency: 1
-    if: github.event_name == 'push' && github.ref == 'refs/heads/production'
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - name: Restore npm cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Production
-        run: cp prod.env .env && npm run build
-
-      - name: Deploy Production
-        run: aws s3 sync build s3://crossfeed.cyber.dhs.gov --delete
+      - name: Test
+        run: aws s3 ls
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
