@@ -132,6 +132,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
         exact: true
       },
       {
+        title: 'P&E Reports',
+        path: '/pe-reports',
+        users: ALL_USERS,
+        exact: true
+      },
+      {
         title: 'Manage Users',
         path: '/users',
         users: GLOBAL_ADMIN,
@@ -170,6 +176,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       title: 'My Organizations',
       path: '/organizations',
       users: STANDARD_USER,
+      exact: true
+    },
+    {
+      title: 'P&E Reports',
+      path: '/pe-reports',
+      users: ALL_USERS,
       exact: true
     },
     {

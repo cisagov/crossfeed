@@ -30,7 +30,8 @@ import {
   SearchPage,
   LoginGovCallback,
   Feeds,
-  Domains
+  Domains,
+  PeReports
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
 import './styles.scss';
@@ -147,6 +148,7 @@ const App: React.FC = () => (
                 <RouteGuard path="/organizations" component={Organizations} />
                 <RouteGuard path="/users" component={Users} />
                 <RouteGuard path="/settings" component={Settings} />
+                <RouteGuard path="/pe-reports" component={PeReports} />
               </Switch>
             </Layout>
           </SearchProvider>
