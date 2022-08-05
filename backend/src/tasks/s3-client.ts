@@ -37,7 +37,7 @@ class S3Client {
         Body: body,
         ContentType: 'text/csv'
       };
-      const data = await this.s3.putObject(params).promise();
+      await this.s3.putObject(params).promise();
       const url = await this.s3.getSignedUrlPromise('getObject', {
         Bucket: process.env.EXPORT_BUCKET_NAME!,
         Key,
@@ -49,7 +49,6 @@ class S3Client {
         console.log(url.replace('minio:9000', 'localhost:9000'));
         return url.replace('minio:9000', 'localhost:9000');
       }
-      console.log(url);
       return url;
     } catch (e) {
       console.error(e);
@@ -71,7 +70,6 @@ class S3Client {
     };
     try {
       const url = await this.s3.getSignedUrlPromise('putObject', params);
-      console.log('The presigned URL is:', url);
       // Do this so exports are accessible when running locally.
       if (this.isLocal) {
         return url.replace('minio:9000', 'localhost:9000');
@@ -113,7 +111,7 @@ class S3Client {
   }
   async listPeReports(orgName: string) {
     try {
-      var params = {
+      const params = {
         Bucket: process.env.EXPORT_BUCKET_NAME!,
         Delimiter: '',
         Prefix: `pe-reports/${orgName}/`
