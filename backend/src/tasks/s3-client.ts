@@ -63,15 +63,12 @@ class S3Client {
    */
   async uploadPeReport(orgName: string, fileName: string) {
     const Key = `pe-reports/${orgName}/${fileName}`;
-    console.log(Key);
-
     const params = {
       Bucket: process.env.EXPORT_BUCKET_NAME!,
       Key,
       Expires: 60 * 5, // 5 minutes
       ContentType: 'application/pdf'
     };
-
     try {
       const url = await this.s3.getSignedUrlPromise('putObject', params);
       console.log('The presigned URL is:', url);
@@ -85,16 +82,10 @@ class S3Client {
       throw new Error(error);
     }
   }
-  async exportPeReport(orgName: string, Key: string) {
+  async exportPeReport(Key: string) {
     try {
-      var params = {
-        Bucket: process.env.EXPORT_BUCKET_NAME!,
-        Delimiter: '',
-        Prefix: `pe-reports/${orgName}/`
-      };
-
       try {
-        const pdfExists = await this.s3
+        await this.s3
           .headObject({ Bucket: process.env.EXPORT_BUCKET_NAME!, Key })
           .promise();
       } catch (e) {
@@ -107,9 +98,7 @@ class S3Client {
       const url = await this.s3.getSignedUrlPromise('getObject', {
         Bucket: process.env.EXPORT_BUCKET_NAME!,
         Key,
-        Expires: 60 * 5, // 5 minutes,
-        ResponseContentDisposition:
-          'attachment; filename=Posture_and_Exposure_Report-2022-07-15.pdf'
+        Expires: 60 * 5 // 5 minutes
       });
 
       // Do this so exports are accessible when running locally.
@@ -124,7 +113,6 @@ class S3Client {
   }
   async listPeReports(orgName: string) {
     try {
-      const Key = `pe-reports/${orgName}/Posture_and_Exposure_Report-2022-07-15.pdf`;
       var params = {
         Bucket: process.env.EXPORT_BUCKET_NAME!,
         Delimiter: '',

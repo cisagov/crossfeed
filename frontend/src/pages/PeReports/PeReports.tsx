@@ -1,22 +1,14 @@
 import classes from './PeReports.module.scss';
 import { FileInput } from 'components';
-import { PeReport } from 'types';
 import React, { useCallback, useState, useEffect } from 'react';
 import { useAuthContext } from 'context';
-import {
-  Label,
-  FormGroup,
-  Button as USWDSButton
-} from '@trussworks/react-uswds';
+import { Label, FormGroup } from '@trussworks/react-uswds';
 import {
   Dialog,
   DialogTitle,
   DialogContent,
-  TextField,
   DialogActions,
-  Switch,
-  Button,
-  FormControlLabel
+  Button
 } from '@material-ui/core';
 import {
   Table,
@@ -29,16 +21,12 @@ import {
   IconButton
 } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
-import { GetAppOutlined } from '@material-ui/icons';
 
 const axios = require('axios');
 
 export const PeReports: React.FC = () => {
   const {
-    apiGet,
     apiPost,
-    apiDelete,
-    setLoading,
     currentOrganization,
     showAllOrganizations
   } = useAuthContext();
@@ -86,13 +74,13 @@ export const PeReports: React.FC = () => {
   const fetchReports = useCallback(async () => {
     try {
       if (!showAllOrganizations && currentOrganization) {
+        console.log(currentOrganization);
         const result = await apiPost('/pe-reports/list/', {
           body: { currentOrganization }
         });
-        console.log('RESULTSSSS');
-        console.log(result);
         const output = result.map((a: any) => {
-          const [folder, organization, name] = a.Key.split('/');
+          const organization = a.Key.split('/')[1];
+          const name = a.Key.split('/')[2];
           return {
             key: a.Key,
             organization,
@@ -107,11 +95,9 @@ export const PeReports: React.FC = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [apiPost]);
+  }, [apiPost, showAllOrganizations, currentOrganization]);
 
   const pdfExport = async (Key: string): Promise<string> => {
-    console.log('Fetching pdf report');
-    console.log(currentOrganization);
     if (!showAllOrganizations && currentOrganization) {
       try {
         const { url } = await apiPost('/pe-reports/export/', {
@@ -149,74 +135,76 @@ export const PeReports: React.FC = () => {
     <>
       <div className={classes.root}>
         <h1>P&E Reports</h1>
-        {/* <Table<PeReport> columns={columns} data={users} fetchData={fetchReports} /> */}
-        <form className={classes.form}>
-          <h2>Upload</h2>
-          <FormGroup>
-            <Label htmlFor="import">File must be in a PDF format.</Label>
-            <FileInput
-              id="import"
-              accept=".pdf"
-              onChange={(e) => uploadPDF(e)}
-            />
-          </FormGroup>
-        </form>
-        {/* <USWDSButton
-          className={classes.exportButton}
-          outline
-          type="button"
-          onClick={() => pdfExport()}
-        >
-          Export Results
-        </USWDSButton> */}
-        <h2>Download</h2>
-        {/* {reports && <p>{reports[0].Key}</p>} */}
-        <div className={classes.section}>
-          <TableContainer component={Paper}>
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Filename</TableCell>
-                  <TableCell>Organization</TableCell>
-                  <TableCell>Date Uploaded</TableCell>
-                  <TableCell>Size (bytes)</TableCell>
-                  <TableCell>Download</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {reports.map((rep: reportOutput) => (
-                  <TableRow key={rep['eTag']}>
-                    <TableCell component="th" scope="row">
-                      {rep['name']}
-                    </TableCell>
-                    <TableCell>{rep['organization']}</TableCell>
-                    <TableCell>{rep['lastModified']}</TableCell>
-                    <TableCell>{rep['size']}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        aria-label="fingerprint"
-                        onClick={() => pdfExport(rep['key'])}
-                      >
-                        <GetAppIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </div>
-        <Dialog open={dialogOpen} onClose={handleClose}>
-          <DialogTitle id="alert-dialog-title">{'Alert'}</DialogTitle>
-          <DialogContent>
-            P&E Report does not exist for this organization.
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} autoFocus>
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
+        {currentOrganization &&
+        currentOrganization.tags.some((e) => e.name === 'P&E') ? (
+          <>
+            <form className={classes.form}>
+              <h2>Upload</h2>
+              <FormGroup>
+                <Label htmlFor="import">File must be in a PDF format.</Label>
+                <FileInput
+                  id="import"
+                  accept=".pdf"
+                  onChange={(e) => uploadPDF(e)}
+                />
+              </FormGroup>
+            </form>
+            <h2>Download</h2>
+            <div className={classes.section}>
+              <TableContainer component={Paper}>
+                <Table aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Filename</TableCell>
+                      <TableCell>Organization</TableCell>
+                      <TableCell>Date Uploaded</TableCell>
+                      <TableCell>Size (bytes)</TableCell>
+                      <TableCell>Download</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {reports.map((rep: reportOutput) => (
+                      <TableRow key={rep['eTag']}>
+                        <TableCell component="th" scope="row">
+                          {rep['name']}
+                        </TableCell>
+                        <TableCell>{rep['organization']}</TableCell>
+                        <TableCell>{rep['lastModified']}</TableCell>
+                        <TableCell>{rep['size']}</TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="fingerprint"
+                            onClick={() => pdfExport(rep['key'])}
+                          >
+                            <GetAppIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+            <Dialog open={dialogOpen} onClose={handleClose}>
+              <DialogTitle id="alert-dialog-title">{'Alert'}</DialogTitle>
+              <DialogContent>
+                P&E Report does not exist for this organization.
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} autoFocus>
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </>
+        ) : (
+          <div>
+            <p>
+              This organization is not registered to receive P&E reports. For
+              more information, please reach out to vulnerability@cisa.dhs.gov.
+            </p>
+          </div>
+        )}
       </div>
     </>
   );
