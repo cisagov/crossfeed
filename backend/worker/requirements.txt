@@ -3,7 +3,7 @@ requests==2.24.0
 mitmproxy==8.0.0
 cryptography==36.0.2
 pytest==6.0.1
-scrapy==2.6.1
+scrapy==2.6.2
 dnstwist==20201228
 dnspython==2.1.0
 psycopg2-binary==2.9.3
