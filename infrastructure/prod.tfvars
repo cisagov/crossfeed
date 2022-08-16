@@ -58,5 +58,5 @@ matomo_ecs_role_name              = "crossfeed-matomo-prod"
 es_instance_type                  = "m4.large.elasticsearch"
 es_instance_count                 = 2
 es_instance_volume_size           = 512
-create_db_accessor_instance       = false
+create_db_accessor_instance       = true
 db_accessor_instance_class        = "t3.2xlarge"
