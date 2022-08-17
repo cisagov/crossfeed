@@ -484,7 +484,8 @@ export const Organization: React.FC = () => {
           {dialog.type === 'tags' ? (
             <>
               <DialogContentText>
-                Select an existing tag or add a new one.
+                Select an existing tag or add a new one. Separate multiple
+                entries by commas.
               </DialogContentText>
               <Autocomplete
                 value={tagValue}
@@ -534,15 +535,20 @@ export const Organization: React.FC = () => {
               />
             </>
           ) : (
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label={dialog.label && dialog.label.slice(0, -1)}
-              type="text"
-              fullWidth
-              onChange={(e) => setInputValue(e.target.value)}
-            />
+            <>
+              <DialogContentText>
+                Separate multiple entries by commas.
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label={dialog.label && dialog.label.slice(0, -1)}
+                type="text"
+                fullWidth
+                onChange={(e) => setInputValue(e.target.value)}
+              />
+            </>
           )}
         </DialogContent>
         <DialogActions>
@@ -555,13 +561,18 @@ export const Organization: React.FC = () => {
             onClick={() => {
               if (dialog.type && dialog.type !== 'tags') {
                 if (inputValue) {
-                  organization[dialog.type].push(inputValue);
+                  // Allow adding multiple values with a comma delimiter
+                  organization[dialog.type].push(...inputValue.split(','));
                   setOrganization({ ...organization });
                 }
               } else {
                 if (tagValue) {
                   if (!organization.tags) organization.tags = [];
-                  organization.tags.push(tagValue as any);
+                  // Allow adding multiple tags with a comma delimiter
+                  const tags = tagValue?.name
+                    ?.split(',')
+                    .map((name) => ({ ...tagValue, name })) as any[];
+                  organization.tags.push(...tags);
                   setOrganization({ ...organization });
                 }
               }
