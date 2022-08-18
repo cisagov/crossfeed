@@ -484,8 +484,7 @@ export const Organization: React.FC = () => {
           {dialog.type === 'tags' ? (
             <>
               <DialogContentText>
-                Select an existing tag or add a new one. Separate multiple
-                entries by commas.
+                Select an existing tag or add a new one.
               </DialogContentText>
               <Autocomplete
                 value={tagValue}
@@ -568,11 +567,7 @@ export const Organization: React.FC = () => {
               } else {
                 if (tagValue) {
                   if (!organization.tags) organization.tags = [];
-                  // Allow adding multiple tags with a comma delimiter
-                  const tags = tagValue?.name
-                    ?.split(',')
-                    .map((name) => ({ ...tagValue, name })) as any[];
-                  organization.tags.push(...tags);
+                  organization.tags.push(tagValue as any);
                   setOrganization({ ...organization });
                 }
               }
