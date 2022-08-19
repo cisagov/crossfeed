@@ -561,7 +561,9 @@ export const Organization: React.FC = () => {
               if (dialog.type && dialog.type !== 'tags') {
                 if (inputValue) {
                   // Allow adding multiple values with a comma delimiter
-                  organization[dialog.type].push(...inputValue.split(',').map(e => e.trim()));
+                  organization[dialog.type].push(
+                    ...inputValue.split(',').map((e) => e.trim())
+                  );
                   setOrganization({ ...organization });
                 }
               } else {
