@@ -534,15 +534,20 @@ export const Organization: React.FC = () => {
               />
             </>
           ) : (
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label={dialog.label && dialog.label.slice(0, -1)}
-              type="text"
-              fullWidth
-              onChange={(e) => setInputValue(e.target.value)}
-            />
+            <>
+              <DialogContentText>
+                Separate multiple entries by commas.
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label={dialog.label && dialog.label.slice(0, -1)}
+                type="text"
+                fullWidth
+                onChange={(e) => setInputValue(e.target.value)}
+              />
+            </>
           )}
         </DialogContent>
         <DialogActions>
@@ -555,7 +560,10 @@ export const Organization: React.FC = () => {
             onClick={() => {
               if (dialog.type && dialog.type !== 'tags') {
                 if (inputValue) {
-                  organization[dialog.type].push(inputValue);
+                  // Allow adding multiple values with a comma delimiter
+                  organization[dialog.type].push(
+                    ...inputValue.split(',').map((e) => e.trim())
+                  );
                   setOrganization({ ...organization });
                 }
               } else {
