@@ -1,4 +1,4 @@
-requests-http-signature==0.2.0
+requests-http-signature==0.7.1
 requests==2.24.0
 mitmproxy==8.0.0
 cryptography==36.0.2
