@@ -76,15 +76,14 @@ export const handler = async (commandOptions: CommandOptions) => {
       const existingVulnsMap = {};
       if (existingVuln) {
         for (const domain of existingVuln.structuredData['domains']) {
-          existingVulnsMap[domain['domain-name']] =
-            domain['date-first-observed'];
+          existingVulnsMap[domain['domain']] = domain['date_first_observed'];
         }
       }
       // If an existing domain-name is in the new results, set date-first-observed to the mapped value
       // Else, set date-first-observed to today's date (dateNow)
       for (const domain of results) {
-        domain['date-first-observed'] =
-          existingVulnsMap[domain['domain-name']] || dateNow;
+        domain['date_first_observed'] =
+          existingVulnsMap[domain['domain']] || dateNow;
       }
       if (Object.keys(results).length !== 0) {
         vulns.push(
