@@ -74,12 +74,12 @@ class S3Client {
       throw e;
     }
   }
-  async listPeReports(orgName: string) {
+  async listPeReports(orgId: string) {
     try {
       const params = {
         Bucket: process.env.EXPORT_BUCKET_NAME!,
         Delimiter: '',
-        Prefix: `pe-reports/${orgName}/`
+        Prefix: `pe-reports/${orgId}/`
       };
 
       const data = await this.s3

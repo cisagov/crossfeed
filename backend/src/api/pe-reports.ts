@@ -43,7 +43,7 @@ export const list_pe_reports = wrapHandler(async (event) => {
   console.log(getOrgMemberships(event));
   if (getOrgMemberships(event).includes(orgId)) {
     const client = new S3Client();
-    const data = await client.listPeReports(orgName);
+    const data = await client.listPeReports(orgId);
     return {
       statusCode: 200,
       body: JSON.stringify(data)
