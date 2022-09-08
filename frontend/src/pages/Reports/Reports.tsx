@@ -32,7 +32,6 @@ export const Reports: React.FC = () => {
   const fetchPeReports = useCallback(async () => {
     try {
       if (!showAllOrganizations && currentOrganization) {
-        console.log(currentOrganization);
         const result = await apiPost('/reports/pe-list/', {
           body: { currentOrganization }
         });
@@ -68,7 +67,6 @@ export const Reports: React.FC = () => {
         return '';
       }
     } else {
-      console.log('All organizations');
       return '';
     }
   };
@@ -110,7 +108,7 @@ export const Reports: React.FC = () => {
                   </TableHead>
                   <TableBody>
                     {reports.map((rep: reportOutput) => (
-                      <TableRow key={rep['eTag']}>
+                      <TableRow key={rep['key']}>
                         <TableCell component="th" scope="row">
                           {rep['name']}
                         </TableCell>
