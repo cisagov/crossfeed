@@ -96,17 +96,6 @@ export const PeReports: React.FC = () => {
         {currentOrganization &&
         currentOrganization.tags.some((e) => e.name === 'P&E') ? (
           <>
-            {/* <form className={classes.form}>
-              <h2>Upload</h2>
-              <FormGroup>
-                <Label htmlFor="import">File must be in a PDF format.</Label>
-                <FileInput
-                  id="import"
-                  accept=".pdf"
-                  onChange={(e) => uploadPDF(e)}
-                />
-              </FormGroup>
-            </form> */}
             <h2>Download</h2>
             <div className={classes.section}>
               <TableContainer component={Paper}>
