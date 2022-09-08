@@ -15,7 +15,11 @@ import * as users from './users';
 import * as scanTasks from './scan-tasks';
 import * as stats from './stats';
 import * as apiKeys from './api-keys';
+<<<<<<< HEAD
 import * as reports from './reports';
+=======
+import * as Reports from './reports';
+>>>>>>> fb7caae5 (clean-up app.ts and comments)
 import * as savedSearches from './saved-searches';
 import { listenForDockerEvents } from './docker-events';
 import { createProxyMiddleware } from 'http-proxy-middleware';
@@ -309,6 +313,7 @@ authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
 
 authenticatedRoute.post(
+<<<<<<< HEAD
   '/reports/export',
   handlerToExpress(reports.export_report)
 );
@@ -316,6 +321,15 @@ authenticatedRoute.post(
 authenticatedRoute.post(
   '/reports/list',
   handlerToExpress(reports.list_reports)
+=======
+  '/reports/pe-export',
+  handlerToExpress(Reports.export_pe_report)
+);
+
+authenticatedRoute.post(
+  '/reports/pe-list',
+  handlerToExpress(Reports.list_pe_reports)
+>>>>>>> fb7caae5 (clean-up app.ts and comments)
 );
 
 app.use(authenticatedRoute);
