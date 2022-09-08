@@ -56,43 +56,8 @@ class S3Client {
     }
   }
 
-  /**
-   * P&E Reports upload. Saves as a pdf in S3, then returns
-   * a temporary URL that can be used to access it.
-   */
-  async uploadPeReport(orgName: string, fileName: string) {
-    const Key = `pe-reports/${orgName}/${fileName}`;
-    const params = {
-      Bucket: process.env.EXPORT_BUCKET_NAME!,
-      Key,
-      Expires: 60 * 5, // 5 minutes
-      ContentType: 'application/pdf'
-    };
-    try {
-      const url = await this.s3.getSignedUrlPromise('putObject', params);
-      // Do this so exports are accessible when running locally.
-      if (this.isLocal) {
-        return url.replace('minio:9000', 'localhost:9000');
-      }
-      return url;
-    } catch (error) {
-      console.error('Error while generating presigned URL:', error.message);
-      throw new Error(error);
-    }
-  }
   async exportPeReport(Key: string) {
     try {
-      try {
-        await this.s3
-          .headObject({ Bucket: process.env.EXPORT_BUCKET_NAME!, Key })
-          .promise();
-      } catch (e) {
-        if (e.name === 'NotFound') {
-          console.log('File does not exist in S3');
-          return 'File does not exist';
-        }
-        console.log(e);
-      }
       const url = await this.s3.getSignedUrlPromise('getObject', {
         Bucket: process.env.EXPORT_BUCKET_NAME!,
         Key,

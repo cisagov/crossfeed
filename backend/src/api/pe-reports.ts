@@ -17,23 +17,6 @@ export const export_pe_report = wrapHandler(async (event) => {
   };
 });
 
-export const upload_pe_report = wrapHandler(async (event) => {
-  const body = JSON.parse(event.body!);
-  console.log(body);
-  if (!body.filename) {
-    throw new Error('Invalid payload');
-  }
-  const client = new S3Client();
-  const url = await client.uploadPeReport(
-    body.currentOrganization.name,
-    body.filename
-  );
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ url })
-  };
-});
-
 export const list_pe_reports = wrapHandler(async (event) => {
   const orgName = JSON.parse(event.body!).currentOrganization.name;
   const client = new S3Client();

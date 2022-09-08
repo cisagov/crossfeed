@@ -313,10 +313,7 @@ authenticatedRoute.post(
   '/pe-reports/export',
   handlerToExpress(peReports.export_pe_report)
 );
-authenticatedRoute.post(
-  '/pe-reports/upload',
-  handlerToExpress(peReports.upload_pe_report)
-);
+
 authenticatedRoute.post(
   '/pe-reports/list',
   handlerToExpress(peReports.list_pe_reports)

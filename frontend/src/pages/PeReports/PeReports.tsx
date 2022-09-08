@@ -1,8 +1,6 @@
 import classes from './PeReports.module.scss';
-import { FileInput } from 'components';
 import React, { useCallback, useState, useEffect } from 'react';
 import { useAuthContext } from 'context';
-import { Label, FormGroup } from '@trussworks/react-uswds';
 import {
   Dialog,
   DialogTitle,
@@ -22,8 +20,6 @@ import {
 } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 
-const axios = require('axios');
-
 export const PeReports: React.FC = () => {
   const {
     apiPost,
@@ -32,44 +28,6 @@ export const PeReports: React.FC = () => {
   } = useAuthContext();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [reports, setReports] = useState([]);
-
-  const uploadPDF = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('Uploading report');
-
-    if (!event.target.files || !event.target.files.length) {
-      return;
-    }
-    console.log(event.target.files);
-    console.log(event.target.files[0].name);
-    const file = event.target.files[0];
-    const filename = file.name;
-
-    if (!showAllOrganizations && currentOrganization) {
-      let presignedUrl;
-      try {
-        const result = await apiPost('/pe-reports/upload/', {
-          body: { filename, currentOrganization }
-        });
-        console.log(result);
-        presignedUrl = result.url;
-      } catch (e) {
-        console.log('Error while generating presigned url', e);
-      }
-
-      try {
-        const options = {
-          headers: {
-            'Content-Type': file.type
-          }
-        };
-        const result = await axios.put(presignedUrl, file, options);
-        fetchReports();
-        return result;
-      } catch (e) {
-        console.log('Error while uploading object to S3:', e);
-      }
-    }
-  };
 
   const fetchReports = useCallback(async () => {
     try {
@@ -138,7 +96,7 @@ export const PeReports: React.FC = () => {
         {currentOrganization &&
         currentOrganization.tags.some((e) => e.name === 'P&E') ? (
           <>
-            <form className={classes.form}>
+            {/* <form className={classes.form}>
               <h2>Upload</h2>
               <FormGroup>
                 <Label htmlFor="import">File must be in a PDF format.</Label>
@@ -148,7 +106,7 @@ export const PeReports: React.FC = () => {
                   onChange={(e) => uploadPDF(e)}
                 />
               </FormGroup>
-            </form>
+            </form> */}
             <h2>Download</h2>
             <div className={classes.section}>
               <TableContainer component={Paper}>
