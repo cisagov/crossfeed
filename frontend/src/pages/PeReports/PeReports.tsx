@@ -29,7 +29,7 @@ export const PeReports: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [reports, setReports] = useState([]);
 
-  const fetchReports = useCallback(async () => {
+  const fetchPeReports = useCallback(async () => {
     try {
       if (!showAllOrganizations && currentOrganization) {
         console.log(currentOrganization);
@@ -77,8 +77,8 @@ export const PeReports: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchReports();
-  }, [fetchReports]);
+    fetchPeReports();
+  }, [fetchPeReports]);
 
   interface reportOutput {
     key: string;

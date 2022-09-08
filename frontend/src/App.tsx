@@ -138,6 +138,7 @@ const App: React.FC = () => (
                 />
 
                 <RouteGuard path="/feeds" component={Feeds} />
+                <RouteGuard path="/pe-reports" component={PeReports} />
                 <RouteGuard path="/scans" component={Scans} exact />
                 <RouteGuard path="/scans/history" component={Scans} exact />
                 <RouteGuard path="/scans/:scanId" component={Scan} />
@@ -148,7 +149,6 @@ const App: React.FC = () => (
                 <RouteGuard path="/organizations" component={Organizations} />
                 <RouteGuard path="/users" component={Users} />
                 <RouteGuard path="/settings" component={Settings} />
-                <RouteGuard path="/pe-reports" component={PeReports} />
               </Switch>
             </Layout>
           </SearchProvider>

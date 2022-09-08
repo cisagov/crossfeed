@@ -103,6 +103,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     },
     { title: 'Feeds', path: '/feeds', users: ALL_USERS, exact: false },
     {
+      title: 'Reports',
+      path: '/pe-reports',
+      users: ALL_USERS,
+      exact: true
+    },
+    {
       title: 'Scans',
       path: '/scans',
       users: GLOBAL_ADMIN,
@@ -129,12 +135,6 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
         title: 'My Organizations',
         path: '/organizations',
         users: STANDARD_USER,
-        exact: true
-      },
-      {
-        title: 'P&E Reports',
-        path: '/pe-reports',
-        users: ALL_USERS,
         exact: true
       },
       {
@@ -176,12 +176,6 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       title: 'My Organizations',
       path: '/organizations',
       users: STANDARD_USER,
-      exact: true
-    },
-    {
-      title: 'P&E Reports',
-      path: '/pe-reports',
-      users: ALL_USERS,
       exact: true
     },
     {
