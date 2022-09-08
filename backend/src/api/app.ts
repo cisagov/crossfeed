@@ -309,12 +309,12 @@ authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
 
-authenticatedRoute.post(
+authenticatedRoute.get(
   '/pe-reports/export',
   handlerToExpress(peReports.export_pe_report)
 );
 
-authenticatedRoute.post(
+authenticatedRoute.get(
   '/pe-reports/list',
   handlerToExpress(peReports.list_pe_reports)
 );

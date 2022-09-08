@@ -105,7 +105,7 @@ export const PeReports: React.FC = () => {
                       <TableCell>Filename</TableCell>
                       <TableCell>Organization</TableCell>
                       <TableCell>Date Uploaded</TableCell>
-                      <TableCell>Size (bytes)</TableCell>
+                      <TableCell>Size (MB)</TableCell>
                       <TableCell>Download</TableCell>
                     </TableRow>
                   </TableHead>
@@ -117,7 +117,9 @@ export const PeReports: React.FC = () => {
                         </TableCell>
                         <TableCell>{rep['organization']}</TableCell>
                         <TableCell>{rep['lastModified']}</TableCell>
-                        <TableCell>{rep['size']}</TableCell>
+                        <TableCell>
+                          {(rep['size'] / (1024 * 1024)).toFixed(2)}
+                        </TableCell>
                         <TableCell>
                           <IconButton
                             aria-label="fingerprint"
