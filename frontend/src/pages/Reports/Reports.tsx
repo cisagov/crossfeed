@@ -36,6 +36,7 @@ export const Reports: React.FC = () => {
   const pdfExport = useCallback(
     async (Key: string): Promise<string> => {
       if (!showAllOrganizations && currentOrganization) {
+<<<<<<< HEAD
         try {
           const { url } = await apiPost('/reports/export/', {
             body: { currentOrganization, Key }
@@ -63,6 +64,9 @@ export const Reports: React.FC = () => {
       setTags(organization.tags);
       if (!showAllOrganizations && currentOrganization) {
         const result = await apiPost('/reports/list/', {
+=======
+        const result = await apiPost('/reports/pe-list/', {
+>>>>>>> dbaf6f2b (update header snapshot)
           body: { currentOrganization }
         });
 
@@ -104,6 +108,25 @@ export const Reports: React.FC = () => {
     <Paginator table={table} totalResults={totalResults} />
   );
 
+<<<<<<< HEAD
+=======
+  const pdfExport = async (Key: string): Promise<string> => {
+    if (!showAllOrganizations && currentOrganization) {
+      try {
+        const { url } = await apiPost('/reports/pe-export/', {
+          body: { currentOrganization, Key }
+        });
+        window.open(url);
+        return url;
+      } catch (e) {
+        setDialogOpen(true);
+        return '';
+      }
+    } else {
+      return '';
+    }
+  };
+>>>>>>> dbaf6f2b (update header snapshot)
   const handleClose = () => {
     setDialogOpen(false);
   };
@@ -118,6 +141,7 @@ export const Reports: React.FC = () => {
         <h1>Reports</h1>
         {currentOrganization && tags && tags.some((e) => e.name === 'P&E') ? (
           <>
+<<<<<<< HEAD
             <Table<Report>
               renderPagination={renderPagination}
               tableRef={tableRef}
@@ -130,6 +154,44 @@ export const Reports: React.FC = () => {
                 "We don't see any reports for this organization."
               }
             />
+=======
+            <h2>Download</h2>
+            <div className={classes.section}>
+              <TableContainer component={Paper}>
+                <Table aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Filename</TableCell>
+                      <TableCell>Date Uploaded</TableCell>
+                      <TableCell>Size (MB)</TableCell>
+                      <TableCell>Download</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {reports.map((rep: reportOutput) => (
+                      <TableRow key={rep['key']}>
+                        <TableCell component="th" scope="row">
+                          {rep['name']}
+                        </TableCell>
+                        <TableCell>{rep['lastModified']}</TableCell>
+                        <TableCell>
+                          {(rep['size'] / (1024 * 1024)).toFixed(2)}
+                        </TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="fingerprint"
+                            onClick={() => pdfExport(rep['key'])}
+                          >
+                            <GetAppIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+>>>>>>> dbaf6f2b (update header snapshot)
             <Dialog open={dialogOpen} onClose={handleClose}>
               <DialogTitle id="alert-dialog-title">{'Alert'}</DialogTitle>
               <DialogContent>Error. File does not exist.</DialogContent>
