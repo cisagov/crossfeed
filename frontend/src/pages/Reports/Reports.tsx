@@ -1,4 +1,4 @@
-import classes from './PeReports.module.scss';
+import classes from './Reports.module.scss';
 import React, { useCallback, useState, useEffect } from 'react';
 import { useAuthContext } from 'context';
 import {
@@ -20,7 +20,7 @@ import {
 } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 
-export const PeReports: React.FC = () => {
+export const Reports: React.FC = () => {
   const {
     apiPost,
     currentOrganization,
@@ -33,7 +33,7 @@ export const PeReports: React.FC = () => {
     try {
       if (!showAllOrganizations && currentOrganization) {
         console.log(currentOrganization);
-        const result = await apiPost('/pe-reports/list/', {
+        const result = await apiPost('/reports/pe-list/', {
           body: { currentOrganization }
         });
         const output = result.map((a: any) => {
@@ -58,7 +58,7 @@ export const PeReports: React.FC = () => {
   const pdfExport = async (Key: string): Promise<string> => {
     if (!showAllOrganizations && currentOrganization) {
       try {
-        const { url } = await apiPost('/pe-reports/export/', {
+        const { url } = await apiPost('/reports/pe-export/', {
           body: { currentOrganization, Key }
         });
         window.open(url);
@@ -103,7 +103,6 @@ export const PeReports: React.FC = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Filename</TableCell>
-                      <TableCell>Organization</TableCell>
                       <TableCell>Date Uploaded</TableCell>
                       <TableCell>Size (MB)</TableCell>
                       <TableCell>Download</TableCell>
@@ -115,7 +114,6 @@ export const PeReports: React.FC = () => {
                         <TableCell component="th" scope="row">
                           {rep['name']}
                         </TableCell>
-                        <TableCell>{rep['organization']}</TableCell>
                         <TableCell>{rep['lastModified']}</TableCell>
                         <TableCell>
                           {(rep['size'] / (1024 * 1024)).toFixed(2)}
@@ -149,8 +147,9 @@ export const PeReports: React.FC = () => {
         ) : (
           <div>
             <p>
-              This organization is not registered to receive P&E reports. For
-              more information, please reach out to vulnerability@cisa.dhs.gov.
+              This organization is not registered to receive Posture and
+              Exposure reports. For more information, please reach out to
+              vulnerability@cisa.dhs.gov.
             </p>
           </div>
         )}
@@ -159,4 +158,4 @@ export const PeReports: React.FC = () => {
   );
 };
 
-export default PeReports;
+export default Reports;

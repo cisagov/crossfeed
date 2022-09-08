@@ -15,4 +15,4 @@ export { default as Organizations } from './Organizations';
 export { default as Users } from './Users';
 export { default as Settings } from './Settings';
 export { default as Feeds } from './Feeds';
-export { default as PeReports } from './PeReports';
+export { default as Reports } from './Reports';

@@ -104,7 +104,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     { title: 'Feeds', path: '/feeds', users: ALL_USERS, exact: false },
     {
       title: 'Reports',
-      path: '/pe-reports',
+      path: '/reports',
       users: ALL_USERS,
       exact: true
     },
