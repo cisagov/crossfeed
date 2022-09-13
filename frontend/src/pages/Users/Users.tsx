@@ -22,8 +22,9 @@ interface Errors extends Partial<User> {
 }
 
 export const Users: React.FC = () => {
-  const { apiGet, apiPost, apiDelete } = useAuthContext();
+  const { apiGet, apiPost, apiDelete, apiPut } = useAuthContext();
   const [showModal, setShowModal] = useState<Boolean>(false);
+  const [modalType, setModalType] = useState<string>('');
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [users, setUsers] = useState<User[]>([]);
 
@@ -99,11 +100,30 @@ export const Users: React.FC = () => {
       disableFilters: true
     },
     {
+      Header: 'Status',
+      width: 100,
+      minWidth: 100,
+      id: 'disabled',
+      Cell: ({ row }: { row: { index: number } }) => (
+        <span
+          onClick={() => {
+            setModalType(users[row.index].disabled ? 'enable' : 'disable');
+            setShowModal(true);
+            setSelectedRow(row.index);
+          }}
+        >
+          {users[row.index].disabled ? 'Disabled' : 'Enabled'}
+        </span>
+      ),
+      disableFilters: true
+    },
+    {
       Header: 'Delete',
       id: 'delete',
       Cell: ({ row }: { row: { index: number } }) => (
         <span
           onClick={() => {
+            setModalType('delete');
             setShowModal(true);
             setSelectedRow(row.index);
           }}
@@ -147,6 +167,29 @@ export const Users: React.FC = () => {
       setErrors({
         global:
           e.status === 422 ? 'Unable to delete user' : e.message ?? e.toString()
+      });
+      console.log(e);
+    }
+  };
+
+  const updateDisabledStatus = async (index: number, disabled: boolean) => {
+    try {
+      const row = users[index];
+      const body = {
+        firstName: row.firstName,
+        lastName: row.lastName,
+        disabled: disabled
+      };
+      const user = await apiPut(`/users/${row.id}`, {
+        body
+      });
+      setUsers(users.filter((user) => user.id !== row.id).concat(user));
+    } catch (e) {
+      setErrors({
+        global:
+          e.status === 422
+            ? 'Unable to update disabled status for user'
+            : e.message ?? e.toString()
       });
       console.log(e);
     }
@@ -326,18 +369,27 @@ export const Users: React.FC = () => {
                   <Button
                     type="button"
                     onClick={() => {
-                      deleteRow(selectedRow);
+                      switch (modalType) {
+                        case 'delete':
+                          deleteRow(selectedRow);
+                          break;
+                        case 'enable':
+                          updateDisabledStatus(selectedRow, false);
+                          break;
+                        case 'disable':
+                          updateDisabledStatus(selectedRow, true);
+                      }
                       setShowModal(false);
                     }}
                   >
-                    Delete
+                    {modalType.toUpperCase()}
                   </Button>
                 </>
               }
-              title={<h2>Delete user?</h2>}
+              title={<h2>{modalType.toUpperCase()} user?</h2>}
             >
               <p>
-                Are you sure you would like to delete{' '}
+                Are you sure you would like to {modalType + ' '}
                 <code>{users[selectedRow].fullName}</code>?
               </p>
             </Modal>
