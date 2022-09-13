@@ -593,6 +593,44 @@ describe('user', () => {
       expect(user.roles.length).toEqual(0);
       expect(user.userType).toEqual(UserType.GLOBAL_ADMIN);
     });
+    it('update by globalAdmin that disables user should work', async () => {
+      const response = await request(app)
+        .put(`/users/${user.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: UserType.GLOBAL_ADMIN
+          })
+        )
+        .send({ firstName, lastName, disabled: true })
+        .expect(200);
+      expect(response.body.firstName).toEqual(firstName);
+      expect(response.body.lastName).toEqual(lastName);
+      user = await User.findOne(user.id, {
+        relations: ['roles', 'roles.organization', 'roles.createdBy']
+      });
+      expect(user.roles.length).toEqual(0);
+      expect(user.disabled).toEqual(true);
+    });
+    it('update by globalAdmin that enables user should work', async () => {
+      const response = await request(app)
+        .put(`/users/${user.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: UserType.GLOBAL_ADMIN
+          })
+        )
+        .send({ firstName, lastName, disabled: false })
+        .expect(200);
+      expect(response.body.firstName).toEqual(firstName);
+      expect(response.body.lastName).toEqual(lastName);
+      user = await User.findOne(user.id, {
+        relations: ['roles', 'roles.organization', 'roles.createdBy']
+      });
+      expect(user.roles.length).toEqual(0);
+      expect(user.disabled).toEqual(false);
+    });
     it('update by globalView should not work', async () => {
       const response = await request(app)
         .put(`/users/${user.id}`)

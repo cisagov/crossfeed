@@ -88,6 +88,8 @@ export const update = wrapHandler(async (event) => {
     user.lastName = body.lastName ?? user.lastName;
     user.fullName = user.firstName + ' ' + user.lastName;
     user.userType = body.userType ?? user.userType;
+    user.disabled = body.disabled ?? user.disabled;
+
     await User.save(user);
     return {
       statusCode: 200,
@@ -115,6 +117,10 @@ class NewUser {
   @IsBoolean()
   @IsOptional()
   organizationAdmin: string;
+
+  @IsBoolean()
+  @IsOptional()
+  disabled: boolean;
 
   @IsEnum(UserType)
   @IsOptional()

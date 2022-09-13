@@ -9,6 +9,7 @@ export interface User {
   lastName: string;
   fullName: string;
   invitePending: boolean;
+  disabled: boolean;
   userType: 'standard' | 'globalView' | 'globalAdmin';
   email: string;
   roles: Role[];

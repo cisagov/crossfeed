@@ -58,6 +58,10 @@ export class User extends BaseEntity {
   @Column({ default: false })
   invitePending: boolean;
 
+  /** Whether the user's account is disabled due to inactivity */
+  @Column({ default: false })
+  disabled: boolean;
+
   /**
    * When the user accepted the terms of use,
    * if the user did so
