@@ -6,6 +6,12 @@ scheduler:
   reservedConcurrency: 1
   memorySize: 4096
 
+autoDisableAccounts:
+  handler: src/tasks/autoDisableAccounts.handler
+  timeout: 900
+  events:
+    - schedule: rate(7 days)
+
 syncdb:
   timeout: 900
   handler: src/tasks/syncdb.handler

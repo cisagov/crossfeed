@@ -85,7 +85,8 @@
     "deploy-worker-staging": "./tools/deploy-worker.sh",
     "deploy-worker-prod": "./tools/deploy-worker.sh crossfeed-prod-worker",
     "syncdb": "docker-compose exec -T backend npx ts-node src/tools/run-syncdb.ts",
-    "pesyncdb": "docker-compose exec -T backend npx ts-node src/tools/run-pesyncdb.ts"
+    "pesyncdb": "docker-compose exec -T backend npx ts-node src/tools/run-pesyncdb.ts",
+    "autodisable": "docker-compose exec -T backend npx ts-node src/tools/run-autodisable.ts"
   },
   "resolutions": {
     "ansi-regex": "5.0.1"
