@@ -7,9 +7,13 @@ const INACTIVE_THRESHOLD = 60;
 export const handler: Handler = async (event) => {
   await connectToDatabase(true);
   var inactiveDate = new Date();
-  inactiveDate.setDate(inactiveDate.getDate() - INACTIVE_THRESHOLD)
+  inactiveDate.setDate(inactiveDate.getDate() - INACTIVE_THRESHOLD);
   const users = await User.find({
-    lastLoggedIn: Raw((alias) => `${alias} < :date`, { date: inactiveDate}),
+    lastLoggedIn: Raw((alias) => `${alias} < :date`, { date: inactiveDate })
   });
-  console.log(users)
+  for (let i = 0; i < users.length; i++) {
+    users[i].disabled = true;
+    await User.save(users[i]);
+  }
+  return users;
 };
