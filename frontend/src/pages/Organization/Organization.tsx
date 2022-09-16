@@ -116,6 +116,14 @@ export const Organization: React.FC = () => {
       disableFilters: true
     },
     {
+      Header: 'Status',
+      accessor: ({ user }) => (user.disabled ? 'Disabled' : 'Enabled'),
+      width: 150,
+      minWidth: 150,
+      id: 'disabled',
+      disableFilters: true
+    },
+    {
       Header: () => {
         return (
           <div style={{ justifyContent: 'flex-center' }}>
