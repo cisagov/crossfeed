@@ -683,5 +683,18 @@ describe('user', () => {
         .expect(403);
       expect(response.body).toEqual({});
     });
+    it('update by regular user should not work if changing disabled to false', async () => {
+      const response = await request(app)
+        .put(`/users/${user.id}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            id: user.id
+          })
+        )
+        .send({ firstName, lastName, disabled: false })
+        .expect(403);
+      expect(response.body).toEqual({});
+    });
   });
 });

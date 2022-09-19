@@ -71,8 +71,11 @@ export const update = wrapHandler(async (event) => {
     return NotFound;
   }
   const body = await validateBody(NewUser, event.body);
-  if (!isGlobalWriteAdmin(event) && body.userType) {
-    // Non-global admins can't set userType
+  if (
+    !isGlobalWriteAdmin(event) &&
+    ('userType' in body || 'disabled' in body)
+  ) {
+    // Non-global admins can't set userType or disabled
     return Unauthorized;
   }
   const user = await User.findOne(
