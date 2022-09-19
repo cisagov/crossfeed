@@ -81,15 +81,22 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const refreshUser = useCallback(async () => {
     if (!token && process.env.REACT_APP_USE_COGNITO) {
       const session = await Auth.currentSession();
-      const { token } = await apiPost<{ token: string; user: User }>(
-        '/auth/callback',
-        {
-          body: {
-            token: session.getIdToken().getJwtToken()
+      try {
+        const { token } = await apiPost<{ token: string; user: User }>(
+          '/auth/callback',
+          {
+            body: {
+              token: session.getIdToken().getJwtToken()
+            }
           }
+        );
+        setToken(token);
+      } catch (error) {
+        const e = error.toString();
+        if (e.slice(-3, e.length) === '460') {
+          alert('Account disabled. Contact global admin for assistance.');
         }
-      );
-      setToken(token);
+      }
     }
   }, [apiPost, setToken, token]);
 
