@@ -136,5 +136,24 @@ describe('auth', () => {
       );
       process.env.USE_COGNITO = '';
     });
+
+    it('verify disabled accounts cannot get tokens', async () => {
+      process.env.USE_COGNITO = '1';
+      const user = await User.create({
+        firstName: Math.random().toString(),
+        lastName: '',
+        email: 'disabledtest@crossfeed.cisa.gov',
+        dateAcceptedTerms: new Date('2020-08-03T13:58:31.715Z'),
+        disabled: true
+      }).save();
+      const response = await request(app)
+        .post('/auth/callback')
+        .send({
+          token: 'TOKEN_disabledtest@crossfeed.cisa.gov'
+        })
+        .expect(460);
+      expect(response.body.token).toBeFalsy();
+      process.env.USE_COGNITO = '';
+    });
   });
 });

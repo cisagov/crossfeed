@@ -163,6 +163,13 @@ export const callback = async (event, context) => {
     await user.save();
   }
 
+  if (user.disabled) {
+    return {
+      statusCode: 460,
+      body: ''
+    };
+  }
+
   user.lastLoggedIn = new Date(Date.now());
   await user.save();
 
