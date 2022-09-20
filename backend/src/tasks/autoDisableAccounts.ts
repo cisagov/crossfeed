@@ -6,7 +6,7 @@ const INACTIVE_THRESHOLD = 60;
 
 export const handler: Handler = async (event) => {
   await connectToDatabase(true);
-  let inactiveDate = new Date();
+  const inactiveDate = new Date();
   inactiveDate.setDate(inactiveDate.getDate() - INACTIVE_THRESHOLD);
   const users = await User.find({
     lastLoggedIn: Raw((alias) => `${alias} < :date`, { date: inactiveDate })

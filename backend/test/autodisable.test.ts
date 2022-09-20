@@ -8,9 +8,9 @@ describe('auto disable', () => {
   const INACTIVE_THRESHOLD = 60;
   it(`auto disable should disable accounts that last logged in over ${INACTIVE_THRESHOLD} days ago`, async () => {
     const days_over_thresh = [0, 1, 50, 200, 365];
-    let users: User[] = [];
+    const users: User[] = [];
     for (let i = 0; i < days_over_thresh.length; i++) {
-      let inactiveDate = new Date();
+      const inactiveDate = new Date();
       inactiveDate.setDate(
         inactiveDate.getDate() - INACTIVE_THRESHOLD - days_over_thresh[i]
       );
@@ -33,9 +33,9 @@ describe('auto disable', () => {
   });
   it(`auto disable should disable accounts that last logged in under ${INACTIVE_THRESHOLD} days ago`, async () => {
     const days_back = [0, 1, 15, 30, 59];
-    let users: User[] = [];
+    const users: User[] = [];
     for (let i = 0; i < days_back.length; i++) {
-      let inactiveDate = new Date();
+      const inactiveDate = new Date();
       inactiveDate.setDate(inactiveDate.getDate() - days_back[i]);
       const user = await User.create({
         firstName: Math.random().toString(),
