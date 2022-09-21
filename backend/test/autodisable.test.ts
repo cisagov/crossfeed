@@ -31,7 +31,7 @@ describe('auto disable', () => {
       expect(retrievedUser.disabled).toEqual(true);
     }
   });
-  it(`auto disable should disable accounts that last logged in under ${INACTIVE_THRESHOLD} days ago`, async () => {
+  it(`auto disable should not disable accounts that last logged in under ${INACTIVE_THRESHOLD} days ago`, async () => {
     const days_back = [0, 1, 15, 30, 59];
     const users: User[] = [];
     for (let i = 0; i < days_back.length; i++) {
