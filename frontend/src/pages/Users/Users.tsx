@@ -185,12 +185,6 @@ export const Users: React.FC = () => {
       });
       setUsers(users.filter((user) => user.id !== row.id).concat(user));
     } catch (e) {
-      setErrors({
-        global:
-          e.status === 422
-            ? 'Unable to update disabled status for user'
-            : e.message ?? e.toString()
-      });
       console.log(e);
     }
   };
