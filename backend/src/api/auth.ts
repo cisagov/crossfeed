@@ -236,6 +236,7 @@ export const authorize = async (event) => {
       return parsed;
     }
     if (!user) throw Error('User does not exist');
+    if (user.disabled) throw Error('User is disabled');
     return userTokenBody(user);
   } catch (e) {
     console.error(e);
