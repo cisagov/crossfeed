@@ -151,7 +151,7 @@ describe('auth', () => {
         .send({
           token: 'TOKEN_disabledtest@crossfeed.cisa.gov'
         })
-        .expect(460);
+        .expect(403);
       expect(response.body.token).toBeFalsy();
       process.env.USE_COGNITO = '';
     });
