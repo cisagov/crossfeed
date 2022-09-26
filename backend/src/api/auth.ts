@@ -165,8 +165,8 @@ export const callback = async (event, context) => {
 
   if (user.disabled) {
     return {
-      statusCode: 460,
-      body: ''
+      statusCode: 403,
+      body: 'disabled'
     };
   }
 

@@ -91,9 +91,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
           }
         );
         setToken(token);
-      } catch (error) {
-        const e = error.toString();
-        if (e.slice(-3, e.length) === '460') {
+      } catch (e) {
+        if (e.response.data === 'disabled') {
           alert('Account disabled. Contact global admin for assistance.');
         }
       }
