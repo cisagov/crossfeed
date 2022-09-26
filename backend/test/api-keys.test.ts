@@ -2,7 +2,7 @@ import * as request from 'supertest';
 import app from '../src/api/app';
 import { User, connectToDatabase, ApiKey, UserType } from '../src/models';
 import { createUserToken } from './util';
-
+import { authorize, UserToken } from '../src/api/auth';
 jest.mock('../src/tasks/scheduler', () => ({
   handler: jest.fn()
 }));
@@ -229,6 +229,38 @@ describe('api-key', () => {
         .get('/users/me')
         .set('Authorization', response.body.key)
         .expect(401);
+    });
+    it('verify account with working API key no longer authorized after disabled', async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        userType: UserType.STANDARD
+      }).save();
+      const response = await request(app)
+        .post('/api-keys')
+        .set(
+          'Authorization',
+          createUserToken({
+            id: user.id,
+            userType: UserType.STANDARD
+          })
+        )
+        .send({})
+        .expect(200);
+      const userAuthEnabled = (await authorize({
+        authorizationToken: response.body.key
+      })) as UserToken;
+      expect(userAuthEnabled).not.toEqual({ id: 'cisa:crossfeed:anonymous' });
+      await User.createQueryBuilder()
+        .update(User)
+        .set({ disabled: true })
+        .where({ id: user.id })
+        .execute();
+      const userAuthDisabled = (await authorize({
+        authorizationToken: response.body.key
+      })) as UserToken;
+      expect(userAuthDisabled).toEqual({ id: 'cisa:crossfeed:anonymous' });
     });
   });
 });
