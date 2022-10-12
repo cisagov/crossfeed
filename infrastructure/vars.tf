@@ -89,17 +89,17 @@ variable "ssm_lambda_subnet" {
 
 variable "ssm_worker_sg" {
   type    = string
-  default = ""
+  default = "/crossfeed/staging/WORKER_SG_ID"
 }
 
 variable "ssm_worker_subnet" {
   type    = string
-  default = ""
+  default = "/crossfeed/staging/WORKER_SUBNET_ID"
 }
 
 variable "ssm_worker_arn" {
   type    = string
-  default = ""
+  default = "/crossfeed/staging/WORKER_CLUSTER_ARN"
 }
 
 variable "db_table_name" {

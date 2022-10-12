@@ -41,13 +41,15 @@ This quickstart describes the initial setup required to run an instance of Cross
 
 6. Navigate to [http://localhost](http://localhost) in a browser.
 
-7. Hot reloading for source files is enabled, but after changes to non-source code files stopping and starting Docker Compose is required. The following are examples of changes that will require restarting the environment:
+7. Create an account on the [staging Crossfeed instance](https://staging.crossfeed.cyber.dhs.gov/signup?). You can then log into your account running on localhost using this account.
+
+8. Hot reloading for source files is enabled, but after changes to non-source code files stopping and starting Docker Compose is required. The following are examples of changes that will require restarting the environment:
 
    - Frontend or backend dependency changes
    - Backend changes to `serverless.yml` or `env.yml`
    - Environment variables in root `.env`
 
-8. Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save.
+9. Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save.
 
 ### Running tests
 
