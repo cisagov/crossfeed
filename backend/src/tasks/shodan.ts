@@ -10,10 +10,7 @@ import { IpToDomainsMap, sanitizeStringField } from './censysIpv4';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 
 // Shodan allows searching up to 100 IPs at once
-// const CHUNK_SIZE = 100;
-// TODO: Once https://github.com/cisagov/crossfeed/issues/1520 is resolved,
-// then switch back to searching IPs in bulk.
-const CHUNK_SIZE = 1;
+const CHUNK_SIZE = 100;
 
 interface ShodanResponse {
   ip_str: string;
@@ -72,24 +69,19 @@ export const handler = async (commandOptions: CommandOptions) => {
       `Scanning ${domainChunk.length} domains beginning with ${domainChunk[0].name}`
     );
     try {
-      // let { data } = await pRetry(
-      //   () =>
-      //     axios.get<ShodanResponse[]>(
-      //       `https://api.shodan.io/shodan/host/${encodeURI(
-      //         domainChunk.map((domain) => domain.ip).join(',')
-      //       )}?key=${process.env.SHODAN_API_KEY}`
-      //     ),
-      //   {
-      //     // Perform less retries on jest to make tests faster
-      //     retries: typeof jest === 'undefined' ? 5 : 2,
-      //     minTimeout: 1000
-      //   }
-      // );
-      let { data } = await axios.get<ShodanResponse[]>(
-        `https://api.shodan.io/shodan/host/${encodeURI(
-          domainChunk.map((domain) => domain.ip).join(',')
-        )}?key=${process.env.SHODAN_API_KEY}`
-      )
+      let { data } = await pRetry(
+        () =>
+          axios.get<ShodanResponse[]>(
+            `https://api.shodan.io/shodan/host/${encodeURI(
+              domainChunk.map((domain) => domain.ip).join(',')
+            )}?key=${process.env.SHODAN_API_KEY}`
+          ),
+        {
+          // Perform less retries on jest to make tests faster
+          retries: typeof jest === 'undefined' ? 5 : 2,
+          minTimeout: 1000
+        }
+      );
 
       // If only one item is returned, the response will not be an array
       if (!Array.isArray(data)) {
