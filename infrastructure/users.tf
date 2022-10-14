@@ -3,7 +3,6 @@ resource "aws_cognito_user_pool" "pool" {
   mfa_configuration        = "ON"
   username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
-  prevent_user_existence_errors = "ENABLED"
 
   software_token_mfa_configuration {
     enabled = true
@@ -43,6 +42,7 @@ resource "aws_cognito_user_pool_client" "client" {
   allowed_oauth_flows                  = ["code"]
   explicit_auth_flows                  = ["ALLOW_CUSTOM_AUTH", "ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH"]
   allowed_oauth_flows_user_pool_client = true
+  prevent_user_existence_errors        = "ENABLED"
 }
 
 resource "aws_ssm_parameter" "user_pool_id" {
