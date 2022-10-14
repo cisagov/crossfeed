@@ -3,6 +3,7 @@ resource "aws_cognito_user_pool" "pool" {
   mfa_configuration        = "ON"
   username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
+  prevent_user_existence_errors = "ENABLED"
 
   software_token_mfa_configuration {
     enabled = true
