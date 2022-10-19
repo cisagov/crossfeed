@@ -26,7 +26,7 @@
     "lodash": "^4.17.21",
     "nodemailer": "^6.7.2",
     "openid-client": "^4.1.1",
-    "p-queue": "^6.6.2",
+    "p-queue": "^7.3.0",
     "p-retry": "^4.6.1",
     "papaparse": "^5.3.1",
     "pg": "^8.7.1",
