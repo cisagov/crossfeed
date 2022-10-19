@@ -16,7 +16,7 @@
     "@nivo/bar": "^0.69.1",
     "@nivo/core": "^0.69.0",
     "@nivo/pie": "^0.69.0",
-    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^11.0.4",
     "@testing-library/user-event": "^7.2.1",
     "@trussworks/react-uswds": "^1.9.2",
