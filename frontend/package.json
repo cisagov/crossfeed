@@ -100,7 +100,8 @@
     "yargs-parser": "18.1.2",
     "postcss": "7.0.36",
     "jspdf": "2.4.0",
-    "ansi-regex": "5.0.1"
+    "ansi-regex": "5.0.1",
+    "shell-quote": "1.7.4"
   },
   "devDependencies": {
     "decamelize": "^5.0.0",
