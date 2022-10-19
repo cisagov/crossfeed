@@ -18,6 +18,7 @@ import {
   ArrowDropDown
 } from '@material-ui/icons';
 import { NavItem } from './NavItem';
+import { useRouteMatch } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import logo from '../assets/crossfeed.svg';
 import { withSearch } from '@elastic/react-search-ui';
@@ -193,6 +194,8 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     }
   ].filter(({ users }) => (users & userLevel) > 0);
 
+  const orgPageMatch = useRouteMatch('/organizations/:id');
+
   const desktopNavItems: JSX.Element[] = navItems.map((item) => (
     <NavItem key={item.title.toString()} {...item} />
   ));
@@ -288,6 +291,11 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                         if (value && 'id' in value) {
                           setOrganization(value);
                           setShowAllOrganizations(false);
+
+                          // Check if we're on an organization page and, if so, update it to the new organization
+                          if (orgPageMatch !== null) {
+                            history.push(`/organizations/${value.id}`);
+                          }
                         } else {
                           setShowAllOrganizations(true);
                         }
