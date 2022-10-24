@@ -4,7 +4,7 @@ mitmproxy==8.1.1
 cryptography==37.0.4
 pytest==7.1.2
 scrapy==2.6.2
-dnstwist==20220815
+dnstwist==20221022
 dnspython==2.2.1
 psycopg2-binary==2.9.3
 shodan==1.28.0
