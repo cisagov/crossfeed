@@ -4,15 +4,15 @@ $theme-image-path: '~uswds/dist/img';
 $theme-show-notifications: false;
 
 // Import required global packages
-@import '~uswds/dist/scss/packages/required';
-@import '~uswds/dist/scss/packages/global';
+@import '~uswds/dist/scss/packages/_required.scss';
+@import '~uswds/dist/scss/packages/_global.scss';
 
-@import '~uswds/dist/scss/packages/uswds-utilities';
-@import '~uswds/dist/scss/packages/usa-banner';
-@import '~uswds/dist/scss/packages/usa-header';
-@import '~uswds/dist/scss/packages/usa-table';
-@import '~uswds/dist/scss/packages/usa-alert';
-@import '~uswds/dist/scss/packages/form-controls';
+@import '~uswds/dist/scss/packages/_uswds-utilities.scss';
+@import '~uswds/dist/scss/packages/_usa-banner.scss';
+@import '~uswds/dist/scss/packages/_usa-header.scss';
+@import '~uswds/dist/scss/packages/_usa-table.scss';
+@import '~uswds/dist/scss/packages/_usa-alert.scss';
+@import '~uswds/dist/scss/packages/_form-controls.scss';
 
 html,
 body {
