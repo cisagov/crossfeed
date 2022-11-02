@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - production
+      - epicfaace-patch-6
     paths:
       - 'infrastructure/**'
       - '.github/workflows/infrastructure.yml'
@@ -65,7 +66,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform apply
-        if: github.ref == 'refs/heads/master'
+#         if: github.ref == 'refs/heads/master'
         run: terraform apply stage.plan
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
