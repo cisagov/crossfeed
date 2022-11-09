@@ -100,6 +100,12 @@ resource "aws_iam_policy_attachment" "db_accessor_2" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
 
+resource "aws_iam_policy_attachment" "db_accessor_3" {
+  name       = "crossfeed-db-accessor-${var.stage}"
+  roles      = [aws_iam_role.db_accessor.id]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonS3FullAccess"
+}
+
 resource "aws_instance" "db_accessor" {
   count         = var.create_db_accessor_instance ? 1 : 0
   ami           = data.aws_ami.ubuntu.id

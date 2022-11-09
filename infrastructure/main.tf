@@ -58,4 +58,70 @@ resource "aws_s3_bucket_logging" "logging_bucket" {
   target_prefix = "logging_bucket/"
 }
 
+resource "aws_s3_bucket" "pe_reports_bucket" {
+  bucket = var.pe_reports_bucket_name
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
 
+resource "aws_s3_bucket_acl" "pe_reports_bucket" {
+  bucket = aws_s3_bucket.pe_reports_bucket_name.id
+  acl    = "private"
+}
+resource "aws_s3_bucket_server_side_encryption_configuration" "pe_reports_bucket" {
+  bucket = aws_s3_bucket.pe_reports_bucket_name.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_versioning" "pe_reports_bucket" {
+  bucket = aws_s3_bucket.pe_reports_bucket_name.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "pe_reports_bucket" {
+  bucket        = aws_s3_bucket.pe_reports_bucket_name.id
+  target_bucket = aws_s3_bucket.pe_reports_bucket_name.id
+  target_prefix = "pe_reports_bucket/"
+}
+
+resource "aws_s3_bucket" "pe_db_backups_bucket" {
+  bucket = var.db_backups_bucket_name
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+resource "aws_s3_bucket_acl" "pe_db_backups_bucket" {
+  bucket = aws_s3_bucket.db_backups_bucket_name.id
+  acl    = "private"
+}
+resource "aws_s3_bucket_server_side_encryption_configuration" "pe_db_backups_bucket" {
+  bucket = aws_s3_bucket.db_backups_bucket_name.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_versioning" "pe_db_backups_bucket" {
+  bucket = aws_s3_bucket.db_backups_bucket_name.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "pe_db_backups_bucket" {
+  bucket        = aws_s3_bucket.db_backups_bucket_name.id
+  target_bucket = aws_s3_bucket.db_backups_bucket_name.id
+  target_prefix = "pe_db_backups_bucket/"
+}
