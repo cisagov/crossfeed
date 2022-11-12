@@ -1,4 +1,5 @@
-FROM node:18-alpine3.15
+FROM node:14-alpine3.14
+USER root
 
 WORKDIR /app
 COPY ./package* ./
