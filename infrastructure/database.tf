@@ -107,9 +107,9 @@ resource "aws_iam_policy_attachment" "db_accessor_3" {
 }
 
 resource "aws_instance" "db_accessor" {
-  count         = var.create_db_accessor_instance ? 1 : 0
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = var.db_accessor_instance_class
+  count                       = var.create_db_accessor_instance ? 1 : 0
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = var.db_accessor_instance_class
   associate_public_ip_address = false
 
   tags = {
