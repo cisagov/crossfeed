@@ -1,9 +1,7 @@
-// const slsw = require('serverless-webpack');
 const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-  // entry: slsw.lib.entries,
   entry: {
     worker: path.join(__dirname, 'src/worker.ts')
   },
@@ -11,12 +9,10 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: '[name].bundle.js'
   },
-  externals: ['webpack'],
   optimization: {
     minimize: false
   },
   target: 'node',
-  // mode: slsw.lib.webpack.isLocal ? "development" : "production",
   mode: 'production',
   module: {
     rules: [
