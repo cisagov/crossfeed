@@ -11,6 +11,7 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: '[name].bundle.js'
   },
+  externals: ['webpack'],
   optimization: {
     minimize: false
   },
