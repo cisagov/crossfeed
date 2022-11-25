@@ -158,6 +158,6 @@ module.exports = {
         icon: `src/images/logo.png`, // This path is relative to the root of the site.
       },
     },
-    `gatsby-plugin-meta-redirect`
+    `gatsby-plugin-meta-redirect`,
   ],
 };
