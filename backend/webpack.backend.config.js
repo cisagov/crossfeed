@@ -22,9 +22,9 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.IgnorePlugin(/^pg-native$/),
-    new webpack.IgnorePlugin(/^canvas$/), // imported by jsdom from simple-wapplyzer, not used so we can ignore.
-    new webpack.IgnorePlugin(/^dockerode$/) // doesn't package properly, not used in production so we can ignore.
+    new webpack.IgnorePlugin({resourceRegExp: /^pg-native$/}),
+    new webpack.IgnorePlugin({resourceRegExp: /^canvas$/}), // imported by jsdom from simple-wapplyzer, not used so we can ignore.
+    new webpack.IgnorePlugin({resourceRegExp: /^dockerode$/}) // doesn't package properly, not used in production so we can ignore.
   ],
   resolve: {
     modules: ['node_modules', 'scripts'],
