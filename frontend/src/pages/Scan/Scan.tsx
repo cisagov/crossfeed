@@ -20,7 +20,7 @@ export const setFrequency = async (body: ScanFormValues) => {
 };
 
 const ScanComponent: React.FC = () => {
-  const { scanId } = useParams();
+  const { scanId } = useParams<any>();
   const { apiGet, apiPut, setFeedbackMessage } = useAuthContext();
   const [scan, setScan] = useState<Scan>();
   const [organizationOptions, setOrganizationOptions] = useState<

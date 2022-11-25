@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, RenderOptions } from '@testing-library/react';
+// @ts-ignore:next-line
 import { mocked } from 'ts-jest/utils';
 import { MemoryRouter } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../context/AuthContext';

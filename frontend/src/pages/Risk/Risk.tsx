@@ -72,12 +72,8 @@ export const getSeverityColor = ({ id }: { id: string }) => {
 
 const Risk: React.FC = (props) => {
   const history = useHistory();
-  const {
-    currentOrganization,
-    showAllOrganizations,
-    user,
-    apiPost
-  } = useAuthContext();
+  const { currentOrganization, showAllOrganizations, user, apiPost } =
+    useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
   const [labels, setLabels] = useState([
@@ -247,7 +243,7 @@ const Risk: React.FC = (props) => {
     };
     return (
       <ResponsiveBar
-        data={dataVal}
+        data={dataVal as any}
         keys={keys}
         layers={
           type === 'ports'
@@ -284,7 +280,7 @@ const Risk: React.FC = (props) => {
           }
         }}
         padding={0.5}
-        colors={type === 'ports' ? getSingleColor : getSeverityColor}
+        colors={type === 'ports' ? getSingleColor : (getSeverityColor as any)}
         borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
         axisTop={null}
         axisRight={null}
@@ -306,11 +302,11 @@ const Risk: React.FC = (props) => {
         }}
         animate={true}
         enableLabel={false}
-        motionStiffness={90}
         motionDamping={15}
         layout={'horizontal'}
         enableGridX={true}
         enableGridY={false}
+        {...({ motionStiffness: 90 } as any)}
       />
     );
   };
