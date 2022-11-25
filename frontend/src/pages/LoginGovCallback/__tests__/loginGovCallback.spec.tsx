@@ -1,18 +1,18 @@
 import React from 'react';
-import { render, mocked, waitFor } from 'test-utils';
+import { render, waitFor } from 'test-utils';
 import { LoginGovCallback } from '../LoginGovCallback';
 
 jest.spyOn(Storage.prototype, 'getItem');
-const mockGetItem = mocked(localStorage.getItem);
+const mockGetItem = jest.mocked(localStorage.getItem);
 
 jest.spyOn(Storage.prototype, 'removeItem');
-const mockRemoveItem = mocked(localStorage.removeItem);
+const mockRemoveItem = jest.mocked(localStorage.removeItem);
 
 // jest.mock('react-router-dom', () => ({
 //   ...jest.requireActual('react-router-dom'),
 //   useHistory: jest.fn()
 // }));
-// const mockRouter = mocked(router);
+// const mockRouter = jest.mocked(router);
 
 // const mockHistory = {
 //   push: jest.fn()
@@ -23,7 +23,7 @@ const { location: originalLocation } = window;
 
 beforeAll(() => {
   delete window.location;
-  window.location = ({} as unknown) as Location;
+  window.location = {} as unknown as Location;
   // mockRouter.useHistory.mockReturnValue(
   //   (mockHistory as unknown) as ReturnType<typeof router.useHistory>
   // );

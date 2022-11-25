@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import clsx from 'classnames';
 import { makeStyles, Paper } from '@material-ui/core';
 import { Result } from '../../context/SearchProvider';
+// @ts-ignore:next-line
 import { parseISO, formatDistanceToNow } from 'date-fns';
 import { sanitize } from 'dompurify';
 

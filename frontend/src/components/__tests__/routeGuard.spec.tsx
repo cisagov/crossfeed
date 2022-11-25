@@ -1,13 +1,13 @@
 import React from 'react';
 import * as router from 'react-router-dom';
 import { RouteGuard } from '../RouteGuard';
-import { render, testUser, mocked } from 'test-utils';
+import { render, testUser } from 'test-utils';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useHistory: jest.fn()
 }));
-const routerMock = mocked(router);
+const routerMock = jest.mocked(router);
 
 const Protected: React.FC = () => <div>PROTECTED ROUTE</div>;
 
@@ -18,7 +18,7 @@ beforeEach(() => {
     push: mockPush
   };
   routerMock.useHistory.mockReturnValue(
-    (mockHistory as unknown) as ReturnType<typeof router.useHistory>
+    mockHistory as unknown as ReturnType<typeof router.useHistory>
   );
 });
 

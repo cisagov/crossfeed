@@ -33,7 +33,7 @@ export const TermsOfUse: React.FC = () => {
       history.push('/', {
         message: 'Your account has been successfully created.'
       });
-    } catch (e) {
+    } catch (e: any) {
       setErrors({
         global: e.message ?? e.toString()
       });
