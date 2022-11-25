@@ -3,13 +3,13 @@
   "description": "Crossfeed Documentation",
   "version": "1.0.0",
   "engines": {
-    "node": ">=18.0.0 <19.0.0"
+    "node": ">=16.0.0 <17.0.0"
   },
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "lint": "prettier --check \"**/*.{js,jsx,json,md}\"",
-    "lint:fix": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
     "codegen": "swagger-jsdoc -d ./src/swaggerDef.js -o ./src/generated/swagger.json",
