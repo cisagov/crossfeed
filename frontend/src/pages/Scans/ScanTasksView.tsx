@@ -4,6 +4,7 @@ import { Query } from 'types';
 import { Table, Paginator, ColumnFilter, selectFilter } from 'components';
 import { ScanTask } from 'types';
 import { useAuthContext } from 'context';
+// @ts-ignore:next-line
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import classes from './Scans.module.scss';
 import { FaMinus, FaPlus, FaSyncAlt } from 'react-icons/fa';
@@ -42,7 +43,7 @@ const Log = ({ url, token }: { url: string; token: string }) => {
       <Button
         type="button"
         outline
-        size="small"
+        size={'small' as any}
         onClick={() => setLogKey(Math.random())}
       >
         <FaSyncAlt />
@@ -69,7 +70,7 @@ export const ScanTasksView: React.FC = () => {
           }
         })
       );
-    } catch (e) {
+    } catch (e: any) {
       setErrors({
         global:
           e.status === 422 ? 'Unable to kill scan' : e.message ?? e.toString()

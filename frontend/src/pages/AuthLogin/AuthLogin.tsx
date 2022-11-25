@@ -3,12 +3,7 @@ import { Link } from 'react-router-dom';
 import { AuthForm } from 'components';
 import { Button } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
-import {
-  AmplifyAuthenticator,
-  AmplifySignUp,
-  AmplifySelectMfaType,
-  AmplifySignIn
-} from '@aws-amplify/ui-react';
+import { Authenticator, ThemeProvider } from '@aws-amplify/ui-react';
 import { Translations, onAuthUIStateChange } from '@aws-amplify/ui-components';
 import { I18n } from 'aws-amplify';
 
@@ -26,6 +21,10 @@ I18n.putVocabulariesForLanguage('en-US', {
   [Translations.CODE_LABEL]: 'Enter code:', // 2FA prompt and reset password label
   [Translations.LESS_THAN_TWO_MFA_VALUES_MESSAGE]: ''
 });
+
+const amplifyTheme = {
+  name: 'my-theme'
+};
 
 interface Errors extends Partial<FormData> {
   global?: string;
@@ -78,23 +77,17 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
 
   if (process.env.REACT_APP_USE_COGNITO) {
     return (
-      <AuthForm>
+      <AuthForm as="div">
         <h1>Welcome to Crossfeed</h1>
-        <AmplifyAuthenticator usernameAlias="email">
-          <AmplifySelectMfaType MFATypes={{ TOTP: true }} />
-          {/* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */}
-          <AmplifySignIn
-            slot="sign-in"
+        <ThemeProvider theme={amplifyTheme}>
+          <Authenticator
+            loginMechanisms={['email']}
+            /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
             hideSignUp={
               !showSignUp && !(process.env.NODE_ENV === 'development')
             }
           />
-          <AmplifySignUp
-            slot="sign-up"
-            formFields={[{ type: 'email' }, { type: 'password' }]}
-            usernameAlias="email"
-          />
-        </AmplifyAuthenticator>
+        </ThemeProvider>
       </AuthForm>
     );
   }

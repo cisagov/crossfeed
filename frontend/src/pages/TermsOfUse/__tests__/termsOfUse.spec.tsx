@@ -6,7 +6,7 @@ import { render, fireEvent, waitFor } from 'test-utils';
 //   ...jest.requireActual('react-router-dom'),
 //   useHistory: jest.fn()
 // }));
-// const mockedRouter = mocked(router);
+// const mockedRouter = jest.mocked(router);
 
 // const mockHistory = {
 //   push: jest.fn()
