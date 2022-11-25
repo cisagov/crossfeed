@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
@@ -13,6 +12,8 @@ module.exports = {
     minimize: false
   },
   target: 'node',
+  // These are not used for being built, and they can't build properly, so we exclude them.
+  externals: ['dockerode', 'canvas', 'pg-native', 'ws'],
   mode: 'production',
   module: {
     rules: [
@@ -27,10 +28,6 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new webpack.IgnorePlugin({ resourceRegExp: /^pg-native$/ }),
-    new webpack.IgnorePlugin({ resourceRegExp: /^canvas$/ }) // imported by jsdom from simple-wapplyzer, not used so we can ignore.
-  ],
   resolve: {
     modules: ['node_modules', 'scripts'],
     extensions: ['.ts', '.tsx', '.json', '.js', '.jsx']

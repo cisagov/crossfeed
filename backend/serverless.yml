@@ -3,9 +3,6 @@ service: crossfeed
 custom:
   webpack:
     webpackConfig: 'webpack.backend.config.js'
-    includeModules:
-      forceExclude:
-        - webpack
   customDomain:
     domainName: ${file(env.yml):${self:provider.stage}.DOMAIN, ''}
     basePath: ''
