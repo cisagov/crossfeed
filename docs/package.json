@@ -23,7 +23,10 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.13",
+    "autoprefixer": "^10.4.13",
     "classnames": "^2.2.6",
+    "colorette": "^2.0.19",
+    "css-what": "^6.1.0",
     "eslint-config-react-app": "^5.2.1",
     "gatsby": "^2.32.13",
     "gatsby-plugin-manifest": "^2.5.2",
@@ -39,6 +42,7 @@
     "html-loader": "^1.3.2",
     "jsonfile": "^4.0.0",
     "klona": "^2.0.5",
+    "postcss": "^7.0.39",
     "prettier": "^2.1.2",
     "prismjs": "^1.27.0",
     "prop-types": "^15.7.2",
@@ -51,7 +55,6 @@
     "uswds": "^2.9.0"
   },
   "resolutions": {
-    "postcss": "8.2.10",
     "trim": "0.0.3",
     "sanitize-html": "2.3.2",
     "ssri": "8.0.1",
