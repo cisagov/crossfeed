@@ -1,7 +1,5 @@
 import React from 'react';
 import { render, RenderOptions } from '@testing-library/react';
-// @ts-ignore:next-line
-import { mocked } from 'ts-jest/utils';
 import { MemoryRouter } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../context/AuthContext';
 import { CFThemeProvider } from 'context';
@@ -37,4 +35,4 @@ const customRender = (ui: any, options: CustomRenderOptions = {}) => {
 export * from '@testing-library/react';
 
 // override render method
-export { customRender as render, mocked };
+export { customRender as render };
