@@ -2,6 +2,9 @@
   "name": "crossfeed-docs",
   "description": "Crossfeed Documentation",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=16.0.0 <17.0.0"
+  },
   "scripts": {
     "clean": "rimraf .cache public _site",
     "build": "gatsby build",
