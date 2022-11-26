@@ -36,7 +36,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
-        run: ls && cat package.json && cat package-lock.json && npm i && git diff
+        run: npm ci
       - name: Lint
         run: npm run lint
   test:
