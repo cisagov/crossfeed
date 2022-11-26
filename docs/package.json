@@ -2,35 +2,32 @@
   "name": "crossfeed-docs",
   "description": "Crossfeed Documentation",
   "version": "1.0.0",
-  "engines": {
-    "node": ">=16.0.0 <17.0.0"
-  },
   "scripts": {
+    "clean": "rimraf .cache public _site",
     "build": "gatsby build",
+    "reset": "npx rimraf .git",
     "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "lint": "prettier --check \"**/*.{js,jsx,json,md}\"",
-    "lint:fix": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
     "codegen": "swagger-jsdoc -d ./src/swaggerDef.js -o ./src/generated/swagger.json",
     "postinstall": "npx npm-force-resolutions && npm run codegen"
   },
   "dependencies": {
-    "btoa": "^1.2.1",
-    "nanoid": "^3.3.4"
+    "btoa": "^1.2.1"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.13",
-    "autoprefixer": "^10.4.13",
     "classnames": "^2.2.6",
-    "colorette": "^2.0.19",
-    "css-what": "^6.1.0",
     "eslint-config-react-app": "^5.2.1",
     "gatsby": "^2.32.13",
+    "gatsby-awesome-pagination": "^0.3.6",
     "gatsby-plugin-manifest": "^2.5.2",
     "gatsby-plugin-meta-redirect": "^1.1.1",
+    "gatsby-plugin-offline": "^3.2.38",
     "gatsby-plugin-react-helmet": "^3.3.14",
     "gatsby-plugin-sass": "^2.4.2",
     "gatsby-plugin-sharp": "^2.14.3",
@@ -40,21 +37,22 @@
     "gatsby-source-filesystem": "^2.4.2",
     "gatsby-transformer-remark": "^2.9.2",
     "html-loader": "^1.3.2",
-    "jsonfile": "^4.0.0",
-    "klona": "^2.0.5",
-    "postcss": "^7.0.39",
+    "netlify-cms-app": "^2.13.3",
     "prettier": "^2.1.2",
     "prismjs": "^1.27.0",
     "prop-types": "^15.7.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-helmet": "^6.1.0",
+    "rimraf": "^3.0.2",
     "sass": "^1.29.0",
     "swagger-jsdoc": "^5.0.1",
     "swagger-ui-react": "^4.1.3",
-    "uswds": "^2.9.0"
+    "uswds": "^2.9.0",
+    "xss": "^1.0.10"
   },
   "resolutions": {
+    "postcss": "8.2.10",
     "trim": "0.0.3",
     "sanitize-html": "2.3.2",
     "ssri": "8.0.1",

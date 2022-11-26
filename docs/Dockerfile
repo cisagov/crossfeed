@@ -1,7 +1,7 @@
 # This file is built with Docker context in the main directory (not ./docs)
 # so that ./backend is accessible.
 
-FROM node:16-alpine3.14
+FROM node:14-alpine3.14
 
 WORKDIR /app/docs
 
