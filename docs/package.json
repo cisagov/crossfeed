@@ -23,7 +23,7 @@
     "@fortawesome/react-fontawesome": "^0.1.13",
     "classnames": "^2.2.6",
     "eslint-config-react-app": "^5.2.1",
-    "gatsby": "^2.32.13",
+    "gatsby": "^5.2.0",
     "gatsby-awesome-pagination": "^0.3.6",
     "gatsby-plugin-manifest": "^2.5.2",
     "gatsby-plugin-meta-redirect": "^1.1.1",
