@@ -4,7 +4,7 @@ USER root
 WORKDIR /app
 COPY ./package* ./
 
-RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
+RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm i
 
 COPY . .
 

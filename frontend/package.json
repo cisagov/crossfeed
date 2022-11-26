@@ -6,7 +6,7 @@
     "node": ">=16.0.0 <17.0.0"
   },
   "dependencies": {
-    "@aws-amplify/ui-react": "^3.5.11",
+    "@aws-amplify/ui-react": "^4.0.3",
     "@datapunt/matomo-tracker-react": "^0.5.1",
     "@elastic/react-search-ui": "^1.18.2",
     "@elastic/react-search-ui-views": "^1.18.2",
@@ -37,7 +37,7 @@
     "@types/react-simple-maps": "^3.0.0",
     "@types/react-table": "^7.7.12",
     "autoprefixer": "^10.4.13",
-    "aws-amplify": "^4.3.42",
+    "aws-amplify": "^5.0.4",
     "classnames": "^2.3.2",
     "d3-scale": "^4.0.2",
     "decamelize": "^6.0.0",

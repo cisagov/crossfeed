@@ -4,7 +4,7 @@ USER root
 WORKDIR /app
 COPY ./package* ./
 
-RUN npm ci
+RUN npm i
 
 COPY . .
 

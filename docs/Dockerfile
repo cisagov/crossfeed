@@ -9,7 +9,7 @@ RUN apk add --update --no-cache build-base python3 vips-dev autoconf automake li
 
 COPY ./docs/package* ./
 
-RUN npm ci
+RUN npm i
 
 # Generate swagger definitions
 COPY ./backend ../backend
