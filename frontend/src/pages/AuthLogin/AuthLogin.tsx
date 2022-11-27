@@ -14,7 +14,8 @@ const TOTP_ISSUER = process.env.REACT_APP_TOTP_ISSUER;
 
 // Strings come from https://github.com/aws-amplify/amplify-ui/blob/main/packages/ui/src/i18n/dictionaries/authenticator/en.ts
 I18n.putVocabulariesForLanguage('en-US', {
-  'Setup TOTP': 'Set up 2FA'
+  'Setup TOTP': 'Set up 2FA',
+  'Confirm TOTP Code': 'Enter 2FA Code'
 });
 
 const amplifyTheme = {
@@ -31,7 +32,8 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   const { apiPost } = useAuthContext();
   const [errors, setErrors] = useState<Errors>({});
 
-  const { user } = useAuthenticator((context) => [context.isPending]);
+  const { user, ...rest } = useAuthenticator((context) => [context.isPending]);
+  console.log(rest);
   const formFields = {
     confirmSignIn: {
       confirmation_code: {
@@ -46,12 +48,13 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
     setupTOTP: {
       QR: {
         // Set the issuer and name so that the authenticator app shows them.
+        // TODO: These overrides don't work due to a bug with Amplify. Track this bug: https://github.com/aws-amplify/amplify-ui/issues/3092
         totpIssuer: TOTP_ISSUER,
         totpUsername: user?.attributes?.email
       },
       confirmation_code: {
         label:
-          'Set up 2FA by scanning the QR code with an authenticator app on your phone'
+          'Set up 2FA by scanning the QR code with an authenticator app on your phone.'
       }
     }
   };
