@@ -1,25 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthForm } from 'components';
 import { Button } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
-import { Authenticator, ThemeProvider } from '@aws-amplify/ui-react';
-import { Translations, onAuthUIStateChange } from '@aws-amplify/ui-components';
+import {
+  Authenticator,
+  ThemeProvider,
+  useAuthenticator
+} from '@aws-amplify/ui-react';
 import { I18n } from 'aws-amplify';
 
-const TOTP_ISSUER_PREFIX = process.env.REACT_APP_TOTP_ISSUER;
+const TOTP_ISSUER = process.env.REACT_APP_TOTP_ISSUER;
 
+// Strings come from https://github.com/aws-amplify/amplify-ui/blob/main/packages/ui/src/i18n/dictionaries/authenticator/en.ts
 I18n.putVocabulariesForLanguage('en-US', {
-  [Translations.TOTP_HEADER_TEXT]:
-    'Set up 2FA by scanning the QR code with an authenticator app on your phone:',
-  [Translations.TOTP_LABEL]: 'Enter 2FA security code from the app:',
-  [Translations.TOTP_ISSUER]: TOTP_ISSUER_PREFIX,
-  [Translations.CONFIRM_TOTP_CODE]: 'Enter 2FA Code',
-  [Translations.CONFIRM_SIGN_UP_CODE_LABEL]: 'Email Confirmation Code',
-  [Translations.CONFIRM_SIGN_UP_CODE_PLACEHOLDER]:
-    'Enter code sent to your email address',
-  [Translations.CODE_LABEL]: 'Enter code:', // 2FA prompt and reset password label
-  [Translations.LESS_THAN_TWO_MFA_VALUES_MESSAGE]: ''
+  'Setup TOTP': 'Set up 2FA',
+  'Confirm TOTP Code': 'Enter 2FA Code'
 });
 
 const amplifyTheme = {
@@ -33,30 +29,35 @@ interface Errors extends Partial<FormData> {
 export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   showSignUp = false
 }) => {
-  const { apiPost, refreshUser } = useAuthContext();
+  const { apiPost } = useAuthContext();
   const [errors, setErrors] = useState<Errors>({});
 
-  useEffect(() => {
-    return onAuthUIStateChange((nextAuthState, authData) => {
-      if (nextAuthState === 'TOTPSetup') {
-        // We want to set the issuer to have the email address, so that the authenticator app will show the email address.
-        // userDataKey is in the format: "CognitoIdentityServiceProvider.[app_client_id].email@gmail.com.userData"
-        const email = (authData as any).userDataKey?.match(
-          /^.*?\..*?\.(.*?)\.userData$/
-        )[1];
-        if (email) {
-          I18n.putVocabulariesForLanguage('en-US', {
-            [Translations.TOTP_ISSUER]: `${TOTP_ISSUER_PREFIX}: ${email}`
-          });
-        } else {
-          I18n.putVocabulariesForLanguage('en-US', {
-            [Translations.TOTP_ISSUER]: TOTP_ISSUER_PREFIX
-          });
-        }
+  const { user, ...rest } = useAuthenticator((context) => [context.isPending]);
+  console.log(rest);
+  const formFields = {
+    confirmSignIn: {
+      confirmation_code: {
+        label: 'Enter 2FA Code from your authenticator app'
       }
-      refreshUser();
-    });
-  }, [refreshUser]);
+    },
+    confirmResetPassword: {
+      confirmation_code: {
+        label: 'Enter code sent to your email address'
+      }
+    },
+    setupTOTP: {
+      QR: {
+        // Set the issuer and name so that the authenticator app shows them.
+        // TODO: These overrides don't work due to a bug with Amplify. Track this bug: https://github.com/aws-amplify/amplify-ui/issues/3092
+        totpIssuer: TOTP_ISSUER,
+        totpUsername: user?.attributes?.email
+      },
+      confirmation_code: {
+        label:
+          'Set up 2FA by scanning the QR code with an authenticator app on your phone.'
+      }
+    }
+  };
 
   const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
@@ -82,6 +83,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
         <ThemeProvider theme={amplifyTheme}>
           <Authenticator
             loginMechanisms={['email']}
+            formFields={formFields}
             /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
             hideSignUp={
               !showSignUp && !(process.env.NODE_ENV === 'development')
