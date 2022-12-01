@@ -235,7 +235,7 @@ resource "aws_s3_bucket_logging" "pe_reports_bucket" {
 }
 
 resource "aws_s3_bucket" "pe_db_backups_bucket" {
-  bucket = var.db_backups_bucket_name
+  bucket = var.pe_db_backups_bucket_name
   tags = {
     Project = var.project
     Stage   = var.stage
