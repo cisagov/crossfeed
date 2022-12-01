@@ -270,14 +270,14 @@ variable "export_bucket_name" {
 
 variable "pe_reports_bucket_name" {
   description = "pe_reports_bucket_name"
-  type    = string
-  default = "cisa-crossfeed-pe-reports"
+  type        = string
+  default     = "cisa-crossfeed-pe-reports"
 }
 
 variable "pe_db_backups_bucket_name" {
   description = "pe_db_backups_bucket_name"
-  type    = string
-  default = "cisa-crossfeed-pe-db-backups"
+  type        = string
+  default     = "cisa-crossfeed-pe-db-backups"
 }
 
 variable "user_pool_name" {
