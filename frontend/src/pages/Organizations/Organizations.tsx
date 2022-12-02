@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core';
 import { OrganizationList } from 'components/OrganizationList';
 
 export const Organizations: React.FC = () => {
-  const { user, apiGet, apiPost } = useAuthContext();
+  const { user, apiGet, apiPost, setFeedbackMessage } = useAuthContext();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const classes = useStyles();
 
@@ -46,8 +46,8 @@ export const Organizations: React.FC = () => {
                 // TODO: use a batch call here instead.
                 const createdOrganizations = [];
                 for (const result of results) {
-                  createdOrganizations.push(
-                    await apiPost('/organizations/', {
+                  try {
+                    const created_org = await apiPost('/organizations/', {
                       body: {
                         ...result,
                         // These fields are initially parsed as strings, so they need
@@ -64,8 +64,15 @@ export const Organizations: React.FC = () => {
                             name: tag
                           }))
                       }
-                    })
-                  );
+                    });
+                    createdOrganizations.push(created_org);
+                  } catch (e: any) {
+                    setFeedbackMessage({
+                      message: 'Error Importing Organization Data',
+                      type: 'error'
+                    });
+                    break;
+                  }
                 }
                 setOrganizations(organizations.concat(...createdOrganizations));
               }}
