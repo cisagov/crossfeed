@@ -100,10 +100,23 @@ resource "aws_iam_policy_attachment" "db_accessor_2" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
 
-resource "aws_iam_policy_attachment" "db_accessor_3" {
-  name       = "crossfeed-db-accessor-${var.stage}"
-  roles      = [aws_iam_role.db_accessor.id]
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonS3FullAccess"
+resource "aws_iam_role_policy" "db_accessor_s3_policy" {
+  name_prefix = "crossfeed-db-accessor-${var.stage}"
+  role        = aws_iam_role.db_accessor.id
+  policy      = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:*"
+      ],
+      "Resource": ["${aws_s3_bucket.pe_reports_bucket.arn}", "${aws_s3_bucket.pe_reports_bucket.arn}/*", "${aws_s3_bucket.pe_db_backups_bucket.arn}", "${aws_s3_bucket.pe_db_backups_bucket.arn}/*"]
+    }
+  ]
+}
+EOF
 }
 
 resource "aws_instance" "db_accessor" {
