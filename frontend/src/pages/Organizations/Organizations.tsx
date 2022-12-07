@@ -5,6 +5,7 @@ import { Organization, OrganizationTag } from 'types';
 import { useAuthContext } from 'context';
 import { makeStyles } from '@material-ui/core';
 import { OrganizationList } from 'components/OrganizationList';
+import { OrganizationTable } from 'components/OrganizationTable';
 import { resourceLimits } from 'worker_threads';
 
 export const Organizations: React.FC = () => {
@@ -31,7 +32,7 @@ export const Organizations: React.FC = () => {
         <h1 className={classes.headerLabel}>Organizations</h1>
       </div>
       <div className={oldClasses.root}>
-        <OrganizationList></OrganizationList>
+        <OrganizationTable></OrganizationTable>
         {user?.userType === 'globalAdmin' && (
           <>
             <ImportExport<Organization>
