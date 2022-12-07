@@ -4,7 +4,8 @@ import {
   IsArray,
   IsBoolean,
   IsUUID,
-  IsOptional
+  IsOptional,
+  validateOrReject
 } from 'class-validator';
 import {
   Organization,
@@ -22,8 +23,9 @@ import {
   getOrgMemberships,
   isGlobalViewAdmin
 } from './auth';
-import { In } from 'typeorm';
+import { In, QueryFailedError } from 'typeorm';
 import { plainToClass } from 'class-transformer';
+import { privateEncrypt } from 'crypto';
 
 /**
  * @swagger
@@ -166,25 +168,64 @@ export const update = wrapHandler(async (event) => {
  *    tags:
  *    - Organizations
  */
-export const create = wrapHandler(async (event) => {
+ export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
-  const body = await validateBody(NewOrganization, event.body);
-  await connectToDatabase();
+  
+        
+    const body = JSON.parse(event.body ?? '{}');          
+    // Wrap a lone org in an array, or pass in the unchanged array
+    let organizations:Array<NewOrganization> = (Array.isArray(body) ? body : [ body ]);
+    
+    await validateOrReject(organizations);        
+    await connectToDatabase();
 
-  if ('tags' in body) {
-    body.tags = await findOrCreateTags(body.tags);
-  }
-  const organization = await Organization.create({
-    ...body,
-    createdBy: { id: event.requestContext.authorizer!.id },
-    parent: { id: body.parent }
-  });
-  const res = await organization.save();
-  return {
-    statusCode: 200,
-    body: JSON.stringify(res)
-  };
-});
+    
+    
+    
+    let failedOrganizations:Array<any> = [];
+
+    for(let org of organizations)    
+    {
+      await validateOrReject(org);    
+      try {
+        console.log("Ingesting organization: ", org.name);
+        
+        if ('tags' in org) {
+          org.tags = await findOrCreateTags(org.tags);
+        }
+
+        const organization = await Organization.create({
+          ...org,
+          createdBy: { id: event.requestContext.authorizer!.id },
+          parent: { id: org.parent }
+        });
+
+        await organization.save();
+      }
+      catch(err)
+      {
+        if (err instanceof QueryFailedError)
+        {
+          //keep track of the failed updates, if we get a query update issue, we'll add it to the list                    
+          failedOrganizations.push({'organization': org, 'error': err});
+        }
+        else{          
+          //we aren't going to swallow any other types of errors.
+          throw err;
+        }
+      }
+    }
+    
+
+    return {
+      statusCode: 200,      
+      body: JSON.stringify(
+        { 'Failed Inserts': failedOrganizations }
+        )
+    };
+  }  
+);
+
 
 /**
  * @swagger

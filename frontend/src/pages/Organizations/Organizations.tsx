@@ -1,10 +1,11 @@
 import oldClasses from './Organizations.module.scss';
 import React, { useCallback, useState } from 'react';
 import { ImportExport } from 'components';
-import { Organization } from 'types';
+import { Organization, OrganizationTag } from 'types';
 import { useAuthContext } from 'context';
 import { makeStyles } from '@material-ui/core';
 import { OrganizationList } from 'components/OrganizationList';
+import { resourceLimits } from 'worker_threads';
 
 export const Organizations: React.FC = () => {
   const { user, apiGet, apiPost, setFeedbackMessage } = useAuthContext();
@@ -43,27 +44,36 @@ export const Organizations: React.FC = () => {
                 'tags'
               ]}
               onImport={async (results) => {
-                // TODO: use a batch call here instead.
                 const createdOrganizations = [];
+                // TODO: use a batch call here instead.
+                // format the results objects first
                 for (const result of results) {
+                  result.ipBlocks = (
+                    (result.ipBlocks as unknown as string) || ''
+                  ).split(',');
+                  result.rootDomains = (
+                    (result.rootDomains as unknown as string) || ''
+                  ).split(',');
+
+                  result.tags = ((result.tags as unknown as string) || '')
+                    .split(',')
+                    .map((tag) => ({
+                      name: tag,
+                      id: '',
+                      organizations: [],
+                      scans: []
+                    }));
+                }
+                console.log('Org', results);
+
+                // if results is large, break into 100-org chunks
+                const chunkSize = 100;
+                for (let i = 0; i < results.length; i += chunkSize) {
+                  const chunk = results.slice(i, i + chunkSize);
+                  console.log('Chunk', chunk);
                   try {
                     const created_org = await apiPost('/organizations/', {
-                      body: {
-                        ...result,
-                        // These fields are initially parsed as strings, so they need
-                        // to be converted to arrays.
-                        ipBlocks: (
-                          (result.ipBlocks as unknown as string) || ''
-                        ).split(','),
-                        rootDomains: (
-                          (result.rootDomains as unknown as string) || ''
-                        ).split(','),
-                        tags: ((result.tags as unknown as string) || '')
-                          .split(',')
-                          .map((tag) => ({
-                            name: tag
-                          }))
-                      }
+                      body: chunk
                     });
                     createdOrganizations.push(created_org);
                   } catch (e: any) {
@@ -73,7 +83,9 @@ export const Organizations: React.FC = () => {
                     });
                     break;
                   }
+                  // do whatever
                 }
+
                 setOrganizations(organizations.concat(...createdOrganizations));
               }}
               getDataToExport={() =>
