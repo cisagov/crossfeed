@@ -1,12 +1,18 @@
 import {
+  IsInt,
+  IsPositive,
+  IsIn,
   IsString,
   isUUID,
   IsArray,
   IsBoolean,
+  ValidateNested,
+  IsObject,  
   IsUUID,
   IsOptional,
   validateOrReject
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import {
   Organization,
   connectToDatabase,
@@ -23,7 +29,7 @@ import {
   getOrgMemberships,
   isGlobalViewAdmin
 } from './auth';
-import { In, QueryFailedError } from 'typeorm';
+import { In, QueryFailedError, SelectQueryBuilder } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { privateEncrypt } from 'crypto';
 
@@ -103,6 +109,7 @@ const findOrCreateTags = async (
     }
   }
   return finalTags;
+
 };
 
 /**
@@ -225,6 +232,101 @@ export const update = wrapHandler(async (event) => {
     };
   }  
 );
+
+const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
+
+class OrganizationFilters {
+
+  @IsString()
+  @IsOptional()
+  name?: string;  
+}
+
+
+class OrganizationSearch {
+  @IsInt()
+  @IsPositive()
+  page: number = 1;
+
+  @IsString()
+  @IsIn(['name', 'reverseName', 'ip', 'createdAt', 'updatedAt', 'id'])
+  sort: string = 'name';
+
+  @IsString()
+  @IsIn(['ASC', 'DESC'])
+  order: 'ASC' | 'DESC' = 'DESC';
+
+  @Type(() => OrganizationFilters)
+  @ValidateNested()
+  @IsObject()
+  @IsOptional()
+  filters?: OrganizationFilters;
+
+  @IsInt()
+  @IsOptional()
+  // If set to -1, returns all results.
+  pageSize?: number;
+
+  async filterResultQueryset(qs: SelectQueryBuilder<Organization>, event) {
+    if (this.filters?.name) {
+      qs.andWhere('organization.name ILIKE :name', {
+        name: `%${this.filters?.name}%`
+      });
+    }   
+    return qs;
+  }
+
+  async getResults(event) {
+    const pageSize = this.pageSize || PAGE_SIZE;
+    let qs = Organization.createQueryBuilder('organization')
+      .leftJoinAndSelect("organization.tags", "tags");
+   
+    if (pageSize !== -1) {
+      qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
+    }
+
+    if (!isGlobalViewAdmin(event)) {
+      qs.andWhere('organization.id IN (:...orgs)', {
+        orgs: getOrgMemberships(event)
+      });
+    }
+
+    await this.filterResultQueryset(qs, event);
+    return qs.getManyAndCount();
+  }
+}
+
+
+/**
+ * @swagger
+ *
+ * /organizations/search:
+ *    description: List organizations by specifying a filter.
+ *    tags:
+ *    - Organizations
+ */
+export const search = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        result: [],
+        count: 0
+      })
+    };
+  }
+  await connectToDatabase();
+  const search = await validateBody(OrganizationSearch, event.body);
+  const [result, count] = await search.getResults(event);
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      result,
+      count
+    })
+  };
+});
 
 
 /**

@@ -13,19 +13,6 @@ export const Organizations: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const classes = useStyles();
 
-  const fetchOrganizations = useCallback(async () => {
-    try {
-      const rows = await apiGet<Organization[]>('/organizations/');
-      setOrganizations(rows);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [apiGet]);
-
-  React.useEffect(() => {
-    fetchOrganizations();
-  }, [apiGet, fetchOrganizations]);
-
   return (
     <div>
       <div className={classes.header}>

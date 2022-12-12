@@ -271,6 +271,7 @@ authenticatedRoute.get(
 );
 
 authenticatedRoute.get('/organizations', handlerToExpress(organizations.list));
+authenticatedRoute.post('/organizations/search', handlerToExpress(organizations.search));
 authenticatedRoute.get(
   '/organizations/tags',
   handlerToExpress(organizations.getTags)

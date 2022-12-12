@@ -11,17 +11,40 @@ type CreateColumns = () => Column<Organization>[];
 
 export const createColumns: CreateColumns = () => [
   {
-    Header: 'Details',
-    Cell: ({ row: { original } }: CellProps<Organization>) => (
-      <Link to={`/organizations/${original.id}`}>
-        <FaSearch className="margin-x-auto display-block" />
-      </Link>
-    )
-  },
-  {
     Header: 'Name',
+    Cell: ({ row: { original } }: CellProps<Organization>) => (
+      <Link to={`/organizations/${original.id}`}>{original.name}</Link>
+    ),
     accessor: 'name',
     id: 'name',
     Filter: ColumnFilter
+  },
+  {
+    Header: 'Root Domains',
+    accessor: ({ rootDomains }) =>
+      rootDomains.map((rootDomain) => rootDomain).join(', '),
+    id: 'rootDomain',
+    Filter: ColumnFilter
+  },
+  {
+    Header: 'Tags',
+    accessor: ({ tags }) => tags.map((tag) => tag.name).join(', '),
+    id: 'tags',
+    Filter: ColumnFilter
+  },
+  {
+    Header: 'IP Blocks',
+    accessor: ({ ipBlocks }) => ipBlocks.map((ipBlock) => ipBlock).join(', '),
+    id: 'ipBlocks',
+    Filter: ColumnFilter
+  },
+  {
+    Header: 'Passive',
+    Cell: ({ row: { original } }: CellProps<Organization>) => (
+      <input type="checkbox" checked={original.isPassive}></input>
+    ),
+    accessor: 'isPassive',
+    id: 'isPassive',
+    disableFilters: true
   }
 ];
