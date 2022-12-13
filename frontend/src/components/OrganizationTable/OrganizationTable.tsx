@@ -1,8 +1,7 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { Organization, Query } from 'types';
 import { OrganizationForm } from 'components/OrganizationForm';
-import { Grid, Paper, makeStyles } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+import { Grid, makeStyles } from '@material-ui/core';
 import { useAuthContext } from 'context';
 import { TableInstance } from 'react-table';
 import { Table, Paginator } from 'components';
@@ -20,8 +19,6 @@ export const OrganizationTable: React.FC<{
   const columns = useMemo(() => createColumns(), []);
   const { listOrganizations } = useOrganizationApi();
   const PAGE_SIZE = 15;
-  const classes = useStyles();
-
   const onSubmit = async (body: Object) => {
     try {
       const org = await apiPost('/organizations/', {
