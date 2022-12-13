@@ -32,12 +32,8 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
   children?: React.ReactNode;
   groupBy?: string;
 }) => {
-  const {
-    currentOrganization,
-    apiPost,
-    apiPut,
-    showAllOrganizations
-  } = useAuthContext();
+  const { currentOrganization, apiPost, apiPut, showAllOrganizations } =
+    useAuthContext();
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
   const [totalResults, setTotalResults] = useState(0);
   const tableRef = useRef<TableInstance<Vulnerability>>(null);
@@ -64,9 +60,10 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
     },
     [setVulnerabilities, apiPut, vulnerabilities]
   );
-  const columns = useMemo(() => createColumns(updateVulnerability), [
-    updateVulnerability
-  ]);
+  const columns = useMemo(
+    () => createColumns(updateVulnerability),
+    [updateVulnerability]
+  );
   const groupedColumns = useMemo(() => createGroupedColumns(), []);
 
   const vulnerabilitiesSearch = useCallback(

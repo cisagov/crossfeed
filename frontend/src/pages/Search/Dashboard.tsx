@@ -20,8 +20,10 @@ import { ContextType } from '../../context/SearchProvider';
 import { SortBar } from './SortBar';
 import {
   Button as USWDSButton,
+  // @ts-ignore:next-line
   Overlay,
   Modal,
+  // @ts-ignore:next-line
   ModalContainer,
   TextInput,
   Label,
@@ -281,6 +283,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
           <ModalContainer>
             <Modal
               className={classes.saveSearchModal}
+              // @ts-ignore:next-line
               actions={
                 <>
                   <USWDSButton
@@ -318,7 +321,13 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
                   </USWDSButton>
                 </>
               }
-              title={search ? <h2>Update Search</h2> : <h2>Save Search</h2>}
+              title={
+                search ? (
+                  <h2>Update Search</h2>
+                ) : (
+                  ((<h2>Save Search</h2>) as any)
+                )
+              }
             >
               <FormGroup>
                 <Label htmlFor="name">Name Your Search</Label>

@@ -5,7 +5,9 @@ import { useAuthContext } from 'context';
 import { SavedSearch } from 'types';
 import { Subnav } from 'components';
 import {
+  // @ts-ignore:next-line
   Overlay,
+  // @ts-ignore:next-line
   ModalContainer,
   Button,
   Modal
@@ -13,7 +15,7 @@ import {
 import { NoResults } from 'components/NoResults';
 
 const Feeds = () => {
-  const classes = useStyles();
+  const classes = useStyles({} as any);
   const { apiGet, apiDelete } = useAuthContext();
   const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
   const [pageState, setPageState] = useState({
@@ -185,6 +187,7 @@ const Feeds = () => {
           <Overlay />
           <ModalContainer>
             <Modal
+              // @ts-ignore:next-line
               actions={
                 <>
                   <Button
@@ -207,7 +210,7 @@ const Feeds = () => {
                   </Button>
                 </>
               }
-              title={<h2>Delete search?</h2>}
+              title={(<h2>Delete search?</h2>) as any}
             >
               <p>
                 Are you sure that you would like to delete this saved search?
@@ -306,7 +309,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'block'
   },
   count: {
-    color: theme.palette.error.light
+    color: theme?.palette?.error?.light
   },
   data: {
     display: 'block',
@@ -348,20 +351,20 @@ const useStyles = makeStyles((theme) => ({
     outline: 'none',
     border: 'none',
     background: 'none',
-    color: theme.palette.secondary.main,
+    color: theme?.palette?.secondary?.main,
     margin: '0 0.2rem',
     cursor: 'pointer'
   },
   barWrapper: {
     zIndex: 101,
     width: '100%',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme?.palette?.background?.paper,
     height: '100px',
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'center',
     boxShadow: ({ inpFocused }: any) =>
-      inpFocused ? theme.shadows[4] : theme.shadows[1],
+      inpFocused ? theme?.shadows[4] : theme?.shadows[1],
     transition: 'box-shadow 0.3s linear',
     marginBottom: '40px'
   },

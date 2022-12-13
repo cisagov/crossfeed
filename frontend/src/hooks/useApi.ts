@@ -37,29 +37,27 @@ export const useApi = (onError?: OnError) => {
   const { trackEvent } = useMatomo();
 
   const apiMethod = useCallback(
-    (method: ApiMethod, methodName: string) => async <T extends object = any>(
-      path: string,
-      init: any = {}
-    ) => {
-      const { showLoading = true, ...rest } = init;
-      try {
-        trackEvent({
-          category: 'apiMethod',
-          action: methodName,
-          name: path,
-          documentTitle: document.title
-        });
-        showLoading && setRequestCount((cnt) => cnt + 1);
-        const options = await prepareInit(rest);
-        const result = await method('crossfeed', path, options);
-        showLoading && setRequestCount((cnt) => cnt - 1);
-        return result as T;
-      } catch (e) {
-        showLoading && setRequestCount((cnt) => cnt - 1);
-        onError && onError(e);
-        throw e;
-      }
-    },
+    (method: ApiMethod, methodName: string) =>
+      async <T extends object = any>(path: string, init: any = {}) => {
+        const { showLoading = true, ...rest } = init;
+        try {
+          trackEvent({
+            category: 'apiMethod',
+            action: methodName,
+            name: path,
+            documentTitle: document.title
+          });
+          showLoading && setRequestCount((cnt) => cnt + 1);
+          const options = await prepareInit(rest);
+          const result = await method('crossfeed', path, options);
+          showLoading && setRequestCount((cnt) => cnt - 1);
+          return result as T;
+        } catch (e: any) {
+          showLoading && setRequestCount((cnt) => cnt - 1);
+          onError && onError(e);
+          throw e;
+        }
+      },
     // Adding trackEvent to deps causes an infinite loop.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [prepareInit, onError]
@@ -70,9 +68,10 @@ export const useApi = (onError?: OnError) => {
     apiPost: useMemo(() => apiMethod(API.post.bind(API), 'post'), [apiMethod]),
     apiDelete: useMemo(() => apiMethod(API.del.bind(API), 'del'), [apiMethod]),
     apiPut: useMemo(() => apiMethod(API.put.bind(API), 'put'), [apiMethod]),
-    apiPatch: useMemo(() => apiMethod(API.patch.bind(API), 'patch'), [
-      apiMethod
-    ])
+    apiPatch: useMemo(
+      () => apiMethod(API.patch.bind(API), 'patch'),
+      [apiMethod]
+    )
   };
 
   return {

@@ -63,7 +63,7 @@ class DomainSearch {
   page: number = 1;
 
   @IsString()
-  @IsIn(['name', 'reverseName', 'ip', 'updatedAt', 'id'])
+  @IsIn(['name', 'reverseName', 'ip', 'createdAt', 'updatedAt', 'id'])
   sort: string = 'name';
 
   @IsString()

@@ -4,19 +4,19 @@ custom:
   webpack:
     webpackConfig: 'webpack.backend.config.js'
   customDomain:
-    domainName: ${file(./env.yml):${self:provider.stage}.DOMAIN, ''}
+    domainName: ${file(env.yml):${self:provider.stage}.DOMAIN, ''}
     basePath: ''
-    certificateName: ${file(./env.yml):${self:provider.stage}.DOMAIN, ''}
+    certificateName: ${file(env.yml):${self:provider.stage}.DOMAIN, ''}
     stage: ${self:provider.stage}
     createRoute53Record: true
 
 provider:
   name: aws
   region: us-east-1
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   timeout: 30
   stage: ${opt:stage, 'dev'}
-  environment: ${file(env.yml):${self:provider.stage}}
+  environment: ${file(env.yml):${self:provider.stage}, ''}
   vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
   apiGateway:
     binaryMediaTypes:
