@@ -4,7 +4,7 @@ import classes from './styles.module.scss';
 import { DomainDetails } from 'components';
 
 export const Domain: React.FC = () => {
-  const { domainId } = useParams<any>();
+  const { domainId } = useParams();
 
   return (
     <div className={classes.root}>

@@ -21,7 +21,7 @@ export const OrganizationList: React.FC<{
         body
       });
       setOrganizations(organizations.concat(org));
-    } catch (e: any) {
+    } catch (e) {
       setFeedbackMessage({
         message:
           e.status === 422

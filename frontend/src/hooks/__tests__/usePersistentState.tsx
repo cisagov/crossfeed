@@ -1,12 +1,12 @@
 import React from 'react';
 import { usePersistentState } from 'hooks';
-import { render, fireEvent, waitFor } from 'test-utils';
+import { render, mocked, fireEvent, waitFor } from 'test-utils';
 
 jest.spyOn(Storage.prototype, 'setItem');
-const setItemMock = jest.mocked(localStorage.setItem);
+const setItemMock = mocked(localStorage.setItem);
 
 jest.spyOn(Storage.prototype, 'getItem');
-const getItemMock = jest.mocked(localStorage.getItem);
+const getItemMock = mocked(localStorage.getItem);
 
 interface TestCompProps {
   storagekey: string;

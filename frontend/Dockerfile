@@ -1,10 +1,9 @@
-FROM node:16-alpine3.14
-USER root
+FROM node:14-alpine3.14
 
 WORKDIR /app
 COPY ./package* ./
 
-RUN npm i
+RUN npm ci
 
 COPY . .
 

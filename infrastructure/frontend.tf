@@ -51,17 +51,17 @@ locals {
 resource "aws_cloudfront_response_headers_policy" "security_headers" {
   name = "crossfeed-${var.stage}-security-headers-policy"
 
-
-  security_headers_config {
-    frame_options {
-      frame_option = "SAMEORIGIN"
-      override     = true
+  custom_headers_config {
+    items {
+      header   = "Strict-Transport-Security"
+      override = true
+      value    = "max-age=31536000; includeSubdomains; preload"
     }
-    strict_transport_security {
-      access_control_max_age_sec = "31536000"
-      include_subdomains         = true
-      override                   = true
-      preload                    = true
+
+    items {
+      header   = "X-Frame-Options"
+      override = true
+      value    = "SAMEORIGIN"
     }
   }
 }

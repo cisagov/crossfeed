@@ -1,3 +1,4 @@
+import { mocked } from 'ts-jest/utils';
 import { getLiveWebsites, LiveDomain } from '../helpers/getLiveWebsites';
 import {
   connectToDatabase,

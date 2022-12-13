@@ -4,9 +4,7 @@ import {
   Button,
   TextInput,
   Label,
-  // @ts-ignore:next-line
   ModalContainer,
-  // @ts-ignore:next-line
   Overlay,
   Modal
 } from '@trussworks/react-uswds';
@@ -16,7 +14,6 @@ import { Column } from 'react-table';
 import { User } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
-// @ts-ignore:next-line
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { Radio, RadioGroup, FormControlLabel } from '@material-ui/core';
 
@@ -146,7 +143,7 @@ export const Users: React.FC = () => {
       const row = users[index];
       await apiDelete(`/users/${row.id}`, { body: {} });
       setUsers(users.filter((user) => user.id !== row.id));
-    } catch (e: any) {
+    } catch (e) {
       setErrors({
         global:
           e.status === 422 ? 'Unable to delete user' : e.message ?? e.toString()
@@ -168,7 +165,7 @@ export const Users: React.FC = () => {
         body
       });
       setUsers(users.concat(user));
-    } catch (e: any) {
+    } catch (e) {
       setErrors({
         global:
           e.status === 422
@@ -315,7 +312,6 @@ export const Users: React.FC = () => {
           <Overlay />
           <ModalContainer>
             <Modal
-              // @ts-ignore:next-line
               actions={
                 <>
                   <Button
@@ -338,7 +334,7 @@ export const Users: React.FC = () => {
                   </Button>
                 </>
               }
-              title={(<h2>Delete user?</h2>) as any}
+              title={<h2>Delete user?</h2>}
             >
               <p>
                 Are you sure you would like to delete{' '}

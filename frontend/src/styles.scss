@@ -1,20 +1,18 @@
 @import '~@trussworks/react-uswds/lib/index.css';
-
-$theme-font-path: '~uswds/fonts';
-$theme-image-path: '~uswds/img';
+$theme-font-path: '~uswds/dist/fonts';
+$theme-image-path: '~uswds/dist/img';
 $theme-show-notifications: false;
 
 // Import required global packages
-@import '~uswds/scss/packages/required';
-@import '~uswds/scss/packages/global';
-@import '~uswds/scss/packages/uswds-utilities';
-@import '~uswds/scss/packages/usa-banner';
-@import '~uswds/scss/packages/usa-header';
-@import '~uswds/scss/packages/usa-table';
-@import '~uswds/scss/packages/usa-alert';
-@import '~uswds/scss/packages/form-controls';
+@import '~uswds/dist/scss/packages/required';
+@import '~uswds/dist/scss/packages/global';
 
-@import "@aws-amplify/ui-react/styles.css";
+@import '~uswds/dist/scss/packages/uswds-utilities';
+@import '~uswds/dist/scss/packages/usa-banner';
+@import '~uswds/dist/scss/packages/usa-header';
+@import '~uswds/dist/scss/packages/usa-table';
+@import '~uswds/dist/scss/packages/usa-alert';
+@import '~uswds/dist/scss/packages/form-controls';
 
 html,
 body {
@@ -66,15 +64,13 @@ body {
 }
 
 :root {
-  // --amplify-primary-color: #005ea2;
-  // --amplify-primary-tint: #73b3e7;
-  // --amplify-primary-shade: #1a4480;
+  --amplify-primary-color: #005ea2;
+  --amplify-primary-tint: #73b3e7;
+  --amplify-primary-shade: #1a4480;
+  --amplify-font-family: 'Source Sans Pro Web', 'Helvetica Neue', Helvetica,
+    Roboto, Arial, sans-serif;
 }
 
 amplify-authenticator {
   --container-height: 100%;
-}
-
-h3.amplify-heading {
-  font-size: 150%;
 }

@@ -2,9 +2,7 @@ import classes from './Scans.module.scss';
 import React, { useCallback, useState } from 'react';
 import {
   Button,
-  // @ts-ignore:next-line
   ModalContainer,
-  // @ts-ignore:next-line
   Overlay,
   Modal
 } from '@trussworks/react-uswds';
@@ -14,7 +12,6 @@ import { Scan, Organization, ScanSchema, OrganizationTag } from 'types';
 import { FaTimes, FaEdit } from 'react-icons/fa';
 import { FaPlayCircle } from 'react-icons/fa';
 import { useAuthContext } from 'context';
-// @ts-ignore:next-line
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { setFrequency } from 'pages/Scan/Scan';
@@ -197,7 +194,7 @@ const ScansView: React.FC = () => {
       const row = scans[index];
       await apiDelete(`/scans/${row.id}`, { body: {} });
       setScans(scans.filter((scan) => scan.id !== row.id));
-    } catch (e: any) {
+    } catch (e) {
       setErrors({
         global:
           e.status === 422 ? 'Unable to delete scan' : e.message ?? e.toString()
@@ -222,7 +219,7 @@ const ScansView: React.FC = () => {
         }
       });
       setScans(scans.concat(scan));
-    } catch (e: any) {
+    } catch (e) {
       setErrors({
         global: e.message ?? e.toString()
       });
@@ -288,7 +285,7 @@ const ScansView: React.FC = () => {
                   // These fields are initially parsed as strings, so they need
                   // to be converted to objects.
                   arguments: JSON.parse(
-                    (result.arguments as unknown as string) || ''
+                    ((result.arguments as unknown) as string) || ''
                   )
                 }
               })
@@ -309,7 +306,6 @@ const ScansView: React.FC = () => {
           <Overlay />
           <ModalContainer>
             <Modal
-              // @ts-ignore:next-line
               actions={
                 <>
                   <Button
@@ -332,7 +328,7 @@ const ScansView: React.FC = () => {
                   </Button>
                 </>
               }
-              title={(<h2>Delete scan?</h2>) as any}
+              title={<h2>Delete scan?</h2>}
             >
               <p>
                 Are you sure you would like to delete the{' '}

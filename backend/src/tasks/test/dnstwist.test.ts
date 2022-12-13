@@ -27,20 +27,20 @@ describe('dnstwist', () => {
       stdout: `[
                 {
                     "fuzzer": "Homoglyph",
-                    "domain": "test-domain.one",
-                    "dns_a": ["21.22.23.24"]
+                    "domain-name": "test-domain.one",
+                    "dns-a": ["21.22.23.24"]
                 },
                 {
                     "fuzzer": "Original",
-                    "domain": "test-domain.two",
-                    "dns_a": ["01.02.03.04"],
-                    "dns_mx": ["localhost"]
+                    "domain-name": "test-domain.two",
+                    "dns-a": ["01.02.03.04"],
+                    "dns-mx": ["localhost"]
                 },
                 {
                     "fuzzer": "tls",
-                    "domain": "test-domain.three",
-                    "dns_a": ["10.11.12.13"],
-                    "dns_ns": ["example.link"]
+                    "domain-name": "test-domain.three",
+                    "dns-a": ["10.11.12.13"],
+                    "dns-ns": ["example.link"]
                 }
             ]`,
       stderr: ''
@@ -116,23 +116,23 @@ describe('dnstwist', () => {
       domains: [
         {
           fuzzer: 'Homoglyph',
-          domain: 'test-domain.one',
-          dns_a: ['21.22.23.24'],
-          date_first_observed: '2019-04-22T10:20:30.000Z'
+          'domain-name': 'test-domain.one',
+          'dns-a': ['21.22.23.24'],
+          'date-first-observed': '2019-04-22T10:20:30.000Z'
         },
         {
           fuzzer: 'Original',
-          domain: 'test-domain.two',
-          dns_a: ['01.02.03.04'],
-          dns_mx: ['localhost'],
-          date_first_observed: '2019-04-22T10:20:30.000Z'
+          'domain-name': 'test-domain.two',
+          'dns-a': ['01.02.03.04'],
+          'dns-mx': ['localhost'],
+          'date-first-observed': '2019-04-22T10:20:30.000Z'
         },
         {
           fuzzer: 'tls',
-          domain: 'test-domain.three',
-          dns_a: ['10.11.12.13'],
-          dns_ns: ['example.link'],
-          date_first_observed: '2019-04-22T10:20:30.000Z'
+          'domain-name': 'test-domain.three',
+          'dns-a': ['10.11.12.13'],
+          'dns-ns': ['example.link'],
+          'date-first-observed': '2019-04-22T10:20:30.000Z'
         }
       ]
     };
@@ -207,9 +207,9 @@ describe('dnstwist', () => {
         domains: [
           {
             fuzzer: 'Homoglyph',
-            domain: 'test-domain.one',
-            dns_a: ['21.22.23.24'],
-            date_first_observed: '2018-04-22T10:20:30.000Z'
+            'domain-name': 'test-domain.one',
+            'dns-a': ['21.22.23.24'],
+            'date-first-observed': '2018-04-22T10:20:30.000Z'
           }
         ]
       }
@@ -232,23 +232,23 @@ describe('dnstwist', () => {
       domains: [
         {
           fuzzer: 'Homoglyph',
-          domain: 'test-domain.one',
-          dns_a: ['21.22.23.24'],
-          date_first_observed: '2018-04-22T10:20:30.000Z'
+          'domain-name': 'test-domain.one',
+          'dns-a': ['21.22.23.24'],
+          'date-first-observed': '2018-04-22T10:20:30.000Z'
         },
         {
           fuzzer: 'Original',
-          domain: 'test-domain.two',
-          dns_a: ['01.02.03.04'],
-          dns_mx: ['localhost'],
-          date_first_observed: '2019-04-22T10:20:30.000Z'
+          'domain-name': 'test-domain.two',
+          'dns-a': ['01.02.03.04'],
+          'dns-mx': ['localhost'],
+          'date-first-observed': '2019-04-22T10:20:30.000Z'
         },
         {
           fuzzer: 'tls',
-          domain: 'test-domain.three',
-          dns_a: ['10.11.12.13'],
-          dns_ns: ['example.link'],
-          date_first_observed: '2019-04-22T10:20:30.000Z'
+          'domain-name': 'test-domain.three',
+          'dns-a': ['10.11.12.13'],
+          'dns-ns': ['example.link'],
+          'date-first-observed': '2019-04-22T10:20:30.000Z'
         }
       ]
     };
@@ -269,15 +269,15 @@ describe('dnstwist', () => {
         domains: [
           {
             fuzzer: 'Homoglyph',
-            domain: 'test-domain.one',
-            dns_a: ['21.22.23.24'],
-            date_first_observed: '2018-04-22T10:20:30.000Z'
+            'domain-name': 'test-domain.one',
+            'dns-a': ['21.22.23.24'],
+            'date-first-observed': '2018-04-22T10:20:30.000Z'
           },
           {
             fuzzer: 'Homoglyph',
-            domain: 'old.test-domain',
-            dns_a: ['21.22.23.24'],
-            date_first_observed: '2018-04-22T10:20:30.000Z'
+            'domain-name': 'old.test-domain',
+            'dns-a': ['21.22.23.24'],
+            'date-first-observed': '2018-04-22T10:20:30.000Z'
           }
         ]
       }
@@ -300,23 +300,23 @@ describe('dnstwist', () => {
       domains: [
         {
           fuzzer: 'Homoglyph',
-          domain: 'test-domain.one',
-          dns_a: ['21.22.23.24'],
-          date_first_observed: '2018-04-22T10:20:30.000Z'
+          'domain-name': 'test-domain.one',
+          'dns-a': ['21.22.23.24'],
+          'date-first-observed': '2018-04-22T10:20:30.000Z'
         },
         {
           fuzzer: 'Original',
-          domain: 'test-domain.two',
-          dns_a: ['01.02.03.04'],
-          dns_mx: ['localhost'],
-          date_first_observed: '2019-04-22T10:20:30.000Z'
+          'domain-name': 'test-domain.two',
+          'dns-a': ['01.02.03.04'],
+          'dns-mx': ['localhost'],
+          'date-first-observed': '2019-04-22T10:20:30.000Z'
         },
         {
           fuzzer: 'tls',
-          domain: 'test-domain.three',
-          dns_a: ['10.11.12.13'],
-          dns_ns: ['example.link'],
-          date_first_observed: '2019-04-22T10:20:30.000Z'
+          'domain-name': 'test-domain.three',
+          'dns-a': ['10.11.12.13'],
+          'dns-ns': ['example.link'],
+          'date-first-observed': '2019-04-22T10:20:30.000Z'
         }
       ]
     };

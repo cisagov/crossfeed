@@ -1,21 +1,14 @@
-import React, { ElementType } from 'react';
+import React from 'react';
 import classes from './styles.module.scss';
 
-interface Props extends Partial<JSX.IntrinsicElements['form']> {
-  // If set, will use this component instead of <form>.
-  as?: ElementType;
-}
+interface Props extends Partial<JSX.IntrinsicElements['form']> {}
 
-export const AuthForm: React.FC<Props> = ({
-  children,
-  as: Tag = 'form',
-  ...rest
-}) => {
+export const AuthForm: React.FC<Props> = ({ children, ...rest }) => {
   return (
     <div className={classes.root}>
-      <Tag className={classes.form} {...rest}>
+      <form className={classes.form} {...rest}>
         {children}
-      </Tag>
+      </form>
     </div>
   );
 };
