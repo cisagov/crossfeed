@@ -12,6 +12,7 @@ import {
 } from 'types';
 import { Column } from 'react-table';
 import { Subnav, Table } from 'components';
+// @ts-ignore:next-line
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import {
   Chip,
@@ -39,13 +40,8 @@ interface AutocompleteType extends Partial<OrganizationTag> {
 }
 
 export const Organization: React.FC = () => {
-  const {
-    apiGet,
-    apiPut,
-    apiPost,
-    user,
-    setFeedbackMessage
-  } = useAuthContext();
+  const { apiGet, apiPut, apiPost, user, setFeedbackMessage } =
+    useAuthContext();
   const { organizationId } = useParams<{ organizationId: string }>();
   const [organization, setOrganization] = useState<OrganizationType>();
   const [tags, setTags] = useState<AutocompleteType[]>([]);
@@ -339,7 +335,7 @@ export const Organization: React.FC = () => {
         message: 'Organization successfully updated',
         type: 'success'
       });
-    } catch (e) {
+    } catch (e: any) {
       setFeedbackMessage({
         message:
           e.status === 422
@@ -370,7 +366,7 @@ export const Organization: React.FC = () => {
               (granularScan) => granularScan.id !== scan.id
             )
       });
-    } catch (e) {
+    } catch (e: any) {
       setFeedbackMessage({
         message:
           e.status === 422 ? 'Error updating scan' : e.message ?? e.toString(),
@@ -405,7 +401,7 @@ export const Organization: React.FC = () => {
       } else {
         setUserRoles(userRoles.concat([newRole]));
       }
-    } catch (e) {
+    } catch (e: any) {
       setFeedbackMessage({
         message:
           e.status === 422 ? 'Error inviting user' : e.message ?? e.toString(),
@@ -534,15 +530,20 @@ export const Organization: React.FC = () => {
               />
             </>
           ) : (
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label={dialog.label && dialog.label.slice(0, -1)}
-              type="text"
-              fullWidth
-              onChange={(e) => setInputValue(e.target.value)}
-            />
+            <>
+              <DialogContentText>
+                Separate multiple entries by commas.
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label={dialog.label && dialog.label.slice(0, -1)}
+                type="text"
+                fullWidth
+                onChange={(e) => setInputValue(e.target.value)}
+              />
+            </>
           )}
         </DialogContent>
         <DialogActions>
@@ -555,7 +556,10 @@ export const Organization: React.FC = () => {
             onClick={() => {
               if (dialog.type && dialog.type !== 'tags') {
                 if (inputValue) {
-                  organization[dialog.type].push(inputValue);
+                  // Allow adding multiple values with a comma delimiter
+                  organization[dialog.type].push(
+                    ...inputValue.split(',').map((e) => e.trim())
+                  );
                   setOrganization({ ...organization });
                 }
               } else {
@@ -741,7 +745,7 @@ export const Organization: React.FC = () => {
   if (!organization.parent) {
     navItems = navItems.concat([
       // { title: 'Teams', path: `/organizations/${organizationId}/teams` },
-      { title: 'Scans', path: `/organizations/${organizationId}/scans` }
+      // { title: 'Scans', path: `/organizations/${organizationId}/scans` }
     ]);
   }
 

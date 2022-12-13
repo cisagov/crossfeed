@@ -53,12 +53,12 @@ export const Organizations: React.FC = () => {
                         // These fields are initially parsed as strings, so they need
                         // to be converted to arrays.
                         ipBlocks: (
-                          ((result.ipBlocks as unknown) as string) || ''
+                          (result.ipBlocks as unknown as string) || ''
                         ).split(','),
                         rootDomains: (
-                          ((result.rootDomains as unknown) as string) || ''
+                          (result.rootDomains as unknown as string) || ''
                         ).split(','),
-                        tags: (((result.tags as unknown) as string) || '')
+                        tags: ((result.tags as unknown as string) || '')
                           .split(',')
                           .map((tag) => ({
                             name: tag

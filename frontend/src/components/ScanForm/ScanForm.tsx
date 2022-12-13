@@ -55,9 +55,8 @@ export const ScanForm: React.FC<{
     organizations: scan ? propValues.organizations : [],
     tags: scan ? propValues.tags : []
   });
-  const [organizationOptions, setOrganizationOptions] = useState<
-    OrganizationOption[]
-  >(organizationOption);
+  const [organizationOptions, setOrganizationOptions] =
+    useState<OrganizationOption[]>(organizationOption);
   const [tagOptions, setTagOptions] = useState<OrganizationOption[]>([]);
   const [values, setValues] = useState<ScanFormValues>(setDefault());
   const [schemaUpdated, setSchemaUpdated] = useState<boolean>(false);

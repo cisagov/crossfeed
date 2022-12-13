@@ -6,6 +6,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Column, CellProps } from 'react-table';
 import { Vulnerability } from 'types';
+// @ts-ignore:next-line
 import { differenceInCalendarDays, parseISO } from 'date-fns';
 
 const extLink = <FaExternalLinkAlt style={{ width: 12 }}></FaExternalLinkAlt>;
