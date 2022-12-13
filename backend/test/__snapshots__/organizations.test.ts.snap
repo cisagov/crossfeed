@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`organizations create can't add organization with the same name 1`] = `Object {}`;
