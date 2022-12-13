@@ -56,6 +56,97 @@ describe('organizations', () => {
         'test'
       );
     });
+
+    it('can add multiple organizations in one post, but know when some fail', async () => {
+      const user = await User.create({
+        firstName: '',
+        lastName: '',
+        email: Math.random() + '@crossfeed.cisa.gov',
+        userType: UserType.GLOBAL_ADMIN
+      }).save();
+      const name = 'test-' + Math.random();
+      const name2 = 'test-' + Math.random();
+      const name3 = 'test-' + Math.random();
+      let response = await request(app)
+        .post('/organizations/')
+        .set(
+          'Authorization',
+          createUserToken({
+            id: user.id,
+            userType: UserType.GLOBAL_ADMIN
+          })
+        )
+        .send([
+          {
+            ipBlocks: [],
+            name: name,
+            rootDomains: ['cisa.gov'],
+            isPassive: false,
+            tags: []
+          },
+          {
+            ipBlocks: [],
+            name: name2,
+            rootDomains: ['whitehouse.gov'],
+            isPassive: true,
+            tags: []
+          }
+        ])
+        .expect(200);
+      expect(response.body.failedInserts).toBeDefined();
+      expect(response.body.failedInserts).toHaveLength(0);
+      //expect 0 successful insert
+      expect(response.body.createdOrganizations).toBeDefined();
+      expect(response.body.createdOrganizations).toHaveLength(2);
+      response = await request(app)
+        .post('/organizations/')
+        .set(
+          'Authorization',
+          createUserToken({
+            id: user.id,
+            userType: UserType.GLOBAL_ADMIN
+          })
+        )
+        .send([
+          {
+            ipBlocks: ['127.0.0.1'],
+            name: name3,
+            rootDomains: ['foo.bar'],
+            isPassive: false,
+            tags: []
+          },
+          {
+            ipBlocks: [],
+            name: name2,
+            rootDomains: ['whitehouse.gov'],
+            isPassive: true,
+            tags: []
+          }
+        ])
+        .expect(200);
+      expect(response.body.failedInserts).toBeDefined();
+      expect(response.body.failedInserts).toHaveLength(1);
+      expect(response.body.failedInserts[0].organization.ipBlocks).toHaveLength(
+        0
+      );
+      expect(response.body.failedInserts[0].organization.name).toEqual(name2);
+      expect(response.body.failedInserts[0].organization.isPassive).toEqual(
+        true
+      );
+      expect(response.body.failedInserts[0].organization.tags).toHaveLength(0);
+
+      //expect 0 successful insert
+      expect(response.body.createdOrganizations).toBeDefined();
+      expect(response.body.createdOrganizations).toHaveLength(1);
+      expect(response.body.createdOrganizations[0].name).toEqual(name3);
+      expect(response.body.createdOrganizations[0].isPassive).toEqual(false);
+      expect(response.body.createdOrganizations[0].rootDomains[0]).toEqual(
+        'foo.bar'
+      );
+      expect(response.body.createdOrganizations[0].ipBlocks[0]).toEqual(
+        '127.0.0.1'
+      );
+    });
     it("can't add organization with the same name", async () => {
       const user = await User.create({
         firstName: '',
