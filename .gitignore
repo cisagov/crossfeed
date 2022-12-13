@@ -46,3 +46,4 @@ minio-data
 infrastructure/lambdas/security_headers.zip
 *.hcl
 .iac-data
+.vscode/settings.json

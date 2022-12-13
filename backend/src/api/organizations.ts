@@ -185,9 +185,9 @@ export const create = wrapHandler(async (event) => {
 
   await validateOrReject(organizations);
   await connectToDatabase();
-
+  let statusCode: number;
   const failedOrganizations: Array<any> = [];
-
+  const createdOrganizations: Array<any> = [];
   for (const org of organizations) {
     await validateOrReject(org);
     try {
@@ -203,21 +203,34 @@ export const create = wrapHandler(async (event) => {
         parent: { id: org.parent }
       });
 
-      await organization.save();
+      //store a successful save in the "created" list
+      const res = await organization.save();
+      createdOrganizations.push(res);
     } catch (err) {
       if (err instanceof QueryFailedError) {
         //keep track of the failed updates, if we get a query update issue, we'll add it to the list
-        failedOrganizations.push({ organization: org, error: err });
+        failedOrganizations.push({ organization: org, error: err.message });
       } else {
         //we aren't going to swallow any other types of errors.
         throw err;
       }
     }
   }
+  //if there were NO successful inserts, return 500, otherwise return a 200
+  if (createdOrganizations.length == 0) {
+    statusCode = 500;
+  } else {
+    statusCode = 200;
+  }
+
+  //return a summary of both successful and failed operations.
 
   return {
-    statusCode: 200,
-    body: JSON.stringify({ 'Failed Inserts': failedOrganizations })
+    statusCode: statusCode,
+    body: JSON.stringify({
+      createdOrganizations: createdOrganizations,
+      failedInserts: failedOrganizations
+    })
   };
 });
 

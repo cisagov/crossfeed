@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { Organization, Query } from 'types';
 import { OrganizationForm } from 'components/OrganizationForm';
+import { Grid, Paper, makeStyles } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
 import { useAuthContext } from 'context';
 import { TableInstance } from 'react-table';
 import { Table, Paginator } from 'components';
@@ -10,14 +12,15 @@ import { useOrganizationApi } from 'hooks';
 export const OrganizationTable: React.FC<{
   parent?: Organization;
 }> = ({ parent }) => {
-  const { apiPost, setFeedbackMessage } = useAuthContext();
+  const { apiPost, setFeedbackMessage, user } = useAuthContext();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const tableRef = useRef<TableInstance<Organization>>(null);
   const [totalResults, setTotalResults] = useState(0);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const columns = useMemo(() => createColumns(), []);
   const { listOrganizations } = useOrganizationApi();
   const PAGE_SIZE = 15;
+  const classes = useStyles();
 
   const onSubmit = async (body: Object) => {
     try {
@@ -56,6 +59,13 @@ export const OrganizationTable: React.FC<{
 
   return (
     <>
+      {user?.userType === 'globalAdmin' && (
+        <Grid item>
+          <button onClick={() => setDialogOpen(true)}>
+            Create new {parent ? 'Team' : 'Organization'}
+          </button>
+        </Grid>
+      )}
       <Table<Organization>
         renderPagination={renderPagination}
         tableRef={tableRef}
@@ -75,3 +85,22 @@ export const OrganizationTable: React.FC<{
     </>
   );
 };
+const useStyles = makeStyles((theme) => ({
+  cardRoot: {
+    cursor: 'pointer',
+    boxSizing: 'border-box',
+    border: '2px solid #DCDEE0',
+    height: 150,
+    width: 200,
+    borderRadius: '5px',
+    padding: '1rem',
+    color: '#3D4551',
+    '& h1': {
+      fontSize: '20px',
+      margin: 0
+    },
+    '& p': {
+      fontSize: '14px'
+    }
+  }
+}));

@@ -42,9 +42,19 @@ describe('organizations', () => {
           tags: [{ name: 'test' }]
         })
         .expect(200);
-      expect(response.body.createdBy.id).toEqual(user.id);
-      expect(response.body.name).toEqual(name);
-      expect(response.body.tags[0].name).toEqual('test');
+      //expect 0 failed inserts
+      expect(response.body.failedInserts).toBeDefined();
+      expect(response.body.failedInserts).toHaveLength(0);
+      //expect 1 successful insert
+      expect(response.body.createdOrganizations).toBeDefined();
+      expect(response.body.createdOrganizations).toHaveLength(1);
+      expect(response.body.createdOrganizations[0].createdBy.id).toEqual(
+        user.id
+      );
+      expect(response.body.createdOrganizations[0].name).toEqual(name);
+      expect(response.body.createdOrganizations[0].tags[0].name).toEqual(
+        'test'
+      );
     });
     it("can't add organization with the same name", async () => {
       const user = await User.create({
@@ -88,7 +98,30 @@ describe('organizations', () => {
           tags: []
         })
         .expect(500);
-      expect(response.body).toMatchSnapshot();
+      //expect 1 failed inserts
+      expect(response.body.failedInserts).toBeDefined();
+      expect(response.body.failedInserts).toHaveLength(1);
+      //expect 0 successful insert
+      expect(response.body.createdOrganizations).toBeDefined();
+      expect(response.body.createdOrganizations).toHaveLength(0);
+      //ensure that the failed insert matches exactly what we sent.
+      expect(response.body.failedInserts[0].error).toContain(
+        'duplicate key value violates unique constraint'
+      );
+      expect(response.body.failedInserts[0].organization.name).toEqual(name);
+      expect(response.body.failedInserts[0].organization.ipBlocks).toHaveLength(
+        0
+      );
+      expect(
+        response.body.failedInserts[0].organization.rootDomains
+      ).toHaveLength(1);
+      expect(
+        response.body.failedInserts[0].organization.rootDomains[0]
+      ).toEqual('cisa.gov');
+      expect(response.body.failedInserts[0].organization.isPassive).toEqual(
+        false
+      );
+      expect(response.body.failedInserts[0].organization.tags).toHaveLength(0);
     });
     it('create by globalView should fail', async () => {
       const name = 'test-' + Math.random();

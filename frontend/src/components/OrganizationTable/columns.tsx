@@ -38,7 +38,11 @@ export const createColumns: CreateColumns = () => [
   {
     Header: 'Passive',
     Cell: ({ row: { original } }: CellProps<Organization>) => (
-      <input type="checkbox" checked={original.isPassive}></input>
+      <input
+        type="checkbox"
+        checked={original.isPassive}
+        readOnly={true}
+      ></input>
     ),
     accessor: 'isPassive',
     id: 'isPassive',

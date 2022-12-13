@@ -1,15 +1,13 @@
 import oldClasses from './Organizations.module.scss';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { ImportExport } from 'components';
-import { Organization, OrganizationTag } from 'types';
+import { Organization } from 'types';
 import { useAuthContext } from 'context';
 import { makeStyles } from '@material-ui/core';
-import { OrganizationList } from 'components/OrganizationList';
 import { OrganizationTable } from 'components/OrganizationTable';
-import { resourceLimits } from 'worker_threads';
 
 export const Organizations: React.FC = () => {
-  const { user, apiGet, apiPost, setFeedbackMessage } = useAuthContext();
+  const { user, apiPost, setFeedbackMessage } = useAuthContext();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const classes = useStyles();
 
