@@ -4,13 +4,16 @@ import { useAuthContext } from 'context';
 import {
   Button,
   Modal,
+  // @ts-ignore:next-line
   ModalContainer,
+  // @ts-ignore:next-line
   Overlay
 } from '@trussworks/react-uswds';
 import { Table } from 'components';
 import { ApiKey } from 'types/api-key';
 import { Column } from 'react-table';
 import { FaTimes } from 'react-icons/fa';
+// @ts-ignore:next-line
 import { formatDistanceToNow, parseISO } from 'date-fns';
 
 const Settings: React.FC = () => {
@@ -121,6 +124,7 @@ const Settings: React.FC = () => {
           <Overlay />
           <ModalContainer>
             <Modal
+              // @ts-ignore:next-line
               actions={
                 <>
                   <Button
@@ -133,7 +137,7 @@ const Settings: React.FC = () => {
                   </Button>
                 </>
               }
-              title={<h2>Copy API Key</h2>}
+              title={(<h2>Copy API Key</h2>) as any}
             >
               <p>
                 Please copy your API key now, as you will not be able to see it

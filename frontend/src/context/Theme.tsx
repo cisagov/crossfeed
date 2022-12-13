@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-  createMuiTheme,
+  createTheme,
   MuiThemeProvider as ThemeProvider
 } from '@material-ui/core';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: '#07648D'

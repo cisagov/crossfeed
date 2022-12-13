@@ -20,6 +20,7 @@ import {
 import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
+// @ts-ignore:next-line
 import { differenceInCalendarDays, parseISO } from 'date-fns';
 import { Webpage } from 'types/webpage';
 import { useAuthContext } from 'context';

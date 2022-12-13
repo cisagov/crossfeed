@@ -5,7 +5,6 @@ on:
     - cron:  '0 1 * * *' # every day at 1 AM
   workflow_dispatch:
   push:
-    branches: [security]
 
 jobs:
   backend:
@@ -17,7 +16,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '16'
       - name: Restore npm cache
         uses: actions/cache@v3
         with:
@@ -38,7 +37,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '15'
+          node-version: '16'
       - name: Restore npm cache
         uses: actions/cache@v3
         with:
@@ -78,10 +77,10 @@ jobs:
         working-directory: ./backend
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.9.5
+      - name: Set up Python 3.9
         uses: actions/setup-python@v4.2.0
         with:
-          python-version: 3.9.5
+          python-version: 3.9
       - uses: actions/cache@v3
         with:
           path: ~/.cache/pip
