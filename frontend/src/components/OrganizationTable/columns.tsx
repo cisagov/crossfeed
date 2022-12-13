@@ -23,7 +23,7 @@ export const createColumns: CreateColumns = () => [
     Header: 'Root Domains',
     accessor: ({ rootDomains }) =>
       rootDomains.map((rootDomain) => rootDomain).join(', '),
-    id: 'rootDomain',
+    id: 'rootDomains',
     Filter: ColumnFilter
   },
   {

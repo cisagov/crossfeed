@@ -240,6 +240,19 @@ class OrganizationFilters {
   @IsString()
   @IsOptional()
   name?: string;  
+
+  @IsString()
+  @IsOptional()
+  rootDomains?: string;
+
+
+  @IsString()
+  @IsOptional()
+  ipBlocks?: string;
+
+  @IsString()
+  @IsOptional()
+  tags?: string;
 }
 
 
@@ -272,14 +285,40 @@ class OrganizationSearch {
       qs.andWhere('organization.name ILIKE :name', {
         name: `%${this.filters?.name}%`
       });
-    }   
+    }
+
+    if (this.filters?.rootDomains)
+    {
+      qs.andWhere("array_to_string(organization.rootDomains,',') LIKE :rootDomains", {
+        rootDomains: `%${this.filters?.rootDomains}%`
+      });
+    }
+
+
+    if (this.filters?.ipBlocks)
+    {
+      qs.andWhere("array_to_string(organization.ipBlocks,',') LIKE :ipBlocks", {
+        ipBlocks: `%${this.filters?.ipBlocks}%`
+      });
+    }
+
+    if (this.filters?.tags) {
+      qs.andHaving(
+        'COUNT(CASE WHEN tags.name ILIKE :tags THEN 1 END) >= 1',
+        {
+          tags: `%${this.filters?.tags}%`
+        }
+      );
     return qs;
   }
+}
 
   async getResults(event) {
     const pageSize = this.pageSize || PAGE_SIZE;
-    let qs = Organization.createQueryBuilder('organization')
-      .leftJoinAndSelect("organization.tags", "tags");
+    let qs = Organization.createQueryBuilder('organization')          
+      .leftJoinAndSelect("organization.tags", "tags")    
+      .orderBy(`organization.${this.sort}`, this.order)
+      .groupBy('organization.id, organization.name, tags.id') 
    
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
