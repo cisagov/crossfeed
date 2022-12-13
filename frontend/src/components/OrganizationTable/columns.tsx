@@ -1,9 +1,6 @@
 import React from 'react';
 import { Column, CellProps } from 'react-table';
 import { Link } from 'react-router-dom';
-// @ts-ignore:next-line
-import { formatDistanceToNow, parseISO } from 'date-fns';
-import { FaSearch } from 'react-icons/fa';
 import { ColumnFilter, BooleanColumnFilter } from 'components';
 import { Organization } from 'types';
 

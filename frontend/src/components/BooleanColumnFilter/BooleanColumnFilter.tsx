@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Checkbox } from '@trussworks/react-uswds';
 import { ColumnInstance } from 'react-table';
-import { FaTimes, FaSearch } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import classes from './styles.module.scss';
 
 interface Props {
