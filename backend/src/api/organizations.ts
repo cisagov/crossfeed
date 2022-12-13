@@ -7,7 +7,7 @@ import {
   IsArray,
   IsBoolean,
   ValidateNested,
-  IsObject,  
+  IsObject,
   IsUUID,
   IsOptional,
   validateOrReject
@@ -109,7 +109,6 @@ const findOrCreateTags = async (
     }
   }
   return finalTags;
-
 };
 
 /**
@@ -175,76 +174,63 @@ export const update = wrapHandler(async (event) => {
  *    tags:
  *    - Organizations
  */
- export const create = wrapHandler(async (event) => {
+export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
-  
-        
-    const body = JSON.parse(event.body ?? '{}');          
-    // Wrap a lone org in an array, or pass in the unchanged array
-    let organizations:Array<NewOrganization> = (Array.isArray(body) ? body : [ body ]);
-    
-    await validateOrReject(organizations);        
-    await connectToDatabase();
 
-    
-    
-    
-    let failedOrganizations:Array<any> = [];
+  const body = JSON.parse(event.body ?? '{}');
+  // Wrap a lone org in an array, or pass in the unchanged array
+  const organizations: Array<NewOrganization> = Array.isArray(body)
+    ? body
+    : [body];
 
-    for(let org of organizations)    
-    {
-      await validateOrReject(org);    
-      try {
-        console.log("Ingesting organization: ", org.name);
-        
-        if ('tags' in org) {
-          org.tags = await findOrCreateTags(org.tags);
-        }
+  await validateOrReject(organizations);
+  await connectToDatabase();
 
-        const organization = await Organization.create({
-          ...org,
-          createdBy: { id: event.requestContext.authorizer!.id },
-          parent: { id: org.parent }
-        });
+  const failedOrganizations: Array<any> = [];
 
-        await organization.save();
+  for (const org of organizations) {
+    await validateOrReject(org);
+    try {
+      console.log('Ingesting organization: ', org.name);
+
+      if ('tags' in org) {
+        org.tags = await findOrCreateTags(org.tags);
       }
-      catch(err)
-      {
-        if (err instanceof QueryFailedError)
-        {
-          //keep track of the failed updates, if we get a query update issue, we'll add it to the list                    
-          failedOrganizations.push({'organization': org, 'error': err});
-        }
-        else{          
-          //we aren't going to swallow any other types of errors.
-          throw err;
-        }
+
+      const organization = await Organization.create({
+        ...org,
+        createdBy: { id: event.requestContext.authorizer!.id },
+        parent: { id: org.parent }
+      });
+
+      await organization.save();
+    } catch (err) {
+      if (err instanceof QueryFailedError) {
+        //keep track of the failed updates, if we get a query update issue, we'll add it to the list
+        failedOrganizations.push({ organization: org, error: err });
+      } else {
+        //we aren't going to swallow any other types of errors.
+        throw err;
       }
     }
-    
+  }
 
-    return {
-      statusCode: 200,      
-      body: JSON.stringify(
-        { 'Failed Inserts': failedOrganizations }
-        )
-    };
-  }  
-);
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ 'Failed Inserts': failedOrganizations })
+  };
+});
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
 
 class OrganizationFilters {
-
   @IsString()
   @IsOptional()
-  name?: string;  
+  name?: string;
 
   @IsString()
   @IsOptional()
   rootDomains?: string;
-
 
   @IsString()
   @IsOptional()
@@ -258,7 +244,6 @@ class OrganizationFilters {
   @IsOptional()
   isPassive?: string;
 }
-
 
 class OrganizationSearch {
   @IsInt()
@@ -292,48 +277,42 @@ class OrganizationSearch {
     }
 
     if (this.filters?.isPassive) {
-       qs.andWhere("organization.isPassive = :passive",
-        {
-          passive: this.filters?.isPassive
-        });      
-    }
-    
-    if (this.filters?.rootDomains)
-    {
-      qs.andWhere("array_to_string(organization.rootDomains,',') LIKE :rootDomains", {
-        rootDomains: `%${this.filters?.rootDomains}%`
+      qs.andWhere('organization.isPassive = :passive', {
+        passive: this.filters?.isPassive
       });
     }
 
+    if (this.filters?.rootDomains) {
+      qs.andWhere(
+        "array_to_string(organization.rootDomains,',') LIKE :rootDomains",
+        {
+          rootDomains: `%${this.filters?.rootDomains}%`
+        }
+      );
+    }
 
-    if (this.filters?.ipBlocks)
-    {
+    if (this.filters?.ipBlocks) {
       qs.andWhere("array_to_string(organization.ipBlocks,',') LIKE :ipBlocks", {
         ipBlocks: `%${this.filters?.ipBlocks}%`
       });
-    }    
+    }
 
     if (this.filters?.tags) {
-      qs.andHaving(
-        'COUNT(CASE WHEN tags.name ILIKE :tags THEN 1 END) >= 1',
-        {
-          tags: `%${this.filters?.tags}%`
-        }
-      );
+      qs.andHaving('COUNT(CASE WHEN tags.name ILIKE :tags THEN 1 END) >= 1', {
+        tags: `%${this.filters?.tags}%`
+      });
 
-    
-    
-    return qs;
+      return qs;
+    }
   }
-}
 
   async getResults(event) {
     const pageSize = this.pageSize || PAGE_SIZE;
-    let qs = Organization.createQueryBuilder('organization')          
-      .leftJoinAndSelect("organization.tags", "tags")    
+    let qs = Organization.createQueryBuilder('organization')
+      .leftJoinAndSelect('organization.tags', 'tags')
       .orderBy(`organization.${this.sort}`, this.order)
-      .groupBy('organization.id, organization.name, tags.id') 
-   
+      .groupBy('organization.id, organization.name, tags.id');
+
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
     }
@@ -348,7 +327,6 @@ class OrganizationSearch {
     return qs.getManyAndCount();
   }
 }
-
 
 /**
  * @swagger
@@ -380,7 +358,6 @@ export const search = wrapHandler(async (event) => {
     })
   };
 });
-
 
 /**
  * @swagger
