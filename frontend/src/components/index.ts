@@ -4,6 +4,7 @@ export * from './Header';
 export * from './AuthRoute';
 export * from './Table';
 export * from './Paginator';
+export * from './BooleanColumnFilter';
 export * from './ColumnFilter';
 export * from './SelectFilter';
 export * from './AuthForm';

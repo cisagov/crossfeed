@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 // @ts-ignore:next-line
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { FaSearch } from 'react-icons/fa';
-import { ColumnFilter } from 'components';
+import { ColumnFilter, BooleanColumnFilter } from 'components';
 import { Organization } from 'types';
 
 type CreateColumns = () => Column<Organization>[];
@@ -45,6 +45,6 @@ export const createColumns: CreateColumns = () => [
     ),
     accessor: 'isPassive',
     id: 'isPassive',
-    disableFilters: true
+    Filter: BooleanColumnFilter
   }
 ];

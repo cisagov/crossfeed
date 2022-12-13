@@ -253,6 +253,10 @@ class OrganizationFilters {
   @IsString()
   @IsOptional()
   tags?: string;
+
+  @IsString()
+  @IsOptional()
+  isPassive?: string;
 }
 
 
@@ -287,6 +291,13 @@ class OrganizationSearch {
       });
     }
 
+    if (this.filters?.isPassive) {
+       qs.andWhere("organization.isPassive = :passive",
+        {
+          passive: this.filters?.isPassive
+        });      
+    }
+    
     if (this.filters?.rootDomains)
     {
       qs.andWhere("array_to_string(organization.rootDomains,',') LIKE :rootDomains", {
@@ -300,7 +311,7 @@ class OrganizationSearch {
       qs.andWhere("array_to_string(organization.ipBlocks,',') LIKE :ipBlocks", {
         ipBlocks: `%${this.filters?.ipBlocks}%`
       });
-    }
+    }    
 
     if (this.filters?.tags) {
       qs.andHaving(
@@ -309,6 +320,9 @@ class OrganizationSearch {
           tags: `%${this.filters?.tags}%`
         }
       );
+
+    
+    
     return qs;
   }
 }

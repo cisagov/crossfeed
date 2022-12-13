@@ -1,0 +1,29 @@
+.root {
+  position: relative;
+}
+
+.input {
+  max-width: none;
+  background-color: white;
+  padding-left: 30px !important;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 8px;
+  top: 10px;
+  width: 17px;
+  background-color: transparent;
+  color: #a9aeb1;
+  border: none;
+}
+
+.clearFilter {
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  background-color: transparent;
+  color: #b50909;
+  border: none;
+  cursor: pointer;
+}
