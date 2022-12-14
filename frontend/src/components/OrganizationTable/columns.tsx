@@ -3,14 +3,19 @@ import { Column, CellProps } from 'react-table';
 import { Link } from 'react-router-dom';
 import { ColumnFilter, BooleanColumnFilter } from 'components';
 import { Organization } from 'types';
-
+import classes from './styles.module.scss';
 type CreateColumns = () => Column<Organization>[];
 
 export const createColumns: CreateColumns = () => [
   {
     Header: 'Name',
     Cell: ({ row: { original } }: CellProps<Organization>) => (
-      <Link to={`/organizations/${original.id}`}>{original.name}</Link>
+      <span>
+        <Link to={`/organizations/${original.id}`}>{original.name}</Link>
+        <i className={`${classes.memberCount} text-primary-darker`}>
+          ({original.userRoles ? original.userRoles.length : 'no'} members)
+        </i>
+      </span>
     ),
     accessor: 'name',
     id: 'name',

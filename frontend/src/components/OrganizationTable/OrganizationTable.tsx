@@ -57,11 +57,13 @@ export const OrganizationTable: React.FC<{
   return (
     <>
       {user?.userType === 'globalAdmin' && (
-        <Grid item>
-          <button onClick={() => setDialogOpen(true)}>
-            Create new {parent ? 'Team' : 'Organization'}
-          </button>
-        </Grid>
+        <button
+          type="button"
+          className="usa-button"
+          onClick={() => setDialogOpen(true)}
+        >
+          Create new {parent ? 'Team' : 'Organization'}
+        </button>
       )}
       <Table<Organization>
         renderPagination={renderPagination}
