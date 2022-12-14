@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { Organization, Query } from 'types';
 import { OrganizationForm } from 'components/OrganizationForm';
-import { Grid, makeStyles } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { useAuthContext } from 'context';
 import { TableInstance } from 'react-table';
 import { Table, Paginator } from 'components';
