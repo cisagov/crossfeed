@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Link, Route, useParams, Switch } from 'react-router-dom';
+import { Link, Route, useParams, Switch, useHistory } from 'react-router-dom';
 import { useAuthContext } from 'context';
+import { OrganizationDeleteDialog } from 'components/OrganizationDeleteDialog';
 import {
   Organization as OrganizationType,
   Role,
@@ -33,14 +34,13 @@ import {
 } from '@material-ui/core';
 import { ChevronRight, ControlPoint } from '@material-ui/icons';
 import { Autocomplete, createFilterOptions } from '@material-ui/lab';
-import { OrganizationList } from 'components/OrganizationList';
 
 interface AutocompleteType extends Partial<OrganizationTag> {
   title?: string;
 }
 
 export const Organization: React.FC = () => {
-  const { apiGet, apiPut, apiPost, user, setFeedbackMessage } =
+  const { apiGet, apiPut, apiPost, apiDelete, user, setFeedbackMessage } =
     useAuthContext();
   const { organizationId } = useParams<{ organizationId: string }>();
   const [organization, setOrganization] = useState<OrganizationType>();
@@ -49,6 +49,9 @@ export const Organization: React.FC = () => {
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
   const [scans, setScans] = useState<Scan[]>([]);
   const [scanSchema, setScanSchema] = useState<ScanSchema>({});
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const history = useHistory();
+
   const [newUserValues, setNewUserValues] = useState<{
     firstName: string;
     lastName: string;
@@ -69,6 +72,23 @@ export const Organization: React.FC = () => {
     type?: 'rootDomains' | 'ipBlocks' | 'tags';
     label?: string;
   }>({ open: false });
+
+  const onDelete = async () => {
+    try {
+      await apiDelete(`/organizations/${organizationId}`, { body: {} });
+      history.push('/organizations');
+      //nagivate away
+    } catch (e: any) {
+      setFeedbackMessage({
+        message:
+          e.status === 422
+            ? 'Error when deleting organization.'
+            : e.message ?? e.toString(),
+        type: 'error'
+      });
+      console.error(e);
+    }
+  };
 
   const dateAccessor = (date?: string) => {
     return !date || new Date(date).getTime() === new Date(0).getTime()
@@ -466,6 +486,13 @@ export const Organization: React.FC = () => {
 
   const views = [
     <Paper className={classes.settingsWrapper} key={0}>
+      <OrganizationDeleteDialog
+        organization={organization}
+        onSubmit={onDelete}
+        open={dialogOpen}
+        setOpen={setDialogOpen}
+        type="create"
+      ></OrganizationDeleteDialog>
       <Dialog
         open={dialog.open}
         onClose={() => setDialog({ open: false })}
@@ -604,7 +631,8 @@ export const Organization: React.FC = () => {
         <span>
           <Button
             variant="contained"
-            style={{ background: '#d83933', color: 'white' }}
+            className={classes.deleteButton}
+            onClick={() => setDialogOpen(true)}
           >
             DELETE
           </Button>
@@ -630,6 +658,7 @@ export const Organization: React.FC = () => {
     </Paper>,
     <React.Fragment key={1}>
       <Table<Role> columns={userRoleColumns} data={userRoles} />
+
       <Dialog
         open={dialog.open}
         onClose={() => setDialog({ open: false })}
@@ -725,9 +754,6 @@ export const Organization: React.FC = () => {
       </Dialog>
     </React.Fragment>,
     <React.Fragment key={2}>
-      <OrganizationList parent={organization}></OrganizationList>
-    </React.Fragment>,
-    <React.Fragment key={3}>
       <Table<Scan> columns={scanColumns} data={scans} fetchData={fetchScans} />
       <h2>Organization Scan History</h2>
       <Table<ScanTask> columns={scanTaskColumns} data={scanTasks} />
@@ -896,6 +922,12 @@ const useStyles = makeStyles((theme) => ({
       '@media screen and (min-width: 1024px)': {
         marginLeft: 0
       }
+    }
+  },
+  deleteButton: {
+    '&:not(:disabled)': {
+      color: 'white',
+      backgroundColor: '#b50909'
     }
   }
 }));
