@@ -578,14 +578,7 @@ export const Organization: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <TextField
-        value={organization.name}
-        disabled
-        variant="filled"
-        InputProps={{
-          className: classes.orgName
-        }}
-      ></TextField>
+      <h2>{organization.name}</h2>
       <ListInput label="Root Domains" type="rootDomains"></ListInput>
       <ListInput label="IP Blocks" type="ipBlocks"></ListInput>
       <ListInput label="Tags" type="tags"></ListInput>
@@ -604,22 +597,35 @@ export const Organization: React.FC = () => {
           />
         </span>
       </div>
-      <div className={classes.buttons}>
-        <Link to={`/organizations`}>
+      <div
+        className={classes.buttons}
+        style={{ justifyContent: 'space-between' }}
+      >
+        <span>
           <Button
-            variant="outlined"
-            style={{ marginRight: '10px', color: '#565C65' }}
+            variant="contained"
+            style={{ background: '#d83933', color: 'white' }}
           >
-            Cancel
+            DELETE
           </Button>
-        </Link>
-        <Button
-          variant="contained"
-          onClick={updateOrganization}
-          style={{ background: '#565C65', color: 'white' }}
-        >
-          Save
-        </Button>
+        </span>
+        <span>
+          <Link to={`/organizations`}>
+            <Button
+              variant="outlined"
+              style={{ marginRight: '10px', color: '#565C65' }}
+            >
+              Cancel
+            </Button>
+          </Link>
+          <Button
+            variant="contained"
+            onClick={updateOrganization}
+            style={{ background: '#565C65', color: 'white' }}
+          >
+            Save
+          </Button>
+        </span>
       </div>
     </Paper>,
     <React.Fragment key={1}>
