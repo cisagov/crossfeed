@@ -82,22 +82,3 @@ export const OrganizationTable: React.FC<{
     </>
   );
 };
-const useStyles = makeStyles((theme) => ({
-  cardRoot: {
-    cursor: 'pointer',
-    boxSizing: 'border-box',
-    border: '2px solid #DCDEE0',
-    height: 150,
-    width: 200,
-    borderRadius: '5px',
-    padding: '1rem',
-    color: '#3D4551',
-    '& h1': {
-      fontSize: '20px',
-      margin: 0
-    },
-    '& p': {
-      fontSize: '14px'
-    }
-  }
-}));
