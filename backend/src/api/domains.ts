@@ -15,7 +15,7 @@ import {
   validateBody,
   wrapHandler,
   NotFound,
-  fixTypeORMTotalResults
+  getAccurateManyAndCount
 } from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
 import {
@@ -155,9 +155,11 @@ class DomainSearch {
         orgs: getOrgMemberships(event)
       });
     }
-
-    await this.filterResultQueryset(qs, event);
-    return fixTypeORMTotalResults(qs.getManyAndCount());
+    const count = await qs.getCount();
+    console.log('My ac tual count: ', count);
+    qs = await this.filterResultQueryset(qs, event);
+    //return qs.getManyAndCount();
+    return getAccurateManyAndCount(qs, 'domain.id');
   }
 }
 

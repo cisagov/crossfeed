@@ -9,6 +9,7 @@ import { ClassType } from 'class-transformer/ClassTransformer';
 import { plainToClass } from 'class-transformer';
 import { SES } from 'aws-sdk';
 import * as nodemailer from 'nodemailer';
+import { SelectQueryBuilder, QueryRunner } from 'typeorm';
 
 export const validateBody = async <T>(
   obj: ClassType<T>,
@@ -99,15 +100,23 @@ export const sendEmail = async (
     replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
   });
 };
-export const fixTypeORMTotalResults = (originalQuery: Promise<Array<any>>) => {
-  return new Promise<Array<any>>((resolve, reject) => {
-    originalQuery
-      .then((r) => {
-        r[1] = r[0].length;
-        resolve(r);
-      })
-      .catch((r) => {
-        reject(r);
-      });
-  });
+
+export const getAccurateManyAndCount = (qb: any, keyColumn: string) => {
+  qb['executeCountQuery'] = (queryRunner: QueryRunner) => {
+    return new Promise<Number>((resolve, reject) => {
+      qb.clone()
+        .select(`COUNT(1)`, 'cnt')
+        .groupBy(keyColumn)
+        .setOption('disable-global-order')
+        .loadRawResults(queryRunner)
+        .then((results) => {
+          if (!results) {
+            resolve(0);
+          }
+
+          resolve(results.length);
+        });
+    });
+  };
+  return qb.getManyAndCount();
 };

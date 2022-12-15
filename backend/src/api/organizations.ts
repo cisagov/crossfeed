@@ -27,7 +27,7 @@ import {
   wrapHandler,
   NotFound,
   Unauthorized,
-  fixTypeORMTotalResults
+  getAccurateManyAndCount
 } from './helpers';
 import {
   isOrgAdmin,
@@ -341,8 +341,8 @@ class OrganizationSearch {
       });
     }
 
-    await this.filterResultQueryset(qs, event);
-    return fixTypeORMTotalResults(qs.getManyAndCount());
+    qs = await this.filterResultQueryset(qs, event);
+    return getAccurateManyAndCount(qs, 'organization.id');
   }
 }
 
