@@ -22,7 +22,13 @@ import {
   User,
   OrganizationTag
 } from '../models';
-import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
+import {
+  validateBody,
+  wrapHandler,
+  NotFound,
+  Unauthorized,
+  fixTypeORMTotalResults
+} from './helpers';
 import {
   isOrgAdmin,
   isGlobalWriteAdmin,
@@ -314,9 +320,8 @@ class OrganizationSearch {
       qs.andHaving('COUNT(CASE WHEN tags.name ILIKE :tags THEN 1 END) >= 1', {
         tags: `%${this.filters?.tags}%`
       });
-
-      return qs;
     }
+    return qs;
   }
 
   async getResults(event) {
@@ -337,7 +342,7 @@ class OrganizationSearch {
     }
 
     await this.filterResultQueryset(qs, event);
-    return qs.getManyAndCount();
+    return fixTypeORMTotalResults(qs.getManyAndCount());
   }
 }
 

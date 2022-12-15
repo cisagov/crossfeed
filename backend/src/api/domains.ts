@@ -11,7 +11,12 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Domain, connectToDatabase } from '../models';
-import { validateBody, wrapHandler, NotFound } from './helpers';
+import {
+  validateBody,
+  wrapHandler,
+  NotFound,
+  fixTypeORMTotalResults
+} from './helpers';
 import { SelectQueryBuilder, In } from 'typeorm';
 import {
   isGlobalViewAdmin,
@@ -152,7 +157,7 @@ class DomainSearch {
     }
 
     await this.filterResultQueryset(qs, event);
-    return qs.getManyAndCount();
+    return fixTypeORMTotalResults(qs.getManyAndCount());
   }
 }
 

@@ -99,3 +99,15 @@ export const sendEmail = async (
     replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
   });
 };
+export const fixTypeORMTotalResults = (originalQuery: Promise<Array<any>>) => {
+  return new Promise<Array<any>>((resolve, reject) => {
+    originalQuery
+      .then((r) => {
+        r[1] = r[0].length;
+        resolve(r);
+      })
+      .catch((r) => {
+        reject(r);
+      });
+  });
+};
