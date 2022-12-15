@@ -631,7 +631,7 @@ export const Organization: React.FC = () => {
         <span>
           <Button
             variant="contained"
-            className={classes.deleteButton}
+            className="warning-button"
             onClick={() => setDialogOpen(true)}
           >
             DELETE
@@ -922,12 +922,6 @@ const useStyles = makeStyles((theme) => ({
       '@media screen and (min-width: 1024px)': {
         marginLeft: 0
       }
-    }
-  },
-  deleteButton: {
-    '&:not(:disabled)': {
-      color: 'white',
-      backgroundColor: '#b50909'
     }
   }
 }));

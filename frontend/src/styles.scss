@@ -78,3 +78,12 @@ amplify-authenticator {
 h3.amplify-heading {
   font-size: 150%;
 }
+
+.warning-button:not(:disabled) {
+    color: white;
+    background-color: #b50909;
+}
+.warning-button:not(:disabled):hover {
+  color: white;
+  background-color: #740303;
+}

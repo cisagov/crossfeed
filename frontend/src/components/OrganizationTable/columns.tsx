@@ -3,7 +3,9 @@ import { Column, CellProps } from 'react-table';
 import { Link } from 'react-router-dom';
 import { ColumnFilter, BooleanColumnFilter } from 'components';
 import { Organization } from 'types';
+
 import classes from './styles.module.scss';
+
 type CreateColumns = () => Column<Organization>[];
 
 export const createColumns: CreateColumns = () => [

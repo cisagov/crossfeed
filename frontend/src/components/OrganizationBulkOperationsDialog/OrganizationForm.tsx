@@ -1,35 +1,34 @@
 import React, { useState } from 'react';
-import { Organization, OrganizationTag } from 'types';
+import { Organization } from 'types';
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   TextField,
   DialogActions,
-  Switch,
-  Button,
-  FormControlLabel
+  Button
 } from '@material-ui/core';
 
-export interface OrganizationDeleteDialogValues {
-  name: string;
-  typedNameConfirm: string;
+export interface OrganizationBulkOperationsDialogValues {
+  totalResults: number;
+  confirmation: string;
+  confirmationReply: string;
 }
 
-export const OrganizationDeleteDialog: React.FC<{
-  organization?: Organization;
+export const OrganizationBulkOperationsDialog: React.FC<{
+  totalResults: number;
   open: boolean;
   setOpen: (open: boolean) => void;
   onSubmit: (values: Object) => Promise<void>;
-  type: string;
-}> = ({ organization, onSubmit, type, open, setOpen }) => {
+}> = ({ totalResults, open, setOpen, onSubmit }) => {
   const defaultValues = () => ({
-    name: organization ? organization.name : '',
-    typedNameConfirm: ''
+    totalResults: totalResults,
+    confirmation: 'I UNDERSTAND WHAT I AM DOING',
+    confirmationReply: ''
   });
 
   const [values, setValues] =
-    useState<OrganizationDeleteDialogValues>(defaultValues);
+    useState<OrganizationBulkOperationsDialogValues>(defaultValues);
 
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -50,38 +49,40 @@ export const OrganizationDeleteDialog: React.FC<{
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle id="form-dialog-title">Delete Organization</DialogTitle>
+      <DialogTitle id="form-dialog-title">
+        You are bulk editing {totalResults} records.
+      </DialogTitle>
       <DialogContent>
-        <h2>Are you sure you would like to delete</h2>
-        <h3>{values.name}</h3>
+        <p>{values.confirmation}</p>
         <TextField
           margin="dense"
-          id="typedNameConfirm"
-          name="typedNameConfirm"
-          label="Please type the organization name to confirm"
+          id="ipBlocks"
+          name="ipBlocks"
+          label="Please type the following confirmation statement listed above to continue"
           type="text"
           fullWidth
-          value={values.typedNameConfirm}
+          value={values.confirmationReply}
           onChange={onTextChange}
         />
+        <br></br>
+        <br></br>
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={() => setOpen(false)}>
           Cancel
         </Button>
         <Button
-          variant="outlined"
-          className="warning-button"
-          disabled={values.typedNameConfirm !== values.name}
+          variant="contained"
+          color="primary"
           onClick={async () => {
             await onSubmit({
-              name: values.name
+              //parameters here
+              foo: true
             });
-            if (!organization) setValues(defaultValues);
             setOpen(false);
           }}
         >
-          Delete
+          Save
         </Button>
       </DialogActions>
     </Dialog>
