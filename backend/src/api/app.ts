@@ -295,6 +295,10 @@ authenticatedRoute.delete(
   '/organizations/:organizationId',
   handlerToExpress(organizations.del)
 );
+authenticatedRoute.delete(
+  '/organizations',
+  handlerToExpress(organizations.del)
+);
 authenticatedRoute.post(
   '/organizations/:organizationId/roles/:roleId/approve',
   handlerToExpress(organizations.approveRole)

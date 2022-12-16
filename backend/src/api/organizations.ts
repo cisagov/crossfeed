@@ -59,16 +59,17 @@ export const del = wrapHandler(async (event) => {
 
   const id = event.pathParameters?.organizationId;
   //if I got a normal, single delete id via path, add it to the collection and proceed as normal
-  if (id) {
+  if (id && isUUID(id)) {
     ids.push(id);
   } //otherwise look in the body
-  else {
-    const body = JSON.parse(event.body ?? '{}');
-    // Wrap a lone org in an array, or pass in the unchanged array
-    if (Array.isArray(body)) {
-      ids = body;
-    }
+
+  //if
+  const body = JSON.parse(event.body ?? '{}');
+  // Wrap a lone org in an array, or pass in the unchanged array
+  if (Array.isArray(body)) {
+    ids = ids.concat(body);
   }
+
   await connectToDatabase();
   for (const id of ids) {
     //check to make sure we have a valid uuid for each entry , and fail if so

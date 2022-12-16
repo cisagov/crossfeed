@@ -27,7 +27,7 @@ export const OrganizationBulkOperationsDialog: React.FC<{
   totalResults: number;
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSubmit: (values: Object) => Promise<void>;
+  onSubmit: () => Promise<void>;
 }> = ({ totalResults, open, setOpen, onSubmit }) => {
   const defaultValues = () => ({
     totalResults: totalResults,
@@ -108,10 +108,7 @@ export const OrganizationBulkOperationsDialog: React.FC<{
               disabled={values.confirmationReply !== values.confirmation}
               className="warning-button"
               onClick={async () => {
-                await onSubmit({
-                  //parameters here
-                  foo: true
-                });
+                await onSubmit();
                 setOpen(false);
               }}
             >

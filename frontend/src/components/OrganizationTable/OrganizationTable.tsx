@@ -9,12 +9,12 @@ import { TableInstance } from 'react-table';
 import { Table, Paginator } from 'components';
 import { createColumns } from './columns';
 import { useOrganizationApi } from 'hooks';
-import { Flex } from '@aws-amplify/ui-react';
+import { ComponentPropsToStylePropsMapKeys, Flex } from '@aws-amplify/ui-react';
 import { Button } from '@material-ui/core';
 export const OrganizationTable: React.FC<{
   parent?: Organization;
 }> = ({ parent }) => {
-  const { apiPost, setFeedbackMessage, user } = useAuthContext();
+  const { apiPost, apiDelete, setFeedbackMessage, user } = useAuthContext();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   // Hold on to current query for use in bulk operations.
   const [currentQuery, setCurrentQuery] = useState<Query<Organization>>({
@@ -31,8 +31,26 @@ export const OrganizationTable: React.FC<{
   const columns = useMemo(() => createColumns(), []);
   const { listOrganizations } = useOrganizationApi();
   const PAGE_SIZE = 15;
-  const onBulkSubmit = async (body: Object) => {
-    console.log(body);
+  const onBulkSubmit = async () => {
+    const { organizations, count } = await listOrganizations({
+      sort: [],
+      page: 1,
+      pageSize: -1, //show all records.
+      filters: currentQuery.filters
+    });
+    console.log(`Deleting ${count} organizations.`);
+    const ids = organizations.map((org) => org.id);
+    //break into 1000-org slices so that we don't send too large of a request.
+    const chunkSize = 1000;
+    for (let i = 0; i < ids.length; i += chunkSize) {
+      const chunk = ids.slice(i, i + chunkSize);
+      await apiDelete('/organizations', {
+        //pattern asks for something, 0 isn't a UUID and will be skipped
+        body: chunk
+      });
+    }
+    fetchOrganizations(currentQuery);
+    // now we can show the deleted records.
   };
   const onSubmit = async (body: Object) => {
     try {
