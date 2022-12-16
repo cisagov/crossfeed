@@ -1,1 +1,1 @@
-export * from './OrganizationForm';
+export * from './OrganizationBulkOperationsDialog';
