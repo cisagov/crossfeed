@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Organization } from 'types';
+
 import {
   Dialog,
   DialogTitle,
@@ -12,10 +12,9 @@ import {
   AccordionDetails,
   makeStyles
 } from '@material-ui/core';
-import { Alert, AlertProps } from '@material-ui/lab';
+import { Alert } from '@material-ui/lab';
 import { ExpandMore } from '@material-ui/icons';
 import { FaTrash } from 'react-icons/fa';
-import { ColumnFilter } from 'components/ColumnFilter';
 
 export interface OrganizationBulkOperationsDialogValues {
   totalResults: number;

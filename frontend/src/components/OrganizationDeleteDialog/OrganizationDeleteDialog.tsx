@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { Organization, OrganizationTag } from 'types';
+import { Organization } from 'types';
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   TextField,
   DialogActions,
-  Switch,
-  Button,
-  FormControlLabel
+  Button
 } from '@material-ui/core';
 
 export interface OrganizationDeleteDialogValues {

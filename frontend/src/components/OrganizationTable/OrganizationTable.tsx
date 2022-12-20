@@ -2,14 +2,14 @@ import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { Organization, Query } from 'types';
 import { OrganizationForm } from 'components/OrganizationForm';
 import { OrganizationBulkOperationsDialog } from 'components/OrganizationBulkOperationsDialog';
-import { Grid } from '@material-ui/core';
+
 import { FaThList } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 import { TableInstance } from 'react-table';
 import { Table, Paginator } from 'components';
 import { createColumns } from './columns';
 import { useOrganizationApi } from 'hooks';
-import { ComponentPropsToStylePropsMapKeys, Flex } from '@aws-amplify/ui-react';
+import { Flex } from '@aws-amplify/ui-react';
 import { Button } from '@material-ui/core';
 export const OrganizationTable: React.FC<{
   parent?: Organization;
