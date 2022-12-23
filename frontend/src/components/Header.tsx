@@ -217,7 +217,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
               <img
                 src={logo}
                 className={classes.logo}
-                alt="Crossfeed Icon Navigate Home"
+                alt="Crossfeed Icon Navigate Home"    
               />
             </Link>
             <div className={classes.lgNav}>{desktopNavItems.slice()}</div>
@@ -382,7 +382,7 @@ export const Header = withSearch(
 const useStyles = makeStyles((theme) => ({
   inner: {
     maxWidth: 1440,
-    width: '100%',
+    width: '250%',
     margin: '0 auto'
   },
   menuButton: {
@@ -392,7 +392,7 @@ const useStyles = makeStyles((theme) => ({
       display: 'none'
     }
   },
-  logo: {
+  logo: {  
     width: 150,
     padding: theme.spacing(),
     paddingLeft: 0,
