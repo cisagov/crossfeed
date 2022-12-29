@@ -35,6 +35,10 @@ RUN apk add --update --no-cache wget build-base curl git unzip openssl-dev linux
 
 RUN npm install -g pm2@4 wait-port@0.2.9
 
+RUN apk add --update --no-cache py3-zstandard --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community
+
+RUN apk add --update --no-cache mitmproxy --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
+
 # Install intrigue ident v2.0.2. Intrigue ident supports Ruby 2.6.5, but we have $RUBY_VERSION, so we update the required Ruby version in the Gemfile so that we can run it with Ruby $RUBY_VERSION.
 
 RUN gem install bundler:2.1.4
