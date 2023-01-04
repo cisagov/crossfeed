@@ -49,7 +49,7 @@ const client = jwksClient({
 });
 function getKey(header, callback) {
   client.getSigningKey(header.kid, function (err, key) {
-    const signingKey = key!.getPublicKey();
+    const signingKey = key.getPublicKey();
     callback(null, signingKey);
   });
 }
@@ -175,8 +175,7 @@ export const callback = async (event, context) => {
   const token = jwt.sign(userTokenBody(user), process.env.JWT_SECRET!, {
     expiresIn: '1 days',
     header: {
-      typ: 'JWT',
-      alg: 'RS256'
+      typ: 'JWT'
     }
   });
 
