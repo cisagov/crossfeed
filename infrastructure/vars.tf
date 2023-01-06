@@ -268,10 +268,10 @@ variable "export_bucket_name" {
   default     = "cisa-crossfeed-staging-exports"
 }
 
-variable "pe_reports_bucket_name" {
-  description = "pe_reports_bucket_name"
+variable "reports_bucket_name" {
+  description = "reports_bucket_name"
   type        = string
-  default     = "cisa-crossfeed-pe-reports"
+  default     = "cisa-crossfeed-reports"
 }
 
 variable "pe_db_backups_bucket_name" {

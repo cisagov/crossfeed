@@ -212,21 +212,21 @@ resource "aws_ssm_parameter" "crossfeed_send_db_name" {
   }
 }
 
-resource "aws_s3_bucket" "pe_reports_bucket" {
-  bucket = var.pe_reports_bucket_name
+resource "aws_s3_bucket" "reports_bucket" {
+  bucket = var.reports_bucket_name
   tags = {
     Project = var.project
     Stage   = var.stage
   }
 }
 
-resource "aws_s3_bucket_acl" "pe_reports_bucket" {
-  bucket = aws_s3_bucket.pe_reports_bucket.id
+resource "aws_s3_bucket_acl" "reports_bucket" {
+  bucket = aws_s3_bucket.reports_bucket.id
   acl    = "private"
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "pe_reports_bucket" {
-  bucket = aws_s3_bucket.pe_reports_bucket.id
+resource "aws_s3_bucket_server_side_encryption_configuration" "reports_bucket" {
+  bucket = aws_s3_bucket.reports_bucket.id
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
@@ -234,17 +234,17 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "pe_reports_bucket
   }
 }
 
-resource "aws_s3_bucket_versioning" "pe_reports_bucket" {
-  bucket = aws_s3_bucket.pe_reports_bucket.id
+resource "aws_s3_bucket_versioning" "reports_bucket" {
+  bucket = aws_s3_bucket.reports_bucket.id
   versioning_configuration {
     status = "Enabled"
   }
 }
 
-resource "aws_s3_bucket_logging" "pe_reports_bucket" {
-  bucket        = aws_s3_bucket.pe_reports_bucket.id
-  target_bucket = aws_s3_bucket.pe_reports_bucket.id
-  target_prefix = "pe_reports_bucket/"
+resource "aws_s3_bucket_logging" "reports_bucket" {
+  bucket        = aws_s3_bucket.reports_bucket.id
+  target_bucket = aws_s3_bucket.reports_bucket.id
+  target_prefix = "reports_bucket/"
 }
 
 resource "aws_s3_bucket" "pe_db_backups_bucket" {
