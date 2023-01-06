@@ -6,39 +6,39 @@ updates:
       interval: 'weekly'
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+        update-types: ["version-update:semver-patch","version-update:semver-minor"]
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
       interval: "weekly"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+        update-types: ["version-update:semver-patch","version-update:semver-minor"]
   - package-ecosystem: "npm"
     directory: "/backend"
     schedule:
       interval: "weekly"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+        update-types: ["version-update:semver-patch","version-update:semver-minor"]
   - package-ecosystem: "pip"
     directory: "/backend/worker"
     schedule:
       interval: "weekly"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+        update-types: ["version-update:semver-patch","version-update:semver-minor"]
   - package-ecosystem: 'docker'
     directory: '/'
     schedule:
       interval: 'weekly'
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+        update-types: ["version-update:semver-patch","version-update:semver-minor"]
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'weekly'
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+        update-types: ["version-update:semver-patch","version-update:semver-minor"]
