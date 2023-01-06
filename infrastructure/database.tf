@@ -101,7 +101,7 @@ resource "aws_iam_policy_attachment" "db_accessor_2" {
 }
 
 resource "aws_iam_role_policy" "db_accessor_s3_policy" {
-  name_prefix = "crossfeed-db-accessor-${var.stage}"
+  name_prefix = "crossfeed-db-accessor-s3-${var.stage}"
   role        = aws_iam_role.db_accessor.id
   policy      = <<EOF
 {
@@ -243,7 +243,7 @@ resource "aws_s3_bucket_versioning" "reports_bucket" {
 
 resource "aws_s3_bucket_logging" "reports_bucket" {
   bucket        = aws_s3_bucket.reports_bucket.id
-  target_bucket = aws_s3_bucket.reports_bucket.id
+  target_bucket = aws_s3_bucket.logging_bucket.id
   target_prefix = "reports_bucket/"
 }
 
@@ -277,7 +277,7 @@ resource "aws_s3_bucket_versioning" "pe_db_backups_bucket" {
 
 resource "aws_s3_bucket_logging" "pe_db_backups_bucket" {
   bucket        = aws_s3_bucket.pe_db_backups_bucket.id
-  target_bucket = aws_s3_bucket.pe_db_backups_bucket.id
+  target_bucket = aws_s3_bucket.logging_bucket.id
   target_prefix = "pe_db_backups_bucket/"
 }
 
