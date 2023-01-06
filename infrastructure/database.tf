@@ -112,7 +112,7 @@ resource "aws_iam_role_policy" "db_accessor_s3_policy" {
       "Action": [
         "s3:*"
       ],
-      "Resource": ["${aws_s3_bucket.pe_reports_bucket.arn}", "${aws_s3_bucket.pe_reports_bucket.arn}/*", "${aws_s3_bucket.pe_db_backups_bucket.arn}", "${aws_s3_bucket.pe_db_backups_bucket.arn}/*"]
+      "Resource": ["${aws_s3_bucket.reports_bucket.arn}", "${aws_s3_bucket.reports_bucket.arn}/*", "${aws_s3_bucket.pe_db_backups_bucket.arn}", "${aws_s3_bucket.pe_db_backups_bucket.arn}/*"]
     }
   ]
 }
