@@ -217,7 +217,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
               <img
                 src={logo}
                 className={classes.logo}
-                alt="Crossfeed Icon Navigate Home"    
+                alt="Crossfeed Icon Navigate Home"
               />
             </Link>
             <div className={classes.lgNav}>{desktopNavItems.slice()}</div>
@@ -392,7 +392,7 @@ const useStyles = makeStyles((theme) => ({
       display: 'none'
     }
   },
-  logo: {  
+  logo: {
     width: 150,
     padding: theme.spacing(),
     paddingLeft: 0,
