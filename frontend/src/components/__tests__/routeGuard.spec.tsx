@@ -18,7 +18,7 @@ beforeEach(() => {
     push: mockPush
   };
   routerMock.useHistory.mockReturnValue(
-    mockHistory as unknown as ReturnType<typeof router.useHistory>
+    (mockHistory as unknown) as ReturnType<typeof router.useHistory>
   );
 });
 

@@ -23,7 +23,7 @@ const { location: originalLocation } = window;
 
 beforeAll(() => {
   delete window.location;
-  window.location = {} as unknown as Location;
+  window.location = ({} as unknown) as Location;
   // mockRouter.useHistory.mockReturnValue(
   //   (mockHistory as unknown) as ReturnType<typeof router.useHistory>
   // );

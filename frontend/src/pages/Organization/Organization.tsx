@@ -40,8 +40,13 @@ interface AutocompleteType extends Partial<OrganizationTag> {
 }
 
 export const Organization: React.FC = () => {
-  const { apiGet, apiPut, apiPost, user, setFeedbackMessage } =
-    useAuthContext();
+  const {
+    apiGet,
+    apiPut,
+    apiPost,
+    user,
+    setFeedbackMessage
+  } = useAuthContext();
   const { organizationId } = useParams<{ organizationId: string }>();
   const [organization, setOrganization] = useState<OrganizationType>();
   const [tags, setTags] = useState<AutocompleteType[]>([]);

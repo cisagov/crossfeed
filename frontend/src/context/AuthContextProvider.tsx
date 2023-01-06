@@ -22,8 +22,9 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const [org, setOrg] = usePersistentState<
     Organization | OrganizationTag | null
   >('organization', null);
-  const [showAllOrganizations, setShowAllOrganizations] =
-    usePersistentState<boolean>('showAllOrganizations', false);
+  const [showAllOrganizations, setShowAllOrganizations] = usePersistentState<
+    boolean
+  >('showAllOrganizations', false);
   const [feedbackMessage, setFeedbackMessage] = useState<{
     message: string;
     type: AlertProps['severity'];
