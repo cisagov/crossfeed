@@ -18,7 +18,7 @@
     "@nivo/pie": "^0.80.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/user-event": "^14.4.3",
     "@trussworks/react-uswds": "^4.0.0",
     "@types/classnames": "^2.3.1",
     "@types/d3-scale": "^4.0.2",
