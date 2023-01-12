@@ -25,19 +25,19 @@ describe('saveCSV', () => {
   });
 });
 
-describe('listPeReports', () => {
+describe('listReports', () => {
   test('gets content', async () => {
     const client = new S3Client();
-    const result = await client.listPeReports('data');
+    const result = await client.listReports('data');
     expect(result).toEqual('report content');
     expect(listObjects).toBeCalled();
   });
 });
 
-describe('exportPeReport', () => {
+describe('exportReport', () => {
   test('gets content', async () => {
     const client = new S3Client();
-    const result = await client.exportPeReport('data');
+    const result = await client.exportReport('data');
     expect(result).toEqual('http://signed_url');
   });
 });

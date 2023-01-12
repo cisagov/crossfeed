@@ -310,13 +310,13 @@ authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
 
 authenticatedRoute.post(
-  '/reports/pe-export',
-  handlerToExpress(reports.export_pe_report)
+  '/reports/export',
+  handlerToExpress(reports.export_report)
 );
 
 authenticatedRoute.post(
-  '/reports/pe-list',
-  handlerToExpress(reports.list_pe_reports)
+  '/reports/list',
+  handlerToExpress(reports.list_reports)
 );
 
 app.use(authenticatedRoute);

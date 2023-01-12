@@ -5,16 +5,16 @@ import { getOrgMemberships } from './auth';
 /**
  * @swagger
  *
- * /reports/pe-export:
+ * /reports/export:
  *  get:
- *    description: Export P&E report by specifying the S3 key returned in /pe-reports/list.
+ *    description: Export CyHy report by specifying the S3 key returned in /reports/list.
  *    tags:
  *    - Reports
  */
-export const export_pe_report = wrapHandler(async (event) => {
+export const export_report = wrapHandler(async (event) => {
   const Key = JSON.parse(event.body!).Key;
   const client = new S3Client();
-  const url = await client.exportPeReport(Key);
+  const url = await client.exportReport(Key);
   if (url == 'File does not exist') {
     return {
       statusCode: 404,
@@ -30,17 +30,17 @@ export const export_pe_report = wrapHandler(async (event) => {
 /**
  * @swagger
  *
- * /reports/pe-list:
+ * /reports/list:
  *  get:
  *    description: Get a list of available P&E reports by specifying organization id. User must be a member of the organization.
  *    tags:
  *    - Reports
  */
-export const list_pe_reports = wrapHandler(async (event) => {
+export const list_reports = wrapHandler(async (event) => {
   const orgId = JSON.parse(event.body!).currentOrganization.id;
   if (getOrgMemberships(event).includes(orgId)) {
     const client = new S3Client();
-    const data = await client.listPeReports(orgId);
+    const data = await client.listReports(orgId);
     return {
       statusCode: 200,
       body: JSON.stringify(data)

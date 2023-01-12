@@ -56,10 +56,10 @@ class S3Client {
     }
   }
 
-  async exportPeReport(Key: string) {
+  async exportReport(Key: string) {
     try {
       const url = await this.s3.getSignedUrlPromise('getObject', {
-        Bucket: process.env.EXPORT_BUCKET_NAME!,
+        Bucket: process.env.REPORTS_BUCKET_NAME!,
         Key,
         Expires: 60 * 5 // 5 minutes
       });
@@ -74,12 +74,12 @@ class S3Client {
       throw e;
     }
   }
-  async listPeReports(orgId: string) {
+  async listReports(orgId: string) {
     try {
       const params = {
-        Bucket: process.env.EXPORT_BUCKET_NAME!,
+        Bucket: process.env.REPORTS_BUCKET_NAME!,
         Delimiter: '',
-        Prefix: `pe-reports/${orgId}/`
+        Prefix: `reports/${orgId}/`
       };
 
       const data = await this.s3

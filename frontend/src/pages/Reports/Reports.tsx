@@ -21,14 +21,17 @@ import {
 import GetAppIcon from '@material-ui/icons/GetApp';
 
 export const Reports: React.FC = () => {
-  const { apiPost, currentOrganization, showAllOrganizations } =  useAuthContext();
+  const { apiPost, currentOrganization, showAllOrganizations } =
+    useAuthContext();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [reports, setReports] = useState([]);
+  const [peReports, setPeReports] = useState([]);
+  const [vsReports, setVsReports] = useState([]);
+  const [wasReports, setWasReports] = useState([]);
 
-  const fetchPeReports = useCallback(async () => {
+  const fetchReports = useCallback(async () => {
     try {
       if (!showAllOrganizations && currentOrganization) {
-        const result = await apiPost('/reports/pe-list/', {
+        const result = await apiPost('/reports/list/', {
           body: { currentOrganization }
         });
         const output = result.map((a: any) => {
@@ -43,7 +46,19 @@ export const Reports: React.FC = () => {
             eTag: a.eTag
           };
         });
-        setReports(output);
+        const peOutput = output.filter((obj: any) =>
+          obj.name.startsWith('Posture')
+        );
+        setPeReports(peOutput);
+        const vsOutput = output.filter((obj: any) =>
+          obj.name.startsWith('Vulnerability')
+        );
+        setVsReports(vsOutput);
+
+        const wasOutput = output.filter((obj: any) =>
+          obj.name.startsWith('Web')
+        );
+        setWasReports(wasOutput);
       }
     } catch (e) {
       console.error(e);
@@ -53,7 +68,7 @@ export const Reports: React.FC = () => {
   const pdfExport = async (Key: string): Promise<string> => {
     if (!showAllOrganizations && currentOrganization) {
       try {
-        const { url } = await apiPost('/reports/pe-export/', {
+        const { url } = await apiPost('/reports/export/', {
           body: { currentOrganization, Key }
         });
         window.open(url);
@@ -71,8 +86,8 @@ export const Reports: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchPeReports();
-  }, [fetchPeReports]);
+    fetchReports();
+  }, [fetchReports]);
 
   interface reportOutput {
     key: string;
@@ -103,7 +118,7 @@ export const Reports: React.FC = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {reports.map((rep: reportOutput) => (
+                    {peReports.map((rep: reportOutput) => (
                       <TableRow key={rep['key']}>
                         <TableCell component="th" scope="row">
                           {rep['name']}
@@ -129,7 +144,7 @@ export const Reports: React.FC = () => {
             <Dialog open={dialogOpen} onClose={handleClose}>
               <DialogTitle id="alert-dialog-title">{'Alert'}</DialogTitle>
               <DialogContent>
-                P&E Report does not exist for this organization.
+                P&E Reports do not exist for this organization.
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose} autoFocus>
@@ -143,6 +158,132 @@ export const Reports: React.FC = () => {
             <p>
               This organization is not registered to receive Posture and
               Exposure reports. For more information, please reach out to
+              vulnerability@cisa.dhs.gov.
+            </p>
+          </div>
+        )}
+      </div>
+      <div className={classes.root}>
+        <h1>VS Reports Reports</h1>
+        {currentOrganization &&
+        currentOrganization.tags.some((e) => e.name === 'P&E') ? (
+          <>
+            <h2>Download</h2>
+            <div className={classes.section}>
+              <TableContainer component={Paper}>
+                <Table aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Filename</TableCell>
+                      <TableCell>Date Uploaded</TableCell>
+                      <TableCell>Size (MB)</TableCell>
+                      <TableCell>Download</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {vsReports.map((rep: reportOutput) => (
+                      <TableRow key={rep['key']}>
+                        <TableCell component="th" scope="row">
+                          {rep['name']}
+                        </TableCell>
+                        <TableCell>{rep['lastModified']}</TableCell>
+                        <TableCell>
+                          {(rep['size'] / (1024 * 1024)).toFixed(2)}
+                        </TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="fingerprint"
+                            onClick={() => pdfExport(rep['key'])}
+                          >
+                            <GetAppIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+            <Dialog open={dialogOpen} onClose={handleClose}>
+              <DialogTitle id="alert-dialog-title">{'Alert'}</DialogTitle>
+              <DialogContent>
+                VS Reports do not exist for this organization.
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} autoFocus>
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </>
+        ) : (
+          <div>
+            <p>
+              This organization is not registered to receive Vulnerability
+              Scanning reports. For more information, please reach out to
+              vulnerability@cisa.dhs.gov.
+            </p>
+          </div>
+        )}
+      </div>
+      <div className={classes.root}>
+        <h1>WAS Reports</h1>
+        {currentOrganization &&
+        currentOrganization.tags.some((e) => e.name === 'P&E') ? (
+          <>
+            <h2>Download</h2>
+            <div className={classes.section}>
+              <TableContainer component={Paper}>
+                <Table aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Filename</TableCell>
+                      <TableCell>Date Uploaded</TableCell>
+                      <TableCell>Size (MB)</TableCell>
+                      <TableCell>Download</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {wasReports.map((rep: reportOutput) => (
+                      <TableRow key={rep['key']}>
+                        <TableCell component="th" scope="row">
+                          {rep['name']}
+                        </TableCell>
+                        <TableCell>{rep['lastModified']}</TableCell>
+                        <TableCell>
+                          {(rep['size'] / (1024 * 1024)).toFixed(2)}
+                        </TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="fingerprint"
+                            onClick={() => pdfExport(rep['key'])}
+                          >
+                            <GetAppIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+            <Dialog open={dialogOpen} onClose={handleClose}>
+              <DialogTitle id="alert-dialog-title">{'Alert'}</DialogTitle>
+              <DialogContent>
+                WAS Reports do not exist for this organization.
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} autoFocus>
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </>
+        ) : (
+          <div>
+            <p>
+              This organization is not registered to receive Web Application
+              Scanning reports. For more information, please reach out to
               vulnerability@cisa.dhs.gov.
             </p>
           </div>
