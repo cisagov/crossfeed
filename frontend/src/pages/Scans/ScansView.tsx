@@ -288,7 +288,7 @@ const ScansView: React.FC = () => {
                   // These fields are initially parsed as strings, so they need
                   // to be converted to objects.
                   arguments: JSON.parse(
-                    ((result.arguments as unknown) as string) || ''
+                    (result.arguments as unknown as string) || ''
                   )
                 }
               })

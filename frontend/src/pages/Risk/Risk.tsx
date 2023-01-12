@@ -72,12 +72,8 @@ export const getSeverityColor = ({ id }: { id: string }) => {
 
 const Risk: React.FC = (props) => {
   const history = useHistory();
-  const {
-    currentOrganization,
-    showAllOrganizations,
-    user,
-    apiPost
-  } = useAuthContext();
+  const { currentOrganization, showAllOrganizations, user, apiPost } =
+    useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
   const [labels, setLabels] = useState([
