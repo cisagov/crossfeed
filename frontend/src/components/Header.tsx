@@ -382,7 +382,7 @@ export const Header = withSearch(
 const useStyles = makeStyles((theme) => ({
   inner: {
     maxWidth: 1440,
-    width: '100%',
+    width: '250%',
     margin: '0 auto'
   },
   menuButton: {
