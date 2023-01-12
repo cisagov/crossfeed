@@ -12,7 +12,7 @@ import {
   MatomoProvider,
   createInstance,
   useMatomo
-} from '@datapunt/matomo-tracker-react';
+} from '@jonkoops/matomo-tracker-react';
 import {
   Domain,
   AuthLogin,

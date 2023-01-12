@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { API } from 'aws-amplify';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { useMatomo } from '@jonkoops/matomo-tracker-react';
 
 const baseHeaders: HeadersInit = {
   'Content-Type': 'application/json',
