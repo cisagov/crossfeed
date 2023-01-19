@@ -322,7 +322,7 @@ authenticatedRoute.post(
   handlerToExpress(reports.export_report)
 );
 
-authenticatedRoute.post(
+authenticatedRoute.get(
   '/reports/list',
   handlerToExpress(reports.list_reports)
 =======
