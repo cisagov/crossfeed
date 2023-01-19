@@ -1,15 +1,9 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import {
-  connectToDatabase,
-  Organization,
-  Role,
-  User
-} from '../src/models';
+import { connectToDatabase, Organization, Role, User } from '../src/models';
 import { createUserToken } from './util';
 jest.mock('../src/tasks/s3-client');
-const listReports = require('../src/tasks/s3-client')
-  .listReports as jest.Mock;
+const listReports = require('../src/tasks/s3-client').listReports as jest.Mock;
 
 describe('reports', () => {
   let organization;
@@ -45,7 +39,7 @@ describe('reports', () => {
       user
     }).save();
     const response = await request(app)
-      .post('/reports/list')
+      .get('/reports/list')
       .set(
         'Authorization',
         createUserToken({
@@ -73,7 +67,7 @@ describe('reports', () => {
       user
     }).save();
     const response = await request(app)
-      .post('/reports/list')
+      .get('/reports/list')
       .set(
         'Authorization',
         createUserToken({

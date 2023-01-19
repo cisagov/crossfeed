@@ -314,10 +314,7 @@ authenticatedRoute.get(
   handlerToExpress(reports.export_report)
 );
 
-authenticatedRoute.get(
-  '/reports/list',
-  handlerToExpress(reports.list_reports)
-);
+authenticatedRoute.get('/reports/list', handlerToExpress(reports.list_reports));
 
 app.use(authenticatedRoute);
 
