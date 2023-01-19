@@ -22,8 +22,7 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 
 export const Reports: React.FC = () => {
   const { apiPost, currentOrganization, showAllOrganizations } =
-     
-    useAuthContext();
+useAuthContext();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [reports, setReports] = useState([]);
 
