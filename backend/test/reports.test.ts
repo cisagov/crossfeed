@@ -1,20 +1,15 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
 import {
-  Domain,
   connectToDatabase,
   Organization,
-  Webpage,
-  OrganizationTag,
-  Service,
-  UserType,
   Role,
   User
 } from '../src/models';
 import { createUserToken } from './util';
 jest.mock('../src/tasks/s3-client');
-const listPeReports = require('../src/tasks/s3-client')
-  .listPeReports as jest.Mock;
+const listReports = require('../src/tasks/s3-client')
+  .listReports as jest.Mock;
 
 describe('reports', () => {
   let organization;
@@ -50,7 +45,7 @@ describe('reports', () => {
       user
     }).save();
     const response = await request(app)
-      .post('/reports/pe-list')
+      .post('/reports/list')
       .set(
         'Authorization',
         createUserToken({
@@ -60,7 +55,7 @@ describe('reports', () => {
       .send({ currentOrganization: { id: organization.id } })
       .expect(404);
     expect(response.text).toEqual('User is not a member of this organization.');
-    expect(listPeReports).toBeCalledTimes(0);
+    expect(listReports).toBeCalledTimes(0);
   });
   it('calling reports list should work for a user inside of the org', async () => {
     const firstName = 'first name';
@@ -78,7 +73,7 @@ describe('reports', () => {
       user
     }).save();
     const response = await request(app)
-      .post('/reports/pe-list')
+      .post('/reports/list')
       .set(
         'Authorization',
         createUserToken({
@@ -88,6 +83,6 @@ describe('reports', () => {
       .send({ currentOrganization: { id: organization.id } })
       .expect(200);
     expect(response.text).toEqual('{"Contents":"report content"}');
-    expect(listPeReports).toBeCalledTimes(1);
+    expect(listReports).toBeCalledTimes(1);
   });
 });
