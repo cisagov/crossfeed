@@ -100,6 +100,25 @@ resource "aws_iam_policy_attachment" "db_accessor_2" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
 
+resource "aws_iam_role_policy" "db_accessor_s3_policy" {
+  name_prefix = "crossfeed-db-accessor-s3-${var.stage}"
+  role        = aws_iam_role.db_accessor.id
+  policy      = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:*"
+      ],
+      "Resource": ["${aws_s3_bucket.reports_bucket.arn}", "${aws_s3_bucket.reports_bucket.arn}/*", "${aws_s3_bucket.pe_db_backups_bucket.arn}", "${aws_s3_bucket.pe_db_backups_bucket.arn}/*"]
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_instance" "db_accessor" {
   count                       = var.create_db_accessor_instance ? 1 : 0
   ami                         = data.aws_ami.ubuntu.id
@@ -192,3 +211,73 @@ resource "aws_ssm_parameter" "crossfeed_send_db_name" {
     Project = var.project
   }
 }
+
+resource "aws_s3_bucket" "reports_bucket" {
+  bucket = var.reports_bucket_name
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+resource "aws_s3_bucket_acl" "reports_bucket" {
+  bucket = aws_s3_bucket.reports_bucket.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "reports_bucket" {
+  bucket = aws_s3_bucket.reports_bucket.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_versioning" "reports_bucket" {
+  bucket = aws_s3_bucket.reports_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "reports_bucket" {
+  bucket        = aws_s3_bucket.reports_bucket.id
+  target_bucket = aws_s3_bucket.logging_bucket.id
+  target_prefix = "reports_bucket/"
+}
+
+resource "aws_s3_bucket" "pe_db_backups_bucket" {
+  bucket = var.pe_db_backups_bucket_name
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+resource "aws_s3_bucket_acl" "pe_db_backups_bucket" {
+  bucket = aws_s3_bucket.pe_db_backups_bucket.id
+  acl    = "private"
+}
+resource "aws_s3_bucket_server_side_encryption_configuration" "pe_db_backups_bucket" {
+  bucket = aws_s3_bucket.pe_db_backups_bucket.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_versioning" "pe_db_backups_bucket" {
+  bucket = aws_s3_bucket.pe_db_backups_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "pe_db_backups_bucket" {
+  bucket        = aws_s3_bucket.pe_db_backups_bucket.id
+  target_bucket = aws_s3_bucket.logging_bucket.id
+  target_prefix = "pe_db_backups_bucket/"
+}
+
