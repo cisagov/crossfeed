@@ -1,0 +1,35 @@
+import { Handler } from 'aws-lambda';
+import { connectToDatabase, Organization } from '../models';
+import {sendEmail} from '../api/helpers';
+
+
+export const handler: Handler = async (event) => {
+    const connection = await connectToDatabase();
+  
+    
+  };
+  
+
+  const sendReportEmail = async (email: string, organization?: Organization) => {
+    const staging = process.env.NODE_ENV !== 'production';
+  
+    await sendEmail(
+      email,
+      'New PE Report',
+      `Hi there,
+  
+  The latest report for ${
+        organization?.name ? `is now available on ` : ''
+      }Crossfeed. To view the report, sign on at ${
+        process.env.FRONTEND_DOMAIN
+      }
+  
+  Crossfeed access instructions:
+  
+  For more information on using Crossfeed, view the Crossfeed user guide at https://docs.crossfeed.cyber.dhs.gov/user-guide/quickstart/. 
+  
+  If you encounter any difficulties, please feel free to reply to this email (or send an email to ${
+        process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO
+      }).`
+    );
+  };
