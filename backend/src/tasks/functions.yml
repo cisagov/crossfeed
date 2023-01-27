@@ -33,9 +33,9 @@ updateScanTaskStatus:
           detail:
             clusterArn:
               - ${file(env.yml):${self:provider.stage}-ecs-cluster, ''}
-peNewReport:
-  handler: src/tasks/peNewReport.handler
+notifications:
+  handler: src/tasks/notifications.handler
   timeout: 900
   events:
-    - schedule:
+    - schedule: rate(5 minutes)
 
