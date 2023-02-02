@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthForm } from 'components';
 import { Button } from '@trussworks/react-uswds';
@@ -29,11 +29,17 @@ interface Errors extends Partial<FormData> {
 export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   showSignUp = false
 }) => {
-  const { apiPost } = useAuthContext();
+  const { apiPost, refreshUser } = useAuthContext();
   const [errors, setErrors] = useState<Errors>({});
 
-  const { user, ...rest } = useAuthenticator((context) => [context.isPending]);
-  console.log(rest);
+  // Once a user signs in, call refreshUser() so that the callback is called and the user gets signed in.
+  const { user, authStatus } = useAuthenticator((context) => [
+    context.isPending
+  ]);
+  useEffect(() => {
+    refreshUser();
+  }, [refreshUser, authStatus]);
+
   const formFields = {
     confirmSignIn: {
       confirmation_code: {
