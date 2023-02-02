@@ -5,8 +5,7 @@ import { Button } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
 import {
   Authenticator,
-  ThemeProvider,
-  useAuthenticator
+  ThemeProvider
 } from '@aws-amplify/ui-react';
 import { I18n } from 'aws-amplify';
 
@@ -32,8 +31,6 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   const { apiPost } = useAuthContext();
   const [errors, setErrors] = useState<Errors>({});
 
-  const { user, ...rest } = useAuthenticator((context) => [context.isPending]);
-  console.log(rest);
   const formFields = {
     confirmSignIn: {
       confirmation_code: {
@@ -48,9 +45,9 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
     setupTOTP: {
       QR: {
         // Set the issuer and name so that the authenticator app shows them.
-        // TODO: These overrides don't work due to a bug with Amplify. Track this bug: https://github.com/aws-amplify/amplify-ui/issues/3092
-        totpIssuer: TOTP_ISSUER,
-        totpUsername: user?.attributes?.email
+        // TODO: Set the issuer to the email, once this is resolved: https://github.com/aws-amplify/amplify-ui/issues/3387.
+        totpIssuer: TOTP_ISSUER
+        // totpUsername: email,
       },
       confirmation_code: {
         label:
