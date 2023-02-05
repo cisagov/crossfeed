@@ -36,6 +36,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   const { user, authStatus } = useAuthenticator((context) => [
     context.isPending
   ]);
+  console.log(user);
   useEffect(() => {
     refreshUser();
   }, [refreshUser, authStatus]);

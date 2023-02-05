@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import classes from './Settings.module.css';
 import { useAuthContext } from 'context';
 import {
   Button,
+  ButtonGroup,
   Modal,
-  // @ts-ignore:next-line
-  ModalContainer,
-  // @ts-ignore:next-line
-  Overlay
+  ModalFooter,
+  ModalHeading,
+  ModalRef,
+  ModalToggleButton
 } from '@trussworks/react-uswds';
 import { Table } from 'components';
 import { ApiKey } from 'types/api-key';
@@ -18,8 +19,8 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 
 const Settings: React.FC = () => {
   const { logout, user, setUser, apiPost, apiDelete } = useAuthContext();
-  const [showModal, setShowModal] = useState<Boolean>(false);
   const [apiKey, setApiKey] = useState<string>('');
+  const modalRef = useRef<ModalRef>(null);
 
   const generateApiKey = async () => {
     if (!user) return;
@@ -30,7 +31,7 @@ const Settings: React.FC = () => {
     >('/api-keys');
     setUser({ ...user, apiKeys: user.apiKeys.concat([apiKey]) });
     setApiKey(apiKey.key);
-    setShowModal(true);
+    modalRef.current?.toggleModal(undefined, true);
   };
 
   const deleteApiKey = async (key: string) => {
@@ -119,35 +120,28 @@ const Settings: React.FC = () => {
       <br></br>
       <br></br>
 
-      {showModal && (
-        <div>
-          <Overlay />
-          <ModalContainer>
-            <Modal
-              // @ts-ignore:next-line
-              actions={
-                <>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      setShowModal(false);
-                    }}
-                  >
-                    Ok
-                  </Button>
-                </>
-              }
-              title={(<h2>Copy API Key</h2>) as any}
+      <Modal ref={modalRef} id="modal">
+        <ModalHeading>Copy API Key</ModalHeading>
+        <p>
+          Please copy your API key now, as you will not be able to see it again:
+        </p>
+        <code>{apiKey}</code>
+        <ModalFooter>
+          <ButtonGroup>
+            <ModalToggleButton modalRef={modalRef} closer>
+              Ok
+            </ModalToggleButton>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              unstyled
+              className="padding-105 text-center"
             >
-              <p>
-                Please copy your API key now, as you will not be able to see it
-                again:
-              </p>
-              <code>{apiKey}</code>
-            </Modal>
-          </ModalContainer>
-        </div>
-      )}
+              Go back
+            </ModalToggleButton>
+          </ButtonGroup>
+        </ModalFooter>
+      </Modal>
       {user?.userType === 'globalAdmin' && (
         <>
           <a href={`${process.env.REACT_APP_API_URL}/matomo/index.php`}>
