@@ -310,7 +310,6 @@ export const Users: React.FC = () => {
         <ModalHeading>Delete user?</ModalHeading>
         <p>
           Are you sure you would like to delete{' '}
-          {console.log(users[selectedRow], selectedRow)}
           <code>{users[selectedRow]?.fullName}</code>?
         </p>
         <ModalFooter>
