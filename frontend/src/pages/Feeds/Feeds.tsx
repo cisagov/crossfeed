@@ -193,7 +193,7 @@ const Feeds = () => {
                 deleteSearch(selectedSearch);
               }}
             >
-              Ok
+              Delete
             </ModalToggleButton>
             <ModalToggleButton
               modalRef={modalRef}
