@@ -6,9 +6,9 @@ import {
   ButtonGroup,
   ModalFooter,
   ModalHeading,
-  ModalRef,
-  ModalToggleButton
+  ModalRef
 } from '@trussworks/react-uswds';
+import { ModalToggleButton } from 'components';
 import { Table, ImportExport } from 'components';
 import { Column, CellProps } from 'react-table';
 import { Scan, Organization, ScanSchema, OrganizationTag } from 'types';
@@ -307,19 +307,19 @@ const ScansView: React.FC = () => {
             <ModalToggleButton
               modalRef={modalRef}
               closer
-              unstyled
-              className="padding-105 text-center"
-            >
-              Cancel
-            </ModalToggleButton>
-            <ModalToggleButton
-              modalRef={modalRef}
-              closer
               onClick={() => {
                 deleteRow(selectedRow);
               }}
             >
               Delete
+            </ModalToggleButton>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              unstyled
+              className="padding-105 text-center"
+            >
+              Cancel
             </ModalToggleButton>
           </ButtonGroup>
         </ModalFooter>

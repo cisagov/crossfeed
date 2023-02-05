@@ -27,9 +27,9 @@ import {
   Dropdown,
   ModalFooter,
   ModalHeading,
-  ModalRef,
-  ModalToggleButton
+  ModalRef
 } from '@trussworks/react-uswds';
+import { ModalToggleButton } from 'components';
 import { useAuthContext } from 'context';
 import { FilterTags } from './FilterTags';
 import { SavedSearch, Vulnerability } from 'types';
@@ -80,11 +80,6 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
     : undefined;
 
   const modalRef = useRef<ModalRef>(null);
-
-  // useEffect(() => {
-  //     modalRef.current?.toggleModal(undefined, search && search.editing ? true : false);
-  // }, []);
-
   const [savedSearchValues, setSavedSearchValues] = useState<
     Partial<SavedSearch> & {
       name: string;
@@ -368,14 +363,6 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
             <ModalToggleButton
               modalRef={modalRef}
               closer
-              unstyled
-              className="padding-105 text-center"
-            >
-              Cancel
-            </ModalToggleButton>
-            <ModalToggleButton
-              modalRef={modalRef}
-              closer
               onClick={async () => {
                 const body = {
                   body: {
@@ -396,6 +383,14 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
               }}
             >
               Save
+            </ModalToggleButton>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              unstyled
+              className="padding-105 text-center"
+            >
+              Cancel
             </ModalToggleButton>
           </ButtonGroup>
         </ModalFooter>

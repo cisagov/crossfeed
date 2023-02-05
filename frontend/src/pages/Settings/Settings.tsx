@@ -7,9 +7,9 @@ import {
   Modal,
   ModalFooter,
   ModalHeading,
-  ModalRef,
-  ModalToggleButton
+  ModalRef
 } from '@trussworks/react-uswds';
+import { ModalToggleButton } from 'components';
 import { Table } from 'components';
 import { ApiKey } from 'types/api-key';
 import { Column } from 'react-table';
@@ -130,14 +130,6 @@ const Settings: React.FC = () => {
           <ButtonGroup>
             <ModalToggleButton modalRef={modalRef} closer>
               Ok
-            </ModalToggleButton>
-            <ModalToggleButton
-              modalRef={modalRef}
-              closer
-              unstyled
-              className="padding-105 text-center"
-            >
-              Go back
             </ModalToggleButton>
           </ButtonGroup>
         </ModalFooter>

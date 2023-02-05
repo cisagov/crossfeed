@@ -7,9 +7,9 @@ import {
   Modal,
   ModalFooter,
   ModalHeading,
-  ModalRef,
-  ModalToggleButton
+  ModalRef
 } from '@trussworks/react-uswds';
+import { ModalToggleButton } from 'components';
 import { Organization } from 'types';
 import { Table, ImportExport } from 'components';
 import { Column } from 'react-table';
@@ -310,18 +310,11 @@ export const Users: React.FC = () => {
         <ModalHeading>Delete user?</ModalHeading>
         <p>
           Are you sure you would like to delete{' '}
+          {console.log(users[selectedRow], selectedRow)}
           <code>{users[selectedRow]?.fullName}</code>?
         </p>
         <ModalFooter>
           <ButtonGroup>
-            <ModalToggleButton
-              modalRef={modalRef}
-              closer
-              unstyled
-              className="padding-105 text-center"
-            >
-              Cancel
-            </ModalToggleButton>
             <ModalToggleButton
               modalRef={modalRef}
               closer
@@ -330,6 +323,14 @@ export const Users: React.FC = () => {
               }}
             >
               Delete
+            </ModalToggleButton>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              unstyled
+              className="padding-105 text-center"
+            >
+              Cancel
             </ModalToggleButton>
           </ButtonGroup>
         </ModalFooter>

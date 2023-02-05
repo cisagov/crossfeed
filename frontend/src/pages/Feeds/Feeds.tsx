@@ -8,9 +8,9 @@ import {
   Modal,
   ModalFooter,
   ModalHeading,
-  ModalToggleButton,
   ModalRef
 } from '@trussworks/react-uswds';
+import { ModalToggleButton } from 'components';
 import { NoResults } from 'components/NoResults';
 
 const Feeds = () => {
@@ -189,19 +189,19 @@ const Feeds = () => {
             <ModalToggleButton
               modalRef={modalRef}
               closer
-              unstyled
-              className="padding-105 text-center"
-            >
-              Cancel
-            </ModalToggleButton>
-            <ModalToggleButton
-              modalRef={modalRef}
-              closer
               onClick={() => {
                 deleteSearch(selectedSearch);
               }}
             >
               Ok
+            </ModalToggleButton>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              unstyled
+              className="padding-105 text-center"
+            >
+              Cancel
             </ModalToggleButton>
           </ButtonGroup>
         </ModalFooter>
