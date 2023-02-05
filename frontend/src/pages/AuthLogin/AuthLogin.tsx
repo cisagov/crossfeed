@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import { AuthForm } from 'components';
 import { Button } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
-import { Authenticator, ThemeProvider, useAuthenticator } from '@aws-amplify/ui-react';
+import {
+  Authenticator,
+  ThemeProvider,
+  useAuthenticator
+} from '@aws-amplify/ui-react';
 import { I18n } from 'aws-amplify';
 
 const TOTP_ISSUER = process.env.REACT_APP_TOTP_ISSUER;
@@ -29,9 +33,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   const [errors, setErrors] = useState<Errors>({});
 
   // Once a user signs in, call refreshUser() so that the callback is called and the user gets signed in.
-  const { authStatus } = useAuthenticator((context) => [
-    context.isPending
-  ]);
+  const { authStatus } = useAuthenticator((context) => [context.isPending]);
   useEffect(() => {
     refreshUser();
   }, [refreshUser, authStatus]);
