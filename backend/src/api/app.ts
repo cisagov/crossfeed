@@ -1,5 +1,4 @@
 import * as express from 'express';
-import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as cookie from 'cookie';
 import * as cors from 'cors';
@@ -55,7 +54,7 @@ const handlerToExpress = (handler) => async (req, res, next) => {
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json({ strict: false }));
 app.use(helmet.hsts({ maxAge: 31536000, preload: true }));
 app.use(cookieParser());
 

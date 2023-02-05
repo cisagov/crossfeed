@@ -1,17 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Paper, makeStyles } from '@material-ui/core';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Paper, makeStyles, ButtonGroup } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { useAuthContext } from 'context';
 import { SavedSearch } from 'types';
 import { Subnav } from 'components';
 import {
-  // @ts-ignore:next-line
-  Overlay,
-  // @ts-ignore:next-line
-  ModalContainer,
-  Button,
-  Modal
+  Modal,
+  ModalFooter,
+  ModalHeading,
+  ModalRef
 } from '@trussworks/react-uswds';
+import { ModalToggleButton } from 'components';
 import { NoResults } from 'components/NoResults';
 
 const Feeds = () => {
@@ -25,7 +24,7 @@ const Feeds = () => {
     totalPages: 0
   });
   const [noResults, setNoResults] = useState(false);
-  const [showModal, setShowModal] = useState<Boolean>(false);
+  const modalRef = useRef<ModalRef>(null);
   const [selectedSearch, setSelectedSearch] = useState<string>('');
 
   const fetchSavedSearches = useCallback(
@@ -140,7 +139,7 @@ const Feeds = () => {
                             className={classes.button}
                             onClick={(event) => {
                               event.preventDefault();
-                              setShowModal(true);
+                              modalRef.current?.toggleModal(undefined, true);
                               setSelectedSearch(search.id);
                             }}
                           >
@@ -182,43 +181,31 @@ const Feeds = () => {
           />
         </Paper>
       </div>
-      {showModal && (
-        <div>
-          <Overlay />
-          <ModalContainer>
-            <Modal
-              // @ts-ignore:next-line
-              actions={
-                <>
-                  <Button
-                    outline
-                    type="button"
-                    onClick={() => {
-                      setShowModal(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      deleteSearch(selectedSearch);
-                      setShowModal(false);
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </>
-              }
-              title={(<h2>Delete search?</h2>) as any}
+      <Modal ref={modalRef} id="modal">
+        <ModalHeading>Delete search?</ModalHeading>
+        <p>Are you sure that you would like to delete this saved search?</p>
+        <ModalFooter>
+          <ButtonGroup>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              onClick={() => {
+                deleteSearch(selectedSearch);
+              }}
             >
-              <p>
-                Are you sure that you would like to delete this saved search?
-              </p>
-            </Modal>
-          </ModalContainer>
-        </div>
-      )}
+              Delete
+            </ModalToggleButton>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              unstyled
+              className="padding-105 text-center"
+            >
+              Cancel
+            </ModalToggleButton>
+          </ButtonGroup>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };
