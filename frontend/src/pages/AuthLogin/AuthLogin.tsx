@@ -33,9 +33,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   const [errors, setErrors] = useState<Errors>({});
 
   // Once a user signs in, call refreshUser() so that the callback is called and the user gets signed in.
-  const { user, authStatus } = useAuthenticator((context) => [
-    context.isPending
-  ]);
+  const { authStatus } = useAuthenticator((context) => [context.isPending]);
   useEffect(() => {
     refreshUser();
   }, [refreshUser, authStatus]);
@@ -54,9 +52,9 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
     setupTOTP: {
       QR: {
         // Set the issuer and name so that the authenticator app shows them.
-        // TODO: These overrides don't work due to a bug with Amplify. Track this bug: https://github.com/aws-amplify/amplify-ui/issues/3092
-        totpIssuer: TOTP_ISSUER,
-        totpUsername: user?.attributes?.email
+        // TODO: Set the issuer to the email, once this is resolved: https://github.com/aws-amplify/amplify-ui/issues/3387.
+        totpIssuer: TOTP_ISSUER
+        // totpUsername: email,
       },
       confirmation_code: {
         label:
