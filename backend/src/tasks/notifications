@@ -1,21 +1,35 @@
 import { Handler } from 'aws-lambda';
-import { connectToDatabase, Organization } from '../models';
+import { connectToDatabase, Scan, Organization, ScanTask} from '../models';
+import ECSClient from './ecs-client';
 import {sendEmail} from '../api/helpers';
+import {Reports} from '/Users/cazaubonr/workspace/crossfeed/frontend/src/pages/Reports/Reports'
+import {list_reports} from '../api/reports'
+import { SCAN_SCHEMA } from '../api/scans';
+import getScanOrganizations from './helpers/getScanOrganizations';
 
+ type Notifications = {
+  ecs: ECSClient;
+  existingReports: number;
+  organizations: Organization [];
+  scans: Scan[];
+  lastNotified: number;
+}
 
-export const handler: Handler = async (event) => {
-    const connection = await connectToDatabase();
+export const handler: Handler<Notifications> = async (
+  event: Notifications
+  ) => {
+    await connectToDatabase();
+    console.log('Running notifications check...')
   
     
   };
   
 
   const sendReportEmail = async (email: string, organization?: Organization) => {
-    const staging = process.env.NODE_ENV !== 'production';
   
     await sendEmail(
       email,
-      'New PE Report',
+      'New Report Available',
       `Hi there,
   
   The latest report for ${
