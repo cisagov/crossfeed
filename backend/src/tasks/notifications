@@ -2,18 +2,42 @@ import { Handler } from 'aws-lambda';
 import { connectToDatabase, Scan, Organization, ScanTask} from '../models';
 import ECSClient from './ecs-client';
 import {sendEmail} from '../api/helpers';
-import {Reports} from '/Users/cazaubonr/workspace/crossfeed/frontend/src/pages/Reports/Reports'
+import S3Client from './s3-client'
 import {list_reports} from '../api/reports'
 import { SCAN_SCHEMA } from '../api/scans';
 import getScanOrganizations from './helpers/getScanOrganizations';
 
- type Notifications = {
+ class Notifications {
   ecs: ECSClient;
   existingReports: number;
   organizations: Organization [];
   scans: Scan[];
-  lastNotified: number;
+  lastNotified: Date;
+
+  constructor() {}
+
+  async initialize({
+    existingReports,
+    organizations,
+    scans,
+    lastNotified
+
+  }: {
+    existingReports: number;
+    organizations: Organization [];
+    scans: Scan[],
+    lastNotified: Date;
+  }) {
+    this.ecs = new ECSClient();
+    this.existingReports = existingReports;
+    this.organizations = organizations;
+    this.scans = scans;
+    this.lastNotified = lastNotified;
+  }
+
 }
+
+
 
 export const handler: Handler<Notifications> = async (
   event: Notifications
