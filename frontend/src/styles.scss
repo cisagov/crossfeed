@@ -12,6 +12,7 @@ $theme-show-notifications: false;
 @import '~uswds/scss/packages/usa-header';
 @import '~uswds/scss/packages/usa-table';
 @import '~uswds/scss/packages/usa-alert';
+@import '~uswds/scss/packages/usa-modal';
 @import '~uswds/scss/packages/form-controls';
 
 @import "@aws-amplify/ui-react/styles.css";
@@ -75,6 +76,18 @@ amplify-authenticator {
   --container-height: 100%;
 }
 
-h3.amplify-heading {
-  font-size: 150%;
+form[data-amplify-authenticator-setup-totp] {
+  h3.amplify-heading {
+    font-size: 150%;
+    text-align: center;
+  }
+
+  img[data-amplify-qrcode] {
+    margin: auto;
+  }
+
+  div[data-amplify-copy] {
+    display: none;
+  }
 }
+

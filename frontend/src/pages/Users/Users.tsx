@@ -1,15 +1,15 @@
 import classes from './Users.module.scss';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   Button,
   TextInput,
   Label,
-  // @ts-ignore:next-line
-  ModalContainer,
-  // @ts-ignore:next-line
-  Overlay,
-  Modal
+  Modal,
+  ModalFooter,
+  ModalHeading,
+  ModalRef
 } from '@trussworks/react-uswds';
+import { ModalToggleButton } from 'components';
 import { Organization } from 'types';
 import { Table, ImportExport } from 'components';
 import { Column } from 'react-table';
@@ -18,7 +18,12 @@ import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 // @ts-ignore:next-line
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { Radio, RadioGroup, FormControlLabel } from '@material-ui/core';
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  ButtonGroup
+} from '@material-ui/core';
 
 interface Errors extends Partial<User> {
   global?: string;
@@ -26,7 +31,7 @@ interface Errors extends Partial<User> {
 
 export const Users: React.FC = () => {
   const { apiGet, apiPost, apiDelete } = useAuthContext();
-  const [showModal, setShowModal] = useState<Boolean>(false);
+  const modalRef = useRef<ModalRef>(null);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [users, setUsers] = useState<User[]>([]);
 
@@ -107,7 +112,7 @@ export const Users: React.FC = () => {
       Cell: ({ row }: { row: { index: number } }) => (
         <span
           onClick={() => {
-            setShowModal(true);
+            modalRef.current?.toggleModal(undefined, true);
             setSelectedRow(row.index);
           }}
         >
@@ -189,15 +194,6 @@ export const Users: React.FC = () => {
       [name]: value
     }));
   };
-
-  React.useEffect(() => {
-    document.addEventListener('keyup', (e) => {
-      //Escape
-      if (e.keyCode === 27) {
-        setShowModal(false);
-      }
-    });
-  }, [apiGet]);
 
   return (
     <div className={classes.root}>
@@ -310,44 +306,34 @@ export const Users: React.FC = () => {
         }
       />
 
-      {showModal && (
-        <div>
-          <Overlay />
-          <ModalContainer>
-            <Modal
-              // @ts-ignore:next-line
-              actions={
-                <>
-                  <Button
-                    outline
-                    type="button"
-                    onClick={() => {
-                      setShowModal(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      deleteRow(selectedRow);
-                      setShowModal(false);
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </>
-              }
-              title={(<h2>Delete user?</h2>) as any}
+      <Modal ref={modalRef} id="modal">
+        <ModalHeading>Delete user?</ModalHeading>
+        <p>
+          Are you sure you would like to delete{' '}
+          <code>{users[selectedRow]?.fullName}</code>?
+        </p>
+        <ModalFooter>
+          <ButtonGroup>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              onClick={() => {
+                deleteRow(selectedRow);
+              }}
             >
-              <p>
-                Are you sure you would like to delete{' '}
-                <code>{users[selectedRow].fullName}</code>?
-              </p>
-            </Modal>
-          </ModalContainer>
-        </div>
-      )}
+              Delete
+            </ModalToggleButton>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              unstyled
+              className="padding-105 text-center"
+            >
+              Cancel
+            </ModalToggleButton>
+          </ButtonGroup>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };
