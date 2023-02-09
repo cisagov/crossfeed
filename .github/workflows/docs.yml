@@ -45,7 +45,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: crazy-max/ghaction-github-pages@v3.0.0
         with:
-          keep_history: true
+          keep_history: false
           target_branch: gh-pages
           build_dir: docs/public
         env:
