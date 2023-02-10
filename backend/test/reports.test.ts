@@ -39,7 +39,7 @@ describe('reports', () => {
       user
     }).save();
     const response = await request(app)
-      .get('/reports/list')
+      .post('/reports/list')
       .set(
         'Authorization',
         createUserToken({
@@ -67,7 +67,7 @@ describe('reports', () => {
       user
     }).save();
     const response = await request(app)
-      .get('/reports/list')
+      .post('/reports/list')
       .set(
         'Authorization',
         createUserToken({
