@@ -79,7 +79,7 @@ class S3Client {
       const params = {
         Bucket: process.env.REPORTS_BUCKET_NAME!,
         Delimiter: '',
-        Prefix: `reports/${orgId}/`
+        Prefix: `${orgId}/`
       };
 
       const data = await this.s3

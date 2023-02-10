@@ -308,12 +308,15 @@ authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
 
-authenticatedRoute.get(
+authenticatedRoute.post(
   '/reports/export',
   handlerToExpress(reports.export_report)
 );
 
-authenticatedRoute.get('/reports/list', handlerToExpress(reports.list_reports));
+authenticatedRoute.post(
+  '/reports/list',
+  handlerToExpress(reports.list_reports)
+);
 
 app.use(authenticatedRoute);
 

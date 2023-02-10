@@ -1,6 +1,16 @@
 import classes from './Reports.module.scss';
-import React, { useCallback, useState, useEffect } from 'react';
+import { TableInstance } from 'react-table';
+import { createColumns } from './columns';
+import { Report } from 'types';
+import React, {
+  useCallback,
+  useState,
+  useEffect,
+  useRef,
+  useMemo
+} from 'react';
 import { useAuthContext } from 'context';
+import { Table, Paginator } from 'components';
 import {
   Dialog,
   DialogTitle,
@@ -8,79 +18,92 @@ import {
   DialogActions,
   Button
 } from '@material-ui/core';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableContainer,
-  Paper,
-  IconButton
-} from '@material-ui/core';
-import GetAppIcon from '@material-ui/icons/GetApp';
+
+import { OrganizationTag, Organization as OrganizationType } from 'types';
+
+const PAGE_SIZE = 15;
 
 export const Reports: React.FC = () => {
-  const { apiPost, currentOrganization, showAllOrganizations } =
+  const { apiPost, apiGet, currentOrganization, showAllOrganizations } =
     useAuthContext();
+  const tableRef = useRef<TableInstance<Report>>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [peReports, setPeReports] = useState([]);
-  const [vsReports, setVsReports] = useState([]);
-  const [wasReports, setWasReports] = useState([]);
+  const [tags, setTags] = useState<OrganizationTag[]>([]);
+  const [reports, setReports] = useState<Report[]>([]);
+  const [totalResults, setTotalResults] = useState(0);
+  const [noResults, setNoResults] = useState(false);
+
+  const pdfExport = useCallback(
+    async (Key: string): Promise<string> => {
+      if (!showAllOrganizations && currentOrganization) {
+        try {
+          const { url } = await apiPost('/reports/export/', {
+            body: { currentOrganization, Key }
+          });
+          window.open(url);
+          return url;
+        } catch (e) {
+          setDialogOpen(true);
+          return '';
+        }
+      } else {
+        return '';
+      }
+    },
+    [apiPost, currentOrganization, showAllOrganizations]
+  );
+
+  const columns = useMemo(() => createColumns(pdfExport), [pdfExport]);
 
   const fetchReports = useCallback(async () => {
     try {
+      const organization = await apiGet<OrganizationType>(
+        `/organizations/${currentOrganization?.id}`
+      );
+      setTags(organization.tags);
       if (!showAllOrganizations && currentOrganization) {
         const result = await apiPost('/reports/list/', {
           body: { currentOrganization }
         });
+
         const output = result.map((a: any) => {
-          const organization = a.Key.split('/')[1];
-          const name = a.Key.split('/')[2];
+          const size_in_mb = (a.Size / (1024 * 1024)).toFixed(2) + ' MB';
+          const name = a.Key.split('/')[1];
+          let team;
+          if (name.startsWith('Posture')) {
+            team = 'Posture and Exposure (P&E)';
+          } else if (name.startsWith('Vulnerability')) {
+            team = 'Vulnerability Scanning (VS)';
+          } else if (name.startsWith('Web')) {
+            team = 'Web Application Scanning (WAS)';
+          } else {
+            team = '';
+          }
+          const date = new Date(a.LastModified).toDateString();
           return {
             key: a.Key,
-            organization,
-            name,
-            lastModified: a.LastModified,
-            size: a.Size,
+            name: name,
+            team: team,
+            lastModified: date,
+            size: size_in_mb,
             eTag: a.eTag
           };
         });
-        const peOutput = output.filter((obj: any) =>
-          obj.name.startsWith('Posture')
-        );
-        setPeReports(peOutput);
-        const vsOutput = output.filter((obj: any) =>
-          obj.name.startsWith('Vulnerability')
-        );
-        setVsReports(vsOutput);
-
-        const wasOutput = output.filter((obj: any) =>
-          obj.name.startsWith('Web')
-        );
-        setWasReports(wasOutput);
+        setReports(output);
+        setTotalResults(output.length);
+        setNoResults(output.length === 0);
       }
     } catch (e) {
+      setNoResults(true);
       console.error(e);
+      return;
     }
-  }, [apiPost, showAllOrganizations, currentOrganization]);
+  }, [apiPost, apiGet, showAllOrganizations, currentOrganization]);
 
-  const pdfExport = async (Key: string): Promise<string> => {
-    if (!showAllOrganizations && currentOrganization) {
-      try {
-        const { url } = await apiPost('/reports/export/', {
-          body: { currentOrganization, Key }
-        });
-        window.open(url);
-        return url;
-      } catch (e) {
-        setDialogOpen(true);
-        return '';
-      }
-    } else {
-      return '';
-    }
-  };
+  const renderPagination = (table: TableInstance<Report>) => (
+    <Paginator table={table} totalResults={totalResults} />
+  );
+
   const handleClose = () => {
     setDialogOpen(false);
   };
@@ -89,63 +112,27 @@ export const Reports: React.FC = () => {
     fetchReports();
   }, [fetchReports]);
 
-  interface reportOutput {
-    key: string;
-    organization: string;
-    name: string;
-    lastModified: string;
-    size: number;
-    eTag: string;
-  }
-
   return (
     <>
       <div className={classes.root}>
-        <h1>P&E Reports</h1>
-        {currentOrganization &&
-        currentOrganization.tags.some((e) => e.name === 'P&E') ? (
+        <h1>Reports</h1>
+        {currentOrganization && tags && tags.some((e) => e.name === 'P&E') ? (
           <>
-            <h2>Download</h2>
-            <div className={classes.section}>
-              <TableContainer component={Paper}>
-                <Table aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Filename</TableCell>
-                      <TableCell>Date Uploaded</TableCell>
-                      <TableCell>Size (MB)</TableCell>
-                      <TableCell>Download</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {peReports.map((rep: reportOutput) => (
-                      <TableRow key={rep['key']}>
-                        <TableCell component="th" scope="row">
-                          {rep['name']}
-                        </TableCell>
-                        <TableCell>{rep['lastModified']}</TableCell>
-                        <TableCell>
-                          {(rep['size'] / (1024 * 1024)).toFixed(2)}
-                        </TableCell>
-                        <TableCell>
-                          <IconButton
-                            aria-label="fingerprint"
-                            onClick={() => pdfExport(rep['key'])}
-                          >
-                            <GetAppIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
+            <Table<Report>
+              renderPagination={renderPagination}
+              tableRef={tableRef}
+              columns={columns}
+              data={reports}
+              pageCount={Math.ceil(totalResults / PAGE_SIZE)}
+              pageSize={PAGE_SIZE}
+              noResults={noResults}
+              noResultsMessage={
+                "We don't see any reports for this organization."
+              }
+            />
             <Dialog open={dialogOpen} onClose={handleClose}>
               <DialogTitle id="alert-dialog-title">{'Alert'}</DialogTitle>
-              <DialogContent>
-                P&E Reports do not exist for this organization.
-              </DialogContent>
+              <DialogContent>Error. File does not exist.</DialogContent>
               <DialogActions>
                 <Button onClick={handleClose} autoFocus>
                   Close
@@ -156,134 +143,8 @@ export const Reports: React.FC = () => {
         ) : (
           <div>
             <p>
-              This organization is not registered to receive Posture and
-              Exposure reports. For more information, please reach out to
-              vulnerability@cisa.dhs.gov.
-            </p>
-          </div>
-        )}
-      </div>
-      <div className={classes.root}>
-        <h1>VS Reports Reports</h1>
-        {currentOrganization &&
-        currentOrganization.tags.some((e) => e.name === 'P&E') ? (
-          <>
-            <h2>Download</h2>
-            <div className={classes.section}>
-              <TableContainer component={Paper}>
-                <Table aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Filename</TableCell>
-                      <TableCell>Date Uploaded</TableCell>
-                      <TableCell>Size (MB)</TableCell>
-                      <TableCell>Download</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {vsReports.map((rep: reportOutput) => (
-                      <TableRow key={rep['key']}>
-                        <TableCell component="th" scope="row">
-                          {rep['name']}
-                        </TableCell>
-                        <TableCell>{rep['lastModified']}</TableCell>
-                        <TableCell>
-                          {(rep['size'] / (1024 * 1024)).toFixed(2)}
-                        </TableCell>
-                        <TableCell>
-                          <IconButton
-                            aria-label="fingerprint"
-                            onClick={() => pdfExport(rep['key'])}
-                          >
-                            <GetAppIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
-            <Dialog open={dialogOpen} onClose={handleClose}>
-              <DialogTitle id="alert-dialog-title">{'Alert'}</DialogTitle>
-              <DialogContent>
-                VS Reports do not exist for this organization.
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose} autoFocus>
-                  Close
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </>
-        ) : (
-          <div>
-            <p>
-              This organization is not registered to receive Vulnerability
-              Scanning reports. For more information, please reach out to
-              vulnerability@cisa.dhs.gov.
-            </p>
-          </div>
-        )}
-      </div>
-      <div className={classes.root}>
-        <h1>WAS Reports</h1>
-        {currentOrganization &&
-        currentOrganization.tags.some((e) => e.name === 'P&E') ? (
-          <>
-            <h2>Download</h2>
-            <div className={classes.section}>
-              <TableContainer component={Paper}>
-                <Table aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Filename</TableCell>
-                      <TableCell>Date Uploaded</TableCell>
-                      <TableCell>Size (MB)</TableCell>
-                      <TableCell>Download</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {wasReports.map((rep: reportOutput) => (
-                      <TableRow key={rep['key']}>
-                        <TableCell component="th" scope="row">
-                          {rep['name']}
-                        </TableCell>
-                        <TableCell>{rep['lastModified']}</TableCell>
-                        <TableCell>
-                          {(rep['size'] / (1024 * 1024)).toFixed(2)}
-                        </TableCell>
-                        <TableCell>
-                          <IconButton
-                            aria-label="fingerprint"
-                            onClick={() => pdfExport(rep['key'])}
-                          >
-                            <GetAppIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
-            <Dialog open={dialogOpen} onClose={handleClose}>
-              <DialogTitle id="alert-dialog-title">{'Alert'}</DialogTitle>
-              <DialogContent>
-                WAS Reports do not exist for this organization.
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose} autoFocus>
-                  Close
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </>
-        ) : (
-          <div>
-            <p>
-              This organization is not registered to receive Web Application
-              Scanning reports. For more information, please reach out to
+              This organization is not registered to receive Cyber Hygiene
+              reports. For more information, please reach out to
               vulnerability@cisa.dhs.gov.
             </p>
           </div>

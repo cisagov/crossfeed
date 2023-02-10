@@ -13,18 +13,26 @@ import { getOrgMemberships } from './auth';
  */
 export const export_report = wrapHandler(async (event) => {
   const Key = JSON.parse(event.body!).Key;
-  const client = new S3Client();
-  const url = await client.exportReport(Key);
-  if (url == 'File does not exist') {
+  const orgId = JSON.parse(event.body!).currentOrganization.id;
+  if (getOrgMemberships(event).includes(orgId)) {
+    const client = new S3Client();
+    const url = await client.exportReport(Key);
+    if (url == 'File does not exist') {
+      return {
+        statusCode: 404,
+        body: 'File does not exist'
+      };
+    }
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ url })
+    };
+  } else {
     return {
       statusCode: 404,
-      body: ''
+      body: 'User is not a member of this organization.'
     };
   }
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ url })
-  };
 });
 
 /**
