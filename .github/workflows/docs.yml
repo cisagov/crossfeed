@@ -49,5 +49,6 @@ jobs:
           keep_history: false
           target_branch: gh-pages
           build_dir: docs/public
+          fqdn: docs.crossfeed.cyber.dhs.gov
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
