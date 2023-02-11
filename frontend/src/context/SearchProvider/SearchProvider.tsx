@@ -9,11 +9,8 @@ interface ApiResponse {
 }
 
 export const SearchProvider: React.FC = ({ children }) => {
-  const {
-    apiPost,
-    currentOrganization,
-    showAllOrganizations
-  } = useAuthContext();
+  const { apiPost, currentOrganization, showAllOrganizations } =
+    useAuthContext();
 
   const config = {
     debug: false,
@@ -75,11 +72,8 @@ export const SearchProvider: React.FC = ({ children }) => {
       const responseJson = await apiPost<ApiResponse>('/search', {
         body
       });
-      const responseJsonWithDisjunctiveFacetCounts = await applyDisjunctiveFaceting(
-        responseJson,
-        state,
-        ['fromRootDomain']
-      );
+      const responseJsonWithDisjunctiveFacetCounts =
+        await applyDisjunctiveFaceting(responseJson, state, ['fromRootDomain']);
       return buildState(responseJsonWithDisjunctiveFacetCounts, resultsPerPage);
     }
   };

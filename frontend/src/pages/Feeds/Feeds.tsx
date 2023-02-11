@@ -1,19 +1,20 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Paper, makeStyles } from '@material-ui/core';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Paper, makeStyles, ButtonGroup } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { useAuthContext } from 'context';
 import { SavedSearch } from 'types';
 import { Subnav } from 'components';
 import {
-  Overlay,
-  ModalContainer,
-  Button,
-  Modal
+  Modal,
+  ModalFooter,
+  ModalHeading,
+  ModalRef
 } from '@trussworks/react-uswds';
+import { ModalToggleButton } from 'components';
 import { NoResults } from 'components/NoResults';
 
 const Feeds = () => {
-  const classes = useStyles();
+  const classes = useStyles({} as any);
   const { apiGet, apiDelete } = useAuthContext();
   const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
   const [pageState, setPageState] = useState({
@@ -23,7 +24,7 @@ const Feeds = () => {
     totalPages: 0
   });
   const [noResults, setNoResults] = useState(false);
-  const [showModal, setShowModal] = useState<Boolean>(false);
+  const modalRef = useRef<ModalRef>(null);
   const [selectedSearch, setSelectedSearch] = useState<string>('');
 
   const fetchSavedSearches = useCallback(
@@ -138,7 +139,7 @@ const Feeds = () => {
                             className={classes.button}
                             onClick={(event) => {
                               event.preventDefault();
-                              setShowModal(true);
+                              modalRef.current?.toggleModal(undefined, true);
                               setSelectedSearch(search.id);
                             }}
                           >
@@ -180,42 +181,31 @@ const Feeds = () => {
           />
         </Paper>
       </div>
-      {showModal && (
-        <div>
-          <Overlay />
-          <ModalContainer>
-            <Modal
-              actions={
-                <>
-                  <Button
-                    outline
-                    type="button"
-                    onClick={() => {
-                      setShowModal(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      deleteSearch(selectedSearch);
-                      setShowModal(false);
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </>
-              }
-              title={<h2>Delete search?</h2>}
+      <Modal ref={modalRef} id="modal">
+        <ModalHeading>Delete search?</ModalHeading>
+        <p>Are you sure that you would like to delete this saved search?</p>
+        <ModalFooter>
+          <ButtonGroup>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              onClick={() => {
+                deleteSearch(selectedSearch);
+              }}
             >
-              <p>
-                Are you sure that you would like to delete this saved search?
-              </p>
-            </Modal>
-          </ModalContainer>
-        </div>
-      )}
+              Delete
+            </ModalToggleButton>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              unstyled
+              className="padding-105 text-center"
+            >
+              Cancel
+            </ModalToggleButton>
+          </ButtonGroup>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };
@@ -306,7 +296,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'block'
   },
   count: {
-    color: theme.palette.error.light
+    color: theme?.palette?.error?.light
   },
   data: {
     display: 'block',
@@ -348,20 +338,20 @@ const useStyles = makeStyles((theme) => ({
     outline: 'none',
     border: 'none',
     background: 'none',
-    color: theme.palette.secondary.main,
+    color: theme?.palette?.secondary?.main,
     margin: '0 0.2rem',
     cursor: 'pointer'
   },
   barWrapper: {
     zIndex: 101,
     width: '100%',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme?.palette?.background?.paper,
     height: '100px',
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'center',
     boxShadow: ({ inpFocused }: any) =>
-      inpFocused ? theme.shadows[4] : theme.shadows[1],
+      inpFocused ? theme?.shadows[4] : theme?.shadows[1],
     transition: 'box-shadow 0.3s linear',
     marginBottom: '40px'
   },

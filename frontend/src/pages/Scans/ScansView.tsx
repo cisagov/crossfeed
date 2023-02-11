@@ -1,17 +1,21 @@
 import classes from './Scans.module.scss';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   Button,
-  ModalContainer,
-  Overlay,
-  Modal
+  Modal,
+  ButtonGroup,
+  ModalFooter,
+  ModalHeading,
+  ModalRef
 } from '@trussworks/react-uswds';
+import { ModalToggleButton } from 'components';
 import { Table, ImportExport } from 'components';
 import { Column, CellProps } from 'react-table';
 import { Scan, Organization, ScanSchema, OrganizationTag } from 'types';
 import { FaTimes, FaEdit } from 'react-icons/fa';
 import { FaPlayCircle } from 'react-icons/fa';
 import { useAuthContext } from 'context';
+// @ts-ignore:next-line
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { setFrequency } from 'pages/Scan/Scan';
@@ -29,7 +33,7 @@ export interface OrganizationOption {
 
 const ScansView: React.FC = () => {
   const { apiGet, apiPost, apiDelete } = useAuthContext();
-  const [showModal, setShowModal] = useState<Boolean>(false);
+  const modalRef = useRef<ModalRef>(null);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [scans, setScans] = useState<Scan[]>([]);
   const [organizationOptions, setOrganizationOptions] = useState<
@@ -129,7 +133,7 @@ const ScansView: React.FC = () => {
       Cell: ({ row }: { row: { index: number } }) => (
         <span
           onClick={() => {
-            setShowModal(true);
+            modalRef.current?.toggleModal(undefined, true);
             setSelectedRow(row.index);
           }}
         >
@@ -161,15 +165,6 @@ const ScansView: React.FC = () => {
     tags: []
   });
 
-  React.useEffect(() => {
-    document.addEventListener('keyup', (e) => {
-      //Escape
-      if (e.keyCode === 27) {
-        setShowModal(false);
-      }
-    });
-  }, [apiGet]);
-
   const fetchScans = useCallback(async () => {
     try {
       const { scans, organizations, schema } = await apiGet<{
@@ -194,7 +189,7 @@ const ScansView: React.FC = () => {
       const row = scans[index];
       await apiDelete(`/scans/${row.id}`, { body: {} });
       setScans(scans.filter((scan) => scan.id !== row.id));
-    } catch (e) {
+    } catch (e: any) {
       setErrors({
         global:
           e.status === 422 ? 'Unable to delete scan' : e.message ?? e.toString()
@@ -219,7 +214,7 @@ const ScansView: React.FC = () => {
         }
       });
       setScans(scans.concat(scan));
-    } catch (e) {
+    } catch (e: any) {
       setErrors({
         global: e.message ?? e.toString()
       });
@@ -285,7 +280,7 @@ const ScansView: React.FC = () => {
                   // These fields are initially parsed as strings, so they need
                   // to be converted to objects.
                   arguments: JSON.parse(
-                    ((result.arguments as unknown) as string) || ''
+                    (result.arguments as unknown as string) || ''
                   )
                 }
               })
@@ -301,43 +296,34 @@ const ScansView: React.FC = () => {
         }
       />
 
-      {showModal && (
-        <div>
-          <Overlay />
-          <ModalContainer>
-            <Modal
-              actions={
-                <>
-                  <Button
-                    outline
-                    type="button"
-                    onClick={() => {
-                      setShowModal(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      deleteRow(selectedRow);
-                      setShowModal(false);
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </>
-              }
-              title={<h2>Delete scan?</h2>}
+      <Modal ref={modalRef} id="modal">
+        <ModalHeading>Delete scan?</ModalHeading>
+        <p>
+          Are you sure you would like to delete the{' '}
+          <code>{scans[selectedRow]?.name}</code> scan?
+        </p>
+        <ModalFooter>
+          <ButtonGroup>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              onClick={() => {
+                deleteRow(selectedRow);
+              }}
             >
-              <p>
-                Are you sure you would like to delete the{' '}
-                <code>{scans[selectedRow].name}</code> scan?
-              </p>
-            </Modal>
-          </ModalContainer>
-        </div>
-      )}
+              Delete
+            </ModalToggleButton>
+            <ModalToggleButton
+              modalRef={modalRef}
+              closer
+              unstyled
+              className="padding-105 text-center"
+            >
+              Cancel
+            </ModalToggleButton>
+          </ButtonGroup>
+        </ModalFooter>
+      </Modal>
     </>
   );
 };
