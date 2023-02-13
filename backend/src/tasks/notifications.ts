@@ -2,8 +2,12 @@ import { Handler } from 'aws-lambda';
 import { Organizations } from 'aws-sdk';
 import { connectToDatabase, Organization } from '../models';
 import {sendEmail} from '../api/helpers';
+
+import { In, IsNull, Not } from 'typeorm';
+
 import * as reports from '../api/reports';
 import S3Client from './s3-client'
+import ECSClient from './ecs-client';
 import { getOrgMemberships } from '../api/auth';
 
 /**
@@ -61,18 +65,39 @@ If you encounter any difficulties, please feel free to reply to this email (or s
 export const handler: Handler = async (event) => {
     await connectToDatabase();
     console.log('Running notifications check...')
+    
+    const orgWhere = event.organizationIds?.length
+      ? { id: In(event.organizationIds)}
+      : {};
+      // Get list of organizations
+    const result = await Organization.find({
+      where: orgWhere
+    })
+    // Get list of reports based on organizations
+    const client = new S3Client();
+    const reports = await client.listReports(JSON.stringify(result))
+
+
+return {
+  body: JSON.stringify(reports)
+}
+     /** 
 
     // List the latest reports 
     const orgId = JSON.parse(event.body!).currentOrganization.id;
-    const client = new S3Client();
-    const latestReports = await client.listReports(orgId);
-    return {
-      body: JSON.stringify(latestReports)
+    if (getOrgMemberships(event).includes(orgId)) {
+      const client = new S3Client();
+      const latestReports = await client.listReports(orgId);
+      return {
+        statusCode: 200,
+        body: JSON.stringify(latestReports)
+      };
+    } else {
+      return {
+        statusCode: 404,
+        body: 'User is not a member of this organization.'
+      };
     }
-
-    console.log(latestReports)
-
-    /** 
     //const firstNotified 
     const prev_latestReports = latestReports
 
