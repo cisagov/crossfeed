@@ -62,25 +62,28 @@ If you encounter any difficulties, please feel free to reply to this email (or s
 };
 
 
-export const handler: Handler = async (event) => {
+export const handler: Handler = async () => {
     await connectToDatabase();
     console.log('Running notifications check...')
     
-    const orgWhere = event.organizationIds?.length
-      ? { id: In(event.organizationIds)}
-      : {};
+    
       // Get list of organizations
-    const result = await Organization.find({
-      where: orgWhere
-    })
-    // Get list of reports based on organizations
-    const client = new S3Client();
-    const reports = await client.listReports(JSON.stringify(result))
+    const organization = await Organization.find()
+    
+    // Loop through organizations and pull reports
 
+    for (const org in organization) {
 
-return {
-  body: JSON.stringify(reports)
-}
+      const client = new S3Client();
+      const reportsList = await client.listReports(org)
+      console.log(reportsList)
+      return {
+        body: JSON.stringify(reportsList)
+      }
+    }
+    
+    
+    
      /** 
 
     // List the latest reports 

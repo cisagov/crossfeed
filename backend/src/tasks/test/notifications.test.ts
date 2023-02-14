@@ -5,7 +5,8 @@ import { connectToDatabase, Organization, Role, User } from '../../models';
 
 jest.mock('../s3-client');
 import { createUserToken } from '../../../../backend/test/util';
-const latestReports = require('../s3-client').listReports as jest.Mock;
+import { Organizations } from 'aws-sdk';
+const listReports = require('../s3-client').listReports as jest.Mock;
 
 describe ('notifications', () => {
     
@@ -19,33 +20,55 @@ describe ('notifications', () => {
             ipBlocks: [],
             isPassive: false
           }).save();
-        
-          
-        const response = await request(app)
-            .get('/organizations')
-            .set(
-              'Authorization',
-             createUserToken({
-               roles: [{ org: organization.id, role: 'user' }]
-             })
-            )
-            .send({ currentOrganization: { id: organization.id} })
-            .expect(200);
-            
-            await notifications(
-                [organization.id],
-                {} as any,
-                () => void 0
-    
-              );
 
+        await Organization.create({
+            name: 'test-' + Math.random(),
+            rootDomains: ['test-' + Math.random()],
+            ipBlocks: [],
+            isPassive: false
+          }).save();
+          
+        await Organization.create({
+            name: 'test-' + Math.random(),
+            rootDomains: ['test-' + Math.random()],
+            ipBlocks: [],
+            isPassive: false
+          }).save();
+          const response = await request(app)
+          .get(`/organizations`)
+          .set(
+            'Authorization',
+            createUserToken({
+                roles: [{ org: organization.id, role: 'user' }]
+            })
+          )
+          .expect(200);
+        expect(response.body.length).toBeGreaterThanOrEqual(1);
+        await notifications(
+
+            organization,
+            {} as any,
+            () => null
+            );
+    expect(response.body.length).toEqual(1)    
     });
-    test('calling reports list for all organizations', async () => {
+  test('getting reports list for all organizations', async () => {
         const organization = await Organization.create({
             name: 'test-' + Math.random(),
             rootDomains: ['test-' + Math.random()],
             ipBlocks: [],
             isPassive: false
           }).save();
-    })
+          const response = await request(app)
+      .get('/reports/list')
+      .set(
+        'Authorization',
+        createUserToken({
+          roles: [{ org: organization.id, role: 'user' }]
+        })
+      )
+      .send({ currentOrganization: { id: organization.id } })
+      .expect(200);
+    expect(listReports).toBeCalledTimes(1);
+    }) 
 });
