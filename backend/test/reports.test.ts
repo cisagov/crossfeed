@@ -2,10 +2,11 @@ import * as request from 'supertest';
 import app from '../src/api/app';
 import { connectToDatabase, Organization, Role, User } from '../src/models';
 import { createUserToken } from './util';
+
 jest.mock('../src/tasks/s3-client');
 const listReports = require('../src/tasks/s3-client').listReports as jest.Mock;
-const exportReports = require('../src/tasks/s3-client')
-  .exportReports as jest.Mock;
+const exportReport = require('../src/tasks/s3-client')
+  .exportReport as jest.Mock;
 
 describe('reports', () => {
   let organization;
@@ -81,7 +82,7 @@ describe('reports', () => {
     expect(response.text).toEqual('{"Contents":"report content"}');
     expect(listReports).toBeCalledTimes(1);
   });
-  it('calling reports export should not work for a user outside of the org', async () => {
+  it('calling report export should not work for a user outside of the org', async () => {
     const firstName = 'first name';
     const lastName = 'last name';
     const email = Math.random() + '@crossfeed.cisa.gov';
@@ -107,9 +108,9 @@ describe('reports', () => {
       .send({ currentOrganization: { id: organization.id } })
       .expect(404);
     expect(response.text).toEqual('User is not a member of this organization.');
-    expect(exportReports).toBeCalledTimes(0);
+    expect(exportReport).toBeCalledTimes(0);
   });
-  it('calling reports export should work for a user inside of the org', async () => {
+  it('calling report export should work for a user inside of the org', async () => {
     const firstName = 'first name';
     const lastName = 'last name';
     const email = Math.random() + '@crossfeed.cisa.gov';
@@ -134,7 +135,7 @@ describe('reports', () => {
       )
       .send({ currentOrganization: { id: organization.id } })
       .expect(200);
-    expect(response.text).toEqual('{"Contents":"report content"}');
-    expect(exportReports).toBeCalledTimes(1);
+    expect(response.text).toEqual('{"url":"report_url"}');
+    expect(exportReport).toBeCalledTimes(1);
   });
 });
