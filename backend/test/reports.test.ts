@@ -4,6 +4,8 @@ import { connectToDatabase, Organization, Role, User } from '../src/models';
 import { createUserToken } from './util';
 jest.mock('../src/tasks/s3-client');
 const listReports = require('../src/tasks/s3-client').listReports as jest.Mock;
+const exportReports = require('../src/tasks/s3-client')
+  .listReports as jest.Mock;
 
 describe('reports', () => {
   let organization;
@@ -78,5 +80,61 @@ describe('reports', () => {
       .expect(200);
     expect(response.text).toEqual('{"Contents":"report content"}');
     expect(listReports).toBeCalledTimes(1);
+  });
+  it('calling reports export should not work for a user outside of the org', async () => {
+    const firstName = 'first name';
+    const lastName = 'last name';
+    const email = Math.random() + '@crossfeed.cisa.gov';
+    const user = await User.create({
+      firstName,
+      lastName,
+      email
+    }).save();
+    await Role.create({
+      role: 'user',
+      approved: false,
+      organization,
+      user
+    }).save();
+    const response = await request(app)
+      .post('/reports/export')
+      .set(
+        'Authorization',
+        createUserToken({
+          roles: [{ org: organization2.id, role: 'user' }]
+        })
+      )
+      .send({ currentOrganization: { id: organization.id } })
+      .expect(404);
+    expect(response.text).toEqual('User is not a member of this organization.');
+    expect(exportReports).toBeCalledTimes(0);
+  });
+  it('calling reports export should work for a user inside of the org', async () => {
+    const firstName = 'first name';
+    const lastName = 'last name';
+    const email = Math.random() + '@crossfeed.cisa.gov';
+    const user = await User.create({
+      firstName,
+      lastName,
+      email
+    }).save();
+    await Role.create({
+      role: 'user',
+      approved: false,
+      organization,
+      user
+    }).save();
+    const response = await request(app)
+      .post('/reports/export')
+      .set(
+        'Authorization',
+        createUserToken({
+          roles: [{ org: organization.id, role: 'user' }]
+        })
+      )
+      .send({ currentOrganization: { id: organization.id } })
+      .expect(200);
+    expect(response.text).toEqual('{"Contents":"report content"}');
+    expect(exportReports).toBeCalledTimes(1);
   });
 });
