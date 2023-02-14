@@ -5,7 +5,7 @@ import { createUserToken } from './util';
 jest.mock('../src/tasks/s3-client');
 const listReports = require('../src/tasks/s3-client').listReports as jest.Mock;
 const exportReports = require('../src/tasks/s3-client')
-  .listReports as jest.Mock;
+  .exportReports as jest.Mock;
 
 describe('reports', () => {
   let organization;
