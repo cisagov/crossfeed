@@ -31,7 +31,7 @@ FROM node:14-alpine3.17
 
 WORKDIR /app
 
-RUN apk add --update --no-cache wget build-base curl git unzip openssl-dev linux-headers python3=3.10.9-r1 python3-dev py3-pip ruby ruby-dev zlib-dev libffi-dev libxml2-dev libxslt-dev postgresql-dev gcc musl-dev py3-pandas py3-scikit-learn cargo
+RUN apk add --update --no-cache wget build-base curl git unzip openssl-dev linux-headers python3=3.10.10-r0 python3-dev py3-pip ruby ruby-dev zlib-dev libffi-dev libxml2-dev libxslt-dev postgresql-dev gcc musl-dev py3-pandas py3-scikit-learn cargo
 
 RUN npm install -g pm2@4 wait-port@0.2.9
 
@@ -42,7 +42,7 @@ RUN export RUBY_VERSION=$(ruby -e "print RUBY_VERSION") && git clone https://git
 RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/bin/intrigue-ident && chmod +x /usr/bin/intrigue-ident
 
 # Install pe-source module
-RUN git clone https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout staging
+RUN git clone https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout 48e35e56677874c7a697c8d1b0eed578fa7062fc && pip install . 
 
 # Python dependencies
 
