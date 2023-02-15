@@ -57,7 +57,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_target" "scheduled_pe_shodan_task" {
-  target_id = "$scheduled-ecs-target"
+  target_id = "scheduled-ecs-target-shodan"
   rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
   arn       = aws_ecs_cluster.worker.arn
   role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
@@ -87,7 +87,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_target" "scheduled_pe_top_cves_task" {
-  target_id = "$scheduled-ecs-target"
+  target_id = "scheduled-ecs-target-cves"
   rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
   arn       = aws_ecs_cluster.worker.arn
   role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
@@ -117,7 +117,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_target" "scheduled_pe_mentions_task" {
-  target_id = "$scheduled-ecs-target"
+  target_id = "scheduled-ecs-target-mentions"
   rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
   arn       = aws_ecs_cluster.worker.arn
   role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
@@ -147,7 +147,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_target" "scheduled_pe_intelx_task" {
-  target_id = "$scheduled-ecs-target"
+  target_id = "scheduled-ecs-target-intelx"
   rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
   arn       = aws_ecs_cluster.worker.arn
   role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
@@ -177,7 +177,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_target" "scheduled_pe_hibp_task" {
-  target_id = "$scheduled-ecs-target"
+  target_id = "scheduled-ecs-target-hibp"
   rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
   arn       = aws_ecs_cluster.worker.arn
   role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
@@ -207,7 +207,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_target" "scheduled_pe_dnstwist_task" {
-  target_id = "$scheduled-ecs-target"
+  target_id = "scheduled-ecs-target-dnstwist"
   rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
   arn       = aws_ecs_cluster.worker.arn
   role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
@@ -237,7 +237,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_target" "scheduled_pe_dnsmonitor_task" {
-  target_id = "$scheduled-ecs-target"
+  target_id = "scheduled-ecs-target-dnsmonitor"
   rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
   arn       = aws_ecs_cluster.worker.arn
   role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
@@ -267,7 +267,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_target" "scheduled_pe_credentials_task" {
-  target_id = "$scheduled-ecs-target"
+  target_id = "scheduled-ecs-target-credentials"
   rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
   arn       = aws_ecs_cluster.worker.arn
   role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
@@ -297,7 +297,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_target" "scheduled_pe_alerts_task" {
-  target_id = "$scheduled-ecs-target"
+  target_id = "scheduled-ecs-target-alerts"
   rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
   arn       = aws_ecs_cluster.worker.arn
   role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
