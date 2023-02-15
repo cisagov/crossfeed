@@ -6,7 +6,7 @@ resource "aws_cloudwatch_event_rule" "scheduled_pe_task" {
 }
 
 resource "aws_iam_role" "cloudwatch_scheduled_task_execution" {
-  name               = "$crossfeed-pe-cloudwatch-role-${var.stage}"
+  name               = "crossfeed-pe-cloudwatch-role-${var.stage}"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -29,7 +29,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "scheduled_task_cloudwatch_policy" {
-  name   = "$crossfeed-pe-cloudwatch-policy-${var.stage}"
+  name   = "crossfeed-pe-cloudwatch-policy-${var.stage}"
   role   = aws_iam_role.cloudwatch_scheduled_task_execution.id
   policy = <<EOF
 {
