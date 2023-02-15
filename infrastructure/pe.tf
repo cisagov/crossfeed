@@ -67,9 +67,9 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_shodan_task" {
     task_definition_arn = aws_ecs_task_definition.worker.arn
     launch_type         = "FARGATE"
     network_configuration {
-      subnets          = [process.env.FARGATE_SUBNET_ID]
+      subnets          = ["$FARGATE_SUBNET_ID"]
       assign_public_ip = true
-      security_groups  = [process.env.FARGATE_SG_ID]
+      security_groups  = ["$FARGATE_SG_ID"]
     }
   }
   input = <<EOF
@@ -97,9 +97,9 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_top_cves_task" {
     task_definition_arn = aws_ecs_task_definition.worker.arn
     launch_type         = "FARGATE"
     network_configuration {
-      subnets          = [process.env.FARGATE_SUBNET_ID]
+      subnets          = ["$FARGATE_SUBNET_ID"]
       assign_public_ip = true
-      security_groups  = [process.env.FARGATE_SG_ID]
+      security_groups  = ["$FARGATE_SG_ID"]
     }
   }
   input = <<EOF
@@ -127,9 +127,9 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_mentions_task" {
     task_definition_arn = aws_ecs_task_definition.worker.arn
     launch_type         = "FARGATE"
     network_configuration {
-      subnets          = [process.env.FARGATE_SUBNET_ID]
+      subnets          = ["$FARGATE_SUBNET_ID"]
       assign_public_ip = true
-      security_groups  = [process.env.FARGATE_SG_ID]
+      security_groups  = ["$FARGATE_SG_ID"]
     }
   }
   input = <<EOF
@@ -157,9 +157,9 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_intelx_task" {
     task_definition_arn = aws_ecs_task_definition.worker.arn
     launch_type         = "FARGATE"
     network_configuration {
-      subnets          = [process.env.FARGATE_SUBNET_ID]
+      subnets          = ["$FARGATE_SUBNET_ID"]
       assign_public_ip = true
-      security_groups  = [process.env.FARGATE_SG_ID]
+      security_groups  = ["$FARGATE_SG_ID"]
     }
   }
   input = <<EOF
@@ -187,9 +187,9 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_hibp_task" {
     task_definition_arn = aws_ecs_task_definition.worker.arn
     launch_type         = "FARGATE"
     network_configuration {
-      subnets          = [process.env.FARGATE_SUBNET_ID]
+      subnets          = ["$FARGATE_SUBNET_ID"]
       assign_public_ip = true
-      security_groups  = [process.env.FARGATE_SG_ID]
+      security_groups  = ["$FARGATE_SG_ID"]
     }
   }
   input = <<EOF
@@ -217,9 +217,9 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_dnstwist_task" {
     task_definition_arn = aws_ecs_task_definition.worker.arn
     launch_type         = "FARGATE"
     network_configuration {
-      subnets          = [process.env.FARGATE_SUBNET_ID]
+      subnets          = ["$FARGATE_SUBNET_ID"]
       assign_public_ip = true
-      security_groups  = [process.env.FARGATE_SG_ID]
+      security_groups  = ["$FARGATE_SG_ID"]
     }
   }
   input = <<EOF
@@ -247,9 +247,9 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_dnsmonitor_task" {
     task_definition_arn = aws_ecs_task_definition.worker.arn
     launch_type         = "FARGATE"
     network_configuration {
-      subnets          = [process.env.FARGATE_SUBNET_ID]
+      subnets          = ["$FARGATE_SUBNET_ID"]
       assign_public_ip = true
-      security_groups  = [process.env.FARGATE_SG_ID]
+      security_groups  = ["$FARGATE_SG_ID"]
     }
   }
   input = <<EOF
@@ -277,9 +277,9 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_credentials_task" {
     task_definition_arn = aws_ecs_task_definition.worker.arn
     launch_type         = "FARGATE"
     network_configuration {
-      subnets          = [process.env.FARGATE_SUBNET_ID]
+      subnets          = ["$FARGATE_SUBNET_ID"]
       assign_public_ip = true
-      security_groups  = [process.env.FARGATE_SG_ID]
+      security_groups  = ["$FARGATE_SG_ID"]
     }
   }
   input = <<EOF
@@ -307,9 +307,9 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_alerts_task" {
     task_definition_arn = aws_ecs_task_definition.worker.arn
     launch_type         = "FARGATE"
     network_configuration {
-      subnets          = [process.env.FARGATE_SUBNET_ID]
+      subnets          = ["$FARGATE_SUBNET_ID"]
       assign_public_ip = true
-      security_groups  = [process.env.FARGATE_SG_ID]
+      security_groups  = ["$FARGATE_SG_ID"]
     }
   }
   input = <<EOF
