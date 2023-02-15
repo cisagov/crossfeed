@@ -9,6 +9,7 @@ import * as reports from '../api/reports';
 import S3Client from './s3-client'
 import ECSClient from './ecs-client';
 import { getOrgMemberships } from '../api/auth';
+import { isNull } from 'lodash';
 
 /**
  *  class Notifications {
@@ -61,28 +62,39 @@ If you encounter any difficulties, please feel free to reply to this email (or s
   );
 };
 
-
-export const handler: Handler = async () => {
+export const handler: Handler = async (event) => {
     await connectToDatabase();
     console.log('Running notifications check...')
-    
+    const result = await Organization.find()
+
+    // for (const orgs in result) {
+    //   const client = new S3Client();
+    //   const reportsList = await client.listReports(orgs)
+    //   console.log(reportsList)
+    // }
     
       // Get list of organizations
-    const organization = await Organization.find()
-    
+
     // Loop through organizations and pull reports
-
-    for (const org in organization) {
-
+    result.forEach( async Element => {
       const client = new S3Client();
-      const reportsList = await client.listReports(org)
+      const reportsList = await client.listReports(JSON.stringify(Element))
       console.log(reportsList)
-      return {
-        body: JSON.stringify(reportsList)
-      }
-    }
+      
+    })
     
-    
+
+
+    // Loop through organizations and pull reports
+    /**for ( let orgs = 0; orgs < result.length, orgs++;) {
+      organizations += result[orgs] + ''
+      const client = new S3Client();
+      const reportsList = await client.listReports(JSON.stringify(organizations))
+      //console.log(result)
+      console.log(orgs)
+    } 
+    */
+  
     
      /** 
 
