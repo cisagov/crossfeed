@@ -195,7 +195,7 @@ resource "aws_db_instance" "matomo_db" {
   multi_az                            = false
   backup_retention_period             = 35
   storage_encrypted                   = true
-  iam_database_authentication_enabled = true
+  iam_database_authentication_enabled = false
 
   // database information
   db_name  = "matomo"
