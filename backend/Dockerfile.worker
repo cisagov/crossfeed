@@ -42,7 +42,7 @@ RUN export RUBY_VERSION=$(ruby -e "print RUBY_VERSION") && git clone https://git
 RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/bin/intrigue-ident && chmod +x /usr/bin/intrigue-ident
 
 # Install pe-source module
-RUN git clone https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout 48e35e56677874c7a697c8d1b0eed578fa7062fc && pip install . 
+RUN git clone https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout c9cbbd73b22ef38cabe1da6ba50aeb2dc0be4f99 && pip install . 
 
 # Python dependencies
 
