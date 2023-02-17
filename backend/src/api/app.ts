@@ -152,6 +152,20 @@ const matomoProxy = createProxyMiddleware({
   }
 });
 
+/**
+ * @swagger
+ *
+ * /pe:
+ *  get:
+ *    description: All paths under /pe proxy to the P&E django application and API. Only a global admin can access.
+ *    tags:
+ *    - Analytics
+ */
+const peProxy = createProxyMiddleware({
+  target: process.env.PE_DJANGO_URL,
+  changeOrigin: true
+});
+
 app.use(
   '/matomo',
   async (req, res, next) => {
@@ -186,6 +200,21 @@ app.use(
     return next();
   },
   matomoProxy
+);
+
+app.use(
+  '/pe',
+  async (req, res, next) => {
+    // Only allow specific users to access
+    const user = (await auth.authorize({
+      authorizationToken: req.cookies['crossfeed-token']
+    })) as auth.UserToken;
+    if (user.userType !== UserType.GLOBAL_ADMIN) {
+      return res.status(401).send('Unauthorized');
+    }
+    return next();
+  },
+  peProxy
 );
 
 // Routes that require an authenticated user, without

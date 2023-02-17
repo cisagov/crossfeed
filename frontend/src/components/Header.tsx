@@ -145,6 +145,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
         exact: true
       },
       {
+        title: 'P&E App',
+        path: '/pe',
+        users: GLOBAL_ADMIN,
+        exact: true
+      },
+      {
         title: 'Logout',
         path: '/settings',
         users: ALL_USERS,
