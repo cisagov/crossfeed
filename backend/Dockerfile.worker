@@ -41,6 +41,9 @@ RUN gem install bundler:2.3.21
 RUN export RUBY_VERSION=$(ruby -e "print RUBY_VERSION") && git clone https://github.com/intrigueio/intrigue-ident.git && cd intrigue-ident && git checkout ee119abeac20564e728a92ab786400126e7a97f0 && sed -i "s/2.7.2/$RUBY_VERSION/g" Gemfile && sed -i "s/2.7.2p114/$RUBY_VERSION/g" Gemfile.lock && bundle install --jobs=4
 RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/bin/intrigue-ident && chmod +x /usr/bin/intrigue-ident
 
+# Install pe-source module
+RUN git clone https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout c9cbbd73b22ef38cabe1da6ba50aeb2dc0be4f99 && pip install . 
+
 # Python dependencies
 
 COPY worker/requirements.txt worker/requirements.txt
