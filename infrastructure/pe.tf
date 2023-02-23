@@ -2,7 +2,7 @@
 resource "aws_cloudwatch_event_rule" "scheduled_pe_task" {
 
   name                = "scheduled-pe-event-rule"
-  schedule_expression = "cron(0 0 1,16 * * *)"
+  schedule_expression = "cron(0 0 1,16 * ? *)"
 }
 
 resource "aws_iam_role" "cloudwatch_scheduled_task_execution" {
