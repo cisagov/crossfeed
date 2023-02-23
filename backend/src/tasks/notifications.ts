@@ -1,43 +1,9 @@
 import { Handler } from 'aws-lambda';
-import { Organizations } from 'aws-sdk';
-import { connectToDatabase, Organization } from '../models';
+import { connectToDatabase, Organization, User, Role, UserType } from '../models';
 import {sendEmail} from '../api/helpers';
-
-import { In, IsNull, Not } from 'typeorm';
-
-import * as reports from '../api/reports';
 import S3Client from './s3-client'
-import ECSClient from './ecs-client';
-import { getOrgMemberships } from '../api/auth';
-import { isNull } from 'lodash';
 
-/**
- *  class Notifications {
-  s3: S3Client;
-  existingReports;
-  organizations: Organization [];
-  lastNotified: Date;
-
-  constructor() {}
-
-  async initialize({
-    existingReports,
-    organizations,
-    lastNotified
-
-  }: {
-    existingReports
-    organizations: Organization [];
-    lastNotified: Date;
-  }) {
-    this.s3 = new S3Client();
-    this.existingReports = await this.s3.listReports('data');
-    this.organizations = organizations;
-    this.lastNotified = lastNotified;
-  }
-
-}
- */
+import {isOrgAdmin} from '../api/auth'
 
 const sendReportEmail = async (email: string, organization?: Organization) => {
   
@@ -65,69 +31,61 @@ If you encounter any difficulties, please feel free to reply to this email (or s
 export const handler: Handler = async (event) => {
     await connectToDatabase();
     console.log('Running notifications check...')
-    const result = await Organization.find()
-
-    // for (const orgs in result) {
-    //   const client = new S3Client();
-    //   const reportsList = await client.listReports(orgs)
-    //   console.log(reportsList)
-    // }
     
-      // Get list of organizations
-
-    // Loop through organizations and pull reports
-    result.forEach( async Element => {
-      const client = new S3Client();
-      const reportsList = await client.listReports(JSON.stringify(Element))
-      console.log(reportsList)
+    const firstName = ' first name';
+    const lastName = 'last name';
+    const email = Math.random() + '@crossfeed.cisa.gov';
+     // created to test if admin can be found 
+     await User.create ({
+      firstName,
+      lastName,
+      email,
+      userType: UserType.GLOBAL_ADMIN
+      }).save();  
+    
+   // Get all organizations
+    const organizations = await Organization.find()
       
-    })
-    
+     for (const org in organizations) {
+       const client = new S3Client();
+       // pull reports list 
+       const reportsList = await client.listReports(organizations[org].id)
+       //find all global admin users only
+       const users = await User.find({
+        userType: UserType.GLOBAL_ADMIN
+         })
+         // loop through reports and send email notification
+       for (const report in reportsList) {
 
+      // email reporting -- TODO need actual org name thats in database here
+        if (organizations[org].name.startsWith("WAS") ){
+          for ( const user in users) {
+            // TODO - check for proper use of isOrgAdmin
+            if (isOrgAdmin(event)) {
+              await sendReportEmail('123@crossfeed.cisa.gov', organizations[org])
+            }
+          }
+        // P&E 
+         } else if (organizations[org].name.startsWith("P&E")){
+          for ( const user in users) {
+            if (isOrgAdmin(event)) {
+              await sendReportEmail(users[user].email, organizations[org])
+            }
+          }
+        // VS
+         } else if (organizations[org].name.startsWith("VS")){
+          for ( const user in users) {
+            if (isOrgAdmin(event)) {
+              await sendReportEmail(users[user].email, organizations[org])
+            }
+          }
+         }
+      }
+       
 
-    // Loop through organizations and pull reports
-    /**for ( let orgs = 0; orgs < result.length, orgs++;) {
-      organizations += result[orgs] + ''
-      const client = new S3Client();
-      const reportsList = await client.listReports(JSON.stringify(organizations))
-      //console.log(result)
-      console.log(orgs)
-    } 
-    */
-  
-    
-     /** 
-
-    // List the latest reports 
-    const orgId = JSON.parse(event.body!).currentOrganization.id;
-    if (getOrgMemberships(event).includes(orgId)) {
-      const client = new S3Client();
-      const latestReports = await client.listReports(orgId);
-      return {
-        statusCode: 200,
-        body: JSON.stringify(latestReports)
-      };
-    } else {
-      return {
-        statusCode: 404,
-        body: 'User is not a member of this organization.'
-      };
-    }
-    //const firstNotified 
-    const prev_latestReports = latestReports
-
-   
-    // If the existing reports are not the same as the previous reports, send email and update lastNotified
-    if (prev_latestReports.length < latestReports.length) {
-      await sendReportEmail(email, organization);
-       const lastNotified = new Date()
-
-       if (lastNotified != null) {
-        return lastNotified
-       }
- 
      }
-*/
+    
+  
 
   };
   
