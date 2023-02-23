@@ -3,7 +3,7 @@ name: Infrastructure Pipeline
 on:
   push:
     branches:
-      - fix-cron-expression
+      - master
       - production
     paths:
       - 'infrastructure/**'
