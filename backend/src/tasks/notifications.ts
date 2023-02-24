@@ -2,7 +2,6 @@ import { Handler } from 'aws-lambda';
 import { connectToDatabase, Organization, User, Role, UserType } from '../models';
 import {sendEmail} from '../api/helpers';
 import S3Client from './s3-client'
-
 import {isOrgAdmin} from '../api/auth'
 
 const sendReportEmail = async (email: string, organization?: Organization) => {
@@ -32,10 +31,10 @@ export const handler: Handler = async (event) => {
     await connectToDatabase();
     console.log('Running notifications check...')
     
+    // created to test if admin can be found
     const firstName = ' first name';
     const lastName = 'last name';
-    const email = Math.random() + '@crossfeed.cisa.gov';
-     // created to test if admin can be found 
+    const email = Math.random() + '@crossfeed.cisa.gov'; 
      await User.create ({
       firstName,
       lastName,
@@ -60,7 +59,7 @@ export const handler: Handler = async (event) => {
       // email reporting -- TODO need actual org name thats in database here
         if (organizations[org].name.startsWith("WAS") ){
           for ( const user in users) {
-            // TODO - check for proper use of isOrgAdmin
+            // TODO - check for proper use of isOrgAdmin, testing ?
             if (isOrgAdmin(event)) {
               await sendReportEmail('123@crossfeed.cisa.gov', organizations[org])
             }
@@ -82,7 +81,6 @@ export const handler: Handler = async (event) => {
          }
       }
        
-
      }
     
   
