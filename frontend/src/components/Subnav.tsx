@@ -5,8 +5,10 @@ import { NavLink } from 'react-router-dom';
 interface Props {
   items: {
     title: string;
-    path: string;
+    path: string | { pathname: string };
     exact?: boolean;
+    users?: number;
+    externalLink?: boolean;
   }[];
   styles?: any;
 }
@@ -17,17 +19,30 @@ export const Subnav: React.FC<Props> = (props) => {
 
   return (
     <Paper classes={{ root: classes.root }}>
-      {items.map((item) => (
-        <NavLink
-          key={item.title}
-          to={item.path}
-          className={classes.link}
-          activeClassName={classes.active}
-          exact={item.exact ?? false}
-        >
-          {item.title}
-        </NavLink>
-      ))}
+      {items.map((item) =>
+        item.externalLink ? (
+          <NavLink
+            key={item.title}
+            to={item.path}
+            className={classes.link}
+            activeClassName={classes.active}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {item.title}
+          </NavLink>
+        ) : (
+          <NavLink
+            key={item.title}
+            to={item.path}
+            className={classes.link}
+            activeClassName={classes.active}
+            exact={item.exact ?? false}
+          >
+            {item.title}
+          </NavLink>
+        )
+      )}
       <div className={classes.flex} />
       {children}
     </Paper>
