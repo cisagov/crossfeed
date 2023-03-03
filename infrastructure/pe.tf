@@ -5,6 +5,12 @@ resource "aws_cloudwatch_event_rule" "scheduled_pe_task" {
   schedule_expression = "cron(0 0 1,16 * ? *)"
 }
 
+resource "aws_cloudwatch_event_rule" "scheduled_pe_cybersixgill_task" {
+
+  name                = "scheduled-pe-event-cybersixgill-rule"
+  schedule_expression = "cron(0 0 1,16 * ? *)"
+}
+
 resource "aws_iam_role" "cloudwatch_scheduled_task_execution" {
   name               = "crossfeed-pe-cloudwatch-role-${var.stage}"
   assume_role_policy = <<EOF
@@ -78,66 +84,6 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_shodan_task" {
     {
       "name": "main",
       "command": "./worker/pe_scripts/runPeShodan.sh",
-      "cpu": "2048",
-      "memory": "16384"
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_cloudwatch_event_target" "scheduled_pe_top_cves_task" {
-  target_id = "scheduled-ecs-target-cves"
-  rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
-  arn       = aws_ecs_cluster.worker.arn
-  role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
-
-  ecs_target {
-    task_count          = 1
-    task_definition_arn = aws_ecs_task_definition.worker.arn
-    launch_type         = "FARGATE"
-    network_configuration {
-      subnets          = ["$FARGATE_SUBNET_ID"]
-      assign_public_ip = true
-      security_groups  = ["$FARGATE_SG_ID"]
-    }
-  }
-  input = <<EOF
-{
-  "containerOverrides": [
-    {
-      "name": "main",
-      "command": "./worker/pe_scripts/runPeTopCVEs.sh",
-      "cpu": "2048",
-      "memory": "16384"
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_cloudwatch_event_target" "scheduled_pe_mentions_task" {
-  target_id = "scheduled-ecs-target-mentions"
-  rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
-  arn       = aws_ecs_cluster.worker.arn
-  role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
-
-  ecs_target {
-    task_count          = 1
-    task_definition_arn = aws_ecs_task_definition.worker.arn
-    launch_type         = "FARGATE"
-    network_configuration {
-      subnets          = ["$FARGATE_SUBNET_ID"]
-      assign_public_ip = true
-      security_groups  = ["$FARGATE_SG_ID"]
-    }
-  }
-  input = <<EOF
-{
-  "containerOverrides": [
-    {
-      "name": "main",
-      "command": "./worker/pe_scripts/runPeMentions.sh",
       "cpu": "2048",
       "memory": "16384"
     }
@@ -266,9 +212,69 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_dnsmonitor_task" {
 EOF
 }
 
+resource "aws_cloudwatch_event_target" "scheduled_pe_alerts_task" {
+  target_id = "scheduled-ecs-target-alerts"
+  rule      = aws_cloudwatch_event_rule.scheduled_pe_cybersixgill_task.name
+  arn       = aws_ecs_cluster.worker.arn
+  role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
+
+  ecs_target {
+    task_count          = 1
+    task_definition_arn = aws_ecs_task_definition.worker.arn
+    launch_type         = "FARGATE"
+    network_configuration {
+      subnets          = ["$FARGATE_SUBNET_ID"]
+      assign_public_ip = true
+      security_groups  = ["$FARGATE_SG_ID"]
+    }
+  }
+  input = <<EOF
+{
+  "containerOverrides": [
+    {
+      "name": "main",
+      "command": "./worker/pe_scripts/runPeAlerts.sh",
+      "cpu": "2048",
+      "memory": "16384"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_cloudwatch_event_target" "scheduled_pe_mentions_task" {
+  target_id = "scheduled-ecs-target-mentions"
+  rule      = aws_cloudwatch_event_rule.scheduled_pe_cybersixgill_task.name
+  arn       = aws_ecs_cluster.worker.arn
+  role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
+
+  ecs_target {
+    task_count          = 1
+    task_definition_arn = aws_ecs_task_definition.worker.arn
+    launch_type         = "FARGATE"
+    network_configuration {
+      subnets          = ["$FARGATE_SUBNET_ID"]
+      assign_public_ip = true
+      security_groups  = ["$FARGATE_SG_ID"]
+    }
+  }
+  input = <<EOF
+{
+  "containerOverrides": [
+    {
+      "name": "main",
+      "command": "./worker/pe_scripts/runPeMentions.sh",
+      "cpu": "2048",
+      "memory": "16384"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_cloudwatch_event_target" "scheduled_pe_credentials_task" {
   target_id = "scheduled-ecs-target-credentials"
-  rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
+  rule      = aws_cloudwatch_event_rule.scheduled_pe_cybersixgill_task.name
   arn       = aws_ecs_cluster.worker.arn
   role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
 
@@ -296,9 +302,9 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_credentials_task" {
 EOF
 }
 
-resource "aws_cloudwatch_event_target" "scheduled_pe_alerts_task" {
-  target_id = "scheduled-ecs-target-alerts"
-  rule      = aws_cloudwatch_event_rule.scheduled_pe_task.name
+resource "aws_cloudwatch_event_target" "scheduled_pe_top_cves_task" {
+  target_id = "scheduled-ecs-target-cves"
+  rule      = aws_cloudwatch_event_rule.scheduled_pe_cybersixgill_task.name
   arn       = aws_ecs_cluster.worker.arn
   role_arn  = aws_iam_role.cloudwatch_scheduled_task_execution.arn
 
@@ -317,7 +323,7 @@ resource "aws_cloudwatch_event_target" "scheduled_pe_alerts_task" {
   "containerOverrides": [
     {
       "name": "main",
-      "command": "./worker/pe_scripts/runPeAlerts.sh",
+      "command": "./worker/pe_scripts/runPeTopCVEs.sh",
       "cpu": "2048",
       "memory": "16384"
     }
