@@ -15,7 +15,10 @@ export function createUserToken(user: Partial<UserToken> = {}) {
     },
     process.env.JWT_SECRET!,
     {
-      expiresIn: '1 day'
+      expiresIn: '1 day',
+      header: {
+        typ: 'JWT'
+      }
     }
   );
   return token;
