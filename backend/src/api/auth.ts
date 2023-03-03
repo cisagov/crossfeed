@@ -47,12 +47,6 @@ interface UserInfo {
 const client = jwksClient({
   jwksUri: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.REACT_APP_USER_POOL_ID}/.well-known/jwks.json`
 });
-function getKey(header, callback) {
-  client.getSigningKey(header.kid, function (err, key) {
-    const signingKey = key.getPublicKey();
-    callback(null, signingKey);
-  });
-}
 
 /**
  * @swagger
@@ -102,12 +96,17 @@ export const userTokenBody = (user): UserToken => ({
 export const callback = async (event, context) => {
   let userInfo: UserInfo;
   try {
+    const token = JSON.parse(event.body).token;
+    const decoded = jwt.decode(token, { complete: true });
+    if (!decoded) {
+      return console.log('Could not decode token');
+    }
+    const key = await client.getSigningKey(decoded.header.kid);
+    const signingKey = key.getPublicKey();
     if (process.env.USE_COGNITO) {
       userInfo = await new Promise((resolve, reject) =>
-        jwt.verify(
-          JSON.parse(event.body).token,
-          getKey,
-          (err, data: CognitoUserToken) => (err ? reject(err) : resolve(data))
+        jwt.verify(token, signingKey, (err, data: CognitoUserToken) =>
+          err ? reject(err) : resolve(data)
         )
       );
     } else {
@@ -173,10 +172,7 @@ export const callback = async (event, context) => {
   }
 
   const token = jwt.sign(userTokenBody(user), process.env.JWT_SECRET!, {
-    expiresIn: '1 days',
-    header: {
-      typ: 'JWT'
-    }
+    expiresIn: '1 days'
   });
 
   return {
