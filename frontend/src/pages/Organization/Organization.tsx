@@ -588,7 +588,9 @@ export const Organization: React.FC = () => {
       ></TextField>
       <ListInput label="Root Domains" type="rootDomains"></ListInput>
       <ListInput label="IP Blocks" type="ipBlocks"></ListInput>
-      <ListInput label="Tags" type="tags"></ListInput>
+      {user?.userType === 'globalAdmin' && (
+        <ListInput label="Tags" type="tags"></ListInput>
+      )}
       <div className={classes.headerRow}>
         <label>Passive Mode</label>
         <span>

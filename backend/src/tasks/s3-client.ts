@@ -37,9 +37,29 @@ class S3Client {
         Body: body,
         ContentType: 'text/csv'
       };
-      const data = await this.s3.putObject(params).promise();
+      await this.s3.putObject(params).promise();
       const url = await this.s3.getSignedUrlPromise('getObject', {
         Bucket: process.env.EXPORT_BUCKET_NAME!,
+        Key,
+        Expires: 60 * 5 // 5 minutes
+      });
+
+      // Do this so exports are accessible when running locally.
+      if (this.isLocal) {
+        console.log(url.replace('minio:9000', 'localhost:9000'));
+        return url.replace('minio:9000', 'localhost:9000');
+      }
+      return url;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  async exportReport(Key: string) {
+    try {
+      const url = await this.s3.getSignedUrlPromise('getObject', {
+        Bucket: process.env.REPORTS_BUCKET_NAME!,
         Key,
         Expires: 60 * 5 // 5 minutes
       });
@@ -49,6 +69,25 @@ class S3Client {
         return url.replace('minio:9000', 'localhost:9000');
       }
       return url;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+  async listReports(orgId: string) {
+    try {
+      const params = {
+        Bucket: process.env.REPORTS_BUCKET_NAME!,
+        Delimiter: '',
+        Prefix: `${orgId}/`
+      };
+
+      const data = await this.s3
+        .listObjects(params, function (err, data) {
+          if (err) throw err;
+        })
+        .promise();
+      return data.Contents;
     } catch (e) {
       console.error(e);
       throw e;
