@@ -25,6 +25,12 @@ export class Organization extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Column({
+    type: 'timestamp',
+    nullable: true
+  })
+  notifiedAt: Date;
+
   @Column()
   name: string;
 
