@@ -5,7 +5,6 @@ import { useAuthContext } from 'context';
 import { SavedSearch } from 'types';
 import { Subnav } from 'components';
 import {
-  Button,
   Modal,
   ModalFooter,
   ModalHeading,
