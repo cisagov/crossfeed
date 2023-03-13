@@ -46,6 +46,13 @@ exports[`Header component matches snapshot 1`] = `
             >
               Feeds
             </a>
+            <a
+              class="makeStyles-link-17"
+              href="/reports"
+              style="outline: none;"
+            >
+              Reports
+            </a>
           </div>
           <div
             class="makeStyles-spacing-4"
