@@ -180,5 +180,40 @@ describe ('notifications', () => {
         .expect(403)
 
   });
-  
+  test('Emails to org admin user should send', async () => {
+
+    const firstName = 'first names';
+    const lastName = 'last names';
+    const email = Math.random() + '@crossfeed.cisa.gov'; 
+    const user = await User.create ({
+        firstName,
+        lastName,
+        email,
+    }).save();
+   
+    const response = await request(app)
+      .post('/users')  
+      .set(
+        'Authorization',
+        createUserToken({
+          roles: [{org: organization.id, role: 'admin'}],
+        })
+      )
+      .send({firstName,
+             lastName,
+             email,
+             organization: organization.id,
+             organizationAdmin: true
+            })
+      .expect(200)
+    console.log(response.body)
+    expect(response.body.email).toEqual(email);
+    expect(response.body.firstName).toEqual(firstName);
+    expect(response.body.lastName).toEqual(lastName);
+    expect(response.body.roles[0].approved).toEqual(true);
+    expect(response.body.roles[0].role).toEqual('admin');
+    expect(response.body.roles[0].organization.id).toEqual(organization.id);
+
+
+});    
 });
