@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  useLocation,
   Redirect
 } from 'react-router-dom';
 import { API, Auth } from 'aws-amplify';
