@@ -8,11 +8,11 @@ import {
 } from 'react-router-dom';
 import { API, Auth } from 'aws-amplify';
 import { AuthContextProvider, CFThemeProvider, SearchProvider } from 'context';
-import {
-  MatomoProvider,
-  createInstance,
-  useMatomo
-} from '@datapunt/matomo-tracker-react';
+// import {
+//   MatomoProvider,
+//   createInstance,
+//   useMatomo
+// } from '@datapunt/matomo-tracker-react';
 import {
   Domain,
   AuthLogin,
@@ -54,35 +54,35 @@ if (process.env.REACT_APP_USE_COGNITO) {
   });
 }
 
-const instance = createInstance({
-  urlBase: `${process.env.REACT_APP_API_URL}/matomo`,
-  siteId: 1,
-  disabled: false,
-  heartBeat: {
-    // optional, enabled by default
-    active: true, // optional, default value: true
-    seconds: 15 // optional, default value: `15
-  },
-  linkTracking: false // optional, default value: true
-  // configurations: { // optional, default value: {}
-  //   // any valid matomo configuration, all below are optional
-  //   disableCookies: true,
-  //   setSecureCookie: true,
-  //   setRequestMethod: 'POST'
-  // }
-});
+// const instance = createInstance({
+//   urlBase: `${process.env.REACT_APP_API_URL}/matomo`,
+//   siteId: 1,
+//   disabled: false,
+//   heartBeat: {
+//     // optional, enabled by default
+//     active: true, // optional, default value: true
+//     seconds: 15 // optional, default value: `15
+//   },
+//   linkTracking: false // optional, default value: true
+//   // configurations: { // optional, default value: {}
+//   //   // any valid matomo configuration, all below are optional
+//   //   disableCookies: true,
+//   //   setSecureCookie: true,
+//   //   setRequestMethod: 'POST'
+//   // }
+// });
 
 const LinkTracker = () => {
   const location = useLocation();
-  const { trackPageView } = useMatomo();
+  // const { trackPageView } = useMatomo();
 
-  useEffect(() => trackPageView({}), [location, trackPageView]);
+  // useEffect(() => trackPageView({}), [location, trackPageView]);
 
   return null;
 };
 
 const App: React.FC = () => (
-  <MatomoProvider value={instance}>
+  // <MatomoProvider value={instance}>
     <Router>
       <CFThemeProvider>
         <AuthContextProvider>
@@ -160,7 +160,7 @@ const App: React.FC = () => (
         </AuthContextProvider>
       </CFThemeProvider>
     </Router>
-  </MatomoProvider>
+  // </MatomoProvider>
 );
 
 export default App;
