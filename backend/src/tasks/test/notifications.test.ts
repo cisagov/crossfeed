@@ -3,9 +3,21 @@ import app from '../../../src/api/app';
 import * as request from 'supertest';
 import { createUserToken } from '../../../test/util';
 import { connectToDatabase, Organization, Role, User, UserType } from '../../models';
+import { sendEmail } from 'src/api/helpers';
 
 jest.mock('../s3-client');
 const listReports = require('../s3-client').listReports as jest.Mock;
+
+const nodemailer = require('nodemailer');
+
+const sendMailMock = jest.fn();
+jest.mock('nodemailer');
+nodemailer.createTransport.mockReturnValue({ 'sendMail': sendMailMock});
+
+beforeEach(() => {
+  sendMailMock.mockClear();
+  nodemailer.createTransport.mockClear();
+})
 
 describe ('notifications', () => {
    let organization;
@@ -99,7 +111,7 @@ describe ('notifications', () => {
           .expect(200)
         expect(response)
 
-    }) 
+    }); 
     
     test('getting reports list for all organizations', async () => {
       const user = await User.create ({
@@ -132,5 +144,41 @@ describe ('notifications', () => {
         //expect(response.text).toEqual('{"Contents":"report content"}');
         expect(listReports).toBeCalled;
     
-    }) 
+    });
+    test('Emails to regular user should not send', async () => {
+      const firstName = 'first names';
+      const lastName = 'last names';
+      const email = Math.random() + '@crossfeed.cisa.gov'; 
+      const user = await User.create ({
+          firstName,
+          lastName,
+          email,
+      }).save();
+
+      await notifications(
+        {
+          notifications
+        },
+        {} as any,
+        () => void 0
+      );
+      const response = await request(app)
+        .post('/users')  
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [{org: organization.id, role: 'user'}],
+            
+          })
+        )
+        .send({firstName,
+               lastName,
+               email,
+               organization: organization.id,
+               organizationAdmin: false
+              })
+        .expect(403)
+
+  });
+  
 });
