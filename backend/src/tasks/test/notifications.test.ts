@@ -3,7 +3,6 @@ import app from '../../../src/api/app';
 import * as request from 'supertest';
 import { createUserToken } from '../../../test/util';
 import { connectToDatabase, Organization, Role, User, UserType } from '../../models';
-import { sendEmail } from 'src/api/helpers';
 
 jest.mock('../s3-client');
 const listReports = require('../s3-client').listReports as jest.Mock;
@@ -26,21 +25,21 @@ describe ('notifications', () => {
     beforeAll(async () => {
         await connectToDatabase();
         organization = await Organization.create({
-          name: 'WAS-' + Math.random(),
+          name: 'Web Application Scanning-' + Math.random(),
           rootDomains: ['WAS-' + Math.random()],
           ipBlocks: [],
           isPassive: false
         }).save();
        
         organization2 = await Organization.create({
-          name: 'P&E-' + Math.random(),
+          name: 'Posture & Exposure-' + Math.random(),
           rootDomains: ['P&E-' + Math.random()],
           ipBlocks: [],
           isPassive: false
         }).save();
         
         organization3 = await Organization.create({
-          name: 'VS-' + Math.random(),
+          name: 'Vulnerability Scanning-' + Math.random(),
           rootDomains: ['VS-' + Math.random()],
           ipBlocks: [],
           isPassive: false

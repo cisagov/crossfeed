@@ -6,7 +6,6 @@ import {
   Role,
 } from '../models';
 import S3Client from './s3-client';
-import s3Client from './__mocks__/s3-client';
 
 const sendReportEmail = async (email: string, organization?: Organization) => {
   await sendEmail(
@@ -59,18 +58,18 @@ export const handler: Handler = async (event) => {
       for (const role in roles) {
     
       // email reporting -- TODO need actual org name thats in database here
-      if (roles[role].organization.name.startsWith('WAS')) {
+      if (roles[role].organization.name.startsWith('Web')) {
             // TODO - pulling orgadmin email to send emails
             await sendReportEmail(roles[role].user.email, organizations[org]);
             organizations[org].notifiedAt = new Date()
 
         // P&E
-      } else if (roles[role].organization.name.startsWith('P&E')) {
+      } else if (roles[role].organization.name.startsWith('Posture')) {
            await sendReportEmail(roles[role].user.email, organizations[org]);  
            organizations[org].notifiedAt = new Date()
 
         // VS
-      } else if (roles[role].organization.name.startsWith('VS')) {
+      } else if (roles[role].organization.name.startsWith('Vulnerability')) {
            await sendReportEmail(roles[role].user.email, organizations[org]);
            organizations[org].notifiedAt = new Date()
 
