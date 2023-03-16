@@ -1,7 +1,9 @@
 export const saveCSV = jest.fn(() => 'http://mock_url');
-export const listPeReports = jest.fn(() => ({ Contents: 'report content' }));
+export const listReports = jest.fn(() => ({ Contents: 'report content' }));
+export const exportReport = jest.fn(() => 'report_url');
 
 export default jest.fn(() => ({
   saveCSV,
-  listPeReports
+  listReports,
+  exportReport
 }));

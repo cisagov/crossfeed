@@ -1,5 +1,4 @@
 import * as express from 'express';
-import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as cookie from 'cookie';
 import * as cors from 'cors';
@@ -16,7 +15,7 @@ import * as users from './users';
 import * as scanTasks from './scan-tasks';
 import * as stats from './stats';
 import * as apiKeys from './api-keys';
-import * as Reports from './reports';
+import * as reports from './reports';
 import * as savedSearches from './saved-searches';
 import { listenForDockerEvents } from './docker-events';
 import { createProxyMiddleware } from 'http-proxy-middleware';
@@ -56,7 +55,7 @@ const handlerToExpress = (handler) => async (req, res, next) => {
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json({ strict: false }));
 app.use(helmet.hsts({ maxAge: 31536000, preload: true }));
 app.use(cookieParser());
 
@@ -310,13 +309,13 @@ authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
 
 authenticatedRoute.post(
-  '/reports/pe-export',
-  handlerToExpress(Reports.export_pe_report)
+  '/reports/export',
+  handlerToExpress(reports.export_report)
 );
 
 authenticatedRoute.post(
-  '/reports/pe-list',
-  handlerToExpress(Reports.list_pe_reports)
+  '/reports/list',
+  handlerToExpress(reports.list_reports)
 );
 
 app.use(authenticatedRoute);
