@@ -118,8 +118,7 @@ describe('notifications', () => {
         organizationAdmin: true
       })
       .expect(200);
-    console.log(response.body);
-    expect(response.body.roles[0].role).toEqual('admin'); // this may be key
+    expect(response.body.roles[0].role).toEqual('admin'); 
   });
 
   test('getting reports list for all organizations', async () => {
