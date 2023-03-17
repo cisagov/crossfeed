@@ -46,7 +46,6 @@ export const handler: Handler = async (event) => {
 
     // loop through reports
     for (const report in reportsList) {
-
       if (reportsList[report].LastModified >= organizations[org].notifiedAt) {
         for (const role in roles) {
           // email reporting -- TODO need actual org name thats in database here

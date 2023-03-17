@@ -115,11 +115,12 @@ describe('notifications', () => {
         lastName,
         email,
         organization: organization.id,
-        organizationAdmin: true})
+        organizationAdmin: true
+      })
       .expect(200);
-      console.log(response.body)
-      expect(response.body.roles[0].role).toEqual('admin'); // this may be key
-    });
+    console.log(response.body);
+    expect(response.body.roles[0].role).toEqual('admin'); // this may be key
+  });
 
   test('getting reports list for all organizations', async () => {
     const user = await User.create({
