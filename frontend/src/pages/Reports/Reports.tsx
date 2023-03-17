@@ -118,42 +118,18 @@ export const Reports: React.FC = () => {
         <h1>Reports</h1>
         {currentOrganization && tags && tags.some((e) => e.name === 'P&E') ? (
           <>
-            <h2>Download</h2>
-            <div className={classes.section}>
-              <TableContainer component={Paper}>
-                <Table aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Filename</TableCell>
-                      <TableCell>Date Uploaded</TableCell>
-                      <TableCell>Size (MB)</TableCell>
-                      <TableCell>Download</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {reports.map((rep: reportOutput) => (
-                      <TableRow key={rep['key']}>
-                        <TableCell component="th" scope="row">
-                          {rep['name']}
-                        </TableCell>
-                        <TableCell>{rep['lastModified']}</TableCell>
-                        <TableCell>
-                          {(rep['size'] / (1024 * 1024)).toFixed(2)}
-                        </TableCell>
-                        <TableCell>
-                          <IconButton
-                            aria-label="fingerprint"
-                            onClick={() => pdfExport(rep['key'])}
-                          >
-                            <GetAppIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
+            <Table<Report>
+              renderPagination={renderPagination}
+              tableRef={tableRef}
+              columns={columns}
+              data={reports}
+              pageCount={Math.ceil(totalResults / PAGE_SIZE)}
+              pageSize={PAGE_SIZE}
+              noResults={noResults}
+              noResultsMessage={
+                "We don't see any reports for this organization."
+              }
+            />
             <Dialog open={dialogOpen} onClose={handleClose}>
               <DialogTitle id="alert-dialog-title">{'Alert'}</DialogTitle>
               <DialogContent>Error. File does not exist.</DialogContent>
