@@ -1,7 +1,8 @@
 import * as crypto from 'crypto';
 import { Issuer, ClientMetadata } from 'openid-client';
 
-const discoveryUrl = process.env.LOGIN_GOV_BASE_URL + '/.well-known/openid-configuration'
+const discoveryUrl =
+  process.env.LOGIN_GOV_BASE_URL + '/.well-known/openid-configuration';
 
 let jwkSet;
 
@@ -12,7 +13,7 @@ try {
 } catch (e) {
   jwkSet = {
     keys: [{}]
-  }
+  };
 }
 
 const clientOptions: ClientMetadata = {

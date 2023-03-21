@@ -111,7 +111,7 @@ export const callback = async (event, context) => {
         )
       );
     } else {
-      userInfo = await callback_(JSON.parse(event.body)) as UserInfo;
+      userInfo = (await callback_(JSON.parse(event.body))) as UserInfo;
     }
   } catch (e) {
     console.error(e);
