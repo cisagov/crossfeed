@@ -2,12 +2,16 @@ import * as request from 'supertest';
 import app from '../src/api/app';
 import { createUserToken } from './util';
 import { connectToDatabase, UserType } from '../src/models';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
-jest.mock('http-proxy-middleware.createProxyMiddleware', () => 200);
+jest.mock('http-proxy-middleware', () => ({
+  createProxyMiddleware: jest.fn()
+}));
 
 describe('pe-proxy', () => {
   beforeAll(async () => {
     await connectToDatabase();
+    (createProxyMiddleware as jest.Mock).mockImplementation(() => 200);
   });
   it('standard user is not authorized to access P&E proxy', async () => {
     const response = await request(app)
