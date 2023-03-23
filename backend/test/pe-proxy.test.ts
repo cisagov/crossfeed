@@ -3,7 +3,7 @@ import app from '../src/api/app';
 import { createUserToken } from './util';
 import { connectToDatabase, UserType } from '../src/models';
 
-jest.mock('http-proxy-middleware', () => 200);
+jest.mock('http-proxy-middleware.createProxyMiddleware', () => 200);
 
 describe('pe-proxy', () => {
   beforeAll(async () => {
