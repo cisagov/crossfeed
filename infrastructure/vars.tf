@@ -381,3 +381,15 @@ variable "db_accessor_instance_class" {
   type        = string
   default     = "t3.micro"
 }
+
+variable "elk_instance_class" {
+  description = "elk_instance_class"
+  type        = string
+  default     = "t3.micro"
+}
+
+variable "create_elk_instance" {
+  description = "Whether to create a ELK instance. This instance can be used to run a ELK cluseter. It can be accessed using AWS Systems Manager Session Manager."
+  type        = bool
+  default     = false
+}
