@@ -3,9 +3,9 @@ import app from '../src/api/app';
 import { createUserToken } from './util';
 import { connectToDatabase, UserType } from '../src/models';
 
+jest.mock('createProxyMiddleware', () => 200);
+
 describe('pe-proxy', () => {
-  let organization;
-  let organization2;
   beforeAll(async () => {
     await connectToDatabase();
   });
@@ -21,7 +21,7 @@ describe('pe-proxy', () => {
       .expect(401);
     expect(response.text).toEqual('Unauthorized');
   });
-  it('gloabl admin is authorized to access P&E proxy', async () => {
+  it('global admin is authorized to access P&E proxy', async () => {
     const response = await request(app)
       .get('/pe')
       .set(
@@ -32,7 +32,7 @@ describe('pe-proxy', () => {
       )
       .expect(200);
   });
-  it('gloabl view user is authorized to access P&E proxy', async () => {
+  it('global view user is authorized to access P&E proxy', async () => {
     const response = await request(app)
       .get('/pe')
       .set(
