@@ -28,7 +28,6 @@
     "jwks-rsa": "^1.12.3",
     "lodash": "^4.17.21",
     "nodemailer": "^6.7.2",
-    "nock": "^13.3.0",
     "openid-client": "^4.1.1",
     "p-queue": "^6.6.2",
     "p-retry": "^4.6.1",
