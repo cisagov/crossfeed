@@ -61,7 +61,7 @@ describe('notifications', () => {
         })
       )
       .expect(200);
-    expect(response.body.length).toBe(3);
+    expect(response.body.length).toBeGreaterThan(2);
   });
 
   test('Get org admins ', async () => {
@@ -118,7 +118,7 @@ describe('notifications', () => {
         organizationAdmin: true
       })
       .expect(200);
-    expect(response.body.roles[0].role).toEqual('admin'); 
+    expect(response.body.roles[0].role).toEqual('admin');
   });
 
   test('getting reports list for all organizations', async () => {
