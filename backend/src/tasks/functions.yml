@@ -35,5 +35,6 @@ updateScanTaskStatus:
               - ${file(env.yml):${self:provider.stage}-ecs-cluster, ''}
 notifications:
   handler: src/tasks/notifications.handler
+  events:
     - schedule: rate(5 minutes)
 
