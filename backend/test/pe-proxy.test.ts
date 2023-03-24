@@ -6,6 +6,7 @@ import { connectToDatabase, UserType } from '../src/models';
 describe('pe-proxy', () => {
   beforeAll(async () => {
     await connectToDatabase();
+    process.env.PE_API_URL = 'http://localhost:8080';
   });
   it('standard user is not authorized to access P&E proxy', async () => {
     const response = await request(app)
@@ -28,11 +29,7 @@ describe('pe-proxy', () => {
           userType: UserType.GLOBAL_ADMIN
         })
       );
-    try {
-      expect(response.status).toBe(200);
-    } catch {
-      expect(response.status).toBe(504);
-    }
+    expect(response.status).toBe(200);
   });
   it('gloabl view user is authorized to access P&E proxy', async () => {
     const response = await request(app)
@@ -43,10 +40,6 @@ describe('pe-proxy', () => {
           userType: UserType.GLOBAL_VIEW
         })
       );
-    try {
-      expect(response.status).toBe(200);
-    } catch {
-      expect(response.status).toBe(504);
-    }
+    expect(response.status).toBe(200);
   });
 });
