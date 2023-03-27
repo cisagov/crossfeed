@@ -19,7 +19,7 @@ describe('pe-proxy', () => {
       .expect(401);
     expect(response.text).toEqual('Unauthorized');
   });
-  it('gloabl admin is authorized to access P&E proxy', async () => {
+  it('global admin is authorized to access P&E proxy', async () => {
     const response = await request(app)
       .get('/pe')
       .set(
@@ -32,7 +32,7 @@ describe('pe-proxy', () => {
     // proxy to P&E app, but the app is not responding
     expect([200, 504]).toContain(response.status);
   });
-  it('gloabl view user is authorized to access P&E proxy', async () => {
+  it('global view user is authorized to access P&E proxy', async () => {
     const response = await request(app)
       .get('/pe')
       .set(
