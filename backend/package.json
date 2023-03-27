@@ -65,7 +65,7 @@
     "prettier": "^2.1.2",
     "sentencer": "^0.2.1",
     "serverless": "^3.25.0",
-    "serverless-domain-manager": "^5.0.0",
+    "serverless-domain-manager": "^7.0.2",
     "serverless-webpack": "^5.11.0",
     "supertest": "^5.0.0",
     "ts-jest": "^26.4.0",
