@@ -31,22 +31,22 @@ describe('notifications', () => {
   beforeAll(async () => {
     await connectToDatabase();
     organization = await Organization.create({
-      name: 'Web Application Scanning-' + Math.random(),
-      rootDomains: ['WAS-' + Math.random()],
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
       isPassive: false
     }).save();
 
     organization2 = await Organization.create({
-      name: 'Posture & Exposure-' + Math.random(),
-      rootDomains: ['P&E-' + Math.random()],
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
       isPassive: false
     }).save();
 
     organization3 = await Organization.create({
-      name: 'Vulnerability Scanning-' + Math.random(),
-      rootDomains: ['VS-' + Math.random()],
+      name: 'test-' + Math.random(),
+      rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
       isPassive: false
     }).save();
@@ -69,17 +69,17 @@ describe('notifications', () => {
     const lastName = 'last names';
     const email = Math.random() + '@crossfeed.cisa.gov';
     const user = await User.create({
-      firstName: 'Deku',
+      firstName: '',
       lastName: '',
       email: Math.random() + '@crossfeed.cisa.gov'
     }).save();
     const user2 = await User.create({
-      firstName: 'Kacchan',
+      firstName: '',
       lastName: '',
       email: Math.random() + '@crossfeed.cisa.gov'
     }).save();
     const user3 = await User.create({
-      firstName: 'Todoroki',
+      firstName: '',
       lastName: '',
       email: Math.random() + '@crossfeed.cisa.gov'
     }).save();
