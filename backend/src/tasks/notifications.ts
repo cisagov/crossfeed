@@ -46,27 +46,14 @@ export const handler: Handler = async (event) => {
 
     // loop through reports
     for (const report in reportsList) {
+      // check if organization was notified about report
       if (reportsList[report].LastModified >= organizations[org].notifiedAt) {
         for (const role in roles) {
-          // email reporting -- TODO need actual org name thats in database here
-          if (roles[role].organization.name.startsWith('Web')) {
-            await sendReportEmail(roles[role].user.email, organizations[org]);
-            organizations[org].notifiedAt = new Date();
-
-            // P&E
-          } else if (roles[role].organization.name.startsWith('Posture')) {
-            await sendReportEmail(roles[role].user.email, organizations[org]);
-            organizations[org].notifiedAt = new Date();
-
-            // VS
-          } else if (
-            roles[role].organization.name.startsWith('Vulnerability')
-          ) {
-            await sendReportEmail(roles[role].user.email, organizations[org]);
-            organizations[org].notifiedAt = new Date();
-          }
+          await sendReportEmail(roles[role].user.email, organizations[org]);
         }
       }
+      // update notification date
+      organizations[org].notifiedAt = new Date();
     }
   }
 };
