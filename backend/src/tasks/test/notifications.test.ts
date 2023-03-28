@@ -1,7 +1,7 @@
 import { handler as notifications } from '../notifications';
 import app from '../../../src/api/app';
 import * as request from 'supertest';
-import { createUserToken } from '../../../test/util';
+import { createUserToken } from '../../../../backend/test/util';
 import {
   connectToDatabase,
   Organization,
