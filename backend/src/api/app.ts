@@ -153,6 +153,18 @@ const matomoProxy = createProxyMiddleware({
   }
 });
 
+/**
+ * @swagger
+ *
+ * /pe:
+ *  get:
+ *    description: All paths under /pe proxy to the P&E django application and API. Only a global admin can access.
+ */
+const peProxy = createProxyMiddleware({
+  target: process.env.PE_API_URL,
+  changeOrigin: true
+});
+
 app.use(
   '/matomo',
   async (req, res, next) => {
@@ -189,6 +201,24 @@ app.use(
   matomoProxy
 );
 
+app.use(
+  '/pe',
+  async (req, res, next) => {
+    // Only allow specific users to access
+    const user = (await auth.authorize({
+      authorizationToken: req.headers.authorization
+    })) as auth.UserToken;
+    if (
+      user.userType !== UserType.GLOBAL_VIEW &&
+      user.userType !== UserType.GLOBAL_ADMIN
+    ) {
+      return res.status(401).send('Unauthorized');
+    }
+    return next();
+  },
+  peProxy
+);
+
 // Routes that require an authenticated user, without
 // needing to sign the terms of service yet
 const authenticatedNoTermsRoute = express.Router();
@@ -205,6 +235,7 @@ app.use(authenticatedNoTermsRoute);
 // Routes that require an authenticated user that has
 // signed the terms of service
 const authenticatedRoute = express.Router();
+
 authenticatedRoute.use(checkUserLoggedIn);
 authenticatedRoute.use(checkUserSignedTerms);
 
