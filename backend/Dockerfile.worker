@@ -21,7 +21,7 @@ RUN apk add --no-cache wget unzip
 
 RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/download/5.1.1/findomain-linux -O /usr/bin/findomain && chmod +x /usr/bin/findomain
 
-RUN wget --quiet https://github.com/owasp-amass/amass/archive/refs/tags/v3.7.3.zip -O amass.zip && unzip -q amass.zip && cp amass-3.7.3 /usr/bin/amass && chmod +x /usr/bin/amass
+RUN wget --quiet https://github.com/owasp-amass/amass/archive/refs/tags/v3.7.3.zip -O amass.zip && unzip -q amass.zip && cp -r amass-3.7.3 /usr/bin/amass && chmod +x /usr/bin/amass
 
 RUN go mod init crossfeed-worker
 
