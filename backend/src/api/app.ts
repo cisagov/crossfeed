@@ -4,7 +4,6 @@ import * as cookie from 'cookie';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
 import { handler as healthcheck } from './healthcheck';
-import { handler as scheduler } from '../tasks/scheduler';
 import * as auth from './auth';
 import * as domains from './domains';
 import * as search from './search';
@@ -17,7 +16,6 @@ import * as stats from './stats';
 import * as apiKeys from './api-keys';
 import * as reports from './reports';
 import * as savedSearches from './saved-searches';
-import { listenForDockerEvents } from './docker-events';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { UserType } from '../models';
 
@@ -25,8 +23,11 @@ if (
   (process.env.IS_OFFLINE || process.env.IS_LOCAL) &&
   typeof jest === 'undefined'
 ) {
+  // Run scheduler during local development. When deployed on AWS,
+  // the scheduler runs on a separate lambda function.
+  const { handler: scheduler } = require('../tasks/scheduler');
+  const { listenForDockerEvents } = require('./docker-events');
   listenForDockerEvents();
-
   setInterval(() => scheduler({}, {} as any, () => null), 30000);
 }
 

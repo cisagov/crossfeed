@@ -1,4 +1,4 @@
-import loginGov from './login-gov';
+import { login as login_, callback as callback_ } from './login-gov';
 import {
   User,
   connectToDatabase,
@@ -64,7 +64,7 @@ function getKey(header, callback) {
  *    - Auth
  */
 export const login = async (event, context) => {
-  const { url, state, nonce } = await loginGov.login();
+  const { url, state, nonce } = await login_();
   return {
     statusCode: 200,
     body: JSON.stringify({
@@ -111,7 +111,7 @@ export const callback = async (event, context) => {
         )
       );
     } else {
-      userInfo = await loginGov.callback(JSON.parse(event.body));
+      userInfo = (await callback_(JSON.parse(event.body))) as UserInfo;
     }
   } catch (e) {
     console.error(e);
