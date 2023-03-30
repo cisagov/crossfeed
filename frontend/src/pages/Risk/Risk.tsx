@@ -550,8 +550,8 @@ const Risk: React.FC = (props) => {
   const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
   const generatePDF = async () => {
-    var dateTimeNow = new Date();
-    var localDate = new Date(dateTimeNow);
+    const dateTimeNow = new Date();
+    const localDate = new Date(dateTimeNow);
     setIsLoading(true);
     await delay(650);
     const input = document.getElementById('wrapper')!;
@@ -572,11 +572,13 @@ const Risk: React.FC = (props) => {
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       const pdf = new jsPDF('p', 'mm');
       const img_crossfeed = 'data:image/png;base64,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';
-      pdf.addImage(img_crossfeed, "png", 167, 5, 30, 10);
+
+      pdf.addImage(img_crossfeed, 'png', 167, 5, 30, 10);
       pdf.setFontSize(18);
+      //pdf.text('Crossfeed Report - ' + dateTimeNow.toISOString(), 10, 10);
       pdf.text('Crossfeed Report', 12, 10);
       pdf.setFontSize(10);
-      pdf.text(dateTimeNow.toISOString(),12,17);
+      pdf.text(dateTimeNow.toISOString(), 12, 17);
       pdf.addImage(imgData, 'PNG', 10, 20, imgWidth, imgHeight); // charts
       pdf.line(3, 290, 207, 290);
       pdf.setFontSize(8);
