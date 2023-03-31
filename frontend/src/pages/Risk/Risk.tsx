@@ -111,10 +111,10 @@ const Risk: React.FC = (props) => {
             (!orgId && showAllOrganizations) || !currentOrganization
               ? {}
               : orgId || 'rootDomains' in currentOrganization
-                ? {
+              ? {
                   organization: orgId ? orgId : currentOrganization?.id
                 }
-                : { tag: currentOrganization.id }
+              : { tag: currentOrganization.id }
         }
       });
       const max = Math.max(...result.vulnerabilities.byOrg.map((p) => p.value));
@@ -366,8 +366,8 @@ const Risk: React.FC = (props) => {
                     onClick={() => {
                       history.push(
                         '/inventory/vulnerabilities?title=' +
-                        vuln.title +
-                        (vuln.domain ? '&domain=' + vuln.domain.name : '')
+                          vuln.title +
+                          (vuln.domain ? '&domain=' + vuln.domain.name : '')
                       );
                     }}
                   >
@@ -453,8 +453,8 @@ const Risk: React.FC = (props) => {
                   geographies.map((geo) => {
                     const cur = findFn(geo) as
                       | (Point & {
-                        orgId: string;
-                      })
+                          orgId: string;
+                        })
                       | undefined;
                     const centroid = geoCentroid(geo);
                     const name: string = geo.properties.name;
@@ -550,8 +550,8 @@ const Risk: React.FC = (props) => {
   const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
   const generatePDF = async () => {
-    const dateTimeNow = new Date();
-    const localDate = new Date(dateTimeNow);
+    const dateTimeNow = new Date(); // UTC Date Time
+    const localDate = new Date(dateTimeNow); // Local Date Time
     setIsLoading(true);
     await delay(650);
     const input = document.getElementById('wrapper')!;
@@ -757,29 +757,29 @@ const Risk: React.FC = (props) => {
               <div id="mapWrapper">
                 {(user?.userType === 'globalView' ||
                   user?.userType === 'globalAdmin') && (
-                    <>
-                      <MapCard
-                        title={'State Vulnerabilities'}
-                        geoUrl={geoStateUrl}
-                        findFn={(geo) =>
-                          stats?.vulnerabilities.byOrg.find(
-                            (p) => p.label === geo.properties.name
-                          )
-                        }
-                        type={'state'}
-                      ></MapCard>
-                      <MapCard
-                        title={'County Vulnerabilities'}
-                        geoUrl={geoStateUrl}
-                        findFn={(geo) =>
-                          stats?.vulnerabilities.byOrg.find(
-                            (p) => p.label === geo.properties.name + ' Counties'
-                          )
-                        }
-                        type={'county'}
-                      ></MapCard>
-                    </>
-                  )}
+                  <>
+                    <MapCard
+                      title={'State Vulnerabilities'}
+                      geoUrl={geoStateUrl}
+                      findFn={(geo) =>
+                        stats?.vulnerabilities.byOrg.find(
+                          (p) => p.label === geo.properties.name
+                        )
+                      }
+                      type={'state'}
+                    ></MapCard>
+                    <MapCard
+                      title={'County Vulnerabilities'}
+                      geoUrl={geoStateUrl}
+                      findFn={(geo) =>
+                        stats?.vulnerabilities.byOrg.find(
+                          (p) => p.label === geo.properties.name + ' Counties'
+                        )
+                      }
+                      type={'county'}
+                    ></MapCard>
+                  </>
+                )}
               </div>
             </div>
           </div>
