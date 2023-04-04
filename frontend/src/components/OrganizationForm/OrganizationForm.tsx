@@ -69,6 +69,7 @@ export const OrganizationForm: React.FC<{
           fullWidth
           value={values.name}
           onChange={onTextChange}
+          inputProps={{maxLength: 20}}
         />
         <TextField
           margin="dense"
@@ -79,6 +80,7 @@ export const OrganizationForm: React.FC<{
           fullWidth
           value={values.rootDomains}
           onChange={onTextChange}
+          inputProps={{maxLength: 50}}
         />
         <TextField
           margin="dense"
@@ -89,6 +91,7 @@ export const OrganizationForm: React.FC<{
           fullWidth
           value={values.ipBlocks}
           onChange={onTextChange}
+          inputProps={{maxLength: 50}}
         />
         <br></br>
         <br></br>
