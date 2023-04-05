@@ -63,7 +63,7 @@ export const OrganizationForm: React.FC<{
         <TextField
           margin="dense"
           id="name"
-          maxLength={20}
+          inputProps={{maxLength:20}}
           name="name"
           label="Organization Name"
           type="text"
@@ -74,7 +74,7 @@ export const OrganizationForm: React.FC<{
         <TextField
           margin="dense"
           id="rootDomains"
-          maxLength={20}
+          inputProps={{maxLength:20}}
           name="rootDomains"
           label="Root Domains"
           type="text"
@@ -85,7 +85,7 @@ export const OrganizationForm: React.FC<{
         <TextField
           margin="dense"
           id="ipBlocks"
-          maxLength={20}
+          inputProps={{maxLength:20}}
           name="ipBlocks"
           label="IP Blocks"
           type="text"
