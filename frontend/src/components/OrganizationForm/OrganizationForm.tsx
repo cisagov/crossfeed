@@ -63,35 +63,35 @@ export const OrganizationForm: React.FC<{
         <TextField
           margin="dense"
           id="name"
+          maxLength={20}
           name="name"
           label="Organization Name"
           type="text"
           fullWidth
           value={values.name}
           onChange={onTextChange}
-          inputProps={{maxLength: 20}}
         />
         <TextField
           margin="dense"
           id="rootDomains"
+          maxLength={20}
           name="rootDomains"
           label="Root Domains"
           type="text"
           fullWidth
           value={values.rootDomains}
           onChange={onTextChange}
-          inputProps={{maxLength: 50}}
         />
         <TextField
           margin="dense"
           id="ipBlocks"
+          maxLength={20}
           name="ipBlocks"
           label="IP Blocks"
           type="text"
           fullWidth
           value={values.ipBlocks}
           onChange={onTextChange}
-          inputProps={{maxLength: 50}}
         />
         <br></br>
         <br></br>
