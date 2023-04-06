@@ -64,7 +64,7 @@ function getKey(header, callback) {
  *    - Auth
  */
 export const login = async (event, context) => {
-  const { url, state, nonce } = await login_();
+  const { url, state, nonce } = await login_(); 
   return {
     statusCode: 200,
     body: JSON.stringify({
