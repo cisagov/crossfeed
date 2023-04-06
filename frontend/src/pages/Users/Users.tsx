@@ -126,12 +126,14 @@ export const Users: React.FC = () => {
 
   const [values, setValues] = useState<{
     firstName: string;
+    maxLength: 20;
     lastName: string;
     email: string;
     organization?: Organization;
     userType: string;
   }>({
     firstName: '',
+    maxLength: 20,
     lastName: '',
     email: '',
     userType: ''
@@ -205,9 +207,9 @@ export const Users: React.FC = () => {
         <Label htmlFor="firstName">First Name</Label>
         <TextInput
           required
-          maxLength={20}
           id="firstName"
           name="firstName"
+          maxLength={20}
           className={classes.textField}
           type="text"
           value={values.firstName}
@@ -216,9 +218,9 @@ export const Users: React.FC = () => {
         <Label htmlFor="lastName">Last Name</Label>
         <TextInput
           required
-          maxLength={20}
           id="lastName"
           name="lastName"
+          maxLength={20}
           className={classes.textField}
           type="text"
           value={values.lastName}
@@ -227,9 +229,9 @@ export const Users: React.FC = () => {
         <Label htmlFor="email">Email</Label>
         <TextInput
           required
-          maxLength={50}
           id="email"
           name="email"
+          maxLength={20}
           className={classes.textField}
           type="text"
           value={values.email}
