@@ -16,7 +16,8 @@
   "homepage": "https://github.com/cisagov/crossfeed#readme",
   "dependencies": {
     "react": "^18.2.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "webpack": "^5.78.0"
   },
   "devDependencies": {
     "@types/node": "^18.8.3",
