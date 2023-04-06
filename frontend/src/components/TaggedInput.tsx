@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const TaggedArrayInput: React.FC<Props> = (props) => {
-  const { values, onAddTag, onRemoveTag, placeholder = ''} = props;
+  const { values, onAddTag, onRemoveTag, placeholder = '' } = props;
   const [inpValue, setInpValue] = useState('');
   const classes = useStyles();
 
