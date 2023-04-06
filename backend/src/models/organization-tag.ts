@@ -23,7 +23,9 @@ export class OrganizationTag extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
+  @Column({
+    length: 128
+  })
   name: string;
 
   /**
