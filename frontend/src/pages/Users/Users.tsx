@@ -189,7 +189,6 @@ export const Users: React.FC = () => {
   > = (e) => onChange(e.target.name, e.target.value);
 
   const onChange = (name: string, value: any) => {
-    const limitChar = 10;
     setValues((values) => ({
       ...values,
       [name]: value
