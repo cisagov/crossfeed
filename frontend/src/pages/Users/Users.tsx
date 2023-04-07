@@ -207,12 +207,12 @@ export const Users: React.FC = () => {
         <Label htmlFor="firstName">First Name</Label>
         <TextInput
           required
+          maxLength={5}
           id="firstName"
           name="firstName"
           className={classes.textField}
           type="text"
           value={values.firstName}
-          maxLength={20}
           onChange={onTextChange}
         />
         <Label htmlFor="lastName">Last Name</Label>
@@ -223,7 +223,6 @@ export const Users: React.FC = () => {
           className={classes.textField}
           type="text"
           value={values.lastName}
-          maxLength={20}
           onChange={onTextChange}
         />
         <Label htmlFor="email">Email</Label>
@@ -234,7 +233,6 @@ export const Users: React.FC = () => {
           className={classes.textField}
           type="text"
           value={values.email}
-          maxLength={50}
           onChange={onTextChange}
         />
         <Label htmlFor="userType">User Type</Label>
