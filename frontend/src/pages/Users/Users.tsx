@@ -126,14 +126,12 @@ export const Users: React.FC = () => {
 
   const [values, setValues] = useState<{
     firstName: string;
-    maxLength: 20;
     lastName: string;
     email: string;
     organization?: Organization;
     userType: string;
   }>({
     firstName: '',
-    maxLength: 20,
     lastName: '',
     email: '',
     userType: ''
@@ -191,9 +189,11 @@ export const Users: React.FC = () => {
   > = (e) => onChange(e.target.name, e.target.value);
 
   const onChange = (name: string, value: any) => {
+    const limitChar = 10;
     setValues((values) => ({
       ...values,
-      [name]: value
+      [name]: value,
+      limitChar
     }));
   };
 
@@ -209,10 +209,10 @@ export const Users: React.FC = () => {
           required
           id="firstName"
           name="firstName"
-          maxLength={20}
           className={classes.textField}
           type="text"
           value={values.firstName}
+          maxLength={20}
           onChange={onTextChange}
         />
         <Label htmlFor="lastName">Last Name</Label>
@@ -220,10 +220,10 @@ export const Users: React.FC = () => {
           required
           id="lastName"
           name="lastName"
-          maxLength={20}
           className={classes.textField}
           type="text"
           value={values.lastName}
+          maxLength={20}
           onChange={onTextChange}
         />
         <Label htmlFor="email">Email</Label>
@@ -231,10 +231,10 @@ export const Users: React.FC = () => {
           required
           id="email"
           name="email"
-          maxLength={20}
           className={classes.textField}
           type="text"
           value={values.email}
+          maxLength={50}
           onChange={onTextChange}
         />
         <Label htmlFor="userType">User Type</Label>
