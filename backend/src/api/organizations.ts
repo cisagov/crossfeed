@@ -209,7 +209,8 @@ export const list = wrapHandler(async (event) => {
   }
   const result = await Organization.find({
     where,
-    relations: ['userRoles', 'tags']
+    relations: ['userRoles', 'tags'],
+    order: { name: 'ASC' }
   });
 
   return {
