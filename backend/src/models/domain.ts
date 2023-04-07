@@ -95,16 +95,17 @@ export class Domain extends BaseEntity {
   screenshot: string | null;
 
   @Column({
+    length: 64,
     nullable: true,
-    type: 'varchar',
-    length: 64
+    type: 'varchar'
   })
   country: string | null;
 
   @Column({
+    // length based on max size of 4294967295 or 0xFFFFFFFF
+    length: 10,
     nullable: true,
-    type: 'varchar',
-    length: 16
+    type: 'varchar'
   })
   asn: string | null;
 

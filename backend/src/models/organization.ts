@@ -26,7 +26,8 @@ export class Organization extends BaseEntity {
   updatedAt: Date;
 
   @Column({
-    length: 128
+    length: 128,
+    type: 'varchar'
   })
   name: string;
 
