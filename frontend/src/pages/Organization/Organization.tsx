@@ -79,14 +79,14 @@ export const Organization: React.FC = () => {
   const userRoleColumns: Column<Role>[] = [
     {
       Header: 'Name',
-      accessor: ({ user }) => user.fullName,
+      accessor: ({ user }) => user?.fullName,
       width: 200,
       disableFilters: true,
       id: 'name'
     },
     {
       Header: 'Email',
-      accessor: ({ user }) => user.email,
+      accessor: ({ user }) => user?.email,
       width: 150,
       minWidth: 150,
       id: 'email',
@@ -96,7 +96,7 @@ export const Organization: React.FC = () => {
       Header: 'Role',
       accessor: ({ approved, role, user }) => {
         if (approved) {
-          if (user.invitePending) {
+          if (user?.invitePending) {
             return 'Invite pending';
           } else if (role === 'admin') {
             return 'Administrator';
@@ -538,6 +538,7 @@ export const Organization: React.FC = () => {
                 autoFocus
                 margin="dense"
                 id="name"
+                inputProps={{ maxLength: 255 }}
                 label={dialog.label && dialog.label.slice(0, -1)}
                 type="text"
                 fullWidth
@@ -642,9 +643,9 @@ export const Organization: React.FC = () => {
           </p>
           <TextField
             margin="dense"
-            maxLength={20}
             id="firstName"
             name="firstName"
+            inputProps={{ maxLength: 50 }}
             label="First Name"
             type="text"
             fullWidth
@@ -657,10 +658,10 @@ export const Organization: React.FC = () => {
           />
           <TextField
             margin="dense"
-            maxLength={20}
             id="lastName"
             name="lastName"
             label="Last Name"
+            inputProps={{ maxLength: 50 }}
             type="text"
             fullWidth
             value={newUserValues.lastName}
@@ -672,10 +673,10 @@ export const Organization: React.FC = () => {
           />
           <TextField
             margin="dense"
-            maxLength={50}
             id="email"
             name="email"
             label="Email"
+            inputProps={{ maxLength: 100 }}
             type="text"
             fullWidth
             value={newUserValues.email}

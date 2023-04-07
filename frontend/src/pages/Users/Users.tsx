@@ -193,7 +193,6 @@ export const Users: React.FC = () => {
     setValues((values) => ({
       ...values,
       [name]: value,
-      limitChar
     }));
   };
 
@@ -207,7 +206,7 @@ export const Users: React.FC = () => {
         <Label htmlFor="firstName">First Name</Label>
         <TextInput
           required
-          maxLength={5}
+          maxLength={50}
           id="firstName"
           name="firstName"
           className={classes.textField}
@@ -220,6 +219,7 @@ export const Users: React.FC = () => {
           required
           id="lastName"
           name="lastName"
+          maxLength={50}
           className={classes.textField}
           type="text"
           value={values.lastName}
@@ -230,6 +230,7 @@ export const Users: React.FC = () => {
           required
           id="email"
           name="email"
+          maxLength={100}
           className={classes.textField}
           type="text"
           value={values.email}
