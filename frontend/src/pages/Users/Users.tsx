@@ -192,7 +192,7 @@ export const Users: React.FC = () => {
     const limitChar = 10;
     setValues((values) => ({
       ...values,
-      [name]: value,
+      [name]: value
     }));
   };
 
