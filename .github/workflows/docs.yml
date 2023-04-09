@@ -4,16 +4,16 @@ on:
     branches:
       - master
     paths:
-      - "docs/**"
-      - "backend/**"
-      - ".github/workflows/docs.yml"
+      - 'docs/**'
+      - 'backend/**'
+      - '.github/workflows/docs.yml'
   pull_request:
     branches:
       - master
     paths:
-      - "docs/**"
-      - "backend/**"
-      - ".github/workflows/docs.yml"
+      - 'docs/**'
+      - 'backend/**'
+      - '.github/workflows/docs.yml'
 
 defaults:
   run:
@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
       - name: Restore npm cache
         uses: actions/cache@v3
         with:
