@@ -1,7 +1,8 @@
 # This file is built with Docker context in the main directory (not ./docs)
 # so that ./backend is accessible.
 
-FROM node:14-alpine3.14
+FROM node:18-alpine3.14
+USER root
 
 WORKDIR /app/docs
 
@@ -9,7 +10,9 @@ RUN apk add --update --no-cache build-base python3 vips-dev autoconf automake li
 
 COPY ./docs/package* ./
 
-RUN npm i
+RUN npm install -g npm@9.6.4
+
+RUN npm i --legacy-peer-deps
 
 # Generate swagger definitions
 COPY ./backend ../backend
