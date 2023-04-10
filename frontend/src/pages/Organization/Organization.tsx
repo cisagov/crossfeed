@@ -642,7 +642,7 @@ export const Organization: React.FC = () => {
           </p>
           <TextField
             margin="dense"
-            maxLength={20}
+            inputProps={{ maxLength: 20 }}
             id="firstName"
             name="firstName"
             label="First Name"
@@ -657,7 +657,7 @@ export const Organization: React.FC = () => {
           />
           <TextField
             margin="dense"
-            maxLength={20}
+            inputProps={{ maxLength: 20 }}
             id="lastName"
             name="lastName"
             label="Last Name"
@@ -672,7 +672,7 @@ export const Organization: React.FC = () => {
           />
           <TextField
             margin="dense"
-            maxLength={50}
+            inputProps={{ maxLength: 50 }}
             id="email"
             name="email"
             label="Email"
