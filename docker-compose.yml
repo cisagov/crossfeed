@@ -102,7 +102,7 @@ services:
   #     LOGGING_QUIET: 'true'
 
   matomodb:
-    image: mariadb:10.5
+    image: mariadb:10.11.2
     command: --max-allowed-packet=64MB
     networks:
       - backend
