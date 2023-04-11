@@ -57,7 +57,7 @@ const DocumentationPage = ({ data, location }) => {
 };
 
 export const pageQuery = graphql`
-  query($name: String!) {
+  query ($name: String!) {
     markdownRemark(
       fields: { sourceName: { eq: "documentation-pages" }, slug: { eq: $name } }
     ) {
