@@ -163,7 +163,6 @@ const matomoProxy = createProxyMiddleware({
  */
 const peProxy = createProxyMiddleware({
   target: process.env.PE_API_URL,
-  changeOrigin: true,
   pathRewrite: function (path, req) {
     return path.replace(/^\/pe/, '');
   }
