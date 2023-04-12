@@ -3,6 +3,7 @@ import * as cookieParser from 'cookie-parser';
 import * as cookie from 'cookie';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import { handler as healthcheck } from './healthcheck';
 import * as auth from './auth';
 import * as domains from './domains';
@@ -54,7 +55,15 @@ const handlerToExpress = (handler) => async (req, res, next) => {
 };
 
 const app = express();
-
+// Define rate limit for auth requests to 100 per 10 minutes per IP
+const authLimit = rateLimit({
+  windowMs: 10 * 60 * 1000, // Set window to 10 minutes
+  max: 100, // Limit each IP to 100 login requests per window
+  message:
+    'Too many login attempts from this IP, please try again after 10 minutes',
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false // Disable the `X-RateLimit-*` headers
+});
 app.use(cors());
 app.use(express.json({ strict: false }));
 app.use(helmet.hsts({ maxAge: 31536000, preload: true }));
@@ -168,6 +177,7 @@ const peProxy = createProxyMiddleware({
 
 app.use(
   '/matomo',
+  authLimit, //Rate limit authorization attempts
   async (req, res, next) => {
     // Public paths -- see https://matomo.org/docs/security-how-to/
     const ALLOWED_PATHS = ['/matomo.php', '/matomo.js'];
@@ -204,6 +214,7 @@ app.use(
 
 app.use(
   '/pe',
+  authLimit, //Rate limit authorization attempts
   async (req, res, next) => {
     // Only allow specific users to access
     const user = (await auth.authorize({
