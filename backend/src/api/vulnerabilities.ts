@@ -162,6 +162,7 @@ class VulnerabilitySearch {
   async getResults(event): Promise<[Vulnerability[], number]> {
     const pageSize = this.pageSize || PAGE_SIZE;
     const groupBy = this.groupBy;
+    let totalResults: number = 0;
     const sort =
       this.sort === 'domain'
         ? 'domain.name'
@@ -171,7 +172,6 @@ class VulnerabilitySearch {
     let qs = Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
       .leftJoinAndSelect('domain.organization', 'organization');
-
     if (groupBy) {
       qs = qs
         .groupBy('title, cve, "isKev", description, severity')
@@ -184,12 +184,14 @@ class VulnerabilitySearch {
           'count(*) as cnt'
         ])
         .orderBy('cnt', 'DESC');
+        const tempResults = await qs.getRawMany()
+        totalResults = tempResults.length;
     } else {
       qs = qs
         .leftJoinAndSelect('vulnerability.service', 'service')
         .orderBy(sort, this.order);
     }
-
+    
     if (pageSize !== -1) {
       qs = qs.offset(pageSize * (this.page - 1)).limit(pageSize);
     }
@@ -203,9 +205,7 @@ class VulnerabilitySearch {
 
     if (groupBy) {
       const results = await qs.getRawMany();
-      // TODO: allow pagination of grouped-by results. For now, we just
-      // return one page max of grouped-by results.
-      return [results, results.length];
+      return [results, totalResults];
     } else {
       return qs.getManyAndCount();
     }
