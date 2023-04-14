@@ -138,9 +138,6 @@ class DomainSearch {
       )
       .leftJoinAndSelect('domain.organization', 'organization')
       .orderBy(`domain.${this.sort}`, this.order)
-      .groupBy(
-        'domain.id, domain.ip, domain.name, organization.id, services.id, vulnerabilities.id'
-      );
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
     }
