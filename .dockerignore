@@ -1,5 +1,7 @@
 .serverless
 .build
+.github
+.gitignore
 dist
 postgres-data
 es-data
@@ -9,3 +11,4 @@ nvd-dump
 minio-data
 **/node_modules
 **/.cache
+./docs/node_modules
