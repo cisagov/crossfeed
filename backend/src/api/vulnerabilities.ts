@@ -184,23 +184,27 @@ class VulnerabilitySearch {
           'count(*) as cnt'
         ])
         .orderBy('cnt', 'DESC');
-        const tempResults = await qs.getRawMany()
-        totalResults = tempResults.length;
     } else {
       qs = qs
         .leftJoinAndSelect('vulnerability.service', 'service')
         .orderBy(sort, this.order);
     }
     
-    if (pageSize !== -1) {
-      qs = qs.offset(pageSize * (this.page - 1)).limit(pageSize);
-    }
 
     await this.filterResultQueryset(qs, event);
     if (!isGlobalViewAdmin(event)) {
       qs.andWhere('organization.id IN (:...orgs)', {
         orgs: getOrgMemberships(event)
       });
+    }
+
+    if(groupBy) {
+      const tempResults = await qs.getRawMany()
+      totalResults = tempResults.length;
+    }
+
+    if (pageSize !== -1) {
+      qs = qs.offset(pageSize * (this.page - 1)).limit(pageSize);
     }
 
     if (groupBy) {
