@@ -29,7 +29,7 @@ import { chain, mapValues } from 'lodash';
 import { JSDOM, VirtualConsole } from 'jsdom';
 import { Cookie } from 'tough-cookie';
 
-const data = require('wappalyzer/technologies.json');
+const data = require('./technologies.json');
 const extraTechnologies = require('./technologies.json');
 
 const parseCookie = (str) => Cookie!.parse(str)!.toJSON();
