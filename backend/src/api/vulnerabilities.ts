@@ -189,7 +189,6 @@ class VulnerabilitySearch {
         .leftJoinAndSelect('vulnerability.service', 'service')
         .orderBy(sort, this.order);
     }
-    
 
     await this.filterResultQueryset(qs, event);
     if (!isGlobalViewAdmin(event)) {
@@ -198,8 +197,8 @@ class VulnerabilitySearch {
       });
     }
 
-    if(groupBy) {
-      const tempResults = await qs.getRawMany()
+    if (groupBy) {
+      const tempResults = await qs.getRawMany();
       totalResults = tempResults.length;
     }
 
