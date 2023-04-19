@@ -137,7 +137,7 @@ class DomainSearch {
         "state = 'open'"
       )
       .leftJoinAndSelect('domain.organization', 'organization')
-      .orderBy(`domain.${this.sort}`, this.order)
+      .orderBy(`domain.${this.sort}`, this.order);
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
     }
