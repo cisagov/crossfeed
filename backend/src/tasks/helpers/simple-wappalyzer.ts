@@ -28,8 +28,30 @@ import { setTechnologies, setCategories, analyze } from 'wappalyzer-core';
 import { chain, mapValues } from 'lodash';
 import { JSDOM, VirtualConsole } from 'jsdom';
 import { Cookie } from 'tough-cookie';
+import path from 'path';
 
-const data = require('wappalyzer/technologies.json');
+const fs = require('fs');
+const Wappalyzer = require('wappalyzer');
+
+const categories = JSON.parse(
+  fs.readFileSync(path.resolve(`${__dirname}/categories.json`))
+);
+
+let outOfTheBoxTechnologies = {};
+
+for (const index of Array(27).keys()) {
+  const character = index ? String.fromCharCode(index + 96) : '_';
+
+  outOfTheBoxTechnologies = {
+    ...outOfTheBoxTechnologies,
+    ...JSON.parse(
+      fs.readFileSync(
+        path.resolve(`${__dirname}/technologies/${character}.json`)
+      )
+    )
+  };
+}
+
 const extraTechnologies = require('./technologies.json');
 
 const parseCookie = (str) => Cookie!.parse(str)!.toJSON();
@@ -58,12 +80,12 @@ const getMeta = (document) =>
   );
 
 export const technologies = {
-  ...data.technologies,
+  ...outOfTheBoxTechnologies,
   ...extraTechnologies
 };
 
 setTechnologies(technologies);
-setCategories(data.categories);
+setCategories(categories);
 
 export const wappalyzer = ({ data = '', url = '', headers = {} }) => {
   const dom = new JSDOM(data, { url, virtualConsole: new VirtualConsole() });

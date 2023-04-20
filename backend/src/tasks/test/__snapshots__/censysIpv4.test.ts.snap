@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`censys ipv4 basic test 1`] = `
-Array [
-  Object {
+[
+  {
     "asn": "7684",
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": "JP",
     "createdAt": null,
@@ -16,8 +16,8 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain1",
     "screenshot": null,
-    "services": Array [
-      Object {
+    "services": [
+      {
         "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
 <html><head>
 <title>403 Forbidden</title>
@@ -27,9 +27,9 @@ Array [
 on this server.</p>
 </body></html>
 ",
-        "censysIpv4Results": Object {
-          "http": Object {
-            "get": Object {
+        "censysIpv4Results": {
+          "http": {
+            "get": {
               "body": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
 <html><head>
 <title>403 Forbidden</title>
@@ -40,18 +40,18 @@ on this server.</p>
 </body></html>
 ",
               "body_sha256": "e6134491cb1cd3e211b94d20b48482caeec46813007e918bc824a06f102ff021",
-              "headers": Object {
+              "headers": {
                 "content_type": "text/html; charset=iso-8859-1",
                 "server": "Apache",
-                "unknown": Array [
-                  Object {
+                "unknown": [
+                  {
                     "key": "date",
                     "value": "Tue, 30 Jun 2020 15:46:46 GMT",
                   },
                 ],
                 "vary": "Accept-Encoding",
               },
-              "metadata": Object {
+              "metadata": {
                 "description": "Apache httpd",
                 "manufacturer": "Apache",
                 "product": "httpd",
@@ -63,32 +63,32 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {
+        "censysMetadata": {
           "description": "Apache httpd",
           "manufacturer": "Apache",
           "product": "httpd",
         },
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 80,
-        "products": Array [
-          Object {
+        "products": [
+          {
             "cpe": "cpe:/a:apache:httpd",
             "description": "Apache httpd",
             "name": "httpd",
             "product": "httpd",
-            "tags": Array [],
+            "tags": [],
           },
         ],
         "service": "http",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
 <html><head>
 <title>403 Forbidden</title>
@@ -98,15 +98,15 @@ on this server.</p>
 on this server.</p>
 </body></html>
 ",
-        "censysIpv4Results": Object {
-          "https": Object {
-            "dhe": Object {
-              "dh_params": Object {
-                "generator": Object {
+        "censysIpv4Results": {
+          "https": {
+            "dhe": {
+              "dh_params": {
+                "generator": {
                   "length": "8",
                   "value": "Ag==",
                 },
-                "prime": Object {
+                "prime": {
                   "length": "2048",
                   "value": "///////////JD9qiIWjCNMTGYouA3BzRKQJOCIpnzHQCC76mOxObIlFKCHmONATd75UZs806QxswKwpt8l8UN0/hNW1tUcJF5IW1dmJefsb0TELppjftawv/XLb0Brft7jhr+1qJn6WunyQRfEsf5kkoZlHs5Fs9wgB8uKFjvwWY2kg2HFXTmmkWP6j9JM9fg2VdI9yjrZYcYvNWIIVSu57VKQdwlpZtZww1Tkq8mATxdGwIyhghfDKQXkYuNs474553LBgOhgObJ4Oi7Aeij7XFXfBvTFLJ3ivL9pVYFxg5lUl86pVq5RXSJhiY+gUQFXKOWoqsqmj//////////w==",
                 },
@@ -114,11 +114,11 @@ on this server.</p>
               "support": true,
               "timestamp": "2020-07-12T12:50:39Z",
             },
-            "dhe_export": Object {
+            "dhe_export": {
               "support": false,
               "timestamp": "2020-07-09T05:39:47Z",
             },
-            "get": Object {
+            "get": {
               "body": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
 <html><head>
 <title>403 Forbidden</title>
@@ -129,19 +129,19 @@ on this server.</p>
 </body></html>
 ",
               "body_sha256": "e6134491cb1cd3e211b94d20b48482caeec46813007e918bc824a06f102ff021",
-              "headers": Object {
+              "headers": {
                 "content_type": "text/html; charset=iso-8859-1",
                 "server": "Apache",
                 "strict_transport_security": "max-age=15768000",
-                "unknown": Array [
-                  Object {
+                "unknown": [
+                  {
                     "key": "date",
                     "value": "Mon, 13 Jul 2020 12:50:53 GMT",
                   },
                 ],
                 "vary": "Accept-Encoding",
               },
-              "metadata": Object {
+              "metadata": {
                 "description": "Apache httpd",
                 "manufacturer": "Apache",
                 "product": "httpd",
@@ -151,23 +151,23 @@ on this server.</p>
               "timestamp": "2020-07-13T12:50:53Z",
               "title": "403 Forbidden",
             },
-            "heartbleed": Object {
+            "heartbleed": {
               "heartbeat_enabled": true,
               "heartbleed_vulnerable": false,
               "timestamp": "2020-07-14T11:48:41Z",
             },
-            "rsa_export": Object {
+            "rsa_export": {
               "support": false,
               "timestamp": "2020-07-09T10:08:24Z",
             },
-            "tls": Object {
-              "certificate": Object {
-                "parsed": Object {
-                  "extensions": Object {
-                    "basic_constraints": Object {
+            "tls": {
+              "certificate": {
+                "parsed": {
+                  "extensions": {
+                    "basic_constraints": {
                       "is_ca": false,
                     },
-                    "key_usage": Object {
+                    "key_usage": {
                       "content_commitment": true,
                       "digital_signature": true,
                       "key_encipherment": true,
@@ -177,79 +177,79 @@ on this server.</p>
                   "fingerprint_md5": "9b29ecc02f7ae02b752aed672b40a840",
                   "fingerprint_sha1": "f66395f114727c71daec03acf99d3de5e6b10766",
                   "fingerprint_sha256": "720bf95038fd667b7e958b6773d90b9dfb18b194725d364859ead4755e10e5ca",
-                  "issuer": Object {
-                    "common_name": Array [
+                  "issuer": {
+                    "common_name": [
                       "otakukonkatsu.com",
                     ],
-                    "country": Array [
+                    "country": [
                       "--",
                     ],
-                    "email_address": Array [
+                    "email_address": [
                       "root@otakukonkatsu.com",
                     ],
-                    "locality": Array [
+                    "locality": [
                       "SomeCity",
                     ],
-                    "organization": Array [
+                    "organization": [
                       "SomeOrganization",
                     ],
-                    "organizational_unit": Array [
+                    "organizational_unit": [
                       "SomeOrganizationalUnit",
                     ],
-                    "province": Array [
+                    "province": [
                       "SomeState",
                     ],
                   },
                   "issuer_dn": "C=--, ST=SomeState, L=SomeCity, O=SomeOrganization, OU=SomeOrganizationalUnit, CN=otakukonkatsu.com, emailAddress=root@otakukonkatsu.com",
-                  "names": Array [
+                  "names": [
                     "otakukonkatsu.com",
                   ],
                   "redacted": false,
                   "serial_number": "10308",
-                  "signature": Object {
+                  "signature": {
                     "self_signed": true,
-                    "signature_algorithm": Object {
+                    "signature_algorithm": {
                       "name": "SHA256WithRSA",
                       "oid": "1.2.840.113549.1.1.11",
                     },
                     "valid": false,
                     "value": "Ybk9fBqSCCWOpnpa9KGvONfCzHaaM5NpebUHk1tuC2TF0jrMi6ba5S2uEsQfGybxEk0Iv2j8kQYwnUnST4+uWFUj2+nuj0dfjGwlBEtA3PL97WSyjbblaLChdJ7quGkzOohzO7lTdVKCv2iR7mEp9ac2ldPdPxTkOmzx8diFnHGotL2vcNP0sfEqkJzvFdpwJnQMoPx7erDyeVb/SE4lieIUpAdn7LUVsAAnJf0C7lIgs5bpOiGF9nbwIOxv5a5pJNtTalNOC0+kamK3KPTobxWhbmkl39HNqD6m3AhksBzSifvC0seVHpbWn6AEA8w4ITzY0eyxNTSt+TvO1/Mk5A==",
                   },
-                  "signature_algorithm": Object {
+                  "signature_algorithm": {
                     "name": "SHA256WithRSA",
                     "oid": "1.2.840.113549.1.1.11",
                   },
                   "spki_subject_fingerprint": "d2f3b9238775b2ff36a5194d808c7b59892dcad94e4bddc8a83224a6a08aa83f",
-                  "subject": Object {
-                    "common_name": Array [
+                  "subject": {
+                    "common_name": [
                       "otakukonkatsu.com",
                     ],
-                    "country": Array [
+                    "country": [
                       "--",
                     ],
-                    "email_address": Array [
+                    "email_address": [
                       "root@otakukonkatsu.com",
                     ],
-                    "locality": Array [
+                    "locality": [
                       "SomeCity",
                     ],
-                    "organization": Array [
+                    "organization": [
                       "SomeOrganization",
                     ],
-                    "organizational_unit": Array [
+                    "organizational_unit": [
                       "SomeOrganizationalUnit",
                     ],
-                    "province": Array [
+                    "province": [
                       "SomeState",
                     ],
                   },
                   "subject_dn": "C=--, ST=SomeState, L=SomeCity, O=SomeOrganization, OU=SomeOrganizationalUnit, CN=otakukonkatsu.com, emailAddress=root@otakukonkatsu.com",
-                  "subject_key_info": Object {
+                  "subject_key_info": {
                     "fingerprint_sha256": "f73b8fb390a439ec73a10655f9ae3fd5fcef470f3b141b9c5f1cc4e3bde10b40",
-                    "key_algorithm": Object {
+                    "key_algorithm": {
                       "name": "RSA",
                     },
-                    "rsa_public_key": Object {
+                    "rsa_public_key": {
                       "exponent": "65537",
                       "length": "2048",
                       "modulus": "wVLn3KpwCaMbah5ScJpVaq9WvOAxzo1U/jv1Yg5iRrpACCszP7IPBe7pzSB/duhXwqUAMLRwebX5VR9oY96PZfOvjnidGvB8hSqLwmEdvTiA1q4H8kX8eYDhtz8fzle1qTtXb6nQnuRvhYKg0O3Cci2EPuSTOObJce4KYq+kKsuqqXto6wGgUe1zG4aHBN5C+J193laZcp+OV9ds94sl9dWqtXhB6x3TJDeXIEiGSo3lEwI8GewbxZW53ryRUqLjMg30rkCXfxvCAiGhDzYQTvwgm/cz8Lg0PSSPfK2NPaCuE/v0hF/hexDu9xKisEyacHLeY98VjKJXSXxfcMUPHQ==",
@@ -258,7 +258,7 @@ on this server.</p>
                   "tbs_fingerprint": "e26550ab8d9e84345a8d61c840d97270ec973406256ea66cad195e43955d08e6",
                   "tbs_noct_fingerprint": "e26550ab8d9e84345a8d61c840d97270ec973406256ea66cad195e43955d08e6",
                   "validation_level": "unknown",
-                  "validity": Object {
+                  "validity": {
                     "end": "2019-08-21T06:54:56Z",
                     "length": "31536000",
                     "start": "2018-08-21T06:54:56Z",
@@ -266,30 +266,30 @@ on this server.</p>
                   "version": "3",
                 },
               },
-              "cipher_suite": Object {
+              "cipher_suite": {
                 "id": "0xC02F",
                 "name": "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
               },
               "ocsp_stapling": false,
-              "server_key_exchange": Object {
-                "ecdh_params": Object {
-                  "curve_id": Object {
+              "server_key_exchange": {
+                "ecdh_params": {
+                  "curve_id": {
                     "id": "23",
                     "name": "secp256r1",
                   },
                 },
               },
-              "session_ticket": Object {
+              "session_ticket": {
                 "length": "192",
                 "lifetime_hint": "300",
               },
-              "signature": Object {
+              "signature": {
                 "hash_algorithm": "sha512",
                 "signature_algorithm": "rsa",
                 "valid": true,
               },
               "timestamp": "2020-07-09T23:00:58Z",
-              "validation": Object {
+              "validation": {
                 "browser_error": "x509: unknown error",
                 "browser_trusted": false,
               },
@@ -297,36 +297,36 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {
+        "censysMetadata": {
           "description": "Apache httpd",
           "manufacturer": "Apache",
           "product": "httpd",
         },
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 443,
-        "products": Array [
-          Object {
+        "products": [
+          {
             "cpe": "cpe:/a:apache:httpd",
             "description": "Apache httpd",
             "name": "httpd",
             "product": "httpd",
-            "tags": Array [],
+            "tags": [],
           },
         ],
         "service": "https",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
-        "censysIpv4Results": Object {
-          "smtp": Object {
-            "tls": Object {
+        "censysIpv4Results": {
+          "smtp": {
+            "tls": {
               "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
               "ehlo": "250-mail.otakukonkatsu.com
 250-PIPELINING
@@ -337,14 +337,14 @@ on this server.</p>
 250-8BITMIME
 250 DSN",
               "timestamp": "2020-07-14T01:08:23Z",
-              "tls": Object {
-                "certificate": Object {
-                  "parsed": Object {
-                    "extensions": Object {
-                      "basic_constraints": Object {
+              "tls": {
+                "certificate": {
+                  "parsed": {
+                    "extensions": {
+                      "basic_constraints": {
                         "is_ca": false,
                       },
-                      "key_usage": Object {
+                      "key_usage": {
                         "content_commitment": true,
                         "digital_signature": true,
                         "key_encipherment": true,
@@ -354,79 +354,79 @@ on this server.</p>
                     "fingerprint_md5": "9b29ecc02f7ae02b752aed672b40a840",
                     "fingerprint_sha1": "f66395f114727c71daec03acf99d3de5e6b10766",
                     "fingerprint_sha256": "720bf95038fd667b7e958b6773d90b9dfb18b194725d364859ead4755e10e5ca",
-                    "issuer": Object {
-                      "common_name": Array [
+                    "issuer": {
+                      "common_name": [
                         "otakukonkatsu.com",
                       ],
-                      "country": Array [
+                      "country": [
                         "--",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "root@otakukonkatsu.com",
                       ],
-                      "locality": Array [
+                      "locality": [
                         "SomeCity",
                       ],
-                      "organization": Array [
+                      "organization": [
                         "SomeOrganization",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "SomeOrganizationalUnit",
                       ],
-                      "province": Array [
+                      "province": [
                         "SomeState",
                       ],
                     },
                     "issuer_dn": "C=--, ST=SomeState, L=SomeCity, O=SomeOrganization, OU=SomeOrganizationalUnit, CN=otakukonkatsu.com, emailAddress=root@otakukonkatsu.com",
-                    "names": Array [
+                    "names": [
                       "otakukonkatsu.com",
                     ],
                     "redacted": false,
                     "serial_number": "10308",
-                    "signature": Object {
+                    "signature": {
                       "self_signed": true,
-                      "signature_algorithm": Object {
+                      "signature_algorithm": {
                         "name": "SHA256WithRSA",
                         "oid": "1.2.840.113549.1.1.11",
                       },
                       "valid": false,
                       "value": "Ybk9fBqSCCWOpnpa9KGvONfCzHaaM5NpebUHk1tuC2TF0jrMi6ba5S2uEsQfGybxEk0Iv2j8kQYwnUnST4+uWFUj2+nuj0dfjGwlBEtA3PL97WSyjbblaLChdJ7quGkzOohzO7lTdVKCv2iR7mEp9ac2ldPdPxTkOmzx8diFnHGotL2vcNP0sfEqkJzvFdpwJnQMoPx7erDyeVb/SE4lieIUpAdn7LUVsAAnJf0C7lIgs5bpOiGF9nbwIOxv5a5pJNtTalNOC0+kamK3KPTobxWhbmkl39HNqD6m3AhksBzSifvC0seVHpbWn6AEA8w4ITzY0eyxNTSt+TvO1/Mk5A==",
                     },
-                    "signature_algorithm": Object {
+                    "signature_algorithm": {
                       "name": "SHA256WithRSA",
                       "oid": "1.2.840.113549.1.1.11",
                     },
                     "spki_subject_fingerprint": "d2f3b9238775b2ff36a5194d808c7b59892dcad94e4bddc8a83224a6a08aa83f",
-                    "subject": Object {
-                      "common_name": Array [
+                    "subject": {
+                      "common_name": [
                         "otakukonkatsu.com",
                       ],
-                      "country": Array [
+                      "country": [
                         "--",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "root@otakukonkatsu.com",
                       ],
-                      "locality": Array [
+                      "locality": [
                         "SomeCity",
                       ],
-                      "organization": Array [
+                      "organization": [
                         "SomeOrganization",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "SomeOrganizationalUnit",
                       ],
-                      "province": Array [
+                      "province": [
                         "SomeState",
                       ],
                     },
                     "subject_dn": "C=--, ST=SomeState, L=SomeCity, O=SomeOrganization, OU=SomeOrganizationalUnit, CN=otakukonkatsu.com, emailAddress=root@otakukonkatsu.com",
-                    "subject_key_info": Object {
+                    "subject_key_info": {
                       "fingerprint_sha256": "f73b8fb390a439ec73a10655f9ae3fd5fcef470f3b141b9c5f1cc4e3bde10b40",
-                      "key_algorithm": Object {
+                      "key_algorithm": {
                         "name": "RSA",
                       },
-                      "rsa_public_key": Object {
+                      "rsa_public_key": {
                         "exponent": "65537",
                         "length": "2048",
                         "modulus": "wVLn3KpwCaMbah5ScJpVaq9WvOAxzo1U/jv1Yg5iRrpACCszP7IPBe7pzSB/duhXwqUAMLRwebX5VR9oY96PZfOvjnidGvB8hSqLwmEdvTiA1q4H8kX8eYDhtz8fzle1qTtXb6nQnuRvhYKg0O3Cci2EPuSTOObJce4KYq+kKsuqqXto6wGgUe1zG4aHBN5C+J193laZcp+OV9ds94sl9dWqtXhB6x3TJDeXIEiGSo3lEwI8GewbxZW53ryRUqLjMg30rkCXfxvCAiGhDzYQTvwgm/cz8Lg0PSSPfK2NPaCuE/v0hF/hexDu9xKisEyacHLeY98VjKJXSXxfcMUPHQ==",
@@ -435,7 +435,7 @@ on this server.</p>
                     "tbs_fingerprint": "e26550ab8d9e84345a8d61c840d97270ec973406256ea66cad195e43955d08e6",
                     "tbs_noct_fingerprint": "e26550ab8d9e84345a8d61c840d97270ec973406256ea66cad195e43955d08e6",
                     "validation_level": "unknown",
-                    "validity": Object {
+                    "validity": {
                       "end": "2019-08-21T06:54:56Z",
                       "length": "31536000",
                       "start": "2018-08-21T06:54:56Z",
@@ -443,12 +443,12 @@ on this server.</p>
                     "version": "3",
                   },
                 },
-                "cipher_suite": Object {
+                "cipher_suite": {
                   "id": "0x0005",
                   "name": "TLS_RSA_WITH_RC4_128_SHA",
                 },
                 "ocsp_stapling": false,
-                "validation": Object {
+                "validation": {
                   "browser_error": "x509: unknown error",
                   "browser_trusted": false,
                 },
@@ -457,81 +457,81 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {},
+        "censysMetadata": {},
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 465,
-        "products": Array [],
+        "products": [],
         "service": "smtp",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
-        "censysIpv4Results": Object {
-          "imaps": Object {
-            "tls": Object {
+        "censysIpv4Results": {
+          "imaps": {
+            "tls": {
               "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
               "timestamp": "2020-07-15T04:50:02Z",
-              "tls": Object {
-                "certificate": Object {
-                  "parsed": Object {
+              "tls": {
+                "certificate": {
+                  "parsed": {
                     "fingerprint_md5": "75a9c8c50cd65b0d20ff590ec16720bc",
                     "fingerprint_sha1": "316f85e231f9e623dc746ec837f69ba21605efb9",
                     "fingerprint_sha256": "2fc1e7271275a9000cd30a120082532b8d5d829df0f43e424ea984283a8561ca",
-                    "issuer": Object {
-                      "common_name": Array [
+                    "issuer": {
+                      "common_name": [
                         "imap.example.com",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "postmaster@example.com",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "IMAP server",
                       ],
                     },
                     "issuer_dn": "OU=IMAP server, CN=imap.example.com, emailAddress=postmaster@example.com",
-                    "names": Array [
+                    "names": [
                       "imap.example.com",
                     ],
                     "redacted": false,
                     "serial_number": "17014858658541463133",
-                    "signature": Object {
+                    "signature": {
                       "self_signed": true,
-                      "signature_algorithm": Object {
+                      "signature_algorithm": {
                         "name": "SHA1WithRSA",
                         "oid": "1.2.840.113549.1.1.5",
                       },
                       "valid": false,
                       "value": "X1y1HOlbWb/UCb1ZiUveVit1/onKvvGC88Lu7uUeHAG0Kyg0a+vCGNeUc5p2LhjHDvps+hqXsUgj6Pc5xAxG1Z+t/SjGgMQfW0TXRZyHz1dcBsZgUcdS8n1MCfYnqTkOK4xM9VJ9s0fCexcEPNJZm8CCc7c/7pidUYb9mhjBn0I=",
                     },
-                    "signature_algorithm": Object {
+                    "signature_algorithm": {
                       "name": "SHA1WithRSA",
                       "oid": "1.2.840.113549.1.1.5",
                     },
                     "spki_subject_fingerprint": "f0bbae564b9009140c3a7dee962721b20183b0ce08302b96925f5ca40aa6ec0a",
-                    "subject": Object {
-                      "common_name": Array [
+                    "subject": {
+                      "common_name": [
                         "imap.example.com",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "postmaster@example.com",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "IMAP server",
                       ],
                     },
                     "subject_dn": "OU=IMAP server, CN=imap.example.com, emailAddress=postmaster@example.com",
-                    "subject_key_info": Object {
+                    "subject_key_info": {
                       "fingerprint_sha256": "500cba1cd900964c5cf45caee7fd5b1d0d9f4bd4e2d6922b165000e871ee4f71",
-                      "key_algorithm": Object {
+                      "key_algorithm": {
                         "name": "RSA",
                       },
-                      "rsa_public_key": Object {
+                      "rsa_public_key": {
                         "exponent": "65537",
                         "length": "1024",
                         "modulus": "33h1UpbthpCviIeKbhn6og9sA1sRGVHTyq50Eqfj/4sJlybCgjg3XX3EsplRmqhoY6iFizMenXSgpb2rdcg0a4O0XLOUDOroUlwg1YuEhvWmykwKsmFpuY+1UpCnqspEHBxpbX10dk9BbUNO76eyk5jxAbVEOARonh5XHV/xiVU=",
@@ -539,15 +539,15 @@ on this server.</p>
                     },
                     "tbs_fingerprint": "61368b020ba895fdf15278c004f63d6474466a37b7bba061441381b228ed6d7d",
                     "tbs_noct_fingerprint": "61368b020ba895fdf15278c004f63d6474466a37b7bba061441381b228ed6d7d",
-                    "unknown_extensions": Array [
-                      Object {
+                    "unknown_extensions": [
+                      {
                         "critical": false,
                         "id": "2.16.840.1.113730.1.1",
                         "value": "AwIGQA==",
                       },
                     ],
                     "validation_level": "unknown",
-                    "validity": Object {
+                    "validity": {
                       "end": "2019-08-21T06:54:04Z",
                       "length": "31536000",
                       "start": "2018-08-21T06:54:04Z",
@@ -555,12 +555,12 @@ on this server.</p>
                     "version": "3",
                   },
                 },
-                "cipher_suite": Object {
+                "cipher_suite": {
                   "id": "0x0005",
                   "name": "TLS_RSA_WITH_RC4_128_SHA",
                 },
                 "ocsp_stapling": false,
-                "validation": Object {
+                "validation": {
                   "browser_error": "x509: unknown error",
                   "browser_trusted": false,
                 },
@@ -569,24 +569,24 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {},
+        "censysMetadata": {},
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 993,
-        "products": Array [],
+        "products": [],
         "service": "imaps",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
-        "censysIpv4Results": Object {
-          "smtp": Object {
-            "starttls": Object {
+        "censysIpv4Results": {
+          "smtp": {
+            "starttls": {
               "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
               "ehlo": "250-mail.otakukonkatsu.com
 250-PIPELINING
@@ -599,14 +599,14 @@ on this server.</p>
 250 DSN",
               "starttls": "220 2.0.0 Ready to start TLS",
               "timestamp": "2020-07-11T14:58:09Z",
-              "tls": Object {
-                "certificate": Object {
-                  "parsed": Object {
-                    "extensions": Object {
-                      "basic_constraints": Object {
+              "tls": {
+                "certificate": {
+                  "parsed": {
+                    "extensions": {
+                      "basic_constraints": {
                         "is_ca": false,
                       },
-                      "key_usage": Object {
+                      "key_usage": {
                         "content_commitment": true,
                         "digital_signature": true,
                         "key_encipherment": true,
@@ -616,79 +616,79 @@ on this server.</p>
                     "fingerprint_md5": "9b29ecc02f7ae02b752aed672b40a840",
                     "fingerprint_sha1": "f66395f114727c71daec03acf99d3de5e6b10766",
                     "fingerprint_sha256": "720bf95038fd667b7e958b6773d90b9dfb18b194725d364859ead4755e10e5ca",
-                    "issuer": Object {
-                      "common_name": Array [
+                    "issuer": {
+                      "common_name": [
                         "otakukonkatsu.com",
                       ],
-                      "country": Array [
+                      "country": [
                         "--",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "root@otakukonkatsu.com",
                       ],
-                      "locality": Array [
+                      "locality": [
                         "SomeCity",
                       ],
-                      "organization": Array [
+                      "organization": [
                         "SomeOrganization",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "SomeOrganizationalUnit",
                       ],
-                      "province": Array [
+                      "province": [
                         "SomeState",
                       ],
                     },
                     "issuer_dn": "C=--, ST=SomeState, L=SomeCity, O=SomeOrganization, OU=SomeOrganizationalUnit, CN=otakukonkatsu.com, emailAddress=root@otakukonkatsu.com",
-                    "names": Array [
+                    "names": [
                       "otakukonkatsu.com",
                     ],
                     "redacted": false,
                     "serial_number": "10308",
-                    "signature": Object {
+                    "signature": {
                       "self_signed": true,
-                      "signature_algorithm": Object {
+                      "signature_algorithm": {
                         "name": "SHA256WithRSA",
                         "oid": "1.2.840.113549.1.1.11",
                       },
                       "valid": false,
                       "value": "Ybk9fBqSCCWOpnpa9KGvONfCzHaaM5NpebUHk1tuC2TF0jrMi6ba5S2uEsQfGybxEk0Iv2j8kQYwnUnST4+uWFUj2+nuj0dfjGwlBEtA3PL97WSyjbblaLChdJ7quGkzOohzO7lTdVKCv2iR7mEp9ac2ldPdPxTkOmzx8diFnHGotL2vcNP0sfEqkJzvFdpwJnQMoPx7erDyeVb/SE4lieIUpAdn7LUVsAAnJf0C7lIgs5bpOiGF9nbwIOxv5a5pJNtTalNOC0+kamK3KPTobxWhbmkl39HNqD6m3AhksBzSifvC0seVHpbWn6AEA8w4ITzY0eyxNTSt+TvO1/Mk5A==",
                     },
-                    "signature_algorithm": Object {
+                    "signature_algorithm": {
                       "name": "SHA256WithRSA",
                       "oid": "1.2.840.113549.1.1.11",
                     },
                     "spki_subject_fingerprint": "d2f3b9238775b2ff36a5194d808c7b59892dcad94e4bddc8a83224a6a08aa83f",
-                    "subject": Object {
-                      "common_name": Array [
+                    "subject": {
+                      "common_name": [
                         "otakukonkatsu.com",
                       ],
-                      "country": Array [
+                      "country": [
                         "--",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "root@otakukonkatsu.com",
                       ],
-                      "locality": Array [
+                      "locality": [
                         "SomeCity",
                       ],
-                      "organization": Array [
+                      "organization": [
                         "SomeOrganization",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "SomeOrganizationalUnit",
                       ],
-                      "province": Array [
+                      "province": [
                         "SomeState",
                       ],
                     },
                     "subject_dn": "C=--, ST=SomeState, L=SomeCity, O=SomeOrganization, OU=SomeOrganizationalUnit, CN=otakukonkatsu.com, emailAddress=root@otakukonkatsu.com",
-                    "subject_key_info": Object {
+                    "subject_key_info": {
                       "fingerprint_sha256": "f73b8fb390a439ec73a10655f9ae3fd5fcef470f3b141b9c5f1cc4e3bde10b40",
-                      "key_algorithm": Object {
+                      "key_algorithm": {
                         "name": "RSA",
                       },
-                      "rsa_public_key": Object {
+                      "rsa_public_key": {
                         "exponent": "65537",
                         "length": "2048",
                         "modulus": "wVLn3KpwCaMbah5ScJpVaq9WvOAxzo1U/jv1Yg5iRrpACCszP7IPBe7pzSB/duhXwqUAMLRwebX5VR9oY96PZfOvjnidGvB8hSqLwmEdvTiA1q4H8kX8eYDhtz8fzle1qTtXb6nQnuRvhYKg0O3Cci2EPuSTOObJce4KYq+kKsuqqXto6wGgUe1zG4aHBN5C+J193laZcp+OV9ds94sl9dWqtXhB6x3TJDeXIEiGSo3lEwI8GewbxZW53ryRUqLjMg30rkCXfxvCAiGhDzYQTvwgm/cz8Lg0PSSPfK2NPaCuE/v0hF/hexDu9xKisEyacHLeY98VjKJXSXxfcMUPHQ==",
@@ -697,7 +697,7 @@ on this server.</p>
                     "tbs_fingerprint": "e26550ab8d9e84345a8d61c840d97270ec973406256ea66cad195e43955d08e6",
                     "tbs_noct_fingerprint": "e26550ab8d9e84345a8d61c840d97270ec973406256ea66cad195e43955d08e6",
                     "validation_level": "unknown",
-                    "validity": Object {
+                    "validity": {
                       "end": "2019-08-21T06:54:56Z",
                       "length": "31536000",
                       "start": "2018-08-21T06:54:56Z",
@@ -705,12 +705,12 @@ on this server.</p>
                     "version": "3",
                   },
                 },
-                "cipher_suite": Object {
+                "cipher_suite": {
                   "id": "0x0005",
                   "name": "TLS_RSA_WITH_RC4_128_SHA",
                 },
                 "ocsp_stapling": false,
-                "validation": Object {
+                "validation": {
                   "browser_error": "x509: unknown error",
                   "browser_trusted": false,
                 },
@@ -719,86 +719,86 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {},
+        "censysMetadata": {},
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 25,
-        "products": Array [],
+        "products": [],
         "service": "smtp",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": "+OK Dovecot ready.",
-        "censysIpv4Results": Object {
-          "pop3": Object {
-            "starttls": Object {
+        "censysIpv4Results": {
+          "pop3": {
+            "starttls": {
               "banner": "+OK Dovecot ready.",
-              "metadata": Object {
+              "metadata": {
                 "description": "Dovecot",
                 "product": "Dovecot",
               },
               "starttls": "+OK Begin TLS negotiation now.",
               "timestamp": "2020-07-12T00:31:30Z",
-              "tls": Object {
-                "certificate": Object {
-                  "parsed": Object {
+              "tls": {
+                "certificate": {
+                  "parsed": {
                     "fingerprint_md5": "75a9c8c50cd65b0d20ff590ec16720bc",
                     "fingerprint_sha1": "316f85e231f9e623dc746ec837f69ba21605efb9",
                     "fingerprint_sha256": "2fc1e7271275a9000cd30a120082532b8d5d829df0f43e424ea984283a8561ca",
-                    "issuer": Object {
-                      "common_name": Array [
+                    "issuer": {
+                      "common_name": [
                         "imap.example.com",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "postmaster@example.com",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "IMAP server",
                       ],
                     },
                     "issuer_dn": "OU=IMAP server, CN=imap.example.com, emailAddress=postmaster@example.com",
-                    "names": Array [
+                    "names": [
                       "imap.example.com",
                     ],
                     "redacted": false,
                     "serial_number": "17014858658541463133",
-                    "signature": Object {
+                    "signature": {
                       "self_signed": true,
-                      "signature_algorithm": Object {
+                      "signature_algorithm": {
                         "name": "SHA1WithRSA",
                         "oid": "1.2.840.113549.1.1.5",
                       },
                       "valid": false,
                       "value": "X1y1HOlbWb/UCb1ZiUveVit1/onKvvGC88Lu7uUeHAG0Kyg0a+vCGNeUc5p2LhjHDvps+hqXsUgj6Pc5xAxG1Z+t/SjGgMQfW0TXRZyHz1dcBsZgUcdS8n1MCfYnqTkOK4xM9VJ9s0fCexcEPNJZm8CCc7c/7pidUYb9mhjBn0I=",
                     },
-                    "signature_algorithm": Object {
+                    "signature_algorithm": {
                       "name": "SHA1WithRSA",
                       "oid": "1.2.840.113549.1.1.5",
                     },
                     "spki_subject_fingerprint": "f0bbae564b9009140c3a7dee962721b20183b0ce08302b96925f5ca40aa6ec0a",
-                    "subject": Object {
-                      "common_name": Array [
+                    "subject": {
+                      "common_name": [
                         "imap.example.com",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "postmaster@example.com",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "IMAP server",
                       ],
                     },
                     "subject_dn": "OU=IMAP server, CN=imap.example.com, emailAddress=postmaster@example.com",
-                    "subject_key_info": Object {
+                    "subject_key_info": {
                       "fingerprint_sha256": "500cba1cd900964c5cf45caee7fd5b1d0d9f4bd4e2d6922b165000e871ee4f71",
-                      "key_algorithm": Object {
+                      "key_algorithm": {
                         "name": "RSA",
                       },
-                      "rsa_public_key": Object {
+                      "rsa_public_key": {
                         "exponent": "65537",
                         "length": "1024",
                         "modulus": "33h1UpbthpCviIeKbhn6og9sA1sRGVHTyq50Eqfj/4sJlybCgjg3XX3EsplRmqhoY6iFizMenXSgpb2rdcg0a4O0XLOUDOroUlwg1YuEhvWmykwKsmFpuY+1UpCnqspEHBxpbX10dk9BbUNO76eyk5jxAbVEOARonh5XHV/xiVU=",
@@ -806,15 +806,15 @@ on this server.</p>
                     },
                     "tbs_fingerprint": "61368b020ba895fdf15278c004f63d6474466a37b7bba061441381b228ed6d7d",
                     "tbs_noct_fingerprint": "61368b020ba895fdf15278c004f63d6474466a37b7bba061441381b228ed6d7d",
-                    "unknown_extensions": Array [
-                      Object {
+                    "unknown_extensions": [
+                      {
                         "critical": false,
                         "id": "2.16.840.1.113730.1.1",
                         "value": "AwIGQA==",
                       },
                     ],
                     "validation_level": "unknown",
-                    "validity": Object {
+                    "validity": {
                       "end": "2019-08-21T06:54:04Z",
                       "length": "31536000",
                       "start": "2018-08-21T06:54:04Z",
@@ -822,12 +822,12 @@ on this server.</p>
                     "version": "3",
                   },
                 },
-                "cipher_suite": Object {
+                "cipher_suite": {
                   "id": "0x0005",
                   "name": "TLS_RSA_WITH_RC4_128_SHA",
                 },
                 "ocsp_stapling": false,
-                "validation": Object {
+                "validation": {
                   "browser_error": "x509: unknown error",
                   "browser_trusted": false,
                 },
@@ -836,96 +836,96 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {
+        "censysMetadata": {
           "description": "Dovecot",
           "product": "Dovecot",
         },
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 110,
-        "products": Array [
-          Object {
+        "products": [
+          {
             "description": "Dovecot",
             "name": "Dovecot",
             "product": "Dovecot",
-            "tags": Array [],
+            "tags": [],
           },
         ],
         "service": "pop3",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
-        "censysIpv4Results": Object {
-          "imap": Object {
-            "starttls": Object {
+        "censysIpv4Results": {
+          "imap": {
+            "starttls": {
               "banner": "* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN] Dovecot ready.",
-              "metadata": Object {
+              "metadata": {
                 "description": "Dovecot",
                 "product": "Dovecot",
               },
               "starttls": "a001 OK Begin TLS negotiation now.",
               "timestamp": "2020-07-12T06:54:10Z",
-              "tls": Object {
-                "certificate": Object {
-                  "parsed": Object {
+              "tls": {
+                "certificate": {
+                  "parsed": {
                     "fingerprint_md5": "75a9c8c50cd65b0d20ff590ec16720bc",
                     "fingerprint_sha1": "316f85e231f9e623dc746ec837f69ba21605efb9",
                     "fingerprint_sha256": "2fc1e7271275a9000cd30a120082532b8d5d829df0f43e424ea984283a8561ca",
-                    "issuer": Object {
-                      "common_name": Array [
+                    "issuer": {
+                      "common_name": [
                         "imap.example.com",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "postmaster@example.com",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "IMAP server",
                       ],
                     },
                     "issuer_dn": "OU=IMAP server, CN=imap.example.com, emailAddress=postmaster@example.com",
-                    "names": Array [
+                    "names": [
                       "imap.example.com",
                     ],
                     "redacted": false,
                     "serial_number": "17014858658541463133",
-                    "signature": Object {
+                    "signature": {
                       "self_signed": true,
-                      "signature_algorithm": Object {
+                      "signature_algorithm": {
                         "name": "SHA1WithRSA",
                         "oid": "1.2.840.113549.1.1.5",
                       },
                       "valid": false,
                       "value": "X1y1HOlbWb/UCb1ZiUveVit1/onKvvGC88Lu7uUeHAG0Kyg0a+vCGNeUc5p2LhjHDvps+hqXsUgj6Pc5xAxG1Z+t/SjGgMQfW0TXRZyHz1dcBsZgUcdS8n1MCfYnqTkOK4xM9VJ9s0fCexcEPNJZm8CCc7c/7pidUYb9mhjBn0I=",
                     },
-                    "signature_algorithm": Object {
+                    "signature_algorithm": {
                       "name": "SHA1WithRSA",
                       "oid": "1.2.840.113549.1.1.5",
                     },
                     "spki_subject_fingerprint": "f0bbae564b9009140c3a7dee962721b20183b0ce08302b96925f5ca40aa6ec0a",
-                    "subject": Object {
-                      "common_name": Array [
+                    "subject": {
+                      "common_name": [
                         "imap.example.com",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "postmaster@example.com",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "IMAP server",
                       ],
                     },
                     "subject_dn": "OU=IMAP server, CN=imap.example.com, emailAddress=postmaster@example.com",
-                    "subject_key_info": Object {
+                    "subject_key_info": {
                       "fingerprint_sha256": "500cba1cd900964c5cf45caee7fd5b1d0d9f4bd4e2d6922b165000e871ee4f71",
-                      "key_algorithm": Object {
+                      "key_algorithm": {
                         "name": "RSA",
                       },
-                      "rsa_public_key": Object {
+                      "rsa_public_key": {
                         "exponent": "65537",
                         "length": "1024",
                         "modulus": "33h1UpbthpCviIeKbhn6og9sA1sRGVHTyq50Eqfj/4sJlybCgjg3XX3EsplRmqhoY6iFizMenXSgpb2rdcg0a4O0XLOUDOroUlwg1YuEhvWmykwKsmFpuY+1UpCnqspEHBxpbX10dk9BbUNO76eyk5jxAbVEOARonh5XHV/xiVU=",
@@ -933,15 +933,15 @@ on this server.</p>
                     },
                     "tbs_fingerprint": "61368b020ba895fdf15278c004f63d6474466a37b7bba061441381b228ed6d7d",
                     "tbs_noct_fingerprint": "61368b020ba895fdf15278c004f63d6474466a37b7bba061441381b228ed6d7d",
-                    "unknown_extensions": Array [
-                      Object {
+                    "unknown_extensions": [
+                      {
                         "critical": false,
                         "id": "2.16.840.1.113730.1.1",
                         "value": "AwIGQA==",
                       },
                     ],
                     "validation_level": "unknown",
-                    "validity": Object {
+                    "validity": {
                       "end": "2019-08-21T06:54:04Z",
                       "length": "31536000",
                       "start": "2018-08-21T06:54:04Z",
@@ -949,12 +949,12 @@ on this server.</p>
                     "version": "3",
                   },
                 },
-                "cipher_suite": Object {
+                "cipher_suite": {
                   "id": "0x0005",
                   "name": "TLS_RSA_WITH_RC4_128_SHA",
                 },
                 "ocsp_stapling": false,
-                "validation": Object {
+                "validation": {
                   "browser_error": "x509: unknown error",
                   "browser_trusted": false,
                 },
@@ -963,91 +963,91 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {
+        "censysMetadata": {
           "description": "Dovecot",
           "product": "Dovecot",
         },
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 143,
-        "products": Array [
-          Object {
+        "products": [
+          {
             "description": "Dovecot",
             "name": "Dovecot",
             "product": "Dovecot",
-            "tags": Array [],
+            "tags": [],
           },
         ],
         "service": "imap",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": "+OK Dovecot ready.",
-        "censysIpv4Results": Object {
-          "pop3s": Object {
-            "tls": Object {
+        "censysIpv4Results": {
+          "pop3s": {
+            "tls": {
               "banner": "+OK Dovecot ready.",
               "timestamp": "2020-07-10T15:49:08Z",
-              "tls": Object {
-                "certificate": Object {
-                  "parsed": Object {
+              "tls": {
+                "certificate": {
+                  "parsed": {
                     "fingerprint_md5": "75a9c8c50cd65b0d20ff590ec16720bc",
                     "fingerprint_sha1": "316f85e231f9e623dc746ec837f69ba21605efb9",
                     "fingerprint_sha256": "2fc1e7271275a9000cd30a120082532b8d5d829df0f43e424ea984283a8561ca",
-                    "issuer": Object {
-                      "common_name": Array [
+                    "issuer": {
+                      "common_name": [
                         "imap.example.com",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "postmaster@example.com",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "IMAP server",
                       ],
                     },
                     "issuer_dn": "OU=IMAP server, CN=imap.example.com, emailAddress=postmaster@example.com",
-                    "names": Array [
+                    "names": [
                       "imap.example.com",
                     ],
                     "redacted": false,
                     "serial_number": "17014858658541463133",
-                    "signature": Object {
+                    "signature": {
                       "self_signed": true,
-                      "signature_algorithm": Object {
+                      "signature_algorithm": {
                         "name": "SHA1WithRSA",
                         "oid": "1.2.840.113549.1.1.5",
                       },
                       "valid": false,
                       "value": "X1y1HOlbWb/UCb1ZiUveVit1/onKvvGC88Lu7uUeHAG0Kyg0a+vCGNeUc5p2LhjHDvps+hqXsUgj6Pc5xAxG1Z+t/SjGgMQfW0TXRZyHz1dcBsZgUcdS8n1MCfYnqTkOK4xM9VJ9s0fCexcEPNJZm8CCc7c/7pidUYb9mhjBn0I=",
                     },
-                    "signature_algorithm": Object {
+                    "signature_algorithm": {
                       "name": "SHA1WithRSA",
                       "oid": "1.2.840.113549.1.1.5",
                     },
                     "spki_subject_fingerprint": "f0bbae564b9009140c3a7dee962721b20183b0ce08302b96925f5ca40aa6ec0a",
-                    "subject": Object {
-                      "common_name": Array [
+                    "subject": {
+                      "common_name": [
                         "imap.example.com",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "postmaster@example.com",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "IMAP server",
                       ],
                     },
                     "subject_dn": "OU=IMAP server, CN=imap.example.com, emailAddress=postmaster@example.com",
-                    "subject_key_info": Object {
+                    "subject_key_info": {
                       "fingerprint_sha256": "500cba1cd900964c5cf45caee7fd5b1d0d9f4bd4e2d6922b165000e871ee4f71",
-                      "key_algorithm": Object {
+                      "key_algorithm": {
                         "name": "RSA",
                       },
-                      "rsa_public_key": Object {
+                      "rsa_public_key": {
                         "exponent": "65537",
                         "length": "1024",
                         "modulus": "33h1UpbthpCviIeKbhn6og9sA1sRGVHTyq50Eqfj/4sJlybCgjg3XX3EsplRmqhoY6iFizMenXSgpb2rdcg0a4O0XLOUDOroUlwg1YuEhvWmykwKsmFpuY+1UpCnqspEHBxpbX10dk9BbUNO76eyk5jxAbVEOARonh5XHV/xiVU=",
@@ -1055,15 +1055,15 @@ on this server.</p>
                     },
                     "tbs_fingerprint": "61368b020ba895fdf15278c004f63d6474466a37b7bba061441381b228ed6d7d",
                     "tbs_noct_fingerprint": "61368b020ba895fdf15278c004f63d6474466a37b7bba061441381b228ed6d7d",
-                    "unknown_extensions": Array [
-                      Object {
+                    "unknown_extensions": [
+                      {
                         "critical": false,
                         "id": "2.16.840.1.113730.1.1",
                         "value": "AwIGQA==",
                       },
                     ],
                     "validation_level": "unknown",
-                    "validity": Object {
+                    "validity": {
                       "end": "2019-08-21T06:54:04Z",
                       "length": "31536000",
                       "start": "2018-08-21T06:54:04Z",
@@ -1071,12 +1071,12 @@ on this server.</p>
                     "version": "3",
                   },
                 },
-                "cipher_suite": Object {
+                "cipher_suite": {
                   "id": "0x0005",
                   "name": "TLS_RSA_WITH_RC4_128_SHA",
                 },
                 "ocsp_stapling": false,
-                "validation": Object {
+                "validation": {
                   "browser_error": "x509: unknown error",
                   "browser_trusted": false,
                 },
@@ -1085,24 +1085,24 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {},
+        "censysMetadata": {},
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 995,
-        "products": Array [],
+        "products": [],
         "service": "pop3s",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
-        "censysIpv4Results": Object {
-          "smtp": Object {
-            "starttls": Object {
+        "censysIpv4Results": {
+          "smtp": {
+            "starttls": {
               "banner": "220 mail.otakukonkatsu.com ESMTP unknown",
               "ehlo": "250-mail.otakukonkatsu.com
 250-PIPELINING
@@ -1115,14 +1115,14 @@ on this server.</p>
 250 DSN",
               "starttls": "220 2.0.0 Ready to start TLS",
               "timestamp": "2020-07-11T09:50:03Z",
-              "tls": Object {
-                "certificate": Object {
-                  "parsed": Object {
-                    "extensions": Object {
-                      "basic_constraints": Object {
+              "tls": {
+                "certificate": {
+                  "parsed": {
+                    "extensions": {
+                      "basic_constraints": {
                         "is_ca": false,
                       },
-                      "key_usage": Object {
+                      "key_usage": {
                         "content_commitment": true,
                         "digital_signature": true,
                         "key_encipherment": true,
@@ -1132,79 +1132,79 @@ on this server.</p>
                     "fingerprint_md5": "9b29ecc02f7ae02b752aed672b40a840",
                     "fingerprint_sha1": "f66395f114727c71daec03acf99d3de5e6b10766",
                     "fingerprint_sha256": "720bf95038fd667b7e958b6773d90b9dfb18b194725d364859ead4755e10e5ca",
-                    "issuer": Object {
-                      "common_name": Array [
+                    "issuer": {
+                      "common_name": [
                         "otakukonkatsu.com",
                       ],
-                      "country": Array [
+                      "country": [
                         "--",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "root@otakukonkatsu.com",
                       ],
-                      "locality": Array [
+                      "locality": [
                         "SomeCity",
                       ],
-                      "organization": Array [
+                      "organization": [
                         "SomeOrganization",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "SomeOrganizationalUnit",
                       ],
-                      "province": Array [
+                      "province": [
                         "SomeState",
                       ],
                     },
                     "issuer_dn": "C=--, ST=SomeState, L=SomeCity, O=SomeOrganization, OU=SomeOrganizationalUnit, CN=otakukonkatsu.com, emailAddress=root@otakukonkatsu.com",
-                    "names": Array [
+                    "names": [
                       "otakukonkatsu.com",
                     ],
                     "redacted": false,
                     "serial_number": "10308",
-                    "signature": Object {
+                    "signature": {
                       "self_signed": true,
-                      "signature_algorithm": Object {
+                      "signature_algorithm": {
                         "name": "SHA256WithRSA",
                         "oid": "1.2.840.113549.1.1.11",
                       },
                       "valid": false,
                       "value": "Ybk9fBqSCCWOpnpa9KGvONfCzHaaM5NpebUHk1tuC2TF0jrMi6ba5S2uEsQfGybxEk0Iv2j8kQYwnUnST4+uWFUj2+nuj0dfjGwlBEtA3PL97WSyjbblaLChdJ7quGkzOohzO7lTdVKCv2iR7mEp9ac2ldPdPxTkOmzx8diFnHGotL2vcNP0sfEqkJzvFdpwJnQMoPx7erDyeVb/SE4lieIUpAdn7LUVsAAnJf0C7lIgs5bpOiGF9nbwIOxv5a5pJNtTalNOC0+kamK3KPTobxWhbmkl39HNqD6m3AhksBzSifvC0seVHpbWn6AEA8w4ITzY0eyxNTSt+TvO1/Mk5A==",
                     },
-                    "signature_algorithm": Object {
+                    "signature_algorithm": {
                       "name": "SHA256WithRSA",
                       "oid": "1.2.840.113549.1.1.11",
                     },
                     "spki_subject_fingerprint": "d2f3b9238775b2ff36a5194d808c7b59892dcad94e4bddc8a83224a6a08aa83f",
-                    "subject": Object {
-                      "common_name": Array [
+                    "subject": {
+                      "common_name": [
                         "otakukonkatsu.com",
                       ],
-                      "country": Array [
+                      "country": [
                         "--",
                       ],
-                      "email_address": Array [
+                      "email_address": [
                         "root@otakukonkatsu.com",
                       ],
-                      "locality": Array [
+                      "locality": [
                         "SomeCity",
                       ],
-                      "organization": Array [
+                      "organization": [
                         "SomeOrganization",
                       ],
-                      "organizational_unit": Array [
+                      "organizational_unit": [
                         "SomeOrganizationalUnit",
                       ],
-                      "province": Array [
+                      "province": [
                         "SomeState",
                       ],
                     },
                     "subject_dn": "C=--, ST=SomeState, L=SomeCity, O=SomeOrganization, OU=SomeOrganizationalUnit, CN=otakukonkatsu.com, emailAddress=root@otakukonkatsu.com",
-                    "subject_key_info": Object {
+                    "subject_key_info": {
                       "fingerprint_sha256": "f73b8fb390a439ec73a10655f9ae3fd5fcef470f3b141b9c5f1cc4e3bde10b40",
-                      "key_algorithm": Object {
+                      "key_algorithm": {
                         "name": "RSA",
                       },
-                      "rsa_public_key": Object {
+                      "rsa_public_key": {
                         "exponent": "65537",
                         "length": "2048",
                         "modulus": "wVLn3KpwCaMbah5ScJpVaq9WvOAxzo1U/jv1Yg5iRrpACCszP7IPBe7pzSB/duhXwqUAMLRwebX5VR9oY96PZfOvjnidGvB8hSqLwmEdvTiA1q4H8kX8eYDhtz8fzle1qTtXb6nQnuRvhYKg0O3Cci2EPuSTOObJce4KYq+kKsuqqXto6wGgUe1zG4aHBN5C+J193laZcp+OV9ds94sl9dWqtXhB6x3TJDeXIEiGSo3lEwI8GewbxZW53ryRUqLjMg30rkCXfxvCAiGhDzYQTvwgm/cz8Lg0PSSPfK2NPaCuE/v0hF/hexDu9xKisEyacHLeY98VjKJXSXxfcMUPHQ==",
@@ -1213,7 +1213,7 @@ on this server.</p>
                     "tbs_fingerprint": "e26550ab8d9e84345a8d61c840d97270ec973406256ea66cad195e43955d08e6",
                     "tbs_noct_fingerprint": "e26550ab8d9e84345a8d61c840d97270ec973406256ea66cad195e43955d08e6",
                     "validation_level": "unknown",
-                    "validity": Object {
+                    "validity": {
                       "end": "2019-08-21T06:54:56Z",
                       "length": "31536000",
                       "start": "2018-08-21T06:54:56Z",
@@ -1221,12 +1221,12 @@ on this server.</p>
                     "version": "3",
                   },
                 },
-                "cipher_suite": Object {
+                "cipher_suite": {
                   "id": "0x0005",
                   "name": "TLS_RSA_WITH_RC4_128_SHA",
                 },
                 "ocsp_stapling": false,
-                "validation": Object {
+                "validation": {
                   "browser_error": "x509: unknown error",
                   "browser_trusted": false,
                 },
@@ -1235,18 +1235,18 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {},
+        "censysMetadata": {},
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 587,
-        "products": Array [],
+        "products": [],
         "service": "smtp",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
     ],
     "ssl": null,
@@ -1254,9 +1254,9 @@ on this server.</p>
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": "16509",
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": "SG",
     "createdAt": null,
@@ -1268,8 +1268,8 @@ on this server.</p>
     "organization": null,
     "reverseName": "first_file_testdomain10",
     "screenshot": null,
-    "services": Array [
-      Object {
+    "services": [
+      {
         "banner": "<!DOCTYPE html>
 <html lang=\\"en\\" ng-app=\\"cloudautom.landing\\">
 
@@ -1308,9 +1308,9 @@ on this server.</p>
 
 </body>
 </html>",
-        "censysIpv4Results": Object {
-          "http": Object {
-            "get": Object {
+        "censysIpv4Results": {
+          "http": {
+            "get": {
               "body": "<!DOCTYPE html>
 <html lang=\\"en\\" ng-app=\\"cloudautom.landing\\">
 
@@ -1350,24 +1350,24 @@ on this server.</p>
 </body>
 </html>",
               "body_sha256": "c546fde38e668872101dc4397c9d224bbb1655281b9624407de4e35f4240cdd0",
-              "headers": Object {
+              "headers": {
                 "accept_ranges": "bytes",
                 "content_type": "text/html",
                 "last_modified": "Thu, 19 Sep 2019 10:07:28 GMT",
                 "server": "Apache/2.4.18 (Ubuntu)",
-                "unknown": Array [
-                  Object {
+                "unknown": [
+                  {
                     "key": "date",
                     "value": "Tue, 14 Jul 2020 07:16:59 GMT",
                   },
-                  Object {
+                  {
                     "key": "etag",
                     "value": "\\"7cb-592e51ef39800-gzip\\"",
                   },
                 ],
                 "vary": "Accept-Encoding",
               },
-              "metadata": Object {
+              "metadata": {
                 "description": "Apache httpd 2.4.18",
                 "manufacturer": "Apache",
                 "product": "httpd",
@@ -1379,7 +1379,7 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {
+        "censysMetadata": {
           "description": "Apache httpd 2.4.18",
           "manufacturer": "Apache",
           "product": "httpd",
@@ -1387,26 +1387,26 @@ on this server.</p>
         },
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 80,
-        "products": Array [
-          Object {
+        "products": [
+          {
             "cpe": "cpe:/a:apache:httpd",
             "description": "Apache httpd 2.4.18",
             "name": "httpd",
             "product": "httpd",
-            "tags": Array [],
+            "tags": [],
             "version": "2.4.18",
           },
         ],
         "service": "http",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": "
 <html lang=\\"en\\">
 <head>
@@ -2422,15 +2422,15 @@ on this server.</p>
 </body>
 </html>
 ",
-        "censysIpv4Results": Object {
-          "https": Object {
-            "dhe": Object {
-              "dh_params": Object {
-                "generator": Object {
+        "censysIpv4Results": {
+          "https": {
+            "dhe": {
+              "dh_params": {
+                "generator": {
                   "length": "8",
                   "value": "Ag==",
                 },
-                "prime": Object {
+                "prime": {
                   "length": "2048",
                   "value": "///////////JD9qiIWjCNMTGYouA3BzRKQJOCIpnzHQCC76mOxObIlFKCHmONATd75UZs806QxswKwpt8l8UN0/hNW1tUcJF5IW1dmJefsb0TELppjftawv/XLb0Brft7jhr+1qJn6WunyQRfEsf5kkoZlHs5Fs9wgB8uKFjvwWY2kg2HFXTmmkWP6j9JM9fg2VdI9yjrZYcYvNWIIVSu57VKQdwlpZtZww1Tkq8mATxdGwIyhghfDKQXkYuNs474553LBgOhgObJ4Oi7Aeij7XFXfBvTFLJ3ivL9pVYFxg5lUl86pVq5RXSJhiY+gUQFXKOWoqsqmj//////////w==",
                 },
@@ -2438,11 +2438,11 @@ on this server.</p>
               "support": true,
               "timestamp": "2020-07-12T07:52:51Z",
             },
-            "dhe_export": Object {
+            "dhe_export": {
               "support": false,
               "timestamp": "2020-07-09T06:46:33Z",
             },
-            "get": Object {
+            "get": {
               "body": "
 <html lang=\\"en\\">
 <head>
@@ -3459,24 +3459,24 @@ on this server.</p>
 </html>
 ",
               "body_sha256": "9c1487d94deba78126aedf06640325567d712176bd905601a86774eccf27acf3",
-              "headers": Object {
+              "headers": {
                 "accept_ranges": "bytes",
                 "content_type": "text/html",
                 "last_modified": "Tue, 22 Oct 2019 07:51:03 GMT",
                 "server": "Apache/2.4.18 (Ubuntu)",
-                "unknown": Array [
-                  Object {
+                "unknown": [
+                  {
                     "key": "date",
                     "value": "Mon, 13 Jul 2020 06:27:22 GMT",
                   },
-                  Object {
+                  {
                     "key": "etag",
                     "value": "\\"b3ed-5957b0fdbdb00-gzip\\"",
                   },
                 ],
                 "vary": "Accept-Encoding",
               },
-              "metadata": Object {
+              "metadata": {
                 "description": "Apache httpd 2.4.18",
                 "manufacturer": "Apache",
                 "product": "httpd",
@@ -3487,67 +3487,67 @@ on this server.</p>
               "timestamp": "2020-07-13T06:27:08Z",
               "title": "Qutrix | Redefining Quality",
             },
-            "heartbleed": Object {
+            "heartbleed": {
               "heartbeat_enabled": true,
               "heartbleed_vulnerable": false,
               "timestamp": "2020-07-14T09:59:29Z",
             },
-            "rsa_export": Object {
+            "rsa_export": {
               "support": false,
               "timestamp": "2020-07-09T09:56:24Z",
             },
-            "tls": Object {
-              "certificate": Object {
-                "parsed": Object {
-                  "extensions": Object {
-                    "authority_info_access": Object {
-                      "issuer_urls": Array [
+            "tls": {
+              "certificate": {
+                "parsed": {
+                  "extensions": {
+                    "authority_info_access": {
+                      "issuer_urls": [
                         "http://cert.int-x3.letsencrypt.org/",
                       ],
-                      "ocsp_urls": Array [
+                      "ocsp_urls": [
                         "http://ocsp.int-x3.letsencrypt.org",
                       ],
                     },
                     "authority_key_id": "a84a6a63047dddbae6d139b7a64565eff3a8eca1",
-                    "basic_constraints": Object {
+                    "basic_constraints": {
                       "is_ca": false,
                     },
-                    "certificate_policies": Array [
-                      Object {
+                    "certificate_policies": [
+                      {
                         "id": "2.23.140.1.2.1",
                       },
-                      Object {
-                        "cps": Array [
+                      {
+                        "cps": [
                           "http://cps.letsencrypt.org",
                         ],
                         "id": "1.3.6.1.4.1.44947.1.1.1",
                       },
                     ],
-                    "extended_key_usage": Object {
+                    "extended_key_usage": {
                       "client_auth": true,
                       "server_auth": true,
                     },
-                    "key_usage": Object {
+                    "key_usage": {
                       "digital_signature": true,
                       "key_encipherment": true,
                       "value": "5",
                     },
-                    "signed_certificate_timestamps": Array [
-                      Object {
+                    "signed_certificate_timestamps": [
+                      {
                         "log_id": "sh4FzIuizYogTodm+Su5iiUgZ2va+nDnsklTLe+LkF4=",
                         "signature": "BAMARzBFAiEAwhO5IAdK5G5mYt5fUWYrK8DtmZrcerkzuGPyEILUsJ0CIFr7AzhyL+9Aresjg3w+naLXwbjx+1gYCZbx66qYniow",
                         "timestamp": "1583670380",
                         "version": "0",
                       },
-                      Object {
+                      {
                         "log_id": "b1N2rDHwMRnYmQCkURX/dxUcEdkCwQApBo2yCJo32RM=",
                         "signature": "BAMASDBGAiEA+UvPCa63vZpGFr8tENEoD6HzEpmKmiRaErsKsJ2MJLwCIQCuQY9COEO90fsRA3Fw2YWOPz/NbII+gPptzMgLgGyhwg==",
                         "timestamp": "1583670380",
                         "version": "0",
                       },
                     ],
-                    "subject_alt_name": Object {
-                      "dns_names": Array [
+                    "subject_alt_name": {
+                      "dns_names": [
                         "www.qutrix.io",
                       ],
                     },
@@ -3556,49 +3556,49 @@ on this server.</p>
                   "fingerprint_md5": "a036039237681543846d469f6ec7a91f",
                   "fingerprint_sha1": "eb7b949bc27b8658028d2e281c87c915f718f27a",
                   "fingerprint_sha256": "2b0c0742cc20379124cac9a5033197f23c5017860b29f3fca01801da20b75298",
-                  "issuer": Object {
-                    "common_name": Array [
+                  "issuer": {
+                    "common_name": [
                       "Let's Encrypt Authority X3",
                     ],
-                    "country": Array [
+                    "country": [
                       "US",
                     ],
-                    "organization": Array [
+                    "organization": [
                       "Let's Encrypt",
                     ],
                   },
                   "issuer_dn": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
-                  "names": Array [
+                  "names": [
                     "www.qutrix.io",
                   ],
                   "redacted": false,
                   "serial_number": "272865425057829337380701653641131382618839",
-                  "signature": Object {
+                  "signature": {
                     "self_signed": false,
-                    "signature_algorithm": Object {
+                    "signature_algorithm": {
                       "name": "SHA256WithRSA",
                       "oid": "1.2.840.113549.1.1.11",
                     },
                     "valid": true,
                     "value": "RVMlDKSXEIwCAsM+DmRZXJBsWRuJr9xPe7VsT6QBFVcoI214Gq1HagThzUWnx47c5tElI1U+6Ew6eU0RunXgWsRauRR72DGhjr0MWLkWHivuD7icNepWgviIrMwWN2Cw+wL966qwhw1/CBWyOilCfEYuH++G7zOgjxWBbVUXB5ZBoWeZyRALy43yIZ9FlLy2aFr/eRcfDkk8O2FyZv5bVTzhtEk1zdarMUAGSOWcC2Jr4alReeLUVNaf3tTdxQ4vXCU7Y1bVLtNYHaxLs4WevhVYnoNVaiEIudOnk6PUOq9l7QJuBr1xU83qFdrzpju8A+wRWggX6xh9NjHmvPGpuA==",
                   },
-                  "signature_algorithm": Object {
+                  "signature_algorithm": {
                     "name": "SHA256WithRSA",
                     "oid": "1.2.840.113549.1.1.11",
                   },
                   "spki_subject_fingerprint": "52da5b0201c8006023175ebd6406427d49a940f128596467f57fd1871f32f422",
-                  "subject": Object {
-                    "common_name": Array [
+                  "subject": {
+                    "common_name": [
                       "www.qutrix.io",
                     ],
                   },
                   "subject_dn": "CN=www.qutrix.io",
-                  "subject_key_info": Object {
+                  "subject_key_info": {
                     "fingerprint_sha256": "c2e20a68d40c74d7e31bafb7482871aac340a46528d6656f253ae66ebe8fe56d",
-                    "key_algorithm": Object {
+                    "key_algorithm": {
                       "name": "RSA",
                     },
-                    "rsa_public_key": Object {
+                    "rsa_public_key": {
                       "exponent": "65537",
                       "length": "2048",
                       "modulus": "oESkMYc5Vk3ovqdRgmNhsXO5fWYQLopuk7DxtHAeHrnM9A+NM562YZYeNCCWYsTQMybF/jvQTLPHV6jVfOsGclu8048SW5D58IJ6/dvGhbpvhM8WzQm23u50GKg+IzjK3ZtxuhRJKw4FUD1JgsfvK8j53aiykN9brm4WKm0Piw8+Lvg+IE3BvbeogzH4BptDDUfIgsi30Kj1Ab0ug75Q43Q1KN+TSW393Qfun5evqS0SIDtNlW1JGMRw9PsEB+z9cXmTj8nDohNdmtvwvWdySY2uZJxS/1Xlblig7tioiMpaZ3Sd9elJkSPc3ETgujrjsb4Plsh+FSnAPr8x3O5p9w==",
@@ -3607,7 +3607,7 @@ on this server.</p>
                   "tbs_fingerprint": "2d3f8612b0d11b1d5b2267615fb29d5344355543bf9a50eb49a0b1b4c6824686",
                   "tbs_noct_fingerprint": "6f414c0a4fa6e3fb8a29ae97cffb38dd498bd6209564f4a84ed4882ea74b02b7",
                   "validation_level": "DV",
-                  "validity": Object {
+                  "validity": {
                     "end": "2020-06-06T11:26:20Z",
                     "length": "7776000",
                     "start": "2020-03-08T11:26:20Z",
@@ -3615,38 +3615,38 @@ on this server.</p>
                   "version": "3",
                 },
               },
-              "chain": Array [
-                Object {
-                  "parsed": Object {
-                    "extensions": Object {
-                      "authority_info_access": Object {
-                        "issuer_urls": Array [
+              "chain": [
+                {
+                  "parsed": {
+                    "extensions": {
+                      "authority_info_access": {
+                        "issuer_urls": [
                           "http://apps.identrust.com/roots/dstrootcax3.p7c",
                         ],
-                        "ocsp_urls": Array [
+                        "ocsp_urls": [
                           "http://isrg.trustid.ocsp.identrust.com",
                         ],
                       },
                       "authority_key_id": "c4a7b1a47b2c71fadbe14b9075ffc41560858910",
-                      "basic_constraints": Object {
+                      "basic_constraints": {
                         "is_ca": true,
                         "max_path_len": "0",
                       },
-                      "certificate_policies": Array [
-                        Object {
+                      "certificate_policies": [
+                        {
                           "id": "2.23.140.1.2.1",
                         },
-                        Object {
-                          "cps": Array [
+                        {
+                          "cps": [
                             "http://cps.root-x1.letsencrypt.org",
                           ],
                           "id": "1.3.6.1.4.1.44947.1.1.1",
                         },
                       ],
-                      "crl_distribution_points": Array [
+                      "crl_distribution_points": [
                         "http://crl.identrust.com/DSTROOTCAX3CRL.crl",
                       ],
-                      "key_usage": Object {
+                      "key_usage": {
                         "certificate_sign": true,
                         "crl_sign": true,
                         "digital_signature": true,
@@ -3657,49 +3657,49 @@ on this server.</p>
                     "fingerprint_md5": "b15409274f54ad8f023d3b85a5ecec5d",
                     "fingerprint_sha1": "e6a3b45b062d509b3382282d196efe97d5956ccb",
                     "fingerprint_sha256": "25847d668eb4f04fdd40b12b6b0740c567da7d024308eb6c2c96fe41d9de218d",
-                    "issuer": Object {
-                      "common_name": Array [
+                    "issuer": {
+                      "common_name": [
                         "DST Root CA X3",
                       ],
-                      "organization": Array [
+                      "organization": [
                         "Digital Signature Trust Co.",
                       ],
                     },
                     "issuer_dn": "O=Digital Signature Trust Co., CN=DST Root CA X3",
                     "redacted": false,
                     "serial_number": "13298795840390663119752826058995181320",
-                    "signature": Object {
+                    "signature": {
                       "self_signed": false,
-                      "signature_algorithm": Object {
+                      "signature_algorithm": {
                         "name": "SHA256WithRSA",
                         "oid": "1.2.840.113549.1.1.11",
                       },
                       "valid": true,
                       "value": "3TPXEfNjWDjdGBX7CVW+dla5cEilaUcne8IkCJLxWh9KEik3JHRRHGJouM2VcGfl96S8TihRzZvoroed6ti6WqEBmtzw3Wodatg+VyOeph4EYpr/1wXKtx8/wApIvJSwtmVi4MFU5aMqrSDE6ea73Mj2tcMyo5jMd6jmeWUHK8so/joWUoHOUgwuX4Po1QYz+3dszkDqMp4fklxBwXRsW10KXzPMTZ+sOPAveyxindmjkW8lGy+QsRlGPfZ+G6Z6h7mjem0Y+iWlkYcV4PIWL1iwBi8saCbGS5jN2p8M+X+Q7UNKEkROb3N6KOqkqm57TH2H3eDJAkSnh6/DNFu0Qg==",
                     },
-                    "signature_algorithm": Object {
+                    "signature_algorithm": {
                       "name": "SHA256WithRSA",
                       "oid": "1.2.840.113549.1.1.11",
                     },
                     "spki_subject_fingerprint": "78d2913356ad04f8f362019df6cb4f4f8b003be0d2aa0d1cb37d2fd326b09c9e",
-                    "subject": Object {
-                      "common_name": Array [
+                    "subject": {
+                      "common_name": [
                         "Let's Encrypt Authority X3",
                       ],
-                      "country": Array [
+                      "country": [
                         "US",
                       ],
-                      "organization": Array [
+                      "organization": [
                         "Let's Encrypt",
                       ],
                     },
                     "subject_dn": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
-                    "subject_key_info": Object {
+                    "subject_key_info": {
                       "fingerprint_sha256": "60b87575447dcba2a36b7d11ac09fb24a9db406fee12d2cc90180517616e8a18",
-                      "key_algorithm": Object {
+                      "key_algorithm": {
                         "name": "RSA",
                       },
-                      "rsa_public_key": Object {
+                      "rsa_public_key": {
                         "exponent": "65537",
                         "length": "2048",
                         "modulus": "nNMM8FrlLke3cl03g7NoYzDq1zUmGSXhvb418XCSL7e4S0EFq6meNQhY7LEqxGiHC6PjdeTm86dicbp5gWAf15Gan/PQeGdxyGkOlZHP/uaZ6WA8SMx+yk13EiSdRxta67nsHjcAHJyse6cF6s5K671B5TaYucv9bTyWaN8jKkKQDIZ0Z8h/pZq4UmEUEz9l6YKHy9v6Dlb2honzhT+Xhq+w3Brvaw2VFn3EK6BlspkENnWAa6xK8xuQSXgvopZPKiAlKQTGdMDQMc2PMTiVFrqoM7hD8bEfwzB/onkxEz0tNvjj/PIzark5McWvxI0NHWQWM6r6hCm21AvA2H3Dkw==",
@@ -3708,7 +3708,7 @@ on this server.</p>
                     "tbs_fingerprint": "3e1a1a0f6c53f3e97a492d57084b5b9807059ee057ab1505876fd83fda3db838",
                     "tbs_noct_fingerprint": "3e1a1a0f6c53f3e97a492d57084b5b9807059ee057ab1505876fd83fda3db838",
                     "validation_level": "DV",
-                    "validity": Object {
+                    "validity": {
                       "end": "2021-03-17T16:40:46Z",
                       "length": "157766400",
                       "start": "2016-03-17T16:40:46Z",
@@ -3717,30 +3717,30 @@ on this server.</p>
                   },
                 },
               ],
-              "cipher_suite": Object {
+              "cipher_suite": {
                 "id": "0xC02F",
                 "name": "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
               },
               "ocsp_stapling": false,
-              "server_key_exchange": Object {
-                "ecdh_params": Object {
-                  "curve_id": Object {
+              "server_key_exchange": {
+                "ecdh_params": {
+                  "curve_id": {
                     "id": "23",
                     "name": "secp256r1",
                   },
                 },
               },
-              "session_ticket": Object {
+              "session_ticket": {
                 "length": "192",
                 "lifetime_hint": "300",
               },
-              "signature": Object {
+              "signature": {
                 "hash_algorithm": "sha512",
                 "signature_algorithm": "rsa",
                 "valid": true,
               },
               "timestamp": "2020-07-09T09:01:29Z",
-              "validation": Object {
+              "validation": {
                 "browser_error": "x509: certificate has expired or is not yet valid",
                 "browser_trusted": false,
               },
@@ -3748,7 +3748,7 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {
+        "censysMetadata": {
           "description": "Apache httpd 2.4.18",
           "manufacturer": "Apache",
           "product": "httpd",
@@ -3756,62 +3756,62 @@ on this server.</p>
         },
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 443,
-        "products": Array [
-          Object {
+        "products": [
+          {
             "cpe": "cpe:/a:apache:httpd",
             "description": "Apache httpd 2.4.18",
             "name": "httpd",
             "product": "httpd",
-            "tags": Array [],
+            "tags": [],
             "version": "2.4.18",
           },
         ],
         "service": "https",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": "SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.8",
-        "censysIpv4Results": Object {
-          "ssh": Object {
-            "v2": Object {
-              "banner": Object {
+        "censysIpv4Results": {
+          "ssh": {
+            "v2": {
+              "banner": {
                 "comment": "Ubuntu-4ubuntu2.8",
                 "raw": "SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.8",
                 "software": "OpenSSH_7.2p2",
                 "version": "2.0",
               },
-              "key_exchange": Object {
-                "curve25519_sha256_params": Object {
+              "key_exchange": {
+                "curve25519_sha256_params": {
                   "server_public": "dBq0WRs9WsHGNqAt31aCy1XXMrUqJAWxEELH/d/m8Ts=",
                 },
               },
-              "metadata": Object {
+              "metadata": {
                 "description": "OpenSSH 7.2p2",
                 "product": "OpenSSH",
                 "version": "7.2p2",
               },
-              "selected": Object {
-                "client_to_server": Object {
+              "selected": {
+                "client_to_server": {
                   "cipher": "aes128-ctr",
                   "compression": "none",
                   "mac": "hmac-sha2-256",
                 },
                 "host_key_algorithm": "ecdsa-sha2-nistp256",
                 "kex_algorithm": "curve25519-sha256@libssh.org",
-                "server_to_client": Object {
+                "server_to_client": {
                   "cipher": "aes128-ctr",
                   "compression": "none",
                   "mac": "hmac-sha2-256",
                 },
               },
-              "server_host_key": Object {
-                "ecdsa_public_key": Object {
+              "server_host_key": {
+                "ecdsa_public_key": {
                   "b": "WsY12Ko6k+ez671VdpiGvGUdBrDMU7D2O848PifSYEs=",
                   "curve": "P-256",
                   "gx": "axfR8uEsQkf4vOblY6RA8ncDfYEt6zOg9KE5RdiYwpY=",
@@ -3825,9 +3825,9 @@ on this server.</p>
                 "fingerprint_sha256": "10e58d265b79146d031aad32b01fb028426c1787caf4bebdab8d72f876949831",
                 "key_algorithm": "ecdsa-sha2-nistp256",
               },
-              "support": Object {
-                "client_to_server": Object {
-                  "ciphers": Array [
+              "support": {
+                "client_to_server": {
+                  "ciphers": [
                     "chacha20-poly1305@openssh.com",
                     "aes128-ctr",
                     "aes192-ctr",
@@ -3835,11 +3835,11 @@ on this server.</p>
                     "aes128-gcm@openssh.com",
                     "aes256-gcm@openssh.com",
                   ],
-                  "compressions": Array [
+                  "compressions": [
                     "none",
                     "zlib@openssh.com",
                   ],
-                  "macs": Array [
+                  "macs": [
                     "umac-64-etm@openssh.com",
                     "umac-128-etm@openssh.com",
                     "hmac-sha2-256-etm@openssh.com",
@@ -3853,14 +3853,14 @@ on this server.</p>
                   ],
                 },
                 "first_kex_follows": false,
-                "host_key_algorithms": Array [
+                "host_key_algorithms": [
                   "ssh-rsa",
                   "rsa-sha2-512",
                   "rsa-sha2-256",
                   "ecdsa-sha2-nistp256",
                   "ssh-ed25519",
                 ],
-                "kex_algorithms": Array [
+                "kex_algorithms": [
                   "curve25519-sha256@libssh.org",
                   "ecdh-sha2-nistp256",
                   "ecdh-sha2-nistp384",
@@ -3868,8 +3868,8 @@ on this server.</p>
                   "diffie-hellman-group-exchange-sha256",
                   "diffie-hellman-group14-sha1",
                 ],
-                "server_to_client": Object {
-                  "ciphers": Array [
+                "server_to_client": {
+                  "ciphers": [
                     "chacha20-poly1305@openssh.com",
                     "aes128-ctr",
                     "aes192-ctr",
@@ -3877,11 +3877,11 @@ on this server.</p>
                     "aes128-gcm@openssh.com",
                     "aes256-gcm@openssh.com",
                   ],
-                  "compressions": Array [
+                  "compressions": [
                     "none",
                     "zlib@openssh.com",
                   ],
-                  "macs": Array [
+                  "macs": [
                     "umac-64-etm@openssh.com",
                     "umac-128-etm@openssh.com",
                     "hmac-sha2-256-etm@openssh.com",
@@ -3899,38 +3899,38 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {
+        "censysMetadata": {
           "description": "OpenSSH 7.2p2",
           "product": "OpenSSH",
           "version": "7.2p2",
         },
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 22,
-        "products": Array [
-          Object {
+        "products": [
+          {
             "description": "OpenSSH 7.2p2",
             "name": "OpenSSH",
             "product": "OpenSSH",
-            "tags": Array [],
+            "tags": [],
             "version": "7.2p2",
           },
         ],
         "service": "ssh",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": null,
-        "censysIpv4Results": Object {
-          "mongodb": Object {
-            "banner": Object {
-              "build_info": Object {
-                "build_environment": Object {
+        "censysIpv4Results": {
+          "mongodb": {
+            "banner": {
+              "build_info": {
+                "build_environment": {
                   "cc": "/opt/mongodbtoolchain/v2/bin/gcc: gcc (GCC) 5.4.0",
                   "cc_flags": "-fno-omit-frame-pointer -fno-strict-aliasing -ggdb -pthread -Wall -Wsign-compare -Wno-unknown-pragmas -Winvalid-pch -Werror -O2 -Wno-unused-local-typedefs -Wno-unused-function -Wno-deprecated-declarations -Wno-unused-but-set-variable -Wno-missing-braces -fstack-protector-strong -fno-builtin-memcmp",
                   "cxx": "/opt/mongodbtoolchain/v2/bin/g++: g++ (GCC) 5.4.0",
@@ -3944,7 +3944,7 @@ on this server.</p>
                 "git_version": "c389e7f69f637f7a1ac3cc9fae843b635f20b766",
                 "version": "4.0.10",
               },
-              "is_master": Object {
+              "is_master": {
                 "is_master": true,
                 "logical_session_timeout_minutes": "30",
                 "max_bson_object_size": "16777216",
@@ -3958,18 +3958,18 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {},
+        "censysMetadata": {},
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 27017,
-        "products": Array [],
+        "products": [],
         "service": "mongodb",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
     ],
     "ssl": null,
@@ -3977,9 +3977,9 @@ on this server.</p>
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": "48347",
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": "RU",
     "createdAt": null,
@@ -3991,8 +3991,8 @@ on this server.</p>
     "organization": null,
     "reverseName": "first_file_testdomain11",
     "screenshot": null,
-    "services": Array [
-      Object {
+    "services": [
+      {
         "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
 <html><head>
 <title>404 Not Found</title>
@@ -4003,9 +4003,9 @@ on this server.</p>
 <address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>
 </body></html>
 ",
-        "censysIpv4Results": Object {
-          "http": Object {
-            "get": Object {
+        "censysIpv4Results": {
+          "http": {
+            "get": {
               "body": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
 <html><head>
 <title>404 Not Found</title>
@@ -4017,18 +4017,18 @@ on this server.</p>
 </body></html>
 ",
               "body_sha256": "edcb45301d911b82b5e4594d875d9b57d8bfd805a6d280416a18c2b500391f32",
-              "headers": Object {
+              "headers": {
                 "content_length": "275",
                 "content_type": "text/html; charset=iso-8859-1",
                 "server": "Apache/2.4.38 (Debian)",
-                "unknown": Array [
-                  Object {
+                "unknown": [
+                  {
                     "key": "date",
                     "value": "Tue, 14 Jul 2020 03:36:42 GMT",
                   },
                 ],
               },
-              "metadata": Object {
+              "metadata": {
                 "description": "Apache httpd 2.4.38",
                 "manufacturer": "Apache",
                 "product": "httpd",
@@ -4041,7 +4041,7 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {
+        "censysMetadata": {
           "description": "Apache httpd 2.4.38",
           "manufacturer": "Apache",
           "product": "httpd",
@@ -4049,24 +4049,24 @@ on this server.</p>
         },
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 80,
-        "products": Array [
-          Object {
+        "products": [
+          {
             "cpe": "cpe:/a:apache:httpd",
             "description": "Apache httpd 2.4.38",
             "name": "httpd",
             "product": "httpd",
-            "tags": Array [],
+            "tags": [],
             "version": "2.4.38",
           },
         ],
         "service": "http",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
     ],
     "ssl": null,
@@ -4074,9 +4074,9 @@ on this server.</p>
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": "9121",
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": "TR",
     "createdAt": null,
@@ -4088,16 +4088,16 @@ on this server.</p>
     "organization": null,
     "reverseName": "first_file_testdomain12",
     "screenshot": null,
-    "services": Array [
-      Object {
+    "services": [
+      {
         "banner": null,
-        "censysIpv4Results": Object {
-          "dns": Object {
-            "lookup": Object {
+        "censysIpv4Results": {
+          "dns": {
+            "lookup": {
               "errors": false,
               "open_resolver": false,
-              "questions": Array [
-                Object {
+              "questions": [
+                {
                   "name": "c.afekv.com",
                   "type": "A",
                 },
@@ -4108,28 +4108,28 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {},
+        "censysMetadata": {},
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 53,
-        "products": Array [],
+        "products": [],
         "service": "dns",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": "these characters should not show up in the snapshot:
               null: 
               another null: 
               another null: 
               ",
-        "censysIpv4Results": Object {
-          "http": Object {
-            "get": Object {
+        "censysIpv4Results": {
+          "http": {
+            "get": {
               "body": "these characters should not show up in the snapshot:
               null: 
               another null: 
@@ -4137,18 +4137,18 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {},
+        "censysMetadata": {},
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 8080,
-        "products": Array [],
+        "products": [],
         "service": "http",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
     ],
     "ssl": null,
@@ -4156,9 +4156,9 @@ on this server.</p>
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": "48347",
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": "RU",
     "createdAt": null,
@@ -4170,8 +4170,8 @@ on this server.</p>
     "organization": null,
     "reverseName": "first_file_testdomain2",
     "screenshot": null,
-    "services": Array [
-      Object {
+    "services": [
+      {
         "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
 <html><head>
 <title>404 Not Found</title>
@@ -4182,9 +4182,9 @@ on this server.</p>
 <address>Apache/2.4.38 (Debian) Server at 31.134.10.156 Port 80</address>
 </body></html>
 ",
-        "censysIpv4Results": Object {
-          "http": Object {
-            "get": Object {
+        "censysIpv4Results": {
+          "http": {
+            "get": {
               "body": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\">
 <html><head>
 <title>404 Not Found</title>
@@ -4196,18 +4196,18 @@ on this server.</p>
 </body></html>
 ",
               "body_sha256": "edcb45301d911b82b5e4594d875d9b57d8bfd805a6d280416a18c2b500391f32",
-              "headers": Object {
+              "headers": {
                 "content_length": "275",
                 "content_type": "text/html; charset=iso-8859-1",
                 "server": "Apache/2.4.38 (Debian)",
-                "unknown": Array [
-                  Object {
+                "unknown": [
+                  {
                     "key": "date",
                     "value": "Tue, 14 Jul 2020 03:36:42 GMT",
                   },
                 ],
               },
-              "metadata": Object {
+              "metadata": {
                 "description": "Apache httpd 2.4.38",
                 "manufacturer": "Apache",
                 "product": "httpd",
@@ -4220,7 +4220,7 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {
+        "censysMetadata": {
           "description": "Apache httpd 2.4.38",
           "manufacturer": "Apache",
           "product": "httpd",
@@ -4228,24 +4228,24 @@ on this server.</p>
         },
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 80,
-        "products": Array [
-          Object {
+        "products": [
+          {
             "cpe": "cpe:/a:apache:httpd",
             "description": "Apache httpd 2.4.38",
             "name": "httpd",
             "product": "httpd",
-            "tags": Array [],
+            "tags": [],
             "version": "2.4.38",
           },
         ],
         "service": "http",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
     ],
     "ssl": null,
@@ -4253,9 +4253,9 @@ on this server.</p>
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -4267,15 +4267,15 @@ on this server.</p>
     "organization": null,
     "reverseName": "first_file_testdomain3",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": "8473",
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": "SE",
     "createdAt": null,
@@ -4287,31 +4287,31 @@ on this server.</p>
     "organization": null,
     "reverseName": "first_file_testdomain4",
     "screenshot": null,
-    "services": Array [
-      Object {
+    "services": [
+      {
         "banner": null,
-        "censysIpv4Results": Object {
-          "vnc": Object {
-            "banner": Object {
-              "security_types": Array [
-                Object {
+        "censysIpv4Results": {
+          "vnc": {
+            "banner": {
+              "security_types": [
+                {
                   "name": "Apple Inc.",
                   "value": "30",
                 },
-                Object {
+                {
                   "name": "Apple Inc.",
                   "value": "33",
                 },
-                Object {
+                {
                   "name": "Unknown",
                   "value": "36",
                 },
-                Object {
+                {
                   "name": "Apple Inc.",
                   "value": "35",
                 },
               ],
-              "server_protocol_version": Object {
+              "server_protocol_version": {
                 "version_major": "3",
                 "version_minor": "121",
                 "version_string": "RFB 003.889",
@@ -4321,18 +4321,18 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {},
+        "censysMetadata": {},
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 5900,
-        "products": Array [],
+        "products": [],
         "service": "vnc",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
     ],
     "ssl": null,
@@ -4340,9 +4340,9 @@ on this server.</p>
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": "63949",
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": "US",
     "createdAt": null,
@@ -4354,8 +4354,8 @@ on this server.</p>
     "organization": null,
     "reverseName": "first_file_testdomain5",
     "screenshot": null,
-    "services": Array [
-      Object {
+    "services": [
+      {
         "banner": "<html>
   <head>
     <meta charset=\\"utf-8\\">
@@ -4427,9 +4427,9 @@ on this server.</p>
   </body>
 </html>
 ",
-        "censysIpv4Results": Object {
-          "http": Object {
-            "get": Object {
+        "censysIpv4Results": {
+          "http": {
+            "get": {
               "body": "<html>
   <head>
     <meta charset=\\"utf-8\\">
@@ -4502,57 +4502,57 @@ on this server.</p>
 </html>
 ",
               "body_sha256": "a8945680f53cd67ec1aef6fb34c40619f52bcc612049316502a3035a359e40fa",
-              "headers": Object {
+              "headers": {
                 "cache_control": "private, no-store, no-cache, must-revalidate, post-check=0, pre-check=0, no-transform",
                 "connection": "keep-alive",
                 "content_type": "text/html; charset=utf-8",
                 "server": "nginx",
                 "strict_transport_security": "max-age=15724800",
-                "unknown": Array [
-                  Object {
+                "unknown": [
+                  {
                     "key": "ot_baggage_auth0_request_id",
                     "value": "3dc0790f280d5bfa47696ea9",
                   },
-                  Object {
+                  {
                     "key": "x_ratelimit_reset",
                     "value": "1594148196",
                   },
-                  Object {
+                  {
                     "key": "date",
                     "value": "Tue, 07 Jul 2020 18:56:35 GMT",
                   },
-                  Object {
+                  {
                     "key": "ot_tracer_spanid",
                     "value": "5b7d921f3dcf0e9f",
                   },
-                  Object {
+                  {
                     "key": "ot_tracer_sampled",
                     "value": "true",
                   },
-                  Object {
+                  {
                     "key": "x_auth0_requestid",
                     "value": "54463be5f6a5f27cd315",
                   },
-                  Object {
+                  {
                     "key": "etag",
                     "value": "W/\\"b22-NrsYOetfnTxV0gk4kA0wrfSdRb8\\"",
                   },
-                  Object {
+                  {
                     "key": "ot_tracer_traceid",
                     "value": "00a9a65275edf0ba",
                   },
-                  Object {
+                  {
                     "key": "x_ratelimit_limit",
                     "value": "1000",
                   },
-                  Object {
+                  {
                     "key": "x_ratelimit_remaining",
                     "value": "998",
                   },
                 ],
                 "vary": "Accept-Encoding",
               },
-              "metadata": Object {
+              "metadata": {
                 "description": "nginx",
                 "product": "nginx",
               },
@@ -4563,28 +4563,28 @@ on this server.</p>
             },
           },
         },
-        "censysMetadata": Object {
+        "censysMetadata": {
           "description": "nginx",
           "product": "nginx",
         },
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 80,
-        "products": Array [
-          Object {
+        "products": [
+          {
             "description": "nginx",
             "name": "nginx",
             "product": "nginx",
-            "tags": Array [],
+            "tags": [],
           },
         ],
         "service": "http",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
     ],
     "ssl": null,
@@ -4592,9 +4592,9 @@ on this server.</p>
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": "26484",
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": "US",
     "createdAt": null,
@@ -4606,8 +4606,8 @@ on this server.</p>
     "organization": null,
     "reverseName": "first_file_testdomain6",
     "screenshot": null,
-    "services": Array [
-      Object {
+    "services": [
+      {
         "banner": "<!DOCTYPE html PUBLIC \\"-//W3C//DTD XHTML 1.0 Strict//EN\\" \\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\\">
 <html xmlns=\\"http://www.w3.org/1999/xhtml\\">
 <head>
@@ -4640,9 +4640,9 @@ a img {
 </div>
 </body>
 </html>",
-        "censysIpv4Results": Object {
-          "http": Object {
-            "get": Object {
+        "censysIpv4Results": {
+          "http": {
+            "get": {
               "body": "<!DOCTYPE html PUBLIC \\"-//W3C//DTD XHTML 1.0 Strict//EN\\" \\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\\">
 <html xmlns=\\"http://www.w3.org/1999/xhtml\\">
 <head>
@@ -4676,17 +4676,17 @@ a img {
 </body>
 </html>",
               "body_sha256": "370be45f65276b3b8de42a29adfb1220fc44a5e018c37e3e9b62fa7d5b523fd0",
-              "headers": Object {
+              "headers": {
                 "accept_ranges": "bytes",
                 "content_type": "text/html",
                 "last_modified": "Mon, 30 Jul 2018 12:41:17 GMT",
                 "server": "Microsoft-IIS/7.5",
-                "unknown": Array [
-                  Object {
+                "unknown": [
+                  {
                     "key": "etag",
                     "value": "\\"e5499c228d41:0\\"",
                   },
-                  Object {
+                  {
                     "key": "date",
                     "value": "Tue, 07 Jul 2020 05:41:26 GMT",
                   },
@@ -4694,7 +4694,7 @@ a img {
                 "vary": "Accept-Encoding",
                 "x_powered_by": "ASP.NET",
               },
-              "metadata": Object {
+              "metadata": {
                 "description": "Microsoft IIS 7.5",
                 "manufacturer": "Microsoft",
                 "product": "IIS",
@@ -4707,7 +4707,7 @@ a img {
             },
           },
         },
-        "censysMetadata": Object {
+        "censysMetadata": {
           "description": "Microsoft IIS 7.5",
           "manufacturer": "Microsoft",
           "product": "IIS",
@@ -4715,26 +4715,26 @@ a img {
         },
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 80,
-        "products": Array [
-          Object {
+        "products": [
+          {
             "cpe": "cpe:/a:microsoft:iis",
             "description": "Microsoft IIS 7.5",
             "name": "IIS",
             "product": "IIS",
-            "tags": Array [],
+            "tags": [],
             "version": "7.5",
           },
         ],
         "service": "http",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
-      Object {
+      {
         "banner": "<!DOCTYPE HTML PUBLIC \\"-//W3C//DTD HTML 4.01//EN\\"\\"http://www.w3.org/TR/html4/strict.dtd\\">
 <HTML><HEAD><TITLE>Not Found</TITLE>
 <META HTTP-EQUIV=\\"Content-Type\\" Content=\\"text/html; charset=us-ascii\\"></HEAD>
@@ -4742,15 +4742,15 @@ a img {
 <hr><p>HTTP Error 404. The requested resource is not found.</p>
 </BODY></HTML>
 ",
-        "censysIpv4Results": Object {
-          "https": Object {
-            "dhe": Object {
-              "dh_params": Object {
-                "generator": Object {
+        "censysIpv4Results": {
+          "https": {
+            "dhe": {
+              "dh_params": {
+                "generator": {
                   "length": "8",
                   "value": "Ag==",
                 },
-                "prime": Object {
+                "prime": {
                   "length": "1024",
                   "value": "///////////JD9qiIWjCNMTGYouA3BzRKQJOCIpnzHQCC76mOxObIlFKCHmONATd75UZs806QxswKwpt8l8UN0/hNW1tUcJF5IW1dmJefsb0TELppjftawv/XLb0Brft7jhr+1qJn6WunyQRfEsf5kkoZlHs5lOB//////////8=",
                 },
@@ -4758,11 +4758,11 @@ a img {
               "support": true,
               "timestamp": "2020-07-12T09:28:30Z",
             },
-            "dhe_export": Object {
+            "dhe_export": {
               "support": false,
               "timestamp": "2020-07-09T11:32:14Z",
             },
-            "get": Object {
+            "get": {
               "body": "<!DOCTYPE HTML PUBLIC \\"-//W3C//DTD HTML 4.01//EN\\"\\"http://www.w3.org/TR/html4/strict.dtd\\">
 <HTML><HEAD><TITLE>Not Found</TITLE>
 <META HTTP-EQUIV=\\"Content-Type\\" Content=\\"text/html; charset=us-ascii\\"></HEAD>
@@ -4771,18 +4771,18 @@ a img {
 </BODY></HTML>
 ",
               "body_sha256": "ce7127c38e30e92a021ed2bd09287713c6a923db9ffdb43f126e8965d777fbf0",
-              "headers": Object {
+              "headers": {
                 "content_length": "315",
                 "content_type": "text/html; charset=us-ascii",
                 "server": "Microsoft-HTTPAPI/2.0",
-                "unknown": Array [
-                  Object {
+                "unknown": [
+                  {
                     "key": "date",
                     "value": "Tue, 14 Jul 2020 05:20:23 GMT",
                   },
                 ],
               },
-              "metadata": Object {
+              "metadata": {
                 "description": "Microsoft HTTPAPI 2.0",
                 "manufacturer": "Microsoft",
                 "product": "HTTPAPI",
@@ -4793,27 +4793,27 @@ a img {
               "timestamp": "2020-07-14T05:22:24Z",
               "title": "Not Found",
             },
-            "heartbleed": Object {
+            "heartbleed": {
               "heartbeat_enabled": false,
               "heartbleed_vulnerable": false,
               "timestamp": "2020-07-14T02:41:19Z",
             },
-            "rsa_export": Object {
+            "rsa_export": {
               "support": false,
               "timestamp": "2020-07-09T06:44:25Z",
             },
-            "ssl_3": Object {
+            "ssl_3": {
               "support": true,
               "timestamp": "2020-07-15T06:13:25Z",
             },
-            "tls": Object {
-              "certificate": Object {
-                "parsed": Object {
-                  "extensions": Object {
-                    "extended_key_usage": Object {
+            "tls": {
+              "certificate": {
+                "parsed": {
+                  "extensions": {
+                    "extended_key_usage": {
                       "server_auth": true,
                     },
-                    "key_usage": Object {
+                    "key_usage": {
                       "data_encipherment": true,
                       "digital_signature": true,
                       "key_encipherment": true,
@@ -4823,40 +4823,40 @@ a img {
                   "fingerprint_md5": "355a2a4731bb4efffbce243be3d68948",
                   "fingerprint_sha1": "d840933627a82b2cfa55f2a05cac785682fceb25",
                   "fingerprint_sha256": "a0d25fa4744f969a60abc76efd41af91fce0a20857b05d95976a989fc429300a",
-                  "issuer": Object {
-                    "common_name": Array [
+                  "issuer": {
+                    "common_name": [
                       "WMSvc-WIN-RRGUHN51BI0",
                     ],
                   },
                   "issuer_dn": "CN=WMSvc-WIN-RRGUHN51BI0",
                   "redacted": false,
                   "serial_number": "98566262313343030001206653522675179984",
-                  "signature": Object {
+                  "signature": {
                     "self_signed": true,
-                    "signature_algorithm": Object {
+                    "signature_algorithm": {
                       "name": "SHA1WithRSA",
                       "oid": "1.2.840.113549.1.1.5",
                     },
                     "valid": false,
                     "value": "Er/DFxqmv3i0bWvqnU4Fj8i6+XXW/xGeKEWmkzKe2VqnxBCUxLhmAxqCV6pnapC1O3dFMQUeVN5rkdXbZzZv94/7JzHzPSPPliV6S6cWUybXtIG/MEzJhsDLB04TPyEG0P7PF4lmzDhUfxUrO9nJGkIUOiXFCy0hzyDwyMwozX2xLZ+VMic2llEN/LPj3lfB7VJjTyjmxTJKTrPhjQEF2vYEJwQjWBfGC0T02ZTxMzqBYlOo7/ZuhN33P4k48KL41coIIbJmSxIi8FV7ibPPV58aDriZqvdwT1vRbPeWXPz2gyzBg0e44PsdFrfK4l+hkzvQ2mICcVyOf5mJsvl4iQ==",
                   },
-                  "signature_algorithm": Object {
+                  "signature_algorithm": {
                     "name": "SHA1WithRSA",
                     "oid": "1.2.840.113549.1.1.5",
                   },
                   "spki_subject_fingerprint": "4e3e776d0e6e3a4abea9909bfe86b2a35af9035e0a57a4ede060e43165e7ecd0",
-                  "subject": Object {
-                    "common_name": Array [
+                  "subject": {
+                    "common_name": [
                       "WMSvc-WIN-RRGUHN51BI0",
                     ],
                   },
                   "subject_dn": "CN=WMSvc-WIN-RRGUHN51BI0",
-                  "subject_key_info": Object {
+                  "subject_key_info": {
                     "fingerprint_sha256": "9d4d893113a35101f1abf987f040d00a7649b2dd323b34fb574aa0d93324954b",
-                    "key_algorithm": Object {
+                    "key_algorithm": {
                       "name": "RSA",
                     },
-                    "rsa_public_key": Object {
+                    "rsa_public_key": {
                       "exponent": "65537",
                       "length": "2048",
                       "modulus": "szfH8SHg0u2dEwTggR0kC1T3d7rKWfTCfnhsZPqGiUuk7KY2On24fNEy0ORmrfcqNqRY2IFHYooPYiheMpGjpfEXAUmt+YuCk5CgK6UBI5WJZCThVbVz1CHB3UJzyHwpDUZ8JpA8HV4ZfI6lhPeZcAKQhs6/1MftJoDo5cnEydtidQOMp7sYgQiOxCQG20VGHfyCkZ1bmzZKMSuVaGTJ2341gndX9ZFD4O+yq/YgzHy/1JU3EUpzwwKYa+d83vhvKFtwq7QCfwaKx2i4I54gxynQmODwAkuhZRbN268hmHBJPImimeeLjMNs6u1lnLAvAcmdCib7JKt1ziKAB/WEuQ==",
@@ -4865,7 +4865,7 @@ a img {
                   "tbs_fingerprint": "3077ccc30b1f9d32a9e6aa3505ecf60f915dbe168cd9531c84b52eb4036eafdd",
                   "tbs_noct_fingerprint": "3077ccc30b1f9d32a9e6aa3505ecf60f915dbe168cd9531c84b52eb4036eafdd",
                   "validation_level": "unknown",
-                  "validity": Object {
+                  "validity": {
                     "end": "2030-06-06T01:03:05Z",
                     "length": "315360000",
                     "start": "2020-06-08T01:03:05Z",
@@ -4873,24 +4873,24 @@ a img {
                   "version": "3",
                 },
               },
-              "cipher_suite": Object {
+              "cipher_suite": {
                 "id": "0xC014",
                 "name": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
               },
               "ocsp_stapling": false,
-              "server_key_exchange": Object {
-                "ecdh_params": Object {
-                  "curve_id": Object {
+              "server_key_exchange": {
+                "ecdh_params": {
+                  "curve_id": {
                     "id": "23",
                     "name": "secp256r1",
                   },
                 },
               },
-              "signature": Object {
+              "signature": {
                 "valid": true,
               },
               "timestamp": "2020-07-09T13:34:36Z",
-              "validation": Object {
+              "validation": {
                 "browser_error": "x509: unknown error",
                 "browser_trusted": false,
               },
@@ -4898,7 +4898,7 @@ a img {
             },
           },
         },
-        "censysMetadata": Object {
+        "censysMetadata": {
           "description": "Microsoft HTTPAPI 2.0",
           "manufacturer": "Microsoft",
           "product": "HTTPAPI",
@@ -4906,24 +4906,24 @@ a img {
         },
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 443,
-        "products": Array [
-          Object {
+        "products": [
+          {
             "cpe": "cpe:/a:microsoft:httpapi",
             "description": "Microsoft HTTPAPI 2.0",
             "name": "HTTPAPI",
             "product": "HTTPAPI",
-            "tags": Array [],
+            "tags": [],
             "version": "2.0",
           },
         ],
         "service": "https",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
     ],
     "ssl": null,
@@ -4931,9 +4931,9 @@ a img {
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -4945,19 +4945,19 @@ a img {
     "organization": null,
     "reverseName": "first_file_testdomain7",
     "screenshot": null,
-    "services": Array [
-      Object {
+    "services": [
+      {
         "banner": null,
-        "censysIpv4Results": Object {
-          "dns": Object {
-            "lookup": Object {
-              "answers": Array [
-                Object {
+        "censysIpv4Results": {
+          "dns": {
+            "lookup": {
+              "answers": [
+                {
                   "name": "c.afekv.com",
                   "response": "221.10.58.54",
                   "type": "A",
                 },
-                Object {
+                {
                   "name": "c.afekv.com",
                   "response": "192.150.186.1",
                   "type": "A",
@@ -4965,8 +4965,8 @@ a img {
               ],
               "errors": false,
               "open_resolver": true,
-              "questions": Array [
-                Object {
+              "questions": [
+                {
                   "name": "c.afekv.com",
                   "type": "A",
                 },
@@ -4977,18 +4977,18 @@ a img {
             },
           },
         },
-        "censysMetadata": Object {},
+        "censysMetadata": {},
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 53,
-        "products": Array [],
+        "products": [],
         "service": "dns",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
     ],
     "ssl": null,
@@ -4996,9 +4996,9 @@ a img {
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": "2856",
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": "GB",
     "createdAt": null,
@@ -5010,13 +5010,13 @@ a img {
     "organization": null,
     "reverseName": "first_file_testdomain8",
     "screenshot": null,
-    "services": Array [
-      Object {
+    "services": [
+      {
         "banner": null,
-        "censysIpv4Results": Object {
-          "cwmp": Object {
-            "get": Object {
-              "headers": Object {
+        "censysIpv4Results": {
+          "cwmp": {
+            "get": {
+              "headers": {
                 "content_length": "0",
                 "server": "gSOAP/2.7",
               },
@@ -5026,18 +5026,18 @@ a img {
             },
           },
         },
-        "censysMetadata": Object {},
+        "censysMetadata": {},
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 7547,
-        "products": Array [],
+        "products": [],
         "service": "cwmp",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
     ],
     "ssl": null,
@@ -5045,9 +5045,9 @@ a img {
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": "6327",
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": "CA",
     "createdAt": null,
@@ -5059,15 +5059,15 @@ a img {
     "organization": null,
     "reverseName": "first_file_testdomain9",
     "screenshot": null,
-    "services": Array [
-      Object {
+    "services": [
+      {
         "banner": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\"><html><head><title>401 Unauthorized</title></head><body><h1>Authorization Required</h1><p>This server could not verify that you are authorized to access the document requested.  Either you supplied the wrong credentials (e.g., bad password), or your browser doesn't understand how to supply the credentials required</p><hr></body></html>",
-        "censysIpv4Results": Object {
-          "cwmp": Object {
-            "get": Object {
+        "censysIpv4Results": {
+          "cwmp": {
+            "get": {
               "body": "<!DOCTYPE HTML PUBLIC \\"-//IETF//DTD HTML 2.0//EN\\"><html><head><title>401 Unauthorized</title></head><body><h1>Authorization Required</h1><p>This server could not verify that you are authorized to access the document requested.  Either you supplied the wrong credentials (e.g., bad password), or your browser doesn't understand how to supply the credentials required</p><hr></body></html>",
               "body_sha256": "721e96983952a29827a40e04ffddf6807212e81923bd0af4f1d90dcd482f504b",
-              "headers": Object {
+              "headers": {
                 "connection": "Keep-Alive",
                 "content_length": "387",
                 "content_type": "text/html;charset=iso-8859-1",
@@ -5081,18 +5081,18 @@ a img {
             },
           },
         },
-        "censysMetadata": Object {},
+        "censysMetadata": {},
         "createdAt": null,
         "id": null,
-        "intrigueIdentResults": Object {},
+        "intrigueIdentResults": {},
         "lastSeen": 2019-04-22T10:20:30.000Z,
         "port": 7547,
-        "products": Array [],
+        "products": [],
         "service": "cwmp",
         "serviceSource": "censysIpv4",
-        "shodanResults": Object {},
+        "shodanResults": {},
         "updatedAt": null,
-        "wappalyzerResults": Array [],
+        "wappalyzerResults": [],
       },
     ],
     "ssl": null,
@@ -5104,10 +5104,10 @@ a img {
 `;
 
 exports[`censys ipv4 http failure should retry 1`] = `
-Array [
-  Object {
+[
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5119,15 +5119,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain1",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5139,15 +5139,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain10",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5159,15 +5159,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain11",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5179,15 +5179,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain12",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5199,15 +5199,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain2",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5219,15 +5219,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain3",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5239,15 +5239,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain4",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5259,15 +5259,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain5",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5279,15 +5279,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain6",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5299,15 +5299,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain7",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5319,15 +5319,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain8",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5339,7 +5339,7 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain9",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
@@ -5349,10 +5349,10 @@ Array [
 `;
 
 exports[`censys ipv4 repeated http failures should throw an error 1`] = `
-Array [
-  Object {
+[
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5364,15 +5364,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain1",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5384,15 +5384,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain10",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5404,15 +5404,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain11",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5424,15 +5424,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain12",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5444,15 +5444,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain2",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5464,15 +5464,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain3",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5484,15 +5484,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain4",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5504,15 +5504,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain5",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5524,15 +5524,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain6",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5544,15 +5544,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain7",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5564,15 +5564,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain8",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -5584,7 +5584,7 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain9",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
