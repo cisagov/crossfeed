@@ -28,13 +28,14 @@ import { setTechnologies, setCategories, analyze } from 'wappalyzer-core';
 import { chain, mapValues } from 'lodash';
 import { JSDOM, VirtualConsole } from 'jsdom';
 import { Cookie } from 'tough-cookie';
-import path from 'path';
 
 const fs = require('fs');
-const Wappalyzer = require('wappalyzer');
+const path = require('path');
+
+//const Wappalyzer = require('wappalyzer');
 
 const categories = JSON.parse(
-  fs.readFileSync(path.resolve(`${__dirname}/categories.json`))
+  fs.readFileSync(path.resolve(`node_modules/wappalyzer/categories.json`))
 );
 
 let outOfTheBoxTechnologies = {};
@@ -46,7 +47,7 @@ for (const index of Array(27).keys()) {
     ...outOfTheBoxTechnologies,
     ...JSON.parse(
       fs.readFileSync(
-        path.resolve(`${__dirname}/technologies/${character}.json`)
+        path.resolve(`node_modules/wappalyzer/technologies/${character}.json`)
       )
     )
   };

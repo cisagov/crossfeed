@@ -32,13 +32,16 @@
     "p-queue": "^6.6.2",
     "p-retry": "^4.6.1",
     "papaparse": "^5.3.1",
+    "path": "^0.12.7",
     "pg": "^8.7.1",
     "portscanner": "^2.2.0",
     "serverless-http": "^2.7.0",
     "ssl-checker": "^2.0.7",
+    "stream": "^0.0.2",
     "supertest": "^6.3.3",
     "tough-cookie": "^3.0.1",
     "typeorm": "^0.2.45",
+    "wait-for-expect": "^3.0.2",
     "wappalyzer": "^6.10.62"
   },
   "devDependencies": {
