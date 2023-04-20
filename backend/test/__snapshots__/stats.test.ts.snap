@@ -1,24 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`stats get get by globalView should filter domains to a single org if specified 1`] = `
-Object {
-  "domains": Object {
-    "numVulnerabilities": Array [
-      Object {
+{
+  "domains": {
+    "numVulnerabilities": [
+      {
         "id": Any<String>,
         "label": Any<String>,
         "value": 1,
       },
     ],
-    "ports": Array [
-      Object {
+    "ports": [
+      {
         "id": "80",
         "label": "80",
         "value": 1,
       },
     ],
-    "services": Array [
-      Object {
+    "services": [
+      {
         "id": "http",
         "label": "http",
         "value": 1,
@@ -26,27 +26,27 @@ Object {
     ],
     "total": 1,
   },
-  "vulnerabilities": Object {
-    "byOrg": Array [
-      Object {
+  "vulnerabilities": {
+    "byOrg": [
+      {
         "id": Any<String>,
         "label": Any<String>,
         "orgId": Any<String>,
         "value": 1,
       },
     ],
-    "latestVulnerabilities": Array [
-      Object {
-        "actions": Array [],
+    "latestVulnerabilities": [
+      {
+        "actions": [],
         "cpe": null,
         "createdAt": Any<String>,
         "cve": null,
         "cvss": "9",
         "cwe": null,
         "description": "",
-        "domain": Object {
+        "domain": {
           "asn": null,
-          "censysCertificatesResults": Object {},
+          "censysCertificatesResults": {},
           "cloudHosted": false,
           "country": null,
           "createdAt": Any<String>,
@@ -64,30 +64,30 @@ Object {
         },
         "id": Any<String>,
         "isKev": false,
-        "kevResults": Object {},
+        "kevResults": {},
         "lastSeen": null,
         "needsPopulation": false,
         "notes": "",
-        "references": Array [],
+        "references": [],
         "severity": "Critical",
         "source": "cpe2cve",
         "state": "open",
-        "structuredData": Object {},
+        "structuredData": {},
         "substate": "unconfirmed",
         "title": "vuln title",
         "updatedAt": Any<String>,
       },
     ],
-    "mostCommonVulnerabilities": Array [
-      Object {
+    "mostCommonVulnerabilities": [
+      {
         "count": "1",
         "description": "",
         "severity": "Critical",
         "title": "vuln title",
       },
     ],
-    "severity": Array [
-      Object {
+    "severity": [
+      {
         "id": "Critical",
         "label": "Critical",
         "value": 1,
@@ -98,24 +98,24 @@ Object {
 `;
 
 exports[`stats get get by org user should return only domains from that org 1`] = `
-Object {
-  "domains": Object {
-    "numVulnerabilities": Array [
-      Object {
+{
+  "domains": {
+    "numVulnerabilities": [
+      {
         "id": Any<String>,
         "label": Any<String>,
         "value": 1,
       },
     ],
-    "ports": Array [
-      Object {
+    "ports": [
+      {
         "id": "80",
         "label": "80",
         "value": 1,
       },
     ],
-    "services": Array [
-      Object {
+    "services": [
+      {
         "id": "http",
         "label": "http",
         "value": 1,
@@ -123,27 +123,27 @@ Object {
     ],
     "total": 1,
   },
-  "vulnerabilities": Object {
-    "byOrg": Array [
-      Object {
+  "vulnerabilities": {
+    "byOrg": [
+      {
         "id": Any<String>,
         "label": Any<String>,
         "orgId": Any<String>,
         "value": 1,
       },
     ],
-    "latestVulnerabilities": Array [
-      Object {
-        "actions": Array [],
+    "latestVulnerabilities": [
+      {
+        "actions": [],
         "cpe": null,
         "createdAt": Any<String>,
         "cve": null,
         "cvss": "9",
         "cwe": null,
         "description": "",
-        "domain": Object {
+        "domain": {
           "asn": null,
-          "censysCertificatesResults": Object {},
+          "censysCertificatesResults": {},
           "cloudHosted": false,
           "country": null,
           "createdAt": Any<String>,
@@ -161,30 +161,30 @@ Object {
         },
         "id": Any<String>,
         "isKev": false,
-        "kevResults": Object {},
+        "kevResults": {},
         "lastSeen": null,
         "needsPopulation": false,
         "notes": "",
-        "references": Array [],
+        "references": [],
         "severity": "Critical",
         "source": "cpe2cve",
         "state": "open",
-        "structuredData": Object {},
+        "structuredData": {},
         "substate": "unconfirmed",
         "title": "vuln title",
         "updatedAt": Any<String>,
       },
     ],
-    "mostCommonVulnerabilities": Array [
-      Object {
+    "mostCommonVulnerabilities": [
+      {
         "count": "1",
         "description": "",
         "severity": "Critical",
         "title": "vuln title",
       },
     ],
-    "severity": Array [
-      Object {
+    "severity": [
+      {
         "id": "Critical",
         "label": "Critical",
         "value": 1,
