@@ -1,7 +1,7 @@
 import { handler as notifications } from '../notifications';
 import app from '../../../src/api/app';
 import * as request from 'supertest';
-import { createUserToken } from '../../../../backend/test/util';
+import { createUserToken } from '../../../test/util';
 import {
   connectToDatabase,
   Organization,
@@ -31,7 +31,7 @@ describe('notifications', () => {
   beforeAll(async () => {
     await connectToDatabase();
     organization = await Organization.create({
-      name: 'test-' + Math.random(),
+      name: 'CISA',
       rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
       isPassive: false
@@ -61,6 +61,15 @@ describe('notifications', () => {
         })
       )
       .expect(200);
+    await notifications(
+      {
+        organizations: organization,
+        organization2,
+        organization3
+      },
+      {} as any,
+      () => void 0
+    );
     expect(response.body.length).toBeGreaterThan(2);
   });
 
