@@ -52,7 +52,7 @@ for (const index of Array(27).keys()) {
   };
 }
 
-const extraTechnologies = require('./technologies.json');
+const data = require('./technologies.json');
 
 const parseCookie = (str) => Cookie!.parse(str)!.toJSON();
 
@@ -80,8 +80,8 @@ const getMeta = (document) =>
   );
 
 export const technologies = {
-  ...outOfTheBoxTechnologies,
-  ...extraTechnologies
+  ...data.technologies,
+  ...outOfTheBoxTechnologies
 };
 
 setTechnologies(technologies);
