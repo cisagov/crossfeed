@@ -27,12 +27,15 @@ export const handler: Handler = async (event) => {
   await connectToDatabase();
   console.log('Running notifications check...');
 
-  // Get all organizations
-  const organizations = await Organization.find();
+  // Get CISA organization[s] only
+  const organizations = await Organization.find({
+    where: {
+      name: 'CISA'
+    }
+  });
 
   for (const org in organizations) {
     const client = new S3Client();
-
     // pull reports list
     const reportsList = await client.listReports(organizations[org].id);
     // find org admin roles for each organization
