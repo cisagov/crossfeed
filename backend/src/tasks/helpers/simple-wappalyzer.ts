@@ -29,7 +29,7 @@ import { chain, mapValues } from 'lodash';
 import { JSDOM, VirtualConsole } from 'jsdom';
 import { Cookie } from 'tough-cookie';
 
-const data = {categories: {}, technologies: require('./technologies.json')};
+const data = { categories: {}, technologies: require('./technologies.json') };
 const extraTechnologies = require('./technologies.json');
 
 const parseCookie = (str) => Cookie!.parse(str)!.toJSON();
