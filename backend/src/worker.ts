@@ -61,7 +61,8 @@ async function main() {
     rootDomainSync,
     peShodan,
     peDomMasq,
-    peHibpSync
+    peHibpSync,
+    test: () => console.log("test")
   }[scanName];
   if (!scanFn) {
     throw new Error('Invalid scan name ' + scanName);
