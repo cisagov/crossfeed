@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   entry: {
@@ -11,9 +12,14 @@ module.exports = {
   optimization: {
     minimize: false
   },
+  plugins: [
+    // These are not used for being built, and they can't build properly, so we exclude them.
+    new webpack.NormalModuleReplacementPlugin(
+      /(canvas|dockerode|pg-native|ws)/,
+      require.resolve('./mock.js')
+    )
+  ],
   target: 'node',
-  // These are not used for being built, and they can't build properly, so we exclude them.
-  externals: ['dockerode', 'canvas', 'pg-native', 'ws'],
   mode: 'production',
   module: {
     rules: [
