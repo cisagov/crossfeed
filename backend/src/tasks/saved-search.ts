@@ -11,8 +11,6 @@ import {
 } from '../api/auth';
 import { fetchAllResults } from '../api/search';
 
-const client = new ESClient();
-
 export const handler = async (commandOptions: CommandOptions) => {
   console.log('Running saved search');
 
@@ -43,6 +41,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     );
     let searchResults;
     try {
+      const client = new ESClient();
       searchResults = await client.searchDomains(request);
     } catch (e) {
       console.error(e.meta.body.error);
