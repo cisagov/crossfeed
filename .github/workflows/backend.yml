@@ -91,8 +91,12 @@ jobs:
         run: npm ci
       - name: Build
         run: npx webpack --config webpack.worker.config.js
-      - name: Start db
-        run: docker-compose up -d db
+      - name: Run db locally
+        run: |
+          cp dev.env.example .env
+          docker-compose up -d db
+          npm install -g wait-port
+          wait-port -t 5432
         working-directory: ./
       - name: Test
         run: node dist/worker.bundle.js
