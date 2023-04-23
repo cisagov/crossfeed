@@ -96,7 +96,7 @@ jobs:
           cp dev.env.example .env
           docker-compose up -d db
           npm install -g wait-port
-          wait-port -t 5432
+          wait-port -t 3000 5432
         working-directory: ./
       - name: Test
         run: node dist/worker.bundle.js
