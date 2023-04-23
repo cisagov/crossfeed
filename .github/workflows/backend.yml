@@ -91,10 +91,15 @@ jobs:
         run: npm ci
       - name: Build
         run: npx webpack --config webpack.worker.config.js
+      - name: Start db
+        run: docker-compose up -d db
+        working-directory: ./
       - name: Test
         run: node dist/worker.bundle.js
         env:
           CROSSFEED_COMMAND_OPTIONS: '{"scanName": "test"}'
+          DB_USERNAME: crossfeed
+          DB_PASSWORD: password
   test_python:
     runs-on: ubuntu-latest
     timeout-minutes: 20

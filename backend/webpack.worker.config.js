@@ -15,9 +15,12 @@ module.exports = {
   plugins: [
     // These are not used for being built, and they can't build properly, so we exclude them.
     new webpack.NormalModuleReplacementPlugin(
-      /(canvas|dockerode|pg-native|ws)/,
+      /(canvas|dockerode|ws)/,
       require.resolve('./mock.js')
-    )
+    ),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /pg-native/
+    })
   ],
   target: 'node',
   mode: 'production',

@@ -142,7 +142,7 @@ async function getThreatInfo(collectionID) {
     workspaceIds: []
   };
 
-  return (got
+  return got
     .post(resource, {
       json: modifier,
       headers: {
@@ -150,7 +150,7 @@ async function getThreatInfo(collectionID) {
         Authorization: 'Bearer ' + process.env.LG_API_KEY
       }
     })
-    .json() as unknown) as LGThreatResponse;
+    .json() as unknown as LGThreatResponse;
 }
 
 /**
@@ -203,7 +203,8 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   console.log('Running lookingGlass on organization', organizationName);
 
-  const collections: LGCollectionsResponse[] = await getCollectionForCurrentWorkspace();
+  const collections: LGCollectionsResponse[] =
+    await getCollectionForCurrentWorkspace();
   const vulnerabilities: Vulnerability[] = [];
   const domainDict: {} = {};
 

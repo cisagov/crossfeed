@@ -1,6 +1,7 @@
 {
   "env": { "es6": true, "node": true },
   "parser": "@typescript-eslint/parser",
+  "ignorePatterns": ["dist/**"],
   "extends":
     [
       "plugin:prettier/recommended",
