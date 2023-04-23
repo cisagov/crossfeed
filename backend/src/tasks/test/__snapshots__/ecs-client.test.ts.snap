@@ -12,7 +12,7 @@ exports[`getLogs local 1`] = `
 `;
 
 exports[`getLogs not local 1`] = `
-Object {
+{
   "logGroupName": "FARGATE_LOG_GROUP_NAME",
   "logStreamName": "worker/main/f59d71c6-3d23-4ee9-ad68-c7b810bf458b",
   "startFromHead": true,

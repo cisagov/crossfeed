@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`censys certificates basic test 1`] = `
-Array [
-  Object {
+[
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -16,15 +16,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain1",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -36,15 +36,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain10",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -56,15 +56,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain11",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -76,25 +76,25 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain12",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {
+    "censysCertificatesResults": {
       "added_at": "2018-03-19 17:56:33 UTC",
-      "ct": Object {
-        "google_testtube": Object {
+      "ct": {
+        "google_testtube": {
           "added_to_ct_at": "2018-03-19 17:21:11 UTC",
           "ct_to_censys_at": "2018-07-30 22:11:20 UTC",
           "index": "15584453",
         },
       },
       "fingerprint_sha256": "c7148262724e33d9b0ea2fa67ae18775c9fc11c5f1c93ebeab443578c315ab25",
-      "metadata": Object {
+      "metadata": {
         "added_at": "2018-03-19 17:56:33 UTC",
         "parse_status": "success",
         "parse_version": "1",
@@ -104,142 +104,142 @@ Array [
         "source": "ct",
         "updated_at": "2018-08-28 23:28:24 UTC",
       },
-      "parents": Array [],
-      "parsed": Object {
-        "extensions": Object {
-          "authority_info_access": Object {
-            "issuer_urls": Array [
+      "parents": [],
+      "parsed": {
+        "extensions": {
+          "authority_info_access": {
+            "issuer_urls": [
               "http://cert.stg-int-x1.letsencrypt.org/",
             ],
-            "ocsp_urls": Array [
+            "ocsp_urls": [
               "http://ocsp.stg-int-x1.letsencrypt.org",
             ],
           },
           "authority_key_id": "c0cc0346b95820cc5c7270f3e12ecb20a6f5683a",
-          "basic_constraints": Object {
+          "basic_constraints": {
             "is_ca": false,
           },
-          "certificate_policies": Array [
-            Object {
-              "cps": Array [],
+          "certificate_policies": [
+            {
+              "cps": [],
               "id": "2.23.140.1.2.1",
-              "user_notice": Array [],
+              "user_notice": [],
             },
-            Object {
-              "cps": Array [
+            {
+              "cps": [
                 "http://cps.letsencrypt.org",
               ],
               "id": "1.3.6.1.4.1.44947.1.1.1",
-              "user_notice": Array [
-                Object {
+              "user_notice": [
+                {
                   "explicit_text": "This Certificate may only be relied upon by Relying Parties and only in accordance with the Certificate Policy found at https://letsencrypt.org/repository/",
-                  "notice_reference": Array [],
+                  "notice_reference": [],
                 },
               ],
             },
           ],
-          "crl_distribution_points": Array [],
+          "crl_distribution_points": [],
           "ct_poison": true,
-          "extended_key_usage": Object {
+          "extended_key_usage": {
             "client_auth": true,
             "server_auth": true,
-            "unknown": Array [],
-            "value": Array [],
+            "unknown": [],
+            "value": [],
           },
-          "key_usage": Object {
+          "key_usage": {
             "digital_signature": true,
             "key_encipherment": true,
             "value": "5",
           },
-          "signed_certificate_timestamps": Array [],
-          "subject_alt_name": Object {
-            "directory_names": Array [],
-            "dns_names": Array [
+          "signed_certificate_timestamps": [],
+          "subject_alt_name": {
+            "directory_names": [],
+            "dns_names": [
               "jrm-web.fr",
             ],
-            "edi_party_names": Array [],
-            "email_addresses": Array [],
-            "ip_addresses": Array [],
-            "other_names": Array [],
-            "registered_ids": Array [],
-            "uniform_resource_identifiers": Array [],
+            "edi_party_names": [],
+            "email_addresses": [],
+            "ip_addresses": [],
+            "other_names": [],
+            "registered_ids": [],
+            "uniform_resource_identifiers": [],
           },
           "subject_key_id": "e8a490d6cdf9dc3b5d22ffa99a146ef70469e557",
         },
         "fingerprint_md5": "679dabf1a1684b4ad47b309a8381c5f0",
         "fingerprint_sha1": "0d31015df88666d830150388fdebc7507ec5a099",
         "fingerprint_sha256": "c7148262724e33d9b0ea2fa67ae18775c9fc11c5f1c93ebeab443578c315ab25",
-        "issuer": Object {
-          "common_name": Array [
+        "issuer": {
+          "common_name": [
             "Fake LE Intermediate X1",
           ],
-          "country": Array [],
-          "domain_component": Array [],
-          "email_address": Array [],
-          "given_name": Array [],
-          "jurisdiction_country": Array [],
-          "jurisdiction_locality": Array [],
-          "jurisdiction_province": Array [],
-          "locality": Array [],
-          "organization": Array [],
-          "organization_id": Array [],
-          "organizational_unit": Array [],
-          "postal_code": Array [],
-          "province": Array [],
-          "serial_number": Array [],
-          "street_address": Array [],
-          "surname": Array [],
+          "country": [],
+          "domain_component": [],
+          "email_address": [],
+          "given_name": [],
+          "jurisdiction_country": [],
+          "jurisdiction_locality": [],
+          "jurisdiction_province": [],
+          "locality": [],
+          "organization": [],
+          "organization_id": [],
+          "organizational_unit": [],
+          "postal_code": [],
+          "province": [],
+          "serial_number": [],
+          "street_address": [],
+          "surname": [],
         },
         "issuer_dn": "CN=Fake LE Intermediate X1",
-        "names": Array [
+        "names": [
           "jrm-web.fr",
           "first_file_testdomain12",
           "first_file_testdomain3.gov",
         ],
         "redacted": false,
         "serial_number": "21813491103223494347342650797518222965967678",
-        "signature": Object {
+        "signature": {
           "self_signed": false,
-          "signature_algorithm": Object {
+          "signature_algorithm": {
             "name": "SHA256-RSA",
             "oid": "1.2.840.113549.1.1.11",
           },
           "valid": false,
           "value": "0dKkylpDkk54kcaaWXKAHPXZkkRW1o8+mtXT5g7/t6ebr0fQfM9BDY1AIDtD9Ll+/0/KpUvdL//GIXwkK/R/w8ZrJ4tA4r/g8EoxxJWHpr16wYjke6FguK3VrQFBGHCU6Gij8zak1YSjhL7rNZGUi6gOLWMq3DtjFN4FqKgVsGg5nONFWuTBsEdKx9LJ5bF4tUm7qPJRS3kc/exBi1gG1DfMNVpDzMbJIcuTyNKGISXnHhuWN7EGXSX3r2rVgKwGBX4v1iDJ7eYfd6bn+bJ1W3GolRdIDImsQQB2ykUfF8IwdGSN55I+dk3VUwHdeVZHpu0awOXW2Xb5O3RvF4q47w==",
         },
-        "signature_algorithm": Object {
+        "signature_algorithm": {
           "name": "SHA256-RSA",
           "oid": "1.2.840.113549.1.1.11",
         },
         "spki_subject_fingerprint": "91fe4e0da702e60968c0bd845ce8905ba041419ea37d08fc5938c66ea6ec66b7",
-        "subject": Object {
-          "common_name": Array [
+        "subject": {
+          "common_name": [
             "jrm-web.fr",
           ],
-          "country": Array [],
-          "domain_component": Array [],
-          "email_address": Array [],
-          "given_name": Array [],
-          "jurisdiction_country": Array [],
-          "jurisdiction_locality": Array [],
-          "jurisdiction_province": Array [],
-          "locality": Array [],
-          "organization": Array [],
-          "organization_id": Array [],
-          "organizational_unit": Array [],
-          "postal_code": Array [],
-          "province": Array [],
-          "serial_number": Array [],
-          "street_address": Array [],
-          "surname": Array [],
+          "country": [],
+          "domain_component": [],
+          "email_address": [],
+          "given_name": [],
+          "jurisdiction_country": [],
+          "jurisdiction_locality": [],
+          "jurisdiction_province": [],
+          "locality": [],
+          "organization": [],
+          "organization_id": [],
+          "organizational_unit": [],
+          "postal_code": [],
+          "province": [],
+          "serial_number": [],
+          "street_address": [],
+          "surname": [],
         },
         "subject_dn": "CN=jrm-web.fr",
-        "subject_key_info": Object {
+        "subject_key_info": {
           "fingerprint_sha256": "5dc2452f4534d7d4c633f096a1c17e3f050c9f6ef19c653b39addf5aa735545b",
-          "key_algorithm": Object {
+          "key_algorithm": {
             "name": "RSA",
           },
-          "rsa_public_key": Object {
+          "rsa_public_key": {
             "exponent": "65537",
             "length": "2048",
             "modulus": "1MUtGN/fPEZIGaaFIu4J3Dcxj/uVUDgLYNK/ntPo/IuIXmcnJ/HNlEVVoOWYCvMbFmE5wrHx5+dMjZg7pfaUon3+agrQRy1ptVB3edb6j5Q45WoV6aqcvR3fJgkqKyumWqEWgPBlt1qfI9cP7r4aPUfV5n5HPqri8nQmlKsqTBvUVXsv5rT3IoT/XFg0gVbtozx9xn6Pwudj6zNzHGmj6AA8/h/pGPZvgoxDIUqpodg+bEwmno8ZRafHzLkqPYIIRlUYPtQ8EHKWcyr+vMovzatoUSGcvrMQIR6uC0zLN89nNshSjCWZQkdXquEP2PT7waBr0RAvWIaiS56WDHKpvw==",
@@ -247,9 +247,9 @@ Array [
         },
         "tbs_fingerprint": "86e4f3f0e55b24b080397e138acdf4f9f7af0d8bcfb002fb4afbc6541b116357",
         "tbs_noct_fingerprint": "52d7d1b652d4da8edf56858412bf5cbbe4705047bda056d6b61d27b391f339e5",
-        "unknown_extensions": Array [],
+        "unknown_extensions": [],
         "validation_level": "DV",
-        "validity": Object {
+        "validity": {
           "end": "2018-06-17 16:21:10 UTC",
           "length": "7776000",
           "start": "2018-03-19 16:21:10 UTC",
@@ -258,54 +258,54 @@ Array [
       },
       "precert": true,
       "raw": "MIIE7TCCA9WgAwIBAgITAPpoFsK7dfi0qEO2Gvz8RnGLPjANBgkqhkiG9w0BAQsFADAiMSAwHgYDVQQDDBdGYWtlIExFIEludGVybWVkaWF0ZSBYMTAeFw0xODAzMTkxNjIxMTBaFw0xODA2MTcxNjIxMTBaMBUxEzARBgNVBAMTCmpybS13ZWIuZnIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDUxS0Y3988RkgZpoUi7gncNzGP+5VQOAtg0r+e0+j8i4heZycn8c2URVWg5ZgK8xsWYTnCsfHn50yNmDul9pSiff5qCtBHLWm1UHd51vqPlDjlahXpqpy9Hd8mCSorK6ZaoRaA8GW3Wp8j1w/uvho9R9Xmfkc+quLydCaUqypMG9RVey/mtPcihP9cWDSBVu2jPH3Gfo/C52PrM3McaaPoADz+H+kY9m+CjEMhSqmh2D5sTCaejxlFp8fMuSo9gghGVRg+1DwQcpZzKv68yi/Nq2hRIZy+sxAhHq4LTMs3z2c2yFKMJZlCR1eq4Q/Y9PvBoGvREC9YhqJLnpYMcqm/AgMBAAGjggInMIICIzAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMAwGA1UdEwEB/wQCMAAwHQYDVR0OBBYEFOikkNbN+dw7XSL/qZoUbvcEaeVXMB8GA1UdIwQYMBaAFMDMA0a5WCDMXHJw8+EuyyCm9Wg6MHcGCCsGAQUFBwEBBGswaTAyBggrBgEFBQcwAYYmaHR0cDovL29jc3Auc3RnLWludC14MS5sZXRzZW5jcnlwdC5vcmcwMwYIKwYBBQUHMAKGJ2h0dHA6Ly9jZXJ0LnN0Zy1pbnQteDEubGV0c2VuY3J5cHQub3JnLzAVBgNVHREEDjAMggpqcm0td2ViLmZyMIH+BgNVHSAEgfYwgfMwCAYGZ4EMAQIBMIHmBgsrBgEEAYLfEwEBATCB1jAmBggrBgEFBQcCARYaaHR0cDovL2Nwcy5sZXRzZW5jcnlwdC5vcmcwgasGCCsGAQUFBwICMIGeDIGbVGhpcyBDZXJ0aWZpY2F0ZSBtYXkgb25seSBiZSByZWxpZWQgdXBvbiBieSBSZWx5aW5nIFBhcnRpZXMgYW5kIG9ubHkgaW4gYWNjb3JkYW5jZSB3aXRoIHRoZSBDZXJ0aWZpY2F0ZSBQb2xpY3kgZm91bmQgYXQgaHR0cHM6Ly9sZXRzZW5jcnlwdC5vcmcvcmVwb3NpdG9yeS8wEwYKKwYBBAHWeQIEAwEB/wQCBQAwDQYJKoZIhvcNAQELBQADggEBANHSpMpaQ5JOeJHGmllygBz12ZJEVtaPPprV0+YO/7enm69H0HzPQQ2NQCA7Q/S5fv9PyqVL3S//xiF8JCv0f8PGayeLQOK/4PBKMcSVh6a9esGI5HuhYLit1a0BQRhwlOhoo/M2pNWEo4S+6zWRlIuoDi1jKtw7YxTeBaioFbBoOZzjRVrkwbBHSsfSyeWxeLVJu6jyUUt5HP3sQYtYBtQ3zDVaQ8zGySHLk8jShiEl5x4bljexBl0l969q1YCsBgV+L9Ygye3mH3em5/mydVtxqJUXSAyJrEEAdspFHxfCMHRkjeeSPnZN1VMB3XlWR6btGsDl1tl2+Tt0bxeKuO8=",
-      "tags": Array [
+      "tags": [
         "ct",
         "expired",
         "precert",
       ],
-      "validation": Object {
-        "apple": Object {
+      "validation": {
+        "apple": {
           "blacklisted": false,
           "had_trusted_path": false,
           "in_revocation_set": false,
-          "parents": Array [],
-          "paths": Array [],
+          "parents": [],
+          "paths": [],
           "trusted_path": false,
           "type": "unknown",
           "valid": false,
           "was_valid": false,
           "whitelisted": false,
         },
-        "google_ct_primary": Object {
+        "google_ct_primary": {
           "blacklisted": false,
           "had_trusted_path": false,
           "in_revocation_set": false,
-          "parents": Array [],
-          "paths": Array [],
+          "parents": [],
+          "paths": [],
           "trusted_path": false,
           "type": "unknown",
           "valid": false,
           "was_valid": false,
           "whitelisted": false,
         },
-        "microsoft": Object {
+        "microsoft": {
           "blacklisted": false,
           "had_trusted_path": false,
           "in_revocation_set": false,
-          "parents": Array [],
-          "paths": Array [],
+          "parents": [],
+          "paths": [],
           "trusted_path": false,
           "type": "unknown",
           "valid": false,
           "was_valid": false,
           "whitelisted": false,
         },
-        "nss": Object {
+        "nss": {
           "blacklisted": false,
           "had_trusted_path": false,
           "in_revocation_set": false,
-          "parents": Array [],
-          "paths": Array [],
+          "parents": [],
+          "paths": [],
           "trusted_path": false,
           "type": "unknown",
           "valid": false,
@@ -313,10 +313,10 @@ Array [
           "whitelisted": false,
         },
       },
-      "zlint": Object {
+      "zlint": {
         "errors_present": false,
         "fatals_present": false,
-        "lints": Object {
+        "lints": {
           "e_basic_constraints_not_critical": "na",
           "e_ca_common_name_missing": "na",
           "e_ca_country_name_invalid": "na",
@@ -551,18 +551,18 @@ Array [
     "organization": null,
     "reverseName": "gov.first_file_testdomain3",
     "screenshot": null,
-    "services": Array [],
-    "ssl": Object {
-      "altNames": Array [
+    "services": [],
+    "ssl": {
+      "altNames": [
         "jrm-web.fr",
         "first_file_testdomain12",
         "first_file_testdomain3.gov",
       ],
       "fingerprint": "MIIE7TCCA9WgAwIBAgITAPpoFsK7dfi0qEO2Gvz8RnGLPjANBgkqhkiG9w0BAQsFADAiMSAwHgYDVQQDDBdGYWtlIExFIEludGVybWVkaWF0ZSBYMTAeFw0xODAzMTkxNjIxMTBaFw0xODA2MTcxNjIxMTBaMBUxEzARBgNVBAMTCmpybS13ZWIuZnIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDUxS0Y3988RkgZpoUi7gncNzGP+5VQOAtg0r+e0+j8i4heZycn8c2URVWg5ZgK8xsWYTnCsfHn50yNmDul9pSiff5qCtBHLWm1UHd51vqPlDjlahXpqpy9Hd8mCSorK6ZaoRaA8GW3Wp8j1w/uvho9R9Xmfkc+quLydCaUqypMG9RVey/mtPcihP9cWDSBVu2jPH3Gfo/C52PrM3McaaPoADz+H+kY9m+CjEMhSqmh2D5sTCaejxlFp8fMuSo9gghGVRg+1DwQcpZzKv68yi/Nq2hRIZy+sxAhHq4LTMs3z2c2yFKMJZlCR1eq4Q/Y9PvBoGvREC9YhqJLnpYMcqm/AgMBAAGjggInMIICIzAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMAwGA1UdEwEB/wQCMAAwHQYDVR0OBBYEFOikkNbN+dw7XSL/qZoUbvcEaeVXMB8GA1UdIwQYMBaAFMDMA0a5WCDMXHJw8+EuyyCm9Wg6MHcGCCsGAQUFBwEBBGswaTAyBggrBgEFBQcwAYYmaHR0cDovL29jc3Auc3RnLWludC14MS5sZXRzZW5jcnlwdC5vcmcwMwYIKwYBBQUHMAKGJ2h0dHA6Ly9jZXJ0LnN0Zy1pbnQteDEubGV0c2VuY3J5cHQub3JnLzAVBgNVHREEDjAMggpqcm0td2ViLmZyMIH+BgNVHSAEgfYwgfMwCAYGZ4EMAQIBMIHmBgsrBgEEAYLfEwEBATCB1jAmBggrBgEFBQcCARYaaHR0cDovL2Nwcy5sZXRzZW5jcnlwdC5vcmcwgasGCCsGAQUFBwICMIGeDIGbVGhpcyBDZXJ0aWZpY2F0ZSBtYXkgb25seSBiZSByZWxpZWQgdXBvbiBieSBSZWx5aW5nIFBhcnRpZXMgYW5kIG9ubHkgaW4gYWNjb3JkYW5jZSB3aXRoIHRoZSBDZXJ0aWZpY2F0ZSBQb2xpY3kgZm91bmQgYXQgaHR0cHM6Ly9sZXRzZW5jcnlwdC5vcmcvcmVwb3NpdG9yeS8wEwYKKwYBBAHWeQIEAwEB/wQCBQAwDQYJKoZIhvcNAQELBQADggEBANHSpMpaQ5JOeJHGmllygBz12ZJEVtaPPprV0+YO/7enm69H0HzPQQ2NQCA7Q/S5fv9PyqVL3S//xiF8JCv0f8PGayeLQOK/4PBKMcSVh6a9esGI5HuhYLit1a0BQRhwlOhoo/M2pNWEo4S+6zWRlIuoDi1jKtw7YxTeBaioFbBoOZzjRVrkwbBHSsfSyeWxeLVJu6jyUUt5HP3sQYtYBtQ3zDVaQ8zGySHLk8jShiEl5x4bljexBl0l969q1YCsBgV+L9Ygye3mH3em5/mydVtxqJUXSAyJrEEAdspFHxfCMHRkjeeSPnZN1VMB3XlWR6btGsDl1tl2+Tt0bxeKuO8=",
-      "issuerCN": Array [
+      "issuerCN": [
         "Fake LE Intermediate X1",
       ],
-      "issuerOrg": Array [],
+      "issuerOrg": [],
       "validFrom": "2018-03-19 16:21:10 UTC",
       "validTo": "2018-06-17 16:21:10 UTC",
     },
@@ -570,9 +570,9 @@ Array [
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -584,15 +584,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain5",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -604,15 +604,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain6",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -624,15 +624,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain7",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -644,15 +644,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain8",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -664,18 +664,18 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain9",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {
+    "censysCertificatesResults": {
       "added_at": "2018-03-19 14:27:41 UTC",
       "fingerprint_sha256": "d0e8f51650889c6f31547c488762ffe45413f4945c8bba293985c54853891186",
-      "metadata": Object {
+      "metadata": {
         "added_at": "2018-03-19 14:27:41 UTC",
         "parse_status": "success",
         "parse_version": "1",
@@ -685,60 +685,60 @@ Array [
         "source": "scan",
         "updated_at": "2019-03-18 00:12:17 UTC",
       },
-      "parents": Array [],
-      "parsed": Object {
-        "extensions": Object {
+      "parents": [],
+      "parsed": {
+        "extensions": {
           "authority_key_id": "296759fa04d6c1d543e5929da1d364f51307cad4",
-          "basic_constraints": Object {
+          "basic_constraints": {
             "is_ca": false,
           },
-          "certificate_policies": Array [],
-          "crl_distribution_points": Array [],
-          "signed_certificate_timestamps": Array [],
-          "subject_alt_name": Object {
-            "directory_names": Array [],
-            "dns_names": Array [
+          "certificate_policies": [],
+          "crl_distribution_points": [],
+          "signed_certificate_timestamps": [],
+          "subject_alt_name": {
+            "directory_names": [],
+            "dns_names": [
               "akmemontech.imtiyazmemon.website",
               "akmemontech.com",
               "mail.akmemontech.com",
               "www.akmemontech.com",
               "www.akmemontech.imtiyazmemon.website",
             ],
-            "edi_party_names": Array [],
-            "email_addresses": Array [],
-            "ip_addresses": Array [],
-            "other_names": Array [],
-            "registered_ids": Array [],
-            "uniform_resource_identifiers": Array [],
+            "edi_party_names": [],
+            "email_addresses": [],
+            "ip_addresses": [],
+            "other_names": [],
+            "registered_ids": [],
+            "uniform_resource_identifiers": [],
           },
           "subject_key_id": "296759fa04d6c1d543e5929da1d364f51307cad4",
         },
         "fingerprint_md5": "99c7eaaa33dba724c01534fbca59e176",
         "fingerprint_sha1": "bfa33d549f45b4b2892203c2b9832db905256381",
         "fingerprint_sha256": "d0e8f51650889c6f31547c488762ffe45413f4945c8bba293985c54853891186",
-        "issuer": Object {
-          "common_name": Array [
+        "issuer": {
+          "common_name": [
             "akmemontech.imtiyazmemon.website",
           ],
-          "country": Array [],
-          "domain_component": Array [],
-          "email_address": Array [],
-          "given_name": Array [],
-          "jurisdiction_country": Array [],
-          "jurisdiction_locality": Array [],
-          "jurisdiction_province": Array [],
-          "locality": Array [],
-          "organization": Array [],
-          "organization_id": Array [],
-          "organizational_unit": Array [],
-          "postal_code": Array [],
-          "province": Array [],
-          "serial_number": Array [],
-          "street_address": Array [],
-          "surname": Array [],
+          "country": [],
+          "domain_component": [],
+          "email_address": [],
+          "given_name": [],
+          "jurisdiction_country": [],
+          "jurisdiction_locality": [],
+          "jurisdiction_province": [],
+          "locality": [],
+          "organization": [],
+          "organization_id": [],
+          "organizational_unit": [],
+          "postal_code": [],
+          "province": [],
+          "serial_number": [],
+          "street_address": [],
+          "surname": [],
         },
         "issuer_dn": "CN=akmemontech.imtiyazmemon.website",
-        "names": Array [
+        "names": [
           "www.akmemontech.imtiyazmemon.website",
           "akmemontech.imtiyazmemon.website",
           "akmemontech.com",
@@ -748,48 +748,48 @@ Array [
         ],
         "redacted": false,
         "serial_number": "4966328060",
-        "signature": Object {
+        "signature": {
           "self_signed": true,
-          "signature_algorithm": Object {
+          "signature_algorithm": {
             "name": "SHA256-RSA",
             "oid": "1.2.840.113549.1.1.11",
           },
           "valid": false,
           "value": "QAREFCXiXmSFfHNFfAdrhQ7GmmszsHJrzyVzea4cbdVftExlPsNzirt+BzUsLyss3dkFv58YHcWRmRjxLYHw3zgxo9sNgkk56NKwMrrThSYlMWldbwU6v5Szkh1ZLwv0BW1KLCfmVF3CiE+uBcaSUpXmPh0XDAfAgEnNyzmQrOMgdkN21qjPDTz8WTvhPiiZyayanwxCtwcC3RnV/lcqKQJd0zU/6aKqNaFxPYiJ/ZG5j2Mz2ZZswRZkEdwqcHfgIrM5FHpxeeKNsP1XoM4XkktD09Tvp+yN8AXJY/mS1vYVMLf5xtOS+DmautWaTWlCZlOGeO7zDiJKX/thvxaaHQ==",
         },
-        "signature_algorithm": Object {
+        "signature_algorithm": {
           "name": "SHA256-RSA",
           "oid": "1.2.840.113549.1.1.11",
         },
         "spki_subject_fingerprint": "3c9deaeec1809b90215fe41068e88d09c6c7f3c444e2cc7074a762872d1bbdee",
-        "subject": Object {
-          "common_name": Array [
+        "subject": {
+          "common_name": [
             "akmemontech.imtiyazmemon.website",
           ],
-          "country": Array [],
-          "domain_component": Array [],
-          "email_address": Array [],
-          "given_name": Array [],
-          "jurisdiction_country": Array [],
-          "jurisdiction_locality": Array [],
-          "jurisdiction_province": Array [],
-          "locality": Array [],
-          "organization": Array [],
-          "organization_id": Array [],
-          "organizational_unit": Array [],
-          "postal_code": Array [],
-          "province": Array [],
-          "serial_number": Array [],
-          "street_address": Array [],
-          "surname": Array [],
+          "country": [],
+          "domain_component": [],
+          "email_address": [],
+          "given_name": [],
+          "jurisdiction_country": [],
+          "jurisdiction_locality": [],
+          "jurisdiction_province": [],
+          "locality": [],
+          "organization": [],
+          "organization_id": [],
+          "organizational_unit": [],
+          "postal_code": [],
+          "province": [],
+          "serial_number": [],
+          "street_address": [],
+          "surname": [],
         },
         "subject_dn": "CN=akmemontech.imtiyazmemon.website",
-        "subject_key_info": Object {
+        "subject_key_info": {
           "fingerprint_sha256": "e292f1b8426fb13c12df280f96f35aa4f515eb951e80a8d267091262acb98aa2",
-          "key_algorithm": Object {
+          "key_algorithm": {
             "name": "RSA",
           },
-          "rsa_public_key": Object {
+          "rsa_public_key": {
             "exponent": "65537",
             "length": "2048",
             "modulus": "vL3d88/7/vbjdUMGhs2eGwlvfcjFbNISekYc573qwTZh4ZRzHWCGK3I9jaJOrksMzwmvfZxBY6FsUk9yFMs15Fs7uR2e+8PCsfzRB/olQcWooOq41iqqLH09n0da6uqugq6ts7ZcFaiJtqJ6JK1ug6ef5LWU2uTepDJ2ssByl9IjU7SnLM4ef5IXjh2slWYf6NsE8FN+wz9PxS8E4YEWjt2si0H565WD9ILhS2xDYapVLyIXw0DK0UbHMU0nSDGFJasHHq8Ul+LVl7Bh6gwxw6niPpol7lkUXFjPTwvtYEoG0nLa2YSW9hleJ3qaszpoYd9eZapm7NvH5SkiX6WfGw==",
@@ -797,9 +797,9 @@ Array [
         },
         "tbs_fingerprint": "4e8608215c79fabad19c8c88140ccb51787c0f6e1ae73ad1db1be47751e0de6a",
         "tbs_noct_fingerprint": "4e8608215c79fabad19c8c88140ccb51787c0f6e1ae73ad1db1be47751e0de6a",
-        "unknown_extensions": Array [],
+        "unknown_extensions": [],
         "validation_level": "unknown",
-        "validity": Object {
+        "validity": {
           "end": "2019-03-17 12:26:13 UTC",
           "length": "31536000",
           "start": "2018-03-17 12:26:13 UTC",
@@ -808,52 +808,52 @@ Array [
       },
       "precert": false,
       "raw": "MIIDtjCCAp6gAwIBAgIFASgEJvwwDQYJKoZIhvcNAQELBQAwKzEpMCcGA1UEAwwgYWttZW1vbnRlY2guaW10aXlhem1lbW9uLndlYnNpdGUwHhcNMTgwMzE3MTIyNjEzWhcNMTkwMzE3MTIyNjEzWjArMSkwJwYDVQQDDCBha21lbW9udGVjaC5pbXRpeWF6bWVtb24ud2Vic2l0ZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALy93fPP+/7243VDBobNnhsJb33IxWzSEnpGHOe96sE2YeGUcx1ghityPY2iTq5LDM8Jr32cQWOhbFJPchTLNeRbO7kdnvvDwrH80Qf6JUHFqKDquNYqqix9PZ9HWurqroKurbO2XBWoibaieiStboOnn+S1lNrk3qQydrLAcpfSI1O0pyzOHn+SF44drJVmH+jbBPBTfsM/T8UvBOGBFo7drItB+euVg/SC4UtsQ2GqVS8iF8NAytFGxzFNJ0gxhSWrBx6vFJfi1ZewYeoMMcOp4j6aJe5ZFFxYz08L7WBKBtJy2tmElvYZXid6mrM6aGHfXmWqZuzbx+UpIl+lnxsCAwEAAaOB4DCB3TAdBgNVHQ4EFgQUKWdZ+gTWwdVD5ZKdodNk9RMHytQwHwYDVR0jBBgwFoAUKWdZ+gTWwdVD5ZKdodNk9RMHytQwCQYDVR0TBAIwADCBjwYDVR0RBIGHMIGEgiBha21lbW9udGVjaC5pbXRpeWF6bWVtb24ud2Vic2l0ZYIPYWttZW1vbnRlY2guY29tghRtYWlsLmFrbWVtb250ZWNoLmNvbYITd3d3LmFrbWVtb250ZWNoLmNvbYIkd3d3LmFrbWVtb250ZWNoLmltdGl5YXptZW1vbi53ZWJzaXRlMA0GCSqGSIb3DQEBCwUAA4IBAQBABEQUJeJeZIV8c0V8B2uFDsaaazOwcmvPJXN5rhxt1V+0TGU+w3OKu34HNSwvKyzd2QW/nxgdxZGZGPEtgfDfODGj2w2CSTno0rAyutOFJiUxaV1vBTq/lLOSHVkvC/QFbUosJ+ZUXcKIT64FxpJSleY+HRcMB8CASc3LOZCs4yB2Q3bWqM8NPPxZO+E+KJnJrJqfDEK3BwLdGdX+VyopAl3TNT/poqo1oXE9iIn9kbmPYzPZlmzBFmQR3Cpwd+AiszkUenF54o2w/VegzheSS0PT1O+n7I3wBclj+ZLW9hUwt/nG05L4OZq61ZpNaUJmU4Z47vMOIkpf+2G/Fpod",
-      "tags": Array [
+      "tags": [
         "expired",
       ],
-      "validation": Object {
-        "apple": Object {
+      "validation": {
+        "apple": {
           "blacklisted": false,
           "had_trusted_path": false,
           "in_revocation_set": false,
-          "parents": Array [],
-          "paths": Array [],
+          "parents": [],
+          "paths": [],
           "trusted_path": false,
           "type": "unknown",
           "valid": false,
           "was_valid": false,
           "whitelisted": false,
         },
-        "google_ct_primary": Object {
+        "google_ct_primary": {
           "blacklisted": false,
           "had_trusted_path": false,
           "in_revocation_set": false,
-          "parents": Array [],
-          "paths": Array [],
+          "parents": [],
+          "paths": [],
           "trusted_path": false,
           "type": "unknown",
           "valid": false,
           "was_valid": false,
           "whitelisted": false,
         },
-        "microsoft": Object {
+        "microsoft": {
           "blacklisted": false,
           "had_trusted_path": false,
           "in_revocation_set": false,
-          "parents": Array [],
-          "paths": Array [],
+          "parents": [],
+          "paths": [],
           "trusted_path": false,
           "type": "unknown",
           "valid": false,
           "was_valid": false,
           "whitelisted": false,
         },
-        "nss": Object {
+        "nss": {
           "blacklisted": false,
           "had_trusted_path": false,
           "in_revocation_set": false,
-          "parents": Array [],
-          "paths": Array [],
+          "parents": [],
+          "paths": [],
           "trusted_path": false,
           "type": "unknown",
           "valid": false,
@@ -861,10 +861,10 @@ Array [
           "whitelisted": false,
         },
       },
-      "zlint": Object {
+      "zlint": {
         "errors_present": true,
         "fatals_present": false,
-        "lints": Object {
+        "lints": {
           "e_basic_constraints_not_critical": "na",
           "e_ca_common_name_missing": "na",
           "e_ca_country_name_invalid": "na",
@@ -1099,9 +1099,9 @@ Array [
     "organization": null,
     "reverseName": "gov.first_file_testdomain2.subdomain",
     "screenshot": null,
-    "services": Array [],
-    "ssl": Object {
-      "altNames": Array [
+    "services": [],
+    "ssl": {
+      "altNames": [
         "www.akmemontech.imtiyazmemon.website",
         "akmemontech.imtiyazmemon.website",
         "akmemontech.com",
@@ -1110,10 +1110,10 @@ Array [
         "*.first_file_testdomain2.gov",
       ],
       "fingerprint": "MIIDtjCCAp6gAwIBAgIFASgEJvwwDQYJKoZIhvcNAQELBQAwKzEpMCcGA1UEAwwgYWttZW1vbnRlY2guaW10aXlhem1lbW9uLndlYnNpdGUwHhcNMTgwMzE3MTIyNjEzWhcNMTkwMzE3MTIyNjEzWjArMSkwJwYDVQQDDCBha21lbW9udGVjaC5pbXRpeWF6bWVtb24ud2Vic2l0ZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALy93fPP+/7243VDBobNnhsJb33IxWzSEnpGHOe96sE2YeGUcx1ghityPY2iTq5LDM8Jr32cQWOhbFJPchTLNeRbO7kdnvvDwrH80Qf6JUHFqKDquNYqqix9PZ9HWurqroKurbO2XBWoibaieiStboOnn+S1lNrk3qQydrLAcpfSI1O0pyzOHn+SF44drJVmH+jbBPBTfsM/T8UvBOGBFo7drItB+euVg/SC4UtsQ2GqVS8iF8NAytFGxzFNJ0gxhSWrBx6vFJfi1ZewYeoMMcOp4j6aJe5ZFFxYz08L7WBKBtJy2tmElvYZXid6mrM6aGHfXmWqZuzbx+UpIl+lnxsCAwEAAaOB4DCB3TAdBgNVHQ4EFgQUKWdZ+gTWwdVD5ZKdodNk9RMHytQwHwYDVR0jBBgwFoAUKWdZ+gTWwdVD5ZKdodNk9RMHytQwCQYDVR0TBAIwADCBjwYDVR0RBIGHMIGEgiBha21lbW9udGVjaC5pbXRpeWF6bWVtb24ud2Vic2l0ZYIPYWttZW1vbnRlY2guY29tghRtYWlsLmFrbWVtb250ZWNoLmNvbYITd3d3LmFrbWVtb250ZWNoLmNvbYIkd3d3LmFrbWVtb250ZWNoLmltdGl5YXptZW1vbi53ZWJzaXRlMA0GCSqGSIb3DQEBCwUAA4IBAQBABEQUJeJeZIV8c0V8B2uFDsaaazOwcmvPJXN5rhxt1V+0TGU+w3OKu34HNSwvKyzd2QW/nxgdxZGZGPEtgfDfODGj2w2CSTno0rAyutOFJiUxaV1vBTq/lLOSHVkvC/QFbUosJ+ZUXcKIT64FxpJSleY+HRcMB8CASc3LOZCs4yB2Q3bWqM8NPPxZO+E+KJnJrJqfDEK3BwLdGdX+VyopAl3TNT/poqo1oXE9iIn9kbmPYzPZlmzBFmQR3Cpwd+AiszkUenF54o2w/VegzheSS0PT1O+n7I3wBclj+ZLW9hUwt/nG05L4OZq61ZpNaUJmU4Z47vMOIkpf+2G/Fpod",
-      "issuerCN": Array [
+      "issuerCN": [
         "akmemontech.imtiyazmemon.website",
       ],
-      "issuerOrg": Array [],
+      "issuerOrg": [],
       "validFrom": "2018-03-17 12:26:13 UTC",
       "validTo": "2019-03-17 12:26:13 UTC",
     },
@@ -1121,12 +1121,12 @@ Array [
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {
+    "censysCertificatesResults": {
       "added_at": "2018-03-19 14:19:01 UTC",
       "fingerprint_sha256": "ed93d6dfbbca976e798864b747410763464b3328929a94371ad15d57217c92a5",
-      "metadata": Object {
+      "metadata": {
         "added_at": "2018-03-19 14:19:01 UTC",
         "parse_status": "success",
         "parse_version": "1",
@@ -1136,115 +1136,115 @@ Array [
         "source": "scan",
         "updated_at": "2019-02-14 00:48:54 UTC",
       },
-      "parents": Array [],
-      "parsed": Object {
-        "extensions": Object {
+      "parents": [],
+      "parsed": {
+        "extensions": {
           "authority_key_id": "aa8d75538faa8fe4bc32a5d91bf49f25b53a0bb0",
-          "basic_constraints": Object {
+          "basic_constraints": {
             "is_ca": false,
           },
-          "certificate_policies": Array [],
-          "crl_distribution_points": Array [],
-          "signed_certificate_timestamps": Array [],
+          "certificate_policies": [],
+          "crl_distribution_points": [],
+          "signed_certificate_timestamps": [],
           "subject_key_id": "aa8d75538faa8fe4bc32a5d91bf49f25b53a0bb0",
         },
         "fingerprint_md5": "01287df208bc96c6da4b19e1882555e4",
         "fingerprint_sha1": "8c696a4d2afa2dc5ddd1258ae78ac222ae567865",
         "fingerprint_sha256": "ed93d6dfbbca976e798864b747410763464b3328929a94371ad15d57217c92a5",
-        "issuer": Object {
-          "common_name": Array [
+        "issuer": {
+          "common_name": [
             "tavarantarkastaja.com",
           ],
-          "country": Array [
+          "country": [
             "FI",
           ],
-          "domain_component": Array [],
-          "email_address": Array [
+          "domain_component": [],
+          "email_address": [
             "tuki@webhotelli.fi",
           ],
-          "given_name": Array [],
-          "jurisdiction_country": Array [],
-          "jurisdiction_locality": Array [],
-          "jurisdiction_province": Array [],
-          "locality": Array [
+          "given_name": [],
+          "jurisdiction_country": [],
+          "jurisdiction_locality": [],
+          "jurisdiction_province": [],
+          "locality": [
             "Helsinki",
           ],
-          "organization": Array [
+          "organization": [
             "Nordic Web Hotel Oy",
           ],
-          "organization_id": Array [],
-          "organizational_unit": Array [
+          "organization_id": [],
+          "organizational_unit": [
             "Webhotelli.fi",
           ],
-          "postal_code": Array [],
-          "province": Array [
+          "postal_code": [],
+          "province": [
             "Uusimaa",
           ],
-          "serial_number": Array [],
-          "street_address": Array [],
-          "surname": Array [],
+          "serial_number": [],
+          "street_address": [],
+          "surname": [],
         },
         "issuer_dn": "C=FI, L=Helsinki, O=Nordic Web Hotel Oy, OU=Webhotelli.fi, CN=tavarantarkastaja.com, emailAddress=tuki@webhotelli.fi, ST=Uusimaa",
-        "names": Array [
+        "names": [
           "tavarantarkastaja.com",
           "subdomain.first_file_testdomain4.gov",
         ],
         "redacted": false,
         "serial_number": "157943845",
-        "signature": Object {
+        "signature": {
           "self_signed": true,
-          "signature_algorithm": Object {
+          "signature_algorithm": {
             "name": "SHA256-RSA",
             "oid": "1.2.840.113549.1.1.11",
           },
           "valid": false,
           "value": "laDNmY7+h2FQ2a1R/4lkN3C1p1JJ5w1sydqQJ95Xp6Jzu8yQ+p3FQeHQlIGy6Cv1fPURTq0aTjKK4v2M2sXheLP43Yg5ak9wIuHojpiiYDmKbDWlMjTD34WHEWO9F4w9apeQtTlEDlEpvUWtoqUQphJNZkTdu1HG0T4OyrCvsSONMCvYvxJy7TgEHTDmTT4NzjNLk25AcfzeBc6siOfcMwKQLmMgvKHOHIePPzvekFkstC3UM+z7kqih+1YEJpdeMU176Bm2Zw92DlyISXXmFfjmj6EY76e6Lz1jvg7x4D53NJhzjnQ+YGvS7t0wNa1YiRUjo2AYn6qpZAXA3r0PcA==",
         },
-        "signature_algorithm": Object {
+        "signature_algorithm": {
           "name": "SHA256-RSA",
           "oid": "1.2.840.113549.1.1.11",
         },
         "spki_subject_fingerprint": "c2bdc1a2112f732023a71fe64034613f7bbc0fbb7527747e7309c3319726ecf6",
-        "subject": Object {
-          "common_name": Array [
+        "subject": {
+          "common_name": [
             "tavarantarkastaja.com",
           ],
-          "country": Array [
+          "country": [
             "FI",
           ],
-          "domain_component": Array [],
-          "email_address": Array [
+          "domain_component": [],
+          "email_address": [
             "tuki@webhotelli.fi",
           ],
-          "given_name": Array [],
-          "jurisdiction_country": Array [],
-          "jurisdiction_locality": Array [],
-          "jurisdiction_province": Array [],
-          "locality": Array [
+          "given_name": [],
+          "jurisdiction_country": [],
+          "jurisdiction_locality": [],
+          "jurisdiction_province": [],
+          "locality": [
             "Helsinki",
           ],
-          "organization": Array [
+          "organization": [
             "Nordic Web Hotel Oy",
           ],
-          "organization_id": Array [],
-          "organizational_unit": Array [
+          "organization_id": [],
+          "organizational_unit": [
             "Webhotelli.fi",
           ],
-          "postal_code": Array [],
-          "province": Array [
+          "postal_code": [],
+          "province": [
             "Uusimaa",
           ],
-          "serial_number": Array [],
-          "street_address": Array [],
-          "surname": Array [],
+          "serial_number": [],
+          "street_address": [],
+          "surname": [],
         },
         "subject_dn": "C=FI, L=Helsinki, O=Nordic Web Hotel Oy, OU=Webhotelli.fi, CN=tavarantarkastaja.com, emailAddress=tuki@webhotelli.fi, ST=Uusimaa",
-        "subject_key_info": Object {
+        "subject_key_info": {
           "fingerprint_sha256": "bb6d492ff73eb585f1289e02570e785c41a9f66c98507850570721283ae91626",
-          "key_algorithm": Object {
+          "key_algorithm": {
             "name": "RSA",
           },
-          "rsa_public_key": Object {
+          "rsa_public_key": {
             "exponent": "65537",
             "length": "2048",
             "modulus": "zZyGfg+Sil+OsCJh/xxw0tSVTtFHKv1yok/g7Ev/fdqhnsBlERjhuotevy+9g3QZcPwaw7bquxAQ4JRY+hL4D+/o7vNOFynIOo1NmP5yY/x+OFyugwRBPgvY8eSxj8yY0y3hPzgQPtIWdHo5c7+t9bjuyGTpK2UIr64UTHAxjSkibo8CCTI2UMn/EP3eHgLlkBpeiFUGo9BwMBHpJyR9hVa2POOu7gSC6nPg7KDzV1nfWmb/rHkRX+wdDRCG87cMkkcV1IqlLKY1v2vS+tiNNrf/GyBgPfzyMQ86/27msbHks9YQSHbTtfarRXAvP8+w++dLFfIJj7SeeLOCr8kPVw==",
@@ -1252,9 +1252,9 @@ Array [
         },
         "tbs_fingerprint": "eca30f5ff0cc15e5085f7420a2ab5c0597e94f1532c76b76f2dd66b04a5ed20d",
         "tbs_noct_fingerprint": "eca30f5ff0cc15e5085f7420a2ab5c0597e94f1532c76b76f2dd66b04a5ed20d",
-        "unknown_extensions": Array [],
+        "unknown_extensions": [],
         "validation_level": "unknown",
-        "validity": Object {
+        "validity": {
           "end": "2019-02-13 13:36:26 UTC",
           "length": "31536000",
           "start": "2018-02-13 13:36:26 UTC",
@@ -1263,52 +1263,52 @@ Array [
       },
       "precert": false,
       "raw": "MIIEIzCCAwugAwIBAgIECWoIJTANBgkqhkiG9w0BAQsFADCBqzELMAkGA1UEBhMCRkkxETAPBgNVBAcMCEhlbHNpbmtpMRwwGgYDVQQKDBNOb3JkaWMgV2ViIEhvdGVsIE95MRYwFAYDVQQLDA1XZWJob3RlbGxpLmZpMR4wHAYDVQQDDBV0YXZhcmFudGFya2FzdGFqYS5jb20xITAfBgkqhkiG9w0BCQEWEnR1a2lAd2ViaG90ZWxsaS5maTEQMA4GA1UECAwHVXVzaW1hYTAeFw0xODAyMTMxMzM2MjZaFw0xOTAyMTMxMzM2MjZaMIGrMQswCQYDVQQGEwJGSTERMA8GA1UEBwwISGVsc2lua2kxHDAaBgNVBAoME05vcmRpYyBXZWIgSG90ZWwgT3kxFjAUBgNVBAsMDVdlYmhvdGVsbGkuZmkxHjAcBgNVBAMMFXRhdmFyYW50YXJrYXN0YWphLmNvbTEhMB8GCSqGSIb3DQEJARYSdHVraUB3ZWJob3RlbGxpLmZpMRAwDgYDVQQIDAdVdXNpbWFhMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzZyGfg+Sil+OsCJh/xxw0tSVTtFHKv1yok/g7Ev/fdqhnsBlERjhuotevy+9g3QZcPwaw7bquxAQ4JRY+hL4D+/o7vNOFynIOo1NmP5yY/x+OFyugwRBPgvY8eSxj8yY0y3hPzgQPtIWdHo5c7+t9bjuyGTpK2UIr64UTHAxjSkibo8CCTI2UMn/EP3eHgLlkBpeiFUGo9BwMBHpJyR9hVa2POOu7gSC6nPg7KDzV1nfWmb/rHkRX+wdDRCG87cMkkcV1IqlLKY1v2vS+tiNNrf/GyBgPfzyMQ86/27msbHks9YQSHbTtfarRXAvP8+w++dLFfIJj7SeeLOCr8kPVwIDAQABo00wSzAdBgNVHQ4EFgQUqo11U4+qj+S8MqXZG/SfJbU6C7AwHwYDVR0jBBgwFoAUqo11U4+qj+S8MqXZG/SfJbU6C7AwCQYDVR0TBAIwADANBgkqhkiG9w0BAQsFAAOCAQEAlaDNmY7+h2FQ2a1R/4lkN3C1p1JJ5w1sydqQJ95Xp6Jzu8yQ+p3FQeHQlIGy6Cv1fPURTq0aTjKK4v2M2sXheLP43Yg5ak9wIuHojpiiYDmKbDWlMjTD34WHEWO9F4w9apeQtTlEDlEpvUWtoqUQphJNZkTdu1HG0T4OyrCvsSONMCvYvxJy7TgEHTDmTT4NzjNLk25AcfzeBc6siOfcMwKQLmMgvKHOHIePPzvekFkstC3UM+z7kqih+1YEJpdeMU176Bm2Zw92DlyISXXmFfjmj6EY76e6Lz1jvg7x4D53NJhzjnQ+YGvS7t0wNa1YiRUjo2AYn6qpZAXA3r0PcA==",
-      "tags": Array [
+      "tags": [
         "expired",
       ],
-      "validation": Object {
-        "apple": Object {
+      "validation": {
+        "apple": {
           "blacklisted": false,
           "had_trusted_path": false,
           "in_revocation_set": false,
-          "parents": Array [],
-          "paths": Array [],
+          "parents": [],
+          "paths": [],
           "trusted_path": false,
           "type": "unknown",
           "valid": false,
           "was_valid": false,
           "whitelisted": false,
         },
-        "google_ct_primary": Object {
+        "google_ct_primary": {
           "blacklisted": false,
           "had_trusted_path": false,
           "in_revocation_set": false,
-          "parents": Array [],
-          "paths": Array [],
+          "parents": [],
+          "paths": [],
           "trusted_path": false,
           "type": "unknown",
           "valid": false,
           "was_valid": false,
           "whitelisted": false,
         },
-        "microsoft": Object {
+        "microsoft": {
           "blacklisted": false,
           "had_trusted_path": false,
           "in_revocation_set": false,
-          "parents": Array [],
-          "paths": Array [],
+          "parents": [],
+          "paths": [],
           "trusted_path": false,
           "type": "unknown",
           "valid": false,
           "was_valid": false,
           "whitelisted": false,
         },
-        "nss": Object {
+        "nss": {
           "blacklisted": false,
           "had_trusted_path": false,
           "in_revocation_set": false,
-          "parents": Array [],
-          "paths": Array [],
+          "parents": [],
+          "paths": [],
           "trusted_path": false,
           "type": "unknown",
           "valid": false,
@@ -1316,10 +1316,10 @@ Array [
           "whitelisted": false,
         },
       },
-      "zlint": Object {
+      "zlint": {
         "errors_present": true,
         "fatals_present": false,
-        "lints": Object {
+        "lints": {
           "e_basic_constraints_not_critical": "na",
           "e_ca_common_name_missing": "na",
           "e_ca_country_name_invalid": "na",
@@ -1554,17 +1554,17 @@ Array [
     "organization": null,
     "reverseName": "gov.first_file_testdomain4.subdomain",
     "screenshot": null,
-    "services": Array [],
-    "ssl": Object {
-      "altNames": Array [
+    "services": [],
+    "ssl": {
+      "altNames": [
         "tavarantarkastaja.com",
         "subdomain.first_file_testdomain4.gov",
       ],
       "fingerprint": "MIIEIzCCAwugAwIBAgIECWoIJTANBgkqhkiG9w0BAQsFADCBqzELMAkGA1UEBhMCRkkxETAPBgNVBAcMCEhlbHNpbmtpMRwwGgYDVQQKDBNOb3JkaWMgV2ViIEhvdGVsIE95MRYwFAYDVQQLDA1XZWJob3RlbGxpLmZpMR4wHAYDVQQDDBV0YXZhcmFudGFya2FzdGFqYS5jb20xITAfBgkqhkiG9w0BCQEWEnR1a2lAd2ViaG90ZWxsaS5maTEQMA4GA1UECAwHVXVzaW1hYTAeFw0xODAyMTMxMzM2MjZaFw0xOTAyMTMxMzM2MjZaMIGrMQswCQYDVQQGEwJGSTERMA8GA1UEBwwISGVsc2lua2kxHDAaBgNVBAoME05vcmRpYyBXZWIgSG90ZWwgT3kxFjAUBgNVBAsMDVdlYmhvdGVsbGkuZmkxHjAcBgNVBAMMFXRhdmFyYW50YXJrYXN0YWphLmNvbTEhMB8GCSqGSIb3DQEJARYSdHVraUB3ZWJob3RlbGxpLmZpMRAwDgYDVQQIDAdVdXNpbWFhMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzZyGfg+Sil+OsCJh/xxw0tSVTtFHKv1yok/g7Ev/fdqhnsBlERjhuotevy+9g3QZcPwaw7bquxAQ4JRY+hL4D+/o7vNOFynIOo1NmP5yY/x+OFyugwRBPgvY8eSxj8yY0y3hPzgQPtIWdHo5c7+t9bjuyGTpK2UIr64UTHAxjSkibo8CCTI2UMn/EP3eHgLlkBpeiFUGo9BwMBHpJyR9hVa2POOu7gSC6nPg7KDzV1nfWmb/rHkRX+wdDRCG87cMkkcV1IqlLKY1v2vS+tiNNrf/GyBgPfzyMQ86/27msbHks9YQSHbTtfarRXAvP8+w++dLFfIJj7SeeLOCr8kPVwIDAQABo00wSzAdBgNVHQ4EFgQUqo11U4+qj+S8MqXZG/SfJbU6C7AwHwYDVR0jBBgwFoAUqo11U4+qj+S8MqXZG/SfJbU6C7AwCQYDVR0TBAIwADANBgkqhkiG9w0BAQsFAAOCAQEAlaDNmY7+h2FQ2a1R/4lkN3C1p1JJ5w1sydqQJ95Xp6Jzu8yQ+p3FQeHQlIGy6Cv1fPURTq0aTjKK4v2M2sXheLP43Yg5ak9wIuHojpiiYDmKbDWlMjTD34WHEWO9F4w9apeQtTlEDlEpvUWtoqUQphJNZkTdu1HG0T4OyrCvsSONMCvYvxJy7TgEHTDmTT4NzjNLk25AcfzeBc6siOfcMwKQLmMgvKHOHIePPzvekFkstC3UM+z7kqih+1YEJpdeMU176Bm2Zw92DlyISXXmFfjmj6EY76e6Lz1jvg7x4D53NJhzjnQ+YGvS7t0wNa1YiRUjo2AYn6qpZAXA3r0PcA==",
-      "issuerCN": Array [
+      "issuerCN": [
         "tavarantarkastaja.com",
       ],
-      "issuerOrg": Array [
+      "issuerOrg": [
         "Nordic Web Hotel Oy",
       ],
       "validFrom": "2018-02-13 13:36:26 UTC",
@@ -1578,10 +1578,10 @@ Array [
 `;
 
 exports[`censys certificates http failure should retry 1`] = `
-Array [
-  Object {
+[
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1593,15 +1593,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain1",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1613,15 +1613,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain10",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1633,15 +1633,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain11",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1653,15 +1653,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain12",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1673,15 +1673,15 @@ Array [
     "organization": null,
     "reverseName": "gov.first_file_testdomain3",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1693,15 +1693,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain5",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1713,15 +1713,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain6",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1733,15 +1733,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain7",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1753,15 +1753,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain8",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1773,15 +1773,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain9",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1793,15 +1793,15 @@ Array [
     "organization": null,
     "reverseName": "gov.first_file_testdomain2.subdomain",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1813,7 +1813,7 @@ Array [
     "organization": null,
     "reverseName": "gov.first_file_testdomain4.subdomain",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
@@ -1823,10 +1823,10 @@ Array [
 `;
 
 exports[`censys certificates repeated http failures should throw an error 1`] = `
-Array [
-  Object {
+[
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1838,15 +1838,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain1",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1858,15 +1858,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain10",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1878,15 +1878,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain11",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1898,15 +1898,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain12",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1918,15 +1918,15 @@ Array [
     "organization": null,
     "reverseName": "gov.first_file_testdomain3",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1938,15 +1938,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain5",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1958,15 +1958,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain6",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1978,15 +1978,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain7",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -1998,15 +1998,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain8",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -2018,15 +2018,15 @@ Array [
     "organization": null,
     "reverseName": "first_file_testdomain9",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -2038,15 +2038,15 @@ Array [
     "organization": null,
     "reverseName": "gov.first_file_testdomain2.subdomain",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
     "updatedAt": null,
   },
-  Object {
+  {
     "asn": null,
-    "censysCertificatesResults": Object {},
+    "censysCertificatesResults": {},
     "cloudHosted": false,
     "country": null,
     "createdAt": null,
@@ -2058,7 +2058,7 @@ Array [
     "organization": null,
     "reverseName": "gov.first_file_testdomain4.subdomain",
     "screenshot": null,
-    "services": Array [],
+    "services": [],
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,

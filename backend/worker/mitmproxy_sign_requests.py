@@ -61,6 +61,7 @@ test = os.getenv("WORKER_TEST", None) is not None
 
 if test:
     # This is a test RSA private key and not used in any deployed environment
+    # file deepcode ignore HardcodedNonCryptoSecret: <please specify a reason of ignoring this>
     private_key = """-----BEGIN RSA PRIVATE KEY-----
 MIICXgIBAAKBgQDCFENGw33yGihy92pDjZQhl0C36rPJj+CvfSC8+q28hxA161QF
 NUd13wuCTUcq0Qd2qsBe/2hFyc2DCJJg0h1L78+6Z4UMR7EOcpfdUE9Hf3m/hs+F

@@ -1,4 +1,3 @@
-import { mocked } from 'jest-mock';
 import { getLiveWebsites, LiveDomain } from '../helpers/getLiveWebsites';
 import { Domain, Service, connectToDatabase, Organization } from '../../models';
 import { CommandOptions } from '../ecs-client';
@@ -8,7 +7,7 @@ import * as nock from 'nock';
 const axios = require('axios');
 
 jest.mock('../helpers/getLiveWebsites');
-const getLiveWebsitesMock = mocked(getLiveWebsites);
+const getLiveWebsitesMock = jest.mocked(getLiveWebsites);
 
 jest.mock('../helpers/simple-wappalyzer');
 const wappalyzer = require('../helpers/simple-wappalyzer')
