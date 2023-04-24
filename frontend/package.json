@@ -63,7 +63,7 @@
     "react-lazylog": "^4.5.3",
     "react-markdown": "^8.0.3",
     "react-media": "^1.10.0",
-    "react-router-dom": "^5.0.0",
+    "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
     "react-select": "^5.5.9",
     "react-simple-maps": "^3.0.0",
