@@ -1,1 +1,6 @@
 node_modules
+.cache
+./docs/node_modules
+./docs/.cache
+**/node_modules
+**/.cache

@@ -25,7 +25,10 @@ export class Organization extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
+  @Column({
+    length: 128,
+    type: 'varchar'
+  })
   name: string;
 
   @Column('varchar', { array: true })

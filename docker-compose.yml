@@ -60,7 +60,7 @@ services:
   docs:
     build:
       context: ./
-      dockerfile: ./docs/Dockerfile
+      dockerfile: ./Dockerfile.docs
     volumes:
       - ./docs/src:/app/docs/src
       - ./docs/gatsby-browser.js:/app/docs/gatsby-browser.js
@@ -103,7 +103,7 @@ services:
   #     LOGGING_QUIET: 'true'
 
   matomodb:
-    image: mariadb:10.5
+    image: mariadb:10.11.2
     command: --max-allowed-packet=64MB
     networks:
       - backend

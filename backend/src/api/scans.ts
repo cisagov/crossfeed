@@ -55,6 +55,12 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: true,
     description: 'Not a real scan, used to test proxy'
   },
+  test: {
+    type: 'fargate',
+    isPassive: false,
+    global: true,
+    description: 'Not a real scan, used to test'
+  },
   censys: {
     type: 'fargate',
     isPassive: true,
