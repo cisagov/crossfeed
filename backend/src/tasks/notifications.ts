@@ -50,7 +50,7 @@ export const handler: Handler = async (event) => {
     // loop through reports
     for (const report in reportsList) {
       // check if organization was notified about report
-      if (reportsList[report].LastModified >= organizations[org].notifiedAt) {
+      if (reportsList[report].lastModified >= organizations[org].notifiedAt) {
         for (const role in roles) {
           await sendReportEmail(roles[role].user.email, organizations[org]);
         }
