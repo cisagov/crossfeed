@@ -42,7 +42,8 @@ const shodanResponse = [
         timestamp: '2020-12-16T20:00:25.339321',
         domains: ['otakukonkatsu.com'],
         org: 'SAKURA Internet',
-        data: '* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.\n* CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN\r\nA001 OK Capability completed.\r\n* ID NIL\r\nA002 OK ID completed.\r\nA003 BAD Error in IMAP command received by server.\r\n',
+        data:
+          '* OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN] Dovecot ready.\n* CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE AUTH=PLAIN AUTH=LOGIN\r\nA001 OK Capability completed.\r\n* ID NIL\r\nA002 OK ID completed.\r\nA003 BAD Error in IMAP command received by server.\r\n',
         asn: 'AS7684',
         transport: 'tcp',
         ip_str: '153.126.148.60',
