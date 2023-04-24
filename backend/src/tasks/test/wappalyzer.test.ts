@@ -7,7 +7,7 @@ import * as nock from 'nock';
 const axios = require('axios');
 
 jest.mock('../helpers/getLiveWebsites');
-const getLiveWebsitesMock = jest.mocked(getLiveWebsites);
+const getLiveWebsitesMock = getLiveWebsites as jest.Mock;
 
 jest.mock('../helpers/simple-wappalyzer');
 const wappalyzer = require('../helpers/simple-wappalyzer')

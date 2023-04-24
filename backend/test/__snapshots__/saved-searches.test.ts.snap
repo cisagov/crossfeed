@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`saved-search create create by user should succeed 1`] = `
-{
+Object {
   "count": 3,
   "createVulnerabilities": false,
   "createdAt": Any<String>,
-  "createdBy": {
+  "createdBy": Object {
     "id": Any<String>,
   },
-  "filters": [],
+  "filters": Array [],
   "id": Any<String>,
   "name": Any<String>,
   "searchPath": "",
@@ -16,6 +16,6 @@ exports[`saved-search create create by user should succeed 1`] = `
   "sortDirection": "",
   "sortField": "",
   "updatedAt": Any<String>,
-  "vulnerabilityTemplate": {},
+  "vulnerabilityTemplate": Object {},
 }
 `;

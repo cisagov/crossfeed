@@ -300,8 +300,7 @@ export class Service extends BaseEntity {
         // TODO: Improve methods for getting CPEs from Censys
         // See https://www.napier.ac.uk/~/media/worktribe/output-1500093/identifying-vulnerabilities-using-internet-wide-scanning-data.pdf
         // and https://github.com/TheHairyJ/Scout
-        cpe =
-          `cpe:/a:${this.censysMetadata.manufacturer}:${this.censysMetadata.product}`.toLowerCase();
+        cpe = `cpe:/a:${this.censysMetadata.manufacturer}:${this.censysMetadata.product}`.toLowerCase();
       }
       const product = {
         name: this.censysMetadata.product,

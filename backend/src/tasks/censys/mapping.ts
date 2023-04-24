@@ -1,7 +1,9 @@
 import { CensysIpv4Data } from '../../models/generated/censysIpv4';
 
 type Mapping = {
-  [x in keyof CensysIpv4Data]: (service: CensysIpv4Data[x]) => {
+  [x in keyof CensysIpv4Data]: (
+    service: CensysIpv4Data[x]
+  ) => {
     banner?: string | null;
     censysMetadata?: {
       product?: string;

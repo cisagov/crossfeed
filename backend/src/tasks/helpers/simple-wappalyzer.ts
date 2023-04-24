@@ -28,32 +28,68 @@ import { setTechnologies, setCategories, analyze } from 'wappalyzer-core';
 import { chain, mapValues } from 'lodash';
 import { JSDOM, VirtualConsole } from 'jsdom';
 import { Cookie } from 'tough-cookie';
+import * as categories from 'wappalyzer/categories.json';
+import * as _ from 'wappalyzer/technologies/_.json';
+import * as a from 'wappalyzer/technologies/a.json';
+import * as b from 'wappalyzer/technologies/b.json';
+import * as c from 'wappalyzer/technologies/c.json';
+import * as d from 'wappalyzer/technologies/d.json';
+import * as e from 'wappalyzer/technologies/e.json';
+import * as f from 'wappalyzer/technologies/f.json';
+import * as g from 'wappalyzer/technologies/g.json';
+import * as h from 'wappalyzer/technologies/h.json';
+import * as i from 'wappalyzer/technologies/i.json';
+import * as j from 'wappalyzer/technologies/j.json';
+import * as k from 'wappalyzer/technologies/k.json';
+import * as l from 'wappalyzer/technologies/l.json';
+import * as m from 'wappalyzer/technologies/m.json';
+import * as n from 'wappalyzer/technologies/n.json';
+import * as o from 'wappalyzer/technologies/o.json';
+import * as p from 'wappalyzer/technologies/p.json';
+import * as q from 'wappalyzer/technologies/q.json';
+import * as r from 'wappalyzer/technologies/r.json';
+import * as s from 'wappalyzer/technologies/s.json';
+import * as t from 'wappalyzer/technologies/t.json';
+import * as u from 'wappalyzer/technologies/u.json';
+import * as v from 'wappalyzer/technologies/v.json';
+import * as w from 'wappalyzer/technologies/w.json';
+import * as x from 'wappalyzer/technologies/x.json';
+import * as y from 'wappalyzer/technologies/y.json';
+import * as z from 'wappalyzer/technologies/z.json';
+import * as customTechnologies from './technologies.json';
 
 const fs = require('fs');
 const path = require('path');
 
-//const Wappalyzer = require('wappalyzer');
-
-const categories = JSON.parse(
-  fs.readFileSync(path.resolve(`node_modules/wappalyzer/categories.json`))
-);
-
-let outOfTheBoxTechnologies = {};
-
-for (const index of Array(27).keys()) {
-  const character = index ? String.fromCharCode(index + 96) : '_';
-
-  outOfTheBoxTechnologies = {
-    ...outOfTheBoxTechnologies,
-    ...JSON.parse(
-      fs.readFileSync(
-        path.resolve(`node_modules/wappalyzer/technologies/${character}.json`)
-      )
-    )
-  };
-}
-
-const data = require('./technologies.json');
+const outOfTheBoxTechnologies = {
+  ..._,
+  ...a,
+  ...b,
+  ...c,
+  ...d,
+  ...e,
+  ...f,
+  ...g,
+  ...h,
+  ...i,
+  ...j,
+  ...k,
+  ...l,
+  ...m,
+  ...n,
+  ...o,
+  ...p,
+  ...q,
+  ...r,
+  ...s,
+  ...t,
+  ...u,
+  ...v,
+  ...w,
+  ...x,
+  ...y,
+  ...z
+};
 
 const parseCookie = (str) => Cookie!.parse(str)!.toJSON();
 
@@ -81,9 +117,24 @@ const getMeta = (document) =>
   );
 
 export const technologies = {
-  ...data.technologies,
+  ...customTechnologies,
   ...outOfTheBoxTechnologies
 };
+
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
+for (const technology of Object.values(technologies)) {
+  // Handles various regex errors with wappalyzer -- we get errors such as the following:
+  // SyntaxError: Invalid regular expression: /link[href*='\/wp-content\/plugins\/amp\/']/: Range out of order in character class
+  if ((technology as any).dom && typeof (technology as any).dom === 'string') {
+    (technology as any).dom = escapeRegExp((technology as any).dom);
+  }
+  if ((technology as any).dom && Array.isArray((technology as any).dom)) {
+    (technology as any).dom = (technology as any).dom.map(escapeRegExp);
+  }
+}
 
 setTechnologies(technologies);
 setCategories(categories);

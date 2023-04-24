@@ -158,9 +158,8 @@ describe('search', () => {
 });
 
 describe('buildRequest', () => {
-  const buildRequest = jest.requireActual(
-    '../src/api/search/buildRequest'
-  ).buildRequest;
+  const buildRequest = jest.requireActual('../src/api/search/buildRequest')
+    .buildRequest;
   test('sample request by global admin', () => {
     const req = buildRequest(
       {
