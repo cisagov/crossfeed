@@ -1,24 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`stats get get by globalView should filter domains to a single org if specified 1`] = `
-{
-  "domains": {
-    "numVulnerabilities": [
-      {
+Object {
+  "domains": Object {
+    "numVulnerabilities": Array [
+      Object {
         "id": Any<String>,
         "label": Any<String>,
         "value": 1,
       },
     ],
-    "ports": [
-      {
+    "ports": Array [
+      Object {
         "id": "80",
         "label": "80",
         "value": 1,
       },
     ],
-    "services": [
-      {
+    "services": Array [
+      Object {
         "id": "http",
         "label": "http",
         "value": 1,
@@ -26,27 +26,27 @@ exports[`stats get get by globalView should filter domains to a single org if sp
     ],
     "total": 1,
   },
-  "vulnerabilities": {
-    "byOrg": [
-      {
+  "vulnerabilities": Object {
+    "byOrg": Array [
+      Object {
         "id": Any<String>,
         "label": Any<String>,
         "orgId": Any<String>,
         "value": 1,
       },
     ],
-    "latestVulnerabilities": [
-      {
-        "actions": [],
+    "latestVulnerabilities": Array [
+      Object {
+        "actions": Array [],
         "cpe": null,
         "createdAt": Any<String>,
         "cve": null,
         "cvss": "9",
         "cwe": null,
         "description": "",
-        "domain": {
+        "domain": Object {
           "asn": null,
-          "censysCertificatesResults": {},
+          "censysCertificatesResults": Object {},
           "cloudHosted": false,
           "country": null,
           "createdAt": Any<String>,
@@ -64,30 +64,30 @@ exports[`stats get get by globalView should filter domains to a single org if sp
         },
         "id": Any<String>,
         "isKev": false,
-        "kevResults": {},
+        "kevResults": Object {},
         "lastSeen": null,
         "needsPopulation": false,
         "notes": "",
-        "references": [],
+        "references": Array [],
         "severity": "Critical",
         "source": "cpe2cve",
         "state": "open",
-        "structuredData": {},
+        "structuredData": Object {},
         "substate": "unconfirmed",
         "title": "vuln title",
         "updatedAt": Any<String>,
       },
     ],
-    "mostCommonVulnerabilities": [
-      {
+    "mostCommonVulnerabilities": Array [
+      Object {
         "count": "1",
         "description": "",
         "severity": "Critical",
         "title": "vuln title",
       },
     ],
-    "severity": [
-      {
+    "severity": Array [
+      Object {
         "id": "Critical",
         "label": "Critical",
         "value": 1,
@@ -98,24 +98,24 @@ exports[`stats get get by globalView should filter domains to a single org if sp
 `;
 
 exports[`stats get get by org user should return only domains from that org 1`] = `
-{
-  "domains": {
-    "numVulnerabilities": [
-      {
+Object {
+  "domains": Object {
+    "numVulnerabilities": Array [
+      Object {
         "id": Any<String>,
         "label": Any<String>,
         "value": 1,
       },
     ],
-    "ports": [
-      {
+    "ports": Array [
+      Object {
         "id": "80",
         "label": "80",
         "value": 1,
       },
     ],
-    "services": [
-      {
+    "services": Array [
+      Object {
         "id": "http",
         "label": "http",
         "value": 1,
@@ -123,27 +123,27 @@ exports[`stats get get by org user should return only domains from that org 1`] 
     ],
     "total": 1,
   },
-  "vulnerabilities": {
-    "byOrg": [
-      {
+  "vulnerabilities": Object {
+    "byOrg": Array [
+      Object {
         "id": Any<String>,
         "label": Any<String>,
         "orgId": Any<String>,
         "value": 1,
       },
     ],
-    "latestVulnerabilities": [
-      {
-        "actions": [],
+    "latestVulnerabilities": Array [
+      Object {
+        "actions": Array [],
         "cpe": null,
         "createdAt": Any<String>,
         "cve": null,
         "cvss": "9",
         "cwe": null,
         "description": "",
-        "domain": {
+        "domain": Object {
           "asn": null,
-          "censysCertificatesResults": {},
+          "censysCertificatesResults": Object {},
           "cloudHosted": false,
           "country": null,
           "createdAt": Any<String>,
@@ -161,30 +161,30 @@ exports[`stats get get by org user should return only domains from that org 1`] 
         },
         "id": Any<String>,
         "isKev": false,
-        "kevResults": {},
+        "kevResults": Object {},
         "lastSeen": null,
         "needsPopulation": false,
         "notes": "",
-        "references": [],
+        "references": Array [],
         "severity": "Critical",
         "source": "cpe2cve",
         "state": "open",
-        "structuredData": {},
+        "structuredData": Object {},
         "substate": "unconfirmed",
         "title": "vuln title",
         "updatedAt": Any<String>,
       },
     ],
-    "mostCommonVulnerabilities": [
-      {
+    "mostCommonVulnerabilities": Array [
+      Object {
         "count": "1",
         "description": "",
         "severity": "Critical",
         "title": "vuln title",
       },
     ],
-    "severity": [
-      {
+    "severity": Array [
+      Object {
         "id": "Critical",
         "label": "Critical",
         "value": 1,

@@ -44,8 +44,7 @@ RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/
 RUN export LD_LIBRARY_PATH=/opt/OpenBLAS/lib:$LD_LIBRARY_PATH
 
 # Install pe-source module
-# Sync the latest from cf-staging branch
-RUN git clone -b cf-source-staging https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout c9cbbd73b22ef38cabe1da6ba50aeb2dc0be4f99 && pip install . 
+RUN git https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout c9cbbd73b22ef38cabe1da6ba50aeb2dc0be4f99 && pip install . 
 
 # Python dependencies
 
