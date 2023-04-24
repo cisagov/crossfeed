@@ -331,9 +331,8 @@ const populateVulnerabilitiesFromNVD = async () => {
 
 // Populate CVE details from the CISA Known Exploited Vulnerabilities (KEV) database.
 const populateVulnerabilitiesFromKEV = async () => {
-  const response: AxiosResponse<CISACatalogOfKnownExploitedVulnerabilities> = await axios.get(
-    KEV_URL
-  );
+  const response: AxiosResponse<CISACatalogOfKnownExploitedVulnerabilities> =
+    await axios.get(KEV_URL);
   const { vulnerabilities: kevVulns } = response.data;
   for (const kevVuln of kevVulns) {
     const { affected = 0 } = await Vulnerability.update(
