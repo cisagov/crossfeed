@@ -67,3 +67,5 @@ export const callback = async function (body) {
   const userInfo = await client.userinfo(tokenSet);
   return userInfo;
 };
+
+export default { login, callback };

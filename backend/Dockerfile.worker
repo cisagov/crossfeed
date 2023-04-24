@@ -9,6 +9,7 @@ RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
 
 COPY tsconfig.json ./tsconfig.json
 COPY webpack.worker.config.js ./webpack.worker.config.js
+COPY mock.js ./mock.js
 COPY src ./src
 
 RUN npx webpack --config webpack.worker.config.js

@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '16'
       - name: Restore npm cache
         uses: actions/cache@v3
         with:
@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '16'
       - name: Restore npm cache
         uses: actions/cache@v3
         with:
@@ -72,6 +72,38 @@ jobs:
         run: npx sls package
         env:
           SLS_DEBUG: '*'
+  test_worker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Restore npm cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npx webpack --config webpack.worker.config.js
+      - name: Run db locally
+        run: |
+          cp dev.env.example .env
+          docker-compose up -d db
+          npm install -g wait-port
+          wait-port -t 3000 5432
+        working-directory: ./
+      - name: Test
+        run: node dist/worker.bundle.js
+        env:
+          CROSSFEED_COMMAND_OPTIONS: '{"scanName": "test"}'
+          DB_USERNAME: crossfeed
+          DB_PASSWORD: password
   test_python:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -80,7 +112,7 @@ jobs:
       - name: Set up Python 3.10
         uses: actions/setup-python@v4.2.0
         with:
-          python-version: '3.10'
+          python-version: "3.10"
       - uses: actions/cache@v3
         with:
           path: ~/.cache/pip
@@ -96,7 +128,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '16'
       - name: Restore npm cache
         uses: actions/cache@v3
         with:
@@ -110,7 +142,7 @@ jobs:
         run: npm run build-worker
         working-directory: ./backend
   deploy_staging:
-    needs: [build_worker, lint, test, test_python]
+    needs: [build_worker, lint, test, test_worker, test_python]
     runs-on: ubuntu-latest
     environment: staging
     concurrency: 1
@@ -119,7 +151,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '16'
       - name: Restore npm cache
         uses: actions/cache@v3
         with:
@@ -129,7 +161,7 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: npm ci
-
+      
       - name: Ensure domain exists
         run: npx sls create_domain --stage=staging
         env:
@@ -168,7 +200,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '16'
       - name: Restore npm cache
         uses: actions/cache@v3
         with:
