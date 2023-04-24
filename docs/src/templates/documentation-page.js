@@ -43,7 +43,7 @@ const DocumentationPage = ({ data, location }) => {
               {fields.slug === '/dev/architecture/' && (
                 <div style={{ marginTop: 20 }}>
                   <iframe
-                    srcDoc={diagramHTML}
+                    srcDoc={diagramHTML.default}
                     style={{ width: '100%', minHeight: 800, border: 0 }}
                   ></iframe>
                 </div>
