@@ -49,24 +49,6 @@ interface ScanSchema {
 }
 
 export const SCAN_SCHEMA: ScanSchema = {
-  testProxy: {
-    type: 'fargate',
-    isPassive: false,
-    global: true,
-    description: 'Not a real scan, used to test proxy'
-  },
-  test: {
-    type: 'fargate',
-    isPassive: false,
-    global: true,
-    description: 'Not a real scan, used to test'
-  },
-  censys: {
-    type: 'fargate',
-    isPassive: true,
-    global: false,
-    description: 'Passive discovery of subdomains from public certificates'
-  },
   amass: {
     type: 'fargate',
     isPassive: false,
@@ -74,51 +56,11 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Open source tool that integrates passive APIs and active subdomain enumeration in order to discover target subdomains'
   },
-  findomain: {
+  censys: {
     type: 'fargate',
     isPassive: true,
     global: false,
-    description:
-      'Open source tool that integrates passive APIs in order to discover target subdomains'
-  },
-  portscanner: {
-    type: 'fargate',
-    isPassive: false,
-    global: false,
-    description: 'Active port scan of common ports'
-  },
-  wappalyzer: {
-    type: 'fargate',
-    isPassive: true,
-    global: false,
-    cpu: '1024',
-    memory: '4096',
-    description:
-      'Open source tool that fingerprints web technologies based on HTTP responses'
-  },
-  shodan: {
-    type: 'fargate',
-    isPassive: true,
-    global: false,
-    description:
-      'Fetch passive port, banner, and vulnerability data from shodan',
-    cpu: '1024',
-    memory: '8192'
-  },
-  sslyze: {
-    type: 'fargate',
-    isPassive: true,
-    global: false,
-    description: 'SSL certificate inspection'
-  },
-  censysIpv4: {
-    type: 'fargate',
-    isPassive: true,
-    global: true,
-    cpu: '2048',
-    memory: '6144',
-    numChunks: 20,
-    description: 'Fetch passive port and banner data from censys ipv4 dataset'
+    description: 'Passive discovery of subdomains from public certificates'
   },
   censysCertificates: {
     type: 'fargate',
@@ -129,6 +71,15 @@ export const SCAN_SCHEMA: ScanSchema = {
     numChunks: 20,
     description: 'Fetch TLS certificate data from censys certificates dataset'
   },
+  censysIpv4: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    cpu: '2048',
+    memory: '6144',
+    numChunks: 20,
+    description: 'Fetch passive port and banner data from censys ipv4 dataset'
+  },
   cve: {
     type: 'fargate',
     isPassive: true,
@@ -137,55 +88,6 @@ export const SCAN_SCHEMA: ScanSchema = {
     memory: '8192',
     description:
       "Matches detected software versions to CVEs from NIST NVD and CISA's Known Exploited Vulnerabilities Catalog."
-  },
-  dotgov: {
-    type: 'fargate',
-    isPassive: true,
-    global: true,
-    description:
-      'Create organizations based on root domains from the dotgov registrar dataset. All organizations are created with the "dotgov" tag and have a " (dotgov)" suffix added to their name.'
-  },
-  searchSync: {
-    type: 'fargate',
-    isPassive: true,
-    global: true,
-    cpu: '1024',
-    memory: '4096',
-    description:
-      'Syncs records with Elasticsearch so that they appear in search results.'
-  },
-  intrigueIdent: {
-    type: 'fargate',
-    isPassive: true,
-    global: false,
-    cpu: '1024',
-    memory: '4096',
-    description:
-      'Open source tool that fingerprints web technologies based on HTTP responses'
-  },
-  webscraper: {
-    type: 'fargate',
-    isPassive: true,
-    global: true,
-    numChunks: 3,
-    cpu: '1024',
-    memory: '4096',
-    description: 'Scrapes all webpages on a given domain, respecting robots.txt'
-  },
-  hibp: {
-    type: 'fargate',
-    isPassive: true,
-    global: false,
-    cpu: '2048',
-    memory: '16384',
-    description:
-      'Finds emails that have appeared in breaches related to a given domain'
-  },
-  lookingGlass: {
-    type: 'fargate',
-    isPassive: true,
-    global: false,
-    description: 'Finds vulnerabilities and malware from the LookingGlass API'
   },
   dnstwist: {
     type: 'fargate',
@@ -196,18 +98,56 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Domain name permutation engine for detecting similar registered domains.'
   },
-  peDomMasq: {
+  dotgov: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    description:
+      'Create organizations based on root domains from the dotgov registrar dataset. All organizations are created with the "dotgov" tag and have a " (dotgov)" suffix added to their name.'
+  },
+  findomain: {
     type: 'fargate',
     isPassive: true,
     global: false,
     description:
-      'Fetch DNSTwist data, check IPs on blocklist.de, then sync to PE db instance.'
+      'Open source tool that integrates passive APIs in order to discover target subdomains'
+  },
+  hibp: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    cpu: '2048',
+    memory: '16384',
+    description:
+      'Finds emails that have appeared in breaches related to a given domain'
+  },
+  intrigueIdent: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    cpu: '1024',
+    memory: '4096',
+    description:
+      'Open source tool that fingerprints web technologies based on HTTP responses'
+  },
+  lookingGlass: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'Finds vulnerabilities and malware from the LookingGlass API'
   },
   peCybersixgill: {
     type: 'fargate',
     isPassive: true,
     global: false,
     description: 'Run P&E Cybersixgill scripts and add to PE db instance.'
+  },
+  peDomMasq: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Fetch DNSTwist data, check IPs on blocklist.de, then sync to PE db instance.'
   },
   peHibpSync: {
     type: 'fargate',
@@ -224,6 +164,12 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Run organization IPs through shodan and circl to find un/verified vulns and save them to PE db.'
   },
+  portscanner: {
+    type: 'fargate',
+    isPassive: false,
+    global: false,
+    description: 'Active port scan of common ports'
+  },
   rootDomainSync: {
     type: 'fargate',
     isPassive: true,
@@ -236,6 +182,67 @@ export const SCAN_SCHEMA: ScanSchema = {
     isPassive: true,
     global: true,
     description: 'Performs saved searches to update their search results'
+  },
+  searchSync: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    cpu: '1024',
+    memory: '4096',
+    description:
+      'Syncs records with Elasticsearch so that they appear in search results.'
+  },
+  shodan: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Fetch passive port, banner, and vulnerability data from shodan',
+    cpu: '1024',
+    memory: '8192'
+  },
+  sslyze: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'SSL certificate inspection'
+  },
+  test: {
+    type: 'fargate',
+    isPassive: false,
+    global: true,
+    description: 'Not a real scan, used to test'
+  },
+  testProxy: {
+    type: 'fargate',
+    isPassive: false,
+    global: true,
+    description: 'Not a real scan, used to test proxy'
+  },
+  trustymail: {
+    type: 'fargate',
+    isPassive: false,
+    global: true,
+    description:
+      'Evaluates SPF/DMARC records and checks MX records for STARTTLS support'
+  },
+  wappalyzer: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    cpu: '1024',
+    memory: '4096',
+    description:
+      'Open source tool that fingerprints web technologies based on HTTP responses'
+  },
+  webscraper: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    numChunks: 3,
+    cpu: '1024',
+    memory: '4096',
+    description: 'Scrapes all webpages on a given domain, respecting robots.txt'
   }
 };
 
