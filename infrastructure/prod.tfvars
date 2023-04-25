@@ -62,3 +62,5 @@ es_instance_count                 = 3
 es_instance_volume_size           = 512
 create_db_accessor_instance       = true
 db_accessor_instance_class        = "t3.2xlarge"
+create_elk_instance               = false
+elk_instance_class                = "t3.2xlarge"

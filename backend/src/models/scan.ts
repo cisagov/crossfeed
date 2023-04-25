@@ -24,7 +24,10 @@ export class Scan extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
+  @Column({
+    length: 128,
+    type: 'varchar'
+  })
   name: string;
 
   @Column('json')

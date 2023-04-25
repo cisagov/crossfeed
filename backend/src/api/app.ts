@@ -4,7 +4,6 @@ import * as cookie from 'cookie';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
 import { handler as healthcheck } from './healthcheck';
-import { handler as scheduler } from '../tasks/scheduler';
 import * as auth from './auth';
 import * as domains from './domains';
 import * as search from './search';
@@ -15,8 +14,8 @@ import * as users from './users';
 import * as scanTasks from './scan-tasks';
 import * as stats from './stats';
 import * as apiKeys from './api-keys';
+import * as reports from './reports';
 import * as savedSearches from './saved-searches';
-import { listenForDockerEvents } from './docker-events';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { UserType } from '../models';
 
@@ -24,8 +23,11 @@ if (
   (process.env.IS_OFFLINE || process.env.IS_LOCAL) &&
   typeof jest === 'undefined'
 ) {
+  // Run scheduler during local development. When deployed on AWS,
+  // the scheduler runs on a separate lambda function.
+  const { handler: scheduler } = require('../tasks/scheduler');
+  const { listenForDockerEvents } = require('./docker-events');
   listenForDockerEvents();
-
   setInterval(() => scheduler({}, {} as any, () => null), 30000);
 }
 
@@ -152,6 +154,20 @@ const matomoProxy = createProxyMiddleware({
   }
 });
 
+/**
+ * @swagger
+ *
+ * /pe:
+ *  get:
+ *    description: All paths under /pe proxy to the P&E django application and API. Only a global admin can access.
+ */
+const peProxy = createProxyMiddleware({
+  target: process.env.PE_API_URL,
+  pathRewrite: function (path, req) {
+    return path.replace(/^\/pe/, '');
+  }
+});
+
 app.use(
   '/matomo',
   async (req, res, next) => {
@@ -188,6 +204,24 @@ app.use(
   matomoProxy
 );
 
+app.use(
+  '/pe',
+  async (req, res, next) => {
+    // Only allow specific users to access
+    const user = (await auth.authorize({
+      authorizationToken: req.headers.authorization
+    })) as auth.UserToken;
+    if (
+      user.userType !== UserType.GLOBAL_VIEW &&
+      user.userType !== UserType.GLOBAL_ADMIN
+    ) {
+      return res.status(401).send('Unauthorized');
+    }
+    return next();
+  },
+  peProxy
+);
+
 // Routes that require an authenticated user, without
 // needing to sign the terms of service yet
 const authenticatedNoTermsRoute = express.Router();
@@ -204,6 +238,7 @@ app.use(authenticatedNoTermsRoute);
 // Routes that require an authenticated user that has
 // signed the terms of service
 const authenticatedRoute = express.Router();
+
 authenticatedRoute.use(checkUserLoggedIn);
 authenticatedRoute.use(checkUserSignedTerms);
 
@@ -306,6 +341,16 @@ authenticatedRoute.post('/stats', handlerToExpress(stats.get));
 authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
+
+authenticatedRoute.post(
+  '/reports/export',
+  handlerToExpress(reports.export_report)
+);
+
+authenticatedRoute.post(
+  '/reports/list',
+  handlerToExpress(reports.list_reports)
+);
 
 app.use(authenticatedRoute);
 

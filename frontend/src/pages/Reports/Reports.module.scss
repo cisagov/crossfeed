@@ -1,0 +1,47 @@
+.root {
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media screen and (min-width: 480px) {
+    padding: 0 1rem;
+  }
+  @media screen and (min-width: 640px) {
+    padding: 0 1.5rem;
+  }
+  @media screen and (min-width: 1024px) {
+    padding: 0 2rem;
+  }
+}
+
+.form {
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.header {
+  background: #f9f9f9;
+}
+
+.headerLabel {
+  margin: 0;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  margin-left: 15%;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 24px;
+  color: #07648d;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.subtitle {
+  margin: 0;
+  padding: 0 0 0.2rem 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #3d4551;
+}

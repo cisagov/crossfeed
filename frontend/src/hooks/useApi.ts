@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { API } from 'aws-amplify';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
+// import { useMatomo } from '@datapunt/matomo-tracker-react';
 
 const baseHeaders: HeadersInit = {
   'Content-Type': 'application/json',
@@ -34,19 +34,19 @@ export const useApi = (onError?: OnError) => {
     };
   }, []);
 
-  const { trackEvent } = useMatomo();
+  // const { trackEvent } = useMatomo();
 
   const apiMethod = useCallback(
     (method: ApiMethod, methodName: string) =>
       async <T extends object = any>(path: string, init: any = {}) => {
         const { showLoading = true, ...rest } = init;
         try {
-          trackEvent({
-            category: 'apiMethod',
-            action: methodName,
-            name: path,
-            documentTitle: document.title
-          });
+          // trackEvent({
+          //   category: 'apiMethod',
+          //   action: methodName,
+          //   name: path,
+          //   documentTitle: document.title
+          // });
           showLoading && setRequestCount((cnt) => cnt + 1);
           const options = await prepareInit(rest);
           const result = await method('crossfeed', path, options);

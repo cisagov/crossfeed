@@ -3,8 +3,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  useLocation,
-  Redirect
+  Redirect,
+  useLocation
 } from 'react-router-dom';
 import { API, Auth } from 'aws-amplify';
 import { AuthContextProvider, CFThemeProvider, SearchProvider } from 'context';
@@ -12,7 +12,7 @@ import {
   MatomoProvider,
   createInstance,
   useMatomo
-} from '@datapunt/matomo-tracker-react';
+} from '@jonkoops/matomo-tracker-react';
 import {
   Domain,
   AuthLogin,
@@ -30,12 +30,12 @@ import {
   SearchPage,
   LoginGovCallback,
   Feeds,
-  Domains
+  Domains,
+  Reports
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
 import './styles.scss';
 import { Authenticator } from '@aws-amplify/ui-react';
-
 API.configure({
   endpoints: [
     {
@@ -141,6 +141,7 @@ const App: React.FC = () => (
                   />
 
                   <RouteGuard path="/feeds" component={Feeds} />
+                  <RouteGuard path="/reports" component={Reports} />
                   <RouteGuard path="/scans" component={Scans} exact />
                   <RouteGuard path="/scans/history" component={Scans} exact />
                   <RouteGuard path="/scans/:scanId" component={Scan} />

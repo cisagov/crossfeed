@@ -7,7 +7,7 @@ This quickstart describes the initial setup required to run an instance of Cross
 
 ### Initial Setup
 
-1. Install [Node.js](https://nodejs.org/en/download/) 14 and [Docker Compose](https://docs.docker.com/compose/install/). Make sure the Docker daemon is running.
+1. Install [Node.js](https://nodejs.org/en/download/) 18 and [Docker Compose](https://docs.docker.com/compose/install/). Make sure the Docker daemon is running.
 
 2. Copy root `dev.env.example` file to a `.env` file.
 
