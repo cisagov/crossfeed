@@ -12,6 +12,7 @@ import {
 
 jest.mock('../s3-client');
 const listReports = require('../s3-client').listReports as jest.Mock;
+const sendReportEmail = require('nodemailer').sendReportEmail as jest.Mock;
 
 const nodemailer = require('nodemailer');
 
@@ -216,5 +217,7 @@ describe('notifications', () => {
     expect(response.body.roles[0].approved).toEqual(true);
     expect(response.body.roles[0].role).toEqual('admin');
     expect(response.body.roles[0].organization.id).toEqual(organization.id);
+    // check if sendReportEmail is being called
+    expect(sendReportEmail).toBeCalled;
   });
 });
