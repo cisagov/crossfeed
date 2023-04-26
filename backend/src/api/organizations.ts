@@ -118,11 +118,13 @@ const findOrCreateTags = async (
  */
 export const update = wrapHandler(async (event) => {
   const id = event.pathParameters?.organizationId;
+  console.log(id);
 
   if (!id || !isUUID(id)) {
     return NotFound;
   }
 
+  console.log(event?.body);
   if (!isOrgAdmin(event, id)) return Unauthorized;
   const body = await validateBody<
     NewOrganization | NewOrganizationNonGlobalAdmins

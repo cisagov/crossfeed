@@ -96,6 +96,7 @@ export const OrganizationList: React.FC<{
         setOpen={setDialogOpen}
         type="create"
         parent={parent}
+        organizations={organizations}
       ></OrganizationForm>
     </>
   );

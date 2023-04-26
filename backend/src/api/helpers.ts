@@ -16,6 +16,11 @@ export const validateBody = async <T>(
   validateOptions?: ValidationOptions
 ): Promise<T> => {
   const raw: any = plainToClass(obj, JSON.parse(body ?? '{}'));
+  // The organization parent is passed back as an organization instead of the string ID. This checks for it.
+  if (raw.parent && typeof raw.parent !== 'string') {
+    raw.parent = raw.parent.id;
+  }
+  console.log('The raw is :  ' + JSON.stringify(raw));
   await validateOrReject(raw, {
     ...validateOptions,
     whitelist: true,
