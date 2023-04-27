@@ -42,9 +42,9 @@ export const Import = <T extends object>(props: ImportProps<T>) => {
           errors.length ? reject(errors) : resolve(data as T[])
       })
     );
-    window.location.reload();
     setLoading((l) => l - 1);
     onImport(results);
+    window.location.reload();
   };
   return (
     <form>
