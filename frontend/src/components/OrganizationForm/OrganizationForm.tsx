@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Organization, OrganizationTag } from 'types';
 import {
   Dialog,
@@ -45,7 +45,23 @@ export const OrganizationForm: React.FC<{
 
   const [values, setValues] = useState<OrganizationFormValues>(defaultValues);
   const classes = useStyles();
-  const { currentOrganization, showAllOrganizations } = useAuthContext();
+  const { apiGet, currentOrganization, showAllOrganizations } =
+    useAuthContext();
+
+  const [allOrganizations, setAllOrganizations] = useState<Organization[]>([]);
+
+  const fetchAllOrganizations = useCallback(async () => {
+    try {
+      const rows = await apiGet<Organization[]>('/organizations/all');
+      setAllOrganizations(rows);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet]);
+
+  React.useEffect(() => {
+    fetchAllOrganizations();
+  }, [apiGet, fetchAllOrganizations]);
 
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -100,7 +116,7 @@ export const OrganizationForm: React.FC<{
           value={values.ipBlocks}
           onChange={onTextChange}
         />
-        {organizations.length > 1 && (
+        {
           <>
             <div className={classes.spacing} />
             <Autocomplete
@@ -108,7 +124,7 @@ export const OrganizationForm: React.FC<{
                 option.name === value.name ||
                 value.name === 'Select Organization Parent'
               }
-              options={organizations}
+              options={allOrganizations}
               autoComplete={false}
               classes={{
                 option: classes.option
@@ -177,7 +193,7 @@ export const OrganizationForm: React.FC<{
               )}
             />
           </>
-        )}
+        }
         <br></br>
         <br></br>
         <FormControlLabel
@@ -216,7 +232,7 @@ export const OrganizationForm: React.FC<{
               name: values.name,
               isPassive: values.isPassive,
               tags: values.tags,
-              parent: values.parentId.id ? values.parentId.id : undefined
+              parent: values?.parentId?.id ? values.parentId.id : undefined
             });
             if (!organization) setValues(defaultValues);
             setOpen(false);
