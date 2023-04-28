@@ -306,6 +306,10 @@ authenticatedRoute.get(
 
 authenticatedRoute.get('/organizations', handlerToExpress(organizations.list));
 authenticatedRoute.get(
+  '/organizations/all',
+  handlerToExpress(organizations.listOfAll)
+);
+authenticatedRoute.get(
   '/organizations/tags',
   handlerToExpress(organizations.getTags)
 );

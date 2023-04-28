@@ -70,6 +70,21 @@ export const Organization: React.FC = () => {
     label?: string;
   }>({ open: false });
 
+  const [organizations, setOrganizations] = useState<OrganizationType[]>([]);
+
+  const fetchOrganizations = useCallback(async () => {
+    try {
+      const rows = await apiGet<OrganizationType[]>('/organizations/all');
+      setOrganizations(rows);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet]);
+
+  React.useEffect(() => {
+    fetchOrganizations();
+  }, [apiGet, fetchOrganizations]);
+
   const dateAccessor = (date?: string) => {
     return !date || new Date(date).getTime() === new Date(0).getTime()
       ? 'None'
@@ -484,6 +499,7 @@ export const Organization: React.FC = () => {
               </DialogContentText>
               <Autocomplete
                 value={tagValue}
+                getOptionSelected={(option, value) => option.id === value.id}
                 onChange={(event, newValue) => {
                   if (typeof newValue === 'string') {
                     setTagValue({
@@ -591,6 +607,72 @@ export const Organization: React.FC = () => {
       {user?.userType === 'globalAdmin' && (
         <ListInput label="Tags" type="tags"></ListInput>
       )}
+      <Autocomplete
+        options={[
+          { name: 'Select Organization Parent' } as OrganizationType
+        ].concat(organizations)}
+        autoComplete={false}
+        getOptionSelected={(option, value) =>
+          option.id === value.id ||
+          value === ({ name: 'Select Organization Parent' } as OrganizationType)
+        }
+        value={
+          organization.parent
+            ? organization.parent
+            : ({ name: 'Select Organization Parent' } as OrganizationType)
+        }
+        filterOptions={(options, state) => {
+          // If already selected, show all
+          if (
+            options.find(
+              (option) =>
+                option.name.toLowerCase() === state.inputValue.toLowerCase()
+            )
+          ) {
+            return options;
+          }
+          return options.filter(
+            (option) =>
+              option.name
+                .toLowerCase()
+                .includes(state.inputValue.toLowerCase()) &&
+              option.name !== organization.name
+          );
+        }}
+        disableClearable
+        blurOnSelect
+        selectOnFocus
+        getOptionLabel={(option) => option.name}
+        renderOption={(option) => (
+          <React.Fragment>{option.name}</React.Fragment>
+        )}
+        onChange={(
+          event: any,
+          value:
+            | OrganizationType
+            | {
+                name: string;
+              }
+            | undefined
+        ) => {
+          setOrganization({
+            ...organization,
+            parent: value as OrganizationType
+          });
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            fullWidth
+            label="Parent Organization"
+            inputProps={{
+              ...params.inputProps,
+              id: 'autocomplete-input',
+              autoComplete: 'new-password' // disable autocomplete and autofill
+            }}
+          />
+        )}
+      />
       <div className={classes.headerRow}>
         <label>Passive Mode</label>
         <span>
@@ -742,7 +824,7 @@ export const Organization: React.FC = () => {
     }
   ];
 
-  if (!organization.parent) {
+  if (typeof organization?.children[0]?.id === 'string') {
     navItems = navItems.concat([
       { title: 'Teams', path: `/organizations/${organizationId}/teams` }
       // { title: 'Scans', path: `/organizations/${organizationId}/scans` }

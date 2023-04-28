@@ -248,6 +248,9 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                   <>
                     <div className={classes.spacing} />
                     <Autocomplete
+                      getOptionSelected={(option, value) =>
+                        option.name === value.name
+                      }
                       options={[{ name: 'All Organizations' }].concat(
                         organizations
                       )}

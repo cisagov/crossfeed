@@ -13,7 +13,6 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
 import { useAuthContext } from 'context';
-import { useHistory, useRouteMatch } from 'react-router-dom';
 
 export interface OrganizationFormValues {
   parentId: any;
@@ -33,15 +32,7 @@ export const OrganizationForm: React.FC<{
   type: string;
   parent?: Organization;
   organizations: Organization[];
-}> = ({
-  organization,
-  onSubmit,
-  type,
-  open,
-  setOpen,
-  parent,
-  organizations
-}) => {
+}> = ({ organization, onSubmit, open, setOpen, parent, organizations }) => {
   const defaultValues = () => ({
     name: organization ? organization.name : '',
     rootDomains: organization ? organization.rootDomains.join(', ') : '',
@@ -53,18 +44,8 @@ export const OrganizationForm: React.FC<{
   });
 
   const [values, setValues] = useState<OrganizationFormValues>(defaultValues);
-  const orgPageMatch = useRouteMatch('/organizations/:id');
   const classes = useStyles();
-  const history = useHistory();
-  const {
-    currentOrganization,
-    setOrganization,
-    showAllOrganizations,
-    setShowAllOrganizations,
-    user,
-    logout,
-    apiGet
-  } = useAuthContext();
+  const { currentOrganization, showAllOrganizations } = useAuthContext();
 
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -123,6 +104,10 @@ export const OrganizationForm: React.FC<{
           <>
             <div className={classes.spacing} />
             <Autocomplete
+              getOptionSelected={(option, value) =>
+                option.name === value.name ||
+                value.name === 'Select Organization Parent'
+              }
               options={organizations}
               autoComplete={false}
               classes={{

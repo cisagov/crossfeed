@@ -148,8 +148,18 @@ export const update = wrapHandler(async (event) => {
     if ('tags' in body) {
       body.tags = await findOrCreateTags(body.tags);
     }
+    let tempParent = {} as Organization | undefined;
+    // Need to check for parent relation.
+    if ('parent' in body) {
+      console.log('Parent present! Finding Parent!' + body.parent);
+      const parentOrg = await Organization.findOne({
+        id: body.parent
+      });
+      tempParent = parentOrg;
+      console.log('We got this back ' + tempParent?.name);
+    }
 
-    Organization.merge(org, { ...body, parent: undefined });
+    Organization.merge(org, { ...body, parent: tempParent });
     await Organization.save(org);
     return {
       statusCode: 200,
@@ -212,6 +222,37 @@ export const list = wrapHandler(async (event) => {
   const result = await Organization.find({
     where,
     relations: ['userRoles', 'tags'],
+    order: { name: 'ASC' }
+  });
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result)
+  };
+});
+
+/**
+ * @swagger
+ *
+ * /organizations/all:
+ *  get:
+ *    description: List organizations that the user could use as a parent.
+ *    tags:
+ *    - Organizations
+ */
+export const listOfAll = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event)) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify([])
+    };
+  }
+  await connectToDatabase();
+  let where: any = {};
+  if (!isGlobalViewAdmin(event)) {
+    where = { id: In(getOrgMemberships(event)) };
+  }
+  const result = await Organization.find({
     order: { name: 'ASC' }
   });
 
