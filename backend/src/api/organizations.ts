@@ -153,13 +153,13 @@ export const update = wrapHandler(async (event) => {
     if ('parent' in body) {
       console.log('Parent present! Finding Parent!' + body.parent);
       const parentOrg = await Organization.findOne({
-        id: body.parent
+        id: body.parent ? body.parent : undefined
       });
       tempParent = parentOrg;
       console.log('We got this back ' + tempParent?.name);
     }
 
-    Organization.merge(org, { ...body, parent: tempParent });
+    Organization.merge(org, { ...body, parent: tempParent ?? undefined });
     await Organization.save(org);
     return {
       statusCode: 200,

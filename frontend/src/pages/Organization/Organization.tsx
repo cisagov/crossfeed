@@ -345,7 +345,6 @@ export const Organization: React.FC = () => {
       const org = await apiPut('/organizations/' + organization?.id, {
         body: organization
       });
-      setOrganization(org);
       setFeedbackMessage({
         message: 'Organization successfully updated',
         type: 'success'
@@ -824,7 +823,10 @@ export const Organization: React.FC = () => {
     }
   ];
 
-  if (typeof organization?.children[0]?.id === 'string') {
+  if (
+    organization.children &&
+    typeof organization?.children[0]?.id === 'string'
+  ) {
     navItems = navItems.concat([
       { title: 'Teams', path: `/organizations/${organizationId}/teams` }
       // { title: 'Scans', path: `/organizations/${organizationId}/scans` }
