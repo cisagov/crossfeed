@@ -9,6 +9,7 @@ joblib==1.2.0
 mitmproxy==9.0.1
 mitmproxy_wireguard==0.1.23
 numpy==1.24.2
+pandas
 phonenumbers==8.13.8
 pip-tools==6.13.0
 pipreqs==0.4.11
@@ -24,6 +25,7 @@ requests-http-signature==0.2.0
 scikit-learn==1.2.2
 scipy==1.10.1
 Scrapy==2.8.0
+scrubadub==2.0.0
 six==1.16.0
 threadpoolctl==3.1.0
 tomli==2.0.1
