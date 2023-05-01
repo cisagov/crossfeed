@@ -53,7 +53,7 @@ RUN git clone -b cf-source-staging https://github.com/cisagov/pe-reports.git && 
 
 COPY worker/requirements.txt worker/requirements.txt
 
-RUN pip install --no-cache-dir -r worker/requirements.txt
+RUN pip install -r worker/requirements.txt
 
 COPY worker worker
 
