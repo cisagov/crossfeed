@@ -31,6 +31,10 @@ Here is a list of database models used by Crossfeed:
 | Scan            | A Scan is a scheduled data collection job.                                                   |
 | ScanTask        | A ScanTask represents a specific run, at a certain time and date, of a Scan.                 |
 
+### Entity-relationship Diagram of the Database
+
+<img src='img/entity-relationship diagram.png' alt='Entity-relationship Diagram of the relational database' />
+
 ### Syncing the database
 
 You should sync the database using the `syncdb` command whenever models change and

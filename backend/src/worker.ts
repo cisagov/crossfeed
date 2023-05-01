@@ -25,6 +25,7 @@ import { handler as peShodan } from './tasks/peShodan';
 import { handler as peDomMasq } from './tasks/peDomMasq';
 import { handler as peHibpSync } from './tasks/peHibpSync';
 import { SCAN_SCHEMA } from './api/scans';
+import { connectToDatabase } from './models';
 
 /**
  * Worker entrypoint.
@@ -37,7 +38,7 @@ async function main() {
 
   const { scanName = 'testProxy', organizations = [] } = commandOptions;
 
-  const scanFn = {
+  const scanFn: any = {
     amass,
     censys,
     censysIpv4,
@@ -61,7 +62,11 @@ async function main() {
     rootDomainSync,
     peShodan,
     peDomMasq,
-    peHibpSync
+    peHibpSync,
+    test: async () => {
+      await connectToDatabase();
+      console.log('test');
+    }
   }[scanName];
   if (!scanFn) {
     throw new Error('Invalid scan name ' + scanName);

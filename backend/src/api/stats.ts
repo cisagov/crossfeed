@@ -141,6 +141,7 @@ export const get = wrapHandler(async (event) => {
           'vulnerability.title, vulnerability.description, vulnerability.severity'
         )
         .orderBy('count', 'DESC')
+        .limit(MAX_RESULTS)
     )
   ).getRawMany();
   const severity = await performQuery(

@@ -578,7 +578,7 @@ const Risk: React.FC = (props) => {
       pdf.addImage(imgData, 'PNG', 10, 20, imgWidth, imgHeight); // charts
       pdf.line(3, 290, 207, 290);
       pdf.setFontSize(8);
-      pdf.text('Prepared by ' + user.fullName + ', ' + localDate, 3, 293); // print the name of the person who printed the report as well as a human friendly date/time
+      pdf.text('Prepared by ' + user?.fullName + ', ' + localDate, 3, 293); // print the name of the person who printed the report as well as a human friendly date/time
       pdf.save('Crossfeed_Report_' + dateTimeNow.toISOString() + '.pdf'); // sets the filename and adds the date and time
     });
     input.style.removeProperty('width');
