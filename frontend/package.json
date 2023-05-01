@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=16.0.0 <17.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^4.3.6",
-    "@datapunt/matomo-tracker-react": "^0.5.1",
     "@elastic/react-search-ui": "^1.18.2",
     "@elastic/react-search-ui-views": "^1.18.2",
+    "@jonkoops/matomo-tracker-react": "^0.7.0",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.61",
