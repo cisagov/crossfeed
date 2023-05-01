@@ -31,7 +31,10 @@ export class Organization extends BaseEntity {
   })
   notifiedAt: Date;
 
-  @Column()
+  @Column({
+    length: 128,
+    type: 'varchar'
+  })
   name: string;
 
   @Column('varchar', { array: true })
