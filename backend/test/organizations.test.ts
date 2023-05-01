@@ -280,6 +280,24 @@ describe('organizations', () => {
         .expect(200);
       expect(response.body.length).toBeGreaterThanOrEqual(1);
     });
+    it('list all should succeed', async () => {
+      const organization = await Organization.create({
+        name: 'test-' + Math.random(),
+        rootDomains: ['test-' + Math.random()],
+        ipBlocks: [],
+        isPassive: false
+      }).save();
+      const response = await request(app)
+        .get(`/organizations/all`)
+        .set(
+          'Authorization',
+          createUserToken({
+            userType: UserType.GLOBAL_VIEW
+          })
+        )
+        .expect(200);
+      expect(response.body.length).toBeGreaterThanOrEqual(1);
+    });
     it('list by org member should only get their org', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
