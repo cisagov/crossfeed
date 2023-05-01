@@ -118,13 +118,11 @@ const findOrCreateTags = async (
  */
 export const update = wrapHandler(async (event) => {
   const id = event.pathParameters?.organizationId;
-  console.log(id);
 
   if (!id || !isUUID(id)) {
     return NotFound;
   }
 
-  console.log(event?.body);
   if (!isOrgAdmin(event, id)) return Unauthorized;
   const body = await validateBody<
     NewOrganization | NewOrganizationNonGlobalAdmins
@@ -151,12 +149,10 @@ export const update = wrapHandler(async (event) => {
     let tempParent = {} as Organization | undefined;
     // Need to check for parent relation.
     if ('parent' in body) {
-      console.log('Parent present! Finding Parent!' + body.parent);
       const parentOrg = await Organization.findOne({
         id: body.parent ? body.parent : undefined
       });
       tempParent = parentOrg;
-      console.log('We got this back ' + tempParent?.name);
     }
 
     Organization.merge(org, { ...body, parent: tempParent ?? undefined });
@@ -215,7 +211,7 @@ export const list = wrapHandler(async (event) => {
     };
   }
   await connectToDatabase();
-  let where;
+  let where: any = { parent: null };
   if (!isGlobalViewAdmin(event)) {
     where = { id: In(getOrgMemberships(event)), parent: null };
   }
@@ -248,10 +244,6 @@ export const listOfAll = wrapHandler(async (event) => {
     };
   }
   await connectToDatabase();
-  let where: any = {};
-  if (!isGlobalViewAdmin(event)) {
-    where = { id: In(getOrgMemberships(event)) };
-  }
   const result = await Organization.find({
     order: { name: 'ASC' }
   });

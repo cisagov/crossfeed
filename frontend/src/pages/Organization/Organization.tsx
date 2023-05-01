@@ -342,7 +342,7 @@ export const Organization: React.FC = () => {
 
   const updateOrganization = async (body: any) => {
     try {
-      const org = await apiPut('/organizations/' + organization?.id, {
+      await apiPut('/organizations/' + organization?.id, {
         body: organization
       });
       setFeedbackMessage({

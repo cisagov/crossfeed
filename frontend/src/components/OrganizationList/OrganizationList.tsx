@@ -20,7 +20,7 @@ export const OrganizationList: React.FC<{
       const org = await apiPost('/organizations/', {
         body
       });
-      if (parent?.id == org.parent.id) {
+      if (parent?.id === org.parent.id) {
         setOrganizations(organizations.concat(org));
       }
       setFeedbackMessage({
