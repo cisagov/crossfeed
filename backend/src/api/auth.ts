@@ -111,10 +111,9 @@ export const callback = async (event, context) => {
         )
       );
     } else {
-      userInfo = await loginGov.callback(JSON.parse(event.body));
+      userInfo = (await loginGov.callback(JSON.parse(event.body))) as UserInfo;
     }
   } catch (e) {
-    console.error(e);
     return {
       statusCode: 500,
       body: ''

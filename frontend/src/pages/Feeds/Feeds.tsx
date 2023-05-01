@@ -13,9 +13,13 @@ import {
 import { ModalToggleButton } from 'components';
 import { NoResults } from 'components/NoResults';
 
+const GLOBAL_VIEW = 2;
+const STANDARD_USER = 1;
+const ALL_USERS = GLOBAL_VIEW | STANDARD_USER;
+
 const Feeds = () => {
   const classes = useStyles({} as any);
-  const { apiGet, apiDelete } = useAuthContext();
+  const { user, apiGet, apiDelete } = useAuthContext();
   const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
   const [pageState, setPageState] = useState({
     totalResults: 0,
@@ -26,6 +30,15 @@ const Feeds = () => {
   const [noResults, setNoResults] = useState(false);
   const modalRef = useRef<ModalRef>(null);
   const [selectedSearch, setSelectedSearch] = useState<string>('');
+
+  let userLevel = 0;
+  if (user && user.isRegistered) {
+    if (user.userType === 'standard') {
+      userLevel = STANDARD_USER;
+    } else {
+      userLevel = GLOBAL_VIEW;
+    }
+  }
 
   const fetchSavedSearches = useCallback(
     async (page: number) => {
@@ -66,7 +79,22 @@ const Feeds = () => {
     <div className={classes.root}>
       <div className={classes.contentWrapper}>
         <Subnav
-          items={[{ title: 'My Saved Searches', path: '/feeds', exact: true }]}
+          items={[
+            {
+              title: 'My Saved Searches',
+              path: '/feeds',
+              exact: true,
+              users: ALL_USERS
+            },
+            {
+              title: 'P&E APP',
+              path: {
+                pathname: `${process.env.REACT_APP_API_URL}/pe`
+              },
+              users: GLOBAL_VIEW,
+              externalLink: true
+            }
+          ].filter(({ users }) => (users & userLevel) > 0)}
         ></Subnav>
         <div className={classes.content}>
           <div className={classes.panel}>

@@ -550,7 +550,10 @@ const Risk: React.FC = (props) => {
   const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
   const generatePDF = async () => {
+    const dateTimeNow = new Date(); // UTC Date Time
+    const localDate = new Date(dateTimeNow); // Local Date Time
     setIsLoading(true);
+    await delay(650);
     const input = document.getElementById('wrapper')!;
     input.style.width = '1400px';
     await delay(1);
@@ -568,8 +571,15 @@ const Risk: React.FC = (props) => {
       const imgWidth = 190;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       const pdf = new jsPDF('p', 'mm');
-      pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-      pdf.save('Crossfeed_Report.pdf');
+      pdf.setFontSize(18);
+      pdf.text('Crossfeed Report', 12, 10);
+      pdf.setFontSize(10);
+      pdf.text(dateTimeNow.toISOString(), 12, 17);
+      pdf.addImage(imgData, 'PNG', 10, 20, imgWidth, imgHeight); // charts
+      pdf.line(3, 290, 207, 290);
+      pdf.setFontSize(8);
+      pdf.text('Prepared by ' + user?.fullName + ', ' + localDate, 3, 293); // print the name of the person who printed the report as well as a human friendly date/time
+      pdf.save('Crossfeed_Report_' + dateTimeNow.toISOString() + '.pdf'); // sets the filename and adds the date and time
     });
     input.style.removeProperty('width');
     setIsLoading(false);
