@@ -215,7 +215,7 @@ export const list = wrapHandler(async (event) => {
     };
   }
   await connectToDatabase();
-  let where: any = { parent: null };
+  let where;
   if (!isGlobalViewAdmin(event)) {
     where = { id: In(getOrgMemberships(event)), parent: null };
   }
