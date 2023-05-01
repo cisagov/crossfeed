@@ -37,7 +37,7 @@ async function main() {
   );
   console.log('commandOptions are', commandOptions);
 
-  const { scanName = 'testProxy', organizations = [] } = commandOptions;
+  const { scanName = 'test', organizations = [] } = commandOptions;
 
   const scanFn: any = {
     amass,
