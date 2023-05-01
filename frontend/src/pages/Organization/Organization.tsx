@@ -739,12 +739,15 @@ export const Organization: React.FC = () => {
     {
       title: 'Members',
       path: `/organizations/${organizationId}/members`
+    },
+    {
+      title: 'Sub-Organizations',
+      path: `/organizations/${organizationId}/sub-organizations`
     }
   ];
 
   if (!organization.parent) {
     navItems = navItems.concat([
-      // { title: 'Teams', path: `/organizations/${organizationId}/teams` },
       // { title: 'Scans', path: `/organizations/${organizationId}/scans` }
     ]);
   }
@@ -790,7 +793,7 @@ export const Organization: React.FC = () => {
             render={() => views[1]}
           />
           <Route
-            path="/organizations/:organizationId/teams"
+            path="/organizations/:organizationId/sub-organizations"
             render={() => views[2]}
           />
           <Route

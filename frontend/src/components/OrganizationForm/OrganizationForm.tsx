@@ -57,7 +57,7 @@ export const OrganizationForm: React.FC<{
       fullWidth
     >
       <DialogTitle id="form-dialog-title">
-        Create new {parent ? 'Team' : 'Organization'}
+        Create new {parent ? 'Sub-Organization' : 'Organization'}
       </DialogTitle>
       <DialogContent>
         <TextField
