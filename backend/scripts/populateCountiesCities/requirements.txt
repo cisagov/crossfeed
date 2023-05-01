@@ -1,0 +1,4 @@
+pandas
+requests
+beautifulsoup4==4.11.2
+typer==0.7.0
