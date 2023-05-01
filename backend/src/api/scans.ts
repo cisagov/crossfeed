@@ -221,8 +221,8 @@ export const SCAN_SCHEMA: ScanSchema = {
   },
   trustymail: {
     type: 'fargate',
-    isPassive: false,
-    global: true,
+    isPassive: true,
+    global: false,
     description:
       'Evaluates SPF/DMARC records and checks MX records for STARTTLS support'
   },
