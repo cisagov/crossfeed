@@ -79,7 +79,7 @@
     "webpack-cli": "^5.0.0"
   },
   "scripts": {
-    "test": "jest --detectOpenHandles",
+    "test": "jest --detectOpenHandles --force-exit",
     "test-python": "pytest",
     "lint": "eslint '**/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint '**/*.{ts,tsx,js,jsx}' --fix",
