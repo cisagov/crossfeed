@@ -7,7 +7,7 @@ export const CrossfeedFooter: React.FC = () => {
   const { logout } = useAuthContext();
   const theme = useTheme();
   return (
-    <Box style={{ backgroundColor: theme.palette.primary.main }}>
+    <Box style={{ backgroundColor: theme.palette.primary.main }} width={'100%'}>
       <Grid
         container
         spacing={2}
@@ -16,14 +16,18 @@ export const CrossfeedFooter: React.FC = () => {
         style={{
           margin: '0 auto',
           marginTop: '1rem',
-          maxWidth: '1000px'
+          maxWidth: '1444px'
         }}
       >
         <Grid
           item
           xs={12}
           sm={2}
-          style={{ display: 'flex', justifyContent: 'flex-start' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            height: '100%'
+          }}
         >
           <Link href="/">
             <img src={logo} alt="Crossfeed Icon Navigate Home" />
@@ -33,7 +37,13 @@ export const CrossfeedFooter: React.FC = () => {
           item
           xs={12}
           sm={2}
-          style={{ display: 'flex', justifyContent: 'center' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+
+            borderLeft: '1px solid white',
+            borderRight: '1px solid white'
+          }}
         >
           <p>
             <Link
@@ -50,7 +60,11 @@ export const CrossfeedFooter: React.FC = () => {
           item
           xs={12}
           sm={2}
-          style={{ display: 'flex', justifyContent: 'center' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            borderRight: '1px solid white'
+          }}
         >
           <p>
             <Link href="/" underline="always" style={{ color: 'white' }}>
@@ -62,7 +76,11 @@ export const CrossfeedFooter: React.FC = () => {
           item
           xs={12}
           sm={2}
-          style={{ display: 'flex', justifyContent: 'center' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            borderRight: '1px solid white'
+          }}
         >
           <p>
             <Link
@@ -78,7 +96,11 @@ export const CrossfeedFooter: React.FC = () => {
           item
           xs={12}
           sm={2}
-          style={{ display: 'flex', justifyContent: 'center' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            borderRight: '1px solid white'
+          }}
         >
           <p>
             <Link
