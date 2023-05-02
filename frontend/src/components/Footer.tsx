@@ -1,33 +1,85 @@
 import React from 'react';
-import { Box, Grid, Link } from '@material-ui/core';
+import { Box, Grid, Link, useTheme } from '@material-ui/core';
+import { useAuthContext } from 'context';
+import logo from '../assets/crossfeed.svg';
 
 export const CrossfeedFooter: React.FC = () => {
+  const { logout } = useAuthContext();
+  const theme = useTheme();
   return (
-    <Box style={{ backgroundColor: '#005288' }}>
+    <Box style={{ backgroundColor: theme.palette.primary.main }}>
       <Grid
         container
         spacing={2}
         alignItems={'center'}
+        justifyContent={'center'}
         style={{
           margin: '0 auto',
           marginTop: '1rem',
           maxWidth: '1000px'
         }}
       >
-        <Grid item xs={12} md={1}>
-          <a
-            title="Department of Homeland Security - Cybersecurity and Infrastructure Security Agency, Public domain, via Wikimedia Commons"
-            href="https://www.cisa.gov"
-          >
-            <img
-              width="512"
-              alt="CISA Logo"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/CISA_Logo.png/512px-CISA_Logo.png"
-            />
-          </a>
+        <Grid
+          item
+          xs={12}
+          sm={2}
+          style={{ display: 'flex', justifyContent: 'flex-start' }}
+        >
+          <Link href="/">
+            <img src={logo} alt="Crossfeed Icon Navigate Home" />
+          </Link>
         </Grid>
-        <Grid item md={1}></Grid>
-        <Grid item sm={12} md={4}>
+        <Grid
+          item
+          xs={12}
+          sm={2}
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
+          <p>
+            <Link
+              href="/"
+              underline="always"
+              style={{ color: 'white' }}
+              onClick={logout}
+            >
+              Logout
+            </Link>
+          </p>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={2}
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
+          <p>
+            <Link href="/" underline="always" style={{ color: 'white' }}>
+              Home
+            </Link>
+          </p>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={2}
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
+          <p>
+            <Link
+              href="https://docs.crossfeed.cyber.dhs.gov/"
+              underline="always"
+              style={{ color: 'white' }}
+            >
+              Documentation
+            </Link>
+          </p>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={2}
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
           <p>
             <Link
               href="https://www.cisa.gov"
@@ -37,35 +89,13 @@ export const CrossfeedFooter: React.FC = () => {
               CISA Homepage
             </Link>
           </p>
-          <p>
-            <Link
-              href="https://www.dhs.gov/foia"
-              underline="always"
-              style={{ color: 'white' }}
-            >
-              FOIA Requests
-            </Link>
-          </p>
-          <p>
-            <Link
-              href="https://www.whitehouse.gov/"
-              underline="always"
-              style={{ color: 'white' }}
-            >
-              The White House
-            </Link>
-          </p>
         </Grid>
-        <Grid item sm={12} md={4}>
-          <p>
-            <Link
-              href="https://www.cisa.gov"
-              underline="always"
-              style={{ color: 'white' }}
-            >
-              Privacy
-            </Link>
-          </p>
+        <Grid
+          item
+          xs={12}
+          sm={2}
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
           <p>
             <Link
               href="mailto:vulnerability@cisa.dhs.gov"
@@ -75,18 +105,6 @@ export const CrossfeedFooter: React.FC = () => {
               Contact Us
             </Link>
           </p>
-        </Grid>
-        <Grid item xs={2}>
-          <iframe
-            src="https://www.dhs.gov/ntas/"
-            name="National Terrorism Advisory System"
-            title="National Terrorism Advisory System"
-            width="170"
-            height="180"
-            scrolling="no"
-            frameBorder="0"
-            seamless
-          ></iframe>
         </Grid>
       </Grid>
     </Box>
