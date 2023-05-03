@@ -43,7 +43,8 @@ export const handler: Handler = async (event) => {
       relations: ['user', 'organization'],
       where: {
         role: 'admin',
-        organization: organizations[org]
+        organization: organizations[org],
+        approved: true
       }
     });
 
