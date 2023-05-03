@@ -10,7 +10,7 @@ RUN apk add --update --no-cache build-base python3 vips-dev autoconf automake li
 
 COPY ./docs/package* ./
 
-RUN npm install -g npm@9.6.4
+RUN npm install -g npm@9
 
 RUN npm i --legacy-peer-deps
 
