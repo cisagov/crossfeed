@@ -74,90 +74,7 @@ describe('notifications', () => {
     expect(response.body.length).toBeGreaterThan(2);
   });
 
-  test('Get org admins ', async () => {
-    const firstName = 'first names';
-    const lastName = 'last names';
-    const email = Math.random() + '@crossfeed.cisa.gov';
-    const user = await User.create({
-      firstName: '',
-      lastName: '',
-      email: Math.random() + '@crossfeed.cisa.gov'
-    }).save();
-    const user2 = await User.create({
-      firstName: '',
-      lastName: '',
-      email: Math.random() + '@crossfeed.cisa.gov'
-    }).save();
-    const user3 = await User.create({
-      firstName: '',
-      lastName: '',
-      email: Math.random() + '@crossfeed.cisa.gov'
-    }).save();
-    await Role.create({
-      role: 'admin',
-      approved: false,
-      organization: organization,
-      user: user
-    }).save();
-    await Role.create({
-      role: 'admin',
-      approved: false,
-      organization: organization2,
-      user: user2
-    }).save();
-    await Role.create({
-      role: 'user',
-      approved: false,
-      organization: organization3,
-      user: user3
-    }).save();
-
-    const response = await request(app)
-      .post(`/users`)
-      .set(
-        'Authorization',
-        createUserToken({
-          roles: [{ org: organization.id, role: 'admin' }]
-        })
-      )
-      .send({
-        firstName,
-        lastName,
-        email,
-        organization: organization.id,
-        organizationAdmin: true
-      })
-      .expect(200);
-    expect(response.body.roles[0].role).toEqual('admin');
-  });
-
-  test('getting reports list for all organizations', async () => {
-    const user = await User.create({
-      firstName: 'Dabi',
-      lastName: '',
-      email: Math.random() + '@crossfeed.cisa.gov'
-    }).save();
-    await Role.create({
-      role: 'user',
-      approved: false,
-      organization,
-      user
-    }).save();
-
-    const response = await request(app)
-      .post('/reports/list')
-      .set(
-        'Authorization',
-        createUserToken({
-          roles: [{ org: organization.id, role: 'user' }]
-        })
-      )
-      .send({ currentOrganization: { id: organization.id } })
-      .expect(200);
-    expect(response.text).toEqual('{"Contents":"report content"}');
-    expect(listReports).toBeCalled;
-  });
-  test('Emails to regular user should not send', async () => {
+  test('Notification emails should not send to non-admins', async () => {
     const firstName = 'first names';
     const lastName = 'last names';
     const email = Math.random() + '@crossfeed.cisa.gov';
@@ -179,12 +96,11 @@ describe('notifications', () => {
         firstName,
         lastName,
         email,
-        organization: organization.id,
-        organizationAdmin: false
+        organization: organization.id
       })
       .expect(403);
   });
-  test('Emails to org admin user should send', async () => {
+  test('Notification emails should send to admins', async () => {
     const firstName = 'first names';
     const lastName = 'last names';
     const email = Math.random() + '@crossfeed.cisa.gov';
@@ -206,8 +122,7 @@ describe('notifications', () => {
         firstName,
         lastName,
         email,
-        organization: organization.id,
-        organizationAdmin: true
+        organization: organization.id
       })
       .expect(200);
     //console.log(response.body)
@@ -217,7 +132,6 @@ describe('notifications', () => {
     expect(response.body.roles[0].approved).toEqual(true);
     expect(response.body.roles[0].role).toEqual('admin');
     expect(response.body.roles[0].organization.id).toEqual(organization.id);
-    // check if sendReportEmail is being called
     expect(sendReportEmail).toBeCalled;
   });
 });
