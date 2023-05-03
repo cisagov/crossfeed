@@ -40,6 +40,12 @@ export class Organization extends BaseEntity {
   @Column()
   isPassive: boolean;
 
+  @Column({
+    type: 'uuid',
+    nullable: true
+  })
+  parentId: string | null;
+
   @OneToMany((type) => Domain, (domain) => domain.organization, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
