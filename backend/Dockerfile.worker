@@ -34,7 +34,7 @@ RUN apt update && apt update -y && apt install zip -y
 
 WORKDIR /app
 
-RUN apt install curl git gfortran cmake python3.10.11r-0 python3-pip ruby ruby-dev libffi-dev libxml2-dev libxslt-dev gcc musl-dev cargo -y
+RUN apt install curl git gfortran cmake python3 python3-pip ruby ruby-dev libffi-dev libxml2-dev libxslt-dev gcc musl-dev cargo -y
 
 RUN npm install -g pm2@4 wait-port@0.2.9
 
