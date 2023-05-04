@@ -2,22 +2,23 @@ import getAllDomains from './helpers/getAllDomains';
 import { spawn, spawnSync } from 'child_process';
 import { CommandOptions } from './ecs-client';
 
-// TODO: Test using spawn in place of spawnSync
-const orgMap = new Map<string, string>();
+// TODO: Push results to domain table
+// TODO: Implement p-queue
+// TODO: Test using spawn in place of spawnSync once p-queue is implemented
 export const handler = async (commandOptions: CommandOptions) => {
-  const { organizationId, organizationName, scanId } = commandOptions;
-  orgMap[organizationId!] = new Map<string, string>();
+  const { organizationId, organizationName } = commandOptions;
   console.log('Running trustymail on organization', organizationName);
 
   const domains = await getAllDomains([organizationId!]);
-  const domainNames = domains.map((domain) => domain.name);
-  const domainCount = domainNames.length;
-  console.log(`${organizationName} domains:`, domainNames);
+  console.log(
+    `${organizationName} domains to be scanned:`,
+    domains.map((domain) => domain.name)
+  );
 
   for (const domain of domains) {
     try {
       const args = [domain.name, '--json', '--debug', `--output=${domain.id}`];
-      console.log('Running trustymail with args', args);
+      console.log('Running trustymail with args:', args);
       spawnSync('trustymail', args, { stdio: 'pipe' });
     } catch (e) {
       console.error(e);
@@ -25,6 +26,6 @@ export const handler = async (commandOptions: CommandOptions) => {
     }
   }
   console.log(
-    `Trustymail scanned ${domainCount} domains for ${organizationName}`
+    `Trustymail finished scanning ${domains.length} domains for ${organizationName}`
   );
 };
