@@ -70,8 +70,6 @@ export const handler: Handler = async (event) => {
       }).save();
     }
     for (let i = 0; i <= NUM_SAMPLE_ORGS; i++) {
-      //let parentId: string | undefined = undefined!;
-      //let parentId: string | null;
       let parentId: string | null = null;
       if (organizationIds.length > NUM_SAMPLE_ORGS / 2)
         parentId =
@@ -90,7 +88,6 @@ export const handler: Handler = async (event) => {
           tags: [tag]
         }).save();
       } else {
-        console.log('HERE!!!!!!!');
         organization = await Organization.create({
           name: Sentencer.make('{{ adjective }} {{ entity }}').replace(
             /\b\w/g,
@@ -105,7 +102,6 @@ export const handler: Handler = async (event) => {
       }
 
       console.log(organization.name);
-      console.log(typeof parentId);
       organizationIds.push(organization.id);
       for (let i = 0; i <= NUM_SAMPLE_DOMAINS; i++) {
         const randomNum = () => Math.floor(Math.random() * 256);
