@@ -1,4 +1,4 @@
-import { login as login_, callback as callback_ } from './login-gov';
+import loginGov from './login-gov';
 import {
   User,
   connectToDatabase,
@@ -64,7 +64,7 @@ function getKey(header, callback) {
  *    - Auth
  */
 export const login = async (event, context) => {
-  const { url, state, nonce } = await login_();
+  const { url, state, nonce } = await loginGov.login();
   return {
     statusCode: 200,
     body: JSON.stringify({
@@ -111,10 +111,9 @@ export const callback = async (event, context) => {
         )
       );
     } else {
-      userInfo = (await callback_(JSON.parse(event.body))) as UserInfo;
+      userInfo = (await loginGov.callback(JSON.parse(event.body))) as UserInfo;
     }
   } catch (e) {
-    console.error(e);
     return {
       statusCode: 500,
       body: ''
@@ -173,10 +172,7 @@ export const callback = async (event, context) => {
   }
 
   const token = jwt.sign(userTokenBody(user), process.env.JWT_SECRET!, {
-    expiresIn: '1 days',
-    header: {
-      typ: 'JWT'
-    }
+    expiresIn: '1 days'
   });
 
   return {

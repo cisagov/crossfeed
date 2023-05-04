@@ -144,13 +144,15 @@ export const ScanForm: React.FC<{
           onChange={onTextChange}
           value={values.name}
         >
-          {Object.keys(scanSchema).map((i) => {
-            return (
-              <option key={i} value={i}>
-                {i}
-              </option>
-            );
-          })}
+          {Object.keys(scanSchema)
+            .sort((a, b) => a.localeCompare(b))
+            .map((i) => {
+              return (
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              );
+            })}
         </Dropdown>
       )}
       {schemaUpdated && <p>{scanSchema[values.name].description}</p>}

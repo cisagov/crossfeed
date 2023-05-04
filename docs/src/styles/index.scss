@@ -2,23 +2,32 @@
   These are necessary for the image and font urls referenced in the source
   files to resolve correctly.
 */
-$theme-image-path: '../../node_modules/uswds/src/img';
-$theme-font-path: '../../node_modules/uswds/src/fonts';
+/* styles.scss */
+
+// 1. Load USWDS settings
+// @forward "../../node_modules/uswds/dist/scss/uswds.scss";
+
+// 2. Load USWDS source code
+// @forward "../../node_modules/uswds/src";
+
+// 3. Load your project's custom Sass
+//@forward "project-custom.scss";
+
+// @import '~@trussworks/react-uswds/lib/index.css';
+
+$theme-font-path: '~uswds/fonts';
+$theme-image-path: '~uswds/img';
+$theme-show-notifications: false;
+
+// Import required global packages
+@import '~uswds/scss/uswds';
 
 /*
   The url for the hero image in the source file is not currently prefixed by
   the $theme-image-path above.
 */
 
-$theme-hero-image: '#{$theme-image-path}/hero.png';
-
-$theme-show-notifications: false;
-
-// Your custom changes to variables go here
-// Uncomment to see this working
-// $theme-color-primary-darker: 'black';
-
-@import 'uswds';
+$theme-hero-image: '../images/crossfeed-search-result.png';
 
 // Your custom SASS/CSS goes here
 @media screen and (min-width: 640px) {
