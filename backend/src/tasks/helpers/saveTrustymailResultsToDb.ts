@@ -6,7 +6,10 @@ export default async (domainId, path): Promise<void> => {
   await connectToDatabase();
   Domain.createQueryBuilder()
     .update(domain)
-    .set({ trustymailResults: () => `'${fs.readFileSync(path)}'` })
+    .set({ trustymailResults: () => `'${fs.promises.readFile(path)}'` })
     .where('id = :id', { id: domainId })
     .execute();
+  fs.unlink(path, (err) => {
+    if (err) throw err;
+  });
 };
