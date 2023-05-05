@@ -338,9 +338,9 @@ authenticatedRoute.post(
   handlerToExpress(organizations.updateScan)
 );
 authenticatedRoute.post('/stats', handlerToExpress(stats.get));
-authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
+authenticatedRoute.post('/users/search', handlerToExpress(users.search));
 
 authenticatedRoute.post(
   '/reports/export',

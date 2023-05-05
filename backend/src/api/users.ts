@@ -4,9 +4,15 @@ import {
   IsBoolean,
   IsOptional,
   IsEmail,
-  IsEnum
+  IsEnum,
+  IsInt,
+  IsIn,
+  IsObject,
+  IsPositive,
+  ValidateNested,
+  IsUUID
 } from 'class-validator';
-import { User, connectToDatabase, Role, Organization, ApiKey } from '../models';
+import { User, connectToDatabase, Role, Organization } from '../models';
 import {
   validateBody,
   wrapHandler,
@@ -22,6 +28,64 @@ import {
   isOrgAdmin,
   isGlobalWriteAdmin
 } from './auth';
+import { Type, plainToClass } from 'class-transformer';
+import { IsNull } from 'typeorm';
+
+class UserSearch {
+  @IsInt()
+  @IsPositive()
+  page: number = 1;
+
+  @IsString()
+  @IsIn([
+    'fullName',
+    'firstName',
+    'lastName',
+    'email',
+    'name',
+    'userType',
+    'dateAcceptedTerms',
+    'lastLoggedIn',
+    'acceptedTermsVersion'
+  ])
+  @IsOptional()
+  sort: string = 'fullName';
+
+  @IsString()
+  @IsIn(['ASC', 'DESC'])
+  order: 'ASC' | 'DESC' = 'DESC';
+
+  @IsInt()
+  @IsOptional()
+  // If set to -1, returns all results.
+  pageSize?: number;
+
+  @IsString()
+  @IsOptional()
+  @IsIn(['title'])
+  groupBy?: 'title';
+
+  async getResults(event): Promise<[User[], number]> {
+    const pageSize = this.pageSize || 25;
+    const sort =
+      this.sort === 'name' || 'fullName'
+        ? 'user.fullName'
+        : this.sort === 'userType'
+        ? 'user.userType'
+        : this.sort === 'dateAcceptedTerms'
+        ? 'user.dateAcceptedTerms'
+        : this.sort === 'lastLoggedIn'
+        ? 'user.lastLoggedIn'
+        : this.sort === 'acceptedTermsVersion'
+        ? 'user.acceptedTermsVersion'
+        : this.sort;
+    let qs = User.createQueryBuilder('user').orderBy(sort, this.order);
+
+    const results = await qs.getManyAndCount();
+
+    return results;
+  }
+}
 
 /**
  * @swagger
@@ -295,20 +359,19 @@ export const acceptTerms = wrapHandler(async (event) => {
 /**
  * @swagger
  *
- * /users:
- *  get:
+ * /users/search:
+ *  post:
  *    description: List users.
  *    tags:
  *    - Users
  */
-export const list = wrapHandler(async (event) => {
+export const search = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) return Unauthorized;
-  await connectToDatabase();
-  const result = await User.find({
-    relations: ['roles', 'roles.organization']
-  });
+  await connectToDatabase(true);
+  const search = await validateBody(UserSearch, event.body);
+  const [result, count] = await search.getResults(event);
   return {
     statusCode: 200,
-    body: JSON.stringify(result)
+    body: JSON.stringify({ result, count })
   };
 });
