@@ -741,8 +741,8 @@ export const Organization: React.FC = () => {
       path: `/organizations/${organizationId}/members`
     },
     {
-      title: 'Sub-Organizations',
-      path: `/organizations/${organizationId}/sub-organizations`
+      title: 'Suborganizations',
+      path: `/organizations/${organizationId}/suborganizations`
     }
   ];
 
@@ -793,7 +793,7 @@ export const Organization: React.FC = () => {
             render={() => views[1]}
           />
           <Route
-            path="/organizations/:organizationId/sub-organizations"
+            path="/organizations/:organizationId/suborganizations"
             render={() => views[2]}
           />
           <Route
