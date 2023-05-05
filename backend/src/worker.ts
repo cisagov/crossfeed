@@ -24,7 +24,6 @@ import { handler as rootDomainSync } from './tasks/rootDomainSync';
 import { handler as peShodan } from './tasks/peShodan';
 import { handler as peDomMasq } from './tasks/peDomMasq';
 import { handler as peHibpSync } from './tasks/peHibpSync';
-import { handler as trustymail } from './tasks/trustymail';
 import { SCAN_SCHEMA } from './api/scans';
 import { connectToDatabase } from './models';
 
@@ -64,7 +63,6 @@ async function main() {
     peShodan,
     peDomMasq,
     peHibpSync,
-    trustymail,
     test: async () => {
       await connectToDatabase();
       console.log('test');
