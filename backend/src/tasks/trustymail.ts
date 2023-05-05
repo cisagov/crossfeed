@@ -3,7 +3,6 @@ import { spawn, spawnSync } from 'child_process';
 import { CommandOptions } from './ecs-client';
 import saveTrustymailResultsToDb from './helpers/saveTrustymailResultsToDb';
 
-// TODO: Push results to domain table
 // TODO: Implement p-queue
 // TODO: Add scan time to domain table
 // TODO: Test using spawn in place of spawnSync once p-queue is implemented
