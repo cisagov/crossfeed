@@ -618,6 +618,34 @@ export const Organization: React.FC = () => {
                 )}
               />
             </>
+          ) : dialog.type === 'rootDomains' && dialog.stage === 1 ? (
+            <>
+              <DialogContentText>
+                Add the following TXT record to {inputValue}&apos;s DNS
+                configuration and click Verify.
+              </DialogContentText>
+              <TextField
+                style={{ width: '100%' }}
+                value={
+                  'crossfeed-verification=' +
+                  organization.pendingDomains.find(
+                    (domain) => domain.name === inputValue
+                  )?.token
+                }
+                onFocus={(event) => {
+                  event.target.select();
+                }}
+              />
+              {dialog.domainVerificationStatusMessage && (
+                <>
+                  <br></br>
+                  <br></br>
+                  <DialogContentText>
+                    {dialog.domainVerificationStatusMessage}
+                  </DialogContentText>
+                </>
+              )}
+            </>
           ) : user?.userType === 'globalAdmin' ? (
             <>
               <DialogContentText>
@@ -650,33 +678,7 @@ export const Organization: React.FC = () => {
               />
             </>
           ) : (
-            <>
-              <DialogContentText>
-                Add the following TXT record to {inputValue}&apos;s DNS
-                configuration and click Verify.
-              </DialogContentText>
-              <TextField
-                style={{ width: '100%' }}
-                value={
-                  'crossfeed-verification=' +
-                  organization.pendingDomains.find(
-                    (domain) => domain.name === inputValue
-                  )?.token
-                }
-                onFocus={(event) => {
-                  event.target.select();
-                }}
-              />
-              {dialog.domainVerificationStatusMessage && (
-                <>
-                  <br></br>
-                  <br></br>
-                  <DialogContentText>
-                    {dialog.domainVerificationStatusMessage}
-                  </DialogContentText>
-                </>
-              )}
-            </>
+            <></>
           )}
         </DialogContent>
         <DialogActions>
