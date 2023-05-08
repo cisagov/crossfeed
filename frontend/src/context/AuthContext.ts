@@ -17,6 +17,8 @@ export interface AuthContextType extends ReturnType<typeof useApi> {
   token: string | null;
   currentOrganization?: CurrentOrganization | null;
   setOrganization: (organization: CurrentOrganization) => void;
+  showMaps: boolean;
+  setShowMaps: (showMap: boolean) => void;
   showAllOrganizations: boolean;
   setShowAllOrganizations: (showAllOrganizations: boolean) => void;
   refreshUser: () => Promise<void>;
