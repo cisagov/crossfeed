@@ -52,29 +52,26 @@ type WrapHandler = (
     APIGatewayProxyResult
   >
 ) => APIGatewayProxyHandler;
-export const wrapHandler: WrapHandler = (handler) => async (
-  event,
-  context,
-  callback
-) => {
-  try {
-    const result = (await handler(
-      event,
-      context,
-      callback
-    )) as APIGatewayProxyResult;
-    const resp = makeResponse(event, result);
-    if (typeof jest === 'undefined') {
-      console.log(`=> ${resp.statusCode} ${event.path} `);
+export const wrapHandler: WrapHandler =
+  (handler) => async (event, context, callback) => {
+    try {
+      const result = (await handler(
+        event,
+        context,
+        callback
+      )) as APIGatewayProxyResult;
+      const resp = makeResponse(event, result);
+      if (typeof jest === 'undefined') {
+        console.log(`=> ${resp.statusCode} ${event.path} `);
+      }
+      return resp;
+    } catch (e) {
+      console.error(e);
+      return makeResponse(event, {
+        statusCode: Array.isArray(e) ? 400 : 500
+      });
     }
-    return resp;
-  } catch (e) {
-    console.error(e);
-    return makeResponse(event, {
-      statusCode: Array.isArray(e) ? 400 : 500
-    });
-  }
-};
+  };
 
 export const NotFound: APIGatewayProxyResult = {
   statusCode: 404,
