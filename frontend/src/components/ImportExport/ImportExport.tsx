@@ -44,7 +44,6 @@ export const Import = <T extends object>(props: ImportProps<T>) => {
     );
     setLoading((l) => l - 1);
     onImport(results);
-    window.location.reload();
   };
   return (
     <form>
