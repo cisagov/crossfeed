@@ -191,7 +191,7 @@ class VulnerabilitySearch {
     }
 
     if (pageSize !== -1) {
-      qs = qs.offset(pageSize * (this.page - 1)).limit(pageSize);
+      qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
     }
 
     await this.filterResultQueryset(qs, event);
