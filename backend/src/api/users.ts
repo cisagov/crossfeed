@@ -79,7 +79,7 @@ class UserSearch {
         : this.sort === 'acceptedTermsVersion'
         ? 'user.acceptedTermsVersion'
         : this.sort;
-    let qs = User.createQueryBuilder('user').orderBy(sort, this.order);
+    const qs = User.createQueryBuilder('user').orderBy(sort, this.order);
 
     const results = await qs.getManyAndCount();
 
