@@ -252,7 +252,9 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                       getOptionSelected={(option, value) =>
                         option.name === value.name
                       }
-                      options={[{ name: 'All Organizations' }].concat(organizations)}
+                      options={[{ name: 'All Organizations' }].concat(
+                        organizations
+                      )}
                       autoComplete={false}
                       className={classes.selectOrg}
                       classes={{
@@ -304,7 +306,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                           } else {
                             setShowMaps(false);
                           }
-                      
+
                           // Check if we're on an organization page and, if so, update it to the new organization
                           if (orgPageMatch !== null) {
                             history.push(`/organizations/${value.id}`);
