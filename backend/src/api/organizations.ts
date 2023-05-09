@@ -27,7 +27,7 @@ import {
 import { In } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { randomBytes } from 'crypto';
-import { resolveTxt } from 'dns';
+import { promises } from 'dns';
 
 /**
  * @swagger
@@ -428,7 +428,7 @@ export const initiateDomainVerification = wrapHandler(async (event) => {
   const body = await validateBody<NewDomain>(NewDomain, event.body);
 
   await connectToDatabase();
-  const token = randomBytes(16).toString('hex');
+  const token = 'crossfeed-verification=' + randomBytes(16).toString('hex');
 
   const organization = await Organization.findOne({
     id: organizationId
@@ -460,19 +460,6 @@ export const initiateDomainVerification = wrapHandler(async (event) => {
     body: JSON.stringify(organization.pendingDomains)
   };
 });
-
-// Helper function to turn resolveTxt into an async function
-const resolveTxtAsync = async (name): Promise<string[][]> => {
-  return new Promise((resolve, reject) => {
-    resolveTxt(name, (err, resp) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(resp);
-      }
-    });
-  });
-};
 
 /**
  * @swagger
@@ -516,11 +503,10 @@ export const checkDomainVerification = wrapHandler(async (event) => {
     };
   }
   try {
-    const res = await resolveTxtAsync(pendingDomain.name);
+    const res = await promises.resolveTxt(pendingDomain.name);
     for (const record of res) {
       for (const val of record) {
-        console.log(val);
-        if (val === 'crossfeed-verification=' + pendingDomain.token) {
+        if (val === pendingDomain.token) {
           // Success!
           organization.rootDomains.push(pendingDomain.name);
           organization.pendingDomains = organization.pendingDomains.filter(

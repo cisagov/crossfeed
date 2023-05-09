@@ -627,7 +627,6 @@ export const Organization: React.FC = () => {
               <TextField
                 style={{ width: '100%' }}
                 value={
-                  'crossfeed-verification=' +
                   organization.pendingDomains.find(
                     (domain) => domain.name === inputValue
                   )?.token
