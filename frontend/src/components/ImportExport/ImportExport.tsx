@@ -27,7 +27,7 @@ export interface ExportProps<T> {
 interface ImportExportProps<T> extends ImportProps<T>, ExportProps<T> {}
 
 export const Import = <T extends object>(props: ImportProps<T>) => {
-  const { setLoading } = useAuthContext();
+  const { user, setLoading } = useAuthContext();
   const { name, onImport } = props;
   const parseCSV = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || !event.target.files.length) {
@@ -45,18 +45,20 @@ export const Import = <T extends object>(props: ImportProps<T>) => {
     setLoading((l) => l - 1);
     onImport(results);
   };
-  return (
-    <form>
-      <h2>Import {name}</h2>
-      <FormGroup>
-        <Label htmlFor="import">
-          File must be in a CSV format, with the same header as the exported
-          file.
-        </Label>
-        <FileInput id="import" accept=".csv" onChange={(e) => parseCSV(e)} />
-      </FormGroup>
-    </form>
-  );
+  if (user?.userType === 'globalAdmin'){
+    return (
+      <form>
+        <h2>Import {name}</h2>
+        <FormGroup>
+          <Label htmlFor="import">
+            File must be in a CSV format, with the same header as the exported
+            file.
+          </Label>
+          <FileInput id="import" accept=".csv" onChange={(e) => parseCSV(e)} />
+        </FormGroup>
+      </form>
+    );
+  }
 };
 
 export const exportCSV = async <T extends object>(
