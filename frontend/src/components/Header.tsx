@@ -485,6 +485,12 @@ const useStyles = makeStyles((theme) => ({
     '& fieldset': {
       borderStyle: 'none'
     },
+    '& div div': {
+      paddingTop: '0 !important'
+    },
+    '& div div div': {
+      marginTop: '-3px !important'
+    },
     height: '45px'
   },
   option: {
