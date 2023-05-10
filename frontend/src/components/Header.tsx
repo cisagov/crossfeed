@@ -58,6 +58,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   const [organizations, setOrganizations] = useState<
     (Organization | OrganizationTag)[]
   >([]);
+  const [tags, setTags] = useState<OrganizationTag[]>([]);
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -76,6 +77,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       let tags: (OrganizationTag | Organization)[] = [];
       if (userLevel === GLOBAL_ADMIN) {
         tags = await apiGet<OrganizationTag[]>('/organizations/tags');
+        setTags(tags as OrganizationTag[]);
       }
       setOrganizations(tags.concat(rows));
     } catch (e) {
@@ -300,7 +302,9 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
 
                           // Check if we're on an organization page and, if so, update it to the new organization
                           if (orgPageMatch !== null) {
-                            history.push(`/organizations/${value.id}`);
+                            if (!tags.find((e) => e.id === value.id)) {
+                              history.push(`/organizations/${value.id}`);
+                            }
                           }
                         } else {
                           setShowAllOrganizations(true);
