@@ -288,10 +288,12 @@ export const Users: React.FC = () => {
               );
             } catch (e) {
               // Just continue when an error occurs
-              console.error(e);
+              console.error("Error loading entry: " + e);
             }
           }
           setUsers(users.concat(...createdUsers));
+          //without location reload site will not refresh to update data
+          window.location.reload();
         }}
         getDataToExport={() =>
           users.map((user) => ({
@@ -303,7 +305,7 @@ export const Users: React.FC = () => {
               }))
             )
           }))
-        }
+        }  
       />
 
       <Modal ref={modalRef} id="modal">

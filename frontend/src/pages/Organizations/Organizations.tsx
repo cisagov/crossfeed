@@ -46,7 +46,6 @@ export const Organizations: React.FC = () => {
                 // TODO: use a batch call here instead.
                 const createdOrganizations = [];
                 for (const result of results) {
-                  try {
                     createdOrganizations.push(
                       await apiPost('/organizations/', {
                         body: {
@@ -67,12 +66,8 @@ export const Organizations: React.FC = () => {
                         }
                       })
                     );
-                  } catch (e: any) {
-                    console.error('Error uploading Entry: ' + e);
-                  }
                 }
                 setOrganizations(organizations.concat(...createdOrganizations));
-                window.location.reload();
               }}
               getDataToExport={() =>
                 organizations.map(
