@@ -1,5 +1,4 @@
 export interface Report {
-  key: string;
   organization: string;
   team: string;
   name: string;

@@ -56,14 +56,14 @@ class S3Client {
     }
   }
 
-  async exportReport(Key: string) {
+  async exportReport(reportName: string, orgId: string) {
     try {
+      const Key = `${orgId}/${reportName}`;
       const url = await this.s3.getSignedUrlPromise('getObject', {
         Bucket: process.env.REPORTS_BUCKET_NAME!,
         Key,
         Expires: 60 * 5 // 5 minutes
       });
-
       // Do this so exports are accessible when running locally.
       if (this.isLocal) {
         return url.replace('minio:9000', 'localhost:9000');

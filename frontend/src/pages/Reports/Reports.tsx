@@ -34,11 +34,11 @@ export const Reports: React.FC = () => {
   const [noResults, setNoResults] = useState(false);
 
   const pdfExport = useCallback(
-    async (Key: string): Promise<string> => {
+    async (Name: string): Promise<string> => {
       if (!showAllOrganizations && currentOrganization) {
         try {
           const { url } = await apiPost('/reports/export/', {
-            body: { currentOrganization, Key }
+            body: { currentOrganization, Name }
           });
           window.open(url);
           return url;
@@ -81,7 +81,6 @@ export const Reports: React.FC = () => {
           }
           const date = new Date(a.LastModified).toDateString();
           return {
-            key: a.Key,
             name: name,
             team: team,
             lastModified: date,

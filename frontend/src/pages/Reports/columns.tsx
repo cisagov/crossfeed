@@ -33,8 +33,8 @@ export const createColumns = (pdfExport: any) =>
     },
     {
       Header: 'Download',
-      accessor: ({ key }) => (
-        <IconButton aria-label="fingerprint" onClick={() => pdfExport(key)}>
+      accessor: ({ name }) => (
+        <IconButton aria-label="fingerprint" onClick={() => pdfExport(name)}>
           <GetAppIcon />
         </IconButton>
       ),
