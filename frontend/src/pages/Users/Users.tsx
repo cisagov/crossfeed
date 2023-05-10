@@ -288,7 +288,7 @@ export const Users: React.FC = () => {
               );
             } catch (e) {
               // Just continue when an error occurs
-              console.error("Error loading entry: " + e);
+              console.error('Error loading entry: ' + e);
             }
           }
           setUsers(users.concat(...createdUsers));
@@ -305,7 +305,7 @@ export const Users: React.FC = () => {
               }))
             )
           }))
-        }  
+        }
       />
 
       <Modal ref={modalRef} id="modal">
