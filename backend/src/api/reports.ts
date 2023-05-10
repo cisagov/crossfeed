@@ -12,11 +12,11 @@ import { getOrgMemberships } from './auth';
  *    - Reports
  */
 export const export_report = wrapHandler(async (event) => {
-  const Name = JSON.parse(event.body!).Name;
+  const reportName = JSON.parse(event.body!).reportName;
   const orgId = JSON.parse(event.body!).currentOrganization.id;
   if (getOrgMemberships(event).includes(orgId)) {
     const client = new S3Client();
-    const url = await client.exportReport(Name, orgId);
+    const url = await client.exportReport(reportName, orgId);
     if (url == 'File does not exist') {
       return {
         statusCode: 404,
@@ -46,11 +46,9 @@ export const export_report = wrapHandler(async (event) => {
  */
 export const list_reports = wrapHandler(async (event) => {
   const orgId = JSON.parse(event.body!).currentOrganization.id;
-  console.log(orgId);
   if (getOrgMemberships(event).includes(orgId)) {
     const client = new S3Client();
     const data = await client.listReports(orgId);
-    console.log(data);
     return {
       statusCode: 200,
       body: JSON.stringify(data)
