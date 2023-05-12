@@ -19,26 +19,85 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   for (const domain of domains) {
     try {
-      const args = [domain.name, '--json', `--output=${domain.id}`];
+      const args = [
+        domain.name,
+        // '--timeout=2',
+        // '--smtp-timeout=2',
+        '--json',
+        `--output=${domain.id}`
+      ];
       console.log('Running trustymail with args:', args);
-      spawnSync('trustymail', args, { stdio: 'pipe' });
-      const path = `${domain.id}.json`;
-      const jsonData = await fs.promises.readFile(path).then((data) => data);
-      await saveTrustymailResultsToDb(domain.id, jsonData)
-        .then(() =>
-          fs.unlink(path, (err) => {
-            if (err) throw err;
-          })
-        )
-        .then(() =>
-          console.log(`Saved result for ${domain.name} to database.`)
+      const child = spawn('trustymail', args, { stdio: 'pipe' });
+      child.stdout.on('data', (data) => {
+        console.log(`${domain.name} (${domain.id}) stdout: ${data}`);
+      });
+      child.on('spawn', () => {
+        console.log(
+          `Spawned ${domain.name} (${domain.id}) trustymail child process`
         );
+      });
+      child.on('error', (err) =>
+        console.error(
+          `Error with trustymail ${domain.name} (${domain.id}) child process:`,
+          err
+        )
+      );
+      child.on('exit', (code, signal) => {
+        console.log(
+          `trustymail child process ${domain.name} (${domain.id}) exited with code`,
+          code,
+          'and signal',
+          signal
+        );
+        setTimeout(() => {
+          console.log(
+            `Syncing results to db for ${domain.name} (${domain.id})...`
+          );
+          const path = `${domain.id}.json`;
+          const jsonData = fs.readFileSync(path);
+          saveTrustymailResultsToDb(domain.id, jsonData)
+            // .then(() =>
+            //   fs.unlink(path, (err) => {
+            //     if (err) throw err;
+            //   })
+            // )
+            .then(() =>
+              console.log(`Saved result for ${domain.name} to database.`)
+            );
+        }, 1000 * 60 * 2);
+      });
+      child.on('close', (code, signal) =>
+        console.log(
+          `trustymail ${domain.name} (${domain.id}) child process closed with code`,
+          code,
+          'and signal',
+          signal
+        )
+      );
+      child.on('disconnect', () =>
+        console.log(
+          `trustymail ${domain.name} (${domain.id}) child process disconnected`
+        )
+      );
+      child.on('message', (message, sendHandle) =>
+        console.log(
+          `trustymail ${domain.name} (${domain.id}) child process message:`,
+          message,
+          sendHandle
+        )
+      );
+      await delay(1000 * 60 * 2);
     } catch (e) {
       console.error(e);
       continue;
     }
   }
+  await delay(1000 * 60 * domains.length);
   console.log(
     `Trustymail finished scanning ${domains.length} domains for ${organizationName}.`
   );
 };
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
