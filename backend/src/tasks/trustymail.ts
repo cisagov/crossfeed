@@ -50,7 +50,6 @@ export const handler = async (commandOptions: CommandOptions) => {
       ];
       console.log('Running trustymail with args:', args);
       const child = spawn('trustymail', args, { stdio: 'pipe' });
-      await delay(1000 * 20);
       child.stdout.on('data', (data) => {
         console.log(`${domain.name} (${domain.id}) stdout: ${data}`);
       });
@@ -93,6 +92,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           sendHandle
         )
       );
+      await delay(1000 * 60); // wait 60 seconds before spawning next child process
     } catch (e) {
       console.error(e);
       continue;
@@ -118,6 +118,7 @@ async function syncToDB(path: string) {
   const jsonData = await fs.promises.readFile(path);
   await saveTrustymailResultsToDb(domainId, jsonData)
     .then(() =>
+      // Delete file after saving to db
       fs.unlink(path, (err) => {
         if (err) throw err;
       })
