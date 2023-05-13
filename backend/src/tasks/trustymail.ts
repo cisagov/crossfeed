@@ -45,8 +45,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         domain.name,
         '--json',
         `--output=${domain.id}`,
-        '--psl-file=/app/worker/public_suffix_list.dat',
-        '--psl-read-only'
+        '--psl-file=public_suffix_list.dat'
       ];
       console.log('Running trustymail with args:', args);
       const child = spawn('trustymail', args, { stdio: 'pipe' });
@@ -92,7 +91,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           sendHandle
         )
       );
-      await delay(1000 * 60); // wait 60 seconds before spawning next child process
+      await delay(1000 * 15); // wait 20 seconds before spawning next child process
     } catch (e) {
       console.error(e);
       continue;
