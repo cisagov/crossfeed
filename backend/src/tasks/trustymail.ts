@@ -5,9 +5,10 @@ import saveTrustymailResultsToDb from './helpers/saveTrustymailResultsToDb';
 import * as chokidar from 'chokidar';
 import * as fs from 'fs';
 
-// TODO: output list of domains that failed to scan
 // TODO: Add scan time to domain table
 // TODO: Add timeout to exit while loop
+// TODO: Retry failed domains
+// TODO: Keep updated PSL file to avoid downloading it with every scan
 export const handler = async (commandOptions: CommandOptions) => {
   // Initialize watcher to detect changes to files in /app folder
   const watcher = chokidar.watch('.', {
@@ -16,7 +17,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     persistent: true
   });
   const queue = new Set<string>();
-  const failedDomains = new Map<string, string[]>();
+  const failedDomains = new Set<string>();
   // Add event listener for when a file is added to the /app folder
   watcher.on('add', (path) => {
     console.log('File', path, 'has been added');
@@ -72,11 +73,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         );
         if (code !== 0) {
           queue.delete(path);
-          failedDomains.set(domain.id, [
-            domain.name,
-            organizationName!,
-            organizationId!
-          ]);
+          failedDomains.add(domain.id);
         }
       });
       child.on('disconnect', () =>
@@ -102,7 +99,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     console.log('queue', queue);
     await delay(1000 * 60 * 1);
   }
-  console.log(
+  console.log(  
     `trustymail failed for ${failedDomains.size} domains out of ${domains.length} domains \n failed domains:`,
     failedDomains
   );
