@@ -72,7 +72,7 @@ export const getSeverityColor = ({ id }: { id: string }) => {
 
 const Risk: React.FC = (props) => {
   const history = useHistory();
-  const { currentOrganization, showAllOrganizations, user, apiPost } =
+  const { currentOrganization, showAllOrganizations, showMaps, user, apiPost } =
     useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
@@ -756,30 +756,31 @@ const Risk: React.FC = (props) => {
 
               <div id="mapWrapper">
                 {(user?.userType === 'globalView' ||
-                  user?.userType === 'globalAdmin') && (
-                  <>
-                    <MapCard
-                      title={'State Vulnerabilities'}
-                      geoUrl={geoStateUrl}
-                      findFn={(geo) =>
-                        stats?.vulnerabilities.byOrg.find(
-                          (p) => p.label === geo.properties.name
-                        )
-                      }
-                      type={'state'}
-                    ></MapCard>
-                    <MapCard
-                      title={'County Vulnerabilities'}
-                      geoUrl={geoStateUrl}
-                      findFn={(geo) =>
-                        stats?.vulnerabilities.byOrg.find(
-                          (p) => p.label === geo.properties.name + ' Counties'
-                        )
-                      }
-                      type={'county'}
-                    ></MapCard>
-                  </>
-                )}
+                  user?.userType === 'globalAdmin') &&
+                  showMaps && (
+                    <>
+                      <MapCard
+                        title={'State Vulnerabilities'}
+                        geoUrl={geoStateUrl}
+                        findFn={(geo) =>
+                          stats?.vulnerabilities.byOrg.find(
+                            (p) => p.label === geo.properties.name
+                          )
+                        }
+                        type={'state'}
+                      ></MapCard>
+                      <MapCard
+                        title={'County Vulnerabilities'}
+                        geoUrl={geoStateUrl}
+                        findFn={(geo) =>
+                          stats?.vulnerabilities.byOrg.find(
+                            (p) => p.label === geo.properties.name + ' Counties'
+                          )
+                        }
+                        type={'county'}
+                      ></MapCard>
+                    </>
+                  )}
               </div>
             </div>
           </div>
