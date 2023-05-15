@@ -1,38 +1,24 @@
 import getAllDomains from './helpers/getAllDomains';
-import { spawn, spawnSync } from 'child_process';
+import { spawn } from 'child_process';
 import { CommandOptions } from './ecs-client';
 import saveTrustymailResultsToDb from './helpers/saveTrustymailResultsToDb';
 import * as chokidar from 'chokidar';
-import * as fs from 'fs';
 
 // TODO: Add scan time to domain table
-// TODO: Add timeout to exit while loop
 // TODO: Retry failed domains
-// TODO: Keep updated PSL file to avoid downloading it with every scan
+// TODO: PSL is downloaded once per organization per scan. Would like to download only once per day
 export const handler = async (commandOptions: CommandOptions) => {
-  // Initialize watcher to detect changes to files in /app folder
-  const watcher = chokidar.watch('.', {
-    ignored: /(^|[\/\\])\../, // ignore dotfiles
-    depth: 0,
-    persistent: true
-  });
-  const queue = new Set<string>();
-  const failedDomains = new Set<string>();
-  // Add event listener for when a file is added to the /app folder
-  watcher.on('add', (path) => {
-    console.log('File', path, 'has been added');
-    if (queue.has(path)) {
-      console.log('queue has path', path);
-      syncToDB(path);
-      console.log('deleting path from queue', path);
-      console.log('queue before delete', queue);
-      queue.delete(path);
-      console.log('queue after delete', queue);
-    }
-  });
+  let pslDownloaded = false;
   const { organizationId, organizationName } = commandOptions;
   console.log('Running trustymail on organization', organizationName);
   const domains = await getAllDomains([organizationId!]);
+  const queue = new Set(domains.map((domain) => `${domain.id}.json`));
+  const failedDomains = new Set<string>();
+  // Event listener detects when public_suffix_list.dat is downloaded
+  chokidar.watch('public_suffix_list.dat').on('add', () => {
+    console.log('Public suffix list downloaded');
+    pslDownloaded = true;
+  });
   console.log(
     `${organizationName} domains to be scanned:`,
     domains.map((domain) => domain.name)
@@ -41,7 +27,16 @@ export const handler = async (commandOptions: CommandOptions) => {
   for (const domain of domains) {
     try {
       const path = `${domain.id}.json`;
-      queue.add(path);
+      // Event listener detects Trustymail results file at creation and syncs it to db
+      chokidar.watch(path).on('add', (path) => {
+        console.log('File', path, 'has been added');
+        console.log(`syncing ${path} to db...`);
+        saveTrustymailResultsToDb(path).then(() => {
+          console.log(`deleting ${path} from queue...`);
+          queue.delete(path);
+          console.log(`Items left in queue:`, queue);
+        });
+      });
       const args = [
         domain.name,
         '--json',
@@ -50,6 +45,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       ];
       console.log('Running trustymail with args:', args);
       const child = spawn('trustymail', args, { stdio: 'pipe' });
+      // Console logs cli output from trustymail
       child.stdout.on('data', (data) => {
         console.log(`${domain.name} (${domain.id}) stdout: ${data}`);
       });
@@ -76,48 +72,32 @@ export const handler = async (commandOptions: CommandOptions) => {
           failedDomains.add(domain.id);
         }
       });
-      child.on('disconnect', () =>
-        console.log(
-          `trustymail ${domain.name} (${domain.id}) child process disconnected`
-        )
-      );
-      child.on('message', (message, sendHandle) =>
-        console.log(
-          `trustymail ${domain.name} (${domain.id}) child process message:`,
-          message,
-          sendHandle
-        )
-      );
-      await delay(1000 * 15); // wait 20 seconds before spawning next child process
+      let pslDownloadTimeout = 0;
+      // Wait for PSL download and continue to next domain if it takes more than 10 seconds
+      while (!pslDownloaded && pslDownloadTimeout < 10) {
+        console.log('Waiting for public_suffix_list.dat to be generated...');
+        await delay(1000 * 1);
+        pslDownloadTimeout++;
+      }
     } catch (e) {
       console.error(e);
       continue;
     }
   }
+  // Keep container alive until trustymail results sync to db
   while (queue.size > 0) {
     console.log('Waiting for trustymail results to sync to db...');
     console.log('queue', queue);
-    await delay(1000 * 60 * 1);
+    await delay(1000 * 5);
   }
-  console.log(  
-    `trustymail failed for ${failedDomains.size} domains out of ${domains.length} domains \n failed domains:`,
+  console.log(
+    `trustymail successfully scanned ${
+      domains.length - failedDomains.size
+    } domains out of ${domains.length} domains \n failed domains:`,
     failedDomains
   );
 };
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-async function syncToDB(path: string) {
-  const domainId = path.split('.')[0];
-  console.log(`Syncing results to db for ${path} to domainId ${domainId}...`);
-  const jsonData = await fs.promises.readFile(path);
-  await saveTrustymailResultsToDb(domainId, jsonData)
-    .then(() =>
-      // Delete file after saving to db
-      fs.unlink(path, (err) => {
-        if (err) throw err;
-      })
-    )
-    .then(() => console.log(`Saved result for ${domainId} to database.`));
 }
