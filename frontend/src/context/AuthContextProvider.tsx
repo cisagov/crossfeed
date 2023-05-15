@@ -22,6 +22,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const [org, setOrg] = usePersistentState<
     Organization | OrganizationTag | null
   >('organization', null);
+  const [showMap, setShowMap] = usePersistentState<boolean>('showMap', false);
   const [showAllOrganizations, setShowAllOrganizations] =
     usePersistentState<boolean>('showAllOrganizations', false);
   const [feedbackMessage, setFeedbackMessage] = useState<{
@@ -129,6 +130,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         setUser: setProfile,
         refreshUser,
         setOrganization: setOrg,
+        showMaps: showMap,
+        setShowMaps: setShowMap,
         currentOrganization: extendedOrg,
         showAllOrganizations: showAllOrganizations,
         setShowAllOrganizations: setShowAllOrganizations,
