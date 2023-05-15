@@ -45,7 +45,7 @@ export const Import = <T extends object>(props: ImportProps<T>) => {
     setLoading((l) => l - 1);
     onImport(results);
   };
-  if (user?.userType === 'globalAdmin'){
+  if (user?.userType === 'globalAdmin') {
     return (
       <form>
         <h2>Import {name}</h2>
