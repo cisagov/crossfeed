@@ -190,10 +190,4 @@ export class Domain extends BaseEntity {
     'Syntax Errors': string[];
     'Debug Info': string[];
   } | null;
-
-  @Column({
-    type: 'timestamp',
-    nullable: true
-  })
-  trustymailLastRun: Date | null;
 }
