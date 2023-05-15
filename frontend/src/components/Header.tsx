@@ -50,6 +50,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     setOrganization,
     showAllOrganizations,
     setShowAllOrganizations,
+    setShowMaps,
     user,
     logout,
     apiGet
@@ -250,6 +251,9 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                   <>
                     <div className={classes.spacing} />
                     <Autocomplete
+                      getOptionSelected={(option, value) =>
+                        option.name === value.name
+                      }
                       options={[{ name: 'All Organizations' }].concat(
                         organizations
                       )}
@@ -299,6 +303,11 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                         if (value && 'id' in value) {
                           setOrganization(value);
                           setShowAllOrganizations(false);
+                          if (value.name === 'Election') {
+                            setShowMaps(true);
+                          } else {
+                            setShowMaps(false);
+                          }
 
                           // Check if we're on an organization page and, if so, update it to the new organization
                           if (orgPageMatch !== null) {
@@ -308,6 +317,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                           }
                         } else {
                           setShowAllOrganizations(true);
+                          setShowMaps(false);
                         }
                       }}
                       renderInput={(params) => (
