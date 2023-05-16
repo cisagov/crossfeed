@@ -7,6 +7,8 @@ RUN apk update && apk upgrade
 
 COPY ./package* ./
 
+RUN npm install -g npm@9
+
 RUN npm i
 
 COPY . .
