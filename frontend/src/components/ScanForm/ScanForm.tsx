@@ -135,26 +135,27 @@ export const ScanForm: React.FC<{
       }}
       className={classes.form}
     >
-      {type === 'create' && scanSchema && <Label htmlFor="name">Name</Label> && (
-        <Dropdown
-          required
-          id="name"
-          name="name"
-          className={classes.textField}
-          onChange={onTextChange}
-          value={values.name}
-        >
-          {Object.keys(scanSchema)
-            .sort((a, b) => a.localeCompare(b))
-            .map((i) => {
-              return (
-                <option key={i} value={i}>
-                  {i}
-                </option>
-              );
-            })}
-        </Dropdown>
-      )}
+      {type === 'create' &&
+        scanSchema && <Label htmlFor="name">Name</Label> && (
+          <Dropdown
+            required
+            id="name"
+            name="name"
+            className={classes.textField}
+            onChange={onTextChange}
+            value={values.name}
+          >
+            {Object.keys(scanSchema)
+              .sort((a, b) => a.localeCompare(b))
+              .map((i) => {
+                return (
+                  <option key={i} value={i}>
+                    {i}
+                  </option>
+                );
+              })}
+          </Dropdown>
+        )}
       {schemaUpdated && <p>{scanSchema[values.name].description}</p>}
       {/* <Label htmlFor="arguments">Arguments</Label>
         <TextInput
@@ -233,7 +234,6 @@ export const ScanForm: React.FC<{
           </label>
           <TextInput
             id="frequency"
-            maxLength={20}
             name="frequency"
             type="number"
             style={{

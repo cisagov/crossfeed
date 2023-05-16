@@ -30,7 +30,7 @@ interface Errors extends Partial<User> {
 }
 
 export const Users: React.FC = () => {
-  const { apiGet, apiPost, apiDelete } = useAuthContext();
+  const { user, apiGet, apiPost, apiDelete } = useAuthContext();
   const modalRef = useRef<ModalRef>(null);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [users, setUsers] = useState<User[]>([]);
@@ -205,7 +205,6 @@ export const Users: React.FC = () => {
         <Label htmlFor="firstName">First Name</Label>
         <TextInput
           required
-          maxLength={20}
           id="firstName"
           name="firstName"
           className={classes.textField}
@@ -219,6 +218,7 @@ export const Users: React.FC = () => {
           maxLength={20}
           id="lastName"
           name="lastName"
+          maxLength={250}
           className={classes.textField}
           type="text"
           value={values.lastName}
@@ -230,6 +230,7 @@ export const Users: React.FC = () => {
           maxLength={50}
           id="email"
           name="email"
+          maxLength={250}
           className={classes.textField}
           type="text"
           value={values.email}
@@ -261,53 +262,63 @@ export const Users: React.FC = () => {
         <br></br>
         <Button type="submit">Invite User</Button>
       </form>
-      <ImportExport<
-        | User
-        | {
-            roles: string;
-          }
-      >
-        name="users"
-        fieldsToExport={['firstName', 'lastName', 'email', 'roles', 'userType']}
-        onImport={async (results) => {
-          // TODO: use a batch call here instead.
-          const createdUsers = [];
-          for (const result of results) {
-            const parsedRoles: {
-              organization: string;
-              role: string;
-            }[] = JSON.parse(result.roles as string);
-            const body: any = result;
-            // For now, just create role with the first organization
-            if (parsedRoles.length > 0) {
-              body.organization = parsedRoles[0].organization;
-              body.organizationAdmin = parsedRoles[0].role === 'admin';
-            }
-            try {
-              createdUsers.push(
-                await apiPost('/users/', {
-                  body
-                })
-              );
-            } catch (e) {
-              // Just continue when an error occurs
-              console.error(e);
-            }
-          }
-          setUsers(users.concat(...createdUsers));
-        }}
-        getDataToExport={() =>
-          users.map((user) => ({
-            ...user,
-            roles: JSON.stringify(
-              user.roles.map((role) => ({
-                organization: role.organization.id,
-                role: role.role
+      {user?.userType === 'globalAdmin' && (
+        <>
+          <ImportExport<
+            | User
+            | {
+                roles: string;
+              }
+          >
+            name="users"
+            fieldsToExport={[
+              'firstName',
+              'lastName',
+              'email',
+              'roles',
+              'userType'
+            ]}
+            onImport={async (results) => {
+              // TODO: use a batch call here instead.
+              const createdUsers = [];
+              for (const result of results) {
+                const parsedRoles: {
+                  organization: string;
+                  role: string;
+                }[] = JSON.parse(result.roles as string);
+                const body: any = result;
+                // For now, just create role with the first organization
+                if (parsedRoles.length > 0) {
+                  body.organization = parsedRoles[0].organization;
+                  body.organizationAdmin = parsedRoles[0].role === 'admin';
+                }
+                try {
+                  createdUsers.push(
+                    await apiPost('/users/', {
+                      body
+                    })
+                  );
+                } catch (e) {
+                  // Just continue when an error occurs
+                  console.error(e);
+                }
+              }
+              setUsers(users.concat(...createdUsers));
+            }}
+            getDataToExport={() =>
+              users.map((user) => ({
+                ...user,
+                roles: JSON.stringify(
+                  user.roles.map((role) => ({
+                    organization: role.organization.id,
+                    role: role.role
+                  }))
+                )
               }))
-            )
-          }))
-        }
-      />
+            }
+          />
+        </>
+      )}
 
       <Modal ref={modalRef} id="modal">
         <ModalHeading>Delete user?</ModalHeading>
