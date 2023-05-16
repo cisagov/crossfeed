@@ -6,7 +6,7 @@ import { getOrgMemberships } from './auth';
  * @swagger
  *
  * /reports/export:
- *  get:
+ *  post:
  *    description: Export CyHy report by specifying the S3 key returned in /reports/list and the organization id. User must be a member of the organization.
  *    tags:
  *    - Reports
@@ -39,7 +39,7 @@ export const export_report = wrapHandler(async (event) => {
  * @swagger
  *
  * /reports/list:
- *  get:
+ *  post:
  *    description: Get a list of available P&E reports by specifying organization id. User must be a member of the organization.
  *    tags:
  *    - Reports
