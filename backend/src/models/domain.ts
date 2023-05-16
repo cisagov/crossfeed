@@ -156,6 +156,7 @@ export class Domain extends BaseEntity {
     default: {}
   })
   trustymailResults: {
+    Timestamp: 'timestamp';
     Domain: string;
     'Base Domain': string;
     Live: boolean;
