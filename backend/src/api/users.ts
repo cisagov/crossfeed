@@ -67,18 +67,7 @@ class UserSearch {
 
   async getResults(event): Promise<[User[], number]> {
     const pageSize = this.pageSize || 25;
-    const sort =
-      this.sort === 'name' || 'fullName'
-        ? 'user.fullName'
-        : this.sort === 'userType'
-        ? 'user.userType'
-        : this.sort === 'dateAcceptedTerms'
-        ? 'user.dateAcceptedTerms'
-        : this.sort === 'lastLoggedIn'
-        ? 'user.lastLoggedIn'
-        : this.sort === 'acceptedTermsVersion'
-        ? 'user.acceptedTermsVersion'
-        : this.sort;
+    const sort = this.sort === 'name' ? 'user.fullName' : 'user.' + this.sort
     const qs = User.createQueryBuilder('user').orderBy(sort, this.order);
 
     const results = await qs.getManyAndCount();
@@ -353,6 +342,27 @@ export const acceptTerms = wrapHandler(async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(user)
+  };
+});
+
+/**
+ * @swagger
+ *
+ * /users:
+ *  get:
+ *    description: List users.
+ *    tags:
+ *    - Users
+ */
+export const list = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  await connectToDatabase();
+  const result = await User.find({
+    relations: ['roles', 'roles.organization']
+  });
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result)
   };
 });
 

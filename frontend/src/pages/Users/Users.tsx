@@ -178,9 +178,8 @@ export const Users: React.FC = () => {
         sort: query.sort
       });
       if (!resp) return;
-      const { result, count } = resp;
+      const { result } = resp;
       setUsers(result);
-      console.log('Count of users' + count);
     },
     [userSearch]
   );
