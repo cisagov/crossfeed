@@ -40,30 +40,8 @@ export const CrossfeedFooter: React.FC = () => {
           style={{
             display: 'flex',
             justifyContent: 'center',
-
-            borderLeft: '1px solid white',
-            borderRight: '1px solid white'
-          }}
-        >
-          <p>
-            <Link
-              href="/"
-              underline="always"
-              style={{ color: 'white' }}
-              onClick={logout}
-            >
-              Logout
-            </Link>
-          </p>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={2}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            borderRight: '1px solid white'
+            borderRight: '1px solid white',
+            borderLeft: '1px solid white'
           }}
         >
           <p>
@@ -125,6 +103,27 @@ export const CrossfeedFooter: React.FC = () => {
               style={{ color: 'white' }}
             >
               Contact Us
+            </Link>
+          </p>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={2}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            borderLeft: '1px solid white'
+          }}
+        >
+          <p>
+            <Link
+              href="/"
+              underline="always"
+              style={{ color: 'white' }}
+              onClick={logout}
+            >
+              Logout
             </Link>
           </p>
         </Grid>
