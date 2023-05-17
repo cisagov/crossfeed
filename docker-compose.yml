@@ -15,6 +15,7 @@ services:
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
+    command: ["postgres", "-c", "log_statement=all", "-c", "log_duration=on"]
 
   frontend:
     build: ./frontend
