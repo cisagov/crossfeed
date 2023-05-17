@@ -174,7 +174,6 @@ export const ScanForm: React.FC<{
         !global) && (
         <Checkbox
           id="isGranular"
-          maxLength={20}
           label="Limit enabled organizations"
           name="isGranular"
           checked={values.isGranular}
@@ -234,6 +233,7 @@ export const ScanForm: React.FC<{
           </label>
           <TextInput
             id="frequency"
+            maxLength={250}
             name="frequency"
             type="number"
             style={{
