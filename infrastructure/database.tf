@@ -23,6 +23,7 @@ resource "aws_db_instance" "db" {
   backup_retention_period             = 35
   storage_encrypted                   = true
   iam_database_authentication_enabled = true
+  enabled_cloudwatch_logs_exports     = ["postgresql","upgrade"]
 
   // database information
   db_name  = var.db_table_name
