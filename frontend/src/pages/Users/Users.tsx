@@ -215,10 +215,8 @@ export const Users: React.FC = () => {
         <Label htmlFor="lastName">Last Name</Label>
         <TextInput
           required
-          maxLength={20}
           id="lastName"
           name="lastName"
-          maxLength={250}
           className={classes.textField}
           type="text"
           value={values.lastName}
@@ -227,10 +225,8 @@ export const Users: React.FC = () => {
         <Label htmlFor="email">Email</Label>
         <TextInput
           required
-          maxLength={50}
           id="email"
           name="email"
-          maxLength={250}
           className={classes.textField}
           type="text"
           value={values.email}
