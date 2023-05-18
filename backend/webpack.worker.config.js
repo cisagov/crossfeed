@@ -15,7 +15,7 @@ module.exports = {
   plugins: [
     // These are not used for being built, and they can't build properly, so we exclude them.
     new webpack.NormalModuleReplacementPlugin(
-      /(canvas|dockerode|ws)/,
+      /(canvas|dockerode|ws|pg-cloudflare)/,
       require.resolve('./mock.js')
     ),
     new webpack.IgnorePlugin({
