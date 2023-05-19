@@ -227,9 +227,15 @@ export const authorize = async (event) => {
     if (!user) throw Error('User does not exist');
     return userTokenBody(user);
   } catch (e) {
-    console.error(e);
-    const parsed = { id: 'cisa:crossfeed:anonymous' };
-    return parsed;
+    if (e.name === 'JsonWebTokenError') {
+      // Handle this error without logging or displaying the error message
+      const parsed = { id: 'cisa:crossfeed:anonymous' };
+      return parsed;
+    } else {
+      console.error(e);
+      const parsed = { id: 'cisa:crossfeed:anonymous' };
+      return parsed;
+    }
   }
 };
 
