@@ -232,6 +232,7 @@ export const ScanForm: React.FC<{
           </label>
           <TextInput
             id="frequency"
+            maxLength={250}
             name="frequency"
             type="number"
             style={{
