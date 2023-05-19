@@ -229,12 +229,12 @@ export const authorize = async (event) => {
   } catch (e) {
     if (e.name === 'JsonWebTokenError') {
       // Handle this error without logging or displaying the error message
-      const parsed = {id: 'cisa:crossfeed:anonymous'};
+      const parsed = { id: 'cisa:crossfeed:anonymous' };
       return parsed;
     } else {
-    console.error(e);
-    const parsed = { id: 'cisa:crossfeed:anonymous' };
-    return parsed;
+      console.error(e);
+      const parsed = { id: 'cisa:crossfeed:anonymous' };
+      return parsed;
     }
   }
 };
