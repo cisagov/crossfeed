@@ -79,17 +79,21 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   );
 
   const refreshUser = useCallback(async () => {
-    if (!token && process.env.REACT_APP_USE_COGNITO) {
-      const session = await Auth.currentSession();
-      const { token } = await apiPost<{ token: string; user: User }>(
-        '/auth/callback',
-        {
-          body: {
-            token: session.getIdToken().getJwtToken()
+    try {
+      if (!token && process.env.REACT_APP_USE_COGNITO) {
+        const session = await Auth.currentSession();
+        const { token } = await apiPost<{ token: string; user: User }>(
+          '/auth/callback',
+          {
+            body: {
+              token: session.getIdToken().getJwtToken()
+            }
           }
-        }
-      );
-      setToken(token);
+        );
+        setToken(token);
+      }
+    } catch (error) {
+      console.log(error);
     }
   }, [apiPost, setToken, token]);
 
