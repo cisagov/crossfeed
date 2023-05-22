@@ -22,7 +22,7 @@ const SAMPLE_TAG_NAME = 'Sample Data'; // Tag name for sample data
 const NUM_SAMPLE_ORGS = 10; // Number of sample orgs
 const NUM_SAMPLE_DOMAINS = 10; // Number of sample domains per org
 const PROB_SAMPLE_SERVICES = 0.5; // Higher number means more services per domain
-const PROB_SAMPLE_VULNERABILITIES = 1; // Higher number means more vulnerabilities per domain
+const PROB_SAMPLE_VULNERABILITIES = 0.5; // Higher number means more vulnerabilities per domain
 
 export const handler: Handler = async (event) => {
   const connection = await connectToDatabase(false);
@@ -163,9 +163,9 @@ export const handler: Handler = async (event) => {
       } catch (error) {
         console.log(error);
       }
-      console.log('Done.');
     } catch (error) {
       console.log(error);
     }
   }
+  console.log('Done.');
 };
