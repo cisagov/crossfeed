@@ -5,7 +5,6 @@ import {
   Domain,
   Organization,
   OrganizationTag,
-  Scan,
   Vulnerability
 } from '../models';
 import ESClient from './es-client';
@@ -23,7 +22,7 @@ const SAMPLE_TAG_NAME = 'Sample Data'; // Tag name for sample data
 const NUM_SAMPLE_ORGS = 10; // Number of sample orgs
 const NUM_SAMPLE_DOMAINS = 10; // Number of sample domains per org
 const PROB_SAMPLE_SERVICES = 0.5; // Higher number means more services per domain
-const PROB_SAMPLE_VULNERABILITIES = 0.5; // Higher number means more vulnerabilities per domain
+const PROB_SAMPLE_VULNERABILITIES = 1; // Higher number means more vulnerabilities per domain
 
 export const handler: Handler = async (event) => {
   const connection = await connectToDatabase(false);
@@ -69,96 +68,104 @@ export const handler: Handler = async (event) => {
         name: SAMPLE_TAG_NAME
       }).save();
     }
-    for (let i = 0; i <= NUM_SAMPLE_ORGS; i++) {
-      let parentId: string | null = null;
-      if (organizationIds.length > NUM_SAMPLE_ORGS / 2)
-        parentId =
-          organizationIds[Math.floor(Math.random() * organizationIds.length)];
-      // make half the entries children of previous entries
-      let organization: Organization;
-      if (parentId === null) {
-        organization = await Organization.create({
-          name: Sentencer.make('{{ adjective }} {{ entity }}').replace(
-            /\b\w/g,
-            (l) => l.toUpperCase()
-          ), // Capitalize organization names
-          rootDomains: ['crossfeed.local'],
-          ipBlocks: [],
-          isPassive: false,
-          tags: [tag]
-        }).save();
-      } else {
-        organization = await Organization.create({
-          name: Sentencer.make('{{ adjective }} {{ entity }}').replace(
-            /\b\w/g,
-            (l) => l.toUpperCase()
-          ), // Capitalize organization names
-          rootDomains: ['crossfeed.local'],
-          ipBlocks: [],
-          isPassive: false,
-          tags: [tag],
-          parentId: parentId
-        }).save();
-      }
-
-      console.log(organization.name);
-      organizationIds.push(organization.id);
-      for (let i = 0; i <= NUM_SAMPLE_DOMAINS; i++) {
-        const randomNum = () => Math.floor(Math.random() * 256);
-        const domain = await Domain.create({
-          name: Sentencer.make('{{ adjective }}-{{ noun }}.crossfeed.local'),
-          ip: ['127', randomNum(), randomNum(), randomNum()].join('.'), // Create random loopback addresses
-          fromRootDomain: 'crossfeed.local',
-          subdomainSource: 'findomain',
-          organization
-        }).save();
-        console.log(`\t${domain.name}`);
-        let service;
-        for (const serviceData of services) {
-          if (service && Math.random() < PROB_SAMPLE_SERVICES) continue;
-          service = await Service.create({
-            domain,
-            port: serviceData.port,
-            service: serviceData.service,
-            serviceSource: 'shodan',
-            wappalyzerResults: [
-              {
-                technology: {
-                  cpe: sample(cpes)
-                },
-                version: ''
-              }
-            ]
+    try {
+      for (let i = 0; i <= NUM_SAMPLE_ORGS; i++) {
+        let parentId: string | null = null;
+        if (organizationIds.length > NUM_SAMPLE_ORGS / 2)
+          parentId =
+            organizationIds[Math.floor(Math.random() * organizationIds.length)];
+        // make half the entries children of previous entries
+        let organization: Organization;
+        if (parentId === null) {
+          organization = await Organization.create({
+            name: Sentencer.make('{{ adjective }} {{ entity }}').replace(
+              /\b\w/g,
+              (l) => l.toUpperCase()
+            ), // Capitalize organization names
+            rootDomains: ['crossfeed.local'],
+            ipBlocks: [],
+            isPassive: false,
+            tags: [tag]
+          }).save();
+        } else {
+          organization = await Organization.create({
+            name: Sentencer.make('{{ adjective }} {{ entity }}').replace(
+              /\b\w/g,
+              (l) => l.toUpperCase()
+            ), // Capitalize organization names
+            rootDomains: ['crossfeed.local'],
+            ipBlocks: [],
+            isPassive: false,
+            tags: [tag],
+            parent: { id: parentId }
           }).save();
         }
-        // Create a bunch of vulnerabilities for the first service
-        for (const vulnData of vulnerabilities) {
-          // Sample CVE vulnerabilities, but always add a single instance of other
-          // vulnerabilities (hibp / dnstwist)
-          if (
-            vulnData.title.startsWith('CVE-') &&
-            Math.random() < PROB_SAMPLE_VULNERABILITIES
-          )
-            continue;
-          await Vulnerability.create({
-            ...vulnData,
-            domain,
-            service
-          } as object).save();
+
+        console.log(organization.name);
+        organizationIds.push(organization.id);
+        for (let i = 0; i <= NUM_SAMPLE_DOMAINS; i++) {
+          const randomNum = () => Math.floor(Math.random() * 256);
+          const domain = await Domain.create({
+            name: Sentencer.make('{{ adjective }}-{{ noun }}.crossfeed.local'),
+            ip: ['127', randomNum(), randomNum(), randomNum()].join('.'), // Create random loopback addresses
+            fromRootDomain: 'crossfeed.local',
+            subdomainSource: 'findomain',
+            organization
+          }).save();
+          console.log(`\t${domain.name}`);
+          let service;
+          for (const serviceData of services) {
+            if (service && Math.random() < PROB_SAMPLE_SERVICES) continue;
+            service = await Service.create({
+              domain,
+              port: serviceData.port,
+              service: serviceData.service,
+              serviceSource: 'shodan',
+              wappalyzerResults: [
+                {
+                  technology: {
+                    cpe: sample(cpes)
+                  },
+                  version: ''
+                }
+              ]
+            }).save();
+          }
+          // Create a bunch of vulnerabilities for the first service
+          for (const vulnData of vulnerabilities) {
+            // Sample CVE vulnerabilities, but always add a single instance of other
+            // vulnerabilities (hibp / dnstwist)
+            if (
+              vulnData.title.startsWith('CVE-') &&
+              Math.random() < PROB_SAMPLE_VULNERABILITIES
+            )
+              continue;
+            await Vulnerability.create({
+              ...vulnData,
+              domain,
+              service
+            } as object).save();
+          }
         }
       }
-    }
 
-    console.log('Done. Running search sync...');
-    for (const organizationId of organizationIds) {
-      await searchSync({
-        organizationId,
-        scanId: 'scanId',
-        scanName: 'scanName',
-        organizationName: 'organizationName',
-        scanTaskId: 'scanTaskId'
-      });
+      console.log('Done. Running search sync...');
+      try {
+        for (const organizationId of organizationIds) {
+          await searchSync({
+            organizationId,
+            scanId: 'scanId',
+            scanName: 'scanName',
+            organizationName: 'organizationName',
+            scanTaskId: 'scanTaskId'
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      console.log('Done.');
+    } catch (error) {
+      console.log(error);
     }
-    console.log('Done.');
   }
 };
