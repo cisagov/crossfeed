@@ -9,7 +9,7 @@ joblib==1.2.0
 mitmproxy==9.0.1
 mitmproxy_wireguard==0.1.23
 numpy==1.24.2
-pandas==1.5.1
+pandas==2.0.1
 phonenumbers==8.13.8
 pip-tools==6.13.0
 pipreqs==0.4.11
