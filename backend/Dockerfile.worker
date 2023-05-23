@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY ./package* ./
 
-RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci --legacy-peer-deps
+RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
 
 COPY tsconfig.json ./tsconfig.json
 COPY webpack.worker.config.js ./webpack.worker.config.js

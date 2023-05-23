@@ -23,9 +23,9 @@ regex==2023.3.23
 requests==2.28.2
 requests-http-signature==0.2.0
 Scrapy==2.8.0
-scrubadub==2.0.0
-six==1.16.0
 scikit-learn==1.2.2
+git+https://github.com/LeapBeyond/scrubadub.git@refs/pull/143/head
+six==1.16.0
 threadpoolctl==3.1.0
 tomli==2.0.1
 tzdata==2023.3
