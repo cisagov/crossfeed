@@ -236,6 +236,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     isPassive: true,
     global: true,
     description: 'Performs saved searches to update their search results'
+  },
+  trustymail: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Evaluates SPF/DMARC records and checks MX records for STARTTLS support'
   }
 };
 
