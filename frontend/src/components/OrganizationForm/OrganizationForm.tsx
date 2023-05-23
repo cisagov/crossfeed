@@ -8,7 +8,8 @@ import {
   DialogActions,
   Switch,
   Button,
-  FormControlLabel
+  FormControlLabel,
+  ValidatorForm
 } from '@material-ui/core';
 
 export interface OrganizationFormValues {
@@ -61,7 +62,9 @@ export const OrganizationForm: React.FC<{
       </DialogTitle>
       <DialogContent>
         <TextField
+          error={!values.name}
           margin="dense"
+          helperText="Required Field"
           id="name"
           inputProps={{ maxLength: 250 }}
           name="name"
@@ -114,6 +117,7 @@ export const OrganizationForm: React.FC<{
         <Button
           variant="contained"
           color="primary"
+          disabled={!values.name}
           onClick={async () => {
             await onSubmit({
               rootDomains:
