@@ -30,7 +30,7 @@ interface Errors extends Partial<User> {
 }
 
 export const Users: React.FC = () => {
-  const { apiGet, apiPost, apiDelete } = useAuthContext();
+  const { user, apiGet, apiPost, apiDelete } = useAuthContext();
   const modalRef = useRef<ModalRef>(null);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [users, setUsers] = useState<User[]>([]);
@@ -205,6 +205,7 @@ export const Users: React.FC = () => {
         <Label htmlFor="firstName">First Name</Label>
         <TextInput
           required
+          maxLength={250}
           id="firstName"
           name="firstName"
           className={classes.textField}
@@ -217,6 +218,7 @@ export const Users: React.FC = () => {
           required
           id="lastName"
           name="lastName"
+          maxLength={250}
           className={classes.textField}
           type="text"
           value={values.lastName}
@@ -227,6 +229,7 @@ export const Users: React.FC = () => {
           required
           id="email"
           name="email"
+          maxLength={250}
           className={classes.textField}
           type="text"
           value={values.email}
@@ -303,10 +306,10 @@ export const Users: React.FC = () => {
                 organization: role.organization.id,
                 role: role.role
               }))
-            )
-          }))
-        }
-      />
+            }
+          />
+        </>
+      )}
 
       <Modal ref={modalRef} id="modal">
         <ModalHeading>Delete user?</ModalHeading>

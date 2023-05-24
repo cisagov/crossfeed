@@ -20,20 +20,13 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^13.5.0",
     "@trussworks/react-uswds": "^4.0.0",
-    "@types/classnames": "^2.3.1",
     "@types/d3-scale": "^4.0.2",
     "@types/dompurify": "^2.3.4",
     "@types/file-saver": "^2.0.5",
-    "@types/jest": "^29.2.1",
-    "@types/jwt-decode": "^3.1.0",
-    "@types/node": "^18.11.9",
+    "@types/jest": "^27.5.2",
     "@types/papaparse": "^5.3.5",
-    "@types/react": "^17.0.52",
     "@types/react-beforeunload": "^2.1.1",
-    "@types/react-dom": "^17.0.18",
     "@types/react-lazylog": "^4.5.1",
-    "@types/react-router-dom": "^5.3.3",
-    "@types/react-select": "^5.0.1",
     "@types/react-simple-maps": "^3.0.0",
     "@types/react-table": "^7.7.12",
     "autoprefixer": "^10.4.13",
@@ -49,7 +42,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.10",
     "file-saver": "^2.0.5",
-    "jest-environment-jsdom-sixteen": "^2.0.0",
     "jspdf": "^2.5.1",
     "jwt-decode": "^3.1.2",
     "papaparse": "^5.3.2",
@@ -63,18 +55,30 @@
     "react-lazylog": "^4.5.3",
     "react-markdown": "^8.0.3",
     "react-media": "^1.10.0",
-    "react-router-dom": "^5.0.0",
+    "react-router-dom": "^5.3.4",
     "react-scripts": "5.0.1",
     "react-select": "^5.5.9",
     "react-simple-maps": "^3.0.0",
     "react-table": "^7.8.0",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.55.0",
-    "ts-jest": "^29.0.3",
+    "ts-jest": "^27.1.5",
     "typescript": "^4.8.4",
     "universal-cookie": "^4.0.4",
     "uswds": "^2.13.3",
     "web-vitals": "^2.1.4"
+  },
+  "overrides": {
+    "react-scripts": {
+      "webpack": "^5.76.0"
+    },
+    "css-select": {
+      "nth-check": "^2.1.1"
+    },
+    "d3-color": "^3.1.0",
+    "kind-of": "^6.0.3",
+    "execa": "^5.1.1",
+    "magic-string": "^0.30.0"
   },
   "resolutions": {
     "d3-color": "3.1.0",
@@ -107,5 +111,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.59",
+    "@types/react-dom": "^17.0.18",
+    "@types/react-router-dom": "^5.3.3",
+    "ajv": "^8.12.0",
+    "ajv-keywords": "^5.1.0"
   }
 }
