@@ -20,7 +20,13 @@ export const OrganizationList: React.FC<{
       const org = await apiPost('/organizations/', {
         body
       });
-      setOrganizations(organizations.concat(org));
+      if (parent?.id === org.parent.id) {
+        setOrganizations(organizations.concat(org));
+      }
+      setFeedbackMessage({
+        message: 'Successfully Created ',
+        type: 'success'
+      });
     } catch (e: any) {
       setFeedbackMessage({
         message:
@@ -96,6 +102,7 @@ export const OrganizationList: React.FC<{
         setOpen={setDialogOpen}
         type="create"
         parent={parent}
+        organizations={organizations}
       ></OrganizationForm>
     </>
   );
