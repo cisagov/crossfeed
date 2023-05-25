@@ -8,8 +8,7 @@ import {
   DialogActions,
   Switch,
   Button,
-  FormControlLabel,
-  ValidatorForm
+  FormControlLabel
 } from '@material-ui/core';
 
 export interface OrganizationFormValues {
