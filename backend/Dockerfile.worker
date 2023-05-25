@@ -60,6 +60,8 @@ RUN pip install -r worker/requirements.txt
 
 COPY worker worker
 
+RUN wget https://publicsuffix.org/list/public_suffix_list.dat --no-use-server-timestamps
+
 COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 
 COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsync /go/bin/cpe2cve /usr/bin/

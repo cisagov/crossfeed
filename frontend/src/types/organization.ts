@@ -14,6 +14,12 @@ export interface Organization {
   tags: OrganizationTag[];
   parent: Organization | null;
   children: Organization[];
+  pendingDomains: PendingDomain[];
+}
+
+export interface PendingDomain {
+  name: string;
+  token: string;
 }
 
 export interface OrganizationTag {
