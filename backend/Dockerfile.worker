@@ -48,6 +48,7 @@ RUN export LD_LIBRARY_PATH=/opt/OpenBLAS/lib:$LD_LIBRARY_PATH
 
 # Install pe-source module
 # Sync the latest from cf-staging branch
+
 RUN git clone -b cf-source-staging https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout c9cbbd73b22ef38cabe1da6ba50aeb2dc0be4f99 && pip install .
 RUN python3 -m pip install --upgrade pip 
 
@@ -58,6 +59,8 @@ COPY worker/requirements.txt worker/requirements.txt
 RUN pip install -r worker/requirements.txt
 
 COPY worker worker
+
+RUN wget https://publicsuffix.org/list/public_suffix_list.dat --no-use-server-timestamps
 
 COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 

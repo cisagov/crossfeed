@@ -9,7 +9,7 @@ export const createColumns = (pdfExport: any) =>
   [
     {
       Header: 'Filename',
-      accessor: 'name',
+      accessor: 'reportName',
       id: 'filename',
       Filter: ColumnFilter
     },
@@ -33,8 +33,11 @@ export const createColumns = (pdfExport: any) =>
     },
     {
       Header: 'Download',
-      accessor: ({ key }) => (
-        <IconButton aria-label="fingerprint" onClick={() => pdfExport(key)}>
+      accessor: ({ reportName }) => (
+        <IconButton
+          aria-label="fingerprint"
+          onClick={() => pdfExport(reportName)}
+        >
           <GetAppIcon />
         </IconButton>
       ),

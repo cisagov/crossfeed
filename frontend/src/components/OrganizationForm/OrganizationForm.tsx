@@ -93,6 +93,7 @@ export const OrganizationForm: React.FC<{
         <TextField
           margin="dense"
           id="name"
+          inputProps={{ maxLength: 250 }}
           name="name"
           label="Organization Name"
           type="text"
