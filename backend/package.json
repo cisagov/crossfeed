@@ -80,7 +80,8 @@
   },
   "overrides": {
     "file-type": "^16.5.4",
-    "superagent": "^8.0.5"
+    "superagent": "^8.0.5",
+    "xml2js": "0.5.0" 
   },
   "scripts": {
     "test": "jest --detectOpenHandles --force-exit",
