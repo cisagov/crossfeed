@@ -7,7 +7,7 @@ WORKDIR /app
 COPY ./package* ./
 
 RUN npm install -g npm@9
-RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm i
+RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
 
 COPY . .
 

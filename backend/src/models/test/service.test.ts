@@ -2,8 +2,12 @@ import { connectToDatabase } from '../connection';
 import { Service } from '../service';
 
 describe('service', () => {
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   test('set products', async () => {
     const service = await Service.create({

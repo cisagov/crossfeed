@@ -59,14 +59,18 @@ const body = {
 
 describe('search', () => {
   let organization;
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     organization = await Organization.create({
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
       isPassive: false
     }).save();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   beforeEach(async () => {
     searchDomains
