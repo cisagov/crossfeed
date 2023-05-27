@@ -17,6 +17,8 @@ const authHeaders = {
   }
 };
 
+jest.setTimeout(30000);
+
 describe('censys certificates', () => {
   let organization;
   let scan;
@@ -490,7 +492,6 @@ describe('censys certificates', () => {
       .get('/snapshots/certificates/20200719/failed_file_2.json.gz')
       .reply(429, 'too many requests');
 
-    jest.setTimeout(30000);
     await expect(
       censysCertificates({
         organizationId: organization.id,
