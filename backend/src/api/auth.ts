@@ -45,18 +45,13 @@ interface UserInfo {
 }
 
 const client = jwksClient({
-  jwksUri: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.REACT_APP_USER_POOL_ID}/.well-known/jwks.json`,
-  timeout: 30000 // Defaults to 30s
+  jwksUri: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.REACT_APP_USER_POOL_ID}/.well-known/jwks.json`
 });
 
 function getKey(header, callback) {
   client.getSigningKey(header.kid, function (err, key) {
-    if (key) {
-      const signingKey = key.getPublicKey();
-      callback(null, signingKey);
-    } else {
-      callback(null, null);
-    }
+    const signingKey = key?.getPublicKey();
+    callback(null, signingKey);
   });
 }
 

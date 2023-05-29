@@ -59,6 +59,8 @@ jest.mock('zlib', () => ({
     )
 }));
 
+jest.setTimeout(30000);
+
 const RealDate = Date;
 
 describe('cve', () => {

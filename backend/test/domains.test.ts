@@ -32,6 +32,9 @@ describe('domains', () => {
       isPassive: false
     }).save();
   });
+  afterAll(async () => {
+    await connection.close();
+  });
 
   describe('export', () => {
     it('export by org user should only return domains from that org', async () => {
