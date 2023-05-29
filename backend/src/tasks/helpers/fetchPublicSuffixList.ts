@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import fetch from 'node-fetch';
 
 // Checks for PSL at ${path} and fetches a new one if missing or out of date
 export default async (path = 'public_suffix_list.dat'): Promise<void> => {

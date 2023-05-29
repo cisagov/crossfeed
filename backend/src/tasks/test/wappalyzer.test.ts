@@ -66,9 +66,13 @@ const commandOptions: CommandOptions = {
 
 describe('wappalyzer', () => {
   let testDomain: LiveDomain;
+  let connection;
 
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
 
   beforeEach(() => {

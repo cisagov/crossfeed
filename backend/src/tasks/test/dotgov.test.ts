@@ -17,8 +17,9 @@ const PATH = DOTGOV_LIST_ENDPOINT.replace(HOST, '');
 
 describe('dotgov', () => {
   let scan;
+  let connection;
   beforeEach(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     scan = await Scan.create({
       name: 'dotgov',
       arguments: {},
@@ -31,7 +32,12 @@ describe('dotgov', () => {
       .delete()
       .execute();
   });
-
+  afterEach(async () => {
+    await connection.close();
+  });
+  afterAll(async () => {
+    nock.cleanAll();
+  });
   test('basic test', async () => {
     nock(HOST)
       .get(PATH)

@@ -11,8 +11,9 @@ const exportReport = require('../src/tasks/s3-client')
 describe('reports', () => {
   let organization;
   let organization2;
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     organization = await Organization.create({
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
@@ -25,6 +26,9 @@ describe('reports', () => {
       ipBlocks: [],
       isPassive: false
     }).save();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   it('calling reports list should not work for a user outside of the org', async () => {
     const firstName = 'first name';

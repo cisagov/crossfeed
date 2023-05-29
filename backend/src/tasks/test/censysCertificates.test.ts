@@ -17,11 +17,14 @@ const authHeaders = {
   }
 };
 
+jest.setTimeout(30000);
+
 describe('censys certificates', () => {
   let organization;
   let scan;
+  let connection;
   beforeEach(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
     organization = await Organization.create({
       name: 'test-' + Math.random(),
@@ -98,6 +101,11 @@ describe('censys certificates', () => {
 
   afterEach(async () => {
     global.Date = RealDate;
+    await connection.close();
+  });
+
+  afterAll(async () => {
+    nock.cleanAll();
   });
 
   const checkDomains = async (organization) => {
@@ -484,7 +492,6 @@ describe('censys certificates', () => {
       .get('/snapshots/certificates/20200719/failed_file_2.json.gz')
       .reply(429, 'too many requests');
 
-    jest.setTimeout(30000);
     await expect(
       censysCertificates({
         organizationId: organization.id,

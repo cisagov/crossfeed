@@ -5,13 +5,17 @@ import {
 import { connectToDatabase, Scan, ScanTask } from '../../models';
 
 let scan;
+let connection;
 beforeAll(async () => {
-  await connectToDatabase();
+  connection = await connectToDatabase();
   scan = await Scan.create({
     name: 'findomain',
     arguments: {},
     frequency: 999
   }).save();
+});
+afterAll(async () => {
+  await connection.close();
 });
 
 const createSampleEvent = ({
