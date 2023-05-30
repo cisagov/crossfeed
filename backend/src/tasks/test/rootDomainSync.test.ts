@@ -9,13 +9,17 @@ jest.mock('dns', () => ({
 
 describe('rootDomainSync', () => {
   let scan;
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     scan = await Scan.create({
       name: 'rootDomainSync',
       arguments: {},
       frequency: 999
     }).save();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
 
   test('should add new domains', async () => {
