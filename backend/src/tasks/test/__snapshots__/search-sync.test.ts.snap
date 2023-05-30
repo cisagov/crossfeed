@@ -18,6 +18,7 @@ Array [
   "cloudHosted",
   "ssl",
   "censysCertificatesResults",
+  "trustymailResults",
   "services",
   "organization",
   "vulnerabilities",
