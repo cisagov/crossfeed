@@ -74,7 +74,7 @@ export const Organization: React.FC = () => {
 
   const fetchOrganizations = useCallback(async () => {
     try {
-      const rows = await apiGet<OrganizationType[]>('/organizations/all');
+      const rows = await apiGet<OrganizationType[]>('/organizations?all=true');
       setOrganizations(rows);
     } catch (e) {
       console.error(e);

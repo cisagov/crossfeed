@@ -288,7 +288,7 @@ describe('organizations', () => {
         isPassive: false
       }).save();
       const response = await request(app)
-        .get(`/organizations/all`)
+        .get(`/organizations?all=true`)
         .set(
           'Authorization',
           createUserToken({

@@ -23,7 +23,7 @@ import {
   isGlobalViewAdmin
 } from './auth';
 import { In } from 'typeorm';
-import { plainToClass } from 'class-transformer';
+import { classToPlain, plainToClass } from 'class-transformer';
 
 /**
  * @swagger
@@ -124,13 +124,27 @@ export const update = wrapHandler(async (event) => {
   }
 
   if (!isOrgAdmin(event, id)) return Unauthorized;
+
+  // The organization parent is passed back as an organization instead of the string ID.
+  // This maps the parent.id being passed in to the parent for updating/creating organizations.
+  const raw: any = plainToClass(
+    isGlobalWriteAdmin(event)
+      ? NewOrganization
+      : NewOrganizationNonGlobalAdmins,
+    JSON.parse(event.body ?? '{}')
+  );
+  if (raw?.parent?.id && typeof raw.parent !== 'string') {
+    raw.parent = raw.parent.id;
+  }
+  const updatedBody = classToPlain(raw);
+
   const body = await validateBody<
     NewOrganization | NewOrganizationNonGlobalAdmins
   >(
     isGlobalWriteAdmin(event)
       ? NewOrganization
       : NewOrganizationNonGlobalAdmins,
-    event.body
+    JSON.stringify(updatedBody)
   );
 
   await connectToDatabase();
@@ -211,6 +225,17 @@ export const list = wrapHandler(async (event) => {
     };
   }
   await connectToDatabase();
+
+  if (event.query.all === 'true') {
+    const result = await Organization.find({
+      order: { name: 'ASC' }
+    });
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  }
   let where: any = { parent: null };
   if (!isGlobalViewAdmin(event)) {
     where = { id: In(getOrgMemberships(event)), parent: null };
@@ -218,33 +243,6 @@ export const list = wrapHandler(async (event) => {
   const result = await Organization.find({
     where,
     relations: ['userRoles', 'tags'],
-    order: { name: 'ASC' }
-  });
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(result)
-  };
-});
-
-/**
- * @swagger
- *
- * /organizations/all:
- *  get:
- *    description: List organizations that the user could use as a parent.
- *    tags:
- *    - Organizations
- */
-export const listOfAll = wrapHandler(async (event) => {
-  if (!isGlobalViewAdmin(event)) {
-    return {
-      statusCode: 200,
-      body: JSON.stringify([])
-    };
-  }
-  await connectToDatabase();
-  const result = await Organization.find({
     order: { name: 'ASC' }
   });
 
