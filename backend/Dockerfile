@@ -1,10 +1,13 @@
 FROM node:18-alpine3.17
 USER root
 
+RUN apk update && apk upgrade
+
 WORKDIR /app
 COPY ./package* ./
 
-RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm i
+RUN npm install -g npm@9
+RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
 
 COPY . .
 

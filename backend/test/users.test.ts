@@ -23,8 +23,9 @@ beforeEach(() => {
 describe('user', () => {
   let organization;
   let organization2;
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     organization = await Organization.create({
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
@@ -37,6 +38,9 @@ describe('user', () => {
       ipBlocks: [],
       isPassive: false
     }).save();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   describe('invite', () => {
     it('invite by a regular user should not work', async () => {
