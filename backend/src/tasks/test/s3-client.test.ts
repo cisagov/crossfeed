@@ -37,7 +37,7 @@ describe('listReports', () => {
 describe('exportReport', () => {
   test('gets content', async () => {
     const client = new S3Client();
-    const result = await client.exportReport('data');
+    const result = await client.exportReport('data', 'orgId');
     expect(result).toEqual('http://signed_url');
   });
 });

@@ -190,6 +190,10 @@ class VulnerabilitySearch {
         .orderBy(sort, this.order);
     }
 
+    if (pageSize !== -1) {
+      qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
+    }
+
     await this.filterResultQueryset(qs, event);
     if (!isGlobalViewAdmin(event)) {
       qs.andWhere('organization.id IN (:...orgs)', {
@@ -198,8 +202,8 @@ class VulnerabilitySearch {
     }
 
     if (groupBy) {
-      const tempResults = await qs.getRawMany();
-      totalResults = tempResults.length;
+      const tempResults = await qs.getCount();
+      totalResults = tempResults;
     }
 
     if (pageSize !== -1) {
