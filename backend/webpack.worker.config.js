@@ -19,7 +19,7 @@ module.exports = {
       require.resolve('./mock.js')
     ),
     new webpack.IgnorePlugin({
-      resourceRegExp: /pg-native/
+      resourceRegExp: /^pg-native$|^cloudflare:sockets$/
     })
   ],
   target: 'node',

@@ -13,8 +13,12 @@ import {
 } from '../src/models';
 
 describe('saved-search', () => {
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   describe('create', () => {
     it('create by user should succeed', async () => {

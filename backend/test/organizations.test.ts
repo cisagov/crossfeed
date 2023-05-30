@@ -14,8 +14,12 @@ import {
 const dns = require('dns');
 
 describe('organizations', () => {
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   describe('create', () => {
     it('create by globalAdmin should succeed', async () => {
