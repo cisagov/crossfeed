@@ -250,10 +250,10 @@ export const ScanForm: React.FC<{
             id="frequencyUnit"
             name="frequencyUnit"
             onChange={onTextChange}
-            value={values.frequencyUnit}
+            defaultValue={"day" || values.frequencyUnit}
             style={{ display: 'inline-block', width: '150px' }}
           >
-            <option value="minute">Minute(s)</option>
+            {/*<option value="minute">Minute(s)</option>*/}
             <option value="hour">Hour(s)</option>
             <option value="day">Day(s)</option>
           </Dropdown>
