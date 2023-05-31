@@ -8,7 +8,8 @@ import {
   User,
   Scan,
   ScanSchema,
-  OrganizationTag
+  OrganizationTag,
+  PendingDomain
 } from 'types';
 import { Column } from 'react-table';
 import { Subnav, Table } from 'components';
@@ -68,6 +69,8 @@ export const Organization: React.FC = () => {
     open: boolean;
     type?: 'rootDomains' | 'ipBlocks' | 'tags';
     label?: string;
+    stage?: number;
+    domainVerificationStatusMessage?: string;
   }>({ open: false });
 
   const dateAccessor = (date?: string) => {
@@ -79,14 +82,14 @@ export const Organization: React.FC = () => {
   const userRoleColumns: Column<Role>[] = [
     {
       Header: 'Name',
-      accessor: ({ user }) => user.fullName,
+      accessor: ({ user }) => user?.fullName,
       width: 200,
       disableFilters: true,
       id: 'name'
     },
     {
       Header: 'Email',
-      accessor: ({ user }) => user.email,
+      accessor: ({ user }) => user?.email,
       width: 150,
       minWidth: 150,
       id: 'email',
@@ -96,7 +99,7 @@ export const Organization: React.FC = () => {
       Header: 'Role',
       accessor: ({ approved, role, user }) => {
         if (approved) {
-          if (user.invitePending) {
+          if (user?.invitePending) {
             return 'Invite pending';
           } else if (role === 'admin') {
             return 'Administrator';
@@ -376,6 +379,64 @@ export const Organization: React.FC = () => {
     }
   };
 
+  const initiateDomainVerification = async (domain: string) => {
+    try {
+      if (!organization) return;
+      const pendingDomains: PendingDomain[] = await apiPost(
+        `/organizations/${organization?.id}/initiateDomainVerification`,
+        {
+          body: { domain }
+        }
+      );
+      setOrganization({ ...organization, pendingDomains });
+    } catch (e: any) {
+      setFeedbackMessage({
+        message:
+          e.status === 422
+            ? 'Error creating domain'
+            : e.message ?? e.toString(),
+        type: 'error'
+      });
+      console.error(e);
+    }
+  };
+
+  const checkDomainVerification = async (domain: string) => {
+    try {
+      if (!organization) return;
+      const resp: { success: boolean; organization?: OrganizationType } =
+        await apiPost(
+          `/organizations/${organization?.id}/checkDomainVerification`,
+          {
+            body: { domain }
+          }
+        );
+      if (resp.success && resp.organization) {
+        setOrganization(resp.organization);
+        setDialog({ open: false });
+        setFeedbackMessage({
+          message: 'Domain ' + inputValue + ' successfully verified!',
+          type: 'success'
+        });
+      } else {
+        setDialog({
+          ...dialog,
+          domainVerificationStatusMessage:
+            'Record not yet found. Note that DNS records may take up to 72 hours to propagate. You can come back later to check the verification status.'
+        });
+      }
+    } catch (e: any) {
+      setFeedbackMessage({
+        message:
+          e.status === 422
+            ? 'Error verifying domain'
+            : e.message ?? e.toString(),
+        type: 'error'
+      });
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     fetchOrganization();
   }, [fetchOrganization]);
@@ -436,6 +497,7 @@ export const Organization: React.FC = () => {
           {elements &&
             elements.map((value: string | OrganizationTag, index: number) => (
               <Chip
+                color={'primary'}
                 className={classes.chip}
                 key={index}
                 label={typeof value === 'string' ? value : value.name}
@@ -445,18 +507,45 @@ export const Organization: React.FC = () => {
                 }}
               ></Chip>
             ))}
-          <Chip
-            label="ADD"
-            variant="outlined"
-            color="secondary"
-            onClick={() => {
-              setDialog({
-                open: true,
-                type: props.type,
-                label: props.label
-              });
-            }}
-          />
+          {props.type === 'rootDomains' &&
+            organization.pendingDomains.map((domain, index: number) => (
+              <Chip
+                className={classes.chip}
+                style={{ backgroundColor: '#C4C4C4' }}
+                key={index}
+                label={domain.name + ' (verification pending)'}
+                onDelete={() => {
+                  organization.pendingDomains.splice(index, 1);
+                  setOrganization({ ...organization });
+                }}
+                onClick={() => {
+                  setInputValue(domain.name);
+                  setDialog({
+                    open: true,
+                    type: props.type,
+                    label: props.label,
+                    stage: 1
+                  });
+                }}
+              ></Chip>
+            ))}
+          {(props.type === 'rootDomains' ||
+            user?.userType === 'globalAdmin') && (
+            <Chip
+              label="ADD"
+              style={{ marginTop: '10px' }}
+              variant="outlined"
+              color="secondary"
+              onClick={() => {
+                setDialog({
+                  open: true,
+                  type: props.type,
+                  label: props.label,
+                  stage: 0
+                });
+              }}
+            />
+          )}
         </span>
       </div>
     );
@@ -529,10 +618,54 @@ export const Organization: React.FC = () => {
                 )}
               />
             </>
-          ) : (
+          ) : dialog.type === 'rootDomains' && dialog.stage === 1 ? (
+            <>
+              <DialogContentText>
+                Add the following TXT record to {inputValue}&apos;s DNS
+                configuration and click Verify.
+              </DialogContentText>
+              <TextField
+                style={{ width: '100%' }}
+                value={
+                  organization.pendingDomains.find(
+                    (domain) => domain.name === inputValue
+                  )?.token
+                }
+                onFocus={(event) => {
+                  event.target.select();
+                }}
+              />
+              {dialog.domainVerificationStatusMessage && (
+                <>
+                  <br></br>
+                  <br></br>
+                  <DialogContentText>
+                    {dialog.domainVerificationStatusMessage}
+                  </DialogContentText>
+                </>
+              )}
+            </>
+          ) : user?.userType === 'globalAdmin' ? (
             <>
               <DialogContentText>
                 Separate multiple entries by commas.
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                inputProps={{ maxLength: 255 }}
+                label={dialog.label && dialog.label.slice(0, -1)}
+                type="text"
+                fullWidth
+                onChange={(e) => setInputValue(e.target.value)}
+              />
+            </>
+          ) : dialog.type === 'rootDomains' && dialog.stage === 0 ? (
+            <>
+              <DialogContentText>
+                In order to add a root domain, you will need to verify ownership
+                of the domain.
               </DialogContentText>
               <TextField
                 autoFocus
@@ -544,6 +677,8 @@ export const Organization: React.FC = () => {
                 onChange={(e) => setInputValue(e.target.value)}
               />
             </>
+          ) : (
+            <></>
           )}
         </DialogContent>
         <DialogActions>
@@ -554,7 +689,20 @@ export const Organization: React.FC = () => {
             variant="contained"
             color="primary"
             onClick={() => {
-              if (dialog.type && dialog.type !== 'tags') {
+              if (
+                dialog.type === 'rootDomains' &&
+                user?.userType !== 'globalAdmin'
+              ) {
+                if (dialog.stage === 0) {
+                  // Start verification process
+                  initiateDomainVerification(inputValue);
+                  setDialog({ ...dialog, stage: 1 });
+                  return;
+                } else {
+                  checkDomainVerification(inputValue);
+                  return;
+                }
+              } else if (dialog.type && dialog.type !== 'tags') {
                 if (inputValue) {
                   // Allow adding multiple values with a comma delimiter
                   organization[dialog.type].push(
@@ -574,7 +722,11 @@ export const Organization: React.FC = () => {
               setTagValue(null);
             }}
           >
-            Add
+            {dialog.type === 'rootDomains' && user?.userType !== 'globalAdmin'
+              ? dialog.stage === 0
+                ? 'Next'
+                : 'Verify'
+              : 'Add'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -644,6 +796,7 @@ export const Organization: React.FC = () => {
             margin="dense"
             id="firstName"
             name="firstName"
+            inputProps={{ maxLength: 50 }}
             label="First Name"
             type="text"
             fullWidth
@@ -659,6 +812,7 @@ export const Organization: React.FC = () => {
             id="lastName"
             name="lastName"
             label="Last Name"
+            inputProps={{ maxLength: 50 }}
             type="text"
             fullWidth
             value={newUserValues.lastName}
@@ -673,6 +827,7 @@ export const Organization: React.FC = () => {
             id="email"
             name="email"
             label="Email"
+            inputProps={{ maxLength: 100 }}
             type="text"
             fullWidth
             value={newUserValues.email}
@@ -827,9 +982,9 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   chip: {
-    backgroundColor: '#C4C4C4',
     color: 'white',
-    marginRight: '10px'
+    marginRight: '10px',
+    marginTop: '10px'
   },
   settingsWrapper: {
     boxSizing: 'border-box',

@@ -4,7 +4,8 @@ import {
   IsArray,
   IsBoolean,
   IsUUID,
-  IsOptional
+  IsOptional,
+  IsNotEmpty
 } from 'class-validator';
 import {
   Organization,
@@ -13,7 +14,8 @@ import {
   ScanTask,
   Scan,
   User,
-  OrganizationTag
+  OrganizationTag,
+  PendingDomain
 } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
@@ -24,6 +26,8 @@ import {
 } from './auth';
 import { In } from 'typeorm';
 import { plainToClass } from 'class-transformer';
+import { randomBytes } from 'crypto';
+import { promises } from 'dns';
 
 /**
  * @swagger
@@ -55,6 +59,13 @@ export const del = wrapHandler(async (event) => {
   };
 });
 
+// Used exclusively for deleting pending domains
+class PendingDomainBody {
+  @IsArray()
+  @IsOptional()
+  pendingDomains: PendingDomain[];
+}
+
 class NewOrganizationNonGlobalAdmins {
   @IsString()
   name: string;
@@ -76,6 +87,12 @@ class NewOrganization extends NewOrganizationNonGlobalAdmins {
   @IsUUID()
   @IsOptional()
   parent?: string;
+}
+
+class NewDomain {
+  @IsString()
+  @IsNotEmpty()
+  domain: string;
 }
 
 const findOrCreateTags = async (
@@ -132,6 +149,10 @@ export const update = wrapHandler(async (event) => {
       : NewOrganizationNonGlobalAdmins,
     event.body
   );
+  const pendingBody = await validateBody<PendingDomainBody>(
+    PendingDomainBody,
+    event.body
+  );
 
   await connectToDatabase();
   const org = await Organization.findOne(
@@ -147,7 +168,23 @@ export const update = wrapHandler(async (event) => {
       body.tags = await findOrCreateTags(body.tags);
     }
 
-    Organization.merge(org, { ...body, parent: undefined });
+    let newPendingDomains: PendingDomain[] = [];
+    if (pendingBody.pendingDomains) {
+      for (const domain of org.pendingDomains) {
+        if (pendingBody.pendingDomains.find((d) => d.name === domain.name)) {
+          // Don't delete
+          newPendingDomains.push(domain);
+        }
+      }
+    } else {
+      newPendingDomains = org.pendingDomains;
+    }
+
+    Organization.merge(org, {
+      ...body,
+      pendingDomains: newPendingDomains,
+      parent: undefined
+    });
     await Organization.save(org);
     return {
       statusCode: 200,
@@ -363,6 +400,131 @@ export const updateScan = wrapHandler(async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(res)
+  };
+});
+
+/**
+ * @swagger
+ *
+ * /organizations/{id}/initiateDomainVerification:
+ *  post:
+ *    description: Generates a token to verify a new domain via a DNS record
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *    tags:
+ *    - Organizations
+ */
+export const initiateDomainVerification = wrapHandler(async (event) => {
+  const organizationId = event.pathParameters?.organizationId;
+
+  if (!organizationId || !isUUID(organizationId)) {
+    return NotFound;
+  }
+
+  if (!isOrgAdmin(event, organizationId) && !isGlobalWriteAdmin(event))
+    return Unauthorized;
+  const body = await validateBody<NewDomain>(NewDomain, event.body);
+
+  await connectToDatabase();
+  const token = 'crossfeed-verification=' + randomBytes(16).toString('hex');
+
+  const organization = await Organization.findOne({
+    id: organizationId
+  });
+  if (!organization) {
+    return NotFound;
+  }
+  if (organization.rootDomains.find((domain) => domain === body.domain)) {
+    return {
+      statusCode: 422,
+      body: 'Domain already exists.'
+    };
+  }
+  if (
+    !organization.pendingDomains.find(
+      (domain) => domain['name'] === body.domain
+    )
+  ) {
+    const domain: PendingDomain = {
+      name: body.domain,
+      token: token
+    };
+    organization.pendingDomains.push(domain);
+
+    const res = await Organization.save(organization);
+  }
+  return {
+    statusCode: 200,
+    body: JSON.stringify(organization.pendingDomains)
+  };
+});
+
+/**
+ * @swagger
+ *
+ * /organizations/{id}/checkDomainVerification:
+ *  post:
+ *    description: Checks whether the DNS record has been created for the supplied domain
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *    tags:
+ *    - Organizations
+ */
+export const checkDomainVerification = wrapHandler(async (event) => {
+  const organizationId = event.pathParameters?.organizationId;
+
+  if (!organizationId || !isUUID(organizationId)) {
+    return NotFound;
+  }
+
+  if (!isOrgAdmin(event, organizationId) && !isGlobalWriteAdmin(event))
+    return Unauthorized;
+  const body = await validateBody<NewDomain>(NewDomain, event.body);
+
+  await connectToDatabase();
+
+  const organization = await Organization.findOne({
+    id: organizationId
+  });
+  if (!organization) {
+    return NotFound;
+  }
+  const pendingDomain = organization.pendingDomains.find(
+    (domain) => domain['name'] === body.domain
+  );
+  if (!pendingDomain) {
+    return {
+      statusCode: 422,
+      body: 'Please initiate the domain verification first.'
+    };
+  }
+  try {
+    const res = await promises.resolveTxt(pendingDomain.name);
+    for (const record of res) {
+      for (const val of record) {
+        if (val === pendingDomain.token) {
+          // Success!
+          organization.rootDomains.push(pendingDomain.name);
+          organization.pendingDomains = organization.pendingDomains.filter(
+            (domain) => domain.name !== pendingDomain.name
+          );
+          organization.save();
+          return {
+            statusCode: 200,
+            body: JSON.stringify({ success: true, organization })
+          };
+        }
+      }
+    }
+  } catch (e) {}
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ success: false })
   };
 });
 

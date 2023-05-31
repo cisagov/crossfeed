@@ -63,7 +63,7 @@ const downloadPath = async (
       let matchingDomains = [].concat
         .apply(
           [],
-          (((item.parsed?.names as any) as string[]) || []).map(
+          ((item.parsed?.names as any as string[]) || []).map(
             (name) => commonNameToDomainsMap[name]
           )
         )
@@ -171,20 +171,22 @@ export const handler = async (commandOptions: CommandOptions) => {
     endIndex = 1;
   }
 
-  const commonNameToDomainsMap: CommonNameToDomainsMap = allDomains.reduce<
-    CommonNameToDomainsMap
-  >((map: CommonNameToDomainsMap, domain: Domain) => {
-    const split = domain.name.split('.');
-    for (let i = 0; i < split.length - 1; i++) {
-      const commonName =
-        i === 0 ? domain.name : '*.' + split.slice(i).join('.');
-      if (!map[commonName]) {
-        map[commonName] = [];
-      }
-      map[commonName].push(domain);
-    }
-    return map;
-  }, {});
+  const commonNameToDomainsMap: CommonNameToDomainsMap =
+    allDomains.reduce<CommonNameToDomainsMap>(
+      (map: CommonNameToDomainsMap, domain: Domain) => {
+        const split = domain.name.split('.');
+        for (let i = 0; i < split.length - 1; i++) {
+          const commonName =
+            i === 0 ? domain.name : '*.' + split.slice(i).join('.');
+          if (!map[commonName]) {
+            map[commonName] = [];
+          }
+          map[commonName].push(domain);
+        }
+        return map;
+      },
+      {}
+    );
 
   for (let i = startIndex; i <= endIndex; i++) {
     const idx = i;
