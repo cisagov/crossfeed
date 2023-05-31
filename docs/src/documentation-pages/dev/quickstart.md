@@ -7,27 +7,38 @@ This quickstart describes the initial setup required to run an instance of Cross
 
 ### Initial Setup
 
-1. Install [Node.js](https://nodejs.org/en/download/) 18 and [Docker Compose](https://docs.docker.com/compose/install/). Make sure the Docker daemon is running.
+1. Before starting the initial setup, ensure you have already did the following setup: [development environment for mac-based computers](https://github.com/cisagov/development-guide/blob/develop/dev_envs/mac-env-setup.md).
 
-2. Copy root `dev.env.example` file to a `.env` file.
+   Click on the link for the location of [Crossfeed Github](https://github.com/cisagov/crossfeed) account.
+
+2. Now install [Node.js](https://nodejs.org/en/download/) 18 and [Docker Compose](https://docs.docker.com/compose/install/). Make sure the Docker daemon is running.
+
+NOTE: For Docker make sure once downloaded:
+
+   ```bash
+      system settings > Privacy & Security > Files and Folder > "Find Docker" > click on Docker > Under Documents Folder ensure its on by swipping right and showing blue icon.
+   ```
+This could cause Docker to fail creating an '**Error: EPERM: Operation not permitted**' or '**Error: module build failed**.'
+
+3. Copy root `dev.env.example` file to a `.env` file.
 
    ```bash
    cp dev.env.example .env
    ```
 
-3. Build the crossfeed-worker Docker image:
+4. Build the crossfeed-worker Docker image:
 
    ```bash
    cd backend && npm run build-worker
    ```
 
-4. Start the entire environment from the root directory:
+5. Start the entire environment from the root directory (in this case is "crossfeed", use cd ..):
 
    ```bash
    npm start
    ```
 
-5. Generate the initial DB schema and populate it with sample data:
+6. Generate the initial DB schema and populate it with sample data:
 
    ```bash
    cd backend
@@ -39,17 +50,17 @@ This quickstart describes the initial setup required to run an instance of Cross
 
    If you ever need to drop and recreate the database, you can run `npm run syncdb -- -d dangerouslyforce`.
 
-6. Navigate to [http://localhost](http://localhost) in a browser.
+7. Navigate to [http://localhost](http://localhost) in a browser.
 
-7. Create an account on the [staging Crossfeed instance](https://staging.crossfeed.cyber.dhs.gov/signup?). You can then log into your account running on localhost using this account.
+8. Create an account on the [staging Crossfeed instance](https://staging.crossfeed.cyber.dhs.gov/signup?). You can then log into your account running on localhost using this account.
 
-8. Hot reloading for source files is enabled, but after changes to non-source code files stopping and starting Docker Compose is required. The following are examples of changes that will require restarting the environment:
+9. Hot reloading for source files is enabled, but after changes to non-source code files stopping and starting Docker Compose is required. The following are examples of changes that will require restarting the environment:
 
    - Frontend or backend dependency changes
    - Backend changes to `serverless.yml` or `env.yml`
    - Environment variables in root `.env`
 
-9. Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save.
+10. Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save.
 
 ### Running tests
 
@@ -111,3 +122,53 @@ see the following links:
 The documentation files are stored in the `docs` directory and served from a Gatsby site. To work on this, you should run `npm start` from before. You can then open up [http://localhost:4000](http://localhost:4000) in your browser to view the docs.
 
 The docs are based on the [federalist-uswds-gatsby](https://github.com/18F/federalist-uswds-gatsby) theme. See that repository for more information on additional theme customizations that can be done.
+
+
+### Common Issues
+
+- Node Error issue occurs due to "npm install"
+
+```bash
+    npm ERR! code EBADENGINE
+	npm ERR! engine Unsupported engine
+	npm ERR! engine Not compatible with your version of node/npm: crossfeed-backend@1.0.0
+	npm ERR! notsup Not compatible with your version of node/npm: crossfeed-backend@1.0.0
+	npm ERR! notsup Required: {"node":">=16.0.0 <17.0.0"}
+	npm ERR! notsup Actual:   {"npm":"9.5.0","node":"v18.14.2"}
+	
+	npm ERR! A complete log of this run can be found in:
+    npm ERR!     /Users/combsc/.npm/_logs/2023-03-10T20_01_15_851Z-debug-0.log
+```
+In this case install nvm for nodes 16.0.0 to 17.0.0. 
+for example `nvm install 16.19.0` then check it by `node -- version` and `npm -- version`
+
+- Sometime you may get an error in package-lock.json file. This is due to the package downloading the docker build resulting in this error. Simply remove the package-lock.json file and reinstall it using `npm install`.  
+
+```bash
+   rm package-lock.json
+   npm install 
+```
+
+If successful then continue to step 3.
+
+- Permission Isue / Permissions not permitted / Oporation not permitted / Module build Failed
+
+```bash
+   Failed to compile.
+	crossfeed-frontend-1  | 
+	crossfeed-frontend-1  | Error: EPERM: operation not permitted, open '/app/src/index.tsx'
+	crossfeed-frontend-1  | ERROR in ./src/index.tsx
+	crossfeed-frontend-1  | Module build failed (from ./node_modules/source-map-loader/dist/cjs.js):
+	crossfeed-frontend-1  | Error: EPERM: operation not permitted, open '/app/src/index.tsx'
+	crossfeed-frontend-1  | 
+	crossfeed-frontend-1  | ERROR in [eslint] EPERM: operation not permitted, open '/app/src/index.tsx'
+	crossfeed-frontend-1  | 
+	crossfeed-frontend-1  | webpack compiled with 2 errors
+    crossfeed-frontend-1  | No issues found.
+```
+If you get the above error or issue check the following:
+
+   ```bash
+      system settings > Privacy & Security > Files and Folder > "Find Docker" > click on Docker > Under Documents Folder ensure its on by swipping right and showing blue icon.
+   ```
+   If the above is correct try looking into the [development environment for mac-based computers](https://github.com/cisagov/development-guide/blob/develop/dev_envs/mac-env-setup.md). Then Review the **account permissions** as necessary. 
