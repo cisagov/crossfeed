@@ -16,8 +16,9 @@ const saveCSV = require('../src/tasks/s3-client').saveCSV as jest.Mock;
 describe('domains', () => {
   let organization;
   let organization2;
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     organization = await Organization.create({
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
@@ -31,6 +32,10 @@ describe('domains', () => {
       isPassive: false
     }).save();
   });
+  afterAll(async () => {
+    await connection.close();
+  });
+
   describe('export', () => {
     it('export by org user should only return domains from that org', async () => {
       const name = 'test-' + Math.random();
