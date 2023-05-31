@@ -48,7 +48,7 @@ export const ScanForm: React.FC<{
     name: scan ? scan.name : 'censys',
     arguments: scan ? scan.arguments : '{}',
     frequency: scan ? scan.frequency : 1,
-    frequencyUnit: scan ? propValues.frequencyUnit : 'minute',
+    frequencyUnit: scan ? propValues.frequencyUnit : 'day',
     isGranular: scan ? scan.isGranular : false,
     isUserModifiable: scan ? scan.isUserModifiable : false,
     isSingleScan: scan ? scan.isSingleScan : false,
@@ -250,10 +250,9 @@ export const ScanForm: React.FC<{
             id="frequencyUnit"
             name="frequencyUnit"
             onChange={onTextChange}
-            defaultValue={"day" || values.frequencyUnit}
+            value={values.frequencyUnit}
             style={{ display: 'inline-block', width: '150px' }}
           >
-            {/*<option value="minute">Minute(s)</option>*/}
             <option value="hour">Hour(s)</option>
             <option value="day">Day(s)</option>
           </Dropdown>
