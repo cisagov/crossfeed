@@ -7,18 +7,18 @@ This quickstart describes the initial setup required to run an instance of Cross
 
 ### Initial Setup
 
-1. Before starting the initial setup, ensure you have already did the following setup: [development environment for mac-based computers](https://github.com/cisagov/development-guide/blob/develop/dev_envs/mac-env-setup.md).
+1. Mac Users - before starting the initial setup, ensure you have already completed the following setup: [development environment for mac-based computers](https://github.com/cisagov/development-guide/blob/develop/dev_envs/mac-env-setup.md).
 
    Click on the link for the location of [Crossfeed Github](https://github.com/cisagov/crossfeed) account.
 
-2. Now install [Node.js](https://nodejs.org/en/download/) 18 and [Docker Compose](https://docs.docker.com/compose/install/). Make sure the Docker daemon is running.
-
-NOTE: For Docker make sure once downloaded:
+2. Install [Node.js](https://nodejs.org/en/download/) 18 and [Docker Compose](https://docs.docker.com/compose/install/). Make sure the Docker daemon is running.
+<!--NOTE: For Docker make sure once downloaded:
 
    ```bash
       system settings > Privacy & Security > Files and Folder > "Find Docker" > click on Docker > Under Documents Folder ensure its on by swipping right and showing blue icon.
    ```
 This could cause Docker to fail creating an '**Error: EPERM: Operation not permitted**' or '**Error: module build failed**.'
+-->
 
 3. Copy root `dev.env.example` file to a `.env` file.
 
@@ -32,7 +32,7 @@ This could cause Docker to fail creating an '**Error: EPERM: Operation not permi
    cd backend && npm run build-worker
    ```
 
-5. Start the entire environment from the root directory (in this case is "crossfeed", use cd ..):
+5. Start the entire environment from the root directory:
 
    ```bash
    npm start
@@ -123,7 +123,6 @@ The documentation files are stored in the `docs` directory and served from a Gat
 
 The docs are based on the [federalist-uswds-gatsby](https://github.com/18F/federalist-uswds-gatsby) theme. See that repository for more information on additional theme customizations that can be done.
 
-
 ### Common Issues
 
 - Node Error issue occurs due to "npm install"
@@ -135,18 +134,19 @@ The docs are based on the [federalist-uswds-gatsby](https://github.com/18F/feder
 	npm ERR! notsup Not compatible with your version of node/npm: crossfeed-backend@1.0.0
 	npm ERR! notsup Required: {"node":">=16.0.0 <17.0.0"}
 	npm ERR! notsup Actual:   {"npm":"9.5.0","node":"v18.14.2"}
-	
+
 	npm ERR! A complete log of this run can be found in:
     npm ERR!     /Users/combsc/.npm/_logs/2023-03-10T20_01_15_851Z-debug-0.log
 ```
-In this case install nvm for nodes 16.0.0 to 17.0.0. 
+
+In this case install nvm for nodes 16.0.0 to 17.0.0.
 for example `nvm install 16.19.0` then check it by `node -- version` and `npm -- version`
 
-- Sometime you may get an error in package-lock.json file. This is due to the package downloading the docker build resulting in this error. Simply remove the package-lock.json file and reinstall it using `npm install`.  
+- Sometimes you may get an error in package-lock.json. This error is due to the package downloading the docker build. Remove the package-lock.json file and reinstall it using `npm install`.
 
 ```bash
    rm package-lock.json
-   npm install 
+   npm install
 ```
 
 If successful then continue to step 3.
@@ -155,20 +155,22 @@ If successful then continue to step 3.
 
 ```bash
    Failed to compile.
-	crossfeed-frontend-1  | 
+	crossfeed-frontend-1  |
 	crossfeed-frontend-1  | Error: EPERM: operation not permitted, open '/app/src/index.tsx'
 	crossfeed-frontend-1  | ERROR in ./src/index.tsx
 	crossfeed-frontend-1  | Module build failed (from ./node_modules/source-map-loader/dist/cjs.js):
 	crossfeed-frontend-1  | Error: EPERM: operation not permitted, open '/app/src/index.tsx'
-	crossfeed-frontend-1  | 
+	crossfeed-frontend-1  |
 	crossfeed-frontend-1  | ERROR in [eslint] EPERM: operation not permitted, open '/app/src/index.tsx'
-	crossfeed-frontend-1  | 
+	crossfeed-frontend-1  |
 	crossfeed-frontend-1  | webpack compiled with 2 errors
     crossfeed-frontend-1  | No issues found.
 ```
-If you get the above error or issue check the following:
 
-   ```bash
-      system settings > Privacy & Security > Files and Folder > "Find Docker" > click on Docker > Under Documents Folder ensure its on by swipping right and showing blue icon.
-   ```
-   If the above is correct try looking into the [development environment for mac-based computers](https://github.com/cisagov/development-guide/blob/develop/dev_envs/mac-env-setup.md). Then Review the **account permissions** as necessary. 
+If you receive the above error check the following:
+
+```bash
+   system settings > Privacy & Security > Files and Folder > "Find Docker" > click on Docker > Under Documents Folder ensure its on by swipping right and showing blue icon.
+```
+
+If the above is correct try looking into the [development environment for mac-based computers](https://github.com/cisagov/development-guide/blob/develop/dev_envs/mac-env-setup.md). Then Review the **account permissions** as necessary.
