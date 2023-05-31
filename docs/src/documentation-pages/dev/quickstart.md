@@ -7,7 +7,7 @@ This quickstart describes the initial setup required to run an instance of Cross
 
 ### Initial Setup
 
-1. Mac Users - before starting the initial setup, ensure you have already completed the following setup: [development environment for mac-based computers](https://github.com/cisagov/development-guide/blob/develop/dev_envs/mac-env-setup.md).
+1. Mac Users - before starting the initial setup, ensure you have already completed the following: [development environment for mac-based computers](https://github.com/cisagov/development-guide/blob/develop/dev_envs/mac-env-setup.md).
 
    Click on the link for the location of [Crossfeed Github](https://github.com/cisagov/crossfeed) account.
 
