@@ -23,6 +23,10 @@ body {
   background-color: color('base-lightest');
 }
 
+body>iframe {
+  display: none;
+}
+
 .cisa-crossfeed-loading {
   display: inline-block;
   position: relative;

@@ -182,10 +182,6 @@ export const ScanTasksView: React.FC = () => {
         'hibp',
         'lookingGlass',
         'dnstwist',
-        'peCybersixgill',
-        'peHibpSync',
-        'peShodan',
-        'peDomMasq',
         'rootDomainSync'
       ]),
       disableSortBy: true

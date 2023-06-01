@@ -47,9 +47,10 @@ interface UserInfo {
 const client = jwksClient({
   jwksUri: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.REACT_APP_USER_POOL_ID}/.well-known/jwks.json`
 });
+
 function getKey(header, callback) {
   client.getSigningKey(header.kid, function (err, key) {
-    const signingKey = key.getPublicKey();
+    const signingKey = key?.getPublicKey();
     callback(null, signingKey);
   });
 }
@@ -227,9 +228,15 @@ export const authorize = async (event) => {
     if (!user) throw Error('User does not exist');
     return userTokenBody(user);
   } catch (e) {
-    console.error(e);
-    const parsed = { id: 'cisa:crossfeed:anonymous' };
-    return parsed;
+    if (e.name === 'JsonWebTokenError') {
+      // Handle this error without logging or displaying the error message
+      const parsed = { id: 'cisa:crossfeed:anonymous' };
+      return parsed;
+    } else {
+      console.error(e);
+      const parsed = { id: 'cisa:crossfeed:anonymous' };
+      return parsed;
+    }
   }
 };
 

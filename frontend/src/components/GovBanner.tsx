@@ -123,8 +123,9 @@ export const GovBanner: React.FC = () => {
                 <p>
                   <strong>The .gov means it’s official.</strong>
                   <br />
-                  Federal government websites often end in .gov or .mil. Before
-                  sharing sensitive information, make sure you’re on a federal
+                  Federal government websites often end in{' '}
+                  <strong>.gov </strong>or <strong>.mil</strong>. Before sharing
+                  sensitive information, make sure you’re on a federal
                   government site.
                 </p>
               </div>
