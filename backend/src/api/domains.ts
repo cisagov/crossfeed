@@ -91,13 +91,13 @@ class DomainSearch {
       qs.andWhere('domain.ip LIKE :ip', { ip: `%${this.filters?.ip}%` });
     }
     if (this.filters?.port) {
-      qs.andHaving('COUNT(CASE WHEN services.port = :port THEN 1 END) >= 1', {
+      qs.andWhere('services.port::text LIKE :port', {
         port: this.filters?.port
       });
     }
     if (this.filters?.service) {
-      qs.andHaving(
-        'COUNT(CASE WHEN services.products->>0 ILIKE :service THEN 1 END) >= 1',
+      qs.andWhere(
+        'services.products->>0 ILIKE :service',
         { service: `%${this.filters?.service}%` }
       );
     }
@@ -117,8 +117,8 @@ class DomainSearch {
       });
     }
     if (this.filters?.vulnerability) {
-      qs.andHaving(
-        'COUNT(CASE WHEN vulnerabilities.title ILIKE :title THEN 1 END) >= 1',
+      qs.andWhere(
+        'vulnerabilities.title ILIKE :title',
         {
           title: `%${this.filters?.vulnerability}%`
         }
