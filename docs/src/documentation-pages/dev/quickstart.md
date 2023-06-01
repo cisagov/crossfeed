@@ -11,14 +11,7 @@ This quickstart describes the initial setup required to run an instance of Cross
 
    Click on the link for the location of [Crossfeed Github](https://github.com/cisagov/crossfeed) account.
 
-2. Install [Node.js](https://nodejs.org/en/download/) 18 and [Docker Compose](https://docs.docker.com/compose/install/). Make sure the Docker daemon is running.
-<!--NOTE: For Docker make sure once downloaded:
-
-   ```bash
-      system settings > Privacy & Security > Files and Folder > "Find Docker" > click on Docker > Under Documents Folder ensure its on by swipping right and showing blue icon.
-   ```
-This could cause Docker to fail creating an '**Error: EPERM: Operation not permitted**' or '**Error: module build failed**.'
--->
+2. Install [Node.js](https://nodejs.org/en/download/) 18 and [Docker Compose](https://docs.docker.com/compose/install/).
 
 3. Copy root `dev.env.example` file to a `.env` file.
 
