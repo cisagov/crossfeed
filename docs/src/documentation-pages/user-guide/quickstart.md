@@ -84,8 +84,8 @@ Crossfeed has two types of scans: active and passive.
 
 You can turn on / off some scans for your organization. To do so, go to My Account -> Manage Organizations and select your organization. Navigate to the "Scans" tab. Here, you can toggle different scans on or off.
 
-![org scans](./img/org scans.png)
+![org scans](./img/org_scans.png)
 
 If you would like only passive scans to run on your organization (and disable active scans), go to My Account -> Manage Organizations and select your organization. Navigate to the "Settings" tab. You can then turn on "Passive Mode" to only enable passive scans on your organization.
 
-![org settings](./img/org settings.png)
+![org settings](./img/org_settings.png)
