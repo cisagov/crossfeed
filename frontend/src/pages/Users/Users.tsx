@@ -36,7 +36,7 @@ export interface ApiResponse {
 }
 
 export const Users: React.FC = () => {
-  const { user, apiGet, apiPost, apiDelete } = useAuthContext();
+  const { user, apiPost, apiDelete } = useAuthContext();
   const modalRef = useRef<ModalRef>(null);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [users, setUsers] = useState<User[]>([]);
