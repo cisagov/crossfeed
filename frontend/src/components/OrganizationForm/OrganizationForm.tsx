@@ -91,7 +91,6 @@ export const OrganizationForm: React.FC<{
       </DialogTitle>
       <DialogContent>
         <TextField
-          error={!values.name}
           margin="dense"
           helperText="Required Field"
           id="name"
