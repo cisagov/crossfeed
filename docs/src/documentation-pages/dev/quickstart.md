@@ -9,8 +9,6 @@ This quickstart describes the initial setup required to run an instance of Cross
 
 1. Mac Users - before starting the initial setup, ensure you have already completed the following: [development environment for mac-based computers](https://github.com/cisagov/development-guide/blob/develop/dev_envs/mac-env-setup.md).
 
-   Click on the link for the location of [Crossfeed Github](https://github.com/cisagov/crossfeed) account.
-
 2. Install [Node.js](https://nodejs.org/en/download/) 18 and [Docker Compose](https://docs.docker.com/compose/install/).
 
 3. Copy root `dev.env.example` file to a `.env` file.
