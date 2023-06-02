@@ -226,13 +226,12 @@ export const create = wrapHandler(async (event) => {
 /**
  * @swagger
  *
- * /organizations/bulk
- * post:
- * description: Create multiple organizations at once
- * tags:
- * - Organizations
+ * /organizations/bulk:
+ *  post:
+ *    description: Create multiple organizations at once.
+ *    tags:
+ *    - Organizations
  */
-
 export const bulkCreate = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   const organizations = new Array<NewOrganization>();
@@ -249,7 +248,7 @@ export const bulkCreate = wrapHandler(async (event) => {
     createdBy: { id: event.requestContext.authorizer!.id },
     parent: { id: org.parent }
   })));
-  const res = await Organization.insert(newOrganizations);
+  const res = Organization.save(newOrganizations);
   return {
     statusCode: 200,
     body: JSON.stringify(res)
