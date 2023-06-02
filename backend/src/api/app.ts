@@ -317,6 +317,10 @@ authenticatedRoute.post(
   '/organizations',
   handlerToExpress(organizations.create)
 );
+authenticatedRoute.post(
+  '/organizations/bulk',
+  handlerToExpress(organizations.bulkCreate)
+);
 authenticatedRoute.put(
   '/organizations/:organizationId',
   handlerToExpress(organizations.update)

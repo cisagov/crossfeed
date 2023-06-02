@@ -226,6 +226,39 @@ export const create = wrapHandler(async (event) => {
 /**
  * @swagger
  *
+ * /organizations/bulk
+ * post:
+ * description: Create multiple organizations at once
+ * tags:
+ * - Organizations
+ */
+
+export const bulkCreate = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  const organizations = new Array<NewOrganization>();
+  for (const org of event.body!) {
+    const body = await validateBody(NewOrganization, org)
+    if ('tags' in body) {
+      body.tags = await findOrCreateTags(body.tags);
+    }
+    organizations.push(body)
+  }
+  await connectToDatabase();
+  const newOrganizations = Organization.create(organizations.map(org => ({
+    ...org,
+    createdBy: { id: event.requestContext.authorizer!.id },
+    parent: { id: org.parent }
+  })));
+  const res = await Organization.insert(newOrganizations);
+  return {
+    statusCode: 200,
+    body: JSON.stringify(res)
+  };
+});
+
+/**
+ * @swagger
+ *
  * /organizations:
  *  get:
  *    description: List organizations that the user is a member of or has access to.
