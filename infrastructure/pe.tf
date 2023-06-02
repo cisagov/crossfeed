@@ -114,12 +114,26 @@ resource "aws_iam_role_policy" "db_accessor_s3_policy" {
       "Action": [
         "s3:*"
       ],
-      "Resource": ["${aws_s3_bucket.reports_bucket.arn}", "${aws_s3_bucket.reports_bucket.arn}/*", "${aws_s3_bucket.pe_db_backups_bucket.arn}", "${aws_s3_bucket.pe_db_backups_bucket.arn}/*"]
+      "Resource": [
+        "${aws_s3_bucket.reports_bucket.arn}",
+        "${aws_s3_bucket.reports_bucket.arn}/*",
+        "${aws_s3_bucket.pe_db_backups_bucket.arn}",
+        "${aws_s3_bucket.pe_db_backups_bucket.arn}/*",
+        "${aws_s3_bucket.pe_reports_bucket.arn}",
+        "${aws_s3_bucket.pe_reports_bucket.arn}/*",
+        "${aws_s3_bucket.pe_asmsheets_bucket.arn}",
+        "${aws_s3_bucket.pe_asmsheets_bucket.arn}/*",
+        "${aws_s3_bucket.pe_test_bucket.arn}",
+        "${aws_s3_bucket.pe_test_bucket.arn}/*",
+        "${aws_s3_bucket.pe_scorecards_bucket.arn}",
+        "${aws_s3_bucket.pe_scorecards_bucket.arn}/*"
+      ]
     }
   ]
 }
 EOF
 }
+
 
 // PE Reports S3 Bucket
 resource "aws_s3_bucket" "pe_reports_bucket" {
