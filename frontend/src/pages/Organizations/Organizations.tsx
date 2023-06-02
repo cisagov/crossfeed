@@ -3,13 +3,33 @@ import React, { useCallback, useState } from 'react';
 import { ImportExport } from 'components';
 import { Organization } from 'types';
 import { useAuthContext } from 'context';
-import { makeStyles } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  makeStyles
+} from '@material-ui/core';
 import { OrganizationList } from 'components/OrganizationList';
 
 export const Organizations: React.FC = () => {
   const { user, apiGet, apiPost } = useAuthContext();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogText, setDialogText] = useState('');
+  const [successCount, setSuccessCount] = useState(0);
+  const [failureCount, setFailureCount] = useState(0);
   const classes = useStyles();
+
+  const handleClose = () => {
+    window.location.reload();
+    setDialogOpen(false);
+  };
+
+  const setWarningMessage = () => {
+    setDialogText('There was an error');
+  };
 
   const fetchOrganizations = useCallback(async () => {
     try {
@@ -67,12 +87,18 @@ export const Organizations: React.FC = () => {
                         }
                       })
                     );
+                    setSuccessCount((e) => (e = e + 1));
                   } catch (e: any) {
                     console.error('Error uploading Entry: ' + e);
+                    setFailureCount((e) => (e = e + 1));
+                    setWarningMessage();
                   }
                 }
+                if (!dialogText.includes('error')) {
+                  setDialogText('All Organizations Successfully Entered');
+                }
+                setDialogOpen(true);
                 setOrganizations(organizations.concat(...createdOrganizations));
-                window.location.reload();
               }}
               getDataToExport={() =>
                 organizations.map(
@@ -87,6 +113,21 @@ export const Organizations: React.FC = () => {
           </>
         )}
       </div>
+      <Dialog open={dialogOpen} onClose={handleClose}>
+        <DialogTitle id="alert-dialog-title">
+          {'Organization Upload Feedback:'}
+        </DialogTitle>
+        <DialogContent>
+          <div> Successful uploads: {successCount}</div>
+          <div> Failed uploads: {failureCount}</div>
+          <div> {dialogText} </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
