@@ -1,6 +1,6 @@
 // PE database
-data "aws_ssm_parameter" "pe_db_password" { name = var.ssm_pe_db_password }
-data "aws_ssm_parameter" "pe_db_username" { name = var.ssm_pe_db_username }
+pe_data "aws_ssm_parameter" "pe_db_password" { name = var.ssm_pe_db_password }
+pe_data "aws_ssm_parameter" "pe_db_username" { name = var.ssm_pe_db_username }
 
 resource "aws_db_instance" "pe_db" {
   identifier                          = var.pe_db_name
@@ -21,8 +21,8 @@ resource "aws_db_instance" "pe_db" {
 
   // database information
   db_name  = var.pe_db_table_name
-  username = data.aws_ssm_parameter.ssm_pe_db_username.value
-  password = data.aws_ssm_parameter.ssm_pe_db_password.value
+  username = pe_data.aws_ssm_parameter.ssm_pe_db_username.value
+  password = pe_data.aws_ssm_parameter.ssm_pe_db_password.value
   port     = var.db_port
 
   db_subnet_group_name = aws_db_subnet_group.default.name
