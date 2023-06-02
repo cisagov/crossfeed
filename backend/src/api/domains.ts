@@ -96,10 +96,9 @@ class DomainSearch {
       });
     }
     if (this.filters?.service) {
-      qs.andWhere(
-        'services.products->>0 ILIKE :service',
-        { service: `%${this.filters?.service}%` }
-      );
+      qs.andWhere('services.products->>0 ILIKE :service', {
+        service: `%${this.filters?.service}%`
+      });
     }
     if (this.filters?.organization) {
       qs.andWhere('organization.id = :org', {
@@ -117,12 +116,9 @@ class DomainSearch {
       });
     }
     if (this.filters?.vulnerability) {
-      qs.andWhere(
-        'vulnerabilities.title ILIKE :title',
-        {
-          title: `%${this.filters?.vulnerability}%`
-        }
-      );
+      qs.andWhere('vulnerabilities.title ILIKE :title', {
+        title: `%${this.filters?.vulnerability}%`
+      });
     }
     return qs;
   }
