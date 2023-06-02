@@ -1,5 +1,7 @@
 data "aws_ssm_parameter" "db_password" { name = var.ssm_db_password }
 data "aws_ssm_parameter" "db_username" { name = var.ssm_db_username }
+data "aws_ssm_parameter" "pe_db_password" { name = var.ssm_pe_db_password }
+data "aws_ssm_parameter" "pe_db_username" { name = var.ssm_pe_db_username }
 
 resource "aws_db_subnet_group" "default" {
   name       = var.db_group_name
