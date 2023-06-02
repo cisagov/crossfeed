@@ -87,10 +87,10 @@ export const Organizations: React.FC = () => {
                         }
                       })
                     );
-                    setSuccessCount((e) => (e = e + 1));
+                    setSuccessCount((e) => e + 1);
                   } catch (e: any) {
                     console.error('Error uploading Entry: ' + e);
-                    setFailureCount((e) => (e = e + 1));
+                    setFailureCount((e) => e + 1);
                     setWarningMessage();
                   }
                 }
