@@ -19,8 +19,8 @@ resource "aws_db_instance" "pe_db" {
 
   // database information
   db_name  = var.pe_db_table_name
-  username = data.aws_ssm_parameter.ssm_pe_db_username.value
-  password = data.aws_ssm_parameter.ssm_pe_db_password.value
+  username = data.aws_ssm_parameter.pe_db_username.value
+  password = data.aws_ssm_parameter.pe_db_password.value
   port     = var.db_port
 
   db_subnet_group_name = aws_db_subnet_group.default.name
