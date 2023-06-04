@@ -6,8 +6,8 @@ version: v1.22.1
 
 ignore: 
     # ignore scrapy 2.9.0 for 6 months.
-    'SNYK-PYTHON-SCRAPY-40690': 
-    - '*':
-        reason: No fix available for version 2.9.x
-        expires: 2023-11-01T00:00:00.000Z
+    SNYK-PYTHON-SCRAPY-40690: 
+        - '*':
+            reason: No fix available for version 2.9.x
+            expires: 2023-11-01T00:00:00.000Z
 patch: {}
