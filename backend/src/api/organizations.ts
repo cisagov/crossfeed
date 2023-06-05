@@ -234,6 +234,8 @@ export const create = wrapHandler(async (event) => {
  */
 export const bulkCreate = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  console.log('event:', event)
+  console.log('event body:', event.body)
   const organizations = new Array<NewOrganization>();
   for (const org of event.body!) {
     const body = await validateBody(NewOrganization, org)
