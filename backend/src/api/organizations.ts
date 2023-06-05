@@ -28,6 +28,7 @@ import { In } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { randomBytes } from 'crypto';
 import { promises } from 'dns';
+import { each } from 'lodash';
 
 /**
  * @swagger
@@ -235,25 +236,26 @@ export const create = wrapHandler(async (event) => {
 export const bulkCreate = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
   console.log('event:', event)
-  console.log('event body:', event.body)
   const organizations = new Array<NewOrganization>();
-  for (const org of event.body!) {
-    const body = await validateBody(NewOrganization, org)
-    if ('tags' in body) {
-      body.tags = await findOrCreateTags(body.tags);
-    }
-    organizations.push(body)
-  }
-  await connectToDatabase();
-  const newOrganizations = Organization.create(organizations.map(org => ({
-    ...org,
-    createdBy: { id: event.requestContext.authorizer!.id },
-    parent: { id: org.parent }
-  })));
-  const res = Organization.save(newOrganizations);
+  const body = await validateBody(NewOrganization, event.body, {each: true})
+  console.log('event body:', body)
+  // for (const org of body) {
+  //   console.log('validated body:', org)
+  //   if ('tags' in org) {
+  //     org.tags = await findOrCreateTags(org.tags);
+  //   }
+  //   organizations.push(org)
+  // }
+  // await connectToDatabase();
+  // const newOrganizations = Organization.create(organizations.map(org => ({
+  //   ...org,
+  //   createdBy: { id: event.requestContext.authorizer!.id },
+  //   parent: { id: org.parent }
+  // })));
+  // const res = Organization.save(newOrganizations);
   return {
     statusCode: 200,
-    body: JSON.stringify(res)
+    body: JSON.stringify(body)
   };
 });
 
