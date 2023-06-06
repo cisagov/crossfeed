@@ -114,13 +114,12 @@ export const Organizations: React.FC = () => {
         )}
       </div>
       <Dialog open={dialogOpen} onClose={handleClose}>
-        <DialogTitle id="alert-dialog-title">
-          {'Organization Upload Feedback:'}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{'Upload Complete'}</DialogTitle>
         <DialogContent>
-          <div> Successful uploads: {successCount}</div>
-          <div> Failed uploads: {failureCount}</div>
-          <div> {dialogText} </div>
+          <div> {successCount} organizations uploaded successfully</div>
+          {failureCount > 0 && (
+            <div> {failureCount} organizations failed to upload</div>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} autoFocus>
