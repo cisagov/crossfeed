@@ -1,5 +1,13 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+
 version: v1.22.1
+
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
-ignore:
+
+ignore: 
+    # ignore scrapy 2.9.0 for 6 months.
+    SNYK-PYTHON-SCRAPY-40690: 
+        - '*':
+            reason: No fix available for version 2.9.x
+            expires: 2023-11-01T00:00:00.000Z
 patch: {}
