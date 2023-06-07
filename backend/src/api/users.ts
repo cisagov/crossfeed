@@ -4,9 +4,15 @@ import {
   IsBoolean,
   IsOptional,
   IsEmail,
-  IsEnum
+  IsEnum,
+  IsInt,
+  IsIn,
+  IsObject,
+  IsPositive,
+  ValidateNested,
+  IsUUID
 } from 'class-validator';
-import { User, connectToDatabase, Role, Organization, ApiKey } from '../models';
+import { User, connectToDatabase, Role, Organization } from '../models';
 import {
   validateBody,
   wrapHandler,
@@ -22,6 +28,51 @@ import {
   isOrgAdmin,
   isGlobalWriteAdmin
 } from './auth';
+import { Type, plainToClass } from 'class-transformer';
+import { IsNull } from 'typeorm';
+
+class UserSearch {
+  @IsInt()
+  @IsPositive()
+  page: number = 1;
+
+  @IsString()
+  @IsIn([
+    'fullName',
+    'firstName',
+    'lastName',
+    'email',
+    'name',
+    'userType',
+    'dateAcceptedTerms',
+    'lastLoggedIn',
+    'acceptedTermsVersion'
+  ])
+  @IsOptional()
+  sort: string = 'fullName';
+
+  @IsString()
+  @IsIn(['ASC', 'DESC'])
+  order: 'ASC' | 'DESC' = 'DESC';
+
+  @IsInt()
+  @IsOptional()
+  // If set to -1, returns all results.
+  pageSize?: number;
+
+  @IsString()
+  @IsOptional()
+  @IsIn(['title'])
+  groupBy?: 'title';
+
+  async getResults(event): Promise<[User[], number]> {
+    const pageSize = this.pageSize || 25;
+    const sort = this.sort === 'name' ? 'user.fullName' : 'user.' + this.sort;
+    const qs = User.createQueryBuilder('user').orderBy(sort, this.order);
+    const results = await qs.getManyAndCount();
+    return results;
+  }
+}
 
 /**
  * @swagger
@@ -310,5 +361,25 @@ export const list = wrapHandler(async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(result)
+  };
+});
+
+/**
+ * @swagger
+ *
+ * /users/search:
+ *  post:
+ *    description: List users.
+ *    tags:
+ *    - Users
+ */
+export const search = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  await connectToDatabase(true);
+  const search = await validateBody(UserSearch, event.body);
+  const [result, count] = await search.getResults(event);
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ result, count })
   };
 });
