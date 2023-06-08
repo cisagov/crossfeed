@@ -162,7 +162,6 @@ class VulnerabilitySearch {
   async getResults(event): Promise<[Vulnerability[], number]> {
     const pageSize = this.pageSize || PAGE_SIZE;
     const groupBy = this.groupBy;
-    let totalResults: number = 0;
     const sort =
       this.sort === 'domain'
         ? 'domain.name'
@@ -190,10 +189,6 @@ class VulnerabilitySearch {
         .orderBy(sort, this.order);
     }
 
-    if (pageSize !== -1) {
-      qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
-    }
-
     await this.filterResultQueryset(qs, event);
     if (!isGlobalViewAdmin(event)) {
       qs.andWhere('organization.id IN (:...orgs)', {
@@ -201,18 +196,17 @@ class VulnerabilitySearch {
       });
     }
 
-    if (groupBy) {
-      const tempResults = await qs.getCount();
-      totalResults = tempResults;
-    }
-
     if (pageSize !== -1) {
-      qs = qs.offset(pageSize * (this.page - 1)).limit(pageSize);
+      if (groupBy) {
+        qs = qs.offset(pageSize * (this.page - 1)).limit(pageSize);
+      } else {
+        qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
+      }
     }
 
     if (groupBy) {
       const results = await qs.getRawMany();
-      return [results, totalResults];
+      return [results, results.length];
     } else {
       return qs.getManyAndCount();
     }

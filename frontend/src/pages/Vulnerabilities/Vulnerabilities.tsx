@@ -5,7 +5,7 @@ import { useAuthContext } from 'context';
 import { Table, Paginator } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import { makeStyles } from '@material-ui/core';
+import { Box, Button, makeStyles } from '@material-ui/core';
 import { Subnav } from 'components';
 import { parse } from 'query-string';
 import { createColumns, createGroupedColumns } from './columns';
@@ -15,8 +15,6 @@ export interface ApiResponse {
   count: number;
   url?: string;
 }
-
-const PAGE_SIZE = 15;
 
 export const stateMap: { [key: string]: string } = {
   unconfirmed: 'Unconfirmed',
@@ -39,6 +37,7 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
   const tableRef = useRef<TableInstance<Vulnerability>>(null);
   const listClasses = useStyles();
   const [noResults, setNoResults] = useState(false);
+  const [page_Size, setPageSize] = useState(15);
 
   const updateVulnerability = useCallback(
     async (index: number, body: { [key: string]: string }) => {
@@ -71,7 +70,7 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
       filters,
       sort,
       page,
-      pageSize = PAGE_SIZE,
+      pageSize = page_Size,
       doExport = false,
       groupBy = undefined
     }: {
@@ -133,7 +132,7 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
         return;
       }
     },
-    [apiPost, currentOrganization, showAllOrganizations]
+    [apiPost, currentOrganization, showAllOrganizations, page_Size]
   );
 
   const fetchVulnerabilities = useCallback(
@@ -208,21 +207,46 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
         ></Subnav>
         <br></br>
         <div className={classes.root}>
-          <Table<Vulnerability>
-            renderPagination={renderPagination}
-            columns={groupBy ? groupedColumns : columns}
-            data={vulnerabilities}
-            pageCount={Math.ceil(totalResults / PAGE_SIZE)}
-            fetchData={fetchVulnerabilities}
-            tableRef={tableRef}
-            initialFilterBy={initialFilterBy}
-            initialSortBy={initialSortBy}
-            noResults={noResults}
-            pageSize={PAGE_SIZE}
-            noResultsMessage={
-              "We don't see any vulnerabilities that match your criteria."
-            }
-          />
+          {!groupBy ? (
+            <Table<Vulnerability>
+              renderPagination={renderPagination}
+              columns={groupBy ? groupedColumns : columns}
+              data={vulnerabilities}
+              pageCount={Math.ceil(totalResults / page_Size)}
+              fetchData={fetchVulnerabilities}
+              tableRef={tableRef}
+              initialFilterBy={initialFilterBy}
+              initialSortBy={initialSortBy}
+              noResults={noResults}
+              pageSize={page_Size}
+              noResultsMessage={
+                "We don't see any vulnerabilities that match your criteria."
+              }
+            />
+          ) : (
+            <>
+              <Box>
+                {vulnerabilities.length} Most common vulnerabilities
+                <Button onClick={() => setPageSize(25)}>25</Button>
+                <Button onClick={() => setPageSize(50)}>50</Button>
+                <Button onClick={() => setPageSize(100)}>100</Button>
+              </Box>
+              <Table<Vulnerability>
+                columns={groupBy ? groupedColumns : columns}
+                data={vulnerabilities.slice(0, page_Size)}
+                pageCount={1}
+                fetchData={fetchVulnerabilities}
+                tableRef={tableRef}
+                initialFilterBy={initialFilterBy}
+                initialSortBy={initialSortBy}
+                noResults={noResults}
+                pageSize={page_Size}
+                noResultsMessage={
+                  "We don't see any vulnerabilities that match your criteria."
+                }
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

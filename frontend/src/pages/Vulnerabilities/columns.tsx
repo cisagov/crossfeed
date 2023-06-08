@@ -198,8 +198,8 @@ export const createGroupedColumns = () =>
         ) : (
           <p>{row.original.title}</p>
         ),
-      width: 800,
-      Filter: ColumnFilter
+      disableFilters: true,
+      disableSortBy: true
     },
     {
       Header: 'Severity',
@@ -217,16 +217,19 @@ export const createGroupedColumns = () =>
         </span>
       ),
       width: 100,
-      Filter: selectFilter(['Low', 'Medium', 'High', 'Critical', 'None'])
+      disableFilters: true,
+      disableSortBy: true
     },
     {
       Header: 'Count',
       accessor: 'cnt',
-      disableFilters: true
+      disableFilters: true,
+      disableSortBy: true
     },
     {
       Header: 'Description',
       accessor: 'description',
-      disableFilters: true
+      disableFilters: true,
+      disableSortBy: true
     }
   ] as Column<Vulnerability>[];

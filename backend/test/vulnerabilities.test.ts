@@ -484,7 +484,7 @@ describe('vulnerabilities', () => {
           groupBy: 'title'
         })
         .expect(200);
-      expect(response.body.count).toEqual(2);
+      expect(response.body.count).toEqual(1);
       expect(response.body.result.length).toEqual(1);
       expect(response.body.result).toEqual([
         {
