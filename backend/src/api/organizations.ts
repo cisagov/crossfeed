@@ -28,7 +28,7 @@ import { In } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { randomBytes } from 'crypto';
 import { promises } from 'dns';
-import { each } from 'lodash';
+// import { each } from 'lodash';
 
 /**
  * @swagger
@@ -233,31 +233,31 @@ export const create = wrapHandler(async (event) => {
  *    tags:
  *    - Organizations
  */
-export const bulkCreate = wrapHandler(async (event) => {
-  if (!isGlobalWriteAdmin(event)) return Unauthorized;
-  console.log('event:', event)
-  const organizations = new Array<NewOrganization>();
-  const body = await validateBody(NewOrganization, event.body, {each: true})
-  console.log('event body:', body)
-  // for (const org of body) {
-  //   console.log('validated body:', org)
-  //   if ('tags' in org) {
-  //     org.tags = await findOrCreateTags(org.tags);
-  //   }
-  //   organizations.push(org)
-  // }
-  // await connectToDatabase();
-  // const newOrganizations = Organization.create(organizations.map(org => ({
-  //   ...org,
-  //   createdBy: { id: event.requestContext.authorizer!.id },
-  //   parent: { id: org.parent }
-  // })));
-  // const res = Organization.save(newOrganizations);
-  return {
-    statusCode: 200,
-    body: JSON.stringify(body)
-  };
-});
+// export const bulkCreate = wrapHandler(async (event) => {
+//   if (!isGlobalWriteAdmin(event)) return Unauthorized;
+//   console.log('event:', event);
+//   const organizations = new Array<NewOrganization>();
+//   const body = await validateBody(NewOrganization, event.body, { each: true });
+//   console.log('event body:', body);
+//   // for (const org of body) {
+//   //   console.log('validated body:', org)
+//   //   if ('tags' in org) {
+//   //     org.tags = await findOrCreateTags(org.tags);
+//   //   }
+//   //   organizations.push(org)
+//   // }
+//   // await connectToDatabase();
+//   // const newOrganizations = Organization.create(organizations.map(org => ({
+//   //   ...org,
+//   //   createdBy: { id: event.requestContext.authorizer!.id },
+//   //   parent: { id: org.parent }
+//   // })));
+//   // const res = Organization.save(newOrganizations);
+//   return {
+//     statusCode: 200,
+//     body: JSON.stringify(body)
+//   };
+// });
 
 /**
  * @swagger
