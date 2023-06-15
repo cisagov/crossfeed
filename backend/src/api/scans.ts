@@ -190,7 +190,7 @@ export const SCAN_SCHEMA: ScanSchema = {
   dnstwist: {
     type: 'fargate',
     isPassive: true,
-    global: false,
+    global: true,
     cpu: '2048',
     memory: '16384',
     description:
