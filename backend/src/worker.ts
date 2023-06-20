@@ -16,7 +16,6 @@ import { handler as webscraper } from './tasks/webscraper';
 import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
 import { handler as dnstwist } from './tasks/dnstwist';
-import { handler as rootDomainSync } from './tasks/rootDomainSync';
 import { handler as trustymail } from './tasks/trustymail';
 import { SCAN_SCHEMA } from './api/scans';
 import { connectToDatabase } from './models';
@@ -50,7 +49,6 @@ async function main() {
     shodan,
     dnstwist,
     testProxy,
-    rootDomainSync,
     trustymail,
     test: async () => {
       await connectToDatabase();
