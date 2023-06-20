@@ -37,7 +37,7 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
   const tableRef = useRef<TableInstance<Vulnerability>>(null);
   const listClasses = useStyles();
   const [noResults, setNoResults] = useState(false);
-  const [page_Size, setPageSize] = useState(15);
+  const [currentPageSize, setCurrentPageSize] = useState(groupBy ? 25 : 15);
 
   const updateVulnerability = useCallback(
     async (index: number, body: { [key: string]: string }) => {
@@ -70,7 +70,7 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
       filters,
       sort,
       page,
-      pageSize = page_Size,
+      pageSize = currentPageSize,
       doExport = false,
       groupBy = undefined
     }: {
@@ -132,7 +132,7 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
         return;
       }
     },
-    [apiPost, currentOrganization, showAllOrganizations, page_Size]
+    [apiPost, currentOrganization, showAllOrganizations, currentPageSize]
   );
 
   const fetchVulnerabilities = useCallback(
@@ -210,15 +210,15 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
           {!groupBy ? (
             <Table<Vulnerability>
               renderPagination={renderPagination}
-              columns={groupBy ? groupedColumns : columns}
+              columns={columns}
               data={vulnerabilities}
-              pageCount={Math.ceil(totalResults / page_Size)}
+              pageCount={Math.ceil(totalResults / currentPageSize)}
               fetchData={fetchVulnerabilities}
               tableRef={tableRef}
               initialFilterBy={initialFilterBy}
               initialSortBy={initialSortBy}
               noResults={noResults}
-              pageSize={page_Size}
+              pageSize={currentPageSize}
               noResultsMessage={
                 "We don't see any vulnerabilities that match your criteria."
               }
@@ -227,20 +227,20 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
             <>
               <Box>
                 {vulnerabilities.length} Most common vulnerabilities
-                <Button onClick={() => setPageSize(25)}>25</Button>
-                <Button onClick={() => setPageSize(50)}>50</Button>
-                <Button onClick={() => setPageSize(100)}>100</Button>
+                <Button onClick={() => setCurrentPageSize(25)}>25</Button>
+                <Button onClick={() => setCurrentPageSize(50)}>50</Button>
+                <Button onClick={() => setCurrentPageSize(100)}>100</Button>
               </Box>
               <Table<Vulnerability>
-                columns={groupBy ? groupedColumns : columns}
-                data={vulnerabilities.slice(0, page_Size)}
+                columns={groupedColumns}
+                data={vulnerabilities.slice(0, currentPageSize)}
                 pageCount={1}
                 fetchData={fetchVulnerabilities}
                 tableRef={tableRef}
                 initialFilterBy={initialFilterBy}
                 initialSortBy={initialSortBy}
                 noResults={noResults}
-                pageSize={page_Size}
+                pageSize={currentPageSize}
                 noResultsMessage={
                   "We don't see any vulnerabilities that match your criteria."
                 }

@@ -197,6 +197,8 @@ class VulnerabilitySearch {
     }
 
     if (pageSize !== -1) {
+      // Performance for skip/take is better for pagination of non groupBy queries in SQL due to the Data Volume.
+      // Offset/limit returns the correct amount of groups for the groupBy statement to the frontend.
       if (groupBy) {
         qs = qs.offset(pageSize * (this.page - 1)).limit(pageSize);
       } else {
