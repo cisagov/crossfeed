@@ -165,12 +165,6 @@ export const SCAN_SCHEMA: ScanSchema = {
     memory: '4096',
     description: 'Scrapes all webpages on a given domain, respecting robots.txt'
   },
-  lookingGlass: {
-    type: 'fargate',
-    isPassive: true,
-    global: false,
-    description: 'Finds vulnerabilities and malware from the LookingGlass API'
-  },
   dnstwist: {
     type: 'fargate',
     isPassive: true,

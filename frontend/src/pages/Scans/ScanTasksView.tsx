@@ -178,7 +178,6 @@ export const ScanTasksView: React.FC = () => {
         'webscraper',
         'intrigueIdent',
         'shodan',
-        'lookingGlass',
         'dnstwist',
         'rootDomainSync'
       ]),
