@@ -29,7 +29,6 @@
     "jwks-rsa": "^3.0",
     "lodash": "^4.17.21",
     "nodemailer": "^6.7.2",
-    "npm-force-resolutions": "^0.0.10",
     "openid-client": "^5.4",
     "p-queue": "^6.6.2",
     "p-retry": "^4.6.1",
@@ -37,7 +36,7 @@
     "pg": "^8.11",
     "portscanner": "^2.2.0",
     "reflect-metadata": "^0.1.13",
-    "serverless-http": "^2.7.0",
+    "serverless-http": "^3.2.0",
     "ssl-checker": "^2.0.7",
     "tough-cookie": "^3.0.1",
     "typeorm": "^0.2.45",
@@ -84,7 +83,8 @@
     "superagent": "^8.0.5",
     "xml2js": "0.5.0",
     "kind-of": "^6.0.3",
-    "execa": "^5.1.1"
+    "execa": "^5.1.1",
+    "natural": "^6.5.0"
   },
   "scripts": {
     "test": "jest --detectOpenHandles",
@@ -96,11 +96,7 @@
     "deploy-worker-staging": "./tools/deploy-worker.sh",
     "deploy-worker-prod": "./tools/deploy-worker.sh crossfeed-prod-worker",
     "syncdb": "docker-compose exec -T backend npx ts-node src/tools/run-syncdb.ts",
-    "pesyncdb": "docker-compose exec -T backend npx ts-node src/tools/run-pesyncdb.ts",
-    "postinstall": "npx npm-force-resolutions"
-  },
-  "resolutions": {
-    "ansi-regex": "5.0.1"
+    "pesyncdb": "docker-compose exec -T backend npx ts-node src/tools/run-pesyncdb.ts"
   },
   "author": "",
   "license": "ISC"

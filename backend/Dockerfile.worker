@@ -1,9 +1,13 @@
-FROM node:18-bullseye as build
+FROM node:18-alpine3.17 as build
 USER root
+
+RUN apk update && apk upgrade
 
 WORKDIR /app
 
 COPY ./package* ./
+
+RUN npm install -g npm@9
 
 RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
 
@@ -14,44 +18,49 @@ COPY src ./src
 
 RUN npx webpack --config webpack.worker.config.js
 
-FROM golang:1.14.6-alpine as deps
+FROM golang:1.19-alpine as deps
+
+RUN apk update && apk upgrade
 
 WORKDIR /app
 
-RUN apk add --no-cache wget unzip
+RUN apk add --no-cache curl unzip musl-dev
 
-RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/download/5.1.1/findomain-linux -O /usr/bin/findomain && chmod +x /usr/bin/findomain
-
-RUN wget --quiet https://github.com/OWASP/Amass/releases/download/v3.22.2/amass_linux_i386.zip -O amass.zip && unzip -q amass.zip && cp amass_linux_i386/amass /usr/bin && chmod +x /usr/bin/amass
+RUN curl -4LO http://github.com/Findomain/Findomain/releases/latest/download/findomain-linux.zip 
+RUN unzip findomain-linux.zip && chmod +x findomain && cp findomain /usr/bin/findomain
 
 RUN go mod init crossfeed-worker
 
-RUN go get github.com/facebookincubator/nvdtools/...@v0.1.4
+RUN go install github.com/facebookincubator/nvdtools/...@latest
+RUN go install -v github.com/owasp-amass/amass/v3/...@master
 
-FROM node:18-bullseye
+FROM ruby:alpine as rubyBuild
 
-RUN apt update && apt update -y && apt install zip -y
-
-WORKDIR /app
-
-RUN apt install curl git gfortran cmake python3 python3-pip ruby ruby-dev libffi-dev libxml2-dev libxslt-dev gcc musl-dev cargo -y
-
-RUN npm install -g pm2@4 wait-port@0.2.9
-
-# Install intrigue ident v2.0.2. Intrigue ident supports Ruby 2.7.2, but we have $RUBY_VERSION, so we update the required Ruby version in the Gemfile so that we can run it with Ruby $RUBY_VERSION.
+RUN apk add --update --no-cache build-base git ruby ruby-dev openssl-dev
 
 RUN gem install bundler:2.3.21
 RUN export RUBY_VERSION=$(ruby -e "print RUBY_VERSION") && git clone https://github.com/intrigueio/intrigue-ident.git && cd intrigue-ident && git checkout ee119abeac20564e728a92ab786400126e7a97f0 && sed -i "s/2.7.2/$RUBY_VERSION/g" Gemfile && sed -i "s/2.7.2p114/$RUBY_VERSION/g" Gemfile.lock && bundle install --jobs=4
 RUN echo 'cd /app/intrigue-ident && bundle exec ruby ./util/ident.rb $@' > /usr/bin/intrigue-ident && chmod +x /usr/bin/intrigue-ident
 
-RUN export LD_LIBRARY_PATH=/opt/OpenBLAS/lib:$LD_LIBRARY_PATH
+FROM node:18-bullseye
+
+#RUN apt update && apt upgrade -y && apt install zip -y
+RUN apt update && apt install wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev zip git -y
+WORKDIR /app
+
+RUN npm install -g pm2@5 wait-port@1
+RUN wget -c https://www.python.org/ftp/python/3.10.11/Python-3.10.11.tar.xz && tar -Jxvf Python-3.10.11.tar.xz
+
+RUN cd Python-3.10.11 && ./configure && make -j4 && make altinstall
+RUN update-alternatives --install /usr/bin/python python /usr/local/bin/python3.10 1
+RUN update-alternatives --install /usr/bin/pip pip /usr/local/bin/pip3.10 1
+RUN pip3.10 install --upgrade pip
+
+RUN apt remove dav1d && apt autoclean && apt autoremove
 
 # Install pe-source module
 # Sync the latest from cf-staging branch
-
-RUN git clone -b cf-source-staging https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout c9cbbd73b22ef38cabe1da6ba50aeb2dc0be4f99 && pip install .
-RUN python3 -m pip install --upgrade pip 
-
+RUN git clone -b cf-source-staging https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout c9cbbd73b22ef38cabe1da6ba50aeb2dc0be4f99 && sed -i 's/"pandas == 1.1.5"/"pandas == 1.5.1"/g' setup.py && sed -i 's/psycopg2-binary == 2.9.3/psycopg2-binary == 2.9.5/g' setup.py && sed -i 's/psycopg2-binary == 2.9.3/psycopg2-binary == 2.9.5/g' setup_reports.py  && pip install .
 # Python dependencies
 
 COPY worker/requirements.txt worker/requirements.txt
@@ -64,9 +73,13 @@ RUN wget https://publicsuffix.org/list/public_suffix_list.dat --no-use-server-ti
 
 COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 
-COPY --from=deps /usr/bin/findomain /usr/bin/amass /go/bin/csv2cpe /go/bin/nvdsync /go/bin/cpe2cve /usr/bin/
+COPY --from=deps /usr/bin/findomain /usr/bin/
+COPY --from=deps /go/bin/amass /usr/bin/
+COPY --from=deps /go/bin/csv2cpe /go/bin/nvdsync /go/bin/cpe2cve /usr/bin/
 
 COPY --from=deps /etc/ssl/certs /etc/ssl/certs
+
+COPY --from=rubyBuild /usr/bin/intrigue-ident  /usr/bin/
 
 ENV GLOBAL_AGENT_HTTP_PROXY=http://localhost:8080
 ENV GLOBAL_AGENT_NO_PROXY=censys.io
