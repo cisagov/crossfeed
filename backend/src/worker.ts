@@ -15,7 +15,6 @@ import { handler as dotgov } from './tasks/dotgov';
 import { handler as webscraper } from './tasks/webscraper';
 import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
-import { handler as hibp } from './tasks/hibp';
 import { handler as lookingGlass } from './tasks/lookingGlass';
 import { handler as dnstwist } from './tasks/dnstwist';
 import { handler as rootDomainSync } from './tasks/rootDomainSync';
@@ -50,7 +49,6 @@ async function main() {
     webscraper,
     savedSearch,
     shodan,
-    hibp,
     lookingGlass,
     dnstwist,
     testProxy,
