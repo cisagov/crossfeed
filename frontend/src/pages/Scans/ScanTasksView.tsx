@@ -166,7 +166,6 @@ export const ScanTasksView: React.FC = () => {
       Filter: selectFilter([
         // TODO: sync this with the SCAN_SCHEMA
         'censys',
-        'amass',
         'findomain',
         'portscanner',
         'wappalyzer',

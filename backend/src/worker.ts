@@ -1,6 +1,5 @@
 import { bootstrap } from 'global-agent';
 import { CommandOptions } from './tasks/ecs-client';
-import { handler as amass } from './tasks/amass';
 import { handler as censys } from './tasks/censys';
 import { handler as findomain } from './tasks/findomain';
 import { handler as portscanner } from './tasks/portscanner';
@@ -37,7 +36,6 @@ async function main() {
   const { scanName = 'test', organizations = [] } = commandOptions;
 
   const scanFn: any = {
-    amass,
     censys,
     censysIpv4,
     censysCertificates,
