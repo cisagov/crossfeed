@@ -41,10 +41,11 @@
     "tough-cookie": "^3.0.1",
     "typeorm": "^0.2.45",
     "uuid": "^8.3.2",
-    "wappalyzer": "^6.10.62",
-    "wappalyzer-core": "^6.3.11"
+    "wappalyzer": "^6.10.63",
+    "wappalyzer-core": "^6.10.63"
   },
   "devDependencies": {
+    "@jest/globals": "^27",
     "@types/aws-lambda": "^8.10.62",
     "@types/dockerode": "^2.5.34",
     "@types/jest": "^27",

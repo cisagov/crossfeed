@@ -7,12 +7,16 @@ import { wappalyzer } from './helpers/simple-wappalyzer';
 const wappalyze = async (domain: LiveDomain): Promise<void> => {
   try {
     const { data, status, headers } = await axios.get(domain.url, {
+      timeout: 2000,
       validateStatus: () => true
     });
-    const result = wappalyzer({ url: domain.url, data, headers });
-    if (result.length > 0) {
-      domain.service.wappalyzerResults = result.filter((e) => e?.technology);
-      await domain.service.save();
+
+    if (status) {
+      const result = wappalyzer({ url: domain.url, data, headers });
+      if (result.length > 0) {
+        domain.service.wappalyzerResults = result.filter((e) => e?.technology);
+        await domain.service.save();
+      }
     }
   } catch (e) {
     console.error(e);
