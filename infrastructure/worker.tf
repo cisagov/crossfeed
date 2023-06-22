@@ -78,7 +78,6 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.censys_api_id.arn}",
           "${data.aws_ssm_parameter.censys_api_secret.arn}",
           "${data.aws_ssm_parameter.shodan_api_key.arn}",
-          "${data.aws_ssm_parameter.hibp_api_key.arn}",
           "${data.aws_ssm_parameter.pe_shodan_api_keys.arn}",
           "${data.aws_ssm_parameter.sixgill_client_id.arn}",
           "${data.aws_ssm_parameter.sixgill_client_secret.arn}",
@@ -250,10 +249,6 @@ resource "aws_ecs_task_definition" "worker" {
         "valueFrom": "${data.aws_ssm_parameter.shodan_api_key.arn}"
       },
       {
-        "name": "HIBP_API_KEY",
-        "valueFrom": "${data.aws_ssm_parameter.hibp_api_key.arn}"
-      },
-      {
         "name": "PE_SHODAN_API_KEYS",
         "valueFrom": "${data.aws_ssm_parameter.pe_shodan_api_keys.arn}"
       },
@@ -320,8 +315,6 @@ data "aws_ssm_parameter" "censys_api_id" { name = var.ssm_censys_api_id }
 data "aws_ssm_parameter" "censys_api_secret" { name = var.ssm_censys_api_secret }
 
 data "aws_ssm_parameter" "shodan_api_key" { name = var.ssm_shodan_api_key }
-
-data "aws_ssm_parameter" "hibp_api_key" { name = var.ssm_hibp_api_key }
 
 data "aws_ssm_parameter" "pe_shodan_api_keys" { name = var.ssm_pe_shodan_api_keys }
 
