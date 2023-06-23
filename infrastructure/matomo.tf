@@ -68,7 +68,7 @@ resource "aws_ecs_task_definition" "matomo" {
 [
   {
     "name": "main",
-    "image": "matomo:4.14.2",
+    "image": "matomo:3.14.1",
     "essential": true,
     "logConfiguration": {
       "logDriver": "awslogs",

@@ -15,7 +15,7 @@ services:
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-    command: ["postgres", "-c", "log_statement=all", "-c", "log_duration=on"]
+    command: ['postgres', '-c', 'log_statement=all', '-c', 'log_duration=on']
 
   frontend:
     build: ./frontend
@@ -115,7 +115,7 @@ services:
       driver: none
 
   matomo:
-    image: matomo:4.14.2
+    image: matomo:3.14.1
     user: root
     networks:
       - backend
