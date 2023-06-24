@@ -96,7 +96,15 @@ const outOfTheBoxTechnologies = {
   ...z
 };
 
-const parseCookie = (str) => Cookie!.parse(str)!.toJSON();
+const parseCookie = (str) => {
+  if (str) {
+    const parsed = Cookie.parse(str);
+    if (parsed) {
+      return parsed.toJSON();
+    }
+  }
+  return JSON.stringify('');
+};
 
 const getCookies = (str) =>
   chain(str)
@@ -145,8 +153,12 @@ setTechnologies(technologies);
 setCategories(categories);
 
 export const wappalyzer = ({ data = '', url = '', headers = {} }) => {
-  const dom = new JSDOM(data, { url, virtualConsole: new VirtualConsole() });
-  const detections = analyze({
+  const dom = new JSDOM(data, {
+    url: url,
+    virtualConsole: new VirtualConsole()
+  });
+
+  return analyze({
     url: url,
     meta: getMeta(dom.window.document),
     headers: getHeaders(headers),
@@ -154,6 +166,4 @@ export const wappalyzer = ({ data = '', url = '', headers = {} }) => {
     cookies: getCookies(headers['set-cookie']),
     html: dom.serialize()
   });
-
-  return resolve(detections);
 };

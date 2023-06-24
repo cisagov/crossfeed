@@ -15,13 +15,14 @@ module.exports = {
   plugins: [
     // These are not used for being built, and they can't build properly, so we exclude them.
     new webpack.NormalModuleReplacementPlugin(
-      /(canvas|dockerode|ws)/,
+      /(dockerode)/,
       require.resolve('./mock.js')
     ),
     new webpack.IgnorePlugin({
       resourceRegExp: /^pg-native$|^cloudflare:sockets$/
     })
   ],
+  externals: ['canvas'],
   target: 'node',
   mode: 'production',
   module: {
@@ -38,7 +39,7 @@ module.exports = {
     ]
   },
   resolve: {
-    modules: ['node_modules', 'scripts'],
-    extensions: ['.ts', '.tsx', '.json', '.js', '.jsx']
+    modules: ['node_modules', path.resolve(__dirname, 'scripts')],
+    extensions: ['.ts', '.tsx', '.json', '.js', '.jsx', '...']
   }
 };
