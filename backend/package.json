@@ -29,6 +29,7 @@
     "jwks-rsa": "^3.0",
     "lodash": "^4.17.21",
     "nodemailer": "^6.7.2",
+    "npm-force-resolutions": "^0.0.10",
     "openid-client": "^5.4",
     "p-queue": "^6.6.2",
     "p-retry": "^4.6.1",
@@ -96,7 +97,11 @@
     "deploy-worker-staging": "./tools/deploy-worker.sh",
     "deploy-worker-prod": "./tools/deploy-worker.sh crossfeed-prod-worker",
     "syncdb": "docker-compose exec -T backend npx ts-node src/tools/run-syncdb.ts",
-    "pesyncdb": "docker-compose exec -T backend npx ts-node src/tools/run-pesyncdb.ts"
+    "pesyncdb": "docker-compose exec -T backend npx ts-node src/tools/run-pesyncdb.ts",
+    "postinstall": "npx npm-force-resolutions"
+  },
+  "resolutions": {
+    "ansi-regex": "5.0.1"
   },
   "author": "",
   "license": "ISC"
