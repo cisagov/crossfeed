@@ -41,7 +41,7 @@ This quickstart describes the initial setup required to run an instance of Cross
 
    If you ever need to drop and recreate the database, you can run `npm run syncdb -- -d dangerouslyforce`.
 
-7. Navigate to [http://localhost](http://localhost) in a browser.  The first time please navigate to [http://localhost/signup](http://localhost/signup) to create account. Local accounts can be set to Global Admin to aide in development.
+7. Navigate to [http://localhost](http://localhost) in a browser. The first time please navigate to [http://localhost/signup](http://localhost/signup) to create account. Local accounts can be set to Global Admin to aide in development.
 
 8. Hot reloading for source files is enabled, but after changes to non-source code files stopping and starting Docker Compose is required. The following are examples of changes that will require restarting the environment:
 
