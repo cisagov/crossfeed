@@ -196,6 +196,7 @@ resource "aws_db_instance" "matomo_db" {
   backup_retention_period             = 35
   storage_encrypted                   = true
   iam_database_authentication_enabled = false
+  allow_major_version_upgrade         = true
 
   // database information
   db_name  = "matomo"
