@@ -15,8 +15,8 @@ resource "aws_db_parameter_group" "default" {
   family = "postgres15"
 
   parameter {
-      name  = "rds.force_ssl"
-      value = "0"
+    name  = "rds.force_ssl"
+    value = "0"
   }
 }
 
