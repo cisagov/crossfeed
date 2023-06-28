@@ -14,10 +14,10 @@ resource "aws_db_parameter_group" "default" {
   name   = "crossfeed-pg15"
   family = "postgres15"
 
-    parameter {
-        name  = "rds.force_ssl"
-        value = "0"
-    }
+  parameter {
+      name  = "rds.force_ssl"
+      value = "0"
+  }
 }
 
 resource "aws_db_instance" "db" {
