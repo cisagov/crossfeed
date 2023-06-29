@@ -33,9 +33,7 @@ export class ApiKey extends BaseEntity {
   lastUsed: Date | null;
 
   @Column({
-    // length based on hex formatted sha256
-    length: 64,
-    type: 'varchar'
+    type: 'text'
   })
   hashedKey: string;
 
