@@ -13,8 +13,8 @@ const wappalyze = async (domain: LiveDomain): Promise<void> => {
       validateStatus: () => true
     });
 
-    // only respose with HTTPStatusCodes lesser than 4xx are wappalizyed
-    if (status < 400) {
+    // only response with HTTPStatusCode lesser than 4xx are "wappalyzed"
+    if (status < 500) {
       const result = wappalyzer({ data, url: domain.url, headers });
       if (result.length > 0) {
         const filteredResults = result.filter((e) => e?.technology);
@@ -60,7 +60,7 @@ const wappalyze = async (domain: LiveDomain): Promise<void> => {
       }
     } else {
       console.error(
-        `${domain.url} - Uknown unexpected error. 
+        `${domain.url} - Unknown unexpected error. 
         Type: ${e.typeof}. 
         Error: ${JSON.stringify(e, null, 4)}`
       );
