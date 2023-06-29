@@ -38,8 +38,7 @@ export class ApiKey extends BaseEntity {
   hashedKey: string;
 
   @Column({
-    length: 4,
-    type: 'varchar'
+    type: 'text'
   })
   lastFour: string;
 }
