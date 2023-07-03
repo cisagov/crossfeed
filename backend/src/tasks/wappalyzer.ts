@@ -13,7 +13,7 @@ const wappalyze = async (domain: LiveDomain): Promise<void> => {
       validateStatus: () => true
     });
 
-    // only response with HTTPStatusCode lesser than 4xx are "wappalyzed"
+    // only response with HTTPStatusCode lesser than 5xx are "wappalyzed"
     if (status < 500) {
       const result = wappalyzer({ data, url: domain.url, headers });
       if (result.length > 0) {
