@@ -17,8 +17,9 @@ const PATH = DOTGOV_LIST_ENDPOINT.replace(HOST, '');
 
 describe('dotgov', () => {
   let scan;
+  let connection;
   beforeEach(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     scan = await Scan.create({
       name: 'dotgov',
       arguments: {},
@@ -31,11 +32,18 @@ describe('dotgov', () => {
       .delete()
       .execute();
   });
-
+  afterEach(async () => {
+    await connection.close();
+  });
+  afterAll(async () => {
+    nock.cleanAll();
+  });
   test('basic test', async () => {
-    nock(HOST).get(PATH).reply(
-      200,
-      `Domain Name,Domain Type,Agency,Organization,City,State,Security Contact Email
+    nock(HOST)
+      .get(PATH)
+      .reply(
+        200,
+        `Domain Name,Domain Type,Agency,Organization,City,State,Security Contact Email
 ACUS.GOV,Federal Agency - Executive,Administrative Conference of the United States,ADMINISTRATIVE CONFERENCE OF THE UNITED STATES,Washington,DC,info@acus.gov
 ACHP.GOV,Federal Agency - Executive,Advisory Council on Historic Preservation,ACHP,Washington,DC,domainsecurity@achp.gov
 PRESERVEAMERICA.GOV,Federal Agency - Executive,Advisory Council on Historic Preservation,ACHP,Washington,DC,domainsecurity@achp.gov
@@ -47,7 +55,7 @@ ARC.GOV,Federal Agency - Executive,Appalachian Regional Commission,ARC,Washingto
 ASC.GOV,Federal Agency - Executive,Appraisal Subcommittee,Appraisal Subcommittee,Washington,DC,(blank)
 AFRH.GOV,Federal Agency - Executive,Armed Forces Retirement Home,Armed Forces Retirement Home,Washington,DC,Stanley.Whitehead@afrh.gov
 GOLDWATERSCHOLARSHIP.GOV,Federal Agency - Executive,Barry Goldwater Scholarship and Excellence in Education Foundation,Barry Goldwater Scholarship and Excellence in Education Foundation,Alexandria,VA,goldwaterao@goldwaterscholarship.gov`
-    );
+      );
 
     await dotgov({
       organizationId: 'organizationId',
@@ -75,12 +83,14 @@ GOLDWATERSCHOLARSHIP.GOV,Federal Agency - Executive,Barry Goldwater Scholarship 
   });
 
   test('combines root domains together', async () => {
-    nock(HOST).get(PATH).reply(
-      200,
-      `Domain Name,Domain Type,Agency,Organization,City,State,Security Contact Email
+    nock(HOST)
+      .get(PATH)
+      .reply(
+        200,
+        `Domain Name,Domain Type,Agency,Organization,City,State,Security Contact Email
 site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.gov
 site2.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,domainsecurity@achp.gov`
-    );
+      );
 
     await dotgov({
       organizationId: 'organizationId',
@@ -106,11 +116,13 @@ site2.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,domainsecur
   });
 
   test("doesn't touch existing organizations with the same name but not with the dotgov-tag", async () => {
-    nock(HOST).get(PATH).reply(
-      200,
-      `Domain Name,Domain Type,Agency,Organization,City,State,Security Contact Email
+    nock(HOST)
+      .get(PATH)
+      .reply(
+        200,
+        `Domain Name,Domain Type,Agency,Organization,City,State,Security Contact Email
 site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.gov`
-    );
+      );
 
     const originalOrganization = await Organization.create({
       name: 'Agency 1',
@@ -143,11 +155,13 @@ site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.g
   });
 
   test('should use existing tag with DOTGOV_TAG_NAME if it exists', async () => {
-    nock(HOST).get(PATH).reply(
-      200,
-      `Domain Name,Domain Type,Agency,Organization,City,State,Security Contact Email
+    nock(HOST)
+      .get(PATH)
+      .reply(
+        200,
+        `Domain Name,Domain Type,Agency,Organization,City,State,Security Contact Email
 site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.gov`
-    );
+      );
 
     const originalTag = await OrganizationTag.create({
       name: DOTGOV_TAG_NAME
@@ -178,11 +192,13 @@ site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.g
   });
 
   test('updates existing organizations with the same name and with the dotgov-tag -- should replace all rootDomains', async () => {
-    nock(HOST).get(PATH).reply(
-      200,
-      `Domain Name,Domain Type,Agency,Organization,City,State,Security Contact Email
+    nock(HOST)
+      .get(PATH)
+      .reply(
+        200,
+        `Domain Name,Domain Type,Agency,Organization,City,State,Security Contact Email
 site1.gov,Federal Agency - Executive,Agency 1,Agency 1,Washington,DC,info@acus.gov`
-    );
+      );
 
     const tag = await OrganizationTag.create({
       name: DOTGOV_TAG_NAME

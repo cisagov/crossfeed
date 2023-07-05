@@ -23,8 +23,9 @@ beforeEach(() => {
 describe('user', () => {
   let organization;
   let organization2;
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     organization = await Organization.create({
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
@@ -37,6 +38,9 @@ describe('user', () => {
       ipBlocks: [],
       isPassive: false
     }).save();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   describe('invite', () => {
     it('invite by a regular user should not work', async () => {
@@ -452,16 +456,26 @@ describe('user', () => {
         email: Math.random() + '@crossfeed.cisa.gov'
       }).save();
       const response = await request(app)
-        .get('/users')
+        .post('/users/search')
         .set(
           'Authorization',
           createUserToken({
             userType: UserType.GLOBAL_VIEW
           })
         )
+        .send({
+          page: 1,
+          sort: 'email',
+          order: 'ASC',
+          filters: {},
+          pageSize: -1,
+          groupBy: undefined
+        })
         .expect(200);
-      expect(response.body.length).toBeGreaterThanOrEqual(1);
-      expect(response.body.map((e) => e.id).indexOf(user.id)).not.toEqual(-1);
+      expect(response.body.count).toBeGreaterThanOrEqual(1);
+      expect(
+        response.body.result.map((e) => e.id).indexOf(user.id)
+      ).not.toEqual(-1);
     });
     it('list by regular user should fail', async () => {
       const user = await User.create({
@@ -470,8 +484,16 @@ describe('user', () => {
         email: Math.random() + '@crossfeed.cisa.gov'
       }).save();
       const response = await request(app)
-        .get('/users')
+        .post('/users/search')
         .set('Authorization', createUserToken({}))
+        .send({
+          page: 1,
+          sort: 'email',
+          order: 'ASC',
+          filters: {},
+          pageSize: -1,
+          groupBy: undefined
+        })
         .expect(403);
       expect(response.body).toEqual({});
     });

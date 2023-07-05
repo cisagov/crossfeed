@@ -7,19 +7,19 @@ sidenav: user-guide
 
 Administrators have a few additional options for management. All data and users are organized into **organizations** in Crossfeed.
 
-![org list](./img/org list.png)
+![org list](./img/org_list.png)
 
 Each organization has a list of root domains configured, which defines the scope of the assets under it, and can have users (with role either `admin` or `user`) assigned to it.
 
-![org detail](./img/org detail.png)
+![org detail](./img/org_detail.png)
 
 The "Manage Users" screen lets you manage all users who have access to Crossfeed, across all organizations.
 
-![user list](./img/user list.png)
+![user list](./img/user_list.png)
 
 Finally, you can view configured scans on the "Scans" tab. These scans allow you to configure the different data sources that feed into Crossfeed.
 
-![scan list](./img/scan list.png)
+![scan list](./img/scan_list.png)
 
 ### Access control
 

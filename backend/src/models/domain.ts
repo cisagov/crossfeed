@@ -95,15 +95,12 @@ export class Domain extends BaseEntity {
   screenshot: string | null;
 
   @Column({
-    length: 64,
     nullable: true,
     type: 'varchar'
   })
   country: string | null;
 
   @Column({
-    // length based on max size of 4294967295 or 0xFFFFFFFF
-    length: 10,
     nullable: true,
     type: 'varchar'
   })
@@ -149,4 +146,46 @@ export class Domain extends BaseEntity {
   setReverseName() {
     this.reverseName = this.name.split('.').reverse().join('.');
   }
+
+  // Trustymail results
+  @Column({
+    type: 'jsonb',
+    default: {}
+  })
+  trustymailResults: {
+    updatedAt: 'timestamp';
+    Domain: string;
+    'Base Domain': string;
+    Live: boolean;
+    'MX Record': boolean;
+    'MX Record DNSSEC': string;
+    'Mail Servers': string[];
+    'Mail Server Ports Tested': number[];
+    'Domain Supports SMTP Results': string[];
+    'Domain Supports SMTP': string;
+    'Domain Supports STARTTLS Results': string[];
+    'Domain Supports STARTTLS': string;
+    'SPF Record': boolean;
+    'SPF Record DNSSEC': string;
+    'Valid SPF': boolean;
+    'SPF Results': string[];
+    'DMARC Record': boolean;
+    'DMARC Record DNSSEC': string;
+    'Valid DMARC': boolean;
+    'DMARC Results': string[];
+    'DMARC Record on Base Domain': boolean;
+    'DMARC Record on Base Domain DNSSEC': string;
+    'Valid DMARC Record on Base Domain': boolean;
+    'DMARC Results on Base Domain': string[];
+    'DMARC Policy': string;
+    'DMARC Subdomain Policy': string;
+    'DMARC Policy Percentage': number;
+    'DMARC Aggregate Report URIs': string[];
+    'DMARC Forensic Report URIs': string[];
+    'DMARC Has Aggregate Report URI': boolean;
+    'DMARC Has Forensic Report URI': boolean;
+    'DMARC Reporting Address Acceptance Error': boolean;
+    'Syntax Errors': string[];
+    'Debug Info': string[];
+  } | null;
 }

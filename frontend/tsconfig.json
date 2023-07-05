@@ -20,5 +20,8 @@
     "baseUrl": "src",
     "noFallthroughCasesInSwitch": true
   },
+  "rules": {
+    "max-line-length": [true, 10]
+  },
   "include": ["src/**/*"]
 }

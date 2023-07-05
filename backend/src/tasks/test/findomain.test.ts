@@ -13,8 +13,9 @@ jest.mock('fs', () => ({
 
 describe('findomain', () => {
   let scan;
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     (readFileSync as jest.Mock).mockImplementation(() =>
       [
         'filedrop.cisa.gov,104.84.119.215',
@@ -26,6 +27,9 @@ describe('findomain', () => {
       arguments: {},
       frequency: 999
     }).save();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   test('should add new domains', async () => {
     const organization = await Organization.create({

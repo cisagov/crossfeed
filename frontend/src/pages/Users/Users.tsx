@@ -10,9 +10,9 @@ import {
   ModalRef
 } from '@trussworks/react-uswds';
 import { ModalToggleButton } from 'components';
-import { Organization } from 'types';
+import { Organization, Query } from 'types';
 import { Table, ImportExport } from 'components';
-import { Column } from 'react-table';
+import { Column, SortingRule } from 'react-table';
 import { User } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
@@ -29,8 +29,14 @@ interface Errors extends Partial<User> {
   global?: string;
 }
 
+export interface ApiResponse {
+  result: User[];
+  count: number;
+  url?: string;
+}
+
 export const Users: React.FC = () => {
-  const { apiGet, apiPost, apiDelete } = useAuthContext();
+  const { user, apiPost, apiDelete } = useAuthContext();
   const modalRef = useRef<ModalRef>(null);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [users, setUsers] = useState<User[]>([]);
@@ -61,7 +67,8 @@ export const Users: React.FC = () => {
           .join(', '),
       id: 'organizations',
       width: 200,
-      disableFilters: true
+      disableFilters: true,
+      disableSortBy: true
     },
     {
       Header: 'User type',
@@ -137,14 +144,45 @@ export const Users: React.FC = () => {
     userType: ''
   });
 
-  const fetchUsers = useCallback(async () => {
-    try {
-      const rows = await apiGet<User[]>('/users/');
-      setUsers(rows);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [apiGet]);
+  const userSearch = useCallback(
+    async ({
+      sort,
+      groupBy = undefined
+    }: {
+      sort: SortingRule<User>[];
+      groupBy?: string;
+    }): Promise<ApiResponse | undefined> => {
+      try {
+        const tableFilters: any = {};
+        return await apiPost<ApiResponse>('/users/search', {
+          body: {
+            page: 1,
+            sort: sort[0]?.id ?? 'email',
+            order: sort[0]?.desc ? 'DESC' : 'ASC',
+            filters: tableFilters,
+            pageSize: -1,
+            groupBy
+          }
+        });
+      } catch (e) {
+        console.error(e);
+        return;
+      }
+    },
+    [apiPost]
+  );
+
+  const fetchUsers = useCallback(
+    async (query: Query<User>) => {
+      const resp = await userSearch({
+        sort: query.sort
+      });
+      if (!resp) return;
+      const { result } = resp;
+      setUsers(result);
+    },
+    [userSearch]
+  );
 
   const deleteRow = async (index: number) => {
     try {
@@ -205,6 +243,7 @@ export const Users: React.FC = () => {
         <Label htmlFor="firstName">First Name</Label>
         <TextInput
           required
+          maxLength={250}
           id="firstName"
           name="firstName"
           className={classes.textField}
@@ -217,6 +256,7 @@ export const Users: React.FC = () => {
           required
           id="lastName"
           name="lastName"
+          maxLength={250}
           className={classes.textField}
           type="text"
           value={values.lastName}
@@ -227,6 +267,7 @@ export const Users: React.FC = () => {
           required
           id="email"
           name="email"
+          maxLength={250}
           className={classes.textField}
           type="text"
           value={values.email}
@@ -258,53 +299,63 @@ export const Users: React.FC = () => {
         <br></br>
         <Button type="submit">Invite User</Button>
       </form>
-      <ImportExport<
-        | User
-        | {
-            roles: string;
-          }
-      >
-        name="users"
-        fieldsToExport={['firstName', 'lastName', 'email', 'roles', 'userType']}
-        onImport={async (results) => {
-          // TODO: use a batch call here instead.
-          const createdUsers = [];
-          for (const result of results) {
-            const parsedRoles: {
-              organization: string;
-              role: string;
-            }[] = JSON.parse(result.roles as string);
-            const body: any = result;
-            // For now, just create role with the first organization
-            if (parsedRoles.length > 0) {
-              body.organization = parsedRoles[0].organization;
-              body.organizationAdmin = parsedRoles[0].role === 'admin';
-            }
-            try {
-              createdUsers.push(
-                await apiPost('/users/', {
-                  body
-                })
-              );
-            } catch (e) {
-              // Just continue when an error occurs
-              console.error(e);
-            }
-          }
-          setUsers(users.concat(...createdUsers));
-        }}
-        getDataToExport={() =>
-          users.map((user) => ({
-            ...user,
-            roles: JSON.stringify(
-              user.roles.map((role) => ({
-                organization: role.organization.id,
-                role: role.role
+      {user?.userType === 'globalAdmin' && (
+        <>
+          <ImportExport<
+            | User
+            | {
+                roles: string;
+              }
+          >
+            name="users"
+            fieldsToExport={[
+              'firstName',
+              'lastName',
+              'email',
+              'roles',
+              'userType'
+            ]}
+            onImport={async (results) => {
+              // TODO: use a batch call here instead.
+              const createdUsers = [];
+              for (const result of results) {
+                const parsedRoles: {
+                  organization: string;
+                  role: string;
+                }[] = JSON.parse(result.roles as string);
+                const body: any = result;
+                // For now, just create role with the first organization
+                if (parsedRoles.length > 0) {
+                  body.organization = parsedRoles[0].organization;
+                  body.organizationAdmin = parsedRoles[0].role === 'admin';
+                }
+                try {
+                  createdUsers.push(
+                    await apiPost('/users/', {
+                      body
+                    })
+                  );
+                } catch (e) {
+                  // Just continue when an error occurs
+                  console.error(e);
+                }
+              }
+              setUsers(users.concat(...createdUsers));
+            }}
+            getDataToExport={() =>
+              users.map((user) => ({
+                ...user,
+                roles: JSON.stringify(
+                  user.roles.map((role) => ({
+                    organization: role.organization.id,
+                    role: role.role
+                  }))
+                )
               }))
-            )
-          }))
-        }
-      />
+            }
+          />
+        </>
+      )}
 
       <Modal ref={modalRef} id="modal">
         <ModalHeading>Delete user?</ModalHeading>

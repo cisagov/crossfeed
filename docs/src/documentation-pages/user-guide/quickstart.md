@@ -38,7 +38,7 @@ You can add additional users to invite to Crossfeed. All users can view your org
 
 Once you invite a user, they will receive an invitation email with instructions on how to sign up if they do not already have a Crossfeed account.
 
-![org members](./img/org members.png)
+![org members](./img/org_members.png)
 
 ### Adding root domains
 
@@ -51,29 +51,29 @@ To view which root domains are assigned to your organization, go to My Account -
 
 If you would like to modify the root domains being scanned for your organization, please send an email to vulnerability@cisa.dhs.gov with the requested changes.
 
-![org settings](./img/org settings.png)
+![org settings](./img/org_settings.png)
 
 ### Viewing assets
 
 You can search for anything, which returns search results, then filter those results. Each search result represents a domain, which can have ports, products, and vulnerabilities associated with it.
 
-![search results](./img/search results.png)
+![search results](./img/search_results.png)
 
 The "All Domains" list contains a more compact representation of all domains.
 
-![domain list](./img/domain list.png)
+![domain list](./img/domain_list.png)
 
 The "All Vulnerabilities" list has a list of all vulnerabilities. Each vulnerability is associated with a specific domain; vulnerabilities include CVEs as well as other issues such as SSL configuration or misconfiguration errors.
 
-![vuln list](./img/vuln list.png)
+![vuln list](./img/vuln_list.png)
 
 You can also view details of an individual domain.
 
-![domain detail](./img/domain detail.png)
+![domain detail](./img/domain_detail.png)
 
 Finally, you can click on a vulnerability to view more information about it, such as references to links with more information about it, as well as its history and any notes that other Crossfeed users may have added to it. You can also mark a vulnerability as a false positive from this page.
 
-![vuln detail](./img/vuln detail.png)
+![vuln detail](./img/vuln_detail.png)
 
 ### Tailoring data sources
 
@@ -84,8 +84,8 @@ Crossfeed has two types of scans: active and passive.
 
 You can turn on / off some scans for your organization. To do so, go to My Account -> Manage Organizations and select your organization. Navigate to the "Scans" tab. Here, you can toggle different scans on or off.
 
-![org scans](./img/org scans.png)
+![org scans](./img/org_scans.png)
 
 If you would like only passive scans to run on your organization (and disable active scans), go to My Account -> Manage Organizations and select your organization. Navigate to the "Settings" tab. You can then turn on "Passive Mode" to only enable passive scans on your organization.
 
-![org settings](./img/org settings.png)
+![org settings](./img/org_settings.png)

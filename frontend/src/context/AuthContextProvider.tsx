@@ -22,6 +22,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const [org, setOrg] = usePersistentState<
     Organization | OrganizationTag | null
   >('organization', null);
+  const [showMap, setShowMap] = usePersistentState<boolean>('showMap', false);
   const [showAllOrganizations, setShowAllOrganizations] =
     usePersistentState<boolean>('showAllOrganizations', false);
   const [feedbackMessage, setFeedbackMessage] = useState<{
@@ -78,17 +79,21 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   );
 
   const refreshUser = useCallback(async () => {
-    if (!token && process.env.REACT_APP_USE_COGNITO) {
-      const session = await Auth.currentSession();
-      const { token } = await apiPost<{ token: string; user: User }>(
-        '/auth/callback',
-        {
-          body: {
-            token: session.getIdToken().getJwtToken()
+    try {
+      if (!token && process.env.REACT_APP_USE_COGNITO) {
+        const session = await Auth.currentSession();
+        const { token } = await apiPost<{ token: string; user: User }>(
+          '/auth/callback',
+          {
+            body: {
+              token: session.getIdToken().getJwtToken()
+            }
           }
-        }
-      );
-      setToken(token);
+        );
+        setToken(token);
+      }
+    } catch (error) {
+      console.log(error);
     }
   }, [apiPost, setToken, token]);
 
@@ -129,6 +134,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         setUser: setProfile,
         refreshUser,
         setOrganization: setOrg,
+        showMaps: showMap,
+        setShowMaps: setShowMap,
         currentOrganization: extendedOrg,
         showAllOrganizations: showAllOrganizations,
         setShowAllOrganizations: setShowAllOrganizations,

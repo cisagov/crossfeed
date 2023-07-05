@@ -13,6 +13,11 @@ import {
 import { Domain, Role, Scan, ScanTask, OrganizationTag } from '.';
 import { User } from './user';
 
+export interface PendingDomain {
+  name: string;
+  token: string;
+}
+
 @Entity()
 @Index(['name'], { unique: true })
 export class Organization extends BaseEntity {
@@ -25,10 +30,7 @@ export class Organization extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({
-    length: 128,
-    type: 'varchar'
-  })
+  @Column()
   name: string;
 
   @Column('varchar', { array: true })
@@ -45,6 +47,9 @@ export class Organization extends BaseEntity {
     onUpdate: 'CASCADE'
   })
   domains: Domain[];
+
+  @Column('json', { default: '[]' })
+  pendingDomains: PendingDomain[];
 
   @OneToMany((type) => Role, (role) => role.organization, {
     onDelete: 'CASCADE',

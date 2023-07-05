@@ -48,7 +48,7 @@ export const ScanForm: React.FC<{
     name: scan ? scan.name : 'censys',
     arguments: scan ? scan.arguments : '{}',
     frequency: scan ? scan.frequency : 1,
-    frequencyUnit: scan ? propValues.frequencyUnit : 'minute',
+    frequencyUnit: scan ? propValues.frequencyUnit : 'day',
     isGranular: scan ? scan.isGranular : false,
     isUserModifiable: scan ? scan.isUserModifiable : false,
     isSingleScan: scan ? scan.isSingleScan : false,
@@ -135,24 +135,27 @@ export const ScanForm: React.FC<{
       }}
       className={classes.form}
     >
-      {type === 'create' && scanSchema && <Label htmlFor="name">Name</Label> && (
-        <Dropdown
-          required
-          id="name"
-          name="name"
-          className={classes.textField}
-          onChange={onTextChange}
-          value={values.name}
-        >
-          {Object.keys(scanSchema).map((i) => {
-            return (
-              <option key={i} value={i}>
-                {i}
-              </option>
-            );
-          })}
-        </Dropdown>
-      )}
+      {type === 'create' &&
+        scanSchema && <Label htmlFor="name">Name</Label> && (
+          <Dropdown
+            required
+            id="name"
+            name="name"
+            className={classes.textField}
+            onChange={onTextChange}
+            value={values.name}
+          >
+            {Object.keys(scanSchema)
+              .sort((a, b) => a.localeCompare(b))
+              .map((i) => {
+                return (
+                  <option key={i} value={i}>
+                    {i}
+                  </option>
+                );
+              })}
+          </Dropdown>
+        )}
       {schemaUpdated && <p>{scanSchema[values.name].description}</p>}
       {/* <Label htmlFor="arguments">Arguments</Label>
         <TextInput
@@ -230,6 +233,7 @@ export const ScanForm: React.FC<{
           </label>
           <TextInput
             id="frequency"
+            maxLength={250}
             name="frequency"
             type="number"
             style={{
@@ -249,7 +253,6 @@ export const ScanForm: React.FC<{
             value={values.frequencyUnit}
             style={{ display: 'inline-block', width: '150px' }}
           >
-            <option value="minute">Minute(s)</option>
             <option value="hour">Hour(s)</option>
             <option value="day">Day(s)</option>
           </Dropdown>

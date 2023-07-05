@@ -91,15 +91,14 @@ class DomainSearch {
       qs.andWhere('domain.ip LIKE :ip', { ip: `%${this.filters?.ip}%` });
     }
     if (this.filters?.port) {
-      qs.andHaving('COUNT(CASE WHEN services.port = :port THEN 1 END) >= 1', {
+      qs.andWhere('services.port::text LIKE :port', {
         port: this.filters?.port
       });
     }
     if (this.filters?.service) {
-      qs.andHaving(
-        'COUNT(CASE WHEN services.products->>0 ILIKE :service THEN 1 END) >= 1',
-        { service: `%${this.filters?.service}%` }
-      );
+      qs.andWhere('services.products->>0 ILIKE :service', {
+        service: `%${this.filters?.service}%`
+      });
     }
     if (this.filters?.organization) {
       qs.andWhere('organization.id = :org', {
@@ -117,12 +116,9 @@ class DomainSearch {
       });
     }
     if (this.filters?.vulnerability) {
-      qs.andHaving(
-        'COUNT(CASE WHEN vulnerabilities.title ILIKE :title THEN 1 END) >= 1',
-        {
-          title: `%${this.filters?.vulnerability}%`
-        }
-      );
+      qs.andWhere('vulnerabilities.title ILIKE :title', {
+        title: `%${this.filters?.vulnerability}%`
+      });
     }
     return qs;
   }
@@ -137,10 +133,7 @@ class DomainSearch {
         "state = 'open'"
       )
       .leftJoinAndSelect('domain.organization', 'organization')
-      .orderBy(`domain.${this.sort}`, this.order)
-      .groupBy(
-        'domain.id, domain.ip, domain.name, organization.id, services.id, vulnerabilities.id'
-      );
+      .orderBy(`domain.${this.sort}`, this.order);
     if (pageSize !== -1) {
       qs = qs.skip(pageSize * (this.page - 1)).take(pageSize);
     }
