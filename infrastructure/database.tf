@@ -10,16 +10,6 @@ resource "aws_db_subnet_group" "default" {
   }
 }
 
-resource "aws_db_parameter_group" "default" {
-  name   = "crossfeed-pg15"
-  family = "postgres15"
-
-  parameter {
-    name  = "rds.force_ssl"
-    value = "0"
-  }
-}
-
 resource "aws_db_instance" "db" {
   identifier                          = var.db_name
   instance_class                      = var.db_instance_class
@@ -44,7 +34,6 @@ resource "aws_db_instance" "db" {
   port     = var.db_port
 
   db_subnet_group_name = aws_db_subnet_group.default.name
-  parameter_group_name = aws_db_parameter_group.default.name
 
   vpc_security_group_ids = [aws_security_group.allow_internal.id]
 
