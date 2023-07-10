@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { ImportExport } from 'components';
 import { Organization } from 'types';
 import { useAuthContext } from 'context';
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import { OrganizationList } from 'components/OrganizationList';
 
 export const Organizations: React.FC = () => {

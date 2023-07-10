@@ -1,12 +1,7 @@
 import React from 'react';
-import {
-  makeStyles,
-  Select,
-  FormControl,
-  MenuItem,
-  SelectProps
-} from '@material-ui/core';
-import { ArrowUpward, ArrowDownward } from '@material-ui/icons';
+import { Select, FormControl, MenuItem, SelectProps } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
 import { ContextType } from '../../context/SearchProvider';
 import { SavedSearch } from 'types';
 
@@ -56,7 +51,7 @@ export const SortBar: React.FC<Props> = (props) => {
             labelId="sort-by-label"
             value={sortField}
             onChange={onSetSortField}
-            classes={{ root: classes.selectInp }}
+            classes={{ select: classes.selectInp }}
           >
             <MenuItem classes={{ root: classes.option }} value="name">
               Domain Name

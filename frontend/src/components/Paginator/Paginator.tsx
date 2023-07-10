@@ -1,7 +1,8 @@
 import React, { PropsWithChildren } from 'react';
 import { TableInstance } from 'react-table';
-import { Button, makeStyles, Paper } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
+import { Button, Paper } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Pagination } from '@mui/material';
 import { exportCSV, ExportProps } from 'components/ImportExport';
 import { useAuthContext } from 'context';
 

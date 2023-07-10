@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Paper, makeStyles, ButtonGroup } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
+import { Paper, ButtonGroup } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Pagination } from '@mui/material';
 import { useAuthContext } from 'context';
 import { SavedSearch } from 'types';
 import { Subnav } from 'components';

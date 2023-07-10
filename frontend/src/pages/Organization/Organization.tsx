@@ -17,7 +17,6 @@ import { Subnav, Table } from 'components';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import {
   Chip,
-  makeStyles,
   Switch as SwitchInput,
   Button,
   TextField,
@@ -31,9 +30,11 @@ import {
   FormLabel,
   Radio,
   RadioGroup
-} from '@material-ui/core';
-import { ChevronRight, ControlPoint } from '@material-ui/icons';
-import { Autocomplete, createFilterOptions } from '@material-ui/lab';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { ChevronRight, ControlPoint } from '@mui/icons-material';
+import { Autocomplete } from '@mui/material';
+import { createFilterOptions } from '@mui/material/useAutocomplete';
 import { OrganizationList } from 'components/OrganizationList';
 
 interface AutocompleteType extends Partial<OrganizationTag> {
@@ -605,9 +606,12 @@ export const Organization: React.FC = () => {
                 handleHomeEndKeys
                 options={tags}
                 getOptionLabel={(option) => {
-                  return option.name ?? '';
+                  if (typeof option === 'string') {
+                    return option;
+                  }
+                  return (option as AutocompleteType).name ?? '';
                 }}
-                renderOption={(option) => {
+                renderOption={(props, option) => {
                   if (option.title) return option.title;
                   return option.name ?? '';
                 }}

@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { Organization } from 'types';
-import { Grid, Paper, makeStyles } from '@material-ui/core';
+import { Grid, Paper } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useHistory } from 'react-router-dom';
-import { Add } from '@material-ui/icons';
+import { Add } from '@mui/icons-material';
 import { OrganizationForm } from 'components/OrganizationForm';
 import { useAuthContext } from 'context';
 

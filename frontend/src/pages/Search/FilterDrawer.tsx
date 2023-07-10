@@ -3,11 +3,11 @@ import {
   Paper,
   Accordion as MuiAccordion,
   AccordionSummary as MuiAccordionSummary,
-  AccordionDetails,
-  makeStyles,
-  withStyles
-} from '@material-ui/core';
-import { ExpandMore, FiberManualRecordRounded } from '@material-ui/icons';
+  AccordionDetails
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import withStyles from '@mui/styles/withStyles';
+import { ExpandMore, FiberManualRecordRounded } from '@mui/icons-material';
 import { FaFilter } from 'react-icons/fa';
 import { TaggedArrayInput, FacetFilter } from 'components';
 import { ContextType } from '../../context/SearchProvider';

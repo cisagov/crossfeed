@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
-import { makeStyles } from '@material-ui/core/styles';
+import ScopedCssBaseline from '@mui/material/ScopedCssBaseline';
+import makeStyles from '@mui/styles/makeStyles';
 import { Header, GovBanner } from 'components';
 
 const useStyles = makeStyles((theme) => ({

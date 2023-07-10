@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import clsx from 'classnames';
 import { NavLink, useRouteMatch, useHistory } from 'react-router-dom';
-import { Menu, MenuItem, Button, makeStyles } from '@material-ui/core';
+import { Menu, MenuItem, Button } from '@mui/material';
+
+import { makeStyles } from '@mui/styles';
 
 interface LinkConfig {
   title: string | JSX.Element;
@@ -74,7 +76,6 @@ export const NavItem: React.FC<Props> = (props) => {
           open={(mouseInButton || mouseInMenu) && !!anchor}
           anchorEl={anchor}
           onClose={onCloseMenu}
-          getContentAnchorEl={null}
           keepMounted
           anchorOrigin={{
             vertical: 'bottom',

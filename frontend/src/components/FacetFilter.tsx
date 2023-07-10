@@ -1,10 +1,7 @@
 import React from 'react';
-import {
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  makeStyles
-} from '@material-ui/core';
+import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 interface Props {
   options: { value: string; count: number }[];

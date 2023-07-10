@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import {
   Paper,
-  makeStyles,
   Accordion,
   AccordionSummary,
   Typography,
@@ -11,12 +10,13 @@ import {
   ListItem,
   ListItemText,
   Collapse
-} from '@material-ui/core';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   ExpandLess,
   ExpandMore,
   Launch as LinkOffIcon
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';

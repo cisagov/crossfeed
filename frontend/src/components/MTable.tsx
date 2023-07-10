@@ -7,9 +7,10 @@ import {
   TableHead,
   TableRow,
   TableFooter,
-  makeStyles,
   TableProps
-} from '@material-ui/core';
+} from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 interface Props<T extends object> extends TableProps {
   instance: TableInstance<T>;
