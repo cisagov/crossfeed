@@ -6,7 +6,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@aws-amplify/ui-react": "^4.3.6",
+    "@aws-amplify/ui-react": "^5.0.4",
     "@elastic/react-search-ui": "^1.18.2",
     "@elastic/react-search-ui-views": "^1.20.2",
     "@emotion/react": "^11.11.1",
@@ -129,6 +129,7 @@
     "@types/react-dom": "^17.0.18",
     "@types/react-router-dom": "^5.3.3",
     "ajv": "^8.12.0",
-    "ajv-keywords": "^5.1.0"
+    "ajv-keywords": "^5.1.0",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }
