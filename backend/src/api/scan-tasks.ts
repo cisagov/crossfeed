@@ -5,8 +5,9 @@ import {
   IsIn,
   ValidateNested,
   isUUID,
+  IsUUID,
   IsOptional,
-  IsObject, IsUUID
+  IsObject
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ScanTask, connectToDatabase } from '../models';
