@@ -18,6 +18,10 @@ resource "aws_db_parameter_group" "default" {
     name  = "rds.force_ssl"
     value = "0"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_db_instance" "db" {
