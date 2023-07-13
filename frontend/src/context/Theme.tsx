@@ -5,7 +5,7 @@ import {
   Theme,
   StyledEngineProvider,
   adaptV4Theme
-} from '@mui/material';
+} from '@mui/material/styles';
 
 declare module '@mui/styles/defaultTheme' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
