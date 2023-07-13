@@ -252,7 +252,7 @@ export const ScanTasksView: React.FC = () => {
         console.error(e);
       }
     },
-    [apiPost]
+    [apiPost, currentOrganization, showAllOrganizations]
   );
 
   const renderPagination = (table: TableInstance<ScanTask>) => (
