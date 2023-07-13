@@ -49,8 +49,9 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
   const handleError = useCallback(
     async (e: Error) => {
-      if (e.message.includes('401')) {
-        // Unauthorized, log out user
+      if (!e.message.includes('200')) {
+        // Error, log out user
+        console.log(e.message, 'Logging out user');
         await logout();
       }
     },
