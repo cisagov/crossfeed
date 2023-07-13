@@ -1,11 +1,11 @@
-aws_region                        = "us-east-1"
+aws_region                        = "us-gov-east-1"
 project                           = "Crossfeed"
 stage                             = "staging"
 frontend_domain                   = "staging.crossfeed.cyber.dhs.gov"
 frontend_lambda_function          = "crossfeed-security-headers-staging"
 frontend_bucket                   = "staging.crossfeed.cyber.dhs.gov"
 api_domain                        = "api.staging.crossfeed.cyber.dhs.gov"
-frontend_cert_arn                 = "arn:aws:acm:us-east-1:957221700844:certificate/4fd47c3b-2d55-44e3-bdea-d258318e63ce"
+frontend_cert_arn                 = "arn:aws-us-gov:acm:us-gov-west-1:263492004256:certificate/3b9cfbbf-5b16-4a2c-9bc6-ceac23207d1a"
 db_name                           = "crossfeed-stage-db"
 db_port                           = 5432
 db_table_name                     = "cfstagingdb"
