@@ -5,14 +5,19 @@ import {
   IsIn,
   ValidateNested,
   isUUID,
+  IsUUID,
   IsOptional,
-  IsObject, IsUUID
+  IsObject
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ScanTask, connectToDatabase } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { SelectQueryBuilder } from 'typeorm';
-import { getTagOrganizations, isGlobalViewAdmin, isGlobalWriteAdmin } from './auth';
+import {
+  getTagOrganizations,
+  isGlobalViewAdmin,
+  isGlobalWriteAdmin
+} from './auth';
 import ECSClient from '../tasks/ecs-client';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE ?? '') || 25;
