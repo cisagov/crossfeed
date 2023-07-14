@@ -13,4 +13,5 @@ export const handler = async (commandOptions: CommandOptions) => {
     },
     cwd: '/app/pe-reports'
   });
+  console.log('Done');
 };
