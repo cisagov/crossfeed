@@ -247,7 +247,7 @@ describe('wappalyzer', () => {
     scope.done();
     expect(wappalyzer).toHaveBeenCalledTimes(2);
     expect(logSpy).toHaveBeenLastCalledWith(
-      'Wappalyzer finished for 2 domains'
+      'Wappalyzer finished for organization organizationName on 2 domains'
     );
     const service1 = await Service.findOne(testServices[0].id);
     expect(service1?.wappalyzerResults).toEqual([]);

@@ -24,7 +24,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import { setTechnologies, setCategories, analyze } from 'wappalyzer-core';
+import {
+  setTechnologies,
+  setCategories,
+  analyze,
+  resolve
+} from 'wappalyzer-core';
 import { chain, mapValues } from 'lodash';
 import { JSDOM, VirtualConsole } from 'jsdom';
 import { Cookie } from 'tough-cookie';
@@ -91,7 +96,15 @@ const outOfTheBoxTechnologies = {
   ...z
 };
 
-const parseCookie = (str) => Cookie!.parse(str)!.toJSON();
+const parseCookie = (str) => {
+  if (str) {
+    const parsed = Cookie.parse(str);
+    if (parsed) {
+      return parsed.toJSON();
+    }
+  }
+  return JSON.stringify('');
+};
 
 const getCookies = (str) =>
   chain(str)
@@ -140,7 +153,11 @@ setTechnologies(technologies);
 setCategories(categories);
 
 export const wappalyzer = ({ data = '', url = '', headers = {} }) => {
-  const dom = new JSDOM(data, { url, virtualConsole: new VirtualConsole() });
+  const dom = new JSDOM(data, {
+    url: url,
+    virtualConsole: new VirtualConsole()
+  });
+
   return analyze({
     url: url,
     meta: getMeta(dom.window.document),

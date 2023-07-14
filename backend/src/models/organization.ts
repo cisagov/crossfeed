@@ -30,10 +30,7 @@ export class Organization extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({
-    length: 128,
-    type: 'varchar'
-  })
+  @Column()
   name: string;
 
   @Column('varchar', { array: true })
