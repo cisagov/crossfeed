@@ -1,9 +1,9 @@
 [
-    "cpe:/a:microsoft:exchange_server:4.0:sp1",
-    "cpe:/a:apache:httpd:0.0.1",
-    "cpe:/a:drupal:drupal:3",
-    "cpe:/a:igor_sysoev:nginx:1.2.0",
-    "cpe:/a:openbsd:openssh:7.4",
-    "cpe:/a:microsoft:internet_information_server:2.0",
-    "cpe:/a:apache:http_server:1.0"
+  "cpe:/a:microsoft:exchange_server:4.0:sp1",
+  "cpe:/a:apache:httpd:0.0.1",
+  "cpe:/a:drupal:drupal:3",
+  "cpe:/a:igor_sysoev:nginx:1.2.0",
+  "cpe:/a:openbsd:openssh:7.4",
+  "cpe:/a:microsoft:internet_information_server:2.0",
+  "cpe:/a:apache:http_server:1.0"
 ]

@@ -5,40 +5,46 @@ updates:
     schedule:
       interval: 'weekly'
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch","version-update:semver-minor"]
-  - package-ecosystem: "npm"
-    directory: "/frontend"
+      - dependency-name: '*'
+        update-types:
+          ['version-update:semver-patch', 'version-update:semver-minor']
+  - package-ecosystem: 'npm'
+    directory: '/frontend'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch","version-update:semver-minor"]
-  - package-ecosystem: "npm"
-    directory: "/backend"
+      - dependency-name: '*'
+        update-types:
+          ['version-update:semver-patch', 'version-update:semver-minor']
+  - package-ecosystem: 'npm'
+    directory: '/backend'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch","version-update:semver-minor"]
-  - package-ecosystem: "pip"
-    directory: "/backend/worker"
+      - dependency-name: '*'
+        update-types:
+          ['version-update:semver-patch', 'version-update:semver-minor']
+  - package-ecosystem: 'pip'
+    directory: '/backend/worker'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch","version-update:semver-minor"]
+      - dependency-name: '*'
+        update-types:
+          ['version-update:semver-patch', 'version-update:semver-minor']
   - package-ecosystem: 'docker'
     directory: '/'
     schedule:
       interval: 'weekly'
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch","version-update:semver-minor"]
+      - dependency-name: '*'
+        update-types:
+          ['version-update:semver-patch', 'version-update:semver-minor']
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'weekly'
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch","version-update:semver-minor"]
+      - dependency-name: '*'
+        update-types:
+          ['version-update:semver-patch', 'version-update:semver-minor']

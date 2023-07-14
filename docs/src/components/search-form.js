@@ -3,22 +3,20 @@ import { useStaticQuery, graphql } from 'gatsby';
 import { navigate } from '@reach/router';
 
 const SearchForm = ({ navigation, secondaryLinks }) => {
-  const { site } = useStaticQuery(
-    graphql`
-      query {
-        site {
-          pathPrefix
-          siteMetadata {
-            searchgov {
-              affiliate
-              endpoint
-              inline
-            }
+  const { site } = useStaticQuery(graphql`
+    query {
+      site {
+        pathPrefix
+        siteMetadata {
+          searchgov {
+            affiliate
+            endpoint
+            inline
           }
         }
       }
-    `
-  );
+    }
+  `);
   const { affiliate, endpoint, inline } = site.siteMetadata.searchgov;
 
   const handleSubmit = (e) => {
