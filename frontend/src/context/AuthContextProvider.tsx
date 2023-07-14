@@ -11,8 +11,9 @@ import {
   getUserMustSign
 } from './userStateUtils';
 import Cookies from 'universal-cookie';
-import { Snackbar } from '@material-ui/core';
-import { Alert, AlertProps } from '@material-ui/lab';
+import { Snackbar } from '@mui/material';
+import { Alert } from '@mui/material';
+import { AlertProps } from '@mui/lab';
 
 export const currentTermsVersion = '1';
 

@@ -5,7 +5,7 @@ import { useAuthContext } from 'context';
 import { Table, Paginator } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import { Subnav } from 'components';
 import { parse } from 'query-string';
 import { createColumns, createGroupedColumns } from './columns';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'classnames';
-import { makeStyles } from '@material-ui/core/styles';
-import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import makeStyles from '@mui/styles/makeStyles';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import flagIcon from '../assets/us_flag_small.png';
 import govIcon from '../assets/icon-dot-gov.svg';
 import httpsIcon from '../assets/icon-https.svg';
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 1440,
     margin: '0 auto',
     padding: `2px 24px`,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       padding: '2px 8px'
     }
   },
@@ -35,14 +35,14 @@ const useStyles = makeStyles((theme) => ({
     flexFlow: 'row wrap',
     alignItems: 'center',
     flexGrow: 1,
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       padding: `5px 0`
     }
   },
   text: {
     flex: '0 1 auto',
     marginRight: theme.spacing(),
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       flex: '0 0 100%'
     }
   },
@@ -63,15 +63,15 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 auto',
     lineHeight: 1.5,
     flexFlow: 'row wrap',
-    padding: `${theme.spacing(3)}px 16px`
+    padding: `${theme.spacing(3)} 16px`
   },
   info: {
     display: 'flex',
     flex: '1 1 50%',
-    padding: `${theme.spacing(2)}px ${theme.spacing(2)}px`,
-    [theme.breakpoints.down('sm')]: {
+    padding: `${theme.spacing(2)} ${theme.spacing(2)}`,
+    [theme.breakpoints.down('md')]: {
       flex: '0 0 100%',
-      padding: `${theme.spacing(2)}px 0`
+      padding: `${theme.spacing(2)} 0`
     }
   },
   infoIcon: {
@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
   infoText: {
     fontSize: '0.87rem',
     '& p': {
-      margin: `0 ${theme.spacing(2)}px`
+      margin: `0 ${theme.spacing(2)}`
     }
   }
 }));

@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import { ContextType } from '../../context/SearchProvider';
-import { Chip, makeStyles } from '@material-ui/core';
+import { Chip } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 interface Props {
   filters: ContextType['filters'];

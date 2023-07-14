@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Organization, OrganizationTag } from 'types';
 import {
-  makeStyles,
+  Autocomplete,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -12,9 +12,12 @@ import {
   FormControlLabel,
   Box,
   Chip,
-  Grid
-} from '@material-ui/core';
-import { Autocomplete, createFilterOptions } from '@material-ui/lab';
+  Grid,
+  createFilterOptions
+} from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
+
 import { useAuthContext } from 'context';
 
 interface AutocompleteType extends Partial<OrganizationTag> {
@@ -179,9 +182,12 @@ export const OrganizationForm: React.FC<{
               handleHomeEndKeys
               options={tags.filter((i) => !chosenTags.includes(i))}
               getOptionLabel={(option) => {
-                return option.name ?? '';
+                if (typeof option === 'string') {
+                  return option;
+                }
+                return (option as AutocompleteType).name ?? '';
               }}
-              renderOption={(option) => {
+              renderOption={(props, option, { selected }) => {
                 if (option.title) return option.title;
                 return option.name ?? '';
               }}

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { DomainDetails, Subnav } from 'components';
 import { ResultCard } from './ResultCard';
 import {
-  makeStyles,
   Paper,
   FormControl,
   Select,
@@ -13,8 +12,9 @@ import {
   FormGroup,
   TextareaAutosize,
   ButtonGroup
-} from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Pagination } from '@mui/material';
 import { withSearch } from '@elastic/react-search-ui';
 import { FilterDrawer } from './FilterDrawer';
 import { ContextType } from '../../context/SearchProvider';
@@ -326,7 +326,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
                 id="description"
                 name="description"
                 style={{ padding: 10 }}
-                rowsMin={2}
+                minRows={2}
                 value={savedSearchValues.vulnerabilityTemplate.description}
                 onChange={onVulnerabilityTemplateChange}
               />

@@ -3,8 +3,9 @@ import classes from './Risk.module.scss';
 import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
-import { makeStyles, Paper, Tooltip, Chip } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
+import { Paper, Tooltip, Chip } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Pagination } from '@mui/material';
 import { geoCentroid } from 'd3-geo';
 import {
   ComposableMap,

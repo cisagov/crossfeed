@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { NavLink, Link, useHistory, useLocation } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   AppBar,
   Toolbar,
@@ -11,12 +11,12 @@ import {
   TextField,
   useMediaQuery,
   useTheme
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   Menu as MenuIcon,
   AccountCircle as UserIcon,
   ArrowDropDown
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 import { NavItem } from './NavItem';
 import { useRouteMatch } from 'react-router-dom';
 import { useAuthContext } from 'context';
@@ -24,7 +24,7 @@ import logo from '../assets/crossfeed.svg';
 import { withSearch } from '@elastic/react-search-ui';
 import { ContextType } from 'context/SearchProvider';
 import { SearchBar } from 'components';
-import { Autocomplete } from '@material-ui/lab';
+import { Autocomplete } from '@mui/material';
 import { Organization, OrganizationTag } from 'types';
 
 const GLOBAL_ADMIN = 2;
@@ -61,7 +61,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   >([]);
   const [tags, setTags] = useState<OrganizationTag[]>([]);
   const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down('md'));
+  const isSmall = useMediaQuery(theme.breakpoints.down('lg'));
 
   let userLevel = 0;
   if (user && user.isRegistered) {
@@ -251,8 +251,8 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                   <>
                     <div className={classes.spacing} />
                     <Autocomplete
-                      getOptionSelected={(option, value) =>
-                        option.name === value.name
+                      isOptionEqualToValue={(option, value) =>
+                        option?.name === value?.name
                       }
                       options={[{ name: 'All Organizations' }].concat(
                         organizations
@@ -272,14 +272,14 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                         if (
                           options.find(
                             (option) =>
-                              option.name.toLowerCase() ===
+                              option?.name.toLowerCase() ===
                               state.inputValue.toLowerCase()
                           )
                         ) {
                           return options;
                         }
                         return options.filter((option) =>
-                          option.name
+                          option?.name
                             .toLowerCase()
                             .includes(state.inputValue.toLowerCase())
                         );
@@ -288,8 +288,8 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                       blurOnSelect
                       selectOnFocus
                       getOptionLabel={(option) => option.name}
-                      renderOption={(option) => (
-                        <React.Fragment>{option.name}</React.Fragment>
+                      renderOption={(props, option) => (
+                        <li {...props}>{option.name}</li>
                       )}
                       onChange={(
                         event: any,
@@ -343,6 +343,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
               aria-label="toggle mobile menu"
               color="inherit"
               onClick={() => setNavOpen((open) => !open)}
+              size="large"
             >
               <MenuIcon />
             </IconButton>
@@ -457,7 +458,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600
   },
   userLink: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       display: 'flex'
     },
     [theme.breakpoints.up('lg')]: {
@@ -478,7 +479,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   mobileNav: {
-    padding: `${theme.spacing(2)}px ${theme.spacing()}px`
+    padding: `${theme.spacing(2)} ${theme.spacing()}px`
   },
   selectOrg: {
     border: '1px solid #FFFFFF',

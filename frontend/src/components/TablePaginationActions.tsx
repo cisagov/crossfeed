@@ -1,11 +1,12 @@
 import React from 'react';
-import { IconButton, makeStyles } from '@material-ui/core';
+import { IconButton } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
   LastPage as LastPageIcon,
   FirstPage as FirstPageIcon
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 
 interface Props {
   count: number;
@@ -51,6 +52,7 @@ export const TablePaginationActions = (props: Props) => {
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
         aria-label="first page"
+        size="large"
       >
         <FirstPageIcon />
       </IconButton>
@@ -58,6 +60,7 @@ export const TablePaginationActions = (props: Props) => {
         onClick={handleBackButtonClick}
         disabled={page === 0}
         aria-label="previous page"
+        size="large"
       >
         <KeyboardArrowLeft />
       </IconButton>
@@ -65,6 +68,7 @@ export const TablePaginationActions = (props: Props) => {
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
+        size="large"
       >
         <KeyboardArrowRight />
       </IconButton>
@@ -72,6 +76,7 @@ export const TablePaginationActions = (props: Props) => {
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
+        size="large"
       >
         <LastPageIcon />
       </IconButton>

@@ -36,6 +36,7 @@ import {
 import { CrossfeedFooter, Layout, RouteGuard } from 'components';
 import './styles.scss';
 import { Authenticator } from '@aws-amplify/ui-react';
+
 API.configure({
   endpoints: [
     {
