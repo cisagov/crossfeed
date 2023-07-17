@@ -22,15 +22,11 @@ const amplifyTheme = {
   name: 'my-theme'
 };
 
-interface Errors extends Partial<FormData> {
-  global?: string;
-}
 
 export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   showSignUp = false
 }) => {
-  const { apiPost, refreshUser } = useAuthContext();
-  const [errors, setErrors] = useState<Errors>({});
+  const { apiPost, refreshUser, error } = useAuthContext();
 
   // Once a user signs in, call refreshUser() so that the callback is called and the user gets signed in.
   const { authStatus } = useAuthenticator((context) => [context.isPending]);
@@ -74,9 +70,6 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
       window.location.href = redirectUrl;
     } catch (e) {
       console.error(e);
-      setErrors({
-        global: 'Something went wrong logging in.'
-      });
     }
   };
 
@@ -84,6 +77,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
     return (
       <AuthForm as="div">
         <h1>Welcome to Crossfeed</h1>
+        {error && <p className="text-error">{error}</p>}
         <ThemeProvider theme={amplifyTheme}>
           <Authenticator
             loginMechanisms={['email']}
@@ -101,7 +95,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   return (
     <AuthForm onSubmit={onSubmit}>
       <h1>Welcome to Crossfeed</h1>
-      {errors.global && <p className="text-error">{errors.global}</p>}
+      {error && <p className="text-error">{error}</p>}
       <Button type="submit" size="big">
         Login with Login.gov
       </Button>

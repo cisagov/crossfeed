@@ -14,6 +14,8 @@ export interface AuthContextType extends ReturnType<typeof useApi> {
   logout(): Promise<void>;
   user?: AuthUser | null;
   setUser(user: User): void;
+  error?: string | null;
+  setError(error: string | null): void;
   token: string | null;
   currentOrganization?: CurrentOrganization | null;
   setOrganization: (organization: CurrentOrganization) => void;

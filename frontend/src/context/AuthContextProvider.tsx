@@ -16,8 +16,13 @@ import { Alert, AlertProps } from '@material-ui/lab';
 
 export const currentTermsVersion = '1';
 
+export interface Errors extends Partial<FormData> {
+  global?: string;
+}
+
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [token, setToken] = usePersistentState<string | null>('token', null);
   const [org, setOrg] = usePersistentState<
     Organization | OrganizationTag | null
@@ -49,9 +54,11 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
   const handleError = useCallback(
     async (e: Error) => {
-      if (!e.message.includes('200')) {
-        // Error, log out user
-        console.log(e.message, 'Logging out user');
+      if (e.message.includes('Network Error')) {
+        setError('There was an error connecting to the server. Logout and try again.');
+      }
+      if (e.message.includes('401')) {
+        setError('You are not authorized to access this resource.');
         await logout();
       }
     },
@@ -133,6 +140,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         user: authUser,
         token,
         setUser: setProfile,
+        error: error,
+        setError: setError,
         refreshUser,
         setOrganization: setOrg,
         showMaps: showMap,
