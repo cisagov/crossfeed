@@ -1,5 +1,4 @@
 const slsw = require('serverless-webpack');
-const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
@@ -11,19 +10,10 @@ module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
   module: {
     rules: [
-      {
-        test: [/\.tsx?$/],
-        exclude: [/node_modules/, /\.test.tsx?$/],
-        use: [
-          {
-            loader: 'ts-loader'
-          }
-        ]
-      }
     ]
   },
   resolve: {
-    modules: ['node_modules', path.resolve(__dirname, 'src')],
+    modules: ['node_modules', path.resolve(__dirname, 'scripts')],
     extensions: ['.ts', '.tsx', '.json', '.js', '.jsx', '...']
   }
 };

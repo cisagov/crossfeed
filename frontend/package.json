@@ -129,6 +129,7 @@
     "express": "^4.18.2",
     "helmet": "^7.0.0",
     "serverless": "^3.30",
+    "serverless-better-credentials": "^1.2.0",
     "serverless-domain-manager": "^7.0",
     "serverless-http": "^3.2.0",
     "serverless-webpack": "^5.11.0",

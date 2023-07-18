@@ -63,5 +63,6 @@ functions:
   - ${file(./src/api/functions.yml)}
 
 plugins:
+  - serverless-better-credentials
   - serverless-domain-manager
   - serverless-webpack

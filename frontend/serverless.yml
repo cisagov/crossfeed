@@ -6,13 +6,13 @@ configValidationMode: error
 
 custom:
   webpack:
-    webpackConfig: 'webpack.backend.config.js'
-  customDomain:
-    domainName: ${file(env.yml):${self:provider.stage}.DOMAIN, ''}
-    basePath: ''
-    certificateName: ${file(env.yml):${self:provider.stage}.CERT_ARN, ''}
-    stage: ${self:provider.stage}
-    createRoute53Record: true
+    webpackConfig: 'webpack.lambda.config.js'
+  # customDomain:
+  #   domainName: ${file(env.yml):${self:provider.stage}.DOMAIN, ''}
+  #   basePath: ''
+  #   certificateName: ${file(env.yml):${self:provider.stage}.CERT_ARN, ''}
+  #   stage: ${self:provider.stage}
+  #   createRoute53Record: true
 
 provider:
   name: aws
@@ -28,6 +28,8 @@ provider:
       - 'font/*'
   logs:
     restApi: true
+  deploymentBucket:
+    serverSideEncryption: AES256
 
 package:
   patterns:
@@ -35,7 +37,7 @@ package:
 
 functions:
   api:
-    handler: src/api.handler
+    handler: scripts/api.handler
     events:
       - http:
           path: / # this matches the base path
@@ -46,5 +48,6 @@ functions:
     # provisionedConcurrency: 1
 
 plugins:
-  - serverless-domain-manager
+  # - serverless-domain-manager
+  - serverless-better-credentials
   - serverless-webpack

@@ -12,6 +12,8 @@ app.use(helmet({
 }
 ));
 
+app.use('/', express.static(__dirname + '/build'));
+
 module.exports.handler = serverless(app, {
   binary: ['image/*', 'font/*']
 });
