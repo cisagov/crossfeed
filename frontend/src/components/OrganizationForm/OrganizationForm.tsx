@@ -150,7 +150,7 @@ export const OrganizationForm: React.FC<{
           <Grid item xs={10}>
             <Autocomplete
               value={tagValue}
-              onChange={(event, newValue) => {
+              onInputChange={(event, newValue) => {
                 if (typeof newValue === 'string') {
                   setTagValue({
                     name: newValue

@@ -26,6 +26,7 @@ import { ContextType } from 'context/SearchProvider';
 import { SearchBar } from 'components';
 import { Autocomplete } from '@mui/material';
 import { Organization, OrganizationTag } from 'types';
+import { act } from 'react-dom/test-utils';
 
 const GLOBAL_ADMIN = 2;
 const STANDARD_USER = 1;
@@ -78,11 +79,15 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       let tags: (OrganizationTag | Organization)[] = [];
       if (userLevel === GLOBAL_ADMIN) {
         tags = await apiGet<OrganizationTag[]>('/organizations/tags');
-        setTags(tags as OrganizationTag[]);
+        act(() => {
+          setTags(tags as OrganizationTag[]);
+        });
       }
-      setOrganizations(tags.concat(rows));
+      act(() => {
+        setOrganizations(tags.concat(rows))
+      });
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
   }, [apiGet, setOrganizations, userLevel]);
 

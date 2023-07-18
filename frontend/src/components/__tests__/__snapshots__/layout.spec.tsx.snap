@@ -3,7 +3,7 @@
 exports[`Layout component matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="MuiScopedCssBaseline-root makeStyles-overrides-2"
+    class="MuiScopedCssBaseline-root makeStyles-overrides-2 css-fnqfs-MuiScopedCssBaseline-root"
   >
     <div
       class="makeStyles-root-1"
