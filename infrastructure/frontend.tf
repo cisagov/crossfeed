@@ -66,6 +66,28 @@ resource "aws_cloudfront_response_headers_policy" "security_headers" {
   }
 }
 
+resource "aws_iam_role" "frontend_lambda_iam" {
+  name               = "frontend_lambda_iam_${var.stage}"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": [
+          "lambda.amazonaws.com",
+          "edgelambda.amazonaws.com"
+        ]
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name = aws_s3_bucket.frontend_bucket.bucket_regional_domain_name
@@ -155,4 +177,25 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     minimum_protocol_version = "TLSv1.2_2019"
   }
 
+  web_acl_id = aws_wafv2_web_acl.default.arn
+}
+
+resource "aws_wafv2_web_acl" "default" {
+  name  = "crossfeed-${var.stage}-default-acl-rule"
+  scope = "CLOUDFRONT"
+
+  default_action {
+    allow {}
+  }
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "crossfeed-${var.stage}-default-acl-metric"
+    sampled_requests_enabled   = true
+  }
 }
