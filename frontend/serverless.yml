@@ -16,7 +16,8 @@ custom:
 
 provider:
   name: aws
-  region: us-east-1
+  region: us-gov-east-1
+  endpointType: REGIONAL
   runtime: nodejs16.x
   timeout: 30
   stage: ${opt:stage, 'dev'}
@@ -30,10 +31,6 @@ provider:
     restApi: true
   deploymentBucket:
     serverSideEncryption: AES256
-
-package:
-  patterns:
-    - build/**
 
 functions:
   api:
