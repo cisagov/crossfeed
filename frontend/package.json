@@ -73,13 +73,13 @@
     "@react-native-community/cli": "11.3.1",
     "@svgr/webpack": "^8.0.1",
     "babel-loader": "^9.1.2",
-    "css-minimizer-webpack-plugin":"^5.0.0",
+    "css-minimizer-webpack-plugin": "^5.0.0",
     "css-select": {
       "nth-check": "^2.1.1"
     },
     "d3-color": "^3.1.0",
     "execa": "^5.1.1",
-    "fast-xml-parser": "4.2.4",    
+    "fast-xml-parser": "4.2.4",
     "jscodeshift": "^0.15.0",
     "kind-of": "^6.0.3",
     "magic-string": "^0.30.0",
@@ -120,10 +120,19 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/react": "^17.0.59",
     "@types/react-dom": "^17.0.18",
     "@types/react-router-dom": "^5.3.3",
     "ajv": "^8.12.0",
-    "ajv-keywords": "^5.1.0"
+    "ajv-keywords": "^5.1.0",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
+    "serverless": "^3.30",
+    "serverless-domain-manager": "^7.0",
+    "serverless-http": "^3.2.0",
+    "serverless-webpack": "^5.11.0",
+    "webpack": "^5.88",
+    "webpack-cli": "^5.1"
   }
 }

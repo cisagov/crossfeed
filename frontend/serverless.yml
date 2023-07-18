@@ -1,0 +1,50 @@
+service: crossfeed-frontend
+
+frameworkVersion: '3'
+useDotenv: true
+configValidationMode: error
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.backend.config.js'
+  customDomain:
+    domainName: ${file(env.yml):${self:provider.stage}.DOMAIN, ''}
+    basePath: ''
+    certificateName: ${file(env.yml):${self:provider.stage}.CERT_ARN, ''}
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+
+provider:
+  name: aws
+  region: us-east-1
+  runtime: nodejs16.x
+  timeout: 30
+  stage: ${opt:stage, 'dev'}
+  environment: ${file(env.yml):${self:provider.stage}, ''}
+  # vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
+  apiGateway:
+    binaryMediaTypes:
+      - 'image/*'
+      - 'font/*'
+  logs:
+    restApi: true
+
+package:
+  patterns:
+    - build/**
+
+functions:
+  api:
+    handler: src/api.handler
+    events:
+      - http:
+          path: / # this matches the base path
+          method: GET
+      - http:
+          path: /{any+} # this matches any path, the token 'any' doesn't mean anything special
+          method: GET
+    # provisionedConcurrency: 1
+
+plugins:
+  - serverless-domain-manager
+  - serverless-webpack
