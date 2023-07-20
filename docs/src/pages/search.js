@@ -3,11 +3,10 @@ import { graphql } from 'gatsby';
 
 import Layout from '../components/layout';
 
-
 // Crossfeed does not use the functionality of this page for the gatsby template.
 
 const SearchPage = ({ data, location }) => {
-  // 
+  //
   // const { access_key, affiliate, endpoint } = data.site.siteMetadata.searchgov;
   // const query = new URLSearchParams(location.search).get('query');
 
