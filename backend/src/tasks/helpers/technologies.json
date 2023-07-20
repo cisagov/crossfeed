@@ -1,81 +1,93 @@
 {
-  "Sitefinity": {
-    "cats": [1],
-    "icon": "Sitefinity.svg",
-    "cpe": "cpe:/a:progress:sitefinity",
-    "implies": "Microsoft ASP.NET",
-    "js": {
-      "Telerik.Sitefinity": ""
+    "Sitefinity": {
+        "cats": [
+            1
+        ],
+        "icon": "Sitefinity.svg",
+        "cpe": "cpe:/a:progress:sitefinity",
+        "implies": "Microsoft ASP.NET",
+        "js": {
+            "Telerik.Sitefinity": ""
+        },
+        "meta": {
+            "generator": "^Sitefinity (\\S+)\\;version:\\1"
+        },
+        "website": "https://www.progress.com/sitefinity-cms",
+        "examples": [
+            {
+                "name": "with version and suffix",
+                "html": "</script><meta name=\"Generator\" content=\"Sitefinity 11.0.6700.0 PE\" /><link",
+                "version": "11.0.6700.0"
+            },
+            {
+                "name": "with version and no suffix",
+                "html": "</script><meta name=\"Generator\" content=\"Sitefinity 11.0.6700.0\" /><link",
+                "version": "11.0.6700.0"
+            }
+        ]
     },
-    "meta": {
-      "generator": "^Sitefinity (\\S+)\\;version:\\1"
+    "Oracle WebLogic Server": {
+        "cats": [
+          22
+        ],
+        "cpe": "cpe:/a:oracle:weblogic_server",
+        "html": [
+            "<title>Oracle WebLogic Server Administration Console</title>",
+            "<p id=\"footerVersion\">WebLogic Server Version: (.*?)</p>\\;version:\\1"
+        ],
+        "icon": "Oracle.png",
+        "website": "http://www.oracle.com/technetwork/middleware/ias/overview/index.html",
+        "examples": [
+            {
+                "name": "with version",
+                "html": "<p id=\"footerVersion\">WebLogic Server Version: 10.3.6.0</p>",
+                "version": "10.3.6.0"
+            }
+        ]
     },
-    "website": "https://www.progress.com/sitefinity-cms",
-    "examples": [
-      {
-        "name": "with version and suffix",
-        "html": "</script><meta name=\"Generator\" content=\"Sitefinity 11.0.6700.0 PE\" /><link",
-        "version": "11.0.6700.0"
-      },
-      {
-        "name": "with version and no suffix",
-        "html": "</script><meta name=\"Generator\" content=\"Sitefinity 11.0.6700.0\" /><link",
-        "version": "11.0.6700.0"
-      }
-    ]
-  },
-  "Oracle WebLogic Server": {
-    "cats": [22],
-    "cpe": "cpe:/a:oracle:weblogic_server",
-    "html": [
-      "<title>Oracle WebLogic Server Administration Console</title>",
-      "<p id=\"footerVersion\">WebLogic Server Version: (.*?)</p>\\;version:\\1"
-    ],
-    "icon": "Oracle.png",
-    "website": "http://www.oracle.com/technetwork/middleware/ias/overview/index.html",
-    "examples": [
-      {
-        "name": "with version",
-        "html": "<p id=\"footerVersion\">WebLogic Server Version: 10.3.6.0</p>",
-        "version": "10.3.6.0"
-      }
-    ]
-  },
-  "Microsoft Exchange Server": {
-    "cats": [30],
-    "cpe": "cpe:/a:microsoft:exchange_server",
-    "html": [
-      "<link rel=\"shortcut icon\" href=\"/owa/auth/(.*?)/\\;version:\\1"
-    ],
-    "icon": "Microsoft.png",
-    "website": "https://www.microsoft.com/en-us/microsoft-365/exchange/email"
-  },
-  "Atlassian Crowd": {
-    "cats": [61],
-    "cpe": "cpe:/a:atlassian:crowd",
-    "cookies": {
-      "crowd.rememberme.token": ""
+    "Microsoft Exchange Server": {
+        "cats": [
+          30
+        ],
+        "cpe": "cpe:/a:microsoft:exchange_server",
+        "html": [
+            "<link rel=\"shortcut icon\" href=\"/owa/auth/(.*?)/\\;version:\\1"
+        ],
+        "icon": "Microsoft.png",
+        "website": "https://www.microsoft.com/en-us/microsoft-365/exchange/email"
     },
-    "html": [
-      "<link rel=\"shortcut icon\" href=\"/crowd/console/favicon.ico\">",
-      "<input id=\"crowd-version\" type=\"hidden\" value=\"Version:&nbsp;(\\S+) \\;version:\\1"
-    ],
-    "website": "https://www.atlassian.com/software/crowd",
-    "examples": [
-      {
-        "name": "with version",
-        "html": "<input id=\"crowd-version\" type=\"hidden\" value=\"Version:&nbsp;3.7.0 (Build:#1271 - 2018-12-30) \">",
-        "version": "3.7.0"
-      }
-    ]
-  },
-  "Oracle PeopleSoft": {
-    "cats": [61],
-    "cookies": {
-      "PS_TOKEN": ""
+    "Atlassian Crowd": {
+        "cats": [
+          61
+        ],
+        "cpe": "cpe:/a:atlassian:crowd",
+        "cookies": {
+            "crowd.rememberme.token": ""
+        },
+        "html": [
+            "<link rel=\"shortcut icon\" href=\"/crowd/console/favicon.ico\">",
+            "<input id=\"crowd-version\" type=\"hidden\" value=\"Version:&nbsp;(\\S+) \\;version:\\1"
+        ],
+        "website": "https://www.atlassian.com/software/crowd",
+        "examples": [
+            {
+                "name": "with version",
+                "html": "<input id=\"crowd-version\" type=\"hidden\" value=\"Version:&nbsp;3.7.0 (Build:#1271 - 2018-12-30) \">",
+                "version": "3.7.0"
+            }
+        ]
     },
-    "cpe": "cpe:/a:oracle:peoplesoft_enterprise",
-    "html": ["<title>Oracle PeopleSoft Sign-in</title>"],
-    "website": "https://www.oracle.com/applications/peoplesoft/"
-  }
+    "Oracle PeopleSoft": {
+        "cats": [
+            61
+        ],
+        "cookies": {
+            "PS_TOKEN": ""
+        },
+        "cpe": "cpe:/a:oracle:peoplesoft_enterprise",
+        "html": [
+            "<title>Oracle PeopleSoft Sign-in</title>"
+        ],
+        "website": "https://www.oracle.com/applications/peoplesoft/"
+    }
 }

@@ -1,7 +1,7 @@
 [
-  { "port": 80, "service": "http" },
-  { "port": 443, "service": "https" },
-  { "port": 22, "service": "ssh" },
-  { "port": 25, "service": "ftp" },
-  { "port": 3389, "service": "rdp" }
+    {"port": 80, "service": "http" },
+    {"port": 443, "service": "https" },
+    {"port": 22, "service": "ssh" },
+    {"port": 25, "service": "ftp" },
+    {"port": 3389, "service": "rdp" }
 ]
