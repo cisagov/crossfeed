@@ -344,16 +344,6 @@ const Risk: React.FC = (props) => {
         )}
         <div className={cardClasses.header}>
           <h2>{title}</h2>
-            {/*<h3 className={cardClasses.cardInner} style={{paddingBottom: '5em', color: 'black'}}>*/}
-            {/*  <div className={cardClasses.vulnCount}>Count</div>*/}
-            {/*  <div className={cardClasses.miniCardLeft}>*/}
-            {/*    Vulnerability*/}
-            {/*  </div>*/}
-            {/*  <div className={cardClasses.miniCardCenter}>*/}
-            {/*    Severity*/}
-            {/*  </div>*/}
-            {/*  <button className={cardClasses.button}>&nbsp;</button>*/}
-            {/*</h3>*/}
           </div>
         <div className={cardClasses.body}>
            <ul className={cardClasses.labels}>{labels.map(label => <li>{label}</li>)}</ul>
