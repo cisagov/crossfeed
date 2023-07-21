@@ -344,10 +344,19 @@ const Risk: React.FC = (props) => {
         )}
         <div className={cardClasses.header}>
           <h2>{title}</h2>
-          <h3 style={{justifyContent: 'space-between'}} >{labels.map(el => el)}</h3>
-        </div>
+            {/*<h3 className={cardClasses.cardInner} style={{paddingBottom: '5em', color: 'black'}}>*/}
+            {/*  <div className={cardClasses.vulnCount}>Count</div>*/}
+            {/*  <div className={cardClasses.miniCardLeft}>*/}
+            {/*    Vulnerability*/}
+            {/*  </div>*/}
+            {/*  <div className={cardClasses.miniCardCenter}>*/}
+            {/*    Severity*/}
+            {/*  </div>*/}
+            {/*  <button className={cardClasses.button}>&nbsp;</button>*/}
+            {/*</h3>*/}
+          </div>
         <div className={cardClasses.body}>
-          {/* <h4 style={{ float: 'left' }}>Today:</h4> */}
+           <ul className={cardClasses.labels}>{labels.map(label => <li>{label}</li>)}</ul>
           <div>
             {data.length === 0 && <h3>No open vulnerabilities</h3>}
             {data.length > 0 &&
@@ -613,7 +622,7 @@ const Risk: React.FC = (props) => {
             <div className={cardClasses.panel}>
               <VulnerabilityCard
                 title={'Latest Vulnerabilities'}
-                labels={['Count', 'Vulnerability', 'Severity', 'Details']}
+                labels={['Count', 'Vulnerability', 'Severity', '']}
                 data={latestVulnsGroupedArr}
                 showLatest={true}
                 showCommon={false}
@@ -753,7 +762,7 @@ const Risk: React.FC = (props) => {
 
               <VulnerabilityCard
                 title={'Most Common Vulnerabilities'}
-                labels={['Count', 'Vulnerability', 'Severity', 'Details']}
+                labels={['Count', 'Vulnerability', 'Severity', '']}
                 data={stats.vulnerabilities.mostCommonVulnerabilities}
                 showLatest={false}
                 showCommon={true}
@@ -853,6 +862,16 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     paddingLeft: 20,
     paddingTop: 1
+  },
+  labels: {
+    display: 'flex',
+    listStyle: 'none',
+    justifyContent: 'space-between',
+    margin: 0,
+    paddingLeft: 16,
+    paddingRight: 128,
+    fontSize: 16,
+    fontWeight: 'bold'
   },
   footer: {
     height: '60px',
