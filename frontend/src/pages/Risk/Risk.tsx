@@ -313,11 +313,13 @@ const Risk: React.FC = (props) => {
 
   const VulnerabilityCard = ({
     title,
+    labels,
     showLatest,
     showCommon,
     data
   }: {
     title: string;
+    labels: string[];
     showLatest: boolean;
     showCommon: boolean;
     data: VulnerabilityCount[];
@@ -342,6 +344,7 @@ const Risk: React.FC = (props) => {
         )}
         <div className={cardClasses.header}>
           <h2>{title}</h2>
+          <h3 style={{justifyContent: 'space-between'}} >{labels.map(el => el)}</h3>
         </div>
         <div className={cardClasses.body}>
           {/* <h4 style={{ float: 'left' }}>Today:</h4> */}
@@ -610,6 +613,7 @@ const Risk: React.FC = (props) => {
             <div className={cardClasses.panel}>
               <VulnerabilityCard
                 title={'Latest Vulnerabilities'}
+                labels={['Count', 'Vulnerability', 'Severity', 'Details']}
                 data={latestVulnsGroupedArr}
                 showLatest={true}
                 showCommon={false}
@@ -749,6 +753,7 @@ const Risk: React.FC = (props) => {
 
               <VulnerabilityCard
                 title={'Most Common Vulnerabilities'}
+                labels={['Count', 'Vulnerability', 'Severity', 'Details']}
                 data={stats.vulnerabilities.mostCommonVulnerabilities}
                 showLatest={false}
                 showCommon={true}
