@@ -344,7 +344,7 @@ const Risk: React.FC = (props) => {
         )}
         <div className={cardClasses.header}>
           <h2>{title}</h2>
-          </div>
+        </div>
         <div className={cardClasses.body}>
            <ul className={cardClasses.labels}>{labels.map(label => <li>{label}</li>)}</ul>
           <div>
