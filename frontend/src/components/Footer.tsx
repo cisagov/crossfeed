@@ -7,7 +7,14 @@ export const CrossfeedFooter: React.FC = () => {
   const { logout } = useAuthContext();
   const theme = useTheme();
   return (
-    <Box style={{ backgroundColor: theme.palette.primary.main }} width={'100%'}>
+    <Box
+      style={{
+        backgroundColor: theme.palette.primary.main,
+        position: 'absolute',
+        bottom: 0
+      }}
+      width={'100%'}
+    >
       <Grid
         container
         spacing={2}
@@ -15,7 +22,6 @@ export const CrossfeedFooter: React.FC = () => {
         justifyContent={'center'}
         style={{
           margin: '0 auto',
-          marginTop: '1rem',
           maxWidth: '1444px'
         }}
       >
