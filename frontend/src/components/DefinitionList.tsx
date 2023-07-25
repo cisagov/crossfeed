@@ -33,7 +33,7 @@ const Root = styled('div')(({ theme }) => ({
     width: '100%',
     margin: '0 0 1.5rem 0'
   },
-  [`&.${classes.content}`]: {
+  [`&. ${classes.content}`]: {
     list: {
       width: '100%',
       margin: 0

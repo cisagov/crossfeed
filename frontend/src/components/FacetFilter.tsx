@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
-
-import makeStyles from '@mui/styles/makeStyles';
+import { styled } from '@mui/material/styles';
 
 interface Props {
   options: { value: string; count: number }[];
@@ -11,7 +10,6 @@ interface Props {
 }
 
 export const FacetFilter: React.FC<Props> = (props) => {
-  const classes = useStyles();
   const { options, selected, onSelect, onDeselect } = props;
 
   const handleChange = (
@@ -28,11 +26,12 @@ export const FacetFilter: React.FC<Props> = (props) => {
 
   return (
     <>
+    <Root className={classes.root}>
       <FormGroup classes={{ root: classes.root }}>
         {/* <input className={classes.inp} placeholder="Filter" /> */}
         {options.map((opt) => (
           <FormControlLabel
-            classes={{ label: classes.label, root: classes.formControl }}
+            classes={{ label: classes.content, root: classes.content }}
             key={opt.value}
             control={
               <Checkbox
@@ -43,47 +42,59 @@ export const FacetFilter: React.FC<Props> = (props) => {
             label={
               <>
                 <span>{opt.value}</span>
-                <span className={classes.count}>{opt.count}</span>
+                <span className={classes.cta}>{opt.count}</span>
               </>
             }
           />
         ))}
       </FormGroup>
+    </Root>
     </>
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const PREFIX = 'FacetFilter';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  cta: `${PREFIX}-cta`,
+  content: `${PREFIX}-content`,
+}
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.root}`]: {
     width: '100%',
     paddingTop: 0,
     flexWrap: 'nowrap'
   },
-  inp: {
-    border: 'none',
-    backgroundColor: '#fff',
-    width: '100%',
-    padding: '1rem',
-    boxShadow: 'inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF'
+  [`& .${classes.cta}`]: {
+    count: {}
   },
-  label: {
-    width: '100%',
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontSize: '0.9rem',
-    marginRight: 0,
-    '& span': {
-      display: 'inline-block'
+  [`& .${classes.content}`]: {
+    inp: {
+      border: 'none',
+      backgroundColor: '#fff',
+      width: '100%',
+      padding: '1rem',
+      boxShadow: 'inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF'
     },
-    '& $count': {
-      fontSize: '0.7rem',
-      color: theme.palette.grey[700]
-    }
+    label: {
+      width: '100%',
+      display: 'flex',
+      flexFlow: 'row nowrap',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      fontSize: '0.9rem',
+      marginRight: 0,
+      '& span': {
+        display: 'inline-block'
+      },
+      '& $count': {
+        fontSize: '0.7rem',
+        color: theme.palette.grey[700]
+      }
+    },
+    formControl: {
+      width: 'calc(100% + 8px)'
+    },
   },
-  formControl: {
-    width: 'calc(100% + 8px)'
-  },
-  count: {}
 }));
