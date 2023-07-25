@@ -503,7 +503,6 @@ const Risk: React.FC = (props) => {
             <div className={cardClasses.panel}>
               <VulnerabilityCard
                 title={'Latest Vulnerabilities'}
-                labels={['Count', 'Vulnerability', 'Severity', '']}
                 data={latestVulnsGroupedArr}
                 showLatest={true}
                 showCommon={false}
@@ -643,7 +642,6 @@ const Risk: React.FC = (props) => {
 
               <VulnerabilityCard
                 title={'Most Common Vulnerabilities'}
-                labels={['Count', 'Vulnerability', 'Severity', '']}
                 data={stats.vulnerabilities.mostCommonVulnerabilities}
                 showLatest={false}
                 showCommon={true}
