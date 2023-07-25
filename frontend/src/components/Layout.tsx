@@ -1,22 +1,36 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { useLocation } from 'react-router-dom';
 import ScopedCssBaseline from '@mui/material/ScopedCssBaseline';
-import makeStyles from '@mui/styles/makeStyles';
 import { Header, GovBanner } from 'components';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const PREFIX = 'Layout';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  overrides: `${PREFIX}-overrides`,
+  content: `${PREFIX}-content`
+};
+
+const StyledScopedCssBaseline = styled(ScopedCssBaseline)((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.root}`]: {
     position: 'relative',
     height: '100vh',
     display: 'flex',
     flexFlow: 'column nowrap',
     overflow: 'auto'
   },
-  overrides: {
+
+  [`& .${classes.overrides}`]: {
     WebkitFontSmoothing: 'unset',
     MozOsxFontSmoothing: 'unset'
   },
-  content: {
+
+  [`& .${classes.content}`]: {
     flex: '1',
     display: 'block',
     position: 'relative'
@@ -24,11 +38,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Layout: React.FC = ({ children }) => {
-  const classes = useStyles();
+
   const { pathname } = useLocation();
 
   return (
-    <ScopedCssBaseline classes={{ root: classes.overrides }}>
+    <StyledScopedCssBaseline classes={{ root: classes.overrides }}>
       <div className={classes.root}>
         <GovBanner />
         <Header />
@@ -39,6 +53,6 @@ export const Layout: React.FC = ({ children }) => {
           <div className={classes.content}>{children}</div>
         )}
       </div>
-    </ScopedCssBaseline>
+    </StyledScopedCssBaseline>
   );
 };

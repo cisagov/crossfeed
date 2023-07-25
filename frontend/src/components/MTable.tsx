@@ -1,4 +1,5 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { TableInstance } from 'react-table';
 import {
   Table,
@@ -10,7 +11,26 @@ import {
   TableProps
 } from '@mui/material';
 
-import makeStyles from '@mui/styles/makeStyles';
+const PREFIX = 'MTable';
+
+const classes = {
+  head: `${PREFIX}-head`,
+  cell: `${PREFIX}-cell`
+};
+
+const StyledTable = styled(Table)((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.head}`]: {
+    backgroundColor: '#E8EAEC'
+  },
+
+  [`& .${classes.cell}`]: {
+    fontSize: '1rem'
+  }
+}));
 
 interface Props<T extends object> extends TableProps {
   instance: TableInstance<T>;
@@ -19,10 +39,10 @@ interface Props<T extends object> extends TableProps {
 
 export const MTable = <T extends object>(props: Props<T>) => {
   const { instance, footerRows, ...rest } = props;
-  const classes = useStyles();
+
 
   return (
-    <Table {...instance.getTableProps} {...rest}>
+    <StyledTable {...instance.getTableProps} {...rest}>
       <TableHead classes={{ root: classes.head }}>
         {instance.headerGroups.map((group) => (
           <TableRow {...group.getHeaderGroupProps()} key={group.id}>
@@ -60,15 +80,6 @@ export const MTable = <T extends object>(props: Props<T>) => {
         })}
       </TableBody>
       {footerRows && <TableFooter>{footerRows}</TableFooter>}
-    </Table>
+    </StyledTable>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  head: {
-    backgroundColor: '#E8EAEC'
-  },
-  cell: {
-    fontSize: '1rem'
-  }
-}));

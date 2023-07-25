@@ -1,19 +1,24 @@
 import React, { PropsWithChildren } from 'react';
+import { styled } from '@mui/material/styles';
 import { TableInstance } from 'react-table';
 import { Button, Paper } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Pagination } from '@mui/material';
 import { exportCSV, ExportProps } from 'components/ImportExport';
 import { useAuthContext } from 'context';
 
-interface PaginatorProps<T extends object> {
-  table: TableInstance<T>;
-  totalResults: number;
-  export?: ExportProps<T>;
-}
+const PREFIX = 'Paginator';
 
-const useStyles = makeStyles((theme) => ({
-  pagination: {
+const classes = {
+  pagination: `${PREFIX}-pagination`,
+  exportButton: `${PREFIX}-exportButton`
+};
+
+const StyledPaper = styled(Paper)((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.pagination}`]: {
     height: 'auto',
     flex: 0,
     display: 'flex',
@@ -29,17 +34,24 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     justifyContent: 'flex-start'
   },
-  exportButton: {
+
+  [`& .${classes.exportButton}`]: {
     justifyContent: 'flex-end',
     marginLeft: 'auto'
   }
 }));
 
+interface PaginatorProps<T extends object> {
+  table: TableInstance<T>;
+  totalResults: number;
+  export?: ExportProps<T>;
+}
+
 export const Paginator = <T extends object>(
   props: PropsWithChildren<PaginatorProps<T>>
 ) => {
   const { setLoading } = useAuthContext();
-  const classes = useStyles();
+
   const {
     table: {
       pageCount,
@@ -49,7 +61,7 @@ export const Paginator = <T extends object>(
     totalResults
   } = props;
   return (
-    <Paper classes={{ root: classes.pagination }}>
+    <StyledPaper classes={{ root: classes.pagination }}>
       <span>
         <strong>
           {pageCount === 0 ? 0 : pageIndex * pageSize + 1} -{' '}
@@ -74,6 +86,6 @@ export const Paginator = <T extends object>(
           Export Results
         </Button>
       )}
-    </Paper>
+    </StyledPaper>
   );
 };

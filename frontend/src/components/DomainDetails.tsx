@@ -42,11 +42,7 @@ const classes = {
   nested: `${PREFIX}-nested`
 };
 
-const StyledPaper = styled(Paper)((
-  {
-    theme
-  }
-) => ({
+const StyledPaper = styled(Paper)(({ theme }) => ({
   [`& .${classes.root}`]: {
     border: `2px solid ${theme.palette.primary.main}`,
     boxShadow: '0px 1px 6px rgba(0, 0, 0, 0.25)',

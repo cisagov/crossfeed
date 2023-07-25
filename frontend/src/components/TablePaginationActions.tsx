@@ -1,12 +1,29 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { IconButton } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
   LastPage as LastPageIcon,
   FirstPage as FirstPageIcon
 } from '@mui/icons-material';
+
+const PREFIX = 'TablePaginationActions';
+
+const classes = {
+  root: `${PREFIX}-root`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`&.${classes.root}`]: {
+    flexShrink: 0,
+    marginLeft: theme.spacing(2.5)
+  }
+}));
 
 interface Props {
   count: number;
@@ -20,7 +37,7 @@ interface Props {
 
 export const TablePaginationActions = (props: Props) => {
   const { count, page, rowsPerPage, onChangePage } = props;
-  const classes = useStyles();
+
 
   const handleFirstPageButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -47,7 +64,7 @@ export const TablePaginationActions = (props: Props) => {
   };
 
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -80,13 +97,6 @@ export const TablePaginationActions = (props: Props) => {
       >
         <LastPageIcon />
       </IconButton>
-    </div>
+    </Root>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexShrink: 0,
-    marginLeft: theme.spacing(2.5)
-  }
-}));
