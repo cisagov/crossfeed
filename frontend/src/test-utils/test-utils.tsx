@@ -14,7 +14,7 @@ const customRender = (ui: any, options: CustomRenderOptions = {}) => {
   const { initialHistory, authContext, ...rest } = options;
 
   // Provide any context that the components may be expecting
-  const Wrapper: React.FC = ({ children }) => (
+  const Wrapper: React.FC<React.PropsWithChildren<{}>> = ({ children }) => (
     <CFThemeProvider>
       <MemoryRouter initialEntries={initialHistory}>
         <AuthContext.Provider

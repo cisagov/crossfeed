@@ -189,7 +189,7 @@ export const Organization: React.FC = () => {
       id: 'action',
       maxWidth: 100,
       Cell: ({ row }: { row: { index: number } }) => {
-        if (!organization) return;
+        if (!organization) return null;
         const enabled = organization.granularScans.find(
           (scan) => scan.id === scans[row.index].id
         );

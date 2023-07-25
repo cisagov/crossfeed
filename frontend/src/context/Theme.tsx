@@ -37,7 +37,12 @@ const theme = createTheme(
   })
 );
 
-export const CFThemeProvider: React.FC = ({ children }) => {
+interface CFThemeProviderProps {
+  children: React.ReactNode;
+}
+export const CFThemeProvider: React.FC<CFThemeProviderProps> = ({
+  children
+}) => {
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>

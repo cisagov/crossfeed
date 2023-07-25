@@ -23,7 +23,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export const Layout: React.FC = ({ children }) => {
+interface LayoutProps {
+  children: React.ReactNode;
+}
+export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const classes = useStyles();
   const { pathname } = useLocation();
 

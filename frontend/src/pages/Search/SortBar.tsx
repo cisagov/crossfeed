@@ -12,6 +12,7 @@ interface Props {
   saveSearch?(): void;
   isFixed: boolean;
   existingSavedSearch?: SavedSearch;
+  children?: React.ReactNode;
 }
 
 export const SortBar: React.FC<Props> = (props) => {
