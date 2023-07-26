@@ -22,283 +22,6 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Button as USWDSButton } from '@trussworks/react-uswds';
 
-const PREFIX = 'Risk';
-
-const classes = {
-  cardRoot: `${PREFIX}-cardRoot`,
-  cardSmall: `${PREFIX}-cardSmall`,
-  chartSmall: `${PREFIX}-chartSmall`,
-  chartLarge: `${PREFIX}-chartLarge`,
-  chartHeader: `${PREFIX}-chartHeader`,
-  cardBig: `${PREFIX}-cardBig`,
-  body: `${PREFIX}-body`,
-  header: `${PREFIX}-header`,
-  footer: `${PREFIX}-footer`,
-  seeAll: `${PREFIX}-seeAll`,
-  root: `${PREFIX}-root`,
-  contentWrapper: `${PREFIX}-contentWrapper`,
-  content: `${PREFIX}-content`,
-  panel: `${PREFIX}-panel`,
-  miniCardRoot: `${PREFIX}-miniCardRoot`,
-  cardInner: `${PREFIX}-cardInner`,
-  miniCardLeft: `${PREFIX}-miniCardLeft`,
-  miniCardCenter: `${PREFIX}-miniCardCenter`,
-  button: `${PREFIX}-button`,
-  underlined: `${PREFIX}-underlined`,
-  vulnCount: `${PREFIX}-vulnCount`,
-  chip: `${PREFIX}-chip`,
-  chipWrapper: `${PREFIX}-chipWrapper`,
-  note: `${PREFIX}-note`
-};
-
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
-  [`& .${classes.cardRoot}`]: {
-    boxSizing: 'border-box',
-    marginBottom: '1rem',
-    border: '2px solid #DCDEE0',
-    boxShadow: 'none',
-    '& em': {
-      fontStyle: 'normal',
-      backgroundColor: 'yellow'
-    }
-  },
-
-  [`& .${classes.cardSmall}`]: {
-    width: '100%',
-    height: '355px',
-    '& h3': {
-      textAlign: 'center'
-    },
-    overflow: 'hidden'
-  },
-
-  [`& .${classes.chartSmall}`]: {
-    height: '85%'
-  },
-
-  [`& .${classes.chartLarge}`]: {
-    height: '85.5%',
-    width: '90%'
-  },
-
-  [`& .${classes.chartHeader}`]: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    '& h5': {
-      paddingLeft: 190,
-      color: '#71767A',
-      margin: '10px 0 0 0',
-      fontSize: 14
-    }
-  },
-
-  [`& .${classes.cardBig}`]: {
-    width: '100%',
-    height: '889px',
-    '& h3': {
-      textAlign: 'center'
-    },
-    overflow: 'hidden'
-  },
-
-  [`& .${classes.body}`]: {
-    padding: '20px 30px'
-  },
-
-  [`& .${classes.header}`]: {
-    height: '60px',
-    backgroundColor: '#F8F9FA',
-    top: 0,
-    width: '100%',
-    color: '#07648D',
-    fontWeight: 'bold',
-    paddingLeft: 20,
-    paddingTop: 1
-  },
-
-  [`& .${classes.footer}`]: {
-    height: '60px',
-    backgroundColor: '#F8F9FA',
-    width: '100%',
-    color: '#3D4551',
-    paddingLeft: 255,
-    paddingTop: 20,
-    display: 'flex',
-    alignItems: 'center',
-    padding: '1rem 2rem',
-    '& > span': {
-      marginRight: '2rem'
-    },
-    '& *:focus': {
-      outline: 'none !important'
-    }
-  },
-
-  [`& .${classes.seeAll}`]: {
-    float: 'right',
-    marginTop: '5px',
-    marginRight: '20px',
-    '& h4 a': {
-      color: '#71767A',
-      fontSize: '12px',
-      fontWeight: '400'
-    }
-  },
-
-  [`& .${classes.root}`]: {
-    position: 'relative',
-    flex: '1',
-    width: '100%',
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    alignItems: 'stretch',
-    margin: '0',
-    overflowY: 'hidden'
-  },
-
-  [`& .${classes.contentWrapper}`]: {
-    position: 'relative',
-    flex: '1 1 auto',
-    height: '100%',
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    overflowY: 'hidden',
-    marginTop: '1rem'
-  },
-
-  [`& .${classes.content}`]: {
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    alignItems: 'stretch',
-    flex: '1'
-  },
-
-  [`& .${classes.panel}`]: {
-    position: 'relative',
-    height: '100%',
-    overflowY: 'auto',
-    padding: '0 1rem 2rem 1rem',
-    flex: '0 0 50%'
-  },
-
-  [`& .${classes.miniCardRoot}`]: {
-    boxSizing: 'border-box',
-    marginBottom: '1rem',
-    '& em': {
-      fontStyle: 'normal',
-      backgroundColor: 'yellow'
-    },
-    '&:hover': {
-      background: '#FCFCFC',
-      boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.15)',
-      borderRadius: '4px',
-      cursor: 'pointer'
-    },
-    '&:last-child hr': {
-      display: 'none'
-    },
-    height: 45,
-    width: '100%',
-    borderRadius: '4px'
-  },
-
-  [`& .${classes.cardInner}`]: {
-    paddingLeft: 30,
-    paddingRight: 30,
-    display: 'flex',
-    alignItems: 'center',
-    '& div': {
-      display: 'inline',
-      fontSize: '14px',
-      fontWeight: 'bold'
-    },
-    '& button': {
-      justifyContent: 'flex-end'
-    },
-    height: 45
-  },
-
-  [`& .${classes.miniCardLeft}`]: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'flex-start',
-    color: '#3D4551'
-  },
-
-  [`& .${classes.miniCardCenter}`]: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'center'
-  },
-
-  [`& .${classes.button}`]: {
-    outline: 'none',
-    border: 'none',
-    background: 'none',
-    color: '#07648D',
-    margin: '0 0.2rem',
-    cursor: 'pointer',
-    fontSize: '12px'
-  },
-
-  [`& .${classes.underlined}`]: {
-    width: '80px',
-    fontWeight: 'normal'
-  },
-
-  [`& .${classes.vulnCount}`]: {
-    color: '#B51D09',
-    flex: 0.5
-  },
-
-  [`& .${classes.chip}`]: {
-    color: '#3D4551',
-    height: '26px',
-    fontSize: '12px',
-    textAlign: 'center',
-    background: '#FFFFFF',
-    border: '1px solid #DCDEE0',
-    boxSizing: 'border-box',
-    borderRadius: '22px',
-    marginRight: '10px',
-    '&:hover': {
-      background: '#F8DFE2',
-      border: '1px solid #D75B57'
-    },
-    '&:focus': {
-      background: '#F8DFE2',
-      border: '1px solid #D75B57',
-      outline: 0
-    },
-    '&:default': {
-      background: '#F8DFE2',
-      border: '1px solid #D75B57',
-      outline: 0
-    }
-  },
-
-  [`& .${classes.chipWrapper}`]: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    padding: '5px 10px',
-    marginTop: '5px',
-    marginLeft: '15px'
-  },
-
-  [`& .${classes.note}`]: {
-    font: '12px',
-    fontFamily: 'Public Sans',
-    margin: '10px 10px 10px 25px',
-    fontStyle: 'italic',
-    color: '#71767A'
-  }
-}));
-
 interface Point {
   id: string;
   label: string;
@@ -600,10 +323,10 @@ const Risk: React.FC = (props) => {
     showCommon: boolean;
     data: VulnerabilityCount[];
   }) => (
-    <Paper elevation={0} className={cardClasses.cardRoot}>
-      <Root className={cardClasses.cardSmall}>
+    <Paper elevation={0} className={classesRisk.cardRoot}>
+      <Root className={classesRisk.cardSmall}>
         {showLatest && (
-          <div className={riskStylingClasses.seeAll}>
+          <div className={classesRisk.seeAll}>
             <h4>
               <Link to="/inventory/vulnerabilities?sort=createdAt&desc=false">
                 See All
@@ -612,16 +335,16 @@ const Risk: React.FC = (props) => {
           </div>
         )}
         {showCommon && (
-          <div className={riskStylingClasses.seeAll}>
+          <div className={classesRisk.seeAll}>
             <h4>
               <Link to="/inventory/vulnerabilities/grouped">See All</Link>
             </h4>
           </div>
         )}
-        <div className={riskStylingClasses.header}>
+        <div className={classesRisk.header}>
           <h2>{title}</h2>
         </div>
-        <div className={riskStylingClasses.body}>
+        <div className={classesRisk.body}>
           {/* <h4 style={{ float: 'left' }}>Today:</h4> */}
           <div>
             {data.length === 0 && <h3>No open vulnerabilities</h3>}
@@ -639,7 +362,7 @@ const Risk: React.FC = (props) => {
                 >
                   <Paper
                     elevation={0}
-                    className={riskStylingClasses.miniCardRoot}
+                    className={classesRisk.miniCardRoot}
                     aria-label="view domain details"
                     onClick={() => {
                       history.push(
@@ -649,14 +372,14 @@ const Risk: React.FC = (props) => {
                       );
                     }}
                   >
-                    <div className={riskStylingClasses.cardInner}>
-                      <div className={riskStylingClasses.vulnCount}>{vuln.count}</div>
-                      <div className={riskStylingClasses.miniCardLeft}>
+                    <div className={classesRisk.cardInner}>
+                      <div className={classesRisk.vulnCount}>{vuln.count}</div>
+                      <div className={classesRisk.miniCardLeft}>
                         {vuln.title}
                       </div>
-                      <div className={riskStylingClasses.miniCardCenter}>
+                      <div className={classesRisk.miniCardCenter}>
                         <p
-                          className={riskStylingClasses.underlined}
+                          className={classesRisk.underlined}
                           style={{
                             borderBottom: `6px solid ${getSeverityColor({
                               id: vuln.severity ?? ''
@@ -666,7 +389,7 @@ const Risk: React.FC = (props) => {
                           {vuln.severity}
                         </p>
                       </div>
-                      <button className={riskStylingClasses.button}>DETAILS</button>
+                      <button className={classesRisk.button}>DETAILS</button>
                     </div>
                     {
                       <hr
@@ -709,10 +432,10 @@ const Risk: React.FC = (props) => {
     findFn: (geo: any) => Point | undefined;
     type: string;
   }) => (
-    <Paper elevation={0} classes={{ root: riskStylingClasses.cardRoot }}>
+    <Paper elevation={0} classes={{ root: classesRisk.cardRoot }}>
       <div>
         <div className={classes.chart}>
-          <div className={riskStylingClasses.header}>
+          <div className={classesRisk.header}>
             <h2>{title}</h2>
           </div>
 
@@ -882,10 +605,10 @@ const Risk: React.FC = (props) => {
           Generate Report
         </USWDSButton>
       </p>
-      <div id="wrapper" className={riskStylingClasses.contentWrapper}>
+      <div id="wrapper" className={classesRisk.contentWrapper}>
         {stats && (
-          <div className={riskStylingClasses.content}>
-            <div className={riskStylingClasses.panel}>
+          <div className={classesRisk.content}>
+            <div className={classesRisk.panel}>
               <VulnerabilityCard
                 title={'Latest Vulnerabilities'}
                 data={latestVulnsGroupedArr}
@@ -893,12 +616,12 @@ const Risk: React.FC = (props) => {
                 showCommon={false}
               ></VulnerabilityCard>
               {stats.domains.services.length > 0 && (
-                <Paper elevation={0} className={riskStylingClasses.cardRoot}>
-                  <div className={riskStylingClasses.cardSmall}>
-                    <div className={riskStylingClasses.header}>
+                <Paper elevation={0} className={classesRisk.cardRoot}>
+                  <div className={classesRisk.cardSmall}>
+                    <div className={classesRisk.header}>
                       <h2>Most common services</h2>
                     </div>
-                    <div className={riskStylingClasses.chartSmall}>
+                    <div className={classesRisk.chartSmall}>
                       <MyResponsivePie
                         data={stats.domains.services}
                         colors={allColors}
@@ -909,12 +632,12 @@ const Risk: React.FC = (props) => {
                 </Paper>
               )}
               {stats.domains.ports.length > 0 && (
-                <Paper elevation={0} classes={{ root: riskStylingClasses.cardRoot }}>
-                  <div className={riskStylingClasses.cardSmall}>
-                    <div className={riskStylingClasses.header}>
+                <Paper elevation={0} classes={{ root: classesRisk.cardRoot }}>
+                  <div className={classesRisk.cardSmall}>
+                    <div className={classesRisk.header}>
                       <h2>Most common ports</h2>
                     </div>
-                    <div className={riskStylingClasses.chartSmall}>
+                    <div className={classesRisk.chartSmall}>
                       <MyResponsiveBar
                         data={stats.domains.ports.slice(0, 5).reverse()}
                         type={'ports'}
@@ -925,12 +648,12 @@ const Risk: React.FC = (props) => {
                 </Paper>
               )}
               {stats.vulnerabilities.severity.length > 0 && (
-                <Paper elevation={0} classes={{ root: riskStylingClasses.cardRoot }}>
-                  <div className={riskStylingClasses.cardSmall}>
-                    <div className={riskStylingClasses.header}>
+                <Paper elevation={0} classes={{ root: classesRisk.cardRoot }}>
+                  <div className={classesRisk.cardSmall}>
+                    <div className={classesRisk.header}>
                       <h2>Severity Levels</h2>
                     </div>
-                    <div className={riskStylingClasses.chartSmall}>
+                    <div className={classesRisk.chartSmall}>
                       <MyResponsivePie
                         data={stats.vulnerabilities.severity}
                         colors={getSeverityColor}
@@ -942,33 +665,33 @@ const Risk: React.FC = (props) => {
               )}
             </div>
 
-            <div className={riskStylingClasses.panel}>
-              <Paper elevation={0} classes={{ root: riskStylingClasses.cardRoot }}>
+            <div className={classesRisk.panel}>
+              <Paper elevation={0} classes={{ root: classesRisk.cardRoot }}>
                 <div>
                   {stats.domains.numVulnerabilities.length > 0 && (
-                    <div className={riskStylingClasses.cardBig}>
-                      <div className={riskStylingClasses.seeAll}>
+                    <div className={classesRisk.cardBig}>
+                      <div className={classesRisk.seeAll}>
                         <h4>
                           <Link to="/inventory/vulnerabilities">See All</Link>
                         </h4>
                       </div>
-                      <div className={riskStylingClasses.header}>
+                      <div className={classesRisk.header}>
                         <h2>Open Vulnerabilities by Domain</h2>
                       </div>
-                      <div className={riskStylingClasses.chartLarge}>
+                      <div className={classesRisk.chartLarge}>
                         {stats.domains.numVulnerabilities.length === 0 ? (
                           <h3>No open vulnerabilities</h3>
                         ) : (
                           <>
-                            <p className={riskStylingClasses.note}>
+                            <p className={classesRisk.note}>
                               *Top 50 domains with open vulnerabilities
                             </p>
-                            <div className={riskStylingClasses.chipWrapper}>
+                            <div className={classesRisk.chipWrapper}>
                               {severities.map(
                                 (sevFilter: VulnSeverities, i: number) => (
                                   <Chip
                                     key={i}
-                                    className={riskStylingClasses.chip}
+                                    className={classesRisk.chip}
                                     disabled={sevFilter.disable}
                                     label={sevFilter.label}
                                     onClick={() => {
@@ -979,7 +702,7 @@ const Risk: React.FC = (props) => {
                                 )
                               )}
                             </div>
-                            <div className={riskStylingClasses.chartHeader}>
+                            <div className={classesRisk.chartHeader}>
                               <h5>Domain&emsp; Breakdown</h5>
                               <h5
                                 style={{ textAlign: 'right', paddingLeft: 0 }}
@@ -996,7 +719,7 @@ const Risk: React.FC = (props) => {
                           </>
                         )}
                       </div>
-                      <div className={riskStylingClasses.footer}>
+                      <div className={classesRisk.footer}>
                         <span>
                           <strong>
                             {(domainsWithVulns === 0
@@ -1069,3 +792,254 @@ const Risk: React.FC = (props) => {
 };
 
 export default Risk;
+
+//Styling
+const PREFIX = 'Risk';
+
+const classesRisk = {
+  cardRoot: `${PREFIX}-cardRoot`,
+  cardSmall: `${PREFIX}-cardSmall`,
+  chartSmall: `${PREFIX}-chartSmall`,
+  chartLarge: `${PREFIX}-chartLarge`,
+  chartHeader: `${PREFIX}-chartHeader`,
+  cardBig: `${PREFIX}-cardBig`,
+  body: `${PREFIX}-body`,
+  header: `${PREFIX}-header`,
+  footer: `${PREFIX}-footer`,
+  seeAll: `${PREFIX}-seeAll`,
+  root: `${PREFIX}-root`,
+  contentWrapper: `${PREFIX}-contentWrapper`,
+  content: `${PREFIX}-content`,
+  panel: `${PREFIX}-panel`,
+  miniCardRoot: `${PREFIX}-miniCardRoot`,
+  cardInner: `${PREFIX}-cardInner`,
+  miniCardLeft: `${PREFIX}-miniCardLeft`,
+  miniCardCenter: `${PREFIX}-miniCardCenter`,
+  button: `${PREFIX}-button`,
+  underlined: `${PREFIX}-underlined`,
+  vulnCount: `${PREFIX}-vulnCount`,
+  chip: `${PREFIX}-chip`,
+  chipWrapper: `${PREFIX}-chipWrapper`,
+  note: `${PREFIX}-note`
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classesRisk.cardRoot}`]: {
+    boxSizing: 'border-box',
+    marginBottom: '1rem',
+    border: '2px solid #DCDEE0',
+    boxShadow: 'none',
+    '& em': {
+      fontStyle: 'normal',
+      backgroundColor: 'yellow'
+    }
+  },
+  [`& .${classesRisk.cardSmall}`]: {
+    width: '100%',
+    height: '355px',
+    '& h3': {
+      textAlign: 'center'
+    },
+    overflow: 'hidden'
+  },
+  [`& .${classesRisk.chartSmall}`]: {
+    height: '85%'
+  },
+  [`& .${classesRisk.chartLarge}`]: {
+    height: '85.5%',
+    width: '90%'
+  },
+  [`& .${classesRisk.chartHeader}`]: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    '& h5': {
+      paddingLeft: 190,
+      color: '#71767A',
+      margin: '10px 0 0 0',
+      fontSize: 14
+    }
+  },
+  [`& .${classesRisk.cardBig}`]: {
+    width: '100%',
+    height: '889px',
+    '& h3': {
+      textAlign: 'center'
+    },
+    overflow: 'hidden'
+  },
+  [`& .${classesRisk.body}`]: {
+    padding: '20px 30px'
+  },
+  [`& .${classesRisk.header}`]: {
+    height: '60px',
+    backgroundColor: '#F8F9FA',
+    top: 0,
+    width: '100%',
+    color: '#07648D',
+    fontWeight: 'bold',
+    paddingLeft: 20,
+    paddingTop: 1
+  },
+  [`& .${classesRisk.footer}`]: {
+    height: '60px',
+    backgroundColor: '#F8F9FA',
+    width: '100%',
+    color: '#3D4551',
+    paddingLeft: 255,
+    paddingTop: 20,
+    display: 'flex',
+    alignItems: 'center',
+    padding: '1rem 2rem',
+    '& > span': {
+      marginRight: '2rem'
+    },
+    '& *:focus': {
+      outline: 'none !important'
+    }
+  },
+  [`& .${classesRisk.seeAll}`]: {
+    float: 'right',
+    marginTop: '5px',
+    marginRight: '20px',
+    '& h4 a': {
+      color: '#71767A',
+      fontSize: '12px',
+      fontWeight: '400'
+    }
+  },
+  [`& .${classesRisk.root}`]: {
+    position: 'relative',
+    flex: '1',
+    width: '100%',
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    alignItems: 'stretch',
+    margin: '0',
+    overflowY: 'hidden'
+  },
+  [`& .${classesRisk.contentWrapper}`]: {
+    position: 'relative',
+    flex: '1 1 auto',
+    height: '100%',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    overflowY: 'hidden',
+    marginTop: '1rem'
+  },
+  [`& .${classesRisk.content}`]: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    alignItems: 'stretch',
+    flex: '1'
+  },
+  [`& .${classesRisk.panel}`]: {
+    position: 'relative',
+    height: '100%',
+    overflowY: 'auto',
+    padding: '0 1rem 2rem 1rem',
+    flex: '0 0 50%'
+  },
+  [`& .${classesRisk.miniCardRoot}`]: {
+    boxSizing: 'border-box',
+    marginBottom: '1rem',
+    '& em': {
+      fontStyle: 'normal',
+      backgroundColor: 'yellow'
+    },
+    '&:hover': {
+      background: '#FCFCFC',
+      boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.15)',
+      borderRadius: '4px',
+      cursor: 'pointer'
+    },
+    '&:last-child hr': {
+      display: 'none'
+    },
+    height: 45,
+    width: '100%',
+    borderRadius: '4px'
+  },
+  [`& .${classesRisk.cardInner}`]: {
+    paddingLeft: 30,
+    paddingRight: 30,
+    display: 'flex',
+    alignItems: 'center',
+    '& div': {
+      display: 'inline',
+      fontSize: '14px',
+      fontWeight: 'bold'
+    },
+    '& button': {
+      justifyContent: 'flex-end'
+    },
+    height: 45
+  },
+  [`& .${classesRisk.miniCardLeft}`]: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'flex-start',
+    color: '#3D4551'
+  },
+  [`& .${classesRisk.miniCardCenter}`]: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center'
+  },
+  [`& .${classesRisk.button}`]: {
+    outline: 'none',
+    border: 'none',
+    background: 'none',
+    color: '#07648D',
+    margin: '0 0.2rem',
+    cursor: 'pointer',
+    fontSize: '12px'
+  },
+  [`& .${classesRisk.underlined}`]: {
+    width: '80px',
+    fontWeight: 'normal'
+  },
+  [`& .${classesRisk.vulnCount}`]: {
+    color: '#B51D09',
+    flex: 0.5
+  },
+  [`& .${classesRisk.chip}`]: {
+    color: '#3D4551',
+    height: '26px',
+    fontSize: '12px',
+    textAlign: 'center',
+    background: '#FFFFFF',
+    border: '1px solid #DCDEE0',
+    boxSizing: 'border-box',
+    borderRadius: '22px',
+    marginRight: '10px',
+    '&:hover': {
+      background: '#F8DFE2',
+      border: '1px solid #D75B57'
+    },
+    '&:focus': {
+      background: '#F8DFE2',
+      border: '1px solid #D75B57',
+      outline: 0
+    },
+    '&:default': {
+      background: '#F8DFE2',
+      border: '1px solid #D75B57',
+      outline: 0
+    }
+  },
+  [`& .${classesRisk.chipWrapper}`]: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    padding: '5px 10px',
+    marginTop: '5px',
+    marginLeft: '15px'
+  },
+  [`& .${classesRisk.note}`]: {
+    font: '12px',
+    fontFamily: 'Public Sans',
+    margin: '10px 10px 10px 25px',
+    fontStyle: 'italic',
+    color: '#71767A'
+  }
+}));

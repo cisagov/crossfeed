@@ -1,12 +1,36 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 
-const PREFIX = 'DefinitionList';
+interface Props {
+  items: {
+    label: string;
+    value: string;
+  }[];
+}
 
+export const DefinitionList: React.FC<Props> = (props) => {
+  const { items } = props;
+  return (
+    (<Root className={classes.root}>
+      <dl className={classes.list}>
+        {items.map(({ label, value }) => (
+          <div className={classes.root} key={value}>
+            <dt>{label}:</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </Root>)
+  );
+};
+
+//Styling
 const PREFIX = 'DefinitionList';
 const classes = {
   root: `${PREFIX}-root`,
-  content: `${PREFIX}-content`
+  content: `${PREFIX}-content`,
+  list:`${PREFIX}-list`,
+  item:`${PREFIX}-item`
 };
 
 const Root = styled('div')(({ theme }) => ({
@@ -37,29 +61,4 @@ const Root = styled('div')(({ theme }) => ({
     }
   }
 }));
-
-
-interface Props {
-  items: {
-    label: string;
-    value: string;
-  }[];
-}
-
-export const DefinitionList: React.FC<Props> = (props) => {
-  const { items } = props;
-  return (
-    (<Root className={classes.root}>
-      <dl className={classes.list}>
-        {items.map(({ label, value }) => (
-          <div className={classes.root} key={value}>
-            <dt>{label}:</dt>
-            <dd>{value}</dd>
-          </div>
-        ))}
-      </dl>
-    </Root>)
-  );
-};
-
 

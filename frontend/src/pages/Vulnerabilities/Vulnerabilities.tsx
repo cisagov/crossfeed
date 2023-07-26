@@ -10,27 +10,6 @@ import { Subnav } from 'components';
 import { parse } from 'query-string';
 import { createColumns, createGroupedColumns } from './columns';
 
-const PREFIX = 'Vulnerabilities';
-
-const classes = {
-  contentWrapper: `${PREFIX}-contentWrapper`
-};
-
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
-  [`& .${classes.contentWrapper}`]: {
-    position: 'relative',
-    flex: '1 1 auto',
-    height: '100%',
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    overflowY: 'hidden'
-  }
-}));
-
 export interface ApiResponse {
   result: Vulnerability[];
   count: number;
@@ -219,7 +198,7 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
 
   return (
     <Root>
-      <div className={listClasses.contentWrapper}>
+      <div className={classesVulns.contentWrapper}>
         <Subnav
           items={[
             { title: 'Search Results', path: '/inventory', exact: true },
@@ -251,3 +230,24 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
 };
 
 export default Vulnerabilities;
+
+//Styling
+const PREFIX = 'Vulnerabilities';
+
+const classesVulns = {
+  contentWrapper: `${PREFIX}-contentWrapper`
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classesVulns.contentWrapper}`]: {
+    position: 'relative',
+    flex: '1 1 auto',
+    height: '100%',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    overflowY: 'hidden'
+  }
+}));
+
+
+

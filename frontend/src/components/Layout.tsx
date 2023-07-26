@@ -4,6 +4,29 @@ import { useLocation } from 'react-router-dom';
 import ScopedCssBaseline from '@mui/material/ScopedCssBaseline';
 import { Header, GovBanner } from 'components';
 
+interface LayoutProps {
+  children: React.ReactNode;
+}
+export const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const { pathname } = useLocation();
+
+  return (
+    <StyledScopedCssBaseline classes={{ root: classes.overrides }}>
+      <div className={classes.root}>
+        <GovBanner />
+        <Header />
+
+        {pathname === '/inventory' ? (
+          children
+        ) : (
+          <div className={classes.content}>{children}</div>
+        )}
+      </div>
+    </StyledScopedCssBaseline>
+  );
+};
+
+//Styling
 const PREFIX = 'Layout';
 
 const classes = {
@@ -12,11 +35,7 @@ const classes = {
   content: `${PREFIX}-content`
 };
 
-const StyledScopedCssBaseline = styled(ScopedCssBaseline)((
-  {
-    theme
-  }
-) => ({
+const StyledScopedCssBaseline = styled(ScopedCssBaseline)(({ theme }) => ({
   [`& .${classes.root}`]: {
     position: 'relative',
     height: '100vh',
@@ -36,26 +55,3 @@ const StyledScopedCssBaseline = styled(ScopedCssBaseline)((
     position: 'relative'
   }
 }));
-
-interface LayoutProps {
-  children: React.ReactNode;
-}
-export const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const classes = useStyles();
-  const { pathname } = useLocation();
-
-  return (
-    <StyledScopedCssBaseline classes={{ root: classes.overrides }}>
-      <div className={classes.root}>
-        <GovBanner />
-        <Header />
-
-        {pathname === '/inventory' ? (
-          children
-        ) : (
-          <div className={classes.content}>{children}</div>
-        )}
-      </div>
-    </StyledScopedCssBaseline>
-  );
-};
