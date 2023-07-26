@@ -19,6 +19,19 @@ export const useRiskStyles = makeStyles((theme) => ({
     },
     overflow: 'hidden'
   },
+  cardTitle: {
+    fontSize: '14px'
+  },
+  cardColumnHeadings: {
+    display: 'flex',
+    listStyle: 'none',
+    justifyContent: 'space-between',
+    margin: 0,
+    paddingLeft: 16,
+    paddingRight: 128,
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
   chartSmall: {
     height: '85%'
   },
