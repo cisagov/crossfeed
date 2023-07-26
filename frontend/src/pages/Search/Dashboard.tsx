@@ -266,7 +266,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
   };
 
   return (
-    <Root className={classes.root}>
+    (<Root className={classes.root}>
       <FilterDrawer
         addFilter={addFilter}
         removeFilter={removeFilter}
@@ -284,9 +284,8 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
           styles={{
             paddingLeft: '0%'
           }}
-        >
-          <FilterTags filters={filters} removeFilter={removeFilter} />
-        </Subnav>
+        />
+        <FilterTags filters={filters} removeFilter={removeFilter} />
         <SortBar
           sortField={sortField}
           sortDirection={sortDirection}
@@ -501,7 +500,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
           </ButtonGroup>
         </ModalFooter>
       </Modal>
-    </Root>
+    </Root>)
   );
 };
 

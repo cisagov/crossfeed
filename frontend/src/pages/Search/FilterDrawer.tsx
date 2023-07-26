@@ -11,6 +11,12 @@ import { FaFilter } from 'react-icons/fa';
 import { TaggedArrayInput, FacetFilter } from 'components';
 import { ContextType } from '../../context/SearchProvider';
 
+const Accordion = MuiAccordion;
+
+const AccordionSummary = MuiAccordionSummary;
+
+const Wrapper = Paper;
+
 const PREFIX = 'FilterDrawer';
 
 const classes = {
@@ -353,8 +359,4 @@ export const FilterDrawer: React.FC<Props> = (props) => {
   );
 };
 
-const Accordion = MuiAccordion;
 
-const AccordionSummary = MuiAccordionSummary;
-
-const Wrapper = Paper;

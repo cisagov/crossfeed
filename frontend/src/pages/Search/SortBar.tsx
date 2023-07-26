@@ -16,11 +16,7 @@ const classes = {
   option: `${PREFIX}-option`
 };
 
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
+const Root = styled('div')(({ theme }) => ({
   [`&.${classes.root}`]: {
     zIndex: 100,
     display: 'flex',
@@ -94,6 +90,7 @@ interface Props {
   saveSearch?(): void;
   isFixed: boolean;
   existingSavedSearch?: SavedSearch;
+  children?: React.ReactNode;
 }
 
 export const SortBar: React.FC<Props> = (props) => {

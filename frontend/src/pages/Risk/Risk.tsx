@@ -24,7 +24,7 @@ import { Button as USWDSButton } from '@trussworks/react-uswds';
 
 const PREFIX = 'Risk';
 
-const classes = {
+const riskStylingClasses = {
   cardRoot: `${PREFIX}-cardRoot`,
   cardSmall: `${PREFIX}-cardSmall`,
   chartSmall: `${PREFIX}-chartSmall`,
@@ -56,7 +56,7 @@ const Root = styled('div')((
     theme
   }
 ) => ({
-  [`& .${classes.cardRoot}`]: {
+  [`& .${riskStylingClasses.cardRoot}`]: {
     boxSizing: 'border-box',
     marginBottom: '1rem',
     border: '2px solid #DCDEE0',
@@ -67,7 +67,7 @@ const Root = styled('div')((
     }
   },
 
-  [`& .${classes.cardSmall}`]: {
+  [`& .${riskStylingClasses.cardSmall}`]: {
     width: '100%',
     height: '355px',
     '& h3': {
@@ -76,16 +76,16 @@ const Root = styled('div')((
     overflow: 'hidden'
   },
 
-  [`& .${classes.chartSmall}`]: {
+  [`& .${riskStylingClasses.chartSmall}`]: {
     height: '85%'
   },
 
-  [`& .${classes.chartLarge}`]: {
+  [`& .${riskStylingClasses.chartLarge}`]: {
     height: '85.5%',
     width: '90%'
   },
 
-  [`& .${classes.chartHeader}`]: {
+  [`& .${riskStylingClasses.chartHeader}`]: {
     display: 'flex',
     justifyContent: 'space-between',
     '& h5': {
@@ -96,7 +96,7 @@ const Root = styled('div')((
     }
   },
 
-  [`& .${classes.cardBig}`]: {
+  [`& .${riskStylingClasses.cardBig}`]: {
     width: '100%',
     height: '889px',
     '& h3': {
@@ -105,11 +105,11 @@ const Root = styled('div')((
     overflow: 'hidden'
   },
 
-  [`& .${classes.body}`]: {
+  [`& .${riskStylingClasses.body}`]: {
     padding: '20px 30px'
   },
 
-  [`& .${classes.header}`]: {
+  [`& .${riskStylingClasses.header}`]: {
     height: '60px',
     backgroundColor: '#F8F9FA',
     top: 0,
@@ -120,7 +120,7 @@ const Root = styled('div')((
     paddingTop: 1
   },
 
-  [`& .${classes.footer}`]: {
+  [`& .${riskStylingClasses.footer}`]: {
     height: '60px',
     backgroundColor: '#F8F9FA',
     width: '100%',
@@ -138,7 +138,7 @@ const Root = styled('div')((
     }
   },
 
-  [`& .${classes.seeAll}`]: {
+  [`& .${riskStylingClasses.seeAll}`]: {
     float: 'right',
     marginTop: '5px',
     marginRight: '20px',
@@ -149,7 +149,7 @@ const Root = styled('div')((
     }
   },
 
-  [`& .${classes.root}`]: {
+  [`& .${riskStylingClasses.root}`]: {
     position: 'relative',
     flex: '1',
     width: '100%',
@@ -160,7 +160,7 @@ const Root = styled('div')((
     overflowY: 'hidden'
   },
 
-  [`& .${classes.contentWrapper}`]: {
+  [`& .${riskStylingClasses.contentWrapper}`]: {
     position: 'relative',
     flex: '1 1 auto',
     height: '100%',
@@ -170,14 +170,14 @@ const Root = styled('div')((
     marginTop: '1rem'
   },
 
-  [`& .${classes.content}`]: {
+  [`& .${riskStylingClasses.content}`]: {
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'stretch',
     flex: '1'
   },
 
-  [`& .${classes.panel}`]: {
+  [`& .${riskStylingClasses.panel}`]: {
     position: 'relative',
     height: '100%',
     overflowY: 'auto',
@@ -185,7 +185,7 @@ const Root = styled('div')((
     flex: '0 0 50%'
   },
 
-  [`& .${classes.miniCardRoot}`]: {
+  [`& .${riskStylingClasses.miniCardRoot}`]: {
     boxSizing: 'border-box',
     marginBottom: '1rem',
     '& em': {
@@ -206,7 +206,7 @@ const Root = styled('div')((
     borderRadius: '4px'
   },
 
-  [`& .${classes.cardInner}`]: {
+  [`& .${riskStylingClasses.cardInner}`]: {
     paddingLeft: 30,
     paddingRight: 30,
     display: 'flex',
@@ -222,20 +222,20 @@ const Root = styled('div')((
     height: 45
   },
 
-  [`& .${classes.miniCardLeft}`]: {
+  [`& .${riskStylingClasses.miniCardLeft}`]: {
     display: 'flex',
     flex: 1,
     justifyContent: 'flex-start',
     color: '#3D4551'
   },
 
-  [`& .${classes.miniCardCenter}`]: {
+  [`& .${riskStylingClasses.miniCardCenter}`]: {
     display: 'flex',
     flex: 1,
     justifyContent: 'center'
   },
 
-  [`& .${classes.button}`]: {
+  [`& .${riskStylingClasses.button}`]: {
     outline: 'none',
     border: 'none',
     background: 'none',
@@ -245,17 +245,17 @@ const Root = styled('div')((
     fontSize: '12px'
   },
 
-  [`& .${classes.underlined}`]: {
+  [`& .${riskStylingClasses.underlined}`]: {
     width: '80px',
     fontWeight: 'normal'
   },
 
-  [`& .${classes.vulnCount}`]: {
+  [`& .${riskStylingClasses.vulnCount}`]: {
     color: '#B51D09',
     flex: 0.5
   },
 
-  [`& .${classes.chip}`]: {
+  [`& .${riskStylingClasses.chip}`]: {
     color: '#3D4551',
     height: '26px',
     fontSize: '12px',
@@ -281,7 +281,7 @@ const Root = styled('div')((
     }
   },
 
-  [`& .${classes.chipWrapper}`]: {
+  [`& .${riskStylingClasses.chipWrapper}`]: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -290,7 +290,7 @@ const Root = styled('div')((
     marginLeft: '15px'
   },
 
-  [`& .${classes.note}`]: {
+  [`& .${riskStylingClasses.note}`]: {
     font: '12px',
     fontFamily: 'Public Sans',
     margin: '10px 10px 10px 25px',
@@ -600,10 +600,10 @@ const Risk: React.FC = (props) => {
     showCommon: boolean;
     data: VulnerabilityCount[];
   }) => (
-    <Paper elevation={0} className={cardClasses.cardRoot}>
-      <Root className={cardClasses.cardSmall}>
+    <Paper elevation={0} className={riskStylingClasses.cardRoot}>
+      <Root className={riskStylingClasses.cardSmall}>
         {showLatest && (
-          <div className={cardClasses.seeAll}>
+          <div className={riskStylingClasses.seeAll}>
             <h4>
               <Link to="/inventory/vulnerabilities?sort=createdAt&desc=false">
                 See All
@@ -612,16 +612,16 @@ const Risk: React.FC = (props) => {
           </div>
         )}
         {showCommon && (
-          <div className={cardClasses.seeAll}>
+          <div className={riskStylingClasses.seeAll}>
             <h4>
               <Link to="/inventory/vulnerabilities/grouped">See All</Link>
             </h4>
           </div>
         )}
-        <div className={cardClasses.header}>
+        <div className={riskStylingClasses.header}>
           <h2>{title}</h2>
         </div>
-        <div className={cardClasses.body}>
+        <div className={riskStylingClasses.body}>
           {/* <h4 style={{ float: 'left' }}>Today:</h4> */}
           <div>
             {data.length === 0 && <h3>No open vulnerabilities</h3>}
@@ -639,7 +639,7 @@ const Risk: React.FC = (props) => {
                 >
                   <Paper
                     elevation={0}
-                    className={cardClasses.miniCardRoot}
+                    className={riskStylingClasses.miniCardRoot}
                     aria-label="view domain details"
                     onClick={() => {
                       history.push(
@@ -649,14 +649,14 @@ const Risk: React.FC = (props) => {
                       );
                     }}
                   >
-                    <div className={cardClasses.cardInner}>
-                      <div className={cardClasses.vulnCount}>{vuln.count}</div>
-                      <div className={cardClasses.miniCardLeft}>
+                    <div className={riskStylingClasses.cardInner}>
+                      <div className={riskStylingClasses.vulnCount}>{vuln.count}</div>
+                      <div className={riskStylingClasses.miniCardLeft}>
                         {vuln.title}
                       </div>
-                      <div className={cardClasses.miniCardCenter}>
+                      <div className={riskStylingClasses.miniCardCenter}>
                         <p
-                          className={cardClasses.underlined}
+                          className={riskStylingClasses.underlined}
                           style={{
                             borderBottom: `6px solid ${getSeverityColor({
                               id: vuln.severity ?? ''
@@ -666,7 +666,7 @@ const Risk: React.FC = (props) => {
                           {vuln.severity}
                         </p>
                       </div>
-                      <button className={cardClasses.button}>DETAILS</button>
+                      <button className={riskStylingClasses.button}>DETAILS</button>
                     </div>
                     {
                       <hr
@@ -709,10 +709,10 @@ const Risk: React.FC = (props) => {
     findFn: (geo: any) => Point | undefined;
     type: string;
   }) => (
-    <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+    <Paper elevation={0} classes={{ root: riskStylingClasses.cardRoot }}>
       <div>
         <div className={classes.chart}>
-          <div className={cardClasses.header}>
+          <div className={riskStylingClasses.header}>
             <h2>{title}</h2>
           </div>
 
@@ -882,10 +882,10 @@ const Risk: React.FC = (props) => {
           Generate Report
         </USWDSButton>
       </p>
-      <div id="wrapper" className={cardClasses.contentWrapper}>
+      <div id="wrapper" className={riskStylingClasses.contentWrapper}>
         {stats && (
-          <div className={cardClasses.content}>
-            <div className={cardClasses.panel}>
+          <div className={riskStylingClasses.content}>
+            <div className={riskStylingClasses.panel}>
               <VulnerabilityCard
                 title={'Latest Vulnerabilities'}
                 data={latestVulnsGroupedArr}
@@ -893,12 +893,12 @@ const Risk: React.FC = (props) => {
                 showCommon={false}
               ></VulnerabilityCard>
               {stats.domains.services.length > 0 && (
-                <Paper elevation={0} className={cardClasses.cardRoot}>
-                  <div className={cardClasses.cardSmall}>
-                    <div className={cardClasses.header}>
+                <Paper elevation={0} className={riskStylingClasses.cardRoot}>
+                  <div className={riskStylingClasses.cardSmall}>
+                    <div className={riskStylingClasses.header}>
                       <h2>Most common services</h2>
                     </div>
-                    <div className={cardClasses.chartSmall}>
+                    <div className={riskStylingClasses.chartSmall}>
                       <MyResponsivePie
                         data={stats.domains.services}
                         colors={allColors}
@@ -909,12 +909,12 @@ const Risk: React.FC = (props) => {
                 </Paper>
               )}
               {stats.domains.ports.length > 0 && (
-                <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
-                  <div className={cardClasses.cardSmall}>
-                    <div className={cardClasses.header}>
+                <Paper elevation={0} classes={{ root: riskStylingClasses.cardRoot }}>
+                  <div className={riskStylingClasses.cardSmall}>
+                    <div className={riskStylingClasses.header}>
                       <h2>Most common ports</h2>
                     </div>
-                    <div className={cardClasses.chartSmall}>
+                    <div className={riskStylingClasses.chartSmall}>
                       <MyResponsiveBar
                         data={stats.domains.ports.slice(0, 5).reverse()}
                         type={'ports'}
@@ -925,12 +925,12 @@ const Risk: React.FC = (props) => {
                 </Paper>
               )}
               {stats.vulnerabilities.severity.length > 0 && (
-                <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
-                  <div className={cardClasses.cardSmall}>
-                    <div className={cardClasses.header}>
+                <Paper elevation={0} classes={{ root: riskStylingClasses.cardRoot }}>
+                  <div className={riskStylingClasses.cardSmall}>
+                    <div className={riskStylingClasses.header}>
                       <h2>Severity Levels</h2>
                     </div>
-                    <div className={cardClasses.chartSmall}>
+                    <div className={riskStylingClasses.chartSmall}>
                       <MyResponsivePie
                         data={stats.vulnerabilities.severity}
                         colors={getSeverityColor}
@@ -942,33 +942,33 @@ const Risk: React.FC = (props) => {
               )}
             </div>
 
-            <div className={cardClasses.panel}>
-              <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+            <div className={riskStylingClasses.panel}>
+              <Paper elevation={0} classes={{ root: riskStylingClasses.cardRoot }}>
                 <div>
                   {stats.domains.numVulnerabilities.length > 0 && (
-                    <div className={cardClasses.cardBig}>
-                      <div className={cardClasses.seeAll}>
+                    <div className={riskStylingClasses.cardBig}>
+                      <div className={riskStylingClasses.seeAll}>
                         <h4>
                           <Link to="/inventory/vulnerabilities">See All</Link>
                         </h4>
                       </div>
-                      <div className={cardClasses.header}>
+                      <div className={riskStylingClasses.header}>
                         <h2>Open Vulnerabilities by Domain</h2>
                       </div>
-                      <div className={cardClasses.chartLarge}>
+                      <div className={riskStylingClasses.chartLarge}>
                         {stats.domains.numVulnerabilities.length === 0 ? (
                           <h3>No open vulnerabilities</h3>
                         ) : (
                           <>
-                            <p className={cardClasses.note}>
+                            <p className={riskStylingClasses.note}>
                               *Top 50 domains with open vulnerabilities
                             </p>
-                            <div className={cardClasses.chipWrapper}>
+                            <div className={riskStylingClasses.chipWrapper}>
                               {severities.map(
                                 (sevFilter: VulnSeverities, i: number) => (
                                   <Chip
                                     key={i}
-                                    className={cardClasses.chip}
+                                    className={riskStylingClasses.chip}
                                     disabled={sevFilter.disable}
                                     label={sevFilter.label}
                                     onClick={() => {
@@ -979,7 +979,7 @@ const Risk: React.FC = (props) => {
                                 )
                               )}
                             </div>
-                            <div className={cardClasses.chartHeader}>
+                            <div className={riskStylingClasses.chartHeader}>
                               <h5>Domain&emsp; Breakdown</h5>
                               <h5
                                 style={{ textAlign: 'right', paddingLeft: 0 }}
@@ -996,7 +996,7 @@ const Risk: React.FC = (props) => {
                           </>
                         )}
                       </div>
-                      <div className={cardClasses.footer}>
+                      <div className={riskStylingClasses.footer}>
                         <span>
                           <strong>
                             {(domainsWithVulns === 0

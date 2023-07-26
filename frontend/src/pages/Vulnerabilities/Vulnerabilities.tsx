@@ -12,7 +12,7 @@ import { createColumns, createGroupedColumns } from './columns';
 
 const PREFIX = 'Vulnerabilities';
 
-const classes = {
+const classesTheme = {
   contentWrapper: `${PREFIX}-contentWrapper`
 };
 
@@ -21,7 +21,7 @@ const Root = styled('div')((
     theme
   }
 ) => ({
-  [`& .${classes.contentWrapper}`]: {
+  [`& .${classesTheme.contentWrapper}`]: {
     position: 'relative',
     flex: '1 1 auto',
     height: '100%',
@@ -218,8 +218,8 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
   }
 
   return (
-    <Root>
-      <div className={listClasses.contentWrapper}>
+    (<Root>
+      <div className={classesTheme.contentWrapper}>
         <Subnav
           items={[
             { title: 'Search Results', path: '/inventory', exact: true },
@@ -246,7 +246,7 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
           />
         </div>
       </div>
-    </Root>
+    </Root>)
   );
 };
 
