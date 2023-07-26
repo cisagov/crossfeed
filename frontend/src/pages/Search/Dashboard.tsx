@@ -266,7 +266,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
   };
 
   return (
-    (<Root className={classes.root}>
+    <Root className={classes.root}>
       <FilterDrawer
         addFilter={addFilter}
         removeFilter={removeFilter}
@@ -500,7 +500,7 @@ export const DashboardUI: React.FC<ContextType & { location: any }> = (
           </ButtonGroup>
         </ModalFooter>
       </Modal>
-    </Root>)
+    </Root>
   );
 };
 

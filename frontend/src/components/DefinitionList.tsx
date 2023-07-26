@@ -3,10 +3,10 @@ import { styled } from '@mui/material/styles';
 
 const PREFIX = 'DefinitionList';
 
+const PREFIX = 'DefinitionList';
 const classes = {
   root: `${PREFIX}-root`,
-  list: `${PREFIX}-list`,
-  item: `${PREFIX}-item`,
+  content: `${PREFIX}-content`
 };
 
 const Root = styled('div')(({ theme }) => ({

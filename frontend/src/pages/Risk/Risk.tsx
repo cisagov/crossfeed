@@ -24,7 +24,7 @@ import { Button as USWDSButton } from '@trussworks/react-uswds';
 
 const PREFIX = 'Risk';
 
-const riskStylingClasses = {
+const classes = {
   cardRoot: `${PREFIX}-cardRoot`,
   cardSmall: `${PREFIX}-cardSmall`,
   chartSmall: `${PREFIX}-chartSmall`,
@@ -56,7 +56,7 @@ const Root = styled('div')((
     theme
   }
 ) => ({
-  [`& .${riskStylingClasses.cardRoot}`]: {
+  [`& .${classes.cardRoot}`]: {
     boxSizing: 'border-box',
     marginBottom: '1rem',
     border: '2px solid #DCDEE0',
@@ -67,7 +67,7 @@ const Root = styled('div')((
     }
   },
 
-  [`& .${riskStylingClasses.cardSmall}`]: {
+  [`& .${classes.cardSmall}`]: {
     width: '100%',
     height: '355px',
     '& h3': {
@@ -76,16 +76,16 @@ const Root = styled('div')((
     overflow: 'hidden'
   },
 
-  [`& .${riskStylingClasses.chartSmall}`]: {
+  [`& .${classes.chartSmall}`]: {
     height: '85%'
   },
 
-  [`& .${riskStylingClasses.chartLarge}`]: {
+  [`& .${classes.chartLarge}`]: {
     height: '85.5%',
     width: '90%'
   },
 
-  [`& .${riskStylingClasses.chartHeader}`]: {
+  [`& .${classes.chartHeader}`]: {
     display: 'flex',
     justifyContent: 'space-between',
     '& h5': {
@@ -96,7 +96,7 @@ const Root = styled('div')((
     }
   },
 
-  [`& .${riskStylingClasses.cardBig}`]: {
+  [`& .${classes.cardBig}`]: {
     width: '100%',
     height: '889px',
     '& h3': {
@@ -105,11 +105,11 @@ const Root = styled('div')((
     overflow: 'hidden'
   },
 
-  [`& .${riskStylingClasses.body}`]: {
+  [`& .${classes.body}`]: {
     padding: '20px 30px'
   },
 
-  [`& .${riskStylingClasses.header}`]: {
+  [`& .${classes.header}`]: {
     height: '60px',
     backgroundColor: '#F8F9FA',
     top: 0,
@@ -120,7 +120,7 @@ const Root = styled('div')((
     paddingTop: 1
   },
 
-  [`& .${riskStylingClasses.footer}`]: {
+  [`& .${classes.footer}`]: {
     height: '60px',
     backgroundColor: '#F8F9FA',
     width: '100%',
@@ -138,7 +138,7 @@ const Root = styled('div')((
     }
   },
 
-  [`& .${riskStylingClasses.seeAll}`]: {
+  [`& .${classes.seeAll}`]: {
     float: 'right',
     marginTop: '5px',
     marginRight: '20px',
@@ -149,7 +149,7 @@ const Root = styled('div')((
     }
   },
 
-  [`& .${riskStylingClasses.root}`]: {
+  [`& .${classes.root}`]: {
     position: 'relative',
     flex: '1',
     width: '100%',
@@ -160,7 +160,7 @@ const Root = styled('div')((
     overflowY: 'hidden'
   },
 
-  [`& .${riskStylingClasses.contentWrapper}`]: {
+  [`& .${classes.contentWrapper}`]: {
     position: 'relative',
     flex: '1 1 auto',
     height: '100%',
@@ -170,14 +170,14 @@ const Root = styled('div')((
     marginTop: '1rem'
   },
 
-  [`& .${riskStylingClasses.content}`]: {
+  [`& .${classes.content}`]: {
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'stretch',
     flex: '1'
   },
 
-  [`& .${riskStylingClasses.panel}`]: {
+  [`& .${classes.panel}`]: {
     position: 'relative',
     height: '100%',
     overflowY: 'auto',
@@ -185,7 +185,7 @@ const Root = styled('div')((
     flex: '0 0 50%'
   },
 
-  [`& .${riskStylingClasses.miniCardRoot}`]: {
+  [`& .${classes.miniCardRoot}`]: {
     boxSizing: 'border-box',
     marginBottom: '1rem',
     '& em': {
@@ -206,7 +206,7 @@ const Root = styled('div')((
     borderRadius: '4px'
   },
 
-  [`& .${riskStylingClasses.cardInner}`]: {
+  [`& .${classes.cardInner}`]: {
     paddingLeft: 30,
     paddingRight: 30,
     display: 'flex',
@@ -222,20 +222,20 @@ const Root = styled('div')((
     height: 45
   },
 
-  [`& .${riskStylingClasses.miniCardLeft}`]: {
+  [`& .${classes.miniCardLeft}`]: {
     display: 'flex',
     flex: 1,
     justifyContent: 'flex-start',
     color: '#3D4551'
   },
 
-  [`& .${riskStylingClasses.miniCardCenter}`]: {
+  [`& .${classes.miniCardCenter}`]: {
     display: 'flex',
     flex: 1,
     justifyContent: 'center'
   },
 
-  [`& .${riskStylingClasses.button}`]: {
+  [`& .${classes.button}`]: {
     outline: 'none',
     border: 'none',
     background: 'none',
@@ -245,17 +245,17 @@ const Root = styled('div')((
     fontSize: '12px'
   },
 
-  [`& .${riskStylingClasses.underlined}`]: {
+  [`& .${classes.underlined}`]: {
     width: '80px',
     fontWeight: 'normal'
   },
 
-  [`& .${riskStylingClasses.vulnCount}`]: {
+  [`& .${classes.vulnCount}`]: {
     color: '#B51D09',
     flex: 0.5
   },
 
-  [`& .${riskStylingClasses.chip}`]: {
+  [`& .${classes.chip}`]: {
     color: '#3D4551',
     height: '26px',
     fontSize: '12px',
@@ -281,7 +281,7 @@ const Root = styled('div')((
     }
   },
 
-  [`& .${riskStylingClasses.chipWrapper}`]: {
+  [`& .${classes.chipWrapper}`]: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -290,7 +290,7 @@ const Root = styled('div')((
     marginLeft: '15px'
   },
 
-  [`& .${riskStylingClasses.note}`]: {
+  [`& .${classes.note}`]: {
     font: '12px',
     fontFamily: 'Public Sans',
     margin: '10px 10px 10px 25px',
@@ -600,8 +600,8 @@ const Risk: React.FC = (props) => {
     showCommon: boolean;
     data: VulnerabilityCount[];
   }) => (
-    <Paper elevation={0} className={riskStylingClasses.cardRoot}>
-      <Root className={riskStylingClasses.cardSmall}>
+    <Paper elevation={0} className={cardClasses.cardRoot}>
+      <Root className={cardClasses.cardSmall}>
         {showLatest && (
           <div className={riskStylingClasses.seeAll}>
             <h4>

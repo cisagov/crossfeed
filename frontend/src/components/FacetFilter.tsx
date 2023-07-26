@@ -78,29 +78,76 @@ export const FacetFilter: React.FC<Props> = (props) => {
 
   return (
     <>
-    (<Root className={classes.root}>
-      <FormGroup classes={{ root: classes.root }}>
-        {/* <input className={classes.inp} placeholder="Filter" /> */}
-        {options.map((opt) => (
-          <FormControlLabel
-            classes={{ label: classes.label, root: classes.formControl }}
-            key={opt.value}
-            control={
-              <Checkbox
-                checked={selected.includes(opt.value)}
-                onChange={(e) => handleChange(e, opt.value)}
-              />
-            }
-            label={
-              <>
-                <span>{opt.value}</span>
-                <span className={classes.count}>{opt.count}</span>
-              </>
-            }
-          />
-        ))}
-      </FormGroup>
-    </Root>);
+      <Root className={classes.root}>
+        <FormGroup classes={{ root: classes.root }}>
+          {/* <input className={classes.inp} placeholder="Filter" /> */}
+          {options.map((opt) => (
+            <FormControlLabel
+              classes={{ label: classes.content, root: classes.content }}
+              key={opt.value}
+              control={
+                <Checkbox
+                  checked={selected.includes(opt.value)}
+                  onChange={(e) => handleChange(e, opt.value)}
+                />
+              }
+              label={
+                <>
+                  <span>{opt.value}</span>
+                  <span className={classes.cta}>{opt.count}</span>
+                </>
+              }
+            />
+          ))}
+        </FormGroup>
+      </Root>
     </>
   );
 };
+
+const PREFIX = 'FacetFilter';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  cta: `${PREFIX}-cta`,
+  content: `${PREFIX}-content`
+};
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    width: '100%',
+    paddingTop: 0,
+    flexWrap: 'nowrap'
+  },
+  [`& .${classes.cta}`]: {
+    count: {}
+  },
+  [`& .${classes.content}`]: {
+    inp: {
+      border: 'none',
+      backgroundColor: '#fff',
+      width: '100%',
+      padding: '1rem',
+      boxShadow:
+        'inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF'
+    },
+    label: {
+      width: '100%',
+      display: 'flex',
+      flexFlow: 'row nowrap',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      fontSize: '0.9rem',
+      marginRight: 0,
+      '& span': {
+        display: 'inline-block'
+      },
+      '& $count': {
+        fontSize: '0.7rem',
+        color: theme.palette.grey[700]
+      }
+    },
+    formControl: {
+      width: 'calc(100% + 8px)'
+    }
+  }
+}));

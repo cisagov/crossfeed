@@ -56,7 +56,7 @@ interface Props {
     externalLink?: boolean;
   }[];
   styles?: any;
-  chilren?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const Subnav: React.FC<Props> = (props) => {
