@@ -1,13 +1,34 @@
 import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import clsx from 'classnames';
-import makeStyles from '@mui/styles/makeStyles';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import flagIcon from '../assets/us_flag_small.png';
 import govIcon from '../assets/icon-dot-gov.svg';
 import httpsIcon from '../assets/icon-https.svg';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const PREFIX = 'GovBanner';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  inner: `${PREFIX}-inner`,
+  flag: `${PREFIX}-flag`,
+  textWrap: `${PREFIX}-textWrap`,
+  text: `${PREFIX}-text`,
+  btn: `${PREFIX}-btn`,
+  btnExpand: `${PREFIX}-btnExpand`,
+  infoInner: `${PREFIX}-infoInner`,
+  info: `${PREFIX}-info`,
+  infoIcon: `${PREFIX}-infoIcon`,
+  infoText: `${PREFIX}-infoText`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.root}`]: {
     position: 'relative',
     width: '100%',
     backgroundColor: '#f0f0f0',
@@ -15,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center'
   },
-  inner: {
+
+  [`& .${classes.inner}`]: {
     width: '100%',
     display: 'flex',
     flexFlow: 'row nowrap',
@@ -27,10 +49,12 @@ const useStyles = makeStyles((theme) => ({
       padding: '2px 8px'
     }
   },
-  flag: {
+
+  [`& .${classes.flag}`]: {
     padding: `0 ${theme.spacing()}px`
   },
-  textWrap: {
+
+  [`& .${classes.textWrap}`]: {
     display: 'flex',
     flexFlow: 'row wrap',
     alignItems: 'center',
@@ -39,33 +63,38 @@ const useStyles = makeStyles((theme) => ({
       padding: `5px 0`
     }
   },
-  text: {
+
+  [`& .${classes.text}`]: {
     flex: '0 1 auto',
     marginRight: theme.spacing(),
     [theme.breakpoints.down('sm')]: {
       flex: '0 0 100%'
     }
   },
-  btn: {
+
+  [`& .${classes.btn}`]: {
     border: 'none',
     background: 'none',
     padding: 0,
     outline: 'none'
   },
-  btnExpand: {
+
+  [`& .${classes.btnExpand}`]: {
     display: 'flex',
     alignItems: 'center',
     color: '#005ea2',
     textDecoration: 'underline'
   },
-  infoInner: {
+
+  [`& .${classes.infoInner}`]: {
     maxWidth: 800,
     margin: '0 auto',
     lineHeight: 1.5,
     flexFlow: 'row wrap',
     padding: `${theme.spacing(3)} 16px`
   },
-  info: {
+
+  [`& .${classes.info}`]: {
     display: 'flex',
     flex: '1 1 50%',
     padding: `${theme.spacing(2)} ${theme.spacing(2)}`,
@@ -74,10 +103,12 @@ const useStyles = makeStyles((theme) => ({
       padding: `${theme.spacing(2)} 0`
     }
   },
-  infoIcon: {
+
+  [`& .${classes.infoIcon}`]: {
     minWidth: 40
   },
-  infoText: {
+
+  [`& .${classes.infoText}`]: {
     fontSize: '0.87rem',
     '& p': {
       margin: `0 ${theme.spacing(2)}`
@@ -86,11 +117,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const GovBanner: React.FC = () => {
-  const classes = useStyles();
+
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <>
+    (<Root>
       <div className={classes.root}>
         <div className={classes.inner}>
           <img src={flagIcon} alt="usa flag" className={classes.flag} />
@@ -147,6 +178,6 @@ export const GovBanner: React.FC = () => {
           </div>
         </div>
       )}
-    </>
+    </Root>)
   );
 };

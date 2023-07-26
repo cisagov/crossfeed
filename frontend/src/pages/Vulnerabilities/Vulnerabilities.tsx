@@ -1,14 +1,35 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
+import { styled } from '@mui/material/styles';
 import { TableInstance, Filters, SortingRule } from 'react-table';
 import { Query } from 'types';
 import { useAuthContext } from 'context';
 import { Table, Paginator } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import makeStyles from '@mui/styles/makeStyles';
 import { Subnav } from 'components';
 import { parse } from 'query-string';
 import { createColumns, createGroupedColumns } from './columns';
+
+const PREFIX = 'Vulnerabilities';
+
+const classes = {
+  contentWrapper: `${PREFIX}-contentWrapper`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.contentWrapper}`]: {
+    position: 'relative',
+    flex: '1 1 auto',
+    height: '100%',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    overflowY: 'hidden'
+  }
+}));
 
 export interface ApiResponse {
   result: Vulnerability[];
@@ -37,7 +58,7 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
   const [totalResults, setTotalResults] = useState(0);
   const tableRef = useRef<TableInstance<Vulnerability>>(null);
-  const listClasses = useStyles();
+
   const [noResults, setNoResults] = useState(false);
 
   const updateVulnerability = useCallback(
@@ -197,7 +218,7 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
   }
 
   return (
-    <div>
+    <Root>
       <div className={listClasses.contentWrapper}>
         <Subnav
           items={[
@@ -225,19 +246,8 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
           />
         </div>
       </div>
-    </div>
+    </Root>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  contentWrapper: {
-    position: 'relative',
-    flex: '1 1 auto',
-    height: '100%',
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    overflowY: 'hidden'
-  }
-}));
 
 export default Vulnerabilities;
