@@ -46,7 +46,7 @@ export class Domain extends BaseEntity {
   })
   fromRootDomain: string;
 
-  /** Scan that discovered this domain (findomain, etc) */
+  /** Scan that discovered this domain (findomain, amass) */
   @Column({
     nullable: true
   })
