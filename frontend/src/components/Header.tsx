@@ -44,11 +44,7 @@ const classes = {
   option: `${PREFIX}-option`
 };
 
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
+const Root = styled('div')(({ theme }) => ({
   [`& .${classes.inner}`]: {
     maxWidth: 1440,
     width: '250%',
@@ -438,12 +434,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                       )}
                       onChange={(
                         event: any,
-                        value:
-                          | Organization
-                          | {
-                              name: string;
-                            }
-                          | undefined
+                        value: Organization | { name: string } | undefined
                       ) => {
                         if (value && 'id' in value) {
                           setOrganization(value);

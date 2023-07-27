@@ -26,11 +26,7 @@ const classes = {
   headerRow: `${PREFIX}-headerRow`
 };
 
-const StyledDialog = styled(Dialog)((
-  {
-    theme
-  }
-) => ({
+const StyledDialog = styled(Dialog)(({ theme }) => ({
   [`& .${classes.chip}`]: {
     backgroundColor: '#C4C4C4',
     color: 'white',
@@ -127,8 +123,6 @@ export const OrganizationForm: React.FC<{
       [name]: value
     }));
   };
-
-
 
   return (
     <StyledDialog

@@ -16,11 +16,7 @@ const classes = {
   option: `${PREFIX}-option`
 };
 
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
+const Root = styled('div')(({ theme }) => ({
   [`&.${classes.root}`]: {
     zIndex: 100,
     display: 'flex',
@@ -106,8 +102,6 @@ export const SortBar: React.FC<Props> = (props) => {
     children,
     existingSavedSearch
   } = props;
-
-
 
   const toggleDirection = () => {
     setSort(sortField, sortDirection === 'asc' ? 'desc' : 'asc');

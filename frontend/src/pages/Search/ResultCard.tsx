@@ -22,11 +22,7 @@ const classes = {
   expandMore: `${PREFIX}-expandMore`
 };
 
-const StyledPaper = styled(Paper)((
-  {
-    theme
-  }
-) => ({
+const StyledPaper = styled(Paper)(({ theme }) => ({
   [`& .${classes.root}`]: {
     boxSizing: 'border-box',
     marginBottom: '1rem',
@@ -170,7 +166,6 @@ const filterExpanded = (
 };
 
 export const ResultCard: React.FC<Props> = (props) => {
-
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const {
     id,

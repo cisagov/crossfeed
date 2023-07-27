@@ -61,7 +61,7 @@ const classes = {
   count: `${PREFIX}-count`,
   inp: `${PREFIX}-inp`,
   label: `${PREFIX}-label`,
-  formControl: `${PREFIX}-formControl`,
+  formControl: `${PREFIX}-formControl`
 };
 
 const Root = styled('div')(({ theme }) => ({
@@ -76,12 +76,12 @@ const Root = styled('div')(({ theme }) => ({
   },
 
   [`& .${classes.inp}`]: {
-      border: 'none',
-      backgroundColor: '#fff',
-      width: '100%',
-      padding: '1rem',
-      boxShadow: 'inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF'
-    },
+    border: 'none',
+    backgroundColor: '#fff',
+    width: '100%',
+    padding: '1rem',
+    boxShadow: 'inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF'
+  },
 
   [`& .${classes.label}`]: {
     width: '100%',
@@ -99,9 +99,8 @@ const Root = styled('div')(({ theme }) => ({
       color: theme.palette.grey[700]
     }
   },
-  
+
   [`& .${classes.formControl}`]: {
     width: 'calc(100% + 8px)'
-  },
+  }
 }));
-

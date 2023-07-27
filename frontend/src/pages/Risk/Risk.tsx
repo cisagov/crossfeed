@@ -88,7 +88,6 @@ const Risk: React.FC = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [current, setCurrent] = useState(1);
 
-
   const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
   const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];

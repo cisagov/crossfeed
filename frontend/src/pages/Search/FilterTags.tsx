@@ -9,11 +9,7 @@ const classes = {
   chip: `${PREFIX}-chip`
 };
 
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
+const Root = styled('div')(({ theme }) => ({
   [`& .${classes.chip}`]: {
     margin: '0 0.5rem'
   }
@@ -34,7 +30,6 @@ type FlatFilters = {
 
 export const FilterTags: React.FC<Props> = (props) => {
   const { filters, removeFilter } = props;
-
 
   const filtersByColumn: FlatFilters = useMemo(
     () =>

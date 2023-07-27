@@ -248,6 +248,3 @@ const Root = styled('div')(({ theme }) => ({
     overflowY: 'hidden'
   }
 }));
-
-
-

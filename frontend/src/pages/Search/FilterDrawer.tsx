@@ -20,8 +20,6 @@ interface Props {
 }
 
 const FiltersApplied: React.FC = () => {
-
-
   return (
     <div className={classes.applied}>
       <FiberManualRecordRounded /> Filters Applied
@@ -31,7 +29,6 @@ const FiltersApplied: React.FC = () => {
 
 export const FilterDrawer: React.FC<Props> = (props) => {
   const { filters, addFilter, removeFilter, facets, clearFilters } = props;
-
 
   const filtersByColumn = useMemo(
     () =>
@@ -86,7 +83,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
           root: classes.root,
           disabled: classes.disabled,
           expanded: classes.expanded
-        }}>
+        }}
+      >
         <AccordionSummary
           expandIcon={<ExpandMore />}
           classes={{
@@ -94,7 +92,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
             content: classes.content,
             disabled: classes.disabled2,
             expanded: classes.expanded2
-          }}>
+          }}
+        >
           <div>IP(s)</div>
           {filtersByColumn['ip']?.length > 0 && <FiltersApplied />}
         </AccordionSummary>
@@ -114,7 +113,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
           root: classes.root,
           disabled: classes.disabled,
           expanded: classes.expanded
-        }}>
+        }}
+      >
         <AccordionSummary
           expandIcon={<ExpandMore />}
           classes={{
@@ -122,7 +122,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
             content: classes.content,
             disabled: classes.disabled2,
             expanded: classes.expanded2
-          }}>
+          }}
+        >
           <div>Domain(s)</div>
           {filtersByColumn['name']?.length > 0 && <FiltersApplied />}
         </AccordionSummary>
@@ -143,7 +144,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
             root: classes.root,
             disabled: classes.disabled,
             expanded: classes.expanded
-          }}>
+          }}
+        >
           <AccordionSummary
             expandIcon={<ExpandMore />}
             classes={{
@@ -151,7 +153,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
               content: classes.content,
               disabled: classes.disabled2,
               expanded: classes.expanded2
-            }}>
+            }}
+          >
             <div>Root Domain(s)</div>
             {filtersByColumn['fromRootDomain']?.length > 0 && (
               <FiltersApplied />
@@ -177,7 +180,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
             root: classes.root,
             disabled: classes.disabled,
             expanded: classes.expanded
-          }}>
+          }}
+        >
           <AccordionSummary
             expandIcon={<ExpandMore />}
             classes={{
@@ -185,7 +189,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
               content: classes.content,
               disabled: classes.disabled2,
               expanded: classes.expanded2
-            }}>
+            }}
+          >
             <div>Port(s)</div>
             {filtersByColumn['services.port']?.length > 0 && <FiltersApplied />}
           </AccordionSummary>
@@ -209,7 +214,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
             root: classes.root,
             disabled: classes.disabled,
             expanded: classes.expanded
-          }}>
+          }}
+        >
           <AccordionSummary
             expandIcon={<ExpandMore />}
             classes={{
@@ -217,7 +223,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
               content: classes.content,
               disabled: classes.disabled2,
               expanded: classes.expanded2
-            }}>
+            }}
+          >
             <div>CVE(s)</div>
             {filtersByColumn['vulnerabilities.cve']?.length > 0 && (
               <FiltersApplied />
@@ -245,7 +252,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
             root: classes.root,
             disabled: classes.disabled,
             expanded: classes.expanded
-          }}>
+          }}
+        >
           <AccordionSummary
             expandIcon={<ExpandMore />}
             classes={{
@@ -253,7 +261,8 @@ export const FilterDrawer: React.FC<Props> = (props) => {
               content: classes.content,
               disabled: classes.disabled2,
               expanded: classes.expanded2
-            }}>
+            }}
+          >
             <div>Severity</div>
             {filtersByColumn['vulnerabilities.severity']?.length > 0 && (
               <FiltersApplied />

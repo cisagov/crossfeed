@@ -12,11 +12,7 @@ const classes = {
   error: `${PREFIX}-error`
 };
 
-const Root = styled('form')((
-  {
-    theme
-  }
-) => ({
+const Root = styled('form')(({ theme }) => ({
   [`&.${classes.form}`]: {
     width: '100%',
     background: 'none'
@@ -57,7 +53,6 @@ interface Props {
 export const TaggedArrayInput: React.FC<Props> = (props) => {
   const { values, onAddTag, onRemoveTag, placeholder = '' } = props;
   const [inpValue, setInpValue] = useState('');
-
 
   const error = useMemo(
     () => (values.includes(inpValue) ? 'Filters must be unique' : ''),

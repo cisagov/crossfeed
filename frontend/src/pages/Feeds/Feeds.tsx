@@ -37,11 +37,7 @@ const classes = {
   barInner: `${PREFIX}-barInner`
 };
 
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
+const Root = styled('div')(({ theme }) => ({
   [`&.${classes.root}`]: {
     position: 'relative',
     flex: '1',
@@ -217,7 +213,6 @@ const STANDARD_USER = 1;
 const ALL_USERS = GLOBAL_VIEW | STANDARD_USER;
 
 const Feeds = () => {
-
   const { user, apiGet, apiDelete } = useAuthContext();
   const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
   const [pageState, setPageState] = useState({

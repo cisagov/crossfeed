@@ -15,11 +15,7 @@ const classes = {
   actionBtn: `${PREFIX}-actionBtn`
 };
 
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
+const Root = styled('div')(({ theme }) => ({
   [`&.${classes.wrapper}`]: {
     zIndex: 101,
     width: '100%',
@@ -109,7 +105,6 @@ export const SearchBar = React.forwardRef<HTMLInputElement, Props>(
     const [hasFocus, setHasFocus] = useState(false);
     const [focusTimer, setFocusTimer] = useState<Timer>();
     const [query, setQuery] = useState<string>(initialValue);
-
 
     const { value } = props;
     useEffect(() => {

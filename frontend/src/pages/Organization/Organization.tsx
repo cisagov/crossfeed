@@ -51,11 +51,7 @@ const classes = {
   headerRow: `${PREFIX}-headerRow`
 };
 
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
+const Root = styled('div')(({ theme }) => ({
   [`& .${classes.header}`]: {
     background: '#F9F9F9'
   },

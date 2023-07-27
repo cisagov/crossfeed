@@ -14,11 +14,7 @@ const classes = {
 };
 
 // TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
+const Root = styled('div')(({ theme }) => ({
   [`& .${classes.cardRoot}`]: {
     cursor: 'pointer',
     boxSizing: 'border-box',
@@ -45,7 +41,6 @@ export const OrganizationList: React.FC<{
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const history = useHistory();
-
 
   const onSubmit = async (body: Object) => {
     try {
@@ -82,7 +77,7 @@ export const OrganizationList: React.FC<{
   }, [fetchOrganizations, parent]);
 
   return (
-    (<Root>
+    <Root>
       <Grid
         container
         spacing={2}
@@ -129,6 +124,6 @@ export const OrganizationList: React.FC<{
         type="create"
         parent={parent}
       ></OrganizationForm>
-    </Root>)
+    </Root>
   );
 };

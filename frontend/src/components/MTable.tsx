@@ -18,11 +18,7 @@ const classes = {
   cell: `${PREFIX}-cell`
 };
 
-const StyledTable = styled(Table)((
-  {
-    theme
-  }
-) => ({
+const StyledTable = styled(Table)(({ theme }) => ({
   [`& .${classes.head}`]: {
     backgroundColor: '#E8EAEC'
   },
@@ -39,7 +35,6 @@ interface Props<T extends object> extends TableProps {
 
 export const MTable = <T extends object>(props: Props<T>) => {
   const { instance, footerRows, ...rest } = props;
-
 
   return (
     <StyledTable {...instance.getTableProps} {...rest}>

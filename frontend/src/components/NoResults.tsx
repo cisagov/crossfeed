@@ -10,11 +10,7 @@ const classes = {
   logo: `${PREFIX}-logo`
 };
 
-const StyledPaper = styled(Paper)((
-  {
-    theme
-  }
-) => ({
+const StyledPaper = styled(Paper)(({ theme }) => ({
   [`&.${classes.card}`]: {
     marginTop: '10px',
     boxSizing: 'border-box',
@@ -51,7 +47,6 @@ interface Props {
 }
 
 export const NoResults: React.FC<Props> = (props) => {
-
   return (
     <StyledPaper className={classes.card}>
       <img src={logo} className={classes.logo} alt="Crossfeed Icon" />

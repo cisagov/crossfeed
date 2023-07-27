@@ -114,11 +114,10 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 export const GovBanner: React.FC = () => {
-
   const [expanded, setExpanded] = useState(false);
 
   return (
-    (<Root>
+    <Root>
       <div className={classes.root}>
         <div className={classes.inner}>
           <img src={flagIcon} alt="usa flag" className={classes.flag} />
@@ -175,6 +174,6 @@ export const GovBanner: React.FC = () => {
           </div>
         </div>
       )}
-    </Root>)
+    </Root>
   );
 };

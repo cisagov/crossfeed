@@ -13,11 +13,7 @@ const classes = {
   exportButton: `${PREFIX}-exportButton`
 };
 
-const StyledPaper = styled(Paper)((
-  {
-    theme
-  }
-) => ({
+const StyledPaper = styled(Paper)(({ theme }) => ({
   [`& .${classes.pagination}`]: {
     height: 'auto',
     flex: 0,

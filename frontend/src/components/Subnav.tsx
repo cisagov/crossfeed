@@ -1,5 +1,5 @@
 import { Paper } from '@mui/material';
-import { makeStyles, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const Subnav: React.FC<Props> = (props) => {
-  const { items, children, styles } = props;
+  const { items, children} = props;
 
   return (
     <StyledPaper classes={{ root: classes.root }}>
@@ -61,7 +61,7 @@ const classes = {
   styles: `${PREFIX}-styles`
 };
 
-const StyledPaper = styled(Paper)(({ theme })=> ({
+const StyledPaper = styled(Paper)(({ theme }) => ({
   [`& .${classes.root}`]: {
     width: '100%',
     padding: '0 1rem',
@@ -69,7 +69,7 @@ const StyledPaper = styled(Paper)(({ theme })=> ({
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'center',
-    paddingLeft: '15%',
+    paddingLeft: '15%'
   },
   [`& .${classes.link}`]: {
     display: 'block',
@@ -85,5 +85,5 @@ const StyledPaper = styled(Paper)(({ theme })=> ({
   },
   [`& .${classes.flex}`]: {
     flex: 1
-  },
+  }
 }));

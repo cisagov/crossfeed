@@ -14,11 +14,7 @@ const classes = {
   root: `${PREFIX}-root`
 };
 
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
+const Root = styled('div')(({ theme }) => ({
   [`&.${classes.root}`]: {
     flexShrink: 0,
     marginLeft: theme.spacing(2.5)
@@ -37,7 +33,6 @@ interface Props {
 
 export const TablePaginationActions = (props: Props) => {
   const { count, page, rowsPerPage, onChangePage } = props;
-
 
   const handleFirstPageButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>

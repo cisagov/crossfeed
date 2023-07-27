@@ -16,11 +16,7 @@ const classes = {
 };
 
 // TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
+const Root = styled('div')(({ theme }) => ({
   [`& .${classes.inner}`]: {
     maxWidth: 1440,
     width: '100%',
@@ -103,7 +99,6 @@ export const NavItem: React.FC<Props> = (props) => {
   const [mouseInButton, setMouseInButton] = useState(false);
   const [mouseInMenu, setMouseInMenu] = useState(false);
 
-
   const onClickButton = (e: any) => {
     setAnchor(e.currentTarget);
     setMouseInButton(true);
@@ -123,7 +118,7 @@ export const NavItem: React.FC<Props> = (props) => {
   };
 
   return (
-    (<Root>
+    <Root>
       {path ? (
         <NavLink
           to={path}
@@ -175,6 +170,6 @@ export const NavItem: React.FC<Props> = (props) => {
           ))}
         </Menu>
       )}
-    </Root>)
+    </Root>
   );
 };

@@ -11,7 +11,7 @@ interface Props {
 export const DefinitionList: React.FC<Props> = (props) => {
   const { items } = props;
   return (
-    (<Root className={classes.root}>
+    <Root className={classes.root}>
       <dl className={classes.list}>
         {items.map(({ label, value }) => (
           <div className={classes.root} key={value}>
@@ -20,7 +20,7 @@ export const DefinitionList: React.FC<Props> = (props) => {
           </div>
         ))}
       </dl>
-    </Root>)
+    </Root>
   );
 };
 
@@ -29,8 +29,8 @@ const PREFIX = 'DefinitionList';
 const classes = {
   root: `${PREFIX}-root`,
   content: `${PREFIX}-content`,
-  list:`${PREFIX}-list`,
-  item:`${PREFIX}-item`
+  list: `${PREFIX}-list`,
+  item: `${PREFIX}-item`
 };
 
 const Root = styled('div')(({ theme }) => ({
@@ -40,8 +40,8 @@ const Root = styled('div')(({ theme }) => ({
   },
 
   [`&. ${classes.list}`]: {
-      width: '100%',
-      margin: 0
+    width: '100%',
+    margin: 0
   },
 
   [`& .${classes.item}`]: {
@@ -61,4 +61,3 @@ const Root = styled('div')(({ theme }) => ({
     }
   }
 }));
-
