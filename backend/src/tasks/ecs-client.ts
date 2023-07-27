@@ -100,6 +100,7 @@ class ECSClient {
             `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`,
             `WORKER_USER_AGENT=${process.env.WORKER_USER_AGENT}`,
             `SHODAN_API_KEY=${process.env.SHODAN_API_KEY}`,
+            `HIBP_API_KEY=${process.env.HIBP_API_KEY}`,
             `SIXGILL_CLIENT_ID=${process.env.SIXGILL_CLIENT_ID}`,
             `SIXGILL_CLIENT_SECRET=${process.env.SIXGILL_CLIENT_SECRET}`,
             `PE_SHODAN_API_KEYS=${process.env.PE_SHODAN_API_KEYS}`,

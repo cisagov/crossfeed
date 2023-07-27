@@ -32,6 +32,7 @@ RUN unzip findomain-linux.zip && chmod +x findomain && cp findomain /usr/bin/fin
 RUN go mod init crossfeed-worker
 
 RUN go install github.com/facebookincubator/nvdtools/...@latest
+RUN go install -v github.com/owasp-amass/amass/v3/...@master
 
 FROM ruby:alpine as rubyBuild
 
@@ -73,6 +74,7 @@ RUN wget https://publicsuffix.org/list/public_suffix_list.dat --no-use-server-ti
 COPY --from=build /app/dist/worker.bundle.js worker.bundle.js
 
 COPY --from=deps /usr/bin/findomain /usr/bin/
+COPY --from=deps /go/bin/amass /usr/bin/
 COPY --from=deps /go/bin/csv2cpe /go/bin/nvdsync /go/bin/cpe2cve /usr/bin/
 
 COPY --from=deps /etc/ssl/certs /etc/ssl/certs
