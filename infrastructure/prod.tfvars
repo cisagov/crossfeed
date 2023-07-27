@@ -28,7 +28,6 @@ ssm_worker_signature_private_key  = "/crossfeed/prod/WORKER_SIGNATURE_PRIVATE_KE
 ssm_censys_api_id                 = "/crossfeed/prod/CENSYS_API_ID"
 ssm_censys_api_secret             = "/crossfeed/prod/CENSYS_API_SECRET"
 ssm_shodan_api_key                = "/crossfeed/prod/SHODAN_API_KEY"
-ssm_hibp_api_key                  = "/crossfeed/prod/HIBP_API_KEY"
 ssm_pe_shodan_api_keys            = "/crossfeed/prod/PE_SHODAN_API_KEYS"
 ssm_sixgill_client_id             = "/crossfeed/prod/SIXGILL_CLIENT_ID"
 ssm_sixgill_client_secret         = "/crossfeed/prod/SIXGILL_CLIENT_SECRET"

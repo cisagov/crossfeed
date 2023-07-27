@@ -177,12 +177,6 @@ variable "ssm_shodan_api_key" {
   default     = "/crossfeed/staging/SHODAN_API_KEY"
 }
 
-variable "ssm_hibp_api_key" {
-  description = "ssm_hibp_api_key"
-  type        = string
-  default     = "/crossfeed/staging/HIBP_API_KEY"
-}
-
 variable "ssm_pe_shodan_api_keys" {
   description = "ssm_pe_shodan_api_keys"
   type        = string
