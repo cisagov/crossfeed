@@ -67,6 +67,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     global: false,
     description: 'Passive discovery of subdomains from public certificates'
   },
+  amass: {
+    type: 'fargate',
+    isPassive: false,
+    global: false,
+    description:
+      'Open source tool that integrates passive APIs and active subdomain enumeration in order to discover target subdomains'
+  },
   findomain: {
     type: 'fargate',
     isPassive: true,
@@ -165,6 +172,21 @@ export const SCAN_SCHEMA: ScanSchema = {
     memory: '4096',
     description: 'Scrapes all webpages on a given domain, respecting robots.txt'
   },
+  hibp: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    cpu: '2048',
+    memory: '16384',
+    description:
+      'Finds emails that have appeared in breaches related to a given domain'
+  },
+  lookingGlass: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'Finds vulnerabilities and malware from the LookingGlass API'
+  },
   dnstwist: {
     type: 'fargate',
     isPassive: true,
@@ -173,6 +195,13 @@ export const SCAN_SCHEMA: ScanSchema = {
     memory: '16384',
     description:
       'Domain name permutation engine for detecting similar registered domains.'
+  },
+  rootDomainSync: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description:
+      'Creates domains from root domains by doing a single DNS lookup for each root domain.'
   },
   savedSearch: {
     type: 'fargate',
