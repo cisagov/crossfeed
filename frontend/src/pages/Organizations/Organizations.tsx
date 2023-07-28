@@ -13,11 +13,7 @@ const classes = {
   headerLabel: `${PREFIX}-headerLabel`
 };
 
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
+const Root = styled('div')(({ theme }) => ({
   [`& .${classes.header}`]: {
     background: '#F9F9F9'
   },
@@ -37,7 +33,6 @@ const Root = styled('div')((
 export const Organizations: React.FC = () => {
   const { user, apiGet, apiPost } = useAuthContext();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-
 
   const fetchOrganizations = useCallback(async () => {
     try {

@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const Subnav: React.FC<Props> = (props) => {
-  const { items, children} = props;
+  const { items, children } = props;
 
   return (
     <StyledPaper classes={{ root: classes.root }}>
