@@ -351,10 +351,6 @@ resource "aws_s3_bucket" "export_bucket" {
   }
 }
 
-resource "aws_s3_bucket_acl" "export_bucket" {
-  bucket = aws_s3_bucket.export_bucket.id
-  acl    = "private"
-}
 resource "aws_s3_bucket_server_side_encryption_configuration" "export_bucket" {
   bucket = aws_s3_bucket.export_bucket.id
   rule {

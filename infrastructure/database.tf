@@ -72,7 +72,7 @@ data "aws_ami" "ubuntu" {
   }
 
   # Canonical
-  owners = ["099720109477"]
+  owners = ["513442679011"]
 }
 
 resource "aws_iam_role" "db_accessor" {
@@ -146,6 +146,7 @@ resource "aws_instance" "db_accessor" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Name    = "db_accessor"
   }
   root_block_device {
     volume_size = 1000
@@ -156,7 +157,6 @@ resource "aws_instance" "db_accessor" {
 
   iam_instance_profile = aws_iam_instance_profile.db_accessor.id
   user_data            = file("./ssm-agent-install.sh")
-
   lifecycle {
     # prevent_destroy = true
     ignore_changes = [ami]
@@ -238,11 +238,6 @@ resource "aws_s3_bucket" "reports_bucket" {
   }
 }
 
-resource "aws_s3_bucket_acl" "reports_bucket" {
-  bucket = aws_s3_bucket.reports_bucket.id
-  acl    = "private"
-}
-
 resource "aws_s3_bucket_server_side_encryption_configuration" "reports_bucket" {
   bucket = aws_s3_bucket.reports_bucket.id
   rule {
@@ -273,10 +268,6 @@ resource "aws_s3_bucket" "pe_db_backups_bucket" {
   }
 }
 
-resource "aws_s3_bucket_acl" "pe_db_backups_bucket" {
-  bucket = aws_s3_bucket.pe_db_backups_bucket.id
-  acl    = "private"
-}
 resource "aws_s3_bucket_server_side_encryption_configuration" "pe_db_backups_bucket" {
   bucket = aws_s3_bucket.pe_db_backups_bucket.id
   rule {

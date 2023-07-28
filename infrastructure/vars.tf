@@ -93,6 +93,13 @@ variable "ssm_pe_db_password" {
   type        = string
   default     = "/crossfeed/staging/PE_DB_PASSWORD"
 }
+
+variable "ssm_crossfeed_vpc_name" {
+  description = "ssm_crossfeed_vpc_name"
+  type        = string
+  default     = "/crossfeed/staging/VPC_NAME"
+}
+
 variable "ssm_lambda_sg" {
   description = "ssm_lambda_sg"
   type        = string
@@ -212,12 +219,6 @@ variable "ssm_lg_workspace_name" {
   description = "ssm_lg_workspace_name"
   type        = string
   default     = "/crossfeed/staging/LG_WORKSPACE_NAME"
-}
-
-variable "cloudfront_name" {
-  description = "cloudfront_name"
-  type        = string
-  default     = "Crossfeed Staging Frontend"
 }
 
 variable "db_group_name" {

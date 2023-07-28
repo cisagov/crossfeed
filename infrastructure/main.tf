@@ -32,10 +32,6 @@ resource "aws_s3_bucket" "logging_bucket" {
   }
 }
 
-resource "aws_s3_bucket_acl" "logging_bucket" {
-  bucket = aws_s3_bucket.logging_bucket.id
-  acl    = "private"
-}
 resource "aws_s3_bucket_server_side_encryption_configuration" "logging_bucket" {
   bucket = aws_s3_bucket.logging_bucket.id
   rule {

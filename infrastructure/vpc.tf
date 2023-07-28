@@ -1,70 +1,79 @@
+data "aws_ssm_parameter" "vpc_name" { name = var.ssm_crossfeed_vpc_name }
+
 resource "aws_vpc" "crossfeed_vpc" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = "10.236.32.0/21"
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
     Project = var.project
+    Name = data.aws_ssm_parameter.vpc_name.value
   }
 }
 
 resource "aws_subnet" "db_1" {
   availability_zone = data.aws_availability_zones.available.names[0]
   vpc_id            = aws_vpc.crossfeed_vpc.id
-  cidr_block        = "10.0.1.0/28"
+  cidr_block        = "10.236.36.0/24"
 
   tags = {
     Project = var.project
+    Name = "Crossfeed-Stage_GovEast_Private-A"
   }
 }
 
 resource "aws_subnet" "db_2" {
   availability_zone = data.aws_availability_zones.available.names[1]
   vpc_id            = aws_vpc.crossfeed_vpc.id
-  cidr_block        = "10.0.1.16/28"
+  cidr_block        = "10.236.37.0/24"
 
   tags = {
     Project = var.project
+    Name = "Crossfeed-Stage_GovEast_Private-B"
   }
 }
 
 resource "aws_subnet" "backend" {
-  availability_zone = data.aws_availability_zones.available.names[1]
+  availability_zone = data.aws_availability_zones.available.names[0]
   vpc_id            = aws_vpc.crossfeed_vpc.id
-  cidr_block        = "10.0.2.0/24"
+  cidr_block        = "10.236.34.0/26"
 
   tags = {
     Project = var.project
+    Name = "Crossfeed-Stage_GovEast_Endpoint-A"
   }
 }
 
 resource "aws_subnet" "worker" {
   availability_zone = data.aws_availability_zones.available.names[1]
   vpc_id            = aws_vpc.crossfeed_vpc.id
-  cidr_block        = "10.0.3.0/24"
+  cidr_block        = "10.236.34.64/26"
 
   tags = {
     Project = var.project
     Stage   = var.stage
+    Name    = "Crossfeed-Stage_GovEast_Endpoint-B"
   }
 }
 
 resource "aws_subnet" "es_1" {
-  availability_zone = data.aws_availability_zones.available.names[0]
+  availability_zone = data.aws_availability_zones.available.names[2]
   vpc_id            = aws_vpc.crossfeed_vpc.id
-  cidr_block        = "10.0.4.0/28"
+  cidr_block        = "10.236.38.0/24"
 
   tags = {
     Project = var.project
+    Name = "Crossfeed-Stage_GovEast_Private-C"
   }
 }
 
 resource "aws_subnet" "matomo_1" {
-  availability_zone = data.aws_availability_zones.available.names[0]
+  availability_zone = data.aws_availability_zones.available.names[2]
   vpc_id            = aws_vpc.crossfeed_vpc.id
-  cidr_block        = "10.0.5.0/28"
+  cidr_block        = "10.236.34.128/26"
 
   tags = {
     Project = var.project
+    Name = "Crossfeed-Stage_GovEast_Endpoint-C"
   }
 }
 
