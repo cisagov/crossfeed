@@ -144,6 +144,7 @@ class Scheduler {
         // For running server on localhost -- doesn't apply in jest tests, though.
         numChunks = 1;
       }
+      numChunks = numChunks > 100 ? 100 : numChunks;
       for (let chunkNumber = 0; chunkNumber < numChunks; chunkNumber++) {
         await this.launchSingleScanTask({
           organizations,
