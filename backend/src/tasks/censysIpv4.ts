@@ -119,10 +119,17 @@ const downloadPath = async (
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { chunkNumber, numChunks, organizationId } = commandOptions;
+  const { chunkNumber, organizationId } = commandOptions;
+
+  const numChucksRawValue = commandOptions.numChunks;
+  const numChunks =  (typeof(numChucksRawValue) == 'number' && numChucksRawValue > 100) ? 100 : numChucksRawValue;
 
   if (chunkNumber === undefined || numChunks === undefined) {
     throw new Error('Chunks not specified.');
+  }
+
+  if (chunkNumber > 100) {
+    throw new Error('Chunk number must be less than 100.');
   }
 
   const {
