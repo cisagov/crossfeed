@@ -19,4 +19,3 @@ export * from './AutoCompletedResults';
 export * from './FacetFilter';
 export * from './Subnav';
 export * from './ModalToggleButton';
-export * from './Footer';
