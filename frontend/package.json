@@ -45,7 +45,7 @@
     "resolve-url-loader": "^5.0.0",
     "universal-cookie": "^4.0.4",
     "uswds": "^2.13.3",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^3.4.0"
   },
   "overrides": {
     "@mattiasbuelens/web-streams-polyfill": "npm:web-streams-polyfill",
