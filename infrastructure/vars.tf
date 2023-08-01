@@ -4,6 +4,12 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "aws_other_region" {
+  description = "aws_other_region"
+  type        = string
+  default     = "us-east-1"
+}
+
 variable "project" {
   description = "project"
   type        = string

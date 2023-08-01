@@ -29,7 +29,7 @@ resource "aws_elasticsearch_domain" "es" {
       "Action": "es:ESHttp*",
       "Principal": "*",
       "Effect": "Allow",
-      "Resource": "arn:aws:es:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:domain/crossfeed-${var.stage}/*"
+      "Resource": "arn:aws-us-gov:es:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:domain/crossfeed-${var.stage}/*"
     }
   ]
 }
@@ -99,7 +99,7 @@ resource "aws_cloudwatch_log_resource_policy" "es" {
         "logs:PutLogEventsBatch",
         "logs:CreateLogStream"
       ],
-      "Resource": "arn:aws:logs:*"
+      "Resource": "arn:aws-us-gov:logs:*"
     }
   ]
 }

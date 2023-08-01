@@ -1,4 +1,5 @@
 resource "aws_cognito_user_pool" "pool" {
+  provider                 = aws.other
   name                     = var.user_pool_name
   mfa_configuration        = "ON"
   username_attributes      = ["email"]
@@ -14,9 +15,17 @@ resource "aws_cognito_user_pool" "pool" {
     reply_to_email_address = var.ses_support_email_replyto
   }
 
+  # Users can recover their accounts by verifying their email address (required mechanism)
   verification_message_template {
     email_subject = "Crossfeed verification code"
     email_message = "Your verification code is {####}. Please enter this code in when logging into Crossfeed to complete your account setup."
+  }
+
+  account_recovery_setting {
+    recovery_mechanism {
+      name     = "verified_email"
+      priority = 1
+    }
   }
 
   tags = {
@@ -25,15 +34,18 @@ resource "aws_cognito_user_pool" "pool" {
 }
 
 resource "aws_ses_email_identity" "default" {
-  email = var.ses_support_email_sender
+  provider = aws.other
+  email    = var.ses_support_email_sender
 }
 
 resource "aws_cognito_user_pool_domain" "auth_domain" {
+  provider     = aws.other
   domain       = var.user_pool_domain
   user_pool_id = aws_cognito_user_pool.pool.id
 }
 
 resource "aws_cognito_user_pool_client" "client" {
+  provider                             = aws.other
   name                                 = "crossfeed"
   user_pool_id                         = aws_cognito_user_pool.pool.id
   callback_urls                        = ["http://localhost"]

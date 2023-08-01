@@ -1,4 +1,5 @@
 aws_region                        = "us-gov-east-1"
+aws_other_region                  = "us-gov-west-1"
 project                           = "Crossfeed"
 stage                             = "staging"
 frontend_domain                   = "staging.crossfeed.cyber.dhs.gov"
