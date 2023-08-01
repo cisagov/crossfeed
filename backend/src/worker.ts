@@ -1,5 +1,6 @@
 import { bootstrap } from 'global-agent';
 import { CommandOptions } from './tasks/ecs-client';
+import { handler as amass } from './tasks/amass';
 import { handler as censys } from './tasks/censys';
 import { handler as findomain } from './tasks/findomain';
 import { handler as portscanner } from './tasks/portscanner';
@@ -15,7 +16,10 @@ import { handler as dotgov } from './tasks/dotgov';
 import { handler as webscraper } from './tasks/webscraper';
 import { handler as shodan } from './tasks/shodan';
 import { handler as testProxy } from './tasks/test-proxy';
+import { handler as hibp } from './tasks/hibp';
+import { handler as lookingGlass } from './tasks/lookingGlass';
 import { handler as dnstwist } from './tasks/dnstwist';
+import { handler as rootDomainSync } from './tasks/rootDomainSync';
 import { handler as trustymail } from './tasks/trustymail';
 import { SCAN_SCHEMA } from './api/scans';
 import { connectToDatabase } from './models';
@@ -33,6 +37,7 @@ async function main() {
   const { scanName = 'test', organizations = [] } = commandOptions;
 
   const scanFn: any = {
+    amass,
     censys,
     censysIpv4,
     censysCertificates,
@@ -47,8 +52,11 @@ async function main() {
     webscraper,
     savedSearch,
     shodan,
+    hibp,
+    lookingGlass,
     dnstwist,
     testProxy,
+    rootDomainSync,
     trustymail,
     test: async () => {
       await connectToDatabase();
