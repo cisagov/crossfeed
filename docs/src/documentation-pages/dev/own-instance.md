@@ -71,6 +71,7 @@ Optional variables:
 - `/crossfeed/staging/CENSYS_API_ID`
 - `/crossfeed/staging/CENSYS_API_SECRET`
 - `/crossfeed/staging/SHODAN_API_KEY`
+- `/crossfeed/staging/HIBP_API_KEY`
 - `/crossfeed/staging/SIXGILL_CLIENT_ID`
 - `/crossfeed/staging/SIXGILL_CLIENT_SECRET`
 - `/crossfeed/staging/PE_SHODAN_API_KEYS`
