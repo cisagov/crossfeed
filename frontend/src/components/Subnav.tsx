@@ -1,4 +1,3 @@
-import { Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
@@ -19,33 +18,35 @@ export const Subnav: React.FC<Props> = (props) => {
   const { items, children } = props;
 
   return (
-    <StyledPaper classes={{ root: classes.root }}>
-      {items.map((item) =>
-        item.externalLink ? (
-          <NavLink
-            key={item.title}
-            to={item.path}
-            className={classes.link}
-            activeClassName={classes.active}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {item.title}
-          </NavLink>
-        ) : (
-          <NavLink
-            key={item.title}
-            to={item.path}
-            className={classes.link}
-            activeClassName={classes.active}
-            exact={item.exact ?? false}
-          >
-            {item.title}
-          </NavLink>
-        )
-      )}
-      <div className={classes.flex} />
-      {children}
+    <StyledPaper>
+      <div className={classes.root}>
+        {items.map((item) =>
+          item.externalLink ? (
+            <NavLink
+              key={item.title}
+              to={item.path}
+              className={classes.link}
+              activeClassName={classes.active}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {item.title}
+            </NavLink>
+          ) : (
+            <NavLink
+              key={item.title}
+              to={item.path}
+              className={classes.link}
+              activeClassName={classes.active}
+              exact={item.exact ?? false}
+            >
+              {item.title}
+            </NavLink>
+          )
+        )}
+        <div className={classes.flex} />
+        {children}
+      </div>
     </StyledPaper>
   );
 };
@@ -61,8 +62,8 @@ const classes = {
   styles: `${PREFIX}-styles`
 };
 
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  [`& .${classes.root}`]: {
+const StyledPaper = styled('div')(({ theme }) => ({
+  [`.${classes.root}`]: {
     width: '100%',
     padding: '0 1rem',
     borderRadius: 0,
@@ -71,19 +72,19 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     alignItems: 'center',
     paddingLeft: '15%'
   },
-  [`& .${classes.link}`]: {
-    display: 'block',
+  [`.${classes.link}`]: {
+    display: 'flex',
     padding: '0.75rem 1rem 0.5rem 1rem',
     borderBottom: '2px solid transparent',
     textDecoration: 'none',
     color: theme.palette.grey[400],
     fontWeight: 500
   },
-  [`& .${classes.active}`]: {
+  [`.${classes.active}`]: {
     borderBottom: `2px solid ${theme.palette.primary.main}`,
     color: theme.palette.primary.main
   },
-  [`& .${classes.flex}`]: {
+  [`.${classes.flex}`]: {
     flex: 1
   }
 }));
