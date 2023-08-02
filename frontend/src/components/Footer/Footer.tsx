@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid, Link } from '@material-ui/core';
+import { Box, Grid, Link } from '@mui/material';
 import { useAuthContext } from 'context';
 import logo from '../../assets/crossfeed.svg';
 import { useFooterStyles } from './style';
