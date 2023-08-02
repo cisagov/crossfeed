@@ -6,7 +6,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@aws-amplify/ui-react": "^5.0.6",
+    "@aws-amplify/ui-react": "^5.0.4",
     "@elastic/react-search-ui": "^1.18.2",
     "@elastic/react-search-ui-views": "^1.20.2",
     "@emotion/react": "^11.11.1",
@@ -48,7 +48,7 @@
     "resolve-url-loader": "^5.0.0",
     "universal-cookie": "^4.0.4",
     "uswds": "^2.13.3",
-    "web-vitals": "^3.4.0"
+    "web-vitals": "^2.1.4"
   },
   "overrides": {
     "@mattiasbuelens/web-streams-polyfill": "npm:web-streams-polyfill",
