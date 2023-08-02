@@ -506,4 +506,28 @@ describe('censys certificates', () => {
 
     await checkDomains(organization);
   });
+  test('undefined numChunks should throw an error', async () => {
+    await expect(
+      censysCertificates({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 0
+      })
+    ).rejects.toThrow('Chunks not specified.');
+  });
+  test('undefined chunkNumber should throw an error', async () => {
+    await expect(
+      censysCertificates({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        numChunks: 1
+      })
+    ).rejects.toThrow('Chunks not specified.');
+  });
 });
