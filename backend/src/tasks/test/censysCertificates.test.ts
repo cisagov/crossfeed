@@ -530,4 +530,30 @@ describe('censys certificates', () => {
       })
     ).rejects.toThrow('Chunks not specified.');
   });
+  test('chunkNumber >= numChunks should throw an error', async () => {
+    await expect(
+      censysCertificates({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 1,
+        numChunks: 1
+      })
+    ).rejects.toThrow('Invalid chunk number.');
+  });
+  test('chunkNumber > 100 should throw an error', async () => {
+    await expect(
+      censysCertificates({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 101,
+        numChunks: 100
+      })
+    ).rejects.toThrow('Invalid chunk number.');
+  });
 });

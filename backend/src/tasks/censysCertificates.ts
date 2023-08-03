@@ -122,8 +122,8 @@ export const handler = async (commandOptions: CommandOptions) => {
     throw new Error('Chunks not specified.');
   }
 
-  if (chunkNumber > 100) {
-    throw new Error('Chunk number must be less than 100.');
+  if (chunkNumber > 100 || chunkNumber >= numChunks) {
+    throw new Error('Invalid chunk number.');
   }
 
   const {
