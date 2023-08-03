@@ -123,7 +123,10 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   // Sanitizes numChunks to protect against arbitrarily large numbers
   const numChucksRawValue = commandOptions.numChunks;
-  const numChunks =  (typeof(numChucksRawValue) == 'number' && numChucksRawValue > 100) ? 100 : numChucksRawValue;
+  const numChunks =
+    typeof numChucksRawValue == 'number' && numChucksRawValue > 100
+      ? 100
+      : numChucksRawValue;
 
   if (chunkNumber === undefined || numChunks === undefined) {
     throw new Error('Chunks not specified.');
