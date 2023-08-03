@@ -130,8 +130,8 @@ export const handler = async (commandOptions: CommandOptions) => {
   }
 
   // Sanitizes chunkNumber to protect against arbitrarily large numbers
-  if (chunkNumber > 100) {
-    throw new Error('Chunk number must be less than 100.');
+  if (chunkNumber >= 100 || chunkNumber >= numChunks) {
+    throw new Error('Invalid chunk number.');
   }
 
   const {
