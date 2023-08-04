@@ -1,6 +1,9 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import classes from './Risk.module.scss';
+import VulnerabilityCard from './VulnerabilityCard';
+import { useRiskStyles } from './style';
+import { getSeverityColor } from './utils';
 import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
@@ -63,14 +66,6 @@ let colorScale = scaleLinear<string>()
   .domain([0, 1])
   .range(['#c7e8ff', '#135787']);
 
-export const getSeverityColor = ({ id }: { id: string }) => {
-  if (id === 'null' || id === '') return '#EFF1F5';
-  else if (id === 'Low') return '#F8DFE2';
-  else if (id === 'Medium') return '#F2938C';
-  else if (id === 'High') return '#B51D09';
-  else return '#540C03';
-};
-
 const Risk: React.FC = (props) => {
   const history = useHistory();
   const { currentOrganization, showAllOrganizations, showMaps, user, apiPost } =
@@ -96,11 +91,6 @@ const Risk: React.FC = (props) => {
 
   const getSingleColor = () => {
     return '#FFBC78';
-  };
-
-  const truncateText = (text: string, len: number) => {
-    if (text.length <= len) return text;
-    return text.substring(0, len) + '...';
   };
 
   const fetchStats = useCallback(
