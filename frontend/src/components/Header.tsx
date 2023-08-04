@@ -45,21 +45,21 @@ const classes = {
 };
 
 const Root = styled('div')(({ theme }) => ({
-  [`& .${classes.inner}`]: {
+  [`.${classes.inner}`]: {
     maxWidth: 1440,
     width: '250%',
     margin: '0 auto'
   },
 
-  [`& .${classes.menuButton}`]: {
+  [`.${classes.menuButton}`]: {
     marginLeft: theme.spacing(2),
-    display: 'block',
-    [theme.breakpoints.up('lg')]: {
+    display: 'flex',
+    [theme.breakpoints.up('sm')]: {
       display: 'none'
     }
   },
 
-  [`& .${classes.logo}`]: {
+  [`.${classes.logo}`]: {
     width: 150,
     padding: theme.spacing(),
     paddingLeft: 0,
@@ -68,12 +68,12 @@ const Root = styled('div')(({ theme }) => ({
     }
   },
 
-  [`& .${classes.spacing}`]: {
+  [`.${classes.spacing}`]: {
     flexGrow: 1
   },
 
-  [`& .${classes.activeLink}`]: {
-    '&:after': {
+  [`.${classes.activeLink}`]: {
+    ':after': {
       content: "''",
       position: 'absolute',
       bottom: 0,
@@ -84,7 +84,7 @@ const Root = styled('div')(({ theme }) => ({
     }
   },
 
-  [`& .${classes.activeMobileLink}`]: {
+  [`.${classes.activeMobileLink}`]: {
     fontWeight: 700,
     '&:after': {
       content: "''",
@@ -98,7 +98,7 @@ const Root = styled('div')(({ theme }) => ({
     }
   },
 
-  [`& .${classes.link}`]: {
+  [`.${classes.link}`]: {
     position: 'relative',
     color: 'white',
     textDecoration: 'none',
@@ -108,7 +108,7 @@ const Root = styled('div')(({ theme }) => ({
     fontWeight: 600
   },
 
-  [`&.${classes.userLink}`]: {
+  [`.${classes.userLink}`]: {
     [theme.breakpoints.down('md')]: {
       display: 'flex'
     },
@@ -124,18 +124,18 @@ const Root = styled('div')(({ theme }) => ({
     }
   },
 
-  [`& .${classes.lgNav}`]: {
-    display: 'none',
-    [theme.breakpoints.down('xl')]: {
-      display: 'inline'
+  [`.${classes.lgNav}`]: {
+    display: 'flex',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex'
     }
   },
 
-  [`& .${classes.mobileNav}`]: {
+  [`.${classes.mobileNav}`]: {
     padding: `${theme.spacing(2)} ${theme.spacing()}px`
   },
 
-  [`& .${classes.selectOrg}`]: {
+  [`.${classes.selectOrg}`]: {
     border: '1px solid #FFFFFF',
     borderRadius: '5px',
     width: '200px',
@@ -163,7 +163,7 @@ const Root = styled('div')(({ theme }) => ({
     height: '45px'
   },
 
-  [`& .${classes.option}`]: {
+  [` .${classes.option}`]: {
     fontSize: 15
   }
 }));
@@ -202,7 +202,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   >([]);
   const [tags, setTags] = useState<OrganizationTag[]>([]);
   const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down('lg'));
+  const isSmall = useMediaQuery(theme.breakpoints.down('md'));
 
   let userLevel = 0;
   if (user && user.isRegistered) {
@@ -263,9 +263,9 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
 
   const userMenu: NavItemType = {
     title: (
-      <Root className={classes.userLink}>
+      <div className={classes.userLink}>
         <UserIcon /> My Account <ArrowDropDown />
-      </Root>
+      </div>
     ),
     path: '#',
     exact: false,
@@ -359,7 +359,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   };
 
   return (
-    <div>
+    <Root>
       <AppBar position="static" elevation={0}>
         <div className={classes.inner}>
           <Toolbar>
@@ -428,9 +428,9 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                       disableClearable
                       blurOnSelect
                       selectOnFocus
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option!.name}
                       renderOption={(props, option) => (
-                        <li {...props}>{option.name}</li>
+                        <li {...props}>{option!.name}</li>
                       )}
                       onChange={(
                         event: any,
@@ -479,7 +479,6 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
               aria-label="toggle mobile menu"
               color="inherit"
               onClick={() => setNavOpen((open) => !open)}
-              size="large"
             >
               <MenuIcon />
             </IconButton>
@@ -525,7 +524,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
           ))}
         </List>
       </Drawer>
-    </div>
+    </Root>
   );
 };
 

@@ -313,7 +313,7 @@ const Risk: React.FC = (props) => {
     data: VulnerabilityCount[];
   }) => (
     <Paper elevation={0} className={classesRisk.cardRoot}>
-      <Root className={classesRisk.cardSmall}>
+      <div className={classesRisk.cardSmall}>
         {showLatest && (
           <div className={classesRisk.seeAll}>
             <h4>
@@ -394,7 +394,7 @@ const Risk: React.FC = (props) => {
               ))}
           </div>
         </div>
-      </Root>
+      </div>
     </Paper>
   );
 
@@ -576,7 +576,7 @@ const Risk: React.FC = (props) => {
   };
 
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       {isLoading && (
         <div className="cisa-crossfeed-loading">
           <div></div>
@@ -776,7 +776,7 @@ const Risk: React.FC = (props) => {
           </div>
         )}
       </div>
-    </div>
+    </Root>
   );
 };
 
