@@ -1,15 +1,8 @@
-import {
-  connectToDatabase,
-  Domain,
-  Organization,
-  Scan,
-  Service
-} from '../models';
+import { connectToDatabase, Domain, Scan } from '../models';
 import { plainToClass } from 'class-transformer';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
 import { CensysCertificatesData } from '../models/generated/censysCertificates';
-import saveServicesToDb from './helpers/saveServicesToDb';
 import getAllDomains from './helpers/getAllDomains';
 import * as zlib from 'zlib';
 import * as readline from 'readline';
@@ -117,16 +110,28 @@ const downloadPath = async (
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { chunkNumber, numChunks, organizationId } = commandOptions;
+  const { chunkNumber, organizationId } = commandOptions;
+
+  // Sanitizes numChunks to protect against arbitrarily large numbers
+  const numChucksRawValue = commandOptions.numChunks;
+  const numChunks =
+    typeof numChucksRawValue == 'number' && numChucksRawValue > 100
+      ? 100
+      : numChucksRawValue;
 
   if (chunkNumber === undefined || numChunks === undefined) {
     throw new Error('Chunks not specified.');
   }
 
+  // Sanitizes chunkNumber to protect against arbitrarily large numbers
+  if (chunkNumber >= 100 || chunkNumber >= numChunks) {
+    throw new Error('Invalid chunk number.');
+  }
+
   const {
     data: { results }
   } = await pRetry(() => axios.get(CENSYS_CERTIFICATES_ENDPOINT, { auth }), {
-    // Perform less retries on jest to make tests faster
+    // Perform fewer retries on jest to make tests faster
     retries: typeof jest === 'undefined' ? 5 : 2,
     randomize: true
   });
