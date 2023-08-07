@@ -4,8 +4,6 @@ import classes from 'classnames';
 import { NavLink, useRouteMatch, useHistory } from 'react-router-dom';
 import { Menu, MenuItem, Button } from '@mui/material';
 
-
-
 interface LinkConfig {
   title: string | JSX.Element;
   path: string;
@@ -51,7 +49,9 @@ export const NavItem: React.FC<Props> = (props) => {
       {path ? (
         <NavLink
           to={path}
-          activeClassName={path !== '#' ? classesNav.activeLink : classesNav.link}
+          activeClassName={
+            path !== '#' ? classesNav.activeLink : classesNav.link
+          }
           className={classesNav.link}
           onClick={onClick ? onClick : onClickButton}
           exact={exact}
@@ -120,8 +120,7 @@ const Root = styled('div')(({ theme }) => ({
   [`& .${classesNav.inner}`]: {
     maxWidth: 1440,
     width: '100%',
-    margin: '0 auto',
-    
+    margin: '0 auto'
   },
 
   [`& .${classesNav.menuButton}`]: {
