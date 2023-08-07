@@ -181,7 +181,9 @@ const Risk: React.FC = (props) => {
           domainToSevMap[domain][severity] = point.value;
         }
       }
-      setDomainsWithVulns(Object.keys(domainToSevMap).length);
+      useEffect(() => {
+        setDomainsWithVulns(Object.keys(domainToSevMap).length);
+      }, [])
       dataVal = Object.keys(domainToSevMap)
         .map((key) => ({
           label: key,
@@ -299,6 +301,11 @@ const Risk: React.FC = (props) => {
         {...({ motionStiffness: 90 } as any)}
       />
     );
+  };
+
+  const truncateText = (text: string, len: number) => {
+    if (text.length <= len) return text;
+    return text.substring(0, len) + '...';
   };
 
   const VulnerabilityCard = ({
