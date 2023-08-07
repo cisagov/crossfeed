@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { styled } from '@mui/material/styles';
+// import { styled } from '@mui/material/styles';
 import classes from './Risk.module.scss';
 import VulnerabilityCard from './VulnerabilityCard';
 import * as RiskStyles from './style';
