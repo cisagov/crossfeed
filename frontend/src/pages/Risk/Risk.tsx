@@ -181,9 +181,7 @@ const Risk: React.FC = (props) => {
           domainToSevMap[domain][severity] = point.value;
         }
       }
-      useEffect(() => {
-        setDomainsWithVulns(Object.keys(domainToSevMap).length);
-      }, []);
+      setDomainsWithVulns(Object.keys(domainToSevMap).length);
       dataVal = Object.keys(domainToSevMap)
         .map((key) => ({
           label: key,
