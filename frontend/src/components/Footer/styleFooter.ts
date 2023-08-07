@@ -8,7 +8,7 @@ export const footerClasses = {
   footerLogo: `${PREFIX}-footerLogo`,
   footerNavItem: `${PREFIX}-footerNavItem`,
   footerNavLink: `${PREFIX}-footerNavLink`
-}
+};
 export const FooterRoot = styled('div')(({ theme }) => ({
   [`& .${footerClasses.footerBox}`]: {
     position: 'absolute',
