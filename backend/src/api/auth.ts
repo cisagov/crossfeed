@@ -173,7 +173,7 @@ export const callback = async (event, context) => {
   }
 
   const token = jwt.sign(userTokenBody(user), process.env.JWT_SECRET!, {
-    expiresIn: '900s' // setting to 15 minutes (900 seconds)
+    expiresIn: '1 days'
   });
 
   return {

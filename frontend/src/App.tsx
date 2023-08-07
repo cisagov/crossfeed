@@ -81,87 +81,96 @@ const LinkTracker = () => {
   return null;
 };
 
-const App: React.FC = () => (
-  <MatomoProvider value={instance}>
-    <Router>
-      <CFThemeProvider>
-        <AuthContextProvider>
-          <Authenticator.Provider>
-            <SearchProvider>
-              <Layout>
-                <LinkTracker />
-                <Switch>
-                  <RouteGuard
-                    exact
-                    path="/"
-                    render={() => <Redirect to="/inventory" />}
-                    unauth={AuthLogin}
-                    component={Risk}
-                  />
-                  <RouteGuard
-                    exact
-                    path="/signup"
-                    render={() => <Redirect to="/inventory" />}
-                    unauth={(props) => (
-                      <AuthLogin {...props} showSignUp={true} />
-                    )}
-                    component={Risk}
-                  />
-                  <Route
-                    exact
-                    path="/login-gov-callback"
-                    component={LoginGovCallback}
-                  />
-                  <Route
-                    exact
-                    path="/create-account"
-                    component={AuthCreateAccount}
-                  />
-                  <Route exact path="/terms" component={TermsOfUse} />
+const App: React.FC = () => {
+  return (
+    <MatomoProvider value={instance}>
+      <Router>
+        <CFThemeProvider>
+          <AuthContextProvider>
+            <Authenticator.Provider>
+              <SearchProvider>
+                <Layout>
+                  <LinkTracker />
+                  <Switch>
+                    <RouteGuard
+                      exact
+                      path="/"
+                      render={() => <Redirect to="/inventory" />}
+                      unauth={AuthLogin}
+                      component={Risk}
+                    />
+                    <RouteGuard
+                      exact
+                      path="/signup"
+                      render={() => <Redirect to="/inventory" />}
+                      unauth={(props) => (
+                        <AuthLogin {...props} showSignUp={true} />
+                      )}
+                      component={Risk}
+                    />
+                    <Route
+                      exact
+                      path="/login-gov-callback"
+                      component={LoginGovCallback}
+                    />
+                    <Route
+                      exact
+                      path="/create-account"
+                      component={AuthCreateAccount}
+                    />
+                    <Route exact path="/terms" component={TermsOfUse} />
 
-                  <RouteGuard exact path="/inventory" component={SearchPage} />
-                  <RouteGuard
-                    path="/inventory/domain/:domainId"
-                    component={Domain}
-                  />
-                  <RouteGuard path="/inventory/domains" component={Domains} />
-                  <RouteGuard
-                    path="/inventory/vulnerabilities"
-                    exact
-                    component={Vulnerabilities}
-                  />
-                  <RouteGuard
-                    path="/inventory/vulnerabilities/grouped"
-                    component={(props) => (
-                      <Vulnerabilities {...props} groupBy="title" />
-                    )}
-                  />
-                  <RouteGuard
-                    path="/inventory/vulnerability/:vulnerabilityId"
-                    component={Vulnerability}
-                  />
+                    <RouteGuard
+                      exact
+                      path="/inventory"
+                      component={SearchPage}
+                    />
+                    <RouteGuard
+                      path="/inventory/domain/:domainId"
+                      component={Domain}
+                    />
+                    <RouteGuard path="/inventory/domains" component={Domains} />
+                    <RouteGuard
+                      path="/inventory/vulnerabilities"
+                      exact
+                      component={Vulnerabilities}
+                    />
+                    <RouteGuard
+                      path="/inventory/vulnerabilities/grouped"
+                      component={(props) => (
+                        <Vulnerabilities {...props} groupBy="title" />
+                      )}
+                    />
+                    <RouteGuard
+                      path="/inventory/vulnerability/:vulnerabilityId"
+                      component={Vulnerability}
+                    />
 
-                  <RouteGuard path="/feeds" component={Feeds} />
-                  <RouteGuard path="/reports" component={Reports} />
-                  <RouteGuard path="/scans" component={Scans} exact />
-                  <RouteGuard path="/scans/history" component={Scans} exact />
-                  <RouteGuard path="/scans/:scanId" component={Scan} />
-                  <RouteGuard
-                    path="/organizations/:organizationId"
-                    component={Organization}
-                  />
-                  <RouteGuard path="/organizations" component={Organizations} />
-                  <RouteGuard path="/users" component={Users} />
-                  <RouteGuard path="/settings" component={Settings} />
-                </Switch>
-                <CrossfeedFooter />
-              </Layout>
-            </SearchProvider>
-          </Authenticator.Provider>
-        </AuthContextProvider>
-      </CFThemeProvider>
-    </Router>
-  </MatomoProvider>
-);
+                    <RouteGuard path="/feeds" component={Feeds} />
+                    <RouteGuard path="/reports" component={Reports} />
+                    <RouteGuard path="/scans" component={Scans} exact />
+                    <RouteGuard path="/scans/history" component={Scans} exact />
+                    <RouteGuard path="/scans/:scanId" component={Scan} />
+                    <RouteGuard
+                      path="/organizations/:organizationId"
+                      component={Organization}
+                    />
+                    <RouteGuard
+                      path="/organizations"
+                      component={Organizations}
+                    />
+                    <RouteGuard path="/users" component={Users} />
+                    <RouteGuard path="/settings" component={Settings} />
+                  </Switch>
+                  <CrossfeedFooter />
+                </Layout>
+              </SearchProvider>
+            </Authenticator.Provider>
+          </AuthContextProvider>
+        </CFThemeProvider>
+      </Router>
+    </MatomoProvider>
+  );
+};
 
 export default App;
