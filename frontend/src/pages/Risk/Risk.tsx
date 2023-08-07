@@ -2,12 +2,12 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import classes from './Risk.module.scss';
 import VulnerabilityCard from './VulnerabilityCard';
-import { useRiskStyles } from './style';
+import * as RiskStyles from './style';
 import { getSeverityColor } from './utils';
 import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
-import { Paper, Tooltip, Chip } from '@mui/material';
+import { Paper, Chip } from '@mui/material';
 import { Pagination } from '@mui/material';
 import { geoCentroid } from 'd3-geo';
 import {
@@ -68,6 +68,8 @@ let colorScale = scaleLinear<string>()
 
 const Risk: React.FC = (props) => {
   const history = useHistory();
+  const classesRisk = RiskStyles.classesRisk;
+  const RiskRoot = RiskStyles.RiskRoot;
   const { currentOrganization, showAllOrganizations, showMaps, user, apiPost } =
     useAuthContext();
 
@@ -301,108 +303,6 @@ const Risk: React.FC = (props) => {
     );
   };
 
-  const truncateText = (text: string, len: number) => {
-    if (text.length <= len) return text;
-    return text.substring(0, len) + '...';
-  };
-
-  const VulnerabilityCard = ({
-    title,
-    showLatest,
-    showCommon,
-    data
-  }: {
-    title: string;
-    showLatest: boolean;
-    showCommon: boolean;
-    data: VulnerabilityCount[];
-  }) => (
-    <Paper elevation={0} className={classesRisk.cardRoot}>
-      <div className={classesRisk.cardSmall}>
-        {showLatest && (
-          <div className={classesRisk.seeAll}>
-            <h4>
-              <Link to="/inventory/vulnerabilities?sort=createdAt&desc=false">
-                See All
-              </Link>
-            </h4>
-          </div>
-        )}
-        {showCommon && (
-          <div className={classesRisk.seeAll}>
-            <h4>
-              <Link to="/inventory/vulnerabilities/grouped">See All</Link>
-            </h4>
-          </div>
-        )}
-        <div className={classesRisk.header}>
-          <h2>{title}</h2>
-        </div>
-        <div className={classesRisk.body}>
-          {/* <h4 style={{ float: 'left' }}>Today:</h4> */}
-          <div>
-            {data.length === 0 && <h3>No open vulnerabilities</h3>}
-            {data.length > 0 &&
-              data.slice(0, 4).map((vuln) => (
-                <Tooltip
-                  title={
-                    <span style={{ fontSize: 14 }}>
-                      {truncateText(vuln.description, 120)}
-                    </span>
-                  }
-                  placement="right"
-                  arrow
-                  key={vuln.title}
-                >
-                  <Paper
-                    elevation={0}
-                    className={classesRisk.miniCardRoot}
-                    aria-label="view domain details"
-                    onClick={() => {
-                      history.push(
-                        '/inventory/vulnerabilities?title=' +
-                          vuln.title +
-                          (vuln.domain ? '&domain=' + vuln.domain.name : '')
-                      );
-                    }}
-                  >
-                    <div className={classesRisk.cardInner}>
-                      <div className={classesRisk.vulnCount}>{vuln.count}</div>
-                      <div className={classesRisk.miniCardLeft}>
-                        {vuln.title}
-                      </div>
-                      <div className={classesRisk.miniCardCenter}>
-                        <p
-                          className={classesRisk.underlined}
-                          style={{
-                            borderBottom: `6px solid ${getSeverityColor({
-                              id: vuln.severity ?? ''
-                            })}`
-                          }}
-                        >
-                          {vuln.severity}
-                        </p>
-                      </div>
-                      <button className={classesRisk.button}>DETAILS</button>
-                    </div>
-                    {
-                      <hr
-                        style={{
-                          border: '1px solid #F0F0F0',
-                          position: 'relative',
-                          maxWidth: '90%'
-                        }}
-                      />
-                    }
-                  </Paper>
-                </Tooltip>
-              ))}
-          </div>
-        </div>
-      </div>
-    </Paper>
-  );
-
   const offsets: any = {
     Vermont: [50, -8],
     'New Hampshire': [34, 2],
@@ -581,7 +481,7 @@ const Risk: React.FC = (props) => {
   };
 
   return (
-    <Root className={classes.root}>
+    <RiskRoot className={classes.root}>
       {isLoading && (
         <div className="cisa-crossfeed-loading">
           <div></div>
@@ -781,259 +681,8 @@ const Risk: React.FC = (props) => {
           </div>
         )}
       </div>
-    </Root>
+    </RiskRoot>
   );
 };
 
 export default Risk;
-
-//Styling
-const PREFIX = 'Risk';
-
-const classesRisk = {
-  cardRoot: `${PREFIX}-cardRoot`,
-  cardSmall: `${PREFIX}-cardSmall`,
-  chartSmall: `${PREFIX}-chartSmall`,
-  chartLarge: `${PREFIX}-chartLarge`,
-  chartHeader: `${PREFIX}-chartHeader`,
-  cardBig: `${PREFIX}-cardBig`,
-  body: `${PREFIX}-body`,
-  header: `${PREFIX}-header`,
-  footer: `${PREFIX}-footer`,
-  seeAll: `${PREFIX}-seeAll`,
-  root: `${PREFIX}-root`,
-  contentWrapper: `${PREFIX}-contentWrapper`,
-  content: `${PREFIX}-content`,
-  panel: `${PREFIX}-panel`,
-  miniCardRoot: `${PREFIX}-miniCardRoot`,
-  cardInner: `${PREFIX}-cardInner`,
-  miniCardLeft: `${PREFIX}-miniCardLeft`,
-  miniCardCenter: `${PREFIX}-miniCardCenter`,
-  button: `${PREFIX}-button`,
-  underlined: `${PREFIX}-underlined`,
-  vulnCount: `${PREFIX}-vulnCount`,
-  chip: `${PREFIX}-chip`,
-  chipWrapper: `${PREFIX}-chipWrapper`,
-  note: `${PREFIX}-note`
-};
-
-const Root = styled('div')(({ theme }) => ({
-  [`& .${classesRisk.cardRoot}`]: {
-    boxSizing: 'border-box',
-    marginBottom: '1rem',
-    border: '2px solid #DCDEE0',
-    boxShadow: 'none',
-    '& em': {
-      fontStyle: 'normal',
-      backgroundColor: 'yellow'
-    }
-  },
-  [`& .${classesRisk.cardSmall}`]: {
-    width: '100%',
-    height: '355px',
-    '& h3': {
-      textAlign: 'center'
-    },
-    overflow: 'hidden'
-  },
-  [`& .${classesRisk.chartSmall}`]: {
-    height: '85%'
-  },
-  [`& .${classesRisk.chartLarge}`]: {
-    height: '85.5%',
-    width: '90%'
-  },
-  [`& .${classesRisk.chartHeader}`]: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    '& h5': {
-      paddingLeft: 190,
-      color: '#71767A',
-      margin: '10px 0 0 0',
-      fontSize: 14
-    }
-  },
-  [`& .${classesRisk.cardBig}`]: {
-    width: '100%',
-    height: '889px',
-    '& h3': {
-      textAlign: 'center'
-    },
-    overflow: 'hidden'
-  },
-  [`& .${classesRisk.body}`]: {
-    padding: '20px 30px'
-  },
-  [`& .${classesRisk.header}`]: {
-    height: '60px',
-    backgroundColor: '#F8F9FA',
-    top: 0,
-    width: '100%',
-    color: '#07648D',
-    fontWeight: 'bold',
-    paddingLeft: 20,
-    paddingTop: 1
-  },
-  [`& .${classesRisk.footer}`]: {
-    height: '60px',
-    backgroundColor: '#F8F9FA',
-    width: '100%',
-    color: '#3D4551',
-    paddingLeft: 255,
-    paddingTop: 20,
-    display: 'flex',
-    alignItems: 'center',
-    padding: '1rem 2rem',
-    '& > span': {
-      marginRight: '2rem'
-    },
-    '& *:focus': {
-      outline: 'none !important'
-    }
-  },
-  [`& .${classesRisk.seeAll}`]: {
-    float: 'right',
-    marginTop: '5px',
-    marginRight: '20px',
-    '& h4 a': {
-      color: '#71767A',
-      fontSize: '12px',
-      fontWeight: '400'
-    }
-  },
-  [`& .${classesRisk.root}`]: {
-    position: 'relative',
-    flex: '1',
-    width: '100%',
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    alignItems: 'stretch',
-    margin: '0',
-    overflowY: 'hidden'
-  },
-  [`& .${classesRisk.contentWrapper}`]: {
-    position: 'relative',
-    flex: '1 1 auto',
-    height: '100%',
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    overflowY: 'hidden',
-    marginTop: '1rem'
-  },
-  [`& .${classesRisk.content}`]: {
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    alignItems: 'stretch',
-    flex: '1'
-  },
-  [`& .${classesRisk.panel}`]: {
-    position: 'relative',
-    height: '100%',
-    overflowY: 'auto',
-    padding: '0 1rem 2rem 1rem',
-    flex: '0 0 50%'
-  },
-  [`& .${classesRisk.miniCardRoot}`]: {
-    boxSizing: 'border-box',
-    marginBottom: '1rem',
-    '& em': {
-      fontStyle: 'normal',
-      backgroundColor: 'yellow'
-    },
-    '&:hover': {
-      background: '#FCFCFC',
-      boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.15)',
-      borderRadius: '4px',
-      cursor: 'pointer'
-    },
-    '&:last-child hr': {
-      display: 'none'
-    },
-    height: 45,
-    width: '100%',
-    borderRadius: '4px'
-  },
-  [`& .${classesRisk.cardInner}`]: {
-    paddingLeft: 30,
-    paddingRight: 30,
-    display: 'flex',
-    alignItems: 'center',
-    '& div': {
-      display: 'inline',
-      fontSize: '14px',
-      fontWeight: 'bold'
-    },
-    '& button': {
-      justifyContent: 'flex-end'
-    },
-    height: 45
-  },
-  [`& .${classesRisk.miniCardLeft}`]: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'flex-start',
-    color: '#3D4551'
-  },
-  [`& .${classesRisk.miniCardCenter}`]: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'center'
-  },
-  [`& .${classesRisk.button}`]: {
-    outline: 'none',
-    border: 'none',
-    background: 'none',
-    color: '#07648D',
-    margin: '0 0.2rem',
-    cursor: 'pointer',
-    fontSize: '12px'
-  },
-  [`& .${classesRisk.underlined}`]: {
-    width: '80px',
-    fontWeight: 'normal'
-  },
-  [`& .${classesRisk.vulnCount}`]: {
-    color: '#B51D09',
-    flex: 0.5
-  },
-  [`& .${classesRisk.chip}`]: {
-    color: '#3D4551',
-    height: '26px',
-    fontSize: '12px',
-    textAlign: 'center',
-    background: '#FFFFFF',
-    border: '1px solid #DCDEE0',
-    boxSizing: 'border-box',
-    borderRadius: '22px',
-    marginRight: '10px',
-    '&:hover': {
-      background: '#F8DFE2',
-      border: '1px solid #D75B57'
-    },
-    '&:focus': {
-      background: '#F8DFE2',
-      border: '1px solid #D75B57',
-      outline: 0
-    },
-    '&:default': {
-      background: '#F8DFE2',
-      border: '1px solid #D75B57',
-      outline: 0
-    }
-  },
-  [`& .${classesRisk.chipWrapper}`]: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    padding: '5px 10px',
-    marginTop: '5px',
-    marginLeft: '15px'
-  },
-  [`& .${classesRisk.note}`]: {
-    font: '12px',
-    fontFamily: 'Public Sans',
-    margin: '10px 10px 10px 25px',
-    fontStyle: 'italic',
-    color: '#71767A'
-  }
-}));
