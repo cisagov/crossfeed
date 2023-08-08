@@ -49,7 +49,7 @@ export const Layout: React.FC = ({ children }) => {
 
   useEffect(() => {
     // set logged in if use exists then set true, otherwise set false
-    if (user) setLoggedIn(user !== null && user !== undefined ? true : false);
+    if (user) setLoggedIn(true);
     else setLoggedIn(false);
   }, [user]);
 
