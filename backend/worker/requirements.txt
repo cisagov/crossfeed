@@ -12,7 +12,7 @@ mitmproxy_wireguard==0.1.23
 numpy==1.24.3
 pandas==1.5.1
 phonenumbers==8.13.8
-pip-tools==6.13.0
+pip-tools==7.1.0
 pipreqs==0.4.11
 psycopg2-binary==2.9.5
 pyproject_hooks==1.0.0
