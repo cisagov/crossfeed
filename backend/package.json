@@ -46,9 +46,9 @@
     "ws": "^8.13.0"
   },
   "devDependencies": {
-    "@jest/globals": "^27",
+    "@jest/globals": "^29",
     "@types/aws-lambda": "^8.10.62",
-    "@types/dockerode": "^2.5.34",
+    "@types/dockerode": "^3.3.19",
     "@types/jest": "^27",
     "@types/node": "^18.11",
     "@types/node-fetch": "^2.6.4",
