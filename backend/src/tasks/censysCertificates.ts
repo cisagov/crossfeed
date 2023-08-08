@@ -4,7 +4,7 @@ import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
 import { CensysCertificatesData } from '../models/generated/censysCertificates';
 import getAllDomains from './helpers/getAllDomains';
-import sanitizeChunking from './helpers/sanitizeChunking';
+import parseCommandOptions from './helpers/parseCommandOptions';
 import * as zlib from 'zlib';
 import * as readline from 'readline';
 import got from 'got';
@@ -113,7 +113,7 @@ const downloadPath = async (
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId } = commandOptions;
 
-  const { chunkNumber, numChunks } = await sanitizeChunking(commandOptions);
+  const { chunkNumber, numChunks } = await parseCommandOptions(commandOptions);
 
   const {
     data: { results }
