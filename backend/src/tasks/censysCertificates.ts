@@ -38,6 +38,9 @@ const downloadPath = async (
   numFiles: number,
   commandOptions: CommandOptions
 ): Promise<void> => {
+  if (i >= 100) {
+    throw new Error('Invalid chunk number.');
+  }
   console.log(`i: ${i} of ${numFiles}: starting download of url ${path}`);
 
   const domains: Domain[] = [];
