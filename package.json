@@ -16,7 +16,7 @@
   "homepage": "https://github.com/cisagov/crossfeed#readme",
   "devDependencies": {
     "@types/node": "^20.4.5",
-    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^5.59.0",
     "jest": "^29.5.0"
   }

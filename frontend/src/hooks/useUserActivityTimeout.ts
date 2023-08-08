@@ -29,7 +29,6 @@ export const useUserActivityTimeout = (timeout: number, loggedIn: boolean) => {
         const now = new Date();
         const timeSinceLastActivity =
           now.getTime() - lastActivityTime.getTime();
-        console.log('Counting down!');
         if (timeSinceLastActivity > timeout) {
           setIsTimedOut(true);
         }
