@@ -29,7 +29,9 @@ const useStyles = makeStyles((theme) => ({
 export const Layout: React.FC = ({ children }) => {
   const classes = useStyles();
   const { logout, user } = useAuthContext();
-  const [loggedIn, setLoggedIn] = useState<boolean>(user ? true : false);
+  const [loggedIn, setLoggedIn] = useState<boolean>(
+    user !== null && user !== undefined ? true : false
+  );
   const { isTimedOut, resetTimeout } = useUserActivityTimeout(
     0.1 * 60 * 1000,
     loggedIn
@@ -47,7 +49,7 @@ export const Layout: React.FC = ({ children }) => {
 
   useEffect(() => {
     // set logged in if use exists then set true, otherwise set false
-    if (user) setLoggedIn(user ? true : false);
+    if (user) setLoggedIn(user !== null && user !== undefined ? true : false);
     else setLoggedIn(false);
   }, [user]);
 
