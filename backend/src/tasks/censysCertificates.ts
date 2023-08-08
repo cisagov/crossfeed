@@ -126,7 +126,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   const {
     data: { files }
   } = await pRetry(() => axios.get(results.latest.details_url, { auth }), {
-    // Perform less retries on jest to make tests faster
+    // Perform fewer retries on jest to make tests faster
     retries: typeof jest === 'undefined' ? 5 : 2,
     randomize: true
   });
@@ -195,7 +195,7 @@ export const handler = async (commandOptions: CommandOptions) => {
               commandOptions
             ),
           {
-            // Perform less retries on jest to make tests faster
+            // Perform fewer retries on jest to make tests faster
             retries: typeof jest === 'undefined' ? 5 : 2,
             randomize: true
           }
