@@ -35,8 +35,7 @@ const downloadPath = async (
   path: string,
   commonNameToDomainsMap: CommonNameToDomainsMap,
   i: number,
-  numFiles: number,
-  commandOptions: CommandOptions
+  numFiles: number
 ): Promise<void> => {
   if (i >= 100) {
     throw new Error('Invalid chunk number.');
@@ -194,8 +193,7 @@ export const handler = async (commandOptions: CommandOptions) => {
               files[fileName].download_path,
               commonNameToDomainsMap,
               idx,
-              numFiles,
-              commandOptions
+              numFiles
             ),
           {
             // Perform fewer retries on jest to make tests faster
