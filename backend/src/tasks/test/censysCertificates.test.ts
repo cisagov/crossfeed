@@ -413,7 +413,7 @@ describe('censys certificates', () => {
     await checkDomains(organization);
   });
 
-  test('http failure triggers retry', async () => {
+  test('http failure should retry', async () => {
     nock('https://censys.io', authHeaders)
       .get('/api/v1/data/certificates_2018/')
       .reply(200, {
@@ -461,7 +461,7 @@ describe('censys certificates', () => {
     await checkDomains(organization);
   });
 
-  test('repeated http failures throws an error', async () => {
+  test('repeated http failures should throw an error', async () => {
     nock('https://censys.io', authHeaders)
       .get('/api/v1/data/certificates_2018/')
       .reply(200, {
