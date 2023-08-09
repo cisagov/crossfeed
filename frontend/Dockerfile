@@ -7,9 +7,9 @@ WORKDIR /app
 
 COPY ./package* ./
 
-RUN npm install -g npm@9
+RUN npm install -g npm@9 --legacy-peer-deps
 
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 COPY . .
 
