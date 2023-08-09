@@ -13,7 +13,7 @@ import PQueue from 'p-queue';
 import pRetry from 'p-retry';
 import axios from 'axios';
 import getScanOrganizations from './helpers/getScanOrganizations';
-import parseCommandOptions from './helpers/parseCommandOptions';
+import sanitizeChunkValues from './helpers/sanitizeChunkValues';
 
 export interface IpToDomainsMap {
   [ip: string]: Domain[];
@@ -125,7 +125,7 @@ const downloadPath = async (
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId } = commandOptions;
 
-  const { chunkNumber, numChunks } = await parseCommandOptions(commandOptions);
+  const { chunkNumber, numChunks } = await sanitizeChunkValues(commandOptions);
 
   const {
     data: { results }

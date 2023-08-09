@@ -1,4 +1,4 @@
-import parseCommandOptions from '../../helpers/parseCommandOptions';
+import sanitizeChunkValues from '../../helpers/sanitizeChunkValues';
 import { CommandOptions } from '../../ecs-client';
 import { connectToDatabase, Organization, Scan } from '../../../models';
 import * as nock from 'nock';
@@ -42,7 +42,7 @@ describe('parse command options', () => {
       chunkNumber: 0,
       numChunks: 100
     };
-    const sanitizedOptions = await parseCommandOptions(commandOptions);
+    const sanitizedOptions = await sanitizeChunkValues(commandOptions);
     expect(sanitizedOptions).toEqual(commandOptions);
   });
   describe('sanitize chunking', () => {
@@ -54,7 +54,7 @@ describe('parse command options', () => {
         scanTaskId: 'scanTaskId',
         chunkNumber: 0
       };
-      await expect(parseCommandOptions(commandOptions)).rejects.toThrow(
+      await expect(sanitizeChunkValues(commandOptions)).rejects.toThrow(
         'Chunks not specified.'
       );
     });
@@ -67,7 +67,7 @@ describe('parse command options', () => {
         chunkNumber: 0,
         numChunks: 101
       };
-      const sanitizedOptions = await parseCommandOptions(commandOptions);
+      const sanitizedOptions = await sanitizeChunkValues(commandOptions);
       expect(sanitizedOptions.numChunks).toEqual(100);
     });
     test('chunkNumber must be defined', async () => {
@@ -78,7 +78,7 @@ describe('parse command options', () => {
         scanTaskId: 'scanTaskId',
         numChunks: 1
       };
-      await expect(parseCommandOptions(commandOptions)).rejects.toThrow(
+      await expect(sanitizeChunkValues(commandOptions)).rejects.toThrow(
         'Chunks not specified.'
       );
     });
@@ -91,7 +91,7 @@ describe('parse command options', () => {
         chunkNumber: 1,
         numChunks: 1
       };
-      await expect(parseCommandOptions(commandOptions)).rejects.toThrow(
+      await expect(sanitizeChunkValues(commandOptions)).rejects.toThrow(
         'Invalid chunk number.'
       );
     });
@@ -104,7 +104,7 @@ describe('parse command options', () => {
         chunkNumber: 100,
         numChunks: 100
       };
-      await expect(parseCommandOptions(commandOptions)).rejects.toThrow(
+      await expect(sanitizeChunkValues(commandOptions)).rejects.toThrow(
         'Invalid chunk number.'
       );
     });
