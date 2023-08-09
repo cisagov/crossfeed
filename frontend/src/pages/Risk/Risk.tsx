@@ -316,8 +316,7 @@ const Risk: React.FC = (props) => {
   const MapCard = ({
     title,
     geoUrl,
-    findFn,
-    type
+    findFn
   }: {
     title: string;
     geoUrl: string;
@@ -428,15 +427,9 @@ const Risk: React.FC = (props) => {
 
   if (stats) {
     for (const sev of severities) {
-      if (
-        stats.domains.numVulnerabilities.some((i) =>
-          sev.sevList.includes(i.id.split('|')[1])
-        )
-      ) {
-        sev.disable = false;
-      } else {
-        sev.disable = true;
-      }
+      sev.disable = !stats.domains.numVulnerabilities.some((i) =>
+        sev.sevList.includes(i.id.split('|')[1])
+      );
     }
   }
 
@@ -454,10 +447,7 @@ const Risk: React.FC = (props) => {
       scrollX: 0,
       scrollY: 0,
       ignoreElements: function (element) {
-        if ('mapWrapper' === element.id) {
-          return true;
-        }
-        return false;
+        return 'mapWrapper' === element.id;
       }
     }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
