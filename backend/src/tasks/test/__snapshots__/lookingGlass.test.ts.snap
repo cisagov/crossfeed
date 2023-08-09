@@ -20,6 +20,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -40,6 +41,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -60,6 +62,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
 ]

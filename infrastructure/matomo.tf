@@ -189,13 +189,14 @@ resource "aws_db_instance" "matomo_db" {
   max_allocated_storage               = 1000
   storage_type                        = "gp2"
   engine                              = "mariadb"
-  engine_version                      = "10.11.2"
+  engine_version                      = "10.6"
   skip_final_snapshot                 = true
   availability_zone                   = data.aws_availability_zones.available.names[0]
   multi_az                            = false
   backup_retention_period             = 35
   storage_encrypted                   = true
   iam_database_authentication_enabled = false
+  allow_major_version_upgrade         = true
 
   // database information
   db_name  = "matomo"

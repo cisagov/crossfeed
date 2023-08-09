@@ -17,11 +17,14 @@ const authHeaders = {
   }
 };
 
+jest.setTimeout(30000);
+
 describe('censys ipv4', () => {
   let organization;
   let scan;
+  let connection;
   beforeEach(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
     organization = await Organization.create({
       name: 'test-' + Math.random(),
@@ -98,6 +101,11 @@ describe('censys ipv4', () => {
 
   afterEach(async () => {
     global.Date = RealDate;
+    await connection.close();
+  });
+
+  afterAll(async () => {
+    nock.cleanAll();
   });
 
   const checkDomains = async (organization) => {
@@ -223,7 +231,6 @@ describe('censys ipv4', () => {
       .reply(200, zlib.gzipSync(firstFileContents))
       .get('/snapshots/ipv4/20200719/second_file.json.gz')
       .reply(200, zlib.gzipSync(secondFileContents));
-    jest.setTimeout(30000);
     await censysIpv4({
       organizationId: organization.id,
       organizationName: 'organizationName',
@@ -328,5 +335,55 @@ describe('censys ipv4', () => {
     ).rejects.toThrow('Response code 429');
 
     await checkDomains(organization);
+  });
+  test('undefined numChunks should throw an error', async () => {
+    await expect(
+      censysIpv4({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 0
+      })
+    ).rejects.toThrow('Chunks not specified.');
+  });
+  test('undefined chunkNumber should throw an error', async () => {
+    await expect(
+      censysIpv4({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        numChunks: 1
+      })
+    ).rejects.toThrow('Chunks not specified.');
+  });
+  test('chunkNumber >= numChunks should throw an error', async () => {
+    await expect(
+      censysIpv4({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 1,
+        numChunks: 1
+      })
+    ).rejects.toThrow('Invalid chunk number.');
+  });
+  test('chunkNumber > 100 should throw an error', async () => {
+    await expect(
+      censysIpv4({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 101,
+        numChunks: 100
+      })
+    ).rejects.toThrow('Invalid chunk number.');
   });
 });

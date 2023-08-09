@@ -18,6 +18,7 @@ describe('dnstwist', () => {
   let scan;
   let organization;
   const domains: Domain[] = [];
+  let connection;
   beforeAll(async () => {
     (spawnSync as jest.Mock).mockImplementation(() => ({
       status: 0,
@@ -47,7 +48,7 @@ describe('dnstwist', () => {
     }));
   });
   beforeEach(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
     organization = await Organization.create({
       name: 'test-' + Math.random(),
@@ -67,6 +68,7 @@ describe('dnstwist', () => {
   afterEach(() => {
     global.Date = RealDate;
     jest.unmock('../helpers/getIps');
+    connection.close();
   });
 
   test('basic test', async () => {

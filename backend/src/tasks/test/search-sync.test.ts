@@ -12,8 +12,12 @@ const { updateDomains, updateWebpages } = require('../es-client');
 
 describe('search_sync', () => {
   let organization;
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   beforeEach(async () => {
     organization = await Organization.create({

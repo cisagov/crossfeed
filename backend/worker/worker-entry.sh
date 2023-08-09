@@ -22,7 +22,7 @@ export AWS_CA_BUNDLE=/usr/local/share/ca-certificates/mitmproxy-ca-cert.crt
 # Main code
 echo "Running main code..."
 
-node --unhandled-rejections=strict worker.bundle.js
+timeout 1d node --unhandled-rejections=strict worker.bundle.js
 
 pm2 stop all | grep "^\[PM2\]"
 

@@ -337,10 +337,19 @@ authenticatedRoute.post(
   '/organizations/:organizationId/granularScans/:scanId/update',
   handlerToExpress(organizations.updateScan)
 );
+authenticatedRoute.post(
+  '/organizations/:organizationId/initiateDomainVerification',
+  handlerToExpress(organizations.initiateDomainVerification)
+);
+authenticatedRoute.post(
+  '/organizations/:organizationId/checkDomainVerification',
+  handlerToExpress(organizations.checkDomainVerification)
+);
 authenticatedRoute.post('/stats', handlerToExpress(stats.get));
-authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
+authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
+authenticatedRoute.post('/users/search', handlerToExpress(users.search));
 
 authenticatedRoute.post(
   '/reports/export',

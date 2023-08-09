@@ -25,6 +25,7 @@ updateScanTaskStatus:
   handler: src/tasks/updateScanTaskStatus.handler
   events:
     - eventBridge:
+        name: ${self:provider.stage}-updateScanTaskStatus
         pattern:
           source:
             - aws.ecs

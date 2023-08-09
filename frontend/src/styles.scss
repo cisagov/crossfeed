@@ -15,12 +15,16 @@ $theme-show-notifications: false;
 @import '~uswds/scss/packages/usa-modal';
 @import '~uswds/scss/packages/form-controls';
 
-@import "@aws-amplify/ui-react/styles.css";
+@import '@aws-amplify/ui-react/styles.css';
 
 html,
 body {
   box-sizing: border-box;
   background-color: color('base-lightest');
+}
+
+body > iframe {
+  display: none;
 }
 
 .cisa-crossfeed-loading {
@@ -90,4 +94,3 @@ form[data-amplify-authenticator-setup-totp] {
     display: none;
   }
 }
-

@@ -10,6 +10,9 @@ jest.mock('dns', () => ({
 }));
 
 describe('censys', () => {
+  afterAll(async () => {
+    nock.cleanAll();
+  });
   test('basic test', async () => {
     nock('https://censys.io')
       .post('/api/v1/search/certificates')

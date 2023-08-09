@@ -10,6 +10,20 @@ resource "aws_db_subnet_group" "default" {
   }
 }
 
+resource "aws_db_parameter_group" "default" {
+  name   = "crossfeed-${var.stage}-postgres15"
+  family = "postgres15"
+
+  parameter {
+    name  = "rds.force_ssl"
+    value = "0"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "aws_db_instance" "db" {
   identifier                          = var.db_name
   instance_class                      = var.db_instance_class
@@ -17,12 +31,15 @@ resource "aws_db_instance" "db" {
   max_allocated_storage               = 10000
   storage_type                        = "gp2"
   engine                              = "postgres"
+  engine_version                      = "15.3"
+  allow_major_version_upgrade         = true
   skip_final_snapshot                 = true
   availability_zone                   = data.aws_availability_zones.available.names[0]
   multi_az                            = false
   backup_retention_period             = 35
   storage_encrypted                   = true
   iam_database_authentication_enabled = true
+  enabled_cloudwatch_logs_exports     = ["postgresql", "upgrade"]
 
   // database information
   db_name  = var.db_table_name
@@ -31,6 +48,7 @@ resource "aws_db_instance" "db" {
   port     = var.db_port
 
   db_subnet_group_name = aws_db_subnet_group.default.name
+  parameter_group_name = aws_db_parameter_group.default.name
 
   vpc_security_group_ids = [aws_security_group.allow_internal.id]
 

@@ -1,10 +1,38 @@
 import React, { useState, useCallback } from 'react';
+import { styled } from '@mui/material/styles';
 import { Organization } from 'types';
-import { Grid, Paper, makeStyles } from '@material-ui/core';
+import { Grid, Paper } from '@mui/material';
 import { useHistory } from 'react-router-dom';
-import { Add } from '@material-ui/icons';
+import { Add } from '@mui/icons-material';
 import { OrganizationForm } from 'components/OrganizationForm';
 import { useAuthContext } from 'context';
+
+const PREFIX = 'OrganizationList';
+
+const classes = {
+  cardRoot: `${PREFIX}-cardRoot`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.cardRoot}`]: {
+    cursor: 'pointer',
+    boxSizing: 'border-box',
+    border: '2px solid #DCDEE0',
+    height: 150,
+    width: 200,
+    borderRadius: '5px',
+    padding: '1rem',
+    color: '#3D4551',
+    '& h1': {
+      fontSize: '20px',
+      margin: 0
+    },
+    '& p': {
+      fontSize: '14px'
+    }
+  }
+}));
 
 export const OrganizationList: React.FC<{
   parent?: Organization;
@@ -13,7 +41,6 @@ export const OrganizationList: React.FC<{
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const history = useHistory();
-  const classes = useStyles();
 
   const onSubmit = async (body: Object) => {
     try {
@@ -50,7 +77,7 @@ export const OrganizationList: React.FC<{
   }, [fetchOrganizations, parent]);
 
   return (
-    <>
+    <Root>
       <Grid
         container
         spacing={2}
@@ -97,26 +124,6 @@ export const OrganizationList: React.FC<{
         type="create"
         parent={parent}
       ></OrganizationForm>
-    </>
+    </Root>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  cardRoot: {
-    cursor: 'pointer',
-    boxSizing: 'border-box',
-    border: '2px solid #DCDEE0',
-    height: 150,
-    width: 200,
-    borderRadius: '5px',
-    padding: '1rem',
-    color: '#3D4551',
-    '& h1': {
-      fontSize: '20px',
-      margin: 0
-    },
-    '& p': {
-      fontSize: '14px'
-    }
-  }
-}));

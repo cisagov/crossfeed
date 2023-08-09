@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   db:
-    image: postgres:13
+    image: postgres:15.3
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
       - ./backend/db-init:/docker-entrypoint-initdb.d
@@ -15,7 +15,7 @@ services:
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-    command: ["postgres", "-c", "log_statement=all", "-c", "log_duration=on"]
+    command: ['postgres', '-c', 'log_statement=all', '-c', 'log_duration=on']
 
   frontend:
     build: ./frontend
@@ -103,7 +103,7 @@ services:
   #     LOGGING_QUIET: 'true'
 
   matomodb:
-    image: mariadb:10.11.2
+    image: mariadb:10.6
     command: --max-allowed-packet=64MB
     networks:
       - backend

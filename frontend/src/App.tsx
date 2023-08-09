@@ -34,8 +34,10 @@ import {
   Reports
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
+import { CrossfeedFooter } from './components/Footer';
 import './styles.scss';
 import { Authenticator } from '@aws-amplify/ui-react';
+
 API.configure({
   endpoints: [
     {
@@ -153,6 +155,7 @@ const App: React.FC = () => (
                   <RouteGuard path="/users" component={Users} />
                   <RouteGuard path="/settings" component={Settings} />
                 </Switch>
+                <CrossfeedFooter />
               </Layout>
             </SearchProvider>
           </Authenticator.Provider>

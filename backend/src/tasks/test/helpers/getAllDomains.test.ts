@@ -2,8 +2,12 @@ import getAllDomains from '../../helpers/getAllDomains';
 import { Domain, connectToDatabase, Organization } from '../../../models';
 
 describe('getAllDomains', () => {
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   test('basic test', async () => {
     const organization = await Organization.create({

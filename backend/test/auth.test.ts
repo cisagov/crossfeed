@@ -15,6 +15,10 @@ jest.mock('jsonwebtoken', () => ({
 }));
 
 describe('auth', () => {
+  afterAll(async () => {
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 500)); // avoid jest open handle error
+  });
+
   describe('login', () => {
     it('success', async () => {
       const response = await request(app).post('/auth/login').expect(200);

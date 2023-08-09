@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { styled } from '@mui/material/styles';
 import { Link, Route, useParams, Switch } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import {
@@ -8,7 +9,8 @@ import {
   User,
   Scan,
   ScanSchema,
-  OrganizationTag
+  OrganizationTag,
+  PendingDomain
 } from 'types';
 import { Column } from 'react-table';
 import { Subnav, Table } from 'components';
@@ -16,7 +18,6 @@ import { Subnav, Table } from 'components';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import {
   Chip,
-  makeStyles,
   Switch as SwitchInput,
   Button,
   TextField,
@@ -30,10 +31,126 @@ import {
   FormLabel,
   Radio,
   RadioGroup
-} from '@material-ui/core';
-import { ChevronRight, ControlPoint } from '@material-ui/icons';
-import { Autocomplete, createFilterOptions } from '@material-ui/lab';
+} from '@mui/material';
+import { ChevronRight, ControlPoint } from '@mui/icons-material';
+import { Autocomplete } from '@mui/material';
+import { createFilterOptions } from '@mui/material/useAutocomplete';
 import { OrganizationList } from 'components/OrganizationList';
+
+const PREFIX = 'Organization';
+
+const classes = {
+  header: `${PREFIX}-header`,
+  headerLabel: `${PREFIX}-headerLabel`,
+  chip: `${PREFIX}-chip`,
+  settingsWrapper: `${PREFIX}-settingsWrapper`,
+  buttons: `${PREFIX}-buttons`,
+  orgName: `${PREFIX}-orgName`,
+  textField: `${PREFIX}-textField`,
+  root: `${PREFIX}-root`,
+  headerRow: `${PREFIX}-headerRow`
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.header}`]: {
+    background: '#F9F9F9'
+  },
+
+  [`& .${classes.headerLabel}`]: {
+    margin: 0,
+    paddingTop: '1.5rem',
+    paddingBottom: '0.5rem',
+    marginLeft: '15%',
+    color: '#C9C9C9',
+    fontWeight: 500,
+    fontStyle: 'normal',
+    fontSize: '24px',
+    '& a': {
+      textDecoration: 'none',
+      color: '#C9C9C9'
+    },
+    '& svg': {
+      verticalAlign: 'middle',
+      lineHeight: '100%',
+      fontSize: '26px'
+    }
+  },
+
+  [`& .${classes.chip}`]: {
+    color: 'white',
+    marginRight: '10px',
+    marginTop: '10px'
+  },
+
+  [`& .${classes.settingsWrapper}`]: {
+    boxSizing: 'border-box',
+    border: '0px',
+    boxShadow: 'none',
+    borderRadius: '0px',
+    padding: '25px',
+    maxWidth: '900px',
+    margin: '0 auto'
+  },
+
+  [`& .${classes.buttons}`]: {
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+
+  [`& .${classes.orgName}`]: {
+    background: '#F5F5F5 !important',
+    paddingBottom: '10px'
+  },
+
+  [`& .${classes.textField}`]: {
+    background: '#F5F5F5 !important'
+  },
+
+  [`& .${classes.root}`]: {
+    maxWidth: '1400px',
+    margin: '0 auto',
+    '@media screen and (min-width: 480px)': {
+      padding: '1rem 1rem'
+    },
+    '@media screen and (min-width: 640px)': {
+      padding: '1rem 1.5rem'
+    },
+    '@media screen and (min-width: 1024px)': {
+      padding: '1rem 2rem'
+    }
+  },
+
+  [`& .${classes.headerRow}`]: {
+    padding: '0.5rem 0',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '16px',
+    flexWrap: 'wrap',
+    '& label': {
+      flex: '1 0 100%',
+      fontWeight: 'bolder',
+      display: 'flex',
+      alignItems: 'center',
+      padding: '0.5rem 0',
+      '@media screen and (min-width: 640px)': {
+        flex: '0 0 220px',
+        padding: 0
+      }
+    },
+    '& span': {
+      display: 'block',
+      flex: '1 1 auto',
+      marginLeft: 'calc(1rem + 20px)',
+      '@media screen and (min-width: 640px)': {
+        marginLeft: 'calc(1rem + 20px)'
+      },
+      '@media screen and (min-width: 1024px)': {
+        marginLeft: 0
+      }
+    }
+  }
+}));
 
 interface AutocompleteType extends Partial<OrganizationTag> {
   title?: string;
@@ -61,13 +178,15 @@ export const Organization: React.FC = () => {
     email: '',
     role: ''
   });
-  const classes = useStyles();
+
   const [tagValue, setTagValue] = React.useState<AutocompleteType | null>(null);
   const [inputValue, setInputValue] = React.useState('');
   const [dialog, setDialog] = React.useState<{
     open: boolean;
     type?: 'rootDomains' | 'ipBlocks' | 'tags';
     label?: string;
+    stage?: number;
+    domainVerificationStatusMessage?: string;
   }>({ open: false });
 
   const dateAccessor = (date?: string) => {
@@ -114,12 +233,12 @@ export const Organization: React.FC = () => {
     {
       Header: () => {
         return (
-          <div style={{ justifyContent: 'flex-center' }}>
+          <Root style={{ justifyContent: 'flex-center' }}>
             <Button color="secondary" onClick={() => setDialog({ open: true })}>
               <ControlPoint style={{ marginRight: '10px' }}></ControlPoint>
               Add member
             </Button>
-          </div>
+          </Root>
         );
       },
       id: 'action',
@@ -185,7 +304,7 @@ export const Organization: React.FC = () => {
       id: 'action',
       maxWidth: 100,
       Cell: ({ row }: { row: { index: number } }) => {
-        if (!organization) return;
+        if (!organization) return null;
         const enabled = organization.granularScans.find(
           (scan) => scan.id === scans[row.index].id
         );
@@ -376,6 +495,64 @@ export const Organization: React.FC = () => {
     }
   };
 
+  const initiateDomainVerification = async (domain: string) => {
+    try {
+      if (!organization) return;
+      const pendingDomains: PendingDomain[] = await apiPost(
+        `/organizations/${organization?.id}/initiateDomainVerification`,
+        {
+          body: { domain }
+        }
+      );
+      setOrganization({ ...organization, pendingDomains });
+    } catch (e: any) {
+      setFeedbackMessage({
+        message:
+          e.status === 422
+            ? 'Error creating domain'
+            : e.message ?? e.toString(),
+        type: 'error'
+      });
+      console.error(e);
+    }
+  };
+
+  const checkDomainVerification = async (domain: string) => {
+    try {
+      if (!organization) return;
+      const resp: { success: boolean; organization?: OrganizationType } =
+        await apiPost(
+          `/organizations/${organization?.id}/checkDomainVerification`,
+          {
+            body: { domain }
+          }
+        );
+      if (resp.success && resp.organization) {
+        setOrganization(resp.organization);
+        setDialog({ open: false });
+        setFeedbackMessage({
+          message: 'Domain ' + inputValue + ' successfully verified!',
+          type: 'success'
+        });
+      } else {
+        setDialog({
+          ...dialog,
+          domainVerificationStatusMessage:
+            'Record not yet found. Note that DNS records may take up to 72 hours to propagate. You can come back later to check the verification status.'
+        });
+      }
+    } catch (e: any) {
+      setFeedbackMessage({
+        message:
+          e.status === 422
+            ? 'Error verifying domain'
+            : e.message ?? e.toString(),
+        type: 'error'
+      });
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     fetchOrganization();
   }, [fetchOrganization]);
@@ -436,6 +613,7 @@ export const Organization: React.FC = () => {
           {elements &&
             elements.map((value: string | OrganizationTag, index: number) => (
               <Chip
+                color={'primary'}
                 className={classes.chip}
                 key={index}
                 label={typeof value === 'string' ? value : value.name}
@@ -445,18 +623,45 @@ export const Organization: React.FC = () => {
                 }}
               ></Chip>
             ))}
-          <Chip
-            label="ADD"
-            variant="outlined"
-            color="secondary"
-            onClick={() => {
-              setDialog({
-                open: true,
-                type: props.type,
-                label: props.label
-              });
-            }}
-          />
+          {props.type === 'rootDomains' &&
+            organization.pendingDomains.map((domain, index: number) => (
+              <Chip
+                className={classes.chip}
+                style={{ backgroundColor: '#C4C4C4' }}
+                key={index}
+                label={domain.name + ' (verification pending)'}
+                onDelete={() => {
+                  organization.pendingDomains.splice(index, 1);
+                  setOrganization({ ...organization });
+                }}
+                onClick={() => {
+                  setInputValue(domain.name);
+                  setDialog({
+                    open: true,
+                    type: props.type,
+                    label: props.label,
+                    stage: 1
+                  });
+                }}
+              ></Chip>
+            ))}
+          {(props.type === 'rootDomains' ||
+            user?.userType === 'globalAdmin') && (
+            <Chip
+              label="ADD"
+              style={{ marginTop: '10px' }}
+              variant="outlined"
+              color="secondary"
+              onClick={() => {
+                setDialog({
+                  open: true,
+                  type: props.type,
+                  label: props.label,
+                  stage: 0
+                });
+              }}
+            />
+          )}
         </span>
       </div>
     );
@@ -516,9 +721,12 @@ export const Organization: React.FC = () => {
                 handleHomeEndKeys
                 options={tags}
                 getOptionLabel={(option) => {
-                  return option.name ?? '';
+                  if (typeof option === 'string') {
+                    return option;
+                  }
+                  return (option as AutocompleteType).name ?? '';
                 }}
-                renderOption={(option) => {
+                renderOption={(props, option) => {
                   if (option.title) return option.title;
                   return option.name ?? '';
                 }}
@@ -529,7 +737,34 @@ export const Organization: React.FC = () => {
                 )}
               />
             </>
-          ) : (
+          ) : dialog.type === 'rootDomains' && dialog.stage === 1 ? (
+            <>
+              <DialogContentText>
+                Add the following TXT record to {inputValue}&apos;s DNS
+                configuration and click Verify.
+              </DialogContentText>
+              <TextField
+                style={{ width: '100%' }}
+                value={
+                  organization.pendingDomains.find(
+                    (domain) => domain.name === inputValue
+                  )?.token
+                }
+                onFocus={(event) => {
+                  event.target.select();
+                }}
+              />
+              {dialog.domainVerificationStatusMessage && (
+                <>
+                  <br></br>
+                  <br></br>
+                  <DialogContentText>
+                    {dialog.domainVerificationStatusMessage}
+                  </DialogContentText>
+                </>
+              )}
+            </>
+          ) : user?.userType === 'globalAdmin' ? (
             <>
               <DialogContentText>
                 Separate multiple entries by commas.
@@ -545,6 +780,24 @@ export const Organization: React.FC = () => {
                 onChange={(e) => setInputValue(e.target.value)}
               />
             </>
+          ) : dialog.type === 'rootDomains' && dialog.stage === 0 ? (
+            <>
+              <DialogContentText>
+                In order to add a root domain, you will need to verify ownership
+                of the domain.
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label={dialog.label && dialog.label.slice(0, -1)}
+                type="text"
+                fullWidth
+                onChange={(e) => setInputValue(e.target.value)}
+              />
+            </>
+          ) : (
+            <></>
           )}
         </DialogContent>
         <DialogActions>
@@ -555,7 +808,20 @@ export const Organization: React.FC = () => {
             variant="contained"
             color="primary"
             onClick={() => {
-              if (dialog.type && dialog.type !== 'tags') {
+              if (
+                dialog.type === 'rootDomains' &&
+                user?.userType !== 'globalAdmin'
+              ) {
+                if (dialog.stage === 0) {
+                  // Start verification process
+                  initiateDomainVerification(inputValue);
+                  setDialog({ ...dialog, stage: 1 });
+                  return;
+                } else {
+                  checkDomainVerification(inputValue);
+                  return;
+                }
+              } else if (dialog.type && dialog.type !== 'tags') {
                 if (inputValue) {
                   // Allow adding multiple values with a comma delimiter
                   organization[dialog.type].push(
@@ -575,7 +841,11 @@ export const Organization: React.FC = () => {
               setTagValue(null);
             }}
           >
-            Add
+            {dialog.type === 'rootDomains' && user?.userType !== 'globalAdmin'
+              ? dialog.stage === 0
+                ? 'Next'
+                : 'Verify'
+              : 'Add'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -809,98 +1079,5 @@ export const Organization: React.FC = () => {
     </div>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  header: {
-    background: '#F9F9F9'
-  },
-  headerLabel: {
-    margin: 0,
-    paddingTop: '1.5rem',
-    paddingBottom: '0.5rem',
-    marginLeft: '15%',
-    color: '#C9C9C9',
-    fontWeight: 500,
-    fontStyle: 'normal',
-    fontSize: '24px',
-    '& a': {
-      textDecoration: 'none',
-      color: '#C9C9C9'
-    },
-    '& svg': {
-      verticalAlign: 'middle',
-      lineHeight: '100%',
-      fontSize: '26px'
-    }
-  },
-  chip: {
-    backgroundColor: '#C4C4C4',
-    color: 'white',
-    marginRight: '10px'
-  },
-  settingsWrapper: {
-    boxSizing: 'border-box',
-    border: '0px',
-    boxShadow: 'none',
-    borderRadius: '0px',
-    padding: '25px',
-    maxWidth: '900px',
-    margin: '0 auto'
-  },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end'
-  },
-  orgName: {
-    background: '#F5F5F5 !important',
-    paddingBottom: '10px'
-  },
-  textField: {
-    background: '#F5F5F5 !important'
-  },
-  root: {
-    maxWidth: '1400px',
-    margin: '0 auto',
-    '@media screen and (min-width: 480px)': {
-      padding: '1rem 1rem'
-    },
-    '@media screen and (min-width: 640px)': {
-      padding: '1rem 1.5rem'
-    },
-    '@media screen and (min-width: 1024px)': {
-      padding: '1rem 2rem'
-    }
-  },
-  headerRow: {
-    padding: '0.5rem 0',
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '16px',
-    flexWrap: 'wrap',
-    '& label': {
-      flex: '1 0 100%',
-      fontWeight: 'bolder',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '0.5rem 0',
-      '@media screen and (min-width: 640px)': {
-        flex: '0 0 220px',
-        padding: 0
-      }
-    },
-    '& span': {
-      display: 'block',
-      flex: '1 1 auto',
-      marginLeft: 'calc(1rem + 20px)',
-      '@media screen and (min-width: 640px)': {
-        marginLeft: 'calc(1rem + 20px)'
-      },
-      '@media screen and (min-width: 1024px)': {
-        marginLeft: 0
-      }
-    }
-  }
-}));
 
 export default Organization;

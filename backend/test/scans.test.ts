@@ -10,15 +10,18 @@ import {
 } from '../src/models';
 import { createUserToken } from './util';
 import { handler as scheduler } from '../src/tasks/scheduler';
-import { Organizations } from 'aws-sdk';
 
 jest.mock('../src/tasks/scheduler', () => ({
   handler: jest.fn()
 }));
 
 describe('scan', () => {
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   describe('list', () => {
     it('list by globalAdmin should return all scans', async () => {
