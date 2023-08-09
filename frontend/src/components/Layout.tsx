@@ -33,7 +33,7 @@ export const Layout: React.FC = ({ children }) => {
     user !== null && user !== undefined ? true : false
   );
   const { isTimedOut, resetTimeout } = useUserActivityTimeout(
-    0.1 * 60 * 1000,
+    14 * 60 * 1000, // set to 14 minutes of inactivity to notify user
     loggedIn
   );
 
@@ -59,7 +59,7 @@ export const Layout: React.FC = ({ children }) => {
         <UserInactiveModal
           isOpen={isTimedOut}
           onCountdownEnd={handleCountdownEnd}
-          countdown={3}
+          countdown={60} // 60 second timer for user inactivity timeout
         />
         <GovBanner />
         <Header />
