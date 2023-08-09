@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
+import { styled } from '@mui/material/styles';
 import { TableInstance, Filters, SortingRule } from 'react-table';
 import { Query } from 'types';
 import { useAuthContext } from 'context';
 import { Table, Paginator } from 'components';
 import { Vulnerability } from 'types';
 import classes from './styles.module.scss';
-import { makeStyles } from '@material-ui/core';
 import { Subnav } from 'components';
 import { parse } from 'query-string';
 import { createColumns, createGroupedColumns } from './columns';
@@ -37,7 +37,7 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
   const [totalResults, setTotalResults] = useState(0);
   const tableRef = useRef<TableInstance<Vulnerability>>(null);
-  const listClasses = useStyles();
+
   const [noResults, setNoResults] = useState(false);
 
   const updateVulnerability = useCallback(
@@ -197,8 +197,8 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
   }
 
   return (
-    <div>
-      <div className={listClasses.contentWrapper}>
+    <Root>
+      <div className={classesVulns.contentWrapper}>
         <Subnav
           items={[
             { title: 'Search Results', path: '/inventory', exact: true },
@@ -225,12 +225,21 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
           />
         </div>
       </div>
-    </div>
+    </Root>
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  contentWrapper: {
+export default Vulnerabilities;
+
+//Styling
+const PREFIX = 'Vulnerabilities';
+
+const classesVulns = {
+  contentWrapper: `${PREFIX}-contentWrapper`
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classesVulns.contentWrapper}`]: {
     position: 'relative',
     flex: '1 1 auto',
     height: '100%',
@@ -239,5 +248,3 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'hidden'
   }
 }));
-
-export default Vulnerabilities;

@@ -6,13 +6,16 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@aws-amplify/ui-react": "^5.0.6",
+    "@aws-amplify/ui-react": "^5.0.4",
     "@elastic/react-search-ui": "^1.18.2",
     "@elastic/react-search-ui-views": "^1.20.2",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@jonkoops/matomo-tracker-react": "^0.7.0",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
-    "@material-ui/lab": "^4.0.0-alpha.61",
+    "@mui/icons-material": "^5.14.1",
+    "@mui/lab": "^5.0.0-alpha.135",
+    "@mui/material": "^5.14.2",
+    "@mui/system": "^5.14.0",
     "@nivo/bar": "^0.80.0",
     "@nivo/core": "^0.80.0",
     "@nivo/pie": "^0.80.0",
@@ -30,9 +33,9 @@
     "papaparse": "^5.3.2",
     "postcss": "^8.4.18",
     "query-string": "^7.1.1",
-    "react": "^17.0.2",
+    "react": "^18.2.0",
     "react-beforeunload": "^2.5.3",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
     "react-lazylog": "^4.5.3",
     "react-markdown": "^8.0.3",
@@ -45,13 +48,13 @@
     "resolve-url-loader": "^5.0.0",
     "universal-cookie": "^4.0.4",
     "uswds": "^2.13.3",
-    "web-vitals": "^3.4.0"
+    "web-vitals": "^2.1.4"
   },
   "overrides": {
     "@mattiasbuelens/web-streams-polyfill": "npm:web-streams-polyfill",
     "@svgr/webpack": "^8.0.1",
     "babel-loader": "^9.1.2",
-    "css-minimizer-webpack-plugin":"^5.0.0",
+    "css-minimizer-webpack-plugin": "^5.0.0",
     "css-select": {
       "nth-check": "^2.1.1"
     },
@@ -67,7 +70,9 @@
     "resolve-url-loader": "$resolve-url-loader",
     "rollup-plugin-terser": "npm:@rollup/plugin-terser",
     "uglify-es": "npm:uglify-js",
-    "yaml": "^2.2.2"
+    "yaml": "^2.2.2",
+    "semver": "^7.5.3",
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "start": "react-scripts --max_old_space_size=8192 start",
@@ -102,9 +107,9 @@
     "@types/file-saver": "^2.0.5",
     "@types/jest": "^27.5.2",
     "@types/papaparse": "^5.3.5",
-    "@types/react": "^17.0.59",
+    "@types/react": "^18.2.0",
     "@types/react-beforeunload": "^2.1.1",
-    "@types/react-dom": "^17.0.18",
+    "@types/react-dom": "^18.2.0",
     "@types/react-lazylog": "^4.5.1",
     "@types/react-router-dom": "^5.3.3",
     "@types/react-simple-maps": "^3.0.0",
@@ -120,7 +125,7 @@
     "eslint-plugin-react": "^7.31.10",
     "sass": "^1.55.0",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^11.2.7",
+    "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^13.5.0",
     "prettier": "^2.7.1"
   }
