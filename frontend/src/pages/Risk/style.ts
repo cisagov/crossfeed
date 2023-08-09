@@ -1,7 +1,39 @@
-import { makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
 
-export const useRiskStyles = makeStyles((theme) => ({
-  cardRoot: {
+//Styling
+const PREFIX = 'Risk';
+
+export const classesRisk = {
+  cardRoot: `${PREFIX}-cardRoot`,
+  cardTitle: `${PREFIX}-cartTitle`,
+  cardColumnHeadings: `${PREFIX}-cardColumnHeadings`,
+  cardSmall: `${PREFIX}-cardSmall`,
+  chartSmall: `${PREFIX}-chartSmall`,
+  chartLarge: `${PREFIX}-chartLarge`,
+  chartHeader: `${PREFIX}-chartHeader`,
+  cardBig: `${PREFIX}-cardBig`,
+  body: `${PREFIX}-body`,
+  header: `${PREFIX}-header`,
+  footer: `${PREFIX}-footer`,
+  seeAll: `${PREFIX}-seeAll`,
+  root: `${PREFIX}-root`,
+  contentWrapper: `${PREFIX}-contentWrapper`,
+  content: `${PREFIX}-content`,
+  panel: `${PREFIX}-panel`,
+  miniCardRoot: `${PREFIX}-miniCardRoot`,
+  cardInner: `${PREFIX}-cardInner`,
+  miniCardLeft: `${PREFIX}-miniCardLeft`,
+  miniCardCenter: `${PREFIX}-miniCardCenter`,
+  button: `${PREFIX}-button`,
+  underlined: `${PREFIX}-underlined`,
+  vulnCount: `${PREFIX}-vulnCount`,
+  chip: `${PREFIX}-chip`,
+  chipWrapper: `${PREFIX}-chipWrapper`,
+  note: `${PREFIX}-note`
+};
+
+export const RiskRoot = styled('div')(({ theme }) => ({
+  [`& .${classesRisk.cardRoot}`]: {
     boxSizing: 'border-box',
     marginBottom: '1rem',
     border: '2px solid #DCDEE0',
@@ -11,18 +43,10 @@ export const useRiskStyles = makeStyles((theme) => ({
       backgroundColor: 'yellow'
     }
   },
-  cardSmall: {
-    width: '100%',
-    height: '355px',
-    '& h3': {
-      textAlign: 'center'
-    },
-    overflow: 'hidden'
-  },
-  cardTitle: {
+  [`& .${classesRisk.cardTitle}`]: {
     fontSize: '14px'
   },
-  cardColumnHeadings: {
+  [`& .${classesRisk.cardColumnHeadings}`]: {
     display: 'flex',
     listStyle: 'none',
     justifyContent: 'space-between',
@@ -32,14 +56,22 @@ export const useRiskStyles = makeStyles((theme) => ({
     fontSize: 16,
     fontWeight: 'bold'
   },
-  chartSmall: {
+  [`& .${classesRisk.cardSmall}`]: {
+    width: '100%',
+    height: '355px',
+    '& h3': {
+      textAlign: 'center'
+    },
+    overflow: 'hidden'
+  },
+  [`& .${classesRisk.chartSmall}`]: {
     height: '85%'
   },
-  chartLarge: {
+  [`& .${classesRisk.chartLarge}`]: {
     height: '85.5%',
     width: '90%'
   },
-  chartHeader: {
+  [`& .${classesRisk.chartHeader}`]: {
     display: 'flex',
     justifyContent: 'space-between',
     '& h5': {
@@ -49,7 +81,7 @@ export const useRiskStyles = makeStyles((theme) => ({
       fontSize: 14
     }
   },
-  cardBig: {
+  [`& .${classesRisk.cardBig}`]: {
     width: '100%',
     height: '889px',
     '& h3': {
@@ -57,10 +89,10 @@ export const useRiskStyles = makeStyles((theme) => ({
     },
     overflow: 'hidden'
   },
-  body: {
+  [`& .${classesRisk.body}`]: {
     padding: '20px 30px'
   },
-  header: {
+  [`& .${classesRisk.header}`]: {
     height: '60px',
     backgroundColor: '#F8F9FA',
     top: 0,
@@ -70,7 +102,7 @@ export const useRiskStyles = makeStyles((theme) => ({
     paddingLeft: 20,
     paddingTop: 1
   },
-  footer: {
+  [`& .${classesRisk.footer}`]: {
     height: '60px',
     backgroundColor: '#F8F9FA',
     width: '100%',
@@ -87,7 +119,7 @@ export const useRiskStyles = makeStyles((theme) => ({
       outline: 'none !important'
     }
   },
-  seeAll: {
+  [`& .${classesRisk.seeAll}`]: {
     float: 'right',
     marginTop: '5px',
     marginRight: '20px',
@@ -97,7 +129,7 @@ export const useRiskStyles = makeStyles((theme) => ({
       fontWeight: '400'
     }
   },
-  root: {
+  [`& .${classesRisk.root}`]: {
     position: 'relative',
     flex: '1',
     width: '100%',
@@ -107,7 +139,7 @@ export const useRiskStyles = makeStyles((theme) => ({
     margin: '0',
     overflowY: 'hidden'
   },
-  contentWrapper: {
+  [`& .${classesRisk.contentWrapper}`]: {
     position: 'relative',
     flex: '1 1 auto',
     height: '100%',
@@ -116,20 +148,20 @@ export const useRiskStyles = makeStyles((theme) => ({
     overflowY: 'hidden',
     marginTop: '1rem'
   },
-  content: {
+  [`& .${classesRisk.content}`]: {
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'stretch',
     flex: '1'
   },
-  panel: {
+  [`& .${classesRisk.panel}`]: {
     position: 'relative',
     height: '100%',
     overflowY: 'auto',
     padding: '0 1rem 2rem 1rem',
     flex: '0 0 50%'
   },
-  miniCardRoot: {
+  [`& .${classesRisk.miniCardRoot}`]: {
     boxSizing: 'border-box',
     marginBottom: '1rem',
     '& em': {
@@ -149,7 +181,7 @@ export const useRiskStyles = makeStyles((theme) => ({
     width: '100%',
     borderRadius: '4px'
   },
-  cardInner: {
+  [`& .${classesRisk.cardInner}`]: {
     paddingLeft: 30,
     paddingRight: 30,
     display: 'flex',
@@ -164,18 +196,18 @@ export const useRiskStyles = makeStyles((theme) => ({
     },
     height: 45
   },
-  miniCardLeft: {
+  [`& .${classesRisk.miniCardLeft}`]: {
     display: 'flex',
     flex: 1,
     justifyContent: 'flex-start',
     color: '#3D4551'
   },
-  miniCardCenter: {
+  [`& .${classesRisk.miniCardCenter}`]: {
     display: 'flex',
     flex: 1,
     justifyContent: 'center'
   },
-  button: {
+  [`& .${classesRisk.button}`]: {
     outline: 'none',
     border: 'none',
     background: 'none',
@@ -184,15 +216,15 @@ export const useRiskStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     fontSize: '12px'
   },
-  underlined: {
+  [`& .${classesRisk.underlined}`]: {
     width: '80px',
     fontWeight: 'normal'
   },
-  vulnCount: {
+  [`& .${classesRisk.vulnCount}`]: {
     color: '#B51D09',
     flex: 0.5
   },
-  chip: {
+  [`& .${classesRisk.chip}`]: {
     color: '#3D4551',
     height: '26px',
     fontSize: '12px',
@@ -217,7 +249,7 @@ export const useRiskStyles = makeStyles((theme) => ({
       outline: 0
     }
   },
-  chipWrapper: {
+  [`& .${classesRisk.chipWrapper}`]: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -225,7 +257,7 @@ export const useRiskStyles = makeStyles((theme) => ({
     marginTop: '5px',
     marginLeft: '15px'
   },
-  note: {
+  [`& .${classesRisk.note}`]: {
     font: '12px',
     fontFamily: 'Public Sans',
     margin: '10px 10px 10px 25px',
@@ -233,5 +265,3 @@ export const useRiskStyles = makeStyles((theme) => ({
     color: '#71767A'
   }
 }));
-
-export type RiskStyles = ReturnType<typeof useRiskStyles>;
