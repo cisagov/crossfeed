@@ -4,13 +4,13 @@ import { ColumnInstance } from 'react-table';
 import { FaSearch, FaTimes } from 'react-icons/fa';
 import classes from './styles.module.scss';
 
-interface Props {
-  column: ColumnInstance;
+interface Props<T extends object> {
+  column: ColumnInstance<T>;
 }
 
-export const ColumnFilter: React.FC<Props> = ({
+export const ColumnFilter = <T extends object>({
   column: { filterValue, setFilter, id }
-}) => {
+}: Props<T>) => {
   const [search, setSearch] = useState('');
 
   const onSubmit: React.FormEventHandler = (e) => {

@@ -1,13 +1,14 @@
 import React, { useCallback, useState, useEffect } from 'react';
+// import { styled } from '@mui/material/styles';
 import classes from './Risk.module.scss';
 import VulnerabilityCard from './VulnerabilityCard';
-import { useRiskStyles } from './style';
+import * as RiskStyles from './style';
 import { getSeverityColor } from './utils';
 import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
-import { Paper, Chip } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
+import { Paper, Chip } from '@mui/material';
+import { Pagination } from '@mui/material';
 import { geoCentroid } from 'd3-geo';
 import {
   ComposableMap,
@@ -67,6 +68,8 @@ let colorScale = scaleLinear<string>()
 
 const Risk: React.FC = (props) => {
   const history = useHistory();
+  const classesRisk = RiskStyles.classesRisk;
+  const RiskRoot = RiskStyles.RiskRoot;
   const { currentOrganization, showAllOrganizations, showMaps, user, apiPost } =
     useAuthContext();
 
@@ -81,7 +84,6 @@ const Risk: React.FC = (props) => {
   const [domainsWithVulns, setDomainsWithVulns] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [current, setCurrent] = useState(1);
-  const cardClasses = useRiskStyles(props);
 
   const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
@@ -324,10 +326,10 @@ const Risk: React.FC = (props) => {
     findFn: (geo: any) => Point | undefined;
     type: string;
   }) => (
-    <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+    <Paper elevation={0} classes={{ root: classesRisk.cardRoot }}>
       <div>
         <div className={classes.chart}>
-          <div className={cardClasses.header}>
+          <div className={classesRisk.header}>
             <h2>{title}</h2>
           </div>
 
@@ -479,7 +481,7 @@ const Risk: React.FC = (props) => {
   };
 
   return (
-    <div className={classes.root}>
+    <RiskRoot className={classes.root}>
       {isLoading && (
         <div className="cisa-crossfeed-loading">
           <div></div>
@@ -497,10 +499,10 @@ const Risk: React.FC = (props) => {
           Generate Report
         </USWDSButton>
       </p>
-      <div id="wrapper" className={cardClasses.contentWrapper}>
+      <div id="wrapper" className={classesRisk.contentWrapper}>
         {stats && (
-          <div className={cardClasses.content}>
-            <div className={cardClasses.panel}>
+          <div className={classesRisk.content}>
+            <div className={classesRisk.panel}>
               <VulnerabilityCard
                 title={'Latest Vulnerabilities'}
                 data={latestVulnsGroupedArr}
@@ -508,12 +510,12 @@ const Risk: React.FC = (props) => {
                 showCommon={false}
               ></VulnerabilityCard>
               {stats.domains.services.length > 0 && (
-                <Paper elevation={0} className={cardClasses.cardRoot}>
-                  <div className={cardClasses.cardSmall}>
-                    <div className={cardClasses.header}>
+                <Paper elevation={0} className={classesRisk.cardRoot}>
+                  <div className={classesRisk.cardSmall}>
+                    <div className={classesRisk.header}>
                       <h2>Most common services</h2>
                     </div>
-                    <div className={cardClasses.chartSmall}>
+                    <div className={classesRisk.chartSmall}>
                       <MyResponsivePie
                         data={stats.domains.services}
                         colors={allColors}
@@ -524,12 +526,12 @@ const Risk: React.FC = (props) => {
                 </Paper>
               )}
               {stats.domains.ports.length > 0 && (
-                <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
-                  <div className={cardClasses.cardSmall}>
-                    <div className={cardClasses.header}>
+                <Paper elevation={0} classes={{ root: classesRisk.cardRoot }}>
+                  <div className={classesRisk.cardSmall}>
+                    <div className={classesRisk.header}>
                       <h2>Most common ports</h2>
                     </div>
-                    <div className={cardClasses.chartSmall}>
+                    <div className={classesRisk.chartSmall}>
                       <MyResponsiveBar
                         data={stats.domains.ports.slice(0, 5).reverse()}
                         type={'ports'}
@@ -540,12 +542,12 @@ const Risk: React.FC = (props) => {
                 </Paper>
               )}
               {stats.vulnerabilities.severity.length > 0 && (
-                <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
-                  <div className={cardClasses.cardSmall}>
-                    <div className={cardClasses.header}>
+                <Paper elevation={0} classes={{ root: classesRisk.cardRoot }}>
+                  <div className={classesRisk.cardSmall}>
+                    <div className={classesRisk.header}>
                       <h2>Severity Levels</h2>
                     </div>
-                    <div className={cardClasses.chartSmall}>
+                    <div className={classesRisk.chartSmall}>
                       <MyResponsivePie
                         data={stats.vulnerabilities.severity}
                         colors={getSeverityColor}
@@ -557,33 +559,33 @@ const Risk: React.FC = (props) => {
               )}
             </div>
 
-            <div className={cardClasses.panel}>
-              <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+            <div className={classesRisk.panel}>
+              <Paper elevation={0} classes={{ root: classesRisk.cardRoot }}>
                 <div>
                   {stats.domains.numVulnerabilities.length > 0 && (
-                    <div className={cardClasses.cardBig}>
-                      <div className={cardClasses.seeAll}>
+                    <div className={classesRisk.cardBig}>
+                      <div className={classesRisk.seeAll}>
                         <h4>
                           <Link to="/inventory/vulnerabilities">See All</Link>
                         </h4>
                       </div>
-                      <div className={cardClasses.header}>
+                      <div className={classesRisk.header}>
                         <h2>Open Vulnerabilities by Domain</h2>
                       </div>
-                      <div className={cardClasses.chartLarge}>
+                      <div className={classesRisk.chartLarge}>
                         {stats.domains.numVulnerabilities.length === 0 ? (
                           <h3>No open vulnerabilities</h3>
                         ) : (
                           <>
-                            <p className={cardClasses.note}>
+                            <p className={classesRisk.note}>
                               *Top 50 domains with open vulnerabilities
                             </p>
-                            <div className={cardClasses.chipWrapper}>
+                            <div className={classesRisk.chipWrapper}>
                               {severities.map(
                                 (sevFilter: VulnSeverities, i: number) => (
                                   <Chip
                                     key={i}
-                                    className={cardClasses.chip}
+                                    className={classesRisk.chip}
                                     disabled={sevFilter.disable}
                                     label={sevFilter.label}
                                     onClick={() => {
@@ -594,7 +596,7 @@ const Risk: React.FC = (props) => {
                                 )
                               )}
                             </div>
-                            <div className={cardClasses.chartHeader}>
+                            <div className={classesRisk.chartHeader}>
                               <h5>Domain&emsp; Breakdown</h5>
                               <h5
                                 style={{ textAlign: 'right', paddingLeft: 0 }}
@@ -611,7 +613,7 @@ const Risk: React.FC = (props) => {
                           </>
                         )}
                       </div>
-                      <div className={cardClasses.footer}>
+                      <div className={classesRisk.footer}>
                         <span>
                           <strong>
                             {(domainsWithVulns === 0
@@ -679,7 +681,7 @@ const Risk: React.FC = (props) => {
           </div>
         )}
       </div>
-    </div>
+    </RiskRoot>
   );
 };
 

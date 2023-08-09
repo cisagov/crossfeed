@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
 
 interface Props {
   items: {
@@ -10,30 +10,41 @@ interface Props {
 
 export const DefinitionList: React.FC<Props> = (props) => {
   const { items } = props;
-  const classes = useStyles();
-
   return (
-    <dl className={classes.list}>
-      {items.map(({ label, value }) => (
-        <div className={classes.item} key={value}>
-          <dt>{label}:</dt>
-          <dd>{value}</dd>
-        </div>
-      ))}
-    </dl>
+    <Root className={classes.root}>
+      <dl className={classes.list}>
+        {items.map(({ label, value }) => (
+          <div className={classes.root} key={value}>
+            <dt>{label}:</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </Root>
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+//Styling
+const PREFIX = 'DefinitionList';
+const classes = {
+  root: `${PREFIX}-root`,
+  content: `${PREFIX}-content`,
+  list: `${PREFIX}-list`,
+  item: `${PREFIX}-item`
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.root}`]: {
     width: '100%',
     margin: '0 0 1.5rem 0'
   },
-  list: {
+
+  [`&. ${classes.list}`]: {
     width: '100%',
     margin: 0
   },
-  item: {
+
+  [`& .${classes.item}`]: {
     width: '100%',
     display: 'flex',
     flexFlow: 'row wrap',

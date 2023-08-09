@@ -23,7 +23,7 @@ import {
   RadioGroup,
   FormControlLabel,
   ButtonGroup
-} from '@material-ui/core';
+} from '@mui/material';
 
 interface Errors extends Partial<User> {
   global?: string;
