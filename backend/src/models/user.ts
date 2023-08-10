@@ -25,17 +25,13 @@ export class User extends BaseEntity {
 
   @Index({ unique: true })
   @Column({
-    length: 128,
-    nullable: true,
-    type: 'varchar'
+    nullable: true
   })
   cognitoId: string;
 
   @Index({ unique: true })
   @Column({
-    length: 128,
-    nullable: true,
-    type: 'varchar'
+    nullable: true
   })
   loginGovId: string;
 
@@ -45,29 +41,17 @@ export class User extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({
-    length: 64,
-    type: 'varchar'
-  })
+  @Column()
   firstName: string;
 
-  @Column({
-    length: 64,
-    type: 'varchar'
-  })
+  @Column()
   lastName: string;
 
-  @Column({
-    length: 128,
-    type: 'varchar'
-  })
+  @Column()
   fullName: string;
 
   @Index({ unique: true })
-  @Column({
-    length: 128,
-    type: 'varchar'
-  })
+  @Column()
   email: string;
 
   /** Whether the user's invite is pending */

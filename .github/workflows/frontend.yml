@@ -62,7 +62,7 @@ jobs:
         run: npm run test
   deploy_staging:
     needs: [lint, test]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     environment: staging
     concurrency: 1
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -92,7 +92,7 @@ jobs:
 
   deploy_prod:
     needs: [lint, test]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     environment: production
     concurrency: 1
     if: github.event_name == 'push' && github.ref == 'refs/heads/production'

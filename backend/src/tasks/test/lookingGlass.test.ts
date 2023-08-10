@@ -372,6 +372,7 @@ describe('lookingGlass', () => {
   let tag2;
   let scan;
   let domains: Domain[] = [];
+  let connection;
   beforeEach(async () => {
     orgName = 'Collection-' + Math.random();
     orgResponse = [
@@ -397,7 +398,7 @@ describe('lookingGlass', () => {
         id: 'Collection_Id_2'
       }
     ];
-    await connectToDatabase();
+    connection = await connectToDatabase();
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
     tag1 = await OrganizationTag.create({
       name: 'P&E'
@@ -441,8 +442,11 @@ describe('lookingGlass', () => {
   afterEach(async () => {
     global.Date = realDate;
     jest.unmock('../helpers/getIps');
+    await connection.close();
   });
-
+  afterAll(async () => {
+    nock.cleanAll();
+  });
   const checkDomains = async (organization) => {
     const domains = await Domain.find({
       where: { organization },

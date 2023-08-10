@@ -3,14 +3,14 @@ import { Dropdown } from '@trussworks/react-uswds';
 import { ColumnInstance } from 'react-table';
 import classes from './styles.module.scss';
 
-interface Props {
-  column: ColumnInstance;
+interface Props<T extends object> {
+  column: ColumnInstance<T>;
 }
 
 type Option = { value: any; label: string };
 
-export const selectFilter = (opts: string[] | Option[]) => {
-  const SelectFilter: React.FC<Props> = ({
+export const selectFilter = <T extends object>(opts: string[] | Option[]) => {
+  const SelectFilter: React.FC<Props<T>> = ({
     column: { filterValue, setFilter, id }
   }) => {
     return (

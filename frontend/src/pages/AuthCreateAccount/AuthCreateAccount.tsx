@@ -78,15 +78,7 @@ export const AuthCreateAccount: React.FC = () => {
 
   return (
     <AuthForm onSubmit={onSubmit}>
-      <h2>Crossfeed is currently in private beta.</h2>
-      <p>
-        Your organization admininistrator will need to invite you to Crossfeed
-        in order for you to begin using it.
-      </p>
-      <p>
-        Is your organization not yet on Crossfeed? Contact{' '}
-        <a href="# ">vulnerability@cisa.dhs.gov</a> to learn more.
-      </p>
+      <h2>Crossfeed is currently in private beta</h2>
       {(process.env.NODE_ENV === 'development' ||
         (user && user.userType === 'globalAdmin')) && (
         <>

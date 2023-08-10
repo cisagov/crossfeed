@@ -12,7 +12,7 @@ COPY ./docs/package* ./
 
 RUN npm install -g npm@9
 
-RUN npm i --legacy-peer-deps
+RUN npm ci
 
 # Generate swagger definitions
 COPY ./backend ../backend

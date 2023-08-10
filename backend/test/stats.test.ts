@@ -12,6 +12,7 @@ import {
 import { createUserToken } from './util';
 
 describe('stats', () => {
+  let connection;
   const standard = {
     domains: {
       numVulnerabilities: [
@@ -46,7 +47,10 @@ describe('stats', () => {
     }
   };
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   describe('get', () => {
     it('get by org user should return only domains from that org', async () => {

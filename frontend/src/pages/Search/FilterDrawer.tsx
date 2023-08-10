@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Paper,
   Accordion as MuiAccordion,
   AccordionSummary as MuiAccordionSummary,
-  AccordionDetails,
-  makeStyles,
-  withStyles
-} from '@material-ui/core';
-import { ExpandMore, FiberManualRecordRounded } from '@material-ui/icons';
+  AccordionDetails
+} from '@mui/material';
+import { ExpandMore, FiberManualRecordRounded } from '@mui/icons-material';
 import { FaFilter } from 'react-icons/fa';
 import { TaggedArrayInput, FacetFilter } from 'components';
 import { ContextType } from '../../context/SearchProvider';
@@ -21,8 +20,6 @@ interface Props {
 }
 
 const FiltersApplied: React.FC = () => {
-  const classes = useStyles();
-
   return (
     <div className={classes.applied}>
       <FiberManualRecordRounded /> Filters Applied
@@ -32,7 +29,6 @@ const FiltersApplied: React.FC = () => {
 
 export const FilterDrawer: React.FC<Props> = (props) => {
   const { filters, addFilter, removeFilter, facets, clearFilters } = props;
-  const classes = useStyles();
 
   const filtersByColumn = useMemo(
     () =>
@@ -69,7 +65,7 @@ export const FilterDrawer: React.FC<Props> = (props) => {
   }
 
   return (
-    <Wrapper>
+    <StyledWrapper>
       <div className={classes.header}>
         <div className={classes.filter}>
           <FaFilter /> <h3>Filter</h3>
@@ -80,8 +76,24 @@ export const FilterDrawer: React.FC<Props> = (props) => {
           </div>
         )}
       </div>
-      <Accordion elevation={0} square>
-        <AccordionSummary expandIcon={<ExpandMore />}>
+      <Accordion
+        elevation={0}
+        square
+        classes={{
+          root: classes.root,
+          disabled: classes.disabled,
+          expanded: classes.expanded
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMore />}
+          classes={{
+            root: classes.root2,
+            content: classes.content,
+            disabled: classes.disabled2,
+            expanded: classes.expanded2
+          }}
+        >
           <div>IP(s)</div>
           {filtersByColumn['ip']?.length > 0 && <FiltersApplied />}
         </AccordionSummary>
@@ -94,8 +106,24 @@ export const FilterDrawer: React.FC<Props> = (props) => {
           />
         </AccordionDetails>
       </Accordion>
-      <Accordion elevation={0} square>
-        <AccordionSummary expandIcon={<ExpandMore />}>
+      <Accordion
+        elevation={0}
+        square
+        classes={{
+          root: classes.root,
+          disabled: classes.disabled,
+          expanded: classes.expanded
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMore />}
+          classes={{
+            root: classes.root2,
+            content: classes.content,
+            disabled: classes.disabled2,
+            expanded: classes.expanded2
+          }}
+        >
           <div>Domain(s)</div>
           {filtersByColumn['name']?.length > 0 && <FiltersApplied />}
         </AccordionSummary>
@@ -109,8 +137,24 @@ export const FilterDrawer: React.FC<Props> = (props) => {
         </AccordionDetails>
       </Accordion>
       {fromDomainFacet.length > 0 && (
-        <Accordion elevation={0} square>
-          <AccordionSummary expandIcon={<ExpandMore />}>
+        <Accordion
+          elevation={0}
+          square
+          classes={{
+            root: classes.root,
+            disabled: classes.disabled,
+            expanded: classes.expanded
+          }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            classes={{
+              root: classes.root2,
+              content: classes.content,
+              disabled: classes.disabled2,
+              expanded: classes.expanded2
+            }}
+          >
             <div>Root Domain(s)</div>
             {filtersByColumn['fromRootDomain']?.length > 0 && (
               <FiltersApplied />
@@ -129,8 +173,24 @@ export const FilterDrawer: React.FC<Props> = (props) => {
         </Accordion>
       )}
       {portFacet.length > 0 && (
-        <Accordion elevation={0} square>
-          <AccordionSummary expandIcon={<ExpandMore />}>
+        <Accordion
+          elevation={0}
+          square
+          classes={{
+            root: classes.root,
+            disabled: classes.disabled,
+            expanded: classes.expanded
+          }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            classes={{
+              root: classes.root2,
+              content: classes.content,
+              disabled: classes.disabled2,
+              expanded: classes.expanded2
+            }}
+          >
             <div>Port(s)</div>
             {filtersByColumn['services.port']?.length > 0 && <FiltersApplied />}
           </AccordionSummary>
@@ -147,8 +207,24 @@ export const FilterDrawer: React.FC<Props> = (props) => {
         </Accordion>
       )}
       {cveFacet.length > 0 && (
-        <Accordion elevation={0} square>
-          <AccordionSummary expandIcon={<ExpandMore />}>
+        <Accordion
+          elevation={0}
+          square
+          classes={{
+            root: classes.root,
+            disabled: classes.disabled,
+            expanded: classes.expanded
+          }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            classes={{
+              root: classes.root2,
+              content: classes.content,
+              disabled: classes.disabled2,
+              expanded: classes.expanded2
+            }}
+          >
             <div>CVE(s)</div>
             {filtersByColumn['vulnerabilities.cve']?.length > 0 && (
               <FiltersApplied />
@@ -169,8 +245,24 @@ export const FilterDrawer: React.FC<Props> = (props) => {
         </Accordion>
       )}
       {severityFacet.length > 0 && (
-        <Accordion elevation={0} square>
-          <AccordionSummary expandIcon={<ExpandMore />}>
+        <Accordion
+          elevation={0}
+          square
+          classes={{
+            root: classes.root,
+            disabled: classes.disabled,
+            expanded: classes.expanded
+          }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            classes={{
+              root: classes.root2,
+              content: classes.content,
+              disabled: classes.disabled2,
+              expanded: classes.expanded2
+            }}
+          >
             <div>Severity</div>
             {filtersByColumn['vulnerabilities.severity']?.length > 0 && (
               <FiltersApplied />
@@ -190,79 +282,33 @@ export const FilterDrawer: React.FC<Props> = (props) => {
           </AccordionDetails>
         </Accordion>
       )}
-    </Wrapper>
+    </StyledWrapper>
   );
 };
 
-const Accordion = withStyles({
-  root: {
-    backgroundColor: '#f4f4f4',
-    borderTop: '1px solid rgba(0,0,0,.125)',
-    borderBottom: '1px solid rgba(0,0,0,.125)',
-    boxShadow: 'none',
-    '&:not(:last-child)': {
-      borderBottom: 0
-    },
-    '&:before': {
-      display: 'none'
-    },
-    margin: 0,
-    '&$expanded': {
-      margin: 0
-    },
-    '&$disabled': {
-      backgroundColor: '#f4f4f4'
-    }
-  },
-  disabled: {},
-  expanded: {}
-})(MuiAccordion);
+//Styling
+const Accordion = MuiAccordion;
+const AccordionSummary = MuiAccordionSummary;
+const Wrapper = Paper;
+const PREFIX = 'FilterDrawer';
 
-const AccordionSummary = withStyles({
-  root: {
-    color: '#3D4551',
-    minHeight: 64,
-    '&$expanded': {
-      minHeight: 64
-    },
-    '&:focus': {
-      outline: 'none !important'
-    },
-    '&$disabled': {
-      opacity: 1,
-      fontWeight: 600,
+const classes = {
+  root: `${PREFIX}-root`,
+  disabled: `${PREFIX}-disabled`,
+  expanded: `${PREFIX}-expanded`,
+  root2: `${PREFIX}-root2`,
+  content: `${PREFIX}-content`,
+  disabled2: `${PREFIX}-disabled2`,
+  expanded2: `${PREFIX}-expanded2`,
+  root3: `${PREFIX}-root3`,
+  header: `${PREFIX}-header`,
+  details: `${PREFIX}-details`,
+  applied: `${PREFIX}-applied`,
+  filter: `${PREFIX}-filter`
+};
 
-      '& svg': {
-        opacity: 0.5
-      }
-    }
-  },
-  content: {
-    flexFlow: 'column nowrap',
-    alignItems: 'flex-start',
-    justifyContent: 'center'
-  },
-  disabled: {},
-  expanded: {}
-})(MuiAccordionSummary);
-
-const Wrapper = withStyles({
-  root: {
-    height: '100%',
-    position: 'relative',
-    flex: '0 0 250px',
-    backgroundColor: '#f4f4f4',
-    color: '#3D4551',
-    overflowY: 'auto',
-    zIndex: 10,
-    borderRadius: 0,
-    borderRight: '1px solid #C3C5C7',
-    boxShadow: 'none'
-  }
-})(Paper);
-
-const useStyles = makeStyles((theme) => ({
-  header: {
+const StyledWrapper = styled(Wrapper)(({ theme }) => ({
+  [`& .${classes.header}`]: {
     display: 'flex',
     alignItems: 'center',
     flexFlow: 'row nowrap',
@@ -284,26 +330,25 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: 'underline'
     }
   },
-  details: {
+  [`& .${classes.details}`]: {
     paddingTop: 0
     // maxHeight: 250,
     // overflowY: 'auto'
   },
-  applied: {
+  [`& .${classes.applied}`]: {
     display: 'flex',
     alignItems: 'center',
     flexFlow: 'row nowrap',
     fontSize: '0.7rem',
     textTransform: 'uppercase',
     color: theme.palette.grey['500'],
-
     '& svg': {
       fontSize: '0.7rem',
       color: theme.palette.primary.main,
       marginRight: 3
     }
   },
-  filter: {
+  [`& .${classes.filter}`]: {
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'center',

@@ -59,11 +59,14 @@ jest.mock('zlib', () => ({
     )
 }));
 
+jest.setTimeout(30000);
+
 const RealDate = Date;
 
 describe('cve', () => {
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
   });
   beforeEach(() => {
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
@@ -71,6 +74,10 @@ describe('cve', () => {
 
   afterEach(() => {
     global.Date = RealDate;
+  });
+  afterAll(async () => {
+    await connection.close();
+    nock.cleanAll();
   });
   test('simple test', async () => {
     const organization = await Organization.create({

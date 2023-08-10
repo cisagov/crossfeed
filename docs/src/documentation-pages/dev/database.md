@@ -34,6 +34,7 @@ Here is a list of database models used by Crossfeed:
 ### Entity-relationship Diagram of the Database
 
 <img src='img/entity-relationship diagram.png' alt='Entity-relationship Diagram of the relational database' />
+* Generated with <a href="https://dbeaver.com/2022/06/30/two-ways-to-use-erd-in-dbeaver/">DBeaver</a>
 
 ### Syncing the database
 
