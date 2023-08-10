@@ -323,7 +323,7 @@ const Risk: React.FC = (props) => {
     findFn: (geo: any) => Point | undefined;
     type: string;
   }) => (
-    <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+    <Paper elevation={0} className={cardClasses.cardRoot}>
       <div>
         <div className={classes.chart}>
           <div className={cardClasses.header}>
@@ -514,7 +514,7 @@ const Risk: React.FC = (props) => {
                 </Paper>
               )}
               {stats.domains.ports.length > 0 && (
-                <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+                <Paper elevation={0} className={cardClasses.cardRoot}>
                   <div className={cardClasses.cardSmall}>
                     <div className={cardClasses.header}>
                       <h2>Most common ports</h2>
@@ -530,7 +530,7 @@ const Risk: React.FC = (props) => {
                 </Paper>
               )}
               {stats.vulnerabilities.severity.length > 0 && (
-                <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+                <Paper elevation={0} className={cardClasses.cardRoot}>
                   <div className={cardClasses.cardSmall}>
                     <div className={cardClasses.header}>
                       <h2>Severity Levels</h2>
@@ -548,7 +548,7 @@ const Risk: React.FC = (props) => {
             </div>
 
             <div className={cardClasses.panel}>
-              <Paper elevation={0} classes={{ root: cardClasses.cardRoot }}>
+              <Paper elevation={0} className={cardClasses.cardRoot}>
                 <div>
                   {stats.domains.numVulnerabilities.length > 0 && (
                     <div className={cardClasses.cardBig}>
