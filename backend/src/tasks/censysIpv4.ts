@@ -13,6 +13,7 @@ import PQueue from 'p-queue';
 import pRetry from 'p-retry';
 import axios from 'axios';
 import getScanOrganizations from './helpers/getScanOrganizations';
+import sanitizeChunkValues from './helpers/sanitizeChunkValues';
 
 export interface IpToDomainsMap {
   [ip: string]: Domain[];
@@ -38,6 +39,9 @@ const downloadPath = async (
   numFiles: number,
   commandOptions: CommandOptions
 ): Promise<void> => {
+  if (i >= 100) {
+    throw new Error('Invalid chunk number.');
+  }
   console.log(`i: ${i} of ${numFiles}: starting download of url ${path}`);
 
   const domains: Domain[] = [];
@@ -119,11 +123,9 @@ const downloadPath = async (
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { chunkNumber, numChunks, organizationId } = commandOptions;
+  const { organizationId } = commandOptions;
 
-  if (chunkNumber === undefined || numChunks === undefined) {
-    throw new Error('Chunks not specified.');
-  }
+  const { chunkNumber, numChunks } = await sanitizeChunkValues(commandOptions);
 
   const {
     data: { results }
@@ -155,9 +157,9 @@ export const handler = async (commandOptions: CommandOptions) => {
   const fileNames = Object.keys(files).sort();
   const jobs: Promise<void>[] = [];
 
-  let startIndex = Math.floor(((1.0 * chunkNumber) / numChunks) * numFiles);
+  let startIndex = Math.floor(((1.0 * chunkNumber!) / numChunks!) * numFiles);
   let endIndex =
-    Math.floor(((1.0 * (chunkNumber + 1)) / numChunks) * numFiles) - 1;
+    Math.floor(((1.0 * (chunkNumber! + 1)) / numChunks!) * numFiles) - 1;
 
   if (process.env.IS_LOCAL && typeof jest === 'undefined') {
     // For local testing.
@@ -191,7 +193,7 @@ export const handler = async (commandOptions: CommandOptions) => {
               commandOptions
             ),
           {
-            // Perform less retries on jest to make tests faster
+            // Perform fewer retries on jest to make tests faster
             retries: typeof jest === 'undefined' ? 5 : 2,
             randomize: true
           }

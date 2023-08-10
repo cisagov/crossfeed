@@ -25,12 +25,13 @@ module.exports = {
     ]
   },
   resolve: {
-    modules: ['node_modules', 'scripts'],
-    extensions: ['.ts', '.tsx', '.json', '.js', '.jsx']
+    modules: ['node_modules', path.resolve(__dirname, 'scripts')],
+    extensions: ['.ts', '.tsx', '.json', '.js', '.jsx', '...']
   },
   plugins: [
     new webpack.IgnorePlugin({
-      resourceRegExp: /^pg-native$|^cloudflare:sockets$/
+      resourceRegExp:
+        /^pg-native$|^cloudflare:sockets$|^mongodb$|^react-native-sqlite-storage$|^\@sap\/hana-client$/
     })
   ]
 };

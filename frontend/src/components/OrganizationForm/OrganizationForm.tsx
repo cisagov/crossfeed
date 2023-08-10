@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { Organization, OrganizationTag } from 'types';
 import {
-  makeStyles,
+  Autocomplete,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -12,10 +13,57 @@ import {
   FormControlLabel,
   Box,
   Chip,
-  Grid
-} from '@material-ui/core';
-import { Autocomplete, createFilterOptions } from '@material-ui/lab';
+  Grid,
+  createFilterOptions
+} from '@mui/material';
+
 import { useAuthContext } from 'context';
+
+const PREFIX = 'OrganizationForm';
+
+const classes = {
+  chip: `${PREFIX}-chip`,
+  headerRow: `${PREFIX}-headerRow`
+};
+
+const StyledDialog = styled(Dialog)(({ theme }) => ({
+  [`& .${classes.chip}`]: {
+    backgroundColor: '#C4C4C4',
+    color: 'white',
+    marginRight: '10px'
+  },
+
+  [`& .${classes.headerRow}`]: {
+    padding: '0.5rem 0',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '16px',
+    flexWrap: 'wrap',
+    '& label': {
+      flex: '1 0 100%',
+      fontWeight: 'bolder',
+      display: 'flex',
+      alignItems: 'center',
+      padding: '0.5rem 0',
+      '@media screen and (min-width: 640px)': {
+        flex: '0 0 220px',
+        padding: 0
+      }
+    },
+    '& span': {
+      display: 'block',
+      flex: '1 1 auto',
+      marginLeft: 'calc(1rem + 20px)',
+      '@media screen and (min-width: 640px)': {
+        marginLeft: 'calc(1rem + 20px)'
+      },
+      '@media screen and (min-width: 1024px)': {
+        marginLeft: 0
+      }
+    }
+  }
+}));
 
 interface AutocompleteType extends Partial<OrganizationTag> {
   title?: string;
@@ -76,10 +124,8 @@ export const OrganizationForm: React.FC<{
     }));
   };
 
-  const classes = useStyles();
-
   return (
-    <Dialog
+    <StyledDialog
       open={open}
       onClose={() => setOpen(false)}
       aria-labelledby="form-dialog-title"
@@ -148,7 +194,7 @@ export const OrganizationForm: React.FC<{
           <Grid item xs={10}>
             <Autocomplete
               value={tagValue}
-              onChange={(event, newValue) => {
+              onInputChange={(event, newValue) => {
                 if (typeof newValue === 'string') {
                   setTagValue({
                     name: newValue
@@ -180,9 +226,12 @@ export const OrganizationForm: React.FC<{
               handleHomeEndKeys
               options={tags.filter((i) => !chosenTags.includes(i))}
               getOptionLabel={(option) => {
-                return option.name ?? '';
+                if (typeof option === 'string') {
+                  return option;
+                }
+                return (option as AutocompleteType).name ?? '';
               }}
-              renderOption={(option) => {
+              renderOption={(props, option, { selected }) => {
                 if (option.title) return option.title;
                 return option.name ?? '';
               }}
@@ -264,44 +313,6 @@ export const OrganizationForm: React.FC<{
           Save
         </Button>
       </DialogActions>
-    </Dialog>
+    </StyledDialog>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  chip: {
-    backgroundColor: '#C4C4C4',
-    color: 'white',
-    marginRight: '10px'
-  },
-  headerRow: {
-    padding: '0.5rem 0',
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '16px',
-    flexWrap: 'wrap',
-    '& label': {
-      flex: '1 0 100%',
-      fontWeight: 'bolder',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '0.5rem 0',
-      '@media screen and (min-width: 640px)': {
-        flex: '0 0 220px',
-        padding: 0
-      }
-    },
-    '& span': {
-      display: 'block',
-      flex: '1 1 auto',
-      marginLeft: 'calc(1rem + 20px)',
-      '@media screen and (min-width: 640px)': {
-        marginLeft: 'calc(1rem + 20px)'
-      },
-      '@media screen and (min-width: 1024px)': {
-        marginLeft: 0
-      }
-    }
-  }
-}));
