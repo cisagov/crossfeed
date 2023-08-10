@@ -53,7 +53,8 @@ const Log = ({ url, token }: { url: string; token: string }) => {
 };
 
 export const ScanTasksView: React.FC = () => {
-  const { apiPost, token } = useAuthContext();
+  const { apiPost, token, currentOrganization, showAllOrganizations } =
+    useAuthContext();
   const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
   const [totalResults, setTotalResults] = useState(0);
   const [errors, setErrors] = useState<Errors>({});
@@ -182,10 +183,6 @@ export const ScanTasksView: React.FC = () => {
         'hibp',
         'lookingGlass',
         'dnstwist',
-        'peCybersixgill',
-        'peHibpSync',
-        'peShodan',
-        'peDomMasq',
         'rootDomainSync'
       ]),
       disableSortBy: true
@@ -221,6 +218,23 @@ export const ScanTasksView: React.FC = () => {
     async (query: Query<ScanTask>) => {
       const { page, sort, filters } = query;
       try {
+        const tableFilters: {
+          [key: string]: string | boolean | undefined;
+        } = filters
+          .filter((f) => Boolean(f.value))
+          .reduce(
+            (accum, next) => ({
+              ...accum,
+              [next.id]: next.value
+            }),
+            {}
+          );
+        // We only want to be able to filter with the dropdown org/tag bar
+        if (!showAllOrganizations && currentOrganization) {
+          if ('rootDomains' in currentOrganization)
+            tableFilters['organization'] = currentOrganization.id;
+          else tableFilters['tag'] = currentOrganization.id;
+        }
         const { result, count } = await apiPost<ApiResponse>(
           '/scan-tasks/search',
           {
@@ -228,15 +242,7 @@ export const ScanTasksView: React.FC = () => {
               page,
               sort: sort[0]?.id ?? 'createdAt',
               order: sort[0]?.desc ? 'DESC' : 'ASC',
-              filters: filters
-                .filter((f) => Boolean(f.value))
-                .reduce(
-                  (accum, next) => ({
-                    ...accum,
-                    [next.id]: next.value
-                  }),
-                  {}
-                )
+              filters: tableFilters
             }
           }
         );
@@ -246,7 +252,7 @@ export const ScanTasksView: React.FC = () => {
         console.error(e);
       }
     },
-    [apiPost]
+    [apiPost, currentOrganization, showAllOrganizations]
   );
 
   const renderPagination = (table: TableInstance<ScanTask>) => (

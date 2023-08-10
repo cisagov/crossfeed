@@ -1,5 +1,9 @@
 service: crossfeed
 
+frameworkVersion: '3'
+useDotenv: true
+configValidationMode: error
+
 custom:
   webpack:
     webpackConfig: 'webpack.backend.config.js'
@@ -26,31 +30,33 @@ provider:
     restApi: true
   deploymentBucket:
     serverSideEncryption: AES256
-  iamRoleStatements:
-    # TODO: make the resources more specific.
-    - Effect: Allow
-      Action:
-        - lambda:InvokeAsync
-        - lambda:InvokeFunction
-      Resource: '*'
-    - Effect: Allow
-      Action:
-        - ecs:RunTask
-        - ecs:ListTasks
-        - iam:PassRole
-        - logs:GetLogEvents
-      Resource: '*'
-    - Effect: Allow
-      Action:
-        - ses:SendRawEmail
-      Resource: '*'
-    - Effect: Allow
-      Action:
-        - s3:GetObject
-        - s3:GetObjectAcl
-        - s3:PutObject
-        - s3:PutObjectAcl
-      Resource: '*'
+  iam:
+    role:
+      statements:
+        # TODO: make the resources more specific.
+        - Effect: Allow
+          Action:
+            - lambda:InvokeAsync
+            - lambda:InvokeFunction
+          Resource: '*'
+        - Effect: Allow
+          Action:
+            - ecs:RunTask
+            - ecs:ListTasks
+            - iam:PassRole
+            - logs:GetLogEvents
+          Resource: '*'
+        - Effect: Allow
+          Action:
+            - ses:SendRawEmail
+          Resource: '*'
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:GetObjectAcl
+            - s3:PutObject
+            - s3:PutObjectAcl
+          Resource: '*'
 
 functions:
   - ${file(./src/tasks/functions.yml)}

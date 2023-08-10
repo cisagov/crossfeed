@@ -13,9 +13,10 @@ jest.mock('@elastic/elasticsearch', () => {
 
 let domain;
 let webpage;
+let connection;
 
 beforeAll(async () => {
-  await connectToDatabase();
+  connection = await connectToDatabase();
   domain = Domain.create({
     name: 'first_file_testdomain5',
     ip: '45.79.207.117'
@@ -26,6 +27,10 @@ beforeAll(async () => {
     status: 200,
     updatedAt: new Date('9999-08-23T03:36:57.231Z')
   });
+});
+
+afterAll(async () => {
+  await connection.close();
 });
 
 describe('updateDomains', () => {

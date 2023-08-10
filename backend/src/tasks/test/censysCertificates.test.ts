@@ -17,11 +17,14 @@ const authHeaders = {
   }
 };
 
+jest.setTimeout(30000);
+
 describe('censys certificates', () => {
   let organization;
   let scan;
+  let connection;
   beforeEach(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
     organization = await Organization.create({
       name: 'test-' + Math.random(),
@@ -98,6 +101,11 @@ describe('censys certificates', () => {
 
   afterEach(async () => {
     global.Date = RealDate;
+    await connection.close();
+  });
+
+  afterAll(async () => {
+    nock.cleanAll();
   });
 
   const checkDomains = async (organization) => {
@@ -405,7 +413,7 @@ describe('censys certificates', () => {
     await checkDomains(organization);
   });
 
-  test('http failure should retry', async () => {
+  test('http failure triggers retry', async () => {
     nock('https://censys.io', authHeaders)
       .get('/api/v1/data/certificates_2018/')
       .reply(200, {
@@ -453,7 +461,7 @@ describe('censys certificates', () => {
     await checkDomains(organization);
   });
 
-  test('repeated http failures should throw an error', async () => {
+  test('repeated http failures throw an error', async () => {
     nock('https://censys.io', authHeaders)
       .get('/api/v1/data/certificates_2018/')
       .reply(200, {
@@ -484,7 +492,6 @@ describe('censys certificates', () => {
       .get('/snapshots/certificates/20200719/failed_file_2.json.gz')
       .reply(429, 'too many requests');
 
-    jest.setTimeout(30000);
     await expect(
       censysCertificates({
         organizationId: organization.id,
@@ -498,5 +505,55 @@ describe('censys certificates', () => {
     ).rejects.toThrow('Response code 429');
 
     await checkDomains(organization);
+  });
+  test('undefined numChunks throws an error', async () => {
+    await expect(
+      censysCertificates({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 0
+      })
+    ).rejects.toThrow('Chunks not specified.');
+  });
+  test('undefined chunkNumber throws an error', async () => {
+    await expect(
+      censysCertificates({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        numChunks: 1
+      })
+    ).rejects.toThrow('Chunks not specified.');
+  });
+  test('chunkNumber >= numChunks throws an error', async () => {
+    await expect(
+      censysCertificates({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 1,
+        numChunks: 1
+      })
+    ).rejects.toThrow('Invalid chunk number.');
+  });
+  test('chunkNumber > 100 throws an error', async () => {
+    await expect(
+      censysCertificates({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 101,
+        numChunks: 100
+      })
+    ).rejects.toThrow('Invalid chunk number.');
   });
 });

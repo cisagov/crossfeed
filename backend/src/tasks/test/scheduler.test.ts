@@ -11,8 +11,12 @@ jest.mock('../ecs-client');
 const { runCommand, getNumTasks } = require('../ecs-client');
 
 describe('scheduler', () => {
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   test('should run a scan for the first time', async () => {
     let scan = await Scan.create({

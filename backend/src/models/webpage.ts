@@ -50,14 +50,12 @@ export class Webpage extends BaseEntity {
 
   /** S3 key that corresponds to this webpage's contents. */
   @Column({
-    length: 1024,
     nullable: true,
     type: 'varchar'
   })
   s3Key: string | null;
 
   @Column({
-    length: 4096,
     type: 'varchar'
   })
   url: string;

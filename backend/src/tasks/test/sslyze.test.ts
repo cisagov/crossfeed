@@ -17,8 +17,9 @@ jest.mock('ssl-checker', () => () => ({
 }));
 
 describe('sslyze', () => {
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
   });
   let organization;
   beforeEach(async () => {
@@ -28,6 +29,9 @@ describe('sslyze', () => {
       ipBlocks: [],
       isPassive: false
     }).save();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   test('basic test', async () => {
     let domain = await Domain.create({

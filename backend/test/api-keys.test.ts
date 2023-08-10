@@ -8,8 +8,12 @@ jest.mock('../src/tasks/scheduler', () => ({
 }));
 
 describe('api-key', () => {
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   describe('generate', () => {
     it('generate by user should succeed', async () => {

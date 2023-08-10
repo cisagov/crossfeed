@@ -1,4 +1,3 @@
-import { domain } from 'process';
 import { connectToDatabase, Domain } from '../../models';
 import * as fs from 'fs';
 
@@ -10,7 +9,7 @@ export default async (path: string): Promise<void> => {
   const domainId = path.split('/')[path.split('/').length - 1].split('.')[0];
   await connectToDatabase();
   await Domain.createQueryBuilder()
-    .update(domain)
+    .update(Domain)
     .set({
       trustymailResults: () => `'${JSON.stringify(jsonObject)}'`
     })

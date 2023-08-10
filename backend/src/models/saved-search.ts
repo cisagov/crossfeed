@@ -21,16 +21,10 @@ export class SavedSearch extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({
-    length: 256,
-    type: 'varchar'
-  })
+  @Column()
   name: string;
 
-  @Column({
-    length: 256,
-    type: 'varchar'
-  })
+  @Column()
   searchTerm: string;
 
   @Column()

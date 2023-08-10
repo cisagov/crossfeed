@@ -33,9 +33,11 @@ import {
   Domains,
   Reports
 } from 'pages';
-import { CrossfeedFooter, Layout, RouteGuard } from 'components';
+import { Layout, RouteGuard } from 'components';
+import { CrossfeedFooter } from './components/Footer';
 import './styles.scss';
 import { Authenticator } from '@aws-amplify/ui-react';
+
 API.configure({
   endpoints: [
     {

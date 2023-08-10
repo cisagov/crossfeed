@@ -10,9 +10,9 @@ import {
   ModalRef
 } from '@trussworks/react-uswds';
 import { ModalToggleButton } from 'components';
-import { Organization } from 'types';
+import { Organization, Query } from 'types';
 import { Table, ImportExport } from 'components';
-import { Column } from 'react-table';
+import { Column, SortingRule } from 'react-table';
 import { User } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
@@ -23,14 +23,20 @@ import {
   RadioGroup,
   FormControlLabel,
   ButtonGroup
-} from '@material-ui/core';
+} from '@mui/material';
 
 interface Errors extends Partial<User> {
   global?: string;
 }
 
+export interface ApiResponse {
+  result: User[];
+  count: number;
+  url?: string;
+}
+
 export const Users: React.FC = () => {
-  const { user, apiGet, apiPost, apiDelete } = useAuthContext();
+  const { user, apiPost, apiDelete } = useAuthContext();
   const modalRef = useRef<ModalRef>(null);
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [users, setUsers] = useState<User[]>([]);
@@ -61,7 +67,8 @@ export const Users: React.FC = () => {
           .join(', '),
       id: 'organizations',
       width: 200,
-      disableFilters: true
+      disableFilters: true,
+      disableSortBy: true
     },
     {
       Header: 'User type',
@@ -137,14 +144,45 @@ export const Users: React.FC = () => {
     userType: ''
   });
 
-  const fetchUsers = useCallback(async () => {
-    try {
-      const rows = await apiGet<User[]>('/users/');
-      setUsers(rows);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [apiGet]);
+  const userSearch = useCallback(
+    async ({
+      sort,
+      groupBy = undefined
+    }: {
+      sort: SortingRule<User>[];
+      groupBy?: string;
+    }): Promise<ApiResponse | undefined> => {
+      try {
+        const tableFilters: any = {};
+        return await apiPost<ApiResponse>('/users/search', {
+          body: {
+            page: 1,
+            sort: sort[0]?.id ?? 'email',
+            order: sort[0]?.desc ? 'DESC' : 'ASC',
+            filters: tableFilters,
+            pageSize: -1,
+            groupBy
+          }
+        });
+      } catch (e) {
+        console.error(e);
+        return;
+      }
+    },
+    [apiPost]
+  );
+
+  const fetchUsers = useCallback(
+    async (query: Query<User>) => {
+      const resp = await userSearch({
+        sort: query.sort
+      });
+      if (!resp) return;
+      const { result } = resp;
+      setUsers(result);
+    },
+    [userSearch]
+  );
 
   const deleteRow = async (index: number) => {
     try {

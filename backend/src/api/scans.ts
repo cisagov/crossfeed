@@ -196,34 +196,6 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Domain name permutation engine for detecting similar registered domains.'
   },
-  peDomMasq: {
-    type: 'fargate',
-    isPassive: true,
-    global: false,
-    description:
-      'Fetch DNSTwist data, check IPs on blocklist.de, then sync to PE db instance.'
-  },
-  peCybersixgill: {
-    type: 'fargate',
-    isPassive: true,
-    global: false,
-    description: 'Run P&E Cybersixgill scripts and add to PE db instance.'
-  },
-  peHibpSync: {
-    type: 'fargate',
-    isPassive: true,
-    global: false,
-    description: 'Fetch hibp data and sync it with the PE db instance.'
-  },
-  peShodan: {
-    type: 'fargate',
-    isPassive: true,
-    global: true,
-    cpu: '2048',
-    memory: '16384',
-    description:
-      'Run organization IPs through shodan and circl to find un/verified vulns and save them to PE db.'
-  },
   rootDomainSync: {
     type: 'fargate',
     isPassive: true,

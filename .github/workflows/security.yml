@@ -88,4 +88,4 @@ jobs:
           restore-keys: |
             pip-
       - run: pip install safety
-      - run: safety check -r worker/requirements.txt
+      - run: safety check -r worker/requirements.txt --policy-file ./worker/.safety-policy.yml

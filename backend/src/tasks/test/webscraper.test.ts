@@ -43,8 +43,12 @@ jest.mock('fs', () => ({
 }));
 
 describe('webscraper', () => {
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   let organization;
   beforeEach(async () => {

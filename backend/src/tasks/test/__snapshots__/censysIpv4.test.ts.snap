@@ -1252,6 +1252,7 @@ on this server.</p>
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -3975,6 +3976,7 @@ on this server.</p>
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -4072,6 +4074,7 @@ on this server.</p>
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -4154,6 +4157,7 @@ on this server.</p>
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -4251,6 +4255,7 @@ on this server.</p>
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -4271,6 +4276,7 @@ on this server.</p>
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -4338,6 +4344,7 @@ on this server.</p>
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -4590,6 +4597,7 @@ on this server.</p>
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -4929,6 +4937,7 @@ a img {
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -4994,6 +5003,7 @@ a img {
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5043,6 +5053,7 @@ a img {
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5098,12 +5109,13 @@ a img {
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
 ]
 `;
 
-exports[`censys ipv4 http failure should retry 1`] = `
+exports[`censys ipv4 http failure triggers retry 1`] = `
 Array [
   Object {
     "asn": null,
@@ -5123,6 +5135,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5143,6 +5156,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5163,6 +5177,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5183,6 +5198,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5203,6 +5219,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5223,6 +5240,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5243,6 +5261,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5263,6 +5282,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5283,6 +5303,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5303,6 +5324,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5323,6 +5345,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5343,12 +5366,13 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
 ]
 `;
 
-exports[`censys ipv4 repeated http failures should throw an error 1`] = `
+exports[`censys ipv4 repeated http failures throw an error 1`] = `
 Array [
   Object {
     "asn": null,
@@ -5368,6 +5392,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5388,6 +5413,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5408,6 +5434,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5428,6 +5455,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5448,6 +5476,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5468,6 +5497,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5488,6 +5518,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5508,6 +5539,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5528,6 +5560,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5548,6 +5581,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5568,6 +5602,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
   Object {
@@ -5588,6 +5623,7 @@ Array [
     "ssl": null,
     "subdomainSource": null,
     "syncedAt": null,
+    "trustymailResults": Object {},
     "updatedAt": null,
   },
 ]

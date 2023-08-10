@@ -4,8 +4,12 @@ import { createUserToken } from './util';
 import { connectToDatabase, UserType } from '../src/models';
 
 describe('pe-proxy', () => {
+  let connection;
   beforeAll(async () => {
-    await connectToDatabase();
+    connection = await connectToDatabase();
+  });
+  afterAll(async () => {
+    await connection.close();
   });
   it('standard user is not authorized to access P&E proxy', async () => {
     const response = await request(app)
