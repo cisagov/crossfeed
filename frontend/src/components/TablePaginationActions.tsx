@@ -1,11 +1,25 @@
 import React from 'react';
-import { IconButton, makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { IconButton } from '@mui/material';
 import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
   LastPage as LastPageIcon,
   FirstPage as FirstPageIcon
-} from '@material-ui/icons';
+} from '@mui/icons-material';
+
+const PREFIX = 'TablePaginationActions';
+
+const classes = {
+  root: `${PREFIX}-root`
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    flexShrink: 0,
+    marginLeft: theme.spacing(2.5)
+  }
+}));
 
 interface Props {
   count: number;
@@ -19,7 +33,6 @@ interface Props {
 
 export const TablePaginationActions = (props: Props) => {
   const { count, page, rowsPerPage, onChangePage } = props;
-  const classes = useStyles();
 
   const handleFirstPageButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -46,11 +59,12 @@ export const TablePaginationActions = (props: Props) => {
   };
 
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
         aria-label="first page"
+        size="large"
       >
         <FirstPageIcon />
       </IconButton>
@@ -58,6 +72,7 @@ export const TablePaginationActions = (props: Props) => {
         onClick={handleBackButtonClick}
         disabled={page === 0}
         aria-label="previous page"
+        size="large"
       >
         <KeyboardArrowLeft />
       </IconButton>
@@ -65,6 +80,7 @@ export const TablePaginationActions = (props: Props) => {
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
+        size="large"
       >
         <KeyboardArrowRight />
       </IconButton>
@@ -72,16 +88,10 @@ export const TablePaginationActions = (props: Props) => {
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
+        size="large"
       >
         <LastPageIcon />
       </IconButton>
-    </div>
+    </Root>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexShrink: 0,
-    marginLeft: theme.spacing(2.5)
-  }
-}));

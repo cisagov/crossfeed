@@ -244,7 +244,7 @@ describe('censys ipv4', () => {
     await checkDomains(organization);
   });
 
-  test('http failure should retry', async () => {
+  test('http failure triggers retry', async () => {
     nock('https://censys.io', authHeaders)
       .get('/api/v1/data/ipv4_2018')
       .reply(200, {
@@ -291,7 +291,7 @@ describe('censys ipv4', () => {
     await checkDomains(organization);
   });
 
-  test('repeated http failures should throw an error', async () => {
+  test('repeated http failures throw an error', async () => {
     nock('https://censys.io', authHeaders)
       .get('/api/v1/data/ipv4_2018')
       .reply(200, {
@@ -335,5 +335,55 @@ describe('censys ipv4', () => {
     ).rejects.toThrow('Response code 429');
 
     await checkDomains(organization);
+  });
+  test('undefined numChunks throws an error', async () => {
+    await expect(
+      censysIpv4({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 0
+      })
+    ).rejects.toThrow('Chunks not specified.');
+  });
+  test('undefined chunkNumber throws an error', async () => {
+    await expect(
+      censysIpv4({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        numChunks: 1
+      })
+    ).rejects.toThrow('Chunks not specified.');
+  });
+  test('chunkNumber >= numChunks throws an error', async () => {
+    await expect(
+      censysIpv4({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 1,
+        numChunks: 1
+      })
+    ).rejects.toThrow('Invalid chunk number.');
+  });
+  test('chunkNumber > 100 throws an error', async () => {
+    await expect(
+      censysIpv4({
+        organizationId: organization.id,
+        organizationName: 'organizationName',
+        scanId: scan.id,
+        scanName: 'scanName',
+        scanTaskId: 'scanTaskId',
+        chunkNumber: 101,
+        numChunks: 100
+      })
+    ).rejects.toThrow('Invalid chunk number.');
   });
 });

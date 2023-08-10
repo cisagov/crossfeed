@@ -3,35 +3,38 @@ import { graphql } from 'gatsby';
 
 import Layout from '../components/layout';
 
+// Crossfeed does not use the functionality of this page for the gatsby template.
+
 const SearchPage = ({ data, location }) => {
-  const { access_key, affiliate, endpoint } = data.site.siteMetadata.searchgov;
-  const query = new URLSearchParams(location.search).get('query');
+  //
+  // const { access_key, affiliate, endpoint } = data.site.siteMetadata.searchgov;
+  // const query = new URLSearchParams(location.search).get('query');
 
-  const [results, setResults] = useState([]);
+  // const [results, setResults] = useState([]);
 
-  useEffect(() => {
-    const searchEndpoint = new URL(`${endpoint}/api/v2/search/i14y`);
-    searchEndpoint.searchParams.append('affiliate', affiliate);
-    searchEndpoint.searchParams.append('access_key', access_key);
-    searchEndpoint.searchParams.append('query', query);
+  // useEffect(() => {
+  //   const searchEndpoint = new URL(`${endpoint}/api/v2/search/i14y`);
+  //   searchEndpoint.searchParams.append('affiliate', affiliate);
+  //   searchEndpoint.searchParams.append('access_key', access_key);
+  //   searchEndpoint.searchParams.append('query', query);
 
-    fetch(searchEndpoint)
-      .then((r) => {
-        if (r.ok) {
-          return r.json();
-        }
-        throw new Error(r.statusText);
-      })
-      .then((posts) => {
-        setResults(posts.web.results);
-      })
-      .catch((err) => console.log(err));
-  }, [query, access_key, affiliate, endpoint]);
+  //   fetch(searchEndpoint)
+  //     .then((r) => {
+  //       if (r.ok) {
+  //         return r.json();
+  //       }
+  //       throw new Error(r.statusText);
+  //     })
+  //     .then((posts) => {
+  //       setResults(posts.web.results);
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, [query, access_key, affiliate, endpoint]);
 
   return (
     <Layout>
       <div className="usa-layout-docs usa-section">
-        <div className="grid-container">
+        {/* <div className="grid-container">
           <div className="grid-row grid-gap">
             <div className="usa-layout-docs__main desktop:grid-col-9 usa-prose">
               <h1>Search Results</h1>
@@ -101,7 +104,7 @@ const SearchPage = ({ data, location }) => {
               )}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </Layout>
   );

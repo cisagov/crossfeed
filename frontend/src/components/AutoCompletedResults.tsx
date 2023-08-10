@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popover, PopoverProps, MenuItem } from '@material-ui/core';
+import { Popover, PopoverProps, MenuItem } from '@mui/material';
 
 interface Props extends PopoverProps {
   values: {
