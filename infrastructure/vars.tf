@@ -28,8 +28,20 @@ variable "db_name" {
   default     = "crossfeed-stage-db"
 }
 
+variable "pe_db_name" {
+  description = "db_name"
+  type        = string
+  default     = "pe-stage-db"
+}
+
 variable "db_instance_class" {
   description = "db_instance_class"
+  type        = string
+  default     = "db.t3.micro"
+}
+
+variable "pe_db_instance_class" {
+  description = "pe_db_instance_class"
   type        = string
   default     = "db.t3.micro"
 }
@@ -127,6 +139,12 @@ variable "db_table_name" {
   description = "db_table_name"
   type        = string
   default     = "cfstagedb"
+}
+
+variable "pe_db_table_name" {
+  description = "pe_db_table_name"
+  type        = string
+  default     = "pestagedb"
 }
 
 variable "ssm_db_username" {
@@ -278,6 +296,30 @@ variable "pe_db_backups_bucket_name" {
   description = "pe_db_backups_bucket_name"
   type        = string
   default     = "cisa-crossfeed-pe-db-backups"
+}
+
+variable "pe_reports_bucket_name" {
+  description = "pe_reports_bucket_name"
+  type        = string
+  default     = "cisa-pe-reports"
+}
+
+variable "pe_scorecards_bucket_name" {
+  description = "pe_scorecards_bucket_name"
+  type        = string
+  default     = "cisa-pe-scorecards"
+}
+
+variable "pe_asmsheets_bucket_name" {
+  description = "pe_asmsheets_bucket_name"
+  type        = string
+  default     = "cisa-pe-asmsheets"
+}
+
+variable "pe_test_bucket_name" {
+  description = "pe_test_bucket_name"
+  type        = string
+  default     = "cisa-pe-test"
 }
 
 variable "user_pool_name" {
