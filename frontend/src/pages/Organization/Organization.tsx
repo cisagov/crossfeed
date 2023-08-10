@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { styled } from '@mui/material/styles';
+import * as OrganizationStyles from './style';
 import { Link, Route, useParams, Switch } from 'react-router-dom';
 import { useAuthContext } from 'context';
 import {
@@ -37,120 +37,8 @@ import { Autocomplete } from '@mui/material';
 import { createFilterOptions } from '@mui/material/useAutocomplete';
 import { OrganizationList } from 'components/OrganizationList';
 
-const PREFIX = 'Organization';
-
-const classes = {
-  header: `${PREFIX}-header`,
-  headerLabel: `${PREFIX}-headerLabel`,
-  chip: `${PREFIX}-chip`,
-  settingsWrapper: `${PREFIX}-settingsWrapper`,
-  buttons: `${PREFIX}-buttons`,
-  orgName: `${PREFIX}-orgName`,
-  textField: `${PREFIX}-textField`,
-  root: `${PREFIX}-root`,
-  headerRow: `${PREFIX}-headerRow`
-};
-
-const Root = styled('div')(({ theme }) => ({
-  [`& .${classes.header}`]: {
-    background: '#F9F9F9'
-  },
-
-  [`& .${classes.headerLabel}`]: {
-    margin: 0,
-    paddingTop: '1.5rem',
-    paddingBottom: '0.5rem',
-    marginLeft: '15%',
-    color: '#C9C9C9',
-    fontWeight: 500,
-    fontStyle: 'normal',
-    fontSize: '24px',
-    '& a': {
-      textDecoration: 'none',
-      color: '#C9C9C9'
-    },
-    '& svg': {
-      verticalAlign: 'middle',
-      lineHeight: '100%',
-      fontSize: '26px'
-    }
-  },
-
-  [`& .${classes.chip}`]: {
-    color: 'white',
-    marginRight: '10px',
-    marginTop: '10px'
-  },
-
-  [`& .${classes.settingsWrapper}`]: {
-    boxSizing: 'border-box',
-    border: '0px',
-    boxShadow: 'none',
-    borderRadius: '0px',
-    padding: '25px',
-    maxWidth: '900px',
-    margin: '0 auto'
-  },
-
-  [`& .${classes.buttons}`]: {
-    display: 'flex',
-    justifyContent: 'flex-end'
-  },
-
-  [`& .${classes.orgName}`]: {
-    background: '#F5F5F5 !important',
-    paddingBottom: '10px'
-  },
-
-  [`& .${classes.textField}`]: {
-    background: '#F5F5F5 !important'
-  },
-
-  [`& .${classes.root}`]: {
-    maxWidth: '1400px',
-    margin: '0 auto',
-    '@media screen and (min-width: 480px)': {
-      padding: '1rem 1rem'
-    },
-    '@media screen and (min-width: 640px)': {
-      padding: '1rem 1.5rem'
-    },
-    '@media screen and (min-width: 1024px)': {
-      padding: '1rem 2rem'
-    }
-  },
-
-  [`& .${classes.headerRow}`]: {
-    padding: '0.5rem 0',
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '16px',
-    flexWrap: 'wrap',
-    '& label': {
-      flex: '1 0 100%',
-      fontWeight: 'bolder',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '0.5rem 0',
-      '@media screen and (min-width: 640px)': {
-        flex: '0 0 220px',
-        padding: 0
-      }
-    },
-    '& span': {
-      display: 'block',
-      flex: '1 1 auto',
-      marginLeft: 'calc(1rem + 20px)',
-      '@media screen and (min-width: 640px)': {
-        marginLeft: 'calc(1rem + 20px)'
-      },
-      '@media screen and (min-width: 1024px)': {
-        marginLeft: 0
-      }
-    }
-  }
-}));
+const organizationClasses = OrganizationStyles.organizationClasses;
+const OrganizationRoot = OrganizationStyles.OrganizationRoot;
 
 interface AutocompleteType extends Partial<OrganizationTag> {
   title?: string;
@@ -233,12 +121,12 @@ export const Organization: React.FC = () => {
     {
       Header: () => {
         return (
-          <Root style={{ justifyContent: 'flex-center' }}>
+          <div style={{ justifyContent: 'flex-center' }}>
             <Button color="secondary" onClick={() => setDialog({ open: true })}>
               <ControlPoint style={{ marginRight: '10px' }}></ControlPoint>
               Add member
             </Button>
-          </Root>
+          </div>
         );
       },
       id: 'action',
@@ -607,14 +495,14 @@ export const Organization: React.FC = () => {
     if (!organization) return null;
     const elements: (string | OrganizationTag)[] = organization[props.type];
     return (
-      <div className={classes.headerRow}>
+      <div className={organizationClasses.headerRow}>
         <label>{props.label}</label>
         <span>
           {elements &&
             elements.map((value: string | OrganizationTag, index: number) => (
               <Chip
                 color={'primary'}
-                className={classes.chip}
+                className={organizationClasses.chip}
                 key={index}
                 label={typeof value === 'string' ? value : value.name}
                 onDelete={() => {
@@ -626,7 +514,7 @@ export const Organization: React.FC = () => {
           {props.type === 'rootDomains' &&
             organization.pendingDomains.map((domain, index: number) => (
               <Chip
-                className={classes.chip}
+                className={organizationClasses.chip}
                 style={{ backgroundColor: '#C4C4C4' }}
                 key={index}
                 label={domain.name + ' (verification pending)'}
@@ -670,7 +558,7 @@ export const Organization: React.FC = () => {
   if (!organization) return null;
 
   const views = [
-    <Paper className={classes.settingsWrapper} key={0}>
+    <Paper className={organizationClasses.settingsWrapper} key={0}>
       <Dialog
         open={dialog.open}
         onClose={() => setDialog({ open: false })}
@@ -854,7 +742,7 @@ export const Organization: React.FC = () => {
         disabled
         variant="filled"
         InputProps={{
-          className: classes.orgName
+          className: organizationClasses.orgName
         }}
       ></TextField>
       <ListInput label="Root Domains" type="rootDomains"></ListInput>
@@ -862,7 +750,7 @@ export const Organization: React.FC = () => {
       {user?.userType === 'globalAdmin' && (
         <ListInput label="Tags" type="tags"></ListInput>
       )}
-      <div className={classes.headerRow}>
+      <div className={organizationClasses.headerRow}>
         <label>Passive Mode</label>
         <span>
           <SwitchInput
@@ -877,7 +765,7 @@ export const Organization: React.FC = () => {
           />
         </span>
       </div>
-      <div className={classes.buttons}>
+      <div className={organizationClasses.buttons}>
         <Link to={`/organizations`}>
           <Button
             variant="outlined"
@@ -923,7 +811,7 @@ export const Organization: React.FC = () => {
             onChange={onInviteUserTextChange}
             variant="filled"
             InputProps={{
-              className: classes.textField
+              className: organizationClasses.textField
             }}
           />
           <TextField
@@ -938,7 +826,7 @@ export const Organization: React.FC = () => {
             onChange={onInviteUserTextChange}
             variant="filled"
             InputProps={{
-              className: classes.textField
+              className: organizationClasses.textField
             }}
           />
           <TextField
@@ -953,7 +841,7 @@ export const Organization: React.FC = () => {
             onChange={onInviteUserTextChange}
             variant="filled"
             InputProps={{
-              className: classes.textField
+              className: organizationClasses.textField
             }}
           />
           <br></br>
@@ -1025,8 +913,8 @@ export const Organization: React.FC = () => {
 
   return (
     <div>
-      <div className={classes.header}>
-        <h1 className={classes.headerLabel}>
+      <div className={organizationClasses.header}>
+        <h1 className={organizationClasses.headerLabel}>
           <Link to="/organizations">Organizations</Link>
           {organization.parent && (
             <>
@@ -1052,7 +940,7 @@ export const Organization: React.FC = () => {
           }}
         ></Subnav>
       </div>
-      <div className={classes.root}>
+      <OrganizationRoot className={organizationClasses.root}>
         <Switch>
           <Route
             path="/organizations/:organizationId"
@@ -1072,7 +960,7 @@ export const Organization: React.FC = () => {
             render={() => views[3]}
           />
         </Switch>
-      </div>
+      </OrganizationRoot>
     </div>
   );
 };
