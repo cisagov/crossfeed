@@ -1,33 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { useLocation } from 'react-router-dom';
-import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
-import { makeStyles } from '@material-ui/core/styles';
+import ScopedCssBaseline from '@mui/material/ScopedCssBaseline';
 import { Header, GovBanner } from 'components';
 import { useUserActivityTimeout } from 'hooks/useUserActivityTimeout';
 import { useAuthContext } from 'context/AuthContext';
 import UserInactiveModal from './UserInactivityModal/UserInactivityModal';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: 'relative',
-    height: '100vh',
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    overflow: 'auto'
-  },
-  overrides: {
-    WebkitFontSmoothing: 'unset',
-    MozOsxFontSmoothing: 'unset'
-  },
-  content: {
-    flex: '1',
-    display: 'block',
-    position: 'relative'
-  }
-}));
+interface LayoutProps {
+  children: React.ReactNode;
+}
 
-export const Layout: React.FC = ({ children }) => {
-  const classes = useStyles();
+export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { logout, user } = useAuthContext();
   const [loggedIn, setLoggedIn] = useState<boolean>(
     user !== null && user !== undefined ? true : false
@@ -54,7 +38,7 @@ export const Layout: React.FC = ({ children }) => {
   }, [user]);
 
   return (
-    <ScopedCssBaseline classes={{ root: classes.overrides }}>
+    <StyledScopedCssBaseline classes={{ root: classes.overrides }}>
       <div className={classes.root}>
         <UserInactiveModal
           isOpen={isTimedOut}
@@ -70,6 +54,36 @@ export const Layout: React.FC = ({ children }) => {
           <div className={classes.content}>{children}</div>
         )}
       </div>
-    </ScopedCssBaseline>
+    </StyledScopedCssBaseline>
   );
 };
+
+//Styling
+const PREFIX = 'Layout';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  overrides: `${PREFIX}-overrides`,
+  content: `${PREFIX}-content`
+};
+
+const StyledScopedCssBaseline = styled(ScopedCssBaseline)(({ theme }) => ({
+  [`& .${classes.root}`]: {
+    position: 'relative',
+    height: '100vh',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    overflow: 'auto'
+  },
+
+  [`& .${classes.overrides}`]: {
+    WebkitFontSmoothing: 'unset',
+    MozOsxFontSmoothing: 'unset'
+  },
+
+  [`& .${classes.content}`]: {
+    flex: '1',
+    display: 'block',
+    position: 'relative'
+  }
+}));

@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { Link, useHistory } from 'react-router-dom';
 import {
   Paper,
-  makeStyles,
   Accordion,
   AccordionSummary,
   Typography,
@@ -11,12 +11,12 @@ import {
   ListItem,
   ListItemText,
   Collapse
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   ExpandLess,
   ExpandMore,
   Launch as LinkOffIcon
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 import { Domain } from 'types';
 import { useDomainApi } from 'hooks';
 import { DefinitionList } from './DefinitionList';
@@ -24,6 +24,106 @@ import { DefinitionList } from './DefinitionList';
 import { differenceInCalendarDays, parseISO } from 'date-fns';
 import { Webpage } from 'types/webpage';
 import { useAuthContext } from 'context';
+
+const PREFIX = 'DomainDetails';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  title: `${PREFIX}-title`,
+  section: `${PREFIX}-section`,
+  subtitle: `${PREFIX}-subtitle`,
+  inner: `${PREFIX}-inner`,
+  accordion: `${PREFIX}-accordion`,
+  accordionHeaderRow: `${PREFIX}-accordionHeaderRow`,
+  accordionHeading: `${PREFIX}-accordionHeading`,
+  lastSeen: `${PREFIX}-lastSeen`,
+  vulnDescription: `${PREFIX}-vulnDescription`,
+  listRoot: `${PREFIX}-listRoot`,
+  nested: `${PREFIX}-nested`
+};
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  [`& .${classes.root}`]: {
+    border: `2px solid ${theme.palette.primary.main}`,
+    boxShadow: '0px 1px 6px rgba(0, 0, 0, 0.25)',
+    marginBottom: '1rem',
+    '& *:focus': {
+      outline: 'none !important'
+    }
+  },
+
+  [`& .${classes.title}`]: {
+    backgroundColor: theme.palette.primary.main,
+    color: '#fff',
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '1rem 1.5rem',
+    fontSize: '2rem',
+    textDecoration: 'none',
+
+    '& > h4': {
+      wordBreak: 'break-all',
+      paddingRight: '2rem',
+      margin: '0'
+    },
+
+    '& > a, & > h4 a': {
+      color: 'white',
+      textDecoration: 'none'
+    }
+  },
+
+  [`& .${classes.section}`]: {
+    marginBottom: '1.5rem'
+  },
+
+  [`& .${classes.subtitle}`]: {
+    margin: 0,
+    padding: '0 0 0.2rem 0',
+    fontSize: '1.2rem',
+    fontWeight: 500,
+    color: '#3D4551'
+  },
+
+  [`& .${classes.inner}`]: {
+    padding: '1.5rem'
+  },
+
+  [`& .${classes.accordion}`]: {
+    color: '#3D4551',
+    textAlign: 'left'
+  },
+
+  [`& .${classes.accordionHeaderRow}`]: {
+    color: '#000',
+    backgroundColor: '#eaeaea !important'
+  },
+
+  [`& .${classes.accordionHeading}`]: {
+    flex: '1 0 33%'
+  },
+
+  [`& .${classes.lastSeen}`]: {
+    flex: '0 0 125px'
+  },
+
+  [`& .${classes.vulnDescription}`]: {
+    flex: '1 1 15%',
+    textOverflow: 'hidden',
+    textAlign: 'right'
+  },
+
+  [`& .${classes.listRoot}`]: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper
+  },
+
+  [`& .${classes.nested}`]: {
+    paddingLeft: theme.spacing(2)
+  }
+}));
 
 interface Props {
   domainId: string;
@@ -52,7 +152,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
   const { getDomain } = useDomainApi(false);
   const { user } = useAuthContext();
   const [domain, setDomain] = useState<Domain>();
-  const classes = useStyles();
+
   const history = useHistory();
 
   const fetchDomain = useCallback(async () => {
@@ -234,7 +334,7 @@ export const DomainDetails: React.FC<Props> = (props) => {
   const webpageList = generateWebpageList(webpageTree);
 
   return (
-    <Paper classes={{ root: classes.root }}>
+    <StyledPaper classes={{ root: classes.root }}>
       <div className={classes.title}>
         <h4>
           <Link to={`/inventory/domain/${domain.id}`}>{domain.name}</Link>
@@ -382,78 +482,6 @@ export const DomainDetails: React.FC<Props> = (props) => {
           </div>
         )}
       </div>
-    </Paper>
+    </StyledPaper>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    border: `2px solid ${theme.palette.primary.main}`,
-    boxShadow: '0px 1px 6px rgba(0, 0, 0, 0.25)',
-    marginBottom: '1rem',
-    '& *:focus': {
-      outline: 'none !important'
-    }
-  },
-  title: {
-    backgroundColor: theme.palette.primary.main,
-    color: '#fff',
-    cursor: 'pointer',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '1rem 1.5rem',
-    fontSize: '2rem',
-    textDecoration: 'none',
-
-    '& > h4': {
-      wordBreak: 'break-all',
-      paddingRight: '2rem',
-      margin: '0'
-    },
-
-    '& > a, & > h4 a': {
-      color: 'white',
-      textDecoration: 'none'
-    }
-  },
-  section: {
-    marginBottom: '1.5rem'
-  },
-  subtitle: {
-    margin: 0,
-    padding: '0 0 0.2rem 0',
-    fontSize: '1.2rem',
-    fontWeight: 500,
-    color: '#3D4551'
-  },
-  inner: {
-    padding: '1.5rem'
-  },
-  accordion: {
-    color: '#3D4551',
-    textAlign: 'left'
-  },
-  accordionHeaderRow: {
-    color: '#000',
-    backgroundColor: '#eaeaea !important'
-  },
-  accordionHeading: {
-    flex: '1 0 33%'
-  },
-  lastSeen: {
-    flex: '0 0 125px'
-  },
-  vulnDescription: {
-    flex: '1 1 15%',
-    textOverflow: 'hidden',
-    textAlign: 'right'
-  },
-  listRoot: {
-    width: '100%',
-    backgroundColor: theme.palette.background.paper
-  },
-  nested: {
-    paddingLeft: theme.spacing(2)
-  }
-}));

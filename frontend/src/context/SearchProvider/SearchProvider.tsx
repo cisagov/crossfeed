@@ -7,8 +7,10 @@ import { SearchProvider as ESProvider } from '@elastic/react-search-ui';
 interface ApiResponse {
   suggest: any;
 }
-
-export const SearchProvider: React.FC = ({ children }) => {
+interface SearchProviderProps {
+  children: React.ReactNode;
+}
+export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
   const { apiPost, currentOrganization, showAllOrganizations } =
     useAuthContext();
 
