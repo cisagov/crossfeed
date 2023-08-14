@@ -1589,7 +1589,7 @@ Array [
 ]
 `;
 
-exports[`censys certificates http failure should retry 1`] = `
+exports[`censys certificates http failure triggers retry 1`] = `
 Array [
   Object {
     "asn": null,
@@ -1846,7 +1846,7 @@ Array [
 ]
 `;
 
-exports[`censys certificates repeated http failures should throw an error 1`] = `
+exports[`censys certificates repeated http failures throw an error 1`] = `
 Array [
   Object {
     "asn": null,

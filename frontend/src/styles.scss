@@ -15,7 +15,7 @@ $theme-show-notifications: false;
 @import '~uswds/scss/packages/usa-modal';
 @import '~uswds/scss/packages/form-controls';
 
-@import "@aws-amplify/ui-react/styles.css";
+@import '@aws-amplify/ui-react/styles.css';
 
 html,
 body {
@@ -23,7 +23,7 @@ body {
   background-color: color('base-lightest');
 }
 
-body>iframe {
+body > iframe {
   display: none;
 }
 
@@ -94,4 +94,3 @@ form[data-amplify-authenticator-setup-totp] {
     display: none;
   }
 }
-

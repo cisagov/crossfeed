@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { NavLink, Link, useHistory, useLocation } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import {
   AppBar,
   Toolbar,
@@ -11,12 +11,12 @@ import {
   TextField,
   useMediaQuery,
   useTheme
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   Menu as MenuIcon,
   AccountCircle as UserIcon,
   ArrowDropDown
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 import { NavItem } from './NavItem';
 import { useRouteMatch } from 'react-router-dom';
 import { useAuthContext } from 'context';
@@ -24,8 +24,149 @@ import logo from '../assets/crossfeed.svg';
 import { withSearch } from '@elastic/react-search-ui';
 import { ContextType } from 'context/SearchProvider';
 import { SearchBar } from 'components';
-import { Autocomplete } from '@material-ui/lab';
+import { Autocomplete } from '@mui/material';
 import { Organization, OrganizationTag } from 'types';
+
+const PREFIX = 'Header';
+
+const classes = {
+  inner: `${PREFIX}-inner`,
+  menuButton: `${PREFIX}-menuButton`,
+  logo: `${PREFIX}-logo`,
+  spacing: `${PREFIX}-spacing`,
+  activeLink: `${PREFIX}-activeLink`,
+  activeMobileLink: `${PREFIX}-activeMobileLink`,
+  link: `${PREFIX}-link`,
+  userLink: `${PREFIX}-userLink`,
+  lgNav: `${PREFIX}-lgNav`,
+  mobileNav: `${PREFIX}-mobileNav`,
+  selectOrg: `${PREFIX}-selectOrg`,
+  option: `${PREFIX}-option`
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`.${classes.inner}`]: {
+    maxWidth: 1440,
+    width: '250%',
+    margin: '0 auto'
+  },
+
+  [`.${classes.menuButton}`]: {
+    marginLeft: theme.spacing(2),
+    display: 'flex',
+    [theme.breakpoints.up('sm')]: {
+      display: 'none'
+    }
+  },
+
+  [`.${classes.logo}`]: {
+    width: 150,
+    padding: theme.spacing(),
+    paddingLeft: 0,
+    [theme.breakpoints.down('xl')]: {
+      display: 'flex'
+    }
+  },
+
+  [`.${classes.spacing}`]: {
+    flexGrow: 1
+  },
+
+  [`.${classes.activeLink}`]: {
+    ':after': {
+      content: "''",
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      width: '100%',
+      height: 2,
+      backgroundColor: 'white'
+    }
+  },
+
+  [`.${classes.activeMobileLink}`]: {
+    fontWeight: 700,
+    '&:after': {
+      content: "''",
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      height: '100%',
+      width: 2,
+      backgroundColor: theme.palette.primary.main
+    }
+  },
+
+  [`.${classes.link}`]: {
+    position: 'relative',
+    color: 'white',
+    textDecoration: 'none',
+    margin: `0 ${theme.spacing()}px`,
+    padding: theme.spacing(),
+    borderBottom: '2px solid transparent',
+    fontWeight: 600
+  },
+
+  [`.${classes.userLink}`]: {
+    [theme.breakpoints.down('md')]: {
+      display: 'flex'
+    },
+    [theme.breakpoints.up('lg')]: {
+      display: 'flex',
+      alignItems: 'center',
+      marginLeft: '1rem',
+      '& svg': {
+        marginRight: theme.spacing()
+      },
+      border: 'none',
+      textDecoration: 'none'
+    }
+  },
+
+  [`.${classes.lgNav}`]: {
+    display: 'flex',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex'
+    }
+  },
+
+  [`.${classes.mobileNav}`]: {
+    padding: `${theme.spacing(2)} ${theme.spacing()}px`
+  },
+
+  [`.${classes.selectOrg}`]: {
+    border: '1px solid #FFFFFF',
+    borderRadius: '5px',
+    width: '200px',
+    padding: '3px',
+    marginLeft: '20px',
+    '& svg': {
+      color: 'white'
+    },
+    '& input': {
+      color: 'white',
+      width: '100%'
+    },
+    '& input:focus': {
+      outlineWidth: 0
+    },
+    '& fieldset': {
+      borderStyle: 'none'
+    },
+    '& div div': {
+      paddingTop: '0 !important'
+    },
+    '& div div div': {
+      marginTop: '-3px !important'
+    },
+    height: '45px'
+  },
+
+  [` .${classes.option}`]: {
+    fontSize: 15
+  }
+}));
 
 const GLOBAL_ADMIN = 2;
 const STANDARD_USER = 1;
@@ -42,7 +183,7 @@ interface NavItemType {
 
 const HeaderNoCtx: React.FC<ContextType> = (props) => {
   const { searchTerm, setSearchTerm } = props;
-  const classes = useStyles();
+
   const history = useHistory();
   const location = useLocation();
   const {
@@ -78,11 +219,11 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       let tags: (OrganizationTag | Organization)[] = [];
       if (userLevel === GLOBAL_ADMIN) {
         tags = await apiGet<OrganizationTag[]>('/organizations/tags');
-        setTags(tags as OrganizationTag[]);
+        await setTags(tags as OrganizationTag[]);
       }
-      setOrganizations(tags.concat(rows));
+      await setOrganizations(tags.concat(rows));
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
   }, [apiGet, setOrganizations, userLevel]);
 
@@ -218,7 +359,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   };
 
   return (
-    <div>
+    <Root>
       <AppBar position="static" elevation={0}>
         <div className={classes.inner}>
           <Toolbar>
@@ -251,8 +392,8 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                   <>
                     <div className={classes.spacing} />
                     <Autocomplete
-                      getOptionSelected={(option, value) =>
-                        option.name === value.name
+                      isOptionEqualToValue={(option, value) =>
+                        option?.name === value?.name
                       }
                       options={[{ name: 'All Organizations' }].concat(
                         organizations
@@ -272,14 +413,14 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                         if (
                           options.find(
                             (option) =>
-                              option.name.toLowerCase() ===
+                              option?.name.toLowerCase() ===
                               state.inputValue.toLowerCase()
                           )
                         ) {
                           return options;
                         }
                         return options.filter((option) =>
-                          option.name
+                          option?.name
                             .toLowerCase()
                             .includes(state.inputValue.toLowerCase())
                         );
@@ -287,18 +428,13 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                       disableClearable
                       blurOnSelect
                       selectOnFocus
-                      getOptionLabel={(option) => option.name}
-                      renderOption={(option) => (
-                        <React.Fragment>{option.name}</React.Fragment>
+                      getOptionLabel={(option) => option!.name}
+                      renderOption={(props, option) => (
+                        <li {...props}>{option!.name}</li>
                       )}
                       onChange={(
                         event: any,
-                        value:
-                          | Organization
-                          | {
-                              name: string;
-                            }
-                          | undefined
+                        value: Organization | { name: string } | undefined
                       ) => {
                         if (value && 'id' in value) {
                           setOrganization(value);
@@ -388,7 +524,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
           ))}
         </List>
       </Drawer>
-    </div>
+    </Root>
   );
 };
 
@@ -398,116 +534,3 @@ export const Header = withSearch(
     setSearchTerm
   })
 )(HeaderNoCtx);
-
-const useStyles = makeStyles((theme) => ({
-  inner: {
-    maxWidth: 1440,
-    width: '250%',
-    margin: '0 auto'
-  },
-  menuButton: {
-    marginLeft: theme.spacing(2),
-    display: 'block',
-    [theme.breakpoints.up('lg')]: {
-      display: 'none'
-    }
-  },
-  logo: {
-    width: 150,
-    padding: theme.spacing(),
-    paddingLeft: 0,
-    [theme.breakpoints.down('xl')]: {
-      display: 'flex'
-    }
-  },
-  spacing: {
-    flexGrow: 1
-  },
-  activeLink: {
-    '&:after': {
-      content: "''",
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      width: '100%',
-      height: 2,
-      backgroundColor: 'white'
-    }
-  },
-  activeMobileLink: {
-    fontWeight: 700,
-    '&:after': {
-      content: "''",
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      left: 0,
-      height: '100%',
-      width: 2,
-      backgroundColor: theme.palette.primary.main
-    }
-  },
-  link: {
-    position: 'relative',
-    color: 'white',
-    textDecoration: 'none',
-    margin: `0 ${theme.spacing()}px`,
-    padding: theme.spacing(),
-    borderBottom: '2px solid transparent',
-    fontWeight: 600
-  },
-  userLink: {
-    [theme.breakpoints.down('sm')]: {
-      display: 'flex'
-    },
-    [theme.breakpoints.up('lg')]: {
-      display: 'flex',
-      alignItems: 'center',
-      marginLeft: '1rem',
-      '& svg': {
-        marginRight: theme.spacing()
-      },
-      border: 'none',
-      textDecoration: 'none'
-    }
-  },
-  lgNav: {
-    display: 'none',
-    [theme.breakpoints.down('xl')]: {
-      display: 'inline'
-    }
-  },
-  mobileNav: {
-    padding: `${theme.spacing(2)}px ${theme.spacing()}px`
-  },
-  selectOrg: {
-    border: '1px solid #FFFFFF',
-    borderRadius: '5px',
-    width: '200px',
-    padding: '3px',
-    marginLeft: '20px',
-    '& svg': {
-      color: 'white'
-    },
-    '& input': {
-      color: 'white',
-      width: '100%'
-    },
-    '& input:focus': {
-      outlineWidth: 0
-    },
-    '& fieldset': {
-      borderStyle: 'none'
-    },
-    '& div div': {
-      paddingTop: '0 !important'
-    },
-    '& div div div': {
-      marginTop: '-3px !important'
-    },
-    height: '45px'
-  },
-  option: {
-    fontSize: 15
-  }
-}));
