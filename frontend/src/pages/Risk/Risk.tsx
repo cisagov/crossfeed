@@ -1,9 +1,9 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import classes from './Risk.module.scss';
 import VulnerabilityCard from './VulnerabilityCard';
+import VulnerabilityPieChart from './VulnerabilityPieChart';
 import { useRiskStyles } from './style';
-import { getSeverityColor } from './utils';
-import { ResponsivePie } from '@nivo/pie';
+import { getSingleColor, getSeverityColor, offsets, resultsPerPage } from './utils';
 import { ResponsiveBar } from '@nivo/bar';
 import { useAuthContext } from 'context';
 import { Paper, Chip } from '@material-ui/core';
@@ -24,7 +24,7 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Button as USWDSButton } from '@trussworks/react-uswds';
 
-interface Point {
+export interface Point {
   id: string;
   label: string;
   value: number;
@@ -87,12 +87,6 @@ const Risk: React.FC = (props) => {
 
   const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
 
-  const resultsPerPage = 30;
-
-  const getSingleColor = () => {
-    return '#FFBC78';
-  };
-
   const fetchStats = useCallback(
     async (orgId?: string) => {
       const { result } = await apiPost<ApiResponse>('/stats', {
@@ -121,39 +115,7 @@ const Risk: React.FC = (props) => {
     fetchStats();
   }, [fetchStats]);
 
-  const MyResponsivePie = ({
-    data,
-    colors,
-    type
-  }: {
-    data: Point[];
-    colors: any;
-    type: string;
-  }) => {
-    return (
-      <ResponsivePie
-        data={data as any}
-        innerRadius={0.5}
-        padAngle={0.7}
-        arcLabelsSkipAngle={10}
-        arcLinkLabelsSkipAngle={10}
-        colors={colors}
-        margin={{
-          left: 30,
-          right: 50,
-          top: 30,
-          bottom: 50
-        }}
-        onClick={(event) => {
-          if (type === 'vulns') {
-            history.push(`/inventory/vulnerabilities?severity=${event.id}`);
-          }
-        }}
-      />
-    );
-  };
-
-  const MyResponsiveBar = ({
+  const VulnerabilityBarChart = ({
     data,
     xLabels,
     type,
@@ -299,18 +261,6 @@ const Risk: React.FC = (props) => {
         {...({ motionStiffness: 90 } as any)}
       />
     );
-  };
-
-  const offsets: any = {
-    Vermont: [50, -8],
-    'New Hampshire': [34, 2],
-    Massachusetts: [30, -1],
-    'Rhode Island': [28, 2],
-    Connecticut: [35, 10],
-    'New Jersey': [34, 1],
-    Delaware: [33, 0],
-    Maryland: [47, 10],
-    'District of Columbia': [49, 21]
   };
 
   const MapCard = ({
@@ -498,20 +448,12 @@ const Risk: React.FC = (props) => {
                 showCommon={false}
               ></VulnerabilityCard>
               {stats.domains.services.length > 0 && (
-                <Paper elevation={0} className={cardClasses.cardRoot}>
-                  <div className={cardClasses.cardSmall}>
-                    <div className={cardClasses.header}>
-                      <h2>Most common services</h2>
-                    </div>
-                    <div className={cardClasses.chartSmall}>
-                      <MyResponsivePie
-                        data={stats.domains.services}
-                        colors={allColors}
-                        type={'services'}
-                      />
-                    </div>
-                  </div>
-                </Paper>
+                <VulnerabilityPieChart
+                  title={'Most common services'}
+                  data={stats.domains.services}
+                  colors={allColors}
+                  type={'services'}
+                />
               )}
               {stats.domains.ports.length > 0 && (
                 <Paper elevation={0} className={cardClasses.cardRoot}>
@@ -520,7 +462,7 @@ const Risk: React.FC = (props) => {
                       <h2>Most common ports</h2>
                     </div>
                     <div className={cardClasses.chartSmall}>
-                      <MyResponsiveBar
+                      <VulnerabilityBarChart
                         data={stats.domains.ports.slice(0, 5).reverse()}
                         type={'ports'}
                         xLabels={['Port']}
@@ -530,20 +472,12 @@ const Risk: React.FC = (props) => {
                 </Paper>
               )}
               {stats.vulnerabilities.severity.length > 0 && (
-                <Paper elevation={0} className={cardClasses.cardRoot}>
-                  <div className={cardClasses.cardSmall}>
-                    <div className={cardClasses.header}>
-                      <h2>Severity Levels</h2>
-                    </div>
-                    <div className={cardClasses.chartSmall}>
-                      <MyResponsivePie
-                        data={stats.vulnerabilities.severity}
-                        colors={getSeverityColor}
-                        type={'vulns'}
-                      />
-                    </div>
-                  </div>
-                </Paper>
+                <VulnerabilityPieChart
+                  title={'Severity Levels'}
+                  data={stats.vulnerabilities.severity}
+                  colors={getSeverityColor}
+                  type={'vulns'}
+                />
               )}
             </div>
 
@@ -592,7 +526,7 @@ const Risk: React.FC = (props) => {
                                 Total
                               </h5>
                             </div>
-                            <MyResponsiveBar
+                            <VulnerabilityBarChart
                               data={stats.domains.numVulnerabilities}
                               xLabels={labels}
                               type={'vulns'}
