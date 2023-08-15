@@ -1,5 +1,47 @@
 import React, { useState, useMemo } from 'react';
-import { Chip, makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Chip } from '@mui/material';
+
+const PREFIX = 'TaggedArrayInput';
+
+const classes = {
+  form: `${PREFIX}-form`,
+  inp: `${PREFIX}-inp`,
+  chip: `${PREFIX}-chip`,
+  tagsWrapper: `${PREFIX}-tagsWrapper`,
+  error: `${PREFIX}-error`
+};
+
+const Root = styled('form')(({ theme }) => ({
+  [`&.${classes.form}`]: {
+    width: '100%',
+    background: 'none'
+  },
+
+  [`& .${classes.inp}`]: {
+    border: 'none',
+    backgroundColor: '#fff',
+    width: '100%',
+    padding: '1rem',
+    boxShadow: 'inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF'
+  },
+
+  [`& .${classes.chip}`]: {
+    margin: '2px 0'
+  },
+
+  [`& .${classes.tagsWrapper}`]: {
+    display: 'block',
+    margin: '1rem 0'
+  },
+
+  [`& .${classes.error}`]: {
+    display: 'block',
+    margin: 0,
+    paddingTop: '0.2rem',
+    color: theme.palette.error.light
+  }
+}));
 
 interface Props {
   placeholder?: string;
@@ -11,7 +53,6 @@ interface Props {
 export const TaggedArrayInput: React.FC<Props> = (props) => {
   const { values, onAddTag, onRemoveTag, placeholder = '' } = props;
   const [inpValue, setInpValue] = useState('');
-  const classes = useStyles();
 
   const error = useMemo(
     () => (values.includes(inpValue) ? 'Filters must be unique' : ''),
@@ -36,7 +77,7 @@ export const TaggedArrayInput: React.FC<Props> = (props) => {
   };
 
   return (
-    <form onSubmit={onSubmit} className={classes.form}>
+    <Root onSubmit={onSubmit} className={classes.form}>
       <input
         className={classes.inp}
         value={inpValue}
@@ -56,33 +97,6 @@ export const TaggedArrayInput: React.FC<Props> = (props) => {
           </div>
         ))}
       </div>
-    </form>
+    </Root>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  form: {
-    width: '100%',
-    background: 'none'
-  },
-  inp: {
-    border: 'none',
-    backgroundColor: '#fff',
-    width: '100%',
-    padding: '1rem',
-    boxShadow: 'inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF'
-  },
-  chip: {
-    margin: '2px 0'
-  },
-  tagsWrapper: {
-    display: 'block',
-    margin: '1rem 0'
-  },
-  error: {
-    display: 'block',
-    margin: 0,
-    paddingTop: '0.2rem',
-    color: theme.palette.error.light
-  }
-}));

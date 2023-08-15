@@ -2,8 +2,8 @@ import React from 'react';
 import { Column } from 'react-table';
 import { ColumnFilter } from 'components';
 import { Report } from 'types';
-import { IconButton } from '@material-ui/core';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import { IconButton } from '@mui/material';
+import GetAppIcon from '@mui/icons-material/GetApp';
 
 export const createColumns = (pdfExport: any) =>
   [
@@ -37,6 +37,7 @@ export const createColumns = (pdfExport: any) =>
         <IconButton
           aria-label="fingerprint"
           onClick={() => pdfExport(reportName)}
+          size="large"
         >
           <GetAppIcon />
         </IconButton>

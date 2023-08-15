@@ -11,12 +11,19 @@ import {
   getUserMustSign
 } from './userStateUtils';
 import Cookies from 'universal-cookie';
-import { Snackbar } from '@material-ui/core';
-import { Alert, AlertProps } from '@material-ui/lab';
+import { Snackbar } from '@mui/material';
+import { Alert } from '@mui/material';
+import { AlertProps } from '@mui/lab';
 
 export const currentTermsVersion = '1';
 
-export const AuthContextProvider: React.FC = ({ children }) => {
+interface AuthContextProviderProps {
+  children: React.ReactNode;
+}
+
+export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
+  children
+}) => {
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [token, setToken] = usePersistentState<string | null>('token', null);
   const [org, setOrg] = usePersistentState<

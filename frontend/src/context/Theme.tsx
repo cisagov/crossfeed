@@ -1,32 +1,51 @@
 import React from 'react';
 import {
   createTheme,
-  MuiThemeProvider as ThemeProvider
-} from '@material-ui/core';
+  ThemeProvider,
+  Theme,
+  StyledEngineProvider,
+  adaptV4Theme
+} from '@mui/material';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#07648D'
-    },
-    secondary: {
-      main: '#28A0CB'
-    },
-    background: {
-      default: '#EFF1F5'
-    }
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 960,
-      lg: 1330,
-      xl: 1920
-    }
-  }
-});
+declare module '@mui/material/styles' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
 
-export const CFThemeProvider: React.FC = ({ children }) => {
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+const theme = createTheme(
+  adaptV4Theme({
+    palette: {
+      primary: {
+        main: '#07648D'
+      },
+      secondary: {
+        main: '#28A0CB'
+      },
+      background: {
+        default: '#EFF1F5'
+      }
+    },
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 600,
+        md: 960,
+        lg: 1330,
+        xl: 1920
+      }
+    }
+  })
+);
+
+interface CFThemeProviderProps {
+  children: React.ReactNode;
+}
+export const CFThemeProvider: React.FC<CFThemeProviderProps> = ({
+  children
+}) => {
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </StyledEngineProvider>
+  );
 };
