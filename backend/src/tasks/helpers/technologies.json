@@ -16,13 +16,13 @@
         "examples": [
             {
                 "name": "with version and suffix",
-                "html": "</script><meta name=\"Generator\" content=\"Sitefinity 11.0.6700.0 PE\" /><link",
-                "version": "11.0.6700.0"
+                "html": "</script><meta name=\"Generator\" content=\"Sitefinity 11.0.6700 PE\" /><link",
+                "version": "11.0.6700"
             },
             {
                 "name": "with version and no suffix",
-                "html": "</script><meta name=\"Generator\" content=\"Sitefinity 11.0.6700.0\" /><link",
-                "version": "11.0.6700.0"
+                "html": "</script><meta name=\"Generator\" content=\"Sitefinity 11.0.6700\" /><link",
+                "version": "11.0.6700"
             }
         ]
     },
