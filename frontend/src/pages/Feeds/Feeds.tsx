@@ -14,11 +14,7 @@ import { ModalToggleButton } from 'components';
 import { NoResults } from 'components/NoResults';
 import { classes, Root } from './style';
 import { getUserLevel, GLOBAL_VIEW, ALL_USERS } from 'context/userStateUtils';
-/*
-const GLOBAL_VIEW = 2;
-const STANDARD_USER = 1;
-const ALL_USERS = GLOBAL_VIEW | STANDARD_USER;
-*/
+
 const Feeds = () => {
   const { user, apiGet, apiDelete } = useAuthContext();
   const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
@@ -33,15 +29,7 @@ const Feeds = () => {
   const [selectedSearch, setSelectedSearch] = useState<string>('');
 
   const userLevel = getUserLevel(user);
-  /*
-  if (user && user.isRegistered) {
-    if (user.userType === 'standard') {
-      userLevel = STANDARD_USER;
-    } else {
-      userLevel = GLOBAL_VIEW;
-    }
-  }
-*/
+
   const fetchSavedSearches = useCallback(
     async (page: number) => {
       try {
