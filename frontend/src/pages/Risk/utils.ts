@@ -1,5 +1,4 @@
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
+import { VulnSeverities } from './Risk';
 
 export const resultsPerPage = 30;
 export const getSingleColor = () => {
@@ -23,5 +22,22 @@ export const offsets: any = {
   Maryland: [47, 10],
   'District of Columbia': [49, 21]
 };
+
+export const sevLabels = [
+  '',
+  'Low',
+  'Medium',
+  'High',
+  'Critical'
+]
+// Create severity object for Open Vulnerability chips
+export const severities: VulnSeverities[] = [
+  { label: 'All', sevList: ['', 'Low', 'Medium', 'High', 'Critical'] },
+  { label: 'Critical', sevList: ['Critical'] },
+  { label: 'High', sevList: ['High'] },
+  { label: 'Medium', sevList: ['Medium'] },
+  { label: 'Low', sevList: ['Low'] }
+];
+
 
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
