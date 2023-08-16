@@ -32,7 +32,6 @@ const BarChartCardLarge = (props: {
     chartHeader,
     footer
   } = useRiskStyles();
-  const [domainsWithVulns, setDomainsWithVulns] = useState(0);
   const [current, setCurrent] = useState(1);
   const [labels, setLabels] = useState(sevLabels);
   const keys = xLabels;
@@ -49,7 +48,7 @@ const BarChartCardLarge = (props: {
       domainToSevMap[domain][severity] = point.value;
     }
   }
-  // setDomainsWithVulns(Object.keys(domainToSevMap).length);
+  const domainsWithVulns = Object.keys(domainToSevMap).length
   dataVal = Object.keys(domainToSevMap)
     .map((key) => ({
       label: key,
@@ -57,7 +56,7 @@ const BarChartCardLarge = (props: {
     }))
     .sort((a, b) => {
       let diff = 0;
-      for (const label of labels) {
+      for (const label of xLabels) {
         diff += (label in b ? b[label] : 0) - (label in a ? a[label] : 0);
       }
       return diff;
@@ -162,11 +161,6 @@ const BarChartCardLarge = (props: {
                   history.push(
                     `/inventory/vulnerabilities?domain=${event.data.label}&severity=${event.id}`
                   );
-                } else if (type === 'ports') {
-                  history.push(
-                    `/inventory?filters[0][field]=services.port&filters[0][values][0]=n_${event.data.label}_n&filters[0][type]=any`
-                  );
-                  window.location.reload();
                 }
               }}
               padding={0.5}
