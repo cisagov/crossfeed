@@ -4,19 +4,16 @@ import { Point } from './Risk';
 import { useHistory } from 'react-router-dom';
 import { getSingleColor } from './utils';
 
-const BarChartCardSmall = (props: {
+const TopVulnerablePorts = (props: {
   data: Point[];
-  xLabels: string[];
-  type: string;
 }) => {
   const history = useHistory();
-  const { data, xLabels, type } = props;
-  const keys = xLabels;
-  const dataVal = data.map((e) => ({ ...e, [xLabels[0]]: e.value })) as any;
+  const { data } = props;
+  const dataVal = data.map((e) => ({ ...e, [['Port'][0]]: e.value })) as any;
   return (
     <ResponsiveBar
       data={dataVal as any}
-      keys={keys}
+      keys={['Port']}
       layers={['grid', 'axes', 'bars', 'markers', 'legends']}
       indexBy="label"
       margin={{
@@ -72,4 +69,4 @@ const BarChartCardSmall = (props: {
     />
   );
 };
-export default BarChartCardSmall;
+export default TopVulnerablePorts;

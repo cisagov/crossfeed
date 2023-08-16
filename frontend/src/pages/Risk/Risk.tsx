@@ -1,8 +1,8 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import classes from './Risk.module.scss';
 import VulnerabilityCard from './VulnerabilityCard';
-import BarChartCardSmall from './BarChartCardSmall';
-import BarChartCardLarge from './BarChartCardLarge';
+import TopVulnerablePorts from './TopVulnerablePorts';
+import TopVulnerableDomains from './TopVulnerableDomains';
 import VulnerabilityPieChart from './VulnerabilityPieChart';
 import { useRiskStyles } from './style';
 import { sevLabels, getSeverityColor, offsets, severities } from './utils';
@@ -29,7 +29,7 @@ export interface Point {
   value: number;
 }
 
-export interface Stats {
+interface Stats {
   domains: {
     services: Point[];
     ports: Point[];
@@ -44,7 +44,7 @@ export interface Stats {
   };
 }
 
-export interface ApiResponse {
+interface ApiResponse {
   result: Stats;
 }
 
@@ -294,10 +294,8 @@ const Risk: React.FC = (props) => {
                       <h2>Most common ports</h2>
                     </div>
                     <div className={cardClasses.chartSmall}>
-                      <BarChartCardSmall
+                      <TopVulnerablePorts
                         data={stats.domains.ports.slice(0, 5).reverse()}
-                        type={'ports'}
-                        xLabels={['Port']}
                       />
                     </div>
                   </div>
@@ -317,10 +315,8 @@ const Risk: React.FC = (props) => {
               <Paper elevation={0} className={cardClasses.cardRoot}>
                 <div>
                   {stats.domains.numVulnerabilities.length > 0 && (
-                    <BarChartCardLarge
+                    <TopVulnerableDomains
                       data={stats.domains.numVulnerabilities}
-                      type={'vulns'}
-                      xLabels={sevLabels}
                     />
                   )}
                 </div>

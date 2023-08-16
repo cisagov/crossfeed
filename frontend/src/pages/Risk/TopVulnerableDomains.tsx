@@ -7,20 +7,17 @@ import { Link, useHistory } from 'react-router-dom';
 import {
   sevLabels,
   resultsPerPage,
-  getSingleColor,
   getSeverityColor,
   severities
 } from './utils';
 import { useRiskStyles } from './style';
 import { Pagination } from '@material-ui/lab';
 
-const BarChartCardLarge = (props: {
+const TopVulnerableDomains = (props: {
   data: Point[];
-  type: string;
-  xLabels: string[];
 }) => {
   const history = useHistory();
-  const { data, type, xLabels } = props;
+  const { data } = props;
   const {
     header,
     chip,
@@ -34,7 +31,7 @@ const BarChartCardLarge = (props: {
   } = useRiskStyles();
   const [current, setCurrent] = useState(1);
   const [labels, setLabels] = useState(sevLabels);
-  const keys = xLabels;
+  const keys = sevLabels;
   let dataVal: object[];
   const pageStart = (current - 1) * resultsPerPage;
   // Separate count by severity
@@ -48,7 +45,7 @@ const BarChartCardLarge = (props: {
       domainToSevMap[domain][severity] = point.value;
     }
   }
-  const domainsWithVulns = Object.keys(domainToSevMap).length
+  const domainsWithVulns = Object.keys(domainToSevMap).length;
   dataVal = Object.keys(domainToSevMap)
     .map((key) => ({
       label: key,
@@ -56,7 +53,7 @@ const BarChartCardLarge = (props: {
     }))
     .sort((a, b) => {
       let diff = 0;
-      for (const label of xLabels) {
+      for (const label of sevLabels) {
         diff += (label in b ? b[label] : 0) - (label in a ? a[label] : 0);
       }
       return diff;
@@ -134,11 +131,14 @@ const BarChartCardLarge = (props: {
             <ResponsiveBar
               data={dataVal as any}
               keys={keys}
-              layers={
-                type === 'ports'
-                  ? ['grid', 'axes', 'bars', 'markers', 'legends']
-                  : ['grid', 'axes', 'bars', totalLabels, 'markers', 'legends']
-              }
+              layers={[
+                'grid',
+                'axes',
+                'bars',
+                totalLabels,
+                'markers',
+                'legends'
+              ]}
               indexBy="label"
               margin={{
                 top: 10,
@@ -157,16 +157,12 @@ const BarChartCardLarge = (props: {
                 }
               }}
               onClick={(event) => {
-                if (type === 'vulns') {
-                  history.push(
-                    `/inventory/vulnerabilities?domain=${event.data.label}&severity=${event.id}`
-                  );
-                }
+                history.push(
+                  `/inventory/vulnerabilities?domain=${event.data.label}&severity=${event.id}`
+                );
               }}
               padding={0.5}
-              colors={
-                type === 'ports' ? getSingleColor : (getSeverityColor as any)
-              }
+              colors={getSeverityColor as any}
               borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
               axisTop={null}
               axisRight={null}
@@ -174,7 +170,7 @@ const BarChartCardLarge = (props: {
                 tickSize: 0,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: type === 'ports' ? 'Count' : '',
+                legend: '',
                 legendPosition: 'middle',
                 legendOffset: 40
               }}
@@ -182,7 +178,7 @@ const BarChartCardLarge = (props: {
                 tickSize: 0,
                 tickPadding: 20,
                 tickRotation: 0,
-                legend: type === 'ports' ? 'Port' : '',
+                legend: '',
                 legendPosition: 'middle',
                 legendOffset: -65
               }}
@@ -223,4 +219,4 @@ const BarChartCardLarge = (props: {
     </div>
   );
 };
-export default BarChartCardLarge;
+export default TopVulnerableDomains;
