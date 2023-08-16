@@ -288,18 +288,9 @@ const Risk: React.FC = (props) => {
                 />
               )}
               {stats.domains.ports.length > 0 && (
-                <Paper elevation={0} className={cardClasses.cardRoot}>
-                  <div className={cardClasses.cardSmall}>
-                    <div className={cardClasses.header}>
-                      <h2>Most common ports</h2>
-                    </div>
-                    <div className={cardClasses.chartSmall}>
-                      <TopVulnerablePorts
-                        data={stats.domains.ports.slice(0, 5).reverse()}
-                      />
-                    </div>
-                  </div>
-                </Paper>
+                <TopVulnerablePorts
+                  data={stats.domains.ports.slice(0, 5).reverse()}
+                />
               )}
               {stats.vulnerabilities.severity.length > 0 && (
                 <VulnerabilityPieChart
