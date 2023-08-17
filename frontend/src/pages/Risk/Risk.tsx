@@ -5,7 +5,7 @@ import TopVulnerablePorts from './TopVulnerablePorts';
 import TopVulnerableDomains from './TopVulnerableDomains';
 import VulnerabilityPieChart from './VulnerabilityPieChart';
 import { useRiskStyles } from './style';
-import { sevLabels, getSeverityColor, offsets, severities } from './utils';
+import { delay, getSeverityColor, offsets, severities } from './utils';
 import { useAuthContext } from 'context';
 import { Paper } from '@material-ui/core';
 import { geoCentroid } from 'd3-geo';
@@ -104,6 +104,7 @@ const Risk: React.FC = (props) => {
     fetchStats();
   }, [fetchStats]);
 
+  // TODO: Move MapCard to a separate component; requires refactoring of how fetchStats and authContext are passed
   const MapCard = ({
     title,
     geoUrl,
@@ -215,8 +216,7 @@ const Risk: React.FC = (props) => {
     }
   }
 
-  const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-
+  // TODO: Move generatePDF to a separate component
   const generatePDF = async () => {
     const dateTimeNow = new Date(); // UTC Date Time
     const localDate = new Date(dateTimeNow); // Local Date Time
