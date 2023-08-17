@@ -244,7 +244,7 @@ describe('censys ipv4', () => {
     await checkDomains(organization);
   });
 
-  test('http failure should retry', async () => {
+  test('http failure triggers retry', async () => {
     nock('https://censys.io', authHeaders)
       .get('/api/v1/data/ipv4_2018')
       .reply(200, {
@@ -291,7 +291,7 @@ describe('censys ipv4', () => {
     await checkDomains(organization);
   });
 
-  test('repeated http failures should throw an error', async () => {
+  test('repeated http failures throw an error', async () => {
     nock('https://censys.io', authHeaders)
       .get('/api/v1/data/ipv4_2018')
       .reply(200, {
@@ -336,7 +336,7 @@ describe('censys ipv4', () => {
 
     await checkDomains(organization);
   });
-  test('undefined numChunks should throw an error', async () => {
+  test('undefined numChunks throws an error', async () => {
     await expect(
       censysIpv4({
         organizationId: organization.id,
@@ -348,7 +348,7 @@ describe('censys ipv4', () => {
       })
     ).rejects.toThrow('Chunks not specified.');
   });
-  test('undefined chunkNumber should throw an error', async () => {
+  test('undefined chunkNumber throws an error', async () => {
     await expect(
       censysIpv4({
         organizationId: organization.id,
@@ -360,7 +360,7 @@ describe('censys ipv4', () => {
       })
     ).rejects.toThrow('Chunks not specified.');
   });
-  test('chunkNumber >= numChunks should throw an error', async () => {
+  test('chunkNumber >= numChunks throws an error', async () => {
     await expect(
       censysIpv4({
         organizationId: organization.id,
@@ -373,7 +373,7 @@ describe('censys ipv4', () => {
       })
     ).rejects.toThrow('Invalid chunk number.');
   });
-  test('chunkNumber > 100 should throw an error', async () => {
+  test('chunkNumber > 100 throws an error', async () => {
     await expect(
       censysIpv4({
         organizationId: organization.id,

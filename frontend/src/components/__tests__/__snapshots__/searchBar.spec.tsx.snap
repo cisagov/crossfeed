@@ -3,14 +3,15 @@
 exports[`matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="makeStyles-wrapper-1"
+    class="SearchBar-wrapper css-6woq0m"
   >
     <div
-      class="makeStyles-inner-2"
+      class="SearchBar-inner"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root makeStyles-icon-4"
+        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium SearchBar-icon css-i4bv87-MuiSvgIcon-root"
+        data-testid="SearchOutlinedIcon"
         focusable="false"
         viewBox="0 0 24 24"
       >
@@ -20,7 +21,7 @@ exports[`matches snapshot 1`] = `
       </svg>
       <form>
         <input
-          class="makeStyles-inp-3"
+          class="SearchBar-inp"
           placeholder="Search for a domain, vuln type, port, service, IP"
           value=""
         />

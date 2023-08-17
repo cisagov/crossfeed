@@ -4,10 +4,10 @@ import VulnerabilityCard from './VulnerabilityCard';
 import TopVulnerablePorts from './TopVulnerablePorts';
 import TopVulnerableDomains from './TopVulnerableDomains';
 import VulnerabilityPieChart from './VulnerabilityPieChart';
-import { useRiskStyles } from './style';
+import * as RiskStyles from './style';
 import { delay, getSeverityColor, offsets, severities } from './utils';
 import { useAuthContext } from 'context';
-import { Paper } from '@material-ui/core';
+import { Paper } from '@mui/material';
 import { geoCentroid } from 'd3-geo';
 import {
   ComposableMap,
@@ -70,7 +70,8 @@ const Risk: React.FC = (props) => {
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
-  const cardClasses = useRiskStyles(props);
+  const RiskRoot = RiskStyles.RiskRoot;
+  const { cardRoot, content, contentWrapper, header, panel } = RiskStyles.classesRisk;
 
   const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
@@ -115,10 +116,10 @@ const Risk: React.FC = (props) => {
     findFn: (geo: any) => Point | undefined;
     type: string;
   }) => (
-    <Paper elevation={0} className={cardClasses.cardRoot}>
+    <Paper elevation={0} className={cardRoot}>
       <div>
         <div className={classes.chart}>
-          <div className={cardClasses.header}>
+          <div className={header}>
             <h2>{title}</h2>
           </div>
 
@@ -251,7 +252,7 @@ const Risk: React.FC = (props) => {
   };
 
   return (
-    <div className={classes.root}>
+    <RiskRoot className={classes.root}>
       {isLoading && (
         <div className="cisa-crossfeed-loading">
           <div></div>
@@ -269,10 +270,10 @@ const Risk: React.FC = (props) => {
           Generate Report
         </USWDSButton>
       </p>
-      <div id="wrapper" className={cardClasses.contentWrapper}>
+      <div id="wrapper" className={contentWrapper}>
         {stats && (
-          <div className={cardClasses.content}>
-            <div className={cardClasses.panel}>
+          <div className={content}>
+            <div className={panel}>
               <VulnerabilityCard
                 title={'Latest Vulnerabilities'}
                 data={latestVulnsGroupedArr}
@@ -302,8 +303,8 @@ const Risk: React.FC = (props) => {
               )}
             </div>
 
-            <div className={cardClasses.panel}>
-              <Paper elevation={0} className={cardClasses.cardRoot}>
+            <div className={panel}>
+              <Paper elevation={0} className={cardRoot}>
                 <div>
                   {stats.domains.numVulnerabilities.length > 0 && (
                     <TopVulnerableDomains
@@ -352,7 +353,7 @@ const Risk: React.FC = (props) => {
           </div>
         )}
       </div>
-    </div>
+    </RiskRoot>
   );
 };
 

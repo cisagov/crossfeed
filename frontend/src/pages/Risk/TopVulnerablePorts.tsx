@@ -3,12 +3,12 @@ import { ResponsiveBar } from '@nivo/bar';
 import { Point } from './Risk';
 import { useHistory } from 'react-router-dom';
 import { getSingleColor } from './utils';
-import { useRiskStyles } from './style';
-import { Paper } from '@material-ui/core';
+import * as RiskStyles from './style';
+import { Paper } from '@mui/material';
 const TopVulnerablePorts = (props: { data: Point[] }) => {
   const history = useHistory();
   const { data } = props;
-  const { cardRoot, cardSmall, header, chartSmall } = useRiskStyles();
+  const { cardRoot, cardSmall, header, chartSmall } = RiskStyles.classesRisk;
   const dataVal = data.map((e) => ({ ...e, [['Port'][0]]: e.value })) as any;
   return (
     <Paper elevation={0} className={cardRoot}>

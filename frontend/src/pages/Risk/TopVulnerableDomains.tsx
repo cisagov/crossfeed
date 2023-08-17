@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
-import { Chip } from '@material-ui/core';
+import { Chip } from '@mui/material';
 import { Point, VulnSeverities } from './Risk';
 import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
@@ -10,8 +10,8 @@ import {
   getSeverityColor,
   severities
 } from './utils';
-import { useRiskStyles } from './style';
-import { Pagination } from '@material-ui/lab';
+import * as RiskStyles from './style';
+import { Pagination } from '@mui/lab';
 
 const TopVulnerableDomains = (props: {
   data: Point[];
@@ -28,7 +28,7 @@ const TopVulnerableDomains = (props: {
     chipWrapper,
     chartHeader,
     footer
-  } = useRiskStyles();
+  } = RiskStyles.classesRisk;
   const [current, setCurrent] = useState(1);
   const [labels, setLabels] = useState(sevLabels);
   const keys = sevLabels;
