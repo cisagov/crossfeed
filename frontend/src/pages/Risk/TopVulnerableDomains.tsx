@@ -30,7 +30,6 @@ const TopVulnerableDomains = (props: { data: Point[] }) => {
   const [current, setCurrent] = useState(1);
   const [labels, setLabels] = useState(sevLabels);
   const keys = sevLabels;
-  let dataVal: object[];
   const pageStart = (current - 1) * resultsPerPage;
   // Separate count by severity
   const domainToSevMap: any = {};
@@ -44,7 +43,7 @@ const TopVulnerableDomains = (props: { data: Point[] }) => {
     }
   }
   const domainsWithVulns = Object.keys(domainToSevMap).length;
-  dataVal = Object.keys(domainToSevMap)
+  const dataVal = Object.keys(domainToSevMap)
     .map((key) => ({
       label: key,
       ...domainToSevMap[key]
