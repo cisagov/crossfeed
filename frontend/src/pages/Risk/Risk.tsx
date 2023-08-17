@@ -283,7 +283,7 @@ const Risk: React.FC = (props) => {
               ></VulnerabilityCard>
               {stats.domains.services.length > 0 && (
                 <VulnerabilityPieChart
-                  title={'Most common services'}
+                  title={'Most Common Services'}
                   data={stats.domains.services}
                   colors={allColors}
                   type={'services'}

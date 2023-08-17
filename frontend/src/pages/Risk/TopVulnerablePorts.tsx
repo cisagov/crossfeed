@@ -14,7 +14,7 @@ const TopVulnerablePorts = (props: { data: Point[] }) => {
     <Paper elevation={0} className={cardRoot}>
       <div className={cardSmall}>
         <div className={header}>
-          <h2>Most common ports</h2>
+          <h2>Most Common Ports</h2>
         </div>
         <div className={chartSmall}>
           <ResponsiveBar
