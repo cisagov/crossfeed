@@ -13,9 +13,7 @@ import {
 import * as RiskStyles from './style';
 import { Pagination } from '@mui/lab';
 
-const TopVulnerableDomains = (props: {
-  data: Point[];
-}) => {
+const TopVulnerableDomains = (props: { data: Point[] }) => {
   const history = useHistory();
   const { data } = props;
   const {

@@ -71,7 +71,8 @@ const Risk: React.FC = (props) => {
   const [stats, setStats] = useState<Stats | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const RiskRoot = RiskStyles.RiskRoot;
-  const { cardRoot, content, contentWrapper, header, panel } = RiskStyles.classesRisk;
+  const { cardRoot, content, contentWrapper, header, panel } =
+    RiskStyles.classesRisk;
 
   const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 

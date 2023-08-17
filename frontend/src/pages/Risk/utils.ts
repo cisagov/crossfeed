@@ -23,13 +23,8 @@ export const offsets: any = {
   'District of Columbia': [49, 21]
 };
 
-export const sevLabels = [
-  '',
-  'Low',
-  'Medium',
-  'High',
-  'Critical'
-]
+export const sevLabels = ['', 'Low', 'Medium', 'High', 'Critical'];
+
 // Create severity object for Open Vulnerability chips
 export const severities: VulnSeverities[] = [
   { label: 'All', sevList: ['', 'Low', 'Medium', 'High', 'Critical'] },
@@ -38,6 +33,5 @@ export const severities: VulnSeverities[] = [
   { label: 'Medium', sevList: ['Medium'] },
   { label: 'Low', sevList: ['Low'] }
 ];
-
 
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
