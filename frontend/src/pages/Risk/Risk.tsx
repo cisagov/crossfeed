@@ -1,14 +1,13 @@
 import React, { useCallback, useState, useEffect } from 'react';
-// import { styled } from '@mui/material/styles';
 import classes from './Risk.module.scss';
 import VulnerabilityCard from './VulnerabilityCard';
+import TopVulnerablePorts from './TopVulnerablePorts';
+import TopVulnerableDomains from './TopVulnerableDomains';
+import VulnerabilityPieChart from './VulnerabilityPieChart';
 import * as RiskStyles from './style';
-import { getSeverityColor } from './utils';
-import { ResponsivePie } from '@nivo/pie';
-import { ResponsiveBar } from '@nivo/bar';
+import { delay, getSeverityColor, offsets, severities } from './utils';
 import { useAuthContext } from 'context';
-import { Paper, Chip } from '@mui/material';
-import { Pagination } from '@mui/material';
+import { Paper } from '@mui/material';
 import { geoCentroid } from 'd3-geo';
 import {
   ComposableMap,
@@ -19,13 +18,12 @@ import {
   Annotation
 } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
-import { Link, useHistory } from 'react-router-dom';
 import { Vulnerability } from 'types';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Button as USWDSButton } from '@trussworks/react-uswds';
 
-interface Point {
+export interface Point {
   id: string;
   label: string;
   value: number;
@@ -54,7 +52,7 @@ interface VulnerabilityCount extends Vulnerability {
   count: number;
 }
 
-interface VulnSeverities {
+export interface VulnSeverities {
   label: string;
   sevList: string[];
   disable?: boolean;
@@ -67,33 +65,18 @@ let colorScale = scaleLinear<string>()
   .range(['#c7e8ff', '#135787']);
 
 const Risk: React.FC = (props) => {
-  const history = useHistory();
-  const classesRisk = RiskStyles.classesRisk;
-  const RiskRoot = RiskStyles.RiskRoot;
   const { currentOrganization, showAllOrganizations, showMaps, user, apiPost } =
     useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
-  const [labels, setLabels] = useState([
-    '',
-    'Low',
-    'Medium',
-    'High',
-    'Critical'
-  ]);
-  const [domainsWithVulns, setDomainsWithVulns] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [current, setCurrent] = useState(1);
+  const RiskRoot = RiskStyles.RiskRoot;
+  const { cardRoot, content, contentWrapper, header, panel } =
+    RiskStyles.classesRisk;
 
   const geoStateUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
   const allColors = ['rgb(0, 111, 162)', 'rgb(0, 185, 227)'];
-
-  const resultsPerPage = 30;
-
-  const getSingleColor = () => {
-    return '#FFBC78';
-  };
 
   const fetchStats = useCallback(
     async (orgId?: string) => {
@@ -123,213 +106,21 @@ const Risk: React.FC = (props) => {
     fetchStats();
   }, [fetchStats]);
 
-  const MyResponsivePie = ({
-    data,
-    colors,
-    type
-  }: {
-    data: Point[];
-    colors: any;
-    type: string;
-  }) => {
-    return (
-      <ResponsivePie
-        data={data as any}
-        innerRadius={0.5}
-        padAngle={0.7}
-        arcLabelsSkipAngle={10}
-        arcLinkLabelsSkipAngle={10}
-        colors={colors}
-        margin={{
-          left: 30,
-          right: 50,
-          top: 30,
-          bottom: 50
-        }}
-        onClick={(event) => {
-          if (type === 'vulns') {
-            history.push(`/inventory/vulnerabilities?severity=${event.id}`);
-          }
-        }}
-      />
-    );
-  };
-
-  const MyResponsiveBar = ({
-    data,
-    xLabels,
-    type,
-    longXValues = false
-  }: {
-    data: Point[];
-    xLabels: string[];
-    type: string;
-    longXValues?: boolean;
-  }) => {
-    const keys = xLabels;
-    let dataVal: object[];
-    const pageStart = (current - 1) * resultsPerPage;
-    if (type === 'ports') {
-      dataVal = data.map((e) => ({ ...e, [xLabels[0]]: e.value })) as any;
-    } else {
-      // Separate count by severity
-      const domainToSevMap: any = {};
-      for (const point of data) {
-        const split = point.id.split('|');
-        const domain = split[0];
-        const severity = split[1];
-        if (labels.includes(severity)) {
-          if (!(domain in domainToSevMap)) domainToSevMap[domain] = {};
-          domainToSevMap[domain][severity] = point.value;
-        }
-      }
-      setDomainsWithVulns(Object.keys(domainToSevMap).length);
-      dataVal = Object.keys(domainToSevMap)
-        .map((key) => ({
-          label: key,
-          ...domainToSevMap[key]
-        }))
-        .sort((a, b) => {
-          let diff = 0;
-          for (const label of xLabels) {
-            diff += (label in b ? b[label] : 0) - (label in a ? a[label] : 0);
-          }
-          return diff;
-        })
-        .slice(pageStart, Math.min(pageStart + 30, domainsWithVulns))
-        .reverse();
-    }
-    // create the total vuln labels for each domain
-    const totalLabels = ({ bars, width }: any) => {
-      const fullWidth = width + 5;
-      return bars.map(
-        ({ data: { data, indexValue }, y, height, width }: any, i: number) => {
-          const total = Object.keys(data)
-            .filter((key) => key !== 'label')
-            .reduce((a, key) => a + data[key], 0);
-          if (i < dataVal.length) {
-            return (
-              <g
-                transform={`translate(${fullWidth}, ${y})`}
-                key={`${indexValue}-${i}`}
-              >
-                <text
-                  x={10}
-                  y={height / 2}
-                  textAnchor="middle"
-                  alignmentBaseline="central"
-                  // add any style to the label here
-                  style={{
-                    fill: 'rgb(51, 51, 51)',
-                    fontSize: 12
-                  }}
-                >
-                  {total}
-                </text>
-              </g>
-            );
-          }
-          return null;
-        }
-      );
-    };
-    return (
-      <ResponsiveBar
-        data={dataVal as any}
-        keys={keys}
-        layers={
-          type === 'ports'
-            ? ['grid', 'axes', 'bars', 'markers', 'legends']
-            : ['grid', 'axes', 'bars', totalLabels, 'markers', 'legends']
-        }
-        indexBy="label"
-        margin={{
-          top: longXValues ? 10 : 30,
-          right: 40,
-          bottom: longXValues ? 150 : 75,
-          left: longXValues ? 260 : 100
-        }}
-        theme={{
-          fontSize: 12,
-          axis: {
-            legend: {
-              text: {
-                fontWeight: 'bold'
-              }
-            }
-          }
-        }}
-        onClick={(event) => {
-          if (type === 'vulns') {
-            history.push(
-              `/inventory/vulnerabilities?domain=${event.data.label}&severity=${event.id}`
-            );
-          } else if (type === 'ports') {
-            history.push(
-              `/inventory?filters[0][field]=services.port&filters[0][values][0]=n_${event.data.label}_n&filters[0][type]=any`
-            );
-            window.location.reload();
-          }
-        }}
-        padding={0.5}
-        colors={type === 'ports' ? getSingleColor : (getSeverityColor as any)}
-        borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-        axisTop={null}
-        axisRight={null}
-        axisBottom={{
-          tickSize: 0,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: type === 'ports' ? 'Count' : '',
-          legendPosition: 'middle',
-          legendOffset: 40
-        }}
-        axisLeft={{
-          tickSize: 0,
-          tickPadding: 20,
-          tickRotation: 0,
-          legend: type === 'ports' ? 'Port' : '',
-          legendPosition: 'middle',
-          legendOffset: -65
-        }}
-        animate={true}
-        enableLabel={false}
-        motionDamping={15}
-        layout={'horizontal'}
-        enableGridX={true}
-        enableGridY={false}
-        {...({ motionStiffness: 90 } as any)}
-      />
-    );
-  };
-
-  const offsets: any = {
-    Vermont: [50, -8],
-    'New Hampshire': [34, 2],
-    Massachusetts: [30, -1],
-    'Rhode Island': [28, 2],
-    Connecticut: [35, 10],
-    'New Jersey': [34, 1],
-    Delaware: [33, 0],
-    Maryland: [47, 10],
-    'District of Columbia': [49, 21]
-  };
-
+  // TODO: Move MapCard to a separate component; requires refactoring of how fetchStats and authContext are passed
   const MapCard = ({
     title,
     geoUrl,
-    findFn,
-    type
+    findFn
   }: {
     title: string;
     geoUrl: string;
     findFn: (geo: any) => Point | undefined;
     type: string;
   }) => (
-    <Paper elevation={0} classes={{ root: classesRisk.cardRoot }}>
+    <Paper elevation={0} className={cardRoot}>
       <div>
         <div className={classes.chart}>
-          <div className={classesRisk.header}>
+          <div className={header}>
             <h2>{title}</h2>
           </div>
 
@@ -419,31 +210,15 @@ const Risk: React.FC = (props) => {
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
-  // Create severity object for Open Vulnerability chips
-  const severities: VulnSeverities[] = [
-    { label: 'All', sevList: ['', 'Low', 'Medium', 'High', 'Critical'] },
-    { label: 'Critical', sevList: ['Critical'] },
-    { label: 'High', sevList: ['High'] },
-    { label: 'Medium', sevList: ['Medium'] },
-    { label: 'Low', sevList: ['Low'] }
-  ];
-
   if (stats) {
     for (const sev of severities) {
-      if (
-        stats.domains.numVulnerabilities.some((i) =>
-          sev.sevList.includes(i.id.split('|')[1])
-        )
-      ) {
-        sev.disable = false;
-      } else {
-        sev.disable = true;
-      }
+      sev.disable = !stats.domains.numVulnerabilities.some((i) =>
+        sev.sevList.includes(i.id.split('|')[1])
+      );
     }
   }
 
-  const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-
+  // TODO: Move generatePDF to a separate component
   const generatePDF = async () => {
     const dateTimeNow = new Date(); // UTC Date Time
     const localDate = new Date(dateTimeNow); // Local Date Time
@@ -456,10 +231,7 @@ const Risk: React.FC = (props) => {
       scrollX: 0,
       scrollY: 0,
       ignoreElements: function (element) {
-        if ('mapWrapper' === element.id) {
-          return true;
-        }
-        return false;
+        return 'mapWrapper' === element.id;
       }
     }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
@@ -499,10 +271,10 @@ const Risk: React.FC = (props) => {
           Generate Report
         </USWDSButton>
       </p>
-      <div id="wrapper" className={classesRisk.contentWrapper}>
+      <div id="wrapper" className={contentWrapper}>
         {stats && (
-          <div className={classesRisk.content}>
-            <div className={classesRisk.panel}>
+          <div className={content}>
+            <div className={panel}>
               <VulnerabilityCard
                 title={'Latest Vulnerabilities'}
                 data={latestVulnsGroupedArr}
@@ -510,134 +282,35 @@ const Risk: React.FC = (props) => {
                 showCommon={false}
               ></VulnerabilityCard>
               {stats.domains.services.length > 0 && (
-                <Paper elevation={0} className={classesRisk.cardRoot}>
-                  <div className={classesRisk.cardSmall}>
-                    <div className={classesRisk.header}>
-                      <h2>Most common services</h2>
-                    </div>
-                    <div className={classesRisk.chartSmall}>
-                      <MyResponsivePie
-                        data={stats.domains.services}
-                        colors={allColors}
-                        type={'services'}
-                      />
-                    </div>
-                  </div>
-                </Paper>
+                <VulnerabilityPieChart
+                  title={'Most Common Services'}
+                  data={stats.domains.services}
+                  colors={allColors}
+                  type={'services'}
+                />
               )}
               {stats.domains.ports.length > 0 && (
-                <Paper elevation={0} classes={{ root: classesRisk.cardRoot }}>
-                  <div className={classesRisk.cardSmall}>
-                    <div className={classesRisk.header}>
-                      <h2>Most common ports</h2>
-                    </div>
-                    <div className={classesRisk.chartSmall}>
-                      <MyResponsiveBar
-                        data={stats.domains.ports.slice(0, 5).reverse()}
-                        type={'ports'}
-                        xLabels={['Port']}
-                      />
-                    </div>
-                  </div>
-                </Paper>
+                <TopVulnerablePorts
+                  data={stats.domains.ports.slice(0, 5).reverse()}
+                />
               )}
               {stats.vulnerabilities.severity.length > 0 && (
-                <Paper elevation={0} classes={{ root: classesRisk.cardRoot }}>
-                  <div className={classesRisk.cardSmall}>
-                    <div className={classesRisk.header}>
-                      <h2>Severity Levels</h2>
-                    </div>
-                    <div className={classesRisk.chartSmall}>
-                      <MyResponsivePie
-                        data={stats.vulnerabilities.severity}
-                        colors={getSeverityColor}
-                        type={'vulns'}
-                      />
-                    </div>
-                  </div>
-                </Paper>
+                <VulnerabilityPieChart
+                  title={'Severity Levels'}
+                  data={stats.vulnerabilities.severity}
+                  colors={getSeverityColor}
+                  type={'vulns'}
+                />
               )}
             </div>
 
-            <div className={classesRisk.panel}>
-              <Paper elevation={0} classes={{ root: classesRisk.cardRoot }}>
+            <div className={panel}>
+              <Paper elevation={0} className={cardRoot}>
                 <div>
                   {stats.domains.numVulnerabilities.length > 0 && (
-                    <div className={classesRisk.cardBig}>
-                      <div className={classesRisk.seeAll}>
-                        <h4>
-                          <Link to="/inventory/vulnerabilities">See All</Link>
-                        </h4>
-                      </div>
-                      <div className={classesRisk.header}>
-                        <h2>Open Vulnerabilities by Domain</h2>
-                      </div>
-                      <div className={classesRisk.chartLarge}>
-                        {stats.domains.numVulnerabilities.length === 0 ? (
-                          <h3>No open vulnerabilities</h3>
-                        ) : (
-                          <>
-                            <p className={classesRisk.note}>
-                              *Top 50 domains with open vulnerabilities
-                            </p>
-                            <div className={classesRisk.chipWrapper}>
-                              {severities.map(
-                                (sevFilter: VulnSeverities, i: number) => (
-                                  <Chip
-                                    key={i}
-                                    className={classesRisk.chip}
-                                    disabled={sevFilter.disable}
-                                    label={sevFilter.label}
-                                    onClick={() => {
-                                      setLabels(sevFilter.sevList);
-                                      setCurrent(1);
-                                    }}
-                                  ></Chip>
-                                )
-                              )}
-                            </div>
-                            <div className={classesRisk.chartHeader}>
-                              <h5>Domain&emsp; Breakdown</h5>
-                              <h5
-                                style={{ textAlign: 'right', paddingLeft: 0 }}
-                              >
-                                Total
-                              </h5>
-                            </div>
-                            <MyResponsiveBar
-                              data={stats.domains.numVulnerabilities}
-                              xLabels={labels}
-                              type={'vulns'}
-                              longXValues={true}
-                            />
-                          </>
-                        )}
-                      </div>
-                      <div className={classesRisk.footer}>
-                        <span>
-                          <strong>
-                            {(domainsWithVulns === 0
-                              ? 0
-                              : (current - 1) * resultsPerPage + 1
-                            ).toLocaleString()}{' '}
-                            -{' '}
-                            {Math.min(
-                              (current - 1) * resultsPerPage + resultsPerPage,
-                              domainsWithVulns
-                            ).toLocaleString()}
-                          </strong>{' '}
-                          of{' '}
-                          <strong>{domainsWithVulns.toLocaleString()}</strong>
-                        </span>
-                        <Pagination
-                          count={Math.ceil(domainsWithVulns / resultsPerPage)}
-                          page={current}
-                          onChange={(_, page) => setCurrent(page)}
-                          color="primary"
-                          size="small"
-                        />
-                      </div>
-                    </div>
+                    <TopVulnerableDomains
+                      data={stats.domains.numVulnerabilities}
+                    />
                   )}
                 </div>
               </Paper>
