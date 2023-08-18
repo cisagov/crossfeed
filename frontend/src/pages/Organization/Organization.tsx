@@ -37,8 +37,6 @@ import { Autocomplete } from '@mui/material';
 import { createFilterOptions } from '@mui/material/useAutocomplete';
 import { OrganizationList } from 'components/OrganizationList';
 
-
-
 interface AutocompleteType extends Partial<OrganizationTag> {
   title?: string;
 }
@@ -83,8 +81,7 @@ export const Organization: React.FC = () => {
   };
 
   const organizationClasses = OrganizationStyles.organizationClasses;
-  const Root = OrganizationStyles.OrganizationRoot
-
+  const Root = OrganizationStyles.OrganizationRoot;
 
   const userRoleColumns: Column<Role>[] = [
     {
