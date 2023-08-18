@@ -1,24 +1,21 @@
-import React, { useState }from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import * as OrganizationStyles from './style';
-import * as authContextOrg from './authContextOrg';
-import { useParams } from 'react-router-dom';
-import { scanColumns } from './Columns/scanColumns';
-import { scanTaskColumns } from './Columns/scanTaskColumns';
-import { userRoleColumns } from './Columns/userRoleColumns';
-import { onInviteUserSubmit, onInviteUserTextChange } from './userActions';
-import { initiateDomainVerification, checkDomainVerification } from './domainVerifications';
-import { fetchScans, updateOrganization } from './FetchAndUpdate';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, Route, useParams, Switch } from 'react-router-dom';
+import { useAuthContext } from 'context';
 import {
-  Organization as OrganizationType, 
-  OrganizationTag,
+  Organization as OrganizationType,
+  Role,
+  ScanTask,
+  User,
   Scan,
   ScanSchema,
-  ScanTask,
-  Role } from 'types';
+  OrganizationTag,
+  PendingDomain
+} from 'types';
+import { Column } from 'react-table';
 import { Subnav, Table } from 'components';
 // @ts-ignore:next-line
-// import { formatDistanceToNow, parseISO } from 'date-fns';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 import {
   Chip,
   Switch as SwitchInput,
@@ -35,47 +32,10 @@ import {
   Radio,
   RadioGroup
 } from '@mui/material';
-import { ChevronRight } from '@mui/icons-material';
+import { ChevronRight, ControlPoint } from '@mui/icons-material';
 import { Autocomplete } from '@mui/material';
 import { createFilterOptions } from '@mui/material/useAutocomplete';
 import { OrganizationList } from 'components/OrganizationList';
-
-
-
-const organizationId  = useParams<{ organizationId: string }>();
-const [organization, setOrganization] = useState<OrganizationType>();
-const [tags, setTags] = useState<AutocompleteType[]>([]);
-const [userRoles, setUserRoles] = useState<Role[]>([]);
-const [scans, setScans] = useState<Scan[]>([]);
-const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
-const [scanSchema, setScanSchema] = useState<ScanSchema>({});
-const [newUserValues, setNewUserValues] = useState<{
-  firstName: string;
-  lastName: string;
-  email: string;
-  organization?: OrganizationType;
-  role: string;
-}>({
-  firstName: '',
-  lastName: '',
-  email: '',
-  role: ''
-});
-
-const [tagValue, setTagValue] = React.useState<AutocompleteType | null>(null);
-const [inputValue, setInputValue] = React.useState('');
-const [dialog, setDialog] = React.useState<{
-  open: boolean;
-  type?: 'rootDomains' | 'ipBlocks' | 'tags';
-  label?: string;
-  stage?: number;
-  domainVerificationStatusMessage?: string;
-}>({ open: false });
-
-
-
-const organizationClasses = OrganizationStyles.organizationClasses;
-const OrganizationRoot = OrganizationStyles.OrganizationRoot;
 
 
 
@@ -83,12 +43,452 @@ interface AutocompleteType extends Partial<OrganizationTag> {
   title?: string;
 }
 
-export const Organization: React.FC = () => {  
-  // useEffect(() => {
-  //   fetchOrganization();
-  // }, [fetchOrganization]);
-  const user = authContextOrg.user;
+export const Organization: React.FC = () => {
+  const { apiGet, apiPut, apiPost, user, setFeedbackMessage } =
+    useAuthContext();
+  const { organizationId } = useParams<{ organizationId: string }>();
+  const [organization, setOrganization] = useState<OrganizationType>();
+  const [tags, setTags] = useState<AutocompleteType[]>([]);
+  const [userRoles, setUserRoles] = useState<Role[]>([]);
+  const [scanTasks, setScanTasks] = useState<ScanTask[]>([]);
+  const [scans, setScans] = useState<Scan[]>([]);
+  const [scanSchema, setScanSchema] = useState<ScanSchema>({});
+  const [newUserValues, setNewUserValues] = useState<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    organization?: OrganizationType;
+    role: string;
+  }>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    role: ''
+  });
 
+  const [tagValue, setTagValue] = React.useState<AutocompleteType | null>(null);
+  const [inputValue, setInputValue] = React.useState('');
+  const [dialog, setDialog] = React.useState<{
+    open: boolean;
+    type?: 'rootDomains' | 'ipBlocks' | 'tags';
+    label?: string;
+    stage?: number;
+    domainVerificationStatusMessage?: string;
+  }>({ open: false });
+
+  const dateAccessor = (date?: string) => {
+    return !date || new Date(date).getTime() === new Date(0).getTime()
+      ? 'None'
+      : `${formatDistanceToNow(parseISO(date))} ago`;
+  };
+
+  const organizationClasses = OrganizationStyles.organizationClasses;
+  const Root = OrganizationStyles.OrganizationRoot
+
+
+  const userRoleColumns: Column<Role>[] = [
+    {
+      Header: 'Name',
+      accessor: ({ user }) => user?.fullName,
+      width: 200,
+      disableFilters: true,
+      id: 'name'
+    },
+    {
+      Header: 'Email',
+      accessor: ({ user }) => user?.email,
+      width: 150,
+      minWidth: 150,
+      id: 'email',
+      disableFilters: true
+    },
+    {
+      Header: 'Role',
+      accessor: ({ approved, role, user }) => {
+        if (approved) {
+          if (user?.invitePending) {
+            return 'Invite pending';
+          } else if (role === 'admin') {
+            return 'Administrator';
+          } else {
+            return 'Member';
+          }
+        }
+        return 'Pending approval';
+      },
+      width: 50,
+      minWidth: 50,
+      id: 'approved',
+      disableFilters: true
+    },
+    {
+      Header: () => {
+        return (
+          <Root style={{ justifyContent: 'flex-center' }}>
+            <Button color="secondary" onClick={() => setDialog({ open: true })}>
+              <ControlPoint style={{ marginRight: '10px' }}></ControlPoint>
+              Add member
+            </Button>
+          </Root>
+        );
+      },
+      id: 'action',
+      Cell: ({ row }: { row: { index: number } }) => {
+        const isApproved =
+          !organization?.userRoles[row.index] ||
+          organization?.userRoles[row.index].approved;
+        return (
+          <>
+            {isApproved ? (
+              <Button
+                onClick={() => {
+                  removeUser(row.index);
+                }}
+                color="secondary"
+              >
+                <p>Remove</p>
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  approveUser(row.index);
+                }}
+                color="secondary"
+              >
+                <p>Approve</p>
+              </Button>
+            )}
+          </>
+        );
+      },
+      disableFilters: true
+    }
+  ];
+
+  const scanColumns: Column<Scan>[] = [
+    {
+      Header: 'Name',
+      accessor: 'name',
+      width: 150,
+      id: 'name',
+      disableFilters: true
+    },
+    {
+      Header: 'Description',
+      accessor: ({ name }) => scanSchema[name] && scanSchema[name].description,
+      width: 200,
+      minWidth: 200,
+      id: 'description',
+      disableFilters: true
+    },
+    {
+      Header: 'Mode',
+      accessor: ({ name }) =>
+        scanSchema[name] && scanSchema[name].isPassive ? 'Passive' : 'Active',
+      width: 150,
+      minWidth: 150,
+      id: 'mode',
+      disableFilters: true
+    },
+    {
+      Header: 'Action',
+      id: 'action',
+      maxWidth: 100,
+      Cell: ({ row }: { row: { index: number } }) => {
+        if (!organization) return null;
+        const enabled = organization.granularScans.find(
+          (scan) => scan.id === scans[row.index].id
+        );
+        return (
+          <Button
+            type="button"
+            onClick={() => {
+              updateScan(scans[row.index], !enabled);
+            }}
+          >
+            {enabled ? 'Disable' : 'Enable'}
+          </Button>
+        );
+      },
+      disableFilters: true
+    }
+  ];
+
+  const scanTaskColumns: Column<ScanTask>[] = [
+    {
+      Header: 'ID',
+      accessor: 'id',
+      disableFilters: true
+    },
+    {
+      Header: 'Status',
+      accessor: 'status',
+      disableFilters: true
+    },
+    {
+      Header: 'Type',
+      accessor: 'type',
+      disableFilters: true
+    },
+    {
+      Header: 'Name',
+      accessor: ({ scan }) => scan?.name,
+      disableFilters: true
+    },
+    {
+      Header: 'Created At',
+      accessor: ({ createdAt }) => dateAccessor(createdAt),
+      disableFilters: true,
+      disableSortBy: true
+    },
+    {
+      Header: 'Requested At',
+      accessor: ({ requestedAt }) => dateAccessor(requestedAt),
+      disableFilters: true,
+      disableSortBy: true
+    },
+    {
+      Header: 'Started At',
+      accessor: ({ startedAt }) => dateAccessor(startedAt),
+      disableFilters: true,
+      disableSortBy: true
+    },
+    {
+      Header: 'Finished At',
+      accessor: ({ finishedAt }) => dateAccessor(finishedAt),
+      disableFilters: true,
+      disableSortBy: true
+    },
+    {
+      Header: 'Output',
+      accessor: 'output',
+      disableFilters: true
+    }
+  ];
+
+  const fetchOrganization = useCallback(async () => {
+    try {
+      const organization = await apiGet<OrganizationType>(
+        `/organizations/${organizationId}`
+      );
+      organization.scanTasks.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setOrganization(organization);
+      setUserRoles(organization.userRoles);
+      setScanTasks(organization.scanTasks);
+      const tags = await apiGet<OrganizationTag[]>(`/organizations/tags`);
+      setTags(tags);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet, setOrganization, organizationId]);
+
+  const fetchScans = useCallback(async () => {
+    try {
+      const response = await apiGet<{
+        scans: Scan[];
+        schema: ScanSchema;
+      }>('/granularScans/');
+      let { scans } = response;
+      const { schema } = response;
+
+      if (user?.userType !== 'globalAdmin')
+        scans = scans.filter(
+          (scan) =>
+            scan.name !== 'censysIpv4' && scan.name !== 'censysCertificates'
+        );
+
+      setScans(scans);
+      setScanSchema(schema);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [apiGet, user]);
+
+  const approveUser = async (user: number) => {
+    try {
+      await apiPost(
+        `/organizations/${organization?.id}/roles/${organization?.userRoles[user].id}/approve`,
+        { body: {} }
+      );
+      const copy = userRoles.map((role, id) =>
+        id === user ? { ...role, approved: true } : role
+      );
+      setUserRoles(copy);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const removeUser = async (user: number) => {
+    try {
+      await apiPost(
+        `/organizations/${organization?.id}/roles/${userRoles[user].id}/remove`,
+        { body: {} }
+      );
+      const copy = userRoles.filter((_, ind) => ind !== user);
+      setUserRoles(copy);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const updateOrganization = async (body: any) => {
+    try {
+      const org = await apiPut('/organizations/' + organization?.id, {
+        body: organization
+      });
+      setOrganization(org);
+      setFeedbackMessage({
+        message: 'Organization successfully updated',
+        type: 'success'
+      });
+    } catch (e: any) {
+      setFeedbackMessage({
+        message:
+          e.status === 422
+            ? 'Error updating organization'
+            : e.message ?? e.toString(),
+        type: 'error'
+      });
+      console.error(e);
+    }
+  };
+
+  const updateScan = async (scan: Scan, enabled: boolean) => {
+    try {
+      if (!organization) return;
+      await apiPost(
+        `/organizations/${organization?.id}/granularScans/${scan.id}/update`,
+        {
+          body: {
+            enabled
+          }
+        }
+      );
+      setOrganization({
+        ...organization,
+        granularScans: enabled
+          ? organization.granularScans.concat([scan])
+          : organization.granularScans.filter(
+              (granularScan) => granularScan.id !== scan.id
+            )
+      });
+    } catch (e: any) {
+      setFeedbackMessage({
+        message:
+          e.status === 422 ? 'Error updating scan' : e.message ?? e.toString(),
+        type: 'error'
+      });
+      console.error(e);
+    }
+  };
+
+  const initiateDomainVerification = async (domain: string) => {
+    try {
+      if (!organization) return;
+      const pendingDomains: PendingDomain[] = await apiPost(
+        `/organizations/${organization?.id}/initiateDomainVerification`,
+        {
+          body: { domain }
+        }
+      );
+      setOrganization({ ...organization, pendingDomains });
+    } catch (e: any) {
+      setFeedbackMessage({
+        message:
+          e.status === 422
+            ? 'Error creating domain'
+            : e.message ?? e.toString(),
+        type: 'error'
+      });
+      console.error(e);
+    }
+  };
+
+  const checkDomainVerification = async (domain: string) => {
+    try {
+      if (!organization) return;
+      const resp: { success: boolean; organization?: OrganizationType } =
+        await apiPost(
+          `/organizations/${organization?.id}/checkDomainVerification`,
+          {
+            body: { domain }
+          }
+        );
+      if (resp.success && resp.organization) {
+        setOrganization(resp.organization);
+        setDialog({ open: false });
+        setFeedbackMessage({
+          message: 'Domain ' + inputValue + ' successfully verified!',
+          type: 'success'
+        });
+      } else {
+        setDialog({
+          ...dialog,
+          domainVerificationStatusMessage:
+            'Record not yet found. Note that DNS records may take up to 72 hours to propagate. You can come back later to check the verification status.'
+        });
+      }
+    } catch (e: any) {
+      setFeedbackMessage({
+        message:
+          e.status === 422
+            ? 'Error verifying domain'
+            : e.message ?? e.toString(),
+        type: 'error'
+      });
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrganization();
+  }, [fetchOrganization]);
+
+  const onInviteUserSubmit = async () => {
+    try {
+      const body = {
+        firstName: newUserValues.firstName,
+        lastName: newUserValues.lastName,
+        email: newUserValues.email,
+        organization: organization?.id,
+        organizationAdmin: newUserValues.role === 'admin'
+      };
+      const user: User = await apiPost('/users/', {
+        body
+      });
+      const newRole = user.roles[user.roles.length - 1];
+      newRole.user = user;
+      if (userRoles.find((role) => role.user.id === user.id)) {
+        setUserRoles(
+          userRoles.map((role) => (role.user.id === user.id ? newRole : role))
+        );
+      } else {
+        setUserRoles(userRoles.concat([newRole]));
+      }
+    } catch (e: any) {
+      setFeedbackMessage({
+        message:
+          e.status === 422 ? 'Error inviting user' : e.message ?? e.toString(),
+        type: 'error'
+      });
+      console.log(e);
+    }
+  };
+
+  const onInviteUserTextChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+  > = (e) => onInviteUserChange(e.target.name, e.target.value);
+
+  const onInviteUserChange = (name: string, value: any) => {
+    setNewUserValues((values) => ({
+      ...values,
+      [name]: value
+    }));
+  };
   const filter = createFilterOptions<AutocompleteType>();
 
   const ListInput = (props: {
@@ -543,7 +943,7 @@ export const Organization: React.FC = () => {
           }}
         ></Subnav>
       </div>
-      <OrganizationRoot className={organizationClasses.root}>
+      <Root className={organizationClasses.root}>
         <Switch>
           <Route
             path="/organizations/:organizationId"
@@ -563,7 +963,7 @@ export const Organization: React.FC = () => {
             render={() => views[3]}
           />
         </Switch>
-      </OrganizationRoot>
+      </Root>
     </div>
   );
 };
