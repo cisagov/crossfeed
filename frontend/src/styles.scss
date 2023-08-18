@@ -93,4 +93,22 @@ form[data-amplify-authenticator-setup-totp] {
   div[data-amplify-copy] {
     display: none;
   }
+
+}
+
+.banner_header {
+  padding-left: 195px;
+  padding-top: 10px;
+  transition: top .2s;
+  background-color: #DDEFF5;
+  font-weight: bold;
+}
+
+.banner_login {
+  position: relative; 
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  transition: top .2s;
+  background-color: #DDEFF5;
 }

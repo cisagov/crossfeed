@@ -4,6 +4,7 @@ import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
 import { CensysCertificatesData } from '../models/generated/censysCertificates';
 import getAllDomains from './helpers/getAllDomains';
+import sanitizeChunkValues from './helpers/sanitizeChunkValues';
 import * as zlib from 'zlib';
 import * as readline from 'readline';
 import got from 'got';
@@ -34,9 +35,11 @@ const downloadPath = async (
   path: string,
   commonNameToDomainsMap: CommonNameToDomainsMap,
   i: number,
-  numFiles: number,
-  commandOptions: CommandOptions
+  numFiles: number
 ): Promise<void> => {
+  if (i >= 100) {
+    throw new Error('Invalid chunk number.');
+  }
   console.log(`i: ${i} of ${numFiles}: starting download of url ${path}`);
 
   const domains: Domain[] = [];
@@ -110,23 +113,9 @@ const downloadPath = async (
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { chunkNumber, organizationId } = commandOptions;
+  const { organizationId } = commandOptions;
 
-  // Sanitizes numChunks to protect against arbitrarily large numbers
-  const numChucksRawValue = commandOptions.numChunks;
-  const numChunks =
-    typeof numChucksRawValue == 'number' && numChucksRawValue > 100
-      ? 100
-      : numChucksRawValue;
-
-  if (chunkNumber === undefined || numChunks === undefined) {
-    throw new Error('Chunks not specified.');
-  }
-
-  // Sanitizes chunkNumber to protect against arbitrarily large numbers
-  if (chunkNumber >= 100 || chunkNumber >= numChunks) {
-    throw new Error('Invalid chunk number.');
-  }
+  const { chunkNumber, numChunks } = await sanitizeChunkValues(commandOptions);
 
   const {
     data: { results }
@@ -139,7 +128,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   const {
     data: { files }
   } = await pRetry(() => axios.get(results.latest.details_url, { auth }), {
-    // Perform less retries on jest to make tests faster
+    // Perform fewer retries on jest to make tests faster
     retries: typeof jest === 'undefined' ? 5 : 2,
     randomize: true
   });
@@ -166,9 +155,9 @@ export const handler = async (commandOptions: CommandOptions) => {
   const fileNames = Object.keys(files).sort();
   const jobs: Promise<void>[] = [];
 
-  let startIndex = Math.floor(((1.0 * chunkNumber) / numChunks) * numFiles);
+  let startIndex = Math.floor(((1.0 * chunkNumber!) / numChunks!) * numFiles);
   let endIndex =
-    Math.floor(((1.0 * (chunkNumber + 1)) / numChunks) * numFiles) - 1;
+    Math.floor(((1.0 * (chunkNumber! + 1)) / numChunks!) * numFiles) - 1;
 
   if (process.env.IS_LOCAL && typeof jest === 'undefined') {
     // For local testing.
@@ -204,11 +193,10 @@ export const handler = async (commandOptions: CommandOptions) => {
               files[fileName].download_path,
               commonNameToDomainsMap,
               idx,
-              numFiles,
-              commandOptions
+              numFiles
             ),
           {
-            // Perform less retries on jest to make tests faster
+            // Perform fewer retries on jest to make tests faster
             retries: typeof jest === 'undefined' ? 5 : 2,
             randomize: true
           }
