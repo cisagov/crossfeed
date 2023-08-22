@@ -6,8 +6,6 @@ USER root
 
 WORKDIR /app/docs
 
-RUN apk add --update python3 make g++\ && rm -rf /var/cache/apk/*
-
 RUN apk update && apk upgrade && apk add --update --no-cache build-base python3 vips-dev autoconf automake libtool make tiff jpeg zlib zlib-dev pkgconf nasm file gcc musl-dev
 
 COPY ./docs/package* ./
