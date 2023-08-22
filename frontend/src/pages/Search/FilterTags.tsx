@@ -1,19 +1,7 @@
 import React, { useMemo } from 'react';
-import { styled } from '@mui/material/styles';
+import { classes, Root } from './Styling/filterTagsStyle';
 import { ContextType } from '../../context/SearchProvider';
 import { Chip } from '@mui/material';
-
-const PREFIX = 'FilterTags';
-
-const classes = {
-  chip: `${PREFIX}-chip`
-};
-
-const Root = styled('div')(({ theme }) => ({
-  [`& .${classes.chip}`]: {
-    margin: '0 0.5rem'
-  }
-}));
 
 interface Props {
   filters: ContextType['filters'];
