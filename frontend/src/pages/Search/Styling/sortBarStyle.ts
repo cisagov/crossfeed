@@ -5,13 +5,13 @@ import { SavedSearch } from 'types';
 const PREFIX = 'SortBar';
 
 interface Props {
-    sortField: ContextType['sortField'];
-    sortDirection?: ContextType['sortDirection'];
-    setSort: ContextType['setSort'];
-    saveSearch?(): void;
-    isFixed: boolean;
-    existingSavedSearch?: SavedSearch;
-    children?: React.ReactNode;
+  sortField: ContextType['sortField'];
+  sortDirection?: ContextType['sortDirection'];
+  setSort: ContextType['setSort'];
+  saveSearch?(): void;
+  isFixed: boolean;
+  existingSavedSearch?: SavedSearch;
+  children?: React.ReactNode;
 }
 
 export const classes = {

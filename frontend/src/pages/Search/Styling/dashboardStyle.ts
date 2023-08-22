@@ -1,6 +1,5 @@
 import { styled } from '@mui/material/styles';
 
-
 const PREFIX = 'DashboardUI';
 
 export const classes = {

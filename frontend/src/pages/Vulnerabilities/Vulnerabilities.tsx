@@ -230,4 +230,3 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
 };
 
 export default Vulnerabilities;
-

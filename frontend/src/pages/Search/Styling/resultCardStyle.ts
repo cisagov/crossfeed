@@ -6,46 +6,46 @@ import { Result } from 'context/SearchProvider';
 const PREFIX = 'ResultCard';
 // Sync this with the backend client in es-client.ts.
 export interface WebpageRecord {
-    webpage_id: string;
-    webpage_createdAt: Date;
-    webpage_updatedAt: Date;
-    webpage_syncedAt: Date;
-    webpage_lastSeen: Date;
-    webpage_s3Key: string;
-    webpage_url: string;
-    webpage_status: string | number;
-    webpage_domainId: string;
-    webpage_discoveredById: string;
-  
-    // Added before elasticsearch insertion (not present in the database):
-    suggest?: { input: string | string[]; weight: number }[];
-    parent_join?: {
-      name: 'webpage';
-      parent: string;
-    };
-    webpage_body?: string;
-  }
-  
+  webpage_id: string;
+  webpage_createdAt: Date;
+  webpage_updatedAt: Date;
+  webpage_syncedAt: Date;
+  webpage_lastSeen: Date;
+  webpage_s3Key: string;
+  webpage_url: string;
+  webpage_status: string | number;
+  webpage_domainId: string;
+  webpage_discoveredById: string;
+
+  // Added before elasticsearch insertion (not present in the database):
+  suggest?: { input: string | string[]; weight: number }[];
+  parent_join?: {
+    name: 'webpage';
+    parent: string;
+  };
+  webpage_body?: string;
+}
+
 interface Highlight {
-    webpage_body: string[];
+  webpage_body: string[];
 }
 
 interface Props extends Result {
-    onDomainSelected(domainId: string): void;
-    selected?: boolean;
-    inner_hits?: {
-      webpage?: {
-        hits: {
-          hits: { _source: WebpageRecord; highlight: Highlight }[];
-          max_score: number;
-          total: {
-            value: number;
-            relation: string;
-          };
+  onDomainSelected(domainId: string): void;
+  selected?: boolean;
+  inner_hits?: {
+    webpage?: {
+      hits: {
+        hits: { _source: WebpageRecord; highlight: Highlight }[];
+        max_score: number;
+        total: {
+          value: number;
+          relation: string;
         };
       };
     };
-  }
+  };
+}
 export const classes = {
   root: `${PREFIX}-root`,
   inner: `${PREFIX}-inner`,
