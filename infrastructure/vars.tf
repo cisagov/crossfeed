@@ -4,6 +4,10 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "cloudtrail_mgmt_log_group_name" {
+  default = ""
+}
+
 variable "project" {
   description = "project"
   type        = string
