@@ -9,9 +9,9 @@ resource "aws_cloudwatch_log_group" "all" {
   }
 }
 
-resource "aws_cloudtrail" "data" {
-  name                          = "data-events"
-  s3_bucket_name                = "data-bucket"
+resource "aws_cloudtrail" "all-events" {
+  name           = "all-events"
+  s3_bucket_name = "all-events-bucket"
   event_selector {
     read_write_type           = "All"
     include_management_events = true
