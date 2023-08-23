@@ -1,7 +1,6 @@
 
 resource "aws_cloudwatch_log_group" "all" {
   name              = var.logging_bucket_name
-  arn               = var.logging_bucket_arn
   retention_in_days = 3653
   kms_key_id        = aws_kms_key.key.arn
   tags = {
@@ -13,7 +12,6 @@ resource "aws_cloudwatch_log_group" "all" {
 resource "aws_cloudtrail" "data" {
   name                          = "data-events"
   s3_bucket_name                = "data-bucket"
-  aws_cloudwatch_logs_group_arn = aws_cloudwatch_log_group.all.arn
   event_selector {
     read_write_type           = "All"
     include_management_events = true
