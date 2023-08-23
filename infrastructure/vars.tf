@@ -266,6 +266,12 @@ variable "logging_bucket_name" {
   default     = "cisa-crossfeed-staging-logging"
 }
 
+variable "logging_bucket_arn" {
+  description = "logging_bucket_arn"
+  type        = string
+  default     = "s3://aws-cloudtrail-logs-957221700844-management-events-5bd3cd7b/AWSLogs/957221700844/"
+}
+
 variable "export_bucket_name" {
   description = "export_bucket_name"
   type        = string
