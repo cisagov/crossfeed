@@ -45,7 +45,11 @@ interface UserInfo {
 }
 
 const client = jwksClient({
-  jwksUri: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.REACT_APP_USER_POOL_ID}/.well-known/jwks.json`
+  jwksUri: `https://cognito-idp.us-gov-west-1.amazonaws.com/${process.env.REACT_APP_USER_POOL_ID}/.well-known/jwks.json`,
+  getKeysInterceptor: () => {
+    const jwksJson = JSON.parse(process.env.REACT_APP_USER_POOL_KEY!);
+    return jwksJson.keys;
+  }
 });
 
 function getKey(header, callback) {
@@ -120,11 +124,10 @@ export const callback = async (event, context) => {
       body: ''
     };
   }
-
   if (!userInfo.email_verified) {
     return {
       statusCode: 403,
-      body: ''
+      body: 'Email is not verified'
     };
   }
 

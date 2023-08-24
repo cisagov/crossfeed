@@ -1,5 +1,6 @@
 data "aws_ssm_parameter" "vpc_name" { name = var.ssm_crossfeed_vpc_name }
 
+
 resource "aws_vpc" "crossfeed_vpc" {
   cidr_block           = "10.236.32.0/21"
   enable_dns_support   = true
@@ -83,85 +84,69 @@ resource "aws_route_table" "r" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Name    = "Crossfeed-Stage_GovEast_Endpoint"
   }
 }
 
-resource "aws_route_table" "r2" {
+resource "aws_route_table" "private_A" {
   vpc_id = aws_vpc.crossfeed_vpc.id
-
-  route {
-    nat_gateway_id = aws_nat_gateway.nat.id
-    cidr_block     = "0.0.0.0/0"
-  }
 
   tags = {
     Project = var.project
     Stage   = var.stage
+    Name    = "Crossfeed-Stage_GovEast_Private-A"
   }
 }
 
-resource "aws_route_table" "worker" {
+resource "aws_route_table" "private_B" {
   vpc_id = aws_vpc.crossfeed_vpc.id
-
-  route {
-    gateway_id = aws_internet_gateway.gw.id
-    cidr_block = "0.0.0.0/0"
-  }
 
   tags = {
     Project = var.project
     Stage   = var.stage
+    Name    = "Crossfeed-Stage_GovEast_Private-A"
   }
 }
 
-resource "aws_route_table_association" "r_assoc_db_1" {
-  route_table_id = aws_route_table.r.id
-  subnet_id      = aws_subnet.db_1.id
+resource "aws_route_table" "private_C" {
+  vpc_id = aws_vpc.crossfeed_vpc.id
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+    Name    = "Crossfeed-Stage_GovEast_Private-A"
+  }
 }
 
-resource "aws_route_table_association" "r_assoc_db_2" {
-  route_table_id = aws_route_table.r.id
-  subnet_id      = aws_subnet.db_2.id
-}
 
 resource "aws_route_table_association" "r_assoc_backend" {
-  route_table_id = aws_route_table.r2.id
+  route_table_id = aws_route_table.r.id
   subnet_id      = aws_subnet.backend.id
 }
 
-resource "aws_route_table_association" "r_assoc_matomo" {
-  route_table_id = aws_route_table.r2.id
-  subnet_id      = aws_subnet.matomo_1.id
-}
-
 resource "aws_route_table_association" "r_assoc_worker" {
-  route_table_id = aws_route_table.worker.id
+  route_table_id = aws_route_table.r.id
   subnet_id      = aws_subnet.worker.id
 }
 
-resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.crossfeed_vpc.id
-
-  tags = {
-    Project = var.project
-  }
+resource "aws_route_table_association" "r_assoc_matomo" {
+  route_table_id = aws_route_table.r.id
+  subnet_id      = aws_subnet.matomo_1.id
 }
 
-resource "aws_eip" "nat_eip" {
-  tags = {
-    Project = var.project
-    Stage   = var.stage
-  }
+resource "aws_route_table_association" "r_assoc_db1" {
+  route_table_id = aws_route_table.private_A.id
+  subnet_id      = aws_subnet.db_1.id
 }
 
-resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.worker.id
+resource "aws_route_table_association" "r_assoc_db2" {
+  route_table_id = aws_route_table.private_B.id
+  subnet_id      = aws_subnet.db_2.id
+}
 
-  tags = {
-    Project = var.project
-    Stage   = var.stage
-  }
+resource "aws_route_table_association" "r_assoc_es_1" {
+  route_table_id = aws_route_table.private_C.id
+  subnet_id      = aws_subnet.es_1.id
 }
 
 resource "aws_security_group" "allow_internal" {
@@ -190,42 +175,3 @@ resource "aws_security_group" "allow_internal" {
   }
 }
 
-# TODO: remove this security group. We can't remove it right now because
-# AWS created an ENI in this security group that can't be deleted at the moment.
-# See https://www.reddit.com/r/aws/comments/4fncrl/dangling_enis_after_deleting_an_invpc_lambda_with/
-resource "aws_security_group" "backend" {
-  name        = "backend"
-  description = "Backend"
-  vpc_id      = aws_vpc.crossfeed_vpc.id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = [aws_vpc.crossfeed_vpc.cidr_block]
-  }
-
-  tags = {
-    Project = var.project
-    Stage   = var.stage
-  }
-}
-
-
-resource "aws_security_group" "worker" {
-  name        = "worker"
-  description = "Worker"
-  vpc_id      = aws_vpc.crossfeed_vpc.id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Project = var.project
-    Stage   = var.stage
-  }
-}

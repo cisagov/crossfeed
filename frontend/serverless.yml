@@ -7,26 +7,40 @@ configValidationMode: error
 custom:
   webpack:
     webpackConfig: 'webpack.lambda.config.js'
-  # customDomain:
-  #   domainName: ${file(env.yml):${self:provider.stage}.DOMAIN, ''}
-  #   basePath: ''
-  #   certificateName: ${file(env.yml):${self:provider.stage}.CERT_ARN, ''}
-  #   stage: ${self:provider.stage}
-  #   createRoute53Record: true
+  customDomain:
+    domainName: ${file(env.yml):${self:provider.stage}.DOMAIN, ''}
+    basePath: ''
+    certificateName: ${file(env.yml):${self:provider.stage}.DOMAIN, ''}
+    stage: ${self:provider.stage}
+    createRoute53Record: false
 
 provider:
   name: aws
   region: us-gov-east-1
-  endpointType: REGIONAL
+  endpointType: PRIVATE
   runtime: nodejs16.x
   timeout: 30
   stage: ${opt:stage, 'dev'}
   environment: ${file(env.yml):${self:provider.stage}, ''}
-  # vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
+  vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
+  vpcEndpointIds:
+    - vpce-0f012d56c2afb9c1d
   apiGateway:
     binaryMediaTypes:
       - 'image/*'
       - 'font/*'
+    resourcePolicy: 
+      - Effect: Deny
+        Principal: "*"
+        Action: "execute-api:Invoke"
+        Resource: "execute-api:/${self:provider.stage}/*/*"
+        Condition:
+          StringNotEquals:
+            "aws:sourceVpce": "vpce-0f012d56c2afb9c1d"
+      - Effect: Allow
+        Principal: "*"
+        Action: "execute-api:Invoke"
+        Resource: "execute-api:/${self:provider.stage}/*/*"
   logs:
     restApi: true
   deploymentBucket:
@@ -45,6 +59,6 @@ functions:
     # provisionedConcurrency: 1
 
 plugins:
-  # - serverless-domain-manager
+  - serverless-domain-manager
   - serverless-better-credentials
   - serverless-webpack

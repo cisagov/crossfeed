@@ -33,9 +33,11 @@ import {
   Domains,
   Reports
 } from 'pages';
-import { CrossfeedFooter, Layout, RouteGuard } from 'components';
+import { Layout, RouteGuard } from 'components';
+import { CrossfeedFooter } from './components/Footer';
 import './styles.scss';
 import { Authenticator } from '@aws-amplify/ui-react';
+
 API.configure({
   endpoints: [
     {
@@ -47,7 +49,7 @@ API.configure({
 
 if (process.env.REACT_APP_USE_COGNITO) {
   Auth.configure({
-    region: 'us-east-1',
+    region: 'us-gov-west-1',
     userPoolId: process.env.REACT_APP_USER_POOL_ID,
     userPoolWebClientId: process.env.REACT_APP_USER_POOL_CLIENT_ID
   });

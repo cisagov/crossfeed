@@ -60,6 +60,20 @@ app.use(express.json({ strict: false }));
 app.use(helmet.hsts({ maxAge: 31536000, preload: true }));
 app.use(cookieParser());
 
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: [
+        "'self'",
+        'https://cognito-idp.us-gov-west-1.amazonaws.com',
+        'https://api.staging.crossfeed.cyber.dhs.gov'
+      ],
+      scriptSrc: ["'self'", 'https://api.staging.crossfeed.cyber.dhs.gov']
+      // Add other directives as needed
+    }
+  })
+);
+
 app.get('/', handlerToExpress(healthcheck));
 app.post('/auth/login', handlerToExpress(auth.login));
 app.post('/auth/callback', handlerToExpress(auth.callback));

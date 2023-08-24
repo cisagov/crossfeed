@@ -85,7 +85,7 @@ export const sendEmail = async (
   body: string
 ) => {
   const transporter = nodemailer.createTransport({
-    SES: new SES({ region: 'us-east-1' })
+    SES: new SES({ region: 'us-gov-west-1' })
   });
 
   await transporter.sendMail({

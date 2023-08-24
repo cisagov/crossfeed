@@ -10,8 +10,7 @@ module.exports = {
   target: 'node',
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
   module: {
-    rules: [
-    ]
+    rules: []
   },
   resolve: {
     modules: ['node_modules', path.resolve(__dirname, 'scripts')],
@@ -19,9 +18,7 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin({
-        patterns: [
-            { from: "./build", to: "build" }
-        ],
+      patterns: [{ from: './build', to: 'build' }]
     })
-],
+  ]
 };
