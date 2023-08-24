@@ -4,10 +4,6 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "cloudtrail_mgmt_log_group_name" {
-  default = ""
-}
-
 variable "project" {
   description = "project"
   type        = string
@@ -264,12 +260,6 @@ variable "logging_bucket_name" {
   description = "logging_bucket_name"
   type        = string
   default     = "cisa-crossfeed-staging-logging"
-}
-
-variable "logging_bucket_arn" {
-  description = "logging_bucket_arn"
-  type        = string
-  default     = "s3://aws-cloudtrail-logs-957221700844-management-events-5bd3cd7b/AWSLogs/957221700844/"
 }
 
 variable "export_bucket_name" {
