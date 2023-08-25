@@ -1,6 +1,6 @@
 
-resource "aws_cloudwatch_log_group" "all" {
-  name              = var.logging_bucket_name
+resource "aws_cloudwatch_log_group" "cloudtrail" {
+  name              = var.cloudtrail_bucket_name
   retention_in_days = 3653
   kms_key_id        = aws_kms_key.key.arn
   tags = {
@@ -13,7 +13,7 @@ resource "aws_cloudtrail" "all-events" {
   name                       = "all-events"
   s3_bucket_name             = var.logging_bucket_name
   cloud_watch_logs_role_arn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.logging_bucket_name}-cloudtrail-role"
-  cloud_watch_logs_group_arn = aws_cloudwatch_log_group.all.arn
+  cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
   tags = {
     Project = var.project
     Stage   = var.stage
