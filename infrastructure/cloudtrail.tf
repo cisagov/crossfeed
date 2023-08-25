@@ -70,7 +70,7 @@ resource "aws_s3_bucket_logging" "cloudtrail_bucket" {
 }
 
 resource "aws_iam_role" "cloudtrail_role" {
-  name = "crossfeed-${var.stage}-cloudtrail-role"
+  name               = "crossfeed-${var.stage}-cloudtrail-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
