@@ -2,7 +2,7 @@
 
 resource "aws_instance" "elk_stack" {
   count                       = var.create_elk_instance ? 1 : 0
-  ami                         = data.aws_ami.ubuntu.id
+  ami                         = var.ami_id
   instance_type               = var.elk_instance_class
   associate_public_ip_address = false
 
