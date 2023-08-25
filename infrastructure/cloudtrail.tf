@@ -1,6 +1,6 @@
 
 resource "aws_cloudwatch_log_group" "cloudtrail" {
-  name              = var.cloudtrail_bucket_name
+  name              = "crossfeed-${var.stage}-cloudtrail-logs"
   retention_in_days = 3653
   kms_key_id        = aws_kms_key.key.arn
   tags = {
