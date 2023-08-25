@@ -11,8 +11,8 @@ resource "aws_cloudwatch_log_group" "cloudtrail" {
 
 resource "aws_cloudtrail" "all-events" {
   name                       = "all-events"
-  s3_bucket_name             = var.logging_bucket_name
-  cloud_watch_logs_role_arn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.logging_bucket_name}-cloudtrail-role"
+  s3_bucket_name             = "crossfeed-${var.stage}-cloudtrail-logs"
+  cloud_watch_logs_role_arn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.stage}-cloudtrail-role"
   cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
   tags = {
     Project = var.project
