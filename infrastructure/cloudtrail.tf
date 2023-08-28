@@ -88,7 +88,7 @@ resource "aws_s3_bucket_policy" "cloudtrail_bucket" {
             "Effect": "Allow",
             "Principal": {"Service": "cloudtrail.amazonaws.com"},
             "Action": "s3:GetBucketAcl",
-            "Resource": "arn:aws:s3:::${var.cloudtrail_bucket_name}
+            "Resource": "arn:aws:s3:::${var.cloudtrail_bucket_name}"
             "Condition": {
                 "StringEquals": {
                     "aws:SourceArn": "arn:aws:cloudtrail:${var.aws_region}:957221700844:trail/${aws_cloudtrail.all-events.name}"
@@ -104,7 +104,7 @@ resource "aws_s3_bucket_policy" "cloudtrail_bucket" {
             "Condition": {
                 "StringEquals": {
                     "s3:x-amz-acl": "bucket-owner-full-control",
-                    "aws:SourceArn": "arn:aws:cloudtrail:${var.aws_region}:957221700844:trail/${aws_cloudtrail.all-events.name}
+                    "aws:SourceArn": "arn:aws:cloudtrail:${var.aws_region}:957221700844:trail/${aws_cloudtrail.all-events.name}"
                 }
             }
         }
