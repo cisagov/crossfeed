@@ -33,7 +33,7 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
 }
 
 resource "aws_s3_bucket_ownership_controls" "cloudtrail_bucket" {
-  bucket = var.cloudtrail_bucket_name
+  bucket = aws_s3_bucket.cloudtrail_bucket.id
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
