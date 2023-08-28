@@ -6,7 +6,6 @@ export const classes = {
   cardRoot: `${PREFIX}-cardRoot`
 };
 
-// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
 export const Root = styled('div')(({ theme }) => ({
   [`& .${classes.cardRoot}`]: {
     cursor: 'pointer',

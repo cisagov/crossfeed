@@ -1,6 +1,5 @@
 import { styled } from '@mui/material/styles';
 import { Paper } from '@mui/material';
-// import { Result } from '../../context/SearchProvider';
 import { Result } from 'context/SearchProvider';
 
 const PREFIX = 'ResultCard';
