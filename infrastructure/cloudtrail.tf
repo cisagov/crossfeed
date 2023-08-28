@@ -77,25 +77,45 @@ resource "aws_s3_bucket_logging" "cloudtrail_bucket" {
   target_prefix = "cloudtrail_bucket/"
 }
 
-resource "aws_iam_role" "cloudtrail_role" {
-  name               = var.cloudtrail_role_name
-  assume_role_policy = <<EOF
+resource "aws_s3_bucket_policy" "cloudtrail_bucket" {
+  bucket = aws_s3_bucket.cloudtrail_bucket.id
+  policy = <<EOF
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": [
-          "cloudtrail.amazonaws.com"
-        ]
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AWSCloudTrailAclCheck20150319",
+            "Effect": "Allow",
+            "Principal": {"Service": "cloudtrail.amazonaws.com"},
+            "Action": "s3:GetBucketAcl",
+            "Resource": "arn:aws:s3:::${var.cloudtrail_bucket_name}
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceArn": "arn:aws:cloudtrail:${var.aws_region}:957221700844:trail/${aws_cloudtrail.all-events.name}"
+                }
+            }
+        },
+        {
+            "Sid": "AWSCloudTrailWrite20150319",
+            "Effect": "Allow",
+            "Principal": {"Service": "cloudtrail.amazonaws.com"},
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::${var.cloudtrail_bucket_name}/${aws_s3_bucket_logging.cloudtrail_bucket.target_prefix}/AWSLogs/957221700844/*",
+            "Condition": {
+                "StringEquals": {
+                    "s3:x-amz-acl": "bucket-owner-full-control",
+                    "aws:SourceArn": "arn:aws:cloudtrail:${var.aws_region}:957221700844:trail/${aws_cloudtrail.all-events.name}
+                }
+            }
+        }
+    ]
 }
 EOF
+}
+
+resource "aws_iam_role" "cloudtrail_role" {
+  name               = var.cloudtrail_role_name
+  assume_role_policy = aws_s3_bucket_policy.cloudtrail_bucket.policy
   tags = {
     Project = var.project
     Stage   = var.stage
