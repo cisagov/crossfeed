@@ -1,8 +1,8 @@
 
 resource "aws_cloudtrail" "all-events" {
   name                       = "all-events"
-  s3_bucket_name             = "cisa-crossfeed-${var.stage}-cloudtrail"
-  cloud_watch_logs_role_arn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.stage}-cloudtrail-role"
+  s3_bucket_name             = var.cloudtrail_bucket_name
+  cloud_watch_logs_role_arn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.cloudtrail_role_name}"
   cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
   tags = {
     Project = var.project
@@ -32,8 +32,15 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   }
 }
 
+resource "aws_s3_bucket_ownership_controls" "cloudtrail_bucket" {
+  bucket = var.cloudtrail_bucket_name
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
 resource "aws_cloudwatch_log_group" "cloudtrail" {
-  name              = "crossfeed-${var.stage}-cloudtrail-logs"
+  name              = var.cloudtrail_bucket_name
   retention_in_days = 3653
   kms_key_id        = aws_kms_key.key.arn
   tags = {
@@ -43,8 +50,9 @@ resource "aws_cloudwatch_log_group" "cloudtrail" {
 }
 
 resource "aws_s3_bucket_acl" "cloudtrail_bucket" {
-  bucket = aws_s3_bucket.cloudtrail_bucket.id
-  acl    = "private"
+  depends_on = [aws_s3_bucket_ownership_controls.cloudtrail_bucket]
+  bucket     = aws_s3_bucket.cloudtrail_bucket.id
+  acl        = "private"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_bucket" {
@@ -70,7 +78,7 @@ resource "aws_s3_bucket_logging" "cloudtrail_bucket" {
 }
 
 resource "aws_iam_role" "cloudtrail_role" {
-  name               = "crossfeed-${var.stage}-cloudtrail-role"
+  name               = var.cloudtrail_role_name
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
