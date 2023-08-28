@@ -46,7 +46,7 @@
     "react-simple-maps": "^3.0.0",
     "react-table": "^7.8.0",
     "resolve-url-loader": "^5.0.0",
-    "universal-cookie": "^4.0.4",
+    "universal-cookie": "^6.1.0",
     "uswds": "^2.13.3",
     "web-vitals": "^2.1.4"
   },
