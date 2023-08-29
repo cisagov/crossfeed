@@ -79,7 +79,7 @@ resource "aws_s3_bucket_logging" "cloudtrail_bucket" {
 
 resource "aws_s3_bucket_policy" "cloudtrail_bucket" {
   bucket = aws_s3_bucket.cloudtrail_bucket.id
-  policy = data.template_file.cloudtrail_bucket_policy
+  policy = data.template_file.cloudtrail_bucket_policy.rendered
 }
 
 resource "aws_iam_role" "cloudtrail_role" {
