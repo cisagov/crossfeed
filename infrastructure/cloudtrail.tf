@@ -94,9 +94,9 @@ resource "aws_iam_role" "cloudtrail_role" {
 data "template_file" "cloudtrail_bucket_policy" {
   template = file("cloudtrail_bucket_policy.tpl")
   vars = {
-    bucketName = aws_s3_bucket.cloudtrail_bucket.bucket
+    bucketName = var.cloudtrail_bucket_name
     prefix     = aws_s3_bucket_logging.cloudtrail_bucket.target_prefix
-    roleName   = aws_iam_role.cloudtrail_role.name
+    roleName   = var.cloudtrail_role_name
     trailName  = aws_cloudtrail.all-events.name
     accountId  = data.aws_caller_identity.current.account_id
     region     = var.aws_region
