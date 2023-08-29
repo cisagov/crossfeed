@@ -9,7 +9,7 @@
       "Resource": "arn:aws:s3:::${bucketName}",
       "Condition": {
         "StringEquals": {
-          "aws:SourceArn": "arn:aws:cloudtrail:${region}:accountId:trail/${trailName}"
+          "aws:SourceArn": "arn:aws:cloudtrail:${region}:${accountId}:trail/${trailName}"
         }
       }
     },
