@@ -10,6 +10,7 @@ export interface AuthUser extends User {
 export type CurrentOrganization = Organization | OrganizationTag;
 
 export interface AuthContextType extends ReturnType<typeof useApi> {
+  userType: string;
   login(token: string): void;
   logout(): Promise<void>;
   user?: AuthUser | null;
