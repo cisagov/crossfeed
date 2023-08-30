@@ -274,8 +274,8 @@ variable "cloudtrail_role_name" {
   default     = "crossfeed-staging-cloudtrail-role"
 }
 
-variable "cloudtrail_cloudwatch_log_group_name" {
-  description = "cloudtrail_cloudwatch_log_group_name"
+variable "cloudtrail_log_group_name" {
+  description = "cloudtrail_log_group_name"
   type        = string
   default     = "crossfeed-staging-cloudtrail-logs"
 }
