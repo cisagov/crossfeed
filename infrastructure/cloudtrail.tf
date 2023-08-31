@@ -2,8 +2,8 @@
 resource "aws_cloudtrail" "all-events" {
   name                       = "all-events"
   s3_bucket_name             = var.cloudtrail_bucket_name
-  cloud_watch_logs_role_arn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.cloudtrail_role_name}"
   cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
+  cloud_watch_logs_role_arn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.cloudtrail_role_name}"
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -32,13 +32,6 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   }
 }
 
-resource "aws_s3_bucket_ownership_controls" "cloudtrail_bucket" {
-  bucket = aws_s3_bucket.cloudtrail_bucket.id
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
-}
-
 resource "aws_cloudwatch_log_group" "cloudtrail" {
   name              = var.cloudtrail_bucket_name
   retention_in_days = 3653
@@ -50,9 +43,8 @@ resource "aws_cloudwatch_log_group" "cloudtrail" {
 }
 
 resource "aws_s3_bucket_acl" "cloudtrail_bucket" {
-  depends_on = [aws_s3_bucket_ownership_controls.cloudtrail_bucket]
-  bucket     = aws_s3_bucket.cloudtrail_bucket.id
-  acl        = "private"
+  bucket = aws_s3_bucket.cloudtrail_bucket.id
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_bucket" {
