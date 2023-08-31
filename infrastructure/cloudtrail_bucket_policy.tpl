@@ -18,7 +18,7 @@
       "Effect": "Allow",
       "Principal": { "Service": "cloudtrail.amazonaws.com" },
       "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::${bucketName}/${prefix}/AWSLogs/${accountId}/*",
+      "Resource": "arn:aws:s3:::${bucketName}/${prefix}AWSLogs/${accountId}/*",
       "Condition": {
         "StringEquals": {
           "s3:x-amz-acl": "bucket-owner-full-control",
