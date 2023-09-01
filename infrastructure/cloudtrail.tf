@@ -1,7 +1,7 @@
 
 resource "aws_cloudtrail" "all-events" {
   name                       = "all-events"
-  s3_bucket_name             = var.cloudtrail_bucket_name0
+  s3_bucket_name             = var.cloudtrail_bucket_name
   cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
   cloud_watch_logs_role_arn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.cloudtrail_role_name}"
   tags = {
@@ -25,7 +25,7 @@ resource "aws_cloudtrail" "all-events" {
 }
 
 resource "aws_s3_bucket" "cloudtrail_bucket" {
-  bucket = var.cloudtrail_bucket_name0
+  bucket = var.cloudtrail_bucket_name
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -43,8 +43,8 @@ resource "aws_cloudwatch_log_group" "cloudtrail" {
 }
 
 resource "aws_s3_bucket_acl" "cloudtrail_bucket" {
-  bucket = aws_s3_bucket.cloudtrail_bucket.id
-  acl    = "private"
+  bucket     = aws_s3_bucket.cloudtrail_bucket.id
+  acl        = "private"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_bucket" {
@@ -86,7 +86,7 @@ resource "aws_iam_role" "cloudtrail_role" {
 data "template_file" "cloudtrail_bucket_policy" {
   template = file("cloudtrail_bucket_policy.tpl")
   vars = {
-    bucketName = var.cloudtrail_bucket_name0
+    bucketName = var.cloudtrail_bucket_name
     region     = var.aws_region
     trailName  = aws_cloudtrail.all-events.name
     accountId  = data.aws_caller_identity.current.account_id
