@@ -265,19 +265,19 @@ variable "logging_bucket_name" {
 variable "cloudtrail_bucket_name" {
   description = "cloudtrail_bucket_name"
   type        = string
-  default     = "cisa-crossfeed-staging-cloudtrail"
+  default     = "cisa-crossfeed-staging-cloudtrails"
 }
 
 variable "cloudtrail_role_name" {
   description = "cloudtrail_role_name"
   type        = string
-  default     = "crossfeed-staging-cloudtrail-role"
+  default     = "crossfeed-staging-cloudtrails-role"
 }
 
 variable "cloudtrail_log_group_name" {
   description = "cloudtrail_log_group_name"
   type        = string
-  default     = "crossfeed-staging-cloudtrail-logs"
+  default     = "crossfeed-staging-cloudtrails-logs"
 }
 
 variable "export_bucket_name" {
