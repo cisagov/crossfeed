@@ -103,9 +103,6 @@ data "template_file" "cloudtrail_bucket_policy" {
   template = file("cloudtrail_bucket_policy.tpl")
   vars = {
     bucketName = var.cloudtrail_bucket_name
-    prefix     = aws_s3_bucket_logging.cloudtrail_bucket.target_prefix
-    trailName  = aws_cloudtrail.all-events.name
     accountId  = data.aws_caller_identity.current.account_id
-    region     = var.aws_region
   }
 }
