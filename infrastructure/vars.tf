@@ -262,7 +262,7 @@ variable "logging_bucket_name" {
   default     = "cisa-crossfeed-staging-logging"
 }
 
-variable "cloudtrail_bucket_name" {
+variable "cloudtrail_bucket_name0" {
   description = "cloudtrail_bucket_name"
   type        = string
   default     = "cisa-crossfeed-staging-cloudtrails"
