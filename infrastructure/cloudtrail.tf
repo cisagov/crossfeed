@@ -33,7 +33,7 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
 }
 
 resource "aws_cloudwatch_log_group" "cloudtrail" {
-  name              = var.cloudtrail_bucket_name
+  name              = var.cloudtrail_log_group_name
   retention_in_days = 3653
   kms_key_id        = aws_kms_key.key.arn
   tags = {
@@ -42,9 +42,25 @@ resource "aws_cloudwatch_log_group" "cloudtrail" {
   }
 }
 
+resource "aws_s3_bucket_ownership_controls" "cloudtrail_bucket" {
+  bucket = aws_s3_bucket.cloudtrail_bucket.id
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
 resource "aws_s3_bucket_acl" "cloudtrail_bucket" {
+  depends_on = [aws_s3_bucket_ownership_controls.cloudtrail_bucket]
   bucket = aws_s3_bucket.cloudtrail_bucket.id
   acl    = "private"
+}
+
+resource "aws_s3_bucket_public_access_block" "cloudtrail_bucket" {
+  bucket = aws_s3_bucket.cloudtrail_bucket.id
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_bucket" {
@@ -88,7 +104,6 @@ data "template_file" "cloudtrail_bucket_policy" {
   vars = {
     bucketName = var.cloudtrail_bucket_name
     prefix     = aws_s3_bucket_logging.cloudtrail_bucket.target_prefix
-    roleName   = var.cloudtrail_role_name
     trailName  = aws_cloudtrail.all-events.name
     accountId  = data.aws_caller_identity.current.account_id
     region     = var.aws_region
