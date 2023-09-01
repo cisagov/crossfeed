@@ -22,7 +22,7 @@
         "Service": "cloudtrail.amazonaws.com"
       },
       "Action": ["s3:PutObject"],
-      "Resource": ["arn:aws:s3:::${bucketName}/cloudtrail_bucket/AWSLogs/${accountId}/*"],
+      "Resource": ["arn:aws:s3:::${bucketName}/AWSLogs/${accountId}/*"],
       "Condition": {
         "StringEquals": {
           "s3:x-amz-acl": "bucket-owner-full-control",
