@@ -43,8 +43,8 @@ resource "aws_cloudwatch_log_group" "cloudtrail" {
 }
 
 resource "aws_s3_bucket_acl" "cloudtrail_bucket" {
-  bucket     = aws_s3_bucket.cloudtrail_bucket.id
-  acl        = "private"
+  bucket = aws_s3_bucket.cloudtrail_bucket.id
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_bucket" {
