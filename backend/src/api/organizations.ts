@@ -24,7 +24,7 @@ import {
   getOrgMemberships,
   isGlobalViewAdmin
 } from './auth';
-import { In } from 'typeorm';
+import { In, IsNull, Not } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { randomBytes } from 'crypto';
 import { promises } from 'dns';
@@ -240,16 +240,15 @@ export const list = wrapHandler(async (event) => {
     };
   }
   await connectToDatabase();
-  let where: any = { parent: null };
+  let where: any = { parentId: IsNull() };
   if (!isGlobalViewAdmin(event)) {
-    where = { id: In(getOrgMemberships(event)), parent: null };
+    where = { id: In(getOrgMemberships(event)), parent: IsNull() };
   }
   const result = await Organization.find({
     where,
     relations: ['userRoles', 'tags'],
     order: { name: 'ASC' }
   });
-
   return {
     statusCode: 200,
     body: JSON.stringify(result)
