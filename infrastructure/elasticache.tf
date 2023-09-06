@@ -20,6 +20,7 @@ resource "aws_elasticache_subnet_group" "crossfeed_vpc" {
 }
 
 resource "aws_elasticache_cluster" "crossfeed_vpc_elasticache_cluster" {
+  count                = var.create_elastcache_cluster ? 1 : 0
   cluster_id           = "crossfeed-vpc-cluster"
   engine               = "redis"
   node_type            = "cache.t2.micro"
@@ -32,5 +33,7 @@ resource "aws_elasticache_cluster" "crossfeed_vpc_elasticache_cluster" {
 
   tags = {
     Name = "crossfeed_vpc_elasticache-cluster"
+    Project = var.project
+    Stage   = var.stage
   }
 }

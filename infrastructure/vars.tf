@@ -61,7 +61,7 @@ variable "frontend_lambda_function" {
 variable "frontend_cert_arn" {
   description = "frontend_cert_arn"
   type        = string
-  default     = "arn:aws:acm:us-east-1:563873274798:certificate/7c6a5980-80e3-47a4-9f21-cbda44b6f34c"
+  default     = "/crossfeed/staging/FRONTEND_CERT_ARN"
 }
 
 variable "ssm_db_name" {
@@ -408,6 +408,12 @@ variable "elk_instance_class" {
 
 variable "create_elk_instance" {
   description = "Whether to create a ELK instance. This instance can be used to run a ELK cluseter. It can be accessed using AWS Systems Manager Session Manager."
+  type        = bool
+  default     = false
+}
+
+variable "create_elastcache_cluster" {
+  description = "Whether to create a elasticache cluster."
   type        = bool
   default     = false
 }
