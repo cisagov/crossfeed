@@ -3,10 +3,10 @@ resource "aws_security_group" "elasticache_security_group" {
   description = "ElastiCache security group"
 
   ingress {
-    from_port = 6379
-    to_port   = 6379
-    protocol  = "tcp"
-    cidr_blocks = ["10.0.2.0/24"]  // Restrict to a specific CIDR block, ideally your VPC's CIDR
+    from_port   = 6379
+    to_port     = 6379
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.2.0/24"] // Restrict to a specific CIDR block, ideally your VPC's CIDR
   }
 }
 
@@ -28,7 +28,7 @@ resource "aws_elasticache_cluster" "crossfeed_vpc_elasticache_cluster" {
   engine_version       = "3.2.10"
   port                 = 6379
   subnet_group_name    = aws_elasticache_subnet_group.crossfeed_vpc.name
-  security_group_ids    = [aws_security_group.elasticache_security_group.id]
+  security_group_ids   = [aws_security_group.elasticache_security_group.id]
 
   tags = {
     Name = "crossfeed_vpc_elasticache-cluster"
