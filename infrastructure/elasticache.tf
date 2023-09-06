@@ -12,7 +12,7 @@ resource "aws_security_group" "elasticache_security_group" {
 
 resource "aws_elasticache_subnet_group" "crossfeed_vpc" {
   name       = "aws_vpc.crossfeed_vpc"
-  subnet_ids = [aws_subnet.crossfeed_vpc.id]
+  subnet_ids = [aws_subnet.backend.id]
 
   tags = {
     Name = "crossfeed_vpc"
