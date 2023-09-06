@@ -58,8 +58,8 @@ variable "frontend_lambda_function" {
   default     = "crossfeed-security-headers-staging"
 }
 
-variable "frontend_cert_arn" {
-  description = "frontend_cert_arn"
+variable "ssm_frontend_cert_arn" {
+  description = "ssm_frontend_cert_arn"
   type        = string
   default     = "/crossfeed/staging/FRONTEND_CERT_ARN"
 }
