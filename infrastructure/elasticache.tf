@@ -32,7 +32,7 @@ resource "aws_elasticache_cluster" "crossfeed_vpc_elasticache_cluster" {
   security_group_ids   = [aws_security_group.elasticache_security_group.id]
 
   tags = {
-    Name = "crossfeed_vpc_elasticache-cluster"
+    Name    = "crossfeed_vpc_elasticache-cluster"
     Project = var.project
     Stage   = var.stage
   }
