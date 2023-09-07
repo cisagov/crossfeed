@@ -72,7 +72,23 @@ resource "aws_s3_bucket_policy" "cloudtrail_bucket" {
 
 resource "aws_iam_role" "cloudtrail_role" {
   name               = var.cloudtrail_role_name
-  assume_role_policy = aws_s3_bucket_policy.cloudtrail_bucket.policy
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": [
+          "cloudtrail.amazonaws.com"
+        ]
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
   tags = {
     Project = var.project
     Stage   = var.stage
