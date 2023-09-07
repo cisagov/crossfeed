@@ -25,7 +25,8 @@ resource "aws_cloudtrail" "all-events" {
 }
 
 resource "aws_s3_bucket" "cloudtrail_bucket" {
-  bucket = var.cloudtrail_bucket_name
+  bucket        = var.cloudtrail_bucket_name
+  force_destroy = true
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -40,11 +41,6 @@ resource "aws_cloudwatch_log_group" "cloudtrail" {
     Project = var.project
     Stage   = var.stage
   }
-}
-
-resource "aws_s3_bucket_acl" "cloudtrail_bucket" {
-  bucket = aws_s3_bucket.cloudtrail_bucket.id
-  acl    = "private"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_bucket" {
@@ -87,8 +83,6 @@ data "template_file" "cloudtrail_bucket_policy" {
   template = file("cloudtrail_bucket_policy.tpl")
   vars = {
     bucketName = var.cloudtrail_bucket_name
-    region     = var.aws_region
-    trailName  = aws_cloudtrail.all-events.name
     accountId  = data.aws_caller_identity.current.account_id
   }
 }
