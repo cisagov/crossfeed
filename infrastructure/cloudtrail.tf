@@ -116,7 +116,7 @@ resource "aws_iam_policy" "cloudtrail_policy" {
         "s3:GetBucketAcl",
         "s3:ListBucket"
       ],
-      Effect   = "Allow",
+      Effect = "Allow",
       Resource = [
         aws_s3_bucket.cloudtrail_bucket.arn,
         "${aws_s3_bucket.cloudtrail_bucket.arn}/*"
