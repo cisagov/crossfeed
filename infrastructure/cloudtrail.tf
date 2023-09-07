@@ -102,3 +102,55 @@ data "template_file" "cloudtrail_bucket_policy" {
     accountId  = data.aws_caller_identity.current.account_id
   }
 }
+
+# Attach policies to the IAM role allowing access to the S3 bucket and Cloudwatch
+resource "aws_iam_policy" "cloudtrail_policy" {
+  name        = "crossfeed-cloudtrail-s3-${var.stage}"
+  description = "Policy for CloudTrail to write logs to S3"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Action = [
+        "s3:PutObject",
+        "s3:GetBucketAcl",
+        "s3:ListBucket"
+      ],
+      Effect = "Allow",
+      Resource = [
+        aws_s3_bucket.cloudtrail_bucket.arn,
+        "${aws_s3_bucket.cloudtrail_bucket.arn}/*"
+      ]
+    }]
+  })
+}
+
+resource "aws_iam_policy" "cloudtrail_cloudwatch_policy" {
+  name        = "crossfeed-cloudtrail-cloudwatch-${var.stage}"
+  description = "Policy for CloudTrail to log to CloudWatch Logs"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Action = [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      Effect   = "Allow",
+      Resource = "arn:aws:logs:*"
+    }]
+  })
+}
+
+
+# Attach the IAM policies to the IAM role
+resource "aws_iam_role_policy_attachment" "cloudtrail_attachment" {
+  policy_arn = aws_iam_policy.cloudtrail_policy.arn
+  role       = aws_iam_role.cloudtrail_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "cloudtrail_cloudwatch_attachment" {
+  policy_arn = aws_iam_policy.cloudtrail_cloudwatch_policy.arn
+  role       = aws_iam_role.cloudtrail_role.name
+}
