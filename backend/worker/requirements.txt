@@ -1,4 +1,4 @@
-build==0.10.0
+build==1.0.3
 certifi==2023.7.22
 charset-normalizer==3.1.0
 click==8.1.3
