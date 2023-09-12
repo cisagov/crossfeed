@@ -25,8 +25,7 @@ resource "aws_cloudtrail" "all-events" {
 }
 
 resource "aws_s3_bucket" "cloudtrail_bucket" {
-  bucket        = var.cloudtrail_bucket_name
-  force_destroy = true
+  bucket = var.cloudtrail_bucket_name
   tags = {
     Project = var.project
     Stage   = var.stage
