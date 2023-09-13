@@ -247,12 +247,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       exact: false
     },
     { title: 'Feeds', path: '/feeds', users: ALL_USERS, exact: false },
-    {
+   /* {
       title: 'Reports',
       path: '/reports',
       users: ALL_USERS,
       exact: true
-    },
+    },*/
     {
       title: 'Scans',
       path: '/scans',
