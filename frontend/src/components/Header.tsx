@@ -247,7 +247,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       exact: false
     },
     { title: 'Feeds', path: '/feeds', users: ALL_USERS, exact: false },
-   
+
     /* 
     hiding reprts page until finished 
     {
@@ -256,7 +256,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       users: ALL_USERS,
       exact: true
     },*/
-    
+
     {
       title: 'Scans',
       path: '/scans',
@@ -423,10 +423,11 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
                         ) {
                           return options;
                         }
-                        return options.filter((option) =>
-                          option?.name
-                            .toLowerCase()
-                            .includes(state.inputValue.toLowerCase())
+                        return options.filter(
+                          (option) =>
+                            option?.name
+                              .toLowerCase()
+                              .includes(state.inputValue.toLowerCase())
                         );
                       }}
                       disableClearable
