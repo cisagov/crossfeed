@@ -247,7 +247,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       exact: false
     },
     { title: 'Feeds', path: '/feeds', users: ALL_USERS, exact: false },
+<<<<<<< Updated upstream
    /* {
+=======
+
+    {
+>>>>>>> Stashed changes
       title: 'Reports',
       path: '/reports',
       users: ALL_USERS,
