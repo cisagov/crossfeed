@@ -14,6 +14,7 @@ export const CrossfeedFooter: React.FC = () => {
         alignItems={'center'}
         justifyContent={'center'}
         style={{
+          position: 'sticky',
           margin: '0 auto',
           marginTop: '1rem',
           maxWidth: '1444px'
