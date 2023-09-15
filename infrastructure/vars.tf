@@ -400,3 +400,9 @@ variable "create_elk_instance" {
   type        = bool
   default     = false
 }
+
+variable "ami_id" {
+  description = "ID of the AMI to use for EC2 instances."
+  type        = string
+  default     = "ami-064cd328d8f9a9f00"
+}

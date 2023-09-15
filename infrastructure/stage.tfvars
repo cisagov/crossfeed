@@ -65,3 +65,4 @@ create_db_accessor_instance       = true
 db_accessor_instance_class        = "t3.2xlarge"
 create_elk_instance               = true
 elk_instance_class                = "t3.2xlarge"
+ami_id = "ami-064cd328d8f9a9f00"

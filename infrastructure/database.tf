@@ -57,24 +57,6 @@ resource "aws_db_instance" "db" {
   }
 }
 
-data "aws_ami" "ubuntu" {
-
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  # Canonical
-  owners = ["513442679011"]
-}
-
 resource "aws_iam_role" "db_accessor" {
   name               = "crossfeed-db-accessor-${var.stage}"
   assume_role_policy = <<EOF
@@ -139,7 +121,7 @@ EOF
 
 resource "aws_instance" "db_accessor" {
   count                       = var.create_db_accessor_instance ? 1 : 0
-  ami                         = data.aws_ami.ubuntu.id
+  ami                         = var.ami_id
   instance_type               = var.db_accessor_instance_class
   associate_public_ip_address = false
 
