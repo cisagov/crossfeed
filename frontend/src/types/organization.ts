@@ -14,7 +14,7 @@ export interface Organization {
   tags: OrganizationTag[];
   parent: Organization | null;
   children: Organization[];
-  pendingDomains: PendingDomain[];
+  pendingDomains?: PendingDomain[];
 }
 
 export interface PendingDomain {
