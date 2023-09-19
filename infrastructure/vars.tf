@@ -406,3 +406,21 @@ variable "ami_id" {
   type        = string
   default     = "ami-064cd328d8f9a9f00"
 }
+
+variable "cloudtrail_bucket_name" {
+  description = "cloudtrail_bucket_name"
+  type        = string
+  default     = "cisa-crossfeed-staging-cloudtrail"
+}
+
+variable "cloudtrail_role_name" {
+  description = "cloudtrail_role_name"
+  type        = string
+  default     = "crossfeed-staging-cloudtrail-role"
+}
+
+variable "cloudtrail_log_group_name" {
+  description = "cloudtrail_log_group_name"
+  type        = string
+  default     = "crossfeed-staging-cloudtrail-logs"
+}
