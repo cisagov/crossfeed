@@ -9,5 +9,6 @@ export const testOrganization = {
   granularScans: [],
   tags: [],
   parent: null,
-  children: []
+  children: [],
+  pendingDomains: []
 };
