@@ -32,7 +32,7 @@ export const handler = async () => {
 
   while (true) {
     const response = await logs.send(new DescribeLogGroupsCommand(extra_args));
-    log_groups = log_groups.concat(response.logGroups);
+    log_groups = log_groups.concat(response.logGroups!);
 
     if (!response.nextToken) {
       break;
@@ -48,7 +48,7 @@ export const handler = async () => {
     const log_group_tags = response.tags || {};
 
     if (log_group_tags.ExportToS3 === 'true') {
-      log_groups_to_export.push(log_group.logGroupName);
+      log_groups_to_export.push(log_group.logGroupName!);
     }
     await delay(10 * 1000); // prevents LimitExceededException (AWS allows only one export task at a time)
   }

@@ -1,3 +1,11 @@
+cloudwatchToS3:
+  handler: src/tasks/cloudwatchToS3.handler
+  timeout: 900
+  events:
+    - schedule: rate(5 minutes)
+  reservedConcurrency: 1
+  memorySize: 4096
+
 scheduler:
   handler: src/tasks/scheduler.handler
   timeout: 900
