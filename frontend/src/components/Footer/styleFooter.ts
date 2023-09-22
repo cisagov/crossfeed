@@ -11,7 +11,7 @@ export const footerClasses = {
 };
 export const FooterRoot = styled('div')(({ theme }) => ({
   [`& .${footerClasses.footerBox}`]: {
-    position: 'sticky',
+    position: 'fixed',
     bottom: 0,
     width: '100%',
     backgroundColor: theme.palette.primary.main
@@ -21,7 +21,7 @@ export const FooterRoot = styled('div')(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     margin: '0 auto',
-    maxWidth: '1444px',
+    maxWidth: '1444px'
   },
   [`& .${footerClasses.footerLogo}`]: {
     display: 'flex',
