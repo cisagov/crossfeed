@@ -286,18 +286,6 @@ variable "export_bucket_name" {
   default     = "cisa-crossfeed-staging-exports"
 }
 
-variable "infrastructure_bucket_name" {
-  description = "infrastructure_bucket_name"
-  type        = string
-  default     = "cisa-crossfeed-staging-infrastructure"
-}
-
-variable "infrastructure_log_group_name" {
-  description = "infrastructure_log_group_name"
-  type        = string
-  default     = "crossfeed-staging-infrastructure-logs"
-}
-
 variable "reports_bucket_name" {
   description = "reports_bucket_name"
   type        = string

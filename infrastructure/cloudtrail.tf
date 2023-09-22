@@ -25,7 +25,8 @@ resource "aws_cloudtrail" "all-events" {
 }
 
 resource "aws_s3_bucket" "cloudtrail_bucket" {
-  bucket = var.cloudtrail_bucket_name
+  bucket        = var.cloudtrail_bucket_name
+  force_destroy = true
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -100,4 +101,42 @@ data "template_file" "cloudtrail_bucket_policy" {
     bucketName = var.cloudtrail_bucket_name
     accountId  = data.aws_caller_identity.current.account_id
   }
+}
+
+# Attach policies to the IAM role allowing access to the S3 bucket and Cloudwatch
+resource "aws_iam_role_policy" "cloudtrail_policy" {
+  name_prefix = "crossfeed-cloudtrail-s3-${var.stage}"
+  role        = aws_iam_role.cloudtrail_role.id
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Action = [
+        "s3:PutObject",
+        "s3:GetBucketAcl",
+        "s3:ListBucket"
+      ],
+      Effect = "Allow",
+      Resource = [
+        aws_s3_bucket.cloudtrail_bucket.arn,
+        "${aws_s3_bucket.cloudtrail_bucket.arn}/*"
+      ]
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "cloudtrail_cloudwatch_policy" {
+  name_prefix = "crossfeed-cloudtrail-cloudwatch-${var.stage}"
+  role        = aws_iam_role.cloudtrail_role.id
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Action = [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      Effect   = "Allow",
+      Resource = "arn:aws:logs:*"
+    }]
+  })
 }
