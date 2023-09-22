@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import zIndex from '@mui/material/styles/zIndex';
 
 const PREFIX = 'Footer';
 
@@ -14,6 +15,7 @@ export const FooterRoot = styled('div')(({ theme }) => ({
     position: 'fixed',
     bottom: 0,
     width: '100%',
+    zIndex: 99999,
     backgroundColor: theme.palette.primary.main
   },
   [`& .${footerClasses.footerContainer}`]: {
