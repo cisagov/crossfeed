@@ -18,7 +18,7 @@ resource "aws_iam_role" "splunk_role" {
 
 resource "aws_iam_role_policy" "splunk_policy" {
   name_prefix = "crossfeed-splunk-s3-${var.stage}"
-  role = aws_iam_role.splunk_role.id
+  role        = aws_iam_role.splunk_role.id
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
