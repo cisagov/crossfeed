@@ -370,6 +370,12 @@ variable "matomo_ecs_role_name" {
   default     = "crossfeed-matomo-staging"
 }
 
+variable "splunk_role_name" {
+  description = "splunk_role_name"
+  type        = string
+  default     = "crossfeed-staging-splunk"
+}
+
 variable "es_instance_type" {
   description = "es_instance_type"
   type        = string

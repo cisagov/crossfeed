@@ -60,6 +60,7 @@ matomo_ecs_log_group_name         = "crossfeed-matomo-staging"
 matomo_db_name                    = "crossfeed-matomo-staging"
 matomo_db_instance_class          = "db.t3.small"
 matomo_ecs_role_name              = "crossfeed-matomo-staging"
+splunk_role_name                  = "crossfeed-staging-splunk"
 es_instance_type                  = "t3.small.elasticsearch"
 es_instance_count                 = 1
 es_instance_volume_size           = 100
