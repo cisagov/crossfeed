@@ -60,17 +60,6 @@ exports[`Header component matches snapshot 1`] = `
                 Feeds
               </a>
             </div>
-            <div
-              class="css-g2ra7n"
-            >
-              <a
-                class="NavItem-link"
-                href="/reports"
-                style="outline: none;"
-              >
-                Reports
-              </a>
-            </div>
           </div>
           <div
             class="Header-spacing"
