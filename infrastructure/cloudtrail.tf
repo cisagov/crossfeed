@@ -104,7 +104,7 @@ data "template_file" "cloudtrail_bucket_policy" {
 }
 
 # Attach policies to the IAM role allowing access to the S3 bucket and Cloudwatch
-resource "aws_iam_role_policy" "cloudtrail_policy" {
+resource "aws_iam_role_policy" "cloudtrail_s3_policy" {
   name_prefix = "crossfeed-cloudtrail-s3-${var.stage}"
   role        = aws_iam_role.cloudtrail_role.id
   policy = jsonencode({
@@ -137,6 +137,23 @@ resource "aws_iam_role_policy" "cloudtrail_cloudwatch_policy" {
       ],
       Effect   = "Allow",
       Resource = "arn:aws:logs:*"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "cloudtrail_kms_policy" {
+  name_prefix = "crossfeed-cloudtrail-kms-${var.stage}"
+  role        = aws_iam_role.cloudtrail_role.id
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Action = [
+        "kms:GenerateDataKey*",
+        "kms:Decrypt*",
+        "kms:DescribeKey"
+      ],
+      Effect   = "Allow",
+      Resource = aws_kms_key.key.arn
     }]
   })
 }
