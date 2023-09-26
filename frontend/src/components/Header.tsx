@@ -248,7 +248,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     },
 
     /* 
-    Hiding Feeds page until finished 
+    Hiding Feeds page until finished. 
     { title: 'Feeds', 
       path: '/feeds', 
       users: ALL_USERS, 
@@ -256,7 +256,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
     },*/
 
     /* 
-    Hiding Reports page until finished 
+    Hiding Reports page until finished. 
     {
       title: 'Reports',
       path: '/reports',
