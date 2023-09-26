@@ -4,6 +4,8 @@ import { FileInput } from 'components';
 import { useAuthContext } from 'context';
 import Papa from 'papaparse';
 import * as FileSaver from 'file-saver';
+import { margin } from '@mui/system';
+import * as FormStyles from './style';
 
 interface ImportProps<T> {
   // Plural name of the model.
@@ -25,6 +27,9 @@ export interface ExportProps<T> {
 }
 
 interface ImportExportProps<T> extends ImportProps<T>, ExportProps<T> {}
+
+const FormRoot = FormStyles.FormRoot;
+const importExportClasses = FormStyles.importExportClasses;
 
 export const Import = <T extends object>(props: ImportProps<T>) => {
   const { setLoading } = useAuthContext();
@@ -83,16 +88,18 @@ export const exportCSV = async <T extends object>(
 export const Export = <T extends object>(props: ExportProps<T>) => {
   const { setLoading } = useAuthContext();
   return (
-    <form>
-      <h2>Export {props.name}</h2>
-      <Button
-        type="button"
-        outline
-        onClick={() => exportCSV(props, setLoading)}
-      >
-        Export as CSV
-      </Button>
-    </form>
+    <FormRoot>
+      <form className={importExportClasses.formExport}>
+        <h2>Export {props.name}</h2>
+        <Button
+          type="button"
+          outline
+          onClick={() => exportCSV(props, setLoading)}
+        >
+          Export as CSV
+        </Button>
+      </form>
+    </FormRoot>
   );
 };
 
