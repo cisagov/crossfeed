@@ -2,6 +2,7 @@
 resource "aws_cloudtrail" "all-events" {
   name                       = "all-events"
   s3_bucket_name             = var.cloudtrail_bucket_name
+  kms_key_id                 = aws_kms_key.key.arn
   cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
   cloud_watch_logs_role_arn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.cloudtrail_role_name}"
   tags = {
@@ -71,19 +72,19 @@ resource "aws_s3_bucket_policy" "cloudtrail_bucket" {
 }
 
 resource "aws_iam_role" "cloudtrail_role" {
-  name               = var.cloudtrail_role_name
+  name = var.cloudtrail_role_name
   assume_role_policy = jsonencode({
-    Version: "2012-10-17",
-    Statement: [
+    Version : "2012-10-17",
+    Statement : [
       {
-        Action: "sts:AssumeRole",
-        Principal: {
-          Service: [
+        Action : "sts:AssumeRole",
+        Principal : {
+          Service : [
             "cloudtrail.amazonaws.com"
           ]
         },
-        Effect: "Allow",
-        Sid: "CloudTrailServiceRole"
+        Effect : "Allow",
+        Sid : "CloudTrailServiceRole"
       }
     ]
   })
