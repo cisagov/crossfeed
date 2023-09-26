@@ -72,23 +72,21 @@ resource "aws_s3_bucket_policy" "cloudtrail_bucket" {
 
 resource "aws_iam_role" "cloudtrail_role" {
   name               = var.cloudtrail_role_name
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": [
-          "cloudtrail.amazonaws.com"
-        ]
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
+  assume_role_policy = jsonencode({
+    Version: "2012-10-17",
+    Statement: [
+      {
+        Action: "sts:AssumeRole",
+        Principal: {
+          Service: [
+            "cloudtrail.amazonaws.com"
+          ]
+        },
+        Effect: "Allow",
+        Sid: "CloudTrailServiceRole"
+      }
+    ]
+  })
   tags = {
     Project = var.project
     Stage   = var.stage
