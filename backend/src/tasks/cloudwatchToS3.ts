@@ -23,12 +23,14 @@ export const handler = async () => {
   let log_groups: LogGroup[] = [];
   const log_groups_to_export: string[] = [];
 
-  if (!process.env.S3_BUCKET) {
-    console.error('Error: S3_BUCKET not defined');
+  if (!process.env.CLOUDWATCH_BUCKET_NAME) {
+    console.error('Error: CLOUDWATCH_BUCKET_NAME not defined');
     return;
   }
 
-  console.log('--> S3_BUCKET=' + process.env.S3_BUCKET);
+  console.log(
+    '--> CLOUDWATCH_BUCKET_NAME=' + process.env.CLOUDWATCH_BUCKET_NAME
+  );
 
   while (true) {
     const response = await logs.send(new DescribeLogGroupsCommand(extra_args));
@@ -73,7 +75,10 @@ export const handler = async () => {
     const export_to_time = Math.round(Date.now());
 
     console.log(
-      '--> Exporting ' + log_group_name + ' to ' + process.env.S3_BUCKET
+      '--> Exporting ' +
+        log_group_name +
+        ' to ' +
+        process.env.CLOUDWATCH_BUCKET_NAME
     );
 
     if (export_to_time - parseInt(ssm_value) < 24 * 60 * 60 * 1000) {
@@ -88,7 +93,7 @@ export const handler = async () => {
           logGroupName: log_group_name,
           from: parseInt(ssm_value),
           to: export_to_time,
-          destination: process.env.S3_BUCKET,
+          destination: process.env.CLOUDWATCH_BUCKET_NAME,
           destinationPrefix: log_group_name
             .replace(/^\//, '')
             .replace(/\/$/, '')
