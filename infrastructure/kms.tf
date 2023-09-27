@@ -2,6 +2,7 @@ resource "aws_kms_key" "key" {
   description             = "KMS key"
   deletion_window_in_days = 10
   enable_key_rotation     = true
+  alias                   = "${var.project}-${var.stage}-key"
   policy                  = <<EOF
 {
     "Version": "2012-10-17",
