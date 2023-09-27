@@ -33,4 +33,8 @@ resource "aws_kms_key" "key" {
     ]
 }
   EOF
+  tags = {
+    project = var.project
+    stage   = var.stage
+  }
 }
