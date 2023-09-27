@@ -286,8 +286,8 @@ variable "cloudwatch_bucket_name" {
   default     = "cisa-crossfeed-staging-cloudwatch"
 }
 
-variable "cloudwatch_log_group" {
-  description = "cloudwatch_log_group"
+variable "cloudwatch_log_group_name" {
+  description = "cloudwatch_log_group_name"
   type        = string
   default     = "crossfeed-staging-cloudwatch-bucket"
 }

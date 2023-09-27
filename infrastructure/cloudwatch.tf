@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "cloudwatch_bucket" {
 
 # TODO: update retention_in_days based on developing requirements
 resource "aws_cloudwatch_log_group" "cloudwatch_bucket" {
-  bucket            = var.cloudwatch_bucket_name
+  name              = var.cloudwatch_log_group_name
   retention_in_days = 365
   kms_key_id        = aws_kms_key.key.arn
   tags = {
