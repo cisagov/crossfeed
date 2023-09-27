@@ -280,6 +280,18 @@ variable "cloudtrail_log_group_name" {
   default     = "crossfeed-staging-cloudtrail-logs"
 }
 
+variable "cloudwatch_bucket_name" {
+  description = "cloudwatch_bucket_name"
+  type        = string
+  default     = "cisa-crossfeed-staging-cloudwatch"
+}
+
+variable "cloudwatch_log_group" {
+    description = "cloudwatch_log_group"
+    type        = string
+    default     = "crossfeed-staging-cloudwatch-bucket"
+}
+
 variable "export_bucket_name" {
   description = "export_bucket_name"
   type        = string
