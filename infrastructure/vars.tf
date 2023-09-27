@@ -287,9 +287,9 @@ variable "cloudwatch_bucket_name" {
 }
 
 variable "cloudwatch_log_group" {
-    description = "cloudwatch_log_group"
-    type        = string
-    default     = "crossfeed-staging-cloudwatch-bucket"
+  description = "cloudwatch_log_group"
+  type        = string
+  default     = "crossfeed-staging-cloudwatch-bucket"
 }
 
 variable "export_bucket_name" {
