@@ -155,5 +155,5 @@ resource "aws_kms_key" "key" {
 
 resource "aws_kms_alias" "key" {
   target_key_id = aws_kms_key.key.id
-  name          = "${var.stage}-key"
+  name          = "alias/${var.stage}-key"
 }
