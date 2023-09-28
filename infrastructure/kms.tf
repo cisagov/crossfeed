@@ -138,7 +138,7 @@ resource "aws_kms_key" "key" {
           Service : "cloudtrail.amazonaws.com"
         },
         Action : "kms:DescribeKey",
-        Resource : "arn:aws:kms:region:${data.aws_caller_identity.current.account_id}:key/${aws_kms_key.key.id}}",
+        Resource : "arn:aws:kms:region:${data.aws_caller_identity.current.account_id}:key/*}",
         Condition : {
           StringEquals : {
             "aws:SourceArn" : "arn:aws:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/${var.cloudtrail_name}"
