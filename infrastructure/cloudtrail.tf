@@ -154,13 +154,13 @@ resource "aws_iam_role_policy" "cloudtrail_kms_policy" {
       Effect   = "Allow",
       Resource = aws_kms_key.key.arn
       Condition = {
-        StringEquals: {
-          "aws:SourceArn": "arn:aws:cloudtrail:${var.aws_region}:${data.aws_caller_identity.current.account_id}:trail/${aws_cloudtrail.all-events.name}"
+        StringEquals : {
+          "aws:SourceArn" : "arn:aws:cloudtrail:${var.aws_region}:${data.aws_caller_identity.current.account_id}:trail/${aws_cloudtrail.all-events.name}"
         },
-        StringLike: {
-          "kms:EncryptionContext:aws:cloudtrail:arn": "arn:aws:cloudtrail:*:${data.aws_caller_identity.current.account_id}:trail/*"
+        StringLike : {
+          "kms:EncryptionContext:aws:cloudtrail:arn" : "arn:aws:cloudtrail:*:${data.aws_caller_identity.current.account_id}:trail/*"
         }
       }
-    }]git
+    }]
   })
 }
