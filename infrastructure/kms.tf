@@ -2,7 +2,6 @@ resource "aws_kms_key" "key" {
   description             = "KMS key"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  alias                   = "${var.stage}-kms-key"
   policy = jsonencode({
     Version : "2012-10-17",
 
@@ -152,4 +151,9 @@ resource "aws_kms_key" "key" {
     project = var.project
     stage   = var.stage
   }
+}
+
+resource "aws_kms_alias" "key" {
+  target_key_id = aws_kms_key.key.id
+  name          = "${var.stage}-key"
 }
