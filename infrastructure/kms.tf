@@ -142,7 +142,7 @@ resource "aws_kms_key" "key" {
         Resource : "arn:aws:kms:region:${data.aws_caller_identity.current.account_id}:key/${aws_kms_key.key.id}}",
         Condition : {
           StringEquals : {
-            "aws:SourceArn" : "arn:aws:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/${aws_cloudtrail.all-events.name}"
+            "aws:SourceArn" : "arn:aws:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/${var.cloudtrail_name}"
           }
         }
       }

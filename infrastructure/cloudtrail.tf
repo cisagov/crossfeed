@@ -1,6 +1,6 @@
 
 resource "aws_cloudtrail" "all-events" {
-  name                       = "all-events"
+  name                       = var.cloudtrail_name
   s3_bucket_name             = var.cloudtrail_bucket_name
   kms_key_id                 = aws_kms_key.key.arn
   cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
