@@ -1,6 +1,6 @@
 
 resource "aws_cloudtrail" "all-events" {
-  name                       = "all-events"
+  name                       = var.cloudtrail_name
   s3_bucket_name             = var.cloudtrail_bucket_name
   kms_key_id                 = aws_kms_key.key.arn
   cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
@@ -136,23 +136,6 @@ resource "aws_iam_role_policy" "cloudtrail_cloudwatch_policy" {
       ],
       Effect   = "Allow",
       Resource = "arn:aws:logs:*"
-    }]
-  })
-}
-
-resource "aws_iam_role_policy" "cloudtrail_kms_policy" {
-  name_prefix = "crossfeed-cloudtrail-kms-${var.stage}"
-  role        = aws_iam_role.cloudtrail_role.id
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [{
-      Action = [
-        "kms:GenerateDataKey*",
-        "kms:Decrypt*",
-        "kms:DescribeKey"
-      ],
-      Effect   = "Allow",
-      Resource = aws_kms_key.key.arn
     }]
   })
 }
