@@ -139,28 +139,3 @@ resource "aws_iam_role_policy" "cloudtrail_cloudwatch_policy" {
     }]
   })
 }
-
-resource "aws_iam_role_policy" "cloudtrail_kms_policy" {
-  name_prefix = "crossfeed-cloudtrail-kms-${var.stage}"
-  role        = aws_iam_role.cloudtrail_role.id
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [{
-      Action = [
-        "kms:GenerateDataKey*",
-        "kms:Decrypt*",
-        "kms:DescribeKey"
-      ],
-      Effect   = "Allow",
-      Resource = aws_kms_key.key.arn
-      Condition = {
-        StringEquals : {
-          "aws:SourceArn" : "arn:aws:cloudtrail:${var.aws_region}:${data.aws_caller_identity.current.account_id}:trail/${aws_cloudtrail.all-events.name}"
-        },
-        StringLike : {
-          "kms:EncryptionContext:aws:cloudtrail:arn" : "arn:aws:cloudtrail:*:${data.aws_caller_identity.current.account_id}:trail/*"
-        }
-      }
-    }]
-  })
-}
