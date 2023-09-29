@@ -57,6 +57,18 @@ provider:
             - s3:PutObject
             - s3:PutObjectAcl
           Resource: '*'
+        - Effect: Allow
+          Action:
+            - logs:Describe*
+            - logs:Get*
+            - logs:List*
+            - logs:StartQuery
+            - logs:StopQuery
+            - logs:TestMetricFilter
+            - logs:FilterLogEvents
+            - logs:StartLiveTail
+            - logs:StopLiveTail
+          Resource: '*'
 
 functions:
   - ${file(./src/tasks/functions.yml)}
