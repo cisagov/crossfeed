@@ -16,3 +16,35 @@ resource "aws_cloudwatch_log_group" "cloudwatch_bucket" {
     stage   = var.stage
   }
 }
+
+resource "aws_s3_bucket_policy" "cloudwatch_bucket" {
+  bucket = aws_s3_bucket.cloudwatch_bucket.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "Allow Cloudwatch to check bucket permissions",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "logs.amazonaws.com"
+        },
+        "Action" : "s3:GetBucketAcl",
+        "Resource" : "arn:aws:s3:::${var.cloudwatch_bucket_name}"
+      },
+      {
+        "Sid" : "Allow Cloudwatch to write to bucket",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "logs.amazonaws.com"
+        },
+        "Action" : "s3:PutObject",
+        "Resource" : "arn:aws:s3:::${var.cloudwatch_bucket_name}/*",
+        "Condition" : {
+          "StringEquals" : {
+            "s3:x-amz-acl" : "bucket-owner-full-control"
+          }
+        }
+      }
+    ]
+  })
+}
