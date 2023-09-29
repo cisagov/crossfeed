@@ -33,8 +33,8 @@ resource "aws_iam_role_policy" "splunk_policy" {
     Effect = "Allow",
     Resource = [
       aws_s3_bucket.cloudtrail_bucket.arn,
-      aws_s3_bucket.logging_bucket.arn
-      # TODO Add cloudwatch bucket(s) to resource list
+      aws_s3_bucket.logging_bucket.arn,
+      aws_s3_bucket.cloudwatch_bucket.arn
     ]
   })
 }
