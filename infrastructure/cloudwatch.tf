@@ -59,7 +59,7 @@ resource "aws_s3_bucket_policy" "cloudwatch_bucket" {
           "Bool" : {
             "aws:SecureTransport" : "false"
           }
-        },
+        }
       }
     ]
   })
