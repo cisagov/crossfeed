@@ -6,7 +6,23 @@
       "Effect":"Allow",
       "Principal": "*",
       "Action":["s3:GetObject"],
-      "Resource":["arn:aws:s3:::${bucket_name}/*","arn:aws:s3:::${bucket_name}/*/"]
+      "Resource":[
+        "arn:aws:s3:::${bucket_name}/*",
+        "arn:aws:s3:::${bucket_name}/*/"
+      ]
+    },
+    {
+      "Sid": "Require SSL for Requests",
+      "Effect": "Deny",
+      "Resource": [
+        "arn:aws:s3:::${bucket_name}",
+        "arn:aws:s3:::${bucket_name}/*"
+      ],
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "false"
+        }
+      }
     }
   ]
 }
