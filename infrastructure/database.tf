@@ -295,6 +295,28 @@ resource "aws_s3_bucket" "pe_db_backups_bucket" {
   }
 }
 
+resource "aws_s3_bucket_policy" "pe_db_backups_bucket" {
+  bucket = aws_s3_bucket.pe_db_backups_bucket.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "Require SSL for Requests",
+        "Effect" : "Deny",
+        "Resource" : [
+          aws_s3_bucket.pe_db_backups_bucket.arn,
+          "${aws_s3_bucket.pe_db_backups_bucket.arn}/*"
+        ],
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : "false"
+          }
+        }
+      }
+      }]
+  })
+}
+
 resource "aws_s3_bucket_acl" "pe_db_backups_bucket" {
   bucket = aws_s3_bucket.pe_db_backups_bucket.id
   acl    = "private"
