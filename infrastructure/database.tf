@@ -238,6 +238,28 @@ resource "aws_s3_bucket" "reports_bucket" {
   }
 }
 
+resource "aws_s3_bucket_policy" "reports_bucket" {
+  bucket = var.reports_bucket_name
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "Require SSL for Requests",
+        "Effect" : "Deny",
+        "Resource" : [
+          "arn:aws:s3:::${var.reports_bucket_name}",
+          "arn:aws:s3:::${var.reports_bucket_name}/*"
+        ],
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : "false"
+          }
+        }
+      }
+    ]
+  })
+}
+
 resource "aws_s3_bucket_acl" "reports_bucket" {
   bucket = aws_s3_bucket.reports_bucket.id
   acl    = "private"

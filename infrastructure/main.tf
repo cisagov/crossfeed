@@ -35,17 +35,20 @@ resource "aws_s3_bucket" "logging_bucket" {
 resource "aws_s3_bucket_policy" "logging_bucket" {
   bucket = aws_s3_bucket.logging_bucket.id
   policy = jsonencode({
-    "Sid" : "Require SSL for requests",
-    "Effect" : "Deny",
-    "Resource" : [
-      "arn:aws:s3:::${var.logging_bucket_name}",
-      "arn:aws:s3:::${var.logging_bucket_name}/*"
-    ],
-    "Condition" : {
-      "Bool" : {
-        "aws:SecureTransport" : "false"
+    "Version" : "2012-10-17",
+    "Statement" : [{
+      "Sid" : "Require SSL for requests",
+      "Effect" : "Deny",
+      "Resource" : [
+        "arn:aws:s3:::${var.logging_bucket_name}",
+        "arn:aws:s3:::${var.logging_bucket_name}/*"
+      ],
+      "Condition" : {
+        "Bool" : {
+          "aws:SecureTransport" : "false"
+        }
       }
-    }
+    }]
   })
 }
 
