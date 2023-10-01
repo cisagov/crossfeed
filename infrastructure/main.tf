@@ -40,8 +40,8 @@ resource "aws_s3_bucket_policy" "logging_bucket" {
       "Sid" : "Require SSL for requests",
       "Effect" : "Deny",
       "Resource" : [
-        "arn:aws:s3:::${var.logging_bucket_name}",
-        "arn:aws:s3:::${var.logging_bucket_name}/*"
+        aws_s3_bucket.logging_bucket.arn,
+        "${aws_s3_bucket.logging_bucket.arn}/*"
       ],
       "Condition" : {
         "Bool" : {
