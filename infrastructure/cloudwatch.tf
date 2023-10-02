@@ -29,7 +29,7 @@ resource "aws_s3_bucket_policy" "cloudwatch_bucket" {
           "Service" : "logs.amazonaws.com"
         },
         "Action" : "s3:GetBucketAcl",
-        "Resource" : "arn:aws:s3:::${var.cloudwatch_bucket_name}"
+        "Resource" : aws_s3_bucket.cloudwatch_bucket.arn
       },
       {
         "Sid" : "Allow Cloudwatch to write to bucket",
@@ -38,7 +38,10 @@ resource "aws_s3_bucket_policy" "cloudwatch_bucket" {
           "Service" : "logs.amazonaws.com"
         },
         "Action" : "s3:PutObject",
-        "Resource" : "arn:aws:s3:::${var.cloudwatch_bucket_name}/*",
+        "Resource" : [
+          aws_s3_bucket.cloudwatch_bucket.arn,
+          "${aws_s3_bucket.cloudwatch_bucket.arn}/*"
+        ],
         "Condition" : {
           "StringEquals" : {
             "s3:x-amz-acl" : "bucket-owner-full-control"
