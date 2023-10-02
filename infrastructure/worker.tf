@@ -357,17 +357,17 @@ resource "aws_s3_bucket_policy" "export_bucket" {
     "Version" = "2012-10-17"
     "Statement" = [
       {
-        Sid = "Require SSL for Requests"
-        Effect = "Deny"
+        Sid       = "Require SSL for Requests"
+        Effect    = "Deny"
         Principal = "*"
-        Action = "s3:*"
+        Action    = "s3:*"
         Resource = [
           aws_s3_bucket.export_bucket.arn,
           "${aws_s3_bucket.export_bucket.arn}/*"
         ]
         Condition = {
           Bool = {
-            "aws:SecureTransport": false
+            "aws:SecureTransport" : false
           }
         }
       }

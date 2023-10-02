@@ -313,7 +313,7 @@ resource "aws_s3_bucket_policy" "pe_db_backups_bucket" {
           }
         }
       }
-      }]
+    ]
   })
 }
 
