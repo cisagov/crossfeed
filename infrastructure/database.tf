@@ -247,8 +247,8 @@ resource "aws_s3_bucket_policy" "reports_bucket" {
         "Sid" : "Require SSL for Requests",
         "Effect" : "Deny",
         "Resource" : [
-          "arn:aws:s3:::${var.reports_bucket_name}",
-          "arn:aws:s3:::${var.reports_bucket_name}/*"
+          aws_s3_bucket.reports_bucket.arn,
+          "${aws_s3_bucket.reports_bucket.arn}/*"
         ],
         "Condition" : {
           "Bool" : {

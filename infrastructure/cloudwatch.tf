@@ -52,8 +52,8 @@ resource "aws_s3_bucket_policy" "cloudwatch_bucket" {
         "Sid" : "Require SSL for requests",
         "Effect" : "Deny",
         "Resource" : [
-          "arn:aws:s3:::${var.cloudwatch_bucket_name}",
-          "arn:aws:s3:::${var.cloudwatch_bucket_name}/*"
+          aws_s3_bucket.cloudwatch_bucket.arn,
+          "${aws_s3_bucket.cloudwatch_bucket.arn}/*"
         ],
         "Condition" : {
           "Bool" : {
