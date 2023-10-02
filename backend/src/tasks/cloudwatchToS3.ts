@@ -34,8 +34,9 @@ export const handler = async () => {
 
   while (true) {
     const response = await logs.send(new DescribeLogGroupsCommand(extra_args));
+    console.log(`response: ${JSON.stringify(response)}`);
     log_groups = log_groups.concat(response.logGroups!);
-
+    console.log(`log_groups: ${JSON.stringify(log_groups)}`);
     if (!response.nextToken) {
       break;
     }
@@ -46,16 +47,23 @@ export const handler = async () => {
     const command = new ListTagsForResourceCommand({
       resourceArn: `arn:aws:logs:${region}:${accountId}:log-group:${log_group.logGroupName}`
     });
+    console.log(`Processing log group: ${log_group.logGroupName}`);
+    console.log(`command: ${JSON.stringify(command)}`);
     const response = await logs.send(command);
+    console.log(`log group response: ${JSON.stringify(response)}`);
     const log_group_tags = response.tags || {};
 
     if (log_group_tags.ExportToS3 === 'true') {
       log_groups_to_export.push(log_group.logGroupName!);
     }
+    console.log(
+      `log_groups_to_export: ${JSON.stringify(log_groups_to_export)}`
+    );
     await delay(10 * 1000); // prevents LimitExceededException (AWS allows only one export task at a time)
   }
 
   for (const log_group_name of log_groups_to_export) {
+    console.log('Processing log group: ' + log_group_name);
     const ssm_parameter_name = (
       '/log-exporter-last-export/' + log_group_name
     ).replace('//', '/');
