@@ -78,6 +78,7 @@ export const handler = async () => {
       if (error.name !== 'ParameterNotFound') {
         console.error('Error fetching SSM parameter: ' + error.message);
       }
+      console.error(`error: ${error.message}`);
     }
 
     const export_to_time = Math.round(Date.now());
