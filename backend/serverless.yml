@@ -78,6 +78,7 @@ provider:
             - ssm:GetParameters
             - ssm:GetParametersByPath
             - ssm:PutParameter
+          Resource: '*'
 
 functions:
   - ${file(./src/tasks/functions.yml)}
