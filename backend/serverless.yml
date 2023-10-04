@@ -57,6 +57,15 @@ provider:
             - s3:PutObject
             - s3:PutObjectAcl
           Resource: '*'
+        - Effect: Allow
+          Action:
+            - sts:AssumeRole
+          Resource: '*'
+        - Effect: Allow
+          Action:
+            - sqs:ReceiveMessage
+            - sqs:SendMessage
+          Resource: '*'
 
 functions:
   - ${file(./src/tasks/functions.yml)}
