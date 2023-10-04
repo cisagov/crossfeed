@@ -172,7 +172,12 @@ resource "aws_iam_policy" "sqs_send_message_policy" {
     Statement = [
       {
         Action = [
-          "sqs:SendMessage"
+          "sqs:SendMessage",
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes",
+          "sqs:ListQueues",
+          "sqs:GetQueueUrl"
         ],
         Effect   = "Allow",
         Resource = aws_sqs_queue.terraform_queue.arn
