@@ -17,5 +17,5 @@ resource "aws_ssm_parameter" "sqs_queue_arn" {
   name        = var.ssm_sqs_queue_arn
   description = "ARN of the SQS queue"
   type        = "String"
-  value       = aws_sqs_queue.terraform_queue.arn 
+  value       = aws_sqs_queue.terraform_queue.arn
 }
