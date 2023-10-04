@@ -70,5 +70,3 @@ create_db_accessor_instance       = true
 db_accessor_instance_class        = "t3.2xlarge"
 create_elk_instance               = false
 elk_instance_class                = "t3.2xlarge"
-sqs_queue_name                    = "crossfeed-prod-worker-queue"
-ssm_sqs_queue_arn                 = "/crossfeed/prod/SQS_QUEUE_ARN"

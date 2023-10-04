@@ -35,7 +35,9 @@ scanExecution:
   events:
     - sqs:
         arn:
-          Fn::ImportValue: ${file(env.yml):${self:provider.stage}.SQS_QUEUE_ARN, ''}
+          Fn::GetAtt:
+            - ${self:provider.stage}-worker-queue
+            - Arn
         batchSize: 5 # Number of messages the lambda can continue to process while a Fargate is still running
 
 updateScanTaskStatus:

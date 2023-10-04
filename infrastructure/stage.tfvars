@@ -70,5 +70,3 @@ create_db_accessor_instance       = true
 db_accessor_instance_class        = "t3.2xlarge"
 create_elk_instance               = true
 elk_instance_class                = "t3.2xlarge"
-sqs_queue_name                    = "crossfeed-staging-worker-queue"
-ssm_sqs_queue_arn                 = "/crossfeed/staging/SQS_QUEUE_ARN"

@@ -117,12 +117,6 @@ variable "ssm_worker_subnet" {
   default     = "/crossfeed/staging/WORKER_SUBNET_ID"
 }
 
-variable "ssm_sqs_queue_arn" {
-  description = "ssm_sqs_queue_arn"
-  type        = string
-  default     = "/crossfeed/staging/SQS_QUEUE_ARN"
-}
-
 variable "ssm_worker_arn" {
   description = "ssm_worker_arn"
   type        = string
@@ -435,10 +429,3 @@ variable "create_elk_instance" {
   type        = bool
   default     = false
 }
-
-variable "sqs_queue_name" {
-  description = "sqs_queue_name"
-  type        = string
-  default     = "crossfeed-staging-worker-queue"
-}
-
