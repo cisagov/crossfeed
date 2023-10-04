@@ -2,7 +2,7 @@
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "Get CloudTrail Bucket ACL",
+      "Sid": "AWSCloudTrailAclCheck20121017",
       "Effect": "Allow",
       "Principal": {
         "Service": "cloudtrail.amazonaws.com"
@@ -11,7 +11,7 @@
       "Resource": ["arn:aws:s3:::${bucketName}"]
     },
     {
-      "Sid": "Grant CloudTrail Permission to Write Logs",
+      "Sid": "AWSCloudTrailWrite20121017",
       "Effect": "Allow",
       "Principal": {
         "Service": "cloudtrail.amazonaws.com"
@@ -28,7 +28,7 @@
       }
     },
     {
-      "Sid": "Require SSL for Requests",
+      "Sid": "RequireSSLRequests",
       "Effect": "Deny",
       "Resource": [
         "arn:aws:s3:::${bucketName}",

@@ -244,7 +244,7 @@ resource "aws_s3_bucket_policy" "reports_bucket" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Sid" : "Require SSL for Requests",
+        "Sid" : "RequireSSLRequests",
         "Effect" : "Deny",
         "Resource" : [
           aws_s3_bucket.reports_bucket.arn,
@@ -301,7 +301,7 @@ resource "aws_s3_bucket_policy" "pe_db_backups_bucket" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Sid" : "Require SSL for Requests",
+        "Sid" : "RequireSSLRequests",
         "Effect" : "Deny",
         "Resource" : [
           aws_s3_bucket.pe_db_backups_bucket.arn,

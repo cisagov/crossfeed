@@ -357,7 +357,7 @@ resource "aws_s3_bucket_policy" "export_bucket" {
     "Version" = "2012-10-17"
     "Statement" = [
       {
-        Sid       = "Require SSL for Requests"
+        Sid       = "RequireSSLRequests"
         Effect    = "Deny"
         Principal = "*"
         Action    = "s3:*"

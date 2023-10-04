@@ -37,7 +37,7 @@ resource "aws_s3_bucket_policy" "logging_bucket" {
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [{
-      "Sid" : "Require SSL for requests",
+      "Sid" : "RequireSSLRequests",
       "Effect" : "Deny",
       "Resource" : [
         aws_s3_bucket.logging_bucket.arn,

@@ -49,7 +49,7 @@ resource "aws_s3_bucket_policy" "cloudwatch_bucket" {
         }
       },
       {
-        "Sid" : "Require SSL for requests",
+        "Sid" : "RequireSSLRequests",
         "Effect" : "Deny",
         "Resource" : [
           aws_s3_bucket.cloudwatch_bucket.arn,

@@ -12,7 +12,7 @@
       ]
     },
     {
-      "Sid": "Require SSL for Requests",
+      "Sid": "RequireSSLRequests",
       "Effect": "Deny",
       "Resource": [
         "arn:aws:s3:::${bucket_name}",
