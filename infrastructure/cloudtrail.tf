@@ -1,6 +1,6 @@
 
 resource "aws_cloudtrail" "all-events" {
-  name                       = "all-events"
+  name                       = var.cloudtrail_name
   s3_bucket_name             = var.cloudtrail_bucket_name
   cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
   cloud_watch_logs_role_arn  = "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:role/${var.cloudtrail_role_name}"

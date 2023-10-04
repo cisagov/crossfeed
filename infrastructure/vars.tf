@@ -1,13 +1,13 @@
 variable "aws_region" {
   description = "aws_region"
   type        = string
-  default     = "us-east-1"
+  default     = "us-gov-east-1"
 }
 
 variable "aws_other_region" {
   description = "aws_other_region"
   type        = string
-  default     = "us-east-1"
+  default     = "us-gov-east-1"
 }
 
 variable "project" {
@@ -405,6 +405,12 @@ variable "ami_id" {
   description = "ID of the AMI to use for EC2 instances."
   type        = string
   default     = "ami-064cd328d8f9a9f00"
+}
+
+variable "cloudtrail_name" {
+    description = "cloudtrail_name"
+    type        = string
+    default     = "crossfeed-staging-cloudtrail"
 }
 
 variable "cloudtrail_bucket_name" {
