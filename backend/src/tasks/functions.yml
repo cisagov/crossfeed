@@ -31,14 +31,14 @@ makeGlobalAdmin:
 
 scanExecution:
   handler: src/tasks/scanExecution.handler
-  timeout: 600 # 10 minutes
+  timeout: 300 # 5 minutes
   events:
     - sqs:
         arn:
           Fn::GetAtt:
             - ${file(env.yml):${self:provider.stage}.SQS_QUEUE_NAME, ''}
             - Arn
-        batchSize: 5 # Number of messages the lambda can continue to process while a fargate is still running
+        batchSize: 5 # Number of messages the lambda can continue to process while a Fargate is still running
 
 updateScanTaskStatus:
   handler: src/tasks/updateScanTaskStatus.handler

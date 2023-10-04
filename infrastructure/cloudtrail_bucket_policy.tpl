@@ -29,7 +29,9 @@
     },
     {
       "Sid": "RequireSSLRequests",
+      "Action": "s3:*",
       "Effect": "Deny",
+      "Principal": "*",
       "Resource": [
         "arn:aws:s3:::${bucketName}",
         "arn:aws:s3:::${bucketName}/*"

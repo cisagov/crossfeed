@@ -164,9 +164,9 @@ resource "aws_iam_role_policy" "db_accessor_s3_policy" {
 EOF
 }
 
-resource "aws_iam_policy" "sqs_send_message_policy" {
-  name        = "ec2-send-sqs-message-${var.stage}"
-  description = "IAM policy to allow sending messages to SQS queue"
+resource "aws_iam_role_policy" "sqs_send_message_policy" {
+  name_prefix = "ec2-send-sqs-message-${var.stage}"
+  role        = aws_iam_role.db_accessor.id
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -184,12 +184,6 @@ resource "aws_iam_policy" "sqs_send_message_policy" {
       }
     ]
   })
-}
-
-resource "aws_iam_policy_attachment" "db_accessor_3" {
-  name       = "crossfeed-db-accessor-${var.stage}"
-  roles      = [aws_iam_role.db_accessor.name]
-  policy_arn = aws_iam_policy.sqs_send_message_policy.arn
 }
 
 # Lambda and Fargate SSM Parameters
@@ -275,7 +269,9 @@ resource "aws_s3_bucket_policy" "reports_bucket" {
     "Statement" : [
       {
         "Sid" : "RequireSSLRequests",
+        "Action" : "s3:*",
         "Effect" : "Deny",
+        "Principal" : "*",
         "Resource" : [
           aws_s3_bucket.reports_bucket.arn,
           "${aws_s3_bucket.reports_bucket.arn}/*"
@@ -333,7 +329,9 @@ resource "aws_s3_bucket_policy" "pe_db_backups_bucket" {
     "Statement" : [
       {
         "Sid" : "RequireSSLRequests",
+        "Action" : "s3:*",
         "Effect" : "Deny",
+        "Principal" : "*",
         "Resource" : [
           aws_s3_bucket.pe_db_backups_bucket.arn,
           "${aws_s3_bucket.pe_db_backups_bucket.arn}/*"
