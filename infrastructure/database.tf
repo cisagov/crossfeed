@@ -75,6 +75,33 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"]
 }
 
+# DB Accessor EC2
+resource "aws_instance" "db_accessor" {
+  count                       = var.create_db_accessor_instance ? 1 : 0
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = var.db_accessor_instance_class
+  associate_public_ip_address = false
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+  root_block_device {
+    volume_size = 1000
+  }
+
+  vpc_security_group_ids = [aws_security_group.allow_internal.id]
+  subnet_id              = aws_subnet.backend.id
+
+  iam_instance_profile = aws_iam_instance_profile.db_accessor.id
+  user_data            = file("./ssm-agent-install.sh")
+
+  lifecycle {
+    # prevent_destroy = true
+    ignore_changes = [ami]
+  }
+}
+
 resource "aws_iam_role" "db_accessor" {
   name               = "crossfeed-db-accessor-${var.stage}"
   assume_role_policy = <<EOF
@@ -137,32 +164,29 @@ resource "aws_iam_role_policy" "db_accessor_s3_policy" {
 EOF
 }
 
-resource "aws_instance" "db_accessor" {
-  count                       = var.create_db_accessor_instance ? 1 : 0
-  ami                         = data.aws_ami.ubuntu.id
-  instance_type               = var.db_accessor_instance_class
-  associate_public_ip_address = false
-
-  tags = {
-    Project = var.project
-    Stage   = var.stage
-  }
-  root_block_device {
-    volume_size = 1000
-  }
-
-  vpc_security_group_ids = [aws_security_group.allow_internal.id]
-  subnet_id              = aws_subnet.backend.id
-
-  iam_instance_profile = aws_iam_instance_profile.db_accessor.id
-  user_data            = file("./ssm-agent-install.sh")
-
-  lifecycle {
-    # prevent_destroy = true
-    ignore_changes = [ami]
-  }
+resource "aws_iam_role_policy" "sqs_send_message_policy" {
+  name_prefix = "ec2-send-sqs-message-${var.stage}"
+  role        = aws_iam_role.db_accessor.id
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "sqs:SendMessage",
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes",
+          "sqs:ListQueues",
+          "sqs:GetQueueUrl"
+        ],
+        Effect   = "Allow",
+        Resource = aws_sqs_queue.terraform_queue.arn
+      }
+    ]
+  })
 }
 
+# Lambda and Fargate SSM Parameters
 resource "aws_ssm_parameter" "lambda_sg_id" {
   name      = var.ssm_lambda_sg
   type      = "String"
@@ -207,7 +231,6 @@ resource "aws_ssm_parameter" "worker_subnet_id" {
   }
 }
 
-
 resource "aws_ssm_parameter" "crossfeed_send_db_host" {
   name      = var.ssm_db_host
   type      = "SecureString"
@@ -230,6 +253,7 @@ resource "aws_ssm_parameter" "crossfeed_send_db_name" {
   }
 }
 
+# Reports S3 Bucket
 resource "aws_s3_bucket" "reports_bucket" {
   bucket = var.reports_bucket_name
   tags = {
@@ -288,6 +312,7 @@ resource "aws_s3_bucket_logging" "reports_bucket" {
   target_prefix = "reports_bucket/"
 }
 
+# P&E DB Backups S3 bucket
 resource "aws_s3_bucket" "pe_db_backups_bucket" {
   bucket = var.pe_db_backups_bucket_name
   tags = {
