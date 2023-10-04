@@ -269,6 +269,7 @@ resource "aws_s3_bucket_policy" "reports_bucket" {
     "Statement" : [
       {
         "Sid" : "RequireSSLRequests",
+        "Action": "s3:*",
         "Effect" : "Deny",
         "Principal" : "*",
         "Resource" : [
@@ -328,6 +329,7 @@ resource "aws_s3_bucket_policy" "pe_db_backups_bucket" {
     "Statement" : [
       {
         "Sid" : "RequireSSLRequests",
+        "Action": "s3:*",
         "Effect" : "Deny",
         "Principal" : "*",
         "Resource" : [
