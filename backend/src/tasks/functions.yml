@@ -34,7 +34,8 @@ scanExecution:
   timeout: 300 # 5 minutes
   events:
     - sqs:
-        arn: ${file(env.yml):${self:provider.stage}.SQS_QUEUE_ARN, ''}
+        arn:
+          - ${file(env.yml):${self:provider.stage}.SQS_QUEUE_ARN, ''}
         batchSize: 5 # Number of messages the lambda can continue to process while a Fargate is still running
 
 updateScanTaskStatus:
