@@ -39,6 +39,7 @@ resource "aws_s3_bucket_policy" "logging_bucket" {
     "Statement" : [{
       "Sid" : "RequireSSLRequests",
       "Effect" : "Deny",
+      "Principal" : "*",
       "Resource" : [
         aws_s3_bucket.logging_bucket.arn,
         "${aws_s3_bucket.logging_bucket.arn}/*"
