@@ -268,6 +268,28 @@ resource "aws_s3_bucket" "reports_bucket" {
   }
 }
 
+resource "aws_s3_bucket_policy" "reports_bucket" {
+  bucket = var.reports_bucket_name
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "RequireSSLRequests",
+        "Effect" : "Deny",
+        "Resource" : [
+          aws_s3_bucket.reports_bucket.arn,
+          "${aws_s3_bucket.reports_bucket.arn}/*"
+        ],
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : "false"
+          }
+        }
+      }
+    ]
+  })
+}
+
 resource "aws_s3_bucket_acl" "reports_bucket" {
   bucket = aws_s3_bucket.reports_bucket.id
   acl    = "private"
@@ -302,6 +324,28 @@ resource "aws_s3_bucket" "pe_db_backups_bucket" {
     Project = var.project
     Stage   = var.stage
   }
+}
+
+resource "aws_s3_bucket_policy" "pe_db_backups_bucket" {
+  bucket = aws_s3_bucket.pe_db_backups_bucket.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "RequireSSLRequests",
+        "Effect" : "Deny",
+        "Resource" : [
+          aws_s3_bucket.pe_db_backups_bucket.arn,
+          "${aws_s3_bucket.pe_db_backups_bucket.arn}/*"
+        ],
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : "false"
+          }
+        }
+      }
+    ]
+  })
 }
 
 resource "aws_s3_bucket_acl" "pe_db_backups_bucket" {
