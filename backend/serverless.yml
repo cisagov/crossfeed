@@ -79,6 +79,13 @@ provider:
             - logs:StopLiveTail
           Resource: '*'
 
+resources:
+  Resources:
+    MySQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.stage}-worker-queue
+
 functions:
   - ${file(./src/tasks/functions.yml)}
   - ${file(./src/api/functions.yml)}
