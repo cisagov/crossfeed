@@ -41,6 +41,7 @@ scanExecution:
             - WorkerQueue
             - Arn
         batchSize: 5 # Number of messages the lambda can continue to process while a Fargate is still running
+        visibilityTimeout: 300 # Should match or exceed function timeout
 
 updateScanTaskStatus:
   handler: src/tasks/updateScanTaskStatus.handler
