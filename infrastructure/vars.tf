@@ -429,3 +429,10 @@ variable "create_elk_instance" {
   type        = bool
   default     = false
 }
+
+variable "sqs_queue_name" {
+  description = "sqs_queue_name"
+  type        = string
+  default     = "crossfeed-staging-worker-queue"
+}
+

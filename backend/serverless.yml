@@ -61,6 +61,15 @@ provider:
           Resource: '*'
         - Effect: Allow
           Action:
+            - sts:AssumeRole
+          Resource: '*'
+        - Effect: Allow
+          Action:
+            - sqs:ReceiveMessage
+            - sqs:SendMessage
+          Resource: '*'
+        - Effect: Allow
+          Action:
             - logs:Describe*
             - logs:Get*
             - logs:List*
