@@ -30,6 +30,7 @@
     {
       "Sid": "RequireSSLRequests",
       "Effect": "Deny",
+      "Principal": "*",
       "Resource": [
         "arn:aws:s3:::${bucketName}",
         "arn:aws:s3:::${bucketName}/*"

@@ -270,6 +270,7 @@ resource "aws_s3_bucket_policy" "reports_bucket" {
       {
         "Sid" : "RequireSSLRequests",
         "Effect" : "Deny",
+        "Principal" : "*",
         "Resource" : [
           aws_s3_bucket.reports_bucket.arn,
           "${aws_s3_bucket.reports_bucket.arn}/*"
@@ -328,6 +329,7 @@ resource "aws_s3_bucket_policy" "pe_db_backups_bucket" {
       {
         "Sid" : "RequireSSLRequests",
         "Effect" : "Deny",
+        "Principal" : "*",
         "Resource" : [
           aws_s3_bucket.pe_db_backups_bucket.arn,
           "${aws_s3_bucket.pe_db_backups_bucket.arn}/*"

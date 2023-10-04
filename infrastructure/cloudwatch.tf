@@ -51,6 +51,7 @@ resource "aws_s3_bucket_policy" "cloudwatch_bucket" {
       {
         "Sid" : "RequireSSLRequests",
         "Effect" : "Deny",
+        "Principal" : "*",
         "Resource" : [
           aws_s3_bucket.cloudwatch_bucket.arn,
           "${aws_s3_bucket.cloudwatch_bucket.arn}/*"
