@@ -13,6 +13,7 @@
     },
     {
       "Sid": "RequireSSLRequests",
+      "Action": "s3:*",
       "Effect": "Deny",
       "Principal": "*",
       "Resource": [
