@@ -358,10 +358,9 @@ resource "aws_s3_bucket_policy" "export_bucket" {
     "Statement" : [
       {
         "Sid" : "RequireSSLRequests"
-        "Action": "s3:*",
+        "Action" : "s3:*",
         "Effect" : "Deny"
         "Principal" : "*"
-        "Action" : "s3:*"
         "Resource" : [
           aws_s3_bucket.export_bucket.arn,
           "${aws_s3_bucket.export_bucket.arn}/*"
