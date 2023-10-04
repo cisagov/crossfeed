@@ -237,7 +237,6 @@ resource "aws_ssm_parameter" "worker_subnet_id" {
   }
 }
 
-
 resource "aws_ssm_parameter" "crossfeed_send_db_host" {
   name      = var.ssm_db_host
   type      = "SecureString"
@@ -295,7 +294,6 @@ resource "aws_s3_bucket_logging" "reports_bucket" {
   target_bucket = aws_s3_bucket.logging_bucket.id
   target_prefix = "reports_bucket/"
 }
-
 
 # P&E DB Backups S3 bucket
 resource "aws_s3_bucket" "pe_db_backups_bucket" {
