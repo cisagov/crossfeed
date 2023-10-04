@@ -408,9 +408,9 @@ variable "ami_id" {
 }
 
 variable "cloudtrail_name" {
-    description = "cloudtrail_name"
-    type        = string
-    default     = "crossfeed-staging-cloudtrail"
+  description = "cloudtrail_name"
+  type        = string
+  default     = "crossfeed-staging-all-events"
 }
 
 variable "cloudtrail_bucket_name" {
