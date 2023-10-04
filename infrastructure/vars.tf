@@ -117,6 +117,12 @@ variable "ssm_worker_subnet" {
   default     = "/crossfeed/staging/WORKER_SUBNET_ID"
 }
 
+variable "ssm_sqs_queue_arn" {
+  description = "ssm_sqs_queue_arn"
+  type        = string
+  default     = "/crossfeed/staging/SQS_QUEUE_ARN"
+}
+
 variable "ssm_worker_arn" {
   description = "ssm_worker_arn"
   type        = string
@@ -262,12 +268,6 @@ variable "logging_bucket_name" {
   default     = "cisa-crossfeed-staging-logging"
 }
 
-variable "cloudtrail_name" {
-  description = "cloudtrail_name"
-  type        = string
-  default     = "crossfeed-staging-all-events"
-}
-
 variable "cloudtrail_bucket_name" {
   description = "cloudtrail_bucket_name"
   type        = string
@@ -284,18 +284,6 @@ variable "cloudtrail_log_group_name" {
   description = "cloudtrail_log_group_name"
   type        = string
   default     = "crossfeed-staging-cloudtrail-logs"
-}
-
-variable "cloudwatch_bucket_name" {
-  description = "cloudwatch_bucket_name"
-  type        = string
-  default     = "cisa-crossfeed-staging-cloudwatch"
-}
-
-variable "cloudwatch_log_group_name" {
-  description = "cloudwatch_log_group_name"
-  type        = string
-  default     = "crossfeed-staging-cloudwatch-bucket"
 }
 
 variable "export_bucket_name" {
