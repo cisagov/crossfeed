@@ -81,7 +81,7 @@ provider:
 
 resources:
   Resources:
-    MySQSQueue:
+    WorkerQueue:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:provider.stage}-worker-queue
