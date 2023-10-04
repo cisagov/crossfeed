@@ -165,8 +165,8 @@ EOF
 }
 
 resource "aws_iam_role_policy" "sqs_send_message_policy" {
-  name_prefix       = "ec2-send-sqs-message-${var.stage}"
-  role              = aws_iam_role.db_accessor.id
+  name_prefix = "ec2-send-sqs-message-${var.stage}"
+  role        = aws_iam_role.db_accessor.id
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
