@@ -40,6 +40,8 @@ resource "aws_db_instance" "db" {
   storage_encrypted                   = true
   iam_database_authentication_enabled = true
   enabled_cloudwatch_logs_exports     = ["postgresql", "upgrade"]
+  monitoring_interval                 = 60
+  deletion_protection                 = true
 
   // database information
   db_name  = var.db_table_name
@@ -135,7 +137,7 @@ resource "aws_instance" "db_accessor" {
   }
 
   vpc_security_group_ids = [aws_security_group.allow_internal.id]
-  subnet_id              = aws_subnet.backend.id
+  subnet_id              = aws_subnet.db_1.id
 
   iam_instance_profile = aws_iam_instance_profile.db_accessor.id
   user_data            = file("./ssm-agent-install.sh")

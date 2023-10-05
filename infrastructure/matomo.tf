@@ -131,13 +131,13 @@ resource "aws_ecs_task_definition" "matomo" {
 }
 
 resource "aws_service_discovery_private_dns_namespace" "default" {
-  name        = "crossfeed.local"
+  name        = "cfs.lz.us-cert.gov"
   description = "Crossfeed ${var.stage}"
   vpc         = aws_vpc.crossfeed_vpc.id
 }
 
 resource "aws_service_discovery_service" "matomo" {
-  # ECS service can be accessed through http://matomo.crossfeed.local
+  # ECS service can be accessed through http://matomo.cfs.lz.us-cert.gov
   name = "matomo"
 
   dns_config {
@@ -197,6 +197,10 @@ resource "aws_db_instance" "matomo_db" {
   storage_encrypted                   = true
   iam_database_authentication_enabled = false
   allow_major_version_upgrade         = true
+  deletion_protection                 = true
+  monitoring_interval                 = 60
+  enabled_cloudwatch_logs_exports     = ["audit", "error", "general", "slowquery"]
+
 
   // database information
   db_name  = "matomo"

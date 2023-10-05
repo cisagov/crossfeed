@@ -404,7 +404,7 @@ variable "create_elk_instance" {
 variable "ami_id" {
   description = "ID of the AMI to use for EC2 instances."
   type        = string
-  default     = "ami-064cd328d8f9a9f00"
+  default     = "ami-0a1445a13e666a557"
 }
 
 variable "cloudtrail_name" {
@@ -429,4 +429,10 @@ variable "cloudtrail_log_group_name" {
   description = "cloudtrail_log_group_name"
   type        = string
   default     = "crossfeed-staging-cloudtrail-logs"
+}
+
+variable "es_instance_master_count" {
+  description = "es_instance_master_count"
+  type        = number
+  default     = 3
 }
