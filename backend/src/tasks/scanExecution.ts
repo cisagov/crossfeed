@@ -12,23 +12,9 @@ export const handler: Handler = async (event) => {
 
     console.log(commandOptions);
 
-    // Get the ARN of the SQS queue from the event
-    const sqsQueueArn: string | undefined = sqsRecord.eventSourceARN;
-
-    if (!sqsQueueArn) {
-      throw new Error('SQS Queue ARN not found in event');
-    }
-
-    // Describe the SQS queue to get its URL
-    const sqsQueue = {
-      QueueUrl: sqsQueueArn // Use the ARN as the QueueUrl
-    };
-    const queueAttributesResponse = await sqs
-      .getQueueAttributes(sqsQueue)
-      .promise();
-    const sqsQueueUrl = queueAttributesResponse.Attributes?.QueueUrl;
+    const sqsQueueUrl = process.env.SQS_QUEUE_URL!;
     console.log(sqsQueueUrl);
-    if (!sqsQueueUrl) {
+    if (sqsQueueUrl) {
       throw new Error('SQS Queue URL not found');
     }
 
