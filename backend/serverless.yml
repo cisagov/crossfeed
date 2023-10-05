@@ -85,6 +85,9 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:provider.stage}-worker-queue
+        VisibilityTimeout: 300 # Should match or exceed function timeout
+        MaximumMessageSize: 262144 # 256 KB
+        MessageRetentionPeriod: 604800 # 7 days
 
 functions:
   - ${file(./src/tasks/functions.yml)}
