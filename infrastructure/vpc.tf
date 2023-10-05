@@ -7,7 +7,7 @@ resource "aws_vpc" "crossfeed_vpc" {
   enable_dns_hostnames = true
   tags = {
     Project = var.project
-    Name = data.aws_ssm_parameter.vpc_name.value
+    Name    = data.aws_ssm_parameter.vpc_name.value
   }
 }
 
@@ -18,7 +18,7 @@ resource "aws_subnet" "db_1" {
 
   tags = {
     Project = var.project
-    Name = "Crossfeed-Stage_GovEast_Private-A"
+    Name    = "Crossfeed-Stage_GovEast_Private-A"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_subnet" "db_2" {
 
   tags = {
     Project = var.project
-    Name = "Crossfeed-Stage_GovEast_Private-B"
+    Name    = "Crossfeed-Stage_GovEast_Private-B"
   }
 }
 
@@ -40,7 +40,7 @@ resource "aws_subnet" "backend" {
 
   tags = {
     Project = var.project
-    Name = "Crossfeed-Stage_GovEast_Endpoint-A"
+    Name    = "Crossfeed-Stage_GovEast_Endpoint-A"
   }
 }
 
@@ -63,7 +63,7 @@ resource "aws_subnet" "es_1" {
 
   tags = {
     Project = var.project
-    Name = "Crossfeed-Stage_GovEast_Private-C"
+    Name    = "Crossfeed-Stage_GovEast_Private-C"
   }
 }
 
@@ -74,7 +74,7 @@ resource "aws_subnet" "matomo_1" {
 
   tags = {
     Project = var.project
-    Name = "Crossfeed-Stage_GovEast_Endpoint-C"
+    Name    = "Crossfeed-Stage_GovEast_Endpoint-C"
   }
 }
 
