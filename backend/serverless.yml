@@ -24,23 +24,23 @@ provider:
   environment: ${file(env.yml):${self:provider.stage}, ''}
   vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
   vpcEndpointIds:
-    - vpce-0f012d56c2afb9c1d
+    - ${file(env.yml):${self:provider.stage}.VPC_ENDPOINT, ''}
   apiGateway:
     binaryMediaTypes:
       - 'image/*'
       - 'font/*'
-    resourcePolicy: 
+    resourcePolicy:
       - Effect: Deny
-        Principal: "*"
-        Action: "execute-api:Invoke"
-        Resource: "execute-api:/${self:provider.stage}/*/*"
+        Principal: '*'
+        Action: 'execute-api:Invoke'
+        Resource: 'execute-api:/${self:provider.stage}/*/*'
         Condition:
           StringNotEquals:
-            "aws:sourceVpce": "vpce-0f012d56c2afb9c1d" # Replace ${vpcID} with the actual VPC ID
+            'aws:sourceVpce': ${file(env.yml):${self:provider.stage}.VPC_ENDPOINT, ''}
       - Effect: Allow
-        Principal: "*"
-        Action: "execute-api:Invoke"
-        Resource: "execute-api:/${self:provider.stage}/*/*"
+        Principal: '*'
+        Action: 'execute-api:Invoke'
+        Resource: 'execute-api:/${self:provider.stage}/*/*'
   logs:
     restApi: true
   deploymentBucket:
@@ -72,7 +72,6 @@ provider:
             - s3:PutObject
             - s3:PutObjectAcl
           Resource: '*'
-
 
 functions:
   - ${file(./src/tasks/functions.yml)}
