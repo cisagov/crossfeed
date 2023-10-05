@@ -91,13 +91,13 @@ resource "aws_iam_instance_profile" "db_accessor" {
 resource "aws_iam_policy_attachment" "db_accessor_1" {
   name       = "crossfeed-db-accessor-${var.stage}"
   roles      = [aws_iam_role.db_accessor.id]
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  policy_arn = "arn:aws-us-gov:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_policy_attachment" "db_accessor_2" {
   name       = "crossfeed-db-accessor-${var.stage}"
   roles      = [aws_iam_role.db_accessor.id]
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+  policy_arn = "arn:aws-us-gov:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
 
 resource "aws_iam_role_policy" "db_accessor_s3_policy" {
