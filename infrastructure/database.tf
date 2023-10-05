@@ -91,13 +91,13 @@ resource "aws_iam_instance_profile" "db_accessor" {
 resource "aws_iam_policy_attachment" "db_accessor_1" {
   name       = "crossfeed-db-accessor-${var.stage}"
   roles      = [aws_iam_role.db_accessor.id]
-  policy_arn = "arn:aws-us-gov:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_policy_attachment" "db_accessor_2" {
   name       = "crossfeed-db-accessor-${var.stage}"
   roles      = [aws_iam_role.db_accessor.id]
-  policy_arn = "arn:aws-us-gov:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
 
 resource "aws_iam_role_policy" "db_accessor_s3_policy" {
@@ -189,7 +189,6 @@ resource "aws_ssm_parameter" "worker_subnet_id" {
   }
 }
 
-
 resource "aws_ssm_parameter" "crossfeed_send_db_host" {
   name      = var.ssm_db_host
   type      = "SecureString"
@@ -218,6 +217,35 @@ resource "aws_s3_bucket" "reports_bucket" {
     Project = var.project
     Stage   = var.stage
   }
+}
+
+resource "aws_s3_bucket_policy" "reports_bucket" {
+  bucket = var.reports_bucket_name
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "RequireSSLRequests",
+        "Action" : "s3:*",
+        "Effect" : "Deny",
+        "Principal" : "*",
+        "Resource" : [
+          aws_s3_bucket.reports_bucket.arn,
+          "${aws_s3_bucket.reports_bucket.arn}/*"
+        ],
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : "false"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_s3_bucket_acl" "reports_bucket" {
+  bucket = aws_s3_bucket.reports_bucket.id
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "reports_bucket" {
@@ -250,6 +278,34 @@ resource "aws_s3_bucket" "pe_db_backups_bucket" {
   }
 }
 
+resource "aws_s3_bucket_policy" "pe_db_backups_bucket" {
+  bucket = aws_s3_bucket.pe_db_backups_bucket.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "RequireSSLRequests",
+        "Action" : "s3:*",
+        "Effect" : "Deny",
+        "Principal" : "*",
+        "Resource" : [
+          aws_s3_bucket.pe_db_backups_bucket.arn,
+          "${aws_s3_bucket.pe_db_backups_bucket.arn}/*"
+        ],
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : "false"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_s3_bucket_acl" "pe_db_backups_bucket" {
+  bucket = aws_s3_bucket.pe_db_backups_bucket.id
+  acl    = "private"
+}
 resource "aws_s3_bucket_server_side_encryption_configuration" "pe_db_backups_bucket" {
   bucket = aws_s3_bucket.pe_db_backups_bucket.id
   rule {
