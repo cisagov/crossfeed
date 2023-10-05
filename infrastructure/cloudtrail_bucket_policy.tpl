@@ -2,7 +2,7 @@
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "AWSCloudTrailAclCheck20131101",
+      "Sid": "AWSCloudTrailAclCheck",
       "Effect": "Allow",
       "Principal": {
         "Service": "cloudtrail.amazonaws.com"
@@ -11,7 +11,7 @@
       "Resource": "arn:aws-us-gov:s3:::${bucketName}"
     },
     {
-      "Sid": "AWSCloudTrailWrite20131101",
+      "Sid": "AWSCloudTrailWrite",
       "Effect": "Allow",
       "Principal": {
         "Service": "cloudtrail.amazonaws.com"
@@ -24,6 +24,21 @@
       "Condition": {
         "StringEquals": {
           "s3:x-amz-acl": "bucket-owner-full-control"
+        }
+      }
+    },
+    {
+      "Sid": "RequireSSLRequests",
+      "Action": "s3:*",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Resource": [
+        "arn:aws-us-gov:s3:::${bucketName}",
+        "arn:aws-us-gov:s3:::${bucketName}/*"
+      ],
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "false"
         }
       }
     }
