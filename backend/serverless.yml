@@ -56,6 +56,8 @@ provider:
             - s3:GetObjectAcl
             - s3:PutObject
             - s3:PutObjectAcl
+            - s3:PutBucketAcl
+            - s3:GetBucketAcl
           Resource: '*'
         - Effect: Allow
           Action:
@@ -77,6 +79,14 @@ provider:
             - logs:FilterLogEvents
             - logs:StartLiveTail
             - logs:StopLiveTail
+          Resource: '*'
+        - Effect: Allow
+          Action:
+            - ssm:DescribeParameters
+            - ssm:GetParameter
+            - ssm:GetParameters
+            - ssm:GetParametersByPath
+            - ssm:PutParameter
           Resource: '*'
 
 resources:
