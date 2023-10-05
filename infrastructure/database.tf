@@ -245,11 +245,6 @@ resource "aws_s3_bucket_policy" "reports_bucket" {
   })
 }
 
-resource "aws_s3_bucket_acl" "reports_bucket" {
-  bucket = aws_s3_bucket.reports_bucket.id
-  acl    = "private"
-}
-
 resource "aws_s3_bucket_server_side_encryption_configuration" "reports_bucket" {
   bucket = aws_s3_bucket.reports_bucket.id
   rule {
@@ -304,10 +299,6 @@ resource "aws_s3_bucket_policy" "pe_db_backups_bucket" {
   })
 }
 
-resource "aws_s3_bucket_acl" "pe_db_backups_bucket" {
-  bucket = aws_s3_bucket.pe_db_backups_bucket.id
-  acl    = "private"
-}
 resource "aws_s3_bucket_server_side_encryption_configuration" "pe_db_backups_bucket" {
   bucket = aws_s3_bucket.pe_db_backups_bucket.id
   rule {
