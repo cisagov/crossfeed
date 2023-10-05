@@ -180,7 +180,7 @@ resource "aws_iam_role_policy" "sqs_send_message_policy" {
           "sqs:GetQueueUrl"
         ],
         Effect   = "Allow",
-        Resource = aws_sqs_queue.terraform_queue.arn
+        Resource = "*"
       }
     ]
   })
