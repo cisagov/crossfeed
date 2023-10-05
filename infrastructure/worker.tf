@@ -351,6 +351,30 @@ resource "aws_s3_bucket" "export_bucket" {
   }
 }
 
+resource "aws_s3_bucket_policy" "export_bucket" {
+  bucket = var.export_bucket_name
+  policy = jsonencode({
+    "Version" : "2012-10-17"
+    "Statement" : [
+      {
+        "Sid" : "RequireSSLRequests"
+        "Action" : "s3:*",
+        "Effect" : "Deny"
+        "Principal" : "*"
+        "Resource" : [
+          aws_s3_bucket.export_bucket.arn,
+          "${aws_s3_bucket.export_bucket.arn}/*"
+        ]
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : false
+          }
+        }
+      }
+    ]
+  })
+}
+
 resource "aws_s3_bucket_server_side_encryption_configuration" "export_bucket" {
   bucket = aws_s3_bucket.export_bucket.id
   rule {

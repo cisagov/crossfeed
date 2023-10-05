@@ -191,7 +191,6 @@ resource "aws_ssm_parameter" "worker_subnet_id" {
   }
 }
 
-
 resource "aws_ssm_parameter" "crossfeed_send_db_host" {
   name      = var.ssm_db_host
   type      = "SecureString"
@@ -222,6 +221,30 @@ resource "aws_s3_bucket" "reports_bucket" {
   }
 }
 
+resource "aws_s3_bucket_policy" "reports_bucket" {
+  bucket = var.reports_bucket_name
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "RequireSSLRequests",
+        "Action" : "s3:*",
+        "Effect" : "Deny",
+        "Principal" : "*",
+        "Resource" : [
+          aws_s3_bucket.reports_bucket.arn,
+          "${aws_s3_bucket.reports_bucket.arn}/*"
+        ],
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : "false"
+          }
+        }
+      }
+    ]
+  })
+}
+
 resource "aws_s3_bucket_server_side_encryption_configuration" "reports_bucket" {
   bucket = aws_s3_bucket.reports_bucket.id
   rule {
@@ -250,6 +273,30 @@ resource "aws_s3_bucket" "pe_db_backups_bucket" {
     Project = var.project
     Stage   = var.stage
   }
+}
+
+resource "aws_s3_bucket_policy" "pe_db_backups_bucket" {
+  bucket = aws_s3_bucket.pe_db_backups_bucket.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "RequireSSLRequests",
+        "Action" : "s3:*",
+        "Effect" : "Deny",
+        "Principal" : "*",
+        "Resource" : [
+          aws_s3_bucket.pe_db_backups_bucket.arn,
+          "${aws_s3_bucket.pe_db_backups_bucket.arn}/*"
+        ],
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : "false"
+          }
+        }
+      }
+    ]
+  })
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "pe_db_backups_bucket" {

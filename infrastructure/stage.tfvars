@@ -66,6 +66,7 @@ db_accessor_instance_class        = "t3.2xlarge"
 create_elk_instance               = true
 elk_instance_class                = "t3.2xlarge"
 ami_id                            = "ami-0a1445a13e666a557"
+cloudtrail_name                   = "crossfeed-staging-all-events"
 cloudtrail_bucket_name            = "cisa-crossfeed-staging-cloudtrail"
 cloudtrail_role_name              = "cisa-crossfeed-staging-cloudtrail"
 cloudtrail_log_group_name         = "cisa-crossfeed-staging-cloudtrail"
