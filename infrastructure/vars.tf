@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "aws_other_region" {
   description = "aws_other_region"
   type        = string
-  default     = "us-gov-east-1"
+  default     = "us-gov-west-1"
 }
 
 variable "project" {
