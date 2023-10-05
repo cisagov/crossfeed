@@ -21,14 +21,12 @@ describe('Scan Execution', () => {
       Records: [
         {
           body: 'test command',
-          eventSourceARN: 'YourSQSQueueARN'
+          eventSourceARN: 'SQSQueueARN'
         } as SQSRecord
       ]
     };
 
-    const context = {} as any;
-    const callback = () => void 0;
-    const result = await handler(event, context, callback);
+    const result = await handler(event, {} as any, () => void 0);
 
     // Add your assertions here
     expect(result.statusCode).toEqual(200);
