@@ -14,7 +14,7 @@ export const handler: Handler = async (event) => {
 
     const sqsQueueUrl = process.env.SQS_QUEUE_URL!;
     console.log(sqsQueueUrl);
-    if (sqsQueueUrl) {
+    if (!sqsQueueUrl) {
       throw new Error('SQS Queue URL not found');
     }
 
