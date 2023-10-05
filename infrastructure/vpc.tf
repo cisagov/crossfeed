@@ -7,7 +7,7 @@ resource "aws_vpc" "crossfeed_vpc" {
   enable_dns_hostnames = true
   tags = {
     Project = var.project
-    Name = data.aws_ssm_parameter.vpc_name.value
+    Name    = data.aws_ssm_parameter.vpc_name.value
   }
 }
 
@@ -18,7 +18,7 @@ resource "aws_subnet" "db_1" {
 
   tags = {
     Project = var.project
-    Name = "Crossfeed-Stage_GovEast_Private-A"
+    Name    = "Crossfeed-Stage_GovEast_Private-A"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_subnet" "db_2" {
 
   tags = {
     Project = var.project
-    Name = "Crossfeed-Stage_GovEast_Private-B"
+    Name    = "Crossfeed-Stage_GovEast_Private-B"
   }
 }
 
@@ -40,7 +40,7 @@ resource "aws_subnet" "backend" {
 
   tags = {
     Project = var.project
-    Name = "Crossfeed-Stage_GovEast_Endpoint-A"
+    Name    = "Crossfeed-Stage_GovEast_Endpoint-A"
   }
 }
 
@@ -63,7 +63,7 @@ resource "aws_subnet" "es_1" {
 
   tags = {
     Project = var.project
-    Name = "Crossfeed-Stage_GovEast_Private-C"
+    Name    = "Crossfeed-Stage_GovEast_Private-C"
   }
 }
 
@@ -74,7 +74,7 @@ resource "aws_subnet" "matomo_1" {
 
   tags = {
     Project = var.project
-    Name = "Crossfeed-Stage_GovEast_Endpoint-C"
+    Name    = "Crossfeed-Stage_GovEast_Endpoint-C"
   }
 }
 
@@ -104,7 +104,7 @@ resource "aws_route_table" "private_B" {
   tags = {
     Project = var.project
     Stage   = var.stage
-    Name    = "Crossfeed-Stage_GovEast_Private-A"
+    Name    = "Crossfeed-Stage_GovEast_Private-B"
   }
 }
 
@@ -114,7 +114,7 @@ resource "aws_route_table" "private_C" {
   tags = {
     Project = var.project
     Stage   = var.stage
-    Name    = "Crossfeed-Stage_GovEast_Private-A"
+    Name    = "Crossfeed-Stage_GovEast_Private-C"
   }
 }
 
@@ -162,6 +162,22 @@ resource "aws_security_group" "allow_internal" {
     cidr_blocks = [aws_vpc.crossfeed_vpc.cidr_block]
   }
 
+  ingress {
+    description = "Nessus Scan"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["10.232.0.94/32"]
+  }
+
+  ingress {
+    description = "Crowdstrike Server"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["10.234.0.0/15", "10.232.0.0/15", "52.61.0.0/17", "10.236.0.0/24", "96.127.0.0/17"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -175,3 +191,20 @@ resource "aws_security_group" "allow_internal" {
   }
 }
 
+resource "aws_security_group" "worker" {
+  name        = "worker"
+  description = "Worker"
+  vpc_id      = aws_vpc.crossfeed_vpc.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}

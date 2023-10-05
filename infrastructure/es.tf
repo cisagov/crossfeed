@@ -9,7 +9,8 @@ resource "aws_elasticsearch_domain" "es" {
   cluster_config {
     instance_type            = var.es_instance_type
     instance_count           = var.es_instance_count
-    dedicated_master_enabled = false
+    dedicated_master_enabled = true
+    dedicated_master_count   = var.es_instance_master_count
 
     # Enable for prod:
     # zone_awareness_enabled = true
@@ -76,6 +77,7 @@ POLICY
   ebs_options {
     ebs_enabled = true
     volume_size = var.es_instance_volume_size
+    iops        = 3000
   }
 
   tags = {
@@ -128,6 +130,16 @@ resource "aws_cloudwatch_log_group" "es_index_slow" {
 
 resource "aws_cloudwatch_log_group" "es_search_slow" {
   name              = "crossfeed-${var.stage}-es-search-slow"
+  retention_in_days = 3653
+  kms_key_id        = aws_kms_key.key.arn
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+resource "aws_cloudwatch_log_group" "es_audit_logs" {
+  name              = "crossfeed-${var.stage}-es-audit-logs"
   retention_in_days = 3653
   kms_key_id        = aws_kms_key.key.arn
   tags = {

@@ -8,15 +8,16 @@ resource "aws_instance" "elk_stack" {
 
 
   tags = {
+    Name    = "ELK"
     Project = var.project
     Stage   = var.stage
   }
   root_block_device {
-    volume_size = 1000
+    volume_size = 15
   }
 
   vpc_security_group_ids = [aws_security_group.allow_internal.id]
-  subnet_id              = aws_subnet.backend.id
+  subnet_id              = aws_subnet.db_1.id
 
   iam_instance_profile = aws_iam_instance_profile.db_accessor.id
   user_data            = file("./ssm-agent-install.sh")
