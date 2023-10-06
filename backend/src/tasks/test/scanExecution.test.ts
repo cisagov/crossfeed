@@ -16,6 +16,7 @@ jest.mock('aws-sdk', () => {
 });
 
 describe('Scan Execution', () => {
+  process.env.SQS_QUEUE_URL = 'YOUR_SQS_QUEUE_URL';
   it('should handle the event', async () => {
     const event = {
       Records: [
