@@ -23,9 +23,11 @@ resource "aws_iam_role_policy" "splunk_policy" {
     Version = "2012-10-17",
     Statement = [{
       Action = [
-        "s3:Get*",
-        "s3:List*",
-        "s3:Describe*"
+        "s3:ListBucket",
+        "s3:ListAllMyBuckets",
+        "s3:GetObject",
+        "s3:GetBucketLocation",
+        "kms:Decrypt",
       ]
     }]
     Effect = "Allow",
