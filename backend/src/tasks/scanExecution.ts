@@ -8,16 +8,16 @@ export const handler: Handler = async (event) => {
   try {
     // Get the SQS record and message body
     const sqsRecord: SQSRecord = event.Records[0];
-    const commandOptions: string = sqsRecord.body;
+    const body: string = sqsRecord.body;
 
-    console.log(commandOptions);
+    console.log(body);
 
-    const sqsQueueUrl = process.env.SQS_QUEUE_URL!;
-    console.log(sqsQueueUrl);
-    if (!sqsQueueUrl) {
-      throw new Error('SQS Queue URL not found');
+    let commandOptions;
+    if (body === 'SHODAN') {
+      commandOptions = './worker/shodan.sh';
+    } else {
+      commandOptions = body;
     }
-
     // Run command in queue message in Fargate
     const params: AWS.ECS.RunTaskRequest = {
       cluster: process.env.FARGATE_CLUSTER_NAME!,
@@ -42,13 +42,6 @@ export const handler: Handler = async (event) => {
     };
     const data = await ecs.runTask(params).promise();
     console.log('Fargate task started:', data);
-
-    // Send a message to the SQS queue to trigger processing
-    const sqsParams: AWS.SQS.SendMessageRequest = {
-      MessageBody: 'Start processing...',
-      QueueUrl: sqsQueueUrl
-    };
-    await sqs.sendMessage(sqsParams).promise();
 
     return {
       statusCode: 200,
