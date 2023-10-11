@@ -56,6 +56,17 @@ provider:
             - s3:GetObjectAcl
             - s3:PutObject
             - s3:PutObjectAcl
+            - s3:PutBucketAcl
+            - s3:GetBucketAcl
+          Resource: '*'
+        - Effect: Allow
+          Action:
+            - sts:AssumeRole
+          Resource: '*'
+        - Effect: Allow
+          Action:
+            - sqs:ReceiveMessage
+            - sqs:SendMessage
           Resource: '*'
         - Effect: Allow
           Action:
@@ -69,6 +80,24 @@ provider:
             - logs:StartLiveTail
             - logs:StopLiveTail
           Resource: '*'
+        - Effect: Allow
+          Action:
+            - ssm:DescribeParameters
+            - ssm:GetParameter
+            - ssm:GetParameters
+            - ssm:GetParametersByPath
+            - ssm:PutParameter
+          Resource: '*'
+
+resources:
+  Resources:
+    WorkerQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.stage}-worker-queue
+        VisibilityTimeout: 300 # Should match or exceed function timeout
+        MaximumMessageSize: 262144 # 256 KB
+        MessageRetentionPeriod: 604800 # 7 days
 
 functions:
   - ${file(./src/tasks/functions.yml)}

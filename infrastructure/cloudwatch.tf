@@ -23,25 +23,43 @@ resource "aws_s3_bucket_policy" "cloudwatch_bucket" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Sid" : "Allow Cloudwatch to check bucket permissions",
+        "Sid" : "AWSLogDeliveryGetBucketACL",
         "Effect" : "Allow",
         "Principal" : {
           "Service" : "logs.amazonaws.com"
         },
         "Action" : "s3:GetBucketAcl",
-        "Resource" : "arn:aws:s3:::${var.cloudwatch_bucket_name}"
+        "Resource" : aws_s3_bucket.cloudwatch_bucket.arn
       },
       {
-        "Sid" : "Allow Cloudwatch to write to bucket",
+        "Sid" : "AWSLogDeliveryWrite",
         "Effect" : "Allow",
         "Principal" : {
           "Service" : "logs.amazonaws.com"
         },
         "Action" : "s3:PutObject",
-        "Resource" : "arn:aws:s3:::${var.cloudwatch_bucket_name}/*",
+        "Resource" : [
+          aws_s3_bucket.cloudwatch_bucket.arn,
+          "${aws_s3_bucket.cloudwatch_bucket.arn}/*"
+        ],
         "Condition" : {
           "StringEquals" : {
             "s3:x-amz-acl" : "bucket-owner-full-control"
+          }
+        }
+      },
+      {
+        "Sid" : "RequireSSLRequests",
+        "Action" : "s3:*",
+        "Effect" : "Deny",
+        "Principal" : "*",
+        "Resource" : [
+          aws_s3_bucket.cloudwatch_bucket.arn,
+          "${aws_s3_bucket.cloudwatch_bucket.arn}/*"
+        ],
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : "false"
           }
         }
       }
