@@ -8,10 +8,16 @@ export const handler: Handler = async (event) => {
   try {
     // Get the SQS record and message body
     const sqsRecord: SQSRecord = event.Records[0];
-    const commandOptions: string = sqsRecord.body;
+    const body: string = sqsRecord.body;
 
-    console.log(commandOptions);
+    console.log(body);
 
+    let commandOptions;
+    if (body === 'SHODAN') {
+      commandOptions = './worker/shodan.sh';
+    } else {
+      commandOptions = body;
+    }
     // Run command in queue message in Fargate
     const params: AWS.ECS.RunTaskRequest = {
       cluster: process.env.FARGATE_CLUSTER_NAME!,
