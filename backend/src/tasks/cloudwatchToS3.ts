@@ -29,9 +29,7 @@ export const handler = async () => {
 
   while (true) {
     const response = await logs.send(new DescribeLogGroupsCommand(args));
-    console.log(`response: ${JSON.stringify(response)}`);
     logGroups = logGroups.concat(response.logGroups!);
-    console.log(`logGroups: ${JSON.stringify(logGroups)}`);
     if (!response.nextToken) {
       break;
     }
@@ -63,7 +61,9 @@ export const handler = async () => {
     console.log('--> Exporting ' + logGroupName + ' to ' + logBucketName);
 
     if (exportTime - parseInt(ssmValue) < 24 * 60 * 60 * 1000) {
-      console.log('Skipped until 24hrs from last export');
+      console.log(
+        'Skipped: log group was already exported in the last 24 hours'
+      );
       continue;
     }
 
