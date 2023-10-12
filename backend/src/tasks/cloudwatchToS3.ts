@@ -48,12 +48,13 @@ export const handler = async () => {
       const ssmResponse = await ssm.send(
         new GetParameterCommand({ Name: ssmParameterName })
       );
+      console.log(`ssmResponse: ${JSON.stringify(ssmResponse)}`);
       ssmValue = ssmResponse.Parameter?.Value || '0';
     } catch (error) {
       if (error.name !== 'ParameterNotFound') {
-        console.error('Error fetching SSM parameter: ' + error.message);
+        console.error('Error fetching SSM parameter: ' + JSON.stringify(error));
       }
-      console.error(`error: ${error.message}`);
+      console.error(`ssm.send error: ${JSON.stringify(error)}`);
     }
 
     const exportTime = Math.round(Date.now());
@@ -78,18 +79,16 @@ export const handler = async () => {
         })
       );
 
-      console.log('    Task created: ' + response.taskId);
+      console.log('Task created: ' + response.taskId);
+      console.log(`logs.send response: ${JSON.stringify(response)}`);
       await new Promise((resolve) => setTimeout(resolve, 5000));
     } catch (error) {
       if (error.name === 'LimitExceededException') {
-        console.log(error.message);
+        console.log(JSON.stringify(error));
         return;
       }
       console.error(
-        'Error exporting ' +
-          logGroupName +
-          ': ' +
-          (error.message || JSON.stringify(error))
+        'Error exporting ' + logGroupName + ': ' + JSON.stringify(error)
       );
       continue;
     }
@@ -102,6 +101,7 @@ export const handler = async () => {
         Overwrite: true
       })
     );
+    console.log('SSM parameter updated: ' + ssmParameterName);
   }
   await delay(10 * 1000); // prevents LimitExceededException (AWS allows only one export task at a time)
 };
