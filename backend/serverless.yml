@@ -44,7 +44,6 @@ provider:
             - ecs:RunTask
             - ecs:ListTasks
             - iam:PassRole
-            - logs:GetLogEvents
           Resource: '*'
         - Effect: Allow
           Action:
@@ -70,9 +69,12 @@ provider:
           Resource: '*'
         - Effect: Allow
           Action:
+            - logs:CreateExportTask
+            - logs:CreateLogStream
             - logs:Describe*
             - logs:Get*
             - logs:List*
+            - logs:PutLogEvents
             - logs:StartQuery
             - logs:StopQuery
             - logs:TestMetricFilter
