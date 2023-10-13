@@ -39,11 +39,13 @@ export const handler = async () => {
   }
 
   for (const logGroup of logGroups) {
-    const command = new ListTagsForResourceCommand({
+    const listTagsCommand = new ListTagsForResourceCommand({
       resourceArn: logGroup.arn!
     });
-    const response = await logs.send(command);
-    const logGroupTags = response.tags || {};
+    const listTagsResponse = await logs.send(listTagsCommand);
+    console.log(`listTagsCommand: ${JSON.stringify(listTagsCommand)}`);
+    console.log(`listTagsResponse: ${JSON.stringify(listTagsResponse)}`);
+    const logGroupTags = listTagsResponse.tags || {};
     if (!logGroupTags[stage!]) {
       console.log(
         `Skipping log group: ${logGroup.logGroupName} (no ${stage} tag)`
@@ -52,15 +54,16 @@ export const handler = async () => {
     }
     const logGroupName = logGroup.logGroupName!;
     console.log('Processing log group: ' + logGroupName);
-    const ssmParameterName = (
-      '/log-exporter-last-export/' + logGroupName
-    ).replace('//', '/');
+    const ssmParameterName = `last-export-to-s3/${logGroupName}`.replace(
+      '//',
+      '/'
+    );
     let ssmValue = '0';
 
     try {
-      const ssmResponse = await ssm.send(
-        new GetParameterCommand({ Name: ssmParameterName })
-      );
+      const ssmCommand = new GetParameterCommand({ Name: ssmParameterName });
+      const ssmResponse = await ssm.send(ssmCommand);
+      console.log(`ssmCommand: ${JSON.stringify(ssmCommand)}`);
       console.log(`ssmResponse: ${JSON.stringify(ssmResponse)}`);
       ssmValue = ssmResponse.Parameter?.Value || '0';
     } catch (error) {
@@ -82,18 +85,17 @@ export const handler = async () => {
     }
 
     try {
-      const response = await logs.send(
-        new CreateExportTaskCommand({
-          logGroupName: logGroupName,
-          from: parseInt(ssmValue),
-          to: exportTime,
-          destination: logBucketName,
-          destinationPrefix: logGroupName.replace(/^\//, '').replace(/\/$/, '')
-        })
-      );
-
-      console.log('Task created: ' + response.taskId);
-      console.log(`logs.send response: ${JSON.stringify(response)}`);
+      const exportTaskCommand = new CreateExportTaskCommand({
+        logGroupName: logGroupName,
+        from: parseInt(ssmValue),
+        to: exportTime,
+        destination: logBucketName,
+        destinationPrefix: logGroupName.replace(/^\//, '').replace(/\/$/, '')
+      });
+      const exportTaskResponse = await logs.send(exportTaskCommand);
+      console.log(`exportTaskCommand: ${JSON.stringify(exportTaskCommand)}`);
+      console.log(`exportTaskResponse: ${JSON.stringify(exportTaskResponse)}`);
+      console.log('Task created: ' + exportTaskResponse.taskId);
       await new Promise((resolve) => setTimeout(resolve, 5000));
     } catch (error) {
       if (error.name === 'LimitExceededException') {
@@ -101,7 +103,7 @@ export const handler = async () => {
         return;
       }
       console.error(
-        'Error exporting ' + logGroupName + ': ' + JSON.stringify(error)
+        `Error exporting ${logGroupName}: ${JSON.stringify(error)}`
       );
       continue;
     }
