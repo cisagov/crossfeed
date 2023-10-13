@@ -120,5 +120,6 @@ export const handler = async () => {
     );
     console.log(`SSM parameter updated: ${ssmParameterName}`);
   }
+  // TODO: reevaluate the delay time after the first set of exports
   await delay(30 * 1000); // mitigates LimitExceededException (AWS allows only one export task at a time)
 };
