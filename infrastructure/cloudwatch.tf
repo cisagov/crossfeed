@@ -70,5 +70,5 @@ resource "aws_s3_bucket_policy" "cloudwatch_bucket" {
 resource "aws_s3_bucket_logging" "cloudwatch_bucket" {
   bucket        = aws_s3_bucket.cloudwatch_bucket.id
   target_bucket = aws_s3_bucket.logging_bucket.id
-  target_prefix = "cloudwatch_bucket"
+  target_prefix = "cloudwatch_bucket/"
 }
