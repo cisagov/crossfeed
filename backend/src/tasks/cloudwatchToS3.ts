@@ -2,8 +2,8 @@ import {
   CloudWatchLogsClient,
   DescribeLogGroupsCommand,
   DescribeLogGroupsRequest,
-  LogGroup,
   ListTagsForResourceCommand,
+  LogGroup,
   CreateExportTaskCommand
 } from '@aws-sdk/client-cloudwatch-logs';
 import {
@@ -14,117 +14,112 @@ import {
 
 const logs = new CloudWatchLogsClient({});
 const ssm = new SSMClient({});
-const region = process.env.AWS_REGION || 'us-east-1';
-const accountId = process.env.AWS_ACCOUNT_ID || '957221700844';
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const handler = async () => {
-  const extra_args: DescribeLogGroupsRequest = {};
-  let log_groups: LogGroup[] = [];
-  const log_groups_to_export: string[] = [];
+  const args: DescribeLogGroupsRequest = {};
+  let logGroups: LogGroup[] = [];
+  const logBucketName = process.env.CLOUDWATCH_BUCKET_NAME;
+  const stage = process.env.STAGE;
 
-  if (!process.env.CLOUDWATCH_BUCKET_NAME) {
-    console.error('Error: CLOUDWATCH_BUCKET_NAME not defined');
+  console.log(`logBucketName=${logBucketName}, stage=${stage}`);
+
+  if (!logBucketName || !stage) {
+    console.error(`Error: logBucketName or stage not defined`);
     return;
   }
 
-  console.log(
-    '--> CLOUDWATCH_BUCKET_NAME=' + process.env.CLOUDWATCH_BUCKET_NAME
-  );
-
   while (true) {
-    const response = await logs.send(new DescribeLogGroupsCommand(extra_args));
-    log_groups = log_groups.concat(response.logGroups!);
-
-    if (!response.nextToken) {
+    const describeLogGroupsResponse = await logs.send(
+      new DescribeLogGroupsCommand(args)
+    );
+    logGroups = logGroups.concat(describeLogGroupsResponse.logGroups!);
+    if (!describeLogGroupsResponse.nextToken) {
       break;
     }
-    extra_args.nextToken = response.nextToken;
+    args.nextToken = describeLogGroupsResponse.nextToken;
   }
 
-  for (const log_group of log_groups) {
-    const command = new ListTagsForResourceCommand({
-      resourceArn: `arn:aws:logs:${region}:${accountId}:log-group:${log_group.logGroupName}`
-    });
-    const response = await logs.send(command);
-    const log_group_tags = response.tags || {};
-
-    if (log_group_tags.ExportToS3 === 'true') {
-      log_groups_to_export.push(log_group.logGroupName!);
+  for (const logGroup of logGroups) {
+    const listTagsResponse = await logs.send(
+      new ListTagsForResourceCommand({
+        resourceArn: logGroup.arn
+      })
+    );
+    console.log(`listTagsResponse: ${JSON.stringify(listTagsResponse)}`);
+    const logGroupTags = listTagsResponse.tags || {};
+    if (logGroupTags.Stage !== stage) {
+      console.log(
+        `Skipping log group: ${logGroup.logGroupName} (no ${stage} tag)`
+      );
+      continue;
     }
-    await delay(10 * 1000); // prevents LimitExceededException (AWS allows only one export task at a time)
-  }
-
-  for (const log_group_name of log_groups_to_export) {
-    const ssm_parameter_name = (
-      '/log-exporter-last-export/' + log_group_name
-    ).replace('//', '/');
-    let ssm_value = '0';
+    const logGroupName = logGroup.logGroupName!;
+    console.log(`Processing log group: ${logGroupName}`);
+    const ssmParameterName = `last-export-to-s3/${logGroupName}`.replace(
+      '//',
+      '/'
+    );
+    let ssmValue = '0';
 
     try {
-      const ssm_response = await ssm.send(
-        new GetParameterCommand({ Name: ssm_parameter_name })
+      const ssmResponse = await ssm.send(
+        new GetParameterCommand({ Name: ssmParameterName })
       );
-      ssm_value = ssm_response.Parameter?.Value || '0';
+      console.log(`ssmResponse: ${JSON.stringify(ssmResponse)}`);
+      ssmValue = ssmResponse.Parameter?.Value || '0';
     } catch (error) {
       if (error.name !== 'ParameterNotFound') {
-        console.error('Error fetching SSM parameter: ' + error.message);
+        console.error(`Error fetching SSM parameter: ${JSON.stringify(error)}`);
       }
+      console.error(`ssm.send error: ${JSON.stringify(error)}`);
     }
 
-    const export_to_time = Math.round(Date.now());
+    const exportTime = Math.round(Date.now());
 
-    console.log(
-      '--> Exporting ' +
-        log_group_name +
-        ' to ' +
-        process.env.CLOUDWATCH_BUCKET_NAME
-    );
+    console.log(`--> Exporting ${logGroupName} to ${logBucketName}`);
 
-    if (export_to_time - parseInt(ssm_value) < 24 * 60 * 60 * 1000) {
-      // Haven't been 24hrs from the last export of this log group
-      console.log('    Skipped until 24hrs from last export is completed');
+    if (exportTime - parseInt(ssmValue) < 24 * 60 * 60 * 1000) {
+      console.log(
+        'Skipped: log group was already exported in the last 24 hours'
+      );
       continue;
     }
 
     try {
-      const response = await logs.send(
+      const exportTaskResponse = await logs.send(
         new CreateExportTaskCommand({
-          logGroupName: log_group_name,
-          from: parseInt(ssm_value),
-          to: export_to_time,
-          destination: process.env.CLOUDWATCH_BUCKET_NAME,
-          destinationPrefix: log_group_name
-            .replace(/^\//, '')
-            .replace(/\/$/, '')
+          logGroupName: logGroupName,
+          from: parseInt(ssmValue),
+          to: exportTime,
+          destination: logBucketName,
+          destinationPrefix: logGroupName.replace(/^\/|\/$/g, '')
         })
       );
-
-      console.log('    Task created: ' + response.taskId);
+      console.log(`exportTaskResponse: ${JSON.stringify(exportTaskResponse)}`);
+      console.log(`Task created: ${exportTaskResponse.taskId}`);
       await new Promise((resolve) => setTimeout(resolve, 5000));
     } catch (error) {
       if (error.name === 'LimitExceededException') {
-        console.log(
-          '    Need to wait until all tasks are finished (LimitExceededException). Continuing later...'
-        );
+        console.log(JSON.stringify(error));
         return;
       }
       console.error(
-        '    Error exporting ' +
-          log_group_name +
-          ': ' +
-          (error.message || JSON.stringify(error))
+        `Error exporting ${logGroupName}: ${JSON.stringify(error)}`
       );
       continue;
     }
 
     await ssm.send(
       new PutParameterCommand({
-        Name: ssm_parameter_name,
+        Name: ssmParameterName,
         Type: 'String',
-        Value: export_to_time.toString(),
+        Value: exportTime.toString(),
         Overwrite: true
       })
     );
+    console.log(`SSM parameter updated: ${ssmParameterName}`);
   }
+  // TODO: reevaluate the delay time after the first set of exports
+  await delay(30 * 1000); // mitigates LimitExceededException (AWS allows only one export task at a time)
 };

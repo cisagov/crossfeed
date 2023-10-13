@@ -29,6 +29,19 @@ bastion:
 makeGlobalAdmin:
   handler: src/tasks/makeGlobalAdmin.handler
 
+scanExecution:
+  handler: src/tasks/scanExecution.handler
+  timeout: 300 # 5 minutes
+  environment:
+    SQS_QUEUE_NAME: ${self:provider.stage}-worker-queue
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - WorkerQueue
+            - Arn
+        batchSize: 5 # Number of messages the lambda can continue to process while a Fargate is still running
+
 updateScanTaskStatus:
   handler: src/tasks/updateScanTaskStatus.handler
   events:
