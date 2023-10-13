@@ -2,6 +2,7 @@ import {
   CloudWatchLogsClient,
   DescribeLogGroupsCommand,
   DescribeLogGroupsRequest,
+  ListTagsForResourceCommand,
   LogGroup,
   CreateExportTaskCommand
 } from '@aws-sdk/client-cloudwatch-logs';
@@ -19,6 +20,7 @@ export const handler = async () => {
   const args: DescribeLogGroupsRequest = {};
   let logGroups: LogGroup[] = [];
   const logBucketName = process.env.CLOUDWATCH_BUCKET_NAME;
+  const stage = process.env.STAGE;
 
   if (!logBucketName) {
     console.error('Error: logBucketName not defined');
@@ -37,6 +39,17 @@ export const handler = async () => {
   }
 
   for (const logGroup of logGroups) {
+    const command = new ListTagsForResourceCommand({
+      resourceArn: logGroup.arn!
+    });
+    const response = await logs.send(command);
+    const logGroupTags = response.tags || {};
+    if (!logGroupTags[stage!]) {
+      console.log(
+        `Skipping log group: ${logGroup.logGroupName} (no ${stage} tag)`
+      );
+      continue;
+    }
     const logGroupName = logGroup.logGroupName!;
     console.log('Processing log group: ' + logGroupName);
     const ssmParameterName = (
