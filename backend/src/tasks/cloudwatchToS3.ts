@@ -92,7 +92,7 @@ export const handler = async () => {
         from: parseInt(ssmValue),
         to: exportTime,
         destination: logBucketName,
-        destinationPrefix: logGroupName.replace(/^\//, '').replace(/\/$/, '')
+        destinationPrefix: logGroupName.replace(/^\/|\/$/g, '')
       });
       const exportTaskResponse = await logs.send(exportTaskCommand);
       console.log(`exportTaskCommand: ${JSON.stringify(exportTaskCommand)}`);
