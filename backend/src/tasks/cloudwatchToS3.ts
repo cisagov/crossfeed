@@ -30,12 +30,14 @@ export const handler = async () => {
   console.log('--> logBucketName=' + logBucketName);
 
   while (true) {
-    const response = await logs.send(new DescribeLogGroupsCommand(args));
-    logGroups = logGroups.concat(response.logGroups!);
-    if (!response.nextToken) {
+    const describeLogGroupsResponse = await logs.send(
+      new DescribeLogGroupsCommand(args)
+    );
+    logGroups = logGroups.concat(describeLogGroupsResponse.logGroups!);
+    if (!describeLogGroupsResponse.nextToken) {
       break;
     }
-    args.nextToken = response.nextToken;
+    args.nextToken = describeLogGroupsResponse.nextToken;
   }
 
   for (const logGroup of logGroups) {
