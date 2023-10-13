@@ -42,13 +42,13 @@ export const handler = async () => {
 
   for (const logGroup of logGroups) {
     const listTagsCommand = new ListTagsForResourceCommand({
-      resourceArn: logGroup.arn!
+      resourceArn: logGroup.arn
     });
     const listTagsResponse = await logs.send(listTagsCommand);
     console.log(`listTagsCommand: ${JSON.stringify(listTagsCommand)}`);
     console.log(`listTagsResponse: ${JSON.stringify(listTagsResponse)}`);
     const logGroupTags = listTagsResponse.tags || {};
-    if (!logGroupTags[stage!]) {
+    if (logGroupTags.Stage !== stage) {
       console.log(
         `Skipping log group: ${logGroup.logGroupName} (no ${stage} tag)`
       );
@@ -120,5 +120,5 @@ export const handler = async () => {
     );
     console.log('SSM parameter updated: ' + ssmParameterName);
   }
-  await delay(10 * 1000); // prevents LimitExceededException (AWS allows only one export task at a time)
+  await delay(30 * 1000); // mitigates LimitExceededException (AWS allows only one export task at a time)
 };
