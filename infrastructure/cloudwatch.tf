@@ -72,3 +72,19 @@ resource "aws_s3_bucket_logging" "cloudwatch_bucket" {
   target_bucket = aws_s3_bucket.logging_bucket.id
   target_prefix = "cloudwatch_bucket/"
 }
+
+resource "aws_s3_bucket_versioning" "cloudwatch_bucket" {
+  bucket = aws_s3_bucket.cloudwatch_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "cloudwatch_bucket" {
+  bucket = aws_s3_bucket.cloudwatch_bucket.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}

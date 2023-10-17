@@ -41,9 +41,10 @@ export const handler = async () => {
   }
 
   for (const logGroup of logGroups) {
+    console.log(`logGroup: ${JSON.stringify(logGroup)}`);
     const listTagsResponse = await logs.send(
       new ListTagsForResourceCommand({
-        resourceArn: logGroup.arn
+        resourceArn: logGroup.arn!.replace(/:\*$/g, '') // .replace() removes the trailing :*
       })
     );
     console.log(`listTagsResponse: ${JSON.stringify(listTagsResponse)}`);
