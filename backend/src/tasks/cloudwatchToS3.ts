@@ -57,10 +57,8 @@ export const handler = async () => {
     }
     const logGroupName = logGroup.logGroupName!;
     console.log(`Processing log group: ${logGroupName}`);
-    const ssmParameterName = `last-export-to-s3/${logGroupName}`.replace(
-      '//',
-      '/'
-    );
+    const ssmParameterName =
+      `/logs/${stage}/last-export-to-s3/${logGroupName}`.replace('//', '/');
     let ssmValue = '0';
 
     try {
