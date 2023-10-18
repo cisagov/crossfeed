@@ -15,6 +15,6 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch1" {
   metric_name         = var.log_metric_name_cloudwatch1
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 0
+  evaluation_periods  = 1
   threshold           = 1
 }
