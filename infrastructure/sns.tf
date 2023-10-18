@@ -7,3 +7,11 @@ resource "aws_sns_topic_subscription" "alarms" {
   protocol  = "sqs"
   topic_arn = aws_sns_topic.alarms
 }
+
+resource "aws_sns_topic_policy" "alarms" {
+  arn    = aws_sns_topic.alarms.arn
+  policy = jsonencode({
+    version = "2012-10-17"
+
+  })
+}
