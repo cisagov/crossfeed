@@ -3,10 +3,10 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch1" {
   name           = var.log_metric_name_cloudwatch1
   pattern        = "{$.userIdentity.type=\"Root\" && $.userIdentity.invokedBy NOT EXISTS && $.eventType !=\"AwsServiceEvent\"}"
   metric_transformation {
-    name      = var.log_metric_name_cloudwatch1
-    namespace = var.log_metric_namespace_cloudwatch
-    default_value  = 0
-    value          = 1
+    name          = var.log_metric_name_cloudwatch1
+    namespace     = var.log_metric_namespace_cloudwatch
+    default_value = 0
+    value         = 1
   }
 }
 

@@ -9,7 +9,7 @@ resource "aws_sns_topic_subscription" "alarms" {
 }
 
 resource "aws_sns_topic_policy" "alarms" {
-  arn    = aws_sns_topic.alarms.arn
+  arn = aws_sns_topic.alarms.arn
   policy = jsonencode({
     version = "2012-10-17"
 
