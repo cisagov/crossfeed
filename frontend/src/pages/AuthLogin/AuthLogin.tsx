@@ -105,8 +105,8 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
             </div>
             <div className="temp_notification">
               {' '}
-              The downtime will begin on Monday, October 23, through the end
-              Monday, October 30. For additional information, please click{' '}
+              The downtime will begin on Wednesday, October 25, through the end
+              Wednesday, November 01. For additional information, please click{' '}
               <a href="crossfeed/frontend/src/pages/AuthLogin/2023OctMigrationNotice.pdf">
                 [here]
               </a>
