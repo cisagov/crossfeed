@@ -110,8 +110,8 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
             </div>
             <div className="temp_notification">
               For additional information, please click{' '}
-              <a href="https://s3.amazonaws.com/staging.crossfeed.cyber.dhs.gov/Notice.pdf">
-                [here]
+              <a href="https://s3.amazonaws.com/crossfeed.cyber.dhs.gov/Notice.pdf">
+                here
               </a>
             </div>
           </div>
