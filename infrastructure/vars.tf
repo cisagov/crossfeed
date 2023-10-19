@@ -64,16 +64,94 @@ variable "frontend_cert_arn" {
   default     = "arn:aws:acm:us-east-1:563873274798:certificate/7c6a5980-80e3-47a4-9f21-cbda44b6f34c"
 }
 
-variable "log_metric_namespace_cloudwatch" {
+variable "log_metric_namespace" {
   description = "log_metric_namespace"
   type        = string
-  default     = "crossfeed-staging-cloudwatch-controls"
+  default     = "LogMetrics"
 }
 
 variable "log_metric_name_cloudwatch1" {
   description = "log_metric_filter_cloudwatch1"
   type        = string
   default     = "crossfeed-staging-RootUserAccess"
+}
+
+variable "log_metric_name_cloudwatch2" {
+  description = "log_metric_filter_cloudwatch2"
+  type        = string
+  default     = "crossfeed-staging-UnauthorizedAPICall"
+}
+
+variable "log_metric_name_cloudwatch3" {
+  description = "log_metric_filter_cloudwatch3"
+  type        = string
+  default     = "crossfeed-staging-ConsoleLoginWithoutMFA"
+}
+
+variable "log_metric_name_cloudwatch4" {
+  description = "log_metric_filter_cloudwatch4"
+  type        = string
+  default     = "crossfeed-staging-IAMPolicyChange"
+}
+
+variable "log_metric_name_cloudwatch5" {
+  description = "log_metric_filter_cloudwatch5"
+  type        = string
+  default     = "crossfeed-staging-CloudTrailConfigurationChange"
+}
+
+variable "log_metric_name_cloudwatch6" {
+  description = "log_metric_filter_cloudwatch6"
+  type        = string
+  default     = "crossfeed-staging-ConsoleLoginFailure"
+}
+
+variable "log_metric_name_cloudwatch7" {
+  description = "log_metric_filter_cloudwatch7"
+  type        = string
+  default     = "crossfeed-staging-DisablingOrScheduledDeletionOfCMK"
+}
+
+variable "log_metric_name_cloudwatch8" {
+  description = "log_metric_filter_cloudwatch8"
+  type        = string
+  default     = "crossfeed-staging-S3BucketPolicyChange"
+}
+
+variable "log_metric_name_cloudwatch9" {
+  description = "log_metric_filter_cloudwatch9"
+  type        = string
+  default     = "crossfeed-staging-AWSConfigConfigurationChange"
+}
+
+variable "log_metric_name_cloudwatch10" {
+  description = "log_metric_filter_cloudwatch10"
+  type        = string
+  default     = "crossfeed-staging-SecurityGroupChange"
+}
+
+variable "log_metric_name_cloudwatch11" {
+  description = "log_metric_filter_cloudwatch11"
+  type        = string
+  default     = "crossfeed-staging-NACLChange"
+}
+
+variable "log_metric_name_cloudwatch12" {
+  description = "log_metric_filter_cloudwatch12"
+  type        = string
+  default     = "crossfeed-staging-NetworkGatewayChange"
+}
+
+variable "log_metric_name_cloudwatch13" {
+  description = "log_metric_filter_cloudwatch13"
+  type        = string
+  default     = "crossfeed-staging-RouteTableChange"
+}
+
+variable "log_metric_name_cloudwatch14" {
+  description = "log_metric_filter_cloudwatch14"
+  type        = string
+  default     = "crossfeed-staging-VPCChange"
 }
 
 variable "sns_topic_alarms" {
