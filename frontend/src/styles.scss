@@ -96,11 +96,49 @@ form[data-amplify-authenticator-setup-totp] {
 
 }
 
+.notification_box {
+  border-width: 3px;
+  border-style: solid;
+  border-color: #0070BB;
+}
+.platform_header {
+  padding-left: 105px;
+  padding-top: 10px;
+  color: #005ea2;;
+  font-weight: bold;
+  font-size: 20px;
+  background-color: white;
+}
+
+.notification_header {
+  transition: top .2s;
+  background-color: white;
+  font-weight: bold;
+  padding-left: 10px;
+ 
+}
+
+.temp_notification {
+  position: relative; 
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  transition: top .2s;
+  background-color: white;
+
+}
+
+.banner_box {
+  border-width: 3px;
+  border-style: solid;
+  border-color: #0070BB;
+}
+
 .banner_header {
-  padding-left: 195px;
+  padding-left: 185px;
   padding-top: 10px;
   transition: top .2s;
-  background-color: #DDEFF5;
+  background-color: white;
   font-weight: bold;
 }
 
@@ -110,5 +148,5 @@ form[data-amplify-authenticator-setup-totp] {
   padding-top: 10px;
   padding-bottom: 20px;
   transition: top .2s;
-  background-color: #DDEFF5;
+  background-color: white;
 }
