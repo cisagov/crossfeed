@@ -5,6 +5,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch1" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -19,6 +20,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch2" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -33,6 +35,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch3" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -47,6 +50,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch4" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -61,6 +65,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch5" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -75,6 +80,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch6" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -89,6 +95,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch7" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -103,6 +110,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch8" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -117,6 +125,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch9" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -131,6 +140,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch10" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -145,6 +155,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch11" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -159,6 +170,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch12" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -173,6 +185,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch13" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
@@ -187,6 +200,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch14" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
+  statistic           = "SampleCount"
 
   tags = {
     project = var.project
