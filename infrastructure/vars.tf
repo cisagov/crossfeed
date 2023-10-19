@@ -85,7 +85,7 @@ variable "sns_topic_alarms" {
 variable "sqs_queue_alarms" {
   description = "sqs_alarm_subscription_name"
   type        = string
-  default     = "crossfeed-staging-cis-alarms"
+  default     = "crossfeed-staging-cis-alarms.fifo"
 }
 
 variable "ssm_db_name" {
