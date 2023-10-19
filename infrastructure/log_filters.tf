@@ -8,11 +8,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch1" {
     default_value = 0
     value         = 1
   }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
-  }
 }
 
 resource "aws_cloudwatch_log_metric_filter" "cloudwatch2" {
@@ -24,11 +19,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch2" {
     namespace     = var.log_metric_namespace
     default_value = 0
     value         = 1
-  }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
   }
 }
 
@@ -42,11 +32,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch3" {
     default_value = 0
     value         = 1
   }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
-  }
 }
 
 resource "aws_cloudwatch_log_metric_filter" "cloudwatch4" {
@@ -58,11 +43,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch4" {
     namespace     = var.log_metric_namespace
     default_value = 0
     value         = 1
-  }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
   }
 }
 
@@ -76,11 +56,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch5" {
     default_value = 0
     value         = 1
   }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
-  }
 }
 
 resource "aws_cloudwatch_log_metric_filter" "cloudwatch6" {
@@ -92,11 +67,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch6" {
     namespace     = var.log_metric_namespace
     default_value = 0
     value         = 1
-  }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
   }
 }
 
@@ -110,11 +80,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch7" {
     default_value = 0
     value         = 1
   }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
-  }
 }
 
 resource "aws_cloudwatch_log_metric_filter" "cloudwatch8" {
@@ -126,11 +91,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch8" {
     namespace     = var.log_metric_namespace
     default_value = 0
     value         = 1
-  }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
   }
 }
 
@@ -144,11 +104,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch9" {
     default_value = 0
     value         = 1
   }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
-  }
 }
 
 resource "aws_cloudwatch_log_metric_filter" "cloudwatch10" {
@@ -160,11 +115,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch10" {
     namespace     = var.log_metric_namespace
     default_value = 0
     value         = 1
-  }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
   }
 }
 
@@ -178,11 +128,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch11" {
     default_value = 0
     value         = 1
   }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
-  }
 }
 
 resource "aws_cloudwatch_log_metric_filter" "cloudwatch12" {
@@ -194,11 +139,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch12" {
     namespace     = var.log_metric_namespace
     default_value = 0
     value         = 1
-  }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
   }
 }
 
@@ -212,11 +152,6 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch13" {
     default_value = 0
     value         = 1
   }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
-  }
 }
 
 resource "aws_cloudwatch_log_metric_filter" "cloudwatch14" {
@@ -228,10 +163,5 @@ resource "aws_cloudwatch_log_metric_filter" "cloudwatch14" {
     namespace     = var.log_metric_namespace
     default_value = 0
     value         = 1
-  }
-
-  tags = {
-    project = var.project
-    stage   = var.stage
   }
 }
