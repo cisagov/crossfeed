@@ -1,6 +1,6 @@
-resource "aws_cloudwatch_metric_alarm" "cloudwatch1" {
-  alarm_name          = "${var.log_metric_name_cloudwatch1}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch1
+resource "aws_cloudwatch_metric_alarm" "root_user" {
+  alarm_name          = "${var.log_metric_root_user}-alarm"
+  metric_name         = var.log_metric_root_user
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -13,9 +13,9 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch1" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch2" {
-  alarm_name          = "${var.log_metric_name_cloudwatch2}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch2
+resource "aws_cloudwatch_metric_alarm" "unauthorized_api_call" {
+  alarm_name          = "${var.log_metric_unauthorized_api_call}-alarm"
+  metric_name         = var.log_metric_unauthorized_api_call
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -28,9 +28,9 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch2" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch3" {
-  alarm_name          = "${var.log_metric_name_cloudwatch3}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch3
+resource "aws_cloudwatch_metric_alarm" "login_without_mfa" {
+  alarm_name          = "${var.log_metric_login_without_mfa}-alarm"
+  metric_name         = var.log_metric_login_without_mfa
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -43,9 +43,9 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch3" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch4" {
-  alarm_name          = "${var.log_metric_name_cloudwatch4}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch4
+resource "aws_cloudwatch_metric_alarm" "iam_policy" {
+  alarm_name          = "${var.log_metric_iam_policy}-alarm"
+  metric_name         = var.log_metric_iam_policy
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -58,9 +58,9 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch4" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch5" {
-  alarm_name          = "${var.log_metric_name_cloudwatch5}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch5
+resource "aws_cloudwatch_metric_alarm" "cloudtrail" {
+  alarm_name          = "${var.log_metric_cloudtrail}-alarm"
+  metric_name         = var.log_metric_cloudtrail
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -73,9 +73,9 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch5" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch6" {
-  alarm_name          = "${var.log_metric_name_cloudwatch6}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch6
+resource "aws_cloudwatch_metric_alarm" "login_failure" {
+  alarm_name          = "${var.log_metric_login_failure}-alarm"
+  metric_name         = var.log_metric_login_failure
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -88,9 +88,9 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch6" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch7" {
-  alarm_name          = "${var.log_metric_name_cloudwatch7}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch7
+resource "aws_cloudwatch_metric_alarm" "cmk_delete_disable" {
+  alarm_name          = "${var.log_metric_cmk_delete_disable}-alarm"
+  metric_name         = var.log_metric_cmk_delete_disable
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -103,9 +103,9 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch7" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch8" {
-  alarm_name          = "${var.log_metric_name_cloudwatch8}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch8
+resource "aws_cloudwatch_metric_alarm" "s3_bucket_policy" {
+  alarm_name          = "${var.log_metric_s3_bucket_policy}-alarm"
+  metric_name         = var.log_metric_s3_bucket_policy
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -118,9 +118,9 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch8" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch9" {
-  alarm_name          = "${var.log_metric_name_cloudwatch9}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch9
+resource "aws_cloudwatch_metric_alarm" "aws_config" {
+  alarm_name          = "${var.log_metric_aws_config}-alarm"
+  metric_name         = var.log_metric_aws_config
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -133,9 +133,9 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch9" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch10" {
-  alarm_name          = "${var.log_metric_name_cloudwatch10}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch10
+resource "aws_cloudwatch_metric_alarm" "security_group" {
+  alarm_name          = "${var.log_metric_security_group}-alarm"
+  metric_name         = var.log_metric_security_group
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -148,9 +148,9 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch10" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch11" {
-  alarm_name          = "${var.log_metric_name_cloudwatch11}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch11
+resource "aws_cloudwatch_metric_alarm" "nacl" {
+  alarm_name          = "${var.log_metric_nacl}-alarm"
+  metric_name         = var.log_metric_nacl
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -163,9 +163,9 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch11" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch12" {
-  alarm_name          = "${var.log_metric_name_cloudwatch12}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch12
+resource "aws_cloudwatch_metric_alarm" "network_gateway" {
+  alarm_name          = "${var.log_metric_network_gateway}-alarm"
+  metric_name         = var.log_metric_network_gateway
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -178,9 +178,9 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch12" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch13" {
-  alarm_name          = "${var.log_metric_name_cloudwatch13}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch13
+resource "aws_cloudwatch_metric_alarm" "route_table" {
+  alarm_name          = "${var.log_metric_route_table}-alarm"
+  metric_name         = var.log_metric_route_table
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -193,9 +193,23 @@ resource "aws_cloudwatch_metric_alarm" "cloudwatch13" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "cloudwatch14" {
-  alarm_name          = "${var.log_metric_name_cloudwatch14}-alarm"
-  metric_name         = var.log_metric_name_cloudwatch14
+resource "aws_cloudwatch_metric_alarm" "vpc" {
+  alarm_name          = "${var.log_metric_vpc}-alarm"
+  metric_name         = var.log_metric_vpc
+  alarm_actions       = [aws_sns_topic.alarms.arn]
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  threshold           = 1
+  statistic           = "SampleCount"
+
+  tags = {
+    project = var.project
+    stage   = var.stage
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "system_shutdown" {
+  alarm_name          = "${var.log_metric_system_shutdown}-alarm"
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1

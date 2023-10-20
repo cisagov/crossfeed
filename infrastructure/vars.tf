@@ -70,88 +70,94 @@ variable "log_metric_namespace" {
   default     = "LogMetrics"
 }
 
-variable "log_metric_name_cloudwatch1" {
-  description = "log_metric_filter_cloudwatch1"
+variable "log_metric_root_user" {
+  description = "log_metric_filter_root_user"
   type        = string
   default     = "crossfeed-staging-RootUserAccess"
 }
 
-variable "log_metric_name_cloudwatch2" {
-  description = "log_metric_filter_cloudwatch2"
+variable "log_metric_unauthorized_api_call" {
+  description = "log_metric_filter_unauthorized_api_call"
   type        = string
   default     = "crossfeed-staging-UnauthorizedAPICall"
 }
 
-variable "log_metric_name_cloudwatch3" {
-  description = "log_metric_filter_cloudwatch3"
+variable "log_metric_login_without_mfa" {
+  description = "log_metric_filter_login_without_mfa"
   type        = string
   default     = "crossfeed-staging-ConsoleLoginWithoutMFA"
 }
 
-variable "log_metric_name_cloudwatch4" {
-  description = "log_metric_filter_cloudwatch4"
+variable "log_metric_iam_policy" {
+  description = "log_metric_filter_iam_policy"
   type        = string
   default     = "crossfeed-staging-IAMPolicyChange"
 }
 
-variable "log_metric_name_cloudwatch5" {
-  description = "log_metric_filter_cloudwatch5"
+variable "log_metric_cloudtrail" {
+  description = "log_metric_filter_cloudtrail"
   type        = string
   default     = "crossfeed-staging-CloudTrailConfigurationChange"
 }
 
-variable "log_metric_name_cloudwatch6" {
-  description = "log_metric_filter_cloudwatch6"
+variable "log_metric_login_failure" {
+  description = "log_metric_filter_login_failure"
   type        = string
   default     = "crossfeed-staging-ConsoleLoginFailure"
 }
 
-variable "log_metric_name_cloudwatch7" {
-  description = "log_metric_filter_cloudwatch7"
+variable "log_metric_cmk_delete_disable" {
+  description = "log_metric_filter_cmk_delete_disable"
   type        = string
   default     = "crossfeed-staging-DisablingOrScheduledDeletionOfCMK"
 }
 
-variable "log_metric_name_cloudwatch8" {
-  description = "log_metric_filter_cloudwatch8"
+variable "log_metric_s3_bucket_policy" {
+  description = "log_metric_filter_s3_bucket_policy"
   type        = string
   default     = "crossfeed-staging-S3BucketPolicyChange"
 }
 
-variable "log_metric_name_cloudwatch9" {
-  description = "log_metric_filter_cloudwatch9"
+variable "log_metric_aws_config" {
+  description = "log_metric_filter_aws_config"
   type        = string
   default     = "crossfeed-staging-AWSConfigConfigurationChange"
 }
 
-variable "log_metric_name_cloudwatch10" {
-  description = "log_metric_filter_cloudwatch10"
+variable "log_metric_security_group" {
+  description = "log_metric_filter_security_group"
   type        = string
   default     = "crossfeed-staging-SecurityGroupChange"
 }
 
-variable "log_metric_name_cloudwatch11" {
-  description = "log_metric_filter_cloudwatch11"
+variable "log_metric_nacl" {
+  description = "log_metric_filter_nacl"
   type        = string
   default     = "crossfeed-staging-NACLChange"
 }
 
-variable "log_metric_name_cloudwatch12" {
-  description = "log_metric_filter_cloudwatch12"
+variable "log_metric_network_gateway" {
+  description = "log_metric_filter_network_gateway"
   type        = string
   default     = "crossfeed-staging-NetworkGatewayChange"
 }
 
-variable "log_metric_name_cloudwatch13" {
-  description = "log_metric_filter_cloudwatch13"
+variable "log_metric_route_table" {
+  description = "log_metric_filter_route_table"
   type        = string
   default     = "crossfeed-staging-RouteTableChange"
 }
 
-variable "log_metric_name_cloudwatch14" {
-  description = "log_metric_filter_cloudwatch14"
+variable "log_metric_vpc" {
+  description = "log_metric_filter_vpc"
   type        = string
   default     = "crossfeed-staging-VPCChange"
+}
+
+variable "log_metric_system_shutdown" {
+  description = "log_metric_filter_system_shutdown"
+  type        = string
+  default     = "crossfeed-staging-SystemShutdown"
 }
 
 variable "sns_topic_alarms" {
