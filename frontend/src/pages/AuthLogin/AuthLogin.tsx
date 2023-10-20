@@ -120,26 +120,25 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
             <div className="banner_login">
               {' '}
               This computer system, including all related equipment, networks,
-              (specifically including Internet access) are provided only for
-              authorized U.S. Government use. U.S. Government computer systems
-              monitored for all lawful purposes, authorized, for management of
-              the system, system, to system, to system, to facilitate protection
-              against unauthorized access, and verify security procedures,
-              procedures, procedures, procedures, survivability, operational
-              operational operational operational Monitoring includes active
-              attacks by authorized U.S. Government entities to test or verify
-              the security the security of this system. During monitoring,
-              monitoring, information may be examined, examined, recorded,
-              copied and used for authorized information, including personal
-              information, placed or sent over or sent over or sent over this
-              system may be may be may be monitored.
+              and network devices (specifically including Internet access) are
+              provided only for authorized U.S. Government use. U.S. Government
+              computer systems may be monitored for all lawful purposes,
+              including to ensure that their use is authorized, for management
+              of the system, to facilitate protection against unauthorized
+              access, and to verify security procedures, survivability, and
+              operational security. Monitoring includes active attacks by
+              authorized U.S. Government entities to test or verify the security
+              of this system. During monitoring, information may be examined,
+              recorded, copied and used for authorized purposes. All
+              information, including personal information, placed or sent over
+              this system may be monitored.
             </div>
             <div className="banner_login">
               {' '}
               Unauthorized use may subject you to criminal prosecution. Evidence
-              unauthorized use collected during monitoring may be used for
+              of unauthorized use collected during monitoring may be used for
               administrative, criminal, or other adverse action. Use of this
-              constitutes consent to monitoring for these purposes.
+              system constitutes consent to monitoring for these purposes.
             </div>
           </div>
         </ThemeProvider>
