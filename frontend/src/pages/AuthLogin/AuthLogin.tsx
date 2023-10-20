@@ -119,13 +119,6 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
             <div className="banner_header">**Warning**</div>
             <div className="banner_login">
               {' '}
-              This system contains U.S. Government Data. Unauthorized use of
-              downtime will begin on Monday, October 23, through the end of
-              Monday, Monday, Monday, Monday, October 30. unauthorized,
-              constitutes system.
-            </div>
-            <div className="banner_login">
-              {' '}
               This computer system, including all related equipment, networks,
               (specifically including Internet access) are provided only for
               authorized U.S. Government use. U.S. Government computer systems
