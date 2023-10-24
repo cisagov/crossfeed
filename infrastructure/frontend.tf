@@ -40,7 +40,6 @@ data "template_file" "policy_file" {
 
 resource "aws_s3_bucket_policy" "b" {
   bucket = aws_s3_bucket.frontend_bucket.id
-
   policy = data.template_file.policy_file.rendered
 }
 
@@ -87,6 +86,8 @@ resource "aws_iam_role" "frontend_lambda_iam" {
 }
 EOF
 }
+
+data "aws_ssm_parameter" "frontend_cert_arn" { name = var.ssm_frontend_cert_arn }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
@@ -172,7 +173,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = var.frontend_cert_arn
+    acm_certificate_arn      = data.aws_ssm_parameter.frontend_cert_arn.value
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2019"
   }
