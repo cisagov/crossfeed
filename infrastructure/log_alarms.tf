@@ -8,8 +8,8 @@ resource "aws_cloudwatch_metric_alarm" "root_user" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -23,8 +23,8 @@ resource "aws_cloudwatch_metric_alarm" "unauthorized_api_call" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -38,8 +38,8 @@ resource "aws_cloudwatch_metric_alarm" "login_without_mfa" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -53,8 +53,8 @@ resource "aws_cloudwatch_metric_alarm" "iam_policy" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -68,8 +68,8 @@ resource "aws_cloudwatch_metric_alarm" "cloudtrail" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -83,8 +83,8 @@ resource "aws_cloudwatch_metric_alarm" "login_failure" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -98,8 +98,8 @@ resource "aws_cloudwatch_metric_alarm" "cmk_delete_disable" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -113,8 +113,8 @@ resource "aws_cloudwatch_metric_alarm" "s3_bucket_policy" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -128,8 +128,8 @@ resource "aws_cloudwatch_metric_alarm" "aws_config" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -143,8 +143,8 @@ resource "aws_cloudwatch_metric_alarm" "security_group" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -158,8 +158,8 @@ resource "aws_cloudwatch_metric_alarm" "nacl" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -173,8 +173,8 @@ resource "aws_cloudwatch_metric_alarm" "network_gateway" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -188,8 +188,8 @@ resource "aws_cloudwatch_metric_alarm" "route_table" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -203,8 +203,8 @@ resource "aws_cloudwatch_metric_alarm" "vpc" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
 
@@ -217,7 +217,7 @@ resource "aws_cloudwatch_metric_alarm" "system_shutdown" {
   statistic           = "SampleCount"
 
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 }
