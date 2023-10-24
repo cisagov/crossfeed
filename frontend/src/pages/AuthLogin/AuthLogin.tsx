@@ -119,6 +119,12 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
             <div className="banner_header">**Warning**</div>
             <div className="banner_login">
               {' '}
+              This system contains U.S. Government Data. Unauthorized use of
+              this system is prohibited. Use of this computer system, authorized
+              or unauthorized, constitutes consent to monitoring of this system.
+            </div>
+            <div className="banner_login">
+              {' '}
               This computer system, including all related equipment, networks,
               and network devices (specifically including internet access) are
               provided only for authorized U.S. Government use. U.S. Government
