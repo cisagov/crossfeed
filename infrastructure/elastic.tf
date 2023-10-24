@@ -6,11 +6,12 @@ resource "aws_instance" "elk_stack" {
   instance_type               = var.elk_instance_class
   associate_public_ip_address = false
 
-
   tags = {
+    Name    = "${var.project}-${var.stage}-elk-stack"
     Project = var.project
     Stage   = var.stage
   }
+
   root_block_device {
     volume_size = 1000
   }
@@ -20,7 +21,6 @@ resource "aws_instance" "elk_stack" {
 
   iam_instance_profile = aws_iam_instance_profile.db_accessor.id
   user_data            = file("./ssm-agent-install.sh")
-
   lifecycle {
     # prevent_destroy = true
     ignore_changes = [ami]
