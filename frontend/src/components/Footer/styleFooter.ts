@@ -11,7 +11,7 @@ export const footerClasses = {
 };
 export const FooterRoot = styled('div')(({ theme }) => ({
   [`& .${footerClasses.footerBox}`]: {
-    position: 'absolute',
+    position: 'fix',
     bottom: 0,
     width: '100%',
     backgroundColor: theme.palette.primary.main
