@@ -21,6 +21,7 @@ resource "aws_instance" "elk_stack" {
 
   iam_instance_profile = aws_iam_instance_profile.db_accessor.id
   user_data            = file("./ssm-agent-install.sh")
+
   lifecycle {
     # prevent_destroy = true
     ignore_changes = [ami]
