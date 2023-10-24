@@ -1,38 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { styled } from '@mui/material/styles';
+import { classes, Root } from './orgListStyle';
 import { Organization } from 'types';
 import { Grid, Paper } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { Add } from '@mui/icons-material';
 import { OrganizationForm } from 'components/OrganizationForm';
 import { useAuthContext } from 'context';
-
-const PREFIX = 'OrganizationList';
-
-const classes = {
-  cardRoot: `${PREFIX}-cardRoot`
-};
-
-// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
-const Root = styled('div')(({ theme }) => ({
-  [`& .${classes.cardRoot}`]: {
-    cursor: 'pointer',
-    boxSizing: 'border-box',
-    border: '2px solid #DCDEE0',
-    height: 150,
-    width: 200,
-    borderRadius: '5px',
-    padding: '1rem',
-    color: '#3D4551',
-    '& h1': {
-      fontSize: '20px',
-      margin: 0
-    },
-    '& p': {
-      fontSize: '14px'
-    }
-  }
-}));
 
 export const OrganizationList: React.FC<{
   parent?: Organization;

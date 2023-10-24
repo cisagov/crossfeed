@@ -24,5 +24,6 @@ export const authCtx: AuthContextType = {
   apiPut: jest.fn(),
   maximumRole: 'user',
   touVersion: 'v1-user',
-  userMustSign: false
+  userMustSign: false,
+  userType: ''
 };

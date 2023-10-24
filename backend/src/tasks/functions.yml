@@ -1,3 +1,11 @@
+cloudwatchToS3:
+  handler: src/tasks/cloudwatchToS3.handler
+  timeout: 900
+  events:
+    - schedule: rate(4 hours)
+  reservedConcurrency: 1
+  memorySize: 4096
+
 scheduler:
   handler: src/tasks/scheduler.handler
   timeout: 900
@@ -20,6 +28,19 @@ bastion:
 
 makeGlobalAdmin:
   handler: src/tasks/makeGlobalAdmin.handler
+
+scanExecution:
+  handler: src/tasks/scanExecution.handler
+  timeout: 300 # 5 minutes
+  environment:
+    SQS_QUEUE_NAME: ${self:provider.stage}-worker-queue
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - WorkerQueue
+            - Arn
+        batchSize: 5 # Number of messages the lambda can continue to process while a Fargate is still running
 
 updateScanTaskStatus:
   handler: src/tasks/updateScanTaskStatus.handler

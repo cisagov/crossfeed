@@ -46,7 +46,7 @@
     "react-simple-maps": "^3.0.0",
     "react-table": "^7.8.0",
     "resolve-url-loader": "^5.0.0",
-    "universal-cookie": "^4.0.4",
+    "universal-cookie": "^6.1.1",
     "uswds": "^2.13.3",
     "web-vitals": "^2.1.4"
   },
@@ -102,6 +102,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^13.5.0",
     "@types/d3-scale": "^4.0.2",
     "@types/dompurify": "^3.0.2",
     "@types/file-saver": "^2.0.5",
@@ -116,17 +120,15 @@
     "@types/react-table": "^7.7.12",
     "ajv": "^8.12.0",
     "ajv-keywords": "^5.1.0",
-    "ts-jest": "^29.1.1",
-    "typescript": "^4.8.4",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.10",
     "sass": "^1.55.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^13.5.0",
-    "prettier": "^2.7.1"
+    "jest-date-mock": "^1.0.8",
+    "prettier": "^2.7.1",
+    "ts-jest": "^29.1.1",
+    "typescript": "^4.8.4"
   }
 }

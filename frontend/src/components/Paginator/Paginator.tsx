@@ -1,41 +1,10 @@
 import React, { PropsWithChildren } from 'react';
-import { styled } from '@mui/material/styles';
+import { classes, StyledPaper } from './paginatorStyle';
 import { TableInstance } from 'react-table';
-import { Button, Paper } from '@mui/material';
+import { Button } from '@mui/material';
 import { Pagination } from '@mui/material';
 import { exportCSV, ExportProps } from 'components/ImportExport';
 import { useAuthContext } from 'context';
-
-const PREFIX = 'Paginator';
-
-const classes = {
-  pagination: `${PREFIX}-pagination`,
-  exportButton: `${PREFIX}-exportButton`
-};
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  [`& .${classes.pagination}`]: {
-    height: 'auto',
-    flex: 0,
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    alignItems: 'center',
-    padding: '1rem 2rem',
-    '& > span': {
-      marginRight: '2rem'
-    },
-    '& *:focus': {
-      outline: 'none !important'
-    },
-    width: '100%',
-    justifyContent: 'flex-start'
-  },
-
-  [`& .${classes.exportButton}`]: {
-    justifyContent: 'flex-end',
-    marginLeft: 'auto'
-  }
-}));
 
 interface PaginatorProps<T extends object> {
   table: TableInstance<T>;
