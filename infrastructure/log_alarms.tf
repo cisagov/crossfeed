@@ -10,6 +10,7 @@ resource "aws_cloudwatch_metric_alarm" "root_user" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_high
   }
 }
 
@@ -25,6 +26,7 @@ resource "aws_cloudwatch_metric_alarm" "unauthorized_api_call" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_low
   }
 }
 
@@ -40,6 +42,7 @@ resource "aws_cloudwatch_metric_alarm" "login_without_mfa" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_high
   }
 }
 
@@ -55,6 +58,7 @@ resource "aws_cloudwatch_metric_alarm" "iam_policy" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_high
   }
 }
 
@@ -70,6 +74,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudtrail" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_high
   }
 }
 
@@ -85,6 +90,7 @@ resource "aws_cloudwatch_metric_alarm" "login_failure" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_low
   }
 }
 
@@ -100,6 +106,7 @@ resource "aws_cloudwatch_metric_alarm" "cmk_delete_disable" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_critical
   }
 }
 
@@ -115,6 +122,7 @@ resource "aws_cloudwatch_metric_alarm" "s3_bucket_policy" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_high
   }
 }
 
@@ -130,6 +138,7 @@ resource "aws_cloudwatch_metric_alarm" "aws_config" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_high
   }
 }
 
@@ -145,6 +154,7 @@ resource "aws_cloudwatch_metric_alarm" "security_group" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_high
   }
 }
 
@@ -160,6 +170,7 @@ resource "aws_cloudwatch_metric_alarm" "nacl" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_high
   }
 }
 
@@ -175,6 +186,7 @@ resource "aws_cloudwatch_metric_alarm" "network_gateway" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_high
   }
 }
 
@@ -190,6 +202,7 @@ resource "aws_cloudwatch_metric_alarm" "route_table" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_high
   }
 }
 
@@ -205,11 +218,12 @@ resource "aws_cloudwatch_metric_alarm" "vpc" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_high
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "system_shutdown" {
-  alarm_name          = "${var.log_metric_system_shutdown}-alarm"
+resource "aws_cloudwatch_metric_alarm" "ec2_shutdown" {
+  alarm_name          = "${var.log_metric_ec2_shutdown}-alarm"
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -219,5 +233,6 @@ resource "aws_cloudwatch_metric_alarm" "system_shutdown" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Severity = var.severity_critical
   }
 }

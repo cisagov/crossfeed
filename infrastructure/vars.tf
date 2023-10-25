@@ -154,10 +154,10 @@ variable "log_metric_vpc" {
   default     = "crossfeed-staging-VPCChange"
 }
 
-variable "log_metric_system_shutdown" {
-  description = "log_metric_filter_system_shutdown"
+variable "log_metric_ec2_shutdown" {
+  description = "log_metric_filter_ec2_shutdown"
   type        = string
-  default     = "crossfeed-staging-SystemShutdown"
+  default     = "crossfeed-staging-EC2Shutdown"
 }
 
 variable "sns_topic_alarms" {
@@ -530,4 +530,28 @@ variable "create_elk_instance" {
   description = "Whether to create a ELK instance. This instance can be used to run a ELK cluseter. It can be accessed using AWS Systems Manager Session Manager."
   type        = bool
   default     = false
+}
+
+variable "severity_critical" {
+  description = "severity_critical"
+  type        = string
+  default     = "CRITICAL"
+}
+
+variable "severity_high" {
+  description = "severity_high"
+  type        = string
+  default     = "HIGH"
+}
+
+variable "severity_medium" {
+  description = "severity_medium"
+  type        = string
+  default     = "MEDIUM"
+}
+
+variable "severity_low" {
+  description = "severity_low"
+  type        = string
+  default     = "LOW"
 }

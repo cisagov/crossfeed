@@ -166,12 +166,12 @@ resource "aws_cloudwatch_log_metric_filter" "vpc" {
   }
 }
 
-resource "aws_cloudwatch_log_metric_filter" "system_shutdown" {
+resource "aws_cloudwatch_log_metric_filter" "ec2_shutdown" {
   log_group_name = var.cloudtrail_log_group_name
-  name           = var.log_metric_system_shutdown
+  name           = var.log_metric_ec2_shutdown
   pattern        = "{($.eventName=StopInstances) || ($.eventName=TerminateInstances)}"
   metric_transformation {
-    name          = var.log_metric_system_shutdown
+    name          = var.log_metric_ec2_shutdown
     namespace     = var.log_metric_namespace
     default_value = 0
     value         = 1
