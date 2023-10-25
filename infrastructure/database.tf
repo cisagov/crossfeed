@@ -83,9 +83,11 @@ resource "aws_instance" "db_accessor" {
   associate_public_ip_address = false
 
   tags = {
+    Name    = "${var.project}-${var.stage}-db-accessor"
     Project = var.project
     Stage   = var.stage
   }
+
   root_block_device {
     volume_size = 1000
   }
