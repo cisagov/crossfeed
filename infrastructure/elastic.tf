@@ -6,11 +6,12 @@ resource "aws_instance" "elk_stack" {
   instance_type               = var.elk_instance_class
   associate_public_ip_address = false
 
-
   tags = {
+    Name    = "${var.project}-${var.stage}-elk-stack"
     Project = var.project
     Stage   = var.stage
   }
+
   root_block_device {
     volume_size = 1000
   }
