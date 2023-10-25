@@ -1,0 +1,5114 @@
+{
+  "@apidevtools/json-schema-ref-parser": {
+    "current": "9.1.2",
+    "wanted": "9.1.2",
+    "latest": "11.1.0",
+    "dependent": "@apidevtools/swagger-parser",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@apidevtools/json-schema-ref-parser"
+  },
+  "@apidevtools/swagger-parser": {
+    "current": "10.0.2",
+    "wanted": "10.0.2",
+    "latest": "10.1.0",
+    "dependent": "swagger-parser",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@apidevtools/swagger-parser"
+  },
+  "@babel/code-frame": {
+    "current": "7.12.11",
+    "wanted": "7.12.11",
+    "latest": "7.22.13",
+    "dependent": "eslint",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/eslint/node_modules/@babel/code-frame"
+  },
+  "@babel/compat-data": {
+    "current": "7.22.9",
+    "wanted": "7.23.2",
+    "latest": "7.23.2",
+    "dependent": "babel-plugin-polyfill-corejs2",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/compat-data"
+  },
+  "@babel/core": {
+    "current": "7.22.11",
+    "wanted": "7.23.2",
+    "latest": "7.23.2",
+    "dependent": "gatsby-worker",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/core"
+  },
+  "@babel/eslint-parser": {
+    "current": "7.22.11",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/eslint-parser"
+  },
+  "@babel/helper-builder-binary-assignment-operator-visitor": {
+    "current": "7.22.10",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "@babel/plugin-transform-exponentiation-operator",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helper-builder-binary-assignment-operator-visitor"
+  },
+  "@babel/helper-compilation-targets": {
+    "current": "7.22.10",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helper-compilation-targets"
+  },
+  "@babel/helper-create-class-features-plugin": {
+    "current": "7.22.11",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "@babel/plugin-transform-typescript",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helper-create-class-features-plugin"
+  },
+  "@babel/helper-create-regexp-features-plugin": {
+    "current": "7.22.9",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "@babel/plugin-transform-unicode-regex",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helper-create-regexp-features-plugin"
+  },
+  "@babel/helper-define-polyfill-provider": {
+    "current": "0.4.2",
+    "wanted": "0.4.3",
+    "latest": "0.4.3",
+    "dependent": "babel-plugin-polyfill-corejs3",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helper-define-polyfill-provider"
+  },
+  "@babel/helper-member-expression-to-functions": {
+    "current": "7.22.5",
+    "wanted": "7.23.0",
+    "latest": "7.23.0",
+    "dependent": "@babel/helper-replace-supers",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helper-member-expression-to-functions"
+  },
+  "@babel/helper-module-imports": {
+    "current": "7.22.5",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "babel-plugin-lodash",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helper-module-imports"
+  },
+  "@babel/helper-module-transforms": {
+    "current": "7.22.9",
+    "wanted": "7.23.0",
+    "latest": "7.23.0",
+    "dependent": "@babel/plugin-transform-modules-systemjs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helper-module-transforms"
+  },
+  "@babel/helper-remap-async-to-generator": {
+    "current": "7.22.9",
+    "wanted": "7.22.20",
+    "latest": "7.22.20",
+    "dependent": "@babel/plugin-transform-async-generator-functions",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helper-remap-async-to-generator"
+  },
+  "@babel/helper-replace-supers": {
+    "current": "7.22.9",
+    "wanted": "7.22.20",
+    "latest": "7.22.20",
+    "dependent": "@babel/plugin-transform-object-super",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helper-replace-supers"
+  },
+  "@babel/helper-validator-option": {
+    "current": "7.22.5",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "@babel/preset-typescript",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helper-validator-option"
+  },
+  "@babel/helper-wrap-function": {
+    "current": "7.22.10",
+    "wanted": "7.22.20",
+    "latest": "7.22.20",
+    "dependent": "@babel/helper-remap-async-to-generator",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helper-wrap-function"
+  },
+  "@babel/helpers": {
+    "current": "7.22.11",
+    "wanted": "7.23.2",
+    "latest": "7.23.2",
+    "dependent": "@babel/core",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/helpers"
+  },
+  "@babel/highlight": {
+    "current": "7.22.13",
+    "wanted": "7.22.20",
+    "latest": "7.22.20",
+    "dependent": "@babel/code-frame",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/highlight"
+  },
+  "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": {
+    "current": "7.22.5",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression"
+  },
+  "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": {
+    "current": "7.22.5",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining"
+  },
+  "@babel/plugin-proposal-decorators": {
+    "current": "7.22.10",
+    "wanted": "7.23.2",
+    "latest": "7.23.2",
+    "dependent": "babel-preset-react-app",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-proposal-decorators"
+  },
+  "@babel/plugin-proposal-private-property-in-object": {
+    "current": "7.21.0-placeholder-for-preset-env.2",
+    "wanted": "7.21.0-placeholder-for-preset-env.2",
+    "latest": "7.21.11",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-proposal-private-property-in-object"
+  },
+  "@babel/plugin-transform-async-generator-functions": {
+    "current": "7.22.11",
+    "wanted": "7.23.2",
+    "latest": "7.23.2",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-async-generator-functions"
+  },
+  "@babel/plugin-transform-block-scoping": {
+    "current": "7.22.10",
+    "wanted": "7.23.0",
+    "latest": "7.23.0",
+    "dependent": "babel-preset-fbjs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-block-scoping"
+  },
+  "@babel/plugin-transform-classes": {
+    "current": "7.22.6",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "babel-preset-gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-classes"
+  },
+  "@babel/plugin-transform-destructuring": {
+    "current": "7.22.10",
+    "wanted": "7.23.0",
+    "latest": "7.23.0",
+    "dependent": "babel-preset-fbjs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-destructuring"
+  },
+  "@babel/plugin-transform-for-of": {
+    "current": "7.22.5",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "babel-preset-fbjs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-for-of"
+  },
+  "@babel/plugin-transform-modules-amd": {
+    "current": "7.22.5",
+    "wanted": "7.23.0",
+    "latest": "7.23.0",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-modules-amd"
+  },
+  "@babel/plugin-transform-modules-commonjs": {
+    "current": "7.22.11",
+    "wanted": "7.23.0",
+    "latest": "7.23.0",
+    "dependent": "babel-preset-fbjs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-modules-commonjs"
+  },
+  "@babel/plugin-transform-modules-systemjs": {
+    "current": "7.22.11",
+    "wanted": "7.23.0",
+    "latest": "7.23.0",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-modules-systemjs"
+  },
+  "@babel/plugin-transform-object-rest-spread": {
+    "current": "7.22.11",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-object-rest-spread"
+  },
+  "@babel/plugin-transform-optional-chaining": {
+    "current": "7.22.12",
+    "wanted": "7.23.0",
+    "latest": "7.23.0",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-optional-chaining"
+  },
+  "@babel/plugin-transform-parameters": {
+    "current": "7.22.5",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "babel-preset-fbjs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-parameters"
+  },
+  "@babel/plugin-transform-react-jsx": {
+    "current": "7.22.5",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "eslint-plugin-flowtype",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-react-jsx"
+  },
+  "@babel/plugin-transform-runtime": {
+    "current": "7.22.10",
+    "wanted": "7.23.2",
+    "latest": "7.23.2",
+    "dependent": "babel-preset-react-app",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-runtime"
+  },
+  "@babel/plugin-transform-typescript": {
+    "current": "7.22.11",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "@babel/preset-typescript",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/plugin-transform-typescript"
+  },
+  "@babel/preset-env": {
+    "current": "7.22.10",
+    "wanted": "7.23.2",
+    "latest": "7.23.2",
+    "dependent": "babel-preset-react-app",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/preset-env"
+  },
+  "@babel/preset-modules": {
+    "current": "0.1.6-no-external-plugins",
+    "wanted": "0.1.6-no-external-plugins",
+    "latest": "0.1.6",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/preset-modules"
+  },
+  "@babel/preset-react": {
+    "current": "7.22.5",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "babel-preset-react-app",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/preset-react"
+  },
+  "@babel/preset-typescript": {
+    "current": "7.22.11",
+    "wanted": "7.23.2",
+    "latest": "7.23.2",
+    "dependent": "gatsby-plugin-typescript",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/preset-typescript"
+  },
+  "@babel/runtime": {
+    "current": "7.22.11",
+    "wanted": "7.23.2",
+    "latest": "7.23.2",
+    "dependent": "redux",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/runtime"
+  },
+  "@babel/runtime-corejs3": {
+    "current": "7.22.11",
+    "wanted": "7.23.2",
+    "latest": "7.23.2",
+    "dependent": "swagger-ui-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@babel/runtime-corejs3"
+  },
+  "@braintree/sanitize-url": {
+    "current": "6.0.2",
+    "wanted": "6.0.2",
+    "latest": "6.0.4",
+    "dependent": "swagger-ui-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@braintree/sanitize-url"
+  },
+  "@builder.io/partytown": {
+    "current": "0.7.6",
+    "wanted": "0.7.6",
+    "latest": "0.8.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@builder.io/partytown"
+  },
+  "@eslint-community/regexpp": {
+    "current": "4.8.0",
+    "wanted": "4.9.1",
+    "latest": "4.9.1",
+    "dependent": "eslint",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@eslint-community/regexpp"
+  },
+  "@eslint/eslintrc": {
+    "current": "0.4.3",
+    "wanted": "0.4.3",
+    "latest": "2.1.2",
+    "dependent": "eslint",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/@eslint/eslintrc"
+  },
+  "@eslint/js": {
+    "current": "8.48.0",
+    "wanted": "8.48.0",
+    "latest": "8.52.0",
+    "dependent": "eslint",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@eslint/js"
+  },
+  "@fortawesome/fontawesome-common-types": {
+    "current": "0.2.36",
+    "wanted": "0.2.36",
+    "latest": "6.4.2",
+    "dependent": "@fortawesome/free-solid-svg-icons",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@fortawesome/fontawesome-common-types"
+  },
+  "@fortawesome/fontawesome-svg-core": {
+    "current": "1.2.36",
+    "wanted": "6.4.2",
+    "latest": "6.4.2",
+    "dependent": "@fortawesome/react-fontawesome",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@fortawesome/fontawesome-svg-core"
+  },
+  "@fortawesome/free-solid-svg-icons": {
+    "current": "5.15.4",
+    "wanted": "5.15.4",
+    "latest": "6.4.2",
+    "dependent": "docs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@fortawesome/free-solid-svg-icons"
+  },
+  "@graphql-codegen/add": {
+    "current": "3.2.3",
+    "wanted": "3.2.3",
+    "latest": "5.0.0",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-codegen/add"
+  },
+  "@graphql-codegen/core": {
+    "current": "2.6.8",
+    "wanted": "2.6.8",
+    "latest": "4.0.0",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-codegen/core"
+  },
+  "@graphql-codegen/plugin-helpers": {
+    "current": "2.7.2",
+    "wanted": "2.7.2",
+    "latest": "5.0.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-codegen/plugin-helpers"
+  },
+  "@graphql-codegen/schema-ast": {
+    "current": "2.6.1",
+    "wanted": "2.6.1",
+    "latest": "4.0.0",
+    "dependent": "@graphql-codegen/typescript",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-codegen/schema-ast"
+  },
+  "@graphql-codegen/typescript": {
+    "current": "2.8.8",
+    "wanted": "2.8.8",
+    "latest": "4.0.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-codegen/typescript"
+  },
+  "@graphql-codegen/typescript-operations": {
+    "current": "2.5.13",
+    "wanted": "2.5.13",
+    "latest": "4.0.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-codegen/typescript-operations"
+  },
+  "@graphql-codegen/visitor-plugin-common": {
+    "current": "2.13.8",
+    "wanted": "2.13.8",
+    "latest": "4.0.1",
+    "dependent": "@graphql-codegen/typescript-operations",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-codegen/visitor-plugin-common"
+  },
+  "@graphql-tools/code-file-loader": {
+    "current": "7.3.23",
+    "wanted": "7.3.23",
+    "latest": "8.0.3",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-tools/code-file-loader"
+  },
+  "@graphql-tools/graphql-tag-pluck": {
+    "current": "7.5.2",
+    "wanted": "7.5.2",
+    "latest": "8.1.0",
+    "dependent": "@graphql-tools/code-file-loader",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-tools/graphql-tag-pluck"
+  },
+  "@graphql-tools/load": {
+    "current": "7.8.14",
+    "wanted": "7.8.14",
+    "latest": "8.0.0",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-tools/load"
+  },
+  "@graphql-tools/merge": {
+    "current": "8.4.2",
+    "wanted": "8.4.2",
+    "latest": "9.0.0",
+    "dependent": "@graphql-tools/schema",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-tools/merge"
+  },
+  "@graphql-tools/optimize": {
+    "current": "1.4.0",
+    "wanted": "1.4.0",
+    "latest": "2.0.0",
+    "dependent": "@graphql-codegen/visitor-plugin-common",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-tools/optimize"
+  },
+  "@graphql-tools/relay-operation-optimizer": {
+    "current": "6.5.18",
+    "wanted": "6.5.18",
+    "latest": "7.0.0",
+    "dependent": "@graphql-codegen/visitor-plugin-common",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-tools/relay-operation-optimizer"
+  },
+  "@graphql-tools/schema": {
+    "current": "9.0.19",
+    "wanted": "9.0.19",
+    "latest": "10.0.0",
+    "dependent": "@graphql-tools/load",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-tools/schema"
+  },
+  "@graphql-tools/utils": {
+    "current": "9.2.1",
+    "wanted": "9.2.1",
+    "latest": "10.0.7",
+    "dependent": "@graphql-tools/schema",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@graphql-tools/utils"
+  },
+  "@hapi/hoek": {
+    "current": "9.3.0",
+    "wanted": "9.3.0",
+    "latest": "11.0.2",
+    "dependent": "joi",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@hapi/hoek"
+  },
+  "@hapi/topo": {
+    "current": "5.1.0",
+    "wanted": "5.1.0",
+    "latest": "6.0.2",
+    "dependent": "joi",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@hapi/topo"
+  },
+  "@humanwhocodes/config-array": {
+    "current": "0.5.0",
+    "wanted": "0.5.0",
+    "latest": "0.11.13",
+    "dependent": "eslint",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/@humanwhocodes/config-array"
+  },
+  "@humanwhocodes/object-schema": {
+    "current": "1.2.1",
+    "wanted": "1.2.1",
+    "latest": "2.0.1",
+    "dependent": "@humanwhocodes/config-array",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@humanwhocodes/object-schema"
+  },
+  "@jridgewell/trace-mapping": {
+    "current": "0.3.19",
+    "wanted": "0.3.20",
+    "latest": "0.3.20",
+    "dependent": "terser-webpack-plugin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@jridgewell/trace-mapping"
+  },
+  "@lezer/common": {
+    "current": "0.15.12",
+    "wanted": "0.15.12",
+    "latest": "1.1.0",
+    "dependent": "@mischnic/json-sourcemap",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@lezer/common"
+  },
+  "@lezer/lr": {
+    "current": "0.15.8",
+    "wanted": "0.15.8",
+    "latest": "1.3.13",
+    "dependent": "@mischnic/json-sourcemap",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@lezer/lr"
+  },
+  "@lmdb/lmdb-darwin-arm64": {
+    "wanted": "2.5.3",
+    "latest": "2.8.5",
+    "dependent": "lmdb"
+  },
+  "@lmdb/lmdb-darwin-x64": {
+    "current": "2.5.3",
+    "wanted": "2.5.3",
+    "latest": "2.8.5",
+    "dependent": "lmdb",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@lmdb/lmdb-darwin-x64"
+  },
+  "@lmdb/lmdb-linux-arm": {
+    "wanted": "2.5.3",
+    "latest": "2.8.5",
+    "dependent": "lmdb"
+  },
+  "@lmdb/lmdb-linux-arm64": {
+    "wanted": "2.5.3",
+    "latest": "2.8.5",
+    "dependent": "lmdb"
+  },
+  "@lmdb/lmdb-linux-x64": {
+    "wanted": "2.5.3",
+    "latest": "2.8.5",
+    "dependent": "lmdb"
+  },
+  "@lmdb/lmdb-win32-x64": {
+    "wanted": "2.5.3",
+    "latest": "2.8.5",
+    "dependent": "lmdb"
+  },
+  "@mischnic/json-sourcemap": {
+    "current": "0.1.0",
+    "wanted": "0.1.1",
+    "latest": "0.1.1",
+    "dependent": "@parcel/diagnostic",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@mischnic/json-sourcemap"
+  },
+  "@msgpackr-extract/msgpackr-extract-darwin-arm64": {
+    "wanted": "3.0.2",
+    "latest": "3.0.2",
+    "dependent": "msgpackr-extract"
+  },
+  "@msgpackr-extract/msgpackr-extract-linux-arm": {
+    "wanted": "3.0.2",
+    "latest": "3.0.2",
+    "dependent": "msgpackr-extract"
+  },
+  "@msgpackr-extract/msgpackr-extract-linux-arm64": {
+    "wanted": "3.0.2",
+    "latest": "3.0.2",
+    "dependent": "msgpackr-extract"
+  },
+  "@msgpackr-extract/msgpackr-extract-linux-x64": {
+    "wanted": "3.0.2",
+    "latest": "3.0.2",
+    "dependent": "msgpackr-extract"
+  },
+  "@msgpackr-extract/msgpackr-extract-win32-x64": {
+    "wanted": "3.0.2",
+    "latest": "3.0.2",
+    "dependent": "msgpackr-extract"
+  },
+  "@nodelib/fs.scandir": {
+    "current": "2.1.5",
+    "wanted": "2.1.5",
+    "latest": "3.0.0",
+    "dependent": "@nodelib/fs.walk",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@nodelib/fs.scandir"
+  },
+  "@nodelib/fs.stat": {
+    "current": "2.0.5",
+    "wanted": "2.0.5",
+    "latest": "3.0.0",
+    "dependent": "fast-glob",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@nodelib/fs.stat"
+  },
+  "@nodelib/fs.walk": {
+    "current": "1.2.8",
+    "wanted": "1.2.8",
+    "latest": "2.0.0",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@nodelib/fs.walk"
+  },
+  "@parcel/bundler-default": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "gatsby-parcel-config",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/bundler-default"
+  },
+  "@parcel/cache": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/cache"
+  },
+  "@parcel/codeframe": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "@parcel/utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/codeframe"
+  },
+  "@parcel/compressor-raw": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "gatsby-parcel-config",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/compressor-raw"
+  },
+  "@parcel/core": {
+    "current": "2.8.3",
+    "wanted": "2.10.0",
+    "latest": "2.10.0",
+    "dependent": "gatsby-parcel-config",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/core"
+  },
+  "@parcel/diagnostic": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "@parcel/workers",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/diagnostic"
+  },
+  "@parcel/events": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "@parcel/logger",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/events"
+  },
+  "@parcel/fs": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "@parcel/types",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/fs"
+  },
+  "@parcel/fs-search": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.9.3",
+    "dependent": "@parcel/fs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/fs-search"
+  },
+  "@parcel/graph": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "3.0.0",
+    "dependent": "@parcel/core",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/graph"
+  },
+  "@parcel/hash": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.9.3",
+    "dependent": "@parcel/utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/hash"
+  },
+  "@parcel/logger": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "@parcel/workers",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/logger"
+  },
+  "@parcel/markdown-ansi": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "@parcel/utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/markdown-ansi"
+  },
+  "@parcel/namer-default": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "gatsby-parcel-config",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/namer-default"
+  },
+  "@parcel/node-resolver-core": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "3.1.0",
+    "dependent": "@parcel/resolver-default",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/node-resolver-core"
+  },
+  "@parcel/optimizer-terser": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "gatsby-parcel-config",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/optimizer-terser"
+  },
+  "@parcel/package-manager": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "@parcel/types",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/package-manager"
+  },
+  "@parcel/packager-js": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "gatsby-parcel-config",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/packager-js"
+  },
+  "@parcel/packager-raw": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "gatsby-parcel-config",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/packager-raw"
+  },
+  "@parcel/plugin": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "@parcel/resolver-default",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/plugin"
+  },
+  "@parcel/reporter-dev-server": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "gatsby-parcel-config",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/reporter-dev-server"
+  },
+  "@parcel/resolver-default": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "gatsby-parcel-config",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/resolver-default"
+  },
+  "@parcel/runtime-js": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "gatsby-parcel-config",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/runtime-js"
+  },
+  "@parcel/transformer-js": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "gatsby-parcel-config",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/transformer-js"
+  },
+  "@parcel/transformer-json": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "gatsby-parcel-config",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/transformer-json"
+  },
+  "@parcel/types": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "@parcel/workers",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/types"
+  },
+  "@parcel/utils": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "@parcel/workers",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/utils"
+  },
+  "@parcel/watcher-android-arm64": {
+    "wanted": "2.3.0",
+    "latest": "2.3.0",
+    "dependent": "@parcel/watcher"
+  },
+  "@parcel/watcher-darwin-arm64": {
+    "wanted": "2.3.0",
+    "latest": "2.3.0",
+    "dependent": "@parcel/watcher"
+  },
+  "@parcel/watcher-freebsd-x64": {
+    "wanted": "2.3.0",
+    "latest": "2.3.0",
+    "dependent": "@parcel/watcher"
+  },
+  "@parcel/watcher-linux-arm-glibc": {
+    "wanted": "2.3.0",
+    "latest": "2.3.0",
+    "dependent": "@parcel/watcher"
+  },
+  "@parcel/watcher-linux-arm64-glibc": {
+    "wanted": "2.3.0",
+    "latest": "2.3.0",
+    "dependent": "@parcel/watcher"
+  },
+  "@parcel/watcher-linux-arm64-musl": {
+    "wanted": "2.3.0",
+    "latest": "2.3.0",
+    "dependent": "@parcel/watcher"
+  },
+  "@parcel/watcher-linux-x64-glibc": {
+    "wanted": "2.3.0",
+    "latest": "2.3.0",
+    "dependent": "@parcel/watcher"
+  },
+  "@parcel/watcher-linux-x64-musl": {
+    "wanted": "2.3.0",
+    "latest": "2.3.0",
+    "dependent": "@parcel/watcher"
+  },
+  "@parcel/watcher-win32-arm64": {
+    "wanted": "2.3.0",
+    "latest": "2.3.0",
+    "dependent": "@parcel/watcher"
+  },
+  "@parcel/watcher-win32-ia32": {
+    "wanted": "2.3.0",
+    "latest": "2.3.0",
+    "dependent": "@parcel/watcher"
+  },
+  "@parcel/watcher-win32-x64": {
+    "wanted": "2.3.0",
+    "latest": "2.3.0",
+    "dependent": "@parcel/watcher"
+  },
+  "@parcel/workers": {
+    "current": "2.8.3",
+    "wanted": "2.8.3",
+    "latest": "2.10.0",
+    "dependent": "@parcel/types",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/workers"
+  },
+  "@rushstack/eslint-patch": {
+    "current": "1.3.3",
+    "wanted": "1.5.1",
+    "latest": "1.5.1",
+    "dependent": "eslint-config-react-app",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@rushstack/eslint-patch"
+  },
+  "@sideway/address": {
+    "current": "4.1.4",
+    "wanted": "4.1.4",
+    "latest": "5.0.0",
+    "dependent": "joi",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@sideway/address"
+  },
+  "@sinclair/typebox": {
+    "current": "0.27.8",
+    "wanted": "0.27.8",
+    "latest": "0.31.18",
+    "dependent": "@jest/schemas",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@sinclair/typebox"
+  },
+  "@sindresorhus/is": {
+    "current": "5.6.0",
+    "wanted": "5.6.0",
+    "latest": "6.0.1",
+    "dependent": "got",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/package-json/node_modules/@sindresorhus/is"
+  },
+  "@sindresorhus/slugify": {
+    "current": "1.1.2",
+    "wanted": "1.1.2",
+    "latest": "2.2.1",
+    "dependent": "gatsby-plugin-page-creator",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@sindresorhus/slugify"
+  },
+  "@sindresorhus/transliterate": {
+    "current": "0.1.2",
+    "wanted": "0.1.2",
+    "latest": "1.6.0",
+    "dependent": "@sindresorhus/slugify",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@sindresorhus/transliterate"
+  },
+  "@swagger-api/apidom-ast": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-parser-adapter-yaml-1-2",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-ast"
+  },
+  "@swagger-api/apidom-core": {
+    "current": "0.75.0",
+    "wanted": "0.79.0",
+    "latest": "0.79.0",
+    "dependent": "swagger-client",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-core"
+  },
+  "@swagger-api/apidom-json-pointer": {
+    "current": "0.75.0",
+    "wanted": "0.79.0",
+    "latest": "0.79.0",
+    "dependent": "swagger-client",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-json-pointer"
+  },
+  "@swagger-api/apidom-ns-api-design-systems": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-parser-adapter-api-design-systems-yaml",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-ns-api-design-systems"
+  },
+  "@swagger-api/apidom-ns-asyncapi-2": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-reference",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-ns-asyncapi-2"
+  },
+  "@swagger-api/apidom-ns-json-schema-draft-4": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-ns-openapi-3-0",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-ns-json-schema-draft-4"
+  },
+  "@swagger-api/apidom-ns-json-schema-draft-6": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-ns-json-schema-draft-7",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-ns-json-schema-draft-6"
+  },
+  "@swagger-api/apidom-ns-json-schema-draft-7": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-ns-asyncapi-2",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-ns-json-schema-draft-7"
+  },
+  "@swagger-api/apidom-ns-openapi-3-0": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-reference",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-ns-openapi-3-0"
+  },
+  "@swagger-api/apidom-ns-openapi-3-1": {
+    "current": "0.75.0",
+    "wanted": "0.79.0",
+    "latest": "0.79.0",
+    "dependent": "swagger-client",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-ns-openapi-3-1"
+  },
+  "@swagger-api/apidom-parser-adapter-api-design-systems-json": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-reference",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-parser-adapter-api-design-systems-json"
+  },
+  "@swagger-api/apidom-parser-adapter-api-design-systems-yaml": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-reference",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-parser-adapter-api-design-systems-yaml"
+  },
+  "@swagger-api/apidom-parser-adapter-asyncapi-json-2": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-reference",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-parser-adapter-asyncapi-json-2"
+  },
+  "@swagger-api/apidom-parser-adapter-asyncapi-yaml-2": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-reference",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-parser-adapter-asyncapi-yaml-2"
+  },
+  "@swagger-api/apidom-parser-adapter-json": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-parser-adapter-openapi-json-3-0",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-parser-adapter-json"
+  },
+  "@swagger-api/apidom-parser-adapter-openapi-json-3-0": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-reference",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-parser-adapter-openapi-json-3-0"
+  },
+  "@swagger-api/apidom-parser-adapter-openapi-json-3-1": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-reference",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-parser-adapter-openapi-json-3-1"
+  },
+  "@swagger-api/apidom-parser-adapter-openapi-yaml-3-0": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-reference",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-parser-adapter-openapi-yaml-3-0"
+  },
+  "@swagger-api/apidom-parser-adapter-openapi-yaml-3-1": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-reference",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-parser-adapter-openapi-yaml-3-1"
+  },
+  "@swagger-api/apidom-parser-adapter-yaml-1-2": {
+    "current": "0.75.0",
+    "wanted": "0.75.0",
+    "latest": "0.79.0",
+    "dependent": "@swagger-api/apidom-reference",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-parser-adapter-yaml-1-2"
+  },
+  "@swagger-api/apidom-reference": {
+    "current": "0.75.0",
+    "wanted": "0.79.0",
+    "latest": "0.79.0",
+    "dependent": "swagger-client",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swagger-api/apidom-reference"
+  },
+  "@swc/helpers": {
+    "current": "0.4.36",
+    "wanted": "0.4.36",
+    "latest": "0.5.3",
+    "dependent": "@parcel/transformer-js",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@swc/helpers"
+  },
+  "@szmarczak/http-timer": {
+    "current": "4.0.6",
+    "wanted": "4.0.6",
+    "latest": "5.0.1",
+    "dependent": "got",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@szmarczak/http-timer"
+  },
+  "@types/cacheable-request": {
+    "current": "6.0.3",
+    "wanted": "6.0.3",
+    "latest": "8.3.2",
+    "dependent": "got",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/cacheable-request"
+  },
+  "@types/common-tags": {
+    "current": "1.8.1",
+    "wanted": "1.8.3",
+    "latest": "1.8.3",
+    "dependent": "gatsby-cli",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/common-tags"
+  },
+  "@types/configstore": {
+    "current": "2.1.1",
+    "wanted": "2.1.1",
+    "latest": "6.0.1",
+    "dependent": "devcert",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/configstore"
+  },
+  "@types/cookie": {
+    "current": "0.4.1",
+    "wanted": "0.4.1",
+    "latest": "0.5.3",
+    "dependent": "engine.io",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/cookie"
+  },
+  "@types/cors": {
+    "current": "2.8.13",
+    "wanted": "2.8.15",
+    "latest": "2.8.15",
+    "dependent": "engine.io",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/cors"
+  },
+  "@types/debug": {
+    "current": "0.0.30",
+    "wanted": "0.0.30",
+    "latest": "4.1.10",
+    "dependent": "devcert",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/debug"
+  },
+  "@types/eslint": {
+    "current": "7.29.0",
+    "wanted": "7.29.0",
+    "latest": "8.44.6",
+    "dependent": "eslint-webpack-plugin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/eslint"
+  },
+  "@types/eslint-scope": {
+    "current": "3.7.4",
+    "wanted": "3.7.6",
+    "latest": "3.7.6",
+    "dependent": "webpack",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/eslint-scope"
+  },
+  "@types/estree": {
+    "current": "1.0.1",
+    "wanted": "1.0.3",
+    "latest": "1.0.3",
+    "dependent": "webpack",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/estree"
+  },
+  "@types/get-port": {
+    "current": "3.2.0",
+    "wanted": "3.2.0",
+    "latest": "4.2.0",
+    "dependent": "devcert",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/get-port"
+  },
+  "@types/glob": {
+    "current": "5.0.38",
+    "wanted": "5.0.38",
+    "latest": "8.1.0",
+    "dependent": "devcert",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/glob"
+  },
+  "@types/hast": {
+    "current": "2.3.5",
+    "wanted": "2.3.7",
+    "latest": "3.0.2",
+    "dependent": "hastscript",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/hast"
+  },
+  "@types/hoist-non-react-statics": {
+    "current": "3.3.1",
+    "wanted": "3.3.4",
+    "latest": "3.3.4",
+    "dependent": "react-redux",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/hoist-non-react-statics"
+  },
+  "@types/http-cache-semantics": {
+    "current": "4.0.1",
+    "wanted": "4.0.3",
+    "latest": "4.0.3",
+    "dependent": "cacheable-request",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/http-cache-semantics"
+  },
+  "@types/http-proxy": {
+    "current": "1.17.11",
+    "wanted": "1.17.13",
+    "latest": "1.17.13",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/http-proxy"
+  },
+  "@types/istanbul-lib-coverage": {
+    "current": "2.0.4",
+    "wanted": "2.0.5",
+    "latest": "2.0.5",
+    "dependent": "@types/istanbul-lib-report",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/istanbul-lib-coverage"
+  },
+  "@types/istanbul-lib-report": {
+    "current": "3.0.0",
+    "wanted": "3.0.2",
+    "latest": "3.0.2",
+    "dependent": "@types/istanbul-reports",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/istanbul-lib-report"
+  },
+  "@types/istanbul-reports": {
+    "current": "3.0.1",
+    "wanted": "3.0.3",
+    "latest": "3.0.3",
+    "dependent": "@jest/types",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/istanbul-reports"
+  },
+  "@types/json-schema": {
+    "current": "7.0.12",
+    "wanted": "7.0.14",
+    "latest": "7.0.14",
+    "dependent": "schema-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/json-schema"
+  },
+  "@types/json5": {
+    "current": "0.0.29",
+    "wanted": "0.0.29",
+    "latest": "2.2.0",
+    "dependent": "tsconfig-paths",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/json5"
+  },
+  "@types/keyv": {
+    "current": "3.1.4",
+    "wanted": "3.1.4",
+    "latest": "4.2.0",
+    "dependent": "@types/cacheable-request",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/keyv"
+  },
+  "@types/lodash": {
+    "current": "4.14.197",
+    "wanted": "4.14.200",
+    "latest": "4.14.200",
+    "dependent": "devcert",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/lodash"
+  },
+  "@types/mdast": {
+    "current": "3.0.12",
+    "wanted": "3.0.14",
+    "latest": "4.0.2",
+    "dependent": "mdast-util-toc",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/mdast"
+  },
+  "@types/mkdirp": {
+    "current": "0.5.2",
+    "wanted": "0.5.2",
+    "latest": "2.0.0",
+    "dependent": "devcert",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/mkdirp"
+  },
+  "@types/node": {
+    "current": "20.5.7",
+    "wanted": "20.8.8",
+    "latest": "20.8.8",
+    "dependent": "jest-worker",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/node"
+  },
+  "@types/node-fetch": {
+    "current": "2.6.4",
+    "wanted": "2.6.7",
+    "latest": "2.6.7",
+    "dependent": "@turist/fetch",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/node-fetch"
+  },
+  "@types/parse-json": {
+    "current": "4.0.0",
+    "wanted": "4.0.1",
+    "latest": "4.0.1",
+    "dependent": "cosmiconfig",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/parse-json"
+  },
+  "@types/parse5": {
+    "current": "5.0.3",
+    "wanted": "5.0.3",
+    "latest": "7.0.0",
+    "dependent": "hast-util-from-parse5",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/parse5"
+  },
+  "@types/prop-types": {
+    "current": "15.7.5",
+    "wanted": "15.7.9",
+    "latest": "15.7.9",
+    "dependent": "@types/react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/prop-types"
+  },
+  "@types/ramda": {
+    "current": "0.29.3",
+    "wanted": "0.29.7",
+    "latest": "0.29.7",
+    "dependent": "@swagger-api/apidom-reference",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/ramda"
+  },
+  "@types/reach__router": {
+    "current": "1.3.11",
+    "wanted": "1.3.13",
+    "latest": "1.3.13",
+    "dependent": "gatsby-link",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/reach__router"
+  },
+  "@types/react": {
+    "current": "18.2.21",
+    "wanted": "18.2.31",
+    "latest": "18.2.31",
+    "dependent": "react-redux",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/react"
+  },
+  "@types/react-dom": {
+    "wanted": "18.2.14",
+    "latest": "18.2.14",
+    "dependent": "react-redux"
+  },
+  "@types/responselike": {
+    "current": "1.0.0",
+    "wanted": "1.0.2",
+    "latest": "1.0.2",
+    "dependent": "got",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/responselike"
+  },
+  "@types/rimraf": {
+    "current": "2.0.5",
+    "wanted": "2.0.5",
+    "latest": "4.0.5",
+    "dependent": "devcert",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/rimraf"
+  },
+  "@types/scheduler": {
+    "current": "0.16.3",
+    "wanted": "0.16.5",
+    "latest": "0.16.5",
+    "dependent": "@types/react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/scheduler"
+  },
+  "@types/semver": {
+    "current": "7.5.1",
+    "wanted": "7.5.4",
+    "latest": "7.5.4",
+    "dependent": "@typescript-eslint/utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/semver"
+  },
+  "@types/tmp": {
+    "current": "0.0.33",
+    "wanted": "0.0.33",
+    "latest": "0.2.5",
+    "dependent": "devcert",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/tmp"
+  },
+  "@types/unist": {
+    "current": "2.0.7",
+    "wanted": "2.0.9",
+    "latest": "3.0.1",
+    "dependent": "vfile-message",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/unist"
+  },
+  "@types/use-sync-external-store": {
+    "current": "0.0.3",
+    "wanted": "0.0.3",
+    "latest": "0.0.5",
+    "dependent": "react-redux",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/use-sync-external-store"
+  },
+  "@types/webpack": {
+    "wanted": "5.28.4",
+    "latest": "5.28.4",
+    "dependent": "@pmmmwh/react-refresh-webpack-plugin"
+  },
+  "@types/yargs": {
+    "current": "17.0.24",
+    "wanted": "17.0.29",
+    "latest": "17.0.29",
+    "dependent": "@jest/types",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/yargs"
+  },
+  "@types/yargs-parser": {
+    "current": "21.0.0",
+    "wanted": "21.0.2",
+    "latest": "21.0.2",
+    "dependent": "@types/yargs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/yargs-parser"
+  },
+  "@types/yoga-layout": {
+    "current": "1.9.2",
+    "wanted": "1.9.2",
+    "latest": "1.9.6",
+    "dependent": "yoga-layout-prebuilt",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@types/yoga-layout"
+  },
+  "@typescript-eslint/eslint-plugin": {
+    "current": "5.62.0",
+    "wanted": "5.62.0",
+    "latest": "6.9.0",
+    "dependent": "eslint-plugin-jest",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@typescript-eslint/eslint-plugin"
+  },
+  "@typescript-eslint/experimental-utils": {
+    "current": "3.10.1",
+    "wanted": "3.10.1",
+    "latest": "5.62.0",
+    "dependent": "eslint-plugin-testing-library",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/eslint-plugin-testing-library/node_modules/@typescript-eslint/experimental-utils"
+  },
+  "@typescript-eslint/parser": {
+    "current": "5.62.0",
+    "wanted": "5.62.0",
+    "latest": "6.9.0",
+    "dependent": "eslint-config-react-app",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@typescript-eslint/parser"
+  },
+  "@typescript-eslint/scope-manager": {
+    "current": "4.33.0",
+    "wanted": "4.33.0",
+    "latest": "6.9.0",
+    "dependent": "@typescript-eslint/experimental-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/@typescript-eslint/scope-manager"
+  },
+  "@typescript-eslint/type-utils": {
+    "current": "5.62.0",
+    "wanted": "5.62.0",
+    "latest": "6.9.0",
+    "dependent": "@typescript-eslint/eslint-plugin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@typescript-eslint/type-utils"
+  },
+  "@typescript-eslint/types": {
+    "current": "3.10.1",
+    "wanted": "3.10.1",
+    "latest": "6.9.0",
+    "dependent": "@typescript-eslint/typescript-estree",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/eslint-plugin-testing-library/node_modules/@typescript-eslint/types"
+  },
+  "@typescript-eslint/typescript-estree": {
+    "current": "3.10.1",
+    "wanted": "3.10.1",
+    "latest": "6.9.0",
+    "dependent": "@typescript-eslint/experimental-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/eslint-plugin-testing-library/node_modules/@typescript-eslint/typescript-estree"
+  },
+  "@typescript-eslint/utils": {
+    "current": "5.62.0",
+    "wanted": "5.62.0",
+    "latest": "6.9.0",
+    "dependent": "eslint-plugin-testing-library",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@typescript-eslint/utils"
+  },
+  "@typescript-eslint/visitor-keys": {
+    "current": "3.10.1",
+    "wanted": "3.10.1",
+    "latest": "6.9.0",
+    "dependent": "@typescript-eslint/typescript-estree",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/eslint-plugin-testing-library/node_modules/@typescript-eslint/visitor-keys"
+  },
+  "acorn": {
+    "current": "6.4.2",
+    "wanted": "6.4.2",
+    "latest": "8.10.0",
+    "dependent": "react-server-dom-webpack",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/react-server-dom-webpack/node_modules/acorn"
+  },
+  "address": {
+    "current": "1.2.2",
+    "wanted": "1.2.2",
+    "latest": "2.0.1",
+    "dependent": "react-dev-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/address"
+  },
+  "adjust-sourcemap-loader": {
+    "current": "4.0.0",
+    "wanted": "4.0.0",
+    "latest": "5.0.0",
+    "dependent": "resolve-url-loader",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/adjust-sourcemap-loader"
+  },
+  "ajv": {
+    "current": "6.12.6",
+    "wanted": "6.12.6",
+    "latest": "8.12.0",
+    "dependent": "schema-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/ajv"
+  },
+  "ajv-keywords": {
+    "current": "3.5.2",
+    "wanted": "3.5.2",
+    "latest": "5.1.0",
+    "dependent": "schema-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/ajv-keywords"
+  },
+  "ansi-escapes": {
+    "current": "4.3.2",
+    "wanted": "4.3.2",
+    "latest": "6.2.0",
+    "dependent": "password-prompt",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/ansi-escapes"
+  },
+  "ansi-regex": {
+    "current": "4.1.1",
+    "wanted": "4.1.1",
+    "latest": "6.0.1",
+    "dependent": "strip-ansi",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/yurnalist/node_modules/ansi-regex"
+  },
+  "ansi-styles": {
+    "current": "4.3.0",
+    "wanted": "4.3.0",
+    "latest": "6.2.1",
+    "dependent": "wrap-ansi",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/wrap-ansi/node_modules/ansi-styles"
+  },
+  "append-field": {
+    "current": "1.0.0",
+    "wanted": "1.0.0",
+    "latest": "2.0.0",
+    "dependent": "multer",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/append-field"
+  },
+  "application-config-path": {
+    "current": "0.1.1",
+    "wanted": "0.1.1",
+    "latest": "1.0.0",
+    "dependent": "devcert",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/application-config-path"
+  },
+  "argparse": {
+    "current": "1.0.10",
+    "wanted": "1.0.10",
+    "latest": "2.0.1",
+    "dependent": "js-yaml",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/swagger-jsdoc/node_modules/argparse"
+  },
+  "array-flatten": {
+    "current": "1.1.1",
+    "wanted": "1.1.1",
+    "latest": "3.0.0",
+    "dependent": "express",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/array-flatten"
+  },
+  "array-includes": {
+    "current": "3.1.6",
+    "wanted": "3.1.7",
+    "latest": "3.1.7",
+    "dependent": "jsx-ast-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/array-includes"
+  },
+  "array-iterate": {
+    "current": "1.1.4",
+    "wanted": "1.1.4",
+    "latest": "2.0.1",
+    "dependent": "unist-util-modify-children",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/array-iterate"
+  },
+  "array-union": {
+    "current": "2.1.0",
+    "wanted": "2.1.0",
+    "latest": "3.0.1",
+    "dependent": "globby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/array-union"
+  },
+  "array.prototype.findlastindex": {
+    "current": "1.2.2",
+    "wanted": "1.2.3",
+    "latest": "1.2.3",
+    "dependent": "eslint-plugin-import",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/array.prototype.findlastindex"
+  },
+  "array.prototype.flat": {
+    "current": "1.3.1",
+    "wanted": "1.3.2",
+    "latest": "1.3.2",
+    "dependent": "jsx-ast-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/array.prototype.flat"
+  },
+  "array.prototype.flatmap": {
+    "current": "1.3.1",
+    "wanted": "1.3.2",
+    "latest": "1.3.2",
+    "dependent": "eslint-plugin-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/array.prototype.flatmap"
+  },
+  "array.prototype.tosorted": {
+    "current": "1.1.1",
+    "wanted": "1.1.2",
+    "latest": "1.1.2",
+    "dependent": "eslint-plugin-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/array.prototype.tosorted"
+  },
+  "arraybuffer.prototype.slice": {
+    "current": "1.0.1",
+    "wanted": "1.0.2",
+    "latest": "1.0.2",
+    "dependent": "es-abstract",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/arraybuffer.prototype.slice"
+  },
+  "arrify": {
+    "current": "2.0.1",
+    "wanted": "2.0.1",
+    "latest": "3.0.0",
+    "dependent": "eslint-webpack-plugin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/arrify"
+  },
+  "ast-types-flow": {
+    "current": "0.0.7",
+    "wanted": "0.0.7",
+    "latest": "0.0.8",
+    "dependent": "eslint-plugin-jsx-a11y",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/ast-types-flow"
+  },
+  "auto-bind": {
+    "current": "4.0.0",
+    "wanted": "4.0.0",
+    "latest": "5.0.1",
+    "dependent": "@graphql-codegen/visitor-plugin-common",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/auto-bind"
+  },
+  "autolinker": {
+    "current": "3.16.2",
+    "wanted": "3.16.2",
+    "latest": "4.0.0",
+    "dependent": "remarkable",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/autolinker"
+  },
+  "autoprefixer": {
+    "current": "10.4.15",
+    "wanted": "10.4.16",
+    "latest": "10.4.16",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/autoprefixer"
+  },
+  "axe-core": {
+    "current": "4.7.2",
+    "wanted": "4.8.2",
+    "latest": "4.8.2",
+    "dependent": "eslint-plugin-jsx-a11y",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/axe-core"
+  },
+  "axios": {
+    "current": "0.21.4",
+    "wanted": "0.21.4",
+    "latest": "1.5.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/axios"
+  },
+  "axobject-query": {
+    "current": "3.2.1",
+    "wanted": "3.2.1",
+    "latest": "4.0.0",
+    "dependent": "eslint-plugin-jsx-a11y",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/axobject-query"
+  },
+  "babel-eslint:@babel/eslint-parser": {
+    "current": "7.22.11",
+    "wanted": "7.22.15",
+    "latest": "7.22.15",
+    "dependent": "eslint-config-react-app",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/babel-eslint"
+  },
+  "babel-loader": {
+    "current": "8.3.0",
+    "wanted": "8.3.0",
+    "latest": "9.1.3",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/babel-loader"
+  },
+  "babel-plugin-polyfill-corejs2": {
+    "current": "0.4.5",
+    "wanted": "0.4.6",
+    "latest": "0.4.6",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/babel-plugin-polyfill-corejs2"
+  },
+  "babel-plugin-polyfill-corejs3": {
+    "current": "0.8.3",
+    "wanted": "0.8.6",
+    "latest": "0.8.6",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/babel-plugin-polyfill-corejs3"
+  },
+  "babel-plugin-polyfill-regenerator": {
+    "current": "0.5.2",
+    "wanted": "0.5.3",
+    "latest": "0.5.3",
+    "dependent": "@babel/preset-env",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/babel-plugin-polyfill-regenerator"
+  },
+  "babel-plugin-syntax-trailing-function-commas": {
+    "current": "7.0.0-beta.0",
+    "wanted": "7.0.0-beta.0",
+    "latest": "6.22.0",
+    "dependent": "babel-preset-fbjs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/babel-plugin-syntax-trailing-function-commas"
+  },
+  "bail": {
+    "current": "1.0.5",
+    "wanted": "1.0.5",
+    "latest": "2.0.2",
+    "dependent": "unified",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/bail"
+  },
+  "balanced-match": {
+    "current": "1.0.2",
+    "wanted": "1.0.2",
+    "latest": "3.0.1",
+    "dependent": "brace-expansion",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/balanced-match"
+  },
+  "base-x": {
+    "current": "3.0.9",
+    "wanted": "3.0.9",
+    "latest": "4.0.0",
+    "dependent": "@parcel/core",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/base-x"
+  },
+  "better-opn": {
+    "current": "2.1.1",
+    "wanted": "2.1.1",
+    "latest": "3.0.2",
+    "dependent": "gatsby-cli",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/better-opn"
+  },
+  "big.js": {
+    "current": "5.2.2",
+    "wanted": "5.2.2",
+    "latest": "6.2.1",
+    "dependent": "loader-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/big.js"
+  },
+  "bl": {
+    "current": "4.1.0",
+    "wanted": "4.1.0",
+    "latest": "6.0.7",
+    "dependent": "tar-stream",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/bl"
+  },
+  "body-parser": {
+    "current": "1.20.1",
+    "wanted": "1.20.1",
+    "latest": "1.20.2",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/body-parser"
+  },
+  "boxen": {
+    "current": "5.1.2",
+    "wanted": "5.1.2",
+    "latest": "7.1.1",
+    "dependent": "gatsby-telemetry",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/boxen"
+  },
+  "brace-expansion": {
+    "current": "1.1.11",
+    "wanted": "1.1.11",
+    "latest": "3.0.0",
+    "dependent": "minimatch",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/brace-expansion"
+  },
+  "browserslist": {
+    "current": "4.21.10",
+    "wanted": "4.22.1",
+    "latest": "4.22.1",
+    "dependent": "webpack",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/browserslist"
+  },
+  "buffer": {
+    "current": "5.7.1",
+    "wanted": "5.7.1",
+    "latest": "6.0.3",
+    "dependent": "bl",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/buffer"
+  },
+  "bufferutil": {
+    "wanted": "4.0.8",
+    "latest": "4.0.8",
+    "dependent": "ws"
+  },
+  "bytes": {
+    "current": "3.0.0",
+    "wanted": "3.0.0",
+    "latest": "3.1.2",
+    "dependent": "compression",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/compression/node_modules/bytes"
+  },
+  "cache-manager": {
+    "current": "5.2.3",
+    "wanted": "5.2.4",
+    "latest": "5.2.4",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/cache-manager"
+  },
+  "cacheable-lookup": {
+    "current": "5.0.4",
+    "wanted": "5.0.4",
+    "latest": "7.0.0",
+    "dependent": "got",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/cacheable-lookup"
+  },
+  "cacheable-request": {
+    "current": "10.2.13",
+    "wanted": "10.2.14",
+    "latest": "10.2.14",
+    "dependent": "got",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/package-json/node_modules/cacheable-request"
+  },
+  "call-bind": {
+    "current": "1.0.2",
+    "wanted": "1.0.5",
+    "latest": "1.0.5",
+    "dependent": "which-typed-array",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/call-bind"
+  },
+  "callsites": {
+    "current": "3.1.0",
+    "wanted": "3.1.0",
+    "latest": "4.1.0",
+    "dependent": "parent-module",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/callsites"
+  },
+  "camel-case": {
+    "current": "4.1.2",
+    "wanted": "4.1.2",
+    "latest": "5.0.0",
+    "dependent": "html-minifier-terser",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/camel-case"
+  },
+  "camelcase": {
+    "current": "5.3.1",
+    "wanted": "5.3.1",
+    "latest": "8.0.0",
+    "dependent": "yargs-parser",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/yargs-parser/node_modules/camelcase"
+  },
+  "caniuse-lite": {
+    "current": "1.0.30001524",
+    "wanted": "1.0.30001553",
+    "latest": "1.0.30001553",
+    "dependent": "caniuse-api",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/caniuse-lite"
+  },
+  "capital-case": {
+    "current": "1.0.4",
+    "wanted": "1.0.4",
+    "latest": "2.0.0",
+    "dependent": "header-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/capital-case"
+  },
+  "ccount": {
+    "current": "1.1.0",
+    "wanted": "1.1.0",
+    "latest": "2.0.1",
+    "dependent": "mdast-util-gfm-autolink-literal",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/ccount"
+  },
+  "chalk": {
+    "current": "2.4.2",
+    "wanted": "2.4.2",
+    "latest": "5.3.0",
+    "dependent": "yurnalist",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/chalk"
+  },
+  "change-case": {
+    "current": "4.1.2",
+    "wanted": "4.1.2",
+    "latest": "5.1.2",
+    "dependent": "change-case-all",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/change-case"
+  },
+  "change-case-all": {
+    "current": "1.0.14",
+    "wanted": "1.0.14",
+    "latest": "1.0.15",
+    "dependent": "@graphql-codegen/plugin-helpers",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/change-case-all"
+  },
+  "character-entities": {
+    "current": "1.2.4",
+    "wanted": "1.2.4",
+    "latest": "2.0.2",
+    "dependent": "parse-entities",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/character-entities"
+  },
+  "character-entities-html4": {
+    "current": "1.1.4",
+    "wanted": "1.1.4",
+    "latest": "2.1.0",
+    "dependent": "stringify-entities",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/character-entities-html4"
+  },
+  "character-entities-legacy": {
+    "current": "1.1.4",
+    "wanted": "1.1.4",
+    "latest": "3.0.0",
+    "dependent": "stringify-entities",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/character-entities-legacy"
+  },
+  "character-reference-invalid": {
+    "current": "1.1.4",
+    "wanted": "1.1.4",
+    "latest": "2.0.1",
+    "dependent": "parse-entities",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/character-reference-invalid"
+  },
+  "chardet": {
+    "current": "0.7.0",
+    "wanted": "0.7.0",
+    "latest": "2.0.0",
+    "dependent": "external-editor",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/chardet"
+  },
+  "chownr": {
+    "current": "1.1.4",
+    "wanted": "1.1.4",
+    "latest": "2.0.0",
+    "dependent": "tar-fs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/chownr"
+  },
+  "ci-info": {
+    "current": "3.8.0",
+    "wanted": "3.9.0",
+    "latest": "3.9.0",
+    "dependent": "jest-util",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/jest-util/node_modules/ci-info"
+  },
+  "cli-boxes": {
+    "current": "2.2.1",
+    "wanted": "2.2.1",
+    "latest": "3.0.0",
+    "dependent": "boxen",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/cli-boxes"
+  },
+  "cli-cursor": {
+    "current": "3.1.0",
+    "wanted": "3.1.0",
+    "latest": "4.0.0",
+    "dependent": "inquirer",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/cli-cursor"
+  },
+  "cli-width": {
+    "current": "3.0.0",
+    "wanted": "3.0.0",
+    "latest": "4.1.0",
+    "dependent": "inquirer",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/cli-width"
+  },
+  "clipboardy": {
+    "current": "2.3.0",
+    "wanted": "2.3.0",
+    "latest": "4.0.0",
+    "dependent": "gatsby-cli",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-cli/node_modules/clipboardy"
+  },
+  "cliui": {
+    "current": "6.0.0",
+    "wanted": "6.0.0",
+    "latest": "8.0.1",
+    "dependent": "yargs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/cliui"
+  },
+  "clone-response": {
+    "current": "1.0.3",
+    "wanted": "1.0.3",
+    "latest": "2.0.0",
+    "dependent": "cacheable-request",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/clone-response"
+  },
+  "color-convert": {
+    "current": "1.9.3",
+    "wanted": "1.9.3",
+    "latest": "2.0.1",
+    "dependent": "ansi-styles",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/color-convert"
+  },
+  "color-name": {
+    "current": "1.1.4",
+    "wanted": "1.1.4",
+    "latest": "2.0.0",
+    "dependent": "color-convert",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/wrap-ansi/node_modules/color-name"
+  },
+  "colorette": {
+    "current": "1.4.0",
+    "wanted": "1.4.0",
+    "latest": "2.0.20",
+    "dependent": "webpack-dev-middleware",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/colorette"
+  },
+  "comma-separated-tokens": {
+    "current": "1.0.8",
+    "wanted": "1.0.8",
+    "latest": "2.0.3",
+    "dependent": "hastscript",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/comma-separated-tokens"
+  },
+  "commander": {
+    "current": "2.20.3",
+    "wanted": "2.20.3",
+    "latest": "11.1.0",
+    "dependent": "z-schema",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/z-schema/node_modules/commander"
+  },
+  "concat-map": {
+    "current": "0.0.1",
+    "wanted": "0.0.1",
+    "latest": "0.0.2",
+    "dependent": "brace-expansion",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/concat-map"
+  },
+  "concat-stream": {
+    "current": "1.6.2",
+    "wanted": "1.6.2",
+    "latest": "2.0.0",
+    "dependent": "multer",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/concat-stream"
+  },
+  "configstore": {
+    "current": "5.0.1",
+    "wanted": "5.0.1",
+    "latest": "6.0.0",
+    "dependent": "gatsby-telemetry",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/configstore"
+  },
+  "constant-case": {
+    "current": "3.0.4",
+    "wanted": "3.0.4",
+    "latest": "4.0.0",
+    "dependent": "change-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/constant-case"
+  },
+  "convert-hrtime": {
+    "current": "3.0.0",
+    "wanted": "3.0.0",
+    "latest": "5.0.0",
+    "dependent": "gatsby-cli",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/convert-hrtime"
+  },
+  "convert-source-map": {
+    "current": "1.9.0",
+    "wanted": "1.9.0",
+    "latest": "2.0.0",
+    "dependent": "resolve-url-loader",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/convert-source-map"
+  },
+  "cookie": {
+    "current": "0.4.2",
+    "wanted": "0.4.2",
+    "latest": "0.5.0",
+    "dependent": "engine.io",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/engine.io/node_modules/cookie"
+  },
+  "cookie-signature": {
+    "current": "1.0.6",
+    "wanted": "1.0.6",
+    "latest": "1.2.1",
+    "dependent": "express",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/cookie-signature"
+  },
+  "core-js": {
+    "current": "3.32.1",
+    "wanted": "3.33.1",
+    "latest": "3.33.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/core-js"
+  },
+  "core-js-compat": {
+    "current": "3.31.0",
+    "wanted": "3.31.0",
+    "latest": "3.33.1",
+    "dependent": "gatsby-legacy-polyfills",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-legacy-polyfills/node_modules/core-js-compat"
+  },
+  "core-js-pure": {
+    "current": "3.32.1",
+    "wanted": "3.33.1",
+    "latest": "3.33.1",
+    "dependent": "@pmmmwh/react-refresh-webpack-plugin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/core-js-pure"
+  },
+  "cosmiconfig": {
+    "current": "7.1.0",
+    "wanted": "7.1.0",
+    "latest": "8.3.6",
+    "dependent": "postcss-loader",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/cosmiconfig"
+  },
+  "create-gatsby": {
+    "current": "3.12.0",
+    "wanted": "3.12.2",
+    "latest": "3.12.2",
+    "dependent": "gatsby-cli",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/create-gatsby"
+  },
+  "cross-fetch": {
+    "current": "3.1.8",
+    "wanted": "3.1.8",
+    "latest": "4.0.0",
+    "dependent": "swagger-client",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/cross-fetch"
+  },
+  "cross-spawn": {
+    "current": "6.0.5",
+    "wanted": "6.0.5",
+    "latest": "7.0.3",
+    "dependent": "patch-package",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/patch-package/node_modules/cross-spawn"
+  },
+  "crypto-random-string": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "5.0.0",
+    "dependent": "unique-string",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/crypto-random-string"
+  },
+  "css-declaration-sorter": {
+    "current": "6.4.1",
+    "wanted": "6.4.1",
+    "latest": "7.1.1",
+    "dependent": "cssnano-preset-default",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/css-declaration-sorter"
+  },
+  "css-loader": {
+    "current": "5.2.7",
+    "wanted": "5.2.7",
+    "latest": "6.8.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/css-loader"
+  },
+  "css-select": {
+    "current": "4.3.0",
+    "wanted": "4.3.0",
+    "latest": "5.1.0",
+    "dependent": "renderkid",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/renderkid/node_modules/css-select"
+  },
+  "css-selector-parser": {
+    "current": "1.4.1",
+    "wanted": "1.4.1",
+    "latest": "3.0.0",
+    "dependent": "unist-util-select",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/css-selector-parser"
+  },
+  "css-tree": {
+    "current": "2.2.1",
+    "wanted": "2.2.1",
+    "latest": "2.3.1",
+    "dependent": "csso",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/csso/node_modules/css-tree"
+  },
+  "debug": {
+    "current": "2.6.9",
+    "wanted": "2.6.9",
+    "latest": "4.3.4",
+    "dependent": "stream-parser",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/stream-parser/node_modules/debug"
+  },
+  "decamelize": {
+    "current": "1.2.0",
+    "wanted": "1.2.0",
+    "latest": "6.0.0",
+    "dependent": "yargs-parser",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/decamelize"
+  },
+  "decode-uri-component": {
+    "current": "0.2.2",
+    "wanted": "0.2.2",
+    "latest": "0.4.1",
+    "dependent": "query-string",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/decode-uri-component"
+  },
+  "decompress-response": {
+    "current": "6.0.0",
+    "wanted": "6.0.0",
+    "latest": "8.1.0",
+    "dependent": "simple-get",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/decompress-response"
+  },
+  "define-lazy-prop": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "3.0.0",
+    "dependent": "open",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/define-lazy-prop"
+  },
+  "define-properties": {
+    "current": "1.2.0",
+    "wanted": "1.2.1",
+    "latest": "1.2.1",
+    "dependent": "string.prototype.trimstart",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/define-properties"
+  },
+  "detect-libc": {
+    "current": "1.0.3",
+    "wanted": "1.0.3",
+    "latest": "2.0.2",
+    "dependent": "@parcel/watcher",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/detect-libc"
+  },
+  "doctrine": {
+    "current": "2.1.0",
+    "wanted": "2.1.0",
+    "latest": "3.0.0",
+    "dependent": "eslint-plugin-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/eslint-plugin-react/node_modules/doctrine"
+  },
+  "dom-serializer": {
+    "current": "1.4.1",
+    "wanted": "1.4.1",
+    "latest": "2.0.0",
+    "dependent": "domutils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/renderkid/node_modules/dom-serializer"
+  },
+  "domhandler": {
+    "current": "4.3.1",
+    "wanted": "4.3.1",
+    "latest": "5.0.3",
+    "dependent": "htmlparser2",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/renderkid/node_modules/domhandler"
+  },
+  "dompurify": {
+    "current": "3.0.2",
+    "wanted": "3.0.2",
+    "latest": "3.0.6",
+    "dependent": "swagger-ui-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/dompurify"
+  },
+  "domutils": {
+    "current": "2.8.0",
+    "wanted": "2.8.0",
+    "latest": "3.1.0",
+    "dependent": "htmlparser2",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/renderkid/node_modules/domutils"
+  },
+  "dot-case": {
+    "current": "3.0.4",
+    "wanted": "3.0.4",
+    "latest": "4.0.0",
+    "dependent": "snake-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/dot-case"
+  },
+  "dot-prop": {
+    "current": "5.3.0",
+    "wanted": "5.3.0",
+    "latest": "8.0.2",
+    "dependent": "configstore",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/dot-prop"
+  },
+  "dotenv": {
+    "current": "8.6.0",
+    "wanted": "8.6.0",
+    "latest": "16.3.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/dotenv"
+  },
+  "dotenv-expand": {
+    "current": "5.1.0",
+    "wanted": "5.1.0",
+    "latest": "10.0.0",
+    "dependent": "@parcel/core",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/dotenv-expand"
+  },
+  "drange": {
+    "current": "1.1.1",
+    "wanted": "1.1.1",
+    "latest": "2.0.1",
+    "dependent": "randexp",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/drange"
+  },
+  "electron-to-chromium": {
+    "current": "1.4.504",
+    "wanted": "1.4.565",
+    "latest": "1.4.565",
+    "dependent": "browserslist",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/electron-to-chromium"
+  },
+  "element-closest": {
+    "current": "2.0.2",
+    "wanted": "2.0.2",
+    "latest": "3.0.2",
+    "dependent": "receptor",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/element-closest"
+  },
+  "emoji-regex": {
+    "current": "8.0.0",
+    "wanted": "8.0.0",
+    "latest": "10.3.0",
+    "dependent": "string-width",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/string-width/node_modules/emoji-regex"
+  },
+  "encoding": {
+    "wanted": "0.1.13",
+    "latest": "0.1.13",
+    "dependent": "node-fetch"
+  },
+  "engine.io": {
+    "current": "6.4.2",
+    "wanted": "6.4.2",
+    "latest": "6.5.3",
+    "dependent": "socket.io",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/engine.io"
+  },
+  "engine.io-parser": {
+    "current": "5.0.7",
+    "wanted": "5.0.7",
+    "latest": "5.2.1",
+    "dependent": "engine.io",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/engine.io-parser"
+  },
+  "entities": {
+    "current": "2.2.0",
+    "wanted": "2.2.0",
+    "latest": "4.5.0",
+    "dependent": "htmlparser2",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/renderkid/node_modules/entities"
+  },
+  "es-abstract": {
+    "current": "1.22.1",
+    "wanted": "1.22.3",
+    "latest": "1.22.3",
+    "dependent": "string.prototype.trimstart",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/es-abstract"
+  },
+  "es-iterator-helpers": {
+    "current": "1.0.14",
+    "wanted": "1.0.15",
+    "latest": "1.0.15",
+    "dependent": "eslint-plugin-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/es-iterator-helpers"
+  },
+  "es-module-lexer": {
+    "current": "1.3.0",
+    "wanted": "1.3.1",
+    "latest": "1.3.1",
+    "dependent": "webpack",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/es-module-lexer"
+  },
+  "es-set-tostringtag": {
+    "current": "2.0.1",
+    "wanted": "2.0.2",
+    "latest": "2.0.2",
+    "dependent": "es-iterator-helpers",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/es-set-tostringtag"
+  },
+  "es-shim-unscopables": {
+    "current": "1.0.0",
+    "wanted": "1.0.2",
+    "latest": "1.0.2",
+    "dependent": "array.prototype.tosorted",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/es-shim-unscopables"
+  },
+  "escape-string-regexp": {
+    "current": "1.0.5",
+    "wanted": "1.0.5",
+    "latest": "5.0.0",
+    "dependent": "trim-repeated",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/escape-string-regexp"
+  },
+  "eslint": {
+    "current": "7.32.0",
+    "wanted": "7.32.0",
+    "latest": "8.52.0",
+    "dependent": "eslint-plugin-testing-library",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/eslint"
+  },
+  "eslint-config-react-app": {
+    "current": "6.0.0",
+    "wanted": "6.0.0",
+    "latest": "7.0.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/eslint-config-react-app"
+  },
+  "eslint-plugin-flowtype": {
+    "current": "5.10.0",
+    "wanted": "5.10.0",
+    "latest": "8.0.3",
+    "dependent": "eslint-config-react-app",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/eslint-plugin-flowtype"
+  },
+  "eslint-plugin-import": {
+    "current": "2.28.1",
+    "wanted": "2.29.0",
+    "latest": "2.29.0",
+    "dependent": "eslint-config-react-app",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/eslint-plugin-import"
+  },
+  "eslint-plugin-jest": {
+    "current": "24.7.0",
+    "wanted": "24.7.0",
+    "latest": "27.4.3",
+    "dependent": "eslint-config-react-app",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/eslint-plugin-jest"
+  },
+  "eslint-plugin-testing-library": {
+    "current": "3.10.2",
+    "wanted": "3.10.2",
+    "latest": "6.1.0",
+    "dependent": "eslint-config-react-app",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/eslint-plugin-testing-library"
+  },
+  "eslint-scope": {
+    "current": "5.1.1",
+    "wanted": "5.1.1",
+    "latest": "7.2.2",
+    "dependent": "webpack",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/eslint-scope"
+  },
+  "eslint-utils": {
+    "current": "2.1.0",
+    "wanted": "2.1.0",
+    "latest": "3.0.0",
+    "dependent": "@typescript-eslint/experimental-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/eslint-utils"
+  },
+  "eslint-visitor-keys": {
+    "current": "1.3.0",
+    "wanted": "1.3.0",
+    "latest": "3.4.3",
+    "dependent": "espree",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/espree/node_modules/eslint-visitor-keys"
+  },
+  "eslint-webpack-plugin": {
+    "current": "2.7.0",
+    "wanted": "2.7.0",
+    "latest": "4.0.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/eslint-webpack-plugin"
+  },
+  "espree": {
+    "current": "7.3.1",
+    "wanted": "7.3.1",
+    "latest": "9.6.1",
+    "dependent": "eslint",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/espree"
+  },
+  "estraverse": {
+    "current": "4.3.0",
+    "wanted": "4.3.0",
+    "latest": "5.3.0",
+    "dependent": "eslint-scope",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/eslint-scope/node_modules/estraverse"
+  },
+  "execa": {
+    "current": "5.1.1",
+    "wanted": "5.1.1",
+    "latest": "8.0.1",
+    "dependent": "clipboardy",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/execa"
+  },
+  "express-http-proxy": {
+    "current": "1.6.3",
+    "wanted": "1.6.3",
+    "latest": "2.0.0",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/express-http-proxy"
+  },
+  "extend-shallow": {
+    "current": "2.0.1",
+    "wanted": "2.0.1",
+    "latest": "3.0.2",
+    "dependent": "section-matter",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/extend-shallow"
+  },
+  "fast-levenshtein": {
+    "current": "2.0.6",
+    "wanted": "2.0.6",
+    "latest": "3.0.0",
+    "dependent": "optionator",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/fast-levenshtein"
+  },
+  "fault": {
+    "current": "1.0.4",
+    "wanted": "1.0.4",
+    "latest": "2.0.1",
+    "dependent": "lowlight",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/fault"
+  },
+  "fibers": {
+    "wanted": "5.0.3",
+    "latest": "5.0.3",
+    "dependent": "sass-loader"
+  },
+  "figures": {
+    "current": "3.2.0",
+    "wanted": "3.2.0",
+    "latest": "5.0.0",
+    "dependent": "inquirer",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/figures"
+  },
+  "file-entry-cache": {
+    "current": "6.0.1",
+    "wanted": "6.0.1",
+    "latest": "7.0.1",
+    "dependent": "eslint",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/file-entry-cache"
+  },
+  "file-type": {
+    "current": "16.5.4",
+    "wanted": "16.5.4",
+    "latest": "18.5.0",
+    "dependent": "gatsby-source-filesystem",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/file-type"
+  },
+  "filename-reserved-regex": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "3.0.0",
+    "dependent": "filenamify",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/filename-reserved-regex"
+  },
+  "filenamify": {
+    "current": "4.3.0",
+    "wanted": "4.3.0",
+    "latest": "6.0.0",
+    "dependent": "gatsby-plugin-sharp",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/filenamify"
+  },
+  "filesize": {
+    "current": "8.0.7",
+    "wanted": "8.0.7",
+    "latest": "10.1.0",
+    "dependent": "react-dev-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/filesize"
+  },
+  "filter-obj": {
+    "current": "1.1.0",
+    "wanted": "1.1.0",
+    "latest": "5.1.0",
+    "dependent": "query-string",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/filter-obj"
+  },
+  "find-cache-dir": {
+    "current": "3.3.2",
+    "wanted": "3.3.2",
+    "latest": "5.0.0",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/find-cache-dir"
+  },
+  "find-up": {
+    "current": "4.1.0",
+    "wanted": "4.1.0",
+    "latest": "6.3.0",
+    "dependent": "yargs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/yargs/node_modules/find-up"
+  },
+  "flat-cache": {
+    "current": "3.1.0",
+    "wanted": "3.1.1",
+    "latest": "3.1.1",
+    "dependent": "file-entry-cache",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/flat-cache"
+  },
+  "flatted": {
+    "current": "3.2.7",
+    "wanted": "3.2.9",
+    "latest": "3.2.9",
+    "dependent": "flat-cache",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/flatted"
+  },
+  "follow-redirects": {
+    "current": "1.15.2",
+    "wanted": "1.15.3",
+    "latest": "1.15.3",
+    "dependent": "axios",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/follow-redirects"
+  },
+  "fork-ts-checker-webpack-plugin": {
+    "current": "6.5.3",
+    "wanted": "6.5.3",
+    "latest": "9.0.0",
+    "dependent": "react-dev-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/fork-ts-checker-webpack-plugin"
+  },
+  "form-data": {
+    "current": "3.0.1",
+    "wanted": "3.0.1",
+    "latest": "4.0.0",
+    "dependent": "@types/node-fetch",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/form-data"
+  },
+  "form-data-encoder": {
+    "current": "1.9.0",
+    "wanted": "1.9.0",
+    "latest": "3.0.1",
+    "dependent": "swagger-client",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/form-data-encoder"
+  },
+  "formdata-node": {
+    "current": "4.4.1",
+    "wanted": "4.4.1",
+    "latest": "6.0.2",
+    "dependent": "swagger-client",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/formdata-node"
+  },
+  "fraction.js": {
+    "current": "4.2.1",
+    "wanted": "4.3.7",
+    "latest": "4.3.7",
+    "dependent": "autoprefixer",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/fraction.js"
+  },
+  "fs-extra": {
+    "current": "9.1.0",
+    "wanted": "9.1.0",
+    "latest": "11.1.1",
+    "dependent": "patch-package",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/patch-package/node_modules/fs-extra"
+  },
+  "fs-monkey": {
+    "current": "1.0.4",
+    "wanted": "1.0.5",
+    "latest": "1.0.5",
+    "dependent": "memfs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/fs-monkey"
+  },
+  "function-bind": {
+    "current": "1.1.1",
+    "wanted": "1.1.2",
+    "latest": "1.1.2",
+    "dependent": "has",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/function-bind"
+  },
+  "gatsby": {
+    "current": "5.12.3",
+    "wanted": "5.12.8",
+    "latest": "5.12.8",
+    "dependent": "gatsby-transformer-remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby"
+  },
+  "gatsby-cli": {
+    "current": "5.12.0",
+    "wanted": "5.12.3",
+    "latest": "5.12.3",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-cli"
+  },
+  "gatsby-graphiql-explorer": {
+    "current": "3.12.0",
+    "wanted": "3.12.1",
+    "latest": "3.12.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-graphiql-explorer"
+  },
+  "gatsby-plugin-manifest": {
+    "current": "5.12.0",
+    "wanted": "5.12.2",
+    "latest": "5.12.2",
+    "dependent": "docs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-plugin-manifest"
+  },
+  "gatsby-plugin-page-creator": {
+    "current": "5.12.0",
+    "wanted": "5.12.2",
+    "latest": "5.12.2",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-plugin-page-creator"
+  },
+  "gatsby-plugin-sass": {
+    "current": "6.12.0",
+    "wanted": "6.12.2",
+    "latest": "6.12.2",
+    "dependent": "docs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-plugin-sass"
+  },
+  "gatsby-plugin-sharp": {
+    "current": "5.12.0",
+    "wanted": "5.12.2",
+    "latest": "5.12.2",
+    "dependent": "gatsby-remark-images",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-plugin-sharp"
+  },
+  "gatsby-plugin-utils": {
+    "current": "4.12.0",
+    "wanted": "4.12.2",
+    "latest": "4.12.2",
+    "dependent": "gatsby-plugin-sharp",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-plugin-utils"
+  },
+  "gatsby-remark-autolink-headers": {
+    "current": "6.12.0",
+    "wanted": "6.12.2",
+    "latest": "6.12.2",
+    "dependent": "docs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-remark-autolink-headers"
+  },
+  "gatsby-remark-images": {
+    "current": "7.12.0",
+    "wanted": "7.12.2",
+    "latest": "7.12.2",
+    "dependent": "docs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-remark-images"
+  },
+  "gatsby-sharp": {
+    "current": "1.12.0",
+    "wanted": "1.12.1",
+    "latest": "1.12.1",
+    "dependent": "gatsby-plugin-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-sharp"
+  },
+  "gatsby-transformer-remark": {
+    "current": "6.12.0",
+    "wanted": "6.12.2",
+    "latest": "6.12.2",
+    "dependent": "docs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-transformer-remark"
+  },
+  "get-intrinsic": {
+    "current": "1.2.1",
+    "wanted": "1.2.2",
+    "latest": "1.2.2",
+    "dependent": "typed-array-buffer",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/get-intrinsic"
+  },
+  "get-port": {
+    "current": "3.2.0",
+    "wanted": "3.2.0",
+    "latest": "7.0.0",
+    "dependent": "devcert",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/get-port"
+  },
+  "get-stream": {
+    "current": "6.0.1",
+    "wanted": "6.0.1",
+    "latest": "8.0.1",
+    "dependent": "got",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/get-stream"
+  },
+  "github-slugger": {
+    "current": "1.5.0",
+    "wanted": "1.5.0",
+    "latest": "2.0.0",
+    "dependent": "mdast-util-toc",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/github-slugger"
+  },
+  "glob": {
+    "current": "7.1.6",
+    "wanted": "7.1.6",
+    "latest": "10.3.10",
+    "dependent": "swagger-jsdoc",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/swagger-jsdoc/node_modules/glob"
+  },
+  "glob-parent": {
+    "current": "5.1.2",
+    "wanted": "5.1.2",
+    "latest": "6.0.2",
+    "dependent": "eslint",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/glob-parent"
+  },
+  "globals": {
+    "current": "13.21.0",
+    "wanted": "13.23.0",
+    "latest": "13.23.0",
+    "dependent": "eslint",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/globals"
+  },
+  "globby": {
+    "current": "11.1.0",
+    "wanted": "11.1.0",
+    "latest": "13.2.2",
+    "dependent": "react-dev-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/globby"
+  },
+  "got": {
+    "current": "12.6.1",
+    "wanted": "12.6.1",
+    "latest": "13.0.0",
+    "dependent": "package-json",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/package-json/node_modules/got"
+  },
+  "graceful-fs": {
+    "current": "4.2.10",
+    "wanted": "4.2.10",
+    "latest": "4.2.11",
+    "dependent": "@pnpm/network.ca-file",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@pnpm/network.ca-file/node_modules/graceful-fs"
+  },
+  "gzip-size": {
+    "current": "6.0.0",
+    "wanted": "6.0.0",
+    "latest": "7.0.0",
+    "dependent": "react-dev-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gzip-size"
+  },
+  "has": {
+    "current": "1.0.3",
+    "wanted": "1.0.4",
+    "latest": "1.0.4",
+    "dependent": "is-core-module",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/has"
+  },
+  "has-flag": {
+    "current": "4.0.0",
+    "wanted": "4.0.0",
+    "latest": "5.0.1",
+    "dependent": "supports-color",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/terser-webpack-plugin/node_modules/has-flag"
+  },
+  "has-property-descriptors": {
+    "current": "1.0.0",
+    "wanted": "1.0.1",
+    "latest": "1.0.1",
+    "dependent": "es-iterator-helpers",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/has-property-descriptors"
+  },
+  "hash-wasm": {
+    "current": "4.9.0",
+    "wanted": "4.10.0",
+    "latest": "4.10.0",
+    "dependent": "gatsby-core-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hash-wasm"
+  },
+  "hast-to-hyperscript": {
+    "current": "9.0.1",
+    "wanted": "9.0.1",
+    "latest": "11.0.0",
+    "dependent": "hast-util-to-parse5",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hast-to-hyperscript"
+  },
+  "hast-util-from-parse5": {
+    "current": "6.0.1",
+    "wanted": "6.0.1",
+    "latest": "8.0.1",
+    "dependent": "hast-util-raw",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hast-util-from-parse5"
+  },
+  "hast-util-is-element": {
+    "current": "1.1.0",
+    "wanted": "1.1.0",
+    "latest": "3.0.0",
+    "dependent": "hast-util-to-html",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hast-util-is-element"
+  },
+  "hast-util-parse-selector": {
+    "current": "2.2.5",
+    "wanted": "2.2.5",
+    "latest": "4.0.0",
+    "dependent": "hastscript",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hast-util-parse-selector"
+  },
+  "hast-util-raw": {
+    "current": "6.1.0",
+    "wanted": "6.1.0",
+    "latest": "9.0.1",
+    "dependent": "gatsby-transformer-remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hast-util-raw"
+  },
+  "hast-util-to-html": {
+    "current": "7.1.3",
+    "wanted": "7.1.3",
+    "latest": "9.0.0",
+    "dependent": "gatsby-transformer-remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hast-util-to-html"
+  },
+  "hast-util-to-parse5": {
+    "current": "6.0.0",
+    "wanted": "6.0.0",
+    "latest": "8.0.0",
+    "dependent": "hast-util-raw",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hast-util-to-parse5"
+  },
+  "hast-util-whitespace": {
+    "current": "1.0.4",
+    "wanted": "1.0.4",
+    "latest": "3.0.0",
+    "dependent": "hast-util-to-html",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hast-util-whitespace"
+  },
+  "hastscript": {
+    "current": "6.0.0",
+    "wanted": "6.0.0",
+    "latest": "8.0.0",
+    "dependent": "refractor",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hastscript"
+  },
+  "header-case": {
+    "current": "2.0.4",
+    "wanted": "2.0.4",
+    "latest": "3.0.0",
+    "dependent": "change-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/header-case"
+  },
+  "highlight.js": {
+    "current": "10.7.3",
+    "wanted": "10.7.3",
+    "latest": "11.9.0",
+    "dependent": "react-syntax-highlighter",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/highlight.js"
+  },
+  "hosted-git-info": {
+    "current": "3.0.8",
+    "wanted": "3.0.8",
+    "latest": "7.0.1",
+    "dependent": "gatsby-cli",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hosted-git-info"
+  },
+  "html-void-elements": {
+    "current": "1.0.5",
+    "wanted": "1.0.5",
+    "latest": "3.0.0",
+    "dependent": "hast-util-raw",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/html-void-elements"
+  },
+  "htmlparser2": {
+    "current": "8.0.2",
+    "wanted": "8.0.2",
+    "latest": "9.0.0",
+    "dependent": "sanitize-html",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/htmlparser2"
+  },
+  "http2-wrapper": {
+    "current": "1.0.3",
+    "wanted": "1.0.3",
+    "latest": "2.2.0",
+    "dependent": "got",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/http2-wrapper"
+  },
+  "human-signals": {
+    "current": "2.1.0",
+    "wanted": "2.1.0",
+    "latest": "5.0.0",
+    "dependent": "execa",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/human-signals"
+  },
+  "iconv-lite": {
+    "current": "0.4.24",
+    "wanted": "0.4.24",
+    "latest": "0.6.3",
+    "dependent": "raw-body",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/iconv-lite"
+  },
+  "ignore": {
+    "current": "4.0.6",
+    "wanted": "4.0.6",
+    "latest": "5.2.4",
+    "dependent": "eslint",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby/node_modules/ignore"
+  },
+  "immer": {
+    "current": "9.0.21",
+    "wanted": "9.0.21",
+    "latest": "10.0.3",
+    "dependent": "react-dev-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/immer"
+  },
+  "immutable": {
+    "current": "3.8.2",
+    "wanted": "4.3.4",
+    "latest": "5.0.0-beta.4",
+    "dependent": "redux-immutable",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/swagger-ui-react/node_modules/immutable"
+  },
+  "ini": {
+    "current": "1.3.8",
+    "wanted": "1.3.8",
+    "latest": "4.1.1",
+    "dependent": "rc",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/ini"
+  },
+  "inline-style-parser": {
+    "current": "0.1.1",
+    "wanted": "0.1.1",
+    "latest": "0.2.2",
+    "dependent": "style-to-object",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/inline-style-parser"
+  },
+  "inquirer": {
+    "current": "7.3.3",
+    "wanted": "7.3.3",
+    "latest": "9.2.11",
+    "dependent": "yurnalist",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/inquirer"
+  },
+  "internal-slot": {
+    "current": "1.0.5",
+    "wanted": "1.0.6",
+    "latest": "1.0.6",
+    "dependent": "string.prototype.matchall",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/internal-slot"
+  },
+  "ipaddr.js": {
+    "current": "1.9.1",
+    "wanted": "1.9.1",
+    "latest": "2.1.0",
+    "dependent": "proxy-addr",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/ipaddr.js"
+  },
+  "is-absolute-url": {
+    "current": "3.0.3",
+    "wanted": "3.0.3",
+    "latest": "4.0.1",
+    "dependent": "is-relative-url",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-absolute-url"
+  },
+  "is-alphabetical": {
+    "current": "1.0.4",
+    "wanted": "1.0.4",
+    "latest": "2.0.1",
+    "dependent": "is-alphanumerical",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-alphabetical"
+  },
+  "is-alphanumerical": {
+    "current": "1.0.4",
+    "wanted": "1.0.4",
+    "latest": "2.0.1",
+    "dependent": "parse-entities",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-alphanumerical"
+  },
+  "is-arrayish": {
+    "current": "0.2.1",
+    "wanted": "0.2.1",
+    "latest": "0.3.2",
+    "dependent": "error-ex",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-arrayish"
+  },
+  "is-ci": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "3.0.1",
+    "dependent": "yurnalist",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-ci"
+  },
+  "is-core-module": {
+    "current": "2.13.0",
+    "wanted": "2.13.1",
+    "latest": "2.13.1",
+    "dependent": "resolve",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-core-module"
+  },
+  "is-decimal": {
+    "current": "1.0.4",
+    "wanted": "1.0.4",
+    "latest": "2.0.1",
+    "dependent": "parse-entities",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-decimal"
+  },
+  "is-docker": {
+    "current": "2.2.1",
+    "wanted": "2.2.1",
+    "latest": "3.0.0",
+    "dependent": "open",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-docker"
+  },
+  "is-extendable": {
+    "current": "0.1.1",
+    "wanted": "0.1.1",
+    "latest": "1.0.1",
+    "dependent": "extend-shallow",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-extendable"
+  },
+  "is-extglob": {
+    "current": "1.0.0",
+    "wanted": "1.0.0",
+    "latest": "2.1.1",
+    "dependent": "is-glob",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-invalid-path/node_modules/is-extglob"
+  },
+  "is-fullwidth-code-point": {
+    "current": "3.0.0",
+    "wanted": "3.0.0",
+    "latest": "4.0.0",
+    "dependent": "string-width",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-fullwidth-code-point"
+  },
+  "is-glob": {
+    "current": "2.0.1",
+    "wanted": "2.0.1",
+    "latest": "4.0.3",
+    "dependent": "is-invalid-path",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-invalid-path/node_modules/is-glob"
+  },
+  "is-hexadecimal": {
+    "current": "1.0.4",
+    "wanted": "1.0.4",
+    "latest": "2.0.1",
+    "dependent": "parse-entities",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-hexadecimal"
+  },
+  "is-invalid-path": {
+    "current": "0.1.0",
+    "wanted": "0.1.0",
+    "latest": "1.0.2",
+    "dependent": "is-valid-path",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-invalid-path"
+  },
+  "is-lower-case": {
+    "current": "2.0.2",
+    "wanted": "2.0.2",
+    "latest": "3.0.0",
+    "dependent": "change-case-all",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-lower-case"
+  },
+  "is-obj": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "3.0.0",
+    "dependent": "dot-prop",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-obj"
+  },
+  "is-path-inside": {
+    "current": "3.0.3",
+    "wanted": "3.0.3",
+    "latest": "4.0.0",
+    "dependent": "eslint",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-path-inside"
+  },
+  "is-plain-obj": {
+    "current": "2.1.0",
+    "wanted": "2.1.0",
+    "latest": "4.1.0",
+    "dependent": "unified",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-plain-obj"
+  },
+  "is-plain-object": {
+    "current": "2.0.4",
+    "wanted": "2.0.4",
+    "latest": "5.0.0",
+    "dependent": "clone-deep",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/clone-deep/node_modules/is-plain-object"
+  },
+  "is-promise": {
+    "current": "2.2.2",
+    "wanted": "2.2.2",
+    "latest": "4.0.0",
+    "dependent": "memoizee",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-promise"
+  },
+  "is-relative-url": {
+    "current": "3.0.0",
+    "wanted": "3.0.0",
+    "latest": "4.0.0",
+    "dependent": "gatsby-remark-images",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-relative-url"
+  },
+  "is-root": {
+    "current": "2.1.0",
+    "wanted": "2.1.0",
+    "latest": "3.0.0",
+    "dependent": "react-dev-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-root"
+  },
+  "is-stream": {
+    "current": "2.0.1",
+    "wanted": "2.0.1",
+    "latest": "3.0.0",
+    "dependent": "hasha",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-stream"
+  },
+  "is-upper-case": {
+    "current": "2.0.2",
+    "wanted": "2.0.2",
+    "latest": "3.0.0",
+    "dependent": "change-case-all",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-upper-case"
+  },
+  "is-wsl": {
+    "current": "2.2.0",
+    "wanted": "2.2.0",
+    "latest": "3.1.0",
+    "dependent": "open",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/is-wsl"
+  },
+  "isarray": {
+    "current": "1.0.0",
+    "wanted": "1.0.0",
+    "latest": "2.0.5",
+    "dependent": "readable-stream",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/isarray"
+  },
+  "isexe": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "3.1.1",
+    "dependent": "which",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/isexe"
+  },
+  "isobject": {
+    "current": "3.0.1",
+    "wanted": "3.0.1",
+    "latest": "4.0.0",
+    "dependent": "is-plain-object",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/isobject"
+  },
+  "iterator.prototype": {
+    "current": "1.1.0",
+    "wanted": "1.1.2",
+    "latest": "1.1.2",
+    "dependent": "es-iterator-helpers",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/iterator.prototype"
+  },
+  "jest-util": {
+    "current": "29.6.3",
+    "wanted": "29.7.0",
+    "latest": "29.7.0",
+    "dependent": "jest-worker",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/jest-util"
+  },
+  "jest-worker": {
+    "current": "27.5.1",
+    "wanted": "27.5.1",
+    "latest": "29.7.0",
+    "dependent": "terser-webpack-plugin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/terser-webpack-plugin/node_modules/jest-worker"
+  },
+  "joi": {
+    "current": "17.10.0",
+    "wanted": "17.11.0",
+    "latest": "17.11.0",
+    "dependent": "gatsby-plugin-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/joi"
+  },
+  "js-tokens": {
+    "current": "4.0.0",
+    "wanted": "4.0.0",
+    "latest": "8.0.2",
+    "dependent": "loose-envify",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/js-tokens"
+  },
+  "js-yaml": {
+    "current": "3.14.0",
+    "wanted": "3.14.0",
+    "latest": "4.1.0",
+    "dependent": "swagger-jsdoc",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/swagger-jsdoc/node_modules/js-yaml"
+  },
+  "jsesc": {
+    "current": "0.5.0",
+    "wanted": "0.5.0",
+    "latest": "3.0.2",
+    "dependent": "regjsparser",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/regjsparser/node_modules/jsesc"
+  },
+  "json-parse-even-better-errors": {
+    "current": "2.3.1",
+    "wanted": "2.3.1",
+    "latest": "3.0.0",
+    "dependent": "webpack",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/json-parse-even-better-errors"
+  },
+  "json-schema-traverse": {
+    "current": "0.4.1",
+    "wanted": "0.4.1",
+    "latest": "1.0.0",
+    "dependent": "ajv",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/json-schema-traverse"
+  },
+  "json5": {
+    "current": "1.0.2",
+    "wanted": "1.0.2",
+    "latest": "2.2.3",
+    "dependent": "tsconfig-paths",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/tsconfig-paths/node_modules/json5"
+  },
+  "jsonfile": {
+    "current": "4.0.0",
+    "wanted": "4.0.0",
+    "latest": "6.1.0",
+    "dependent": "fs-extra",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-plugin-meta-redirect/node_modules/jsonfile"
+  },
+  "keyv": {
+    "current": "4.5.3",
+    "wanted": "4.5.4",
+    "latest": "4.5.4",
+    "dependent": "cacheable-request",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/keyv"
+  },
+  "kleur": {
+    "current": "3.0.3",
+    "wanted": "3.0.3",
+    "latest": "4.1.5",
+    "dependent": "prompts",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/kleur"
+  },
+  "language-tags": {
+    "current": "1.0.5",
+    "wanted": "1.0.5",
+    "latest": "1.0.9",
+    "dependent": "eslint-plugin-jsx-a11y",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/language-tags"
+  },
+  "legacy-swc-helpers:@swc/helpers@=0.4.14": {
+    "current": "0.4.14",
+    "wanted": "0.4.14",
+    "latest": "0.5.3",
+    "dependent": "@swc/helpers",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/legacy-swc-helpers"
+  },
+  "lines-and-columns": {
+    "current": "1.2.4",
+    "wanted": "1.2.4",
+    "latest": "2.0.3",
+    "dependent": "parse-json",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/lines-and-columns"
+  },
+  "lmdb": {
+    "current": "2.5.3",
+    "wanted": "2.5.3",
+    "latest": "2.8.5",
+    "dependent": "gatsby-core-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/lmdb"
+  },
+  "loader-utils": {
+    "current": "2.0.4",
+    "wanted": "2.0.4",
+    "latest": "3.2.1",
+    "dependent": "yaml-loader",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/loader-utils"
+  },
+  "locate-path": {
+    "current": "5.0.0",
+    "wanted": "5.0.0",
+    "latest": "7.2.0",
+    "dependent": "find-up",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/yargs/node_modules/locate-path"
+  },
+  "longest-streak": {
+    "current": "2.0.4",
+    "wanted": "2.0.4",
+    "latest": "3.1.0",
+    "dependent": "mdast-util-to-markdown",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/longest-streak"
+  },
+  "lower-case": {
+    "current": "2.0.2",
+    "wanted": "2.0.2",
+    "latest": "3.0.0",
+    "dependent": "no-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/lower-case"
+  },
+  "lower-case-first": {
+    "current": "2.0.2",
+    "wanted": "2.0.2",
+    "latest": "3.0.0",
+    "dependent": "change-case-all",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/lower-case-first"
+  },
+  "lowercase-keys": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "3.0.0",
+    "dependent": "responselike",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/lowercase-keys"
+  },
+  "lowlight": {
+    "current": "1.20.0",
+    "wanted": "1.20.0",
+    "latest": "3.1.0",
+    "dependent": "react-syntax-highlighter",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/lowlight"
+  },
+  "lru-cache": {
+    "current": "6.0.0",
+    "wanted": "6.0.0",
+    "latest": "10.0.1",
+    "dependent": "semver",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/sharp/node_modules/lru-cache"
+  },
+  "make-dir": {
+    "current": "3.1.0",
+    "wanted": "3.1.0",
+    "latest": "4.0.0",
+    "dependent": "find-cache-dir",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/make-dir"
+  },
+  "map-age-cleaner": {
+    "current": "0.1.3",
+    "wanted": "0.1.3",
+    "latest": "0.2.0",
+    "dependent": "mem",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/map-age-cleaner"
+  },
+  "markdown-table": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "3.0.3",
+    "dependent": "mdast-util-gfm-table",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/markdown-table"
+  },
+  "mdast-util-definitions": {
+    "current": "4.0.0",
+    "wanted": "4.0.0",
+    "latest": "6.0.0",
+    "dependent": "mdast-util-to-hast",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-definitions"
+  },
+  "mdast-util-find-and-replace": {
+    "current": "1.1.1",
+    "wanted": "1.1.1",
+    "latest": "3.0.1",
+    "dependent": "mdast-util-gfm-autolink-literal",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-find-and-replace"
+  },
+  "mdast-util-footnote": {
+    "current": "0.1.7",
+    "wanted": "0.1.7",
+    "latest": "2.0.0",
+    "dependent": "remark-footnotes",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-footnote"
+  },
+  "mdast-util-from-markdown": {
+    "current": "0.8.5",
+    "wanted": "0.8.5",
+    "latest": "2.0.0",
+    "dependent": "remark-parse",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-from-markdown"
+  },
+  "mdast-util-gfm": {
+    "current": "0.1.2",
+    "wanted": "0.1.2",
+    "latest": "3.0.0",
+    "dependent": "remark-gfm",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-gfm"
+  },
+  "mdast-util-gfm-autolink-literal": {
+    "current": "0.1.3",
+    "wanted": "0.1.3",
+    "latest": "2.0.0",
+    "dependent": "mdast-util-gfm",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-gfm-autolink-literal"
+  },
+  "mdast-util-gfm-strikethrough": {
+    "current": "0.2.3",
+    "wanted": "0.2.3",
+    "latest": "2.0.0",
+    "dependent": "mdast-util-gfm",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-gfm-strikethrough"
+  },
+  "mdast-util-gfm-table": {
+    "current": "0.1.6",
+    "wanted": "0.1.6",
+    "latest": "2.0.0",
+    "dependent": "mdast-util-gfm",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-gfm-table"
+  },
+  "mdast-util-gfm-task-list-item": {
+    "current": "0.1.6",
+    "wanted": "0.1.6",
+    "latest": "2.0.0",
+    "dependent": "mdast-util-gfm",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-gfm-task-list-item"
+  },
+  "mdast-util-to-hast": {
+    "current": "10.2.0",
+    "wanted": "10.2.0",
+    "latest": "13.0.2",
+    "dependent": "gatsby-transformer-remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-to-hast"
+  },
+  "mdast-util-to-markdown": {
+    "current": "0.6.5",
+    "wanted": "0.6.5",
+    "latest": "2.1.0",
+    "dependent": "remark-stringify",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-to-markdown"
+  },
+  "mdast-util-to-nlcst": {
+    "current": "4.0.1",
+    "wanted": "4.0.1",
+    "latest": "7.0.0",
+    "dependent": "remark-retext",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-to-nlcst"
+  },
+  "mdast-util-to-string": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "4.0.0",
+    "dependent": "mdast-util-toc",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-to-string"
+  },
+  "mdast-util-toc": {
+    "current": "5.1.0",
+    "wanted": "5.1.0",
+    "latest": "7.0.0",
+    "dependent": "gatsby-transformer-remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mdast-util-toc"
+  },
+  "mdn-data": {
+    "current": "2.0.28",
+    "wanted": "2.0.28",
+    "latest": "2.1.0",
+    "dependent": "css-tree",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/csso/node_modules/mdn-data"
+  },
+  "meant": {
+    "current": "1.0.3",
+    "wanted": "1.0.3",
+    "latest": "2.0.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/meant"
+  },
+  "media-typer": {
+    "current": "0.3.0",
+    "wanted": "0.3.0",
+    "latest": "1.1.0",
+    "dependent": "type-is",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/media-typer"
+  },
+  "mem": {
+    "current": "8.1.1",
+    "wanted": "8.1.1",
+    "latest": "9.0.2",
+    "dependent": "webpack-dev-middleware",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mem"
+  },
+  "memfs": {
+    "current": "3.5.3",
+    "wanted": "3.5.3",
+    "latest": "4.6.0",
+    "dependent": "webpack-dev-middleware",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/memfs"
+  },
+  "micromark": {
+    "current": "2.11.4",
+    "wanted": "2.11.4",
+    "latest": "4.0.0",
+    "dependent": "micromark-extension-footnote",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/micromark"
+  },
+  "micromark-extension-footnote": {
+    "current": "0.3.2",
+    "wanted": "0.3.2",
+    "latest": "1.0.2",
+    "dependent": "remark-footnotes",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/micromark-extension-footnote"
+  },
+  "micromark-extension-gfm": {
+    "current": "0.3.3",
+    "wanted": "0.3.3",
+    "latest": "3.0.0",
+    "dependent": "remark-gfm",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/micromark-extension-gfm"
+  },
+  "micromark-extension-gfm-autolink-literal": {
+    "current": "0.5.7",
+    "wanted": "0.5.7",
+    "latest": "2.0.0",
+    "dependent": "micromark-extension-gfm",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/micromark-extension-gfm-autolink-literal"
+  },
+  "micromark-extension-gfm-strikethrough": {
+    "current": "0.6.5",
+    "wanted": "0.6.5",
+    "latest": "2.0.0",
+    "dependent": "micromark-extension-gfm",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/micromark-extension-gfm-strikethrough"
+  },
+  "micromark-extension-gfm-table": {
+    "current": "0.4.3",
+    "wanted": "0.4.3",
+    "latest": "2.0.0",
+    "dependent": "micromark-extension-gfm",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/micromark-extension-gfm-table"
+  },
+  "micromark-extension-gfm-tagfilter": {
+    "current": "0.3.0",
+    "wanted": "0.3.0",
+    "latest": "2.0.0",
+    "dependent": "micromark-extension-gfm",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/micromark-extension-gfm-tagfilter"
+  },
+  "micromark-extension-gfm-task-list-item": {
+    "current": "0.3.3",
+    "wanted": "0.3.3",
+    "latest": "2.0.1",
+    "dependent": "micromark-extension-gfm",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/micromark-extension-gfm-task-list-item"
+  },
+  "mime": {
+    "current": "1.6.0",
+    "wanted": "1.6.0",
+    "latest": "3.0.0",
+    "dependent": "send",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/send/node_modules/mime"
+  },
+  "mimic-fn": {
+    "current": "2.1.0",
+    "wanted": "2.1.0",
+    "latest": "4.0.0",
+    "dependent": "onetime",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mimic-fn"
+  },
+  "mimic-response": {
+    "current": "3.1.0",
+    "wanted": "3.1.0",
+    "latest": "4.0.0",
+    "dependent": "decompress-response",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/decompress-response/node_modules/mimic-response"
+  },
+  "mini-css-extract-plugin": {
+    "current": "1.6.2",
+    "wanted": "1.6.2",
+    "latest": "2.7.6",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mini-css-extract-plugin"
+  },
+  "minimatch": {
+    "current": "3.1.2",
+    "wanted": "3.1.2",
+    "latest": "9.0.3",
+    "dependent": "glob",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/minimatch"
+  },
+  "mitt": {
+    "current": "1.2.0",
+    "wanted": "1.2.0",
+    "latest": "3.0.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mitt"
+  },
+  "mkdirp": {
+    "current": "0.5.6",
+    "wanted": "0.5.6",
+    "latest": "3.0.1",
+    "dependent": "multer",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mkdirp"
+  },
+  "ms": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "2.1.3",
+    "dependent": "debug",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/stream-parser/node_modules/ms"
+  },
+  "msgpackr": {
+    "current": "1.9.7",
+    "wanted": "1.9.9",
+    "latest": "1.9.9",
+    "dependent": "lmdb",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/msgpackr"
+  },
+  "mute-stream": {
+    "current": "0.0.8",
+    "wanted": "0.0.8",
+    "latest": "1.0.0",
+    "dependent": "read",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/mute-stream"
+  },
+  "nan": {
+    "current": "2.17.0",
+    "wanted": "2.18.0",
+    "latest": "2.18.0",
+    "dependent": "tree-sitter-json",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/nan"
+  },
+  "nanoid": {
+    "current": "3.3.6",
+    "wanted": "3.3.6",
+    "latest": "5.0.2",
+    "dependent": "postcss",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/nanoid"
+  },
+  "needle": {
+    "current": "2.9.1",
+    "wanted": "2.9.1",
+    "latest": "3.2.0",
+    "dependent": "probe-image-size",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/needle"
+  },
+  "nice-try": {
+    "current": "1.0.5",
+    "wanted": "1.0.5",
+    "latest": "3.0.1",
+    "dependent": "cross-spawn",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/nice-try"
+  },
+  "nlcst-to-string": {
+    "current": "2.0.4",
+    "wanted": "2.0.4",
+    "latest": "4.0.0",
+    "dependent": "parse-latin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/nlcst-to-string"
+  },
+  "no-case": {
+    "current": "3.0.4",
+    "wanted": "3.0.4",
+    "latest": "4.0.0",
+    "dependent": "sentence-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/no-case"
+  },
+  "node-abi": {
+    "current": "3.47.0",
+    "wanted": "3.51.0",
+    "latest": "3.51.0",
+    "dependent": "prebuild-install",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/node-abi"
+  },
+  "node-addon-api": {
+    "current": "6.1.0",
+    "wanted": "6.1.0",
+    "latest": "7.0.0",
+    "dependent": "sharp",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/sharp/node_modules/node-addon-api"
+  },
+  "node-domexception": {
+    "current": "1.0.0",
+    "wanted": "1.0.0",
+    "latest": "2.0.1",
+    "dependent": "formdata-node",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/node-domexception"
+  },
+  "node-fetch": {
+    "current": "2.7.0",
+    "wanted": "2.7.0",
+    "latest": "3.3.2",
+    "dependent": "gatsby-telemetry",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/node-fetch"
+  },
+  "node-gyp-build-optional-packages": {
+    "current": "5.0.7",
+    "wanted": "5.0.7",
+    "latest": "5.1.1",
+    "dependent": "msgpackr-extract",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/msgpackr-extract/node_modules/node-gyp-build-optional-packages"
+  },
+  "node-html-parser": {
+    "current": "5.4.2",
+    "wanted": "5.4.2",
+    "latest": "6.1.10",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/node-html-parser"
+  },
+  "node-object-hash": {
+    "current": "2.3.10",
+    "wanted": "2.3.10",
+    "latest": "3.0.0",
+    "dependent": "gatsby-core-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/node-object-hash"
+  },
+  "node-sass": {
+    "wanted": "8.0.0",
+    "latest": "9.0.0",
+    "dependent": "sass-loader"
+  },
+  "normalize-path": {
+    "current": "2.1.1",
+    "wanted": "2.1.1",
+    "latest": "3.0.0",
+    "dependent": "unixify",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unixify/node_modules/normalize-path"
+  },
+  "normalize-url": {
+    "current": "6.1.0",
+    "wanted": "6.1.0",
+    "latest": "8.0.0",
+    "dependent": "cacheable-request",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/normalize-url"
+  },
+  "npm-run-path": {
+    "current": "4.0.1",
+    "wanted": "4.0.1",
+    "latest": "5.1.0",
+    "dependent": "execa",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/npm-run-path"
+  },
+  "object-inspect": {
+    "current": "1.12.3",
+    "wanted": "1.13.1",
+    "latest": "1.13.1",
+    "dependent": "side-channel",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/object-inspect"
+  },
+  "object.fromentries": {
+    "current": "2.0.6",
+    "wanted": "2.0.7",
+    "latest": "2.0.7",
+    "dependent": "eslint-plugin-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/object.fromentries"
+  },
+  "onetime": {
+    "current": "5.1.2",
+    "wanted": "5.1.2",
+    "latest": "6.0.0",
+    "dependent": "restore-cursor",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/onetime"
+  },
+  "open": {
+    "current": "8.4.2",
+    "wanted": "8.4.2",
+    "latest": "9.1.0",
+    "dependent": "react-dev-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/react-dev-utils/node_modules/open"
+  },
+  "os-tmpdir": {
+    "current": "1.0.2",
+    "wanted": "1.0.2",
+    "latest": "2.0.0",
+    "dependent": "tmp",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/os-tmpdir"
+  },
+  "p-cancelable": {
+    "current": "3.0.0",
+    "wanted": "3.0.0",
+    "latest": "4.0.1",
+    "dependent": "got",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/package-json/node_modules/p-cancelable"
+  },
+  "p-defer": {
+    "current": "1.0.0",
+    "wanted": "1.0.0",
+    "latest": "4.0.0",
+    "dependent": "map-age-cleaner",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/map-age-cleaner/node_modules/p-defer"
+  },
+  "p-limit": {
+    "current": "2.3.0",
+    "wanted": "2.3.0",
+    "latest": "4.0.0",
+    "dependent": "p-locate",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/yargs/node_modules/p-limit"
+  },
+  "p-locate": {
+    "current": "4.1.0",
+    "wanted": "4.1.0",
+    "latest": "6.0.0",
+    "dependent": "locate-path",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/yargs/node_modules/p-locate"
+  },
+  "p-try": {
+    "current": "2.2.0",
+    "wanted": "2.2.0",
+    "latest": "3.0.0",
+    "dependent": "p-limit",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/p-try"
+  },
+  "param-case": {
+    "current": "3.0.4",
+    "wanted": "3.0.4",
+    "latest": "4.0.0",
+    "dependent": "html-minifier-terser",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/param-case"
+  },
+  "parent-module": {
+    "current": "1.0.1",
+    "wanted": "1.0.1",
+    "latest": "3.1.0",
+    "dependent": "import-fresh",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/parent-module"
+  },
+  "parse-english": {
+    "current": "4.2.0",
+    "wanted": "4.2.0",
+    "latest": "7.0.0",
+    "dependent": "retext-english",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/parse-english"
+  },
+  "parse-entities": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "4.0.1",
+    "dependent": "refractor",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/parse-entities"
+  },
+  "parse-json": {
+    "current": "5.2.0",
+    "wanted": "5.2.0",
+    "latest": "7.1.0",
+    "dependent": "cosmiconfig",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/parse-json"
+  },
+  "parse-latin": {
+    "current": "4.3.0",
+    "wanted": "4.3.0",
+    "latest": "7.0.0",
+    "dependent": "parse-english",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/parse-latin"
+  },
+  "parse5": {
+    "current": "6.0.1",
+    "wanted": "6.0.1",
+    "latest": "7.1.2",
+    "dependent": "hast-util-raw",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hast-util-raw/node_modules/parse5"
+  },
+  "pascal-case": {
+    "current": "3.1.2",
+    "wanted": "3.1.2",
+    "latest": "4.0.0",
+    "dependent": "change-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/pascal-case"
+  },
+  "patch-package": {
+    "current": "6.5.1",
+    "wanted": "6.5.1",
+    "latest": "8.0.0",
+    "dependent": "swagger-ui-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/patch-package"
+  },
+  "path-case": {
+    "current": "3.0.4",
+    "wanted": "3.0.4",
+    "latest": "4.0.0",
+    "dependent": "change-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/path-case"
+  },
+  "path-exists": {
+    "current": "4.0.0",
+    "wanted": "4.0.0",
+    "latest": "5.0.0",
+    "dependent": "find-up",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/path-exists"
+  },
+  "path-is-absolute": {
+    "current": "1.0.1",
+    "wanted": "1.0.1",
+    "latest": "2.0.0",
+    "dependent": "glob",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/path-is-absolute"
+  },
+  "path-key": {
+    "current": "2.0.1",
+    "wanted": "2.0.1",
+    "latest": "4.0.0",
+    "dependent": "cross-spawn",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/patch-package/node_modules/path-key"
+  },
+  "path-to-regexp": {
+    "current": "0.1.7",
+    "wanted": "0.1.7",
+    "latest": "6.2.1",
+    "dependent": "express",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/path-to-regexp"
+  },
+  "path-type": {
+    "current": "4.0.0",
+    "wanted": "4.0.0",
+    "latest": "5.0.0",
+    "dependent": "cosmiconfig",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/path-type"
+  },
+  "peek-readable": {
+    "current": "4.1.0",
+    "wanted": "4.1.0",
+    "latest": "5.0.0",
+    "dependent": "strtok3",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/peek-readable"
+  },
+  "pkg-dir": {
+    "current": "4.2.0",
+    "wanted": "4.2.0",
+    "latest": "7.0.0",
+    "dependent": "find-cache-dir",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/pkg-dir"
+  },
+  "pkg-up": {
+    "current": "3.1.0",
+    "wanted": "3.1.0",
+    "latest": "4.0.0",
+    "dependent": "react-dev-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/pkg-up"
+  },
+  "postcss-loader": {
+    "current": "5.3.0",
+    "wanted": "5.3.0",
+    "latest": "7.3.3",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/postcss-loader"
+  },
+  "prettier": {
+    "current": "2.8.8",
+    "wanted": "2.8.8",
+    "latest": "3.0.3",
+    "dependent": "docs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/prettier"
+  },
+  "pretty-bytes": {
+    "current": "5.6.0",
+    "wanted": "5.6.0",
+    "latest": "6.1.1",
+    "dependent": "gatsby-source-filesystem",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/pretty-bytes"
+  },
+  "pretty-error": {
+    "current": "2.1.2",
+    "wanted": "2.1.2",
+    "latest": "4.0.0",
+    "dependent": "gatsby-cli",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/pretty-error"
+  },
+  "prismjs": {
+    "current": "1.27.0",
+    "wanted": "1.27.0",
+    "latest": "1.29.0",
+    "dependent": "refractor",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/refractor/node_modules/prismjs"
+  },
+  "promise": {
+    "current": "7.3.1",
+    "wanted": "7.3.1",
+    "latest": "8.3.0",
+    "dependent": "fbjs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/promise"
+  },
+  "property-information": {
+    "current": "5.6.0",
+    "wanted": "5.6.0",
+    "latest": "6.3.0",
+    "dependent": "hast-util-from-parse5",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/property-information"
+  },
+  "punycode": {
+    "current": "1.4.1",
+    "wanted": "1.4.1",
+    "latest": "2.3.0",
+    "dependent": "url",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/url/node_modules/punycode"
+  },
+  "qs": {
+    "current": "6.11.0",
+    "wanted": "6.11.2",
+    "latest": "6.11.2",
+    "dependent": "url",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/qs"
+  },
+  "query-string": {
+    "current": "6.14.1",
+    "wanted": "6.14.1",
+    "latest": "8.1.0",
+    "dependent": "gatsby-remark-images",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/query-string"
+  },
+  "quick-lru": {
+    "current": "5.1.1",
+    "wanted": "5.1.1",
+    "latest": "7.0.0",
+    "dependent": "http2-wrapper",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/quick-lru"
+  },
+  "ramda": {
+    "current": "0.29.0",
+    "wanted": "0.29.1",
+    "latest": "0.29.1",
+    "dependent": "ramda-adjunct",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/ramda"
+  },
+  "raw-body": {
+    "current": "2.5.1",
+    "wanted": "2.5.2",
+    "latest": "2.5.2",
+    "dependent": "express-http-proxy",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/raw-body"
+  },
+  "react-is": {
+    "current": "16.13.1",
+    "wanted": "16.13.1",
+    "latest": "18.2.0",
+    "dependent": "prop-types",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/react-is"
+  },
+  "react-native": {
+    "wanted": "0.72.6",
+    "latest": "0.72.6",
+    "dependent": "react-redux"
+  },
+  "react-redux": {
+    "current": "8.1.2",
+    "wanted": "8.1.3",
+    "latest": "8.1.3",
+    "dependent": "swagger-ui-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/react-redux"
+  },
+  "react-server-dom-webpack": {
+    "current": "0.0.0-experimental-c8b778b7f-20220825",
+    "wanted": "0.0.0-experimental-c8b778b7f-20220825",
+    "latest": "0.0.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/react-server-dom-webpack"
+  },
+  "read": {
+    "current": "1.0.7",
+    "wanted": "1.0.7",
+    "latest": "2.1.0",
+    "dependent": "yurnalist",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/read"
+  },
+  "readable-stream": {
+    "current": "3.6.2",
+    "wanted": "3.6.2",
+    "latest": "4.4.2",
+    "dependent": "readable-web-to-node-stream",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/readable-web-to-node-stream/node_modules/readable-stream"
+  },
+  "receptor": {
+    "current": "1.0.0",
+    "wanted": "1.0.0",
+    "latest": "2.2.1",
+    "dependent": "uswds",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/receptor"
+  },
+  "reflect.getprototypeof": {
+    "current": "1.0.3",
+    "wanted": "1.0.4",
+    "latest": "1.0.4",
+    "dependent": "iterator.prototype",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/reflect.getprototypeof"
+  },
+  "refractor": {
+    "current": "3.6.0",
+    "wanted": "3.6.0",
+    "latest": "4.8.1",
+    "dependent": "react-syntax-highlighter",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/refractor"
+  },
+  "regenerate-unicode-properties": {
+    "current": "10.1.0",
+    "wanted": "10.1.1",
+    "latest": "10.1.1",
+    "dependent": "regexpu-core",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/regenerate-unicode-properties"
+  },
+  "regenerator-runtime": {
+    "current": "0.13.11",
+    "wanted": "0.13.11",
+    "latest": "0.14.0",
+    "dependent": "@parcel/transformer-js",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/@parcel/transformer-js/node_modules/regenerator-runtime"
+  },
+  "regexp.prototype.flags": {
+    "current": "1.5.0",
+    "wanted": "1.5.1",
+    "latest": "1.5.1",
+    "dependent": "string.prototype.matchall",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/regexp.prototype.flags"
+  },
+  "regexpu-core": {
+    "current": "5.3.2",
+    "wanted": "5.3.2",
+    "latest": "6.0.0",
+    "dependent": "@babel/helper-create-regexp-features-plugin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/regexpu-core"
+  },
+  "regjsparser": {
+    "current": "0.9.1",
+    "wanted": "0.9.1",
+    "latest": "0.10.0",
+    "dependent": "regexpu-core",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/regjsparser"
+  },
+  "relay-runtime": {
+    "current": "12.0.0",
+    "wanted": "12.0.0",
+    "latest": "16.0.0",
+    "dependent": "@ardatan/relay-compiler",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/relay-runtime"
+  },
+  "remark": {
+    "current": "13.0.0",
+    "wanted": "13.0.0",
+    "latest": "15.0.1",
+    "dependent": "gatsby-transformer-remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/remark"
+  },
+  "remark-footnotes": {
+    "current": "3.0.0",
+    "wanted": "3.0.0",
+    "latest": "4.0.1",
+    "dependent": "gatsby-transformer-remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/remark-footnotes"
+  },
+  "remark-gfm": {
+    "current": "1.0.0",
+    "wanted": "1.0.0",
+    "latest": "4.0.0",
+    "dependent": "gatsby-transformer-remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/remark-gfm"
+  },
+  "remark-parse": {
+    "current": "9.0.0",
+    "wanted": "9.0.0",
+    "latest": "11.0.0",
+    "dependent": "remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/remark-parse"
+  },
+  "remark-retext": {
+    "current": "4.0.0",
+    "wanted": "4.0.0",
+    "latest": "6.0.0",
+    "dependent": "gatsby-transformer-remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/remark-retext"
+  },
+  "remark-stringify": {
+    "current": "9.0.1",
+    "wanted": "9.0.1",
+    "latest": "11.0.0",
+    "dependent": "remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/remark-stringify"
+  },
+  "renderkid": {
+    "current": "2.0.7",
+    "wanted": "2.0.7",
+    "latest": "3.0.0",
+    "dependent": "pretty-error",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/renderkid"
+  },
+  "resolve": {
+    "current": "2.0.0-next.4",
+    "wanted": "2.0.0-next.5",
+    "latest": "1.22.8",
+    "dependent": "eslint-plugin-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/eslint-plugin-react/node_modules/resolve"
+  },
+  "resolve-from": {
+    "current": "4.0.0",
+    "wanted": "4.0.0",
+    "latest": "5.0.0",
+    "dependent": "import-fresh",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/import-fresh/node_modules/resolve-from"
+  },
+  "responselike": {
+    "current": "2.0.1",
+    "wanted": "2.0.1",
+    "latest": "3.0.0",
+    "dependent": "got",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/responselike"
+  },
+  "restore-cursor": {
+    "current": "3.1.0",
+    "wanted": "3.1.0",
+    "latest": "5.0.0",
+    "dependent": "cli-cursor",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/restore-cursor"
+  },
+  "ret": {
+    "current": "0.2.2",
+    "wanted": "0.2.2",
+    "latest": "0.5.0",
+    "dependent": "randexp",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/ret"
+  },
+  "retext-english": {
+    "current": "3.0.4",
+    "wanted": "3.0.4",
+    "latest": "5.0.0",
+    "dependent": "gatsby-transformer-remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/retext-english"
+  },
+  "retry": {
+    "current": "0.12.0",
+    "wanted": "0.12.0",
+    "latest": "0.13.1",
+    "dependent": "proper-lockfile",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/retry"
+  },
+  "rimraf": {
+    "current": "3.0.2",
+    "wanted": "3.0.2",
+    "latest": "5.0.5",
+    "dependent": "tmp",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/rimraf"
+  },
+  "run-async": {
+    "current": "2.4.1",
+    "wanted": "2.4.1",
+    "latest": "3.0.0",
+    "dependent": "inquirer",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/run-async"
+  },
+  "rxjs": {
+    "current": "6.6.7",
+    "wanted": "6.6.7",
+    "latest": "7.8.1",
+    "dependent": "inquirer",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/rxjs"
+  },
+  "safe-array-concat": {
+    "current": "1.0.0",
+    "wanted": "1.0.1",
+    "latest": "1.0.1",
+    "dependent": "es-iterator-helpers",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/safe-array-concat"
+  },
+  "safe-buffer": {
+    "current": "5.1.2",
+    "wanted": "5.1.2",
+    "latest": "5.2.1",
+    "dependent": "string_decoder",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/string_decoder/node_modules/safe-buffer"
+  },
+  "sass": {
+    "current": "1.66.1",
+    "wanted": "1.69.4",
+    "latest": "1.69.4",
+    "dependent": "sass-loader",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/sass"
+  },
+  "sass-loader": {
+    "current": "10.4.1",
+    "wanted": "10.4.1",
+    "latest": "13.3.2",
+    "dependent": "gatsby-plugin-sass",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/sass-loader"
+  },
+  "sax": {
+    "current": "1.2.4",
+    "wanted": "1.3.0",
+    "latest": "1.3.0",
+    "dependent": "needle",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/sax"
+  },
+  "schema-utils": {
+    "current": "3.3.0",
+    "wanted": "3.3.0",
+    "latest": "4.2.0",
+    "dependent": "webpack-dev-middleware",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/schema-utils"
+  },
+  "semver": {
+    "current": "5.7.2",
+    "wanted": "5.7.2",
+    "latest": "7.5.4",
+    "dependent": "cross-spawn",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/patch-package/node_modules/semver"
+  },
+  "sentence-case": {
+    "current": "3.0.4",
+    "wanted": "3.0.4",
+    "latest": "4.0.0",
+    "dependent": "change-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/sentence-case"
+  },
+  "serialize-error": {
+    "current": "8.1.0",
+    "wanted": "8.1.0",
+    "latest": "11.0.2",
+    "dependent": "swagger-ui-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/serialize-error"
+  },
+  "sharp": {
+    "current": "0.32.5",
+    "wanted": "0.32.6",
+    "latest": "0.32.6",
+    "dependent": "gatsby-sharp",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/sharp"
+  },
+  "shebang-command": {
+    "current": "1.2.0",
+    "wanted": "1.2.0",
+    "latest": "2.0.0",
+    "dependent": "cross-spawn",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/patch-package/node_modules/shebang-command"
+  },
+  "shebang-regex": {
+    "current": "3.0.0",
+    "wanted": "3.0.0",
+    "latest": "4.0.0",
+    "dependent": "shebang-command",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/shebang-regex"
+  },
+  "short-unique-id": {
+    "current": "4.4.4",
+    "wanted": "4.4.4",
+    "latest": "5.0.3",
+    "dependent": "@swagger-api/apidom-core",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/short-unique-id"
+  },
+  "signal-exit": {
+    "current": "3.0.7",
+    "wanted": "3.0.7",
+    "latest": "4.1.0",
+    "dependent": "write-file-atomic",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/signal-exit"
+  },
+  "signedsource": {
+    "current": "1.0.0",
+    "wanted": "1.0.0",
+    "latest": "2.0.0",
+    "dependent": "@ardatan/relay-compiler",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/signedsource"
+  },
+  "slash": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "5.1.0",
+    "dependent": "patch-package",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/patch-package/node_modules/slash"
+  },
+  "slice-ansi": {
+    "current": "4.0.0",
+    "wanted": "4.0.0",
+    "latest": "6.0.0",
+    "dependent": "table",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/slice-ansi"
+  },
+  "snake-case": {
+    "current": "3.0.4",
+    "wanted": "3.0.4",
+    "latest": "4.0.0",
+    "dependent": "change-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/snake-case"
+  },
+  "socket.io": {
+    "current": "4.6.1",
+    "wanted": "4.6.1",
+    "latest": "4.7.2",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/socket.io"
+  },
+  "socket.io-client": {
+    "current": "4.7.1",
+    "wanted": "4.7.1",
+    "latest": "4.7.2",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/socket.io-client"
+  },
+  "sockjs-client": {
+    "wanted": "1.6.1",
+    "latest": "1.6.1",
+    "dependent": "@pmmmwh/react-refresh-webpack-plugin"
+  },
+  "source-map": {
+    "current": "0.6.1",
+    "wanted": "0.6.1",
+    "latest": "0.7.4",
+    "dependent": "webpack-sources",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/webpack-sources/node_modules/source-map"
+  },
+  "space-separated-tokens": {
+    "current": "1.1.5",
+    "wanted": "1.1.5",
+    "latest": "2.0.2",
+    "dependent": "hastscript",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/space-separated-tokens"
+  },
+  "split-on-first": {
+    "current": "1.1.0",
+    "wanted": "1.1.0",
+    "latest": "3.0.0",
+    "dependent": "query-string",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/split-on-first"
+  },
+  "sponge-case": {
+    "current": "1.0.1",
+    "wanted": "1.0.1",
+    "latest": "2.0.2",
+    "dependent": "change-case-all",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/sponge-case"
+  },
+  "sprintf-js": {
+    "current": "1.1.2",
+    "wanted": "1.1.3",
+    "latest": "1.1.3",
+    "dependent": "underscore.string",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/sprintf-js"
+  },
+  "stack-trace": {
+    "current": "0.0.10",
+    "wanted": "0.0.10",
+    "latest": "1.0.0-pre2",
+    "dependent": "gatsby-cli",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/stack-trace"
+  },
+  "string_decoder": {
+    "current": "1.1.1",
+    "wanted": "1.3.0",
+    "latest": "1.3.0",
+    "dependent": "readable-stream",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/string_decoder"
+  },
+  "string-similarity": {
+    "current": "1.2.2",
+    "wanted": "1.2.2",
+    "latest": "4.0.4",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/string-similarity"
+  },
+  "string-width": {
+    "current": "4.2.3",
+    "wanted": "4.2.3",
+    "latest": "6.1.0",
+    "dependent": "yargs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/string-width"
+  },
+  "string.prototype.matchall": {
+    "current": "4.0.8",
+    "wanted": "4.0.10",
+    "latest": "4.0.10",
+    "dependent": "eslint-plugin-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/string.prototype.matchall"
+  },
+  "string.prototype.trim": {
+    "current": "1.2.7",
+    "wanted": "1.2.8",
+    "latest": "1.2.8",
+    "dependent": "es-abstract",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/string.prototype.trim"
+  },
+  "string.prototype.trimend": {
+    "current": "1.0.6",
+    "wanted": "1.0.7",
+    "latest": "1.0.7",
+    "dependent": "es-abstract",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/string.prototype.trimend"
+  },
+  "string.prototype.trimstart": {
+    "current": "1.0.6",
+    "wanted": "1.0.7",
+    "latest": "1.0.7",
+    "dependent": "es-abstract",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/string.prototype.trimstart"
+  },
+  "stringify-entities": {
+    "current": "3.1.0",
+    "wanted": "3.1.0",
+    "latest": "4.0.3",
+    "dependent": "hast-util-to-html",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/stringify-entities"
+  },
+  "strip-ansi": {
+    "current": "5.2.0",
+    "wanted": "5.2.0",
+    "latest": "7.1.0",
+    "dependent": "yurnalist",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/yurnalist/node_modules/strip-ansi"
+  },
+  "strip-bom": {
+    "current": "3.0.0",
+    "wanted": "3.0.0",
+    "latest": "5.0.0",
+    "dependent": "tsconfig-paths",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/strip-bom"
+  },
+  "strip-final-newline": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "3.0.0",
+    "dependent": "execa",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/strip-final-newline"
+  },
+  "strip-json-comments": {
+    "current": "2.0.1",
+    "wanted": "2.0.1",
+    "latest": "5.0.1",
+    "dependent": "rc",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/rc/node_modules/strip-json-comments"
+  },
+  "strip-outer": {
+    "current": "1.0.1",
+    "wanted": "1.0.1",
+    "latest": "2.0.0",
+    "dependent": "filenamify",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/strip-outer"
+  },
+  "strtok3": {
+    "current": "6.3.0",
+    "wanted": "6.3.0",
+    "latest": "7.0.0",
+    "dependent": "file-type",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/strtok3"
+  },
+  "style-loader": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "3.3.3",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/style-loader"
+  },
+  "style-to-object": {
+    "current": "0.3.0",
+    "wanted": "0.3.0",
+    "latest": "1.0.3",
+    "dependent": "hast-to-hyperscript",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/hast-to-hyperscript/node_modules/style-to-object"
+  },
+  "sudo-prompt": {
+    "current": "8.2.5",
+    "wanted": "8.2.5",
+    "latest": "9.2.1",
+    "dependent": "devcert",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/sudo-prompt"
+  },
+  "supports-color": {
+    "current": "8.1.1",
+    "wanted": "8.1.1",
+    "latest": "9.4.0",
+    "dependent": "jest-worker",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/terser-webpack-plugin/node_modules/supports-color"
+  },
+  "swagger-client": {
+    "current": "3.20.0",
+    "wanted": "3.23.1",
+    "latest": "3.23.1",
+    "dependent": "swagger-ui-react",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/swagger-client"
+  },
+  "swagger-jsdoc": {
+    "current": "5.0.1",
+    "wanted": "5.0.1",
+    "latest": "6.2.8",
+    "dependent": "docs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/swagger-jsdoc"
+  },
+  "swagger-parser": {
+    "current": "10.0.2",
+    "wanted": "10.0.2",
+    "latest": "10.0.3",
+    "dependent": "swagger-jsdoc",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/swagger-parser"
+  },
+  "swagger-ui-react": {
+    "current": "4.19.1",
+    "wanted": "4.19.1",
+    "latest": "5.9.0",
+    "dependent": "docs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/swagger-ui-react"
+  },
+  "swap-case": {
+    "current": "2.0.2",
+    "wanted": "2.0.2",
+    "latest": "3.0.2",
+    "dependent": "change-case-all",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/swap-case"
+  },
+  "tapable": {
+    "current": "1.1.3",
+    "wanted": "1.1.3",
+    "latest": "2.2.1",
+    "dependent": "fork-ts-checker-webpack-plugin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/fork-ts-checker-webpack-plugin/node_modules/tapable"
+  },
+  "tar-fs": {
+    "current": "2.1.1",
+    "wanted": "2.1.1",
+    "latest": "3.0.4",
+    "dependent": "prebuild-install",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/prebuild-install/node_modules/tar-fs"
+  },
+  "tar-stream": {
+    "current": "2.2.0",
+    "wanted": "2.2.0",
+    "latest": "3.1.6",
+    "dependent": "tar-fs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/prebuild-install/node_modules/tar-stream"
+  },
+  "terser": {
+    "current": "5.19.2",
+    "wanted": "5.22.0",
+    "latest": "5.22.0",
+    "dependent": "terser-webpack-plugin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/terser"
+  },
+  "title-case": {
+    "current": "3.0.3",
+    "wanted": "3.0.3",
+    "latest": "4.1.2",
+    "dependent": "change-case-all",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/title-case"
+  },
+  "tmp": {
+    "current": "0.0.33",
+    "wanted": "0.0.33",
+    "latest": "0.2.1",
+    "dependent": "patch-package",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/patch-package/node_modules/tmp"
+  },
+  "to-fast-properties": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "4.0.0",
+    "dependent": "@babel/types",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/to-fast-properties"
+  },
+  "token-types": {
+    "current": "4.2.1",
+    "wanted": "4.2.1",
+    "latest": "5.0.1",
+    "dependent": "file-type",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/token-types"
+  },
+  "tr46": {
+    "current": "0.0.3",
+    "wanted": "0.0.3",
+    "latest": "4.1.1",
+    "dependent": "whatwg-url",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/tr46"
+  },
+  "tree-sitter": {
+    "current": "0.20.4",
+    "wanted": "0.20.4",
+    "latest": "0.20.6",
+    "dependent": "@swagger-api/apidom-parser-adapter-yaml-1-2",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/tree-sitter"
+  },
+  "tree-sitter-json": {
+    "current": "0.20.0",
+    "wanted": "0.20.0",
+    "latest": "0.20.1",
+    "dependent": "@swagger-api/apidom-parser-adapter-json",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/tree-sitter-json"
+  },
+  "trim-repeated": {
+    "current": "1.0.0",
+    "wanted": "1.0.0",
+    "latest": "2.0.0",
+    "dependent": "filenamify",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/trim-repeated"
+  },
+  "trough": {
+    "current": "1.0.5",
+    "wanted": "1.0.5",
+    "latest": "2.1.0",
+    "dependent": "unified",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/trough"
+  },
+  "tsconfig-paths": {
+    "current": "3.14.2",
+    "wanted": "3.14.2",
+    "latest": "4.2.0",
+    "dependent": "eslint-plugin-import",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/tsconfig-paths"
+  },
+  "tslib": {
+    "current": "2.4.1",
+    "wanted": "2.6.2",
+    "latest": "2.6.2",
+    "dependent": "upper-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/tslib"
+  },
+  "type": {
+    "current": "1.2.0",
+    "wanted": "1.2.0",
+    "latest": "2.7.2",
+    "dependent": "d",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/type"
+  },
+  "type-fest": {
+    "current": "0.20.2",
+    "wanted": "0.20.2",
+    "latest": "4.5.0",
+    "dependent": "serialize-error",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/type-fest"
+  },
+  "typedarray": {
+    "current": "0.0.6",
+    "wanted": "0.0.6",
+    "latest": "0.0.7",
+    "dependent": "concat-stream",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/typedarray"
+  },
+  "typedarray-to-buffer": {
+    "current": "3.1.5",
+    "wanted": "3.1.5",
+    "latest": "4.0.0",
+    "dependent": "write-file-atomic",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/typedarray-to-buffer"
+  },
+  "types-ramda": {
+    "current": "0.29.4",
+    "wanted": "0.29.5",
+    "latest": "0.29.5",
+    "dependent": "@types/ramda",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/types-ramda"
+  },
+  "ua-parser-js": {
+    "current": "1.0.35",
+    "wanted": "1.0.36",
+    "latest": "1.0.36",
+    "dependent": "fbjs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/ua-parser-js"
+  },
+  "unherit": {
+    "current": "1.1.3",
+    "wanted": "1.1.3",
+    "latest": "3.0.1",
+    "dependent": "retext-english",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unherit"
+  },
+  "unified": {
+    "current": "9.2.2",
+    "wanted": "9.2.2",
+    "latest": "11.0.3",
+    "dependent": "remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unified"
+  },
+  "unique-string": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "3.0.0",
+    "dependent": "configstore",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unique-string"
+  },
+  "unist-builder": {
+    "current": "2.0.3",
+    "wanted": "2.0.3",
+    "latest": "4.0.0",
+    "dependent": "mdast-util-to-hast",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unist-builder"
+  },
+  "unist-util-generated": {
+    "current": "1.1.6",
+    "wanted": "1.1.6",
+    "latest": "3.0.0",
+    "dependent": "mdast-util-to-hast",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unist-util-generated"
+  },
+  "unist-util-is": {
+    "current": "4.1.0",
+    "wanted": "4.1.0",
+    "latest": "6.0.0",
+    "dependent": "unist-util-visit",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unist-util-is"
+  },
+  "unist-util-modify-children": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "4.0.0",
+    "dependent": "parse-latin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unist-util-modify-children"
+  },
+  "unist-util-position": {
+    "current": "3.1.0",
+    "wanted": "3.1.0",
+    "latest": "5.0.0",
+    "dependent": "mdast-util-to-nlcst",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unist-util-position"
+  },
+  "unist-util-remove-position": {
+    "current": "3.0.0",
+    "wanted": "3.0.0",
+    "latest": "5.0.0",
+    "dependent": "gatsby-transformer-remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unist-util-remove-position"
+  },
+  "unist-util-select": {
+    "current": "3.0.4",
+    "wanted": "3.0.4",
+    "latest": "5.0.0",
+    "dependent": "gatsby-transformer-remark",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unist-util-select"
+  },
+  "unist-util-stringify-position": {
+    "current": "2.0.3",
+    "wanted": "2.0.3",
+    "latest": "4.0.0",
+    "dependent": "vfile",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unist-util-stringify-position"
+  },
+  "unist-util-visit": {
+    "current": "2.0.3",
+    "wanted": "2.0.3",
+    "latest": "5.0.0",
+    "dependent": "unist-util-remove-position",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unist-util-visit"
+  },
+  "unist-util-visit-children": {
+    "current": "1.1.4",
+    "wanted": "1.1.4",
+    "latest": "3.0.0",
+    "dependent": "parse-latin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unist-util-visit-children"
+  },
+  "unist-util-visit-parents": {
+    "current": "3.1.1",
+    "wanted": "3.1.1",
+    "latest": "6.0.1",
+    "dependent": "unist-util-visit",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/unist-util-visit-parents"
+  },
+  "universalify": {
+    "current": "0.1.2",
+    "wanted": "0.1.2",
+    "latest": "2.0.0",
+    "dependent": "fs-extra",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/gatsby-plugin-meta-redirect/node_modules/universalify"
+  },
+  "update-browserslist-db": {
+    "current": "1.0.11",
+    "wanted": "1.0.13",
+    "latest": "1.0.13",
+    "dependent": "browserslist",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/update-browserslist-db"
+  },
+  "upper-case": {
+    "current": "2.0.2",
+    "wanted": "2.0.2",
+    "latest": "3.0.0",
+    "dependent": "constant-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/upper-case"
+  },
+  "upper-case-first": {
+    "current": "2.0.2",
+    "wanted": "2.0.2",
+    "latest": "3.0.0",
+    "dependent": "sentence-case",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/upper-case-first"
+  },
+  "url": {
+    "current": "0.11.1",
+    "wanted": "0.11.3",
+    "latest": "0.11.3",
+    "dependent": "swagger-client",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/url"
+  },
+  "utf-8-validate": {
+    "wanted": "5.0.10",
+    "latest": "6.0.3",
+    "dependent": "ws"
+  },
+  "utila": {
+    "current": "0.4.0",
+    "wanted": "0.4.0",
+    "latest": "0.5.0-dev.1",
+    "dependent": "dom-converter",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/utila"
+  },
+  "uuid": {
+    "current": "8.3.2",
+    "wanted": "8.3.2",
+    "latest": "9.0.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/uuid"
+  },
+  "vfile": {
+    "current": "4.2.1",
+    "wanted": "4.2.1",
+    "latest": "6.0.1",
+    "dependent": "unified",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/vfile"
+  },
+  "vfile-location": {
+    "current": "3.2.0",
+    "wanted": "3.2.0",
+    "latest": "5.0.2",
+    "dependent": "mdast-util-to-nlcst",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/vfile-location"
+  },
+  "vfile-message": {
+    "current": "2.0.4",
+    "wanted": "2.0.4",
+    "latest": "4.0.2",
+    "dependent": "vfile",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/vfile-message"
+  },
+  "vue-template-compiler": {
+    "wanted": "2.7.15",
+    "latest": "2.7.15",
+    "dependent": "fork-ts-checker-webpack-plugin"
+  },
+  "web-namespaces": {
+    "current": "1.1.4",
+    "wanted": "1.1.4",
+    "latest": "2.0.1",
+    "dependent": "hast-util-to-parse5",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/web-namespaces"
+  },
+  "web-streams-polyfill": {
+    "current": "4.0.0-beta.3",
+    "wanted": "4.0.0-beta.3",
+    "latest": "3.2.1",
+    "dependent": "formdata-node",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/web-streams-polyfill"
+  },
+  "web-tree-sitter": {
+    "current": "0.20.3",
+    "wanted": "0.20.3",
+    "latest": "0.20.8",
+    "dependent": "@swagger-api/apidom-parser-adapter-yaml-1-2",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/web-tree-sitter"
+  },
+  "webidl-conversions": {
+    "current": "3.0.1",
+    "wanted": "3.0.1",
+    "latest": "7.0.0",
+    "dependent": "whatwg-url",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/webidl-conversions"
+  },
+  "webpack": {
+    "current": "5.88.2",
+    "wanted": "5.89.0",
+    "latest": "5.89.0",
+    "dependent": "webpack-dev-middleware",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/webpack"
+  },
+  "webpack-dev-middleware": {
+    "current": "4.3.0",
+    "wanted": "4.3.0",
+    "latest": "6.1.1",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/webpack-dev-middleware"
+  },
+  "webpack-dev-server": {
+    "wanted": "4.15.1",
+    "latest": "4.15.1",
+    "dependent": "@pmmmwh/react-refresh-webpack-plugin"
+  },
+  "webpack-hot-middleware": {
+    "wanted": "2.25.4",
+    "latest": "2.25.4",
+    "dependent": "@pmmmwh/react-refresh-webpack-plugin"
+  },
+  "webpack-merge": {
+    "current": "5.9.0",
+    "wanted": "5.10.0",
+    "latest": "5.10.0",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/webpack-merge"
+  },
+  "webpack-plugin-serve": {
+    "wanted": "1.6.0",
+    "latest": "1.6.0",
+    "dependent": "@pmmmwh/react-refresh-webpack-plugin"
+  },
+  "webpack-sources": {
+    "current": "1.4.3",
+    "wanted": "1.4.3",
+    "latest": "3.2.3",
+    "dependent": "mini-css-extract-plugin",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/webpack-sources"
+  },
+  "webpack-virtual-modules": {
+    "current": "0.5.0",
+    "wanted": "0.5.0",
+    "latest": "0.6.0",
+    "dependent": "gatsby",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/webpack-virtual-modules"
+  },
+  "whatwg-url": {
+    "current": "5.0.0",
+    "wanted": "5.0.0",
+    "latest": "13.0.0",
+    "dependent": "node-fetch",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/whatwg-url"
+  },
+  "which": {
+    "current": "1.3.1",
+    "wanted": "1.3.1",
+    "latest": "4.0.0",
+    "dependent": "cross-spawn",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/patch-package/node_modules/which"
+  },
+  "which-typed-array": {
+    "current": "1.1.11",
+    "wanted": "1.1.13",
+    "latest": "1.1.13",
+    "dependent": "which-builtin-type",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/which-typed-array"
+  },
+  "widest-line": {
+    "current": "3.1.0",
+    "wanted": "3.1.0",
+    "latest": "4.0.1",
+    "dependent": "boxen",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/widest-line"
+  },
+  "wrap-ansi": {
+    "current": "6.2.0",
+    "wanted": "6.2.0",
+    "latest": "8.1.0",
+    "dependent": "cliui",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/cliui/node_modules/wrap-ansi"
+  },
+  "write-file-atomic": {
+    "current": "3.0.3",
+    "wanted": "3.0.3",
+    "latest": "5.0.1",
+    "dependent": "configstore",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/write-file-atomic"
+  },
+  "ws": {
+    "current": "8.11.0",
+    "wanted": "8.11.0",
+    "latest": "8.14.2",
+    "dependent": "socket.io-adapter",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/ws"
+  },
+  "xdg-basedir": {
+    "current": "4.0.0",
+    "wanted": "4.0.0",
+    "latest": "5.1.0",
+    "dependent": "gatsby-core-utils",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/xdg-basedir"
+  },
+  "xmlhttprequest-ssl": {
+    "current": "2.0.0",
+    "wanted": "2.0.0",
+    "latest": "2.1.1",
+    "dependent": "engine.io-client",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/xmlhttprequest-ssl"
+  },
+  "xstate": {
+    "current": "4.38.2",
+    "wanted": "4.38.3",
+    "latest": "4.38.3",
+    "dependent": "gatsby-source-filesystem",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/xstate"
+  },
+  "xxhash-wasm": {
+    "current": "0.4.2",
+    "wanted": "0.4.2",
+    "latest": "1.0.2",
+    "dependent": "@parcel/hash",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/xxhash-wasm"
+  },
+  "y18n": {
+    "current": "4.0.3",
+    "wanted": "4.0.3",
+    "latest": "5.0.8",
+    "dependent": "yargs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/y18n"
+  },
+  "yallist": {
+    "current": "3.1.1",
+    "wanted": "3.1.1",
+    "latest": "4.0.0",
+    "dependent": "lru-cache",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/yallist"
+  },
+  "yaml": {
+    "current": "2.3.2",
+    "wanted": "2.3.3",
+    "latest": "2.3.3",
+    "dependent": "yaml-loader",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/yaml"
+  },
+  "yargs": {
+    "current": "15.4.1",
+    "wanted": "15.4.1",
+    "latest": "17.7.2",
+    "dependent": "gatsby-cli",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/yargs"
+  },
+  "yargs-parser": {
+    "current": "18.1.3",
+    "wanted": "18.1.3",
+    "latest": "21.1.1",
+    "dependent": "yargs",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/yargs-parser"
+  },
+  "yocto-queue": {
+    "current": "0.1.0",
+    "wanted": "0.1.0",
+    "latest": "1.0.0",
+    "dependent": "p-limit",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/yocto-queue"
+  },
+  "z-schema": {
+    "current": "4.2.4",
+    "wanted": "4.2.4",
+    "latest": "6.0.1",
+    "dependent": "@apidevtools/swagger-parser",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/z-schema"
+  },
+  "zwitch": {
+    "current": "1.0.5",
+    "wanted": "1.0.5",
+    "latest": "2.0.4",
+    "dependent": "unist-util-select",
+    "location": "/Users/cantuj/cisagov/crossfeed/docs/node_modules/zwitch"
+  }
+}
