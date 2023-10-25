@@ -8,8 +8,8 @@ resource "aws_cloudwatch_metric_alarm" "root_user" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_high
   }
 }
@@ -24,8 +24,8 @@ resource "aws_cloudwatch_metric_alarm" "unauthorized_api_call" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_low
   }
 }
@@ -40,8 +40,8 @@ resource "aws_cloudwatch_metric_alarm" "login_without_mfa" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_high
   }
 }
@@ -56,8 +56,8 @@ resource "aws_cloudwatch_metric_alarm" "iam_policy" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_high
   }
 }
@@ -72,8 +72,8 @@ resource "aws_cloudwatch_metric_alarm" "cloudtrail" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_high
   }
 }
@@ -88,8 +88,8 @@ resource "aws_cloudwatch_metric_alarm" "login_failure" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_low
   }
 }
@@ -104,8 +104,8 @@ resource "aws_cloudwatch_metric_alarm" "cmk_delete_disable" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_critical
   }
 }
@@ -120,8 +120,8 @@ resource "aws_cloudwatch_metric_alarm" "s3_bucket_policy" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_high
   }
 }
@@ -136,8 +136,8 @@ resource "aws_cloudwatch_metric_alarm" "aws_config" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_high
   }
 }
@@ -152,8 +152,8 @@ resource "aws_cloudwatch_metric_alarm" "security_group" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_high
   }
 }
@@ -168,8 +168,8 @@ resource "aws_cloudwatch_metric_alarm" "nacl" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_high
   }
 }
@@ -184,8 +184,8 @@ resource "aws_cloudwatch_metric_alarm" "network_gateway" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_high
   }
 }
@@ -200,8 +200,8 @@ resource "aws_cloudwatch_metric_alarm" "route_table" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_high
   }
 }
@@ -216,8 +216,8 @@ resource "aws_cloudwatch_metric_alarm" "vpc" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_high
   }
 }
@@ -231,8 +231,8 @@ resource "aws_cloudwatch_metric_alarm" "ec2_shutdown" {
   statistic           = "SampleCount"
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
+    Project  = var.project
+    Stage    = var.stage
     Severity = var.severity_critical
   }
 }
