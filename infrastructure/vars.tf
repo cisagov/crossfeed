@@ -160,6 +160,18 @@ variable "log_metric_ec2_shutdown" {
   default     = "crossfeed-staging-EC2Shutdown"
 }
 
+variable "log_metric_db_shutdown" {
+  description = "log_metric_filter_DB_shutdown"
+  type        = string
+  default     = "crossfeed-staging-DBShutdown"
+}
+
+variable "log_metric_db_deletion" {
+  description = "log_metric_filter_db_deletion"
+  type        = string
+  default     = "crossfeed-staging-DBDeletion"
+}
+
 variable "sns_topic_alarms" {
   description = "sns_alarm_topic_name"
   type        = string
