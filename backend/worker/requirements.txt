@@ -10,7 +10,7 @@ joblib==1.2.0
 git+https://github.com/mitmproxy/mitmproxy@e0e46f4
 mitmproxy_wireguard==0.1.23
 numpy==1.24.3
-pandas==1.5.1
+pandas==2.1.2
 phonenumbers==8.13.8
 pip-tools==7.1.0
 pipreqs==0.4.11
