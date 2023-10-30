@@ -1,0 +1,31 @@
+FROM node:18-alpine3.17 as build
+USER root
+
+RUN apk update && apk upgrade
+
+WORKDIR /app
+
+COPY ./package* ./
+
+COPY tsconfig.json ./tsconfig.json
+COPY webpack.worker.config.js ./webpack.worker.config.js
+COPY mock.js ./mock.js
+COPY src ./src
+
+WORKDIR /app
+
+# Install pe-source module
+# Sync the latest from cf-staging branch
+RUN git clone -b cf-source-staging https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout c9cbbd73b22ef38cabe1da6ba50aeb2dc0be4f99 && sed -i 's/"pandas == 1.1.5"/"pandas == 1.5.1"/g' setup.py && sed -i 's/psycopg2-binary == 2.9.3/psycopg2-binary == 2.9.5/g' setup.py && sed -i 's/psycopg2-binary == 2.9.3/psycopg2-binary == 2.9.5/g' setup_reports.py  && pip install .
+
+# Python dependencies
+
+COPY worker/requirements.txt worker/requirements.txt
+
+RUN pip install -r worker/requirements.txt
+
+COPY worker worker
+
+RUN wget https://publicsuffix.org/list/public_suffix_list.dat --no-use-server-timestamps
+
+CMD ["./worker/pe-worker-entry.sh"]

@@ -429,3 +429,39 @@ variable "create_elk_instance" {
   type        = bool
   default     = false
 }
+
+variable "pe_worker_ecs_repository_name" {
+  description = "pe_worker_ecs_repository_name"
+  type        = string
+  default     = "pe-staging-worker"
+}
+
+variable "pe_worker_ecs_cluster_name" {
+  description = "pe_worker_ecs_cluster_name"
+  type        = string
+  default     = "pe-staging-worker"
+}
+
+variable "pe_worker_ecs_task_definition_family" {
+  description = "pe_worker_ecs_task_definition_family"
+  type        = string
+  default     = "pe-staging-worker"
+}
+
+variable "pe_worker_ecs_log_group_name" {
+  description = "pe_worker_ecs_log_group_name"
+  type        = string
+  default     = "pe-staging-worker"
+}
+
+variable "pe_worker_ecs_role_name" {
+  description = "pe_worker_ecs_role_name"
+  type        = string
+  default     = "pe-staging-worker"
+}
+
+variable "pe_shodan_ecs_service_name" {
+  description = "pe_shodan_ecs_service_name"
+  type        = string
+  default     = "pe-staging-shodan"
+}

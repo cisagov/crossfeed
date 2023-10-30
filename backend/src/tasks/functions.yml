@@ -38,9 +38,8 @@ scanExecution:
     - sqs:
         arn:
           Fn::GetAtt:
-            - WorkerQueue
+            - WorkerControlQueue
             - Arn
-        batchSize: 5 # Number of messages the lambda can continue to process while a Fargate is still running
 
 updateScanTaskStatus:
   handler: src/tasks/updateScanTaskStatus.handler
