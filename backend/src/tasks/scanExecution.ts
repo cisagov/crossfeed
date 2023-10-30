@@ -6,7 +6,6 @@ const ecs = new AWS.ECS();
 const sqs = new AWS.SQS();
 
 export const handler: Handler = async (event) => {
-
   try {
     let desiredCount;
     const clusterName = process.env.FARGATE_CLUSTER_NAME!;
@@ -17,18 +16,19 @@ export const handler: Handler = async (event) => {
     console.log(message_body);
 
     if (message_body.scriptType! === 'shodan') {
-
       // Place message in Shodan Queue
       await placeMessageInQueue(process.env.SHODAN_QUEUE_URL!, message_body);
 
       // Check if Fargate is running desired count and start if not
       desiredCount = 5;
-
-      await startFargateTask(clusterName, process.env.SHODAN_SERVICE_NAME!, desiredCount)
+      await startFargateTask(
+        clusterName,
+        process.env.SHODAN_SERVICE_NAME!,
+        desiredCount
+      );
     } else {
-      console.log("Shodan is the only script type available right now.")
+      console.log('Shodan is the only script type available right now.');
     }
-
   } catch (error) {
     console.error(error);
     return {
@@ -38,17 +38,24 @@ export const handler: Handler = async (event) => {
   }
 };
 
-
-async function startFargateTask(clusterName: string, serviceName: string, desiredCountNum: integer) {
+async function startFargateTask(
+  clusterName: string,
+  serviceName: string,
+  desiredCountNum: integer
+) {
   try {
     const describeServiceParams = {
       cluster: clusterName,
-      services: [serviceName],
+      services: [serviceName]
     };
-
-    const serviceDescription = await ecs.describeServices(describeServiceParams).promise();
-
-    if (serviceDescription && serviceDescription.services && serviceDescription.services.length > 0) {
+    const serviceDescription = await ecs
+      .describeServices(describeServiceParams)
+      .promise();
+    if (
+      serviceDescription &&
+      serviceDescription.services &&
+      serviceDescription.services.length > 0
+    ) {
       const service = serviceDescription.services[0];
 
       // Check if the desired task count is less than # provided
@@ -56,7 +63,7 @@ async function startFargateTask(clusterName: string, serviceName: string, desire
         const updateServiceParams = {
           cluster: clusterName,
           service: serviceName,
-          desiredCount: desiredCountNum, // Set to desired # of Fargate tasks
+          desiredCount: desiredCountNum // Set to desired # of Fargate tasks
         };
 
         await ecs.updateService(updateServiceParams).promise();
@@ -70,7 +77,7 @@ async function startFargateTask(clusterName: string, serviceName: string, desire
 async function placeMessageInQueue(queueUrl: string, message: any) {
   const sendMessageParams = {
     QueueUrl: queueUrl,
-    MessageBody: JSON.stringify(message),
+    MessageBody: JSON.stringify(message)
   };
 
   await sqs.sendMessage(sendMessageParams).promise();
