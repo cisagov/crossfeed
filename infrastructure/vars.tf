@@ -64,6 +64,24 @@ variable "frontend_cert_arn" {
   default     = "arn:aws:acm:us-east-1:563873274798:certificate/7c6a5980-80e3-47a4-9f21-cbda44b6f34c"
 }
 
+variable "log_metric_namespace_cloudwatch" {
+  description = "log_metric_namespace"
+  type        = string
+  default     = "crossfeed-staging-cloudwatch-controls"
+}
+
+variable "log_metric_name_cloudwatch1" {
+  description = "log_metric_filter_cloudwatch1"
+  type        = string
+  default     = "crossfeed-staging-RootUserAccess"
+}
+
+variable "sns_topic_alarms" {
+  description = "sns_alarm_topic_name"
+  type        = string
+  default     = "crossfeed-staging-cis-alarms"
+}
+
 variable "ssm_db_name" {
   description = "ssm_db_name"
   type        = string

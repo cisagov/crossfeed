@@ -21,6 +21,7 @@ export const usePersistentState = <T extends any = any>(
     if (key === 'token') {
       cookies.set('crossfeed-token', state, {
         domain: process.env.REACT_APP_COOKIE_DOMAIN,
+        sameSite: 'strict',
         secure: true
       });
     }
