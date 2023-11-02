@@ -16,7 +16,8 @@ import { ApiKey } from './api-key';
 export enum UserType {
   STANDARD = 'standard',
   GLOBAL_VIEW = 'globalView',
-  GLOBAL_ADMIN = 'globalAdmin'
+  GLOBAL_ADMIN = 'globalAdmin',
+  REGIONAL_ADMIN = 'regionalAdmin'
 }
 @Entity()
 export class User extends BaseEntity {

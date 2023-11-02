@@ -9,7 +9,7 @@ export interface User {
   lastName: string;
   fullName: string;
   invitePending: boolean;
-  userType: 'standard' | 'globalView' | 'globalAdmin';
+  userType: 'standard' | 'globalView' | 'globalAdmin'| 'regionalAdmin';
   email: string;
   roles: Role[];
   dateAcceptedTerms: string | null;
