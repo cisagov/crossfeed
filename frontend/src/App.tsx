@@ -37,6 +37,7 @@ import { Layout, RouteGuard } from 'components';
 import { CrossfeedFooter } from './components/Footer';
 import './styles.scss';
 import { Authenticator } from '@aws-amplify/ui-react';
+import UserRegistration from 'pages/UserRegistration';
 
 API.configure({
   endpoints: [
@@ -154,6 +155,7 @@ const App: React.FC = () => (
                   <RouteGuard path="/organizations" component={Organizations} />
                   <RouteGuard path="/users" component={Users} />
                   <RouteGuard path="/settings" component={Settings} />
+                  <Route exact path="/user/registration" component={UserRegistration} />
                 </Switch>
                 <CrossfeedFooter />
               </Layout>

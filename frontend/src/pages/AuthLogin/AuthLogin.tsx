@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthForm } from 'components';
 import { Button } from '@trussworks/react-uswds';
+import { Typography } from '@mui/material';
 import { useAuthContext } from 'context';
 import {
   Authenticator,
@@ -9,6 +10,7 @@ import {
   useAuthenticator
 } from '@aws-amplify/ui-react';
 import { I18n } from 'aws-amplify';
+import { RegisterForm } from 'components/Register/RegisterForm';
 
 const TOTP_ISSUER = process.env.REACT_APP_TOTP_ISSUER;
 
@@ -31,6 +33,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
 }) => {
   const { apiPost, refreshUser } = useAuthContext();
   const [errors, setErrors] = useState<Errors>({});
+  const [open, setOpen] = useState<boolean>(false);
 
   // Once a user signs in, call refreshUser() so that the callback is called and the user gets signed in.
   const { authStatus } = useAuthenticator((context) => [context.isPending]);
@@ -79,6 +82,10 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
       });
     }
   };
+
+  const onClose = () => {
+    setOpen(false);
+  }
 
   if (process.env.REACT_APP_USE_COGNITO) {
     return (
@@ -134,9 +141,20 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
       <Button type="submit" size="big">
         Login with Login.gov
       </Button>
-      <Link to="#" onClick={onSubmit}>
+      <Typography>
+        <h5>New to Crossfeed? Register with Login.gov</h5>
+      </Typography>
+      {open && <RegisterForm open={open} onClose={onClose} />}
+      <Button type="submit" size="big" onClick={() => setOpen(true)}>
+        Register
+      </Button>
+      {/* <Typography>
+        <h5>New to Crossfeed? Register with Login.gov</h5>
+      </Typography> */}
+
+      {/* <Link to="#" onClick={onSubmit}>
         New to Crossfeed? Register with Login.gov
-      </Link>
+      </Link> */}
     </AuthForm>
   );
 };
