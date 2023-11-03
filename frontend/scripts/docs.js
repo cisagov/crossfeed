@@ -7,10 +7,10 @@ export const app = express();
 
 app.use(
   rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 1000 // max 1000 requests per windowMs
+    windowMs: 15 * 60 * 1000,
+    max: 1000
   })
-);
+); // limit 1000 requests per 15 minutes
 
 app.use(express.static(path.join(__dirname, '../docs/build')));
 
