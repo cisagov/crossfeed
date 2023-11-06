@@ -144,6 +144,10 @@ resource "aws_ecs_task_definition" "pe_worker" {
       {
         "name": "ELASTICSEARCH_ENDPOINT",
         "valueFrom": "${aws_ssm_parameter.es_endpoint.arn}"
+      },
+      {
+        "name": "SHODAN_QUEUE_URL",
+        "valueFrom": "${aws_ssm_parameter.shodan_queue_url.arn}"
       }
     ]
   }

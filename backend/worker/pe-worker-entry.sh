@@ -26,5 +26,5 @@ while true; do
 
   # Delete the processed message from the queue
   RECEIPT_HANDLE=$(echo "$MESSAGE" | jq -r '.ReceiptHandle')
-  aws sqs delete-message --queue-url YOUR_SHODAN_QUEUE_URL --receipt-handle "$RECEIPT_HANDLE"
+  aws sqs delete-message --queue-url "$SHODAN_QUEUE_URL" --receipt-handle "$RECEIPT_HANDLE"
 done
