@@ -232,6 +232,12 @@ variable "ssm_lg_workspace_name" {
   default     = "/crossfeed/staging/LG_WORKSPACE_NAME"
 }
 
+variable "ssm_shodan_queue_url" {
+  description = "ssm_shodan_queue_url"
+  type        = string
+  default     = "/crossfeed/staging/SHODAN_QUEUE_URL"
+}
+
 variable "cloudfront_name" {
   description = "cloudfront_name"
   type        = string

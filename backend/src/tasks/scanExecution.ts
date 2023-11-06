@@ -8,7 +8,7 @@ const sqs = new AWS.SQS();
 export const handler: Handler = async (event) => {
   try {
     let desiredCount;
-    const clusterName = process.env.FARGATE_CLUSTER_NAME!;
+    const clusterName = process.env.PE_CLUSTER_NAME!;
 
     // Get the Control SQS record and message body
     const sqsRecord: SQSRecord = event.Records[0];

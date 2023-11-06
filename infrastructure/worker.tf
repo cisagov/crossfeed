@@ -84,6 +84,7 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.sixgill_client_secret.arn}",
           "${data.aws_ssm_parameter.lg_api_key.arn}",
           "${data.aws_ssm_parameter.lg_workspace_name.arn}",
+          "${data.aws_ssm_parameter.shodan_queue_url.arn}",
           "${aws_ssm_parameter.es_endpoint.arn}"
         ]
     }
