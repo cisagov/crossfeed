@@ -38,7 +38,7 @@ export const handler: Handler = async (event) => {
   }
 };
 
-async function startFargateTask(
+export async function startFargateTask(
   clusterName: string,
   serviceName: string,
   desiredCountNum: integer
