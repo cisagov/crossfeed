@@ -12,7 +12,9 @@ describe('Scan Execution', () => {
     AWS.SQS.prototype.sendMessage = mockSendMessage;
   });
 
-  process.env.SQS_QUEUE_URL = 'YOUR_SQS_QUEUE_URL';
+  process.env.FARGATE_CLUSTER_NAME = 'FARGATE_CLUSTER_NAME';
+  process.env.SHODAN_QUEUE_URL = 'SHODAN_QUEUE_URL';
+  process.env.SHODAN_SERVICE_NAME = 'SHODAN_SERVICE_NAME';
 
   it('scanExecution should run successfully', async () => {
     const event = {
