@@ -344,6 +344,8 @@ data "aws_ssm_parameter" "worker_signature_public_key" { name = var.ssm_worker_s
 
 data "aws_ssm_parameter" "worker_signature_private_key" { name = var.ssm_worker_signature_private_key }
 
+data "aws_ssm_parameter" "shodan_queue_url" { name = var.ssm_shodan_queue_url }
+
 resource "aws_s3_bucket" "export_bucket" {
   bucket = var.export_bucket_name
   tags = {
