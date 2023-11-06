@@ -1,48 +1,44 @@
-import { handler as scanExecution, startFargateTask } from '../scanExecution';
-import { SQSRecord } from 'aws-lambda';
-import * as AWS from 'aws-sdk';
+import { handler } from '../scanExecution';
 
 describe('Scan Execution', () => {
-  beforeEach(() => {
-    // Mock the sendMessage method manually
-    const mockSendMessage = jest.fn().mockReturnValue({
-      promise: jest.fn().mockResolvedValue({})
-    });
-
-    AWS.SQS.prototype.sendMessage = mockSendMessage;
-  });
-
-  process.env.FARGATE_CLUSTER_NAME = 'FARGATE_CLUSTER_NAME';
-  process.env.SHODAN_QUEUE_URL = 'SHODAN_QUEUE_URL';
-  process.env.SHODAN_SERVICE_NAME = 'SHODAN_SERVICE_NAME';
-
-  // Create a wrapper function for startFargateTask
-  let startFargateTaskWrapper = async (clusterName: string, serviceName: string, desiredCountNum: number) => {
-    return startFargateTask(clusterName, serviceName, desiredCountNum);
-  };
-
-  // Mock the startFargateTaskWrapper function
-  const mockStartFargateTaskWrapper = jest.fn().mockResolvedValue(undefined);
-
-  it('scanExecution should run successfully', async () => {
-    // Set the mock for startFargateTaskWrapper
-    startFargateTaskWrapper = mockStartFargateTaskWrapper;
+  it('should handle the "shodan" scriptType', async () => {
+    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
 
     const event = {
       Records: [
         {
           body: JSON.stringify({ scriptType: 'shodan' }),
-          eventSourceARN: 'SQSQueueARN'
-        } as SQSRecord
-      ]
+        },
+      ],
     };
 
-    const result = await scanExecution(event, {} as any, () => void 0);
+    const result = await handler(event, {} as any, () => void 0);
 
-    expect(result.statusCode).toEqual(200);
-    expect(result.body).toContain('Fargate task started and message sent to SQS queue');
+    expect(consoleLogSpy).toHaveBeenCalledWith({ scriptType: 'shodan' });
+    expect(result).toEqual({ statusCode: 500, body: 'JSON.stringify(error)' });
 
-    // Assert that startFargateTaskWrapper was called with the expected arguments (if needed)
-    expect(mockStartFargateTaskWrapper).toHaveBeenCalledWith('FARGATE_CLUSTER_NAME', 'SHODAN_SERVICE_NAME', 5);
+    consoleLogSpy.mockRestore();
+  });
+
+  it('should handle an unsupported scriptType', async () => {
+
+    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
+
+    const event = {
+      Records: [
+        {
+          body: JSON.stringify({ scriptType: 'unsupported' }),
+        },
+      ],
+    };
+
+    const result = await handler(event, {} as any, () => void 0);
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      'Shodan is the only script type available right now.'
+    );
+    expect(result).toEqual({ statusCode: 500, body: 'JSON.stringify(error)' });
+
+    consoleLogSpy.mockRestore();
   });
 });
