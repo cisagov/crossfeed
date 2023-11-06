@@ -171,5 +171,5 @@ resource "aws_ecs_service" "shodan_service" {
   cluster         = aws_ecs_cluster.pe_worker.id
   task_definition = aws_ecs_task_definition.pe_worker.arn
   launch_type     = "FARGATE"
-  desired_count   = 0  # Initially set to 0, plan to start it dynamically
+  desired_count   = 0 # Initially set to 0, plan to start it dynamically
 }
