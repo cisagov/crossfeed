@@ -102,8 +102,10 @@ form[data-amplify-authenticator-setup-totp] {
   border-color: hsl(190, 95%, 30%);
   margin-top: 25px;
 }
-.platform_header {
-  padding-left: 105px;
+.warning_header {
+  margin:auto;
+  width: 50%;
+  text-align: center;
   padding-top: 10px;
   color: hsl(190, 95%, 30%);
   font-weight: bold;
@@ -111,22 +113,19 @@ form[data-amplify-authenticator-setup-totp] {
   background-color: white;
 }
 
-.notification_header {
-  transition: top .2s;
-  background-color: white;
-  font-weight: bold;
-  padding-left: 10px;
- 
-}
-
-.temp_notification {
+.warning_notification  {
   position: relative; 
   padding-left: 10px;
   padding-top: 10px;
   padding-bottom: 20px;
   transition: top .2s;
   background-color: white;
-
+ 
+}
+.warning_logo{
+  margin:auto;
+  width: 50%;
+  text-align: center;
 }
 
 .banner_box {
