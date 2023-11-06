@@ -102,7 +102,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
       <AuthForm as="div">
         <Alert onClose={() => {}} severity="warning">
           <AlertTitle>
-            <h2>PLATFORM NOTIFICATION</h2>
+            <h2 className="platform_notice">PLATFORM NOTIFICATION</h2>
           </AlertTitle>
           <h3>
             Important Notice: Temporary Downtime During Crossfeed Migration
