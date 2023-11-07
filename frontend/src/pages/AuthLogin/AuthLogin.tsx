@@ -20,6 +20,7 @@ import { AuthForm } from 'components';
 import { Button } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
 import { Alert } from '@mui/material';
+import cisa_logo from '../../pages/AuthLogin/img/CISA_LOGO.png';
 import {
   Authenticator,
   ThemeProvider,
@@ -136,7 +137,9 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
           <div className="notification_box">
             <div className="warning_header">WARNING</div>
             <div className="warning_logo">
-              <img src="/img/CISA_LOGO.png"></img>
+              <Link href="/" to={''}>
+                <img src={cisa_logo} alt="CISA LOGO" />
+              </Link>
             </div>
             <div className="warning_notification">
               Crossfeed is hosted by Department of Homeland Security (DHS)
