@@ -177,7 +177,7 @@ resource "aws_ecs_service" "shodan_service" {
   launch_type     = "FARGATE"
   desired_count   = 0 # Initially set to 0, plan to start it dynamically
   network_configuration {
-    subnets         = aws_subnet.worker.id
+    subnets         = aws_subnet.worker.*.id
     security_groups = [aws_security_group.worker.id]
   }
 }
