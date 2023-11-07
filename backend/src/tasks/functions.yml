@@ -33,7 +33,7 @@ scanExecution:
   handler: src/tasks/scanExecution.handler
   timeout: 300 # 5 minutes
   environment:
-    SQS_QUEUE_NAME: ${self:provider.stage}-worker-queue
+    SQS_QUEUE_NAME: ${self:provider.stage}-worker-control-queue
   events:
     - sqs:
         arn:
