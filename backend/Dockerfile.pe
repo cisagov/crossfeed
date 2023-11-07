@@ -1,0 +1,24 @@
+FROM node:18-bullseye as build
+USER root
+
+WORKDIR /app
+
+COPY ./package* ./
+
+COPY src ./src
+
+RUN apt update && apt install git zlib1g-dev
+
+RUN wget -c https://www.python.org/ftp/python/3.10.11/Python-3.10.11.tar.xz && tar -Jxvf Python-3.10.11.tar.xz
+RUN cd Python-3.10.11 && ./configure && make -j4 && make altinstall
+RUN update-alternatives --install /usr/bin/python python /usr/local/bin/python3.10 1
+RUN update-alternatives --install /usr/bin/pip pip /usr/local/bin/pip3.10 1
+RUN pip3.10 install --upgrade pip
+
+RUN apt remove dav1d && apt autoclean && apt autoremove
+
+# Install pe-source module
+# Sync the latest from cf-staging branch
+RUN git clone -b cf-source-staging https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout c9cbbd73b22ef38cabe1da6ba50aeb2dc0be4f99 && pip install .
+
+CMD ["./worker/pe-worker-entry.sh"]
