@@ -27,7 +27,18 @@ export const handler = async (commandOptions: CommandOptions) => {
         OUT_PATH
       ];
       console.log('Running findomain with args', args);
-      spawnSync('findomain', args, { stdio: 'pipe' });
+      spawnSync(
+        'findomain', 
+        args, 
+        { 
+          stdio: 'pipe',
+          env: { 
+            ...process.env,
+            HTTP_PROXY: process.env.HTTPS_PROXY,
+            HTTPS_PROXY: process.env.HTTPS_PROXY 
+          } 
+        }
+      );
       const output = String(readFileSync(OUT_PATH));
       const lines = output.split('\n');
       const domains: Domain[] = [];
