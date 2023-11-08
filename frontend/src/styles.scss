@@ -95,9 +95,32 @@ form[data-amplify-authenticator-setup-totp] {
   }
 
 }
-.platform_notice{
-  margin:auto;
+.alert_box {
+  margin-top: 25px;
+}
+.platform_notice {
+  margin: auto;
   text-align: center;
+  padding-top: 10px;
+  font-weight: bold;
+  font-size: 20px;
+}
+.notification_header {
+  position: relative; 
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  transition: top .2s;
+  background-color: white;
+
+}
+.temp_notification{
+  position: relative; 
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  transition: top .2s;
+  background-color: white;
 }
 
 .notification_box {
