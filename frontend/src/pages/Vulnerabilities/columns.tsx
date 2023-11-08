@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown } from '@trussworks/react-uswds';
 import { ColumnFilter, selectFilter } from 'components';
-import { getSeverityColor } from 'pages/Risk/Risk';
+import { getSeverityColor } from 'pages/Risk/utils';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Column, CellProps } from 'react-table';

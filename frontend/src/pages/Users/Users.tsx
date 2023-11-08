@@ -23,7 +23,7 @@ import {
   RadioGroup,
   FormControlLabel,
   ButtonGroup
-} from '@material-ui/core';
+} from '@mui/material';
 
 interface Errors extends Partial<User> {
   global?: string;
@@ -207,7 +207,7 @@ export const Users: React.FC = () => {
         email: values.email,
         userType: values.userType
       };
-      const user = await apiPost('/users/', {
+      const user = await apiPost('/users', {
         body
       });
       setUsers(users.concat(user));
@@ -331,7 +331,7 @@ export const Users: React.FC = () => {
                 }
                 try {
                   createdUsers.push(
-                    await apiPost('/users/', {
+                    await apiPost('/users', {
                       body
                     })
                   );

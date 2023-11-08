@@ -1,13 +1,17 @@
 import React from 'react';
-import { makeStyles, Paper } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Paper } from '@mui/material';
 import logo from '../assets/crossfeed_blue.svg';
 
-interface Props {
-  message: string;
-}
+const PREFIX = 'NoResults';
 
-const useStyles = makeStyles((theme) => ({
-  card: {
+const classes = {
+  card: `${PREFIX}-card`,
+  logo: `${PREFIX}-logo`
+};
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  [`&.${classes.card}`]: {
     marginTop: '10px',
     boxSizing: 'border-box',
     marginBottom: '1rem',
@@ -30,19 +34,23 @@ const useStyles = makeStyles((theme) => ({
     },
     padding: '1rem'
   },
-  logo: {
+
+  [`& .${classes.logo}`]: {
     width: '100px',
     marginBottom: 25,
     margin: '0 auto'
   }
 }));
 
+interface Props {
+  message: string;
+}
+
 export const NoResults: React.FC<Props> = (props) => {
-  const classes = useStyles();
   return (
-    <Paper className={classes.card}>
+    <StyledPaper className={classes.card}>
       <img src={logo} className={classes.logo} alt="Crossfeed Icon" />
       <p>{props.message}</p>
-    </Paper>
+    </StyledPaper>
   );
 };

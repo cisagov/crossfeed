@@ -1,15 +1,38 @@
 import oldClasses from './Organizations.module.scss';
+import { styled } from '@mui/material/styles';
 import React, { useCallback, useState } from 'react';
 import { ImportExport } from 'components';
 import { Organization } from 'types';
 import { useAuthContext } from 'context';
-import { makeStyles } from '@material-ui/core';
 import { OrganizationList } from 'components/OrganizationList';
+
+const PREFIX = 'Organizations';
+
+const classes = {
+  header: `${PREFIX}-header`,
+  headerLabel: `${PREFIX}-headerLabel`
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.header}`]: {
+    background: '#F9F9F9'
+  },
+
+  [`& .${classes.headerLabel}`]: {
+    margin: 0,
+    paddingTop: '1.5rem',
+    paddingBottom: '1rem',
+    marginLeft: '15%',
+    fontWeight: 500,
+    fontStyle: 'normal',
+    fontSize: '24px',
+    color: '#07648D'
+  }
+}));
 
 export const Organizations: React.FC = () => {
   const { user, apiGet, apiPost } = useAuthContext();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const classes = useStyles();
 
   const fetchOrganizations = useCallback(async () => {
     try {
@@ -25,7 +48,7 @@ export const Organizations: React.FC = () => {
   }, [apiGet, fetchOrganizations]);
 
   return (
-    <div>
+    <Root>
       <div className={classes.header}>
         <h1 className={classes.headerLabel}>Organizations</h1>
       </div>
@@ -87,24 +110,8 @@ export const Organizations: React.FC = () => {
           </>
         )}
       </div>
-    </div>
+    </Root>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  header: {
-    background: '#F9F9F9'
-  },
-  headerLabel: {
-    margin: 0,
-    paddingTop: '1.5rem',
-    paddingBottom: '1rem',
-    marginLeft: '15%',
-    fontWeight: 500,
-    fontStyle: 'normal',
-    fontSize: '24px',
-    color: '#07648D'
-  }
-}));
 
 export default Organizations;

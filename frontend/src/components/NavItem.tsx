@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import clsx from 'classnames';
+import { styled } from '@mui/material/styles';
+import classes from 'classnames';
 import { NavLink, useRouteMatch, useHistory } from 'react-router-dom';
-import { Menu, MenuItem, Button, makeStyles } from '@material-ui/core';
+import { Menu, MenuItem, Button } from '@mui/material';
 
 interface LinkConfig {
   title: string | JSX.Element;
@@ -24,7 +25,6 @@ export const NavItem: React.FC<Props> = (props) => {
   const [anchor, setAnchor] = useState<any>(null);
   const [mouseInButton, setMouseInButton] = useState(false);
   const [mouseInMenu, setMouseInMenu] = useState(false);
-  const classes = useStyles();
 
   const onClickButton = (e: any) => {
     setAnchor(e.currentTarget);
@@ -45,12 +45,14 @@ export const NavItem: React.FC<Props> = (props) => {
   };
 
   return (
-    <>
+    <Root>
       {path ? (
         <NavLink
           to={path}
-          activeClassName={path !== '#' ? classes.activeLink : classes.link}
-          className={classes.link}
+          activeClassName={
+            path !== '#' ? classesNav.activeLink : classesNav.link
+          }
+          className={classesNav.link}
           onClick={onClick ? onClick : onClickButton}
           exact={exact}
           style={{ outline: 'none' }}
@@ -59,8 +61,8 @@ export const NavItem: React.FC<Props> = (props) => {
         </NavLink>
       ) : (
         <Button
-          className={clsx(classes.link, {
-            [classes.activeLink]: !!match
+          className={classes(classesNav.link, {
+            [classesNav.activeLink]: !!match
           })}
           onClick={onClick ? onClick : onClickButton}
           style={{ outline: 'none' }}
@@ -74,14 +76,13 @@ export const NavItem: React.FC<Props> = (props) => {
           open={(mouseInButton || mouseInMenu) && !!anchor}
           anchorEl={anchor}
           onClose={onCloseMenu}
-          getContentAnchorEl={null}
           keepMounted
           anchorOrigin={{
-            vertical: 'bottom',
+            vertical: 'center',
             horizontal: 'center'
           }}
           transformOrigin={{
-            vertical: 'top',
+            vertical: 'center',
             horizontal: 'center'
           }}
         >
@@ -98,35 +99,51 @@ export const NavItem: React.FC<Props> = (props) => {
           ))}
         </Menu>
       )}
-    </>
+    </Root>
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  inner: {
+//Styling
+const PREFIX = 'NavItem';
+
+const classesNav = {
+  inner: `${PREFIX}-inner`,
+  menuButton: `${PREFIX}-menuButton`,
+  activeLink: `${PREFIX}-activeLink`,
+  activeMobileLink: `${PREFIX}-activeMobileLink`,
+  link: `${PREFIX}-link`,
+  userLink: `${PREFIX}-userLink`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classesNav.inner}`]: {
     maxWidth: 1440,
     width: '100%',
     margin: '0 auto'
   },
-  menuButton: {
+
+  [`& .${classesNav.menuButton}`]: {
     marginRight: theme.spacing(2),
     display: 'block',
     [theme.breakpoints.up('lg')]: {
       display: 'none'
     }
   },
-  activeLink: {
+
+  [`& .${classesNav.activeLink}`]: {
     '&:after': {
       content: "''",
       position: 'absolute',
       bottom: 0,
-      left: 0,
+      left: 6,
       width: '100%',
       height: 2,
       backgroundColor: 'white'
     }
   },
-  activeMobileLink: {
+
+  [`& .${classesNav.activeMobileLink}`]: {
     fontWeight: 700,
     '&:after': {
       content: "''",
@@ -139,7 +156,8 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.primary.main
     }
   },
-  link: {
+
+  [`& .${classesNav.link}`]: {
     position: 'relative',
     color: 'white',
     textDecoration: 'none',
@@ -148,7 +166,8 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: '2px solid transparent',
     fontWeight: 600
   },
-  userLink: {
+
+  [`& .${classesNav.userLink}`]: {
     display: 'flex',
     alignItems: 'center',
 

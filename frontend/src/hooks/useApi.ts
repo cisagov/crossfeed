@@ -2,8 +2,6 @@ import { useState, useCallback, useMemo } from 'react';
 import { API } from 'aws-amplify';
 // import { useMatomo } from '@datapunt/matomo-tracker-react';
 
-const BASE_API_URL = process.env.REACT_APP_API_URL;
-
 const baseHeaders: HeadersInit = {
   'Content-Type': 'application/json',
   Accept: 'application/json'
@@ -51,11 +49,7 @@ export const useApi = (onError?: OnError) => {
           // });
           showLoading && setRequestCount((cnt) => cnt + 1);
           const options = await prepareInit(rest);
-          const result = await method(
-            'crossfeed',
-            `${BASE_API_URL}${path}`,
-            options
-          );
+          const result = await method('crossfeed', path, options);
           showLoading && setRequestCount((cnt) => cnt - 1);
           return result as T;
         } catch (e: any) {
