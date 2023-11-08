@@ -121,7 +121,7 @@ export const callback = async (event, context) => {
   } catch (e) {
     return {
       statusCode: 500,
-      body: ''
+      body: e
     };
   }
   if (!userInfo.email_verified) {

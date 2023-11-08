@@ -22,11 +22,11 @@ app.use(
       defaultSrc: [
         "'self'",
         'https://cognito-idp.us-gov-west-1.amazonaws.com',
-        'https://api.staging.crossfeed.cyber.dhs.gov'
+        'https://api.crossfeed.cyber.dhs.gov'
       ],
       scriptSrc: [
         "'self'",
-        'https://api.staging.crossfeed.cyber.dhs.gov',
+        'https://api.crossfeed.cyber.dhs.gov',
         // Add any other allowed script sources here
         "'unsafe-inline'" // Allow inline scripts (not recommended for security)
       ]
