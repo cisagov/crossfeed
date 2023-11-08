@@ -1,3 +1,5 @@
+data "aws_ssm_parameter" "ses_email_identity_arn" { name = var.ssm_ses_email_identity_arn }
+
 resource "aws_cognito_user_pool" "pool" {
   provider                 = aws.other
   name                     = var.user_pool_name
@@ -12,7 +14,7 @@ resource "aws_cognito_user_pool" "pool" {
     email_sending_account  = "DEVELOPER"
     from_email_address     = "noreply@crossfeed.cyber.dhs.gov"
     reply_to_email_address = "vulnerability@cisa.dhs.gov"
-    source_arn             = var.ses_support_email_replyto
+    source_arn             = data.aws_ssm_parameter.ses_email_identity_arn.value
   }
 
 
