@@ -31,6 +31,7 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -41,6 +42,7 @@ resource "aws_cloudwatch_log_group" "cloudtrail" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -91,6 +93,7 @@ resource "aws_iam_role" "cloudtrail_role" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 

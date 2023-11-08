@@ -9,6 +9,7 @@ resource "aws_ecs_cluster" "matomo" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -38,6 +39,7 @@ resource "aws_iam_role" "matomo_task_execution_role" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -127,6 +129,7 @@ resource "aws_ecs_task_definition" "matomo" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -175,6 +178,7 @@ resource "aws_cloudwatch_log_group" "matomo" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -199,7 +203,6 @@ resource "aws_db_instance" "matomo_db" {
   iam_database_authentication_enabled = false
   allow_major_version_upgrade         = true
   deletion_protection                 = true
-  monitoring_interval                 = 60
   enabled_cloudwatch_logs_exports     = ["audit", "error", "general", "slowquery"]
 
 
@@ -215,6 +218,7 @@ resource "aws_db_instance" "matomo_db" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -226,5 +230,6 @@ resource "aws_ssm_parameter" "matomo_db_password" {
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }

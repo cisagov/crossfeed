@@ -3,10 +3,11 @@ data "aws_ssm_parameter" "db_username" { name = var.ssm_db_username }
 
 resource "aws_db_subnet_group" "default" {
   name       = var.db_group_name
-  subnet_ids = [aws_subnet.db_1.id, aws_subnet.db_2.id]
+  subnet_ids = [data.aws_ssm_parameter.subnet_db_1_id.value, data.aws_ssm_parameter.subnet_db_2_id.value]
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -40,7 +41,6 @@ resource "aws_db_instance" "db" {
   storage_encrypted                   = true
   iam_database_authentication_enabled = true
   enabled_cloudwatch_logs_exports     = ["postgresql", "upgrade"]
-  monitoring_interval                 = 60
   deletion_protection                 = true
 
   // database information
@@ -56,6 +56,7 @@ resource "aws_db_instance" "db" {
 
   tags = {
     Project = "Crossfeed"
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -80,6 +81,7 @@ EOF
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -87,6 +89,11 @@ EOF
 resource "aws_iam_instance_profile" "db_accessor" {
   name = "crossfeed-db-accessor-${var.stage}"
   role = aws_iam_role.db_accessor.id
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
+  }
 }
 
 #Attach Policies to Instance Role
@@ -131,13 +138,14 @@ resource "aws_instance" "db_accessor" {
     Project = var.project
     Stage   = var.stage
     Name    = "db_accessor"
+    Owner   = "Crossfeed managed resource"
   }
   root_block_device {
     volume_size = 1000
   }
 
   vpc_security_group_ids = [aws_security_group.allow_internal.id]
-  subnet_id              = aws_subnet.db_1.id
+  subnet_id              = data.aws_ssm_parameter.subnet_db_1_id.value
 
   iam_instance_profile = aws_iam_instance_profile.db_accessor.id
   user_data            = file("./ssm-agent-install.sh")
@@ -155,17 +163,19 @@ resource "aws_ssm_parameter" "lambda_sg_id" {
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }
 
 resource "aws_ssm_parameter" "lambda_subnet_id" {
   name      = var.ssm_lambda_subnet
   type      = "String"
-  value     = aws_subnet.backend.id
+  value     = data.aws_ssm_parameter.subnet_db_2_id.value
   overwrite = true
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -177,17 +187,19 @@ resource "aws_ssm_parameter" "worker_sg_id" {
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }
 
 resource "aws_ssm_parameter" "worker_subnet_id" {
   name      = var.ssm_worker_subnet
   type      = "String"
-  value     = aws_subnet.worker.id
+  value     = data.aws_ssm_parameter.subnet_db_2_id.value
   overwrite = true
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -199,6 +211,7 @@ resource "aws_ssm_parameter" "crossfeed_send_db_host" {
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -210,6 +223,7 @@ resource "aws_ssm_parameter" "crossfeed_send_db_name" {
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -218,6 +232,7 @@ resource "aws_s3_bucket" "reports_bucket" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -272,6 +287,7 @@ resource "aws_s3_bucket" "pe_db_backups_bucket" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 

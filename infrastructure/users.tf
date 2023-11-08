@@ -8,12 +8,13 @@ resource "aws_cognito_user_pool" "pool" {
   software_token_mfa_configuration {
     enabled = true
   }
-
   email_configuration {
     email_sending_account  = "DEVELOPER"
-    source_arn             = aws_ses_email_identity.default.arn
-    reply_to_email_address = var.ses_support_email_replyto
+    from_email_address     = "noreply@crossfeed.cyber.dhs.gov"
+    reply_to_email_address = "vulnerability@cisa.dhs.gov"
+    source_arn             = var.ses_support_email_replyto
   }
+
 
   # Users can recover their accounts by verifying their email address (required mechanism)
   verification_message_template {
@@ -30,12 +31,8 @@ resource "aws_cognito_user_pool" "pool" {
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
-}
-
-resource "aws_ses_email_identity" "default" {
-  provider = aws.other
-  email    = var.ses_support_email_sender
 }
 
 resource "aws_cognito_user_pool_domain" "auth_domain" {
@@ -65,6 +62,7 @@ resource "aws_ssm_parameter" "user_pool_id" {
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -76,5 +74,6 @@ resource "aws_ssm_parameter" "user_pool_client_id" {
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }

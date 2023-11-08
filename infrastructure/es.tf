@@ -37,7 +37,7 @@ resource "aws_elasticsearch_domain" "es" {
 POLICY
 
   vpc_options {
-    subnet_ids         = [aws_subnet.es_1.id]
+    subnet_ids         = [data.aws_ssm_parameter.subnet_es_id.value]
     security_group_ids = [aws_security_group.allow_internal.id]
   }
 
@@ -77,11 +77,13 @@ POLICY
   ebs_options {
     ebs_enabled = true
     volume_size = var.es_instance_volume_size
+    volume_type = "gp3"
     iops        = 3000
   }
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -115,6 +117,7 @@ resource "aws_cloudwatch_log_group" "es_application" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -125,6 +128,7 @@ resource "aws_cloudwatch_log_group" "es_index_slow" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -135,6 +139,7 @@ resource "aws_cloudwatch_log_group" "es_search_slow" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -145,6 +150,7 @@ resource "aws_cloudwatch_log_group" "es_audit_logs" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -156,5 +162,6 @@ resource "aws_ssm_parameter" "es_endpoint" {
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }

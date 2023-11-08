@@ -227,6 +227,12 @@ variable "ssm_lg_workspace_name" {
   default     = "/crossfeed/staging/LG_WORKSPACE_NAME"
 }
 
+variable "ssm_https_proxy" {
+  description = "ssm_https_proxy"
+  type        = string
+  default     = "/crossfeed/staging/HTTPS_PROXY"
+}
+
 variable "db_group_name" {
   description = "db_group_name"
   type        = string
@@ -435,4 +441,74 @@ variable "es_instance_master_count" {
   description = "es_instance_master_count"
   type        = number
   default     = 3
+}
+
+variable "ssm_vpc_id" {
+  description = "ssm_vpc_id"
+  type        = string
+  default     = "/LZ/VPC_ID"
+}
+
+variable "ssm_vpc_cidr_block" {
+  description = "ssm_vpc_cidr_block"
+  type        = string
+  default     = "/LZ/VPC_CIDR_BLOCK"
+}
+
+variable "ssm_route_table_endpoints_id" {
+  description = "ssm_route_table_endpoints_id"
+  type        = string
+  default     = ""
+}
+variable "ssm_route_table_private_A_id" {
+  description = "ssm_route_table_private_A_id"
+  type        = string
+  default     = ""
+}
+variable "ssm_route_table_private_B_id" {
+  description = "ssm_route_table_private_B_id"
+  type        = string
+  default     = ""
+}
+
+variable "ssm_route_table_private_C_id" {
+  description = "ssm_route_table_private_C_id"
+  type        = string
+  default     = ""
+}
+
+variable "ssm_subnet_backend_id" {
+  description = "ssm_subnet_backend_id"
+  type        = string
+  default     = ""
+}
+
+variable "ssm_subnet_worker_id" {
+  description = "ssm_subnet_worker_id"
+  type        = string
+  default     = ""
+}
+
+variable "ssm_subnet_matomo_id" {
+  description = "ssm_subnet_matomo_id"
+  type        = string
+  default     = ""
+}
+
+variable "ssm_subnet_db_1_id" {
+  description = "ssm_subnet_db_1_id"
+  type        = string
+  default     = ""
+}
+
+variable "ssm_subnet_db_2_id" {
+  description = "ssm_subnet_db_2_id"
+  type        = string
+  default     = ""
+}
+
+variable "ssm_subnet_es_id" {
+  description = "ssm_subnet_es_id"
+  type        = string
+  default     = ""
 }

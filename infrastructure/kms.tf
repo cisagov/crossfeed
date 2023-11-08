@@ -174,12 +174,14 @@ resource "aws_kms_key" "key" {
     ]
   })
   tags = {
-    project = var.project
-    stage   = var.stage
+    Project = var.project
+    Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
 resource "aws_kms_alias" "key" {
   target_key_id = aws_kms_key.key.id
   name          = "alias/${var.stage}-key"
+
 }

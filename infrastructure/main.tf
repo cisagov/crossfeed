@@ -10,6 +10,7 @@ resource "aws_ssm_parameter" "prod_api_domain" {
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -21,6 +22,7 @@ resource "aws_ssm_parameter" "stage_api_domain" {
 
   tags = {
     Project = var.project
+    Owner   = "Crossfeed managed resource"
   }
 }
 
@@ -29,6 +31,7 @@ resource "aws_s3_bucket" "logging_bucket" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 

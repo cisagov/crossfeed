@@ -1,165 +1,60 @@
 data "aws_ssm_parameter" "vpc_name" { name = var.ssm_crossfeed_vpc_name }
 
-
-resource "aws_vpc" "crossfeed_vpc" {
-  cidr_block           = "10.236.32.0/21"
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-  tags = {
-    Project = var.project
-    Name    = data.aws_ssm_parameter.vpc_name.value
-  }
-}
-
-resource "aws_subnet" "db_1" {
-  availability_zone = data.aws_availability_zones.available.names[0]
-  vpc_id            = aws_vpc.crossfeed_vpc.id
-  cidr_block        = "10.236.36.0/24"
-
-  tags = {
-    Project = var.project
-    Name    = "Crossfeed-Stage_GovEast_Private-A"
-  }
-}
-
-resource "aws_subnet" "db_2" {
-  availability_zone = data.aws_availability_zones.available.names[1]
-  vpc_id            = aws_vpc.crossfeed_vpc.id
-  cidr_block        = "10.236.37.0/24"
-
-  tags = {
-    Project = var.project
-    Name    = "Crossfeed-Stage_GovEast_Private-B"
-  }
-}
-
-resource "aws_subnet" "backend" {
-  availability_zone = data.aws_availability_zones.available.names[0]
-  vpc_id            = aws_vpc.crossfeed_vpc.id
-  cidr_block        = "10.236.34.0/26"
-
-  tags = {
-    Project = var.project
-    Name    = "Crossfeed-Stage_GovEast_Endpoint-A"
-  }
-}
-
-resource "aws_subnet" "worker" {
-  availability_zone = data.aws_availability_zones.available.names[1]
-  vpc_id            = aws_vpc.crossfeed_vpc.id
-  cidr_block        = "10.236.34.64/26"
-
-  tags = {
-    Project = var.project
-    Stage   = var.stage
-    Name    = "Crossfeed-Stage_GovEast_Endpoint-B"
-  }
-}
-
-resource "aws_subnet" "es_1" {
-  availability_zone = data.aws_availability_zones.available.names[2]
-  vpc_id            = aws_vpc.crossfeed_vpc.id
-  cidr_block        = "10.236.38.0/24"
-
-  tags = {
-    Project = var.project
-    Name    = "Crossfeed-Stage_GovEast_Private-C"
-  }
-}
-
-resource "aws_subnet" "matomo_1" {
-  availability_zone = data.aws_availability_zones.available.names[2]
-  vpc_id            = aws_vpc.crossfeed_vpc.id
-  cidr_block        = "10.236.34.128/26"
-
-  tags = {
-    Project = var.project
-    Name    = "Crossfeed-Stage_GovEast_Endpoint-C"
-  }
-}
-
-resource "aws_route_table" "r" {
-  vpc_id = aws_vpc.crossfeed_vpc.id
-
-  tags = {
-    Project = var.project
-    Stage   = var.stage
-    Name    = "Crossfeed-Stage_GovEast_Endpoint"
-  }
-}
-
-resource "aws_route_table" "private_A" {
-  vpc_id = aws_vpc.crossfeed_vpc.id
-
-  tags = {
-    Project = var.project
-    Stage   = var.stage
-    Name    = "Crossfeed-Stage_GovEast_Private-A"
-  }
-}
-
-resource "aws_route_table" "private_B" {
-  vpc_id = aws_vpc.crossfeed_vpc.id
-
-  tags = {
-    Project = var.project
-    Stage   = var.stage
-    Name    = "Crossfeed-Stage_GovEast_Private-B"
-  }
-}
-
-resource "aws_route_table" "private_C" {
-  vpc_id = aws_vpc.crossfeed_vpc.id
-
-  tags = {
-    Project = var.project
-    Stage   = var.stage
-    Name    = "Crossfeed-Stage_GovEast_Private-C"
-  }
-}
+data "aws_ssm_parameter" "vpc_id" { name = var.ssm_vpc_id }
+data "aws_ssm_parameter" "vpc_cidr_block" { name = var.ssm_vpc_cidr_block }
+data "aws_ssm_parameter" "route_table_endpoints_id" { name = var.ssm_route_table_endpoints_id }
+data "aws_ssm_parameter" "route_table_private_A_id" { name = var.ssm_route_table_private_A_id }
+data "aws_ssm_parameter" "route_table_private_B_id" { name = var.ssm_route_table_private_B_id }
+data "aws_ssm_parameter" "route_table_private_C_id" { name = var.ssm_route_table_private_C_id }
+data "aws_ssm_parameter" "subnet_backend_id" { name = var.ssm_subnet_backend_id }
+data "aws_ssm_parameter" "subnet_worker_id" { name = var.ssm_subnet_worker_id }
+data "aws_ssm_parameter" "subnet_matomo_id" { name = var.ssm_subnet_matomo_id }
+data "aws_ssm_parameter" "subnet_db_1_id" { name = var.ssm_subnet_db_1_id }
+data "aws_ssm_parameter" "subnet_db_2_id" { name = var.ssm_subnet_db_2_id }
+data "aws_ssm_parameter" "subnet_es_id" { name = var.ssm_subnet_es_id }
 
 
 resource "aws_route_table_association" "r_assoc_backend" {
-  route_table_id = aws_route_table.r.id
-  subnet_id      = aws_subnet.backend.id
+  route_table_id = data.aws_ssm_parameter.route_table_endpoints_id.value
+  subnet_id      = data.aws_ssm_parameter.subnet_backend_id.value
 }
 
 resource "aws_route_table_association" "r_assoc_worker" {
-  route_table_id = aws_route_table.r.id
-  subnet_id      = aws_subnet.worker.id
+  route_table_id = data.aws_ssm_parameter.route_table_endpoints_id.value
+  subnet_id      = data.aws_ssm_parameter.subnet_worker_id.value
 }
 
 resource "aws_route_table_association" "r_assoc_matomo" {
-  route_table_id = aws_route_table.r.id
-  subnet_id      = aws_subnet.matomo_1.id
+  route_table_id = data.aws_ssm_parameter.route_table_endpoints_id.value
+  subnet_id      = data.aws_ssm_parameter.subnet_matomo_id.value
 }
 
 resource "aws_route_table_association" "r_assoc_db1" {
-  route_table_id = aws_route_table.private_A.id
-  subnet_id      = aws_subnet.db_1.id
+  route_table_id = data.aws_ssm_parameter.route_table_private_A_id.value
+  subnet_id      = data.aws_ssm_parameter.subnet_db_1_id.value
 }
 
 resource "aws_route_table_association" "r_assoc_db2" {
-  route_table_id = aws_route_table.private_B.id
-  subnet_id      = aws_subnet.db_2.id
+  route_table_id = data.aws_ssm_parameter.route_table_private_B_id.value
+  subnet_id      = data.aws_ssm_parameter.subnet_db_2_id.value
 }
 
 resource "aws_route_table_association" "r_assoc_es_1" {
-  route_table_id = aws_route_table.private_C.id
-  subnet_id      = aws_subnet.es_1.id
+  route_table_id = data.aws_ssm_parameter.route_table_private_C_id.value
+  subnet_id      = data.aws_ssm_parameter.subnet_es_id.value
 }
 
 resource "aws_security_group" "allow_internal" {
   name        = "allow-internal"
   description = "Allow All VPC Internal Traffic"
-  vpc_id      = aws_vpc.crossfeed_vpc.id
+  vpc_id      = data.aws_ssm_parameter.vpc_id.value
 
   ingress {
     description = "All Lambda Subnet"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [aws_vpc.crossfeed_vpc.cidr_block]
+    cidr_blocks = [data.aws_ssm_parameter.vpc_cidr_block.value]
   }
 
   ingress {
@@ -188,13 +83,14 @@ resource "aws_security_group" "allow_internal" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }
 
 resource "aws_security_group" "worker" {
   name        = "worker"
   description = "Worker"
-  vpc_id      = aws_vpc.crossfeed_vpc.id
+  vpc_id      = data.aws_ssm_parameter.vpc_id.value
 
   egress {
     from_port   = 0
@@ -206,5 +102,6 @@ resource "aws_security_group" "worker" {
   tags = {
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
 }

@@ -11,13 +11,14 @@ resource "aws_instance" "elk_stack" {
     Name    = "ELK"
     Project = var.project
     Stage   = var.stage
+    Owner   = "Crossfeed managed resource"
   }
   root_block_device {
     volume_size = 15
   }
 
   vpc_security_group_ids = [aws_security_group.allow_internal.id]
-  subnet_id              = aws_subnet.db_1.id
+  subnet_id              = data.aws_ssm_parameter.subnet_db_1_id.value
 
   iam_instance_profile = aws_iam_instance_profile.db_accessor.id
   user_data            = file("./ssm-agent-install.sh")
