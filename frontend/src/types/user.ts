@@ -16,4 +16,6 @@ export interface User {
   acceptedTermsVersion: string | null;
   lastLoggedIn: string | null;
   apiKeys: ApiKey[];
+  regionId: string | null;
+  state: string | null;
 }

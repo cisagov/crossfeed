@@ -15,6 +15,14 @@ export interface Organization {
   parent: Organization | null;
   children: Organization[];
   pendingDomains: PendingDomain[];
+  country: string;
+  state: string;
+  stateFips: number;
+  stateName: string;
+  county: string;
+  countyFips: number;
+  acronym: string;
+  type: string;
 }
 
 export interface PendingDomain {

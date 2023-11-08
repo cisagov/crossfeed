@@ -111,4 +111,44 @@ export class Organization extends BaseEntity {
     onUpdate: 'CASCADE'
   })
   createdBy: User;
+
+  @Column({
+    nullable: true
+  })
+  country: string;
+
+  @Column({
+    nullable: true
+  })
+  state: string;
+
+  @Column({
+    nullable: true
+  })
+  stateFips: number;
+
+  @Column({
+    nullable: true
+  })
+  stateName: string;
+
+  @Column({
+    nullable: true
+  })
+  county: string;
+
+  @Column({
+    nullable: true
+  })
+  countyFips: number;
+
+  @Column({
+    nullable: true
+  })
+  acronym: string;
+
+  @Column({
+    nullable: true
+  })
+  type: string;
 }

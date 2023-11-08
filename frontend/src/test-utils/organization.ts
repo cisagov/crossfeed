@@ -10,5 +10,13 @@ export const testOrganization = {
   tags: [],
   parent: null,
   children: [],
-  pendingDomains: []
+  pendingDomains: [],
+  country: 'US',
+  state: 'LA',
+  stateFips: 22,
+  stateName: 'Louisiana',
+  county: 'Calcasieu Parish',
+  countyFips: 22019,
+  acronym: 'TEST',
+  type: 'Federal'
 };

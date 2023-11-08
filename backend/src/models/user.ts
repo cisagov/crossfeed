@@ -105,4 +105,14 @@ export class User extends BaseEntity {
   setFullName() {
     this.fullName = this.firstName + ' ' + this.lastName;
   }
+
+  @Column({
+    nullable: true
+  })
+  regionId: string;
+
+  @Column({
+    nullable: true
+  })
+  state: string;
 }
