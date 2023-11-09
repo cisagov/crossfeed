@@ -36,7 +36,7 @@ export interface RegisterFormValues {
 export const RegisterForm: React.FC<{
   open: boolean;
   onClose: () => void;
-}> = ({open, onClose}) => { 
+}> = ({ open, onClose }) => {
   const defaultValues = () => ({
     firstName: '',
     lastName: '',
@@ -45,7 +45,9 @@ export const RegisterForm: React.FC<{
   const [values, setValues] = useState<RegisterFormValues>(defaultValues);
   // const [errorMessage, setErrorMessage] = useState<string>('');
   const [errorRequestMessage, setErrorRequestMessage] = useState<string>('');
-  const [errorEmailMessage, setEmailErrorMessage] = useState<string>('Email entry error. Please try again.');
+  const [errorEmailMessage, setEmailErrorMessage] = useState<string>(
+    'Email entry error. Please try again.'
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -59,7 +61,7 @@ export const RegisterForm: React.FC<{
   };
 
   const isDisabled = () => {
-    if (Object.values(values).every(value => value) && !errorEmailMessage) {
+    if (Object.values(values).every((value) => value) && !errorEmailMessage) {
       return false;
     } else {
       return true;
@@ -70,23 +72,30 @@ export const RegisterForm: React.FC<{
     setIsLoading(true);
     console.log('values: ', values);
     console.log('This is where we will send the values to post.');
-    // makeRequest should be "await someApiCallToBeSuccessfulOrFail" 
-    const makeRequest = {data: {user: {firstName: 'test', lastName: 'test', email: 'test@email.com'}}}
+    // makeRequest should be "await someApiCallToBeSuccessfulOrFail"
+    const makeRequest = {
+      data: {
+        user: { firstName: 'test', lastName: 'test', email: 'test@email.com' }
+      }
+    };
     const successfulRequest = makeRequest.data;
-    if(makeRequest && makeRequest.data){
+    if (makeRequest && makeRequest.data) {
       console.log('User Registered Successfully');
       onClose();
-    }else{
+    } else {
       console.log('User Register Failed');
-      setErrorRequestMessage('Something went wrong registering. Please try again.');
+      setErrorRequestMessage(
+        'Something went wrong registering. Please try again.'
+      );
       setIsLoading(false);
     }
-  }
+  };
 
   const validateEmail = (email: string) => {
     // email format
     // const regexEmail = /\S+@\S+\.\S+/;
-    const regexEmail =  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const regexEmail =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     let error = false;
     if (email && regexEmail.test(email)) {
       setEmailErrorMessage('');
@@ -99,10 +108,7 @@ export const RegisterForm: React.FC<{
   };
 
   useEffect(() => {
-    if (
-      values &&
-      values.email
-    ) {
+    if (values && values.email) {
       validateEmail(values.email);
     }
   }, [values]);
@@ -115,11 +121,11 @@ export const RegisterForm: React.FC<{
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle id="form-dialog-title">
-        Register with Crossfeed
-      </DialogTitle>
+      <DialogTitle id="form-dialog-title">Register with Crossfeed</DialogTitle>
       <DialogContent>
-        {errorRequestMessage && <p className="text-error">{errorRequestMessage}</p>}
+        {errorRequestMessage && (
+          <p className="text-error">{errorRequestMessage}</p>
+        )}
         <TextField
           margin="dense"
           id="firstName"
@@ -167,7 +173,7 @@ export const RegisterForm: React.FC<{
           onClick={onSave}
           startIcon={
             isLoading ? (
-              <CircularProgress color='secondary' size={16} />
+              <CircularProgress color="secondary" size={16} />
             ) : (
               <Save />
             )
