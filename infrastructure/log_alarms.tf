@@ -20,6 +20,7 @@ resource "aws_cloudwatch_metric_alarm" "api_error_rate" {
   metric_name         = "5XXError"
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreateerThanOrEqualToThreshold"
+  period              = 60
   evaluation_periods  = 2
   threshold           = 0.05
   statistic           = "Average"
