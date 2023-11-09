@@ -31,13 +31,13 @@ import {
   LoginGovCallback,
   Feeds,
   Domains,
-  Reports
+  Reports,
+  RegionUsers
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
 import { CrossfeedFooter } from './components/Footer';
 import './styles.scss';
 import { Authenticator } from '@aws-amplify/ui-react';
-// import UserRegistration from 'pages/UserRegistration';
 
 API.configure({
   endpoints: [
@@ -156,6 +156,10 @@ const App: React.FC = () => (
                   <RouteGuard path="/users" component={Users} />
                   <RouteGuard path="/settings" component={Settings} />
                   {/* <Route exact path="/user/registration" component={UserRegistration} /> */}
+                  <RouteGuard
+                    path="/region-admin-dashboard"
+                    component={RegionUsers}
+                  />
                 </Switch>
                 <CrossfeedFooter />
               </Layout>
