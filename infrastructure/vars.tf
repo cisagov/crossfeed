@@ -70,6 +70,12 @@ variable "log_metric_namespace" {
   default     = "LogMetrics"
 }
 
+variable "log_metric_api_error_rate" {
+  description = "log_metric_filter_api_error_rate"
+  type        = string
+  default     = "crossfeed-staging-APIErrorRate"
+}
+
 variable "log_metric_root_user" {
   description = "log_metric_filter_root_user"
   type        = string

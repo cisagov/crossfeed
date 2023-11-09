@@ -14,6 +14,25 @@ resource "aws_cloudwatch_metric_alarm" "root_user" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "api_error_rate" {
+  alarm_name          = "${var.log_metric_api_error_rate}-alarm"
+  alarm_description   = "API error rate exceeded 5%"
+  metric_name         = "5XXError"
+  alarm_actions       = [aws_sns_topic.alarms.arn]
+  comparison_operator = "GreateerThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  threshold           = 0.05
+  statistic           = "Average"
+  unit                = "Count"
+  treat_missing_data  = "notBreaching"
+
+  tags = {
+    Project  = var.project
+    Stage    = var.stage
+    Severity = var.severity_medium
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "unauthorized_api_call" {
   alarm_name          = "${var.log_metric_unauthorized_api_call}-alarm"
   metric_name         = var.log_metric_unauthorized_api_call
