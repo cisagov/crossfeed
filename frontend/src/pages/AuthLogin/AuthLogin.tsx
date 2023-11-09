@@ -85,7 +85,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
 
   const onClose = () => {
     setOpen(false);
-  }
+  };
 
   if (process.env.REACT_APP_USE_COGNITO) {
     return (
