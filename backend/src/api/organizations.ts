@@ -231,6 +231,19 @@ export const create = wrapHandler(async (event) => {
  *    description: List organizations that the user is a member of or has access to.
  *    tags:
  *    - Organizations
+ *    parameters:
+ *    - in: query
+ *      name: state
+ *      schema:
+ *        type: array
+ *        items:
+ *          type: string 
+ *    - in: query
+ *      name: regionId
+ *      schema:
+ *        type: array
+ *        items:
+ *          type: string 
  */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
@@ -602,6 +615,57 @@ export const removeRole = wrapHandler(async (event) => {
   const result = await Role.delete({
     organization: { id: organizationId },
     id
+  });
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result)
+  };
+});
+
+
+/**
+ * @swagger
+ *
+ * /organizations/regionId/{regionId}:
+ *  get:
+ *    description: List organizations with specific regionId.
+ *    parameters:
+ *      - in: path
+ *        name: regionId
+ *        description: Organization regionId
+ *    tags:
+ *    - Organizations
+ */
+export const getByRegionId = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  await connectToDatabase();
+  const result = await Organization.find({
+    where: { regionId: event.pathParameters?.regionId }
+  });
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result)
+  };
+});
+
+/**
+ * @swagger
+ *
+ * /organizations/state/{state}:
+ *  get:
+ *    description: List organizations with specific state.
+ *    parameters:
+ *      - in: path
+ *        name: state
+ *        description: Organization state
+ *    tags:
+ *    - Organizations
+ */
+export const getByState = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  await connectToDatabase();
+  const result = await Organization.find({
+    where: { state: event.pathParameters?.state }
   });
   return {
     statusCode: 200,

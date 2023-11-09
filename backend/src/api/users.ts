@@ -385,3 +385,53 @@ export const search = wrapHandler(async (event) => {
     body: JSON.stringify({ result, count })
   };
 });
+
+/**
+ * @swagger
+ *
+ * /users/regionId/{regionId}:
+ *  get:
+ *    description: List users with specific regionId.
+ *    parameters:
+ *      - in: path
+ *        name: regionId
+ *        description: User regionId
+ *    tags:
+ *    - Users
+ */
+export const getByRegionId = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  await connectToDatabase();
+  const result = await User.find({
+    where: { regionId: event.pathParameters?.regionId }
+  });
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result)
+  };
+});
+
+/**
+ * @swagger
+ *
+ * /users/state/{state}:
+ *  get:
+ *    description: List users with specific state.
+ *    parameters:
+ *      - in: path
+ *        name: state
+ *        description: User state
+ *    tags:
+ *    - Users
+ */
+export const getByState = wrapHandler(async (event) => {
+  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  await connectToDatabase();
+  const result = await User.find({
+    where: { state: event.pathParameters?.state }
+  });
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result)
+  };
+});
