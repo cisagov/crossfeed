@@ -14,7 +14,6 @@ import {
   DataGrid,
   GridColDef,
   GridRenderCellParams,
-  // GridRowId,
   GridRowSelectionModel,
   GridToolbar
 } from '@mui/x-data-grid';
@@ -166,13 +165,6 @@ export const RegionUsers: React.FC = () => {
   };
   return (
     <Box m={5} sx={{ height: '150vh' }}>
-      {/* <ResultDialog
-        openDialog={dialogStates.isSubmitDialogOpen}
-        setDialog={setDialogStates({
-          ...dialogStates,
-          isSubmitDialogOpen: true,
-        })}
-      /> */}
       <Box
         sx={{
           maxWidth: '1700px',
