@@ -10,7 +10,6 @@ db_name                              = "crossfeed-prod-db2"
 db_port                              = 5432
 db_table_name                        = "cfproddb"
 db_instance_class                    = "db.t3.2xlarge"
-db_instance_class                    = "db.t3.2xlarge"
 log_metric_namespace                 = "LogMetrics"
 log_metric_root_user                 = "crossfeed-prod-RootUserAccess"
 log_metric_unauthorized_api_call     = "crossfeed-prod-UnauthorizedApiCall"
