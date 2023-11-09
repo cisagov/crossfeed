@@ -92,75 +92,77 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   };
   if (process.env.REACT_APP_USE_COGNITO) {
     return (
-      <AuthForm as="div">
-        <h1>Welcome to Crossfeed</h1>
-        <ThemeProvider theme={amplifyTheme}>
-          <Authenticator
-            loginMechanisms={['email']}
-            formFields={formFields}
-            /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
-            hideSignUp={
-              !showSignUp && !(process.env.NODE_ENV === 'development')
-            }
-          />
-          <Alert onClose={() => {}} severity="warning" className="alert_box">
-            <AlertTitle>
-              <h2 className="platform_notice">PLATFORM NOTIFICATION</h2>
-            </AlertTitle>
-            <h3>
-              Important Notice: Temporary Downtime During Crossfeed Migration
-            </h3>
-            <p>
-              The Crossfeed environment is moving. The migration will require a
-              temporary downtime of approximately one week.
-            </p>
-            <p>
-              The downtime will begin on Wednesday, October 25, through the end
-              of day Wednesday, November 01.
-            </p>
-            <p>
-              For additional information, please click
-              <a href="https://s3.amazonaws.com/crossfeed.cyber.dhs.gov/Notice.pdf">
-                {' '}
-                here.
-              </a>
-            </p>
-          </Alert>
-          <div className="notification_box">
-            <div className="warning_header">WARNING</div>
-            <div className="warning_logo">
-              <Link href="/" to={''}>
-                <img src={cisa_logo} alt="CISA LOGO" />
-              </Link>
-            </div>
-            <div className="warning_notification">
-              Crossfeed is hosted by Department of Homeland Security (DHS)
-              Cybersecurity and Infrastructure Security Agency (CISA)
-              Cybersecurity Division (CSD) Vulnerability Management (VM) Attack
-              Surface Management (ASM) Automation Capabilities team.
-              Unauthorized use of this system is prohibited. US Government
-              computer systems may be monitored for all unlawful purposes,
-              including to ensure that their use is authorized, for management
-              of the system, to facilitate protection against unauthorized
-              access, and to verify security procedures, survivability, and
-              operational security. All information, including personal
-              information, placed or sent over this system may be monitored.
-              Monitoring includes actives attacks by authorized US Government
-              entities to test or verify the security of this system.
-            </div>
-            <div className="warning_notification">
-              {' '}
-              Use of the computer system, authorized or unauthorized,
-              constitutes consent to monitoring of this system. Unauthorized use
-              may subject you to criminal prosecution. Evidence of unauthorized
-              use collected during monitoring may be used for administrivia,
-              criminal, or other adverse action. Use of this system constitutes
-              to monitoring for these purposes. Use of this system implies
-              understanding of these items and conditions.
-            </div>
+      <>
+        <AuthForm as="div">
+          <h1>Welcome to Crossfeed</h1>
+          <ThemeProvider theme={amplifyTheme}>
+            <Authenticator
+              loginMechanisms={['email']}
+              formFields={formFields}
+              /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
+              hideSignUp={
+                !showSignUp && !(process.env.NODE_ENV === 'development')
+              }
+            />
+            <Alert onClose={() => {}} severity="warning" className="alert_box">
+              <AlertTitle>
+                <h2 className="platform_notice">PLATFORM NOTIFICATION</h2>
+              </AlertTitle>
+              <h3>
+                Important Notice: Temporary Downtime During Crossfeed Migration
+              </h3>
+              <p>
+                The Crossfeed environment is moving. The migration will require
+                a a temporary downtime of approximately one week.
+              </p>
+              <p>
+                The downtime will begin on Wednesday, October 25, through the
+                day Wednesday, November 01.
+              </p>
+              <p>
+                For additional information, please click
+                <a href="https://s3.amazonaws.com/crossfeed.cyber.dhs.gov/Notice.pdf">
+                  {' '}
+                  here.
+                </a>
+              </p>
+            </Alert>
+          </ThemeProvider>
+        </AuthForm>
+        <div className="notification_box">
+          <div className="warning_header">WARNING</div>
+          <div className="warning_logo">
+            <Link href="/" to={''}>
+              <img src={cisa_logo} alt="CISA LOGO" />
+            </Link>
           </div>
-        </ThemeProvider>
-      </AuthForm>
+          <div className="warning_notification">
+            Crossfeed is hosted by Department of Homeland Security (DHS)
+            Cybersecurity and Infrastructure Security Agency (CISA)
+            Cybersecurity Division (CSD) Vulnerability Management (VM) Attack
+            Surface Management (ASM) Automation Capabilities team. Unauthorized
+            use of this system is prohibited. US Government computer systems may
+            be monitored for all unlawful purposes, including to ensure that
+            their use is authorized, for management of the system, to facilitate
+            protection against unauthorized access, and to verify security
+            procedures, survivability, and operational security. All
+            information, including personal information, placed or sent over
+            this system may be monitored. Monitoring includes actives attacks by
+            authorized US Government entities to test or verify the security of
+            this system.
+          </div>
+          <div className="warning_notification">
+            {' '}
+            Use of the computer system, authorized or unauthorized, constitutes
+            consent to monitoring of this system. Unauthorized use may subject
+            you to criminal prosecution. Evidence of unauthorized use collected
+            during monitoring may be used for administrivia, criminal, or other
+            adverse action. Use of this system constitutes to monitoring for
+            these purposes. Use of this system implies understanding of these
+            items and conditions.
+          </div>
+        </div>
+      </>
     );
   }
   return (
