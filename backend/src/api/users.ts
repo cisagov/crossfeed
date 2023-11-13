@@ -158,6 +158,14 @@ class NewUser {
   @IsString()
   lastName: string;
 
+  @IsString()
+  @IsOptional()
+  state: string;
+
+  @IsString()
+  @IsOptional()
+  regionId: string;
+
   @IsEmail()
   @IsOptional()
   email: string;
