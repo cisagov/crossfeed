@@ -25,6 +25,7 @@ import {
   getUserId,
   canAccessUser,
   isGlobalViewAdmin,
+  isRegionalAdmin,
   isOrgAdmin,
   isGlobalWriteAdmin
 } from './auth';
@@ -400,15 +401,19 @@ export const search = wrapHandler(async (event) => {
  *    - Users
  */
 export const getByRegionId = wrapHandler(async (event) => {
-  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  if (!isRegionalAdmin(event)) return Unauthorized;
+  const regionId = event.pathParameters?.regionId;
   await connectToDatabase();
   const result = await User.find({
-    where: { regionId: event.pathParameters?.regionId }
+    where: { regionId: regionId }
   });
-  return {
-    statusCode: 200,
-    body: JSON.stringify(result)
-  };
+ if (result) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  }
+  return NotFound; 
 });
 
 /**
@@ -425,13 +430,17 @@ export const getByRegionId = wrapHandler(async (event) => {
  *    - Users
  */
 export const getByState = wrapHandler(async (event) => {
-  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  if (!isRegionalAdmin(event)) return Unauthorized;
+  const state = event.pathParameters?.state;
   await connectToDatabase();
   const result = await User.find({
-    where: { state: event.pathParameters?.state }
+    where: { state: state }
   });
-  return {
-    statusCode: 200,
-    body: JSON.stringify(result)
-  };
+  if (result) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  }
+  return NotFound; 
 });

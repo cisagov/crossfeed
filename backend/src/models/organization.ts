@@ -125,6 +125,11 @@ export class Organization extends BaseEntity {
   @Column({
     nullable: true
   })
+  regionId: string;
+
+  @Column({
+    nullable: true
+  })
   stateFips: number;
 
   @Column({

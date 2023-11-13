@@ -313,6 +313,14 @@ authenticatedRoute.get(
   '/organizations/:organizationId',
   handlerToExpress(organizations.get)
 );
+authenticatedRoute.get(
+  '/organizations/state/:state',
+  handlerToExpress(organizations.getByState)
+);
+authenticatedRoute.get(
+  '/organizations/regionId/:regionId',
+  handlerToExpress(organizations.getByRegionId)
+);
 authenticatedRoute.post(
   '/organizations',
   handlerToExpress(organizations.create)
@@ -353,6 +361,8 @@ authenticatedRoute.post('/stats', handlerToExpress(stats.get));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
+authenticatedRoute.get('/users/state/:state', handlerToExpress(users.getByState));
+authenticatedRoute.get('/users/regionId/:regionId', handlerToExpress(users.getByRegionId));
 authenticatedRoute.post('/users/search', handlerToExpress(users.search));
 
 authenticatedRoute.post(

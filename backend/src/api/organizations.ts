@@ -22,6 +22,7 @@ import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
   isOrgAdmin,
   isGlobalWriteAdmin,
+  isRegionalAdmin,
   getOrgMemberships,
   isGlobalViewAdmin
 } from './auth';
@@ -110,6 +111,11 @@ class UpdateOrganizationMetaV2 {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
+  regionId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
   country: string;
 
   @IsNumber()
@@ -189,6 +195,7 @@ const findOrCreateTags = async (
  */
 
 export const updateV2 = wrapHandler(async (event) => {
+  if (!isRegionalAdmin(event)) return Unauthorized;
   // Get the organization id from the path
   const id = event.pathParameters?.organizationId;
 
@@ -739,15 +746,20 @@ export const removeRole = wrapHandler(async (event) => {
  *    - Organizations
  */
 export const getByRegionId = wrapHandler(async (event) => {
-  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  if (!isRegionalAdmin(event)) return Unauthorized;
+  const regionId = event.pathParameters?.regionId;
   await connectToDatabase();
   const result = await Organization.find({
-    where: { regionId: event.pathParameters?.regionId }
+    where: { regionId: regionId }
   });
-  return {
-    statusCode: 200,
-    body: JSON.stringify(result)
-  };
+
+ if (result) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  }
+  return NotFound; 
 });
 
 /**
@@ -764,13 +776,18 @@ export const getByRegionId = wrapHandler(async (event) => {
  *    - Organizations
  */
 export const getByState = wrapHandler(async (event) => {
-  if (!isGlobalViewAdmin(event)) return Unauthorized;
+  if (!isRegionalAdmin(event)) return Unauthorized;
+  const state = event.pathParameters?.state;
   await connectToDatabase();
   const result = await Organization.find({
-    where: { state: event.pathParameters?.state }
+    where: { state: state }
   });
-  return {
-    statusCode: 200,
-    body: JSON.stringify(result)
-  };
+
+ if (result) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  }
+  return NotFound; 
 });
