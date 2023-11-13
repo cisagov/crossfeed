@@ -109,7 +109,7 @@
     "@types/d3-scale": "^4.0.2",
     "@types/dompurify": "^3.0.2",
     "@types/file-saver": "^2.0.5",
-    "@types/jest": "^27.5.2",
+    "@types/jest": "^29.5.8",
     "@types/papaparse": "^5.3.5",
     "@types/react": "^18.2.0",
     "@types/react-beforeunload": "^2.1.1",
