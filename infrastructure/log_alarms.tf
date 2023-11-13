@@ -236,3 +236,33 @@ resource "aws_cloudwatch_metric_alarm" "ec2_shutdown" {
     Severity = var.severity_critical
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "db_shutdown" {
+  alarm_name          = "${var.log_metric_db_shutdown}-alarm"
+  alarm_actions       = [aws_sns_topic.alarms.arn]
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  threshold           = 1
+  statistic           = "SampleCount"
+
+  tags = {
+    Project  = var.project
+    Stage    = var.stage
+    Severity = var.severity_critical
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "db_deletion" {
+  alarm_name          = "${var.log_metric_db_deletion}-alarm"
+  alarm_actions       = [aws_sns_topic.alarms.arn]
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  threshold           = 1
+  statistic           = "SampleCount"
+
+  tags = {
+    Project  = var.project
+    Stage    = var.stage
+    Severity = var.severity_critical
+  }
+}

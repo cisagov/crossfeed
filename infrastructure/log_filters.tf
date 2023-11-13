@@ -177,3 +177,27 @@ resource "aws_cloudwatch_log_metric_filter" "ec2_shutdown" {
     value         = 1
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "db_shutdown" {
+  log_group_name = var.cloudtrail_log_group_name
+  name           = var.log_metric_db_shutdown
+  pattern        = "{$.eventName=StopDBInstance}"
+  metric_transformation {
+    name          = var.log_metric_db_shutdown
+    namespace     = var.log_metric_namespace
+    default_value = 0
+    value         = 1
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "db_deletion" {
+  log_group_name = var.cloudtrail_log_group_name
+  name           = var.log_metric_db_deletion
+  pattern        = "{$.eventName=DeleteDBInstance}"
+  metric_transformation {
+    name          = var.log_metric_db_deletion
+    namespace     = var.log_metric_namespace
+    default_value = 0
+    value         = 1
+  }
+}
