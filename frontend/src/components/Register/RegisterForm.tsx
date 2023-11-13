@@ -1,31 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as registerFormStyles from './registerFormStyle';
-import { Organization, OrganizationTag } from 'types';
 import {
-  Autocomplete,
   CircularProgress,
   DialogTitle,
   DialogContent,
   TextField,
   DialogActions,
-  Switch,
-  Button,
-  FormControlLabel,
-  Box,
-  Chip,
-  Grid,
-  createFilterOptions
+  Button
 } from '@mui/material';
 import { Save } from '@mui/icons-material';
 
-import { useAuthContext } from 'context';
-
-const classes = registerFormStyles.classes;
 const StyledDialog = registerFormStyles.StyledDialog;
-
-interface AutocompleteType extends Partial<OrganizationTag> {
-  title?: string;
-}
 
 export interface RegisterFormValues {
   firstName: string;
@@ -78,7 +63,6 @@ export const RegisterForm: React.FC<{
         user: { firstName: 'test', lastName: 'test', email: 'test@email.com' }
       }
     };
-    const successfulRequest = makeRequest.data;
     if (makeRequest && makeRequest.data) {
       console.log('User Registered Successfully');
       onClose();

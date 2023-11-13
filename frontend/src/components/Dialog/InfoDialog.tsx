@@ -4,8 +4,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Grid,
-  Typography
+  Grid
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
