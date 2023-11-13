@@ -5,7 +5,8 @@ import {
   IsBoolean,
   IsUUID,
   IsOptional,
-  IsNotEmpty
+  IsNotEmpty,
+  IsNumber
 } from 'class-validator';
 import {
   Organization,
@@ -66,6 +67,7 @@ class PendingDomainBody {
   pendingDomains: PendingDomain[];
 }
 
+
 class NewOrganizationNonGlobalAdmins {
   @IsString()
   name: string;
@@ -87,6 +89,57 @@ class NewOrganization extends NewOrganizationNonGlobalAdmins {
   @IsUUID()
   @IsOptional()
   parent?: string;
+}
+
+// Type Validation Options
+class UpdateOrganizationMetaV2 {
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  name: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isPassive: boolean;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  state: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  country: string;
+
+  @IsNumber()
+  @IsOptional()
+  stateFips: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  stateName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  county: string;
+
+  @IsNumber()
+  @IsOptional()
+  countyFips: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  acronym: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  type: string;
+
 }
 
 class NewDomain {
@@ -119,6 +172,55 @@ const findOrCreateTags = async (
   }
   return finalTags;
 };
+
+
+/**
+ * @swagger
+ *
+ * /organizations/v2/{id}:
+ *  put:
+ *    description: Update a particular organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *    tags:
+ *    - Organizations
+ */
+
+export const updateV2 = wrapHandler(async (event) => {
+  // Get the organization id from the path
+  const id = event.pathParameters?.organizationId;
+
+  // confirm that the id is a valid UUID
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+
+  // TODO: check permissions
+  // if (!isOrgAdmin(event, id)) return Unauthorized;
+
+  // Validate the body
+  const validatedBody = await validateBody(
+    UpdateOrganizationMetaV2,
+    event.body
+  );
+
+  // Connect to the database
+  await connectToDatabase();
+
+  // Update the organization
+  const updatedOrg = await Organization.update(id, validatedBody);
+
+  // Handle response
+  if (updatedOrg) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify(updatedOrg)
+    };
+  }
+  return NotFound;
+});
 
 /**
  * @swagger

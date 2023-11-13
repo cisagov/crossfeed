@@ -321,6 +321,10 @@ authenticatedRoute.put(
   '/organizations/:organizationId',
   handlerToExpress(organizations.update)
 );
+authenticatedRoute.put(
+  '/organizations/v2/:organizationId',
+  handlerToExpress(organizations.updateV2)
+);
 authenticatedRoute.delete(
   '/organizations/:organizationId',
   handlerToExpress(organizations.del)

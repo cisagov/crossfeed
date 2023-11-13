@@ -71,12 +71,12 @@ export const wrapHandler: WrapHandler =
 
 export const NotFound: APIGatewayProxyResult = {
   statusCode: 404,
-  body: ''
+  body: "Item not found. View logs for details."
 };
 
 export const Unauthorized: APIGatewayProxyResult = {
   statusCode: 403,
-  body: ''
+  body: "Unauthorized access. View logs for details."
 };
 
 export const sendEmail = async (
