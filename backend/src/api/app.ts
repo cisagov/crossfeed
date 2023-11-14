@@ -329,10 +329,6 @@ authenticatedRoute.put(
   '/organizations/:organizationId',
   handlerToExpress(organizations.update)
 );
-authenticatedRoute.put(
-  '/organizations/v2/:organizationId',
-  handlerToExpress(organizations.updateV2)
-);
 authenticatedRoute.delete(
   '/organizations/:organizationId',
   handlerToExpress(organizations.del)
@@ -374,6 +370,25 @@ authenticatedRoute.post(
   '/reports/list',
   handlerToExpress(reports.list_reports)
 );
+
+//************* */
+//  V2 Routes   //
+//************* */
+
+// Users
+authenticatedRoute.put('/v2/users/:userId', handlerToExpress(users.updateV2));
+authenticatedRoute.get('/v2/users', handlerToExpress(users.getAllV2));
+
+// Organizations
+authenticatedRoute.put(
+  '/v2/organizations/:organizationId',
+  handlerToExpress(organizations.updateV2)
+);
+authenticatedRoute.get(
+  '/v2/organizations',
+  handlerToExpress(organizations.getAllV2)
+);
+
 
 app.use(authenticatedRoute);
 

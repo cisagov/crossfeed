@@ -47,7 +47,9 @@ class UserSearch {
     'userType',
     'dateAcceptedTerms',
     'lastLoggedIn',
-    'acceptedTermsVersion'
+    'acceptedTermsVersion',
+    'state',
+    'regionId'
   ])
   @IsOptional()
   sort: string = 'fullName';
@@ -73,6 +75,57 @@ class UserSearch {
     const results = await qs.getManyAndCount();
     return results;
   }
+}
+
+class NewUser {
+  @IsString()
+  firstName: string;
+
+  @IsString()
+  lastName: string;
+
+  @IsString()
+  @IsOptional()
+  state: string;
+
+  @IsString()
+  @IsOptional()
+  regionId: string;
+
+  @IsEmail()
+  @IsOptional()
+  email: string;
+
+  @IsString()
+  @IsOptional()
+  organization: string;
+
+  @IsBoolean()
+  @IsOptional()
+  organizationAdmin: string;
+
+  @IsEnum(UserType)
+  @IsOptional()
+  userType: UserType;
+}
+
+class UpdateUser {
+  @IsString()
+  @IsOptional()
+  state: string;
+
+  @IsString()
+  @IsOptional()
+  regionId: string;
+
+  @IsBoolean()
+  @IsOptional()
+  invitePending: boolean;
+
+  @IsEnum(UserType)
+  @IsOptional()
+  userType: UserType;
+
 }
 
 /**
@@ -151,37 +204,6 @@ export const update = wrapHandler(async (event) => {
   return NotFound;
 });
 
-class NewUser {
-  @IsString()
-  firstName: string;
-
-  @IsString()
-  lastName: string;
-
-  @IsString()
-  @IsOptional()
-  state: string;
-
-  @IsString()
-  @IsOptional()
-  regionId: string;
-
-  @IsEmail()
-  @IsOptional()
-  email: string;
-
-  @IsString()
-  @IsOptional()
-  organization: string;
-
-  @IsBoolean()
-  @IsOptional()
-  organizationAdmin: string;
-
-  @IsEnum(UserType)
-  @IsOptional()
-  userType: UserType;
-}
 
 const sendInviteEmail = async (email: string, organization?: Organization) => {
   const staging = process.env.NODE_ENV !== 'production';
@@ -362,6 +384,7 @@ export const acceptTerms = wrapHandler(async (event) => {
  *    description: List users.
  *    tags:
  *    - Users
+ * 
  */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) return Unauthorized;
@@ -424,6 +447,7 @@ export const getByRegionId = wrapHandler(async (event) => {
   return NotFound; 
 });
 
+
 /**
  * @swagger
  *
@@ -451,4 +475,120 @@ export const getByState = wrapHandler(async (event) => {
     };
   }
   return NotFound; 
+});
+
+
+// V2 Endpoints
+
+/**
+ * @swagger
+ *
+ * /v2/users:
+ *  get:
+ *    description: List all users with query parameters.
+ *    tags:
+ *    - Users 
+ *    parameters:
+ *      - in: query
+ *        name: state
+ *        required: false
+ *        schema:
+ *          type: array
+ *          items:
+ *            type: string 
+ *      - in: query
+ *        name: regionId
+ *        required: false
+ *        schema:
+ *          type: array
+ *          items:
+ *            type: string 
+ *      - in: query
+ *        name: invitePending
+ *        required: false
+ *        schema:
+ *          type: array
+ *          items:
+ *            type: string 
+ * 
+ */
+export const getAllV2 = wrapHandler(async (event) => {
+  if (!isRegionalAdmin(event)) return Unauthorized;
+
+  const filterParams = {}
+
+  if (event.query && event.query.state) {
+    filterParams["state"] = event.query.state;
+  }
+  if (event.query && event.query.regionId) {
+    filterParams["regionId"] = event.query.regionId;
+  }
+  if (event.query && event.query.invitePending) {
+    filterParams["invitePending"] = event.query.invitePending;
+  }
+
+  await connectToDatabase();
+  if (Object.entries(filterParams).length === 0) {
+    const result = await User.find({});
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    }
+  } else {
+    const result = await User.find({where: filterParams});
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  }
+});
+
+
+/**
+ * @swagger
+ *
+ * /v2/users/{id}:
+ *  put:
+ *    description: Update a particular user.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: User id
+ *    tags:
+ *    - Users
+ */
+export const updateV2 = wrapHandler(async (event) => {
+  if (!isRegionalAdmin(event)) return Unauthorized;
+  // Get the user id from the path
+  const id = event.pathParameters?.userId;
+
+  // confirm that the id is a valid UUID
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+
+  // TODO: check permissions
+  // if (!isOrgAdmin(event, id)) return Unauthorized;
+
+  // Validate the body
+  const validatedBody = await validateBody(
+    UpdateUser,
+    event.body
+  );
+
+  // Connect to the database
+  await connectToDatabase();
+
+  // Update the user
+  const updatedResp = await User.update(id, validatedBody);
+
+  // Handle response
+  if (updatedResp) {
+    const updatedOrg = await User.findOne(id);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(updatedOrg)
+    };
+  }
+  return NotFound;
 });

@@ -179,56 +179,6 @@ const findOrCreateTags = async (
   return finalTags;
 };
 
-
-/**
- * @swagger
- *
- * /organizations/v2/{id}:
- *  put:
- *    description: Update a particular organization.
- *    parameters:
- *      - in: path
- *        name: id
- *        description: Organization id
- *    tags:
- *    - Organizations
- */
-
-export const updateV2 = wrapHandler(async (event) => {
-  if (!isRegionalAdmin(event)) return Unauthorized;
-  // Get the organization id from the path
-  const id = event.pathParameters?.organizationId;
-
-  // confirm that the id is a valid UUID
-  if (!id || !isUUID(id)) {
-    return NotFound;
-  }
-
-  // TODO: check permissions
-  // if (!isOrgAdmin(event, id)) return Unauthorized;
-
-  // Validate the body
-  const validatedBody = await validateBody(
-    UpdateOrganizationMetaV2,
-    event.body
-  );
-
-  // Connect to the database
-  await connectToDatabase();
-
-  // Update the organization
-  const updatedOrg = await Organization.update(id, validatedBody);
-
-  // Handle response
-  if (updatedOrg) {
-    return {
-      statusCode: 200,
-      body: JSON.stringify(updatedOrg)
-    };
-  }
-  return NotFound;
-});
-
 /**
  * @swagger
  *
@@ -340,19 +290,6 @@ export const create = wrapHandler(async (event) => {
  *    description: List organizations that the user is a member of or has access to.
  *    tags:
  *    - Organizations
- *    parameters:
- *    - in: query
- *      name: state
- *      schema:
- *        type: array
- *        items:
- *          type: string 
- *    - in: query
- *      name: regionId
- *      schema:
- *        type: array
- *        items:
- *          type: string 
  */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
@@ -790,4 +727,109 @@ export const getByState = wrapHandler(async (event) => {
     };
   }
   return NotFound; 
+});
+
+// V2 Endpoints
+
+/**
+ * @swagger
+ *
+ * /v2/organizations:
+ *  get:
+ *    description: List all organizations with query parameters.
+ *    tags:
+ *    - Users 
+ *    parameters:
+ *      - in: query
+ *        name: state
+ *        required: false
+ *        schema:
+ *          type: array
+ *          items:
+ *            type: string 
+ *      - in: query
+ *        name: regionId
+ *        required: false
+ *        schema:
+ *          type: array
+ *          items:
+ *            type: string 
+ * 
+ */
+export const getAllV2 = wrapHandler(async (event) => {
+  if (!isRegionalAdmin(event)) return Unauthorized;
+
+  const filterParams = {}
+
+  if (event.query && event.query.state) {
+    filterParams["state"] = event.query.state;
+  }
+  if (event.query && event.query.regionId) {
+    filterParams["regionId"] = event.query.regionId;
+  }
+
+  await connectToDatabase();
+  if (Object.entries(filterParams).length === 0) {
+    const result = await Organization.find({});
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    }
+  } else {
+    const result = await Organization.find({where: filterParams});
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  }
+});
+
+/**
+ * @swagger
+ *
+ * /v2/organizations/{id}:
+ *  put:
+ *    description: Update a particular organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *    tags:
+ *    - Organizations
+ */
+
+export const updateV2 = wrapHandler(async (event) => {
+  if (!isRegionalAdmin(event)) return Unauthorized;
+  // Get the organization id from the path
+  const id = event.pathParameters?.organizationId;
+
+  // confirm that the id is a valid UUID
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+
+  // TODO: check permissions
+  // if (!isOrgAdmin(event, id)) return Unauthorized;
+
+  // Validate the body
+  const validatedBody = await validateBody(
+    UpdateOrganizationMetaV2,
+    event.body
+  );
+
+  // Connect to the database
+  await connectToDatabase();
+
+  // Update the organization
+  const updateResp = await Organization.update(id, validatedBody);
+
+  // Handle response
+  if (updateResp) {
+    const updatedOrg = await Organization.findOne(id);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(updatedOrg)
+    };
+  }
+  return NotFound;
 });
