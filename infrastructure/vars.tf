@@ -64,16 +64,112 @@ variable "frontend_cert_arn" {
   default     = "arn:aws:acm:us-east-1:563873274798:certificate/7c6a5980-80e3-47a4-9f21-cbda44b6f34c"
 }
 
-variable "log_metric_namespace_cloudwatch" {
+variable "log_metric_namespace" {
   description = "log_metric_namespace"
   type        = string
-  default     = "crossfeed-staging-cloudwatch-controls"
+  default     = "LogMetrics"
 }
 
-variable "log_metric_name_cloudwatch1" {
-  description = "log_metric_filter_cloudwatch1"
+variable "log_metric_root_user" {
+  description = "log_metric_filter_root_user"
   type        = string
   default     = "crossfeed-staging-RootUserAccess"
+}
+
+variable "log_metric_unauthorized_api_call" {
+  description = "log_metric_filter_unauthorized_api_call"
+  type        = string
+  default     = "crossfeed-staging-UnauthorizedAPICall"
+}
+
+variable "log_metric_login_without_mfa" {
+  description = "log_metric_filter_login_without_mfa"
+  type        = string
+  default     = "crossfeed-staging-ConsoleLoginWithoutMFA"
+}
+
+variable "log_metric_iam_policy" {
+  description = "log_metric_filter_iam_policy"
+  type        = string
+  default     = "crossfeed-staging-IAMPolicyChange"
+}
+
+variable "log_metric_cloudtrail" {
+  description = "log_metric_filter_cloudtrail"
+  type        = string
+  default     = "crossfeed-staging-CloudTrailConfigurationChange"
+}
+
+variable "log_metric_login_failure" {
+  description = "log_metric_filter_login_failure"
+  type        = string
+  default     = "crossfeed-staging-ConsoleLoginFailure"
+}
+
+variable "log_metric_cmk_delete_disable" {
+  description = "log_metric_filter_cmk_delete_disable"
+  type        = string
+  default     = "crossfeed-staging-DisablingOrScheduledDeletionOfCMK"
+}
+
+variable "log_metric_s3_bucket_policy" {
+  description = "log_metric_filter_s3_bucket_policy"
+  type        = string
+  default     = "crossfeed-staging-S3BucketPolicyChange"
+}
+
+variable "log_metric_aws_config" {
+  description = "log_metric_filter_aws_config"
+  type        = string
+  default     = "crossfeed-staging-AWSConfigConfigurationChange"
+}
+
+variable "log_metric_security_group" {
+  description = "log_metric_filter_security_group"
+  type        = string
+  default     = "crossfeed-staging-SecurityGroupChange"
+}
+
+variable "log_metric_nacl" {
+  description = "log_metric_filter_nacl"
+  type        = string
+  default     = "crossfeed-staging-NACLChange"
+}
+
+variable "log_metric_network_gateway" {
+  description = "log_metric_filter_network_gateway"
+  type        = string
+  default     = "crossfeed-staging-NetworkGatewayChange"
+}
+
+variable "log_metric_route_table" {
+  description = "log_metric_filter_route_table"
+  type        = string
+  default     = "crossfeed-staging-RouteTableChange"
+}
+
+variable "log_metric_vpc" {
+  description = "log_metric_filter_vpc"
+  type        = string
+  default     = "crossfeed-staging-VPCChange"
+}
+
+variable "log_metric_ec2_shutdown" {
+  description = "log_metric_filter_ec2_shutdown"
+  type        = string
+  default     = "crossfeed-staging-EC2Shutdown"
+}
+
+variable "log_metric_db_shutdown" {
+  description = "log_metric_filter_DB_shutdown"
+  type        = string
+  default     = "crossfeed-staging-DBShutdown"
+}
+
+variable "log_metric_db_deletion" {
+  description = "log_metric_filter_db_deletion"
+  type        = string
+  default     = "crossfeed-staging-DBDeletion"
 }
 
 variable "sns_topic_alarms" {
@@ -454,6 +550,29 @@ variable "create_elk_instance" {
   default     = false
 }
 
+variable "severity_critical" {
+  description = "severity_critical"
+  type        = string
+  default     = "CRITICAL"
+}
+
+variable "severity_high" {
+  description = "severity_high"
+  type        = string
+  default     = "HIGH"
+}
+
+variable "severity_medium" {
+  description = "severity_medium"
+  type        = string
+  default     = "MEDIUM"
+}
+
+variable "severity_low" {
+  description = "severity_low"
+  type        = string
+  default     = "LOW"
+}
 variable "pe_worker_ecs_repository_name" {
   description = "pe_worker_ecs_repository_name"
   type        = string
