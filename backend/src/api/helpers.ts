@@ -96,3 +96,35 @@ export const sendEmail = async (
     replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
   });
 };
+
+export const sendTemplate = async (
+  recepient: string ,
+  subject: string,
+  template: string 
+) => {
+  const transporter = nodemailer.createTransport({
+    SES: new SES({region: 'us-east-1'})
+  });
+
+  var fs = require('fs');
+
+  fs.readFile(template, {encoding: 'utf-8'}, function(err, html){
+    if (err) {
+      console.log(err);
+    } else {
+      var mailOptions = {
+        from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
+        tp: recepient,
+        subject: subject,
+        html: html
+      };
+      transporter.sendMail(mailOptions, function(error, info){
+        if(error) {
+          console.log(error);
+        } else {
+          console.log('Email sent' + info.response);
+        }
+      });
+    }
+  });
+};
