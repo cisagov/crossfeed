@@ -24,6 +24,16 @@ const NUM_SAMPLE_ORGS = 10; // Number of sample orgs
 const NUM_SAMPLE_DOMAINS = 10; // Number of sample domains per org
 const PROB_SAMPLE_SERVICES = 0.5; // Higher number means more services per domain
 const PROB_SAMPLE_VULNERABILITIES = 0.5; // Higher number means more vulnerabilities per domain
+const SAMPLE_STATES = [
+  "VA",
+  "CA",
+  "CO"
+]
+const SAMPLE_REGIONIDS = [
+  "1",
+  "2",
+  "3"
+]
 
 export const handler: Handler = async (event) => {
   const connection = await connectToDatabase(false);
@@ -78,7 +88,9 @@ export const handler: Handler = async (event) => {
         rootDomains: ['crossfeed.local'],
         ipBlocks: [],
         isPassive: false,
-        tags: [tag]
+        tags: [tag],
+        state: SAMPLE_STATES[Math.floor(Math.random() * SAMPLE_STATES.length)],
+        regionId: SAMPLE_REGIONIDS[Math.floor(Math.random() * SAMPLE_REGIONIDS.length)],
       }).save();
       console.log(organization.name);
       organizationIds.push(organization.id);
