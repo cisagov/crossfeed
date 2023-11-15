@@ -227,6 +227,7 @@ app.use(
 const authenticatedNoTermsRoute = express.Router();
 authenticatedNoTermsRoute.use(checkUserLoggedIn);
 authenticatedNoTermsRoute.get('/users/me', handlerToExpress(users.me));
+authenticatedNoTermsRoute.post('/users/register', handlerToExpress(users.register));
 authenticatedNoTermsRoute.post(
   '/users/me/acceptTerms',
   handlerToExpress(users.acceptTerms)

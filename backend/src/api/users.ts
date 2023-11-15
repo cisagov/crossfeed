@@ -31,6 +31,7 @@ import {
 } from './auth';
 import { Type, plainToClass } from 'class-transformer';
 import { IsNull } from 'typeorm';
+import { create } from './organizations';
 
 class UserSearch {
   @IsInt()
@@ -109,6 +110,7 @@ class NewUser {
   userType: UserType;
 }
 
+
 class UpdateUser {
   @IsString()
   @IsOptional()
@@ -127,6 +129,69 @@ class UpdateUser {
   userType: UserType;
 
 }
+
+
+const REGION_STATE_MAP = {
+  "Connecticut": "1",
+  "Maine": "1",
+  "Massachusetts": "1",
+  "New Hampshire": "1",
+  "Rhode Island": "1",
+  "Vermont": "1",
+  "New Jersey": "2",
+  "New York": "2",
+  "Puerto Rico": "2",
+  "Virgin Islands": "2",
+  "Delaware": "3",
+  "Maryland": "3",
+  "Pennsylvania": "3",
+  "Virginia": "3",
+  "District of Columbia": "3",
+  "West Virginia": "3",
+  "Alabama": "4",
+  "Florida": "4",
+  "Georgia": "4",
+  "Kentucky": "4",
+  "Mississippi": "4",
+  "North Carolina": "4",
+  "South Carolina": "4",
+  "Tennessee": "4",
+  "Illinois": "5",
+  "Indiana": "5",
+  "Michigan": "5",
+  "Minnesota": "5",
+  "Ohio": "5",
+  "Wisconsin": "5",
+  "Arkansas": "6",
+  "Louisiana": "6",
+  "New Mexico": "6",
+  "Oklahoma": "6",
+  "Texas": "6",
+  "Iowa": "7",
+  "Kansas": "7",
+  "Missouri": "7",
+  "Nebraska": "7",
+  "Colorado": "8",
+  "Montana": "8",
+  "North Dakota": "8",
+  "South Dakota": "8",
+  "Utah": "8",
+  "Wyoming": "8",
+  "Arizona": "9",
+  "California": "9",
+  "Hawaii": "9",
+  "Nevada": "9",
+  "Guam": "9",
+  "American Samoa": "9",
+  "Commonwealth Northern Mariana Islands": "9",
+  "Republic of Marshall Islands": "9",
+  "Federal States of Micronesia": "9",
+  "Alaska": "10",
+  "Idaho": "10",
+  "Oregon": "10",
+  "Washington": "10"
+}
+
 
 /**
  * @swagger
@@ -478,7 +543,60 @@ export const getByState = wrapHandler(async (event) => {
 });
 
 
-// V2 Endpoints
+/**
+ * @swagger
+ *
+ * /users/register:
+ *  post:
+ *    description: New user registration.
+ *    tags:
+ *    - Users
+ */
+export const register = wrapHandler(async (event) => {
+  const body = await validateBody(NewUser, event.body);
+
+  const newUser = {
+    "firstName": body.firstName,
+    "lastName": body.lastName,
+    "email": body.email.toLowerCase(),
+    "userType": UserType.STANDARD,
+    "state": body.state,
+    "regionId": REGION_STATE_MAP[body.state],
+    "invitePending": true,
+  }
+
+  await connectToDatabase();
+
+  // Check if user already exists by email
+  let user = await User.findOne({
+    email: body.email.toLowerCase()
+  });
+  let id = "";
+  // Crreate if user does not exist
+  if (!user) {
+    const createdUser = await User.create(newUser);
+    await User.save(createdUser);
+    id = createdUser.id;
+
+    // Send Registration confirmation emailto user
+    // TODO: replace with html email function to user
+
+    // Send new user pending approval email to regionalAdmin
+    // TODO: replace with html email function to regianlAdmin
+  }
+
+  const savedUser = await User.findOne({ id: id },);
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(savedUser)
+  };
+});
+
+
+//***************//
+// V2 Endpoints  //
+//***************//
 
 /**
  * @swagger
