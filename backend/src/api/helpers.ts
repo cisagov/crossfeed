@@ -9,9 +9,9 @@ import { ClassType } from 'class-transformer/ClassTransformer';
 import { plainToClass } from 'class-transformer';
 import { SES } from 'aws-sdk';
 import * as nodemailer from 'nodemailer';
-import { readFile }from 'fs'
-import { compile } from 'handlebars';
-import { promisify } from 'util';
+import * as fs from 'fs';
+import * as handlebars from 'handlebars';
+import * as util from 'util';
 
 export const validateBody = async <T>(
   obj: ClassType<T>,
@@ -86,7 +86,6 @@ export const sendEmail = async (
   recipient: string,
   subject: string,
   body: string,
-  html: string
 ) => {
   const transporter = nodemailer.createTransport({
     SES: new SES({ region: 'us-east-1' })
@@ -97,7 +96,6 @@ export const sendEmail = async (
     to: recipient,
     subject: subject,
     text: body,
-    html: html
     replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
   });
 };
@@ -110,35 +108,35 @@ export const sendNotificationEmail = async (
   p_lastname: string,
 ) => {
 
-    const transporter = nodemailer.createTransport({
-      SES: new SES({ region: 'us-east-1' })
-    });
-    const readFile = promisify(fs.readFile);
+  const transporter = nodemailer.createTransport({
+    SES: new SES({ region: 'us-east-1' })
+  });
 
-    html = await readFile('../../email_templates/template.html', 'utf8');
-    template = handlebars.compile(html);
-    data = {
-      email: p_email,
-      firstName: p_firstName,
-      lastName: p_lastname
-    }
+  const fs = require('fs').promises;
+  const html = await fs.readFile('../../email_templates/template.html', 'utf8');
+  const template = handlebars.compile(html);
+  const data = {
+    email: p_email,
+    firstName: p_firstName,
+    lastName: p_lastname
+  }
 
-    htmlToSend = template(data);
+  const htmlToSend = template(data);
 
-    mailOptions = {
-      from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER,
-      to: recepient,
-      subject: subject,
-      html: htmlToSend,
-      attachments: [{
-        filename: '../../email_templates/img/example.png',
-        path: __dirname + 'example.png',
-        cid: 'example'
-      }]
-    };
+  const mailOptions = {
+    from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER,
+    to: recepient,
+    subject: subject,
+    html: htmlToSend,
+    attachments: [{
+      filename: '../../email_templates/img/example.png',
+      path: __dirname + 'example.png',
+      cid: 'example'
+    }]
+  };
 
-    nodemailer.sendMail(mailOptions, (error, info) => {
-      if (error) console.log(error);
-    })
+  await transporter.sendMail(mailOptions, (error, info) => {
+    if (error) console.log(error);
+  })
 };
 
