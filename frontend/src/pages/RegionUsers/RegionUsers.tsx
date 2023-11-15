@@ -1,15 +1,10 @@
-import React, { useState } from 'react';
-import { initializeUser, User } from 'types';
-import { testUsers, testOrganizations } from './testData';
+import React, { useState, useEffect, useCallback } from 'react';
+import { initializeUser, User, Organization as OrganizationType } from 'types';
+import { testUsers } from './testData';
 import ConfirmDialog from 'components/Dialog/ConfirmDialog';
 import InfoDialog from 'components/Dialog/InfoDialog';
-import {
-  // Alert,
-  Box,
-  Button,
-  Stack,
-  Typography
-} from '@mui/material';
+import { useAuthContext } from 'context';
+import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
@@ -34,7 +29,16 @@ type DialogStates = {
   isInfoDialogOpen: boolean;
 };
 
+type ErrorStates = {
+  getOrgsError: string;
+  getUsersError: string;
+  updateUserError: string;
+};
+
+type CloseReason = 'backdropClick' | 'escapeKeyDown' | 'closeButtonClick';
+
 export const RegionUsers: React.FC = () => {
+  const { apiGet } = useAuthContext();
   const pendingCols: GridColDef[] = [
     { field: 'fullName', headerName: 'Name', minWidth: 100, flex: 1 },
     { field: 'email', headerName: 'Email', minWidth: 100, flex: 2 },
@@ -87,7 +91,7 @@ export const RegionUsers: React.FC = () => {
   const orgCols: GridColDef[] = [
     { field: 'name', headerName: 'Name', minWidth: 100, flex: 2 },
     { field: 'updatedAt', headerName: 'Updated At', minWidth: 100, flex: 1 },
-    { field: 'members', headerName: 'Members', minWidth: 100, flex: 1 }
+    { field: 'stateName', headerName: 'State', minWidth: 100, flex: 1 }
   ];
   const [dialogStates, setDialogStates] = useState<DialogStates>({
     isOrgDialogOpen: false,
@@ -95,12 +99,29 @@ export const RegionUsers: React.FC = () => {
     isApproveDialogOpen: false,
     isInfoDialogOpen: false
   });
+  const [errorStates, setErrorStates] = useState<ErrorStates>({
+    getOrgsError: '',
+    getUsersError: '',
+    updateUserError: ''
+  });
   const [selectedUser, selectUser] = useState(initializeUser);
-  // const [apiError, setApiError] = useState<[boolean, string]>([false, '']);
-  const [selectedOrgRows, selectOrgRows] =
-    React.useState<GridRowSelectionModel>([]);
+  const [selectedOrgRows, selectOrgRows] = useState<GridRowSelectionModel>([]);
+  const [organizations, setOrganizations] = useState<OrganizationType[]>([]);
+  const orgURL = '/organizations/regionId/';
 
-  type CloseReason = 'backdropClick' | 'escapeKeyDown' | 'closeButtonClick';
+  const fetchOrganizations = useCallback(async () => {
+    try {
+      const rows = await apiGet<OrganizationType[]>(orgURL + '1');
+      setOrganizations(rows);
+      setErrorStates({ ...errorStates, getOrgsError: '' });
+    } catch (e: any) {
+      setErrorStates({ ...errorStates, getOrgsError: e.message });
+    }
+  }, [apiGet]);
+
+  useEffect(() => {
+    fetchOrganizations();
+  }, [apiGet, fetchOrganizations]);
 
   // TODO: Update selectedUser with invitePending as false and add selected organizations.
   const handleSubmitClick = (value: CloseReason) => {
@@ -163,6 +184,7 @@ export const RegionUsers: React.FC = () => {
       isInfoDialogOpen: true
     }));
   };
+
   return (
     <Box m={5} sx={{ height: '150vh' }}>
       <Box
@@ -218,7 +240,7 @@ export const RegionUsers: React.FC = () => {
                   selectOrgRows(newRowSelectionModel);
                 }}
                 rowSelectionModel={selectedOrgRows}
-                rows={testOrganizations}
+                rows={organizations}
                 columns={orgCols}
                 slots={{ toolbar: GridToolbar }}
                 slotProps={{
@@ -228,11 +250,11 @@ export const RegionUsers: React.FC = () => {
                 }}
               />
             </Box>
-            {/* {apiError[0] && (
-            <Alert severity="error">
-              {apiError[1]}: Unable to add this user to the database.
-            </Alert>
-          )} */}
+            {errorStates.getOrgsError && (
+              <Alert severity="error">
+                Error retrieving organizations: {errorStates.getOrgsError}
+              </Alert>
+            )}
           </>
         }
         disabled={selectedOrgRows.length === 0 ? true : false}

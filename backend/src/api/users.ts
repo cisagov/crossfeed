@@ -31,6 +31,7 @@ import {
 } from './auth';
 import { Type, plainToClass } from 'class-transformer';
 import { IsNull } from 'typeorm';
+import { create } from './organizations';
 
 class UserSearch {
   @IsInt()
@@ -47,7 +48,9 @@ class UserSearch {
     'userType',
     'dateAcceptedTerms',
     'lastLoggedIn',
-    'acceptedTermsVersion'
+    'acceptedTermsVersion',
+    'state',
+    'regionId'
   ])
   @IsOptional()
   sort: string = 'fullName';
@@ -74,6 +77,121 @@ class UserSearch {
     return results;
   }
 }
+
+class NewUser {
+  @IsString()
+  firstName: string;
+
+  @IsString()
+  lastName: string;
+
+  @IsString()
+  @IsOptional()
+  state: string;
+
+  @IsString()
+  @IsOptional()
+  regionId: string;
+
+  @IsEmail()
+  @IsOptional()
+  email: string;
+
+  @IsString()
+  @IsOptional()
+  organization: string;
+
+  @IsBoolean()
+  @IsOptional()
+  organizationAdmin: string;
+
+  @IsEnum(UserType)
+  @IsOptional()
+  userType: UserType;
+}
+
+
+class UpdateUser {
+  @IsString()
+  @IsOptional()
+  state: string;
+
+  @IsString()
+  @IsOptional()
+  regionId: string;
+
+  @IsBoolean()
+  @IsOptional()
+  invitePending: boolean;
+
+  @IsEnum(UserType)
+  @IsOptional()
+  userType: UserType;
+
+}
+
+
+const REGION_STATE_MAP = {
+  "Connecticut": "1",
+  "Maine": "1",
+  "Massachusetts": "1",
+  "New Hampshire": "1",
+  "Rhode Island": "1",
+  "Vermont": "1",
+  "New Jersey": "2",
+  "New York": "2",
+  "Puerto Rico": "2",
+  "Virgin Islands": "2",
+  "Delaware": "3",
+  "Maryland": "3",
+  "Pennsylvania": "3",
+  "Virginia": "3",
+  "District of Columbia": "3",
+  "West Virginia": "3",
+  "Alabama": "4",
+  "Florida": "4",
+  "Georgia": "4",
+  "Kentucky": "4",
+  "Mississippi": "4",
+  "North Carolina": "4",
+  "South Carolina": "4",
+  "Tennessee": "4",
+  "Illinois": "5",
+  "Indiana": "5",
+  "Michigan": "5",
+  "Minnesota": "5",
+  "Ohio": "5",
+  "Wisconsin": "5",
+  "Arkansas": "6",
+  "Louisiana": "6",
+  "New Mexico": "6",
+  "Oklahoma": "6",
+  "Texas": "6",
+  "Iowa": "7",
+  "Kansas": "7",
+  "Missouri": "7",
+  "Nebraska": "7",
+  "Colorado": "8",
+  "Montana": "8",
+  "North Dakota": "8",
+  "South Dakota": "8",
+  "Utah": "8",
+  "Wyoming": "8",
+  "Arizona": "9",
+  "California": "9",
+  "Hawaii": "9",
+  "Nevada": "9",
+  "Guam": "9",
+  "American Samoa": "9",
+  "Commonwealth Northern Mariana Islands": "9",
+  "Republic of Marshall Islands": "9",
+  "Federal States of Micronesia": "9",
+  "Alaska": "10",
+  "Idaho": "10",
+  "Oregon": "10",
+  "Washington": "10"
+}
+
 
 /**
  * @swagger
@@ -151,37 +269,6 @@ export const update = wrapHandler(async (event) => {
   return NotFound;
 });
 
-class NewUser {
-  @IsString()
-  firstName: string;
-
-  @IsString()
-  lastName: string;
-
-  @IsString()
-  @IsOptional()
-  state: string;
-
-  @IsString()
-  @IsOptional()
-  regionId: string;
-
-  @IsEmail()
-  @IsOptional()
-  email: string;
-
-  @IsString()
-  @IsOptional()
-  organization: string;
-
-  @IsBoolean()
-  @IsOptional()
-  organizationAdmin: string;
-
-  @IsEnum(UserType)
-  @IsOptional()
-  userType: UserType;
-}
 
 const sendInviteEmail = async (email: string, organization?: Organization) => {
   const staging = process.env.NODE_ENV !== 'production';
@@ -362,6 +449,7 @@ export const acceptTerms = wrapHandler(async (event) => {
  *    description: List users.
  *    tags:
  *    - Users
+ * 
  */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) return Unauthorized;
@@ -424,6 +512,7 @@ export const getByRegionId = wrapHandler(async (event) => {
   return NotFound; 
 });
 
+
 /**
  * @swagger
  *
@@ -451,4 +540,173 @@ export const getByState = wrapHandler(async (event) => {
     };
   }
   return NotFound; 
+});
+
+
+/**
+ * @swagger
+ *
+ * /users/register:
+ *  post:
+ *    description: New user registration.
+ *    tags:
+ *    - Users
+ */
+export const register = wrapHandler(async (event) => {
+  const body = await validateBody(NewUser, event.body);
+
+  const newUser = {
+    "firstName": body.firstName,
+    "lastName": body.lastName,
+    "email": body.email.toLowerCase(),
+    "userType": UserType.STANDARD,
+    "state": body.state,
+    "regionId": REGION_STATE_MAP[body.state],
+    "invitePending": true,
+  }
+
+  await connectToDatabase();
+
+  // Check if user already exists by email
+  let user = await User.findOne({
+    email: body.email.toLowerCase()
+  });
+  let id = "";
+  // Crreate if user does not exist
+  if (!user) {
+    const createdUser = await User.create(newUser);
+    await User.save(createdUser);
+    id = createdUser.id;
+
+    // Send Registration confirmation emailto user
+    // TODO: replace with html email function to user
+
+    // Send new user pending approval email to regionalAdmin
+    // TODO: replace with html email function to regianlAdmin
+  }
+
+  const savedUser = await User.findOne({ id: id },);
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(savedUser)
+  };
+});
+
+
+//***************//
+// V2 Endpoints  //
+//***************//
+
+/**
+ * @swagger
+ *
+ * /v2/users:
+ *  get:
+ *    description: List all users with query parameters.
+ *    tags:
+ *    - Users 
+ *    parameters:
+ *      - in: query
+ *        name: state
+ *        required: false
+ *        schema:
+ *          type: array
+ *          items:
+ *            type: string 
+ *      - in: query
+ *        name: regionId
+ *        required: false
+ *        schema:
+ *          type: array
+ *          items:
+ *            type: string 
+ *      - in: query
+ *        name: invitePending
+ *        required: false
+ *        schema:
+ *          type: array
+ *          items:
+ *            type: string 
+ * 
+ */
+export const getAllV2 = wrapHandler(async (event) => {
+  if (!isRegionalAdmin(event)) return Unauthorized;
+
+  const filterParams = {}
+
+  if (event.query && event.query.state) {
+    filterParams["state"] = event.query.state;
+  }
+  if (event.query && event.query.regionId) {
+    filterParams["regionId"] = event.query.regionId;
+  }
+  if (event.query && event.query.invitePending) {
+    filterParams["invitePending"] = event.query.invitePending;
+  }
+
+  await connectToDatabase();
+  if (Object.entries(filterParams).length === 0) {
+    const result = await User.find({});
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    }
+  } else {
+    const result = await User.find({where: filterParams});
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  }
+});
+
+
+/**
+ * @swagger
+ *
+ * /v2/users/{id}:
+ *  put:
+ *    description: Update a particular user.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: User id
+ *    tags:
+ *    - Users
+ */
+export const updateV2 = wrapHandler(async (event) => {
+  if (!isRegionalAdmin(event)) return Unauthorized;
+  // Get the user id from the path
+  const id = event.pathParameters?.userId;
+
+  // confirm that the id is a valid UUID
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+
+  // TODO: check permissions
+  // if (!isOrgAdmin(event, id)) return Unauthorized;
+
+  // Validate the body
+  const validatedBody = await validateBody(
+    UpdateUser,
+    event.body
+  );
+
+  // Connect to the database
+  await connectToDatabase();
+
+  // Update the user
+  const updatedResp = await User.update(id, validatedBody);
+
+  // Handle response
+  if (updatedResp) {
+    const updatedOrg = await User.findOne(id);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(updatedOrg)
+    };
+  }
+  return NotFound;
 });
