@@ -1,57 +1,84 @@
 import { Handler, SQSRecord } from 'aws-lambda';
 import * as AWS from 'aws-sdk';
+import { integer } from 'aws-sdk/clients/cloudfront';
 
 const ecs = new AWS.ECS();
 const sqs = new AWS.SQS();
 
 export const handler: Handler = async (event) => {
   try {
-    // Get the SQS record and message body
+    let desiredCount;
+    const clusterName = process.env.PE_CLUSTER_NAME!;
+
+    // Get the Control SQS record and message body
     const sqsRecord: SQSRecord = event.Records[0];
-    const body: string = sqsRecord.body;
+    const message_body = JSON.parse(sqsRecord.body);
+    console.log(message_body);
 
-    console.log(body);
+    if (message_body.scriptType! === 'shodan') {
+      // Place message in Shodan Queue
+      await placeMessageInQueue(process.env.SHODAN_QUEUE_URL!, message_body);
 
-    let commandOptions;
-    if (body === 'SHODAN') {
-      commandOptions = './worker/shodan.sh';
+      // Check if Fargate is running desired count and start if not
+      desiredCount = 5;
+      await startFargateTask(
+        clusterName,
+        process.env.SHODAN_SERVICE_NAME!,
+        desiredCount
+      );
     } else {
-      commandOptions = body;
+      console.log('Shodan is the only script type available right now.');
     }
-    // Run command in queue message in Fargate
-    const params: AWS.ECS.RunTaskRequest = {
-      cluster: process.env.FARGATE_CLUSTER_NAME!,
-      taskDefinition: process.env.FARGATE_TASK_DEFINITION_NAME!,
-      launchType: 'FARGATE',
-      networkConfiguration: {
-        awsvpcConfiguration: {
-          assignPublicIp: 'ENABLED',
-          securityGroups: [process.env.FARGATE_SG_ID!],
-          subnets: [process.env.FARGATE_SUBNET_ID!]
-        }
-      },
-      platformVersion: '1.4.0',
-      overrides: {
-        containerOverrides: [
-          {
-            name: 'main', // from task definition
-            command: [commandOptions] // Pass the command options as an array
-          }
-        ]
-      }
-    };
-    const data = await ecs.runTask(params).promise();
-    console.log('Fargate task started:', data);
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify('Fargate task started and message sent to SQS queue')
-    };
   } catch (error) {
-    console.error('Error starting Fargate task:', error);
+    console.error(error);
     return {
       statusCode: 500,
-      body: JSON.stringify('Error starting Fargate task')
+      body: JSON.stringify(error)
     };
   }
 };
+
+export async function startFargateTask(
+  clusterName: string,
+  serviceName: string,
+  desiredCountNum: integer
+) {
+  try {
+    const describeServiceParams = {
+      cluster: clusterName,
+      services: [serviceName]
+    };
+    const serviceDescription = await ecs
+      .describeServices(describeServiceParams)
+      .promise();
+    if (
+      serviceDescription &&
+      serviceDescription.services &&
+      serviceDescription.services.length > 0
+    ) {
+      const service = serviceDescription.services[0];
+
+      // Check if the desired task count is less than # provided
+      if (service.desiredCount! < desiredCountNum) {
+        const updateServiceParams = {
+          cluster: clusterName,
+          service: serviceName,
+          desiredCount: desiredCountNum // Set to desired # of Fargate tasks
+        };
+
+        await ecs.updateService(updateServiceParams).promise();
+      }
+    }
+  } catch (error) {
+    console.error('Error: ', error);
+  }
+}
+
+async function placeMessageInQueue(queueUrl: string, message: any) {
+  const sendMessageParams = {
+    QueueUrl: queueUrl,
+    MessageBody: JSON.stringify(message)
+  };
+
+  await sqs.sendMessage(sendMessageParams).promise();
+}
