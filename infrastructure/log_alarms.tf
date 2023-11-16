@@ -21,7 +21,7 @@ resource "aws_cloudwatch_metric_alarm" "api_error_rate" {
   alarm_description   = "API error rate exceeded 5%"
   metric_name         = "5XXError"
   alarm_actions       = [aws_sns_topic.alarms.arn]
-  comparison_operator = "GreateerThanOrEqualToThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = 60
   evaluation_periods  = 2
   threshold           = 0.05
