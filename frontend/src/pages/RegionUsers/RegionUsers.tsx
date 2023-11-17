@@ -30,6 +30,13 @@ type ErrorStates = {
 
 type CloseReason = 'backdropClick' | 'escapeKeyDown' | 'closeButtonClick';
 
+const transformData = (data: User[]): User[] => {
+  return data.map(({ roles, ...user }) => ({
+      ...user,
+      roles,
+      organizations: roles.map((role) => ' ' + role.organization.name),
+  }));
+}
 export const RegionUsers: React.FC = () => {
   const { apiGet, user } = useAuthContext();
   const regionId = user?.regionId;
@@ -38,12 +45,13 @@ export const RegionUsers: React.FC = () => {
   const pendingCols: GridColDef[] = [
     { field: 'fullName', headerName: 'Name', minWidth: 100, flex: 1 },
     { field: 'email', headerName: 'Email', minWidth: 100, flex: 2 },
-    { field: 'createdAt', headerName: 'Created At', minWidth: 100, flex: 2 },
+    { field: 'state', headerName: 'State', minWidth: 100, flex: 1 },
+    { field: 'createdAt', headerName: 'Created At', minWidth: 100, flex: 1.5 },
     {
       field: 'status',
       headerName: 'Registration Status',
       minWidth: 250,
-      flex: 1,
+      flex: 2,
       renderCell: (cellValues: GridRenderCellParams) => {
         return (
           <Stack direction="row" spacing={1}>
@@ -71,17 +79,18 @@ export const RegionUsers: React.FC = () => {
   const memberCols: GridColDef[] = [
     { field: 'fullName', headerName: 'Name', minWidth: 100, flex: 1 },
     { field: 'email', headerName: 'Email', minWidth: 100, flex: 2 },
+    { field: 'state', headerName: 'State', minWidth: 100, flex: 1 },
     {
       field: 'lastLoggedIn',
       headerName: 'Last Logged In',
       minWidth: 100,
-      flex: 1
+      flex: 1.5
     },
     {
       field: 'organizations',
       headerName: 'Organizations',
       minWidth: 250,
-      flex: 3
+      flex: 2
     }
   ];
   const orgCols: GridColDef[] = [
@@ -129,7 +138,7 @@ export const RegionUsers: React.FC = () => {
   const fetchCurrentUsers = useCallback(async () => {
     try {
       const rows = await apiGet<User[]>(`${usersURL}false`);
-      setCurrentUsers(rows);
+      setCurrentUsers(transformData(rows));
       setErrorStates({ ...errorStates, getOrgsError: '' });
     } catch (e: any) {
       setErrorStates({ ...errorStates, getUsersError: e.message });
