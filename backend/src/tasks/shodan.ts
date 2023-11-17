@@ -64,13 +64,6 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   const chunks = chunk(domainsWithIPs, CHUNK_SIZE);
 
-  const axiosInstance = axios.create({
-    proxy: {
-      host: process.env.HTTPS_PROXY!,
-      port: 8080,
-      protocol: 'http',
-    },
-  });
   for (const domainChunk of chunks) {
     console.log(
       `Scanning ${domainChunk.length} domains beginning with ${domainChunk[0].name}`
@@ -78,7 +71,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     try {
       let { data } = await pRetry(
         () =>
-          axiosInstance.get<ShodanResponse[]>(
+          axios.get<ShodanResponse[]>(
             `https://api.shodan.io/shodan/host/${encodeURI(
               domainChunk.map((domain) => domain.ip).join(',')
             )}?key=${process.env.SHODAN_API_KEY}`

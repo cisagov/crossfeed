@@ -43,6 +43,9 @@ const handlerToExpress = (handler) => async (req, res, next) => {
     },
     {}
   );
+  // Set HSTS header to ensure that the browser enforces HTTPS
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000');
+
   try {
     const parsedBody = JSON.parse(body);
     res.status(statusCode).json(parsedBody);
@@ -66,9 +69,9 @@ app.use(
       defaultSrc: [
         "'self'",
         'https://cognito-idp.us-gov-west-1.amazonaws.com',
-        'https://api.crossfeed.cyber.dhs.gov'
+        'https://api.staging.crossfeed.cyber.dhs.gov'
       ],
-      scriptSrc: ["'self'", 'https://api.crossfeed.cyber.dhs.gov']
+      scriptSrc: ["'self'", 'https://api.staging.crossfeed.cyber.dhs.gov']
       // Add other directives as needed
     }
   })

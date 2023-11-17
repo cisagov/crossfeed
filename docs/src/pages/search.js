@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { graphql } from 'gatsby';
+import DOMPurify from 'dompurify';
 
 import Layout from '../components/layout';
 
@@ -23,7 +24,11 @@ const SearchPage = ({ data, location }) => {
         throw new Error(r.statusText);
       })
       .then((posts) => {
-        setResults(posts.web.results);
+        const sanitizedResults = posts.web.results.map((result) => ({
+          ...result,
+          snippet: DOMPurify.sanitize(result.snippet),
+        }));
+        setResults(sanitizedResults);
       })
       .catch((err) => console.log(err));
   }, [query, access_key, affiliate, endpoint]);
@@ -44,14 +49,21 @@ const SearchPage = ({ data, location }) => {
                       className="padding-bottom-5 margin-top-4 usa-prose border-bottom-05 border-base-lightest"
                     >
                       <b className="title">
-                        <a href={r.url}>{r.title}</a>
+                        <a href={encodeURI(DOMPurify.sanitize(r.url))}>
+                          {r.title}
+                        </a>
                       </b>
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: r.snippet
-                            .replace(/class=/g, 'className=')
-                            .replace(/\uE000/g, '<span className="bg-yellow">')
-                            .replace(/\uE001/g, '</span>'),
+                          __html: DOMPurify.sanitize(
+                            r.snippet
+                              .replace(/class=/g, 'className=')
+                              .replace(
+                                /\uE000/g,
+                                '<span className="bg-yellow">'
+                              )
+                              .replace(/\uE001/g, '</span>')
+                          ),
                         }}
                       />
                     </li>
