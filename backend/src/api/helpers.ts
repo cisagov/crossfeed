@@ -102,8 +102,6 @@ export const sendEmail = async (
 
 export const sendNotificationEmail = async (
   recepient: string,
-  subject: string,
-  p_email: string,
   p_firstName: string,
   p_lastname: string,
 ) => {
@@ -113,12 +111,11 @@ export const sendNotificationEmail = async (
   });
 
   const fs = require('fs').promises;
-  const html = await fs.readFile('../../email_templates/template.html', 'utf8');
+  const html = await fs.readFile('../../email_templates/crossfeed_registration_notification.html', 'utf8');
   const template = handlebars.compile(html);
   const data = {
-    email: p_email,
-    firstName: p_firstName,
-    lastName: p_lastname
+    first_name: p_firstName,
+    last_name: p_lastname
   }
 
   const htmlToSend = template(data);
@@ -126,13 +123,44 @@ export const sendNotificationEmail = async (
   const mailOptions = {
     from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER,
     to: recepient,
-    subject: subject,
+    subject: "Crossfeed Account Creation Request Received",
     html: htmlToSend,
     attachments: [{
-      filename: '../../email_templates/img/example.png',
-      path: __dirname + 'example.png',
-      cid: 'example'
-    }]
+      filename: 'banner.png',
+      path: 'banner.png',
+      cid: 'CISA Banner'
+    },
+    {
+      filename: 'web.png',
+      path: 'banner.png',
+      cid: 'CISA Web'
+    },
+    {
+      filename: 'email.png',
+      path: 'email.png',
+      cid: 'CISA Email'
+    },
+    {
+      filename: 'linkedin.png',
+      path: 'linkedin.png',
+      cid: 'CISA LinkedIn'
+    },
+    {
+      filename: 'twitter.png',
+      path: 'twitter.png',
+      cid: 'CISA Twitter'
+    },
+    {
+      filename: 'facebook.png',
+      path: 'facebooK.png',
+      cid: 'CISA Facebook'
+    },
+    {
+      filename: 'instagram.png',
+      path: 'instagram.png',
+      cid: 'CISA Instagram'
+    },
+  ]
   };
 
   await transporter.sendMail(mailOptions, (error, info) => {
