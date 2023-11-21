@@ -100,10 +100,12 @@ export const sendEmail = async (
   });
 };
 
-export const sendNotificationEmail = async (
+export const sendUserNotificationEmail = async (
   recepient: string,
+  p_subject: string
   p_firstName: string,
   p_lastname: string,
+  template_file: string,
 ) => {
 
   const transporter = nodemailer.createTransport({
@@ -111,7 +113,7 @@ export const sendNotificationEmail = async (
   });
 
   const fs = require('fs').promises;
-  const html = await fs.readFile('../../email_templates/crossfeed_registration_notification.html', 'utf8');
+  const html = await fs.readFile(filename, 'utf8');
   const template = handlebars.compile(html);
   const data = {
     first_name: p_firstName,
@@ -123,7 +125,7 @@ export const sendNotificationEmail = async (
   const mailOptions = {
     from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER,
     to: recepient,
-    subject: "Crossfeed Account Creation Request Received",
+    subject: p_subject,
     html: htmlToSend,
     attachments: [{
       filename: 'banner.png',
@@ -163,8 +165,4 @@ export const sendNotificationEmail = async (
   ]
   };
 
-  await transporter.sendMail(mailOptions, (error, info) => {
-    if (error) console.log(error);
-  })
-};
 
