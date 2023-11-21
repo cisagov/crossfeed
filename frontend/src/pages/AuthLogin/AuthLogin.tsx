@@ -13,7 +13,6 @@ import { Link } from 'react-router-dom';
 import { AuthForm } from 'components';
 import { useAuthContext } from 'context';
 import { Alert } from '@mui/material';
-import { CrossfeedWarning } from '../../components/WarningBanner';
 import {
   Authenticator,
   ThemeProvider,
@@ -86,50 +85,42 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   if (process.env.REACT_APP_USE_COGNITO) {
     return (
       <>
-        <>
-          <AuthForm as="div">
-            <h1>Welcome to Crossfeed</h1>
-            <ThemeProvider theme={amplifyTheme}>
-              <Authenticator
-                loginMechanisms={['email']}
-                formFields={formFields}
-                /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
-                hideSignUp={
-                  !showSignUp && !(process.env.NODE_ENV === 'development')
-                }
-              />
-              <Alert
-                onClose={() => {}}
-                severity="warning"
-                className="alert_box"
-              >
-                <AlertTitle>
-                  <h2 className="platform_notice">PLATFORM NOTIFICATION</h2>
-                </AlertTitle>
-                <h3>
-                  Important Notice: Temporary Downtime During Crossfeed
-                  Migration
-                </h3>
-                <p>
-                  The Crossfeed environment is moving. The migration will
-                  require a a temporary downtime of approximately one week.
-                </p>
-                <p>
-                  The downtime will begin on Wednesday, October 25, through the
-                  day Wednesday, November 01.
-                </p>
-                <p>
-                  For additional information, please click
-                  <a href="https://s3.amazonaws.com/crossfeed.cyber.dhs.gov/Notice.pdf">
-                    {' '}
-                    here.
-                  </a>
-                </p>
-              </Alert>
-            </ThemeProvider>
-          </AuthForm>
-          <CrossfeedWarning />
-        </>
+        <AuthForm as="div">
+          <h1>Welcome to Crossfeed</h1>
+          <ThemeProvider theme={amplifyTheme}>
+            <Authenticator
+              loginMechanisms={['email']}
+              formFields={formFields}
+              /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
+              hideSignUp={
+                !showSignUp && !(process.env.NODE_ENV === 'development')
+              }
+            />
+            <Alert onClose={() => {}} severity="warning" className="alert_box">
+              <AlertTitle>
+                <h2 className="platform_notice">PLATFORM NOTIFICATION</h2>
+              </AlertTitle>
+              <h3>
+                Important Notice: Temporary Downtime During Crossfeed Migration
+              </h3>
+              <p>
+                The Crossfeed environment is moving. The migration will require
+                a a temporary downtime of approximately one week.
+              </p>
+              <p>
+                The downtime will begin on Wednesday, October 25, through the
+                day Wednesday, November 01.
+              </p>
+              <p>
+                For additional information, please click
+                <a href="https://s3.amazonaws.com/crossfeed.cyber.dhs.gov/Notice.pdf">
+                  {' '}
+                  here.
+                </a>
+              </p>
+            </Alert>
+          </ThemeProvider>
+        </AuthForm>
         <ModFooter />
       </>
     );
