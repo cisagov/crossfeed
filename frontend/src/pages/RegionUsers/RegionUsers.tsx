@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { initializeUser, User, Organization as OrganizationType } from 'types';
-import { testUsers } from './testData';
 import ConfirmDialog from 'components/Dialog/ConfirmDialog';
 import InfoDialog from 'components/Dialog/InfoDialog';
 import { useAuthContext } from 'context';
@@ -15,12 +14,6 @@ import {
 import DoneIcon from '@mui/icons-material/Done';
 import { CheckCircleOutline as CheckIcon } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
-
-export interface ApiResponse {
-  result: User[];
-  count: number;
-  url?: string;
-}
 
 type DialogStates = {
   isOrgDialogOpen: boolean;
@@ -37,17 +30,28 @@ type ErrorStates = {
 
 type CloseReason = 'backdropClick' | 'escapeKeyDown' | 'closeButtonClick';
 
+const transformData = (data: User[]): User[] => {
+  return data.map(({ roles, ...user }) => ({
+      ...user,
+      roles,
+      organizations: roles.map((role) => ' ' + role.organization.name),
+  }));
+}
 export const RegionUsers: React.FC = () => {
-  const { apiGet } = useAuthContext();
+  const { apiGet, user } = useAuthContext();
+  const regionId = user?.regionId;
+  const orgsURL = `/organizations/regionId/${regionId}`;
+  const usersURL = `/v2/users?regionId=${regionId}&invitePending=`;
   const pendingCols: GridColDef[] = [
     { field: 'fullName', headerName: 'Name', minWidth: 100, flex: 1 },
     { field: 'email', headerName: 'Email', minWidth: 100, flex: 2 },
-    { field: 'createdAt', headerName: 'Created At', minWidth: 100, flex: 2 },
+    { field: 'state', headerName: 'State', minWidth: 100, flex: 1 },
+    { field: 'createdAt', headerName: 'Created At', minWidth: 100, flex: 1.5 },
     {
       field: 'status',
       headerName: 'Registration Status',
       minWidth: 250,
-      flex: 1,
+      flex: 2,
       renderCell: (cellValues: GridRenderCellParams) => {
         return (
           <Stack direction="row" spacing={1}>
@@ -75,17 +79,18 @@ export const RegionUsers: React.FC = () => {
   const memberCols: GridColDef[] = [
     { field: 'fullName', headerName: 'Name', minWidth: 100, flex: 1 },
     { field: 'email', headerName: 'Email', minWidth: 100, flex: 2 },
+    { field: 'state', headerName: 'State', minWidth: 100, flex: 1 },
     {
       field: 'lastLoggedIn',
       headerName: 'Last Logged In',
       minWidth: 100,
-      flex: 1
+      flex: 1.5
     },
     {
       field: 'organizations',
       headerName: 'Organizations',
       minWidth: 250,
-      flex: 3
+      flex: 2
     }
   ];
   const orgCols: GridColDef[] = [
@@ -107,21 +112,46 @@ export const RegionUsers: React.FC = () => {
   const [selectedUser, selectUser] = useState(initializeUser);
   const [selectedOrgRows, selectOrgRows] = useState<GridRowSelectionModel>([]);
   const [organizations, setOrganizations] = useState<OrganizationType[]>([]);
-  const orgURL = '/organizations/regionId/';
+  const [pendingUsers, setPendingUsers] = useState<User[]>([]);
+  const [currentUsers, setCurrentUsers] = useState<User[]>([]);
 
   const fetchOrganizations = useCallback(async () => {
     try {
-      const rows = await apiGet<OrganizationType[]>(orgURL + '1');
+      const rows = await apiGet<OrganizationType[]>(orgsURL);
       setOrganizations(rows);
       setErrorStates({ ...errorStates, getOrgsError: '' });
     } catch (e: any) {
       setErrorStates({ ...errorStates, getOrgsError: e.message });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiGet]);
+  const fetchPendingUsers = useCallback(async () => {
+    try {
+      const rows = await apiGet<User[]>(`${usersURL}true`);
+      setPendingUsers(rows);
+      setErrorStates({ ...errorStates, getOrgsError: '' });
+    } catch (e: any) {
+      setErrorStates({ ...errorStates, getUsersError: e.message });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiGet]);
+  const fetchCurrentUsers = useCallback(async () => {
+    try {
+      const rows = await apiGet<User[]>(`${usersURL}false`);
+      setCurrentUsers(transformData(rows));
+      setErrorStates({ ...errorStates, getOrgsError: '' });
+    } catch (e: any) {
+      setErrorStates({ ...errorStates, getUsersError: e.message });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiGet]);
 
   useEffect(() => {
     fetchOrganizations();
-  }, [apiGet, fetchOrganizations]);
+    fetchPendingUsers();
+    fetchCurrentUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // TODO: Update selectedUser with invitePending as false and add selected organizations.
   const handleSubmitClick = (value: CloseReason) => {
@@ -200,21 +230,27 @@ export const RegionUsers: React.FC = () => {
           <Typography variant="h6" pb={2} pt={2}>
             Pending Requests
           </Typography>
-          <Box sx={{ height: '400px' }}>
+          <Box sx={{ height: '400px', pb: 2 }}>
             <DataGrid
               columns={pendingCols}
-              rows={testUsers}
+              rows={pendingUsers}
               disableRowSelectionOnClick
               autoPageSize
             />
           </Box>
-          <Typography variant="h6" pb={2} pt={5}>
+          {errorStates.getUsersError && (
+            <Alert severity="error">
+              Error retrieving users from the database:{' '}
+              {errorStates.getUsersError}
+            </Alert>
+          )}
+          <Typography variant="h6" pb={2} pt={3}>
             Members of Region 1
           </Typography>
           <Box sx={{ height: '400px' }}>
             <DataGrid
               columns={memberCols}
-              rows={testUsers}
+              rows={currentUsers}
               disableRowSelectionOnClick
               slots={{ toolbar: GridToolbar }}
             />

@@ -128,6 +128,15 @@ class UpdateUser {
   @IsOptional()
   userType: UserType;
 
+  // @IsString()
+  @IsEnum(Organization)
+  @IsOptional()
+  organization: Organization;
+
+  @IsString()
+  @IsOptional()
+  role: string;
+
 }
 
 
@@ -501,7 +510,8 @@ export const getByRegionId = wrapHandler(async (event) => {
   const regionId = event.pathParameters?.regionId;
   await connectToDatabase();
   const result = await User.find({
-    where: { regionId: regionId }
+    where: { regionId: regionId },
+    relations: ['roles', 'roles.organization']
   });
  if (result) {
     return {
@@ -531,7 +541,8 @@ export const getByState = wrapHandler(async (event) => {
   const state = event.pathParameters?.state;
   await connectToDatabase();
   const result = await User.find({
-    where: { state: state }
+    where: { state: state },
+    relations: ['roles', 'roles.organization']
   });
   if (result) {
     return {
@@ -578,14 +589,16 @@ export const register = wrapHandler(async (event) => {
     await User.save(createdUser);
     id = createdUser.id;
 
-    // Send Registration confirmation emailto user
+    // Send Registration confirmation email to user
     // TODO: replace with html email function to user
 
     // Send new user pending approval email to regionalAdmin
     // TODO: replace with html email function to regianlAdmin
   }
 
-  const savedUser = await User.findOne({ id: id },);
+  const savedUser = await User.findOne(id, {
+    relations: ['roles', 'roles.organization']
+  });
 
   return {
     statusCode: 200,
@@ -647,13 +660,18 @@ export const getAllV2 = wrapHandler(async (event) => {
 
   await connectToDatabase();
   if (Object.entries(filterParams).length === 0) {
-    const result = await User.find({});
+    const result = await User.find({
+      relations: ['roles', 'roles.organization']
+    });
     return {
       statusCode: 200,
       body: JSON.stringify(result)
     }
   } else {
-    const result = await User.find({where: filterParams});
+    const result = await User.find({
+    where: filterParams,
+    relations: ['roles', 'roles.organization']
+    });
     return {
       statusCode: 200,
       body: JSON.stringify(result)
@@ -661,6 +679,99 @@ export const getAllV2 = wrapHandler(async (event) => {
   }
 });
 
+/**
+ * @swagger
+ *
+ * /v2/users:
+ *  post:
+ *    description: Create a new user.
+ *    tags:
+ *    - Users
+ */
+export const inviteV2 = wrapHandler(async (event) => {
+  const body = await validateBody(NewUser, event.body);
+  // Invoker must be either an organization or global admin
+  if (body.organization) {
+    if (!isOrgAdmin(event, body.organization)) return Unauthorized;
+  } else {
+    if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  }
+  if (!isGlobalWriteAdmin(event) && body.userType) {
+    // Non-global admins can't set userType
+    return Unauthorized;
+  }
+
+  await connectToDatabase();
+
+  body.email = body.email.toLowerCase();
+
+  // Check if user already exists
+  let user = await User.findOne({
+    email: body.email
+  });
+
+  let organization: Organization | undefined;
+
+  if (body.organization) {
+    organization = await Organization.findOne(body.organization);
+  }
+
+  if (!user) {
+    user = await User.create({
+      invitePending: true,
+      ...body
+    });
+    await User.save(user);
+    await sendInviteEmail(user.email, organization);
+  } else if (!user.firstName && !user.lastName) {
+    // Only set the user first name and last name the first time the user is invited.
+    user.firstName = body.firstName;
+    user.lastName = body.lastName;
+    await User.save(user);
+  }
+
+  // Always update the userType, if specified in the request.
+  if (body.userType) {
+    user.userType = body.userType;
+    await User.save(user);
+  }
+
+  if (organization) {
+    // Create approved role if organization supplied
+    await Role.createQueryBuilder()
+      .insert()
+      .values({
+        user: user,
+        organization: { id: body.organization },
+        approved: true,
+        createdBy: { id: event.requestContext.authorizer!.id },
+        approvedBy: { id: event.requestContext.authorizer!.id },
+        role: body.organizationAdmin ? 'admin' : 'user'
+      })
+      .onConflict(
+        `
+      ("userId", "organizationId") DO UPDATE
+      SET "role" = excluded."role",
+          "approved" = excluded."approved",
+          "approvedById" = excluded."approvedById"
+    `
+      )
+      .execute();
+  }
+
+  const updated = await User.findOne(
+    {
+      id: user.id
+    },
+    {
+      relations: ['roles', 'roles.organization']
+    }
+  );
+  return {
+    statusCode: 200,
+    body: JSON.stringify(updated)
+  };
+});
 
 /**
  * @swagger
@@ -676,36 +787,77 @@ export const getAllV2 = wrapHandler(async (event) => {
  *    - Users
  */
 export const updateV2 = wrapHandler(async (event) => {
-  if (!isRegionalAdmin(event)) return Unauthorized;
   // Get the user id from the path
-  const id = event.pathParameters?.userId;
+  const userId = event.pathParameters?.userId;
 
-  // confirm that the id is a valid UUID
-  if (!id || !isUUID(id)) {
+  // Confirm that the id is a valid UUID
+  if (!userId || !isUUID(userId)) {
+    return NotFound;
+  }
+
+  // Validate the body
+  const body = await validateBody(UpdateUser, event.body);
+
+  // User type permissions check
+  // if (!isRegionalAdmin(event)) return Unauthorized;
+
+  // // Validate the body
+  // const validatedBody = await validateBody(
+  //   UpdateUser,
+  //   event.body
+  // );
+
+  // Connect to the database
+  await connectToDatabase();
+
+  const user = await User.findOne(userId);
+  if (!user) {
     return NotFound;
   }
 
   // TODO: check permissions
   // if (!isOrgAdmin(event, id)) return Unauthorized;
 
-  // Validate the body
-  const validatedBody = await validateBody(
-    UpdateUser,
-    event.body
-  );
-
-  // Connect to the database
-  await connectToDatabase();
+  // If organization id is supplied, create approved role
+  // if (body.organization) {
+  //   // Check if organization exists
+  //   const organization = await Organization.findOne(body.organization);
+  //   if (organization) {
+  //     // Create approved role if organization supplied
+  //     await Role.createQueryBuilder()
+  //       .insert()
+  //       .values({
+  //         user: user,
+  //         oganization: organization,
+  //         approved: true,
+  //         createdBy: { id: event.requestContext.authorizer!.id },
+  //         approvedBy: { id: event.requestContext.authorizer!.id },
+  //         role: "user"
+  //       })
+  //       .onConflict(
+  //         `
+  //       ("userId", "organizationId") DO UPDATE
+  //       SET "role" = excluded."role",
+  //           "approved" = excluded."approved",
+  //           "approvedById" = excluded."approvedById"
+  //     `
+  //       )
+  //       .execute();
+  //   }
+  // }
 
   // Update the user
-  const updatedResp = await User.update(id, validatedBody);
+  const updatedResp = await User.update(userId, body);
 
   // Handle response
   if (updatedResp) {
-    const updatedOrg = await User.findOne(id);
+    const updatedUser = await User.findOne(
+      userId,
+      { relations: ['roles', 'roles.organization'] }
+    );
     return {
       statusCode: 200,
-      body: JSON.stringify(updatedOrg)
+      body: JSON.stringify(updatedUser)
     };
   }
   return NotFound;
