@@ -157,20 +157,25 @@ export const RegionUsers: React.FC = () => {
   }, []);
 
   const addOrgToUser = useCallback(
-    (userId: string, selectedOrgId: any) => {
-      apiPost(`/v2/organizations/${selectedOrgId}/users`, {
+    (userId: string, selectedOrgId: any): Promise<boolean> => {
+      return apiPost(`/v2/organizations/${selectedOrgId}/users`, {
         body: { userId, role: 'user' }
       }).then(
-        () => updateUser(userId),
-        (e) => setErrorStates({ ...errorStates, getUpdateError: e.message })
+        () => {
+          return updateUser(userId);
+        },
+        (e) => {
+          setErrorStates({ ...errorStates, getUpdateError: e.message });
+          return false;
+        }
       );
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [apiPost]
   );
 
   const updateUser = useCallback(
-    (userId: string) => {
-      apiPut(`/v2/users/${userId}`, {
+    (userId: string): Promise<boolean> => {
+      return apiPut(`/v2/users/${userId}`, {
         body: { invitePending: false }
       }).then(
         (res) => {
@@ -182,8 +187,12 @@ export const RegionUsers: React.FC = () => {
           );
           apiRefCurrentUsers.current.updateRows([res]);
           setCurrentUsers((prevCurrentUsers) => [...prevCurrentUsers, res]);
+          return true;
         },
-        (e) => setErrorStates({ ...errorStates, getUpdateError: e.message })
+        (e) => {
+          setErrorStates({ ...errorStates, getUpdateError: e.message });
+          return false;
+        }
       );
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [apiPut]
@@ -241,13 +250,15 @@ export const RegionUsers: React.FC = () => {
     selectUser(initializeUser);
   };
 
-  const handleApproveConfirmClick = () => {
-    addOrgToUser(selectedUser.id, selectedOrgRows[0]);
-    handleSubmitClick('closeButtonClick');
-    setDialogStates((prevState) => ({
-      ...prevState,
-      isInfoDialogOpen: true
-    }));
+  const handleApproveConfirmClick = async () => {
+    const success = await addOrgToUser(selectedUser.id, selectedOrgRows[0]);
+    if (success) {
+      handleSubmitClick('closeButtonClick');
+      setDialogStates((prevState) => ({
+        ...prevState,
+        isInfoDialogOpen: true
+      }));
+    }
   };
 
   const onRowSelectionModelChange = (newRowSelectionModel: any) => {
@@ -311,7 +322,7 @@ export const RegionUsers: React.FC = () => {
               slots={{ toolbar: GridToolbar }}
               initialState={{
                 pagination: {
-                  paginationModel: { pageSize: 10, page: 0 }
+                  paginationModel: { pageSize: 25, page: 0 }
                 }
               }}
             />
@@ -350,13 +361,18 @@ export const RegionUsers: React.FC = () => {
                 Error retrieving organizations: {errorStates.getOrgsError}
               </Alert>
             )}
-            {selectedOrgRows.length !== 0 ? (
-              <Alert severity="info">
-                {selectedUser.fullName} will become a member of the selected
-                organization.
+            {selectedOrgRows.length !== 0 &&
+              errorStates.getUpdateError.length === 0 && (
+                <Alert severity="info">
+                  {selectedUser.fullName} will become a member of the selected
+                  organization.
+                </Alert>
+              )}
+            {errorStates.getUpdateError.length !== 0 && (
+              <Alert severity="error">
+                Error updating user: {errorStates.getUpdateError}. See the
+                network tab for more details.
               </Alert>
-            ) : (
-              <Box pt={6} />
             )}
           </>
         }
