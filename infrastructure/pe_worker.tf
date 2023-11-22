@@ -185,7 +185,7 @@ resource "aws_ecs_service" "shodan_service" {
 
 # Create the  log group
 resource "aws_cloudwatch_log_group" "pe_worker" {
-  name              = var.pe_worker_ecs_log_group_name # should match awslogs-group in service.json
+  name              = var.pe_worker_ecs_log_group_name
   retention_in_days = 3653
   kms_key_id        = aws_kms_key.key.arn
   tags = {
