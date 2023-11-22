@@ -161,8 +161,8 @@ export const RegionUsers: React.FC = () => {
       return apiPost(`/v2/organizations/${selectedOrgId}/users`, {
         body: { userId, role: 'user' }
       }).then(
-        () => {
-          return updateUser(userId);
+        (res) => {
+          return updateUser(userId, res.organization.name);
         },
         (e) => {
           setErrorStates({ ...errorStates, getUpdateError: e.message });
@@ -174,7 +174,7 @@ export const RegionUsers: React.FC = () => {
   );
 
   const updateUser = useCallback(
-    (userId: string): Promise<boolean> => {
+    (userId: string, orgName: string): Promise<boolean> => {
       return apiPut(`/v2/users/${userId}`, {
         body: { invitePending: false }
       }).then(
@@ -185,6 +185,7 @@ export const RegionUsers: React.FC = () => {
           setPendingUsers((prevPendingUsers) =>
             prevPendingUsers.filter((user) => user.id !== userId)
           );
+          res['organizations'] = orgName;
           apiRefCurrentUsers.current.updateRows([res]);
           setCurrentUsers((prevCurrentUsers) => [...prevCurrentUsers, res]);
           return true;
@@ -281,7 +282,7 @@ export const RegionUsers: React.FC = () => {
     );
   }
   return (
-    <Box m={5} sx={{ height: '150vh' }}>
+    <Box m={5} sx={{ minHeight: '1500px' }}>
       <Box
         sx={{
           maxWidth: '1700px',
@@ -290,12 +291,14 @@ export const RegionUsers: React.FC = () => {
         }}
       >
         <Box sx={{ m: 'auto', maxWidth: '1500px', px: 2, py: 5 }}>
-          <Typography variant="h4">Region 1 Admin Dashboard</Typography>
+          <Typography variant="h4">
+            Region {regionId} Admin Dashboard
+          </Typography>
           <br />
           <Typography variant="h6" pb={2} pt={2}>
             Pending Requests
           </Typography>
-          <Box sx={{ height: '400px', pb: 2 }}>
+          <Box sx={{ height: '387px', pb: 2 }}>
             <DataGrid
               apiRef={apiRefPendingUsers}
               columns={pendingCols}
@@ -311,20 +314,16 @@ export const RegionUsers: React.FC = () => {
             </Alert>
           )}
           <Typography variant="h6" pb={2} pt={3}>
-            Members of Region 1
+            Members of Region {regionId}
           </Typography>
-          <Box sx={{ maxHeight: '1500px' }}>
+          <Box sx={{ height: '667px' }}>
             <DataGrid
               apiRef={apiRefCurrentUsers}
               columns={memberCols}
               rows={currentUsers}
               disableRowSelectionOnClick
               slots={{ toolbar: GridToolbar }}
-              initialState={{
-                pagination: {
-                  paginationModel: { pageSize: 25, page: 0 }
-                }
-              }}
+              autoPageSize
             />
           </Box>
         </Box>
@@ -407,10 +406,10 @@ export const RegionUsers: React.FC = () => {
           }));
         }}
         icon={<CheckIcon color="success" sx={{ fontSize: '80px' }} />}
-        title={<Typography variant="h4">Success</Typography>}
+        title={<Typography variant="h4">Success </Typography>}
         content={
           <Typography variant="body1">
-            This user has been approved and is now a member of Region 1.
+            The user has been approved and is a member of Region {regionId}.
           </Typography>
         }
       />
