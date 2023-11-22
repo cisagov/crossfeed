@@ -21,4 +21,6 @@ RUN apt remove dav1d && apt autoclean && apt autoremove
 # Sync the latest from cf-staging branch
 RUN git clone -b cf-source-staging https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout c9cbbd73b22ef38cabe1da6ba50aeb2dc0be4f99 && pip install .
 
+COPY worker worker
+
 CMD ["./worker/pe-worker-entry.sh"]
