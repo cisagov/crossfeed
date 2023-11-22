@@ -27,6 +27,7 @@ type ErrorStates = {
   getOrgsError: string;
   getUsersError: string;
   getUpdateError: string;
+  getDeleteError: string;
 };
 
 type CloseReason = 'backdropClick' | 'escapeKeyDown' | 'closeButtonClick';
@@ -39,7 +40,7 @@ const transformData = (data: User[]): User[] => {
   }));
 };
 export const RegionUsers: React.FC = () => {
-  const { apiGet, apiPost, apiPut, user } = useAuthContext();
+  const { apiDelete, apiGet, apiPost, apiPut, user } = useAuthContext();
   const apiRefPendingUsers = useGridApiRef();
   const apiRefCurrentUsers = useGridApiRef();
   const regionId = user?.regionId;
@@ -110,13 +111,15 @@ export const RegionUsers: React.FC = () => {
   const [errorStates, setErrorStates] = useState<ErrorStates>({
     getOrgsError: '',
     getUsersError: '',
-    getUpdateError: ''
+    getUpdateError: '',
+    getDeleteError: ''
   });
   const [selectedUser, selectUser] = useState<User>(initializeUser);
   const [selectedOrgRows, selectOrgRows] = useState<GridRowSelectionModel>([]);
   const [organizations, setOrganizations] = useState<OrganizationType[]>([]);
   const [pendingUsers, setPendingUsers] = useState<User[]>([]);
   const [currentUsers, setCurrentUsers] = useState<User[]>([]);
+  const [infoDialogContent, setInfoDialogContent] = useState<String>('');
 
   const fetchOrganizations = useCallback(async () => {
     try {
@@ -155,6 +158,28 @@ export const RegionUsers: React.FC = () => {
     fetchCurrentUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const deleteUser = useCallback(
+    (userId: string): Promise<boolean> => {
+      return apiDelete(`/users/${userId}`).then(
+        () => {
+          apiRefPendingUsers.current.updateRows([
+            { id: userId, _action: 'delete' }
+          ]);
+          setPendingUsers((prevPendingUsers) =>
+            prevPendingUsers.filter((user) => user.id !== userId)
+          );
+          setInfoDialogContent('This user has been successfully removed.');
+          return true;
+        },
+        (e) => {
+          setErrorStates({ ...errorStates, getDeleteError: e.message });
+          return false;
+        }
+      );
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [apiDelete]
+  );
 
   const addOrgToUser = useCallback(
     (userId: string, selectedOrgId: any): Promise<boolean> => {
@@ -210,13 +235,16 @@ export const RegionUsers: React.FC = () => {
     });
     selectUser(initializeUser);
   };
-  // TODO: Remove selectedUser from User table.
-  const handleConfirmDeny = () => {
-    // TODO: Handle API error response
-    setDialogStates({
-      ...dialogStates,
-      isDenyDialogOpen: false
-    });
+
+  const handleConfirmDenyClick = async () => {
+    const success = await deleteUser(selectedUser.id);
+    if (success) {
+      setDialogStates({
+        ...dialogStates,
+        isDenyDialogOpen: false,
+        isInfoDialogOpen: true
+      });
+    }
   };
 
   const handleApproveClick = (row: typeof initializeUser) => {
@@ -259,6 +287,9 @@ export const RegionUsers: React.FC = () => {
         ...prevState,
         isInfoDialogOpen: true
       }));
+      setInfoDialogContent(
+        `The user has been approved and is a member of Region ${regionId}.`
+      );
     }
   };
 
@@ -380,20 +411,21 @@ export const RegionUsers: React.FC = () => {
       />
       <ConfirmDialog
         isOpen={dialogStates.isDenyDialogOpen}
-        onConfirm={handleConfirmDeny}
+        onConfirm={handleConfirmDenyClick}
         onCancel={handleDenyCancelClick}
         title={`Are you sure?`}
         content={
           <>
             <Typography mb={3}>
-              Denying the request from {selectedUser.fullName} will permanently
-              remove this user and cannot be undone.
+              Denying this request will permanently remove{' '}
+              {selectedUser.fullName} from the records and cannot be undone.
             </Typography>
-            {/* {apiError[0] && (
-            <Alert severity="error">
-              {apiError[1]}: Unable to remove this user to the database.
-            </Alert>
-          )} */}
+            {errorStates.getDeleteError && (
+              <Alert severity="error">
+                Error removing user: {errorStates.getDeleteError}. See the
+                network tab for more details.
+              </Alert>
+            )}
           </>
         }
       />
@@ -407,11 +439,7 @@ export const RegionUsers: React.FC = () => {
         }}
         icon={<CheckIcon color="success" sx={{ fontSize: '80px' }} />}
         title={<Typography variant="h4">Success </Typography>}
-        content={
-          <Typography variant="body1">
-            The user has been approved and is a member of Region {regionId}.
-          </Typography>
-        }
+        content={<Typography variant="body1">{infoDialogContent}</Typography>}
       />
     </Box>
   );
