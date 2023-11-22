@@ -224,11 +224,10 @@ export const RegionUsers: React.FC = () => {
     [apiPut]
   );
 
-  const handleSubmitClick = (value: CloseReason) => {
+  const handleCloseDialog = (value: CloseReason) => {
     if (value === 'backdropClick' || value === 'escapeKeyDown') {
       return;
     }
-    // TODO: Handle API error response
     setDialogStates({
       ...dialogStates,
       isOrgDialogOpen: false
@@ -282,7 +281,7 @@ export const RegionUsers: React.FC = () => {
   const handleApproveConfirmClick = async () => {
     const success = await addOrgToUser(selectedUser.id, selectedOrgRows[0]);
     if (success) {
-      handleSubmitClick('closeButtonClick');
+      handleCloseDialog('closeButtonClick');
       setDialogStates((prevState) => ({
         ...prevState,
         isInfoDialogOpen: true
@@ -361,7 +360,7 @@ export const RegionUsers: React.FC = () => {
       </Box>
       <ConfirmDialog
         isOpen={dialogStates.isOrgDialogOpen}
-        onClose={(_, reason) => handleSubmitClick(reason)}
+        onClose={(_, reason) => handleCloseDialog(reason)}
         onConfirm={handleApproveConfirmClick}
         onCancel={handleApproveCancelClick}
         title={`Add ${selectedUser.fullName} to an organization`}
