@@ -102,7 +102,7 @@ export const sendEmail = async (
 
 export const sendUserNotificationEmail = async (
   recepient: string,
-  p_subject: string
+  p_subject: string,
   p_firstName: string,
   p_lastname: string,
   template_file: string,
@@ -113,7 +113,7 @@ export const sendUserNotificationEmail = async (
   });
 
   const fs = require('fs').promises;
-  const html = await fs.readFile(filename, 'utf8');
+  const html = await fs.readFile(template_file, 'utf8');
   const template = handlebars.compile(html);
   const data = {
     first_name: p_firstName,
@@ -164,7 +164,74 @@ export const sendUserNotificationEmail = async (
     }]
   };
 
-  await nodemailer.sendMail(mailOptions);
+  await transporter.sendMail(mailOptions);
 };
 
+export const sendRegionalAdminNotificationEmail = async (
+  recepient: string,
+  p_subject: string,
+  p_firstName: string,
+  p_lastname: string,
+  p_username: string
+) => {
+
+  const transporter = nodemailer.createTransport({
+    SES: new SES({ region: 'us-east-1' })
+  });
+
+  const fs = require('fs').promises;
+  const html = await fs.readFile('../../email_templates/crossfeed_regional_admin_notification.html', 'utf8');
+  const template = handlebars.compile(html);
+  const data = {
+    first_name: p_firstName,
+    last_name: p_lastname,
+    username: p_username
+  }
+
+  const htmlToSend = template(data);
+
+  const mailOptions = {
+    from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER,
+    to: recepient,
+    subject: p_subject,
+    html: htmlToSend,
+    attachments: [{
+      filename: 'banner.png',
+      path: 'banner.png',
+      cid: 'CISA Banner'
+    },
+    {
+      filename: 'web.png',
+      path: 'banner.png',
+      cid: 'CISA Web'
+    },
+    {
+      filename: 'email.png',
+      path: 'email.png',
+      cid: 'CISA Email'
+    },
+    {
+      filename: 'linkedin.png',
+      path: 'linkedin.png',
+      cid: 'CISA LinkedIn'
+    },
+    {
+      filename: 'twitter.png',
+      path: 'twitter.png',
+      cid: 'CISA Twitter'
+    },
+    {
+      filename: 'facebook.png',
+      path: 'facebooK.png',
+      cid: 'CISA Facebook'
+    },
+    {
+      filename: 'instagram.png',
+      path: 'instagram.png',
+      cid: 'CISA Instagram'
+    }]
+  };
+
+  await transporter.sendMail(mailOptions);
+};
 

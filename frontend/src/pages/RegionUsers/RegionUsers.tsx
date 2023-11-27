@@ -9,7 +9,8 @@ import {
   GridColDef,
   GridRenderCellParams,
   GridRowSelectionModel,
-  GridToolbar
+  GridToolbar,
+  useGridApiRef
 } from '@mui/x-data-grid';
 import DoneIcon from '@mui/icons-material/Done';
 import { CheckCircleOutline as CheckIcon } from '@mui/icons-material';
@@ -25,23 +26,26 @@ type DialogStates = {
 type ErrorStates = {
   getOrgsError: string;
   getUsersError: string;
-  updateUserError: string;
+  getUpdateError: string;
+  getDeleteError: string;
 };
 
 type CloseReason = 'backdropClick' | 'escapeKeyDown' | 'closeButtonClick';
 
 const transformData = (data: User[]): User[] => {
   return data.map(({ roles, ...user }) => ({
-      ...user,
-      roles,
-      organizations: roles.map((role) => ' ' + role.organization.name),
+    ...user,
+    roles,
+    organizations: roles.map((role) => ' ' + role.organization.name)
   }));
-}
+};
 export const RegionUsers: React.FC = () => {
-  const { apiGet, user } = useAuthContext();
+  const { apiDelete, apiGet, apiPost, apiPut, user } = useAuthContext();
+  const apiRefPendingUsers = useGridApiRef();
+  const apiRefCurrentUsers = useGridApiRef();
   const regionId = user?.regionId;
-  const orgsURL = `/organizations/regionId/${regionId}`;
-  const usersURL = `/v2/users?regionId=${regionId}&invitePending=`;
+  const getOrgsURL = `/organizations/regionId/${regionId}`;
+  const getUsersURL = `/v2/users?regionId=${regionId}&invitePending=`;
   const pendingCols: GridColDef[] = [
     { field: 'fullName', headerName: 'Name', minWidth: 100, flex: 1 },
     { field: 'email', headerName: 'Email', minWidth: 100, flex: 2 },
@@ -107,17 +111,19 @@ export const RegionUsers: React.FC = () => {
   const [errorStates, setErrorStates] = useState<ErrorStates>({
     getOrgsError: '',
     getUsersError: '',
-    updateUserError: ''
+    getUpdateError: '',
+    getDeleteError: ''
   });
-  const [selectedUser, selectUser] = useState(initializeUser);
+  const [selectedUser, selectUser] = useState<User>(initializeUser);
   const [selectedOrgRows, selectOrgRows] = useState<GridRowSelectionModel>([]);
   const [organizations, setOrganizations] = useState<OrganizationType[]>([]);
   const [pendingUsers, setPendingUsers] = useState<User[]>([]);
   const [currentUsers, setCurrentUsers] = useState<User[]>([]);
+  const [infoDialogContent, setInfoDialogContent] = useState<String>('');
 
   const fetchOrganizations = useCallback(async () => {
     try {
-      const rows = await apiGet<OrganizationType[]>(orgsURL);
+      const rows = await apiGet<OrganizationType[]>(getOrgsURL);
       setOrganizations(rows);
       setErrorStates({ ...errorStates, getOrgsError: '' });
     } catch (e: any) {
@@ -127,9 +133,9 @@ export const RegionUsers: React.FC = () => {
   }, [apiGet]);
   const fetchPendingUsers = useCallback(async () => {
     try {
-      const rows = await apiGet<User[]>(`${usersURL}true`);
+      const rows = await apiGet<User[]>(`${getUsersURL}true`);
       setPendingUsers(rows);
-      setErrorStates({ ...errorStates, getOrgsError: '' });
+      setErrorStates({ ...errorStates, getUsersError: '' });
     } catch (e: any) {
       setErrorStates({ ...errorStates, getUsersError: e.message });
     }
@@ -137,9 +143,9 @@ export const RegionUsers: React.FC = () => {
   }, [apiGet]);
   const fetchCurrentUsers = useCallback(async () => {
     try {
-      const rows = await apiGet<User[]>(`${usersURL}false`);
+      const rows = await apiGet<User[]>(`${getUsersURL}false`);
       setCurrentUsers(transformData(rows));
-      setErrorStates({ ...errorStates, getOrgsError: '' });
+      setErrorStates({ ...errorStates, getUsersError: '' });
     } catch (e: any) {
       setErrorStates({ ...errorStates, getUsersError: e.message });
     }
@@ -153,29 +159,95 @@ export const RegionUsers: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // TODO: Update selectedUser with invitePending as false and add selected organizations.
-  const handleSubmitClick = (value: CloseReason) => {
+  const deleteUser = useCallback(
+    (userId: string): Promise<boolean> => {
+      return apiDelete(`/users/${userId}`).then(
+        () => {
+          apiRefPendingUsers.current.updateRows([
+            { id: userId, _action: 'delete' }
+          ]);
+          setPendingUsers((prevPendingUsers) =>
+            prevPendingUsers.filter((user) => user.id !== userId)
+          );
+          setInfoDialogContent('This user has been successfully removed.');
+          return true;
+        },
+        (e) => {
+          setErrorStates({ ...errorStates, getDeleteError: e.message });
+          return false;
+        }
+      );
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [apiDelete]
+  );
+
+  const addOrgToUser = useCallback(
+    (userId: string, selectedOrgId: any): Promise<boolean> => {
+      return apiPost(`/v2/organizations/${selectedOrgId}/users`, {
+        body: { userId, role: 'user' }
+      }).then(
+        (res) => {
+          return updateUser(userId, res.organization.name);
+        },
+        (e) => {
+          setErrorStates({ ...errorStates, getUpdateError: e.message });
+          return false;
+        }
+      );
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [apiPost]
+  );
+
+  const updateUser = useCallback(
+    (userId: string, orgName: string): Promise<boolean> => {
+      return apiPut(`/v2/users/${userId}`, {
+        body: { invitePending: false }
+      }).then(
+        (res) => {
+          apiRefPendingUsers.current.updateRows([
+            { id: userId, _action: 'delete' }
+          ]);
+          setPendingUsers((prevPendingUsers) =>
+            prevPendingUsers.filter((user) => user.id !== userId)
+          );
+          res['organizations'] = orgName;
+          apiRefCurrentUsers.current.updateRows([res]);
+          setCurrentUsers((prevCurrentUsers) => [...prevCurrentUsers, res]);
+          return true;
+        },
+        (e) => {
+          setErrorStates({ ...errorStates, getUpdateError: e.message });
+          return false;
+        }
+      );
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [apiPut]
+  );
+
+  const handleCloseDialog = (value: CloseReason) => {
     if (value === 'backdropClick' || value === 'escapeKeyDown') {
       return;
     }
-    // TODO: Handle API error response
     setDialogStates({
       ...dialogStates,
       isOrgDialogOpen: false
     });
     selectUser(initializeUser);
-    selectOrgRows([]);
   };
-  // TODO: Remove selectedUser from User table.
-  const handleConfirmDeny = () => {
-    // TODO: Handle API error response
-    setDialogStates({
-      ...dialogStates,
-      isDenyDialogOpen: false
-    });
+
+  const handleConfirmDenyClick = async () => {
+    const success = await deleteUser(selectedUser.id);
+    if (success) {
+      setDialogStates({
+        ...dialogStates,
+        isDenyDialogOpen: false,
+        isInfoDialogOpen: true
+      });
+    }
   };
 
   const handleApproveClick = (row: typeof initializeUser) => {
+    selectOrgRows([]);
     setDialogStates({
       ...dialogStates,
       isOrgDialogOpen: true
@@ -191,32 +263,56 @@ export const RegionUsers: React.FC = () => {
     selectUser(row);
   };
 
-  const handleCancelDeny = () => {
+  const handleDenyCancelClick = () => {
     setDialogStates((prevState) => ({
       ...prevState,
       isDenyDialogOpen: false
     }));
   };
 
-  const handleCancelApprove = () => {
+  const handleApproveCancelClick = () => {
     setDialogStates((prevState) => ({
       ...prevState,
       isOrgDialogOpen: false
     }));
     selectUser(initializeUser);
-    selectOrgRows([]);
   };
 
-  const handleConfirmApprove = () => {
-    handleSubmitClick('closeButtonClick');
-    setDialogStates((prevState) => ({
-      ...prevState,
-      isInfoDialogOpen: true
-    }));
+  const handleApproveConfirmClick = async () => {
+    const success = await addOrgToUser(selectedUser.id, selectedOrgRows[0]);
+    if (success) {
+      handleCloseDialog('closeButtonClick');
+      setDialogStates((prevState) => ({
+        ...prevState,
+        isInfoDialogOpen: true
+      }));
+      setInfoDialogContent(
+        `The user has been approved and is a member of Region ${regionId}.`
+      );
+    }
   };
 
+  const onRowSelectionModelChange = (newRowSelectionModel: any) => {
+    if (newRowSelectionModel.length > 1) {
+      const selectionSet = new Set(selectedOrgRows);
+      const result = newRowSelectionModel.filter(
+        (s: any) => !selectionSet.has(s)
+      );
+      selectOrgRows(result);
+    } else {
+      selectOrgRows(newRowSelectionModel);
+    }
+  };
+  if (user?.userType !== ('globalAdmin' || 'regionAdmin')) {
+    return (
+      <Alert severity="warning" sx={{ fontSize: 17 }}>
+        <b>Access Prohibited:</b> You are not authorized to view this page.
+        Contact an administrator for access.
+      </Alert>
+    );
+  }
   return (
-    <Box m={5} sx={{ height: '150vh' }}>
+    <Box m={5} sx={{ minHeight: '1500px' }}>
       <Box
         sx={{
           maxWidth: '1700px',
@@ -225,13 +321,16 @@ export const RegionUsers: React.FC = () => {
         }}
       >
         <Box sx={{ m: 'auto', maxWidth: '1500px', px: 2, py: 5 }}>
-          <Typography variant="h4">Region 1 Admin Dashboard</Typography>
+          <Typography variant="h4">
+            Region {regionId} Admin Dashboard
+          </Typography>
           <br />
           <Typography variant="h6" pb={2} pt={2}>
             Pending Requests
           </Typography>
-          <Box sx={{ height: '400px', pb: 2 }}>
+          <Box sx={{ height: '387px', pb: 2 }}>
             <DataGrid
+              apiRef={apiRefPendingUsers}
               columns={pendingCols}
               rows={pendingUsers}
               disableRowSelectionOnClick
@@ -245,36 +344,36 @@ export const RegionUsers: React.FC = () => {
             </Alert>
           )}
           <Typography variant="h6" pb={2} pt={3}>
-            Members of Region 1
+            Members of Region {regionId}
           </Typography>
-          <Box sx={{ height: '400px' }}>
+          <Box sx={{ height: '667px' }}>
             <DataGrid
+              apiRef={apiRefCurrentUsers}
               columns={memberCols}
               rows={currentUsers}
               disableRowSelectionOnClick
               slots={{ toolbar: GridToolbar }}
+              autoPageSize
             />
           </Box>
         </Box>
       </Box>
       <ConfirmDialog
         isOpen={dialogStates.isOrgDialogOpen}
-        onClose={(_, reason) => handleSubmitClick(reason)}
-        onConfirm={handleConfirmApprove}
-        onCancel={handleCancelApprove}
-        title={`Add ${selectedUser.fullName} to organizations`}
+        onClose={(_, reason) => handleCloseDialog(reason)}
+        onConfirm={handleApproveConfirmClick}
+        onCancel={handleApproveCancelClick}
+        title={`Add ${selectedUser.fullName} to an organization`}
         content={
           <>
             <Typography mb={3}>
-              To complete the approval process, select at least one organization
-              for this user.
+              To complete the approval process, select one organization for this
+              user to join.
             </Typography>
             <Box sx={{ height: 600, margin: 'auto', pb: 2 }}>
               <DataGrid
                 checkboxSelection
-                onRowSelectionModelChange={(newRowSelectionModel) => {
-                  selectOrgRows(newRowSelectionModel);
-                }}
+                onRowSelectionModelChange={onRowSelectionModelChange}
                 rowSelectionModel={selectedOrgRows}
                 rows={organizations}
                 columns={orgCols}
@@ -291,6 +390,19 @@ export const RegionUsers: React.FC = () => {
                 Error retrieving organizations: {errorStates.getOrgsError}
               </Alert>
             )}
+            {selectedOrgRows.length !== 0 &&
+              errorStates.getUpdateError.length === 0 && (
+                <Alert severity="info">
+                  {selectedUser.fullName} will become a member of the selected
+                  organization.
+                </Alert>
+              )}
+            {errorStates.getUpdateError.length !== 0 && (
+              <Alert severity="error">
+                Error updating user: {errorStates.getUpdateError}. See the
+                network tab for more details.
+              </Alert>
+            )}
           </>
         }
         disabled={selectedOrgRows.length === 0 ? true : false}
@@ -298,20 +410,21 @@ export const RegionUsers: React.FC = () => {
       />
       <ConfirmDialog
         isOpen={dialogStates.isDenyDialogOpen}
-        onConfirm={handleConfirmDeny}
-        onCancel={handleCancelDeny}
+        onConfirm={handleConfirmDenyClick}
+        onCancel={handleDenyCancelClick}
         title={`Are you sure?`}
         content={
           <>
             <Typography mb={3}>
-              Removing {selectedUser.fullName} from pending requests will be
-              permanent and cannot be undone.
+              Denying this request will permanently remove{' '}
+              {selectedUser.fullName} from the records and cannot be undone.
             </Typography>
-            {/* {apiError[0] && (
-            <Alert severity="error">
-              {apiError[1]}: Unable to remove this user to the database.
-            </Alert>
-          )} */}
+            {errorStates.getDeleteError && (
+              <Alert severity="error">
+                Error removing user: {errorStates.getDeleteError}. See the
+                network tab for more details.
+              </Alert>
+            )}
           </>
         }
       />
@@ -322,16 +435,10 @@ export const RegionUsers: React.FC = () => {
             ...prevState,
             isInfoDialogOpen: false
           }));
-          selectOrgRows([]);
         }}
         icon={<CheckIcon color="success" sx={{ fontSize: '80px' }} />}
-        title={<Typography variant="h4">Success</Typography>}
-        content={
-          <Typography variant="body1">
-            This user has been approved and is now a member of organizations in
-            Region 1.
-          </Typography>
-        }
+        title={<Typography variant="h4">Success </Typography>}
+        content={<Typography variant="body1">{infoDialogContent}</Typography>}
       />
     </Box>
   );

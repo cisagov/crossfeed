@@ -354,28 +354,6 @@ export const Organization: React.FC = () => {
     }
   };
 
-  const updateOrganizationV2 = async (body: any) => {
-    try {
-      const org = await apiPut('/organizations/v2/' + organization?.id, {
-        body: organization
-      });
-      setOrganization(org);
-      setFeedbackMessage({
-        message: 'Organization successfully updated',
-        type: 'success'
-      });
-    } catch (e: any) {
-      setFeedbackMessage({
-        message:
-          e.status === 422
-            ? 'Error updating organization'
-            : e.message ?? e.toString(),
-        type: 'error'
-      });
-      console.error(e);
-    }
-  };
-
   const updateScan = async (scan: Scan, enabled: boolean) => {
     try {
       if (!organization) return;
