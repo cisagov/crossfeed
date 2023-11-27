@@ -1,12 +1,4 @@
-import {
-  Paper,
-  TableContainer,
-  TextareaAutosize,
-  Chip,
-  MenuItem,
-  Menu,
-  AlertTitle
-} from '@mui/material';
+import { AlertTitle } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
@@ -20,6 +12,7 @@ import {
 } from '@aws-amplify/ui-react';
 import { I18n } from 'aws-amplify';
 import { ModFooter } from 'components/Footer';
+import { CrossfeedWarning } from 'components/WarningBanner';
 const TOTP_ISSUER = process.env.REACT_APP_TOTP_ISSUER;
 // Strings come from https://github.com/aws-amplify/amplify-ui/blob/main/packages/ui/src/i18n/dictionaries/authenticator/en.ts
 I18n.putVocabulariesForLanguage('en-US', {
@@ -121,6 +114,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
             </Alert>
           </ThemeProvider>
         </AuthForm>
+        <CrossfeedWarning />
         <ModFooter />
       </>
     );
