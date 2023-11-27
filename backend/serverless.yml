@@ -43,6 +43,9 @@ provider:
           Action:
             - ecs:RunTask
             - ecs:ListTasks
+            - ecs:DescribeTasks
+            - ecs:DescribeServices
+            - ecs:UpdateService
             - iam:PassRole
           Resource: '*'
         - Effect: Allow
@@ -65,7 +68,9 @@ provider:
         - Effect: Allow
           Action:
             - sqs:ReceiveMessage
+            - sqs:DeleteMessage
             - sqs:SendMessage
+            - sqs:GetQueueAttributes
           Resource: '*'
         - Effect: Allow
           Action:
@@ -107,7 +112,6 @@ resources:
         VisibilityTimeout: 300
         MaximumMessageSize: 262144 # 256 KB
         MessageRetentionPeriod: 604800 # 7 days
-
 
 functions:
   - ${file(./src/tasks/functions.yml)}
