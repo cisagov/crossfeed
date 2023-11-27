@@ -161,8 +161,10 @@ export const sendUserNotificationEmail = async (
       filename: 'instagram.png',
       path: 'instagram.png',
       cid: 'CISA Instagram'
-    },
-  ]
+    }]
   };
+
+  await nodemailer.sendMail(mailOptions);
+};
 
 

@@ -18,7 +18,8 @@ import {
   wrapHandler,
   NotFound,
   Unauthorized,
-  sendEmail
+  sendEmail,
+  sendUserNotificationEmail
 } from './helpers';
 import { UserType } from '../models/user';
 import {
@@ -589,8 +590,10 @@ export const register = wrapHandler(async (event) => {
     await User.save(createdUser);
     id = createdUser.id;
 
-    // Send Registration confirmation email to user
-    // TODO: replace with html email function to user
+    sendUserNotificationEmail(newUser.email, 
+      "Crossfeed Account Registration Received",
+      newUser.firstName, newUser.lastName,
+      "../../email_templates/crossfeed_registration_notification.html");
 
     // Send new user pending approval email to regionalAdmin
     // TODO: replace with html email function to regianlAdmin
