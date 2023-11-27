@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   BeforeUpdate
 } from 'typeorm';
-import { Role } from './';
+import { Organization, Role } from './';
 import { ApiKey } from './api-key';
 
 export enum UserType {
@@ -115,4 +115,16 @@ export class User extends BaseEntity {
     nullable: true
   })
   state: string;
+
+  // @Column({
+  //   nullable: true,
+  //   default: 0
+  // })
+  // numberOfOrganizations: number;
+
+  // @Column({
+  //   nullable: true,
+  //   default: []
+  // })
+  // organizationIds: Array<Organization>;
 }

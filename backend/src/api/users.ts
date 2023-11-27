@@ -7,6 +7,7 @@ import {
   IsEnum,
   IsInt,
   IsIn,
+  IsNumber,
   IsObject,
   IsPositive,
   ValidateNested,
@@ -50,7 +51,9 @@ class UserSearch {
     'lastLoggedIn',
     'acceptedTermsVersion',
     'state',
-    'regionId'
+    'regionId',
+    // 'organizations',
+    // 'numberOfOrganizations'
   ])
   @IsOptional()
   sort: string = 'fullName';
@@ -78,6 +81,7 @@ class UserSearch {
   }
 }
 
+// New User
 class NewUser {
   @IsString()
   firstName: string;
@@ -136,7 +140,6 @@ class UpdateUser {
   @IsString()
   @IsOptional()
   role: string;
-
 }
 
 
@@ -565,7 +568,6 @@ export const getByState = wrapHandler(async (event) => {
  */
 export const register = wrapHandler(async (event) => {
   const body = await validateBody(NewUser, event.body);
-
   const newUser = {
     "firstName": body.firstName,
     "lastName": body.lastName,
@@ -575,27 +577,38 @@ export const register = wrapHandler(async (event) => {
     "regionId": REGION_STATE_MAP[body.state],
     "invitePending": true,
   }
+  console.log(JSON.stringify(newUser))
 
   await connectToDatabase();
 
-  // Check if user already exists by email
-  let user = await User.findOne({
-    email: body.email.toLowerCase()
+  // Check if user already exists
+  let userCheck = await User.findOne({
+    where: { email: newUser.email }
   });
+
   let id = "";
   // Crreate if user does not exist
-  if (!user) {
-    const createdUser = await User.create(newUser);
-    await User.save(createdUser);
-    id = createdUser.id;
-
-    // Send Registration confirmation email to user
-    // TODO: replace with html email function to user
-
-    // Send new user pending approval email to regionalAdmin
-    // TODO: replace with html email function to regianlAdmin
+  // if (!user) {
+  if (userCheck) {
+    console.log("User already exists.");
+    return {
+      statusCode: 422,
+      body: 'User email already exists. Registration failed.'
+    };
   }
 
+  const createdUser = await User.create(newUser);
+  await User.save(createdUser);
+  id = createdUser.id;
+
+  // const savedUser = await User.save(createdUser);
+  // id = createdUser.id;
+
+  // Send Registration confirmation email to user
+  // TODO: replace with html email function to user
+
+  // Send new user pending approval email to regionalAdmin
+  // TODO: replace with html email function to regianlAdmin
   const savedUser = await User.findOne(id, {
     relations: ['roles', 'roles.organization']
   });
@@ -662,6 +675,10 @@ export const getAllV2 = wrapHandler(async (event) => {
   if (Object.entries(filterParams).length === 0) {
     const result = await User.find({
       relations: ['roles', 'roles.organization']
+    // relations: {
+    //   roles: true,
+    //   organizations: true
+    // },
     });
     return {
       statusCode: 200,
@@ -669,11 +686,39 @@ export const getAllV2 = wrapHandler(async (event) => {
     }
   } else {
     const result = await User.find({
-    where: filterParams,
-    relations: ['roles', 'roles.organization']
+      where: filterParams,
+      relations: ['roles', 'roles.organization']
+    // relations: {
+    //   roles: true,
+    //   organizations: true
+    // },
+    // relations: {
+    //   roles: {
+    //     roles: true
+    //   },
+    //   organizations: {
+    //     organizations: true
+    //   }
+    // },
     });
+    // const updatedResult = {
+    //   ...result,
+    //   numberOfOrganizations: 0,
+    //   organizations: []
+    // }
+    // if (!result.roles) {
+    //   result.roles = [];
+    // }
+    // updatedResult.roles.forEach((role) => {
+    //   const org = role.organization;
+    //   if (org) {
+    //     updatedResult.numberOfOrganizations += 1;
+    //     updatedResult.organizations.push(org);
+    //   }
+    // });
     return {
       statusCode: 200,
+      // body: JSON.stringify(updatedResult)
       body: JSON.stringify(result)
     };
   }

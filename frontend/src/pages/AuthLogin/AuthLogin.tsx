@@ -6,9 +6,14 @@ import { useAuthContext } from 'context';
 import {
   Authenticator,
   ThemeProvider,
-  useAuthenticator
+  useAuthenticator,
+  Button as AmplifyButton,
+  View,
+  Text,
+  Button as AmplifyButtonButton
 } from '@aws-amplify/ui-react';
 import { I18n } from 'aws-amplify';
+
 import { RegisterForm } from 'components/Register/RegisterForm';
 
 const TOTP_ISSUER = process.env.REACT_APP_TOTP_ISSUER;
@@ -82,6 +87,20 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
     }
   };
 
+  // const components = {
+  //   Footer() {
+  //     const { tokens } = useTheme();
+  
+  //     return (
+  //       <View textAlign="center" padding={tokens.space.large}>
+  //         <Text color={tokens.colors.neutral[80]}>
+  //           &copy; All Rights Reserved
+  //         </Text>
+  //       </View>
+  //     );
+  //   },
+  // }
+
   const onClose = () => {
     setOpen(false);
   };
@@ -90,15 +109,26 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
     return (
       <AuthForm as="div">
         <h1>Welcome to Crossfeed</h1>
+
         <ThemeProvider theme={amplifyTheme}>
           <Authenticator
             loginMechanisms={['email']}
             formFields={formFields}
             /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
-            hideSignUp={
-              !showSignUp && !(process.env.NODE_ENV === 'development')
-            }
+            // hideSignUp={
+            //   !showSignUp && !(process.env.NODE_ENV === 'development')
+            // }
+            hideSignUp={true}
           />
+          {/* <AmplifyButton onClick={() => alert('hello')}>
+            Register
+          </AmplifyButton> */}
+
+          {open && <RegisterForm open={open} onClose={onClose} />}
+          <AmplifyButton type="submit" variation="primary" isFullWidth={true} onClick={() => setOpen(true)}>
+            Register
+          </AmplifyButton>
+            
           <div className="banner_header">**Warning**</div>
           <div className="banner_login">
             {' '}
@@ -147,13 +177,6 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
       <Button type="submit" size="big" onClick={() => setOpen(true)}>
         Register
       </Button>
-      {/* <Typography>
-        <h5>New to Crossfeed? Register with Login.gov</h5>
-      </Typography> */}
-
-      {/* <Link to="#" onClick={onSubmit}>
-        New to Crossfeed? Register with Login.gov
-      </Link> */}
     </AuthForm>
   );
 };
