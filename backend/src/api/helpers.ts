@@ -184,8 +184,7 @@ export const sendRegionalAdminNotificationEmail = async (
   const template = handlebars.compile(html);
   const data = {
     first_name: p_firstName,
-    last_name: p_lastname,
-    username: p_username
+    last_name: p_lastname
   }
 
   const htmlToSend = template(data);
