@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AuthForm } from 'components';
 import { Button } from '@trussworks/react-uswds';
-import { Typography } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
 import { useAuthContext } from 'context';
 import {
   Authenticator,
@@ -10,7 +10,7 @@ import {
   Button as AmplifyButton,
   View,
   Text,
-  Button as AmplifyButtonButton
+  SelectField
 } from '@aws-amplify/ui-react';
 import { I18n } from 'aws-amplify';
 
@@ -125,10 +125,17 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
           </AmplifyButton> */}
 
           {open && <RegisterForm open={open} onClose={onClose} />}
-          <AmplifyButton type="submit" variation="primary" isFullWidth={true} onClick={() => setOpen(true)}>
-            Register
-          </AmplifyButton>
-            
+          <Box pt={3} pb={3} display="flex" justifyContent="center">
+            <Typography display="inline">New to Crossfeed?&nbsp;</Typography>
+            <Link
+              underline="hover"
+              style={{ cursor: 'pointer' }}
+              onClick={() => setOpen(true)}
+            >
+              Register Now
+            </Link>
+          </Box>
+
           <div className="banner_header">**Warning**</div>
           <div className="banner_login">
             {' '}
