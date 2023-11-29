@@ -377,6 +377,19 @@ authenticatedRoute.post(
   handlerToExpress(reports.list_reports)
 );
 
+
+//Authenticated Registration Routes
+authenticatedRoute.put(
+  '/users/:userId/register/approve',
+  handlerToExpress(users.registrationApproval)
+);
+
+authenticatedRoute.put(
+  '/users/:userId/register/deny',
+  handlerToExpress(users.registrationDenial)
+);
+
+
 //************* */
 //  V2 Routes   //
 //************* */
