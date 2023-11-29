@@ -626,6 +626,162 @@ export const register = wrapHandler(async (event) => {
   };
 });
 
+/**
+ * @swagger
+ *
+ * /users/register/approve:
+ *  post:
+ *    description: New user registration.
+ *    tags:
+ *    - Users
+ */
+export const register = wrapHandler(async (event) => {
+  const body = await validateBody(NewUser, event.body);
+  const newUser = {
+    "firstName": body.firstName,
+    "lastName": body.lastName,
+    "email": body.email.toLowerCase(),
+    "userType": UserType.STANDARD,
+    "state": body.state,
+    "regionId": REGION_STATE_MAP[body.state],
+    "invitePending": true,
+  }
+  console.log(JSON.stringify(newUser))
+
+  await connectToDatabase();
+
+  // Check if user already exists
+  let userCheck = await User.findOne({
+    where: { email: newUser.email }
+  });
+
+  let id = "";
+  // Crreate if user does not exist
+  // if (!user) {
+  if (userCheck) {
+    console.log("User already exists.");
+    return {
+      statusCode: 422,
+      body: 'User email already exists. Registration failed.'
+    };
+  }
+
+  const createdUser = await User.create(newUser);
+  await User.save(createdUser);
+  id = createdUser.id;
+
+  // const savedUser = await User.save(createdUser);
+  // id = createdUser.id;
+
+  // Send Registration confirmation email to user
+  // TODO: replace with html email function to user
+
+  // Send new user pending approval email to regionalAdmin
+  // TODO: replace with html email function to regianlAdmin
+  const savedUser = await User.findOne(id, {
+    relations: ['roles', 'roles.organization']
+  });
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(savedUser)
+  };
+});
+
+/**
+ * @swagger
+ *
+ * /users/{id}/register/approve:
+ *  put:
+ *    description: Approve a particular users registration.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: User id
+ *    tags:
+ *    - Users
+ */
+export const registrationApproval = wrapHandler(async (event) => {
+  // Get the user id from the path
+  const userId = event.pathParameters?.userId;
+
+  // Confirm that the id is a valid UUID
+  if (!userId || !isUUID(userId)) {
+    return NotFound;
+  }
+
+  // TODO: add user registration approval logic
+  // Validate the body
+  // const body = await approvalBody(UpdateUser, event.body);
+
+  // TODO: verify permissions
+  // User type permissions check
+  // if (!isRegionalAdmin(event)) return Unauthorized;
+
+  // TODO: finalize validation
+  // // Validate the body
+  // const validatedBody = await validateBody(
+  //   UpdateUser,
+  //   event.body
+  // );
+
+  // TODO: Handle Email notificaitons
+  // Add email notification logic
+
+  // TODO: Handle Response Output
+  return {
+    statusCode: 200,
+    body: "User registration approved."
+  }
+});
+
+/**
+ * @swagger
+ *
+ * /users/{id}/register/deny:
+ *  put:
+ *    description: Deny a particular users registration.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: User id
+ *    tags:
+ *    - Users
+ */
+export const registrationDenial = wrapHandler(async (event) => {
+  // Get the user id from the path
+  const userId = event.pathParameters?.userId;
+
+  // Confirm that the id is a valid UUID
+  if (!userId || !isUUID(userId)) {
+    return NotFound;
+  }
+
+  // TODO: add user registration denial logic
+  // Validate the body
+  // const body = await approvalBody(UpdateUser, event.body);
+
+  // TODO: verify permissions
+  // User type permissions check
+  // if (!isRegionalAdmin(event)) return Unauthorized;
+
+  // TODO: finalize validation
+  // // Validate the body
+  // const validatedBody = await validateBody(
+  //   UpdateUser,
+  //   event.body
+  // );
+
+  // TODO: Handle Email notificaitons
+  // Add email notification logic
+
+  // TODO: Handle Response Output
+  return {
+    statusCode: 200,
+    body: "User registration denied."
+  }
+});
+
 
 //***************//
 // V2 Endpoints  //

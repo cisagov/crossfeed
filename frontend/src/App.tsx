@@ -109,6 +109,15 @@ const App: React.FC = () => (
                     )}
                     component={Risk}
                   />
+                  <RouteGuard
+                    exact
+                    path="/registration"
+                    render={() => <Redirect to="/inventory" />}
+                    unauth={(props) => (
+                      <AuthLogin {...props} showSignUp={true} />
+                    )}
+                    component={Risk}
+                  />
                   <Route
                     exact
                     path="/login-gov-callback"
@@ -119,6 +128,7 @@ const App: React.FC = () => (
                     path="/create-account"
                     component={AuthCreateAccount}
                   />
+                  // TODO: Finalize Registration Route Component(Approved create account)
                   <Route exact path="/terms" component={TermsOfUse} />
 
                   <RouteGuard exact path="/inventory" component={SearchPage} />
