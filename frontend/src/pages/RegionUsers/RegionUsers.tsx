@@ -213,10 +213,26 @@ export const RegionUsers: React.FC = () => {
           res['organizations'] = orgName;
           apiRefCurrentUsers.current.updateRows([res]);
           setCurrentUsers((prevCurrentUsers) => [...prevCurrentUsers, res]);
-          return true;
+          return sendApprovalEmail(userId);
         },
         (e) => {
           setErrorStates({ ...errorStates, getUpdateError: e.message });
+          return false;
+        }
+      );
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [apiPut]
+  );
+
+  const sendApprovalEmail = useCallback(
+    (userId: string): Promise<boolean> => {
+      return apiPut(`/users/${userId}/register/approve`).then(
+        (res) => {
+          console.log(res);
+          return true;
+        },
+        (e) => {
+          console.log(e);
           return false;
         }
       );
