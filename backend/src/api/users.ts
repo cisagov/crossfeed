@@ -629,68 +629,6 @@ export const register = wrapHandler(async (event) => {
 /**
  * @swagger
  *
- * /users/register/approve:
- *  post:
- *    description: New user registration.
- *    tags:
- *    - Users
- */
-export const register = wrapHandler(async (event) => {
-  const body = await validateBody(NewUser, event.body);
-  const newUser = {
-    "firstName": body.firstName,
-    "lastName": body.lastName,
-    "email": body.email.toLowerCase(),
-    "userType": UserType.STANDARD,
-    "state": body.state,
-    "regionId": REGION_STATE_MAP[body.state],
-    "invitePending": true,
-  }
-  console.log(JSON.stringify(newUser))
-
-  await connectToDatabase();
-
-  // Check if user already exists
-  let userCheck = await User.findOne({
-    where: { email: newUser.email }
-  });
-
-  let id = "";
-  // Crreate if user does not exist
-  // if (!user) {
-  if (userCheck) {
-    console.log("User already exists.");
-    return {
-      statusCode: 422,
-      body: 'User email already exists. Registration failed.'
-    };
-  }
-
-  const createdUser = await User.create(newUser);
-  await User.save(createdUser);
-  id = createdUser.id;
-
-  // const savedUser = await User.save(createdUser);
-  // id = createdUser.id;
-
-  // Send Registration confirmation email to user
-  // TODO: replace with html email function to user
-
-  // Send new user pending approval email to regionalAdmin
-  // TODO: replace with html email function to regianlAdmin
-  const savedUser = await User.findOne(id, {
-    relations: ['roles', 'roles.organization']
-  });
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(savedUser)
-  };
-});
-
-/**
- * @swagger
- *
  * /users/{id}/register/approve:
  *  put:
  *    description: Approve a particular users registration.
