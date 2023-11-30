@@ -129,37 +129,37 @@ export const sendUserNotificationEmail = async (
     html: htmlToSend,
     attachments: [{
       filename: 'banner.png',
-      path: 'banner.png',
+      path: '/app/src/email_templates/banner.png',
       cid: 'CISA Banner'
     },
     {
       filename: 'web.png',
-      path: 'banner.png',
+      path: '/app/src/email_templates/banner.png',
       cid: 'CISA Web'
     },
     {
       filename: 'email.png',
-      path: 'email.png',
+      path: '/app/src/email_templates/email.png',
       cid: 'CISA Email'
     },
     {
       filename: 'linkedin.png',
-      path: 'linkedin.png',
+      path: '/app/src/email_templates/linkedin.png',
       cid: 'CISA LinkedIn'
     },
     {
       filename: 'twitter.png',
-      path: 'twitter.png',
+      path: '/app/src/email_templates/twitter.png',
       cid: 'CISA Twitter'
     },
     {
       filename: 'facebook.png',
-      path: 'facebooK.png',
+      path: '/app/src/email_templates/facebooK.png',
       cid: 'CISA Facebook'
     },
     {
       filename: 'instagram.png',
-      path: 'instagram.png',
+      path: '/app/src/email_templates/instagram.png',
       cid: 'CISA Instagram'
     }]
   };
@@ -196,37 +196,37 @@ export const sendRegionalAdminNotificationEmail = async (
     html: htmlToSend,
     attachments: [{
       filename: 'banner.png',
-      path: 'banner.png',
+      path: '/app/src/email_templates/banner.png',
       cid: 'CISA Banner'
     },
     {
       filename: 'web.png',
-      path: 'banner.png',
+      path: '/app/src/email_templates/banner.png',
       cid: 'CISA Web'
     },
     {
       filename: 'email.png',
-      path: 'email.png',
+      path: '/app/src/email_templates/email.png',
       cid: 'CISA Email'
     },
     {
       filename: 'linkedin.png',
-      path: 'linkedin.png',
+      path: '/app/src/email_templates/linkedin.png',
       cid: 'CISA LinkedIn'
     },
     {
       filename: 'twitter.png',
-      path: 'twitter.png',
+      path: '/app/src/email_templates/twitter.png',
       cid: 'CISA Twitter'
     },
     {
       filename: 'facebook.png',
-      path: 'facebooK.png',
+      path: '/app/src/email_templates/facebooK.png',
       cid: 'CISA Facebook'
     },
     {
       filename: 'instagram.png',
-      path: 'instagram.png',
+      path: '/app/src/email_templates/instagram.png',
       cid: 'CISA Instagram'
     }]
   };
