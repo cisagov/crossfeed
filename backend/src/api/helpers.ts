@@ -162,7 +162,7 @@ export const sendUserNotificationEmail = async (
         path: '/app/src/email_templates/instagram.png',
         cid: 'CISA Instagram'
       }
-  ]
+    ]
   };
 
   await transporter.sendMail(mailOptions);
@@ -233,7 +233,7 @@ export const sendRegionalAdminNotificationEmail = async (
         path: '/app/src/email_templates/instagram.png',
         cid: 'CISA Instagram'
       }
-  ]
+    ]
   };
 
   await transporter.sendMail(mailOptions);
