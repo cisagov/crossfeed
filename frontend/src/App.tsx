@@ -16,6 +16,7 @@ import {
 import {
   Domain,
   AuthLogin,
+  AuthLoginCreate,
   AuthCreateAccount,
   Scans,
   Scan,
@@ -114,7 +115,7 @@ const App: React.FC = () => (
                     path="/registration"
                     render={() => <Redirect to="/inventory" />}
                     unauth={(props) => (
-                      <AuthLogin {...props} showSignUp={true} />
+                      <AuthLoginCreate {...props} showSignUp={true} />
                     )}
                     component={Risk}
                   />
