@@ -868,7 +868,7 @@ export const updateV2 = wrapHandler(async (event) => {
 /**
  * @swagger
  *
- * /v2/organizations/{orgId}/users
+ * /v2/organizations/{orgId}/users:
  *  post:
  *    description: Add a user to a particular organization.
  *    parameters:
