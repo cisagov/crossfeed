@@ -106,6 +106,8 @@ export const RegisterForm: React.FC<{
   });
 
   const { apiPost, setFeedbackMessage } = useAuthContext();
+  console.log('apiPost: ', apiPost);
+  console.log('setFeedbackMessage: ', setFeedbackMessage);
 
   const registerUserPost = async (body: Object) => {
     try {
@@ -114,12 +116,14 @@ export const RegisterForm: React.FC<{
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       };
-      const response = await fetch(process.env.REACT_APP_API_URL + '/users/register',
-        requestOptions);
+      const response = await fetch(
+        process.env.REACT_APP_API_URL + '/users/register',
+        requestOptions
+      );
       const data = await response.json();
       // Handle the response data here
       console.log(data);
-      return data
+      return data;
     } catch (error) {
       // Handle any errors here
       console.error(error);
@@ -283,7 +287,9 @@ export const RegisterForm: React.FC<{
             onChange={handleChange}
           >
             {STATE_OPTIONS.map((state: string, index: number) => (
-              <MenuItem value={state}>{state}</MenuItem>
+              <MenuItem key={index} value={state}>
+                {state}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>

@@ -129,7 +129,6 @@ const App: React.FC = () => (
                     path="/create-account"
                     component={AuthCreateAccount}
                   />
-                  // TODO: Finalize Registration Route Component(Approved create account)
                   <Route exact path="/terms" component={TermsOfUse} />
 
                   <RouteGuard exact path="/inventory" component={SearchPage} />

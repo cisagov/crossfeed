@@ -6,11 +6,7 @@ import { useAuthContext } from 'context';
 import {
   Authenticator,
   ThemeProvider,
-  useAuthenticator,
-  Button as AmplifyButton,
-  View,
-  Text,
-  SelectField
+  useAuthenticator
 } from '@aws-amplify/ui-react';
 import { I18n } from 'aws-amplify';
 
