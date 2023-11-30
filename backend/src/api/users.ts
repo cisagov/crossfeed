@@ -612,7 +612,7 @@ export const register = wrapHandler(async (event) => {
     "Crossfeed Registration Pending", 
     newUser.firstName, 
     newUser.lastName,
-    "../../email_templates/crossfeed_registration_notification.html"
+    "/app/src/email_templates/crossfeed_registration_notification.html"
   );
   // Send new user pending approval email to regionalAdmin
   // TODO: replace with html email function to regianlAdmin
@@ -662,9 +662,21 @@ export const registrationApproval = wrapHandler(async (event) => {
   //   UpdateUser,
   //   event.body
   // );
-
-  // TODO: Handle Email notificaitons
-  // Add email notification logic
+  
+  // Connect to the database
+  await connectToDatabase();
+ 
+  const user = await User.findOne(userId);
+  if (!user) {
+    return NotFound;
+  }
+    
+  // Send email notification
+  sendUserNotificationEmail(user.email, 
+    "Crossfeed Registration Approved",
+    user.firstName,
+    user.lastName,
+    "/app/src/email_templates/crossfeed_approval_notification.html");
 
   // TODO: Handle Response Output
   return {

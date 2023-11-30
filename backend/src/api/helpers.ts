@@ -180,7 +180,7 @@ export const sendRegionalAdminNotificationEmail = async (
   });
 
   const fs = require('fs').promises;
-  const html = await fs.readFile('../../email_templates/crossfeed_regional_admin_notification.html', 'utf8');
+  const html = await fs.readFile('/app/src/email_templates/crossfeed_regional_admin_notification.html', 'utf8');
   const template = handlebars.compile(html);
   const data = {
     first_name: p_firstName,
