@@ -64,6 +64,120 @@ variable "frontend_cert_arn" {
   default     = "arn:aws:acm:us-east-1:563873274798:certificate/7c6a5980-80e3-47a4-9f21-cbda44b6f34c"
 }
 
+variable "log_metric_namespace" {
+  description = "log_metric_namespace"
+  type        = string
+  default     = "LogMetrics"
+}
+
+variable "log_metric_root_user" {
+  description = "log_metric_filter_root_user"
+  type        = string
+  default     = "crossfeed-staging-RootUserAccess"
+}
+
+variable "log_metric_unauthorized_api_call" {
+  description = "log_metric_filter_unauthorized_api_call"
+  type        = string
+  default     = "crossfeed-staging-UnauthorizedAPICall"
+}
+
+variable "log_metric_login_without_mfa" {
+  description = "log_metric_filter_login_without_mfa"
+  type        = string
+  default     = "crossfeed-staging-ConsoleLoginWithoutMFA"
+}
+
+variable "log_metric_iam_policy" {
+  description = "log_metric_filter_iam_policy"
+  type        = string
+  default     = "crossfeed-staging-IAMPolicyChange"
+}
+
+variable "log_metric_cloudtrail" {
+  description = "log_metric_filter_cloudtrail"
+  type        = string
+  default     = "crossfeed-staging-CloudTrailConfigurationChange"
+}
+
+variable "log_metric_login_failure" {
+  description = "log_metric_filter_login_failure"
+  type        = string
+  default     = "crossfeed-staging-ConsoleLoginFailure"
+}
+
+variable "log_metric_cmk_delete_disable" {
+  description = "log_metric_filter_cmk_delete_disable"
+  type        = string
+  default     = "crossfeed-staging-DisablingOrScheduledDeletionOfCMK"
+}
+
+variable "log_metric_s3_bucket_policy" {
+  description = "log_metric_filter_s3_bucket_policy"
+  type        = string
+  default     = "crossfeed-staging-S3BucketPolicyChange"
+}
+
+variable "log_metric_aws_config" {
+  description = "log_metric_filter_aws_config"
+  type        = string
+  default     = "crossfeed-staging-AWSConfigConfigurationChange"
+}
+
+variable "log_metric_security_group" {
+  description = "log_metric_filter_security_group"
+  type        = string
+  default     = "crossfeed-staging-SecurityGroupChange"
+}
+
+variable "log_metric_nacl" {
+  description = "log_metric_filter_nacl"
+  type        = string
+  default     = "crossfeed-staging-NACLChange"
+}
+
+variable "log_metric_network_gateway" {
+  description = "log_metric_filter_network_gateway"
+  type        = string
+  default     = "crossfeed-staging-NetworkGatewayChange"
+}
+
+variable "log_metric_route_table" {
+  description = "log_metric_filter_route_table"
+  type        = string
+  default     = "crossfeed-staging-RouteTableChange"
+}
+
+variable "log_metric_vpc" {
+  description = "log_metric_filter_vpc"
+  type        = string
+  default     = "crossfeed-staging-VPCChange"
+}
+
+variable "log_metric_ec2_shutdown" {
+  description = "log_metric_filter_ec2_shutdown"
+  type        = string
+  default     = "crossfeed-staging-EC2Shutdown"
+}
+
+variable "log_metric_db_shutdown" {
+  description = "log_metric_filter_DB_shutdown"
+  type        = string
+  default     = "crossfeed-staging-DBShutdown"
+}
+
+variable "log_metric_db_deletion" {
+  description = "log_metric_filter_db_deletion"
+  type        = string
+  default     = "crossfeed-staging-DBDeletion"
+}
+
+variable "sns_topic_alarms" {
+  description = "sns_alarm_topic_name"
+  type        = string
+  default     = "crossfeed-staging-cis-alarms"
+}
+
 variable "ssm_db_name" {
   description = "ssm_db_name"
   type        = string
@@ -212,6 +326,12 @@ variable "ssm_lg_workspace_name" {
   description = "ssm_lg_workspace_name"
   type        = string
   default     = "/crossfeed/staging/LG_WORKSPACE_NAME"
+}
+
+variable "ssm_shodan_queue_url" {
+  description = "ssm_shodan_queue_url"
+  type        = string
+  default     = "/crossfeed/staging/SHODAN_QUEUE_URL"
 }
 
 variable "cloudfront_name" {
@@ -428,4 +548,63 @@ variable "create_elk_instance" {
   description = "Whether to create a ELK instance. This instance can be used to run a ELK cluseter. It can be accessed using AWS Systems Manager Session Manager."
   type        = bool
   default     = false
+}
+
+variable "severity_critical" {
+  description = "severity_critical"
+  type        = string
+  default     = "CRITICAL"
+}
+
+variable "severity_high" {
+  description = "severity_high"
+  type        = string
+  default     = "HIGH"
+}
+
+variable "severity_medium" {
+  description = "severity_medium"
+  type        = string
+  default     = "MEDIUM"
+}
+
+variable "severity_low" {
+  description = "severity_low"
+  type        = string
+  default     = "LOW"
+}
+variable "pe_worker_ecs_repository_name" {
+  description = "pe_worker_ecs_repository_name"
+  type        = string
+  default     = "pe-staging-worker"
+}
+
+variable "pe_worker_ecs_cluster_name" {
+  description = "pe_worker_ecs_cluster_name"
+  type        = string
+  default     = "pe-staging-worker"
+}
+
+variable "pe_worker_ecs_task_definition_family" {
+  description = "pe_worker_ecs_task_definition_family"
+  type        = string
+  default     = "pe-staging-worker"
+}
+
+variable "pe_worker_ecs_log_group_name" {
+  description = "pe_worker_ecs_log_group_name"
+  type        = string
+  default     = "pe-staging-worker"
+}
+
+variable "pe_worker_ecs_role_name" {
+  description = "pe_worker_ecs_role_name"
+  type        = string
+  default     = "pe-staging-worker"
+}
+
+variable "pe_shodan_ecs_service_name" {
+  description = "pe_shodan_ecs_service_name"
+  type        = string
+  default     = "pe-staging-shodan"
 }
