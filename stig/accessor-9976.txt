@@ -1,0 +1,947 @@
+
+PLAY [ec2] *********************************************************************
+
+TASK [ubuntu2004STIG : populate package facts] *********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : install auditd] *****************************************
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238197__etc_gdm3_greeter_dconf_defaults_enable] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238198__etc_gdm3_greeter_dconf_defaults_text] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238200_vlock] **********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238202__etc_login_defs] ************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238203__etc_login_defs] ************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238207__etc_profile_d_99_terminal_tmout_sh] ****
+changed: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238209__etc_login_defs] ************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238212_ClientAliveCountMax] ********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238213_ClientAliveInterval] ********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238214_banner] *********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238214__etc_issue_net] *************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238215_ssh] ************************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if sshd.service is installed] *********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238215_sshd_active] ****************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if sshd.service is installed] *********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238215_sshd_start] *****************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238216_MACs] ***********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238217_Ciphers] ********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238218_PermitEmptyPasswords] *******************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238218_PermitUserEnvironment] ******************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238219_X11Forwarding] **************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238220_X11UseLocalhost] ************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238221__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238222__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238223__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238224__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238225__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238226__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238227__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238230_libpam_pkcs11] **************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238231_opensc_pkcs11] **************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238323__etc_security_limits_conf] **************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238325__etc_login_defs] ************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238326_telnetd] ********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238327_rsh_server] *****************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238333_net_ipv4_tcp_syncookies] ****************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238333__etc_sysctl_conf] ***********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if kdump.service is installed] ********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238334_kdump_disable] **************************
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238336_mfetp] **********************************
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238353_rsyslog] ********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if rsyslog.service is installed] ******************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238353_rsyslog_enable] *************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238354_ufw] ************************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238359__etc_apt_apt_conf_d_01_vendor_Ubuntu] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238360_apparmor] *******************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if apparmor.service is installed] *****************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238360_apparmor_enable] ************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if apparmor.service is installed] *****************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238360_apparmor_start] *************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238360_aide] ***********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238370__etc_apt_apt_conf_d_50unattended_upgrades_Remove_Unused_Dependencies] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238370__etc_apt_apt_conf_d_50unattended_upgrades_Remove_Unused_Kernel_Packages] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if ufw.service is installed] **********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238374_ufw_active] *****************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if ufw.service is installed] **********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238374_ufw_start] ******************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : PRELIM | Get audit log path] ****************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010006 | PATCH | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Install libpam-pkcs11] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010006 | AUDIT | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Check for pam_pkcs11.conf] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010006 | PATCH | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Template pam_pkcs11.conf if does not exist] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010006 | PATCH | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Set use_mappers if pam_pkcs11.conf exists] ***
+changed: [ec2_instance]
+
+TASK [ubuntu2004STIG : Get location for pam_pkcs11.conf] ***********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010009 | AUDIT | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Superuser Check In Grub.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010009 | AUDIT | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Hash Password Check In Grub.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010009 | AUDIT | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Set Fact SU Name.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010009 | AUDIT | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | No Username And Password Meet Set For Bootloader.] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010009 | AUDIT | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Verify Username And Password Meet Site Policies For Bootloader.] ***
+ok: [ec2_instance] => {
+    "msg": [
+        "Warning!! Below is your current bootloader configuration.",
+        "Please review to make sure they conform to your site policies.",
+        "Username: root ",
+        "Password Hash: password_pbkdf2 root grub.pbkdf2.sha512.10000.781ACCB849FA04117584AFA82EF6B93B658BD3F94B9CE2F24A5E4EC4FF5403C931495D2B5B7522BFE83B1F1821A75DCB0023DB4B7AD784F546FE630EAF7AB46A.F4ABC2A3C267CEE4FAC5D32D3354A353F5D4CB5687A5E3112D4AD555E5C956316E6B243515582FF90978C1FE1EC0531376D840FB6D89F76A26CF8E7DB8E5BB0D"
+    ]
+}
+
+TASK [ubuntu2004STIG : NO CONTROL ID | AUDIT | Set fact for manual task warning.] ***
+fatal: [ec2_instance]: FAILED! => {"msg": "The task includes an option with an undefined variable. The error was: 'warn_control_list' is undefined. 'warn_control_list' is undefined\n\nThe error appears to be in '/Users/loftusa/Documents/ec2_stig_11_30_2023/roles/ubuntu2004STIG/tasks/warning_facts.yml': line 17, column 3, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n# the count increases by a value of 1\n- name: \"NO CONTROL ID | AUDIT | Set fact for manual task warning.\"\n  ^ here\n"}
+
+PLAY RECAP *********************************************************************
+ec2_instance               : ok=62   changed=2    unreachable=0    failed=1    skipped=8    rescued=0    ignored=0   
+
+
+PLAY [ec2] *********************************************************************
+
+TASK [ubuntu2004STIG : populate package facts] *********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : install auditd] *****************************************
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238197__etc_gdm3_greeter_dconf_defaults_enable] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238198__etc_gdm3_greeter_dconf_defaults_text] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238200_vlock] **********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238202__etc_login_defs] ************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238203__etc_login_defs] ************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238207__etc_profile_d_99_terminal_tmout_sh] ****
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238209__etc_login_defs] ************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238212_ClientAliveCountMax] ********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238213_ClientAliveInterval] ********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238214_banner] *********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238214__etc_issue_net] *************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238215_ssh] ************************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if sshd.service is installed] *********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238215_sshd_active] ****************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if sshd.service is installed] *********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238215_sshd_start] *****************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238216_MACs] ***********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238217_Ciphers] ********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238218_PermitEmptyPasswords] *******************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238218_PermitUserEnvironment] ******************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238219_X11Forwarding] **************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238220_X11UseLocalhost] ************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238221__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238222__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238223__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238224__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238225__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238226__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238227__etc_security_pwquality_conf] ***********
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238230_libpam_pkcs11] **************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238231_opensc_pkcs11] **************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238323__etc_security_limits_conf] **************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238325__etc_login_defs] ************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238326_telnetd] ********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238327_rsh_server] *****************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238333_net_ipv4_tcp_syncookies] ****************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238333__etc_sysctl_conf] ***********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if kdump.service is installed] ********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238334_kdump_disable] **************************
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238336_mfetp] **********************************
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238353_rsyslog] ********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if rsyslog.service is installed] ******************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238353_rsyslog_enable] *************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238354_ufw] ************************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238359__etc_apt_apt_conf_d_01_vendor_Ubuntu] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238360_apparmor] *******************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if apparmor.service is installed] *****************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238360_apparmor_enable] ************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if apparmor.service is installed] *****************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238360_apparmor_start] *************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238360_aide] ***********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238370__etc_apt_apt_conf_d_50unattended_upgrades_Remove_Unused_Dependencies] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238370__etc_apt_apt_conf_d_50unattended_upgrades_Remove_Unused_Kernel_Packages] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if ufw.service is installed] **********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238374_ufw_active] *****************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : check if ufw.service is installed] **********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : stigrule_238374_ufw_start] ******************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : PRELIM | Get audit log path] ****************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010006 | PATCH | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Install libpam-pkcs11] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010006 | AUDIT | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Check for pam_pkcs11.conf] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010006 | PATCH | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Template pam_pkcs11.conf if does not exist] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010006 | PATCH | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Set use_mappers if pam_pkcs11.conf exists] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : Get location for pam_pkcs11.conf] ***********************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010009 | AUDIT | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Superuser Check In Grub.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010009 | AUDIT | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Hash Password Check In Grub.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010009 | AUDIT | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Set Fact SU Name.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010009 | AUDIT | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | No Username And Password Meet Set For Bootloader.] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010009 | AUDIT | The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. | Verify Username And Password Meet Site Policies For Bootloader.] ***
+ok: [ec2_instance] => {
+    "msg": [
+        "Warning!! Below is your current bootloader configuration.",
+        "Please review to make sure they conform to your site policies.",
+        "Username: root ",
+        "Password Hash: password_pbkdf2 root grub.pbkdf2.sha512.10000.781ACCB849FA04117584AFA82EF6B93B658BD3F94B9CE2F24A5E4EC4FF5403C931495D2B5B7522BFE83B1F1821A75DCB0023DB4B7AD784F546FE630EAF7AB46A.F4ABC2A3C267CEE4FAC5D32D3354A353F5D4CB5687A5E3112D4AD555E5C956316E6B243515582FF90978C1FE1EC0531376D840FB6D89F76A26CF8E7DB8E5BB0D"
+    ]
+}
+
+TASK [ubuntu2004STIG : NO CONTROL ID | AUDIT | Set fact for manual task warning.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010013 | PATCH | The Ubuntu operating system must automatically terminate a user session after inactivity timeouts have expired.] ***
+changed: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010048 | PATCH | The Ubuntu operating system must be configured so that remote X connections are disabled, unless to fulfill documented and validated mission requirements.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010057 | PATCH | The Ubuntu operating system must be configured so that when passwords are changed or new passwords are established, pwquality must be used. | Find the pamd settings] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010057 | PATCH | The Ubuntu operating system must be configured so that when passwords are changed or new passwords are established, pwquality must be used. | Add retry setting if exists] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010057 | PATCH | The Ubuntu operating system must be configured so that when passwords are changed or new passwords are established, pwquality must be used. | Add retry setting if doesn't exists] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010057 | PATCH | The Ubuntu operating system must be configured so that when passwords are changed or new passwords are established, pwquality must be used. | Install libpam-pwquality] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010057 | PATCH | The Ubuntu operating system must be configured so that when passwords are changed or new passwords are established, pwquality must be used. | Set the enforcing setting] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010060 | AUDIT | The Ubuntu operating system, for PKI-based authentication, must validate certificates by constructing a certification path (which includes status information) to an accepted trust anchor. | Find Section for Default Pkcs11 Module.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010060 | AUDIT | The Ubuntu operating system, for PKI-based authentication, must validate certificates by constructing a certification path (which includes status information) to an accepted trust anchor. | Set_fact] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010060 | PATCH | The Ubuntu operating system, for PKI-based authentication, must validate certificates by constructing a certification path (which includes status information) to an accepted trust anchor. | Add Ca to line If not present.] ***
+changed: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010060 | PATCH | The Ubuntu operating system, for PKI-based authentication, must validate certificates by constructing a certification path (which includes status information) to an accepted trust anchor. | Fix Commented out line and add ca.] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010060 | PATCH | The Ubuntu operating system, for PKI-based authentication, must validate certificates by constructing a certification path (which includes status information) to an accepted trust anchor. | Line Already Exisits No Ca.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010065 | PATCH | The Ubuntu operating system must electronically verify Personal Identity Verification (PIV) credentials.] ***
+changed: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010066 | PATCH | The Ubuntu operating system for PKI-based authentication, must implement a local cache of revocation data in case of the inability to access revocation information via the network. | Remove crl_auto when it does not match variable set.] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010066 | PATCH | The Ubuntu operating system for PKI-based authentication, must implement a local cache of revocation data in case of the inability to access revocation information via the network. | Remove crl_offline when it does not match variable set.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010066 | PATCH | The Ubuntu operating system for PKI-based authentication, must implement a local cache of revocation data in case of the inability to access revocation information via the network. | Update Policy crl_auto.] ***
+changed: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010066 | PATCH | The Ubuntu operating system for PKI-based authentication, must implement a local cache of revocation data in case of the inability to access revocation information via the network. | Update Policy crl_offline.] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010070 | AUDIT | The Ubuntu operating system must prohibit password reuse for a minimum of five generations. | Get password remember status] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010070 | PATCH | The Ubuntu operating system must prohibit password reuse for a minimum of five generations. | Add remember if doesn't exist] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010070 | PATCH | The Ubuntu operating system must prohibit password reuse for a minimum of five generations. | Add remember exists] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010072 | AUDIT | The Ubuntu operating system must automatically lock an account until the locked account is released by an administrator when three unsuccessful logon attempts have been made. | pam_faillock.so authfail Current] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010072 | AUDIT | The Ubuntu operating system must automatically lock an account until the locked account is released by an administrator when three unsuccessful logon attempts have been made. | pam_faillock.so authsucc Current] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010072 | PATCH | The Ubuntu operating system must automatically lock an account until the locked account is released by an administrator when three unsuccessful logon attempts have been made. | Set if no faildelay.so settings] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010072 | PATCH | The Ubuntu operating system must automatically lock an account until the locked account is released by an administrator when three unsuccessful logon attempts have been made. | Set if faildelay.so settings exist] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010072 | PATCH | The Ubuntu operating system must automatically lock an account until the locked account is released by an administrator when three unsuccessful logon attempts have been made. | Set if no faildelay.so settings] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010072 | PATCH | The Ubuntu operating system must automatically lock an account until the locked account is released by an administrator when three unsuccessful logon attempts have been made. | Set if faildelay.so settings exist] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010072 | AUDIT | The Ubuntu operating system must automatically lock an account until the locked account is released by an administrator when three unsuccessful logon attempts have been made. | Update Faillock.] ***
+ok: [ec2_instance] => (item={'regexp': '^#?\\s*audit', 'line': 'audit'})
+ok: [ec2_instance] => (item={'regexp': '^#?\\s*silent', 'line': 'silent'})
+ok: [ec2_instance] => (item={'regexp': '^#?\\s*deny', 'line': 'deny = 3'})
+ok: [ec2_instance] => (item={'regexp': '^#?\\s*fail_interval', 'line': 'fail_interval = 900'})
+ok: [ec2_instance] => (item={'regexp': '^#?\\s*unlock_time', 'line': 'unlock_time = 0'})
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010075 | AUDIT | The Ubuntu operating system must enforce a delay of at least 4 seconds between logon prompts following a failed logon attempt. | Get current faildelay.so settings] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010075 | PATCH | The Ubuntu operating system must enforce a delay of at least 4 seconds between logon prompts following a failed logon attempt. | Set if no faildelay.so settings] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010075 | PATCH | The Ubuntu operating system must enforce a delay of at least 4 seconds between logon prompts following a failed logon attempt. | Set if faildelay.so settings exist] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010122 | AUDIT | The Ubuntu operating system must be configured so that audit log files are not read or write-accessible by unauthorized users. | Get File Permissions.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010122 | PATCH | The Ubuntu operating system must be configured so that audit log files are not read or write-accessible by unauthorized users. | Adjust Aduit Log Files If Higher Then 0600.] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : "MEDIUM | UBTU-20-010123 | AUDIT | The Ubuntu operating system must be configured to permit only authorized users ownership of the audit log files. | Find Files."
+"MEDIUM | UBTU-20-010124 | AUDIT | The Ubuntu operating system must permit only authorized groups ownership of the audit log files. | Find Files."] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : "MEDIUM | UBTU-20-010123 | PATCH | The Ubuntu operating system must be configured to permit only authorized users ownership of the audit log files. | Set Permissions."
+"MEDIUM | UBTU-20-010124 | PATCH | The Ubuntu operating system must permit only authorized groups ownership of the audit log files. | Set Permissions."] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010142 | PATCH | The Ubuntu operating system must generate audit records for any use of the setxattr, fsetxattr, lsetxattr, removexattr, fremovexattr, and lremovexattr system calls.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010148 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chown, fchown, fchownat, and lchown system calls.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010152 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chmod, fchmod, and fchmodat system calls.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010155 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the creat, open, openat, open_by_handle_at, truncate, and ftruncate system calls.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010161 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the sudo command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010162 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the sudoedit command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010163 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chsh command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010164 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the newgrp command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010165 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chcon command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010166 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the apparmor_parser command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010167 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the setfacl command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010168 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chacl command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010169 | PATCH | The Ubuntu operating system must generate audit records for the use and modification of the tallylog file.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010170 | PATCH | The Ubuntu operating system must generate audit records for the use and modification of faillog file.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc//99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010171 | PATCH | The Ubuntu operating system must generate audit records for the use and modification of the lastlog file.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010172 | PATCH |  The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the passwd command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010173 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the unix_update command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010174 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the gpasswd command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010175 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chage command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010176 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the usermod command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010177 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the crontab command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010178 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the pam_timestamp_check command.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010179 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the init_module and finit_module syscalls.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010181 | PATCH | The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the delete_module syscall.] ***
+changed: [ec2_instance] => {
+    "msg": "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_stig_auditd.rules"
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010205 | PATCH | The Ubuntu operating system must use cryptographic mechanisms to protect the integrity of audit tools.] ***
+ok: [ec2_instance] => (item={'regexp': '# Audit Tools', 'line': '# Audit Tools'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/auditctl', 'line': '/sbin/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/auditd', 'line': '/sbin/auditd p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/ausearch', 'line': '/sbin/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/aureport', 'line': '/sbin/aureport p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/autrace', 'line': '/sbin/autrace p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/audispd', 'line': '/sbin/audispd p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/augenrules', 'line': '/sbin/augenrules p+i+n+u+g+s+b+acl+xattrs+sha512'})
+
+TASK [ubuntu2004STIG : PRELIM | Install audisp-remote plugin] ******************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010216 | PATCH | The Ubuntu operating system audit event multiplexor must be configured to off-load audit logs onto a different system or storage media from the system being audited.] ***
+ok: [ec2_instance] => (item={'path': '/etc/audisp/plugins.d/au-remote.conf', 'regexp': '(?i)^#?active =', 'line': 'active = yes'})
+ok: [ec2_instance] => (item={'path': '/etc/audisp/audisp-remote.conf', 'regexp': '(?i)^#?remote_server =', 'line': 'remote_server = 10.10.10.10'})
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010401 | AUDIT | The Ubuntu operating system must restrict access to the kernel message buffer. | Find current status.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010401 | AUDIT | The Ubuntu operating system must restrict access to the kernel message buffer. | Set restrict to 1.] ***
+changed: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010403 | PATCH | The Ubuntu operating system must monitor remote access methods. | Get existing files] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010403 | PATCH | The Ubuntu operating system must monitor remote access methods. | Set settings] ***
+ok: [ec2_instance] => (item={'regexp': '^auth.*,authpriv.*', 'line': 'auth.*,authpriv.*               /var/log/secure'})
+ok: [ec2_instance] => (item={'regexp': '^daemon.*|#daemon.*', 'line': 'daemon.*                        /var/log/messages'})
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010437 | PATCH | The Ubuntu operating system must notify designated personnel if baseline configurations are changed in an unauthorized manner. The file integrity tool must notify the system administrator when changes to the baseline configuration or anomalies in the operation of any security functions are discovered.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010403 | PATCH | The Ubuntu operating system must monitor remote access methods. | Get existing files] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010403 | PATCH | The Ubuntu operating system must monitor remote access methods. | Set settings] ***
+ok: [ec2_instance] => (item={'regexp': '^auth.*,authpriv.*', 'line': 'auth.*,authpriv.*               /var/log/secure'})
+ok: [ec2_instance] => (item={'regexp': '^daemon.*|#daemon.*', 'line': 'daemon.*                        /var/log/messages'})
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010409 | AUDIT | The Ubuntu operating system must disable account identifiers (individuals, groups, roles, and devices) after 35 days of inactivity. | Get useradd inactive value] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010409 | PATCH | The Ubuntu operating system must disable account identifiers (individuals, groups, roles, and devices) after 35 days of inactivity. | Set INACTIVE] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010415 | AUDIT | The Ubuntu operating system must deploy Endpoint Security for Linux Threat Prevention (ENSLTP). | Check For Install.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010415 | AUDIT | The Ubuntu operating system must deploy Endpoint Security for Linux Threat Prevention (ENSLTP). | Check that the daemon is running.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010415 | AUDIT | The Ubuntu operating system must deploy Endpoint Security for Linux Threat Prevention (ENSLTP). | Not Installed Warning Message.] ***
+ok: [ec2_instance] => {
+    "msg": [
+        "Warning!! Mcafee Endpoint Security for Linux Threat Prevention is not installed on the system.",
+        "Please install from your vendor portal and install on the system."
+    ]
+}
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010415 | AUDIT | The Ubuntu operating system must deploy Endpoint Security for Linux Threat Prevention (ENSLTP). | Installed But Not Running Message.] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : NO CONTROL ID | AUDIT | Set fact for manual task warning.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010416 | AUDIT | The Ubuntu operating system must generate error messages that provide information necessary for corrective actions without revealing information that could be exploited by adversaries. | Audit Files For Permissions] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010416 | PATCH | The Ubuntu operating system must generate error messages that provide information necessary for corrective actions without revealing information that could be exploited by adversaries. | Fix files] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010419 | AUDIT | The Ubuntu operating system must configure the /var/log directory to have mode 0755 or less permissive. | Find Dir Permissions.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010419 | PATCH | The Ubuntu operating system must configure the /var/log directory to have mode 0755 or less permissive. | Change Log Dir Permissions.] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : "MEDIUM | UBTU-20-010428 | AUDIT | The Ubuntu operating system library files must be owned by root. | Get library files not owned by root"
+"MEDIUM | UBTU-20-010430 | AUDIT | The Ubuntu operating system library files must be group-owned by root. | Get library files not group-owned by root"] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : "MEDIUM | UBTU-20-010428 | PATCH | The Ubuntu operating system library files must be owned by root. | Set library files to be owned by root"
+"MEDIUM | UBTU-20-010430 | PATCH | The Ubuntu operating system library files must be group-owned by root. | Set library files not group-owned by root"] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : PRELIM | Install Chrony] ********************************
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010435 | PATCH | The Ubuntu operating system must, for networked systems, compare internal information system clocks at least every 24 hours with a server which is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, or a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS).] ***
+ok: [ec2_instance] => (item=tick.usno.navy.mil)
+ok: [ec2_instance] => (item=tock.usno.navy.mil)
+ok: [ec2_instance] => (item=ntp2.usno.navy.mil)
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010436 | PATCH |  The Ubuntu operating system must synchronize internal information system clocks to the authoritative time source when the time difference is greater than one second.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010437 | PATCH | The Ubuntu operating system must notify designated personnel if baseline configurations are changed in an unauthorized manner. The file integrity tool must notify the system administrator when changes to the baseline configuration or anomalies in the operation of any security functions are discovered.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010441 | PATCH | The Ubuntu operating system must be configured such that Pluggable Authentication Module (PAM) prohibits the use of cached authentications after one day.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010442 | AUDIT | The Ubuntu operating system must implement NIST FIPS-validated cryptography to protect classified information and for the following: To provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards. | Alert no fips-mode] ***
+ok: [ec2_instance] => {
+    "msg": [
+        "Warning!! You do not have FIPS-Mode enabled. This is a finding, please enable to conform to STIG standards",
+        "A subscription to the Ubuntu Pro plan is required to obtain the FIPS Kernel cryptographic modules and enable FIPS"
+    ]
+}
+
+TASK [ubuntu2004STIG : NO CONTROL ID | AUDIT | Set fact for manual task warning.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010447 | AUDIT | The Ubuntu operating system must implement nonexecutable data to protect its memory from unauthorized code execution. | Check No execution bit flag.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010447 | AUDIT | The Ubuntu operating system must implement nonexecutable data to protect its memory from unauthorized code execution. | Dmesg Does Not Contain NX (Execute Disable) protection active.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010447 | AUDIT | The Ubuntu operating system must implement nonexecutable data to protect its memory from unauthorized code execution. | Warning Out.] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : NO CONTROL ID | AUDIT | Set fact for manual task warning.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010453 | AUDIT | The Ubuntu operating system must display the date and time of the last successful account logon upon logon. | Get pam_lastlog.so showfailed status] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010453 | PATCH | The Ubuntu operating system must display the date and time of the last successful account logon upon logon. | Set if noshowfail exists] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010453 | PATCH | The Ubuntu operating system must display the date and time of the last successful account logon upon logon. | Set if no noshowfail] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : "MEDIUM | UBTU-20-010456 | AUDIT | The Ubuntu operating system must have system ansible.builtin.shells set to a mode of 0755 or less permissive. | Get OS commands with mode less than 755"
+"MEDIUM | UBTU-20-010457 | AUDIT | The Ubuntu operating system must have system commands owned by root or a system account. | Get OS commands not owned by root"
+"MEDIUM | UBTU-20-010458 | PATCH | The Ubuntu operating system must have system commands group-owned by root or a system account. | Get OS commands not group-owned by root"] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : "MEDIUM | UBTU-20-010456 | PATCH | The Ubuntu operating system must have system commands set to a mode of 0755 or less permissive. | Set OS commands with mode 755 or more restricive"
+"MEDIUM | UBTU-20-010457 | PATCH | The Ubuntu operating system must have system commands owned by root or a system account. | Set OS commands not owned by root to owned by root"
+"MEDIUM | UBTU-20-010458 | PATCH | The Ubuntu operating system must have system commands group-owned by root or a system account. | Set OS commands not group-owned by root to root"] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : HIGH | UBTU-20-010460 | PATCH | The Ubuntu operating system must disable the x86 Ctrl-Alt-Delete key sequence.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010461 | PATCH | The Ubuntu operating system must disable automatic mounting of Universal Serial Bus (USB) mass storage driver. | Set modprobe config] ***
+ok: [ec2_instance] => (item={'regexp': '^install usb-storage', 'line': 'install usb-storage /bin/true'})
+ok: [ec2_instance] => (item={'regexp': '^blacklist usb-storage', 'line': 'blacklist usb-storage'})
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010461 | PATCH | The Ubuntu operating system must disable automatic mounting of Universal Serial Bus (USB) mass storage driver. | Remove USB storage module] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010045 | PATCH | The Ubuntu operating system SSH server must be configured to use only FIPS-validated key exchange algorithms.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010118 | PATCH | The Ubuntu operating system must shut down by default upon audit failure (unless availability is an overriding concern).] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : PRELIM | Install Chrony] ********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010435 | PATCH | The Ubuntu operating system must, for networked systems, compare internal information system clocks at least every 24 hours with a server which is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, or a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS).] ***
+ok: [ec2_instance] => (item=tick.usno.navy.mil)
+ok: [ec2_instance] => (item=tock.usno.navy.mil)
+ok: [ec2_instance] => (item=ntp2.usno.navy.mil)
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010419 | PATCH | The Ubuntu operating system must configure the /var/log directory to have mode 0755 or less permissive. | Change Log Dir Permissions.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010416 | AUDIT | The Ubuntu operating system must generate error messages that provide information necessary for corrective actions without revealing information that could be exploited by adversaries. | Audit Files For Permissions] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010416 | PATCH | The Ubuntu operating system must generate error messages that provide information necessary for corrective actions without revealing information that could be exploited by adversaries. | Fix files] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010408 | PATCH | The Ubuntu operating system must prevent direct login into the root account.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010403 | PATCH | The Ubuntu operating system must monitor remote access methods. | Get existing files] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010403 | PATCH | The Ubuntu operating system must monitor remote access methods. | Set settings] ***
+ok: [ec2_instance] => (item={'regexp': '^auth.*,authpriv.*', 'line': 'auth.*,authpriv.*               /var/log/secure'})
+ok: [ec2_instance] => (item={'regexp': '^daemon.*|#daemon.*', 'line': 'daemon.*                        /var/log/messages'})
+
+TASK [ubuntu2004STIG : PRELIM | Install AIDE] **********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010205 | PATCH | The Ubuntu operating system must use cryptographic mechanisms to protect the integrity of audit tools.] ***
+ok: [ec2_instance] => (item={'regexp': '# Audit Tools', 'line': '# Audit Tools'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/auditctl', 'line': '/sbin/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/auditd', 'line': '/sbin/auditd p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/ausearch', 'line': '/sbin/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/aureport', 'line': '/sbin/aureport p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/autrace', 'line': '/sbin/autrace p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/audispd', 'line': '/sbin/audispd p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/augenrules', 'line': '/sbin/augenrules p+i+n+u+g+s+b+acl+xattrs+sha512'})
+
+TASK [ubuntu2004STIG : PRELIM | Install audisp-remote plugin] ******************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010216 | PATCH | The Ubuntu operating system audit event multiplexor must be configured to off-load audit logs onto a different system or storage media from the system being audited.] ***
+ok: [ec2_instance] => (item={'path': '/etc/audisp/plugins.d/au-remote.conf', 'regexp': '(?i)^#?active =', 'line': 'active = yes'})
+ok: [ec2_instance] => (item={'path': '/etc/audisp/audisp-remote.conf', 'regexp': '(?i)^#?remote_server =', 'line': 'remote_server = 10.10.10.10'})
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010198 | Arating system musUDIT | The Ubuntu opet initiate session audits at system startup. | Get GRUB_CMDLINE_LINUX] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010198 | PATCH | The Ubuntu operating system must initiate session audits at system startup. | Add setting if audit doesn't exist] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010198 | PATCH | The Ubuntu operating system must initiate session audits at system startup. | Add setting if audit exists] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010013 | PATCH | The Ubuntu operating system must automatically terminate a user session after inactivity timeouts have expired.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010014 | PATCH | The Ubuntu operating system must require users to reauthenticate for privilege escalation or when changing roles. | Get sudoers nopasswd files] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010014 | PATCH | The Ubuntu operating system must require users to reauthenticate for privilege escalation or when changing roles. | Get sudoers authenticate files] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010014 | PATCH | The Ubuntu operating system must require users to reauthenticate for privilege escalation or when changing roles. | Replace NOPASSWD Finds.] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010014 | PATCH | The Ubuntu operating system must require users to reauthenticate for privilege escalation or when changing roles. | Replace authenticate Finds.] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010045 | PATCH | The Ubuntu operating system SSH server must be configured to use only FIPS-validated key exchange algorithms.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010118 | PATCH | The Ubuntu operating system must shut down by default upon audit failure (unless availability is an overriding concern).] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : PRELIM | Get audit log path] ****************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010122 | AUDIT | The Ubuntu operating system must be configured so that audit log files are not read or write-accessible by unauthorized users. | Get File Permissions.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010122 | PATCH | The Ubuntu operating system must be configured so that audit log files are not read or write-accessible by unauthorized users. | Adjust Aduit Log Files If Higher Then 0600.] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : "MEDIUM | UBTU-20-010123 | AUDIT | The Ubuntu operating system must be configured to permit only authorized users ownership of the audit log files. | Find Files."
+"MEDIUM | UBTU-20-010124 | AUDIT | The Ubuntu operating system must permit only authorized groups ownership of the audit log files. | Find Files."] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : "MEDIUM | UBTU-20-010123 | PATCH | The Ubuntu operating system must be configured to permit only authorized users ownership of the audit log files. | Set Permissions."
+"MEDIUM | UBTU-20-010124 | PATCH | The Ubuntu operating system must permit only authorized groups ownership of the audit log files. | Set Permissions."] ***
+skipping: [ec2_instance]
+
+RUNNING HANDLER [ubuntu2004STIG : reload kernel system] ************************
+changed: [ec2_instance]
+
+RUNNING HANDLER [ubuntu2004STIG : update auditd] *******************************
+changed: [ec2_instance]
+
+RUNNING HANDLER [ubuntu2004STIG : reload auditd] *******************************
+changed: [ec2_instance]
+
+RUNNING HANDLER [ubuntu2004STIG : restart auditd] ******************************
+changed: [ec2_instance]
+
+PLAY RECAP *********************************************************************
+ec2_instance               : ok=170  changed=33   unreachable=0    failed=0    skipped=34   rescued=0    ignored=0   
+

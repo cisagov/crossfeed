@@ -1,0 +1,344 @@
+#
+# Configuration file for pam_pkcs11 module
+#
+# Version 0.4
+# Author: Juan Antonio Martinez <jonsito@teleline.es>
+#
+pam_pkcs11 {
+  # Allow empty passwords
+  nullok = true;
+
+  # Enable debugging support.
+  debug = true; 
+
+  # Do not prompt the user for the passwords but take them from the
+  # PAM_ items instead.
+  use_first_pass = false;
+
+  # Do not prompt the user for the passwords unless PAM_(OLD)AUTHTOK
+  # is unset.
+  try_first_pass = false;
+
+  # Like try_first_pass, but fail if the new PAM_AUTHTOK has not been
+  # previously set (intended for stacking password modules only).
+  use_authtok = false;
+
+  # card_only means:
+  #  1) always get the userid from the certificate.
+  #  2) don't prompt for the user name if the card is present.
+  #  3) if the token is present, then we must use the cardAuth mechanism.
+  card_only = false;
+
+  # wait_for_card means:
+  #  1) nothing if card_only isn't set
+  #  2) if logged in, block in pam conversation until the token used for login
+  #     is inserted
+  #  3) if not logged in, block until a token that could be used for logging in
+  #     is inserted
+  # right now, logged in means PKC11_LOGIN_TOKEN_NAME is set,
+  # but we could something else later (like set some per-user state in
+  # a pam session module keyed off uid)
+  wait_for_card = false;
+
+  # List of screen saver services.
+  # This list is only parsed if card_only is set.  Basically the screen saver
+  # will bypass pam_pkcs11 if a token was not used to login (The basic idea is
+  # you always unlock the screen saver with the same mechanism you used to
+  # login).
+  screen_savers = xfce4-screensaver, mate-screensaver, gnome-screensaver, kde4-kscreensaver, kscreensaver, xscreensaver;
+
+  # Filename of the PKCS #11 module. The default value is "default"
+  use_pkcs11_module = opensc;
+
+  pkcs11_module opensc {
+    module = /usr/lib/opensc-pkcs11.so;
+    description = "OpenSC PKCS#11 module";
+
+    # Which slot to use?
+    # You can use "slot_num" or "slot_description", but not both, to specify
+    # the slot to use.   Using "slot_description" is preferred because the
+    # PKCS#11 specification does not guarantee slot ordering. "slot_num" should
+    # only be used with those PKCS#11 implementations that guarantee
+    # constant slot numbering.
+    #
+    #  slot_description = "xxxx"
+    #      The slot is specified by the slot description, for example, 
+    #      slot_description = "Sun Crypto Softtoken".  The default value is
+    #      "none" which means to use the first slot with an available token.
+    #
+    #  slot_num = a_number
+    #      The slot is specified by the slot number, for example, slot_num = 1.
+    #      The default value is zero which means to use the first slot with an
+    #      available token.
+    #
+    slot_description = "none";
+
+    # Where are CA certificates stored?
+    # You can setup this value to:
+    # 1- A directory with openssl hash-links to all certificates
+    # 2- A CA file in PEM (.pem) or ASN1 (.cer) format, 
+    # containing all allowed CA certs
+    # The default value is /etc/pam_pkcs11/cacerts.
+    ca_dir = /etc/pam_pkcs11/cacerts;
+  
+    # Path to the directory where the local (offline) CRLs are stored.
+    # Same convention as above is applied: you can choose either
+    # hash-link directory or CRL file
+    # The default value is /etc/pam_pkcs11/crls.
+    crl_dir = /etc/pam_pkcs11/crls;
+  
+    # Some pcks#11 libraries can handle multithreading. So 
+    # set it to true to properly call C_Initialize() 
+    support_threads = false;
+
+    # Sets the Certificate verification policy. 
+    # "none"        Performs no verification
+    # "ca"          Does CA check
+    # "crl_online"  Downloads the CRL form the location given by the
+    #               CRL distribution point extension of the certificate
+    # "crl_offline" Uses the locally stored CRLs
+    # "crl_auto"    Is a combination of online and offline; it first 
+    #               tries to download the CRL from a possibly given CRL 
+    #               distribution point and if this fails, uses the local
+    #               CRLs
+    # "signature"   Does also a signature check to ensure that private
+    #               and public key matches
+    # You can use a combination of ca,crl, and signature flags, or just
+    # use "none".
+    cert_policy = ca,signature;
+
+    # What kind of token?
+    # The value of the token_type parameter will be used in the user prompt
+    # messages.   The default value is "Smart card".
+    token_type = "Smart card";
+  }
+
+  # Aladdin eTokenPRO 32
+  pkcs11_module etoken {
+    module = /usr/local/lib/libetpkcs11.so
+    description = "Aladdin eTokenPRO-32";
+    slot_num = 0;
+    support_threads = true;
+    ca_dir = /etc/pam_pkcs11/cacerts;
+    crl_dir = /etc/pam_pkcs11/crls;
+    cert_policy = ca,signature;
+  }
+
+  # NSS (Network Security Service) config
+  pkcs11_module nss {
+    nss_dir = /etc/ssl/nssdb;
+    crl_policy = none;
+  }
+
+  # Default pkcs11 module
+  pkcs11_module default {
+    module = @libdir@/pam_pkcs11/pkcs11_module.so;
+    description = "Default pkcs#11 module";
+    slot_num = 0;
+    support_threads = false;
+    ca_dir = /etc/pam_pkcs11/cacerts;
+    crl_dir = /etc/pam_pkcs11/crls;
+    cert_policy = none;
+  }
+
+  # Which mappers ( Cert to login ) to use?
+  # you can use several mappers:
+  #
+  # subject - Cert Subject to login file based mapper
+  # pwent   - CN to getpwent() login or gecos fields mapper
+  # ldap    - LDAP mapper
+  # opensc  - Search certificate in ${HOME}/.eid/authorized_certificates
+  # openssh - Search certificate public key in ${HOME}/.ssh/authorized_keys
+  # mail    - Compare email fields from certificate
+  # ms      - Use Microsoft Universal Principal Name extension
+  # krb     - Compare against Kerberos Principal Name
+  # cn      - Compare Common Name (CN)
+  # uid     - Compare Unique Identifier
+  # digest  - Certificate digest to login (mapfile based) mapper
+  # generic - User defined certificate contents mapped
+  # null    - blind access/deny mapper
+  #
+  # You can select a comma-separated mapper list.
+  # If used null mapper should be the last in the list :-)
+  # Also you should select at least one mapper, otherwise
+  # certificate will not match :-)
+  use_mappers = pwent;
+
+  # When no absolute path or module info is provided, use this
+  # value as module search path
+  # TODO:
+  # This is not still functional: use absolute pathnames or LD_LIBRARY_PATH 
+  mapper_search_path = @libdir@/pam_pkcs11;
+
+  # 
+  # Generic certificate contents mapper
+  mapper generic {
+        debug = true;
+        #module = @libdir@/pam_pkcs11/generic_mapper.so;
+        module = internal;
+        # ignore letter case on match/compare
+        ignorecase = false;
+        # Use one of "cn" , "subject" , "kpn" , "email" , "upn" , "uid" or "serial"
+        cert_item  = cn;
+        # Define mapfile if needed, else select "none"
+        mapfile = file:///etc/pam_pkcs11/generic_mapping;
+        # Decide if use getpwent() to map login
+        use_getpwent = false;
+  }
+
+  # Certificate Subject to login based mapper
+  # provided file stores one or more "Subject -> login" lines
+  mapper subject {
+	debug = false;
+	# module = @libdir@/pam_pkcs11/subject_mapper.so;
+	module = internal;
+	ignorecase = false;
+	mapfile = file:///etc/pam_pkcs11/subject_mapping;
+  }
+
+  # Search public keys from $HOME/.ssh/authorized_keys to match users
+  mapper openssh {
+	debug = false;
+	module = @libdir@/pam_pkcs11/openssh_mapper.so;
+  }
+
+  # Search certificates from $HOME/.eid/authorized_certificates to match users
+  mapper opensc {
+	debug = false;
+	module = @libdir@/pam_pkcs11/opensc_mapper.so;
+  }
+
+  # Certificate Common Name ( CN ) to getpwent() mapper
+  mapper pwent {
+	debug = false;
+	ignorecase = false;
+	module = internal;
+	# module = @libdir@/pam_pkcs11/pwent_mapper.so;
+  }
+
+  # Null ( no map ) mapper. when user as finder matches to NULL or "nobody"
+  mapper null {
+	debug = false;
+	# module = @libdir@/pam_pkcs11/null_mapper.so;
+	module = internal ;
+	# select behavior: always match, or always fail
+	default_match = false;
+	# on match, select returned user
+        default_user = nobody ;
+  }
+
+  # Directory ( ldap style ) mapper
+  mapper ldap {
+	debug = false;
+	module = @libdir@/pam_pkcs11/ldap_mapper.so;
+	# hostname of ldap server (use LDAP-URI for more then one)
+	ldaphost = "";
+	# Port on ldap server to connect, this is also the default
+	#   if no port is given in URI below
+	#   if empty, then 389 for TLS and 636 for SSL is used
+	ldapport = ;
+	# space separated list of LDAP URIs (URIs are used by given order)
+	URI = "";
+	# Scope of search: 0-2
+	#   Default is 1 = "one", meaning the set of records one
+	#   level below the basedn.
+	#   0 = "base"  means search only the basedn, and
+	#   2 = "sub"  means the union of entries at the "base" level
+	#   and ? all or "one" level below ??? FIXME
+	scope = 2;
+	# DN to bind with. Must have read-access for user entries
+	# under "base"
+	binddn = "cn=pam,o=example,c=com";
+	# Password for above DN
+	passwd = "";
+	# Searchbase for user entries
+	base = "ou=People,o=example,c=com";
+	# Attribute of user entry which contains the certificate
+	attribute = "userCertificate";
+	# Searchfilter for user entry. Must only let pass user entry
+	# for the login user.
+	filter = "(&(objectClass=posixAccount)(uid=%s))"
+	# SSL/TLS-Switch
+	#   This is a global switch, you can't switch between
+	#   SSL or TLS and non secured connections per URI!
+	#   values: off (standard), tls or on (ssl) or ssl
+	ssl = tls
+	# SSL specific settings
+	# tls_randfile = ...
+	tls_cacertfile = /etc/ssl/cacert.pem
+	# tls_cacertdir = ...
+	tls_checkpeer = 0
+	#tls_ciphers = ...
+	#tls_cert = ...
+	#tls_key = ...
+  }
+
+  # Assume common name (CN) to be the login
+  mapper cn {
+	debug = false;
+	module = internal;
+	# module = @libdir@/pam_pkcs11/cn_mapper.so;
+	ignorecase = true;
+	# mapfile = file:///etc/pam_pkcs11/cn_map;
+	mapfile = "none";
+  }
+
+  # mail -  Compare email field from certificate
+  mapper mail {
+	debug = false;
+	module = internal;
+	# module = @libdir@/pam_pkcs11/mail_mapper.so;
+	# Declare mapfile or
+	# leave empty "" or "none" to use no map 
+	mapfile = file:///etc/pam_pkcs11/mail_mapping;
+	# Some certs store email in uppercase. take care on this
+	ignorecase = true;
+	# Also check that host matches mx domain
+	# when using mapfile this feature is ignored
+	ignoredomain = false;
+  }
+
+  # ms - Use Microsoft Universal Principal Name extension
+  # UPN is in format login@ADS_Domain. No map is needed, just
+  # check domain name.
+  mapper ms {
+	debug = false;
+	module = internal;
+	# module = @libdir@/pam_pkcs11/ms_mapper.so;
+	ignorecase = false;
+	ignoredomain = false;
+	domainname = "domain.com";
+  }
+
+  # krb  - Compare against Kerberos Principal Name
+  mapper krb {
+	debug = false;
+	module = internal;
+	# module = @libdir@/pam_pkcs11/krb_mapper.so;
+	ignorecase = false;
+	mapfile = "none";
+  }
+
+  # uid  - Maps Subject Unique Identifier field (if exist) to login
+  mapper uid {
+	debug = false;
+	module = internal;
+	# module = @libdir@/pam_pkcs11/uid_mapper.so;
+	ignorecase = false;
+	mapfile = "none";
+  }
+
+  # digest - elaborate certificate digest and map it into a file
+  mapper digest {
+	debug = false;
+	module = internal;
+	# module = @libdir@/pam_pkcs11/digest_mapper.so;
+	# algorithm used to evaluate certificate digest
+        # Select one of:
+	# "null","md2","md4","md5","sha","sha1","dss","dss1","ripemd160"
+	algorithm = "sha1";
+	mapfile = file:///etc/pam_pkcs11/digest_mapping;
+	# mapfile = "none";
+  }
+
+}

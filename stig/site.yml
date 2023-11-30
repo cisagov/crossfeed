@@ -1,0 +1,5 @@
+- hosts: ec2
+  gather_facts: no
+  become: true
+  roles:
+    - ubuntu2004STIG

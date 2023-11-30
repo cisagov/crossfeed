@@ -1,0 +1,7 @@
+ec2:
+  hosts:
+    ec2_instance:
+      ansible_host: localhost
+      ansible_port: 9976
+      ansible_user: ubuntu
+      ansible_ssh_private_key_file: ~/.ssh/accessor_rsa

@@ -1,0 +1,125 @@
+## This file is managed by Ansible, YOUR CHANGES WILL BE LOST!!
+
+# This template will set all of the auditd configurations via a handler in the role in one task instead of individually
+{% if ubtu_20_010100 %}
+-w /etc/passwd -p wa -k usergroup_modification
+{% endif %}
+{% if ubtu_20_010101 %}
+-w /etc/group -p wa -k usergroup_modification
+{% endif %}
+{% if ubtu_20_010102 %}
+-w /etc/shadow -p wa -k usergroup_modification
+{% endif %}
+{% if ubtu_20_010103 %}
+-w /etc/gshadow -p wa -k usergroup_modification
+{% endif %}
+{% if ubtu_20_010104 %}
+-w /etc/security/opasswd -p wa -k usergroup_modification
+{% endif %}
+{% if ubtu_20_010136 %}
+-a always,exit -F path=/bin/su -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-priv_change
+{% endif %}
+{% if ubtu_20_010137 %}
+-a always,exit -F path=/usr/bin/chfn -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-chfn
+{% endif %}
+{% if ubtu_20_010138 %}
+-a always,exit -F path=/usr/bin/mount -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-mount
+{% endif %}
+{% if ubtu_20_010139 %}
+-a always,exit -F path=/usr/bin/umount -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-umount
+{% endif %}
+{% if ubtu_20_010140 %}
+-a always,exit -F path=/usr/bin/ssh-agent -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-ssh
+{% endif %}
+{% if ubtu_20_010141 %}
+-a always,exit -F path=/usr/lib/openssh/ssh-keysign -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-ssh
+{% endif %}
+{% if ubtu_20_010161 %}
+-a always,exit -F path=/usr/bin/sudo -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k priv_cmd
+{% endif %}
+{% if ubtu_20_010162 %}
+-a always,exit -F path=/usr/bin/sudoedit -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k priv_cmd
+{% endif %}
+{% if ubtu_20_010163 %}
+-a always,exit -F path=/usr/bin/chsh -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k priv_cmd
+{% endif %}
+{% if ubtu_20_010164 %}
+-a always,exit -F path=/usr/bin/newgrp -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k priv_cmd
+{% endif %}
+{% if ubtu_20_010165 %}
+-a always,exit -F path=/usr/bin/chcon -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k perm_chng
+{% endif %}
+{% if ubtu_20_010166 %}
+-a always,exit -F path=/sbin/apparmor_parser -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k perm_chng
+{% endif %}
+{% if ubtu_20_010167 %}
+-a always,exit -F path=/usr/bin/setfacl -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k perm_chng
+{% endif %}
+{% if ubtu_20_010168 %}
+-a always,exit -F path=/usr/bin/chacl -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k perm_chng
+{% endif %}
+{% if ubtu_20_010169 %}
+-w /var/log/tallylog -p wa -k logins
+{% endif %}
+{% if ubtu_20_010170 %}
+-w /var/log/faillog -p wa -k logins
+{% endif %}
+{% if ubtu_20_010171 %}
+-w /var/log/lastlog -p wa -k logins
+{% endif %}
+{% if ubtu_20_010172 %}
+-a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-passwd
+{% endif %}
+{% if ubtu_20_010173 %}
+-a always,exit -F path=/sbin/unix_update -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-unix-update
+{% endif %}
+{% if ubtu_20_010174 %}
+-a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-gpasswd
+{% endif %}
+{% if ubtu_20_010175 %}
+-a always,exit -F path=/usr/bin/chage -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-chage
+{% endif %}
+{% if ubtu_20_010176 %}
+-a always,exit -F path=/usr/sbin/usermod -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-usermod
+{% endif %}
+{% if ubtu_20_010177 %}
+-a always,exit -F path=/usr/bin/crontab -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-crontab
+{% endif %}
+{% if ubtu_20_010178 %}
+-a always,exit -F path=/usr/sbin/pam_timestamp_check -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-pam_timestamp_check
+{% endif %}
+{% if ubtu_20_010179 %}
+-a always,exit -F arch=b32 -S finit_module -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k module_chng
+-a always,exit -F arch=b64 -S finit_module -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k module_chng
+{% endif %}
+{% if ubtu_20_010181 %}
+-a always,exit -F arch=b32 -S delete_module -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k module_chng 
+-a always,exit -F arch=b64 -S delete_module -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k module_chng
+{% endif %}
+{% if ubtu_20_010211 %}
+-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -F key=execpriv 
+-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -F key=execpriv 
+-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -F key=execpriv 
+-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -F key=execpriv
+{% endif %}
+{% if ubtu_20_010244 %}
+-w /var/log/sudo.log -p wa -k maintenance
+{% endif %}
+{% if ubtu_20_010277 %}
+-w /var/log/wtmp -p wa -k logins
+{% endif %}
+{% if ubtu_20_010278 %}
+-w /var/run/utmp -p wa -k logins
+{% endif %}
+{% if ubtu_20_010279 %}
+-w /var/log/btmp -p wa -k logins
+{% endif %}
+{% if ubtu_20_010296 %}
+-w /sbin/modprobe -p x -k modules
+{% endif %}
+{% if ubtu_20_010297 %}
+-w /bin/kmod -p x -k modules
+{% endif %}
+{% if ubtu_20_010298 %}
+-w /bin/fdisk -p x -k fdisk
+{% endif %} 

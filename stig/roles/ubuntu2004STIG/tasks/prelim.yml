@@ -1,0 +1,157 @@
+---
+- name: "PRELIM | Include Parse /etc/passwd"
+  ansible.builtin.import_tasks: parse_etc_passwd.yml
+  when:
+    - ubtu_20_010410 or
+      ubtu_20_010000
+
+- name: "PRELIM | Run apt update"
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: "PRELIM | UBTU-20-010002 | gdm3 setup"
+  ansible.builtin.package:
+    name: gdm3
+    state: present
+  when:
+    - ubtu20stig_desktop_required
+    - "'gdm3' not in ansible_facts.packages or
+      ubtu_20_010002"
+  tags:
+    - cat2
+    - medium
+
+- name: "PRELIM | UBTU-20-010459 | dconf setup"
+  ansible.builtin.package:
+    name: dconf-cli
+    state: present
+  when:
+    - ubtu20stig_desktop_required
+    - ubtu_20_010459 or
+      ubtu_20_010002 or
+      ubtu_20_010003
+  tags:
+    - cat1
+    - high
+
+- name: "PRELIM | Install AIDE"
+  ansible.builtin.package:
+    name: ["aide", "aide-common"]
+    state: present
+  when:
+    - "'aide' not in ansible_facts.packages"
+    - ubtu_20_010205 or
+      ubtu_20_010437 or
+      ubtu_20_010450 or
+      ubtu_20_010074
+
+- name: "PRELIM | Install auditd"
+  ansible.builtin.package:
+    name: auditd
+    state: present
+  when:
+    - "'auditd' not in ansible_facts.packages"
+    - ubtu_20_010100 or
+      ubtu_20_010101 or
+      ubtu_20_010102 or
+      ubtu_20_010103 or
+      ubtu_20_010104 or
+      ubtu_20_010122 or
+      ubtu_20_010123 or
+      ubtu_20_010124 or
+      ubtu_20_010128 or
+      ubtu_20_010133 or
+      ubtu_20_010134 or
+      ubtu_20_010135 or
+      ubtu_20_010215
+
+- name: "PRELIM | Install audisp-remote plugin"
+  ansible.builtin.package:
+    name: audispd-plugins
+    state: present
+  when:
+    - ubtu_20_010216
+
+- name: "PRELIM | Install pam_pkcs11 and check for conf file and location."
+  block:
+    - name: "PRELIM | Install pam_pkcs11"
+      ansible.builtin.package:
+        name: libpam-pkcs11
+        state: present
+      when:
+        - "'libpam-pkcs11' not in ansible_facts.packages"
+
+    - name: "Check for pam_pkcs11.conf"
+      ansible.builtin.stat:
+        path: /etc/pam_pkcs11/pam_pkcs11.conf
+      register: pam_pkcs11_conf_stat
+
+    - name: "Template pam_pkcs11.conf if does not exist"
+      ansible.builtin.template:
+        src: pam_pkcs11.conf.j2
+        dest: /etc/pam_pkcs11/pam_pkcs11.conf
+      when:
+        - not pam_pkcs11_conf_stat.stat.exists
+
+    - name: "Get location for pam_pkcs11.conf"
+      ansible.builtin.shell: sudo find / -type f -name "pam_pkcs11.conf"
+      changed_when: false
+      failed_when: false
+      register: pam_pkcs11_location
+  when:
+    - ubtu_20_010060 or
+      ubtu_20_010063 or
+      ubtu_20_010064 or
+      ubtu_20_010065 or
+      ubtu_20_010060 or
+      ubtu_20_010066
+
+- name: "PRELIM | Install rsyslog"
+  ansible.builtin.package:
+    name: rsyslog
+    state: present
+  when:
+    - "'rsyslog' not in ansible_facts.packages"
+    - ubtu20stig_cat2_patch or
+      ubtu_20_010403 or
+      ubtu_20_010432
+
+- name: "PRELIM | Install sssd package"
+  ansible.builtin.package:
+    name: sssd
+    state: present
+  when:
+    - "'sssd' not in ansible_facts.packages"
+    - ubtu20stig_cat3_patch
+    - ubtu_20_010441
+
+- name: "PRELIM | Install Chrony"
+  ansible.builtin.package:
+    name: chrony
+    state: present
+  when:
+    - "'chrony' not in ansible_facts.packages"
+    - ubtu20stig_cat2_patch or
+      ubtu20stig_cat3_patch
+    - ubtu_20_010435 or
+      ubtu_20_010436
+
+- name: "PRELIM | Install Ufw"
+  ansible.builtin.package:
+    name: ufw
+    state: present
+  when:
+    - ubtu_20_010433 or
+      ubtu_20_010434 or
+      ubtu_20_010454
+
+- name: "PRELIM | Get audit log path"
+  ansible.builtin.shell: "grep -iw log_file /etc/audit/auditd.conf | cut -d' ' -f3 | sed 's:[^/]*$::'"
+  changed_when: false
+  failed_when: false
+  register: ubtu_20_audit_log_path
+  when:
+    - ubtu_20_010122 or
+      ubtu_20_010123 or
+      ubtu_20_010124 or
+      ubtu_20_010128

@@ -1,0 +1,104 @@
+
+PLAY [ec2] *********************************************************************
+
+TASK [ubuntu2004STIG : install auditd] *****************************************
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : touch stig.rules] ***************************************
+changed: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010118 | PATCH | The Ubuntu operating system must shut down by default upon audit failure (unless availability is an overriding concern).] ***
+changed: [ec2_instance]
+
+TASK [ubuntu2004STIG : PRELIM | Install Chrony] ********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010435 | PATCH | The Ubuntu operating system must, for networked systems, compare internal information system clocks at least every 24 hours with a server which is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, or a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS).] ***
+ok: [ec2_instance] => (item=tick.usno.navy.mil)
+ok: [ec2_instance] => (item=tock.usno.navy.mil)
+ok: [ec2_instance] => (item=ntp2.usno.navy.mil)
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010419 | PATCH | The Ubuntu operating system must configure the /var/log directory to have mode 0755 or less permissive. | Change Log Dir Permissions.] ***
+changed: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010416 | AUDIT | The Ubuntu operating system must generate error messages that provide information necessary for corrective actions without revealing information that could be exploited by adversaries. | Audit Files For Permissions] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010416 | PATCH | The Ubuntu operating system must generate error messages that provide information necessary for corrective actions without revealing information that could be exploited by adversaries. | Fix files] ***
+changed: [ec2_instance] => (item=/var/log/ubuntu-advantage.log)
+changed: [ec2_instance] => (item=/var/log/fontconfig.log)
+changed: [ec2_instance] => (item=/var/log/maconfig.log)
+changed: [ec2_instance] => (item=/var/log/btmp.1)
+changed: [ec2_instance] => (item=/var/log/mcupdater_ip-10-236-36-42.log)
+changed: [ec2_instance] => (item=/var/log/ubuntu-advantage-timer.log.1)
+changed: [ec2_instance] => (item=/var/log/apt/history.log.2.gz)
+changed: [ec2_instance] => (item=/var/log/apt/history.log)
+changed: [ec2_instance] => (item=/var/log/apt/eipp.log.xz)
+changed: [ec2_instance] => (item=/var/log/apt/history.log.1.gz)
+changed: [ec2_instance] => (item=/var/log/ubuntu-advantage-timer.log)
+changed: [ec2_instance] => (item=/var/log/wtmp.1)
+changed: [ec2_instance] => (item=/var/log/amazon/ssm/amazon-ssm-agent.log.3)
+changed: [ec2_instance] => (item=/var/log/amazon/ssm/amazon-ssm-agent.log.5)
+changed: [ec2_instance] => (item=/var/log/amazon/ssm/patch-baseline-operations-reboot-194timestamp)
+changed: [ec2_instance] => (item=/var/log/amazon/ssm/patch-baseline-operations-reboot-195timestamp)
+changed: [ec2_instance] => (item=/var/log/amazon/ssm/amazon-ssm-agent.log.4)
+changed: [ec2_instance] => (item=/var/log/amazon/ssm/amazon-ssm-agent.log.2)
+changed: [ec2_instance] => (item=/var/log/amazon/ssm/amazon-ssm-agent.log)
+changed: [ec2_instance] => (item=/var/log/ubuntu-advantage.log.1)
+changed: [ec2_instance] => (item=/var/log/mfedx-6.0.3-906-1695833247.log)
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010408 | PATCH | The Ubuntu operating system must prevent direct login into the root account.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010403 | PATCH | The Ubuntu operating system must monitor remote access methods. | Get existing files] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010403 | PATCH | The Ubuntu operating system must monitor remote access methods. | Set settings] ***
+ok: [ec2_instance] => (item={'regexp': '^auth.*,authpriv.*', 'line': 'auth.*,authpriv.*               /var/log/secure'})
+ok: [ec2_instance] => (item={'regexp': '^daemon.*|#daemon.*', 'line': 'daemon.*                        /var/log/messages'})
+
+TASK [ubuntu2004STIG : PRELIM | Install AIDE] **********************************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010205 | PATCH | The Ubuntu operating system must use cryptographic mechanisms to protect the integrity of audit tools.] ***
+ok: [ec2_instance] => (item={'regexp': '# Audit Tools', 'line': '# Audit Tools'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/auditctl', 'line': '/sbin/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/auditd', 'line': '/sbin/auditd p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/ausearch', 'line': '/sbin/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/aureport', 'line': '/sbin/aureport p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/autrace', 'line': '/sbin/autrace p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/audispd', 'line': '/sbin/audispd p+i+n+u+g+s+b+acl+xattrs+sha512'})
+ok: [ec2_instance] => (item={'regexp': '/sbin/augenrules', 'line': '/sbin/augenrules p+i+n+u+g+s+b+acl+xattrs+sha512'})
+
+TASK [ubuntu2004STIG : PRELIM | Install audisp-remote plugin] ******************
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : LOW | UBTU-20-010216 | PATCH | The Ubuntu operating system audit event multiplexor must be configured to off-load audit logs onto a different system or storage media from the system being audited.] ***
+ok: [ec2_instance] => (item={'path': '/etc/audisp/plugins.d/au-remote.conf', 'regexp': '(?i)^#?active =', 'line': 'active = yes'})
+ok: [ec2_instance] => (item={'path': '/etc/audisp/audisp-remote.conf', 'regexp': '(?i)^#?remote_server =', 'line': 'remote_server = 10.10.10.10'})
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010198 | Arating system musUDIT | The Ubuntu opet initiate session audits at system startup. | Get GRUB_CMDLINE_LINUX] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010198 | PATCH | The Ubuntu operating system must initiate session audits at system startup. | Add setting if audit doesn't exist] ***
+changed: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010198 | PATCH | The Ubuntu operating system must initiate session audits at system startup. | Add setting if audit exists] ***
+skipping: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010013 | PATCH | The Ubuntu operating system must automatically terminate a user session after inactivity timeouts have expired.] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010014 | PATCH | The Ubuntu operating system must require users to reauthenticate for privilege escalation or when changing roles. | Get sudoers nopasswd files] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010014 | PATCH | The Ubuntu operating system must require users to reauthenticate for privilege escalation or when changing roles. | Get sudoers authenticate files] ***
+ok: [ec2_instance]
+
+TASK [ubuntu2004STIG : MEDIUM | UBTU-20-010014 | PATCH | The Ubuntu operating system must require users to reauthenticate for privilege escalation or when changing roles. | Replace NOPASSWD Finds.] ***
+changed: [ec2_instance] => (item=/etc/sudoers.d/90-cloud-init-users)
+fatal: [ec2_instance]: FAILED! => {"msg": "Missing sudo password"}
+
+PLAY RECAP *********************************************************************
+ec2_instance               : ok=19   changed=5    unreachable=0    failed=1    skipped=2    rescued=0    ignored=0   
+

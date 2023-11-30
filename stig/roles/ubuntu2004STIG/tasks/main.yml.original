@@ -1,0 +1,1001 @@
+- name: populate package facts
+  package_facts:
+- name: install auditd
+  apt:
+    name: auditd
+    state: present
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+- name: touch stig.rules
+  file:
+    path: /etc/audit/rules.d/stig.rules
+    state: touch
+    mode: '0640'
+    modification_time: preserve
+    access_time: preserve
+# R-238197 UBTU-20-010002
+- name: stigrule_238197__etc_gdm3_greeter_dconf_defaults_enable
+  ini_file:
+    path: /etc/gdm3/greeter.dconf-defaults
+    section: org/gnome/login-screen
+    option: banner-message-enable
+    value: "{{ ubuntu2004STIG_stigrule_238197__etc_gdm3_greeter_dconf_defaults_enable_Value }}"
+    no_extra_spaces: yes
+  notify: dconf_update
+  when:
+    - ubuntu2004STIG_stigrule_238197_Manage
+    - "'gdm3' in packages"
+# R-238198 UBTU-20-010003
+- name: stigrule_238198__etc_gdm3_greeter_dconf_defaults_text
+  ini_file:
+    path: /etc/gdm3/greeter.dconf-defaults
+    section: org/gnome/login-screen
+    option: banner-message-text
+    value: "{{ ubuntu2004STIG_stigrule_238198__etc_gdm3_greeter_dconf_defaults_text_Value }}"
+    no_extra_spaces: yes
+  notify: dconf_update
+  when:
+    - ubuntu2004STIG_stigrule_238198_Manage
+    - "'gdm3' in packages"
+# R-238200 UBTU-20-010005
+- name: stigrule_238200_vlock
+  apt:
+    name: vlock
+    state: "{{ ubuntu2004STIG_stigrule_238200_vlock_State }}"
+    update_cache: yes
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+  when: ubuntu2004STIG_stigrule_238200_Manage
+# R-238202 UBTU-20-010007
+- name: stigrule_238202__etc_login_defs
+  lineinfile:
+    path: /etc/login.defs
+    regexp: '^PASS_MIN_DAYS'
+    line: "{{ ubuntu2004STIG_stigrule_238202__etc_login_defs_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238202_Manage
+# R-238203 UBTU-20-010008
+- name: stigrule_238203__etc_login_defs
+  lineinfile:
+    path: /etc/login.defs
+    regexp: '^PASS_MAX_DAYS'
+    line: "{{ ubuntu2004STIG_stigrule_238203__etc_login_defs_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238203_Manage
+# R-238207 UBTU-20-010013
+- name: stigrule_238207__etc_profile_d_99_terminal_tmout_sh
+  copy:
+    dest: "{{ ubuntu2004STIG_stigrule_238207__etc_profile_d_99_terminal_tmout_sh_Dest }}"
+    content: "{{ ubuntu2004STIG_stigrule_238207__etc_profile_d_99_terminal_tmout_sh_Content }}"
+  when:
+    - ubuntu2004STIG_stigrule_238207_Manage
+# R-238209 UBTU-20-010016
+- name: stigrule_238209__etc_login_defs
+  lineinfile:
+    path: /etc/login.defs
+    regexp: '^UMASK'
+    line: "{{ ubuntu2004STIG_stigrule_238209__etc_login_defs_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238209_Manage
+# R-238212 UBTU-20-010036
+- name: stigrule_238212_ClientAliveCountMax
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '(?i)^\s*ClientAliveCountMax\s+'
+    line: "{{ ubuntu2004STIG_stigrule_238212_ClientAliveCountMax_Line }}"
+  notify: ssh_restart
+  when:
+    - ubuntu2004STIG_stigrule_238212_Manage
+    - "'openssh-server' in packages"
+# R-238213 UBTU-20-010037
+- name: stigrule_238213_ClientAliveInterval
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '(?i)^\s*ClientAliveInterval\s+'
+    line: "{{ ubuntu2004STIG_stigrule_238213_ClientAliveInterval_Line }}"
+  notify: ssh_restart
+  when:
+    - ubuntu2004STIG_stigrule_238213_Manage
+    - "'openssh-server' in packages"
+# R-238214 UBTU-20-010038
+- name: stigrule_238214_banner
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '(?i)^\s*banner\s+'
+    line: "{{ ubuntu2004STIG_stigrule_238214_banner_Line }}"
+  notify: ssh_restart
+  when:
+    - ubuntu2004STIG_stigrule_238214_Manage
+    - "'openssh-server' in packages"
+# R-238214 UBTU-20-010038
+- name: stigrule_238214__etc_issue_net
+  copy:
+    dest: "{{ ubuntu2004STIG_stigrule_238214__etc_issue_net_Dest }}"
+    content: "{{ ubuntu2004STIG_stigrule_238214__etc_issue_net_Content }}"
+  when:
+    - ubuntu2004STIG_stigrule_238214_Manage
+# R-238215 UBTU-20-010042
+- name: stigrule_238215_ssh
+  apt:
+    name: ssh
+    state: "{{ ubuntu2004STIG_stigrule_238215_ssh_State }}"
+    update_cache: yes
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+  when: ubuntu2004STIG_stigrule_238215_Manage
+# R-238215 UBTU-20-010042
+- name: check if sshd.service is installed
+  shell: ! systemctl list-unit-files | grep "^sshd.service[ \t]\+"
+  changed_when: False
+  check_mode: no
+  register: result
+  failed_when: result.rc > 1
+- name: stigrule_238215_sshd_active
+  service:
+    name: sshd.service
+    enabled: "{{ ubuntu2004STIG_stigrule_238215_sshd_active_Enabled }}"
+  when:
+    - ubuntu2004STIG_stigrule_238215_Manage
+    - result.rc == 0
+# R-238215 UBTU-20-010042
+- name: check if sshd.service is installed
+  shell: ! systemctl list-unit-files | grep "^sshd.service[ \t]\+"
+  changed_when: False
+  check_mode: no
+  register: result
+  failed_when: result.rc > 1
+- name: stigrule_238215_sshd_start
+  service:
+    name: sshd.service
+    state: "{{ ubuntu2004STIG_stigrule_238215_sshd_start_State }}"
+  when:
+    - ubuntu2004STIG_stigrule_238215_Manage
+    - result.rc == 0
+# R-238216 UBTU-20-010043
+- name: stigrule_238216_MACs
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '(?i)^\s*MACs\s+'
+    line: "{{ ubuntu2004STIG_stigrule_238216_MACs_Line }}"
+  notify: ssh_restart
+  when:
+    - ubuntu2004STIG_stigrule_238216_Manage
+    - "'openssh-server' in packages"
+# R-238217 UBTU-20-010044
+- name: stigrule_238217_Ciphers
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '(?i)^\s*Ciphers\s+'
+    line: "{{ ubuntu2004STIG_stigrule_238217_Ciphers_Line }}"
+  notify: ssh_restart
+  when:
+    - ubuntu2004STIG_stigrule_238217_Manage
+    - "'openssh-server' in packages"
+# R-238218 UBTU-20-010047
+- name: stigrule_238218_PermitEmptyPasswords
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '(?i)^\s*PermitEmptyPasswords\s+'
+    line: "{{ ubuntu2004STIG_stigrule_238218_PermitEmptyPasswords_Line }}"
+  notify: ssh_restart
+  when:
+    - ubuntu2004STIG_stigrule_238218_Manage
+    - "'openssh-server' in packages"
+# R-238218 UBTU-20-010047
+- name: stigrule_238218_PermitUserEnvironment
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '(?i)^\s*PermitUserEnvironment\s+'
+    line: "{{ ubuntu2004STIG_stigrule_238218_PermitUserEnvironment_Line }}"
+  notify: ssh_restart
+  when:
+    - ubuntu2004STIG_stigrule_238218_Manage
+    - "'openssh-server' in packages"
+# R-238219 UBTU-20-010048
+- name: stigrule_238219_X11Forwarding
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '(?i)^\s*X11Forwarding\s+'
+    line: "{{ ubuntu2004STIG_stigrule_238219_X11Forwarding_Line }}"
+  notify: ssh_restart
+  when:
+    - ubuntu2004STIG_stigrule_238219_Manage
+    - "'openssh-server' in packages"
+# R-238220 UBTU-20-010049
+- name: stigrule_238220_X11UseLocalhost
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '(?i)^\s*X11UseLocalhost\s+'
+    line: "{{ ubuntu2004STIG_stigrule_238220_X11UseLocalhost_Line }}"
+  notify: ssh_restart
+  when:
+    - ubuntu2004STIG_stigrule_238220_Manage
+    - "'openssh-server' in packages"
+# R-238221 UBTU-20-010050
+- name: stigrule_238221__etc_security_pwquality_conf
+  lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^\s*ucredit'
+    line: "{{ ubuntu2004STIG_stigrule_238221__etc_security_pwquality_conf_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238221_Manage
+# R-238222 UBTU-20-010051
+- name: stigrule_238222__etc_security_pwquality_conf
+  lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^\s*lcredit'
+    line: "{{ ubuntu2004STIG_stigrule_238222__etc_security_pwquality_conf_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238222_Manage
+# R-238223 UBTU-20-010052
+- name: stigrule_238223__etc_security_pwquality_conf
+  lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^\s*dcredit'
+    line: "{{ ubuntu2004STIG_stigrule_238223__etc_security_pwquality_conf_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238223_Manage
+# R-238224 UBTU-20-010053
+- name: stigrule_238224__etc_security_pwquality_conf
+  lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^\s*difok'
+    line: "{{ ubuntu2004STIG_stigrule_238224__etc_security_pwquality_conf_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238224_Manage
+# R-238225 UBTU-20-010054
+- name: stigrule_238225__etc_security_pwquality_conf
+  lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^\s*minlen'
+    line: "{{ ubuntu2004STIG_stigrule_238225__etc_security_pwquality_conf_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238225_Manage
+# R-238226 UBTU-20-010055
+- name: stigrule_238226__etc_security_pwquality_conf
+  lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^\s*ocredit'
+    line: "{{ ubuntu2004STIG_stigrule_238226__etc_security_pwquality_conf_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238226_Manage
+# R-238227 UBTU-20-010056
+- name: stigrule_238227__etc_security_pwquality_conf
+  lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^\s*dictcheck'
+    line: "{{ ubuntu2004STIG_stigrule_238227__etc_security_pwquality_conf_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238227_Manage
+# R-238230 UBTU-20-010063
+- name: stigrule_238230_libpam_pkcs11
+  apt:
+    name: libpam-pkcs11
+    state: "{{ ubuntu2004STIG_stigrule_238230_libpam_pkcs11_State }}"
+    update_cache: yes
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+  when: ubuntu2004STIG_stigrule_238230_Manage
+# R-238231 UBTU-20-010064
+- name: stigrule_238231_opensc_pkcs11
+  apt:
+    name: opensc-pkcs11
+    state: "{{ ubuntu2004STIG_stigrule_238231_opensc_pkcs11_State }}"
+    update_cache: yes
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+  when: ubuntu2004STIG_stigrule_238231_Manage
+# R-238238 UBTU-20-010100
+- name : stigrule_238238__etc_audit_rules_d_stig_rules__etc_passwd
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /etc/passwd -p wa -k usergroup_modification$'
+    line: "{{ ubuntu2004STIG_stigrule_238238__etc_audit_rules_d_stig_rules__etc_passwd_Line }}"
+  when: ubuntu2004STIG_stigrule_238238_Manage
+# R-238239 UBTU-20-010101
+- name : stigrule_238239__etc_audit_rules_d_stig_rules__etc_group
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /etc/group -p wa -k usergroup_modification$'
+    line: "{{ ubuntu2004STIG_stigrule_238239__etc_audit_rules_d_stig_rules__etc_group_Line }}"
+  when: ubuntu2004STIG_stigrule_238239_Manage
+# R-238240 UBTU-20-010102
+- name : stigrule_238240__etc_audit_rules_d_stig_rules__etc_shadow
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /etc/shadow -p wa -k usergroup_modification$'
+    line: "{{ ubuntu2004STIG_stigrule_238240__etc_audit_rules_d_stig_rules__etc_shadow_Line }}"
+  when: ubuntu2004STIG_stigrule_238240_Manage
+# R-238241 UBTU-20-010103
+- name : stigrule_238241__etc_audit_rules_d_stig_rules__etc_gshadow
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /etc/gshadow -p wa -k usergroup_modification$'
+    line: "{{ ubuntu2004STIG_stigrule_238241__etc_audit_rules_d_stig_rules__etc_gshadow_Line }}"
+  when: ubuntu2004STIG_stigrule_238241_Manage
+# R-238242 UBTU-20-010104
+- name : stigrule_238242__etc_audit_rules_d_stig_rules__etc_security_opasswd
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /etc/security/opasswd -p wa -k usergroup_modification$'
+    line: "{{ ubuntu2004STIG_stigrule_238242__etc_audit_rules_d_stig_rules__etc_security_opasswd_Line }}"
+  when: ubuntu2004STIG_stigrule_238242_Manage
+# R-238243 UBTU-20-010117
+# Change root to an account for security personnel.
+- name: stigrule_238243__etc_audit_auditd_conf
+  lineinfile:
+    path: /etc/audit/auditd.conf
+    regexp: '^action_mail_acct = '
+    line: "{{ ubuntu2004STIG_stigrule_238243__etc_audit_auditd_conf_Line }}"
+    create: yes
+  notify: auditd_restart
+  when:
+    - ubuntu2004STIG_stigrule_238243_Manage
+# R-238244 UBTU-20-010118
+- name: stigrule_238244__etc_audit_auditd_conf
+  lineinfile:
+    path: /etc/audit/auditd.conf
+    regexp: '^disk_full_action = '
+    line: "{{ ubuntu2004STIG_stigrule_238244__etc_audit_auditd_conf_Line }}"
+    create: yes
+  notify: auditd_restart
+  when:
+    - ubuntu2004STIG_stigrule_238244_Manage
+# R-238252 UBTU-20-010136
+- name : stigrule_238252__etc_audit_rules_d_stig_rules__bin_su
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/bin/su -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change$'
+    line: "{{ ubuntu2004STIG_stigrule_238252__etc_audit_rules_d_stig_rules__bin_su_Line }}"
+  when: ubuntu2004STIG_stigrule_238252_Manage
+# R-238253 UBTU-20-010137
+- name : stigrule_238253__etc_audit_rules_d_stig_rules__usr_bin_chfn
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/chfn -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-chfn$'
+    line: "{{ ubuntu2004STIG_stigrule_238253__etc_audit_rules_d_stig_rules__usr_bin_chfn_Line }}"
+  when: ubuntu2004STIG_stigrule_238253_Manage
+# R-238254 UBTU-20-010138
+- name : stigrule_238254__etc_audit_rules_d_stig_rules__usr_bin_mount
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-mount$'
+    line: "{{ ubuntu2004STIG_stigrule_238254__etc_audit_rules_d_stig_rules__usr_bin_mount_Line }}"
+  when: ubuntu2004STIG_stigrule_238254_Manage
+# R-238255 UBTU-20-010139
+- name : stigrule_238255__etc_audit_rules_d_stig_rules__usr_bin_umount
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-umount$'
+    line: "{{ ubuntu2004STIG_stigrule_238255__etc_audit_rules_d_stig_rules__usr_bin_umount_Line }}"
+  when: ubuntu2004STIG_stigrule_238255_Manage
+# R-238256 UBTU-20-010140
+- name : stigrule_238256__etc_audit_rules_d_stig_rules__usr_bin_ssh_agent
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/ssh-agent -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-ssh$'
+    line: "{{ ubuntu2004STIG_stigrule_238256__etc_audit_rules_d_stig_rules__usr_bin_ssh_agent_Line }}"
+  when: ubuntu2004STIG_stigrule_238256_Manage
+# R-238257 UBTU-20-010141
+- name : stigrule_238257__etc_audit_rules_d_stig_rules__usr_lib_openssh_ssh_keysign
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/lib/openssh/ssh-keysign -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-ssh$'
+    line: "{{ ubuntu2004STIG_stigrule_238257__etc_audit_rules_d_stig_rules__usr_lib_openssh_ssh_keysign_Line }}"
+  when: ubuntu2004STIG_stigrule_238257_Manage
+# R-238258 UBTU-20-010142
+- name : stigrule_238258__etc_audit_rules_d_stig_rules_b32_setxattr_fsetxattr_lsetxattr_removexattr_fremovexattr_lremovexattr_1
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b32 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid>=1000 -F auid!=-1 -k perm_mod$'
+    line: "{{ ubuntu2004STIG_stigrule_238258__etc_audit_rules_d_stig_rules_b32_setxattr_fsetxattr_lsetxattr_removexattr_fremovexattr_lremovexattr_1_Line }}"
+  when: ubuntu2004STIG_stigrule_238258_Manage
+# R-238258 UBTU-20-010142
+- name : stigrule_238258__etc_audit_rules_d_stig_rules_b32_setxattr_fsetxattr_lsetxattr_removexattr_fremovexattr_lremovexattr_2
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b32 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid=0 -k perm_mod$'
+    line: "{{ ubuntu2004STIG_stigrule_238258__etc_audit_rules_d_stig_rules_b32_setxattr_fsetxattr_lsetxattr_removexattr_fremovexattr_lremovexattr_2_Line }}"
+  when: ubuntu2004STIG_stigrule_238258_Manage
+# R-238258 UBTU-20-010142
+- name : stigrule_238258__etc_audit_rules_d_stig_rules_b64_setxattr_fsetxattr_lsetxattr_removexattr_fremovexattr_lremovexattr_1
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b64 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid>=1000 -F auid!=-1 -k perm_mod$'
+    line: "{{ ubuntu2004STIG_stigrule_238258__etc_audit_rules_d_stig_rules_b64_setxattr_fsetxattr_lsetxattr_removexattr_fremovexattr_lremovexattr_1_Line }}"
+  when: ubuntu2004STIG_stigrule_238258_Manage
+# R-238258 UBTU-20-010142
+- name : stigrule_238258__etc_audit_rules_d_stig_rules_b64_setxattr_fsetxattr_lsetxattr_removexattr_fremovexattr_lremovexattr_2
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b64 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid=0 -k perm_mod$'
+    line: "{{ ubuntu2004STIG_stigrule_238258__etc_audit_rules_d_stig_rules_b64_setxattr_fsetxattr_lsetxattr_removexattr_fremovexattr_lremovexattr_2_Line }}"
+  when: ubuntu2004STIG_stigrule_238258_Manage
+# R-238264 UBTU-20-010148
+- name : stigrule_238264__etc_audit_rules_d_stig_rules_b32_chown_fchown_fchownat_lchown
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b32 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=-1 -k perm_chng$'
+    line: "{{ ubuntu2004STIG_stigrule_238264__etc_audit_rules_d_stig_rules_b32_chown_fchown_fchownat_lchown_Line }}"
+  when: ubuntu2004STIG_stigrule_238264_Manage
+# R-238264 UBTU-20-010148
+- name : stigrule_238264__etc_audit_rules_d_stig_rules_b64_chown_fchown_fchownat_lchown
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b64 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=-1 -k perm_chng$'
+    line: "{{ ubuntu2004STIG_stigrule_238264__etc_audit_rules_d_stig_rules_b64_chown_fchown_fchownat_lchown_Line }}"
+  when: ubuntu2004STIG_stigrule_238264_Manage
+# R-238268 UBTU-20-010152
+- name : stigrule_238268__etc_audit_rules_d_stig_rules_b32_chmod_fchmod_fchmodat
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_chng$'
+    line: "{{ ubuntu2004STIG_stigrule_238268__etc_audit_rules_d_stig_rules_b32_chmod_fchmod_fchmodat_Line }}"
+  when: ubuntu2004STIG_stigrule_238268_Manage
+# R-238268 UBTU-20-010152
+- name : stigrule_238268__etc_audit_rules_d_stig_rules_b64_chmod_fchmod_fchmodat
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_chng$'
+    line: "{{ ubuntu2004STIG_stigrule_238268__etc_audit_rules_d_stig_rules_b64_chmod_fchmod_fchmodat_Line }}"
+  when: ubuntu2004STIG_stigrule_238268_Manage
+# R-238271 UBTU-20-010155
+- name : stigrule_238271__etc_audit_rules_d_stig_rules_b32_creat_open_openat_open_by_handle_at_truncate_ftruncate_EPERM
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b32 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k perm_access$'
+    line: "{{ ubuntu2004STIG_stigrule_238271__etc_audit_rules_d_stig_rules_b32_creat_open_openat_open_by_handle_at_truncate_ftruncate_EPERM_Line }}"
+  when: ubuntu2004STIG_stigrule_238271_Manage
+# R-238271 UBTU-20-010155
+- name : stigrule_238271__etc_audit_rules_d_stig_rules_b32_creat_open_openat_open_by_handle_at_truncate_ftruncate_EACCES
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b32 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k perm_access$'
+    line: "{{ ubuntu2004STIG_stigrule_238271__etc_audit_rules_d_stig_rules_b32_creat_open_openat_open_by_handle_at_truncate_ftruncate_EACCES_Line }}"
+  when: ubuntu2004STIG_stigrule_238271_Manage
+# R-238271 UBTU-20-010155
+- name : stigrule_238271__etc_audit_rules_d_stig_rules_b64_creat_open_openat_open_by_handle_at_truncate_ftruncat_EPERM
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b64 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k perm_access$'
+    line: "{{ ubuntu2004STIG_stigrule_238271__etc_audit_rules_d_stig_rules_b64_creat_open_openat_open_by_handle_at_truncate_ftruncat_EPERM_Line }}"
+  when: ubuntu2004STIG_stigrule_238271_Manage
+# R-238271 UBTU-20-010155
+- name : stigrule_238271__etc_audit_rules_d_stig_rules_b64_creat_open_openat_open_by_handle_at_truncate_ftruncat_EACCES
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b64 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k perm_access$'
+    line: "{{ ubuntu2004STIG_stigrule_238271__etc_audit_rules_d_stig_rules_b64_creat_open_openat_open_by_handle_at_truncate_ftruncat_EACCES_Line }}"
+  when: ubuntu2004STIG_stigrule_238271_Manage
+# R-238277 UBTU-20-010161
+- name : stigrule_238277__etc_audit_rules_d_stig_rules__usr_bin_sudo
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/sudo -F perm=x -F auid>=1000 -F auid!=4294967295 -k priv_cmd$'
+    line: "{{ ubuntu2004STIG_stigrule_238277__etc_audit_rules_d_stig_rules__usr_bin_sudo_Line }}"
+  when: ubuntu2004STIG_stigrule_238277_Manage
+# R-238278 UBTU-20-010162
+- name : stigrule_238278__etc_audit_rules_d_stig_rules__usr_bin_sudoedit
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/sudoedit -F perm=x -F auid>=1000 -F auid!=4294967295 -k priv_cmd$'
+    line: "{{ ubuntu2004STIG_stigrule_238278__etc_audit_rules_d_stig_rules__usr_bin_sudoedit_Line }}"
+  when: ubuntu2004STIG_stigrule_238278_Manage
+# R-238279 UBTU-20-010163
+- name : stigrule_238279__etc_audit_rules_d_stig_rules__usr_bin_chsh
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/chsh -F perm=x -F auid>=1000 -F auid!=4294967295 -k priv_cmd$'
+    line: "{{ ubuntu2004STIG_stigrule_238279__etc_audit_rules_d_stig_rules__usr_bin_chsh_Line }}"
+  when: ubuntu2004STIG_stigrule_238279_Manage
+# R-238280 UBTU-20-010164
+- name : stigrule_238280__etc_audit_rules_d_stig_rules__usr_bin_newgrp
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=4294967295 -k priv_cmd$'
+    line: "{{ ubuntu2004STIG_stigrule_238280__etc_audit_rules_d_stig_rules__usr_bin_newgrp_Line }}"
+  when: ubuntu2004STIG_stigrule_238280_Manage
+# R-238281 UBTU-20-010165
+- name : stigrule_238281__etc_audit_rules_d_stig_rules__usr_bin_chcon
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/chcon -F perm=x -F auid>=1000 -F auid!=4294967295 -k perm_chng$'
+    line: "{{ ubuntu2004STIG_stigrule_238281__etc_audit_rules_d_stig_rules__usr_bin_chcon_Line }}"
+  when: ubuntu2004STIG_stigrule_238281_Manage
+# R-238282 UBTU-20-010166
+- name : stigrule_238282__etc_audit_rules_d_stig_rules__sbin_apparmor_parser
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/sbin/apparmor_parser -F perm=x -F auid>=1000 -F auid!=4294967295 -k perm_chng$'
+    line: "{{ ubuntu2004STIG_stigrule_238282__etc_audit_rules_d_stig_rules__sbin_apparmor_parser_Line }}"
+  when: ubuntu2004STIG_stigrule_238282_Manage
+# R-238283 UBTU-20-010167
+- name : stigrule_238283__etc_audit_rules_d_stig_rules__usr_bin_setfacl
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/setfacl -F perm=x -F auid>=1000 -F auid!=4294967295 -k perm_chng$'
+    line: "{{ ubuntu2004STIG_stigrule_238283__etc_audit_rules_d_stig_rules__usr_bin_setfacl_Line }}"
+  when: ubuntu2004STIG_stigrule_238283_Manage
+# R-238284 UBTU-20-010168
+- name : stigrule_238284__etc_audit_rules_d_stig_rules__usr_bin_chacl
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/chacl -F perm=x -F auid>=1000 -F auid!=4294967295 -k perm_chng$'
+    line: "{{ ubuntu2004STIG_stigrule_238284__etc_audit_rules_d_stig_rules__usr_bin_chacl_Line }}"
+  when: ubuntu2004STIG_stigrule_238284_Manage
+# R-238285 UBTU-20-010169
+- name : stigrule_238285__etc_audit_rules_d_stig_rules_tallylog
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /var/log/tallylog -p wa -k logins$'
+    line: "{{ ubuntu2004STIG_stigrule_238285__etc_audit_rules_d_stig_rules_tallylog_Line }}"
+  when: ubuntu2004STIG_stigrule_238285_Manage
+# R-238286 UBTU-20-010170
+- name : stigrule_238286__etc_audit_rules_d_stig_rules_faillog
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /var/log/faillog -p wa -k logins$'
+    line: "{{ ubuntu2004STIG_stigrule_238286__etc_audit_rules_d_stig_rules_faillog_Line }}"
+  when: ubuntu2004STIG_stigrule_238286_Manage
+# R-238287 UBTU-20-010171
+- name : stigrule_238287__etc_audit_rules_d_stig_rules_lastlog
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /var/log/lastlog -p wa -k logins$'
+    line: "{{ ubuntu2004STIG_stigrule_238287__etc_audit_rules_d_stig_rules_lastlog_Line }}"
+  when: ubuntu2004STIG_stigrule_238287_Manage
+# R-238288 UBTU-20-010172
+- name : stigrule_238288__etc_audit_rules_d_stig_rules__usr_bin_passwd
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-passwd$'
+    line: "{{ ubuntu2004STIG_stigrule_238288__etc_audit_rules_d_stig_rules__usr_bin_passwd_Line }}"
+  when: ubuntu2004STIG_stigrule_238288_Manage
+# R-238289 UBTU-20-010173
+- name : stigrule_238289__etc_audit_rules_d_stig_rules__sbin_unix_update
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/sbin/unix_update -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-unix-update$'
+    line: "{{ ubuntu2004STIG_stigrule_238289__etc_audit_rules_d_stig_rules__sbin_unix_update_Line }}"
+  when: ubuntu2004STIG_stigrule_238289_Manage
+# R-238290 UBTU-20-010174
+- name : stigrule_238290__etc_audit_rules_d_stig_rules__usr_bin_gpasswd
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-gpasswd$'
+    line: "{{ ubuntu2004STIG_stigrule_238290__etc_audit_rules_d_stig_rules__usr_bin_gpasswd_Line }}"
+  when: ubuntu2004STIG_stigrule_238290_Manage
+# R-238291 UBTU-20-010175
+- name : stigrule_238291__etc_audit_rules_d_stig_rules__usr_bin_chage
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/chage -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-chage$'
+    line: "{{ ubuntu2004STIG_stigrule_238291__etc_audit_rules_d_stig_rules__usr_bin_chage_Line }}"
+  when: ubuntu2004STIG_stigrule_238291_Manage
+# R-238292 UBTU-20-010176
+- name : stigrule_238292__etc_audit_rules_d_stig_rules__usr_bin_usermod
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/sbin/usermod -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-usermod$'
+    line: "{{ ubuntu2004STIG_stigrule_238292__etc_audit_rules_d_stig_rules__usr_bin_usermod_Line }}"
+  when: ubuntu2004STIG_stigrule_238292_Manage
+# R-238293 UBTU-20-010177
+- name : stigrule_238293__etc_audit_rules_d_stig_rules__usr_bin_crontab
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-crontab$'
+    line: "{{ ubuntu2004STIG_stigrule_238293__etc_audit_rules_d_stig_rules__usr_bin_crontab_Line }}"
+  when: ubuntu2004STIG_stigrule_238293_Manage
+# R-238294 UBTU-20-010178
+- name : stigrule_238294__etc_audit_rules_d_stig_rules__usr_sbin_pam_timestamp_check
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F path=/usr/sbin/pam_timestamp_check -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-pam_timestamp_check$'
+    line: "{{ ubuntu2004STIG_stigrule_238294__etc_audit_rules_d_stig_rules__usr_sbin_pam_timestamp_check_Line }}"
+  when: ubuntu2004STIG_stigrule_238294_Manage
+# R-238295 UBTU-20-010179
+- name : stigrule_238295__etc_audit_rules_d_stig_rules_b32_init_module_finit_module
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b32 -S init_module,finit_module -F auid>=1000 -F auid!=-1 -k module_chng$'
+    line: "{{ ubuntu2004STIG_stigrule_238295__etc_audit_rules_d_stig_rules_b32_init_module_finit_module_Line }}"
+  when: ubuntu2004STIG_stigrule_238295_Manage
+# R-238295 UBTU-20-010179
+- name : stigrule_238295__etc_audit_rules_d_stig_rules_b64_init_module_finit_module
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b64 -S init_module,finit_module -F auid>=1000 -F auid!=-1 -k module_chng$'
+    line: "{{ ubuntu2004STIG_stigrule_238295__etc_audit_rules_d_stig_rules_b64_init_module_finit_module_Line }}"
+  when: ubuntu2004STIG_stigrule_238295_Manage
+# R-238297 UBTU-20-010181
+- name : stigrule_238297__etc_audit_rules_d_stig_rules_delete_module_b32
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b32 -S delete_module -F auid>=1000 -F auid!=4294967295 -k module_chng$'
+    line: "{{ ubuntu2004STIG_stigrule_238297__etc_audit_rules_d_stig_rules_delete_module_b32_Line }}"
+  when: ubuntu2004STIG_stigrule_238297_Manage
+# R-238297 UBTU-20-010181
+- name : stigrule_238297__etc_audit_rules_d_stig_rules_delete_module_b64
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b64 -S delete_module -F auid>=1000 -F auid!=4294967295 -k module_chng$'
+    line: "{{ ubuntu2004STIG_stigrule_238297__etc_audit_rules_d_stig_rules_delete_module_b64_Line }}"
+  when: ubuntu2004STIG_stigrule_238297_Manage
+# R-238298 UBTU-20-010182
+- name: stigrule_238298_auditd
+  apt:
+    name: auditd
+    state: "{{ ubuntu2004STIG_stigrule_238298_auditd_State }}"
+    update_cache: yes
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+  when: ubuntu2004STIG_stigrule_238298_Manage
+# R-238298 UBTU-20-010182
+- name: check if auditd.service is installed
+  shell: ! systemctl list-unit-files | grep "^auditd.service[ \t]\+"
+  changed_when: False
+  check_mode: no
+  register: result
+  failed_when: result.rc > 1
+- name: stigrule_238298_auditd_enable
+  service:
+    name: auditd.service
+    enabled: "{{ ubuntu2004STIG_stigrule_238298_auditd_enable_Enabled }}"
+  when:
+    - ubuntu2004STIG_stigrule_238298_Manage
+    - result.rc == 0
+# R-238304 UBTU-20-010211
+- name : stigrule_238304__etc_audit_rules_d_stig_rules_execve_b64_euid
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -F key=execpriv$'
+    line: "{{ ubuntu2004STIG_stigrule_238304__etc_audit_rules_d_stig_rules_execve_b64_euid_Line }}"
+  when: ubuntu2004STIG_stigrule_238304_Manage
+# R-238304 UBTU-20-010211
+- name : stigrule_238304__etc_audit_rules_d_stig_rules_execve_b64_egid
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -F key=execpriv$'
+    line: "{{ ubuntu2004STIG_stigrule_238304__etc_audit_rules_d_stig_rules_execve_b64_egid_Line }}"
+  when: ubuntu2004STIG_stigrule_238304_Manage
+# R-238304 UBTU-20-010211
+- name : stigrule_238304__etc_audit_rules_d_stig_rules_execve_b32_euid
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -F key=execpriv$'
+    line: "{{ ubuntu2004STIG_stigrule_238304__etc_audit_rules_d_stig_rules_execve_b32_euid_Line }}"
+  when: ubuntu2004STIG_stigrule_238304_Manage
+# R-238304 UBTU-20-010211
+- name : stigrule_238304__etc_audit_rules_d_stig_rules_execve_b32_egid
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -F key=execpriv$'
+    line: "{{ ubuntu2004STIG_stigrule_238304__etc_audit_rules_d_stig_rules_execve_b32_egid_Line }}"
+  when: ubuntu2004STIG_stigrule_238304_Manage
+# R-238309 UBTU-20-010244
+- name : stigrule_238309__etc_audit_rules_d_stig_rules_sudo_log
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /var/log/sudo.log -p wa -k actions$'
+    line: "{{ ubuntu2004STIG_stigrule_238309__etc_audit_rules_d_stig_rules_sudo_log_Line }}"
+  when: ubuntu2004STIG_stigrule_238309_Manage
+# R-238310 UBTU-20-010267
+- name : stigrule_238310__etc_audit_rules_d_stig_rules_b64_unlink_unlinkat_rename_renameat_rmdir
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b64 -S unlink,unlinkat,rename,renameat,rmdir -F auid>=1000 -F auid!=-1 -k delete$'
+    line: "{{ ubuntu2004STIG_stigrule_238310__etc_audit_rules_d_stig_rules_b64_unlink_unlinkat_rename_renameat_rmdir_Line }}"
+  when: ubuntu2004STIG_stigrule_238310_Manage
+# R-238310 UBTU-20-010267
+- name : stigrule_238310__etc_audit_rules_d_stig_rules_b32_unlink_unlinkat_rename_renameat_rmdir
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-a always,exit -F arch=b32 -S unlink,unlinkat,rename,renameat,rmdir -F auid>=1000 -F auid!=-1 -k delete$'
+    line: "{{ ubuntu2004STIG_stigrule_238310__etc_audit_rules_d_stig_rules_b32_unlink_unlinkat_rename_renameat_rmdir_Line }}"
+  when: ubuntu2004STIG_stigrule_238310_Manage
+# R-238315 UBTU-20-010277
+- name : stigrule_238315__etc_audit_rules_d_stig_rules__var_log_wtmp
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /var/log/wtmp -p wa -k logins$'
+    line: "{{ ubuntu2004STIG_stigrule_238315__etc_audit_rules_d_stig_rules__var_log_wtmp_Line }}"
+  when: ubuntu2004STIG_stigrule_238315_Manage
+# R-238316 UBTU-20-010278
+- name : stigrule_238316__etc_audit_rules_d_stig_rules__var_run_utmp
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /var/run/utmp -p wa -k logins$'
+    line: "{{ ubuntu2004STIG_stigrule_238316__etc_audit_rules_d_stig_rules__var_run_utmp_Line }}"
+  when: ubuntu2004STIG_stigrule_238316_Manage
+# R-238317 UBTU-20-010279
+- name : stigrule_238317__etc_audit_rules_d_stig_rules__var_log_btmp
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /var/log/btmp -p wa -k logins$'
+    line: "{{ ubuntu2004STIG_stigrule_238317__etc_audit_rules_d_stig_rules__var_log_btmp_Line }}"
+  when: ubuntu2004STIG_stigrule_238317_Manage
+# R-238318 UBTU-20-010296
+- name : stigrule_238318__etc_audit_rules_d_stig_rules__sbin_modprobe
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /sbin/modprobe -p x -k modules$'
+    line: "{{ ubuntu2004STIG_stigrule_238318__etc_audit_rules_d_stig_rules__sbin_modprobe_Line }}"
+  when: ubuntu2004STIG_stigrule_238318_Manage
+# R-238319 UBTU-20-010297
+- name : stigrule_238319__etc_audit_rules_d_stig_rules__bin_kmod
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /bin/kmod -p x -k modules$'
+    line: "{{ ubuntu2004STIG_stigrule_238319__etc_audit_rules_d_stig_rules__bin_kmod_Line }}"
+  when: ubuntu2004STIG_stigrule_238319_Manage
+# R-238320 UBTU-20-010298
+- name : stigrule_238320__etc_audit_rules_d_stig_rules__bin_fdisk
+  lineinfile:
+    path: /etc/audit/rules.d/stig.rules
+    regexp: '^-w /sbin/fdisk -p x -k fdisk$'
+    line: "{{ ubuntu2004STIG_stigrule_238320__etc_audit_rules_d_stig_rules__bin_fdisk_Line }}"
+  when: ubuntu2004STIG_stigrule_238320_Manage
+# R-238323 UBTU-20-010400
+- name: stigrule_238323__etc_security_limits_conf
+  lineinfile:
+    path: /etc/security/limits.conf
+    regexp: '^\* hard maxlogins'
+    line: "{{ ubuntu2004STIG_stigrule_238323__etc_security_limits_conf_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238323_Manage
+# R-238325 UBTU-20-010404
+- name: stigrule_238325__etc_login_defs
+  lineinfile:
+    path: /etc/login.defs
+    regexp: '^ENCRYPT_METHOD'
+    line: "{{ ubuntu2004STIG_stigrule_238325__etc_login_defs_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238325_Manage
+# R-238326 UBTU-20-010405
+- name: stigrule_238326_telnetd
+  apt:
+    name: telnetd
+    state: "{{ ubuntu2004STIG_stigrule_238326_telnetd_State }}"
+    update_cache: yes
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+  when: ubuntu2004STIG_stigrule_238326_Manage
+# R-238327 UBTU-20-010406
+- name: stigrule_238327_rsh_server
+  apt:
+    name: rsh-server
+    state: "{{ ubuntu2004STIG_stigrule_238327_rsh_server_State }}"
+    update_cache: yes
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+  when: ubuntu2004STIG_stigrule_238327_Manage
+# R-238333 UBTU-20-010412
+- name: stigrule_238333_net_ipv4_tcp_syncookies
+  sysctl:
+    name: net.ipv4.tcp_syncookies
+    value: "{{ ubuntu2004STIG_stigrule_238333_net_ipv4_tcp_syncookies_Value }}"
+  when:
+    - ubuntu2004STIG_stigrule_238333_Manage
+# R-238333 UBTU-20-010412
+- name: stigrule_238333__etc_sysctl_conf
+  lineinfile:
+    path: /etc/sysctl.conf
+    regexp: '^\s*net.ipv4.tcp_syncookies'
+    line: "{{ ubuntu2004STIG_stigrule_238333__etc_sysctl_conf_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238333_Manage
+# R-238334 UBTU-20-010413
+- name: check if kdump.service is installed
+  shell: ! systemctl list-unit-files | grep "^kdump.service[ \t]\+"
+  changed_when: False
+  check_mode: no
+  register: result
+  failed_when: result.rc > 1
+- name: stigrule_238334_kdump_disable
+  service:
+    name: kdump.service
+    enabled: "{{ ubuntu2004STIG_stigrule_238334_kdump_disable_Enabled }}"
+  when:
+    - ubuntu2004STIG_stigrule_238334_Manage
+    - result.rc == 0
+# R-238336 UBTU-20-010415
+# Disabled due to not being a standard package
+- name: stigrule_238336_mfetp
+  apt:
+    name: mfetp
+    state: "{{ ubuntu2004STIG_stigrule_238336_mfetp_State }}"
+    update_cache: yes
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+  when: ubuntu2004STIG_stigrule_238336_Manage
+# R-238353 UBTU-20-010432
+- name: stigrule_238353_rsyslog
+  apt:
+    name: rsyslog
+    state: "{{ ubuntu2004STIG_stigrule_238353_rsyslog_State }}"
+    update_cache: yes
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+  when: ubuntu2004STIG_stigrule_238353_Manage
+# R-238353 UBTU-20-010432
+- name: check if rsyslog.service is installed
+  shell: ! systemctl list-unit-files | grep "^rsyslog.service[ \t]\+"
+  changed_when: False
+  check_mode: no
+  register: result
+  failed_when: result.rc > 1
+- name: stigrule_238353_rsyslog_enable
+  service:
+    name: rsyslog.service
+    enabled: "{{ ubuntu2004STIG_stigrule_238353_rsyslog_enable_Enabled }}"
+  when:
+    - ubuntu2004STIG_stigrule_238353_Manage
+    - result.rc == 0
+# R-238354 UBTU-20-010433
+- name: stigrule_238354_ufw
+  apt:
+    name: ufw
+    state: "{{ ubuntu2004STIG_stigrule_238354_ufw_State }}"
+    update_cache: yes
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+  when: ubuntu2004STIG_stigrule_238354_Manage
+# R-238359 UBTU-20-010438
+- name: stigrule_238359__etc_apt_apt_conf_d_01_vendor_Ubuntu
+  lineinfile:
+    path: /etc/apt/apt.conf.d/01-vendor-Ubuntu
+    regexp: '^APT::Get::AllowUnauthenticated'
+    line: "{{ ubuntu2004STIG_stigrule_238359__etc_apt_apt_conf_d_01_vendor_Ubuntu_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238359_Manage
+# R-238360 UBTU-20-010439
+- name: stigrule_238360_apparmor
+  apt:
+    name: apparmor
+    state: "{{ ubuntu2004STIG_stigrule_238360_apparmor_State }}"
+    update_cache: yes
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+  when: ubuntu2004STIG_stigrule_238360_Manage
+# R-238360 UBTU-20-010439
+- name: check if apparmor.service is installed
+  shell: ! systemctl list-unit-files | grep "^apparmor.service[ \t]\+"
+  changed_when: False
+  check_mode: no
+  register: result
+  failed_when: result.rc > 1
+- name: stigrule_238360_apparmor_enable
+  service:
+    name: apparmor.service
+    enabled: "{{ ubuntu2004STIG_stigrule_238360_apparmor_enable_Enabled }}"
+  when:
+    - ubuntu2004STIG_stigrule_238360_Manage
+    - result.rc == 0
+# R-238360 UBTU-20-010439
+- name: check if apparmor.service is installed
+  shell: ! systemctl list-unit-files | grep "^apparmor.service[ \t]\+"
+  changed_when: False
+  check_mode: no
+  register: result
+  failed_when: result.rc > 1
+- name: stigrule_238360_apparmor_start
+  service:
+    name: apparmor.service
+    state: "{{ ubuntu2004STIG_stigrule_238360_apparmor_start_State }}"
+  when:
+    - ubuntu2004STIG_stigrule_238360_Manage
+    - result.rc == 0
+# R-238360 UBTU-20-010439
+- name: stigrule_238360_aide
+  apt:
+    name: aide
+    state: "{{ ubuntu2004STIG_stigrule_238360_aide_State }}"
+    update_cache: yes
+  register: apt_status
+  until: apt_status is success
+  retries: 12
+  delay: 10
+  when: ubuntu2004STIG_stigrule_238360_Manage
+# R-238370 UBTU-20-010449
+- name: stigrule_238370__etc_apt_apt_conf_d_50unattended_upgrades_Remove_Unused_Dependencies
+  lineinfile:
+    path: /etc/apt/apt.conf.d/50unattended-upgrades
+    regexp: '^Unattended-Upgrade::Remove-Unused-Dependencies'
+    line: "{{ ubuntu2004STIG_stigrule_238370__etc_apt_apt_conf_d_50unattended_upgrades_Remove_Unused_Dependencies_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238370_Manage
+# R-238370 UBTU-20-010449
+- name: stigrule_238370__etc_apt_apt_conf_d_50unattended_upgrades_Remove_Unused_Kernel_Packages
+  lineinfile:
+    path: /etc/apt/apt.conf.d/50unattended-upgrades
+    regexp: '^Unattended-Upgrade::Remove-Unused-Kernel-Packages'
+    line: "{{ ubuntu2004STIG_stigrule_238370__etc_apt_apt_conf_d_50unattended_upgrades_Remove_Unused_Kernel_Packages_Line }}"
+    create: yes
+  when:
+    - ubuntu2004STIG_stigrule_238370_Manage
+# R-238374 UBTU-20-010454
+- name: check if ufw.service is installed
+  shell: ! systemctl list-unit-files | grep "^ufw.service[ \t]\+"
+  changed_when: False
+  check_mode: no
+  register: result
+  failed_when: result.rc > 1
+- name: stigrule_238374_ufw_active
+  service:
+    name: ufw.service
+    enabled: "{{ ubuntu2004STIG_stigrule_238374_ufw_active_Enabled }}"
+  when:
+    - ubuntu2004STIG_stigrule_238374_Manage
+    - result.rc == 0
+# R-238374 UBTU-20-010454
+- name: check if ufw.service is installed
+  shell: ! systemctl list-unit-files | grep "^ufw.service[ \t]\+"
+  changed_when: False
+  check_mode: no
+  register: result
+  failed_when: result.rc > 1
+- name: stigrule_238374_ufw_start
+  service:
+    name: ufw.service
+    state: "{{ ubuntu2004STIG_stigrule_238374_ufw_start_State }}"
+  when:
+    - ubuntu2004STIG_stigrule_238374_Manage
+    - result.rc == 0
+
+
+V-238208 - The Ubuntu operating system must require users to reauthenticate for privilege escalation or when changing roles. - Fail
+V-238244 - The Ubuntu operating system must shut down by default upon audit failure (unless availability is an overriding concern). - Fail
+V-238229 - The Ubuntu operating system, for PKI-based authentication, must validate certificates by constructing a certification path (which includes status information) to an accepted trust anchor. - Fail
+V-238232 - The Ubuntu operating system must electronically verify Personal Identity Verification (PIV) credentials. - Fail
+V-238233 - The Ubuntu operating system for PKI-based authentication, must implement a local cache of revocation data in case of the inability to access revocation information via the network. - Fail
+V-238254 - The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the mount command. - Fail
+V-238255 - The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the umount command. - Fail
+V-238258 - The Ubuntu operating system must generate audit records for any use of the setxattr, fsetxattr, lsetxattr, removexattr, fremovexattr, and lremovexattr system calls. - Fail
+V-238264 - The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chown, fchown, fchownat, and lchown system calls. - Fail
+V-238268 - The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chmod, fchmod, and fchmodat system calls. - Fail
+V-238271 - The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the creat, open, openat, open_by_handle_at, truncate, and ftruncate system calls. - Fail
+V-238295 - The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the init_module and finit_module syscalls. - Fail
+V-238299 - The Ubuntu operating system must initiate session audits at system start-up. - Fail
+V-238320 - The Ubuntu operating system must generate audit records when successful/unsuccessful attempts to use the fdisk command. - Fail
+V-238310 - The Ubuntu operating system must generate audit records for any successful/unsuccessful use of unlink, unlinkat, rename, renameat, and rmdir system calls. - Fail
+V-238337 - The Ubuntu operating system must generate error messages that provide information necessary for corrective actions without revealing information that could be exploited by adversaries. - Fail
+V-238235 - The Ubuntu operating system must automatically lock an account until the locked account is released by an administrator when three unsuccessful logon attempts have been made. - Fail

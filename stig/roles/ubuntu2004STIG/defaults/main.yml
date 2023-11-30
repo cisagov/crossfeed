@@ -1,0 +1,953 @@
+# R-238197 UBTU-20-010002
+ubuntu2004STIG_stigrule_238197_Manage: True
+ubuntu2004STIG_stigrule_238197__etc_gdm3_greeter_dconf_defaults_enable_Value: 'true'
+# R-238198 UBTU-20-010003
+ubuntu2004STIG_stigrule_238198_Manage: True
+ubuntu2004STIG_stigrule_238198__etc_gdm3_greeter_dconf_defaults_text_Value: '''You are accessing a U.S. Government (USG) Information System (IS) that is provided for USG-authorized use only.\nBy using this IS (which includes any device attached to this IS), you consent to the following conditions:\n-The USG routinely intercepts and monitors communications on this IS for purposes including, but not limited to, penetration testing, COMSEC monitoring, network operations and defense, personnel misconduct (PM), law enforcement (LE), and counterintelligence (CI) investigations.\n-At any time, the USG may inspect and seize data stored on this IS.\n-Communications using, or data stored on, this IS are not private, are subject to routine monitoring, interception, and search, and may be disclosed or used for any USG-authorized purpose.\n-This IS includes security measures (e.g., authentication and access controls) to protect USG interests--not for your personal benefit or privacy.\n-Notwithstanding the above, using this IS does not constitute consent to PM, LE or CI investigative searching or monitoring of the content of privileged communications, or work product, related to personal representation or services by attorneys, psychotherapists, or clergy, and their assistants. Such communications and work product are private and confidential. See User Agreement for details.'''
+# R-238200 UBTU-20-010005
+ubuntu2004STIG_stigrule_238200_Manage: True
+ubuntu2004STIG_stigrule_238200_vlock_State: present
+# R-238202 UBTU-20-010007
+ubuntu2004STIG_stigrule_238202_Manage: True
+ubuntu2004STIG_stigrule_238202__etc_login_defs_Line: 'PASS_MIN_DAYS 1'
+# R-238203 UBTU-20-010008
+ubuntu2004STIG_stigrule_238203_Manage: True
+ubuntu2004STIG_stigrule_238203__etc_login_defs_Line: 'PASS_MAX_DAYS 60'
+# R-238207 UBTU-20-010013
+ubuntu2004STIG_stigrule_238207_Manage: True
+ubuntu2004STIG_stigrule_238207__etc_profile_d_99_terminal_tmout_sh_Dest: /etc/profile.d/99-terminal_tmout.sh
+ubuntu2004STIG_stigrule_238207__etc_profile_d_99_terminal_tmout_sh_Content: 'TMOUT=600'
+# R-238209 UBTU-20-010016
+ubuntu2004STIG_stigrule_238209_Manage: True
+ubuntu2004STIG_stigrule_238209__etc_login_defs_Line: 'UMASK 077'
+# R-238212 UBTU-20-010036
+ubuntu2004STIG_stigrule_238212_Manage: True
+ubuntu2004STIG_stigrule_238212_ClientAliveCountMax_Line: ClientAliveCountMax 1
+# R-238213 UBTU-20-010037
+ubuntu2004STIG_stigrule_238213_Manage: True
+ubuntu2004STIG_stigrule_238213_ClientAliveInterval_Line: ClientAliveInterval 600
+# R-238214 UBTU-20-010038
+ubuntu2004STIG_stigrule_238214_Manage: True
+ubuntu2004STIG_stigrule_238214_banner_Line: banner /etc/issue.net
+ubuntu2004STIG_stigrule_238214__etc_issue_net_Dest: /etc/issue.net
+ubuntu2004STIG_stigrule_238214__etc_issue_net_Content: 'You are accessing a U.S. Government (USG) Information System (IS) that is provided for USG-authorized use only.
+
+By using this IS (which includes any device attached to this IS), you consent to the following conditions:
+
+-The USG routinely intercepts and monitors communications on this IS for purposes including, but not limited to, penetration testing, COMSEC monitoring, network operations and defense, personnel misconduct (PM), law enforcement (LE), and counterintelligence (CI) investigations.
+
+-At any time, the USG may inspect and seize data stored on this IS.
+
+-Communications using, or data stored on, this IS are not private, are subject to routine monitoring, interception, and search, and may be disclosed or used for any USG-authorized purpose.
+
+-This IS includes security measures (e.g., authentication and access controls) to protect USG interests--not for your personal benefit or privacy.
+
+-Notwithstanding the above, using this IS does not constitute consent to PM, LE or CI investigative searching or monitoring of the content of privileged communications, or work product, related to personal representation or services by attorneys, psychotherapists, or clergy, and their assistants. Such communications and work product are private and confidential. See User Agreement for details.
+
+'
+# R-238215 UBTU-20-010042
+ubuntu2004STIG_stigrule_238215_Manage: True
+ubuntu2004STIG_stigrule_238215_ssh_State: present
+ubuntu2004STIG_stigrule_238215_sshd_active_Enabled: yes
+ubuntu2004STIG_stigrule_238215_sshd_start_State: started
+# R-238216 UBTU-20-010043
+ubuntu2004STIG_stigrule_238216_Manage: True
+ubuntu2004STIG_stigrule_238216_MACs_Line: MACs hmac-sha2-512,hmac-sha2-256
+# R-238217 UBTU-20-010044
+ubuntu2004STIG_stigrule_238217_Manage: True
+ubuntu2004STIG_stigrule_238217_Ciphers_Line: Ciphers aes256-ctr,aes192-ctr,aes128-ctr
+# R-238218 UBTU-20-010047
+ubuntu2004STIG_stigrule_238218_Manage: True
+ubuntu2004STIG_stigrule_238218_PermitEmptyPasswords_Line: PermitEmptyPasswords no
+ubuntu2004STIG_stigrule_238218_PermitUserEnvironment_Line: PermitUserEnvironment no
+# R-238219 UBTU-20-010048
+ubuntu2004STIG_stigrule_238219_Manage: True
+ubuntu2004STIG_stigrule_238219_X11Forwarding_Line: X11Forwarding no
+# R-238220 UBTU-20-010049
+ubuntu2004STIG_stigrule_238220_Manage: True
+ubuntu2004STIG_stigrule_238220_X11UseLocalhost_Line: X11UseLocalhost yes
+# R-238221 UBTU-20-010050
+ubuntu2004STIG_stigrule_238221_Manage: True
+ubuntu2004STIG_stigrule_238221__etc_security_pwquality_conf_Line: 'ucredit=-1'
+# R-238222 UBTU-20-010051
+ubuntu2004STIG_stigrule_238222_Manage: True
+ubuntu2004STIG_stigrule_238222__etc_security_pwquality_conf_Line: 'lcredit=-1'
+# R-238223 UBTU-20-010052
+ubuntu2004STIG_stigrule_238223_Manage: True
+ubuntu2004STIG_stigrule_238223__etc_security_pwquality_conf_Line: 'dcredit=-1'
+# R-238224 UBTU-20-010053
+ubuntu2004STIG_stigrule_238224_Manage: True
+ubuntu2004STIG_stigrule_238224__etc_security_pwquality_conf_Line: 'difok=8'
+# R-238225 UBTU-20-010054
+ubuntu2004STIG_stigrule_238225_Manage: True
+ubuntu2004STIG_stigrule_238225__etc_security_pwquality_conf_Line: 'minlen=15'
+# R-238226 UBTU-20-010055
+ubuntu2004STIG_stigrule_238226_Manage: True
+ubuntu2004STIG_stigrule_238226__etc_security_pwquality_conf_Line: 'ocredit=-1'
+# R-238227 UBTU-20-010056
+ubuntu2004STIG_stigrule_238227_Manage: True
+ubuntu2004STIG_stigrule_238227__etc_security_pwquality_conf_Line: 'dictcheck=1'
+# R-238230 UBTU-20-010063
+ubuntu2004STIG_stigrule_238230_Manage: True
+ubuntu2004STIG_stigrule_238230_libpam_pkcs11_State: present
+# R-238231 UBTU-20-010064
+ubuntu2004STIG_stigrule_238231_Manage: True
+ubuntu2004STIG_stigrule_238231_opensc_pkcs11_State: present
+# R-238238 UBTU-20-010100
+ubuntu2004STIG_stigrule_238238_Manage: True
+ubuntu2004STIG_stigrule_238238__etc_audit_rules_d_stig_rules__etc_passwd_Line: '-w /etc/passwd -p wa -k usergroup_modification'
+# R-238239 UBTU-20-010101
+ubuntu2004STIG_stigrule_238239_Manage: True
+ubuntu2004STIG_stigrule_238239__etc_audit_rules_d_stig_rules__etc_group_Line: '-w /etc/group -p wa -k usergroup_modification'
+# R-238240 UBTU-20-010102
+ubuntu2004STIG_stigrule_238240_Manage: True
+ubuntu2004STIG_stigrule_238240__etc_audit_rules_d_stig_rules__etc_shadow_Line: '-w /etc/shadow -p wa -k usergroup_modification'
+# R-238241 UBTU-20-010103
+ubuntu2004STIG_stigrule_238241_Manage: True
+ubuntu2004STIG_stigrule_238241__etc_audit_rules_d_stig_rules__etc_gshadow_Line: '-w /etc/gshadow -p wa -k usergroup_modification'
+# R-238242 UBTU-20-010104
+ubuntu2004STIG_stigrule_238242_Manage: True
+ubuntu2004STIG_stigrule_238242__etc_audit_rules_d_stig_rules__etc_security_opasswd_Line: '-w /etc/security/opasswd -p wa -k usergroup_modification'
+# R-238243 UBTU-20-010117
+# Change root to an account for security personnel.
+ubuntu2004STIG_stigrule_238243_Manage: True
+ubuntu2004STIG_stigrule_238243__etc_audit_auditd_conf_Line: 'action_mail_acct = root'
+# R-238244 UBTU-20-010118
+ubuntu2004STIG_stigrule_238244_Manage: True
+ubuntu2004STIG_stigrule_238244__etc_audit_auditd_conf_Line: 'disk_full_action = HALT'
+# R-238252 UBTU-20-010136
+ubuntu2004STIG_stigrule_238252_Manage: True
+ubuntu2004STIG_stigrule_238252__etc_audit_rules_d_stig_rules__bin_su_Line: '-a always,exit -F path=/bin/su -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change'
+# R-238253 UBTU-20-010137
+ubuntu2004STIG_stigrule_238253_Manage: True
+ubuntu2004STIG_stigrule_238253__etc_audit_rules_d_stig_rules__usr_bin_chfn_Line: '-a always,exit -F path=/usr/bin/chfn -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-chfn'
+# R-238254 UBTU-20-010138
+ubuntu2004STIG_stigrule_238254_Manage: True
+ubuntu2004STIG_stigrule_238254__etc_audit_rules_d_stig_rules__usr_bin_mount_Line: '-a always,exit -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-mount'
+# R-238255 UBTU-20-010139
+ubuntu2004STIG_stigrule_238255_Manage: True
+ubuntu2004STIG_stigrule_238255__etc_audit_rules_d_stig_rules__usr_bin_umount_Line: '-a always,exit -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-umount'
+# R-238256 UBTU-20-010140
+ubuntu2004STIG_stigrule_238256_Manage: True
+ubuntu2004STIG_stigrule_238256__etc_audit_rules_d_stig_rules__usr_bin_ssh_agent_Line: '-a always,exit -F path=/usr/bin/ssh-agent -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-ssh'
+# R-238257 UBTU-20-010141
+ubuntu2004STIG_stigrule_238257_Manage: True
+ubuntu2004STIG_stigrule_238257__etc_audit_rules_d_stig_rules__usr_lib_openssh_ssh_keysign_Line: '-a always,exit -F path=/usr/lib/openssh/ssh-keysign -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-ssh'
+# R-238258 UBTU-20-010142
+ubuntu2004STIG_stigrule_238258_Manage: True
+ubuntu2004STIG_stigrule_238258__etc_audit_rules_d_stig_rules_b32_setxattr_fsetxattr_lsetxattr_removexattr_fremovexattr_lremovexattr_1_Line: '-a always,exit -F arch=b32 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid>=1000 -F auid!=-1 -k perm_mod'
+ubuntu2004STIG_stigrule_238258__etc_audit_rules_d_stig_rules_b32_setxattr_fsetxattr_lsetxattr_removexattr_fremovexattr_lremovexattr_2_Line: '-a always,exit -F arch=b32 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid=0 -k perm_mod'
+ubuntu2004STIG_stigrule_238258__etc_audit_rules_d_stig_rules_b64_setxattr_fsetxattr_lsetxattr_removexattr_fremovexattr_lremovexattr_1_Line: '-a always,exit -F arch=b64 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid>=1000 -F auid!=-1 -k perm_mod'
+ubuntu2004STIG_stigrule_238258__etc_audit_rules_d_stig_rules_b64_setxattr_fsetxattr_lsetxattr_removexattr_fremovexattr_lremovexattr_2_Line: '-a always,exit -F arch=b64 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid=0 -k perm_mod'
+# R-238264 UBTU-20-010148
+ubuntu2004STIG_stigrule_238264_Manage: True
+ubuntu2004STIG_stigrule_238264__etc_audit_rules_d_stig_rules_b32_chown_fchown_fchownat_lchown_Line: '-a always,exit -F arch=b32 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=-1 -k perm_chng'
+ubuntu2004STIG_stigrule_238264__etc_audit_rules_d_stig_rules_b64_chown_fchown_fchownat_lchown_Line: '-a always,exit -F arch=b64 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=-1 -k perm_chng'
+# R-238268 UBTU-20-010152
+ubuntu2004STIG_stigrule_238268_Manage: True
+ubuntu2004STIG_stigrule_238268__etc_audit_rules_d_stig_rules_b32_chmod_fchmod_fchmodat_Line: '-a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_chng'
+ubuntu2004STIG_stigrule_238268__etc_audit_rules_d_stig_rules_b64_chmod_fchmod_fchmodat_Line: '-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_chng'
+# R-238271 UBTU-20-010155
+ubuntu2004STIG_stigrule_238271_Manage: True
+ubuntu2004STIG_stigrule_238271__etc_audit_rules_d_stig_rules_b32_creat_open_openat_open_by_handle_at_truncate_ftruncate_EPERM_Line: '-a always,exit -F arch=b32 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k perm_access'
+ubuntu2004STIG_stigrule_238271__etc_audit_rules_d_stig_rules_b32_creat_open_openat_open_by_handle_at_truncate_ftruncate_EACCES_Line: '-a always,exit -F arch=b32 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k perm_access'
+ubuntu2004STIG_stigrule_238271__etc_audit_rules_d_stig_rules_b64_creat_open_openat_open_by_handle_at_truncate_ftruncat_EPERM_Line: '-a always,exit -F arch=b64 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k perm_access'
+ubuntu2004STIG_stigrule_238271__etc_audit_rules_d_stig_rules_b64_creat_open_openat_open_by_handle_at_truncate_ftruncat_EACCES_Line: '-a always,exit -F arch=b64 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k perm_access'
+# R-238277 UBTU-20-010161
+ubuntu2004STIG_stigrule_238277_Manage: True
+ubuntu2004STIG_stigrule_238277__etc_audit_rules_d_stig_rules__usr_bin_sudo_Line: '-a always,exit -F path=/usr/bin/sudo -F perm=x -F auid>=1000 -F auid!=4294967295 -k priv_cmd'
+# R-238278 UBTU-20-010162
+ubuntu2004STIG_stigrule_238278_Manage: True
+ubuntu2004STIG_stigrule_238278__etc_audit_rules_d_stig_rules__usr_bin_sudoedit_Line: '-a always,exit -F path=/usr/bin/sudoedit -F perm=x -F auid>=1000 -F auid!=4294967295 -k priv_cmd'
+# R-238279 UBTU-20-010163
+ubuntu2004STIG_stigrule_238279_Manage: True
+ubuntu2004STIG_stigrule_238279__etc_audit_rules_d_stig_rules__usr_bin_chsh_Line: '-a always,exit -F path=/usr/bin/chsh -F perm=x -F auid>=1000 -F auid!=4294967295 -k priv_cmd'
+# R-238280 UBTU-20-010164
+ubuntu2004STIG_stigrule_238280_Manage: True
+ubuntu2004STIG_stigrule_238280__etc_audit_rules_d_stig_rules__usr_bin_newgrp_Line: '-a always,exit -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=4294967295 -k priv_cmd'
+# R-238281 UBTU-20-010165
+ubuntu2004STIG_stigrule_238281_Manage: True
+ubuntu2004STIG_stigrule_238281__etc_audit_rules_d_stig_rules__usr_bin_chcon_Line: '-a always,exit -F path=/usr/bin/chcon -F perm=x -F auid>=1000 -F auid!=4294967295 -k perm_chng'
+# R-238282 UBTU-20-010166
+ubuntu2004STIG_stigrule_238282_Manage: True
+ubuntu2004STIG_stigrule_238282__etc_audit_rules_d_stig_rules__sbin_apparmor_parser_Line: '-a always,exit -F path=/sbin/apparmor_parser -F perm=x -F auid>=1000 -F auid!=4294967295 -k perm_chng'
+# R-238283 UBTU-20-010167
+ubuntu2004STIG_stigrule_238283_Manage: True
+ubuntu2004STIG_stigrule_238283__etc_audit_rules_d_stig_rules__usr_bin_setfacl_Line: '-a always,exit -F path=/usr/bin/setfacl -F perm=x -F auid>=1000 -F auid!=4294967295 -k perm_chng'
+# R-238284 UBTU-20-010168
+ubuntu2004STIG_stigrule_238284_Manage: True
+ubuntu2004STIG_stigrule_238284__etc_audit_rules_d_stig_rules__usr_bin_chacl_Line: '-a always,exit -F path=/usr/bin/chacl -F perm=x -F auid>=1000 -F auid!=4294967295 -k perm_chng'
+# R-238285 UBTU-20-010169
+ubuntu2004STIG_stigrule_238285_Manage: True
+ubuntu2004STIG_stigrule_238285__etc_audit_rules_d_stig_rules_tallylog_Line: '-w /var/log/tallylog -p wa -k logins'
+# R-238286 UBTU-20-010170
+ubuntu2004STIG_stigrule_238286_Manage: True
+ubuntu2004STIG_stigrule_238286__etc_audit_rules_d_stig_rules_faillog_Line: '-w /var/log/faillog -p wa -k logins'
+# R-238287 UBTU-20-010171
+ubuntu2004STIG_stigrule_238287_Manage: True
+ubuntu2004STIG_stigrule_238287__etc_audit_rules_d_stig_rules_lastlog_Line: '-w /var/log/lastlog -p wa -k logins'
+# R-238288 UBTU-20-010172
+ubuntu2004STIG_stigrule_238288_Manage: True
+ubuntu2004STIG_stigrule_238288__etc_audit_rules_d_stig_rules__usr_bin_passwd_Line: '-a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-passwd'
+# R-238289 UBTU-20-010173
+ubuntu2004STIG_stigrule_238289_Manage: True
+ubuntu2004STIG_stigrule_238289__etc_audit_rules_d_stig_rules__sbin_unix_update_Line: '-a always,exit -F path=/sbin/unix_update -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-unix-update'
+# R-238290 UBTU-20-010174
+ubuntu2004STIG_stigrule_238290_Manage: True
+ubuntu2004STIG_stigrule_238290__etc_audit_rules_d_stig_rules__usr_bin_gpasswd_Line: '-a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-gpasswd'
+# R-238291 UBTU-20-010175
+ubuntu2004STIG_stigrule_238291_Manage: True
+ubuntu2004STIG_stigrule_238291__etc_audit_rules_d_stig_rules__usr_bin_chage_Line: '-a always,exit -F path=/usr/bin/chage -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-chage'
+# R-238292 UBTU-20-010176
+ubuntu2004STIG_stigrule_238292_Manage: True
+ubuntu2004STIG_stigrule_238292__etc_audit_rules_d_stig_rules__usr_bin_usermod_Line: '-a always,exit -F path=/usr/sbin/usermod -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-usermod'
+# R-238293 UBTU-20-010177
+ubuntu2004STIG_stigrule_238293_Manage: True
+ubuntu2004STIG_stigrule_238293__etc_audit_rules_d_stig_rules__usr_bin_crontab_Line: '-a always,exit -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-crontab'
+# R-238294 UBTU-20-010178
+ubuntu2004STIG_stigrule_238294_Manage: True
+ubuntu2004STIG_stigrule_238294__etc_audit_rules_d_stig_rules__usr_sbin_pam_timestamp_check_Line: '-a always,exit -F path=/usr/sbin/pam_timestamp_check -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-pam_timestamp_check'
+# R-238295 UBTU-20-010179
+ubuntu2004STIG_stigrule_238295_Manage: True
+ubuntu2004STIG_stigrule_238295__etc_audit_rules_d_stig_rules_b32_init_module_finit_module_Line: '-a always,exit -F arch=b32 -S init_module,finit_module -F auid>=1000 -F auid!=-1 -k module_chng'
+ubuntu2004STIG_stigrule_238295__etc_audit_rules_d_stig_rules_b64_init_module_finit_module_Line: '-a always,exit -F arch=b64 -S init_module,finit_module -F auid>=1000 -F auid!=-1 -k module_chng'
+# R-238297 UBTU-20-010181
+ubuntu2004STIG_stigrule_238297_Manage: True
+ubuntu2004STIG_stigrule_238297__etc_audit_rules_d_stig_rules_delete_module_b32_Line: '-a always,exit -F arch=b32 -S delete_module -F auid>=1000 -F auid!=4294967295 -k module_chng'
+ubuntu2004STIG_stigrule_238297__etc_audit_rules_d_stig_rules_delete_module_b64_Line: '-a always,exit -F arch=b64 -S delete_module -F auid>=1000 -F auid!=4294967295 -k module_chng'
+# R-238298 UBTU-20-010182
+ubuntu2004STIG_stigrule_238298_Manage: True
+ubuntu2004STIG_stigrule_238298_auditd_State: present
+ubuntu2004STIG_stigrule_238298_auditd_enable_Enabled: yes
+# R-238304 UBTU-20-010211
+ubuntu2004STIG_stigrule_238304_Manage: True
+ubuntu2004STIG_stigrule_238304__etc_audit_rules_d_stig_rules_execve_b64_euid_Line: '-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -F key=execpriv'
+ubuntu2004STIG_stigrule_238304__etc_audit_rules_d_stig_rules_execve_b64_egid_Line: '-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -F key=execpriv'
+ubuntu2004STIG_stigrule_238304__etc_audit_rules_d_stig_rules_execve_b32_euid_Line: '-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -F key=execpriv'
+ubuntu2004STIG_stigrule_238304__etc_audit_rules_d_stig_rules_execve_b32_egid_Line: '-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -F key=execpriv'
+# R-238309 UBTU-20-010244
+ubuntu2004STIG_stigrule_238309_Manage: True
+ubuntu2004STIG_stigrule_238309__etc_audit_rules_d_stig_rules_sudo_log_Line: '-w /var/log/sudo.log -p wa -k actions'
+# R-238310 UBTU-20-010267
+ubuntu2004STIG_stigrule_238310_Manage: True
+ubuntu2004STIG_stigrule_238310__etc_audit_rules_d_stig_rules_b64_unlink_unlinkat_rename_renameat_rmdir_Line: '-a always,exit -F arch=b64 -S unlink,unlinkat,rename,renameat,rmdir -F auid>=1000 -F auid!=-1 -k delete'
+ubuntu2004STIG_stigrule_238310__etc_audit_rules_d_stig_rules_b32_unlink_unlinkat_rename_renameat_rmdir_Line: '-a always,exit -F arch=b32 -S unlink,unlinkat,rename,renameat,rmdir -F auid>=1000 -F auid!=-1 -k delete'
+# R-238315 UBTU-20-010277
+ubuntu2004STIG_stigrule_238315_Manage: True
+ubuntu2004STIG_stigrule_238315__etc_audit_rules_d_stig_rules__var_log_wtmp_Line: '-w /var/log/wtmp -p wa -k logins'
+# R-238316 UBTU-20-010278
+ubuntu2004STIG_stigrule_238316_Manage: True
+ubuntu2004STIG_stigrule_238316__etc_audit_rules_d_stig_rules__var_run_utmp_Line: '-w /var/run/utmp -p wa -k logins'
+# R-238317 UBTU-20-010279
+ubuntu2004STIG_stigrule_238317_Manage: True
+ubuntu2004STIG_stigrule_238317__etc_audit_rules_d_stig_rules__var_log_btmp_Line: '-w /var/log/btmp -p wa -k logins'
+# R-238318 UBTU-20-010296
+ubuntu2004STIG_stigrule_238318_Manage: True
+ubuntu2004STIG_stigrule_238318__etc_audit_rules_d_stig_rules__sbin_modprobe_Line: '-w /sbin/modprobe -p x -k modules'
+# R-238319 UBTU-20-010297
+ubuntu2004STIG_stigrule_238319_Manage: True
+ubuntu2004STIG_stigrule_238319__etc_audit_rules_d_stig_rules__bin_kmod_Line: '-w /bin/kmod -p x -k modules'
+# R-238320 UBTU-20-010298
+ubuntu2004STIG_stigrule_238320_Manage: True
+ubuntu2004STIG_stigrule_238320__etc_audit_rules_d_stig_rules__bin_fdisk_Line: '-w /sbin/fdisk -p x -k fdisk'
+# R-238323 UBTU-20-010400
+ubuntu2004STIG_stigrule_238323_Manage: True
+ubuntu2004STIG_stigrule_238323__etc_security_limits_conf_Line: '* hard maxlogins 10'
+# R-238325 UBTU-20-010404
+ubuntu2004STIG_stigrule_238325_Manage: True
+ubuntu2004STIG_stigrule_238325__etc_login_defs_Line: 'ENCRYPT_METHOD SHA512'
+# R-238326 UBTU-20-010405
+ubuntu2004STIG_stigrule_238326_Manage: True
+ubuntu2004STIG_stigrule_238326_telnetd_State: absent
+# R-238327 UBTU-20-010406
+ubuntu2004STIG_stigrule_238327_Manage: True
+ubuntu2004STIG_stigrule_238327_rsh_server_State: absent
+# R-238333 UBTU-20-010412
+ubuntu2004STIG_stigrule_238333_Manage: True
+ubuntu2004STIG_stigrule_238333_net_ipv4_tcp_syncookies_Value: 1
+ubuntu2004STIG_stigrule_238333__etc_sysctl_conf_Line: 'net.ipv4.tcp_syncookies = 1'
+# R-238334 UBTU-20-010413
+ubuntu2004STIG_stigrule_238334_Manage: True
+ubuntu2004STIG_stigrule_238334_kdump_disable_Enabled: no
+# R-238336 UBTU-20-010415
+# Disabled due to not being a standard package
+ubuntu2004STIG_stigrule_238336_Manage: False
+ubuntu2004STIG_stigrule_238336_mfetp_State: present
+# R-238353 UBTU-20-010432
+ubuntu2004STIG_stigrule_238353_Manage: True
+ubuntu2004STIG_stigrule_238353_rsyslog_State: present
+ubuntu2004STIG_stigrule_238353_rsyslog_enable_Enabled: yes
+# R-238354 UBTU-20-010433
+ubuntu2004STIG_stigrule_238354_Manage: True
+ubuntu2004STIG_stigrule_238354_ufw_State: present
+# R-238355 UBTU-20-010434
+# A duplicate of 238374
+# duplicate of 238374
+# R-238359 UBTU-20-010438
+ubuntu2004STIG_stigrule_238359_Manage: True
+ubuntu2004STIG_stigrule_238359__etc_apt_apt_conf_d_01_vendor_Ubuntu_Line: 'APT::Get::AllowUnauthenticated "false";'
+# R-238360 UBTU-20-010439
+ubuntu2004STIG_stigrule_238360_Manage: True
+ubuntu2004STIG_stigrule_238360_apparmor_State: present
+ubuntu2004STIG_stigrule_238360_apparmor_enable_Enabled: yes
+ubuntu2004STIG_stigrule_238360_apparmor_start_State: started
+ubuntu2004STIG_stigrule_238360_aide_State: present
+# R-238370 UBTU-20-010449
+ubuntu2004STIG_stigrule_238370_Manage: True
+ubuntu2004STIG_stigrule_238370__etc_apt_apt_conf_d_50unattended_upgrades_Remove_Unused_Dependencies_Line: 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'
+ubuntu2004STIG_stigrule_238370__etc_apt_apt_conf_d_50unattended_upgrades_Remove_Unused_Kernel_Packages_Line: 'Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";'
+# R-238374 UBTU-20-010454
+ubuntu2004STIG_stigrule_238374_Manage: True
+ubuntu2004STIG_stigrule_238374_ufw_active_Enabled: yes
+ubuntu2004STIG_stigrule_238374_ufw_start_State: started
+
+
+# UBTU-20-010033
+# ubtu20stig_pkcs11 are the settings related to the pkcs11 pam module
+# The settings type, control, module_path, and state need to correspond to an existing rule in /etc/pam.d/common-password, which is used
+# as a reference in adding the pam_pkcs11.so entry
+ubtu20stig_pkcs11:
+    new_control: "[success=2 default=ignore]"
+    type: auth
+    control: "[success=1 default=ignore]"
+    module_path: pam_unix.so
+    state: after
+
+
+
+# UBTU-20-010066
+# ubtu20stig_crl_setting_cert_policy is the setting that will be applied to all cert_policy lines that are
+# in the pam_pkcs11.conf file.  This control adds the variable you select below to all lines.
+# crl_auto or crl_offline are valid STIG compliant options.
+ubtu20stig_crl_setting_cert_policy: crl_auto
+
+# UBTU-20-010070
+# ubtu20stig_pamd_remember are the pam.d placement settings and value for password remember setting
+# The settings, type, control, module_path, and state need to correspond to an existing rule in /etc/pam.d/common-password, which is used
+# as a reference in adding the password [success default] pam_unix.so remember values if pam_unix.so with success/default do not already exist.
+# new_control is the value for the success and default with pam_unix.so
+# remember is the number of generations to remember, this value should be no less than 5.
+ubtu20stig_pamd_remember:
+    new_control: "[success=1 default=ignore]"
+    type: password
+    control: requisite
+    module_path: pam_pwquality.so
+    state: after
+    remember: 5
+    rounds: 5000
+
+# UBTU-20-010072
+# ubtu20stig_pamd_failock_authfail are the pam.d placement settings and value for failed login attempts
+# The settings, type, control, module_path, and state need to correspond to an existing rule in /etc/pam.d/common-auth, which is used
+# as a reference in adding the [default=die] pam_faillock.so values if [default=die] pam_faillock.so do not already exist.
+# authfail is the setting used to lock the account until a admin reinstates it.
+ubtu20stig_pamd_failock_authfail:
+    type: auth
+    control: [success=1 default=ignore]
+    module_path: pam_unix.so
+    state: after
+    auth: authfail
+
+# ubtu20stig_pamd_failock are the settings for the faillock.conf.
+# Deny must be set to a value of 3 or less to be STIG compliant.
+# fail_interval must be set to a value of 900 or less to be STIG compliant.
+# unlock_time must be set to a value of 0 to be STIG compliant.
+# all other STIG settings for this control will be adjusted automatically.
+ubtu20stig_pamd_failock:
+    deny: 3
+    fail_interval: 900
+    unlock_time: 0
+
+
+
+
+ubtu_20_010148: true
+
+ubtu20stig_report_dir: /tmp
+
+ubtu20stig_cat1_patch: true
+ubtu20stig_cat2_patch: true
+ubtu20stig_cat3_patch: true
+
+# We've defined complexity-high to mean that we cannot automatically remediate
+# the rule in question.  In the future this might mean that the remediation
+# may fail in some cases.
+ubtu20stig_complexity_high: false
+
+# Show "changed" for complex items not remediated per complexity-high setting
+# to make them stand out.  "changed" items on a second run of the role would
+# indicate items requiring manual review.
+ubtu20stig_audit_complex: false
+
+# We've defined disruption-high to indicate items that are likely to cause
+# disruption in a normal workflow.  These items can be remediated automatically
+# but are disabled by default to avoid disruption.
+ubtu20stig_disruption_high: false
+
+# Show "changed" for disruptive items not remediated per disruption-high
+# setting to make them stand out.
+ubtu20stig_audit_disruptive: false
+
+ubtu20stig_skip_for_travis: false
+
+ubtu20_skip_reboot: true
+
+ubtu20stig_workaround_for_disa_benchmark: true
+ubtu20stig_workaround_for_ssg_benchmark: true
+
+# tweak role to run in a chroot, such as in kickstart %post script
+ubtu20stig_system_is_chroot: "{{ ansible_is_chroot | default(False) }}"
+
+# tweak role to run in a non-privileged container
+ubtu20stig_system_is_container: false
+
+system_is_ec2: false
+
+# These variables correspond with the STIG IDs defined in the STIG and allows you to enable/disable specific rules.
+# PLEASE NOTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
+# in order for the variables below to take effect.
+# CAT 1 rules
+ubtu_20_010006: true
+ubtu_20_010009: true
+ubtu_20_010012: true
+ubtu_20_010042: true
+ubtu_20_010047: true
+ubtu_20_010048: true
+ubtu_20_010405: true
+ubtu_20_010406: true
+ubtu_20_010442: true
+ubtu_20_010459: true
+ubtu_20_010460: true
+ubtu_20_010462: true
+ubtu_20_010463: true
+
+# CAT 2 Rules
+ubtu_20_010000: true
+ubtu_20_010002: true
+ubtu_20_010003: true
+ubtu_20_010004: true
+ubtu_20_010005: true
+ubtu_20_010010: true
+ubtu_20_010013: true
+ubtu_20_010014: false
+ubtu_20_010016: true
+ubtu_20_010033: true
+ubtu_20_010035: true
+ubtu_20_010036: true
+ubtu_20_010037: true
+ubtu_20_010038: true
+ubtu_20_010043: true
+ubtu_20_010044: true
+ubtu_20_010045: true
+ubtu_20_010049: true
+ubtu_20_010054: true
+ubtu_20_010056: true
+# Task ubtu_20_010057 is before ubtu_20_010054 in playbook
+# because of package install check.
+ubtu_20_010057: true
+# Task ubtu_20_010060 is after ubtu_20_010064 in playbook
+# because of package install requirements.
+ubtu_20_010060: true
+ubtu_20_010063: true
+ubtu_20_010064: true
+ubtu_20_010065: true
+ubtu_20_010066: true
+ubtu_20_010074: true
+ubtu_20_010100: true
+ubtu_20_010101: true
+ubtu_20_010102: true
+ubtu_20_010103: true
+ubtu_20_010104: true
+ubtu_20_010117: true
+ubtu_20_010118: true
+ubtu_20_010122: true
+ubtu_20_010123: true
+ubtu_20_010124: true
+ubtu_20_010128: true
+ubtu_20_010133: true
+ubtu_20_010134: true
+ubtu_20_010135: true
+ubtu_20_010136: true
+ubtu_20_010137: true
+ubtu_20_010138: true
+ubtu_20_010139: true
+ubtu_20_010140: true
+ubtu_20_010141: true
+ubtu_20_010142: true
+ubtu_20_010152: true
+ubtu_20_010155: true
+ubtu_20_010161: true
+ubtu_20_010162: true
+ubtu_20_010163: true
+ubtu_20_010164: true
+ubtu_20_010165: true
+ubtu_20_010166: true
+ubtu_20_010167: true
+ubtu_20_010168: true
+ubtu_20_010169: true
+ubtu_20_010170: true
+ubtu_20_010171: true
+ubtu_20_010172: true
+ubtu_20_010173: true
+ubtu_20_010174: true
+ubtu_20_010175: true
+ubtu_20_010176: true
+ubtu_20_010177: true
+ubtu_20_010178: true
+ubtu_20_010179: true
+ubtu_20_010181: true
+ubtu_20_010182: true
+ubtu_20_010198: true
+ubtu_20_010199: true
+ubtu_20_010200: true
+ubtu_20_010201: true
+ubtu_20_010205: true
+ubtu_20_010211: true
+ubtu_20_010244: true
+ubtu_20_010267: true
+ubtu_20_010277: true
+ubtu_20_010278: true
+ubtu_20_010279: true
+ubtu_20_010296: true
+ubtu_20_010297: true
+ubtu_20_010298: true
+ubtu_20_010403: true
+ubtu_20_010404: true
+ubtu_20_010407: true
+ubtu_20_010408: true
+ubtu_20_010409: true
+ubtu_20_010411: true
+ubtu_20_010412: true
+ubtu_20_010413: true
+ubtu_20_010414: true
+ubtu_20_010416: true
+ubtu_20_010417: true
+ubtu_20_010418: true
+ubtu_20_010419: true
+ubtu_20_010420: true
+ubtu_20_010421: true
+ubtu_20_010422: true
+ubtu_20_010423: true
+ubtu_20_010424: true
+ubtu_20_010425: true
+ubtu_20_010426: true
+ubtu_20_010427: true
+ubtu_20_010428: true
+ubtu_20_010429: true
+ubtu_20_010430: true
+ubtu_20_010431: true
+ubtu_20_010432: true
+ubtu_20_010433: true
+ubtu_20_010434: true
+ubtu_20_010435: true
+ubtu_20_010437: true
+ubtu_20_010438: true
+ubtu_20_010439: true
+ubtu_20_010440: true
+ubtu_20_010443: true
+ubtu_20_010444: true
+ubtu_20_010445: true
+ubtu_20_010446: true
+ubtu_20_010447: true
+ubtu_20_010448: true
+ubtu_20_010449: true
+ubtu_20_010450: true
+ubtu_20_010451: true
+ubtu_20_010454: true
+ubtu_20_010455: true
+ubtu_20_010456: true
+ubtu_20_010457: true
+ubtu_20_010458: true
+ubtu_20_010461: true
+
+# CAT 3 Rules
+ubtu_20_010007: true
+ubtu_20_010008: true
+ubtu_20_010050: true
+ubtu_20_010051: true
+ubtu_20_010052: true
+ubtu_20_010053: true
+ubtu_20_010055: true
+ubtu_20_010070: true
+ubtu_20_010072: true
+ubtu_20_010075: true
+ubtu_20_010215: true
+ubtu_20_010216: true
+ubtu_20_010217: true
+ubtu_20_010230: true
+ubtu_20_010300: true
+ubtu_20_010400: true
+ubtu_20_010410: true
+ubtu_20_010415: true
+ubtu_20_010436: true
+ubtu_20_010441: true
+ubtu_20_010453: true
+ubtu_20_010401: true
+
+# ubtu20stig_desktop_required is the toggle to turn on desktop related controls
+# value of true will run tasks that are intended for the desktop, false will skip desktop related controls
+ubtu20stig_desktop_required: false
+
+# Install and enable ssh on networked systems
+ubtu20stig_ssh_required: true
+
+# Service configuration variables, set to true to keep service
+ubtu20stig_nis_required: false
+ubtu20stig_rshserver_required: false
+ubtu20stig_telnet_required: false
+
+# ubt20stig_int_gid is the interactive user gid
+ubtu20stig_int_gid: 1000
+
+# ubtu20stig_kdump_needed is the toggle kdumps are needed or not, when false kernel dumper service is stopped
+ubtu20stig_kdump_needed: false
+
+# The variables below are related to specific tasks
+
+# CAT 1
+# UBTU-20-010012
+# ubtu20stig_sudo_group_name is the variable to place your custom name for your sudo group.
+# If you do not have a custom sudo group name leave as default.
+ubtu20stig_sudo_group_name: sudo
+
+# ubtu20_allowed_sudoers is the list of users who should be in the sudoers group
+# With this enabled all other users will be removed from the sudoers group
+ubtu20_allowed_sudoers:
+    - vagrant
+# ubtu20_auto_remove_sudoers is the toggle to let this role remove users from the sudoers
+# group if they do not match the list above.
+# Set this value to false and the task will just message out the list of users in the sudo group
+ubtu20_auto_remove_sudoers: false
+
+# Cat 2
+# UBTU-20-010000
+# ubtu20_temp_accounts is the list of temporary accounts that are known and will have a
+# expiration time of 72 hours. If no warning is displayed at the end of the playbook for this control, the control worked.
+# ubtu20_temp_account: "none" setting in variable will not run the control to adjust the accounts and will
+# display a list of all user names to review for site policies.
+ubtu20_temp_account: "none"
+
+# UBTU-20-010002
+# ubtu20stig_warning_banner is the banner to be displayed when logging into a system
+ubtu20stig_warning_banner: |
+    'You are accessing a U.S. Government (USG) Information System (IS) that is
+    provided for USG-authorized use only.
+
+    By using this IS (which includes any device attached to this IS), you consent
+    to the following conditions:
+
+    -The USG routinely intercepts and monitors communications on this IS for
+    purposes including, but not limited to, penetration testing, COMSEC monitoring,
+    network operations and defense, personnel misconduct (PM), law enforcement
+    (LE), and counterintelligence (CI) investigations.
+
+    -At any time, the USG may inspect and seize data stored on this IS.
+
+    -Communications using, or data stored on, this IS are not private, are subject
+    to routine monitoring, interception, and search, and may be disclosed or used
+    for any USG-authorized purpose.
+
+    -This IS includes security measures (e.g., authentication and access controls)
+    to protect USG interests--not for your personal benefit or privacy.
+
+    -Notwithstanding the above, using this IS does not constitute consent to PM, LE
+    or CI investigative searching or monitoring of the content of privileged
+    communications, or work product, related to personal representation or services
+    by attorneys, psychotherapists, or clergy, and their assistants. Such
+    communications and work product are private and confidential. See User
+    Agreement for details.'
+
+# UBTU-20-010013
+# ubtu20stig_user_session_timeout is the session timeout value in seconds
+# To conform to STIG standards the value needs to be 600 or less
+ubtu20stig_user_session_timeout: 600
+
+
+# ubtu20stig_sshd will contain all sshd variables. The task association and variable descriptions for each section are listed below
+# UBTU-20-010044
+# ciphers are the ciphers to be used in yoru sshd_config. Set to aes256-ctr,aes192-ctr,and aes128-ctr ciphers can be used to conform to STIG standards
+# UBTU-20-010037
+# client_alive_interval is the amount of time idle before ssh session terminated. Set to 600 or less to conform to STIG standards
+# UBTU-20-010043
+# macs are the mac ciphers to be used so to hmac-sha2-512,hmac-sha2-256 only and in that order to conform to STIG standards
+# UBTU-20-010045
+# kexalgorithms are the cryptographic algorithms to add to sshd_config. STIG FIPS Compliance must only use ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256
+ubtu20stig_sshd:
+    ciphers: "aes256-ctr,aes192-ctr,aes128-ctr"
+    client_alive_interval: 600
+    macs: "hmac-sha2-512,hmac-sha2-256"
+    kexalgorithms: "ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256"
+
+# UBTU-20-010054
+# UNTU-20-010056
+# ubtu20stig_password_complexity.minlen setting should be 15 to meet STIG requirements.
+# Password complexity settings
+ubtu20stig_password_complexity:
+    # ucredit: -1
+    # lcredit: -1
+    # dcredit: -1
+    # ocredit: -1
+    # difok: 8
+    # minclass: 4
+    # maxrepeat: 3
+    # maxclassrepeat: 4
+    dictcheck: 1
+    minlen: 15
+
+# UBTU-20-010057
+# ubtu20stig_pam_pwquality_retry is the number of times a password entry fails before warning with an error
+# To conform with STIG standards this value needs to be higher than 0 but no more than 3
+ubtu20stig_pam_pwquality_retry: 3
+# ubtu20stig_pamd_retry are the settings related to adding the pam_pwquality.so retry value.
+# The settings type, control, module_path, and state need to correspond to an existing rule in /etc/pam.d/common-password, which is used
+# as a reference in adding the pam_pwquality.so entry and retry parameter.
+ubtu20stig_pamd_retry:
+    type: password
+    control: requisite
+    module_path: pam_deny.so
+    state: after
+
+
+# UBTU-20-010074
+# ubtu20stig_aide_cron is the settings you will set for which cron job is handling the script for aide checking.
+# Be sure you set either daily or monthly.
+ubtu20stig_aide_cron: daily
+# ubtu20stig_custom_sha1_for_aide is the custom sha1 that is created when you modify the default aide script
+# file in either the daily or monthly cron location. If you have a modified script file in either folder place the
+# sha1 for your custom script here so that if there is a change to the system aide script a error will be produced.
+##### IF YOU ARE NOT USING A MODIFIED AIDE SCRIPT LEAVE THIS VARIABLE SET TO none #####
+ubtu20stig_custom_sha1_for_aide: none
+
+# UBTU-20-010117
+# ubtu20stig_auditd_mail_acct is the account that will be alerted via auditd my email
+# To conform to STIG standards this needs to be an account the ISSO and SA at a minimum gets alerts to
+ubtu20stig_auditd_mail_acct: root
+
+# UBTU-20-010118
+# ubtu20stig_auditd_disk_full_action is the action for the OS on audit failure
+# To conform to STIG standards this value needs to be SYSLOG, SINGLE, or HALT
+ubtu20stig_auditd_disk_full_action: HALT
+
+# UBTU-20-010122
+# ubtu20stig_audit_log is the permissions value on all files in the audit logs folder, /var/logs/audit by default
+# To conform to STIG standards this needs to be 0600 or less permissive
+ubtu20stig_audit_log_files_permissions: 0600
+
+# UBTU-20-010128
+# ubtu20stig_audit_log_dirs_mode is the permissions value on the audit logs folder, var/logs/audit by default
+# To conform to STIG standards this needs to be 0750 or less permissive
+ubtu20stig_audit_log_dir_permission: 0750
+
+# UBTU-20-010133
+# ubtu20stig_audit_file_permissions is the permissions value on all files in the /etc/audit/audit.rule","/etc/audit/rules.d/*", or "/etc/audit/auditd.conf
+# To conform to STIG standards this needs to be 0640 or less permissive
+ubtu20stig_audit_file_permissions: 0640
+
+# UBTU-20-010199
+# ubtu20stig_tool_perms is the permissions set to the /sbin/auditctl, /sbin/aureport,
+# /sbin/ausearch, /sbin/autrace, /sbin/auditd, /sbin/audispd, /sbin/augenrules tools
+# To conform to STIG standards this needs to be 0755 or more restrictive
+ubtu20stig_audit_tool_permissions: 0755
+
+# UBTU-20-010205
+# ubtu20stig_cryptographic_mechanisms is the default STIG setting to conform to standards.
+# This variable is here as option for easier chamge later on if the STIG control changes.
+ubtu20stig_cryptographic_mechanisms: p+i+n+u+g+s+b+acl+xattrs+sha512
+
+# UBTU-20-010404
+# ubtu20stig_pamd_encryption are the pam_unix settings related to setting the encryption schema for logins.
+# The settings type, control, module_path, and state need to correspond to an existing rule in /etc/pam.d/common-password, which is used
+# as a refe rence in adding the pam_unix.so entry and encryption parameter.
+# new_control is the control settings for the pam_unix.so settings, by default we have the default value entered here. It can be
+# modified
+ubtu20stig_pamd_encryption:
+    new_control: "[success=1 default=ignore]"
+    type: password
+    control: requisite
+    module_path: pam_deny.so
+    state: before
+    encryption: sha512
+# encrypt_method is the encryption method and to conform to STIG standards needs to be SHA512
+ubtu20stig_login_defaults:
+    encrypt_method: SHA512
+    # pass_min_days: 1
+    # pass_max_days: 60
+    # fail_delay_secs: 4
+    # umask: '077'
+    # create_home: 'yes'
+
+# UBTU-20-010409
+# ubtu20stig_useradd_active is the default INTERACTIVE setting for the useradd command
+# To conform to STIG standards this needs to be 35 or less, but greater than 0
+ubtu20stig_useradd_active: 35
+
+# UBTU-20-010416
+# ubtu20stig_var_log_file_perms is the permissions on the /var/log files
+# excluding btmp, wtmp, and lastlog files
+# To conform to STIG starndards this needs to be 0640 or more restrictive
+ubtu20stig_var_log_file_perms: 0640
+
+# UBTU-20-010419
+# ubtu20stig_var_log_perms is the permissions on the /var/log directory
+# To conform to STIG starndards this needs to be 0755 or more restrictive
+ubtu20stig_var_log_perms: 0755
+
+# UBTU-20-010422
+# ubtu20stig_var_log_syslog_perms is the permissions on the /var/log/syslog file
+# To conform to STIG standards this needs to be 0640 or more restrictive
+ubtu20stig_var_log_syslog_perms: 0640
+
+# UBUT-20-010423
+# ubtu20stig_sys_comm_dir_perms are the permissions to put on the OS system commands directories if they are found to be less restrictive than 755
+# To conform to STIG standards this value needs to be 0755 or more restrictive
+ubtu20stig_sys_comm_dir_perms: 0755
+
+# UBTU-20-010426
+# ubtu20stig_lib_file_perms are the perms to put on all library files if they are found be less restrictive than 755
+# To conform to STIG standards this value needs to be 0755 or more restrictive
+ubtu20stig_lib_file_perms: 0755
+
+# UBTU-20-010427
+# ubtu20stig_lib_dir_perms are the perms to put on the library directories if they are found to be less restrictive than 755
+# To conform to STIG standards this value needs to be 755 or more restrictive
+ubtu20stig_lib_dir_perms: 0755
+
+# UBTU-20-010435
+# ubtu20stig_iburst_maxpoll_value is the maximum interval between requests sent to the server
+# in seconds
+# To conform to STIG standards this value needs to be 16 or less
+ubtu20stig_iburst_maxpoll_value: 16
+# ubtu20stig_dod_timesource is the list of the time servers
+# To conform to STIG standards these need to be authoritative DoD sources
+# Please always enter these values as a list, even if it's just one
+ubtu20stig_dod_timesource:
+    - tick.usno.navy.mil
+    - tock.usno.navy.mil
+    - ntp2.usno.navy.mil
+
+# UBTU-20-010466
+# ubtu20stig_limit_method is how you want manage your UFW limits
+# This value needs to be service to manage via service names or eth_port to limit all on a network port
+ubtu20stig_limit_method: service
+# ubtu20stig_limit_services is the list of services to limit
+ubtu20stig_limit_services:
+    - OpenSSH
+# ubtu20stig_limit_eth_port is the list of ports to limit
+ubtu20stig_limit_eth_port:
+    - eth0
+
+# UBTU-20-010456
+# ubtu20stig_sys_commands_perms are the permissions to put on the OS system command files if they are found to be less restrictive than 755
+# To conform to STIG standards this value needs to be 755 or more restrictive
+ubtu20stig_sys_commands_perms: 755
+
+# Cat 3
+# UBTU-20-010007
+# ubtu20stig_pass_min_days is the value for PASS_MIN_DAYS, which is the minimum number of days for a PW's lifetime
+# To conform to STIG standards this value can be no smaller than 1
+ubtu20stig_pass_min_days: 1
+
+# UBTU-20-010008
+# ubtu20stig_pass_max_days is the value for PASS_MAX_DAYS, which is the maximum nubmer of days for a PW's lifetime
+# To conform to STIG standards this value can be no smaller than 60
+ubtu20stig_pass_max_days: 60
+
+# UBTU-20-010050
+# ubtu20stig_pwquality_ucredit is the value set to the ucredit parameter in the /etc/security/pwquality.conf file
+# To conform to STIG standards the value can be no larger than -1, so the next incremental value should be -2
+ubtu20stig_pwquality_ucredit: "-1"
+
+# UBTU-20-010051
+# ubtu20stig_pwquality_lcredit is the value set to the lcredit parameter in the /etc/security/pwquality.conf file
+# To conform to STIG standards the value can be no larger than -1, so the next incremental value should be -2
+ubtu20stig_pwquality_lcredit: "-1"
+
+# UBTU-20-010052
+# ubtu20stig_pwquality_dcredit is the value set to the dcredit parameter in the /etc/security/pwquality.conf file
+# To conform to STIG standards the value can be no larger than -1, so the next incremental value should be -2
+ubtu20stig_pwquality_dcredit: "-1"
+
+# UBTU-20-010053
+# ubtu20stig_pwquality_difok is the value set to the difork parameter in the /etc/security/pwquality.conf file
+# To conform to STIG standards the value can be no less than 8.
+ubtu20stig_pwquality_difok: 8
+
+# UBTU-20-010055
+# ubtu20stig_pwquality_ocredit is the value for number of special characters
+# To conform to STIG standards this value can be no larger than -1, so the next incremental value should be -2
+ubtu20stig_pwquality_ocredit: "-1"
+
+# ubtu20stig_pamd_failock_authsucc are the pam.d placement settings and value for failed login attempts
+# The settings, type, control, module_path, and state need to correspond to an existing rule in /etc/pam.d/common-auth, which is used
+# as a reference in adding the [default=die] pam_faillock.so values if [default=die] pam_faillock.so do not already exist.
+# authsucc is the setting used allow logins if password is used correctly.
+ubtu20stig_pamd_failock_authsucc:
+    type: auth
+    control: optional
+    module_path: pam_cap.so
+    state: before
+    auth: authsucc
+
+# UBTU-20-010075
+# ubtu20stig_pamd_faildelay are the pam.d placement settings and value for the delay
+# The settings type, control, module_path, and state need to correspond to an existing rule in /etc/pam.d/common-auth, which is used
+# as a reference in adding the auth required pam_faildelay.so delay= value if pam_faildelay does not already exist.
+# The state value determines before or after the stated type/control/module_path.
+# The delay setting is is in microseconds and needs to be a minimum 4 seconds (4000000) to conform to STIG standards
+ubtu20stig_pamd_faildelay:
+    type: auth
+    control: required
+    module_path: pam_permit.so
+    state: after
+    delay: 4000000
+
+# UBTU-20_010216
+# ubtu20stig_audispd_remote_servers is the address of the remote server receiving the auditd logs
+ubtu20stig_audispd_remote_servers: 10.10.10.10
+
+# UBTU-20_010217
+# ubtu20stig_auditd_space_left_action is the setting on which who is notified when audit record storage volume
+# reaches 75% of the repository maximum
+# To conform to STIG standards this value needs to be exec or email
+ubtu20stig_auditd_space_left_action: "email"
+# ubtu20stig_auditd_action_mail_acct is the email account used when ubtu20stig_auditd_space_left_action is set to email
+ubtu20stig_auditd_action_mail_acct: root
+# ubtu20stig_auditd_space_left is the setting for how much space (as a percentage) is left before alerting the space_left_action accounts
+# To conform to STIG standards this value needs to be 25% or less
+# The Admin space left is not part of the STIG, but can't be more than the space_left value
+ubtu20stig_auditd_space_left: 25
+ubtu20stig_auditd_admin_space_left: 20
+
+# UBTU-20-010230
+# ubtu20stig_timezone is the timezone to configure the host in
+# STIG requires UTC or GMT.
+ubtu20stig_timezone: "GMT"
+
+# UBTU-20-010400
+# ubtu20stig_maxlogins is max number of concurrent sessions
+# To conform to STIG standards this value can be no larger than 10.
+ubtu20stig_maxlogins: 10
+
+# UBTU-20-010410
+# ubtu20_emergency_accounts is the list of emergency accounts that are known and will have a
+# expiration time of 72 hours. If no warning is displayed at the end of the playbook for this control, the control worked.
+# ubtu20_emergency_account: "none" setting in variable will not run the control to adjust the accounts and will
+# display a list of all user names to review for site policies.
+ubtu20_emergency_account: "none"
+
+# UBTU-20-010436
+# ubtu20stig_chrony will be all of the settings needed for chrony
+# makestep is the value for the chrony makestep threshhold limit
+# To be Stig complaint the values 1 -1 must be below.
+ubtu20stig_chrony:
+    makestep: "1 -1"
+
+# UBTU-20-010453
+# ubtu20stig_pamd_showfailed are the pam.d placement settings and for the showfail setting.
+# The settings type, control, module_path, and state need to correspond to an existing rule in /etc/pam.d/login, which is used
+# as a reference in adding the showfail parameter.
+ubtu20stig_pamd_showfailed:
+    type: session
+    control: required
+    module_path: pam_limits.so
+    state: before
