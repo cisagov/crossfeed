@@ -363,8 +363,12 @@ authenticatedRoute.post('/stats', handlerToExpress(stats.get));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
-authenticatedRoute.get('/users/state/:state', handlerToExpress(users.getByState));
-authenticatedRoute.get('/users/regionId/:regionId', handlerToExpress(users.getByRegionId));
+authenticatedRoute.get('/users/state/:state',
+  handlerToExpress(users.getByState)
+);
+authenticatedRoute.get('/users/regionId/:regionId',
+  handlerToExpress(users.getByRegionId)
+);
 authenticatedRoute.post('/users/search', handlerToExpress(users.search));
 
 authenticatedRoute.post(
@@ -377,7 +381,6 @@ authenticatedRoute.post(
   handlerToExpress(reports.list_reports)
 );
 
-
 //Authenticated Registration Routes
 authenticatedRoute.put(
   '/users/:userId/register/approve',
@@ -388,7 +391,6 @@ authenticatedRoute.put(
   '/users/:userId/register/deny',
   handlerToExpress(users.registrationDenial)
 );
-
 
 //************* */
 //  V2 Routes   //
@@ -407,7 +409,6 @@ authenticatedRoute.get(
   '/v2/organizations',
   handlerToExpress(organizations.getAllV2)
 );
-
 
 app.use(authenticatedRoute);
 
