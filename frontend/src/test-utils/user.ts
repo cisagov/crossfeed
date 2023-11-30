@@ -16,6 +16,6 @@ export const testUser: AuthUser = {
   acceptedTermsVersion: 'v1-user',
   isRegistered: true,
   apiKeys: [],
-  regionId: "1234",
-  state: "LA"
+  regionId: '1234',
+  state: 'LA'
 };
