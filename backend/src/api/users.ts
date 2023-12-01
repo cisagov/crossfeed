@@ -568,7 +568,7 @@ export const register = wrapHandler(async (event) => {
     userType: UserType.STANDARD,
     state: body.state,
     regionId: REGION_STATE_MAP[body.state],
-    invitePending: true,
+    invitePending: true
   };
   console.log(JSON.stringify(newUser));
 
@@ -665,7 +665,7 @@ export const registrationApproval = wrapHandler(async (event) => {
 
   // Send email notification
   sendUserNotificationEmail(
-    user.email, 
+    user.email,
     'Crossfeed Registration Approved',
     user.firstName,
     user.lastName,
