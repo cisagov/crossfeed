@@ -1,11 +1,9 @@
 import React from 'react';
 import { Box, Grid, Link } from '@mui/material';
-import { useAuthContext } from 'context';
 import logo from '../../assets/crossfeed.svg';
 import * as FooterStyles from './styleFooter';
 
 export const ModFooter: React.FC = (props) => {
-  const { logout } = useAuthContext();
   const FooterRoot = FooterStyles.FooterRoot;
   const footerClasses = FooterStyles.footerClasses;
   return (
