@@ -28,7 +28,7 @@ interface Errors extends Partial<FormData> {
   global?: string;
 }
 
-export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
+export const AuthLoginCreate: React.FC<{ showSignUp?: boolean }> = ({
   showSignUp = false
 }) => {
   const { apiPost, refreshUser } = useAuthContext();
@@ -83,19 +83,6 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
     }
   };
 
-  // const components = {
-  //   Footer() {
-  //     const { tokens } = useTheme();
-  //     return (
-  //       <View textAlign="center" padding={tokens.space.large}>
-  //         <Text color={tokens.colors.neutral[80]}>
-  //           &copy; All Rights Reserved
-  //         </Text>
-  //       </View>
-  //     );
-  //   },
-  // }
-
   const onClose = () => {
     setOpen(false);
   };
@@ -110,10 +97,9 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
             loginMechanisms={['email']}
             formFields={formFields}
             /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
-            // hideSignUp={
-            //   !showSignUp && !(process.env.NODE_ENV === 'development')
-            // }
-            hideSignUp={true}
+            hideSignUp={
+              !showSignUp && !(process.env.NODE_ENV === 'development')
+            }
           />
           {/* <AmplifyButton onClick={() => alert('hello')}>
             Register
@@ -132,59 +118,33 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
           </Box>
 
           <div className="banner_header">**Warning**</div>
-          <div className="notification_box">
-            <div className="platform_header">PLATFORM NOTIFICATION</div>
-            <div className="notification_header">
-              Important Notice: Temporary Downtime During Crossfeed Migration
-            </div>
-            <div className="temp_notification">
-              {' '}
-              The Crossfeed environment is moving. The migration will require a
-              temporary downtime of approximately one week.
-            </div>
-            <div className="temp_notification">
-              {' '}
-              The downtime will begin on Wednesday, October 25, through the end
-              of day Wednesday, November 01.{' '}
-            </div>
-            <div className="temp_notification">
-              For additional information, please click{' '}
-              <a href="https://s3.amazonaws.com/crossfeed.cyber.dhs.gov/Notice.pdf">
-                here.
-              </a>
-            </div>
+          <div className="banner_login">
+            {' '}
+            This system contains U.S. Government Data. Unauthorized use of this
+            system is prohibited. Use of this computer system, authorized or
+            unauthorized, constitutes consent to monitoring of this system.
           </div>
-          <div className="banner_box">
-            <div className="banner_header">**Warning**</div>
-            <div className="banner_login">
-              {' '}
-              This system contains U.S. Government Data. Unauthorized use of
-              this system is prohibited. Use of this computer system, authorized
-              or unauthorized, constitutes consent to monitoring of this system.
-            </div>
-            <div className="banner_login">
-              {' '}
-              This computer system, including all related equipment, networks,
-              and network devices (specifically including internet access) are
-              provided only for authorized U.S. Government use. U.S. Government
-              computer systems may be monitored for all lawful purposes,
-              including to ensure that their use is authorized, for management
-              of the system, to facilitate protection against unauthorized
-              access, and to verify security procedures, survivability, and
-              operational security. Monitoring includes active attacks by
-              authorized U.S. Government entities to test or verify the security
-              of this system. During monitoring, information may be examined,
-              recorded, copied and used for authorized purposes. All
-              information, including personal information, placed or sent over
-              this system may be monitored.
-            </div>
-            <div className="banner_login">
-              {' '}
-              Unauthorized use may subject you to criminal prosecution. Evidence
-              of unauthorized use collected during monitoring may be used for
-              administrative, criminal, or other adverse action. Use of this
-              system constitutes consent to monitoring for these purposes.
-            </div>
+          <div className="banner_login">
+            {' '}
+            This computer system, including all related equipment, networks, and
+            network devices (specifically including Internet access) are
+            provided only for authorized U.S. Government use. U.S. Government
+            computer systems may be monitored for all lawful purposes, including
+            to ensure that their use is authorized, for management of the
+            system, to facilitate protection against unauthorized access, and to
+            verify security procedures, survivability, and operational security.
+            Monitoring includes active attacks by authorized U.S. Government
+            entities to test or verify the security of this system. During
+            monitoring, information may be examined, recorded, copied and used
+            for authorized purposes. All information, including personal
+            information, placed or sent over this system may be monitored.
+          </div>
+          <div className="banner_login">
+            {' '}
+            Unauthorized use may subject you to criminal prosecution. Evidence
+            of unauthorized use collected during monitoring may be used for
+            administrative, criminal, or other adverse action. Use of this
+            system constitutes consent to monitoring for these purposes.
           </div>
         </ThemeProvider>
       </AuthForm>
