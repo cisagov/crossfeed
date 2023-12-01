@@ -735,7 +735,7 @@ export const getByState = wrapHandler(async (event) => {
  *  get:
  *    description: List all organizations with query parameters.
  *    tags:
- *    - Users 
+ *    - Users
  *    parameters:
  *      - in: query
  *        name: state
@@ -743,15 +743,15 @@ export const getByState = wrapHandler(async (event) => {
  *        schema:
  *          type: array
  *          items:
- *            type: string 
+ *            type: string
  *      - in: query
  *        name: regionId
  *        required: false
  *        schema:
  *          type: array
  *          items:
- *            type: string 
- * 
+ *            type: string
+ *
  */
 export const getAllV2 = wrapHandler(async (event) => {
   if (!isRegionalAdmin(event)) return Unauthorized;
