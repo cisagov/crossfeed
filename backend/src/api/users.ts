@@ -456,7 +456,7 @@ export const acceptTerms = wrapHandler(async (event) => {
  *    description: List users.
  *    tags:
  *    - Users
- * 
+ *
  */
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) return Unauthorized;
@@ -511,15 +511,14 @@ export const getByRegionId = wrapHandler(async (event) => {
     where: { regionId: regionId },
     relations: ['roles', 'roles.organization']
   });
- if (result) {
+  if (result) {
     return {
       statusCode: 200,
       body: JSON.stringify(result)
     };
   }
-  return NotFound; 
+  return NotFound;
 });
-
 
 /**
  * @swagger
@@ -548,9 +547,8 @@ export const getByState = wrapHandler(async (event) => {
       body: JSON.stringify(result)
     };
   }
-  return NotFound; 
+  return NotFound;
 });
-
 
 /**
  * @swagger
@@ -564,28 +562,28 @@ export const getByState = wrapHandler(async (event) => {
 export const register = wrapHandler(async (event) => {
   const body = await validateBody(NewUser, event.body);
   const newUser = {
-    "firstName": body.firstName,
-    "lastName": body.lastName,
-    "email": body.email.toLowerCase(),
-    "userType": UserType.STANDARD,
-    "state": body.state,
-    "regionId": REGION_STATE_MAP[body.state],
-    "invitePending": true,
-  }
-  console.log(JSON.stringify(newUser))
+    'firstName': body.firstName,
+    'lastName': body.lastName,
+    'email': body.email.toLowerCase(),
+    'userType': UserType.STANDARD,
+    'state': body.state,
+    'regionId': REGION_STATE_MAP[body.state],
+    'invitePending': true,
+  };
+  console.log(JSON.stringify(newUser));
 
   await connectToDatabase();
 
   // Check if user already exists
-  let userCheck = await User.findOne({
+  const userCheck = await User.findOne({
     where: { email: newUser.email }
   });
 
-  let id = "";
+  let id = '';
   // Create if user does not exist
   // if (!user) {
   if (userCheck) {
-    console.log("User already exists.");
+    console.log('User already exists.');
     return {
       statusCode: 422,
       body: 'User email already exists. Registration failed.'
@@ -603,10 +601,10 @@ export const register = wrapHandler(async (event) => {
   // TODO: replace with html email function to user
   sendUserNotificationEmail(
     newUser.email,
-    "Crossfeed Registration Pending", 
+    'Crossfeed Registration Pending',
     newUser.firstName, 
     newUser.lastName,
-    "/app/src/email_templates/crossfeed_registration_notification.html"
+    '/app/src/email_templates/crossfeed_registration_notification.html'
   );
   // Send new user pending approval email to regionalAdmin
   // TODO: replace with html email function to regianlAdmin
@@ -656,7 +654,7 @@ export const registrationApproval = wrapHandler(async (event) => {
   //   UpdateUser,
   //   event.body
   // );
-  
+
   // Connect to the database
   await connectToDatabase();
  
@@ -664,19 +662,19 @@ export const registrationApproval = wrapHandler(async (event) => {
   if (!user) {
     return NotFound;
   }
-    
+
   // Send email notification
   sendUserNotificationEmail(user.email, 
-    "Crossfeed Registration Approved",
+    'Crossfeed Registration Approved',
     user.firstName,
     user.lastName,
-    "/app/src/email_templates/crossfeed_approval_notification.html");
+    '/app/src/email_templates/crossfeed_approval_notification.html');
 
   // TODO: Handle Response Output
   return {
     statusCode: 200,
-    body: "User registration approved."
-  }
+    body: 'User registration approved.'
+  };
 });
 
 /**
@@ -722,10 +720,9 @@ export const registrationDenial = wrapHandler(async (event) => {
   // TODO: Handle Response Output
   return {
     statusCode: 200,
-    body: "User registration denied."
-  }
+    body: 'User registration denied.'
+  };
 });
-
 
 //***************//
 // V2 Endpoints  //
@@ -738,7 +735,7 @@ export const registrationDenial = wrapHandler(async (event) => {
  *  get:
  *    description: List all users with query parameters.
  *    tags:
- *    - Users 
+ *    - Users
  *    parameters:
  *      - in: query
  *        name: state
@@ -746,86 +743,54 @@ export const registrationDenial = wrapHandler(async (event) => {
  *        schema:
  *          type: array
  *          items:
- *            type: string 
+ *            type: string
  *      - in: query
  *        name: regionId
  *        required: false
  *        schema:
  *          type: array
  *          items:
- *            type: string 
+ *            type: string
  *      - in: query
  *        name: invitePending
  *        required: false
  *        schema:
  *          type: array
  *          items:
- *            type: string 
- * 
+ *            type: string
+ *
  */
 export const getAllV2 = wrapHandler(async (event) => {
   if (!isRegionalAdmin(event)) return Unauthorized;
 
-  const filterParams = {}
+  const filterParams = {};
 
   if (event.query && event.query.state) {
-    filterParams["state"] = event.query.state;
+    filterParams['state'] = event.query.state;
   }
   if (event.query && event.query.regionId) {
-    filterParams["regionId"] = event.query.regionId;
+    filterParams['regionId'] = event.query.regionId;
   }
   if (event.query && event.query.invitePending) {
-    filterParams["invitePending"] = event.query.invitePending;
+    filterParams['invitePending'] = event.query.invitePending;
   }
 
   await connectToDatabase();
   if (Object.entries(filterParams).length === 0) {
     const result = await User.find({
       relations: ['roles', 'roles.organization']
-    // relations: {
-    //   roles: true,
-    //   organizations: true
-    // },
     });
     return {
       statusCode: 200,
       body: JSON.stringify(result)
-    }
+    };
   } else {
     const result = await User.find({
       where: filterParams,
       relations: ['roles', 'roles.organization']
-    // relations: {
-    //   roles: true,
-    //   organizations: true
-    // },
-    // relations: {
-    //   roles: {
-    //     roles: true
-    //   },
-    //   organizations: {
-    //     organizations: true
-    //   }
-    // },
     });
-    // const updatedResult = {
-    //   ...result,
-    //   numberOfOrganizations: 0,
-    //   organizations: []
-    // }
-    // if (!result.roles) {
-    //   result.roles = [];
-    // }
-    // updatedResult.roles.forEach((role) => {
-    //   const org = role.organization;
-    //   if (org) {
-    //     updatedResult.numberOfOrganizations += 1;
-    //     updatedResult.organizations.push(org);
-    //   }
-    // });
     return {
       statusCode: 200,
-      // body: JSON.stringify(updatedResult)
       body: JSON.stringify(result)
     };
   }
@@ -950,15 +915,6 @@ export const updateV2 = wrapHandler(async (event) => {
   // Validate the body
   const body = await validateBody(UpdateUser, event.body);
 
-  // User type permissions check
-  // if (!isRegionalAdmin(event)) return Unauthorized;
-
-  // // Validate the body
-  // const validatedBody = await validateBody(
-  //   UpdateUser,
-  //   event.body
-  // );
-
   // Connect to the database
   await connectToDatabase();
 
@@ -967,46 +923,14 @@ export const updateV2 = wrapHandler(async (event) => {
     return NotFound;
   }
 
-  // TODO: check permissions
-  // if (!isOrgAdmin(event, id)) return Unauthorized;
-
-  // If organization id is supplied, create approved role
-  // if (body.organization) {
-  //   // Check if organization exists
-  //   const organization = await Organization.findOne(body.organization);
-  //   if (organization) {
-  //     // Create approved role if organization supplied
-  //     await Role.createQueryBuilder()
-  //       .insert()
-  //       .values({
-  //         user: user,
-  //         oganization: organization,
-  //         approved: true,
-  //         createdBy: { id: event.requestContext.authorizer!.id },
-  //         approvedBy: { id: event.requestContext.authorizer!.id },
-  //         role: "user"
-  //       })
-  //       .onConflict(
-  //         `
-  //       ("userId", "organizationId") DO UPDATE
-  //       SET "role" = excluded."role",
-  //           "approved" = excluded."approved",
-  //           "approvedById" = excluded."approvedById"
-  //     `
-  //       )
-  //       .execute();
-  //   }
-  // }
-
   // Update the user
   const updatedResp = await User.update(userId, body);
 
   // Handle response
   if (updatedResp) {
-    const updatedUser = await User.findOne(
-      userId,
-      { relations: ['roles', 'roles.organization'] }
-    );
+    const updatedUser = await User.findOne(userId, {
+      relations: ['roles', 'roles.organization']
+    });
     return {
       statusCode: 200,
       body: JSON.stringify(updatedUser)
