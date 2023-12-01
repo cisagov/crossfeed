@@ -693,7 +693,7 @@ export const getByRegionId = wrapHandler(async (event) => {
       body: JSON.stringify(result)
     };
   }
-  return NotFound; 
+  return NotFound;
 });
 
 /**
@@ -723,7 +723,7 @@ export const getByState = wrapHandler(async (event) => {
       body: JSON.stringify(result)
     };
   }
-  return NotFound; 
+  return NotFound;
 });
 
 // V2 Endpoints
@@ -756,7 +756,7 @@ export const getByState = wrapHandler(async (event) => {
 export const getAllV2 = wrapHandler(async (event) => {
   if (!isRegionalAdmin(event)) return Unauthorized;
 
-  const filterParams = {}
+  const filterParams = {};
 
   if (event.query && event.query.state) {
     filterParams['state'] = event.query.state;

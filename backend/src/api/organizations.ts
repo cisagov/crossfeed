@@ -717,7 +717,7 @@ export const getByRegionId = wrapHandler(async (event) => {
     where: { regionId: regionId }
   });
 
- if (result) {
+  if (result) {
     return {
       statusCode: 200,
       body: JSON.stringify(result)
@@ -883,9 +883,7 @@ export const addUserV2 = wrapHandler(async (event) => {
   // if (!isOrgAdmin(event, id)) return Unauthorized;
 
   // Validate the body
-  const body = await validateBody(
-    NewOrganizationRoleBody, event.body
-  );
+  const body = await validateBody(NewOrganizationRoleBody, event.body);
 
   // Connect to the database
   await connectToDatabase();
