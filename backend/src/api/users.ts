@@ -562,13 +562,13 @@ export const getByState = wrapHandler(async (event) => {
 export const register = wrapHandler(async (event) => {
   const body = await validateBody(NewUser, event.body);
   const newUser = {
-    'firstName': body.firstName,
-    'lastName': body.lastName,
-    'email': body.email.toLowerCase(),
-    'userType': UserType.STANDARD,
-    'state': body.state,
-    'regionId': REGION_STATE_MAP[body.state],
-    'invitePending': true,
+    firstName: body.firstName,
+    lastName: body.lastName,
+    email: body.email.toLowerCase(),
+    userType: UserType.STANDARD,
+    state: body.state,
+    regionId: REGION_STATE_MAP[body.state],
+    invitePending: true,
   };
   console.log(JSON.stringify(newUser));
 
@@ -602,7 +602,7 @@ export const register = wrapHandler(async (event) => {
   sendUserNotificationEmail(
     newUser.email,
     'Crossfeed Registration Pending',
-    newUser.firstName, 
+    newUser.firstName,
     newUser.lastName,
     '/app/src/email_templates/crossfeed_registration_notification.html'
   );
@@ -657,18 +657,20 @@ export const registrationApproval = wrapHandler(async (event) => {
 
   // Connect to the database
   await connectToDatabase();
- 
+
   const user = await User.findOne(userId);
   if (!user) {
     return NotFound;
   }
 
   // Send email notification
-  sendUserNotificationEmail(user.email, 
+  sendUserNotificationEmail(
+    user.email, 
     'Crossfeed Registration Approved',
     user.firstName,
     user.lastName,
-    '/app/src/email_templates/crossfeed_approval_notification.html');
+    '/app/src/email_templates/crossfeed_approval_notification.html'
+  );
 
   // TODO: Handle Response Output
   return {
