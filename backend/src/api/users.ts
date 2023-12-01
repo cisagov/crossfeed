@@ -199,8 +199,7 @@ const REGION_STATE_MAP = {
   Idaho: '10',
   Oregon: '10',
   Washington: '10'
-}
-
+};
 
 /**
  * @swagger
@@ -277,7 +276,6 @@ export const update = wrapHandler(async (event) => {
   }
   return NotFound;
 });
-
 
 const sendInviteEmail = async (email: string, organization?: Organization) => {
   const staging = process.env.NODE_ENV !== 'production';

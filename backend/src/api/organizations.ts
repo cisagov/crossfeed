@@ -7,8 +7,7 @@ import {
   IsOptional,
   IsNotEmpty,
   IsNumber,
-  IsEnum,
-  
+  IsEnum
 } from 'class-validator';
 import {
   Organization,
@@ -69,7 +68,6 @@ class PendingDomainBody {
   @IsOptional()
   pendingDomains: PendingDomain[];
 }
-
 
 class NewOrganizationNonGlobalAdmins {
   @IsString()
@@ -147,7 +145,6 @@ class UpdateOrganizationMetaV2 {
   @IsNotEmpty()
   @IsOptional()
   type: string;
-
 }
 
 class NewDomain {
@@ -699,7 +696,6 @@ export const removeRole = wrapHandler(async (event) => {
   };
 });
 
-
 /**
  * @swagger
  *
@@ -751,7 +747,7 @@ export const getByState = wrapHandler(async (event) => {
     where: { state: state }
   });
 
- if (result) {
+  if (result) {
     return {
       statusCode: 200,
       body: JSON.stringify(result)
@@ -760,7 +756,7 @@ export const getByState = wrapHandler(async (event) => {
   return NotFound; 
 });
 
-// V2 Endpoints
+//V2 Endpoints
 
 /**
  * @swagger
@@ -789,14 +785,13 @@ export const getByState = wrapHandler(async (event) => {
  */
 export const getAllV2 = wrapHandler(async (event) => {
   if (!isRegionalAdmin(event)) return Unauthorized;
-
-  const filterParams = {}
+  const filterParams = {};
 
   if (event.query && event.query.state) {
-    filterParams["state"] = event.query.state;
+    filterParams['state'] = event.query.state;
   }
   if (event.query && event.query.regionId) {
-    filterParams["regionId"] = event.query.regionId;
+    filterParams['regionId'] = event.query.regionId;
   }
 
   await connectToDatabase();
@@ -805,9 +800,11 @@ export const getAllV2 = wrapHandler(async (event) => {
     return {
       statusCode: 200,
       body: JSON.stringify(result)
-    }
+    };
   } else {
-    const result = await Organization.find({where: filterParams});
+    const result = await Organization.find({
+      where: filterParams
+    });
     return {
       statusCode: 200,
       body: JSON.stringify(result)
@@ -887,8 +884,7 @@ export const addUserV2 = wrapHandler(async (event) => {
 
   // Validate the body
   const body = await validateBody(
-    NewOrganizationRoleBody,
-    event.body
+    NewOrganizationRoleBody, event.body
   );
 
   // Connect to the database
@@ -904,7 +900,7 @@ export const addUserV2 = wrapHandler(async (event) => {
   const org = await Organization.findOne(orgId);
 
   // Get the user id from the body
-  const userId = body.userId
+  const userId = body.userId;
   // confirm that the userId is a valid UUID
   if (!userId || !isUUID(userId)) {
     return NotFound;
@@ -916,12 +912,10 @@ export const addUserV2 = wrapHandler(async (event) => {
     user: user,
     organization: org,
     approved: true,
-    // role: body.role,
     role: body.role,
     approvedBy: event.requestContext.authorizer!.id,
     createdBy: event.requestContext.authorizer!.id 
-  }
-  // const validatedRoleData = await validateBody(NewOrganizationRoleDB, JSON.stringify(newRoleData));
+  };
 
   // Add a role to make association to user/organization
   const newRole = Role.create(newRoleData);
