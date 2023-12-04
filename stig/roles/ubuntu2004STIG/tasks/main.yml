@@ -1336,31 +1336,31 @@
     - { regexp: '# Audit Tools', line: '# Audit Tools' }
     - {
         regexp: '/sbin/auditctl',
-        line: '/sbin/auditctl {{ ubtu20stig_cryptographic_mechanisms }}'
+        line: '/sbin/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512'
       }
     - {
         regexp: '/sbin/auditd',
-        line: '/sbin/auditd {{ ubtu20stig_cryptographic_mechanisms }}'
+        line: '/sbin/auditd p+i+n+u+g+s+b+acl+xattrs+sha512'
       }
     - {
         regexp: '/sbin/ausearch',
-        line: '/sbin/ausearch {{ ubtu20stig_cryptographic_mechanisms }}'
+        line: '/sbin/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512'
       }
     - {
         regexp: '/sbin/aureport',
-        line: '/sbin/aureport {{ ubtu20stig_cryptographic_mechanisms }}'
+        line: '/sbin/aureport p+i+n+u+g+s+b+acl+xattrs+sha512'
       }
     - {
         regexp: '/sbin/autrace',
-        line: '/sbin/autrace {{ ubtu20stig_cryptographic_mechanisms }}'
+        line: '/sbin/autrace p+i+n+u+g+s+b+acl+xattrs+sha512'
       }
     - {
         regexp: '/sbin/audispd',
-        line: '/sbin/audispd {{ ubtu20stig_cryptographic_mechanisms }}'
+        line: '/sbin/audispd p+i+n+u+g+s+b+acl+xattrs+sha512'
       }
     - {
         regexp: '/sbin/augenrules',
-        line: '/sbin/augenrules {{ ubtu20stig_cryptographic_mechanisms }}'
+        line: '/sbin/augenrules p+i+n+u+g+s+b+acl+xattrs+sha512'
       }
 #UBTU-20-010216 - The Ubuntu operating system audit event multiplexor must be configured to off-load audit logs onto a different system or storage media from the system being audited - audispd-plugins
 - name: 'PRELIM | Install audisp-remote plugin'
@@ -1793,45 +1793,6 @@
     name: ['aide', 'aide-common']
     state: present
 
-#-------------------------
-- name: 'MEDIUM | UBTU-20-010205 | PATCH | The Ubuntu operating system must use cryptographic mechanisms to protect the integrity of audit tools.'
-  ansible.builtin.lineinfile:
-    path: /etc/aide/aide.conf
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }} '
-    owner: root
-    group: root
-    mode: 0600
-  with_items:
-    - { regexp: '# Audit Tools', line: '# Audit Tools' }
-    - {
-        regexp: '/sbin/auditctl',
-        line: '/sbin/auditctl {{ ubtu20stig_cryptographic_mechanisms }}'
-      }
-    - {
-        regexp: '/sbin/auditd',
-        line: '/sbin/auditd {{ ubtu20stig_cryptographic_mechanisms }}'
-      }
-    - {
-        regexp: '/sbin/ausearch',
-        line: '/sbin/ausearch {{ ubtu20stig_cryptographic_mechanisms }}'
-      }
-    - {
-        regexp: '/sbin/aureport',
-        line: '/sbin/aureport {{ ubtu20stig_cryptographic_mechanisms }}'
-      }
-    - {
-        regexp: '/sbin/autrace',
-        line: '/sbin/autrace {{ ubtu20stig_cryptographic_mechanisms }}'
-      }
-    - {
-        regexp: '/sbin/audispd',
-        line: '/sbin/audispd {{ ubtu20stig_cryptographic_mechanisms }}'
-      }
-    - {
-        regexp: '/sbin/augenrules',
-        line: '/sbin/augenrules {{ ubtu20stig_cryptographic_mechanisms }}'
-      }
 #------------------
 - name: 'PRELIM | Install audisp-remote plugin'
   ansible.builtin.package:
