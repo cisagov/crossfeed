@@ -1408,32 +1408,6 @@
 
 #UBTU-20-010403 - The Ubuntu operating system must monitor remote access methods - daemon
 
-- name: 'MEDIUM | UBTU-20-010403 | PATCH | The Ubuntu operating system must monitor remote access methods. | Get existing files'
-  ansible.builtin.shell: grep -E -r '^(auth,authpriv\.\*|daemon\.\*)' /etc/rsyslog.* | cut -d':' -f1
-  changed_when: false
-  failed_when: false
-  register: ubtu_20_010403_existing_files
-
-- name: 'MEDIUM | UBTU-20-010403 | PATCH | The Ubuntu operating system must monitor remote access methods. | Set settings'
-  ansible.builtin.lineinfile:
-    path: "{{ (ubtu_20_010403_existing_files.stdout | length > 0) | ternary(ubtu_20_010403_existing_files.stdout,'/etc/rsyslog.d/50-default.conf') }}"
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }}'
-    create: true
-    mode: 0644
-    owner: root
-    group: root
-  notify: restart rsyslog
-  with_items:
-    - {
-        regexp: '^auth.*,authpriv.*',
-        line: 'auth.*,authpriv.*               /var/log/secure'
-      }
-    - {
-        regexp: '^daemon.*|#daemon.*',
-        line: 'daemon.*                        /var/log/messages'
-      }
-
 # ubtu_20_010451
 - name: 'MEDIUM | UBTU-20-010437 | PATCH | The Ubuntu operating system must notify designated personnel if baseline configurations are changed in an unauthorized manner. The file integrity tool must notify the system administrator when changes to the baseline configuration or anomalies in the operation of any security functions are discovered.'
   ansible.builtin.lineinfile:
@@ -1465,11 +1439,11 @@
   with_items:
     - {
         regexp: '^auth.*,authpriv.*',
-        line: 'auth.*,authpriv.*               /var/log/secure'
+        line: 'auth.*,authpriv.* /var/log/secure'
       }
     - {
         regexp: '^daemon.*|#daemon.*',
-        line: 'daemon.*                        /var/log/messages'
+        line: 'daemon.* /var/log/messages'
       }
 
 # UBTU-20-010409
@@ -1813,37 +1787,6 @@
   ansible.builtin.user:
     name: root
     password_lock: true
-
-#----------------------------
-- name: 'MEDIUM | UBTU-20-010403 | PATCH |  The Ubuntu operating system must monitor remote access methods.'
-  block:
-    - name: 'MEDIUM | UBTU-20-010403 | PATCH | The Ubuntu operating system must monitor remote access methods. | Get existing files'
-      ansible.builtin.shell: grep -E -r '^(auth,authpriv\.\*|daemon\.\*)' /etc/rsyslog.* | cut -d':' -f1
-      changed_when: false
-      failed_when: false
-      register: ubtu_20_010403_existing_files
-
-    - name: 'MEDIUM | UBTU-20-010403 | PATCH | The Ubuntu operating system must monitor remote access methods. | Set settings'
-      ansible.builtin.lineinfile:
-        path: "{{ (ubtu_20_010403_existing_files.stdout | length > 0) | ternary(ubtu_20_010403_existing_files.stdout,'/etc/rsyslog.d/50-default.conf') }}"
-        regexp: '{{ item.regexp }}'
-        line: '{{ item.line }}'
-        create: true
-        mode: 0644
-        owner: root
-        group: root
-      notify: restart rsyslog
-      with_items:
-        - {
-            regexp: '^auth.*,authpriv.*',
-            line: 'auth.*,authpriv.*               /var/log/secure'
-          }
-        - {
-            regexp: '^daemon.*|#daemon.*',
-            line: 'daemon.*                        /var/log/messages'
-          }
-
-#------------------
 
 - name: 'PRELIM | Install AIDE'
   ansible.builtin.package:
