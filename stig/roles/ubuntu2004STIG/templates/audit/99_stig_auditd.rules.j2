@@ -89,8 +89,8 @@
 -a always,exit -F path=/usr/sbin/pam_timestamp_check -F perm=x -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k privileged-pam_timestamp_check
 {% endif %}
 {% if ubtu_20_010179 %}
--a always,exit -F arch=b32 -S finit_module -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k module_chng
--a always,exit -F arch=b64 -S finit_module -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k module_chng
+-a always,exit -F arch=b32 -S init_module,finit_module -F auid>=1000 -F auid!=4294967295 -k module_chng
+-a always,exit -F arch=b64 -S init_module,finit_module -F auid>=1000 -F auid!=4294967295 -k module_chng
 {% endif %}
 {% if ubtu_20_010181 %}
 -a always,exit -F arch=b32 -S delete_module -F auid>={{ ubtu20stig_int_gid }} -F auid!=4294967295 -k module_chng 
@@ -123,3 +123,30 @@
 {% if ubtu_20_010298 %}
 -w /bin/fdisk -p x -k fdisk
 {% endif %} 
+{% if ubtu_20_010142 %}
+-a always,exit -F arch=b32 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b32 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid=0 -k perm_mod
+-a always,exit -F arch=b64 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid=0 -k perm_mod
+{% endif %}
+{% if ubtu_20_010148 %}
+-a always,exit -F arch=b32 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=4294967295 -k perm_chng
+-a always,exit -F arch=b64 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=4294967295 -k perm_chng
+{% endif %}
+{% if ubtu_20_010152 %}
+-a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_chng
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_chng
+{% endif %} 
+{% if ubtu_20_010155 %}
+-a always,exit -F arch=b32 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k perm_access
+-a always,exit -F arch=b32 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k perm_access
+-a always,exit -F arch=b64 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k perm_access
+-a always,exit -F arch=b64 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k perm_access
+{% endif %}
+{% if ubtu_20_010267 %}
+-a always,exit -F arch=b64 -S unlink,unlinkat,rename,renameat,rmdir -F auid>=1000 -F auid!=4294967295 -k delete
+-a always,exit -F arch=b32 -S unlink,unlinkat,rename,renameat,rmdir -F auid>=1000 -F auid!=4294967295 -k delete
+{% endif %}
+{% if ubtu_20_010298 %}
+-w /usr/sbin/fdisk -p x -k fdisk
+{% endif %}
