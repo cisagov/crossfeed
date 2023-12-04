@@ -821,9 +821,9 @@ ubtu20stig_iburst_maxpoll_value: 16
 # To conform to STIG standards these need to be authoritative DoD sources
 # Please always enter these values as a list, even if it's just one
 ubtu20stig_dod_timesource:
-    - tick.usno.navy.mil
-    - tock.usno.navy.mil
-    - ntp2.usno.navy.mil
+    - 0.pool.ntp.org
+    - 1.pool.ntp.org
+    - 2.pool.ntp.org
 
 # UBTU-20-010466
 # ubtu20stig_limit_method is how you want manage your UFW limits
