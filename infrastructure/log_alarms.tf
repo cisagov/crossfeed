@@ -7,7 +7,7 @@ resource "aws_cloudwatch_metric_alarm" "root_user" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -25,7 +25,7 @@ resource "aws_cloudwatch_metric_alarm" "unauthorized_api_call" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -43,7 +43,7 @@ resource "aws_cloudwatch_metric_alarm" "login_without_mfa" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -61,7 +61,7 @@ resource "aws_cloudwatch_metric_alarm" "iam_policy" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -79,7 +79,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudtrail" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -97,7 +97,7 @@ resource "aws_cloudwatch_metric_alarm" "login_failure" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -115,7 +115,7 @@ resource "aws_cloudwatch_metric_alarm" "cmk_delete_disable" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -133,7 +133,7 @@ resource "aws_cloudwatch_metric_alarm" "s3_bucket_policy" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -151,7 +151,7 @@ resource "aws_cloudwatch_metric_alarm" "aws_config" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -169,7 +169,7 @@ resource "aws_cloudwatch_metric_alarm" "security_group" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -187,7 +187,7 @@ resource "aws_cloudwatch_metric_alarm" "nacl" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -205,7 +205,7 @@ resource "aws_cloudwatch_metric_alarm" "network_gateway" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -223,7 +223,7 @@ resource "aws_cloudwatch_metric_alarm" "route_table" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -241,7 +241,7 @@ resource "aws_cloudwatch_metric_alarm" "vpc" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -259,7 +259,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_shutdown" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -277,7 +277,7 @@ resource "aws_cloudwatch_metric_alarm" "db_shutdown" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
@@ -295,7 +295,7 @@ resource "aws_cloudwatch_metric_alarm" "db_deletion" {
   evaluation_periods  = 1
   period              = 60
   threshold           = 1
-  statistic           = "SampleCount"
+  statistic           = "Sum"
 
   tags = {
     Project  = var.project
