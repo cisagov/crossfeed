@@ -23,7 +23,9 @@ module.exports = {
     '/node_modules/',
     '.*report.*' // Remove this when we enable report / vulnerability functionality
   ],
-  transformIgnorePatterns: ['/node_modules/(?!(axios)/)'],
+  moduleNameMapper: {
+    '^axios$': require.resolve('axios')
+  },
   coverageThreshold: {
     global: {
       branches: 50
