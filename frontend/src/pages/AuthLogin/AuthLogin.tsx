@@ -1,10 +1,11 @@
 import { AlertTitle } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { AuthForm } from 'components';
-import { Button } from '@trussworks/react-uswds';
 import { useAuthContext } from 'context';
 import { Alert } from '@mui/material';
+import { Button } from '@trussworks/react-uswds';
+import { Box, Link, Typography } from '@mui/material';
+import { RegisterForm } from 'components/Register/RegisterForm';
 import {
   Authenticator,
   ThemeProvider,
@@ -29,7 +30,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
 }) => {
   const { apiPost, refreshUser } = useAuthContext();
   const [errors, setErrors] = useState<Errors>({});
-
+  const [open, setOpen] = useState<boolean>(false);
   // Once a user signs in, call refreshUser() so that the callback is called and the user gets signed in.
   const { authStatus } = useAuthenticator((context) => [context.isPending]);
   useEffect(() => {
@@ -151,13 +152,13 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
     <AuthForm onSubmit={onSubmit}>
       <h1>Welcome to Crossfeed</h1>
       {errors.global && <p className="text-error">{errors.global}</p>}
-      <Button type="submit" size="large">
+      <Button type="submit" size="big">
         Login with Login.gov
       </Button>
       <Typography>
         <h5>New to Crossfeed? Register with Login.gov</h5>
       </Typography>
-      {open && <RegisterForm open={open} onClose={onClose} />}
+      {open && <RegisterForm open={open} onClose={onclose} />}
       <Button type="submit" size="big" onClick={() => setOpen(true)}>
         Register
       </Button>
