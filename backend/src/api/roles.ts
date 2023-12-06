@@ -6,8 +6,7 @@ import {
   IsUUID,
   IsOptional,
   IsNotEmpty,
-  IsNumber,
-  IsEnum
+  IsNumber
 } from 'class-validator';
 import {
   Organization,
@@ -35,7 +34,7 @@ import { promises } from 'dns';
 /**
  * @swagger
  *
- * /organizations/{id}:
+ * /roless/{id}:
  *  delete:
  *    description: Delete a particular organization.
  *    parameters:
@@ -151,35 +150,6 @@ class NewDomain {
   @IsString()
   @IsNotEmpty()
   domain: string;
-}
-
-class NewOrganizationRoleDB {
-  @IsEnum(User)
-  user: User;
-
-  @IsEnum(Organization)
-  organization: Organization;
-
-  @IsBoolean()
-  approved: boolean;
-
-  @IsString()
-  role: string;
-
-  @IsEnum(User)
-  approvedBy: User;
-
-  @IsEnum(User)
-  createdBy: User;
-}
-
-class NewOrganizationRoleBody {
-  @IsString()
-  userId: string;
-
-  @IsString()
-  @IsOptional()
-  role: any;
 }
 
 const findOrCreateTags = async (
@@ -756,7 +726,7 @@ export const getByState = wrapHandler(async (event) => {
   return NotFound;
 });
 
-//V2 Endpoints
+// V2 Endpoints
 
 /**
  * @swagger
@@ -785,6 +755,7 @@ export const getByState = wrapHandler(async (event) => {
  */
 export const getAllV2 = wrapHandler(async (event) => {
   if (!isRegionalAdmin(event)) return Unauthorized;
+
   const filterParams = {};
 
   if (event.query && event.query.state) {
@@ -857,75 +828,6 @@ export const updateV2 = wrapHandler(async (event) => {
     return {
       statusCode: 200,
       body: JSON.stringify(updatedOrg)
-    };
-  }
-  return NotFound;
-});
-
-/**
- * @swagger
- *
- * /v2/organizations/{orgId}/users:
- *  post:
- *    description: Add a user to a particular organization.
- *    parameters:
- *      - in: path
- *        name: orgId
- *        description: Organization id
- *    tags:
- *    - Organizations
- */
-
-export const addUserV2 = wrapHandler(async (event) => {
-  // Permissions
-  if (!isRegionalAdmin(event)) return Unauthorized;
-  // TODO: check permissions
-  // if (!isOrgAdmin(event, id)) return Unauthorized;
-
-  // Validate the body
-  const body = await validateBody(NewOrganizationRoleBody, event.body);
-
-  // Connect to the database
-  await connectToDatabase();
-
-  // Get the organization id from the path
-  const orgId = event.pathParameters?.organizationId;
-  // confirm that the orgId is a valid UUID
-  if (!orgId || !isUUID(orgId)) {
-    return NotFound;
-  }
-  // Get Organization from the database
-  const org = await Organization.findOne(orgId);
-
-  // Get the user id from the body
-  const userId = body.userId;
-  // confirm that the userId is a valid UUID
-  if (!userId || !isUUID(userId)) {
-    return NotFound;
-  }
-  // Get User from the database
-  const user = await User.findOneOrFail(userId);
-
-  const newRoleData = {
-    user: user,
-    organization: org,
-    approved: true,
-    role: body.role,
-    approvedBy: event.requestContext.authorizer!.id,
-    createdBy: event.requestContext.authorizer!.id
-  };
-
-  // Add a role to make association to user/organization
-  const newRole = Role.create(newRoleData);
-  await Role.save(newRole);
-  // const roleId = newRole.id;
-
-  // Handle response
-  if (newRole) {
-    // const roleResp = await Organization.findOne(roleId);
-    return {
-      statusCode: 200,
-      body: JSON.stringify(newRole)
     };
   }
   return NotFound;

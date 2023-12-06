@@ -50,6 +50,12 @@ export class Role extends BaseEntity {
   })
   user: User;
 
+  // @ManyToOne((type) => User, (user) => user.organizations, {
+  //   onDelete: 'CASCADE',
+  //   onUpdate: 'CASCADE'
+  // })
+  // userOrgs: User;
+
   @ManyToOne((type) => Organization, (organization) => organization.userRoles, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'

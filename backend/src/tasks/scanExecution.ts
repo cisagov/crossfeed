@@ -29,6 +29,24 @@ export const handler: Handler = async (event) => {
     } else {
       console.log('Shodan is the only script type available right now.');
     }
+
+    // After processing each message, check if the SQS queue is empty
+    const sqsAttributes = await sqs
+      .getQueueAttributes({
+        QueueUrl: process.env.SHODAN_QUEUE_URL!,
+        AttributeNames: ['ApproximateNumberOfMessages']
+      })
+      .promise();
+
+    const approximateNumberOfMessages = parseInt(
+      sqsAttributes.Attributes?.ApproximateNumberOfMessages || '0',
+      10
+    );
+
+    // If the queue is empty, scale down to zero tasks
+    if (approximateNumberOfMessages === 0) {
+      await startFargateTask(clusterName, process.env.SHODAN_SERVICE_NAME!, 0);
+    }
   } catch (error) {
     console.error(error);
     return {
@@ -59,7 +77,7 @@ export async function startFargateTask(
       const service = serviceDescription.services[0];
 
       // Check if the desired task count is less than # provided
-      if (service.desiredCount! < desiredCountNum) {
+      if (service.desiredCount! !== desiredCountNum) {
         const updateServiceParams = {
           cluster: clusterName,
           service: serviceName,
