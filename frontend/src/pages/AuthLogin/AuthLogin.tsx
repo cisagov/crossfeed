@@ -6,6 +6,8 @@ import { Alert } from '@mui/material';
 import { Button } from '@trussworks/react-uswds';
 import { Box, Link, Typography } from '@mui/material';
 import { RegisterForm } from 'components/Register/RegisterForm';
+import { ModFooter } from 'components/Footer';
+import { CrossfeedWarning } from 'components/WarningBanner';
 import {
   Authenticator,
   ThemeProvider,
@@ -79,73 +81,46 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
 
   if (process.env.REACT_APP_USE_COGNITO) {
     return (
-      <AuthForm as="div">
-        <h1>Welcome to Crossfeed</h1>
-        <ThemeProvider theme={amplifyTheme}>
-          <Authenticator
-            loginMechanisms={['email']}
-            formFields={formFields}
-            /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
-            hideSignUp={
-              !showSignUp && !(process.env.NODE_ENV === 'development')
-            }
-          />
-          <div className="notification_box">
-            <div className="platform_header">PLATFORM NOTIFICATION</div>
-            <div className="notification_header">
-              Important Notice: Temporary Downtime During Crossfeed Migration
-            </div>
-            <div className="temp_notification">
-              {' '}
-              The Crossfeed environment is moving. The migration will require a
-              temporary downtime of approximately one week.
-            </div>
-            <div className="temp_notification">
-              {' '}
-              The downtime will begin on Wednesday, October 25, through the end
-              of day Wednesday, November 01.{' '}
-            </div>
-            <div className="temp_notification">
-              For additional information, please click{' '}
-              <a href="https://s3.amazonaws.com/crossfeed.cyber.dhs.gov/Notice.pdf">
-                here.
-              </a>
-            </div>
-          </div>
-          <div className="banner_box">
-            <div className="banner_header">**Warning**</div>
-            <div className="banner_login">
-              {' '}
-              This system contains U.S. Government Data. Unauthorized use of
-              this system is prohibited. Use of this computer system, authorized
-              or unauthorized, constitutes consent to monitoring of this system.
-            </div>
-            <div className="banner_login">
-              {' '}
-              This computer system, including all related equipment, networks,
-              and network devices (specifically including internet access) are
-              provided only for authorized U.S. Government use. U.S. Government
-              computer systems may be monitored for all lawful purposes,
-              including to ensure that their use is authorized, for management
-              of the system, to facilitate protection against unauthorized
-              access, and to verify security procedures, survivability, and
-              operational security. Monitoring includes active attacks by
-              authorized U.S. Government entities to test or verify the security
-              of this system. During monitoring, information may be examined,
-              recorded, copied and used for authorized purposes. All
-              information, including personal information, placed or sent over
-              this system may be monitored.
-            </div>
-            <div className="banner_login">
-              {' '}
-              Unauthorized use may subject you to criminal prosecution. Evidence
-              of unauthorized use collected during monitoring may be used for
-              administrative, criminal, or other adverse action. Use of this
-              system constitutes consent to monitoring for these purposes.
-            </div>
-          </div>
-        </ThemeProvider>
-      </AuthForm>
+      <>
+        <AuthForm as="div">
+          <h1>Welcome to Crossfeed</h1>
+          <ThemeProvider theme={amplifyTheme}>
+            <Authenticator
+              loginMechanisms={['email']}
+              formFields={formFields}
+              /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
+              hideSignUp={
+                !showSignUp && !(process.env.NODE_ENV === 'development')
+              }
+            />
+            <Alert onClose={() => {}} severity="warning" className="alert_box">
+              <AlertTitle>
+                <h2 className="platform_notice">PLATFORM NOTIFICATION</h2>
+              </AlertTitle>
+              <h3>
+                Important Notice: Temporary Downtime During Crossfeed Migration
+              </h3>
+              <p>
+                The Crossfeed environment is moving. The migration will require
+                a a temporary downtime of approximately one week.
+              </p>
+              <p>
+                The downtime will begin on Wednesday, October 25, through the
+                day Wednesday, November 01.
+              </p>
+              <p>
+                For additional information, please click
+                <a href="https://s3.amazonaws.com/crossfeed.cyber.dhs.gov/Notice.pdf">
+                  {' '}
+                  here.
+                </a>
+              </p>
+            </Alert>
+          </ThemeProvider>
+        </AuthForm>
+        <CrossfeedWarning />
+        <ModFooter />
+      </>
     );
   }
   return (
@@ -158,7 +133,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
       <Typography>
         <h5>New to Crossfeed? Register with Login.gov</h5>
       </Typography>
-      {open && <RegisterForm open={open} onClose={onclose} />}
+      {open && <RegisterForm open={open} onClose={onClose} />}
       <Button type="submit" size="big" onClick={() => setOpen(true)}>
         Register
       </Button>
