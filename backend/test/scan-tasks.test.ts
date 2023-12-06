@@ -232,7 +232,9 @@ describe('domains', () => {
         .get(`/scan-tasks/${scanTask.id}/logs`)
         .set('Authorization', createUserToken({}))
         .expect(403);
-      expect(response.text).toEqual('');
+      expect(response.text).toEqual(
+        'Unauthorized access. View logs for details.'
+      );
       expect(getLogs).not.toHaveBeenCalled();
     });
   });

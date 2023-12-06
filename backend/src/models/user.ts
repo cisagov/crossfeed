@@ -10,13 +10,14 @@ import {
   PrimaryGeneratedColumn,
   BeforeUpdate
 } from 'typeorm';
-import { Role } from './';
+import { Organization, Role } from './';
 import { ApiKey } from './api-key';
 
 export enum UserType {
   STANDARD = 'standard',
   GLOBAL_VIEW = 'globalView',
-  GLOBAL_ADMIN = 'globalAdmin'
+  GLOBAL_ADMIN = 'globalAdmin',
+  REGIONAL_ADMIN = 'regionalAdmin'
 }
 @Entity()
 export class User extends BaseEntity {
@@ -104,4 +105,26 @@ export class User extends BaseEntity {
   setFullName() {
     this.fullName = this.firstName + ' ' + this.lastName;
   }
+
+  @Column({
+    nullable: true
+  })
+  regionId: string;
+
+  @Column({
+    nullable: true
+  })
+  state: string;
+
+  // @Column({
+  //   nullable: true,
+  //   default: 0
+  // })
+  // numberOfOrganizations: number;
+
+  // @Column({
+  //   nullable: true,
+  //   default: []
+  // })
+  // organizationIds: Array<Organization>;
 }
