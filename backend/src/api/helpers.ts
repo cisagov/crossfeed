@@ -14,7 +14,6 @@ import * as handlebars from 'handlebars';
 import * as util from 'util';
 import S3Client from '../tasks/s3-client';
 
-
 export const validateBody = async <T>(
   obj: ClassType<T>,
   body: string | null,
