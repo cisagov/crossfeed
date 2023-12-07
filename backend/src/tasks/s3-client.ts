@@ -1,5 +1,6 @@
 import { S3 } from 'aws-sdk';
 
+S3.getObject({)
 /**
  * S3 Client. Normally, interacts with S3.
  * When the app is running locally, connects
@@ -74,6 +75,7 @@ class S3Client {
       throw e;
     }
   }
+
   async listReports(orgId: string) {
     try {
       const params = {
@@ -84,6 +86,25 @@ class S3Client {
 
       const data = await this.s3
         .listObjects(params, function (err, data) {
+          if (err) throw err;
+        })
+        .promise();
+      return data.Contents;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  async getEmailAsset(fileName: string) {
+    try {
+      const params = {
+        Bucket: process.env.EMAIL_BUCKET_NAME!,
+        Key: fileName
+      };
+
+      const data = await this.s3
+        .getObject(params, function (err, data) {
           if (err) throw err;
         })
         .promise();
