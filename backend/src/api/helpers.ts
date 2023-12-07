@@ -112,7 +112,8 @@ export const sendUserNotificationEmail = async (
     SES: new SES({ region: 'us-east-1' })
   });
 
-  const html = S3Client.getEmailAsset(template_file);
+  const client = new S3Client();
+  const html = client.getEmailAsset(template_file);
   const template = handlebars.compile(html);
   const data = {
     first_name: p_firstName,
@@ -129,37 +130,37 @@ export const sendUserNotificationEmail = async (
     attachments: [
       {
         filename: 'banner.png',
-        path: S3Client.getEmailAsset('banner.png'),
+        path: client.getEmailAsset('banner.png'),
         cid: 'CISA Banner'
       },
       {
         filename: 'web.png',
-        path: S3Client.getEmailAsset('banner.png'),
+        path: client.getEmailAsset('banner.png'),
         cid: 'CISA Web'
       },
       {
         filename: 'email.png',
-        path: S3Client.getEmailAsset('email.png'),
+        path: client.getEmailAsset('email.png'),
         cid: 'CISA Email'
       },
       {
         filename: 'linkedin.png',
-        path: S3Client.getEmailAsset('linkedin.png'),
+        path: client.getEmailAsset('linkedin.png'),
         cid: 'CISA LinkedIn'
       },
       {
         filename: 'twitter.png',
-        path: S3Client.getEmailAsset('twitter.png'),
+        path: client.getEmailAsset('twitter.png'),
         cid: 'CISA Twitter'
       },
       {
         filename: 'facebook.png',
-        path: S3Client.getEmailAsset('facebooK.png'),
+        path: client.getEmailAsset('facebooK.png'),
         cid: 'CISA Facebook'
       },
       {
         filename: 'instagram.png',
-        path: S3Client.getEmailAsset('instagram.png'),
+        path: client.getEmailAsset('instagram.png'),
         cid: 'CISA Instagram'
       }
     ]
@@ -180,8 +181,9 @@ export const sendRegionalAdminNotificationEmail = async (
   });
 
   const fs = require('fs').promises;
+  const client = new S3Client();
   const html = await fs.readFile(
-    S3Client.getEmailAsset('crossfeed_regional_admin_notification.html'),
+    client.getEmailAsset('crossfeed_regional_admin_notification.html'),
     'utf8'
   );
   const template = handlebars.compile(html);
@@ -200,37 +202,37 @@ export const sendRegionalAdminNotificationEmail = async (
     attachments: [
       {
         filename: 'banner.png',
-        path: S3Client.getEmailAsset('banner.png'),
+        path: client.getEmailAsset('banner.png'),
         cid: 'CISA Banner'
       },
       {
         filename: 'web.png',
-        path: S3Client.getEmailAsset('banner.png'),
+        path: client.getEmailAsset('banner.png'),
         cid: 'CISA Web'
       },
       {
         filename: 'email.png',
-        path: S3Client.getEmailAsset('email.png'),
+        path: client.getEmailAsset('email.png'),
         cid: 'CISA Email'
       },
       {
         filename: 'linkedin.png',
-        path: S3Client.getEmailAsset('linkedin.png'),
+        path: client.getEmailAsset('linkedin.png'),
         cid: 'CISA LinkedIn'
       },
       {
         filename: 'twitter.png',
-        path: S3Client.getEmailAsset('twitter.png'),
+        path: client.getEmailAsset('twitter.png'),
         cid: 'CISA Twitter'
       },
       {
         filename: 'facebook.png',
-        path: S3Client.getEmailAsset('facebooK.png'),
+        path: client.getEmailAsset('facebooK.png'),
         cid: 'CISA Facebook'
       },
       {
         filename: 'instagram.png',
-        path: S3Client.getEmailAsset('instagram.png'),
+        path: client.getEmailAsset('instagram.png'),
         cid: 'CISA Instagram'
       }
     ]
