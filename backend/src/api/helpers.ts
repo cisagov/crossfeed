@@ -12,6 +12,7 @@ import * as nodemailer from 'nodemailer';
 import * as fs from 'fs';
 import * as handlebars from 'handlebars';
 import * as util from 'util';
+import { getEmailAsset } from '../tasks/s3-client';
 
 export const validateBody = async <T>(
   obj: ClassType<T>,
@@ -111,8 +112,7 @@ export const sendUserNotificationEmail = async (
     SES: new SES({ region: 'us-east-1' })
   });
 
-  const fs = require('fs').promises;
-  const html = await fs.readFile(template_file, 'utf8');
+  const html = getEmailAsset(template_file);
   const template = handlebars.compile(html);
   const data = {
     first_name: p_firstName,
@@ -129,37 +129,37 @@ export const sendUserNotificationEmail = async (
     attachments: [
       {
         filename: 'banner.png',
-        path: '/app/src/email_templates/banner.png',
+        path: getEmailAsset('banner.png'),
         cid: 'CISA Banner'
       },
       {
         filename: 'web.png',
-        path: '/app/src/email_templates/banner.png',
+        path: getEmailAsset('banner.png'),
         cid: 'CISA Web'
       },
       {
         filename: 'email.png',
-        path: '/app/src/email_templates/email.png',
+        path: getEmailAsset('email.png'),
         cid: 'CISA Email'
       },
       {
         filename: 'linkedin.png',
-        path: '/app/src/email_templates/linkedin.png',
+        path: getEmailAsset('linkedin.png'),
         cid: 'CISA LinkedIn'
       },
       {
         filename: 'twitter.png',
-        path: '/app/src/email_templates/twitter.png',
+        path: getEmailAsset('twitter.png'),
         cid: 'CISA Twitter'
       },
       {
         filename: 'facebook.png',
-        path: '/app/src/email_templates/facebooK.png',
+        path: getEmailAsset('facebooK.png'),
         cid: 'CISA Facebook'
       },
       {
         filename: 'instagram.png',
-        path: '/app/src/email_templates/instagram.png',
+        path: getEmailAsset('instagram.png'),
         cid: 'CISA Instagram'
       }
     ]
@@ -181,7 +181,7 @@ export const sendRegionalAdminNotificationEmail = async (
 
   const fs = require('fs').promises;
   const html = await fs.readFile(
-    '/app/src/email_templates/crossfeed_regional_admin_notification.html',
+    getEmailAsset('crossfeed_regional_admin_notification.html'),
     'utf8'
   );
   const template = handlebars.compile(html);
@@ -200,37 +200,37 @@ export const sendRegionalAdminNotificationEmail = async (
     attachments: [
       {
         filename: 'banner.png',
-        path: '/app/src/email_templates/banner.png',
+        path: getEmailAsset('banner.png'),
         cid: 'CISA Banner'
       },
       {
         filename: 'web.png',
-        path: '/app/src/email_templates/banner.png',
+        path: getEmailAsset('banner.png'),
         cid: 'CISA Web'
       },
       {
         filename: 'email.png',
-        path: '/app/src/email_templates/email.png',
+        path: getEmailAsset('email.png'),
         cid: 'CISA Email'
       },
       {
         filename: 'linkedin.png',
-        path: '/app/src/email_templates/linkedin.png',
+        path: getEmailAsset('linkedin.png'),
         cid: 'CISA LinkedIn'
       },
       {
         filename: 'twitter.png',
-        path: '/app/src/email_templates/twitter.png',
+        path: getEmailAsset('twitter.png'),
         cid: 'CISA Twitter'
       },
       {
         filename: 'facebook.png',
-        path: '/app/src/email_templates/facebooK.png',
+        path: getEmailAsset('facebooK.png'),
         cid: 'CISA Facebook'
       },
       {
         filename: 'instagram.png',
-        path: '/app/src/email_templates/instagram.png',
+        path: getEmailAsset('instagram.png'),
         cid: 'CISA Instagram'
       }
     ]
