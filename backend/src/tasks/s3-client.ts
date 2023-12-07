@@ -1,6 +1,5 @@
 import { S3 } from 'aws-sdk';
 
-S3.getObject({)
 /**
  * S3 Client. Normally, interacts with S3.
  * When the app is running locally, connects
