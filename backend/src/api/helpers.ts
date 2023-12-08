@@ -130,37 +130,37 @@ export const sendUserNotificationEmail = async (
     attachments: [
       {
         filename: 'banner.png',
-        content: client.getEmailAsset('banner.png'),
+        content: await client.getEmailAsset('banner.png'),
         cid: 'CISA Banner'
       },
       {
         filename: 'web.png',
-        content: client.getEmailAsset('banner.png'),
+        content: await client.getEmailAsset('banner.png'),
         cid: 'CISA Web'
       },
       {
         filename: 'email.png',
-        content: client.getEmailAsset('email.png'),
+        content: await client.getEmailAsset('email.png'),
         cid: 'CISA Email'
       },
       {
         filename: 'linkedin.png',
-        content: client.getEmailAsset('linkedin.png'),
+        content: await client.getEmailAsset('linkedin.png'),
         cid: 'CISA LinkedIn'
       },
       {
         filename: 'twitter.png',
-        content: client.getEmailAsset('twitter.png'),
+        content: await client.getEmailAsset('twitter.png'),
         cid: 'CISA Twitter'
       },
       {
         filename: 'facebook.png',
-        content: client.getEmailAsset('facebooK.png'),
+        content: await client.getEmailAsset('facebooK.png'),
         cid: 'CISA Facebook'
       },
       {
         filename: 'instagram.png',
-        content: client.getEmailAsset('instagram.png'),
+        content: await client.getEmailAsset('instagram.png'),
         cid: 'CISA Instagram'
       }
     ]
@@ -202,37 +202,37 @@ export const sendRegionalAdminNotificationEmail = async (
     attachments: [
       {
         filename: 'banner.png',
-        content: client.getEmailAsset('banner.png'),
+        content: await client.getEmailAsset('banner.png'),
         cid: 'CISA Banner'
       },
       {
         filename: 'web.png',
-        content: client.getEmailAsset('banner.png'),
+        content: await client.getEmailAsset('banner.png'),
         cid: 'CISA Web'
       },
       {
         filename: 'email.png',
-        content: client.getEmailAsset('email.png'),
+        content: await client.getEmailAsset('email.png'),
         cid: 'CISA Email'
       },
       {
         filename: 'linkedin.png',
-        content: client.getEmailAsset('linkedin.png'),
+        content: await client.getEmailAsset('linkedin.png'),
         cid: 'CISA LinkedIn'
       },
       {
         filename: 'twitter.png',
-        content: client.getEmailAsset('twitter.png'),
+        content: await client.getEmailAsset('twitter.png'),
         cid: 'CISA Twitter'
       },
       {
         filename: 'facebook.png',
-        content: client.getEmailAsset('facebooK.png'),
+        content: await client.getEmailAsset('facebooK.png'),
         cid: 'CISA Facebook'
       },
       {
         filename: 'instagram.png',
-        content: client.getEmailAsset('instagram.png'),
+        content: await client.getEmailAsset('instagram.png'),
         cid: 'CISA Instagram'
       }
     ]
