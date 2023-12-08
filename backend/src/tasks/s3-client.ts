@@ -107,7 +107,7 @@ class S3Client {
           if (err) throw err;
         })
         .promise();
-      if ( data && data.Body ) {
+      if (data && data.Body) {
         return data.Body.toString('utf-8');
       }
     } catch (e) {
