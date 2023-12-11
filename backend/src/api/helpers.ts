@@ -181,7 +181,9 @@ export const sendRegionalAdminNotificationEmail = async (
   });
 
   const client = new S3Client();
-  const html = await client.getEmailAsset('crossfeed_regional_admin_notification.html');
+  const html = await client.getEmailAsset(
+    'crossfeed_regional_admin_notification.html'
+  );
   const template = handlebars.compile(html);
   const data = {
     first_name: p_firstName,
