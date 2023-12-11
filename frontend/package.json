@@ -1,6 +1,11 @@
 {
   "name": "crossfeed-front",
   "version": "0.1.0",
+  "jest" : {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
+  },
   "private": true,
   "engines": {
     "node": ">=18.0.0"
