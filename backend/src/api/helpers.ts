@@ -12,6 +12,7 @@ import * as nodemailer from 'nodemailer';
 import * as fs from 'fs';
 import * as handlebars from 'handlebars';
 import * as util from 'util';
+import S3Client from '../tasks/s3-client';
 
 export const validateBody = async <T>(
   obj: ClassType<T>,
@@ -111,8 +112,8 @@ export const sendUserNotificationEmail = async (
     SES: new SES({ region: 'us-east-1' })
   });
 
-  const fs = require('fs').promises;
-  const html = await fs.readFile(template_file, 'utf8');
+  const client = new S3Client();
+  const html = await client.getEmailAsset(template_file);
   const template = handlebars.compile(html);
   const data = {
     first_name: p_firstName,
@@ -129,37 +130,37 @@ export const sendUserNotificationEmail = async (
     attachments: [
       {
         filename: 'banner.png',
-        path: '/app/src/email_templates/banner.png',
+        content: await client.getEmailAsset('banner.png'),
         cid: 'CISA Banner'
       },
       {
         filename: 'web.png',
-        path: '/app/src/email_templates/banner.png',
+        content: await client.getEmailAsset('banner.png'),
         cid: 'CISA Web'
       },
       {
         filename: 'email.png',
-        path: '/app/src/email_templates/email.png',
+        content: await client.getEmailAsset('email.png'),
         cid: 'CISA Email'
       },
       {
         filename: 'linkedin.png',
-        path: '/app/src/email_templates/linkedin.png',
+        content: await client.getEmailAsset('linkedin.png'),
         cid: 'CISA LinkedIn'
       },
       {
         filename: 'twitter.png',
-        path: '/app/src/email_templates/twitter.png',
+        content: await client.getEmailAsset('twitter.png'),
         cid: 'CISA Twitter'
       },
       {
         filename: 'facebook.png',
-        path: '/app/src/email_templates/facebooK.png',
+        content: await client.getEmailAsset('facebooK.png'),
         cid: 'CISA Facebook'
       },
       {
         filename: 'instagram.png',
-        path: '/app/src/email_templates/instagram.png',
+        content: await client.getEmailAsset('instagram.png'),
         cid: 'CISA Instagram'
       }
     ]
@@ -179,10 +180,9 @@ export const sendRegionalAdminNotificationEmail = async (
     SES: new SES({ region: 'us-east-1' })
   });
 
-  const fs = require('fs').promises;
-  const html = await fs.readFile(
-    '/app/src/email_templates/crossfeed_regional_admin_notification.html',
-    'utf8'
+  const client = new S3Client();
+  const html = await client.getEmailAsset(
+    'crossfeed_regional_admin_notification.html'
   );
   const template = handlebars.compile(html);
   const data = {
@@ -200,37 +200,37 @@ export const sendRegionalAdminNotificationEmail = async (
     attachments: [
       {
         filename: 'banner.png',
-        path: '/app/src/email_templates/banner.png',
+        content: await client.getEmailAsset('banner.png'),
         cid: 'CISA Banner'
       },
       {
         filename: 'web.png',
-        path: '/app/src/email_templates/banner.png',
+        content: await client.getEmailAsset('banner.png'),
         cid: 'CISA Web'
       },
       {
         filename: 'email.png',
-        path: '/app/src/email_templates/email.png',
+        content: await client.getEmailAsset('email.png'),
         cid: 'CISA Email'
       },
       {
         filename: 'linkedin.png',
-        path: '/app/src/email_templates/linkedin.png',
+        content: await client.getEmailAsset('linkedin.png'),
         cid: 'CISA LinkedIn'
       },
       {
         filename: 'twitter.png',
-        path: '/app/src/email_templates/twitter.png',
+        content: await client.getEmailAsset('twitter.png'),
         cid: 'CISA Twitter'
       },
       {
         filename: 'facebook.png',
-        path: '/app/src/email_templates/facebooK.png',
+        content: await client.getEmailAsset('facebooK.png'),
         cid: 'CISA Facebook'
       },
       {
         filename: 'instagram.png',
-        path: '/app/src/email_templates/instagram.png',
+        content: await client.getEmailAsset('instagram.png'),
         cid: 'CISA Instagram'
       }
     ]
