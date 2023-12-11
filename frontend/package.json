@@ -1,6 +1,11 @@
 {
   "name": "crossfeed-front",
   "version": "0.1.0",
+  "jest" : {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
+  },
   "private": true,
   "engines": {
     "node": ">=18.0.0"
@@ -22,7 +27,7 @@
     "@nivo/pie": "^0.80.0",
     "@trussworks/react-uswds": "^5.1.1",
     "autoprefixer": "^10.4.13",
-    "aws-amplify": "^5.0.4",
+    "aws-amplify": "^5.3.12",
     "classnames": "^2.3.2",
     "d3-scale": "^4.0.2",
     "date-fns": "^2.29.3",
