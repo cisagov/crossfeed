@@ -180,12 +180,9 @@ export const sendRegionalAdminNotificationEmail = async (
     SES: new SES({ region: 'us-east-1' })
   });
 
-  const fs = require('fs').promises;
   const client = new S3Client();
-  const html = await fs.readFile(
-    await client.getEmailAsset('crossfeed_regional_admin_notification.html'),
-    'utf8'
-  );
+  const html = await client.getEmailAsset('crossfeed_regional_admin_notification.html');
+  
   const template = handlebars.compile(html);
   const data = {
     first_name: p_firstName,
