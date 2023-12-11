@@ -113,7 +113,7 @@ export const sendUserNotificationEmail = async (
   });
 
   const client = new S3Client();
-  const html = client.getEmailAsset(template_file);
+  const html = await client.getEmailAsset(template_file);
   const template = handlebars.compile(html);
   const data = {
     first_name: p_firstName,
@@ -183,7 +183,7 @@ export const sendRegionalAdminNotificationEmail = async (
   const fs = require('fs').promises;
   const client = new S3Client();
   const html = await fs.readFile(
-    client.getEmailAsset('crossfeed_regional_admin_notification.html'),
+    await client.getEmailAsset('crossfeed_regional_admin_notification.html'),
     'utf8'
   );
   const template = handlebars.compile(html);
