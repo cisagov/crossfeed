@@ -4,7 +4,7 @@ import { AuthForm } from 'components';
 import { useAuthContext } from 'context';
 import { Alert } from '@mui/material';
 import { Button } from '@trussworks/react-uswds';
-import { Box, Link, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { RegisterForm } from 'components/Register/RegisterForm';
 import { ModFooter } from 'components/Footer';
 import { CrossfeedWarning } from 'components/WarningBanner';
@@ -78,7 +78,9 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
       });
     }
   };
-
+  const onClose = () => {
+    setOpen(false);
+  };
   if (process.env.REACT_APP_USE_COGNITO) {
     return (
       <>
