@@ -16,6 +16,7 @@ import {
 import {
   Domain,
   AuthLogin,
+  AuthLoginCreate,
   AuthCreateAccount,
   Scans,
   Scan,
@@ -31,7 +32,8 @@ import {
   LoginGovCallback,
   Feeds,
   Domains,
-  Reports
+  Reports,
+  RegionUsers
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
 import { CrossfeedFooter } from './components/Footer';
@@ -108,6 +110,15 @@ const App: React.FC = () => (
                     )}
                     component={Risk}
                   />
+                  <RouteGuard
+                    exact
+                    path="/registration"
+                    render={() => <Redirect to="/inventory" />}
+                    unauth={(props) => (
+                      <AuthLoginCreate {...props} showSignUp={true} />
+                    )}
+                    component={Risk}
+                  />
                   <Route
                     exact
                     path="/login-gov-callback"
@@ -154,6 +165,11 @@ const App: React.FC = () => (
                   <RouteGuard path="/organizations" component={Organizations} />
                   <RouteGuard path="/users" component={Users} />
                   <RouteGuard path="/settings" component={Settings} />
+                  {/* <Route exact path="/user/registration" component={UserRegistration} /> */}
+                  <RouteGuard
+                    path="/region-admin-dashboard"
+                    component={RegionUsers}
+                  />
                 </Switch>
                 <CrossfeedFooter />
               </Layout>

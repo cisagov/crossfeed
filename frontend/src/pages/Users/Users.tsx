@@ -143,7 +143,6 @@ export const Users: React.FC = () => {
     email: '',
     userType: ''
   });
-
   const userSearch = useCallback(
     async ({
       sort,
