@@ -145,7 +145,7 @@ form[data-amplify-authenticator-setup-totp] {
 .warning_notification  {
   position: relative; 
   padding-left: 10px;
-  padding-top: 10px;
+  //padding-top: 10px;
   padding-bottom: 20px;
   transition: top .2s;
  
@@ -182,8 +182,8 @@ form[data-amplify-authenticator-setup-totp] {
 .banner_login {
   position: relative; 
   padding-left: 10px;
-  padding-top: 10px;
-  padding-bottom: 20px;
+ // padding-top: 10px;
+ // padding-bottom: 20px;
   transition: top .2s;
   background-color: white;
 }
