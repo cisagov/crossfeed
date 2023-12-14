@@ -4,7 +4,7 @@ import { AuthForm } from 'components';
 import { useAuthContext } from 'context';
 import { Alert } from '@mui/material';
 import { Button } from '@trussworks/react-uswds';
-import { Typography } from '@mui/material';
+import { Typography, Box, Link } from '@mui/material';
 import { RegisterForm } from 'components/Register/RegisterForm';
 import { ModFooter } from 'components/Footer';
 import { CrossfeedWarning } from 'components/WarningBanner';
@@ -91,10 +91,22 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
               loginMechanisms={['email']}
               formFields={formFields}
               /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
-              hideSignUp={
+              /* hideSignUp={
                 !showSignUp && !(process.env.NODE_ENV === 'development')
-              }
+              }*/
+              hideSignUp={true}
             />
+            {open && <RegisterForm open={open} onClose={onClose} />}
+            <Box pt={3} pb={3} display="flex" justifyContent="center">
+              <Typography display="inline">New to Crossfeed?&nbsp;</Typography>
+              <Link
+                underline="hover"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setOpen(true)}
+              >
+                Register Now
+              </Link>
+            </Box>
             <Alert onClose={() => {}} severity="warning" className="alert_box">
               <AlertTitle>
                 <h2 className="platform_notice">PLATFORM NOTIFICATION</h2>
