@@ -22,9 +22,9 @@ const sleep = (milliseconds: number) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
-const fetchCensysData = async (rootDomain: string, page: number) => {
+const fetchCensysData = async (rootDomain: string) => {
   console.log(
-    `[censys] fetching certificates for query "${rootDomain}", page ${page}`
+    `[censys] fetching certificates for query "${rootDomain}" from Censys...`
   );
   const { data } = await axios({
     url: 'https://search.censys.io/api/v2/certificates/search',
@@ -37,8 +37,8 @@ const fetchCensysData = async (rootDomain: string, page: number) => {
       'Content-Type': 'application/json'
     },
     data: {
-      query: rootDomain,
-      page: page,
+      q: rootDomain,
+      per_page: 100,
       fields: ['names']
     }
   });
@@ -59,33 +59,29 @@ export const handler = async (commandOptions: CommandOptions) => {
   }>();
 
   for (const rootDomain of rootDomains) {
-    let pages = 1;
-    for (let page = 1; page <= pages; page++) {
-      const data = await fetchCensysData(rootDomain, page);
-      pages = data.metadata.pages;
-      for (const result of data.results) {
-        const names = result['names'];
-        if (!names) continue;
-        for (const name of names) {
-          if (name.endsWith(rootDomain)) {
-            foundDomains.add({
-              name: name.replace('*.', ''),
-              organization: { id: organizationId! },
-              fromRootDomain: rootDomain,
-              discoveredBy: { id: scanId }
-            });
-          }
+    const data = await fetchCensysData(rootDomain);
+    for (const result of data.results) {
+      const names = result['names'];
+      if (!names) continue;
+      for (const name of names) {
+        if (name.endsWith(rootDomain)) {
+          foundDomains.add({
+            name: name.replace('*.', ''),
+            organization: { id: organizationId! },
+            fromRootDomain: rootDomain,
+            discoveredBy: { id: scanId }
+          });
         }
       }
-
-      await sleep(1000); // Wait for rate limit
     }
+
+    await sleep(1000); // Wait for rate limit
   }
 
   // LATER: Can we just grab the cert the site is presenting, and store that?
   // Censys (probably doesn't know who's presenting it)
   // SSLyze (fetches the cert), Project Sonar (has SSL certs, but not sure how pulls domains -- from IPs)
-  // Project Sonar has forward & reverse DNS for finding subdomains
+  // Project Sonar has both forward & reverse DNS for finding subdomains
 
   // Save domains to database
   console.log('[censys] saving domains to database...');
