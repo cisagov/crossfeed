@@ -9,7 +9,7 @@ import getRootDomains from './helpers/getRootDomains';
 interface CensysAPIResponse {
   status: string;
   results: {
-    'parsed.names'?: string[];
+    names?: string[];
   }[];
   metadata: {
     count: number;
@@ -27,7 +27,7 @@ const fetchCensysData = async (rootDomain: string, page: number) => {
     `[censys] fetching certificates for query "${rootDomain}", page ${page}`
   );
   const { data, status } = await axios({
-    url: 'https://censys.io/api/v1/search/certificates',
+    url: 'https://search.censys.io/api/v2/certificates/search',
     method: 'POST',
     auth: {
       username: String(process.env.CENSYS_API_ID),
@@ -39,7 +39,7 @@ const fetchCensysData = async (rootDomain: string, page: number) => {
     data: {
       query: rootDomain,
       page: page,
-      fields: ['parsed.names']
+      fields: ['names']
     }
   });
   return data as CensysAPIResponse;
@@ -64,7 +64,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       const data = await fetchCensysData(rootDomain, page);
       pages = data.metadata.pages;
       for (const result of data.results) {
-        const names = result['parsed.names'];
+        const names = result['names'];
         if (!names) continue;
         for (const name of names) {
           if (name.endsWith(rootDomain)) {
@@ -109,6 +109,6 @@ export const handler = async (commandOptions: CommandOptions) => {
       })
     );
   }
-  saveDomainsToDb(domains);
+  await saveDomainsToDb(domains);
   console.log(`[censys] done, saved or updated ${domains.length} domains`);
 };
