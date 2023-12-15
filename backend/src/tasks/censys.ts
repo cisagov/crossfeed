@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Domain, Organization } from '../models';
+import { Domain } from '../models';
 import { plainToClass } from 'class-transformer';
 import * as dns from 'dns';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
@@ -18,7 +18,7 @@ interface CensysAPIResponse {
   };
 }
 
-const sleep = (milliseconds) => {
+const sleep = (milliseconds: number) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
@@ -26,7 +26,7 @@ const fetchCensysData = async (rootDomain: string, page: number) => {
   console.log(
     `[censys] fetching certificates for query "${rootDomain}", page ${page}`
   );
-  const { data, status } = await axios({
+  const { data } = await axios({
     url: 'https://search.censys.io/api/v2/certificates/search',
     method: 'POST',
     auth: {
