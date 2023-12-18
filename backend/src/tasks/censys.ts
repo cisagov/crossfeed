@@ -6,16 +6,20 @@ import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
 import getRootDomains from './helpers/getRootDomains';
 
+// TODO: code only returns first 100 results; add cursor to API call to return all results
 interface CensysAPIResponse {
   status: string;
-  results: {
-    names?: string[];
-  }[];
-  metadata: {
-    count: number;
-    page: number;
-    pages: number;
+  result: {
+    total: number;
+    hits: [
+      {
+        names?: string[];
+      }
+    ];
   };
+  // links: {
+  //   next: string;
+  // };
 }
 
 const sleep = (milliseconds: number) => {
@@ -51,6 +55,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   console.log('Running censys on organization', organizationName);
 
   const rootDomains = await getRootDomains(organizationId!);
+  const uniqueNames = new Set<string>(); //used to dedupe domain names
   const foundDomains = new Set<{
     name: string;
     organization: { id: string };
@@ -60,11 +65,12 @@ export const handler = async (commandOptions: CommandOptions) => {
 
   for (const rootDomain of rootDomains) {
     const data = await fetchCensysData(rootDomain);
-    for (const result of data.results) {
-      const names = result['names'];
+    for (const hit of data.result.hits) {
+      const names = hit['names'];
       if (!names) continue;
       for (const name of names) {
-        if (name.endsWith(rootDomain)) {
+        if (!uniqueNames.has(name) && name.endsWith(rootDomain)) {
+          uniqueNames.add(name);
           foundDomains.add({
             name: name.replace('*.', ''),
             organization: { id: organizationId! },
