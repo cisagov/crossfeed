@@ -128,7 +128,7 @@ export const sendUserNotificationEmail = async (
     from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER,
     to: recepient,
     subject: p_subject,
-    html: "<p>Testing email</p>"
+    html: '<html><head><meta http-equiv="Content-Type" content="text/html; charset=us-ascii"></head><body><p>Testing</p></body></html>'
   };
 
   await transporter.sendMail(mailOptions);
