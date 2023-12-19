@@ -130,7 +130,7 @@
     "webpack": "^5.88",
     "webpack-cli": "^5.1",
     "ts-jest": "^29.1.1",
-    "typescript": "^4.8.4",
+    "typescript": "^5.3.3",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-react-app": "^7.0.1",
