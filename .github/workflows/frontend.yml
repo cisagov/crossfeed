@@ -84,11 +84,11 @@ jobs:
         run: cp stage.env .env && npm run build
 
       - name: Deploy Staging
-        run: aws s3 sync build s3://staging.crossfeed.cyber.dhs.gov --delete
+        run: npx sls deploy --stage=staging
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
+          SLS_DEBUG: '*'
 
   deploy_prod:
     needs: [lint, test]
@@ -115,8 +115,8 @@ jobs:
         run: cp prod.env .env && npm run build
 
       - name: Deploy Production
-        run: aws s3 sync build s3://crossfeed.cyber.dhs.gov --delete
+        run: npx sls deploy --stage=staging
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
+          SLS_DEBUG: '*'
