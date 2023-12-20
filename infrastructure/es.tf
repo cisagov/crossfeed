@@ -11,6 +11,7 @@ resource "aws_elasticsearch_domain" "es" {
     instance_count           = var.es_instance_count
     dedicated_master_enabled = true
     dedicated_master_count   = var.es_instance_master_count
+    dedicated_master_type    = "r5.large.elasticsearch"
 
     # Enable for prod:
     # zone_awareness_enabled = true

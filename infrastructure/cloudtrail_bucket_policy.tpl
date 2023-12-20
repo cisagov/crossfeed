@@ -48,7 +48,7 @@
       "Principal": {
         "Service": "logging.s3.amazonaws.com"
       },
-      "Resource": "arn:aws-us-gov:s3:::cisa-crossfeed-prod-cloudtrail/*",
+      "Resource": "arn:aws-us-gov:s3:::${bucketName}/*",
       "Sid": "S3PolicyStmt-DO-NOT-MODIFY-1697490065333"
     }
   ]

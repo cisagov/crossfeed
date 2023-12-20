@@ -8,10 +8,20 @@ resource "aws_instance" "elk_stack" {
 
 
   tags = {
-    Name    = "ELK"
-    Project = var.project
-    Stage   = var.stage
-    Owner   = "Crossfeed managed resource"
+    Name                = "ELK"
+    Project             = var.project
+    Stage               = var.stage
+    Owner               = "Crossfeed managed resource"
+    ApplicationRole     = ""
+    BillingProject      = ""
+    Confidentiality     = ""
+    Criticality         = ""
+    Environment         = ""
+    FismaID             = "PRE-08561-GSS-08561"
+    OperationalStatus   = "Stage"
+    ResourceSavings     = ""
+    Security            = ""
+    Lifecycle_TargetTag = "Sunday-02"
   }
   root_block_device {
     volume_size = 15

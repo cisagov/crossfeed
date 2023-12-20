@@ -36,7 +36,7 @@ resource "aws_db_instance" "db" {
   allow_major_version_upgrade         = true
   skip_final_snapshot                 = true
   availability_zone                   = data.aws_availability_zones.available.names[0]
-  multi_az                            = false
+  multi_az                            = true
   backup_retention_period             = 35
   storage_encrypted                   = true
   iam_database_authentication_enabled = true
@@ -135,10 +135,20 @@ resource "aws_instance" "db_accessor" {
   associate_public_ip_address = false
 
   tags = {
-    Project = var.project
-    Stage   = var.stage
-    Name    = "db_accessor"
-    Owner   = "Crossfeed managed resource"
+    Project           = var.project
+    Stage             = var.stage
+    Name              = "db_accessor"
+    Owner             = "Crossfeed managed resource"
+    ApplicationRole   = ""
+    BillingProject    = ""
+    Confidentiality   = ""
+    Criticality       = ""
+    Environment       = ""
+    FismaID           = "PRE-08561-GSS-08561"
+    OperationalStatus = "Stage"
+    ResourceSavings   = ""
+    Security          = ""
+
   }
   root_block_device {
     volume_size = 1000

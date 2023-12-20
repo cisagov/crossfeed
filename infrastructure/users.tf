@@ -12,7 +12,7 @@ resource "aws_cognito_user_pool" "pool" {
   }
   email_configuration {
     email_sending_account  = "DEVELOPER"
-    from_email_address     = "noreply@crossfeed.cyber.dhs.gov"
+    from_email_address     = "noreply@${var.frontend_domain}"
     reply_to_email_address = "vulnerability@cisa.dhs.gov"
     source_arn             = data.aws_ssm_parameter.ses_email_identity_arn.value
   }

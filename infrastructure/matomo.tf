@@ -196,11 +196,11 @@ resource "aws_db_instance" "matomo_db" {
   engine                              = "mariadb"
   engine_version                      = "10.6"
   skip_final_snapshot                 = true
-  availability_zone                   = data.aws_availability_zones.available.names[0]
-  multi_az                            = false
+  availability_zone                   = "us-gov-east-1b"
+  multi_az                            = true
   backup_retention_period             = 35
   storage_encrypted                   = true
-  iam_database_authentication_enabled = false
+  iam_database_authentication_enabled = true
   allow_major_version_upgrade         = true
   deletion_protection                 = true
   enabled_cloudwatch_logs_exports     = ["audit", "error", "general", "slowquery"]

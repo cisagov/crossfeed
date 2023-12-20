@@ -514,7 +514,7 @@ variable "ssm_subnet_es_id" {
 }
 
 variable "ssm_ses_email_identity_arn" {
-  description = "ssm_subnet_es_id"
+  description = "ssm_ses_email_identity_arn"
   type        = string
   default     = "/crossfeed/staging/SES_EMAIL_IDENTITY_ARN"
 }
