@@ -1,7 +1,9 @@
 import { Client } from '@elastic/elasticsearch';
 import { Domain, Webpage } from '../models';
+import logger from '../tools/lambda-logger';
 
 export const DOMAINS_INDEX = 'domains-5';
+const httpProxy = require('https-proxy-agent');
 
 interface DomainRecord extends Domain {
   suggest: { input: string | string[]; weight: number }[];
@@ -37,7 +39,16 @@ class ESClient {
   client: Client;
 
   constructor(isLocal?: boolean) {
-    this.client = new Client({ node: process.env.ELASTICSEARCH_ENDPOINT! });
+    process.env.HTTPS_PROXY = 'http://proxy.lz.us-cert.gov:8080';
+    process.env.HTTP_PROXY = 'http://proxy.lz.us-cert.gov:8080';
+
+    const proxyAgent = process.env.HTTPS_PROXY || process.env.HTTP_PROXY;
+    const agent = proxyAgent ? httpProxy(proxyAgent) : undefined;
+
+    this.client = new Client({
+      node: process.env.ELASTICSEARCH_ENDPOINT!,
+      agent: agent
+    });
   }
 
   /**
@@ -70,10 +81,10 @@ class ESClient {
         index: DOMAINS_INDEX,
         body: { properties: mapping }
       });
-      console.log(`Index ${DOMAINS_INDEX} updated.`);
+      logger.info(`Index ${DOMAINS_INDEX} updated.`);
     } catch (e) {
       if (e.meta?.body?.error.type !== 'index_not_found_exception') {
-        console.error(e.meta?.body);
+        logger.error(e.meta?.body);
         throw e;
       }
       await this.client.indices.create({
@@ -93,7 +104,7 @@ class ESClient {
           }
         }
       });
-      console.log(`Created index ${DOMAINS_INDEX}.`);
+      logger.info(`Created index ${DOMAINS_INDEX}.`);
     }
     await this.client.indices.putSettings({
       index: DOMAINS_INDEX,
@@ -101,7 +112,7 @@ class ESClient {
         settings: { refresh_interval: '1800s' }
       }
     });
-    console.log(`Updated settings for index ${DOMAINS_INDEX}.`);
+    logger.info(`Updated settings for index ${DOMAINS_INDEX}.`);
   }
 
   excludeFields = (domain: Domain) => {
@@ -140,13 +151,13 @@ class ESClient {
         ];
       },
       onDrop(doc) {
-        console.error(doc.error, doc.document);
+        logger.error(`${doc.error} ${doc.document}`);
         b.abort();
       }
     });
     const result = await b;
     if (result.aborted) {
-      console.error(result);
+      logger.error(result);
       throw new Error('Bulk operation aborted');
     }
     return result;
@@ -180,13 +191,13 @@ class ESClient {
         ];
       },
       onDrop(doc) {
-        console.error(doc.error, doc.document);
+        logger.error(`${doc.error} ${doc.document}`);
         b.abort();
       }
     });
     const result = await b;
     if (result.aborted) {
-      console.error(result);
+      logger.error(result);
       throw new Error('Bulk operation aborted');
     }
     return result;

@@ -9,6 +9,10 @@ import { ClassType } from 'class-transformer/ClassTransformer';
 import { plainToClass } from 'class-transformer';
 import { SES } from 'aws-sdk';
 import * as nodemailer from 'nodemailer';
+import logger from '../tools/lambda-logger';
+
+const AWS = require('aws-sdk');
+const httpProxy = require('https-proxy-agent');
 
 export const validateBody = async <T>(
   obj: ClassType<T>,
@@ -58,11 +62,11 @@ export const wrapHandler: WrapHandler =
       )) as APIGatewayProxyResult;
       const resp = makeResponse(event, result);
       if (typeof jest === 'undefined') {
-        console.log(`=> ${resp.statusCode} ${event.path} `);
+        logger.info(`=> ${resp.statusCode} ${event.path} `);
       }
       return resp;
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       return makeResponse(event, {
         statusCode: Array.isArray(e) ? 400 : 500
       });
@@ -84,15 +88,36 @@ export const sendEmail = async (
   subject: string,
   body: string
 ) => {
-  const transporter = nodemailer.createTransport({
-    SES: new SES({ region: 'us-gov-west-1' })
-  });
+  try {
+    process.env.HTTPS_PROXY = 'http://proxy.lz.us-cert.gov:8080';
+    process.env.HTTP_PROXY = 'http://proxy.lz.us-cert.gov:8080';
+    const proxyAgent = process.env.HTTPS_PROXY || process.env.HTTP_PROXY;
+    AWS.config.update({
+      httpOptions: {
+        agent: proxyAgent ? httpProxy(proxyAgent) : undefined
+      }
+    });
+    const transporter = nodemailer.createTransport({
+      SES: new SES({
+        region: 'us-gov-west-1',
+        endpoint: 'https://email.us-gov-west-1.amazonaws.com'
+      })
+    });
 
-  await transporter.sendMail({
-    from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
-    to: recipient,
-    subject: subject,
-    text: body,
-    replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
-  });
+    await transporter.sendMail({
+      from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
+      to: recipient,
+      subject: subject,
+      text: body,
+      replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
+    });
+
+    logger.info('Email sent successfully');
+    return 'Email sent successfully';
+  } catch (error) {
+    logger.error(`Error sending email: ${error}`);
+
+    // Handle the error or re-throw it if needed
+    throw error;
+  }
 };
