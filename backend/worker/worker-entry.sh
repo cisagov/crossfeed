@@ -5,7 +5,7 @@ set -e
 PROXY_PORT=8080
 
 # Reduce some long and unnecessary tabular output from pm2 with grep
-pm2 start --interpreter none --error ~/pm2-error.log mitmdump -- -s worker/mitmproxy_sign_requests.py --set stream_large_bodies=1 --listen-port $PROXY_PORT | grep "^\[PM2\]"
+pm2 start --interpreter none --error ~/pm2-error.log mitmdump -- -s worker/mitmproxy_sign_requests.py --set stream_large_bodies=1 --listen-port $PROXY_PORT --mode upstream:http://proxy.lz.us-cert.gov:8080 | grep "^\[PM2\]"
 
 wait-port $PROXY_PORT -t 5000 || pm2 logs
 
