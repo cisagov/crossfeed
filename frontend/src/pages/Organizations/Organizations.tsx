@@ -71,7 +71,7 @@ export const Organizations: React.FC = () => {
                 for (const result of results) {
                   try {
                     createdOrganizations.push(
-                      await apiPost('/organizations/', {
+                      await apiPost('/organizations', {
                         body: {
                           ...result,
                           // These fields are initially parsed as strings, so they need

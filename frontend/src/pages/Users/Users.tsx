@@ -319,11 +319,15 @@ export const Users: React.FC = () => {
               // TODO: use a batch call here instead.
               const createdUsers = [];
               for (const result of results) {
-                const parsedRoles: {
+                let parsedRoles: {
                   organization: string;
                   role: string;
-                }[] = JSON.parse(result.roles as string);
+                }[] = [];
+                if (result.roles) {
+                  parsedRoles = JSON.parse(result.roles as string);
+                }
                 const body: any = result;
+
                 // For now, just create role with the first organization
                 if (parsedRoles.length > 0) {
                   body.organization = parsedRoles[0].organization;
@@ -345,12 +349,14 @@ export const Users: React.FC = () => {
             getDataToExport={() =>
               users.map((user) => ({
                 ...user,
-                roles: JSON.stringify(
-                  user.roles.map((role) => ({
-                    organization: role.organization.id,
-                    role: role.role
-                  }))
-                )
+                roles: user.roles
+                  ? JSON.stringify(
+                      user.roles.map((role) => ({
+                        organization: role.organization.id,
+                        role: role.role
+                      }))
+                    )
+                  : undefined
               }))
             }
           />

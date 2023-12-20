@@ -566,7 +566,7 @@ export const Organization: React.FC = () => {
         organization: organization?.id,
         organizationAdmin: newUserValues.role === 'admin'
       };
-      const user: User = await apiPost('/users/', {
+      const user: User = await apiPost('/users', {
         body
       });
       const newRole = user.roles[user.roles.length - 1];

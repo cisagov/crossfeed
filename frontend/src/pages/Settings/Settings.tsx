@@ -102,7 +102,7 @@ const Settings: React.FC = () => {
       <h2>API Keys:</h2>
       <p>
         <a
-          href="https://docs.crossfeed.cyber.dhs.gov/api-reference"
+          href="https://crossfeed.cyber.dhs.gov/docs/api-reference"
           rel="noopener noreferrer"
           target="_blank"
         >

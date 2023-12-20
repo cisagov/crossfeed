@@ -44,7 +44,7 @@ export const OrganizationList: React.FC<{
 
   const onSubmit = async (body: Object) => {
     try {
-      const org = await apiPost('/organizations/', {
+      const org = await apiPost('/organizations', {
         body
       });
       setOrganizations(organizations.concat(org));

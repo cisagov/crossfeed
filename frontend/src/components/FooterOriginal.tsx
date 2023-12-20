@@ -62,7 +62,7 @@ export const CrossfeedFooter: React.FC = () => {
         >
           <p>
             <Link
-              href="https://docs.crossfeed.cyber.dhs.gov/"
+              href="https://crossfeed.cyber.dhs.gov/docs"
               underline="always"
               style={{ color: 'white' }}
             >

@@ -204,7 +204,7 @@ const ScansView: React.FC = () => {
       body.arguments = JSON.parse(body.arguments);
       setFrequency(body);
 
-      const scan = await apiPost('/scans/', {
+      const scan = await apiPost('/scans', {
         body: {
           ...body,
           organizations: body.organizations
@@ -274,7 +274,7 @@ const ScansView: React.FC = () => {
           const createdScans = [];
           for (const result of results) {
             createdScans.push(
-              await apiPost('/scans/', {
+              await apiPost('/scans', {
                 body: {
                   ...result,
                   // These fields are initially parsed as strings, so they need
