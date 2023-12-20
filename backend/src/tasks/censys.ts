@@ -26,7 +26,7 @@ const sleep = (milliseconds: number) => {
 
 const fetchCensysData = async (rootDomain: string) => {
   console.log(`Fetching certificates for ${rootDomain}`);
-  let data = await fetchPage(rootDomain);
+  const data = await fetchPage(rootDomain);
   console.log(
     `Censys found ${data.result.total} certificates for ${rootDomain}
     Fetching ${Math.min(data.result.total, resultLimit)} of them...`
