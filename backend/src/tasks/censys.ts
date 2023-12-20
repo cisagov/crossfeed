@@ -6,9 +6,7 @@ import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
 import getRootDomains from './helpers/getRootDomains';
 
-// TODO: code only returns first 100 results; add cursor to API call to return all results
 interface CensysAPIResponse {
-  status: string;
   result: {
     total: number;
     hits: [
@@ -17,19 +15,34 @@ interface CensysAPIResponse {
       }
     ];
   };
-  // links: {
-  //   next: string;
-  // };
 }
+
+const resultLimit = 1000;
+const resultsPerPage = 100;
 
 const sleep = (milliseconds: number) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
 const fetchCensysData = async (rootDomain: string) => {
+  console.log(`Fetching certificates for ${rootDomain}`);
+  let data = await fetchPage(rootDomain);
   console.log(
-    `[censys] fetching certificates for query "${rootDomain}" from Censys...`
+    `Censys found ${data.result.total} certificates for ${rootDomain}
+    Fetching ${Math.min(data.result.total, resultLimit)} of them...`
   );
+  let resultCount = 0;
+  let nextToken = data.result.links.next;
+  while (nextToken && resultCount < resultLimit) {
+    const nextPage = await fetchPage(rootDomain, nextToken);
+    data.result.hits = data.result.hits.concat(nextPage.result.hits);
+    nextToken = nextPage.result.links.next;
+    resultCount += resultsPerPage;
+  }
+  return data as CensysAPIResponse;
+};
+
+const fetchPage = async (rootDomain: string, nextToken?: string) => {
   const { data } = await axios({
     url: 'https://search.censys.io/api/v2/certificates/search',
     method: 'POST',
@@ -42,17 +55,18 @@ const fetchCensysData = async (rootDomain: string) => {
     },
     data: {
       q: rootDomain,
-      per_page: 100,
+      per_page: resultsPerPage,
+      cursor: nextToken,
       fields: ['names']
     }
   });
-  return data as CensysAPIResponse;
+  return data;
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName, scanId } = commandOptions;
 
-  console.log('Running censys on organization', organizationName);
+  console.log(`Running Censys on: ${organizationName}`);
 
   const rootDomains = await getRootDomains(organizationId!);
   const uniqueNames = new Set<string>(); //used to dedupe domain names
@@ -66,10 +80,9 @@ export const handler = async (commandOptions: CommandOptions) => {
   for (const rootDomain of rootDomains) {
     const data = await fetchCensysData(rootDomain);
     for (const hit of data.result.hits) {
-      const names = hit['names'];
-      if (!names) continue;
-      for (const name of names) {
-        if (!uniqueNames.has(name) && name.endsWith(rootDomain)) {
+      if (!hit.names) continue;
+      for (const name of hit.names) {
+        if (name.endsWith(rootDomain) && !uniqueNames.has(name)) {
           uniqueNames.add(name);
           foundDomains.add({
             name: name.replace('*.', ''),
@@ -90,7 +103,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   // Project Sonar has both forward & reverse DNS for finding subdomains
 
   // Save domains to database
-  console.log('[censys] saving domains to database...');
+  console.log('Saving subdomains to database...');
   const domains: Domain[] = [];
   for (const domain of foundDomains) {
     let ip: string | null;
@@ -112,5 +125,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     );
   }
   await saveDomainsToDb(domains);
-  console.log(`[censys] done, saved or updated ${domains.length} domains`);
+  console.log(
+    `Censys saved or updated ${domains.length} subdomains for ${organizationName}`
+  );
 };
