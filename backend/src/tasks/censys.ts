@@ -103,7 +103,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   // Project Sonar has both forward & reverse DNS for finding subdomains
 
   // Save domains to database
-  console.log('Saving subdomains to database...');
+  console.log(`Saving ${organizationName} subdomains to database...`);
   const domains: Domain[] = [];
   for (const domain of foundDomains) {
     let ip: string | null;
