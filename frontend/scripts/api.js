@@ -4,8 +4,18 @@ import serverless from 'serverless-http';
 import helmet from 'helmet';
 import express from 'express';
 import path from 'path';
+import logger from 'lambda-logger';
 
 export const app = express();
+
+app.use((req, res, next) => {
+  const sanitizedHeaders = { ...req.headers };
+  // Remove or replace sensitive headers
+  delete sanitizedHeaders['authorization'];
+  logger.info(`Request Headers: ${JSON.stringify(sanitizedHeaders)}`);
+  next();
+});
+
 app.use(
   helmet({
     strictTransportSecurity: {
@@ -22,11 +32,11 @@ app.use(
       defaultSrc: [
         "'self'",
         'https://cognito-idp.us-gov-west-1.amazonaws.com',
-        'https://api.crossfeed.cyber.dhs.gov'
+        process.env.REACT_APP_API_URL
       ],
       scriptSrc: [
         "'self'",
-        'https://api.crossfeed.cyber.dhs.gov',
+        process.env.REACT_APP_API_URL,
         // Add any other allowed script sources here
         "'unsafe-inline'" // Allow inline scripts (not recommended for security)
       ]
