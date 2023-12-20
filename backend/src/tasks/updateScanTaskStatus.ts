@@ -2,6 +2,7 @@ import { Handler } from 'aws-lambda';
 import { connectToDatabase, ScanTask } from '../models';
 import { Task } from 'aws-sdk/clients/ecs';
 import pRetry from 'p-retry';
+import logger from '../tools/lambda-logger';
 
 export type EventBridgeEvent = {
   detail: Task & {
@@ -51,7 +52,7 @@ export const handler: Handler<EventBridgeEvent> = async (
   } else {
     return;
   }
-  console.log(
+  logger.info(
     `Updating status of ScanTask ${scanTask.id} from ${oldStatus} to ${scanTask.status}.`
   );
   await scanTask.save();

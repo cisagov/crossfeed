@@ -1,4 +1,5 @@
 import { S3 } from 'aws-sdk';
+import logger from '../tools/lambda-logger';
 
 /**
  * S3 Client. Normally, interacts with S3.
@@ -46,12 +47,12 @@ class S3Client {
 
       // Do this so exports are accessible when running locally.
       if (this.isLocal) {
-        console.log(url.replace('minio:9000', 'localhost:9000'));
+        logger.info(url.replace('minio:9000', 'localhost:9000'));
         return url.replace('minio:9000', 'localhost:9000');
       }
       return url;
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       throw e;
     }
   }
@@ -70,7 +71,7 @@ class S3Client {
       }
       return url;
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       throw e;
     }
   }
@@ -89,7 +90,7 @@ class S3Client {
         .promise();
       return data.Contents;
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       throw e;
     }
   }

@@ -1,5 +1,6 @@
 import { ECS, CloudWatchLogs } from 'aws-sdk';
 import { SCAN_SCHEMA } from '../api/scans';
+import logger from '../tools/lambda-logger';
 
 export interface CommandOptions {
   /** A list of organizations (id and name) that this
@@ -123,7 +124,7 @@ class ECSClient {
           failures: []
         };
       } catch (e) {
-        console.error(e);
+        logger.error(e);
         return {
           tasks: [],
           failures: [{}]

@@ -5,6 +5,7 @@ import { SCAN_SCHEMA } from '../api/scans';
 import { In, IsNull, Not } from 'typeorm';
 import getScanOrganizations from './helpers/getScanOrganizations';
 import { chunk } from 'lodash';
+import logger from '../tools/lambda-logger';
 
 class Scheduler {
   ecs: ECSClient;
@@ -38,8 +39,8 @@ class Scheduler {
     this.maxConcurrentTasks = Number(process.env.FARGATE_MAX_CONCURRENCY!);
     this.orgsPerScanTask = orgsPerScanTask;
 
-    console.log('Number of running Fargate tasks: ', this.numExistingTasks);
-    console.log('Number of queued scan tasks: ', this.queuedScanTasks.length);
+    logger.info(`Number of running Fargate tasks: ${this.numExistingTasks}`);
+    logger.info(`Number of queued scan tasks: ${this.queuedScanTasks.length}`);
   }
 
   launchSingleScanTask = async ({
@@ -86,9 +87,8 @@ class Scheduler {
       if (!scanTask.queuedAt) {
         scanTask.queuedAt = new Date();
       }
-      console.log(
-        'Reached maximum concurrency, queueing scantask',
-        scanTask.id
+      logger.info(
+        `Reached maximum concurrency, queueing scantask ${scanTask.id}`
       );
       await scanTask.save();
       return;
@@ -98,7 +98,7 @@ class Scheduler {
       if (type === 'fargate') {
         const result = await ecsClient.runCommand(commandOptions);
         if (result.tasks!.length === 0) {
-          console.error(result.failures);
+          logger.error(result.failures);
           throw new Error(
             `Failed to start fargate task for scan ${scan.name} -- got ${
               result.failures!.length
@@ -108,7 +108,7 @@ class Scheduler {
         const taskArn = result.tasks![0].taskArn;
         scanTask.fargateTaskArn = taskArn;
         if (typeof jest === 'undefined') {
-          console.log(
+          logger.info(
             `Successfully invoked ${scan.name} scan with fargate on ${organizations.length} organizations, with ECS task ARN ${taskArn}` +
               (commandOptions.numChunks
                 ? `, Chunk ${commandOptions.chunkNumber}/${commandOptions.numChunks}`
@@ -122,8 +122,8 @@ class Scheduler {
       scanTask.requestedAt = new Date();
       this.numLaunchedTasks++;
     } catch (error) {
-      console.error(`Error invoking ${scan.name} scan.`);
-      console.error(error);
+      logger.error(`Error invoking ${scan.name} scan.`);
+      logger.error(error);
       scanTask.output = JSON.stringify(error);
       scanTask.status = 'failed';
       scanTask.finishedAt = new Date();
@@ -168,7 +168,7 @@ class Scheduler {
       const prev_numLaunchedTasks = this.numLaunchedTasks;
 
       if (!SCAN_SCHEMA[scan.name]) {
-        console.error('Invalid scan name ', scan.name);
+        logger.error(`Invalid scan name ${scan.name}`);
         continue;
       }
       const { global } = SCAN_SCHEMA[scan.name];
@@ -195,11 +195,8 @@ class Scheduler {
           await this.launchScanTask({ organizations: orgs, scan });
         }
       }
-      console.log(
-        'Launched',
-        this.numLaunchedTasks,
-        'scanTasks for scan',
-        scan.name
+      logger.info(
+        `Launched ${this.numLaunchedTasks}scanTasks for scan ${scan.name}`
       );
       // If at least 1 new scan task was launched for this scan, update the scan
       if (this.numLaunchedTasks > prev_numLaunchedTasks) {
@@ -317,9 +314,9 @@ interface Event {
   orgsPerScanTask?: number;
 }
 
-export const handler: Handler<Event> = async (event) => {
+export const handler: Handler<Event> = async (event, context) => {
   await connectToDatabase();
-  console.log('Running scheduler...');
+  logger.info('Running scheduler...', { context });
 
   const scanIds = event.scanIds || [];
   if (event.scanId) {
@@ -348,6 +345,7 @@ export const handler: Handler<Event> = async (event) => {
     relations: ['scan']
   });
 
+  logger.info('Initializing...', { context });
   const scheduler = new Scheduler();
   await scheduler.initialize({
     scans,
@@ -360,5 +358,5 @@ export const handler: Handler<Event> = async (event) => {
   });
   await scheduler.runQueued();
   await scheduler.run();
-  console.log('Finished running scheduler.');
+  logger.info('Finished running scheduler.', { context });
 };

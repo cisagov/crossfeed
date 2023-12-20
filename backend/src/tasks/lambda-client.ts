@@ -1,5 +1,6 @@
 import { Lambda } from 'aws-sdk';
 import { handler as scheduler } from './scheduler';
+import logger from '../tools/lambda-logger';
 
 /**
  * Lambda Client used to invoke lambda functions.
@@ -24,7 +25,7 @@ class LambdaClient {
   }: {
     name: string;
   }): Promise<Lambda.InvocationResponse> {
-    console.log('Invoking lambda function ', name);
+    logger.info(`Invoking lambda function ${name}`);
     if (this.isLocal) {
       scheduler({}, {} as any, () => null);
       return { StatusCode: 202, Payload: '' };

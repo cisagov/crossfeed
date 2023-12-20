@@ -16,6 +16,7 @@ import PQueue from 'p-queue';
 import { chunk } from 'lodash';
 import { In } from 'typeorm';
 import getScanOrganizations from './helpers/getScanOrganizations';
+import logger from '../tools/lambda-logger';
 
 const WEBSCRAPER_DIRECTORY = '/app/worker/webscraper';
 const INPUT_PATH = path.join(WEBSCRAPER_DIRECTORY, 'domains.txt');
@@ -58,13 +59,13 @@ export const handler = async (commandOptions: CommandOptions) => {
   const organizationIds = (
     chunk(organizations, numChunks)[chunkNumber!] || []
   ).map((e) => e.id);
-  console.log('Running webscraper on organizations ', organizationIds);
+  logger.info(`Running webscraper on organizations ${organizationIds}`);
 
   const liveWebsites = await getLiveWebsites(undefined, organizationIds);
   const urls = liveWebsites.map((domain) => domain.url);
-  console.log('input urls', urls);
+  logger.info(`input urls ${urls}`);
   if (urls.length === 0) {
-    console.log('no urls, returning');
+    logger.info('no urls, returning');
     return;
   }
 
@@ -101,14 +102,14 @@ export const handler = async (commandOptions: CommandOptions) => {
   });
 
   await new Promise((resolve, reject) => {
-    console.log('Going to save webpages to the database...');
+    logger.info('Going to save webpages to the database...');
     let scrapedWebpages: ScraperItem[] = [];
     readInterfaceStderr.on('line', (line) =>
-      console.error(line?.substring(0, 999))
+      logger.error(line?.substring(0, 999))
     );
     readInterface.on('line', async (line) => {
       if (!line?.trim() || line.indexOf('database_output: ') === -1) {
-        console.log(line);
+        logger.info(line);
         return;
       }
       const item: ScraperItem = JSON.parse(
@@ -118,7 +119,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       );
       const domain = liveWebsitesMap[item.domain_name];
       if (!domain) {
-        console.error(
+        logger.error(
           `No corresponding domain found for item with domain_name ${item.domain_name}.`
         );
         return;
@@ -134,7 +135,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           if (scrapedWebpages.length === 0) {
             return;
           }
-          console.log(
+          logger.info(
             `Saving ${scrapedWebpages.length} webpages, starting with ${scrapedWebpages[0].url}...`
           );
           await saveWebpagesToDb(scrapedWebpages);
@@ -147,7 +148,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     readInterface.on('close', async () => {
       await queue.onIdle();
       if (scrapedWebpages.length > 0) {
-        console.log(
+        logger.info(
           `Saving ${scrapedWebpages.length} webpages to the database...`
         );
         await saveWebpagesToDb(scrapedWebpages);
@@ -160,7 +161,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     readInterface.on('SIGCONT', reject);
     readInterface.on('SIGTSTP', reject);
   });
-  console.log(
+  logger.info(
     `Webscraper finished for ${liveWebsites.length} domains, saved ${totalNumWebpages} webpages in total`
   );
 };

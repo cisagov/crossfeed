@@ -43,6 +43,8 @@
     "uuid": "^8.3.2",
     "wappalyzer": "^6.10.63",
     "wappalyzer-core": "^6.10.63",
+    "winston": "^3.11.0",
+    "winston-cloudwatch": "^6.2.0",
     "ws": "^8.13.0"
   },
   "devDependencies": {

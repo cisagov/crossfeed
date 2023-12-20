@@ -8,6 +8,7 @@ import axios from 'axios';
 import pRetry from 'p-retry';
 import { IpToDomainsMap, sanitizeStringField } from './censysIpv4';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
+import logger from '../tools/lambda-logger';
 
 // Shodan allows searching up to 100 IPs at once
 const CHUNK_SIZE = 100;
@@ -47,7 +48,7 @@ const sleep = (milliseconds) => {
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
-  console.log('Running shodan on organization', organizationName);
+  logger.info(`Running shodan on organization ${organizationName}`);
 
   const domainsWithIPs = await getIps(organizationId);
 
@@ -65,7 +66,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   const chunks = chunk(domainsWithIPs, CHUNK_SIZE);
 
   for (const domainChunk of chunks) {
-    console.log(
+    logger.info(
       `Scanning ${domainChunk.length} domains beginning with ${domainChunk[0].name}`
     );
     try {
@@ -109,7 +110,7 @@ export const handler = async (commandOptions: CommandOptions) => {
             if (service.vulns) {
               const vulns: Vulnerability[] = [];
               for (const cve in service.vulns) {
-                // console.log('Creating vulnerability', cve);
+                // logger.info('Creating vulnerability', cve);
                 vulns.push(
                   plainToClass(Vulnerability, {
                     domain: domain,
@@ -136,11 +137,11 @@ export const handler = async (commandOptions: CommandOptions) => {
         }
       }
     } catch (e) {
-      console.error(e);
+      logger.error(JSON.stringify(e));
     }
 
     await sleep(1000); // Wait for Shodan rate limit of 1 request / second
   }
 
-  console.log(`Shodan finished for ${domainsWithIPs.length} domains`);
+  logger.info(`Shodan finished for ${domainsWithIPs.length} domains`);
 };

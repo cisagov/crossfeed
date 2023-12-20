@@ -1,6 +1,7 @@
 import { Client } from 'pg';
 import { Handler } from 'aws-lambda';
 import { connectToDatabase } from '../models';
+import logger from '../tools/lambda-logger';
 
 /*
  * Generates initial P&E database.
@@ -1285,7 +1286,7 @@ VALUES ('unknown', 'Source unknown', '2022-03-14');
 
 `;
 
-export const handler: Handler = async (event) => {
+export const handler: Handler = async (event, context) => {
   const connection = await connectToDatabase();
 
   // Create P&E database and user.
@@ -1294,9 +1295,9 @@ export const handler: Handler = async (event) => {
       `CREATE USER ${process.env.PE_DB_USERNAME} WITH PASSWORD '${process.env.PE_DB_PASSWORD}';`
     );
   } catch (e) {
-    console.log(
-      "Create user failed. This usually means that the user already exists, so you're OK if that was the case. Here's the exact error:",
-      e
+    logger.error(
+      `Create user failed. This usually means that the user already exists, so you're OK if that was the case. Here's the exact error: ${e}`,
+      { context }
     );
   }
   try {
@@ -1304,16 +1305,16 @@ export const handler: Handler = async (event) => {
       `GRANT ${process.env.PE_DB_USERNAME} to ${process.env.DB_USERNAME};`
     );
   } catch (e) {
-    console.log('Grant role failed. Error:', e);
+    logger.error(`Grant role failed. Error: ${e}`, { context });
   }
   try {
     await connection.query(
       `CREATE DATABASE ${process.env.PE_DB_NAME} owner ${process.env.PE_DB_USERNAME};`
     );
   } catch (e) {
-    console.log(
-      "Create database failed. This usually means that the database already exists, so you're OK if that was the case. Here's the exact error:",
-      e
+    logger.error(
+      `Create database failed. This usually means that the database already exists, so you're OK if that was the case. Here's the exact error: ${e}`,
+      { context }
     );
   }
 
@@ -1333,6 +1334,6 @@ export const handler: Handler = async (event) => {
   const sql = String(PE_DATA_SCHEMA);
   await client.query(sql);
 
-  console.log('Done.');
+  logger.info('Done.', { context });
   client.end();
 };

@@ -283,7 +283,7 @@ export const update = wrapHandler(async (event) => {
  *    - Vulnerabilities
  */
 export const list = wrapHandler(async (event) => {
-  await connectToDatabase(true);
+  await connectToDatabase();
   const search = await validateBody(VulnerabilitySearch, event.body);
   const [result, count] = await search.getResults(event);
   return {

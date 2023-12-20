@@ -3,30 +3,31 @@ import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 import { CommandOptions } from './ecs-client';
 import saveTrustymailResultsToDb from './helpers/saveTrustymailResultsToDb';
 import * as chokidar from 'chokidar';
+import logger from '../tools/lambda-logger';
 
 // TODO: Retry failed domains
 // TODO: PSL is downloaded once per container (number of orgs / 2, rounded up); would like to download only once per day
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
-  console.log('Running Trustymail on organization', organizationName);
+  logger.info(`Running Trustymail on organization ${organizationName}`);
   const domains = await getAllDomains([organizationId!]);
   const queue = new Set(domains.map((domain) => `${domain.id}.json`));
   const failedDomains = new Set<string>();
-  console.log(
+  logger.info(
     `${organizationName} domains to be scanned:`,
     domains.map((domain) => domain.name)
   );
-  console.log(`queue`, queue);
+  logger.info(`queue ${queue}`);
   for (const domain of domains) {
     const path = `${domain.id}.json`;
     // Event listener detects Trustymail results file at creation and syncs it to db
     chokidar.watch(path).on('add', (path) => {
-      console.log('Trustymail saved results to', path);
-      console.log(`Syncing ${path} to db...`);
+      logger.info(`Trustymail saved results to ${path}`);
+      logger.info(`Syncing ${path} to db...`);
       saveTrustymailResultsToDb(path).then(() => {
-        console.log(`Deleting ${path} and removing it from queue...`);
+        logger.info(`Deleting ${path} and removing it from queue...`);
         queue.delete(path);
-        console.log(`Items left in queue:`, queue);
+        logger.info(`Items left in queue: ${queue}`);
       });
     });
     try {
@@ -36,7 +37,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         `--output=${domain.id}`,
         '--psl-filename=public_suffix_list.dat'
       ];
-      console.log('Running Trustymail with args:', args);
+      logger.info(`Running Trustymail with args: ${args}`);
       const child = spawn('trustymail', args, { stdio: 'pipe' });
       addEventListenersToChildProcess(
         child,
@@ -46,21 +47,20 @@ export const handler = async (commandOptions: CommandOptions) => {
         failedDomains
       );
     } catch (e) {
-      console.error(e);
+      logger.error(JSON.stringify(e));
     }
   }
   // Keep container alive while syncing results to db; timeout after 10 minutes (60 * 10 seconds)
   let dbSyncTimeout = 0;
   while (queue.size > 0 && dbSyncTimeout < 60) {
-    console.log('Syncing...');
+    logger.info('Syncing...');
     await delay(1000 * 2);
     dbSyncTimeout++;
   }
-  console.log(
+  logger.info(
     `Trustymail successfully scanned ${
       domains.length - failedDomains.size
-    } out of ${domains.length} domains \n failed domains:`,
-    failedDomains
+    } out of ${domains.length} domains \n failed domains: ${failedDomains}`
   );
 };
 
@@ -76,25 +76,22 @@ function addEventListenersToChildProcess(
   failedDomains: Set<string>
 ) {
   child.stdout.on('data', (data) => {
-    console.log(`${domain.name} (${domain.id}) stdout: ${data}`);
+    logger.info(`${domain.name} (${domain.id}) stdout: ${data}`);
   });
   child.on('spawn', () => {
-    console.log(
+    logger.info(
       `Spawned ${domain.name} (${domain.id}) Trustymail child process`
     );
   });
   child.on('error', (err) =>
-    console.error(
+    logger.error(
       `Error with Trustymail ${domain.name} (${domain.id}) child process:`,
-      err
+      JSON.stringify(err)
     )
   );
   child.on('exit', (code, signal) => {
-    console.log(
-      `Trustymail child process ${domain.name} (${domain.id}) exited with code`,
-      code,
-      'and signal',
-      signal
+    logger.info(
+      `Trustymail child process ${domain.name} (${domain.id}) exited with code ${code} and signal ${signal}`
     );
     if (code !== 0) {
       queue.delete(path);

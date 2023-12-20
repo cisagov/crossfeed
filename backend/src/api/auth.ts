@@ -10,6 +10,7 @@ import * as jwt from 'jsonwebtoken';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import * as jwksClient from 'jwks-rsa';
 import { createHash } from 'crypto';
+import logger from '../tools/lambda-logger';
 
 export interface UserToken {
   email: string;
@@ -236,7 +237,7 @@ export const authorize = async (event) => {
       const parsed = { id: 'cisa:crossfeed:anonymous' };
       return parsed;
     } else {
-      console.error(e);
+      logger.error(JSON.stringify(e));
       const parsed = { id: 'cisa:crossfeed:anonymous' };
       return parsed;
     }

@@ -18,6 +18,7 @@ import * as adjectives from './sample_data/adjectives.json';
 import { sample } from 'lodash';
 import { handler as searchSync } from './search-sync';
 import { In } from 'typeorm';
+import logger from '../tools/lambda-logger';
 
 const SAMPLE_TAG_NAME = 'Sample Data'; // Tag name for sample data
 const NUM_SAMPLE_ORGS = 10; // Number of sample orgs
@@ -25,29 +26,31 @@ const NUM_SAMPLE_DOMAINS = 10; // Number of sample domains per org
 const PROB_SAMPLE_SERVICES = 0.5; // Higher number means more services per domain
 const PROB_SAMPLE_VULNERABILITIES = 0.5; // Higher number means more vulnerabilities per domain
 
-export const handler: Handler = async (event) => {
+export const handler: Handler = async (event, context) => {
   const connection = await connectToDatabase(false);
   const type = event?.type || event;
   const dangerouslyforce = type === 'dangerouslyforce';
   if (connection) {
     await connection.synchronize(dangerouslyforce);
   } else {
-    console.error('Error: could not sync');
+    logger.error('Error: could not sync', { context });
   }
 
   if (process.env.NODE_ENV !== 'test') {
     // Create indices on elasticsearch only when not using tests.
     const client = new ESClient();
     if (dangerouslyforce) {
-      console.log('Deleting all data in elasticsearch...');
+      logger.info('Deleting all data in elasticsearch...', { context });
       await client.deleteAll();
-      console.log('Done.');
+      logger.info('Done.', { context });
     }
     await client.syncDomainsIndex();
   }
 
   if (type === 'populate') {
-    console.log('Populating the database with some sample data...');
+    logger.info('Populating the database with some sample data...', {
+      context
+    });
     Sentencer.configure({
       nounList: nouns,
       adjectiveList: adjectives,
@@ -80,7 +83,7 @@ export const handler: Handler = async (event) => {
         isPassive: false,
         tags: [tag]
       }).save();
-      console.log(organization.name);
+      logger.info(organization.name, { context });
       organizationIds.push(organization.id);
       for (let i = 0; i <= NUM_SAMPLE_DOMAINS; i++) {
         const randomNum = () => Math.floor(Math.random() * 256);
@@ -91,7 +94,7 @@ export const handler: Handler = async (event) => {
           subdomainSource: 'findomain',
           organization
         }).save();
-        console.log(`\t${domain.name}`);
+        logger.info(`\t${domain.name}`, { context });
         let service;
         for (const serviceData of services) {
           if (service && Math.random() < PROB_SAMPLE_SERVICES) continue;
@@ -128,7 +131,7 @@ export const handler: Handler = async (event) => {
       }
     }
 
-    console.log('Done. Running search sync...');
+    logger.info('Done. Running search sync...', { context });
     for (const organizationId of organizationIds) {
       await searchSync({
         organizationId,
@@ -138,6 +141,6 @@ export const handler: Handler = async (event) => {
         scanTaskId: 'scanTaskId'
       });
     }
-    console.log('Done.');
+    logger.info('Done.', { context });
   }
 };

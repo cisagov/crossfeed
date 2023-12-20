@@ -32,7 +32,6 @@ function convertToJSONSchema(data) {
     }
   } else {
     if (!typeMap[data.type]) {
-      console.error(data.type);
       throw new Error('Unrecognized type' + data.type);
     }
     schema = { type: typeMap[data.type], description: data.doc };

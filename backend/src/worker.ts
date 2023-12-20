@@ -24,6 +24,7 @@ import { handler as trustymail } from './tasks/trustymail';
 import { SCAN_SCHEMA } from './api/scans';
 import { connectToDatabase } from './models';
 import fetchPublicSuffixList from './tasks/helpers/fetchPublicSuffixList';
+import logger from './tools/lambda-logger';
 
 /**
  * Worker entrypoint.
@@ -32,7 +33,7 @@ async function main() {
   const commandOptions: CommandOptions = JSON.parse(
     process.env.CROSSFEED_COMMAND_OPTIONS || '{}'
   );
-  console.log('commandOptions are', commandOptions);
+  logger.info(`commandOptions are ${JSON.stringify(commandOptions)}`);
 
   const { scanName = 'test', organizations = [] } = commandOptions;
 
@@ -60,7 +61,7 @@ async function main() {
     trustymail,
     test: async () => {
       await connectToDatabase();
-      console.log('test');
+      logger.info('test');
     }
   }[scanName];
   if (!scanFn) {

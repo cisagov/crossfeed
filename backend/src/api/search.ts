@@ -10,6 +10,7 @@ import { IsArray, IsInt, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Domain } from 'domain';
 import S3Client from '../tasks/s3-client';
 import * as Papa from 'papaparse';
+import logger from '../tools/lambda-logger';
 
 class SearchBody {
   @IsInt()
@@ -64,7 +65,7 @@ export const fetchAllResults = async (
     try {
       searchResults = await client.searchDomains(request);
     } catch (e) {
-      console.error(e.meta.body.error);
+      logger.error(e.meta.body.error);
       continue;
     }
     if (searchResults.body.hits.hits.length === 0) break;
@@ -179,7 +180,7 @@ export const search = wrapHandler(async (event) => {
   try {
     searchResults = await client.searchDomains(request);
   } catch (e) {
-    console.error(e.meta.body.error);
+    logger.error(e.meta.body.error);
     throw e;
   }
 

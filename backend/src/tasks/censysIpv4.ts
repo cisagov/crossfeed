@@ -13,6 +13,7 @@ import PQueue from 'p-queue';
 import pRetry from 'p-retry';
 import axios from 'axios';
 import getScanOrganizations from './helpers/getScanOrganizations';
+import logger from '../tools/lambda-logger';
 
 export interface IpToDomainsMap {
   [ip: string]: Domain[];
@@ -38,7 +39,7 @@ const downloadPath = async (
   numFiles: number,
   commandOptions: CommandOptions
 ): Promise<void> => {
-  console.log(`i: ${i} of ${numFiles}: starting download of url ${path}`);
+  logger.info(`i: ${i} of ${numFiles}: starting download of url ${path}`);
 
   const domains: Domain[] = [];
   const services: Service[] = [];
@@ -105,11 +106,11 @@ const downloadPath = async (
     readInterface.on('SIGTSTP', reject);
   });
   if (!domains.length) {
-    console.log(
+    logger.info(
       `censysipv4 - processed file ${i} of ${numFiles}: got no results`
     );
   } else {
-    console.log(
+    logger.info(
       `censysipv4 - processed file ${i} of ${numFiles}: got some results: ${domains.length} domains and ${services.length} services`
     );
   }
@@ -199,8 +200,8 @@ export const handler = async (commandOptions: CommandOptions) => {
       )
     );
   }
-  console.log(`censysipv4: scheduled all tasks`);
+  logger.info(`censysipv4: scheduled all tasks`);
   await Promise.all(jobs);
 
-  console.log(`censysipv4 done`);
+  logger.info(`censysipv4 done`);
 };

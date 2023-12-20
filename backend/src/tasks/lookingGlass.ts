@@ -10,6 +10,7 @@ import { plainToClass } from 'class-transformer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { exit } from 'process';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
+import logger from '../tools/lambda-logger';
 
 interface LGCollectionsResponse {
   children: any[];
@@ -201,7 +202,7 @@ async function saveAndPullDomains(
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName, scanId } = commandOptions;
 
-  console.log('Running lookingGlass on organization', organizationName);
+  logger.info(`Running lookingGlass on organization ${organizationName}`);
 
   const collections: LGCollectionsResponse[] =
     await getCollectionForCurrentWorkspace();
@@ -223,7 +224,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       // Only pull domains that have been seen in the last two months.
       const twoMonthsAgo = new Date();
       twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
-      console.log(`Pulling domains seen since ${twoMonthsAgo}`);
+      logger.info(`Pulling domains seen since ${twoMonthsAgo}`);
       for (const l of data.results) {
         // Create a dictionary of relevant fields from the API request.
         const lastSeen = new Date(l.lastSeen);
@@ -291,7 +292,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       }
 
       await saveVulnerabilitiesToDb(vulnerabilities, false);
-      console.log('Vulnerabilities saved to db');
+      logger.info('Vulnerabilities saved to db');
     }
   }
 };

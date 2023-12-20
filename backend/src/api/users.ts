@@ -30,6 +30,7 @@ import {
 } from './auth';
 import { Type, plainToClass } from 'class-transformer';
 import { IsNull } from 'typeorm';
+import logger from '../tools/lambda-logger';
 
 class UserSearch {
   @IsInt()
@@ -175,32 +176,39 @@ class NewUser {
 const sendInviteEmail = async (email: string, organization?: Organization) => {
   const staging = process.env.NODE_ENV !== 'production';
 
-  await sendEmail(
-    email,
-    'Crossfeed Invitation',
-    `Hi there,
+  try {
+    await sendEmail(
+      email,
+      'Crossfeed Invitation',
+      `Hi there,
 
-You've been invited to join ${
-      organization?.name ? `the ${organization?.name} organization on ` : ''
-    }Crossfeed. To accept the invitation and start using Crossfeed, sign on at ${
-      process.env.FRONTEND_DOMAIN
-    }/signup.
+  You've been invited to join ${
+    organization?.name ? `the ${organization?.name} organization on ` : ''
+  }Crossfeed. To accept the invitation and start using Crossfeed, sign on at ${
+    process.env.FRONTEND_DOMAIN
+  }/signup.
 
-Crossfeed access instructions:
+  Crossfeed access instructions:
 
-1. Visit ${process.env.FRONTEND_DOMAIN}/signup.
-2. Select "Create Account."
-3. Enter your email address and a new password for Crossfeed.
-4. A confirmation code will be sent to your email. Enter this code when you receive it.
-5. You will be prompted to enable MFA. Scan the QR code with an authenticator app on your phone, such as Microsoft Authenticator. Enter the MFA code you see after scanning.
-6. After configuring your account, you will be redirected to Crossfeed.
+  1. Visit ${process.env.FRONTEND_DOMAIN}/signup.
+  2. Select "Create Account."
+  3. Enter your email address and a new password for Crossfeed.
+  4. A confirmation code will be sent to your email. Enter this code when you receive it.
+  5. You will be prompted to enable MFA. Scan the QR code with an authenticator app on your phone, such as Microsoft Authenticator. Enter the MFA code you see after scanning.
+  6. After configuring your account, you will be redirected to Crossfeed.
 
-For more information on using Crossfeed, view the Crossfeed user guide at https://docs.crossfeed.cyber.dhs.gov/user-guide/quickstart/. 
+  For more information on using Crossfeed, view the Crossfeed user guide at https://docs.crossfeed.cyber.dhs.gov/user-guide/quickstart/. 
 
-If you encounter any difficulties, please feel free to reply to this email (or send an email to ${
-      process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO
-    }).`
-  );
+  If you encounter any difficulties, please feel free to reply to this email (or send an email to ${
+    process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO
+  }).`
+    );
+  } catch (error) {
+    logger.error(`Error sending email: ${error}`);
+
+    // Handle the error or re-throw it if needed
+    throw error;
+  }
 };
 
 /**
@@ -228,12 +236,12 @@ export const invite = wrapHandler(async (event) => {
   await connectToDatabase();
 
   body.email = body.email.toLowerCase();
-
+  logger.info(body.email);
   // Check if user already exists
   let user = await User.findOne({
     email: body.email
   });
-
+  logger.info(user);
   let organization: Organization | undefined;
 
   if (body.organization) {
@@ -375,7 +383,7 @@ export const list = wrapHandler(async (event) => {
  */
 export const search = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event)) return Unauthorized;
-  await connectToDatabase(true);
+  await connectToDatabase();
   const search = await validateBody(UserSearch, event.body);
   const [result, count] = await search.getResults(event);
   return {

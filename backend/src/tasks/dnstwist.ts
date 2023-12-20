@@ -6,6 +6,7 @@ import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { spawnSync } from 'child_process';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 import * as dns from 'dns';
+import logger from '../tools/lambda-logger';
 
 async function runDNSTwist(domain: string) {
   const child = spawnSync(
@@ -18,7 +19,7 @@ async function runDNSTwist(domain: string) {
   );
   const savedOutput = child.stdout;
   const finalResults = JSON.parse(savedOutput);
-  console.log(
+  logger.info(
     `Got ${
       Object.keys(finalResults).length
     } similar domains for root domain ${domain}`
@@ -30,10 +31,10 @@ export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
   await connectToDatabase();
   const dateNow = new Date(Date.now());
-  console.log('Running dnstwist on organization', organizationName);
+  logger.info(`Running dnstwist on organization ${organizationName}`);
   const root_domains = await getRootDomains(organizationId!);
   const vulns: Vulnerability[] = [];
-  console.log('Root domains:', root_domains);
+  logger.info(`Root domains: ${root_domains}`);
   for (const root_domain of root_domains) {
     try {
       const results = await runDNSTwist(root_domain);
@@ -104,7 +105,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         continue;
       }
     } catch (e) {
-      console.error(e);
+      logger.error(JSON.stringify(e));
       continue;
     }
   }

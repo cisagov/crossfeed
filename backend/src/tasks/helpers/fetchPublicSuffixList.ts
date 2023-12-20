@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import fetch from 'node-fetch';
+import logger from '../../tools/lambda-logger';
 
 // Checks for PSL at ${path} and fetches a new one if missing or out of date
 export default async (path = 'public_suffix_list.dat'): Promise<void> => {
@@ -12,7 +13,7 @@ export default async (path = 'public_suffix_list.dat'): Promise<void> => {
     try {
       fs.writeFileSync(fd, await fetchPsl());
     } catch (e) {
-      console.error(e);
+      logger.error(e);
     } finally {
       fs.closeSync(fd);
     }
@@ -26,7 +27,7 @@ async function handleExistingPsl(path) {
         fs.writeFileSync(fd, await fetchPsl());
       }
     } catch (e) {
-      console.error(e);
+      logger.error(e);
     } finally {
       fs.closeSync(fd);
     }

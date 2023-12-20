@@ -10,6 +10,7 @@ import {
 import { connectToDatabase, SavedSearch, Vulnerability } from '../models';
 import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import { FindManyOptions } from 'typeorm';
+import logger from '../tools/lambda-logger';
 
 export const del = wrapHandler(async (event) => {
   const id = event.pathParameters?.searchId;
@@ -124,7 +125,7 @@ export const list = wrapHandler(async (event) => {
     : PAGE_SIZE;
   const page = event.query?.page ? parseInt(event.query?.page) : 1;
 
-  console.log(event.query);
+  logger.info(event.query);
   const result = await SavedSearch.findAndCount({
     where,
     take: pageSize,

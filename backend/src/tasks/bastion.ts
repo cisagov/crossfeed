@@ -1,21 +1,22 @@
 import { Handler } from 'aws-lambda';
 import { connectToDatabase, User } from '../models';
 import ESClient from '../tasks/es-client';
+import logger from '../tools/lambda-logger';
 
-export const handler: Handler = async (event) => {
+export const handler: Handler = async (event, context) => {
   if (event.mode === 'db') {
-    const connection = await connectToDatabase(true);
+    const connection = await connectToDatabase();
     const res = await connection.query(event.query);
-    console.log(res);
+    logger.info(res, { context });
   } else if (event.mode === 'es') {
     if (event.query === 'delete') {
       const client = new ESClient();
       await client.deleteAll();
-      console.log('Index successfully deleted');
+      logger.info('Index successfully deleted', { context });
     } else {
-      console.log('Query not found: ' + event.query);
+      logger.info(`Query not found: ${event.query}`, { context });
     }
   } else {
-    console.log('Mode not found: ' + event.mode);
+    logger.info(`Mode not found: ${event.mode}`, { context });
   }
 };

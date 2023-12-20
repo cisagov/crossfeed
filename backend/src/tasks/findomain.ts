@@ -6,13 +6,14 @@ import { CommandOptions } from './ecs-client';
 import getRootDomains from './helpers/getRootDomains';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 import * as path from 'path';
+import logger from '../tools/lambda-logger';
 
 const OUT_PATH = path.join(__dirname, 'out-' + Math.random() + '.txt');
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName, scanId } = commandOptions;
 
-  console.log('Running findomain on organization', organizationName);
+  logger.info(`Running findomain on organization ${organizationName}`);
 
   const rootDomains = await getRootDomains(organizationId!);
 
@@ -26,19 +27,15 @@ export const handler = async (commandOptions: CommandOptions) => {
         '-u',
         OUT_PATH
       ];
-      console.log('Running findomain with args', args);
-      spawnSync(
-        'findomain', 
-        args, 
-        { 
-          stdio: 'pipe',
-          env: { 
-            ...process.env,
-            HTTP_PROXY: process.env.HTTPS_PROXY,
-            HTTPS_PROXY: process.env.HTTPS_PROXY 
-          } 
+      logger.info(`Running findomain with args ${args}`);
+      spawnSync('findomain', args, {
+        stdio: 'pipe',
+        env: {
+          ...process.env,
+          HTTP_PROXY: process.env.HTTPS_PROXY,
+          HTTPS_PROXY: process.env.HTTPS_PROXY
         }
-      );
+      });
       const output = String(readFileSync(OUT_PATH));
       const lines = output.split('\n');
       const domains: Domain[] = [];
@@ -57,9 +54,9 @@ export const handler = async (commandOptions: CommandOptions) => {
         );
       }
       await saveDomainsToDb(domains);
-      console.log(`Findomain created/updated ${domains.length} new domains`);
+      logger.info(`Findomain created/updated ${domains.length} new domains`);
     } catch (e) {
-      console.error(e);
+      logger.error(JSON.stringify(e));
       continue;
     }
   }
