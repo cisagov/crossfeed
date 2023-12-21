@@ -310,7 +310,6 @@ If you encounter any difficulties, please feel free to reply to this email (or s
   );
 };
 
-
 /**
  * @swagger
  *
@@ -846,7 +845,7 @@ export const inviteV2 = wrapHandler(async (event) => {
       You will receive an email when your registration is approved.
       
       Thank you!`
-    )
+    );
   };
 
   // Check if user already exists

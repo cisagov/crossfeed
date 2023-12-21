@@ -117,7 +117,7 @@ export const sendRegistrationTextEmail = async (recipient: string) => {
   await transporter.sendMail(mailOptions, (error, data) => {
     console.log(data);
     if (error) {
-      console.log(error); 
+      console.log(error);
     }
   });
 };
