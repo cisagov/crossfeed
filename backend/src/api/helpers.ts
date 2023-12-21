@@ -101,6 +101,48 @@ export const sendEmail = async (
   });
 };
 
+export const sendRegistrationTextEmail = async (recipient: string) => {
+  const transporter = nodemailer.createTransport({
+    SES: new SES({ region: 'us-east-1' })
+  });
+
+  const mailOptions = {
+    from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
+    to: recipient,
+    subject: 'Crossfeed Registration Pending',
+    text: 'Your registration is pending approval.',
+    replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
+  };
+
+  await transporter.sendMail(mailOptions, (error, data) => {
+    console.log(data);
+    if (error) {
+      console.log(error); 
+    }
+  });
+};
+
+export const sendRegistrationHtmlEmail = async (recipient: string) => {
+  const transporter = nodemailer.createTransport({
+    SES: new SES({ region: 'us-east-1' })
+  });
+
+  const mailOptions = {
+    from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
+    to: recipient,
+    subject: 'Crossfeed Registration Pending',
+    html: '<p>Your registration is pending approval.</p>',
+    replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
+  };
+
+  await transporter.sendMail(mailOptions, (error, data) => {
+    console.log(data);
+    if (error) {
+      console.log(error);
+    }
+  });
+};
+
 export const sendUserNotificationEmail = async (
   recepient: string,
   p_subject: string,
