@@ -82,10 +82,14 @@ export const handler = async (commandOptions: CommandOptions) => {
     for (const hit of data.result.hits) {
       if (!hit.names) continue;
       for (const name of hit.names) {
-        if (name.endsWith(rootDomain) && !uniqueNames.has(name)) {
-          uniqueNames.add(name);
+        const normalizedName = name.replace(/\*\.|^(www\.)/g, ''); // Remove www from beginning of name and wildcards from entire name
+        if (
+          normalizedName.endsWith(rootDomain) &&
+          !uniqueNames.has(normalizedName)
+        ) {
+          uniqueNames.add(normalizedName);
           foundDomains.add({
-            name: name.replace('*.', ''),
+            name: normalizedName,
             organization: { id: organizationId! },
             fromRootDomain: rootDomain,
             discoveredBy: { id: scanId }
