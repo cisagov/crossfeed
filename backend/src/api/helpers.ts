@@ -158,8 +158,8 @@ export const sendUserNotificationEmail = async (
   const html = await client.getEmailAsset(template_file);
   const template = handlebars.compile(html);
   const data = {
-    first_name: p_firstName,
-    last_name: p_lastname
+    firstName: p_firstName,
+    lastName: p_lastname
   };
 
   const htmlToSend = template(data);
@@ -211,3 +211,4 @@ export const sendUserNotificationEmail = async (
 
   await transporter.sendMail(mailOptions);
 };
+
