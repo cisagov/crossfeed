@@ -154,43 +154,10 @@ export const sendUserNotificationEmail = async (
     SES: new SES({ region: 'us-east-1' })
   });
 
-  /*const client = new S3Client();
+  const client = new S3Client();
   const html = await client.getEmailAsset(template_file);
 
 
-  const template = handlebars.compile(html);
-  const data = {
-    first_name: p_firstName,
-    last_name: p_lastname
-  };
-
-  const htmlToSend = template(data);*/
-
-  const mailOptions = {
-    from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER,
-    to: recepient,
-    subject: p_subject,
-    text: 'Testing'
-  };
-
-  await transporter.sendMail(mailOptions);
-};
-
-export const sendRegionalAdminNotificationEmail = async (
-  recepient: string,
-  p_subject: string,
-  p_firstName: string,
-  p_lastname: string,
-  p_username: string
-) => {
-  const transporter = nodemailer.createTransport({
-    SES: new SES({ region: 'us-east-1' })
-  });
-
-  const client = new S3Client();
-  const html = await client.getEmailAsset(
-    'crossfeed_regional_admin_notification.html'
-  );
   const template = handlebars.compile(html);
   const data = {
     first_name: p_firstName,
@@ -204,6 +171,7 @@ export const sendRegionalAdminNotificationEmail = async (
     to: recepient,
     subject: p_subject,
     html: htmlToSend,
+    replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!,
     attachments: [
       {
         filename: 'banner.png',
@@ -232,7 +200,7 @@ export const sendRegionalAdminNotificationEmail = async (
       },
       {
         filename: 'facebook.png',
-        content: await client.getEmailAsset('facebooK.png'),
+        content: await client.getEmailAsset('facebook.png'),
         cid: 'CISA Facebook'
       },
       {
