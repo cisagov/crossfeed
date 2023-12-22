@@ -156,8 +156,6 @@ export const sendUserNotificationEmail = async (
 
   const client = new S3Client();
   const html = await client.getEmailAsset(template_file);
-
-
   const template = handlebars.compile(html);
   const data = {
     first_name: p_firstName,
