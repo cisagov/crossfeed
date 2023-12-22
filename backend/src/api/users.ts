@@ -675,10 +675,10 @@ export const registrationApproval = wrapHandler(async (event) => {
   // Send email notification
   await sendUserNotificationEmail(
     user.email,
-    'Crossfeed Registration Approved',
+    'Crossfeed Registration Pending',
     user.firstName,
     user.lastName,
-    '/app/src/email_templates/crossfeed_approval_notification.html'
+    'crossfeed_approval_notification.html'
   );
 
   // TODO: Handle Response Output
