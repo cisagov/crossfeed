@@ -1,3 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`censys basic test: helpers.saveDomainsToDb 1`] = `Array []`;
+exports[`censys basic test: helpers.saveDomainsToDb 1`] = `
+Array [
+  Domain {
+    "discoveredBy": Object {
+      "id": "ddf56d43-7f87-4139-9a86-b8a1ffde9b9e",
+    },
+    "fromRootDomain": "filedrop.cisa.gov",
+    "ip": "104.84.119.215",
+    "name": "filedrop.cisa.gov",
+    "organization": Object {
+      "id": "organizationId",
+    },
+    "subdomainSource": "censys",
+  },
+]
+`;
