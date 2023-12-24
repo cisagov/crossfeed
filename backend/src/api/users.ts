@@ -20,7 +20,9 @@ import {
   NotFound,
   Unauthorized,
   sendEmail,
-  sendUserNotificationEmail
+  sendUserNotificationEmail,
+  sendRegistrationTextEmail,
+  sendRegistrationHtmlEmail
 } from './helpers';
 import { UserType } from '../models/user';
 import {
@@ -598,16 +600,23 @@ export const register = wrapHandler(async (event) => {
   // id = createdUser.id;
 
   // Send Registration confirmation email to user
-  // TODO: replace with html email function to user
-  sendUserNotificationEmail(
-    newUser.email,
-    'Crossfeed Registration Pending',
-    newUser.firstName,
-    newUser.lastName,
-    '/app/src/email_templates/crossfeed_registration_notification.html'
-  );
+  // TODO Commented out for testing - uncomment/cleanup for prod
+  // sendUserNotificationEmail(
+  //   newUser.email,
+  //   'Crossfeed Registration Pending',
+  //   newUser.firstName,
+  //   newUser.lastName,
+  //   '/app/src/email_templates/crossfeed_registration_notification.html'
+  // );
+
+  // Send Basic Text Registration confirmation email to user
+  await sendRegistrationTextEmail(newUser.email);
+  // Send Basic HTML Registration confirmation email to user
+  await sendRegistrationHtmlEmail(newUser.email);
+
   // Send new user pending approval email to regionalAdmin
-  // TODO: replace with html email function to regianlAdmin
+  // TODO: replace with html email function to regianlAdmin if desired
+
   const savedUser = await User.findOne(id, {
     relations: ['roles', 'roles.organization']
   });
@@ -823,29 +832,50 @@ export const inviteV2 = wrapHandler(async (event) => {
   await connectToDatabase();
 
   body.email = body.email.toLowerCase();
+  const userEmail = body.email.toLowerCase();
+
+  const sendRegisterEmail = async (email: string) => {
+    const staging = process.env.NODE_ENV !== 'production';
+
+    await sendEmail(
+      email,
+      'Crossfeed Registration',
+      `Hello,
+      Your Crossfeed registration is under review.
+      You will receive an email when your registration is approved.
+      
+      Thank you!`
+    );
+  };
 
   // Check if user already exists
   let user = await User.findOne({
     email: body.email
   });
 
+  // Handle Organization assignment if provided
   let organization: Organization | undefined;
-
   if (body.organization) {
     organization = await Organization.findOne(body.organization);
   }
 
+  // Create user if not found
   if (!user) {
+    // Create User object
     user = await User.create({
       invitePending: true,
       ...body
     });
+    // Save User to DB
     await User.save(user);
-    await sendInviteEmail(user.email, organization);
+
+    // Send Notification Email to user
+    await sendRegisterEmail(userEmail);
   } else if (!user.firstName && !user.lastName) {
     // Only set the user first name and last name the first time the user is invited.
     user.firstName = body.firstName;
     user.lastName = body.lastName;
+    // Save User to DB
     await User.save(user);
   }
 
