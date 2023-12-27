@@ -211,4 +211,3 @@ export const sendUserNotificationEmail = async (
 
   await transporter.sendMail(mailOptions);
 };
-
