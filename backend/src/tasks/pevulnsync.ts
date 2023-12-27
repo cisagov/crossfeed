@@ -7,38 +7,69 @@ import saveServicesToDb from './helpers/saveServicesToDb';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import { IpToDomainsMap, sanitizeStringField } from './censysIpv4';
 
-interface UniversalCrossfeedVuln {
-    task_id: string;
-    status: 'Pending' | 'Completed' | 'Failed';
-    result?:{
-        [title: string]: {
-        cve: string;
-        cvss: string;
-        state: string;
-        severity: string;
-        source: string;
-        needsPopulation: boolean;
-        port: number;
-        lastSeen: Date;
-        banner: string;
-        serviceSource: string;
-        product: string;
-        version: string;
-        cpe: string;
-        service_asset: string;
-        service_port: string;
-        service_asset_type: string;
-        };
-    }
+interface UniversalCrossfeedVuln {   
+    title: string
+    cve: string;
+    cvss: string;
+    state: string;
+    severity: string;
+    source: string;
+    needsPopulation: boolean;
+    port: number;
+    lastSeen: Date;
+    banner: string;
+    serviceSource: string;
+    product: string;
+    version: string;
+    cpe: string;
+    service_asset: string;
+    service_port: string;
+    service_asset_type: string;
 }
 interface TaskResponse {
     task_id: string;
     status: 'Pending' | 'Completed' | 'Failure';
+    result: UniversalCrossfeedVuln[];
 }
 
 const sleep = (milliseconds) => {
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
   };
+
+  const fetchPEVulnTask = async (org_name : string) => {
+    console.log(
+      `[PE Vuln Synnc] Fetching vulnerabilities for org "${org_name}"`
+    );
+    const { data, status } = await axios({
+      url: '`https://localhost/crossfeed_vulns`',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        ApiKey: process.env.PE_API_KEY, //TODO: define this
+        org_id: org_name
+      }
+    });
+    return data as TaskResponse;
+  };
+  const fetchPEVulnData = async (task_id:string) => {
+    console.log(
+      `[PE Vuln Synnc] Fetching vulnerabilities for task "${task_id}"`
+    );
+    const { data, status } = await axios({
+      url: `https://localhost/crossfeed_vulns/task/${task_id}`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        ApiKey: process.env.PE_API_KEY, //TODO: define this
+      }
+    });
+    return data as TaskResponse;
+  
+  }
 
 export const handler = async (commandOptions: CommandOptions) => {
     const{ organizationId, organizationName } = commandOptions; 
@@ -47,29 +78,25 @@ export const handler = async (commandOptions: CommandOptions) => {
         `Scanning PE database for vulnerabilities & servuces for organization ${organizationId}...`
       );
     try {
-        let {taskInfo} = await pRetry(
-            () =>
-                axios.post<TaskResponse>(`https://localhost/crossfeed_vulns`, {
-                    api_key: process.env.SHODAN_API_KEY, //TODO: define this
-                    org_id: organizationId
-                }),
-            { retries: 3 }
-          );
-        let {response} = await pRetry(
-            () => {
-                const resp = axios.get<UniversalCrossfeedVuln>(`https://localhost/crossfeed_vulns/task/${taskInfo.task_id}`)
-                if (response.status === 'Pending') {
-                    throw new Error('Task not complete.');
-                  }
-                  return resp
-            },
-            { retries: 1000 }
-        );
+        let data: TaskResponse;
+        if (typeof organizationName !== 'undefined') {
+            data = await fetchPEVulnTask(organizationName);
+        } else {
+            throw new Error('org_name is undefined');
+        }
 
-        if (response.status == 'Failed') throw new Error('P&E Api Task Failure, nothing changed.');
-        
+
+        let response = await fetchPEVulnData(data.task_id);
+        while (response.status === 'Pending') {
+            await sleep(1000);
+            response = await fetchPEVulnData(data.task_id);
+        }
+        if (response.status === 'Failure') {
+            console.error('Failed to fetch PE vulns');
+            return;
+        }
         for (const item of response.result) {
-            const [serviceId] = await saveServicesToDb(
+            const [serviceId] = await saveServicesToDb([
                 plainToClass(Service, {
                     domain: item.service_asset,
                     discoveredBy: { id: commandOptions.scanId },
@@ -85,7 +112,7 @@ export const handler = async (commandOptions: CommandOptions) => {
                         }
                     } : {})
                 })
-            );
+            ]);
             const vulns: Vulnerability[] = [];
             vulns.push(
                 plainToClass(Vulnerability, {

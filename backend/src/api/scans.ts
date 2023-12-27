@@ -81,6 +81,12 @@ export const SCAN_SCHEMA: ScanSchema = {
     description:
       'Open source tool that integrates passive APIs in order to discover target subdomains'
   },
+  pevulnsync: {
+    type: 'fargate',
+    isPassive: true,
+    global: false,
+    description: 'Sync all the domains for an organization with the P&E API and save the results to the database'
+  },
   portscanner: {
     type: 'fargate',
     isPassive: false,
