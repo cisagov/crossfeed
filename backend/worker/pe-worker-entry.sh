@@ -1,6 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
+
+echo "Starting pe-worker-entry.sh script"
 
 # Check if the SHODAN_QUEUE_URL environment variable is set
 if [ -z "$SHODAN_QUEUE_URL" ]; then
