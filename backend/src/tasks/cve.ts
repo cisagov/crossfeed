@@ -20,7 +20,8 @@ import {
 } from 'typeorm';
 import * as fs from 'fs';
 import * as zlib from 'zlib';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
+import type { AxiosResponse } from 'axios';
 import { CISACatalogOfKnownExploitedVulnerabilities } from 'src/models/generated/kev';
 
 /**
