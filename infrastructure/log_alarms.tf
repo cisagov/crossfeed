@@ -152,7 +152,7 @@ resource "aws_cloudwatch_metric_alarm" "s3_bucket_policy" {
 
 resource "aws_cloudwatch_metric_alarm" "aws_config" {
   alarm_name          = "${var.log_metric_aws_config}-alarm"
-  alarm_description   = "AWS Config configurations were modified"
+  alarm_description   = "AWS Config was modified"
   metric_name         = var.log_metric_aws_config
   namespace           = var.log_metric_namespace
   alarm_actions       = [aws_sns_topic.alarms.arn]
