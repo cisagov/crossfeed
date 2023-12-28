@@ -26,7 +26,9 @@ jest.mock('fs', () => ({
   }
 }));
 
+const realZlib = jest.requireActual('zlib');
 jest.mock('zlib', () => ({
+  ...realZlib,
   unzipSync: (contents) =>
     Buffer.from(
       JSON.stringify({
