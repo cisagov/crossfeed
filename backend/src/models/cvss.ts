@@ -5,10 +5,11 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     OneToMany,
+    BaseEntity  
 } from 'typeorm';
 
 @Entity()
-export class CveWith {
+export class Cvss extends BaseEntity {
     @PrimaryGeneratedColumn()
     cve_uid: number;
 
