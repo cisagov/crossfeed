@@ -92,7 +92,7 @@ export class Organization extends BaseEntity {
    * The organization's parent organization, if any.
    * Organizations without a parent organization are
    * shown to users as 'Organizations', while organizations
-   * with a parent organization are shown to users as 'Teams'
+   * with a parent organization are shown to users as 'Suborganizations'
    */
   @ManyToOne((type) => Organization, (org) => org.children, {
     onDelete: 'CASCADE',

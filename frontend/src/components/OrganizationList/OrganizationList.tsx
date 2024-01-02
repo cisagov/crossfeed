@@ -64,7 +64,7 @@ export const OrganizationList: React.FC<{
               style={{ border: '1px dashed #C9C9C9', textAlign: 'center' }}
               onClick={() => setDialogOpen(true)}
             >
-              <h1>Create New {parent ? 'Team' : 'Organization'}</h1>
+              <h1>Create New {parent ? 'Suborganization' : 'Organization'}</h1>
               <p>
                 <Add></Add>
               </p>
