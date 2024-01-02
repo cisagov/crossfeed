@@ -11,6 +11,7 @@ db_port                              = 5432
 db_table_name                        = "cfproddb"
 db_instance_class                    = "db.t3.2xlarge"
 log_metric_namespace                 = "LogMetrics"
+log_metric_api_error_rate            = "crossfeed-prod-APIErrorRate"
 log_metric_root_user                 = "crossfeed-prod-RootUserAccess"
 log_metric_unauthorized_api_call     = "crossfeed-prod-UnauthorizedApiCall"
 log_metric_login_without_mfa         = "crossfeed-prod-ConsoleSignInWithoutMFA"
