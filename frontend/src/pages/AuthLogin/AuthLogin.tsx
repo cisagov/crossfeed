@@ -82,6 +82,24 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   if (process.env.REACT_APP_USE_COGNITO) {
     return (
       <Grid container>
+        <Grid item xs={12}>
+          <Alert severity="warning" onClose={() => {}}>
+            <AlertTitle>
+              {' '}
+              PLATFORM NOTIFICATION: Temporary Downtime During Crossfeed
+              Migration
+            </AlertTitle>
+            <Typography variant="caption"></Typography>
+            The Crossfeed environment is moving. The migration will require a a
+            temporary downtime of approximately one week. The downtime will
+            begin on Wednesday, October 25, through the day Wednesday, November
+            01. For additional information, please click{' '}
+            <a href="https://s3.amazonaws.com/crossfeed.cyber.dhs.gov/Notice.pdf">
+              here
+            </a>
+            .
+          </Alert>
+        </Grid>
         <Grid item xs={12} py={5}>
           <Typography variant="h3" textAlign="center">
             Welcome to Crossfeed
@@ -100,7 +118,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
         </Grid>
         <Grid item xs={12}>
           {open && <RegisterForm open={open} onClose={onClose} />}
-          <Box pt={3} pb={3} display="flex" justifyContent="center">
+          <Box pt={3} display="flex" justifyContent="center">
             <Typography display="inline">New to Crossfeed?&nbsp;</Typography>
             <Link
               underline="hover"
@@ -113,18 +131,11 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
         </Grid>
         <Grid item xs={12}>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Alert
-              onClose={() => {}}
-              severity="warning"
-              className="alert_box"
-              sx={{ width: 478 }}
-            >
-              <AlertTitle>
-                <h2 className="platform_notice">PLATFORM NOTIFICATION</h2>
-              </AlertTitle>
-              <h3>
-                Important Notice: Temporary Downtime During Crossfeed Migration
-              </h3>
+            {/* <Alert severity="warning" className="alert_box" sx={{ width: 478 }}>
+              <AlertTitle> PLATFORM NOTIFICATION</AlertTitle>
+              <Typography fontWeight={500} variant="body1">
+                Temporary Downtime During Crossfeed Migration
+              </Typography>
               <p>
                 The Crossfeed environment is moving. The migration will require
                 a a temporary downtime of approximately one week.
@@ -140,7 +151,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
                   here.
                 </a>
               </p>
-            </Alert>
+            </Alert> */}
           </Box>
           <CrossfeedWarning />
           {/* <ModFooter /> */}
