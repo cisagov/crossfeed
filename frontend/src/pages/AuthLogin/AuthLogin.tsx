@@ -1,16 +1,14 @@
-import { AlertTitle } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { AuthForm } from 'components';
 import { useAuthContext } from 'context';
-import { Alert } from '@mui/material';
 import { Button } from '@trussworks/react-uswds';
-import { Typography, Box, Link } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid, Link, Typography } from '@mui/material';
 import { RegisterForm } from 'components/Register/RegisterForm';
-import { ModFooter } from 'components/Footer';
+// import { ModFooter } from 'components/Footer';
 import { CrossfeedWarning } from 'components/WarningBanner';
 import {
   Authenticator,
-  ThemeProvider,
+  // ThemeProvider,
   useAuthenticator
 } from '@aws-amplify/ui-react';
 import { I18n } from 'aws-amplify';
@@ -21,9 +19,9 @@ I18n.putVocabulariesForLanguage('en-US', {
   'Setup TOTP': 'Set up 2FA',
   'Confirm TOTP Code': 'Enter 2FA Code'
 });
-const amplifyTheme = {
-  name: 'my-theme'
-};
+// const amplifyTheme = {
+//   name: 'my-theme'
+// };
 interface Errors extends Partial<FormData> {
   global?: string;
 }
@@ -83,31 +81,44 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   };
   if (process.env.REACT_APP_USE_COGNITO) {
     return (
-      <>
-        <AuthForm as="div">
-          <h1>Welcome to Crossfeed</h1>
-          <ThemeProvider theme={amplifyTheme}>
-            <Authenticator
-              loginMechanisms={['email']}
-              formFields={formFields}
-              /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
-              /* hideSignUp={
+      <Grid container>
+        <Grid item xs={12} py={5}>
+          <Typography variant="h3" textAlign="center">
+            Welcome to Crossfeed
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Authenticator
+            loginMechanisms={['email']}
+            formFields={formFields}
+            /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
+            /* hideSignUp={
                 !showSignUp && !(process.env.NODE_ENV === 'development')
               }*/
-              hideSignUp={true}
-            />
-            {open && <RegisterForm open={open} onClose={onClose} />}
-            <Box pt={3} pb={3} display="flex" justifyContent="center">
-              <Typography display="inline">New to Crossfeed?&nbsp;</Typography>
-              <Link
-                underline="hover"
-                style={{ cursor: 'pointer' }}
-                onClick={() => setOpen(true)}
-              >
-                Register Now
-              </Link>
-            </Box>
-            <Alert onClose={() => {}} severity="warning" className="alert_box">
+            hideSignUp={true}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          {open && <RegisterForm open={open} onClose={onClose} />}
+          <Box pt={3} pb={3} display="flex" justifyContent="center">
+            <Typography display="inline">New to Crossfeed?&nbsp;</Typography>
+            <Link
+              underline="hover"
+              style={{ cursor: 'pointer' }}
+              onClick={() => setOpen(true)}
+            >
+              Register Now
+            </Link>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Alert
+              onClose={() => {}}
+              severity="warning"
+              className="alert_box"
+              sx={{ width: 478 }}
+            >
               <AlertTitle>
                 <h2 className="platform_notice">PLATFORM NOTIFICATION</h2>
               </AlertTitle>
@@ -130,11 +141,11 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
                 </a>
               </p>
             </Alert>
-          </ThemeProvider>
-        </AuthForm>
-        <CrossfeedWarning />
-        <ModFooter />
-      </>
+          </Box>
+          <CrossfeedWarning />
+          {/* <ModFooter /> */}
+        </Grid>
+      </Grid>
     );
   }
   return (
