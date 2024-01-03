@@ -1,0 +1,43 @@
+FROM node:18-bullseye as build
+USER root
+
+WORKDIR /app
+
+COPY ./package* ./
+
+COPY src ./src
+
+RUN apt update && apt install git zlib1g-dev
+
+RUN apt-get update && apt-get install -y jq
+
+RUN wget -c https://www.python.org/ftp/python/3.10.11/Python-3.10.11.tar.xz && tar -Jxvf Python-3.10.11.tar.xz
+RUN cd Python-3.10.11 && ./configure && make -j4 && make altinstall
+RUN update-alternatives --install /usr/bin/python python /usr/local/bin/python3.10 1
+RUN update-alternatives --install /usr/bin/pip pip /usr/local/bin/pip3.10 1
+RUN pip3.10 install --upgrade pip
+
+RUN apt remove dav1d && apt autoclean && apt autoremove
+
+# Install AWS CLI
+RUN curl --insecure "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+
+# Install pe-source module
+# Sync the latest from cf-staging branch
+RUN git clone -b AL-staging-SQS https://github.com/cisagov/pe-reports.git && \
+    cd pe-reports && \
+    git checkout 6dcd017551ba14022e110c073e1bdbc804c795f8 && \
+    pip install .
+
+RUN python -m spacy download en_core_web_lg
+
+# Create database.ini 
+RUN echo "[database]" > database.ini \ 
+    && echo "user=$(cat db_user.txt)" >> database.ini \ 
+    && echo "password=$(cat db_password.txt)" >> database.ini
+
+COPY worker worker
+
+CMD ["./worker/generate_config.sh", "./worker/pe-worker-entry.sh"]
