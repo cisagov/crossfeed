@@ -10,14 +10,7 @@ import { plainToClass } from 'class-transformer';
 import { CommandOptions } from './ecs-client';
 import * as buffer from 'buffer';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
-import {
-  LessThan,
-  MoreThan,
-  FindOperator,
-  In,
-  MoreThanOrEqual,
-  Not
-} from 'typeorm';
+import { LessThan, MoreThan, In, MoreThanOrEqual, Not } from 'typeorm';
 import * as fs from 'fs';
 import * as zlib from 'zlib';
 import axios, { AxiosResponse } from 'axios';
