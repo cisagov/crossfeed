@@ -257,6 +257,15 @@ export const isGlobalViewAdmin = (event: APIGatewayProxyEvent) => {
     : false;
 };
 
+/** Check if a user has regionalAdmin view permissions */
+export const isRegionalAdmin = (event: APIGatewayProxyEvent) => {
+  return event.requestContext.authorizer &&
+    (event.requestContext.authorizer.userType === UserType.REGIONAL_ADMIN ||
+      event.requestContext.authorizer.userType === UserType.GLOBAL_ADMIN)
+    ? true
+    : false;
+};
+
 /** Checks if the current user is allowed to access (modify) a user with id userId */
 export const canAccessUser = (event: APIGatewayProxyEvent, userId?: string) => {
   return userId && (userId === getUserId(event) || isGlobalWriteAdmin(event));

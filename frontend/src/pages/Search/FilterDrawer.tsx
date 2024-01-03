@@ -1,11 +1,10 @@
 import React, { useMemo } from 'react';
-import { styled } from '@mui/material/styles';
 import {
-  Paper,
+  AccordionDetails,
   Accordion as MuiAccordion,
-  AccordionSummary as MuiAccordionSummary,
-  AccordionDetails
+  AccordionSummary as MuiAccordionSummary
 } from '@mui/material';
+import { classes, StyledWrapper } from './Styling/filterDrawerStyle';
 import { ExpandMore, FiberManualRecordRounded } from '@mui/icons-material';
 import { FaFilter } from 'react-icons/fa';
 import { TaggedArrayInput, FacetFilter } from 'components';
@@ -26,6 +25,9 @@ const FiltersApplied: React.FC = () => {
     </div>
   );
 };
+
+const Accordion = MuiAccordion;
+const AccordionSummary = MuiAccordionSummary;
 
 export const FilterDrawer: React.FC<Props> = (props) => {
   const { filters, addFilter, removeFilter, facets, clearFilters } = props;
@@ -285,75 +287,3 @@ export const FilterDrawer: React.FC<Props> = (props) => {
     </StyledWrapper>
   );
 };
-
-//Styling
-const Accordion = MuiAccordion;
-const AccordionSummary = MuiAccordionSummary;
-const Wrapper = Paper;
-const PREFIX = 'FilterDrawer';
-
-const classes = {
-  root: `${PREFIX}-root`,
-  disabled: `${PREFIX}-disabled`,
-  expanded: `${PREFIX}-expanded`,
-  root2: `${PREFIX}-root2`,
-  content: `${PREFIX}-content`,
-  disabled2: `${PREFIX}-disabled2`,
-  expanded2: `${PREFIX}-expanded2`,
-  root3: `${PREFIX}-root3`,
-  header: `${PREFIX}-header`,
-  details: `${PREFIX}-details`,
-  applied: `${PREFIX}-applied`,
-  filter: `${PREFIX}-filter`
-};
-
-const StyledWrapper = styled(Wrapper)(({ theme }) => ({
-  [`& .${classes.header}`]: {
-    display: 'flex',
-    alignItems: 'center',
-    flexFlow: 'row nowrap',
-    padding: '0 1rem',
-    minHeight: 60,
-    justifyContent: 'space-between',
-    '& h3': {
-      fontSize: '1.3rem',
-      fontWeight: 400,
-      margin: 0,
-      marginLeft: '1rem'
-    },
-    '& button': {
-      outline: 'none',
-      border: 'none',
-      color: '#71767A',
-      background: 'none',
-      cursor: 'pointer',
-      textDecoration: 'underline'
-    }
-  },
-  [`& .${classes.details}`]: {
-    paddingTop: 0
-    // maxHeight: 250,
-    // overflowY: 'auto'
-  },
-  [`& .${classes.applied}`]: {
-    display: 'flex',
-    alignItems: 'center',
-    flexFlow: 'row nowrap',
-    fontSize: '0.7rem',
-    textTransform: 'uppercase',
-    color: theme.palette.grey['500'],
-    '& svg': {
-      fontSize: '0.7rem',
-      color: theme.palette.primary.main,
-      marginRight: 3
-    }
-  },
-  [`& .${classes.filter}`]: {
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    alignItems: 'center',
-    '& > span': {
-      display: 'block'
-    }
-  }
-}));
