@@ -43,8 +43,10 @@ provider:
           Action:
             - ecs:RunTask
             - ecs:ListTasks
+            - ecs:DescribeTasks
+            - ecs:DescribeServices
+            - ecs:UpdateService
             - iam:PassRole
-            - logs:GetLogEvents
           Resource: '*'
         - Effect: Allow
           Action:
@@ -56,7 +58,60 @@ provider:
             - s3:GetObjectAcl
             - s3:PutObject
             - s3:PutObjectAcl
+            - s3:PutBucketAcl
+            - s3:GetBucketAcl
           Resource: '*'
+        - Effect: Allow
+          Action:
+            - sts:AssumeRole
+          Resource: '*'
+        - Effect: Allow
+          Action:
+            - sqs:ReceiveMessage
+            - sqs:DeleteMessage
+            - sqs:SendMessage
+            - sqs:GetQueueAttributes
+          Resource: '*'
+        - Effect: Allow
+          Action:
+            - logs:CreateExportTask
+            - logs:CreateLogStream
+            - logs:Describe*
+            - logs:Get*
+            - logs:List*
+            - logs:PutLogEvents
+            - logs:StartQuery
+            - logs:StopQuery
+            - logs:TestMetricFilter
+            - logs:FilterLogEvents
+            - logs:StartLiveTail
+            - logs:StopLiveTail
+          Resource: '*'
+        - Effect: Allow
+          Action:
+            - ssm:DescribeParameters
+            - ssm:GetParameter
+            - ssm:GetParameters
+            - ssm:GetParametersByPath
+            - ssm:PutParameter
+          Resource: '*'
+
+resources:
+  Resources:
+    WorkerControlQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.stage}-worker-control-queue
+        VisibilityTimeout: 300 # Should match or exceed function timeout
+        MaximumMessageSize: 262144 # 256 KB
+        MessageRetentionPeriod: 604800 # 7 days
+    ShodanQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.stage}-shodan-queue
+        VisibilityTimeout: 300
+        MaximumMessageSize: 262144 # 256 KB
+        MessageRetentionPeriod: 604800 # 7 days
 
 functions:
   - ${file(./src/tasks/functions.yml)}
