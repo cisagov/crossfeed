@@ -19,10 +19,25 @@ RUN pip3.10 install --upgrade pip
 
 RUN apt remove dav1d && apt autoclean && apt autoremove
 
+# Install AWS CLI
+RUN curl --insecure "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+
 # Install pe-source module
 # Sync the latest from cf-staging branch
-RUN git clone -b cf-source-staging https://github.com/cisagov/pe-reports.git && cd pe-reports && git checkout c9cbbd73b22ef38cabe1da6ba50aeb2dc0be4f99 && pip install .
+RUN git clone -b AL-staging-SQS https://github.com/cisagov/pe-reports.git && \
+    cd pe-reports && \
+    git checkout 6dcd017551ba14022e110c073e1bdbc804c795f8 && \
+    pip install .
+
+RUN python -m spacy download en_core_web_lg
+
+# Create database.ini 
+RUN echo "[database]" > database.ini \ 
+    && echo "user=$(cat db_user.txt)" >> database.ini \ 
+    && echo "password=$(cat db_password.txt)" >> database.ini
 
 COPY worker worker
 
-CMD ["./worker/pe-worker-entry.sh"]
+CMD ["./worker/generate_config.sh", "./worker/pe-worker-entry.sh"]
