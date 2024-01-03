@@ -610,9 +610,9 @@ export const register = wrapHandler(async (event) => {
   // );
 
   // Send Basic Text Registration confirmation email to user
-  await sendRegistrationTextEmail(newUser.email);
+  // await sendRegistrationTextEmail(newUser.email);
   // Send Basic HTML Registration confirmation email to user
-  await sendRegistrationHtmlEmail(newUser.email);
+  // await sendRegistrationHtmlEmail(newUser.email);
 
   // Send new user pending approval email to regionalAdmin
   // TODO: replace with html email function to regianlAdmin if desired
@@ -673,12 +673,12 @@ export const registrationApproval = wrapHandler(async (event) => {
   }
 
   // Send email notification
-  sendUserNotificationEmail(
+  await sendUserNotificationEmail(
     user.email,
-    'Crossfeed Registration Approved',
+    'Crossfeed Registration Pending',
     user.firstName,
     user.lastName,
-    '/app/src/email_templates/crossfeed_approval_notification.html'
+    'crossfeed_registration_notification.html'
   );
 
   // TODO: Handle Response Output
