@@ -5,6 +5,7 @@ import * as dns from 'dns';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
 import { CommandOptions } from './ecs-client';
 import getRootDomains from './helpers/getRootDomains';
+import logger from '../tools/lambda-logger';
 
 interface CensysAPIResponse {
   result: {
@@ -25,9 +26,9 @@ const sleep = (milliseconds: number) => {
 };
 
 const fetchCensysData = async (rootDomain: string) => {
-  console.log(`Fetching certificates for ${rootDomain}`);
+  logger.info(`Fetching certificates for ${rootDomain}`);
   const data = await fetchPage(rootDomain);
-  console.log(
+  logger.info(
     `Censys found ${data.result.total} certificates for ${rootDomain}
     Fetching ${Math.min(data.result.total, resultLimit)} of them...`
   );
@@ -66,7 +67,7 @@ const fetchPage = async (rootDomain: string, nextToken?: string) => {
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName, scanId } = commandOptions;
 
-  console.log(`Running Censys on: ${organizationName}`);
+  logger.info(`Running Censys on: ${organizationName}`);
 
   const rootDomains = await getRootDomains(organizationId!);
   const uniqueNames = new Set<string>(); //used to dedupe domain names
@@ -107,7 +108,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   // Project Sonar has both forward & reverse DNS for finding subdomains
 
   // Save domains to database
-  console.log(`Saving ${organizationName} subdomains to database...`);
+  logger.info(`Saving ${organizationName} subdomains to database...`);
   const domains: Domain[] = [];
   for (const domain of foundDomains) {
     let ip: string | null;
@@ -129,7 +130,7 @@ export const handler = async (commandOptions: CommandOptions) => {
     );
   }
   await saveDomainsToDb(domains);
-  console.log(
+  logger.info(
     `Censys saved or updated ${domains.length} subdomains for ${organizationName}`
   );
 };
