@@ -209,8 +209,8 @@ export const sendUserNotificationEmail = async (
         }
       ]
     };
-      await transporter.sendMail(mailOptions);
-  } catch (e){
+    await transporter.sendMail(mailOptions);
+  } catch(e){
     console.log(e);
   }
 };

@@ -599,10 +599,9 @@ export const register = wrapHandler(async (event) => {
   const savedUser = await User.findOne(id, {
     relations: ['roles', 'roles.organization']
   });
-  if(!savedUser){
+  if (!savedUser) {
     return NotFound;
   }
-  
   // Send email notification
   await sendUserNotificationEmail(
     savedUser.email,
@@ -666,7 +665,7 @@ export const registrationApproval = wrapHandler(async (event) => {
   // Send email notification
   await sendUserNotificationEmail(
     user.email,
-    'Crossfeed Registration Pending',
+    'Crossfeed Registration Approved',
     user.firstName,
     user.lastName,
     'crossfeed_registration_notification.html'
