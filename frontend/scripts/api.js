@@ -12,7 +12,17 @@ app.use((req, res, next) => {
   const sanitizedHeaders = { ...req.headers };
   // Remove or replace sensitive headers
   delete sanitizedHeaders['authorization'];
-  logger.info(`Request Headers: ${JSON.stringify(sanitizedHeaders)}`);
+  res.on('finish', () => {
+    const logInfo = {
+      httpMethod: req.method,
+      protocol: req.protocol,
+      originalUrl: req.originalUrl,
+      path: req.path,
+      statusCode: res.statusCode,
+      headers: sanitizedHeaders
+    };
+    logger.info(`Request Info: ${JSON.stringify(logInfo)}`);
+  });
   next();
 });
 
@@ -32,11 +42,11 @@ app.use(
       defaultSrc: [
         "'self'",
         'https://cognito-idp.us-gov-west-1.amazonaws.com',
-        process.env.REACT_APP_API_URL
+        'https://api.staging.crossfeed.cyber.dhs.gov'
       ],
       scriptSrc: [
         "'self'",
-        process.env.REACT_APP_API_URL,
+        'https://api.staging.crossfeed.cyber.dhs.gov',
         // Add any other allowed script sources here
         "'unsafe-inline'" // Allow inline scripts (not recommended for security)
       ]

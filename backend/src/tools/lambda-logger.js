@@ -30,8 +30,8 @@ const logger = createLogger({
     format.printf(
       (info) =>
         `${info.level} RequestId: ${info.requestId || 'undefined'} ${
-          info.message
-        }`
+          info.timestamp
+        } ${info.message}`
     )
   ),
   transports: [new transports.Console()]
