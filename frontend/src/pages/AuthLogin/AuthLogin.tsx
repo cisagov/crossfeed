@@ -83,7 +83,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
     return (
       <Grid container>
         <Grid item xs={12}>
-          <Alert severity="warning" onClose={() => {}}>
+          <Alert severity="warning">
             <AlertTitle>
               {' '}
               PLATFORM NOTIFICATION: Temporary Downtime During Crossfeed
