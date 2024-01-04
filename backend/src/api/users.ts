@@ -594,32 +594,23 @@ export const register = wrapHandler(async (event) => {
 
   const createdUser = await User.create(newUser);
   await User.save(createdUser);
+
   id = createdUser.id;
-
-  // const savedUser = await User.save(createdUser);
-  // id = createdUser.id;
-
-  // Send Registration confirmation email to user
-  // TODO Commented out for testing - uncomment/cleanup for prod
-  // sendUserNotificationEmail(
-  //   newUser.email,
-  //   'Crossfeed Registration Pending',
-  //   newUser.firstName,
-  //   newUser.lastName,
-  //   '/app/src/email_templates/crossfeed_registration_notification.html'
-  // );
-
-  // Send Basic Text Registration confirmation email to user
-  // await sendRegistrationTextEmail(newUser.email);
-  // Send Basic HTML Registration confirmation email to user
-  // await sendRegistrationHtmlEmail(newUser.email);
-
-  // Send new user pending approval email to regionalAdmin
-  // TODO: replace with html email function to regianlAdmin if desired
-
   const savedUser = await User.findOne(id, {
     relations: ['roles', 'roles.organization']
   });
+  if(!savedUser){
+    return NotFound;
+  }
+  
+  // Send email notification
+  await sendUserNotificationEmail(
+    savedUser.email,
+    'Crossfeed Registration Pending',
+    savedUser.firstName,
+    savedUser.lastName,
+    'crossfeed_registration_notification.html'
+  );
 
   return {
     statusCode: 200,
