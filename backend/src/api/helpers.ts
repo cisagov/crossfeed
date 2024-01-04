@@ -214,4 +214,3 @@ export const sendUserNotificationEmail = async (
     console.log(e);
   }
 };
-
