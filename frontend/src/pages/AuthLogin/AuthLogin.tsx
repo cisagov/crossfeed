@@ -4,7 +4,6 @@ import { useAuthContext } from 'context';
 import { Button } from '@trussworks/react-uswds';
 import { Alert, AlertTitle, Box, Grid, Link, Typography } from '@mui/material';
 import { RegisterForm } from 'components/Register/RegisterForm';
-// import { ModFooter } from 'components/Footer';
 import { CrossfeedWarning } from 'components/WarningBanner';
 import {
   Authenticator,
@@ -154,7 +153,6 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
             </Alert> */}
           </Box>
           <CrossfeedWarning />
-          {/* <ModFooter /> */}
         </Grid>
       </Grid>
     );
