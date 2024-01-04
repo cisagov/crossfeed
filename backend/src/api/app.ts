@@ -18,6 +18,7 @@ import * as reports from './reports';
 import * as savedSearches from './saved-searches';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { UserType } from '../models';
+import logger from '../tools/lambda-logger';
 
 if (
   (process.env.IS_OFFLINE || process.env.IS_LOCAL) &&
@@ -41,7 +42,8 @@ const handlerToExpress = (handler) => async (req, res, next) => {
       headers: req.headers,
       path: req.originalUrl
     },
-    {}
+    {},
+    req.context
   );
   // Set HSTS header to ensure that the browser enforces HTTPS
   res.setHeader('Strict-Transport-Security', 'max-age=31536000');
@@ -56,8 +58,33 @@ const handlerToExpress = (handler) => async (req, res, next) => {
   }
 };
 
+const logHeaders = (req, res, next) => {
+  const sanitizedHeaders = { ...req.headers };
+  // Remove or replace sensitive headers
+  delete sanitizedHeaders['authorization'];
+
+  res.on('finish', () => {
+    const logInfo = {
+      httpMethod: req.method,
+      protocol: req.protocol,
+      originalURL: req.originalUrl,
+      path: req.path,
+      statusCode: res.statusCode,
+      headers: sanitizedHeaders,
+      userEmail: req.requestContext.authorizer
+        ? req.requestContext.authorizer.email || 'undefined'
+        : 'undefined'
+    };
+
+    logger.info(`Request Info: ${JSON.stringify(logInfo)}`);
+  });
+
+  next();
+};
+
 const app = express();
 
+app.use(logHeaders);
 app.use(cors());
 app.use(express.json({ strict: false }));
 app.use(helmet.hsts({ maxAge: 31536000, preload: true }));
@@ -168,7 +195,8 @@ const matomoProxy = createProxyMiddleware({
     if (proxyRes.headers['transfer-encoding'] === 'chunked') {
       proxyRes.headers['transfer-encoding'] = '';
     }
-  }
+  },
+  logLevel: 'silent'
 });
 
 /**
@@ -182,7 +210,8 @@ const peProxy = createProxyMiddleware({
   target: process.env.PE_API_URL,
   pathRewrite: function (path, req) {
     return path.replace(/^\/pe/, '');
-  }
+  },
+  logLevel: 'silent'
 });
 
 app.use(
@@ -243,6 +272,7 @@ app.use(
 // needing to sign the terms of service yet
 const authenticatedNoTermsRoute = express.Router();
 authenticatedNoTermsRoute.use(checkUserLoggedIn);
+authenticatedNoTermsRoute.use(logHeaders);
 authenticatedNoTermsRoute.get('/users/me', handlerToExpress(users.me));
 authenticatedNoTermsRoute.post(
   '/users/me/acceptTerms',
@@ -258,6 +288,7 @@ const authenticatedRoute = express.Router();
 
 authenticatedRoute.use(checkUserLoggedIn);
 authenticatedRoute.use(checkUserSignedTerms);
+authenticatedRoute.use(logHeaders);
 
 authenticatedRoute.post('/api-keys', handlerToExpress(apiKeys.generate));
 authenticatedRoute.delete('/api-keys/:keyId', handlerToExpress(apiKeys.del));
