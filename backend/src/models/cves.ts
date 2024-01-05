@@ -4,14 +4,18 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
-    OneToMany,
-    BaseEntity  
+    ManyToMany,
+    BaseEntity,
+    JoinTable,
+    Unique
 } from 'typeorm';
+import { Cpes } from './cpes';
 
 @Entity()
-export class Cvss extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    cve_uid: number;
+@Unique(['cve_name'])
+export class Cves extends BaseEntity {
+    @PrimaryGeneratedColumn('uuid')
+    cve_uid: string;
 
     @Column({ nullable: true })
     cve_name: string;
@@ -41,16 +45,16 @@ export class Cvss extends BaseEntity {
     cvss_v2_vector_string: string;
 
     @Column({ nullable: true })
-    cvss_v2_base_score: number;
+    cvss_v2_base_score: string;
 
     @Column({ nullable: true })
     cvss_v2_base_severity: string;
 
     @Column({ nullable: true })
-    cvss_v2_exploitability_score: number;
+    cvss_v2_exploitability_score: string;
 
     @Column({ nullable: true })
-    cvss_v2_impact_score: number;
+    cvss_v2_impact_score: string;
 
     @Column({ nullable: true })
     cvss_v3_source: string;
@@ -65,16 +69,16 @@ export class Cvss extends BaseEntity {
     cvss_v3_vector_string: string;
 
     @Column({ nullable: true })
-    cvss_v3_base_score: number;
+    cvss_v3_base_score: string;
 
     @Column({ nullable: true })
     cvss_v3_base_severity: string;
 
     @Column({ nullable: true })
-    cvss_v3_exploitability_score: number;
+    cvss_v3_exploitability_score: string;
 
     @Column({ nullable: true })
-    cvss_v3_impact_score: number;
+    cvss_v3_impact_score: string;
 
     @Column({ nullable: true })
     cvss_v4_source: string;
@@ -89,16 +93,16 @@ export class Cvss extends BaseEntity {
     cvss_v4_vector_string: string;
 
     @Column({ nullable: true })
-    cvss_v4_base_score: number;
+    cvss_v4_base_score: string;
 
     @Column({ nullable: true })
     cvss_v4_base_severity: string;
 
     @Column({ nullable: true })
-    cvss_v4_exploitability_score: number;
+    cvss_v4_exploitability_score: string;
 
     @Column({ nullable: true })
-    cvss_v4_impact_score: number;
+    cvss_v4_impact_score: string;
 
     @Column("simple-array", { nullable: true })
     weaknesses: string[];
@@ -108,6 +112,10 @@ export class Cvss extends BaseEntity {
 
     @Column("simple-array", { nullable: true })
     cpe_list: string[];
+
+    @ManyToMany(() => Cpes, cpe => cpe.id)
+    @JoinTable()
+    cpes: Cpes[];
 
     // For vender_product, you might need to create another entity and establish a OneToMany relationship
     // @OneToMany(() => CpeProduct, cpeProduct => cpeProduct.cve)

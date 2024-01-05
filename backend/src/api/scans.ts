@@ -49,6 +49,15 @@ interface ScanSchema {
 }
 
 export const SCAN_SCHEMA: ScanSchema = {
+  cveSync: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    description:
+      "Matches detected software versions to CVEs from NIST NVD and CISA's Known Exploited Vulnerabilities Catalog.",
+    cpu: '1024',
+    memory: '8192'
+  },
   testProxy: {
     type: 'fargate',
     isPassive: false,
