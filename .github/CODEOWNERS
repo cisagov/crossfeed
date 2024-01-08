@@ -1,0 +1,10 @@
+# Each line is a file pattern followed by one or more owners.
+
+# These owners will be the default owners for everything in the
+# repo. Unless a later match takes precedence, these owners will be
+# requested for review when someone opens a pull request.
+* @rapidray12 @schmelz21 @cduhn17 @aloftus23 @Matthew-Grayson @nickviola
+
+# These folks own any files in the .github directory at the root of
+# the repository and any of its subdirectories.
+/.github/ @rapidray12 @schmelz21 @cduhn17 @aloftus23 @Matthew-Grayson @nickviola
