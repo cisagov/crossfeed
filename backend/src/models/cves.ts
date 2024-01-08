@@ -113,11 +113,7 @@ export class Cves extends BaseEntity {
     @Column("simple-array", { nullable: true })
     cpe_list: string[];
 
-    @ManyToMany(() => Cpes, cpe => cpe.id)
+    @ManyToMany(() => Cpes, cpes => cpes.cves, { cascade: true })
     @JoinTable()
     cpes: Cpes[];
-
-    // For vender_product, you might need to create another entity and establish a OneToMany relationship
-    // @OneToMany(() => CpeProduct, cpeProduct => cpeProduct.cve)
-    // vender_product: CpeProduct[];
 }

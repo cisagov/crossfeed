@@ -1,13 +1,15 @@
+import { mapping } from 'src/tasks/censys/mapping';
 import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
     CreateDateColumn,
     UpdateDateColumn,
-    OneToMany,
+    ManyToMany,
     BaseEntity,
     Unique
 } from 'typeorm';
+import { Cves } from './cves';
 
 @Entity()
 @Unique(['cpe_product_name', 'version_number', 'vender'])
@@ -26,4 +28,7 @@ export class Cpes extends BaseEntity{
 
     @Column()
     last_seen: Date;
+
+    @ManyToMany((type) => Cves, (cves) => cves.cpes)
+    cves: Cves[];
 }
