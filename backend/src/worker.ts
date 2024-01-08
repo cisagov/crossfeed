@@ -42,7 +42,7 @@ async function main() {
     censys,
     censysIpv4,
     censysCertificates,
-    cveSync, 
+    cveSync,
     sslyze,
     searchSync,
     cve,

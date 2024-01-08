@@ -13,7 +13,7 @@ import {
   SavedSearch,
   OrganizationTag,
   Cves,
-  Cpes,
+  Cpes
 } from '.';
 
 let connection: Connection | null = null;
