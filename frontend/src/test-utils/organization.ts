@@ -9,5 +9,14 @@ export const testOrganization = {
   granularScans: [],
   tags: [],
   parent: null,
-  children: []
+  children: [],
+  pendingDomains: [],
+  country: 'US',
+  state: 'LA',
+  stateFips: 22,
+  stateName: 'Louisiana',
+  county: 'Calcasieu Parish',
+  countyFips: 22019,
+  acronym: 'TEST',
+  type: 'Federal'
 };

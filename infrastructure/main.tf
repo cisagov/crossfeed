@@ -32,6 +32,28 @@ resource "aws_s3_bucket" "logging_bucket" {
   }
 }
 
+resource "aws_s3_bucket_policy" "logging_bucket" {
+  bucket = aws_s3_bucket.logging_bucket.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [{
+      "Sid" : "RequireSSLRequests",
+      "Action" : "s3:*",
+      "Effect" : "Deny",
+      "Principal" : "*",
+      "Resource" : [
+        aws_s3_bucket.logging_bucket.arn,
+        "${aws_s3_bucket.logging_bucket.arn}/*"
+      ],
+      "Condition" : {
+        "Bool" : {
+          "aws:SecureTransport" : "false"
+        }
+      }
+    }]
+  })
+}
+
 resource "aws_s3_bucket_acl" "logging_bucket" {
   bucket = aws_s3_bucket.logging_bucket.id
   acl    = "private"
@@ -57,5 +79,3 @@ resource "aws_s3_bucket_logging" "logging_bucket" {
   target_bucket = aws_s3_bucket.logging_bucket.id
   target_prefix = "logging_bucket/"
 }
-
-

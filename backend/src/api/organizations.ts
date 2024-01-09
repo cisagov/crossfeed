@@ -5,7 +5,9 @@ import {
   IsBoolean,
   IsUUID,
   IsOptional,
-  IsNotEmpty
+  IsNotEmpty,
+  IsNumber,
+  IsEnum
 } from 'class-validator';
 import {
   Organization,
@@ -21,6 +23,7 @@ import { validateBody, wrapHandler, NotFound, Unauthorized } from './helpers';
 import {
   isOrgAdmin,
   isGlobalWriteAdmin,
+  isRegionalAdmin,
   getOrgMemberships,
   isGlobalViewAdmin
 } from './auth';
@@ -89,10 +92,94 @@ class NewOrganization extends NewOrganizationNonGlobalAdmins {
   parent?: string;
 }
 
+// Type Validation Options
+class UpdateOrganizationMetaV2 {
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  name: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isPassive: boolean;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  state: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  regionId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  country: string;
+
+  @IsNumber()
+  @IsOptional()
+  stateFips: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  stateName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  county: string;
+
+  @IsNumber()
+  @IsOptional()
+  countyFips: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  acronym: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  type: string;
+}
+
 class NewDomain {
   @IsString()
   @IsNotEmpty()
   domain: string;
+}
+
+class NewOrganizationRoleDB {
+  @IsEnum(User)
+  user: User;
+
+  @IsEnum(Organization)
+  organization: Organization;
+
+  @IsBoolean()
+  approved: boolean;
+
+  @IsString()
+  role: string;
+
+  @IsEnum(User)
+  approvedBy: User;
+
+  @IsEnum(User)
+  createdBy: User;
+}
+
+class NewOrganizationRoleBody {
+  @IsString()
+  userId: string;
+
+  @IsString()
+  @IsOptional()
+  role: any;
 }
 
 const findOrCreateTags = async (
@@ -607,4 +694,239 @@ export const removeRole = wrapHandler(async (event) => {
     statusCode: 200,
     body: JSON.stringify(result)
   };
+});
+
+/**
+ * @swagger
+ *
+ * /organizations/regionId/{regionId}:
+ *  get:
+ *    description: List organizations with specific regionId.
+ *    parameters:
+ *      - in: path
+ *        name: regionId
+ *        description: Organization regionId
+ *    tags:
+ *    - Organizations
+ */
+export const getByRegionId = wrapHandler(async (event) => {
+  if (!isRegionalAdmin(event)) return Unauthorized;
+  const regionId = event.pathParameters?.regionId;
+  await connectToDatabase();
+  const result = await Organization.find({
+    where: { regionId: regionId }
+  });
+
+  if (result) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  }
+  return NotFound;
+});
+
+/**
+ * @swagger
+ *
+ * /organizations/state/{state}:
+ *  get:
+ *    description: List organizations with specific state.
+ *    parameters:
+ *      - in: path
+ *        name: state
+ *        description: Organization state
+ *    tags:
+ *    - Organizations
+ */
+export const getByState = wrapHandler(async (event) => {
+  if (!isRegionalAdmin(event)) return Unauthorized;
+  const state = event.pathParameters?.state;
+  await connectToDatabase();
+  const result = await Organization.find({
+    where: { state: state }
+  });
+
+  if (result) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  }
+  return NotFound;
+});
+
+//V2 Endpoints
+
+/**
+ * @swagger
+ *
+ * /v2/organizations:
+ *  get:
+ *    description: List all organizations with query parameters.
+ *    tags:
+ *    - Users
+ *    parameters:
+ *      - in: query
+ *        name: state
+ *        required: false
+ *        schema:
+ *          type: array
+ *          items:
+ *            type: string
+ *      - in: query
+ *        name: regionId
+ *        required: false
+ *        schema:
+ *          type: array
+ *          items:
+ *            type: string
+ *
+ */
+export const getAllV2 = wrapHandler(async (event) => {
+  if (!isRegionalAdmin(event)) return Unauthorized;
+  const filterParams = {};
+
+  if (event.query && event.query.state) {
+    filterParams['state'] = event.query.state;
+  }
+  if (event.query && event.query.regionId) {
+    filterParams['regionId'] = event.query.regionId;
+  }
+
+  await connectToDatabase();
+  if (Object.entries(filterParams).length === 0) {
+    const result = await Organization.find({});
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  } else {
+    const result = await Organization.find({
+      where: filterParams
+    });
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result)
+    };
+  }
+});
+
+/**
+ * @swagger
+ *
+ * /v2/organizations/{id}:
+ *  put:
+ *    description: Update a particular organization.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        description: Organization id
+ *    tags:
+ *    - Organizations
+ */
+
+export const updateV2 = wrapHandler(async (event) => {
+  if (!isRegionalAdmin(event)) return Unauthorized;
+  // Get the organization id from the path
+  const id = event.pathParameters?.organizationId;
+
+  // confirm that the id is a valid UUID
+  if (!id || !isUUID(id)) {
+    return NotFound;
+  }
+
+  // TODO: check permissions
+  // if (!isOrgAdmin(event, id)) return Unauthorized;
+
+  // Validate the body
+  const validatedBody = await validateBody(
+    UpdateOrganizationMetaV2,
+    event.body
+  );
+
+  // Connect to the database
+  await connectToDatabase();
+
+  // Update the organization
+  const updateResp = await Organization.update(id, validatedBody);
+
+  // Handle response
+  if (updateResp) {
+    const updatedOrg = await Organization.findOne(id);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(updatedOrg)
+    };
+  }
+  return NotFound;
+});
+
+/**
+ * @swagger
+ *
+ * /v2/organizations/{orgId}/users:
+ *  post:
+ *    description: Add a user to a particular organization.
+ *    parameters:
+ *      - in: path
+ *        name: orgId
+ *        description: Organization id
+ *    tags:
+ *    - Organizations
+ */
+
+export const addUserV2 = wrapHandler(async (event) => {
+  // Permissions
+  if (!isRegionalAdmin(event)) return Unauthorized;
+  // TODO: check permissions
+  // if (!isOrgAdmin(event, id)) return Unauthorized;
+
+  // Validate the body
+  const body = await validateBody(NewOrganizationRoleBody, event.body);
+
+  // Connect to the database
+  await connectToDatabase();
+
+  // Get the organization id from the path
+  const orgId = event.pathParameters?.organizationId;
+  // confirm that the orgId is a valid UUID
+  if (!orgId || !isUUID(orgId)) {
+    return NotFound;
+  }
+  // Get Organization from the database
+  const org = await Organization.findOne(orgId);
+
+  // Get the user id from the body
+  const userId = body.userId;
+  // confirm that the userId is a valid UUID
+  if (!userId || !isUUID(userId)) {
+    return NotFound;
+  }
+  // Get User from the database
+  const user = await User.findOneOrFail(userId);
+
+  const newRoleData = {
+    user: user,
+    organization: org,
+    approved: true,
+    role: body.role,
+    approvedBy: event.requestContext.authorizer!.id,
+    createdBy: event.requestContext.authorizer!.id
+  };
+
+  // Add a role to make association to user/organization
+  const newRole = Role.create(newRoleData);
+  await Role.save(newRole);
+  // const roleId = newRole.id;
+
+  // Handle response
+  if (newRole) {
+    // const roleResp = await Organization.findOne(roleId);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(newRole)
+    };
+  }
+  return NotFound;
 });

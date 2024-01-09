@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
-import { styled } from '@mui/material/styles';
+import { classesVulns, Root } from './vulnerabilitiesStyle';
 import { TableInstance, Filters, SortingRule } from 'react-table';
 import { Query } from 'types';
 import { useAuthContext } from 'context';
@@ -230,21 +230,3 @@ export const Vulnerabilities: React.FC<{ groupBy?: string }> = ({
 };
 
 export default Vulnerabilities;
-
-//Styling
-const PREFIX = 'Vulnerabilities';
-
-const classesVulns = {
-  contentWrapper: `${PREFIX}-contentWrapper`
-};
-
-const Root = styled('div')(({ theme }) => ({
-  [`& .${classesVulns.contentWrapper}`]: {
-    position: 'relative',
-    flex: '1 1 auto',
-    height: '100%',
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    overflowY: 'hidden'
-  }
-}));

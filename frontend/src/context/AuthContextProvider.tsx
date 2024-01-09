@@ -153,6 +153,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         touVersion,
         userMustSign,
         setFeedbackMessage,
+        userType: '',
         ...api
       }}
     >
