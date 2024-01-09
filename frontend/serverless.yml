@@ -23,24 +23,10 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment: ${file(env.yml):${self:provider.stage}, ''}
   vpc: ${file(env.yml):${self:provider.stage}-vpc, ''}
-  vpcEndpointIds:
-    - vpce-0f012d56c2afb9c1d
   apiGateway:
     binaryMediaTypes:
       - 'image/*'
       - 'font/*'
-    resourcePolicy: 
-      - Effect: Deny
-        Principal: "*"
-        Action: "execute-api:Invoke"
-        Resource: "execute-api:/${self:provider.stage}/*/*"
-        Condition:
-          StringNotEquals:
-            "aws:sourceVpce": "vpce-0f012d56c2afb9c1d"
-      - Effect: Allow
-        Principal: "*"
-        Action: "execute-api:Invoke"
-        Resource: "execute-api:/${self:provider.stage}/*/*"
   logs:
     restApi: true
   deploymentBucket:
