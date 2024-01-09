@@ -42,7 +42,7 @@
     "ssl-checker": "^2.0.7",
     "tough-cookie": "^4.1.3",
     "typeorm": "^0.2.45",
-    "utf-8-validate": "^5.0.10",
+    "utf-8-validate": "^6.0.3",
     "uuid": "^8.3.2",
     "wappalyzer": "^6.10.63",
     "wappalyzer-core": "^6.10.63",
