@@ -103,7 +103,7 @@ export const Organizations: React.FC = () => {
                     ({
                       ...org,
                       tags: org.tags.map((tag) => tag.name)
-                    } as any)
+                    }) as any
                 )
               }
             />
