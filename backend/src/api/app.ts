@@ -63,6 +63,7 @@ app.use(cookieParser());
 app.get('/', handlerToExpress(healthcheck));
 app.post('/auth/login', handlerToExpress(auth.login));
 app.post('/auth/callback', handlerToExpress(auth.callback));
+app.post('/users/register', handlerToExpress(users.register));
 
 const checkUserLoggedIn = async (req, res, next) => {
   req.requestContext = {
@@ -227,6 +228,7 @@ app.use(
 const authenticatedNoTermsRoute = express.Router();
 authenticatedNoTermsRoute.use(checkUserLoggedIn);
 authenticatedNoTermsRoute.get('/users/me', handlerToExpress(users.me));
+// authenticatedNoTermsRoute.post('/users/register', handlerToExpress(users.register));
 authenticatedNoTermsRoute.post(
   '/users/me/acceptTerms',
   handlerToExpress(users.acceptTerms)
@@ -313,6 +315,14 @@ authenticatedRoute.get(
   '/organizations/:organizationId',
   handlerToExpress(organizations.get)
 );
+authenticatedRoute.get(
+  '/organizations/state/:state',
+  handlerToExpress(organizations.getByState)
+);
+authenticatedRoute.get(
+  '/organizations/regionId/:regionId',
+  handlerToExpress(organizations.getByRegionId)
+);
 authenticatedRoute.post(
   '/organizations',
   handlerToExpress(organizations.create)
@@ -324,6 +334,10 @@ authenticatedRoute.put(
 authenticatedRoute.delete(
   '/organizations/:organizationId',
   handlerToExpress(organizations.del)
+);
+authenticatedRoute.post(
+  '/v2/organizations/:organizationId/users',
+  handlerToExpress(organizations.addUserV2)
 );
 authenticatedRoute.post(
   '/organizations/:organizationId/roles/:roleId/approve',
@@ -349,6 +363,14 @@ authenticatedRoute.post('/stats', handlerToExpress(stats.get));
 authenticatedRoute.post('/users', handlerToExpress(users.invite));
 authenticatedRoute.get('/users', handlerToExpress(users.list));
 authenticatedRoute.delete('/users/:userId', handlerToExpress(users.del));
+authenticatedRoute.get(
+  '/users/state/:state',
+  handlerToExpress(users.getByState)
+);
+authenticatedRoute.get(
+  '/users/regionId/:regionId',
+  handlerToExpress(users.getByRegionId)
+);
 authenticatedRoute.post('/users/search', handlerToExpress(users.search));
 
 authenticatedRoute.post(
@@ -359,6 +381,35 @@ authenticatedRoute.post(
 authenticatedRoute.post(
   '/reports/list',
   handlerToExpress(reports.list_reports)
+);
+
+//Authenticated Registration Routes
+authenticatedRoute.put(
+  '/users/:userId/register/approve',
+  handlerToExpress(users.registrationApproval)
+);
+
+authenticatedRoute.put(
+  '/users/:userId/register/deny',
+  handlerToExpress(users.registrationDenial)
+);
+
+//************* */
+//  V2 Routes   //
+//************* */
+
+// Users
+authenticatedRoute.put('/v2/users/:userId', handlerToExpress(users.updateV2));
+authenticatedRoute.get('/v2/users', handlerToExpress(users.getAllV2));
+
+// Organizations
+authenticatedRoute.put(
+  '/v2/organizations/:organizationId',
+  handlerToExpress(organizations.updateV2)
+);
+authenticatedRoute.get(
+  '/v2/organizations',
+  handlerToExpress(organizations.getAllV2)
 );
 
 app.use(authenticatedRoute);
