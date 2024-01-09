@@ -5,6 +5,11 @@
   "engines": {
     "node": ">=18.0.0"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
+  },
   "dependencies": {
     "@aws-amplify/ui-react": "^5.0.4",
     "@elastic/react-search-ui": "^1.18.2",
@@ -16,17 +21,20 @@
     "@mui/lab": "^5.0.0-alpha.135",
     "@mui/material": "^5.14.2",
     "@mui/system": "^5.14.0",
+    "@mui/x-data-grid": "^6.18.0",
     "@nivo/bar": "^0.80.0",
     "@nivo/core": "^0.80.0",
     "@nivo/pie": "^0.80.0",
     "@trussworks/react-uswds": "^5.1.1",
     "autoprefixer": "^10.4.13",
-    "aws-amplify": "^5.0.4",
+    "aws-amplify": "^5.3.12",
+    "axios": "^1.6.2",
     "classnames": "^2.3.2",
     "d3-scale": "^4.0.2",
     "date-fns": "^2.29.3",
     "decamelize": "^6.0.0",
     "dompurify": "^3.0.5",
+    "express-rate-limit": "^7.1.3",
     "file-saver": "^2.0.5",
     "jspdf": "^2.5.1",
     "jwt-decode": "^3.1.2",
@@ -46,7 +54,7 @@
     "react-simple-maps": "^3.0.0",
     "react-table": "^7.8.0",
     "resolve-url-loader": "^5.0.0",
-    "universal-cookie": "^6.1.1",
+    "universal-cookie": "^4.0.4",
     "uswds": "^2.13.3",
     "web-vitals": "^2.1.4"
   },
@@ -120,15 +128,25 @@
     "@types/react-table": "^7.7.12",
     "ajv": "^8.12.0",
     "ajv-keywords": "^5.1.0",
+    "copy-webpack-plugin": "^11.0.0",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.10",
-    "sass": "^1.55.0",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
     "jest-date-mock": "^1.0.8",
     "prettier": "^2.7.1",
+    "sass": "^1.55.0",
+    "serverless": "^3.30",
+    "serverless-better-credentials": "^1.2.0",
+    "serverless-domain-manager": "^7.0",
+    "serverless-http": "^3.2.0",
+    "serverless-webpack": "^5.11.0",
     "ts-jest": "^29.1.1",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "webpack": "^5.88",
+    "webpack-cli": "^5.1"
   }
 }

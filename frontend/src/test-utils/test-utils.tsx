@@ -4,7 +4,6 @@ import { MemoryRouter } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../context/AuthContext';
 import { CFThemeProvider } from 'context';
 import { authCtx } from './authCtx';
-import { Props } from 'react-select';
 
 interface CustomRenderOptions extends RenderOptions {
   initialHistory?: string[];
