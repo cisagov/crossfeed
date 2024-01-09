@@ -84,6 +84,7 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.sixgill_client_secret.arn}",
           "${data.aws_ssm_parameter.lg_api_key.arn}",
           "${data.aws_ssm_parameter.lg_workspace_name.arn}",
+          "${data.aws_ssm_parameter.shodan_queue_url.arn}",
           "${aws_ssm_parameter.es_endpoint.arn}"
         ]
     }
@@ -343,12 +344,38 @@ data "aws_ssm_parameter" "worker_signature_public_key" { name = var.ssm_worker_s
 
 data "aws_ssm_parameter" "worker_signature_private_key" { name = var.ssm_worker_signature_private_key }
 
+data "aws_ssm_parameter" "shodan_queue_url" { name = var.ssm_shodan_queue_url }
+
 resource "aws_s3_bucket" "export_bucket" {
   bucket = var.export_bucket_name
   tags = {
     Project = var.project
     Stage   = var.stage
   }
+}
+
+resource "aws_s3_bucket_policy" "export_bucket" {
+  bucket = var.export_bucket_name
+  policy = jsonencode({
+    "Version" : "2012-10-17"
+    "Statement" : [
+      {
+        "Sid" : "RequireSSLRequests"
+        "Action" : "s3:*",
+        "Effect" : "Deny"
+        "Principal" : "*"
+        "Resource" : [
+          aws_s3_bucket.export_bucket.arn,
+          "${aws_s3_bucket.export_bucket.arn}/*"
+        ]
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : false
+          }
+        }
+      }
+    ]
+  })
 }
 
 resource "aws_s3_bucket_acl" "export_bucket" {

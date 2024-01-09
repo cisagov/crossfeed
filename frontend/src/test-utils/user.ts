@@ -15,5 +15,7 @@ export const testUser: AuthUser = {
   dateAcceptedTerms: new Date().toISOString(),
   acceptedTermsVersion: 'v1-user',
   isRegistered: true,
-  apiKeys: []
+  apiKeys: [],
+  regionId: '1234',
+  state: 'LA'
 };
