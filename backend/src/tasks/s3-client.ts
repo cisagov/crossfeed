@@ -74,6 +74,7 @@ class S3Client {
       throw e;
     }
   }
+
   async listReports(orgId: string) {
     try {
       const params = {
@@ -88,6 +89,27 @@ class S3Client {
         })
         .promise();
       return data.Contents;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  async getEmailAsset(fileName: string) {
+    try {
+      const params = {
+        Bucket: process.env.EMAIL_BUCKET_NAME!,
+        Key: fileName
+      };
+
+      const data = await this.s3
+        .getObject(params, function (err, data) {
+          if (err) throw err;
+        })
+        .promise();
+      if (data && data.Body) {
+        return data.Body.toString('utf-8');
+      }
     } catch (e) {
       console.error(e);
       throw e;
