@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Domain, Organization } from '../models';
+import { Domain } from '../models';
 import { plainToClass } from 'class-transformer';
 import * as dns from 'dns';
 import saveDomainsToDb from './helpers/saveDomainsToDb';
@@ -7,27 +7,44 @@ import { CommandOptions } from './ecs-client';
 import getRootDomains from './helpers/getRootDomains';
 
 interface CensysAPIResponse {
-  status: string;
-  results: {
-    'parsed.names'?: string[];
-  }[];
-  metadata: {
-    count: number;
-    page: number;
-    pages: number;
+  result: {
+    total: number;
+    hits: [
+      {
+        names?: string[];
+      }
+    ];
   };
 }
 
-const sleep = (milliseconds) => {
+const resultLimit = 1000;
+const resultsPerPage = 100;
+
+const sleep = (milliseconds: number) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
-const fetchCensysData = async (rootDomain: string, page: number) => {
+const fetchCensysData = async (rootDomain: string) => {
+  console.log(`Fetching certificates for ${rootDomain}`);
+  const data = await fetchPage(rootDomain);
   console.log(
-    `[censys] fetching certificates for query "${rootDomain}", page ${page}`
+    `Censys found ${data.result.total} certificates for ${rootDomain}
+    Fetching ${Math.min(data.result.total, resultLimit)} of them...`
   );
-  const { data, status } = await axios({
-    url: 'https://censys.io/api/v1/search/certificates',
+  let resultCount = 0;
+  let nextToken = data.result.links.next;
+  while (nextToken && resultCount < resultLimit) {
+    const nextPage = await fetchPage(rootDomain, nextToken);
+    data.result.hits = data.result.hits.concat(nextPage.result.hits);
+    nextToken = nextPage.result.links.next;
+    resultCount += resultsPerPage;
+  }
+  return data as CensysAPIResponse;
+};
+
+const fetchPage = async (rootDomain: string, nextToken?: string) => {
+  const { data } = await axios({
+    url: 'https://search.censys.io/api/v2/certificates/search',
     method: 'POST',
     auth: {
       username: String(process.env.CENSYS_API_ID),
@@ -37,20 +54,22 @@ const fetchCensysData = async (rootDomain: string, page: number) => {
       'Content-Type': 'application/json'
     },
     data: {
-      query: rootDomain,
-      page: page,
-      fields: ['parsed.names']
+      q: rootDomain,
+      per_page: resultsPerPage,
+      cursor: nextToken,
+      fields: ['names']
     }
   });
-  return data as CensysAPIResponse;
+  return data;
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName, scanId } = commandOptions;
 
-  console.log('Running censys on organization', organizationName);
+  console.log(`Running Censys on: ${organizationName}`);
 
   const rootDomains = await getRootDomains(organizationId!);
+  const uniqueNames = new Set<string>(); //used to dedupe domain names
   const foundDomains = new Set<{
     name: string;
     organization: { id: string };
@@ -59,36 +78,36 @@ export const handler = async (commandOptions: CommandOptions) => {
   }>();
 
   for (const rootDomain of rootDomains) {
-    let pages = 1;
-    for (let page = 1; page <= pages; page++) {
-      const data = await fetchCensysData(rootDomain, page);
-      pages = data.metadata.pages;
-      for (const result of data.results) {
-        const names = result['parsed.names'];
-        if (!names) continue;
-        for (const name of names) {
-          if (name.endsWith(rootDomain)) {
-            foundDomains.add({
-              name: name.replace('*.', ''),
-              organization: { id: organizationId! },
-              fromRootDomain: rootDomain,
-              discoveredBy: { id: scanId }
-            });
-          }
+    const data = await fetchCensysData(rootDomain);
+    for (const hit of data.result.hits) {
+      if (!hit.names) continue;
+      for (const name of hit.names) {
+        const normalizedName = name.replace(/\*\.|^(www\.)/g, ''); // Remove www from beginning of name and wildcards from entire name
+        if (
+          normalizedName.endsWith(rootDomain) &&
+          !uniqueNames.has(normalizedName)
+        ) {
+          uniqueNames.add(normalizedName);
+          foundDomains.add({
+            name: normalizedName,
+            organization: { id: organizationId! },
+            fromRootDomain: rootDomain,
+            discoveredBy: { id: scanId }
+          });
         }
       }
-
-      await sleep(1000); // Wait for rate limit
     }
+
+    await sleep(1000); // Wait for rate limit
   }
 
   // LATER: Can we just grab the cert the site is presenting, and store that?
   // Censys (probably doesn't know who's presenting it)
   // SSLyze (fetches the cert), Project Sonar (has SSL certs, but not sure how pulls domains -- from IPs)
-  // Project Sonar has forward & reverse DNS for finding subdomains
+  // Project Sonar has both forward & reverse DNS for finding subdomains
 
   // Save domains to database
-  console.log('[censys] saving domains to database...');
+  console.log(`Saving ${organizationName} subdomains to database...`);
   const domains: Domain[] = [];
   for (const domain of foundDomains) {
     let ip: string | null;
@@ -109,6 +128,8 @@ export const handler = async (commandOptions: CommandOptions) => {
       })
     );
   }
-  saveDomainsToDb(domains);
-  console.log(`[censys] done, saved or updated ${domains.length} domains`);
+  await saveDomainsToDb(domains);
+  console.log(
+    `Censys saved or updated ${domains.length} subdomains for ${organizationName}`
+  );
 };

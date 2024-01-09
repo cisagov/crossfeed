@@ -7,6 +7,9 @@ import {
   Vulnerability
 } from '../../models';
 import * as nock from 'nock';
+import * as zlib from 'zlib';
+
+const unzipSyncSpy = jest.spyOn(zlib, 'unzipSync');
 
 jest.mock('child_process', () => ({
   spawnSync: () => null,
@@ -26,39 +29,6 @@ jest.mock('fs', () => ({
   }
 }));
 
-jest.mock('zlib', () => ({
-  unzipSync: (contents) =>
-    Buffer.from(
-      JSON.stringify({
-        CVE_Items: [
-          {
-            cve: {
-              CVE_data_meta: { ID: 'CVE-2019-10866' },
-              description: {
-                description_data: [
-                  {
-                    lang: 'en',
-                    value: 'Test description'
-                  }
-                ]
-              },
-              references: {
-                reference_data: [
-                  {
-                    url: 'https://example.com',
-                    name: 'https://example.com',
-                    refsource: 'CONFIRM',
-                    tags: ['Patch', 'Vendor Advisory']
-                  }
-                ]
-              }
-            }
-          }
-        ]
-      })
-    )
-}));
-
 jest.setTimeout(30000);
 
 const RealDate = Date;
@@ -67,6 +37,37 @@ describe('cve', () => {
   let connection;
   beforeAll(async () => {
     connection = await connectToDatabase();
+    unzipSyncSpy.mockImplementation((contents) =>
+      Buffer.from(
+        JSON.stringify({
+          CVE_Items: [
+            {
+              cve: {
+                CVE_data_meta: { ID: 'CVE-2019-10866' },
+                description: {
+                  description_data: [
+                    {
+                      lang: 'en',
+                      value: 'Test description'
+                    }
+                  ]
+                },
+                references: {
+                  reference_data: [
+                    {
+                      url: 'https://example.com',
+                      name: 'https://example.com',
+                      refsource: 'CONFIRM',
+                      tags: ['Patch', 'Vendor Advisory']
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        })
+      )
+    );
   });
   beforeEach(() => {
     global.Date.now = jest.fn(() => new Date('2019-04-22T10:20:30Z').getTime());
@@ -76,6 +77,7 @@ describe('cve', () => {
     global.Date = RealDate;
   });
   afterAll(async () => {
+    unzipSyncSpy.mockRestore();
     await connection.close();
     nock.cleanAll();
   });
