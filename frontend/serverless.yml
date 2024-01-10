@@ -27,6 +27,11 @@ provider:
     binaryMediaTypes:
       - 'image/*'
       - 'font/*'
+    resourcePolicy:
+      - Effect: Allow
+        Principal: '*'
+        Action: 'execute-api:Invoke'
+        Resource: 'execute-api:/${self:provider.stage}/*/*'
   logs:
     restApi: true
   deploymentBucket:
