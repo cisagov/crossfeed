@@ -1,7 +1,7 @@
 FROM node:18-alpine3.17
 USER root
 
-RUN apk update && apk upgrade
+RUN apk update && apk upgrade && apk add --no-cache g++ make py3-pip
 
 WORKDIR /app
 COPY ./package* ./
