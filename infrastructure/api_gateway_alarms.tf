@@ -10,6 +10,7 @@ resource "aws_cloudwatch_metric_alarm" "api_error_rate" {
   statistic           = "Average"
   unit                = "Count"
   treat_missing_data  = "notBreaching"
+  namespace           = var.log_metric_namespace
 
   tags = {
     Project  = var.project
