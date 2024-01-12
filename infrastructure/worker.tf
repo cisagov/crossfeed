@@ -60,7 +60,7 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
         "sqs:ReceiveMessage",
         "sqs:DeleteMessage",
         "sqs:ListQueues",
-        "sqs:GetQueueAttributes",
+        "sqs:GetQueueAttributes"
       ],
       "Resource": "*"
     },
