@@ -323,8 +323,8 @@ resource "aws_cloudwatch_log_group" "pe_worker" {
 # Shodan specific ECS service
 resource "aws_ecs_service" "shodan_service" {
   name            = var.pe_shodan_ecs_service_name
-  cluster         = aws_ecs_cluster.pe_shodan_worker.id
-  task_definition = aws_ecs_task_definition.pe_worker.arn
+  cluster         = aws_ecs_cluster.pe_worker.id
+  task_definition = aws_ecs_task_definition.pe_shodan_worker.arn
   launch_type     = "FARGATE"
   desired_count   = 0 # Initially set to 0, plan to start it dynamically
   network_configuration {
