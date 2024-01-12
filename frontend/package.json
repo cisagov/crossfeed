@@ -30,6 +30,7 @@
     "aws-amplify": "^5.3.12",
     "axios": "^1.6.2",
     "classnames": "^2.3.2",
+    "cors": "^2.8.5",
     "d3-scale": "^4.0.2",
     "date-fns": "^2.29.3",
     "decamelize": "^6.0.0",
