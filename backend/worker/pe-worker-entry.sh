@@ -7,14 +7,14 @@ echo "Starting pe-worker-entry.sh script"
 echo "Running $SERVICE_TYPE"
 
 # Check if the QUEUE_URL environment variable is set
-if [ -z "$QUEUE_URL" ]; then
-  echo "QUEUE_URL environment variable is not set. Exiting."
+if [ -z "$SERVICE_QUEUE_URL" ]; then
+  echo "SERVICE_QUEUE_URL environment variable is not set. Exiting."
   exit 1
 fi
 
 while true; do
   # Receive message from the Scan specific queue
-  MESSAGE=$(aws sqs receive-message --queue-url "$QUEUE_URL")
+  MESSAGE=$(aws sqs receive-message --queue-url "$SERVICE_QUEUE_URL")
 
   # Check if there are no more messages. If no more, then exit Fargate container
   if [ -z "$MESSAGE" ]; then
@@ -35,11 +35,11 @@ while true; do
   fi
 
   echo "Running $COMMAND"
-  
+
   # Run the pe-source command
   eval "$COMMAND"
 
   # Delete the processed message from the queue
   RECEIPT_HANDLE=$(echo "$MESSAGE" | jq -r '.ReceiptHandle')
-  aws sqs delete-message --queue-url "$QUEUE_URL" --receipt-handle "$RECEIPT_HANDLE"
+  aws sqs delete-message --queue-url "$SERVICE_QUEUE_URL" --receipt-handle "$RECEIPT_HANDLE"
 done
