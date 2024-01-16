@@ -142,7 +142,8 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
             // hideSignUp={
             //   !showSignUp && !(process.env.NODE_ENV === 'development')
             // }
-            hideSignUp={true}
+            // Hide sign up button unless we are in development mode.
+            hideSignUp={!(process.env.NODE_ENV === 'development')}
           />
           {/* <AmplifyButton onClick={() => alert('hello')}>
             Register

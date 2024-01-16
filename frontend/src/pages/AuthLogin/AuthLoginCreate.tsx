@@ -124,12 +124,13 @@ export const AuthLoginCreate: React.FC<{ showSignUp?: boolean }> = ({
 
         <ThemeProvider theme={amplifyTheme}>
           <Authenticator
-            loginMechanisms={['email']}
             formFields={formFields}
             /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
-            hideSignUp={
-              !showSignUp && !(process.env.NODE_ENV === 'development')
-            }
+            // hideSignUp={
+            //   !showSignUp && !(process.env.NODE_ENV === 'development')
+            // }
+            // Hide sign up button unless we are in development mode.
+            hideSignUp={!(process.env.NODE_ENV === 'development')}
           />
           {/* <AmplifyButton onClick={() => alert('hello')}>
             Register
