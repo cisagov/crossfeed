@@ -150,6 +150,16 @@ resource "aws_iam_role_policy" "worker_task_role_policy" {
       "Resource": [
         "${aws_s3_bucket.export_bucket.arn}"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:ListQueues",
+        "sqs:GetQueueAttributes"
+      ],
+      "Resource": "*"
     }
   ]
 }
