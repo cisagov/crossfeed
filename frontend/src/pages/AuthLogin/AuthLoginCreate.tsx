@@ -42,15 +42,43 @@ export const AuthLoginCreate: React.FC<{ showSignUp?: boolean }> = ({
   }, [refreshUser, authStatus]);
 
   const formFields = {
+    signIn: {
+      username: {
+        label: 'Email',
+        placeholder: 'Email',
+        required: true,
+        autoFocus: true
+      },
+      password: {
+        label: 'Password',
+        placeholder: 'Password',
+        required: true
+      }
+    },
     confirmSignIn: {
       confirmation_code: {
         label: 'Enter 2FA Code from your authenticator app',
         autoFocus: true
       }
     },
+    resetPassword: {
+      username: {
+        label: 'Email',
+        placeholder: 'Email',
+        required: true,
+        autoFocus: true
+      }
+    },
     confirmResetPassword: {
       confirmation_code: {
-        label: 'Enter code sent to your email address'
+        label: 'Enter code sent to your email address',
+        autoFocus: true
+      }
+    },
+    confirmSignUp: {
+      confirmation_code: {
+        label: 'Enter code sent to your email address',
+        autoFocus: true
       }
     },
     setupTOTP: {
@@ -62,7 +90,8 @@ export const AuthLoginCreate: React.FC<{ showSignUp?: boolean }> = ({
       },
       confirmation_code: {
         label:
-          'Set up 2FA by scanning the QR code with an authenticator app on your phone.'
+          'Set up 2FA by scanning the QR code with an authenticator app on your phone.',
+        autoFocus: true
       }
     }
   };
