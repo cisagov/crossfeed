@@ -139,10 +139,10 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
           <Authenticator
             formFields={formFields}
             /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
-            hideSignUp={
-              !showSignUp && !(process.env.NODE_ENV === 'development')
-            }
-            // hideSignUp={true}
+            // hideSignUp={
+            //   !showSignUp && !(process.env.NODE_ENV === 'development')
+            // }
+            hideSignUp={true}
           />
           {/* <AmplifyButton onClick={() => alert('hello')}>
             Register
