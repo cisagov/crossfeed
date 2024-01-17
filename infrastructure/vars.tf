@@ -340,6 +340,12 @@ variable "ssm_shodan_queue_url" {
   default     = "/crossfeed/staging/SHODAN_QUEUE_URL"
 }
 
+variable "ssm_dnstwist_queue_url" {
+  description = "ssm_dnstwist_queue_url"
+  type        = string
+  default     = "/crossfeed/staging/DNSTWIST_QUEUE_URL"
+}
+
 variable "cloudfront_name" {
   description = "cloudfront_name"
   type        = string
@@ -613,4 +619,10 @@ variable "pe_shodan_ecs_service_name" {
   description = "pe_shodan_ecs_service_name"
   type        = string
   default     = "pe-staging-shodan"
+}
+
+variable "pe_dnstwist_ecs_service_name" {
+  description = "pe_dnstwist_ecs_service_name"
+  type        = string
+  default     = "pe-staging-dnstwist"
 }
