@@ -3,14 +3,14 @@
 # Generate database.ini
 cat <<EOF > pe-reports/src/pe_reports/data/database.ini
 [postgres]
-host=$(DB_HOST)
-database=$(PE_DB_NAME)
-user=$(PE_DB_USERNAME)
-password=$(PE_DB_PASSWORD)
+host=${DB_HOST}
+database=${PE_DB_NAME}
+user=${PE_DB_USERNAME}
+password=${PE_DB_PASSWORD}
 port=5432
 
 [shodan]
-key1=$(PE_SHODAN_API_KEYS)
+key1=${PE_SHODAN_API_KEYS}
 
 [staging]
 [cyhy_mongo]
@@ -41,4 +41,5 @@ pe_reports_path="${pe_reports_path%/pe-reports}/pe_reports"
 # Copy database.ini to the module's installation directory
 cp /app/pe-reports/src/pe_reports/data/database.ini "${pe_reports_path}/data/"
 
+cat ${pe_reports_path}/data/database.ini
 exec "$@"
