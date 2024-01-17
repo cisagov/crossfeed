@@ -9,11 +9,11 @@ import {
   BaseEntity,
   Unique
 } from 'typeorm';
-import { Cves } from './cves';
+import { Cve } from './cve';
 
 @Entity()
 @Unique(['cpe_product_name', 'version_number', 'vender'])
-export class Cpes extends BaseEntity {
+export class ProductInfo extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string; //TODO: change this to something else??
 
@@ -29,6 +29,6 @@ export class Cpes extends BaseEntity {
   @Column()
   last_seen: Date;
 
-  @ManyToMany((type) => Cves, (cves) => cves.cpes)
-  cves: Cves[];
+  @ManyToMany((type) => Cve, (cve) => cve.product_info)
+  cve: Cve[];
 }

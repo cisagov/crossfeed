@@ -9,11 +9,11 @@ import {
   JoinTable,
   Unique
 } from 'typeorm';
-import { Cpes } from './cpes';
+import { ProductInfo } from './product-info';
 
 @Entity()
 @Unique(['cve_name'])
-export class Cves extends BaseEntity {
+export class Cve extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   cve_uid: string;
 
@@ -113,7 +113,9 @@ export class Cves extends BaseEntity {
   @Column('simple-array', { nullable: true })
   cpe_list: string[];
 
-  @ManyToMany(() => Cpes, (cpes) => cpes.cves, { cascade: true })
+  @ManyToMany(() => ProductInfo, (product_info) => product_info.cve, {
+    cascade: true
+  })
   @JoinTable()
-  cpes: Cpes[];
+  product_info: ProductInfo[];
 }

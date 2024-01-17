@@ -1,4 +1,4 @@
-import { connectToDatabase, Cpes } from '../../models';
+import { connectToDatabase, ProductInfo } from '../../models';
 
 export default async (cpes: Cpes[]): Promise<string[]> => {
   await connectToDatabase();
