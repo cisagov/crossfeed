@@ -12,8 +12,8 @@ import {
   ApiKey,
   SavedSearch,
   OrganizationTag,
-  Cves,
-  Cpes
+  ProductInfo,
+  Cve
 } from '.';
 
 let connection: Connection | null = null;
@@ -27,8 +27,8 @@ const connectDb = async (logging?: boolean) => {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     entities: [
-      Cves,
-      Cpes,
+      ProductInfo,
+      Cve,
       Domain,
       Service,
       Vulnerability,
