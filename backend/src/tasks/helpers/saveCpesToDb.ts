@@ -1,13 +1,13 @@
 import { connectToDatabase, ProductInfo } from '../../models';
 
-export default async (cpes: Cpes[]): Promise<string[]> => {
+export default async (cpes: ProductInfo[]): Promise<string[]> => {
   await connectToDatabase();
   console.log('Saving CPEs to database');
   const ids: string[] = [];
   for (const cpe of cpes) {
     try {
       const id: string = (
-        await Cpes.createQueryBuilder()
+        await ProductInfo.createQueryBuilder()
           .insert()
           .values(cpe)
           .returning('id')
