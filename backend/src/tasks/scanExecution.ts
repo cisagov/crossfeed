@@ -5,58 +5,39 @@ import { integer } from 'aws-sdk/clients/cloudfront';
 const ecs = new AWS.ECS();
 const sqs = new AWS.SQS();
 
-export const handler: Handler = async (event) => {
-  try {
-    let desiredCount;
-    const clusterName = process.env.PE_CLUSTER_NAME!;
+async function updateServiceAndQueue(
+  queueUrl: string,
+  serviceName: string,
+  desiredCount: integer,
+  message_body: any, // Add this parameter
+  clusterName: string // Add this parameter
+) {
+  // Place message in scan specific queue
+  await placeMessageInQueue(queueUrl, message_body);
 
-    // Get the Control SQS record and message body
-    const sqsRecord: SQSRecord = event.Records[0];
-    const message_body = JSON.parse(sqsRecord.body);
-    console.log(message_body);
+  // Check if Fargate is running desired count and start if not
+  await updateServiceDesiredCount(clusterName, serviceName, desiredCount);
 
-    if (message_body.scriptType! === 'shodan') {
-      // Place message in Shodan Queue
-      await placeMessageInQueue(process.env.SHODAN_QUEUE_URL!, message_body);
+  // After processing each message, check if the SQS queue is empty
+  const sqsAttributes = await sqs
+    .getQueueAttributes({
+      QueueUrl: queueUrl,
+      AttributeNames: ['ApproximateNumberOfMessages']
+    })
+    .promise();
 
-      // Check if Fargate is running desired count and start if not
-      desiredCount = 5;
-      await startFargateTask(
-        clusterName,
-        process.env.SHODAN_SERVICE_NAME!,
-        desiredCount
-      );
-    } else {
-      console.log('Shodan is the only script type available right now.');
-    }
+  const approximateNumberOfMessages = parseInt(
+    sqsAttributes.Attributes?.ApproximateNumberOfMessages || '0',
+    10
+  );
 
-    // After processing each message, check if the SQS queue is empty
-    const sqsAttributes = await sqs
-      .getQueueAttributes({
-        QueueUrl: process.env.SHODAN_QUEUE_URL!,
-        AttributeNames: ['ApproximateNumberOfMessages']
-      })
-      .promise();
-
-    const approximateNumberOfMessages = parseInt(
-      sqsAttributes.Attributes?.ApproximateNumberOfMessages || '0',
-      10
-    );
-
-    // If the queue is empty, scale down to zero tasks
-    if (approximateNumberOfMessages === 0) {
-      await startFargateTask(clusterName, process.env.SHODAN_SERVICE_NAME!, 0);
-    }
-  } catch (error) {
-    console.error(error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify(error)
-    };
+  // If the queue is empty, scale down to zero tasks
+  if (approximateNumberOfMessages === 0) {
+    await updateServiceDesiredCount(clusterName, serviceName, 0);
   }
-};
+}
 
-export async function startFargateTask(
+export async function updateServiceDesiredCount(
   clusterName: string,
   serviceName: string,
   desiredCountNum: integer
@@ -77,7 +58,7 @@ export async function startFargateTask(
       const service = serviceDescription.services[0];
 
       // Check if the desired task count is less than # provided
-      if (service.desiredCount! !== desiredCountNum) {
+      if (service.desiredCount !== desiredCountNum) {
         const updateServiceParams = {
           cluster: clusterName,
           service: serviceName,
@@ -100,3 +81,45 @@ async function placeMessageInQueue(queueUrl: string, message: any) {
 
   await sqs.sendMessage(sendMessageParams).promise();
 }
+
+export const handler: Handler = async (event) => {
+  try {
+    let desiredCount;
+    const clusterName = process.env.PE_CLUSTER_NAME!;
+
+    // Get the Control SQS record and message body
+    const sqsRecord: SQSRecord = event.Records[0];
+    const message_body = JSON.parse(sqsRecord.body);
+    console.log(message_body);
+
+    if (message_body.scriptType === 'shodan') {
+      desiredCount = 5;
+      await updateServiceAndQueue(
+        process.env.SHODAN_QUEUE_URL!,
+        process.env.SHODAN_SERVICE_NAME!,
+        desiredCount,
+        message_body,
+        clusterName
+      );
+    } else if (message_body.scriptType === 'dnstwist') {
+      desiredCount = 10;
+      await updateServiceAndQueue(
+        process.env.DNSTWIST_QUEUE_URL!,
+        process.env.DNSTWIST_SERVICE_NAME!,
+        desiredCount,
+        message_body,
+        clusterName
+      );
+    } else {
+      console.log(
+        'Shodan and DNSTwist are the only script types available right now.'
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify(error)
+    };
+  }
+};
