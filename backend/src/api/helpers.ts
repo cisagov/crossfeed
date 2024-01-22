@@ -164,53 +164,58 @@ export const sendUserNotificationEmail = async (
     };
 
     const htmlToSend = template(data);
-
+    const bannerPng = await client.getEmailAsset('banner.jpg');
+    const webPng = await client.getEmailAsset('web.png');
+    const emailPng = await client.getEmailAsset('email.png')
+    const linkedinPng = await client.getEmailAsset('linkedin.png');
+    const twitterPng = await client.getEmailAsset('twitter.png');
+    const facebookPng = await client.getEmailAsset('facebook.png');
+    const instagramPng = await client.getEmailAsset('instagram.png');
     const mailOptions = {
       from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER,
       to: recepient,
       subject: p_subject,
       html: htmlToSend,
-      replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
-      /*attachments: [
+      replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!,
+      attachments: [
         {
           filename: 'banner.png',
-          content: await client.getEmailAsset('banner.png'),
+          content: bannerPng,
           cid: 'CISA Banner'
         },
         {
           filename: 'web.png',
-          content: await client.getEmailAsset('banner.png'),
+          content: webPng,
           cid: 'CISA Web'
         },
         {
           filename: 'email.png',
-          content: await client.getEmailAsset('email.png'),
+          content: emailPng,
           cid: 'CISA Email'
         },
         {
           filename: 'linkedin.png',
-          content: await client.getEmailAsset('linkedin.png'),
+          content: linkedinPng,
           cid: 'CISA LinkedIn'
         },
         {
           filename: 'twitter.png',
-          content: await client.getEmailAsset('twitter.png'),
+          content: twitterPng,
           cid: 'CISA Twitter'
         },
         {
           filename: 'facebook.png',
-          content: await client.getEmailAsset('facebook.png'),
+          content: facebookPng,
           cid: 'CISA Facebook'
         },
         {
           filename: 'instagram.png',
-          content: await client.getEmailAsset('instagram.png'),
+          content: instagramPng,
           cid: 'CISA Instagram'
         }
-      ]*/
+      ]
     };
 
-    console.log(mailOptions);
     await transporter.sendMail(mailOptions);
   } catch (e) {
     console.log(e);
