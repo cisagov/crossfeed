@@ -151,7 +151,7 @@ export const sendUserNotificationEmail = async (
   template_file: string
 ) => {
   const transporter = nodemailer.createTransport({
-  SES: new SES({ region: 'us-east-1' })
+    SES: new SES({ region: 'us-east-1' })
   });
 
   try {
@@ -170,7 +170,7 @@ export const sendUserNotificationEmail = async (
       to: recepient,
       subject: p_subject,
       html: htmlToSend,
-      replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!,
+      replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
       /*attachments: [
         {
           filename: 'banner.png',
