@@ -4,7 +4,6 @@ import serverless from 'serverless-http';
 import helmet from 'helmet';
 import express from 'express';
 import path from 'path';
-import logger from 'lambda-logger';
 
 export const app = express();
 
@@ -12,7 +11,7 @@ app.use((req, res, next) => {
   const sanitizedHeaders = { ...req.headers };
   // Remove or replace sensitive headers
   delete sanitizedHeaders['authorization'];
-  logger.info(`Request Headers: ${JSON.stringify(sanitizedHeaders)}`);
+  console.log(`Request Headers: ${JSON.stringify(sanitizedHeaders)}`);
   next();
 });
 
