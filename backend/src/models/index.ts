@@ -1,4 +1,6 @@
 export * from './domain';
+export * from './cve';
+export * from './product-info';
 export * from './service';
 export * from './connection';
 export * from './vulnerability';

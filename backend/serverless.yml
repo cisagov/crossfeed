@@ -43,6 +43,9 @@ provider:
           Action:
             - ecs:RunTask
             - ecs:ListTasks
+            - ecs:DescribeTasks
+            - ecs:DescribeServices
+            - ecs:UpdateService
             - iam:PassRole
           Resource: '*'
         - Effect: Allow
@@ -65,7 +68,9 @@ provider:
         - Effect: Allow
           Action:
             - sqs:ReceiveMessage
+            - sqs:DeleteMessage
             - sqs:SendMessage
+            - sqs:GetQueueAttributes
           Resource: '*'
         - Effect: Allow
           Action:
@@ -93,11 +98,25 @@ provider:
 
 resources:
   Resources:
-    WorkerQueue:
+    WorkerControlQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: ${self:provider.stage}-worker-queue
+        QueueName: ${self:provider.stage}-worker-control-queue
         VisibilityTimeout: 300 # Should match or exceed function timeout
+        MaximumMessageSize: 262144 # 256 KB
+        MessageRetentionPeriod: 604800 # 7 days
+    ShodanQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.stage}-shodan-queue
+        VisibilityTimeout: 300
+        MaximumMessageSize: 262144 # 256 KB
+        MessageRetentionPeriod: 604800 # 7 days
+    DnstwistQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.stage}-dnstwist-queue
+        VisibilityTimeout: 300
         MaximumMessageSize: 262144 # 256 KB
         MessageRetentionPeriod: 604800 # 7 days
 

@@ -56,7 +56,11 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
         "ecr:GetDownloadUrlForLayer",
         "ecr:BatchGetImage",
         "logs:CreateLogStream",
-        "logs:PutLogEvents"
+        "logs:PutLogEvents",
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:ListQueues",
+        "sqs:GetQueueAttributes"
       ],
       "Resource": "*"
     },
@@ -84,6 +88,8 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.sixgill_client_secret.arn}",
           "${data.aws_ssm_parameter.lg_api_key.arn}",
           "${data.aws_ssm_parameter.lg_workspace_name.arn}",
+          "${data.aws_ssm_parameter.shodan_queue_url.arn}",
+          "${data.aws_ssm_parameter.dnstwist_queue_url.arn}",
           "${aws_ssm_parameter.es_endpoint.arn}"
         ]
     }
@@ -144,6 +150,16 @@ resource "aws_iam_role_policy" "worker_task_role_policy" {
       "Resource": [
         "${aws_s3_bucket.export_bucket.arn}"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:ListQueues",
+        "sqs:GetQueueAttributes"
+      ],
+      "Resource": "*"
     }
   ]
 }
@@ -342,6 +358,10 @@ data "aws_ssm_parameter" "lg_workspace_name" { name = var.ssm_lg_workspace_name 
 data "aws_ssm_parameter" "worker_signature_public_key" { name = var.ssm_worker_signature_public_key }
 
 data "aws_ssm_parameter" "worker_signature_private_key" { name = var.ssm_worker_signature_private_key }
+
+data "aws_ssm_parameter" "shodan_queue_url" { name = var.ssm_shodan_queue_url }
+
+data "aws_ssm_parameter" "dnstwist_queue_url" { name = var.ssm_dnstwist_queue_url }
 
 resource "aws_s3_bucket" "export_bucket" {
   bucket = var.export_bucket_name

@@ -5,9 +5,9 @@ version: v1.22.1
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 
 ignore: 
-    # ignore scrapy 2.9.0 for 6 months.
+    # ignore scrapy 2.x.x for 6 months.
     SNYK-PYTHON-SCRAPY-40690: 
         - '*':
-            reason: No fix available for version 2.9.x
-            expires: 2023-11-01T00:00:00.000Z
+            reason: No fix available up to version 2.11.0
+            expires: 2024-06-01T00:00:00.000Z
 patch: {}
