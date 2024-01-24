@@ -599,7 +599,7 @@ export const register = wrapHandler(async (event) => {
 
   // Send Registration confirmation email to user
   // TODO: replace with html email function to user
-  sendUserNotificationEmail(
+  await sendUserNotificationEmail(
     newUser.email,
     'Crossfeed Registration Pending',
     newUser.firstName,
@@ -664,7 +664,7 @@ export const registrationApproval = wrapHandler(async (event) => {
   }
 
   // Send email notification
-  sendUserNotificationEmail(
+  await sendUserNotificationEmail(
     user.email,
     'Crossfeed Registration Approved',
     user.firstName,
