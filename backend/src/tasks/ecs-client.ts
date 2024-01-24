@@ -86,6 +86,8 @@ class ECSClient {
           },
           Env: [
             `CROSSFEED_COMMAND_OPTIONS=${JSON.stringify(commandOptions)}`,
+            `CF_API_KEY=${process.env.CF_API_KEY}`,
+            `PE_API_KEY=${process.env.PE_API_KEY}`,
             `DB_DIALECT=${process.env.DB_DIALECT}`,
             `DB_HOST=${process.env.DB_HOST}`,
             `IS_LOCAL=true`,

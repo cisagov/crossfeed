@@ -70,6 +70,12 @@ variable "log_metric_namespace" {
   default     = "LogMetrics"
 }
 
+variable "log_metric_api_error_rate" {
+  description = "log_metric_filter_api_error_rate"
+  type        = string
+  default     = "crossfeed-staging-APIErrorRate"
+}
+
 variable "log_metric_root_user" {
   description = "log_metric_filter_root_user"
   type        = string
@@ -332,6 +338,12 @@ variable "ssm_shodan_queue_url" {
   description = "ssm_shodan_queue_url"
   type        = string
   default     = "/crossfeed/staging/SHODAN_QUEUE_URL"
+}
+
+variable "ssm_dnstwist_queue_url" {
+  description = "ssm_dnstwist_queue_url"
+  type        = string
+  default     = "/crossfeed/staging/DNSTWIST_QUEUE_URL"
 }
 
 variable "cloudfront_name" {
@@ -607,4 +619,10 @@ variable "pe_shodan_ecs_service_name" {
   description = "pe_shodan_ecs_service_name"
   type        = string
   default     = "pe-staging-shodan"
+}
+
+variable "pe_dnstwist_ecs_service_name" {
+  description = "pe_dnstwist_ecs_service_name"
+  type        = string
+  default     = "pe-staging-dnstwist"
 }

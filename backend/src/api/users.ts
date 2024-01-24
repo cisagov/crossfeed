@@ -20,7 +20,9 @@ import {
   NotFound,
   Unauthorized,
   sendEmail,
-  sendUserNotificationEmail
+  sendUserNotificationEmail,
+  sendRegistrationTextEmail,
+  sendRegistrationHtmlEmail
 } from './helpers';
 import { UserType } from '../models/user';
 import {
@@ -592,7 +594,9 @@ export const register = wrapHandler(async (event) => {
 
   const createdUser = await User.create(newUser);
   await User.save(createdUser);
+
   id = createdUser.id;
+<<<<<<< HEAD
 
   // const savedUser = await User.save(createdUser);
   // id = createdUser.id;
@@ -608,9 +612,22 @@ export const register = wrapHandler(async (event) => {
   );
   // Send new user pending approval email to regionalAdmin
   // TODO: replace with html email function to regianlAdmin
+=======
+>>>>>>> 2a0364f91126165310749a685eb256b8e64015b4
   const savedUser = await User.findOne(id, {
     relations: ['roles', 'roles.organization']
   });
+  if (!savedUser) {
+    return NotFound;
+  }
+  // Send email notification
+  await sendUserNotificationEmail(
+    savedUser.email,
+    'Crossfeed Registration Pending',
+    savedUser.firstName,
+    savedUser.lastName,
+    'crossfeed_registration_notification.html'
+  );
 
   return {
     statusCode: 200,
@@ -669,7 +686,7 @@ export const registrationApproval = wrapHandler(async (event) => {
     'Crossfeed Registration Approved',
     user.firstName,
     user.lastName,
-    '/app/src/email_templates/crossfeed_approval_notification.html'
+    'crossfeed_registration_notification.html'
   );
 
   // TODO: Handle Response Output
@@ -823,29 +840,50 @@ export const inviteV2 = wrapHandler(async (event) => {
   await connectToDatabase();
 
   body.email = body.email.toLowerCase();
+  const userEmail = body.email.toLowerCase();
+
+  const sendRegisterEmail = async (email: string) => {
+    const staging = process.env.NODE_ENV !== 'production';
+
+    await sendEmail(
+      email,
+      'Crossfeed Registration',
+      `Hello,
+      Your Crossfeed registration is under review.
+      You will receive an email when your registration is approved.
+      
+      Thank you!`
+    );
+  };
 
   // Check if user already exists
   let user = await User.findOne({
     email: body.email
   });
 
+  // Handle Organization assignment if provided
   let organization: Organization | undefined;
-
   if (body.organization) {
     organization = await Organization.findOne(body.organization);
   }
 
+  // Create user if not found
   if (!user) {
+    // Create User object
     user = await User.create({
       invitePending: true,
       ...body
     });
+    // Save User to DB
     await User.save(user);
-    await sendInviteEmail(user.email, organization);
+
+    // Send Notification Email to user
+    await sendRegisterEmail(userEmail);
   } else if (!user.firstName && !user.lastName) {
     // Only set the user first name and last name the first time the user is invited.
     user.firstName = body.firstName;
     user.lastName = body.lastName;
+    // Save User to DB
     await User.save(user);
   }
 
