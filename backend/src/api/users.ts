@@ -594,26 +594,7 @@ export const register = wrapHandler(async (event) => {
 
   const createdUser = await User.create(newUser);
   await User.save(createdUser);
-
   id = createdUser.id;
-<<<<<<< HEAD
-
-  // const savedUser = await User.save(createdUser);
-  // id = createdUser.id;
-
-  // Send Registration confirmation email to user
-  // TODO: replace with html email function to user
-  await sendUserNotificationEmail(
-    newUser.email,
-    'Crossfeed Registration Pending',
-    newUser.firstName,
-    newUser.lastName,
-    '/app/src/email_templates/crossfeed_registration_notification.html'
-  );
-  // Send new user pending approval email to regionalAdmin
-  // TODO: replace with html email function to regianlAdmin
-=======
->>>>>>> 2a0364f91126165310749a685eb256b8e64015b4
   const savedUser = await User.findOne(id, {
     relations: ['roles', 'roles.organization']
   });
