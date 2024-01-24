@@ -165,7 +165,7 @@ export const sendUserNotificationEmail = async (
 
     const htmlToSend = template(data);
     const mailOptions = {
-      from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER,
+      from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
       to: recepient,
       subject: p_subject,
       html: htmlToSend,
