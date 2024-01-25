@@ -1,6 +1,7 @@
 // Main entrypoint for serverless frontend code.
 
 import serverless from 'serverless-http';
+import cors from 'cors';
 import helmet from 'helmet';
 import express from 'express';
 import path from 'path';
@@ -16,31 +17,36 @@ app.use((req, res, next) => {
 });
 
 app.use(
-  helmet({
-    strictTransportSecurity: {
-      maxAge: 31536000,
-      includeSubDomains: true,
-      preload: true
-    }
+  cors({
+    origin: [/crossfeed\.cyber\.dhs\.gov$/, /localhost$/],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
   })
 );
 
 app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: [
-        "'self'",
-        'https://cognito-idp.us-gov-west-1.amazonaws.com',
-        'https://api.staging-cd.crossfeed.cyber.dhs.gov'
-      ],
-      scriptSrc: [
-        "'self'",
-        'https://api.staging-cd.crossfeed.cyber.dhs.gov',
-        // Add any other allowed script sources here
-        "'unsafe-inline'" // Allow inline scripts (not recommended for security)
-      ]
-      // Add other directives as needed
-    }
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: [
+          "'self'",
+          'https://cognito-idp.us-gov-west-1.amazonaws.com',
+          'https://api.staging-cd.crossfeed.cyber.dhs.gov'
+        ],
+        objectSrc: ["'none'"],
+        scriptSrc: [
+          "'self'",
+          'https://api.staging-cd.crossfeed.cyber.dhs.gov'
+          // Add any other allowed script sources here
+        ]
+        // Add other directives as needed
+      }
+    },
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true
+    },
+    xssFilter: false
   })
 );
 
