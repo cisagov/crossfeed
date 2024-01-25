@@ -45,10 +45,14 @@ app.use(
       maxAge: 31536000,
       includeSubDomains: true,
       preload: true
-    },
-    xssFilter: false
+    }
   })
 );
+
+app.use((req, res, next) => {
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  next();
+});
 
 app.use(express.static(path.join(__dirname, '../build')));
 
