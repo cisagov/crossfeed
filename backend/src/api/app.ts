@@ -18,7 +18,6 @@ import * as reports from './reports';
 import * as savedSearches from './saved-searches';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { UserType } from '../models';
-import { ALLOW_ORIGIN, ALLOW_METHODS } from '../../constants';
 
 if (
   (process.env.IS_OFFLINE || process.env.IS_LOCAL) &&
@@ -58,7 +57,12 @@ const app = express();
 
 app.use(express.json({ strict: false }));
 
-app.use(cors({ origin: ALLOW_ORIGIN, methods: ALLOW_METHODS }));
+app.use(
+  cors({
+    origin: [/crossfeed\.cyber\.dhs\.gov$/, /localhost$/],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+  })
+);
 
 app.use(
   helmet({
