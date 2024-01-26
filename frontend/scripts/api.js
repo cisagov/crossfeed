@@ -5,6 +5,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import express from 'express';
 import path from 'path';
+import { ALLOW_ORIGIN, ALLOW_METHODS } from './constants.js';
 
 export const app = express();
 
@@ -16,7 +17,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors(CORS_OPTIONS));
+app.use(cors({ origin: ALLOW_ORIGIN, methods: ALLOW_METHODS }));
 
 app.use(
   helmet({
