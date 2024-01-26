@@ -16,12 +16,7 @@ app.use(
 
 app.use(express.static(path.join(__dirname, '../docs/build')));
 
-app.use(
-  cors({
-    origin: [/crossfeed\.cyber\.dhs\.gov$/, /localhost$/],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-  })
-);
+app.use(cors(CORS_OPTIONS));
 
 app.use(
   helmet({

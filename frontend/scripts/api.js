@@ -16,12 +16,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(
-  cors({
-    origin: [/crossfeed\.cyber\.dhs\.gov$/, /localhost$/],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-  })
-);
+app.use(cors(CORS_OPTIONS));
 
 app.use(
   helmet({
