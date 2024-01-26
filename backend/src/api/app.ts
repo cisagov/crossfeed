@@ -70,7 +70,7 @@ app.use(
       directives: {
         defaultSrc: [
           "'self'",
-          'https://cognito-idp.us-gov-west-1.amazonaws.com',
+          'https://cognito-idp.us-east-1.amazonaws.com',
           'https://api.staging-cd.crossfeed.cyber.dhs.gov'
         ],
         objectSrc: ["'none'"],
@@ -78,7 +78,8 @@ app.use(
           "'self'",
           'https://api.staging-cd.crossfeed.cyber.dhs.gov'
           // Add any other allowed script sources here
-        ]
+        ],
+        frameAncestors: ["'none'"]
         // Add other directives as needed
       }
     },
@@ -91,7 +92,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('X-XSS-Protection', '0');
   next();
 });
 
