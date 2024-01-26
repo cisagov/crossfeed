@@ -15,7 +15,8 @@ app.use(
 ); // limit 1000 requests per 15 minutes
 
 app.use(express.static(path.join(__dirname, '../docs/build')));
-app.use(cors());
+
+app.use(cors(CORS_OPTIONS));
 
 app.use(
   helmet({
@@ -28,10 +29,16 @@ app.use(
         scriptSrc: ["'none'"]
       }
     },
-    hsts: { maxAge: 31536000, preload: true },
+    hsts: { maxAge: 31536000, includeSubDomains: true, preload: true },
     xFrameOptions: 'DENY'
   })
 );
+
+app.use((req, res, next) => {
+  res.setHeader('X-XSS-Protection', '0');
+  next();
+});
+
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, '../docs/build/index.html'));
 });
