@@ -44,7 +44,9 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   const formFields = {
     confirmSignIn: {
       confirmation_code: {
-        label: 'Enter 2FA Code from your authenticator app'
+        label: 'Enter 2FA Code from your authenticator app',
+        // Adding input autoFocus for 2FA prompt
+        autoFocus: true
       }
     },
     confirmResetPassword: {
