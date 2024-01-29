@@ -52,6 +52,7 @@
   "devDependencies": {
     "@jest/globals": "^29",
     "@types/aws-lambda": "^8.10.62",
+    "@types/cors": "^2.8.17",
     "@types/dockerode": "^3.3.19",
     "@types/jest": "^27",
     "@types/node": "^20.6",
