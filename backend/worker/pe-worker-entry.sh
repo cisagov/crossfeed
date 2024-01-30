@@ -18,8 +18,7 @@ fi
 
 # Function to retrieve a message from RabbitMQ queue
 get_rabbitmq_message() {
-  echo "Calling get_rabbitmq_message..."
-  curl -i -u "guest:guest" \
+  curl -s -u "guest:guest" \
        -H "content-type:application/json" \
        -X POST "http://rabbitmq:15672/api/queues/%2F/$SERVICE_QUEUE_URL/get" \
        --data '{"count": 1, "requeue": true, "encoding": "auto", "ackmode": "ack_requeue_true"}'
@@ -31,10 +30,14 @@ while true; do
   if [ "$IS_LOCAL" = true ]; then
     echo "Running local RabbitMQ logic..."
     # Call the function and capture the response
-    RESPONSE=$(get_rabbitmq_message)
-    echo "Response from get_rabbitmq_message: $RESPONSE"
-    # Extract the message from the response
+    RESPONSE=$(get_rabbitmq_message) &&
+    echo "Response from get_rabbitmq_message: $RESPONSE" &&
+    # Extract the JSON payload from the response body
     MESSAGE=$(echo "$RESPONSE" | jq -r '.[0].payload')
+    MESSAGE=$(echo "$MESSAGE" | sed 's/\\"/"/g')
+    # Displaying the result
+    echo "MESSAGE: $MESSAGE"
+
   else
     echo "Running live SQS logic..."
     MESSAGE=$(aws sqs receive-message --queue-url "$SERVICE_QUEUE_URL")
@@ -46,18 +49,17 @@ while true; do
     break
   fi
 
-  echo "$MESSAGE"
   # Extract the org_name from the message body
   if [ "$IS_LOCAL" = true ]; then
-    ORG=$(echo "$MESSAGE" | jq -r '.payload | fromjson | .org')
+    ORG=$(echo "$MESSAGE" | jq -r '.org')
   else
-      ORG=$(echo "$MESSAGE" | jq -r '.Body.org')
+    ORG=$(echo "$MESSAGE" | jq -r '.Body.org')
   fi
 
-  if [ "$SERVICE_TYPE" = "shodan" ]; then
-    COMMAND="pe-source shodan --soc_med_included --org=\"$ORG\""
-  elif [ "$SERVICE_TYPE" = "dnstwist" ]; then 
-    COMMAND="pe-source dnstwist --org=\"$ORG\""
+  if [[ "$SERVICE_TYPE" = *"shodan"*  ]]; then
+    COMMAND="pe-source shodan --soc_med_included --org=$ORG"
+  elif [[ "$SERVICE_TYPE" = *"dnstwist"* ]]; then 
+    COMMAND="pe-source dnstwist --org=$ORG"
   else
     echo "Unsupported SERVICE_TYPE: $SERVICE_TYPE"
     break
