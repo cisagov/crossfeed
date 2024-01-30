@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { AuthForm } from 'components';
 import { useAuthContext } from 'context';
 import { Button } from '@trussworks/react-uswds';
-import { Alert, AlertTitle, Box, Grid, Link, Typography } from '@mui/material';
+// import { Alert, AlertTitle, Box, Grid, Link, Typography } from '@mui/material';
+import { Box, Grid, Link, Typography } from '@mui/material';
 import { RegisterForm } from 'components/Register/RegisterForm';
 import { CrossfeedWarning } from 'components/WarningBanner';
 import {
