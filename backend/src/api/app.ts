@@ -327,6 +327,11 @@ authenticatedRoute.post(
   '/organizations',
   handlerToExpress(organizations.create)
 );
+authenticatedRoute.post(
+  '/organizations_upsert',
+  handlerToExpress(organizations.upsert_org)
+);
+
 authenticatedRoute.put(
   '/organizations/:organizationId',
   handlerToExpress(organizations.update)

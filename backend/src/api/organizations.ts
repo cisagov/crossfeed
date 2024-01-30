@@ -92,6 +92,52 @@ class NewOrganization extends NewOrganizationNonGlobalAdmins {
   parent?: string;
 }
 
+class NewOrUpdatedOrganization extends NewOrganizationNonGlobalAdmins {
+  @IsArray()
+  rootDomains: string[];
+
+  @IsArray()
+  ipBlocks: string[];
+
+  @IsArray()
+  tags: OrganizationTag[];
+
+  @IsUUID()
+  @IsOptional()
+  parent?: string;
+
+  @IsString()
+  @IsOptional()
+  state?: string;
+
+  @IsString()
+  @IsOptional()
+  regionId?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  country?: string;
+
+  @IsNumber()
+  @IsOptional()
+  stateFips?: number;
+
+  @IsString()
+  @IsOptional()
+  stateName?: string;
+
+  @IsString()
+  @IsOptional()
+  county?: string;
+
+  @IsNumber()
+  @IsOptional()
+  countyFips?: number;
+}
+
+
+
 // Type Validation Options
 class UpdateOrganizationMetaV2 {
   @IsString()
@@ -929,4 +975,78 @@ export const addUserV2 = wrapHandler(async (event) => {
     };
   }
   return NotFound;
+});
+
+
+
+/**
+ * @swagger
+ *
+ * /organizations_upsert:
+ *  post:
+ *    description: Create a new organization or update it if it already exists.
+ *    tags:
+ *    - Organizations
+ */
+export const upsert_org = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  const body = await validateBody(NewOrUpdatedOrganization, event.body);
+  await connectToDatabase();
+
+  if ('tags' in body) {
+    body.tags = await findOrCreateTags(body.tags);
+  }
+  // const organization = await Organization.upsert({...body, createdBy: { id: event.requestContext.authorizer!.id },
+  //     parent: { id: body.parent }},
+  //   {
+  //   conflictPaths: ["name"],
+  //   skipUpdateIfNoValuesChanged: true,
+  //   upsertType: "on-conflict-do-update",
+  // })
+
+  const organization_id = await Organization.createQueryBuilder()
+  .insert()
+  .into(Organization)
+  .values([{...body, createdBy: { id: event.requestContext.authorizer!.id },
+    parent: { id: body.parent }}])
+  .orUpdate({conflict_target:["name"],overwrite: ['isPassive',
+    'country',
+    'state',
+    'regionId',
+    'stateFips',
+    'stateName',
+    'county',
+    'countyFips']})
+  // .returning("id")
+  .execute()
+  const organization_w_tags = organization_id
+  // console.log('org_id')
+  // console.log(organization_id)
+  // const organization_w_tags = await Organization.createQueryBuilder()
+  // .relation(Organization, "tags")
+  // .of({id:organization_id.identifiers[0]}) // post
+  // .add(body.tags) // images
+  
+  const current_org = await Organization.findOneOrFail(organization_id.identifiers[0])
+
+  current_org.tags = body.tags
+
+  current_org.save()
+
+  // const org_tags = body.tags.map(val => { return {
+  //   organizationTagId: val.id,
+  //   organizationId: organization_id.identifiers[0].id
+  // }})
+  
+
+  // const organization = await Organization.create({
+  //   ...body,
+  //   createdBy: { id: event.requestContext.authorizer!.id },
+  //   parent: { id: body.parent }
+  // });
+  // const res = await organization.save();
+  return {
+    statusCode: 200,
+    body: JSON.stringify(current_org)
+  };
 });
