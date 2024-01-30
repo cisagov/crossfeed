@@ -164,50 +164,12 @@ export const sendUserNotificationEmail = async (
     };
 
     const htmlToSend = template(data);
-
     const mailOptions = {
-      from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER,
+      from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
       to: recepient,
       subject: p_subject,
       html: htmlToSend,
-      replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!,
-      attachments: [
-        {
-          filename: 'banner.png',
-          content: await client.getEmailAsset('banner.png'),
-          cid: 'CISA Banner'
-        },
-        {
-          filename: 'web.png',
-          content: await client.getEmailAsset('banner.png'),
-          cid: 'CISA Web'
-        },
-        {
-          filename: 'email.png',
-          content: await client.getEmailAsset('email.png'),
-          cid: 'CISA Email'
-        },
-        {
-          filename: 'linkedin.png',
-          content: await client.getEmailAsset('linkedin.png'),
-          cid: 'CISA LinkedIn'
-        },
-        {
-          filename: 'twitter.png',
-          content: await client.getEmailAsset('twitter.png'),
-          cid: 'CISA Twitter'
-        },
-        {
-          filename: 'facebook.png',
-          content: await client.getEmailAsset('facebook.png'),
-          cid: 'CISA Facebook'
-        },
-        {
-          filename: 'instagram.png',
-          content: await client.getEmailAsset('instagram.png'),
-          cid: 'CISA Instagram'
-        }
-      ]
+      replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
     };
     await transporter.sendMail(mailOptions);
   } catch (e) {
