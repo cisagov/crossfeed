@@ -594,7 +594,6 @@ export const register = wrapHandler(async (event) => {
 
   const createdUser = await User.create(newUser);
   await User.save(createdUser);
-
   id = createdUser.id;
   const savedUser = await User.findOne(id, {
     relations: ['roles', 'roles.organization']

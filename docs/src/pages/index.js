@@ -15,4 +15,20 @@ const IndexPage = () => (
   </Layout>
 );
 
+export function Head() {
+  return (
+    <>
+      <meta
+        httpEquiv={'Content-Security-Policy'}
+        content={"object-src 'none'; script-src 'self'; base-uri 'none'"}
+      />
+      <meta httpEquiv={'X-Frame-Options'} content={'DENY'} />
+      <meta
+        httpEquiv={'Access-Control-Allow-Origin'}
+        content={'https://docs.crossfeed.cyber.dhs.gov'}
+      />
+    </>
+  );
+}
+
 export default IndexPage;
