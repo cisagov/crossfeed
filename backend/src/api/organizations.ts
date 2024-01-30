@@ -1017,15 +1017,7 @@ export const upsert_org = wrapHandler(async (event) => {
     'stateName',
     'county',
     'countyFips']})
-  // .returning("id")
   .execute()
-  const organization_w_tags = organization_id
-  // console.log('org_id')
-  // console.log(organization_id)
-  // const organization_w_tags = await Organization.createQueryBuilder()
-  // .relation(Organization, "tags")
-  // .of({id:organization_id.identifiers[0]}) // post
-  // .add(body.tags) // images
   
   const current_org = await Organization.findOneOrFail(organization_id.identifiers[0])
 
@@ -1033,18 +1025,6 @@ export const upsert_org = wrapHandler(async (event) => {
 
   current_org.save()
 
-  // const org_tags = body.tags.map(val => { return {
-  //   organizationTagId: val.id,
-  //   organizationId: organization_id.identifiers[0].id
-  // }})
-  
-
-  // const organization = await Organization.create({
-  //   ...body,
-  //   createdBy: { id: event.requestContext.authorizer!.id },
-  //   parent: { id: body.parent }
-  // });
-  // const res = await organization.save();
   return {
     statusCode: 200,
     body: JSON.stringify(current_org)
