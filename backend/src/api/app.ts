@@ -57,7 +57,12 @@ const app = express();
 
 app.use(express.json({ strict: false }));
 
-app.use(cors(CORS_OPTIONS));
+app.use(
+  cors({
+    origin: [/crossfeed\.cyber\.dhs\.gov$/, /localhost$/],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+  })
+);
 
 app.use(
   helmet({
