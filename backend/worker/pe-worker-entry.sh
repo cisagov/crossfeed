@@ -36,7 +36,7 @@ while true; do
 
   else
     echo "Running live SQS logic..."
-    MESSAGE=$(aws sqs receive-message --queue-url "$SERVICE_QUEUE_URL")
+    MESSAGE=$(aws sqs receive-message --queue-url "$SERVICE_QUEUE_URL" --output json --max-number-of-messages 1)
     echo "MESSAGE: $MESSAGE"
   fi
 
@@ -50,7 +50,7 @@ while true; do
   if [ "$IS_LOCAL" = true ]; then
     ORG=$(echo "$MESSAGE" | jq -r '.org')
   else
-    ORG=$(echo "$MESSAGE" | jq -r '.Body.org')
+    ORG=$(echo "$MESSAGE" | jq -r '.Messages[0].Body | capture("org: \"(?<org>[^\"]+)\"") | .org')
   fi
 
   if [[ "$SERVICE_TYPE" = *"shodan"*  ]]; then
@@ -74,7 +74,7 @@ while true; do
     echo "Done"
 
   else
-    RECEIPT_HANDLE=$(echo "$MESSAGE" | jq -r '.ReceiptHandle')
+    RECEIPT_HANDLE=$(echo "$MESSAGE" | jq -r '.Messages[0].ReceiptHandle')
     aws sqs delete-message --queue-url "$SERVICE_QUEUE_URL" --receipt-handle "$RECEIPT_HANDLE"
   fi
 done
