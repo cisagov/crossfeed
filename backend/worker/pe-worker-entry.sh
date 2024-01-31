@@ -3,10 +3,7 @@
 set -e
 
 echo "Starting pe-worker-entry.sh script"
-echo "$AWS_REGION"
 echo "$SERVICE_QUEUE_URL"
-
-curl -i -u "guest:guest" http://rabbitmq:15672/api/queues
 
 echo "Running $SERVICE_TYPE"
 
@@ -21,7 +18,7 @@ get_rabbitmq_message() {
   curl -s -u "guest:guest" \
        -H "content-type:application/json" \
        -X POST "http://rabbitmq:15672/api/queues/%2F/$SERVICE_QUEUE_URL/get" \
-       --data '{"count": 1, "requeue": true, "encoding": "auto", "ackmode": "ack_requeue_true"}'
+       --data '{"count": 1, "requeue": false, "encoding": "auto", "ackmode": "ack_requeue_false"}'
 }
 
 
@@ -35,16 +32,16 @@ while true; do
     # Extract the JSON payload from the response body
     MESSAGE=$(echo "$RESPONSE" | jq -r '.[0].payload')
     MESSAGE=$(echo "$MESSAGE" | sed 's/\\"/"/g')
-    # Displaying the result
     echo "MESSAGE: $MESSAGE"
 
   else
     echo "Running live SQS logic..."
     MESSAGE=$(aws sqs receive-message --queue-url "$SERVICE_QUEUE_URL")
+    echo "MESSAGE: $MESSAGE"
   fi
 
   # Check if there are no more messages. If no more, then exit Fargate container
-  if [ -z "$MESSAGE" ]; then
+  if [ -z "$MESSAGE" ] || [ "$MESSAGE" == "null" ];  then
     echo "No more messages in the queue. Exiting."
     break
   fi
@@ -68,12 +65,13 @@ while true; do
   echo "Running $COMMAND"
 
   # Run the pe-source command
-  eval "$COMMAND"
+  eval "$COMMAND" &&
+
+  cat /app/pe_reports_logging.log
 
   # Delete the processed message from the queue
   if [ "$IS_LOCAL" = true ]; then
-    DELIVERY_TAG=$(echo "$MESSAGE" | jq -r '.delivery_tag')
-    rabbitmqadmin --username=quest --password=guest ack queue="$SERVICE_QUEUE_URL" delivery_tag="$DELIVERY_TAG"
+    echo "Done"
 
   else
     RECEIPT_HANDLE=$(echo "$MESSAGE" | jq -r '.ReceiptHandle')

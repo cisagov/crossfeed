@@ -158,20 +158,8 @@ async function startLocalContainers(
       } as any);
       await container.start();
       console.log(`done starting container ${i}`);
-      return {
-        tasks: [
-          {
-            taskArn: containerName
-          }
-        ],
-        failures: []
-      };
     } catch (e) {
       console.error(e);
-      return {
-        tasks: [],
-        failures: [{}]
-      };
     }
   }
 }
@@ -203,15 +191,6 @@ export const handler: Handler = async (event) => {
     let desiredCount;
     const clusterName = process.env.PE_CLUSTER_NAME!;
 
-    // Determine if running locally based on an environment variable
-    const isLocal = process.env.IS_LOCAL ? true : false;
-
-    if (isLocal) {
-      console.log('WE ARE LOCAL IN SCAN EXECUTION. Nice');
-      console.log(event.Records[0].body);
-      console.log('testing again');
-    }
-
     // Get the Control SQS record and message body
     const sqsRecord: SQSRecord = event.Records[0];
     const message_body = JSON.parse(sqsRecord.body);
@@ -227,7 +206,7 @@ export const handler: Handler = async (event) => {
         clusterName
       );
     } else if (message_body.scriptType === 'dnstwist') {
-      desiredCount = 10;
+      desiredCount = 15;
       await updateServiceAndQueue(
         process.env.DNSTWIST_QUEUE_URL!,
         process.env.DNSTWIST_SERVICE_NAME!,
