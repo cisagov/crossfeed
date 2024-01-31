@@ -136,8 +136,6 @@ class NewOrUpdatedOrganization extends NewOrganizationNonGlobalAdmins {
   countyFips?: number;
 }
 
-
-
 // Type Validation Options
 class UpdateOrganizationMetaV2 {
   @IsString()
@@ -977,8 +975,6 @@ export const addUserV2 = wrapHandler(async (event) => {
   return NotFound;
 });
 
-
-
 /**
  * @swagger
  *
@@ -1005,25 +1001,37 @@ export const upsert_org = wrapHandler(async (event) => {
   // })
 
   const organization_id = await Organization.createQueryBuilder()
-  .insert()
-  .into(Organization)
-  .values([{...body, createdBy: { id: event.requestContext.authorizer!.id },
-    parent: { id: body.parent }}])
-  .orUpdate({conflict_target:["name"],overwrite: ['isPassive',
-    'country',
-    'state',
-    'regionId',
-    'stateFips',
-    'stateName',
-    'county',
-    'countyFips']})
-  .execute()
-  
-  const current_org = await Organization.findOneOrFail(organization_id.identifiers[0])
+    .insert()
+    .into(Organization)
+    .values([
+      {
+        ...body,
+        createdBy: { id: event.requestContext.authorizer!.id },
+        parent: { id: body.parent }
+      }
+    ])
+    .orUpdate({
+      conflict_target: ['name'],
+      overwrite: [
+        'isPassive',
+        'country',
+        'state',
+        'regionId',
+        'stateFips',
+        'stateName',
+        'county',
+        'countyFips'
+      ]
+    })
+    .execute();
 
-  current_org.tags = body.tags
+  const current_org = await Organization.findOneOrFail(
+    organization_id.identifiers[0]
+  );
 
-  current_org.save()
+  current_org.tags = body.tags;
+
+  current_org.save();
 
   return {
     statusCode: 200,
