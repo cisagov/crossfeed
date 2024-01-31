@@ -13,8 +13,8 @@ port=5432
 key1=${PE_SHODAN_API_KEYS}
 
 [pe_api]
-pe_api_key=fakeKey
-pe_api_url=fakeURL
+pe_api_key=
+pe_api_url=
 
 [staging]
 [cyhy_mongo]
