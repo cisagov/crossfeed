@@ -5,7 +5,7 @@ import logo from '../../assets/crossfeed.svg';
 import * as FooterStyles from './styleFooter';
 
 export const CrossfeedFooter: React.FC = (props) => {
-  const { logout } = useAuthContext();
+  const { logout, user } = useAuthContext();
   const FooterRoot = FooterStyles.FooterRoot;
   const footerClasses = FooterStyles.footerClasses;
   return (
@@ -17,13 +17,13 @@ export const CrossfeedFooter: React.FC = (props) => {
               <img src={logo} alt="Crossfeed Icon Navigate Home" />
             </Link>
           </Grid>
-          <Grid className={footerClasses.footerNavItem} item xs={12} sm={2}>
-            <p>
+          {user && (
+            <Grid className={footerClasses.footerNavItem} item xs={12} sm={2}>
               <Link className={footerClasses.footerNavLink} href="/">
                 Home
               </Link>
-            </p>
-          </Grid>
+            </Grid>
+          )}
           <Grid className={footerClasses.footerNavItem} item xs={12} sm={2}>
             <p>
               <Link
@@ -54,17 +54,19 @@ export const CrossfeedFooter: React.FC = (props) => {
               </Link>
             </p>
           </Grid>
-          <Grid className={footerClasses.footerNavItem} item xs={12} sm={2}>
-            <p>
-              <Link
-                className={footerClasses.footerNavLink}
-                href="/"
-                onClick={logout}
-              >
-                Logout
-              </Link>
-            </p>
-          </Grid>
+          {user && (
+            <Grid className={footerClasses.footerNavItem} item xs={12} sm={2}>
+              <p>
+                <Link
+                  className={footerClasses.footerNavLink}
+                  href="/"
+                  onClick={logout}
+                >
+                  Logout
+                </Link>
+              </p>
+            </Grid>
+          )}
         </Grid>
       </Box>
     </FooterRoot>

@@ -155,7 +155,7 @@ export const sendUserNotificationEmail = async (
   });
 
   try {
-    const client = new S3Client(false);
+    const client = new S3Client();
     const html = await client.getEmailAsset(template_file);
     const template = handlebars.compile(html);
     const data = {
@@ -164,58 +164,13 @@ export const sendUserNotificationEmail = async (
     };
 
     const htmlToSend = template(data);
-    const bannerPng = await client.getEmailAsset('banner.jpg');
-    const webPng = await client.getEmailAsset('web.png');
-    const emailPng = await client.getEmailAsset('email.png');
-    const linkedinPng = await client.getEmailAsset('linkedin.png');
-    const twitterPng = await client.getEmailAsset('twitter.png');
-    const facebookPng = await client.getEmailAsset('facebook.png');
-    const instagramPng = await client.getEmailAsset('instagram.png');
     const mailOptions = {
-      from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER,
+      from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
       to: recepient,
       subject: p_subject,
       html: htmlToSend,
-      replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!,
-      attachments: [
-        {
-          filename: 'banner.png',
-          content: bannerPng,
-          cid: 'CISA Banner'
-        },
-        {
-          filename: 'web.png',
-          content: webPng,
-          cid: 'CISA Web'
-        },
-        {
-          filename: 'email.png',
-          content: emailPng,
-          cid: 'CISA Email'
-        },
-        {
-          filename: 'linkedin.png',
-          content: linkedinPng,
-          cid: 'CISA LinkedIn'
-        },
-        {
-          filename: 'twitter.png',
-          content: twitterPng,
-          cid: 'CISA Twitter'
-        },
-        {
-          filename: 'facebook.png',
-          content: facebookPng,
-          cid: 'CISA Facebook'
-        },
-        {
-          filename: 'instagram.png',
-          content: instagramPng,
-          cid: 'CISA Instagram'
-        }
-      ]
+      replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
     };
-
     await transporter.sendMail(mailOptions);
   } catch (e) {
     console.log(e);
