@@ -2,26 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { AuthForm } from 'components';
 import { useAuthContext } from 'context';
 import { Button } from '@trussworks/react-uswds';
-// import { Alert, AlertTitle, Box, Grid, Link, Typography } from '@mui/material';
 import { Box, Grid, Link, Typography } from '@mui/material';
 import { RegisterForm } from 'components/Register/RegisterForm';
 import { CrossfeedWarning } from 'components/WarningBanner';
-import {
-  Authenticator,
-  // ThemeProvider,
-  useAuthenticator
-} from '@aws-amplify/ui-react';
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { I18n } from 'aws-amplify';
 
 const TOTP_ISSUER = process.env.REACT_APP_TOTP_ISSUER;
-// Strings come from https://github.com/aws-amplify/amplify-ui/blob/main/packages/ui/src/i18n/dictionaries/authenticator/en.ts
 I18n.putVocabulariesForLanguage('en-US', {
   'Setup TOTP': 'Set up 2FA',
   'Confirm TOTP Code': 'Enter 2FA Code'
 });
-// const amplifyTheme = {
-//   name: 'my-theme'
-// };
+
 interface Errors extends Partial<FormData> {
   global?: string;
 }
@@ -115,7 +107,8 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
             /* hideSignUp={
                 !showSignUp && !(process.env.NODE_ENV === 'development')
               }*/
-            hideSignUp={true}
+            // Hide sign up button unless we are in development mode.
+            hideSignUp={!(process.env.NODE_ENV === 'development')}
           />
         </Grid>
         <Grid item xs={12}>
