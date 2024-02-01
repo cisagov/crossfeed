@@ -1053,13 +1053,7 @@ export const upsert_org = wrapHandler(async (event) => {
   if ('tags' in body) {
     body.tags = await findOrCreateTags(body.tags);
   }
-  // const organization = await Organization.upsert({...body, createdBy: { id: event.requestContext.authorizer!.id },
-  //     parent: { id: body.parent }},
-  //   {
-  //   conflictPaths: ["name"],
-  //   skipUpdateIfNoValuesChanged: true,
-  //   upsertType: "on-conflict-do-update",
-  // })
+  
   if ('state' in body) {
     body.regionId = REGION_STATE_MAP[body.state!] ?? null;
   }
