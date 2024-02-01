@@ -28,15 +28,48 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   useEffect(() => {
     refreshUser();
   }, [refreshUser, authStatus]);
+
   const formFields = {
+    signIn: {
+      username: {
+        label: 'Email',
+        placeholder: 'Enter your email address',
+        required: true,
+        autoFocus: true
+      },
+      password: {
+        label: 'Password',
+        placeholder: 'Enter your password',
+        required: true
+      }
+    },
     confirmSignIn: {
       confirmation_code: {
-        label: 'Enter 2FA Code from your authenticator app'
+        label: 'Confirmation Code',
+        placeholder: 'Enter code from your authenticator app',
+        autoFocus: true
+      }
+    },
+    resetPassword: {
+      username: {
+        label: 'Email',
+        placeholder: 'Enter your email address',
+        required: true,
+        autoFocus: true
       }
     },
     confirmResetPassword: {
       confirmation_code: {
-        label: 'Enter code sent to your email address'
+        label: 'Confirmation Code',
+        placeholder: 'Enter code sent to your email address',
+        autoFocus: true
+      }
+    },
+    confirmSignUp: {
+      confirmation_code: {
+        label: 'Confirmation Code',
+        placeholder: 'Enter code sent to your email address',
+        autoFocus: true
       }
     },
     setupTOTP: {
@@ -44,14 +77,15 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
         // Set the issuer and name so that the authenticator app shows them.
         // TODO: Set the issuer to the email, once this is resolved: https://github.com/aws-amplify/amplify-ui/issues/3387.
         totpIssuer: TOTP_ISSUER
-        // totpUsername: email,
       },
       confirmation_code: {
         label:
-          'Set up 2FA by scanning the QR code with an authenticator app on your phone.'
+          'Set up 2FA by scanning the QR code with an authenticator app on your phone.',
+        autoFocus: true
       }
     }
   };
+
   const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
     try {
