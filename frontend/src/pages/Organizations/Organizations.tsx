@@ -66,7 +66,6 @@ export const Organizations: React.FC = () => {
                 'tags',
                 'country',
                 'state',
-                'regionId',
                 'stateFips',
                 'stateName',
                 'county',
@@ -93,8 +92,7 @@ export const Organizations: React.FC = () => {
                             .split(',')
                             .map((tag) => ({
                               name: tag
-                            })),
-                          regionId: result.regionId?.toString() || ''
+                            }))
                         }
                       })
                     );
