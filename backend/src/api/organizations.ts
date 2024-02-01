@@ -1053,7 +1053,7 @@ export const upsert_org = wrapHandler(async (event) => {
   if ('tags' in body) {
     body.tags = await findOrCreateTags(body.tags);
   }
-  
+
   if ('state' in body) {
     body.regionId = REGION_STATE_MAP[body.state!] ?? null;
   }
