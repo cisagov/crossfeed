@@ -45,39 +45,42 @@ export const AuthLoginCreate: React.FC<{ showSignUp?: boolean }> = ({
     signIn: {
       username: {
         label: 'Email',
-        placeholder: 'Email',
+        placeholder: 'Enter your email address',
         required: true,
         autoFocus: true
       },
       password: {
         label: 'Password',
-        placeholder: 'Password',
+        placeholder: 'Enter your password',
         required: true
       }
     },
     confirmSignIn: {
       confirmation_code: {
-        label: 'Enter 2FA Code from your authenticator app',
+        label: 'Confirmation Code',
+        placeholder: 'Enter code sent to your email address',
         autoFocus: true
       }
     },
     resetPassword: {
       username: {
         label: 'Email',
-        placeholder: 'Email',
+        placeholder: 'Enter your email address',
         required: true,
         autoFocus: true
       }
     },
     confirmResetPassword: {
       confirmation_code: {
-        label: 'Enter code sent to your email address',
+        label: 'Confirmation Code',
+        placeholder: 'Enter code sent to your email address',
         autoFocus: true
       }
     },
     confirmSignUp: {
       confirmation_code: {
-        label: 'Enter code sent to your email address',
+        label: 'Confirmation Code',
+        placeholder: 'Enter code sent to your email address',
         autoFocus: true
       }
     },
