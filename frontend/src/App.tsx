@@ -16,7 +16,6 @@ import {
 import {
   Domain,
   AuthLogin,
-  AuthLoginCreate,
   AuthCreateAccount,
   Scans,
   Scan,
