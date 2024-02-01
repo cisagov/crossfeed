@@ -108,7 +108,6 @@ const App: React.FC = () => (
                     unauth={(props) => (
                       <AuthLogin {...props} showSignUp={true} />
                     )}
-                    // roles={['globalAdmin']}
                     component={Risk}
                   />
                   <RouteGuard
