@@ -975,7 +975,6 @@ export const addUserV2 = wrapHandler(async (event) => {
   return NotFound;
 });
 
-
 export const REGION_STATE_MAP = {
   Connecticut: '1',
   Maine: '1',
@@ -1037,7 +1036,6 @@ export const REGION_STATE_MAP = {
   Washington: '10'
 };
 
-
 /**
  * @swagger
  *
@@ -1063,7 +1061,7 @@ export const upsert_org = wrapHandler(async (event) => {
   //   upsertType: "on-conflict-do-update",
   // })
   if ('state' in body) {
-    body.regionId = REGION_STATE_MAP[body.state!] ?? null
+    body.regionId = REGION_STATE_MAP[body.state!] ?? null;
   }
 
   const organization_id = await Organization.createQueryBuilder()
