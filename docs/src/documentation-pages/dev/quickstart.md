@@ -51,6 +51,38 @@ This quickstart describes the initial setup required to run an instance of Cross
 
 9. Install [Prettier](https://www.robinwieruch.de/how-to-use-prettier-vscode) in your dev environment to format code on save.
 
+### Simulate SQS Process
+
+1. Make sure to complete the Initial Setup above
+2. Fill dev.env.example with necessary credentials and rerun:
+
+   ```bash
+      cp dev.env.example .env
+   ```
+
+3. Generate the P&E DB Schema
+
+   ```bash
+   cd backend
+   npm run pesyncdb
+   ```
+
+4. Start the RabbitMQ listener. This will listen for any messages sent to the queue and
+   trigger the scanExecution.ts function. This will stay running with this message: "Waiting for messages from ControlQueue..."
+
+   ```bash
+   cd backend
+   npm run control-queue
+   ```
+
+5. Run sendMessage.js to send a sample message to the queue. Feel free to edit this file
+   while testing.
+
+   ```bash
+   cd backend
+   node sendMessage.js
+   ```
+
 ### Running tests
 
 To run tests, first make sure you have already started Crossfeed with `npm start` (or, at bare minimum, that the database container is running). Then run:

@@ -1,9 +1,14 @@
 import { Handler, SQSRecord } from 'aws-lambda';
 import * as AWS from 'aws-sdk';
 import { integer } from 'aws-sdk/clients/cloudfront';
+import { connect } from 'amqplib';
+const Docker = require('dockerode');
 
 const ecs = new AWS.ECS();
 const sqs = new AWS.SQS();
+const docker = new Docker();
+
+const toSnakeCase = (input) => input.replace(/ /g, '-');
 
 async function updateServiceAndQueue(
   queueUrl: string,
@@ -13,59 +18,83 @@ async function updateServiceAndQueue(
   clusterName: string // Add this parameter
 ) {
   // Place message in scan specific queue
-  await placeMessageInQueue(queueUrl, message_body);
+  if (process.env.IS_LOCAL) {
+    // If running locally, use RabbitMQ instead of SQS
+    console.log('publishing to rabbitMQ');
+    await publishToRabbitMQ(queueUrl, message_body);
+    console.log('done publishing to rabbitMQ');
+  } else {
+    // Place in AWS SQS queue
+    await placeMessageInQueue(queueUrl, message_body);
+  }
 
   // Check if Fargate is running desired count and start if not
-  await updateServiceDesiredCount(clusterName, serviceName, desiredCount);
-
-  // After processing each message, check if the SQS queue is empty
-  const sqsAttributes = await sqs
-    .getQueueAttributes({
-      QueueUrl: queueUrl,
-      AttributeNames: ['ApproximateNumberOfMessages']
-    })
-    .promise();
-
-  const approximateNumberOfMessages = parseInt(
-    sqsAttributes.Attributes?.ApproximateNumberOfMessages || '0',
-    10
+  await updateServiceDesiredCount(
+    clusterName,
+    serviceName,
+    desiredCount,
+    queueUrl
   );
 
-  // If the queue is empty, scale down to zero tasks
-  if (approximateNumberOfMessages === 0) {
-    await updateServiceDesiredCount(clusterName, serviceName, 0);
+  // After processing each message, check if the SQS queue is empty
+  if (!process.env.IS_LOCAL) {
+    const sqsAttributes = await sqs
+      .getQueueAttributes({
+        QueueUrl: queueUrl,
+        AttributeNames: ['ApproximateNumberOfMessages']
+      })
+      .promise();
+
+    const approximateNumberOfMessages = parseInt(
+      sqsAttributes.Attributes?.ApproximateNumberOfMessages || '0',
+      10
+    );
+
+    // If the queue is empty, scale down to zero tasks
+    console.log(
+      `Approximate number of messages in specific queue: ${approximateNumberOfMessages}`
+    );
+    if (approximateNumberOfMessages === 0) {
+      await updateServiceDesiredCount(clusterName, serviceName, 0, queueUrl);
+    }
   }
 }
 
 export async function updateServiceDesiredCount(
   clusterName: string,
   serviceName: string,
-  desiredCountNum: integer
+  desiredCountNum: integer,
+  queueUrl: string
 ) {
   try {
-    const describeServiceParams = {
-      cluster: clusterName,
-      services: [serviceName]
-    };
-    const serviceDescription = await ecs
-      .describeServices(describeServiceParams)
-      .promise();
-    if (
-      serviceDescription &&
-      serviceDescription.services &&
-      serviceDescription.services.length > 0
-    ) {
-      const service = serviceDescription.services[0];
+    if (process.env.IS_LOCAL) {
+      console.log('starting local containers');
+      await startLocalContainers(desiredCountNum, serviceName, queueUrl);
+    } else {
+      const describeServiceParams = {
+        cluster: clusterName,
+        services: [serviceName]
+      };
+      const serviceDescription = await ecs
+        .describeServices(describeServiceParams)
+        .promise();
+      if (
+        serviceDescription &&
+        serviceDescription.services &&
+        serviceDescription.services.length > 0
+      ) {
+        const service = serviceDescription.services[0];
 
-      // Check if the desired task count is less than # provided
-      if (service.desiredCount !== desiredCountNum) {
-        const updateServiceParams = {
-          cluster: clusterName,
-          service: serviceName,
-          desiredCount: desiredCountNum // Set to desired # of Fargate tasks
-        };
+        // Check if the desired task count is less than # provided
+        if (service.desiredCount !== desiredCountNum) {
+          const updateServiceParams = {
+            cluster: clusterName,
+            service: serviceName,
+            desiredCount: desiredCountNum // Set to desired # of Fargate tasks
+          };
 
-        await ecs.updateService(updateServiceParams).promise();
+          await ecs.updateService(updateServiceParams).promise();
+        }
       }
     }
   } catch (error) {
@@ -73,6 +102,69 @@ export async function updateServiceDesiredCount(
   }
 }
 
+async function startLocalContainers(
+  count: number,
+  serviceName: string,
+  queueUrl: string
+) {
+  // Start 'count' number of local Docker containers
+  for (let i = 0; i < count; i++) {
+    try {
+      const containerName = toSnakeCase(
+        `crossfeed_worker_${serviceName}_${i}_` +
+          Math.floor(Math.random() * 10000000)
+      );
+      const container = await docker!.createContainer({
+        // We need to create unique container names to avoid conflicts.
+        name: containerName,
+        Image: 'pe-worker',
+        HostConfig: {
+          // In order to use the host name "db" to access the database from the
+          // crossfeed-worker image, we must launch the Docker container with
+          // the Crossfeed backend network.
+          NetworkMode: 'crossfeed_backend',
+          Memory: 4000000000 // Limit memory to 4 GB. We do this locally to better emulate fargate memory conditions. TODO: In the future, we could read the exact memory from SCAN_SCHEMA to better emulate memory requirements for each scan.
+        },
+        Env: [
+          `DB_DIALECT=${process.env.DB_DIALECT}`,
+          `DB_HOST=${process.env.DB_HOST}`,
+          `IS_LOCAL=true`,
+          `DB_PORT=${process.env.DB_PORT}`,
+          `DB_NAME=${process.env.DB_NAME}`,
+          `DB_USERNAME=${process.env.DB_USERNAME}`,
+          `DB_PASSWORD=${process.env.DB_PASSWORD}`,
+          `PE_DB_NAME=${process.env.PE_DB_NAME}`,
+          `PE_DB_USERNAME=${process.env.PE_DB_USERNAME}`,
+          `PE_DB_PASSWORD=${process.env.PE_DB_PASSWORD}`,
+          `CENSYS_API_ID=${process.env.CENSYS_API_ID}`,
+          `CENSYS_API_SECRET=${process.env.CENSYS_API_SECRET}`,
+          `WORKER_USER_AGENT=${process.env.WORKER_USER_AGENT}`,
+          `SHODAN_API_KEY=${process.env.SHODAN_API_KEY}`,
+          `HIBP_API_KEY=${process.env.HIBP_API_KEY}`,
+          `SIXGILL_CLIENT_ID=${process.env.SIXGILL_CLIENT_ID}`,
+          `SIXGILL_CLIENT_SECRET=${process.env.SIXGILL_CLIENT_SECRET}`,
+          `PE_SHODAN_API_KEYS=${process.env.PE_SHODAN_API_KEYS}`,
+          `WORKER_SIGNATURE_PUBLIC_KEY=${process.env.WORKER_SIGNATURE_PUBLIC_KEY}`,
+          `WORKER_SIGNATURE_PRIVATE_KEY=${process.env.WORKER_SIGNATURE_PRIVATE_KEY}`,
+          `ELASTICSEARCH_ENDPOINT=${process.env.ELASTICSEARCH_ENDPOINT}`,
+          `AWS_ACCESS_KEY_ID=${process.env.AWS_ACCESS_KEY_ID}`,
+          `AWS_SECRET_ACCESS_KEY=${process.env.AWS_SECRET_ACCESS_KEY}`,
+          `AWS_REGION=${process.env.AWS_REGION}`,
+          `LG_API_KEY=${process.env.LG_API_KEY}`,
+          `LG_WORKSPACE_NAME=${process.env.LG_WORKSPACE_NAME}`,
+          `SERVICE_QUEUE_URL=${queueUrl}`,
+          `SERVICE_TYPE=${serviceName}`
+        ]
+      } as any);
+      await container.start();
+      console.log(`done starting container ${i}`);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}
+
+// Place message in AWS SQS Queue
 async function placeMessageInQueue(queueUrl: string, message: any) {
   const sendMessageParams = {
     QueueUrl: queueUrl,
@@ -80,6 +172,18 @@ async function placeMessageInQueue(queueUrl: string, message: any) {
   };
 
   await sqs.sendMessage(sendMessageParams).promise();
+}
+
+// Function to connect to RabbitMQ and publish a message
+async function publishToRabbitMQ(queue: string, message: any) {
+  const connection = await connect('amqp://rabbitmq');
+  const channel = await connection.createChannel();
+
+  await channel.assertQueue(queue, { durable: true });
+  await channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)));
+
+  await channel.close();
+  await connection.close();
 }
 
 export const handler: Handler = async (event) => {
@@ -102,7 +206,7 @@ export const handler: Handler = async (event) => {
         clusterName
       );
     } else if (message_body.scriptType === 'dnstwist') {
-      desiredCount = 10;
+      desiredCount = 15;
       await updateServiceAndQueue(
         process.env.DNSTWIST_QUEUE_URL!,
         process.env.DNSTWIST_SERVICE_NAME!,
