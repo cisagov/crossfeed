@@ -2,26 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { AuthForm } from 'components';
 import { useAuthContext } from 'context';
 import { Button } from '@trussworks/react-uswds';
-// import { Alert, AlertTitle, Box, Grid, Link, Typography } from '@mui/material';
 import { Box, Grid, Link, Typography } from '@mui/material';
 import { RegisterForm } from 'components/Register/RegisterForm';
 import { CrossfeedWarning } from 'components/WarningBanner';
-import {
-  Authenticator,
-  // ThemeProvider,
-  useAuthenticator
-} from '@aws-amplify/ui-react';
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { I18n } from 'aws-amplify';
 
 const TOTP_ISSUER = process.env.REACT_APP_TOTP_ISSUER;
-// Strings come from https://github.com/aws-amplify/amplify-ui/blob/main/packages/ui/src/i18n/dictionaries/authenticator/en.ts
 I18n.putVocabulariesForLanguage('en-US', {
   'Setup TOTP': 'Set up 2FA',
   'Confirm TOTP Code': 'Enter 2FA Code'
 });
-// const amplifyTheme = {
-//   name: 'my-theme'
-// };
+
 interface Errors extends Partial<FormData> {
   global?: string;
 }
@@ -36,15 +28,48 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   useEffect(() => {
     refreshUser();
   }, [refreshUser, authStatus]);
+
   const formFields = {
+    signIn: {
+      username: {
+        label: 'Email',
+        placeholder: 'Enter your email address',
+        required: true,
+        autoFocus: true
+      },
+      password: {
+        label: 'Password',
+        placeholder: 'Enter your password',
+        required: true
+      }
+    },
     confirmSignIn: {
       confirmation_code: {
-        label: 'Enter 2FA Code from your authenticator app'
+        label: 'Confirmation Code',
+        placeholder: 'Enter code from your authenticator app',
+        autoFocus: true
+      }
+    },
+    resetPassword: {
+      username: {
+        label: 'Email',
+        placeholder: 'Enter your email address',
+        required: true,
+        autoFocus: true
       }
     },
     confirmResetPassword: {
       confirmation_code: {
-        label: 'Enter code sent to your email address'
+        label: 'Confirmation Code',
+        placeholder: 'Enter code sent to your email address',
+        autoFocus: true
+      }
+    },
+    confirmSignUp: {
+      confirmation_code: {
+        label: 'Confirmation Code',
+        placeholder: 'Enter code sent to your email address',
+        autoFocus: true
       }
     },
     setupTOTP: {
@@ -52,14 +77,15 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
         // Set the issuer and name so that the authenticator app shows them.
         // TODO: Set the issuer to the email, once this is resolved: https://github.com/aws-amplify/amplify-ui/issues/3387.
         totpIssuer: TOTP_ISSUER
-        // totpUsername: email,
       },
       confirmation_code: {
         label:
-          'Set up 2FA by scanning the QR code with an authenticator app on your phone.'
+          'Set up 2FA by scanning the QR code with an authenticator app on your phone.',
+        autoFocus: true
       }
     }
   };
+
   const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
     try {
@@ -115,6 +141,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
             /* hideSignUp={
                 !showSignUp && !(process.env.NODE_ENV === 'development')
               }*/
+            // Hide sign up button unless we are in development mode.
             hideSignUp={true}
           />
         </Grid>

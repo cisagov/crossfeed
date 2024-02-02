@@ -42,14 +42,46 @@ export const AuthLoginCreate: React.FC<{ showSignUp?: boolean }> = ({
   }, [refreshUser, authStatus]);
 
   const formFields = {
+    signIn: {
+      username: {
+        label: 'Email',
+        placeholder: 'Enter your email address',
+        required: true,
+        autoFocus: true
+      },
+      password: {
+        label: 'Password',
+        placeholder: 'Enter your password',
+        required: true
+      }
+    },
     confirmSignIn: {
       confirmation_code: {
-        label: 'Enter 2FA Code from your authenticator app'
+        label: 'Confirmation Code',
+        placeholder: 'Enter code from your authenticator app',
+        autoFocus: true
+      }
+    },
+    resetPassword: {
+      username: {
+        label: 'Email',
+        placeholder: 'Enter your email address',
+        required: true,
+        autoFocus: true
       }
     },
     confirmResetPassword: {
       confirmation_code: {
-        label: 'Enter code sent to your email address'
+        label: 'Confirmation Code',
+        placeholder: 'Enter code sent to your email address',
+        autoFocus: true
+      }
+    },
+    confirmSignUp: {
+      confirmation_code: {
+        label: 'Confirmation Code',
+        placeholder: 'Enter code sent to your email address',
+        autoFocus: true
       }
     },
     setupTOTP: {
@@ -61,7 +93,8 @@ export const AuthLoginCreate: React.FC<{ showSignUp?: boolean }> = ({
       },
       confirmation_code: {
         label:
-          'Set up 2FA by scanning the QR code with an authenticator app on your phone.'
+          'Set up 2FA by scanning the QR code with an authenticator app on your phone.',
+        autoFocus: true
       }
     }
   };
@@ -94,7 +127,6 @@ export const AuthLoginCreate: React.FC<{ showSignUp?: boolean }> = ({
 
         <ThemeProvider theme={amplifyTheme}>
           <Authenticator
-            loginMechanisms={['email']}
             formFields={formFields}
             /* Hide the sign up button unless we are 1) on the /signup page or 2) in development mode. */
             hideSignUp={
