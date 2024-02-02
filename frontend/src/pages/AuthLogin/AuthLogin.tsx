@@ -142,7 +142,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
                 !showSignUp && !(process.env.NODE_ENV === 'development')
               }*/
             // Hide sign up button unless we are in development mode.
-            hideSignUp={!(process.env.NODE_ENV === 'development')}
+            hideSignUp={true}
           />
         </Grid>
         <Grid item xs={12}>
