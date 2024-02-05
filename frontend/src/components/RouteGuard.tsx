@@ -49,7 +49,7 @@ export const RouteGuard: React.FC<AuthRedirectRouteProps> = ({
   }
 
   if (typeof unauth === 'string' && !user) {
-    history.push('/');
+    history.push(unauth);
     return null;
   }
 
