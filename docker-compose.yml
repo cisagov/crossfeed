@@ -132,6 +132,18 @@ services:
       - MATOMO_GENERAL_ASSUME_SECURE_PROTOCOL=1
     logging:
       driver: none
+  rabbitmq:
+    image: 'rabbitmq:3.8-management'
+    ports:
+      - '5672:5672' # RabbitMQ default port
+      - '15672:15672' # RabbitMQ management plugin
+    networks:
+      - backend
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
 
 volumes:
   postgres-data:
@@ -139,6 +151,7 @@ volumes:
   minio-data:
   matomo-db-data:
   matomo-data:
+  rabbitmq-data:
 
 networks:
   backend:
