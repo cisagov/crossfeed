@@ -253,6 +253,7 @@ export const RegisterForm: React.FC<{
           value={values.email}
           onChange={onTextChange}
           helperText={errorEmailMessage ? errorEmailMessage : null}
+          autoFocus
         />
         <TextField
           margin="dense"

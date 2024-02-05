@@ -16,11 +16,12 @@ export interface Organization {
   children: Organization[];
   pendingDomains: PendingDomain[];
   country?: string;
-  state: string;
-  stateFips: number;
-  stateName: string;
-  county: string;
-  countyFips: number;
+  regionId?: string;
+  state?: string;
+  stateFips?: number;
+  stateName?: string;
+  county?: string;
+  countyFips?: number;
   acronym: string;
   type: string;
 }
