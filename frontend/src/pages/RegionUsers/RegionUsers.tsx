@@ -319,14 +319,14 @@ export const RegionUsers: React.FC = () => {
       selectOrgRows(newRowSelectionModel);
     }
   };
-  if (user?.userType !== ('globalAdmin' || 'regionalAdmin')) {
-    return (
-      <Alert severity="warning" sx={{ fontSize: 17 }}>
-        <b>Access Prohibited:</b> You are not authorized to view this page.
-        Contact an administrator for access.
-      </Alert>
-    );
-  }
+  // if (user?.userType !== ('globalAdmin' || 'regionalAdmin')) {
+  //   return (
+  //     <Alert severity="warning" sx={{ fontSize: 17 }}>
+  //       <b>Access Prohibited:</b> You are not authorized to view this page.
+  //       Contact an administrator for access.
+  //     </Alert>
+  //   );
+  // }
   return (
     <Box m={5} sx={{ minHeight: '1500px' }}>
       <Box
