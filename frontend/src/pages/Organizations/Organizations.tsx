@@ -63,7 +63,13 @@ export const Organizations: React.FC = () => {
                 'rootDomains',
                 'ipBlocks',
                 'isPassive',
-                'tags'
+                'tags',
+                'country',
+                'state',
+                'stateFips',
+                'stateName',
+                'county',
+                'countyFips'
               ]}
               onImport={async (results) => {
                 // TODO: use a batch call here instead.
@@ -71,7 +77,7 @@ export const Organizations: React.FC = () => {
                 for (const result of results) {
                   try {
                     createdOrganizations.push(
-                      await apiPost('/organizations/', {
+                      await apiPost('/organizations_upsert/', {
                         body: {
                           ...result,
                           // These fields are initially parsed as strings, so they need
@@ -103,7 +109,7 @@ export const Organizations: React.FC = () => {
                     ({
                       ...org,
                       tags: org.tags.map((tag) => tag.name)
-                    } as any)
+                    }) as any
                 )
               }
             />
