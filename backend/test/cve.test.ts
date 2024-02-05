@@ -10,9 +10,11 @@ describe('cve', () => {
   beforeAll(async () => {
     connection = await connectToDatabase();
     cve = Cve.create({
+      cve_uid: 'test-' + Math.random(),
       cve_name: 'CVE-0001-0001'
     });
     const organization = await Organization.create({
+      id: 'test-' + Math.random(),
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
@@ -21,7 +23,7 @@ describe('cve', () => {
   });
 
   afterAll(async () => {
-    await Cve.delete(cve);
+    await Cve.delete(cve.cve_uid);
     await Organization.delete(organization.id);
     await connection.close();
   });
