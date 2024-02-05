@@ -10,10 +10,9 @@ import {
   ModalRef
 } from '@trussworks/react-uswds';
 import { ModalToggleButton } from 'components';
-import { Organization, Query } from 'types';
 import { Table, ImportExport } from 'components';
 import { Column, SortingRule } from 'react-table';
-import { User } from 'types';
+import { Organization, Query, User } from 'types';
 import { FaTimes } from 'react-icons/fa';
 import { useAuthContext } from 'context';
 // @ts-ignore:next-line
