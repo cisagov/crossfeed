@@ -1,4 +1,3 @@
-// import React, { useEffect } from 'react';
 import React from 'react';
 import { RouteProps, Route, useHistory } from 'react-router-dom';
 import { useAuthContext } from 'context';
@@ -31,23 +30,26 @@ export const RouteGuard: React.FC<AuthRedirectRouteProps> = ({
 
   if (token && !user) {
     // waiting on user profile
+    console.log('Token Route Check')
     return null;
   }
 
   if (user && !user.isRegistered) {
     // user has authenticated but needs to create an account
+    console.log('User Registered Check')
     history.push('/create-account');
     return null;
   }
 
   if (user && userMustSign) {
     // user has authenticated but needs to sign terms
+    console.log('User must sign check')
     history.push('/terms');
     return null;
   }
 
   if (typeof unauth === 'string' && !user) {
-    history.push(unauth);
+    history.push('/');
     return null;
   }
 
@@ -58,8 +60,9 @@ export const RouteGuard: React.FC<AuthRedirectRouteProps> = ({
       !permissions.includes(user.userType)
     ) {
       console.log('User access denied. Logging out!');
-      // Log User out
       logout();
+      history.push('/');
+      return null;
     }
   }
 

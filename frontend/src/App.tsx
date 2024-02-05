@@ -105,18 +105,14 @@ const App: React.FC = () => (
                     exact
                     path="/signup"
                     render={() => <Redirect to="/inventory" />}
-                    unauth={(props) => (
-                      <AuthLogin {...props} showSignUp={true} />
-                    )}
+                    unauth={AuthLoginCreate}
                     component={Risk}
                   />
                   <RouteGuard
                     exact
                     path="/registration"
                     render={() => <Redirect to="/inventory" />}
-                    unauth={(props) => (
-                      <AuthLoginCreate {...props} showSignUp={true} />
-                    )}
+                    unauth={AuthLoginCreate}
                     component={Risk}
                   />
                   <Route
@@ -173,8 +169,8 @@ const App: React.FC = () => (
                   />
                   <RouteGuard
                     path="/scans"
-                    component={Scans}
                     exact
+                    component={Scans}
                     permissions={['globalView']}
                   />
                   <RouteGuard

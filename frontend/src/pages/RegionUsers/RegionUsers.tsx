@@ -319,7 +319,7 @@ export const RegionUsers: React.FC = () => {
       selectOrgRows(newRowSelectionModel);
     }
   };
-  if (user?.userType !== ('globalAdmin' || 'regionAdmin')) {
+  if (user?.userType !== ('globalAdmin' || 'regionalAdmin')) {
     return (
       <Alert severity="warning" sx={{ fontSize: 17 }}>
         <b>Access Prohibited:</b> You are not authorized to view this page.
