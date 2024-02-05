@@ -3,23 +3,25 @@ import app from '../src/api/app';
 import { Cve, Organization, connectToDatabase } from '../src/models';
 import { createUserToken } from './util';
 
-describe('cve', () => {
+describe('cves', () => {
   let connection;
   let cve: Cve;
   let organization: Organization;
   beforeAll(async () => {
     connection = await connectToDatabase();
     cve = Cve.create({
-      cve_uid: 'test-' + Math.random(),
+      cve_uid: '00000000-0000-0000-0000-000000000000',
       cve_name: 'CVE-0001-0001'
     });
-    const organization = await Organization.create({
-      id: 'test-' + Math.random(),
+    await cve.save();
+    organization = Organization.create({
+      id: '00000000-0000-0000-0000-000000000000',
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
       isPassive: false
-    }).save();
+    });
+    await organization.save();
   });
 
   afterAll(async () => {
@@ -29,17 +31,18 @@ describe('cve', () => {
   });
   describe('CVE API', () => {
     it('should return a single CVE by cve_name', async () => {
-      const res = await request(app)
-        .get(`/api/cve/${cve.cve_name}`)
+      const response = await request(app)
+        .get(`/cves/${cve.cve_name}`)
         .set(
           'Authorization',
           createUserToken({
             roles: [{ org: organization.id, role: 'user' }]
           })
-        );
-      expect(res.statusCode).toEqual(200);
-      expect(res.body).toHaveProperty('cve');
-      expect(res.body.cve.cve_name).toEqual(cve.cve_name);
+        )
+        .send({})
+        .expect(200);
+      expect(response.body).toHaveProperty('cve');
+      expect(response.body.cve.cve_name).toEqual(cve.cve_name);
     });
   });
 });

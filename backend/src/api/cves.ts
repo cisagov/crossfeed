@@ -79,34 +79,12 @@ class CveSearch {
   }
 }
 
-/**
- * @swagger
- *
- * /cve:
- *  get:
- *    description: List CVE records by specifying a filter.
- *    tags:
- *    - CVE
- */
-export const list = wrapHandler(async (event) => {
-  await connectToDatabase();
-  const search = await validateBody(CveSearch, event.body);
-  const [result, count] = await search.getResults(event);
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      result,
-      count
-    })
-  };
-});
-
 //TODO: Refactor the get endpoint to search by id instead of cve_name.
 // This requires creating a relationship between the cve and vulnerability tables.
 /**
  * @swagger
  *
- * /cve/{cve_name}:
+ * /cves/{cve_name}:
  *  get:
  *    description: Retrieve a single CVE record by its name.
  *    tags:
@@ -121,10 +99,16 @@ export const list = wrapHandler(async (event) => {
 export const get = wrapHandler(async (event) => {
   await connectToDatabase();
   const cve_name = event.pathParameters?.cve_name;
+  console.log('cve_name:', cve_name);
+
   const cve = await Cve.findOne({ where: { cve_name } });
+  console.log('Cve.findOne result:', cve);
 
   if (!cve) {
-    return NotFound;
+    return {
+      statusCode: 404,
+      body: JSON.stringify(Error)
+    };
   }
 
   return {

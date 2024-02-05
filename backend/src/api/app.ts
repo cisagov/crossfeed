@@ -5,6 +5,7 @@ import * as cors from 'cors';
 import * as helmet from 'helmet';
 import { handler as healthcheck } from './healthcheck';
 import * as auth from './auth';
+import * as cves from './cves';
 import * as domains from './domains';
 import * as search from './search';
 import * as vulnerabilities from './vulnerabilities';
@@ -287,6 +288,7 @@ authenticatedRoute.delete('/api-keys/:keyId', handlerToExpress(apiKeys.del));
 
 authenticatedRoute.post('/search', handlerToExpress(search.search));
 authenticatedRoute.post('/search/export', handlerToExpress(search.export_));
+authenticatedRoute.get('/cves/:cve_name', handlerToExpress(cves.get));
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
 authenticatedRoute.post('/domain/export', handlerToExpress(domains.export_));
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));
