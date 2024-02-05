@@ -41,8 +41,7 @@ describe('cves', () => {
         )
         .send({})
         .expect(200);
-      expect(response.body).toHaveProperty('cve');
-      expect(response.body.cve.cve_name).toEqual(cve.cve_name);
+      expect(response.body.cve_name).toEqual(cve.cve_name);
     });
   });
 });
