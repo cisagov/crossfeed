@@ -30,20 +30,20 @@ export const RouteGuard: React.FC<AuthRedirectRouteProps> = ({
 
   if (token && !user) {
     // waiting on user profile
-    console.log('Token Route Check')
+    console.log('Token Route Check');
     return null;
   }
 
   if (user && !user.isRegistered) {
     // user has authenticated but needs to create an account
-    console.log('User Registered Check')
+    console.log('User Registered Check');
     history.push('/create-account');
     return null;
   }
 
   if (user && userMustSign) {
     // user has authenticated but needs to sign terms
-    console.log('User must sign check')
+    console.log('User must sign check');
     history.push('/terms');
     return null;
   }
