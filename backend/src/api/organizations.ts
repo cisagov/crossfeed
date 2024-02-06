@@ -92,6 +92,50 @@ class NewOrganization extends NewOrganizationNonGlobalAdmins {
   parent?: string;
 }
 
+class NewOrUpdatedOrganization extends NewOrganizationNonGlobalAdmins {
+  @IsArray()
+  rootDomains: string[];
+
+  @IsArray()
+  ipBlocks: string[];
+
+  @IsArray()
+  tags: OrganizationTag[];
+
+  @IsUUID()
+  @IsOptional()
+  parent?: string;
+
+  @IsString()
+  @IsOptional()
+  state?: string;
+
+  @IsString()
+  @IsOptional()
+  regionId?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  country?: string;
+
+  @IsNumber()
+  @IsOptional()
+  stateFips?: number;
+
+  @IsString()
+  @IsOptional()
+  stateName?: string;
+
+  @IsString()
+  @IsOptional()
+  county?: string;
+
+  @IsNumber()
+  @IsOptional()
+  countyFips?: number;
+}
+
 // Type Validation Options
 class UpdateOrganizationMetaV2 {
   @IsString()
@@ -929,4 +973,125 @@ export const addUserV2 = wrapHandler(async (event) => {
     };
   }
   return NotFound;
+});
+
+export const REGION_STATE_MAP = {
+  Alabama: '4',
+  Alaska: '10',
+  'American Samoa': '9',
+  Arizona: '9',
+  Arkansas: '6',
+  California: '9',
+  Colorado: '8',
+  'Commonwealth Northern Mariana Islands': '9',
+  Connecticut: '1',
+  Delaware: '3',
+  'Federal States of Micronesia': '9',
+  Florida: '4',
+  Georgia: '4',
+  Guam: '9',
+  Hawaii: '9',
+  Idaho: '10',
+  Illinois: '5',
+  Indiana: '5',
+  Iowa: '7',
+  Kansas: '7',
+  Kentucky: '4',
+  Louisiana: '6',
+  Maine: '1',
+  Maryland: '3',
+  Massachusetts: '1',
+  Michigan: '5',
+  Minnesota: '5',
+  Mississippi: '4',
+  Missouri: '7',
+  Montana: '8',
+  Nebraska: '7',
+  Nevada: '9',
+  'New Hampshire': '1',
+  'New Jersey': '2',
+  'New Mexico': '6',
+  'New York': '2',
+  'North Carolina': '4',
+  'North Dakota': '8',
+  Ohio: '5',
+  Oklahoma: '6',
+  Oregon: '10',
+  Pennsylvania: '3',
+  'Puerto Rico': '2',
+  'Republic of Marshall Islands': '9',
+  'Rhode Island': '1',
+  'South Carolina': '4',
+  'South Dakota': '8',
+  Tennessee: '4',
+  Texas: '6',
+  Utah: '8',
+  Vermont: '1',
+  Virginia: '3',
+  'Virgin Islands': '2',
+  Washington: '10',
+  'West Virginia': '3',
+  Wisconsin: '5',
+  Wyoming: '8'
+};
+
+/**
+ * @swagger
+ *
+ * /organizations_upsert:
+ *  post:
+ *    description: Create a new organization or update it if it already exists.
+ *    tags:
+ *    - Organizations
+ */
+export const upsert_org = wrapHandler(async (event) => {
+  if (!isGlobalWriteAdmin(event)) return Unauthorized;
+  const body = await validateBody(NewOrUpdatedOrganization, event.body);
+  await connectToDatabase();
+
+  if ('tags' in body) {
+    body.tags = await findOrCreateTags(body.tags);
+  }
+
+  if ('stateName' in body) {
+    body.regionId = REGION_STATE_MAP[body.stateName!] ?? null;
+  }
+
+  const organization_id = await Organization.createQueryBuilder()
+    .insert()
+    .into(Organization)
+    .values([
+      {
+        ...body,
+        createdBy: { id: event.requestContext.authorizer!.id },
+        parent: { id: body.parent }
+      }
+    ])
+    .orUpdate({
+      conflict_target: ['name'],
+      overwrite: [
+        'isPassive',
+        'country',
+        'state',
+        'regionId',
+        'stateFips',
+        'stateName',
+        'county',
+        'countyFips'
+      ]
+    })
+    .execute();
+
+  const current_org = await Organization.findOneOrFail(
+    organization_id.identifiers[0]
+  );
+
+  current_org.tags = body.tags;
+
+  current_org.save();
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(current_org)
+  };
 });

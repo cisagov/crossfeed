@@ -1,6 +1,6 @@
 .root {
   width: 100%;
-  height: 100%;
+  //height: 100%;
   position: absolute;
   padding: 0;
 
@@ -23,7 +23,7 @@
     background-color: #fff;
     border-radius: 5px;
     width: 100%;
-    height: 100%;
+    //height: 100%;
     max-width: 32rem;
     padding: 3rem 1rem;
     display: flex;
@@ -34,6 +34,16 @@
     :global .usa-label,
     :global .usa-input {
       width: 100%;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    input[type='number'] {
+      appearance: textfield;
     }
 
     @media screen and (min-width: 480px) {
