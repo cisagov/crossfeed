@@ -1,4 +1,4 @@
-import { Cpe } from './cpe';
+import { ProductInfo } from './product-info';
 export interface Cve {
   cve_uid: string;
   cve_name: string | null;
@@ -33,5 +33,5 @@ export interface Cve {
   weaknesses: string[] | null;
   reference_urls: string[] | null;
   cpe_list: string[] | null;
-  product_info: Cpe[];
+  product_info: ProductInfo[];
 }

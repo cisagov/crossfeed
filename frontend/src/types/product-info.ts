@@ -1,5 +1,5 @@
 import { Cve } from './cve';
-export interface Cpe {
+export interface ProductInfo {
   id: string;
   cpe_product_name: string;
   version_number: string;
