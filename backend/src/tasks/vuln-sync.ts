@@ -29,7 +29,7 @@ interface UniversalCrossfeedVuln {
   service_asset_type: string;
 }
 interface TaskResponse {
-  task_id: string;
+  task_id: string[];
   status: 'Pending' | 'Completed' | 'Failure';
   result: UniversalCrossfeedVuln[];
   error?: string;
@@ -92,7 +92,7 @@ export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
   console.log(
-    `Scanning PE database for vulnerabilities & servuces for organization ${organizationId}...`
+    `Scanning PE database for vulnerabilities & services for organization ${organizationId}...`
   );
   try {
     //if (organizationName === 'GLOBAL SCAN') {
@@ -106,16 +106,22 @@ export const handler = async (commandOptions: CommandOptions) => {
       console.error('Failed to fetch PE vulns');
       return;
     }
-    let response = await fetchPEVulnData(data.task_id);
-    while (response && response.status === 'Pending') {
-      await sleep(1000);
-      response = await fetchPEVulnData(data.task_id);
+    let allVulns: UniversalCrossfeedVuln[] = [];
+    for (const taskId of data.task_id) {
+      let response = await fetchPEVulnData(taskId);
+      while (response && response.status === 'Pending') {
+        await sleep(1000);
+        response = await fetchPEVulnData(taskId);
+      }
+      if (response && response.status === 'Failure') {
+        console.error('Failed for task id: ' + taskId);
+        continue; // Go to the next item in the for loop
+      }
+      allVulns = allVulns.concat(response?.result ?? []);
+      await sleep(1000); // Delay between API requests
     }
-    if (response && response.status === 'Failure') {
-      console.error('Failed to fetch PE vulns');
-      return;
-    }
-    for (const item of response?.result ?? []) {
+
+    for (const item of allVulns ?? []) {
       const domainId = await saveDomainsReturn([
         plainToClass(Domain, {
           name: item.service_asset,
