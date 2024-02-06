@@ -1,10 +1,11 @@
+import { Cpe } from './cpe';
 export interface Cve {
   cve_uid: string;
-  cve_name: string;
-  published_date: string;
-  last_modified_date: string;
-  vuln_status: string;
-  description: string;
+  cve_name: string | null;
+  published_date: Date;
+  last_modified_date: Date;
+  vuln_status: string | null;
+  description: string | null;
   cvss_v2_source: string | null;
   cvss_v2_type: string | null;
   cvss_v2_version: string | null;
@@ -29,8 +30,8 @@ export interface Cve {
   cvss_v4_base_severity: string | null;
   cvss_v4_exploitability_score: string | null;
   cvss_v4_impact_score: string | null;
-  weaknesses: string;
-  reference_urls: string;
-  cpe_list: string;
+  weaknesses: string[] | null;
+  reference_urls: string[] | null;
+  cpe_list: string[] | null;
+  product_info: Cpe[];
 }
-

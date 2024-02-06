@@ -1,4 +1,6 @@
 import { SortingRule, Filters } from 'react-table';
+export * from './cpe';
+export * from './cve';
 export * from './domain';
 export * from './vulnerability';
 export * from './scan';
