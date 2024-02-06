@@ -9,7 +9,7 @@ import {
 import { Cve } from './cve';
 
 //TODO: Refactor column names to camelCase to match the rest of the codebase?
-//TODO: Refactor table name to product for brevity?
+//TODO: Refactor table name to product or cpe for brevity?
 @Entity()
 @Unique(['cpe_product_name', 'version_number', 'vender'])
 export class ProductInfo extends BaseEntity {
