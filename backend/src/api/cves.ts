@@ -56,6 +56,8 @@ class CveSearch {
     const filters = this.filters || new CveFilters();
     const query = Cve.createQueryBuilder('cve');
 
+    query.leftJoinAndSelect('cve.product_info', 'product_info');
+
     if (filters.cve_name) {
       query.andWhere('cve.cve_name = :cve_name', {
         cve_name: filters.cve_name
@@ -97,25 +99,28 @@ class CveSearch {
 export const get = wrapHandler(async (event) => {
   await connectToDatabase();
   const cve_uid = event.pathParameters?.cve_uid;
-  console.log('cve_uid:', cve_uid);
 
-  const cve = await Cve.findOne({ where: { cve_uid: cve_uid } });
-  console.log('Cve.findOne result:', cve);
+  // Create an instance of CveSearch and call getResults
+  const cveSearch = new CveSearch();
+  cveSearch.uuid = cve_uid;
+  const [cves, count] = await cveSearch.getResults(event);
 
-  if (!cve) {
+  // Check if any CVEs were found
+  if (count === 0) {
     return {
       statusCode: 404,
       body: JSON.stringify(Error)
     };
   }
 
+  // Return the first CVE found
   return {
     statusCode: 200,
-    body: JSON.stringify(cve)
+    body: JSON.stringify(cves[0])
   };
 });
 
-//TODO: Remove getByName endpoint once the vulnerability and cve tables are related
+//TODO: Remove getByName endpoint once a one-to-one relationship is established between vulnerability.cve and cve.cve_id
 /**
  * @swagger
  *
