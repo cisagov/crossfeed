@@ -142,18 +142,22 @@ export const getByName = wrapHandler(async (event) => {
   const cve_name = event.pathParameters?.cve_name;
   console.log('cve_name:', cve_name);
 
-  const cve = await Cve.findOne({ where: { cve_name } });
-  console.log('Cve.findOne result:', cve);
+  // Create an instance of CveSearch and call getResults
+  const cveSearch = new CveSearch();
+  cveSearch.cve_name = cve_name;
+  const [cves, count] = await cveSearch.getResults(event);
 
-  if (!cve) {
+  // Check if any CVEs were found
+  if (count === 0) {
     return {
       statusCode: 404,
       body: JSON.stringify(Error)
     };
   }
 
+  // Return the first CVE found
   return {
     statusCode: 200,
-    body: JSON.stringify(cve)
+    body: JSON.stringify(cves[0])
   };
 });
