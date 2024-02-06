@@ -79,12 +79,47 @@ class CveSearch {
   }
 }
 
-//TODO: Refactor the get endpoint to search by id instead of cve_name.
-// This requires creating a relationship between the cve and vulnerability tables.
 /**
  * @swagger
  *
- * /cves/{cve_name}:
+ * /cves/{cve_uid}:
+ *  get:
+ *    description: Retrieve a single CVE record by its ID.
+ *    tags:
+ *    - CVE
+ *    parameters:
+ *    - name: cve_uid
+ *      in: path
+ *      required: true
+ *      schema:
+ *        type: string
+ */
+export const get = wrapHandler(async (event) => {
+  await connectToDatabase();
+  const cve_uid = event.pathParameters?.cve_uid;
+  console.log('cve_uid:', cve_uid);
+
+  const cve = await Cve.findOne({ where: { cve_uid: cve_uid } });
+  console.log('Cve.findOne result:', cve);
+
+  if (!cve) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify(Error)
+    };
+  }
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(cve)
+  };
+});
+
+//TODO: Remove getByName endpoint once the vulnerability and cve tables are related
+/**
+ * @swagger
+ *
+ * /cves/name/{cve_name}:
  *  get:
  *    description: Retrieve a single CVE record by its name.
  *    tags:
@@ -96,7 +131,7 @@ class CveSearch {
  *      schema:
  *        type: string
  */
-export const get = wrapHandler(async (event) => {
+export const getByName = wrapHandler(async (event) => {
   await connectToDatabase();
   const cve_name = event.pathParameters?.cve_name;
   console.log('cve_name:', cve_name);
