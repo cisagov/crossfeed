@@ -186,9 +186,7 @@ class VulnerabilitySearch {
         ])
         .orderBy('cnt', 'DESC');
     } else {
-      qs = qs
-        .leftJoinAndSelect('vulnerability.service', 'service')
-        .orderBy(sort, this.order);
+      qs = qs.orderBy(sort, this.order);
     }
 
     if (pageSize !== -1) {
