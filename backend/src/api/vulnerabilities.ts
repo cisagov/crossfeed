@@ -170,7 +170,8 @@ class VulnerabilitySearch {
         : `vulnerability.${this.sort}`;
     let qs = Vulnerability.createQueryBuilder('vulnerability')
       .leftJoinAndSelect('vulnerability.domain', 'domain')
-      .leftJoinAndSelect('domain.organization', 'organization');
+      .leftJoinAndSelect('domain.organization', 'organization')
+      .leftJoinAndSelect('vulnerability.service', 'service');
 
     if (groupBy) {
       qs = qs

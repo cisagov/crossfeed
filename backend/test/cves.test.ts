@@ -3,6 +3,7 @@ import app from '../src/api/app';
 import { Cve, Organization, connectToDatabase } from '../src/models';
 import { createUserToken } from './util';
 
+// TODO: Add test for joining product_info
 describe('cves', () => {
   let connection;
   let cve: Cve;

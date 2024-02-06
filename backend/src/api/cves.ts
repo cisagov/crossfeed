@@ -54,9 +54,10 @@ class CveSearch {
 
   async getResults(event): Promise<[Cve[], number]> {
     const filters = this.filters || new CveFilters();
-    const query = Cve.createQueryBuilder('cve');
-
-    query.leftJoinAndSelect('cve.product_info', 'product_info');
+    const query = Cve.createQueryBuilder('cve').leftJoinAndSelect(
+      'cve.product_info',
+      'product_info'
+    );
 
     if (filters.cve_name) {
       query.andWhere('cve.cve_name = :cve_name', {
