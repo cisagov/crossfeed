@@ -30,9 +30,24 @@ describe('cves', () => {
     await connection.close();
   });
   describe('CVE API', () => {
+    it('should return a single CVE by cve_uid', async () => {
+      const response = await request(app)
+        .get(`/cves/${cve.cve_uid}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [{ org: organization.id, role: 'user' }]
+          })
+        )
+        .send({})
+        .expect(200);
+      expect(response.body.cve_uid).toEqual(cve.cve_uid);
+    });
+  });
+  describe('CVE API', () => {
     it('should return a single CVE by cve_name', async () => {
       const response = await request(app)
-        .get(`/cves/${cve.cve_name}`)
+        .get(`/cves/name/${cve.cve_name}`)
         .set(
           'Authorization',
           createUserToken({
