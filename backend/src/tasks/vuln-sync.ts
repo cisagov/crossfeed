@@ -1,5 +1,11 @@
 import { CommandOptions } from './ecs-client';
-import { Domain, Service, Vulnerability, Organization } from '../models';
+import {
+  connectToDatabase,
+  Domain,
+  Service,
+  Vulnerability,
+  Organization
+} from '../models';
 import { plainToClass } from 'class-transformer';
 import axios from 'axios';
 import pRetry from 'p-retry';
@@ -7,7 +13,6 @@ import saveServicesToDb from './helpers/saveServicesToDb';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import saveDomainsReturn from './helpers/saveDomainsReturn';
 import { IpToDomainsMap, sanitizeStringField } from './censysIpv4';
-import getScanOrganizations from './helpers/getScanOrganizations';
 
 interface UniversalCrossfeedVuln {
   title: string;
@@ -92,85 +97,90 @@ export const handler = async (commandOptions: CommandOptions) => {
   const { organizationId, organizationName } = commandOptions;
 
   console.log(
-    `Scanning PE database for vulnerabilities & services for organization ${organizationId}...`
+    `Scanning PE database for vulnerabilities & services for all orgs`
   );
   try {
-    //if (organizationName === 'GLOBAL SCAN') {
-    //TODO: get all the organizations and scan them
-    if (organizationName === 'GLOBAL SCAN' || organizationName === undefined) {
-      console.log('Org must be defined and not GLOBAL SCAN');
-      return;
-    }
-    const data = await fetchPEVulnTask(organizationName);
-    if (data?.task_id === undefined) {
-      console.error('Failed to fetch PE vulns');
-      return;
-    }
-    let allVulns: UniversalCrossfeedVuln[] = [];
-    for (const taskId of data.task_id) {
-      let response = await fetchPEVulnData(taskId);
-      while (response && response.status === 'Pending') {
-        await sleep(1000);
-        response = await fetchPEVulnData(taskId);
-      }
-      if (response && response.status === 'Failure') {
-        console.error('Failed for task id: ' + taskId);
-        continue; // Go to the next item in the for loop
-      }
-      allVulns = allVulns.concat(response?.result ?? []);
-      await sleep(1000); // Delay between API requests
-    }
-
-    for (const item of allVulns ?? []) {
-      const domainId = await saveDomainsReturn([
-        plainToClass(Domain, {
-          name: item.service_asset,
-          organization: { id: organizationId }, //change this for global scan to get all the organizations
-          fromRootDomain: item.service_asset,
-          discoveredBy: { id: commandOptions.scanId }
-        })
-      ]);
-      console.log('DOMAINID: ');
-      console.log(domainId?.id);
-      const [serviceId] = await saveServicesToDb([
-        plainToClass(Service, {
-          domain: item.service_asset,
-          discoveredBy: { id: commandOptions.scanId },
-          port: item.service_port,
-          lastSeen: item.lastSeen,
-          banner: sanitizeStringField(item.banner),
-          serviceSource: item.serviceSource,
-          ...(item.source === 'Shodan'
-            ? {
-                shodanResults: {
-                  product: item.product,
-                  version: item.version,
-                  cpe: item.cpe
-                }
-              }
-            : {})
-        })
-      ]);
-      console.log('saved services');
-      const vulns: Vulnerability[] = [];
-      vulns.push(
-        plainToClass(Vulnerability, {
-          domain: item.service_asset,
-          lastSeen: item.lastSeen,
-          title: item.title,
-          cve: item.cve,
-          cvss: item.cvss,
-          state: item.state,
-          source: item.source,
-          needsPopulation: item.needsPopulation,
-          service: { id: serviceId }
-        })
+    const allOrgs: Organization[] = await Organization.find();
+    for (const org of allOrgs) {
+      console.log(
+        `Scanning PE database for vulnerabilities & services for ${org.acronym}, ${org.name}`
       );
-      await saveVulnerabilitiesToDb(vulns, false);
+      const data = await fetchPEVulnTask(org.acronym);
+      if (data?.task_id === undefined) {
+        console.error(
+          `Failed to fetch PE vulns for org: ${org.acronym}, ${org.name}`
+        );
+        continue;
+      }
+      let allVulns: UniversalCrossfeedVuln[] = [];
+      for (const taskId of data.task_id) {
+        let response = await fetchPEVulnData(taskId);
+        while (response && response.status === 'Pending') {
+          await sleep(1000);
+          response = await fetchPEVulnData(taskId);
+        }
+        if (response && response.status === 'Failure') {
+          console.error(
+            `Failed for task id: ${taskId} for org ${org.acronym}, ${org.name}`
+          );
+          continue; // Go to the next item in the for loop
+        }
+        allVulns = allVulns.concat(response?.result ?? []);
+        await sleep(1000); // Delay between API requests
+      }
+      for (const item of allVulns ?? []) {
+        const domainId = await saveDomainsReturn([
+          plainToClass(Domain, {
+            name: item.service_asset,
+            organization: { id: organizationId }, //change this for global scan to get all the organizations
+            fromRootDomain: item.service_asset,
+            discoveredBy: { id: commandOptions.scanId }
+          })
+        ]);
+        if (domainId === undefined || domainId.id === null) {
+          console.error(`Failed to save domain ${item.service_asset}`);
+          continue;
+        }
+        const [serviceId] = await saveServicesToDb([
+          plainToClass(Service, {
+            domain: { id: domainId.id },
+            discoveredBy: { id: commandOptions.scanId },
+            port: item.service_port,
+            lastSeen: item.lastSeen,
+            banner: sanitizeStringField(item.banner),
+            serviceSource: item.serviceSource,
+            ...(item.source === 'Shodan'
+              ? {
+                  shodanResults: {
+                    product: item.product,
+                    version: item.version,
+                    cpe: item.cpe
+                  }
+                }
+              : {})
+          })
+        ]);
+        console.log('saved services');
+        const vulns: Vulnerability[] = [];
+        vulns.push(
+          plainToClass(Vulnerability, {
+            domain: item.service_asset,
+            lastSeen: item.lastSeen,
+            title: item.title,
+            cve: item.cve,
+            cvss: item.cvss,
+            state: item.state,
+            source: item.source,
+            needsPopulation: item.needsPopulation,
+            service: { id: serviceId }
+          })
+        );
+        await saveVulnerabilitiesToDb(vulns, false);
+      }
     }
   } catch (e) {
     console.error(e);
   }
   await sleep(1000); //Not overload P&E API
-  console.log(`Finished retriving info for organization ${organizationId}...`);
+  console.log(`Finished retriving PE vulns for all orgs`);
 };
