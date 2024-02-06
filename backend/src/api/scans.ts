@@ -49,6 +49,14 @@ interface ScanSchema {
 }
 
 export const SCAN_SCHEMA: ScanSchema = {
+  vulnSync: {
+    type: 'fargate',
+    isPassive: true,
+    global: true,
+    description: 'Pull in vulnerability data from PEs Vulnerability database',
+    cpu: '1024',
+    memory: '8192'
+  },
   cveSync: {
     type: 'fargate',
     isPassive: true,
