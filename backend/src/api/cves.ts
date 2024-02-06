@@ -140,24 +140,21 @@ export const get = wrapHandler(async (event) => {
 export const getByName = wrapHandler(async (event) => {
   await connectToDatabase();
   const cve_name = event.pathParameters?.cve_name;
-  console.log('cve_name:', cve_name);
 
-  // Create an instance of CveSearch and call getResults
-  const cveSearch = new CveSearch();
-  cveSearch.cve_name = cve_name;
-  const [cves, count] = await cveSearch.getResults(event);
+  const cve = await Cve.createQueryBuilder('cve')
+    .leftJoinAndSelect('cve.product_info', 'product_info')
+    .where('cve.cve_name = :cve_name', { cve_name })
+    .getOne();
 
-  // Check if any CVEs were found
-  if (count === 0) {
+  if (!cve) {
     return {
       statusCode: 404,
       body: JSON.stringify(Error)
     };
   }
 
-  // Return the first CVE found
   return {
     statusCode: 200,
-    body: JSON.stringify(cves[0])
+    body: JSON.stringify(cve)
   };
 });
