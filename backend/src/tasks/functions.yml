@@ -29,6 +29,20 @@ bastion:
 makeGlobalAdmin:
   handler: src/tasks/makeGlobalAdmin.handler
 
+checkUserExpiration:
+  timeout: 300
+  handler: src/tasks/checkUserExpiration.handler
+  environment:
+    REACT_APP_USER_POOL_ID: ${env:REACT_APP_USER_POOL_ID}
+    events:
+      - schedule: cron(0 0 * * ? *) # Runs every day at midnight
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "cognito-idp:AdminDisableUser"
+          - "cognito-idp:ListUsers"
+        Resource: "*"
+
 scanExecution:
   handler: src/tasks/scanExecution.handler
   timeout: 300 # 5 minutes

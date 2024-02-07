@@ -33,12 +33,15 @@ provider:
   iam:
     role:
       statements:
-        # TODO: make the resources more specific.
+        # TODO: make the resources more specific. See Resource: '*' was
         - Effect: Allow
           Action:
             - lambda:InvokeAsync
             - lambda:InvokeFunction
-          Resource: '*'
+            - cognito-idp:AdminDisableUser
+            - cognito-idp:ListUsers
+          Resource:
+            - "arn:aws:cognito-idp:us-east-1:<account-id>:userpool/${env:REACT_APP_USER_POOL_ID}"
         - Effect: Allow
           Action:
             - ecs:RunTask
