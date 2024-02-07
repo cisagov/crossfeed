@@ -1,86 +1,8 @@
-import {
-  IsInt,
-  IsPositive,
-  IsString,
-  ValidateNested,
-  IsOptional,
-  IsUUID
-} from 'class-validator';
-import { Type } from 'class-transformer';
 import { Cve, connectToDatabase } from '../models';
-import { validateBody, wrapHandler, NotFound } from './helpers';
+import { wrapHandler } from './helpers';
 
-class CveFilters {
-  @IsUUID()
-  @IsOptional()
-  uuid?: string;
-
-  @IsOptional()
-  @IsString()
-  cve_name?: string;
-
-  @IsOptional()
-  @IsString()
-  vuln_status?: string;
-}
-
-class CveSearch {
-  @IsUUID()
-  @IsOptional()
-  uuid?: string;
-
-  @IsOptional()
-  @IsString()
-  cve_name?: string;
-
-  @IsOptional()
-  @IsString()
-  vuln_status?: string;
-
-  @Type(() => CveFilters)
-  @ValidateNested()
-  @IsOptional()
-  filters?: CveFilters;
-
-  @IsInt()
-  @IsPositive()
-  @IsOptional()
-  pageSize?: number;
-
-  @IsInt()
-  @IsPositive()
-  @IsOptional()
-  page?: number;
-
-  async getResults(event): Promise<[Cve[], number]> {
-    const filters = this.filters || new CveFilters();
-    const query = Cve.createQueryBuilder('cve').leftJoinAndSelect(
-      'cve.product_info',
-      'product_info'
-    );
-
-    if (filters.cve_name) {
-      query.andWhere('cve.cve_name = :cve_name', {
-        cve_name: filters.cve_name
-      });
-    }
-    if (filters.vuln_status) {
-      query.andWhere('cve.vuln_status = :vuln_status', {
-        vuln_status: filters.vuln_status
-      });
-    }
-
-    // Apply pagination to the query
-    const pageSize = this.pageSize || 25;
-    const skip = ((this.page || 1) - 1) * pageSize;
-    query.skip(skip).take(pageSize);
-
-    // Execute the query
-    const [result, count] = await query.getManyAndCount();
-
-    return [result, count];
-  }
-}
+// TODO: Add test for joining product_info
+// TODO: Create CveFilters and CveSearch classes to handle filtering and pagination of additional fields
 
 /**
  * @swagger
@@ -101,23 +23,21 @@ export const get = wrapHandler(async (event) => {
   await connectToDatabase();
   const cve_uid = event.pathParameters?.cve_uid;
 
-  // Create an instance of CveSearch and call getResults
-  const cveSearch = new CveSearch();
-  cveSearch.uuid = cve_uid;
-  const [cves, count] = await cveSearch.getResults(event);
+  const cve = await Cve.createQueryBuilder('cve')
+    .leftJoinAndSelect('cve.product_info', 'product_info')
+    .where('cve.cve_uid = :cve_uid', { cve_uid: cve_uid })
+    .getOne();
 
-  // Check if any CVEs were found
-  if (count === 0) {
+  if (!cve) {
     return {
       statusCode: 404,
       body: JSON.stringify(Error)
     };
   }
 
-  // Return the first CVE found
   return {
     statusCode: 200,
-    body: JSON.stringify(cves[0])
+    body: JSON.stringify(cve)
   };
 });
 
