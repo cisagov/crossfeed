@@ -16,8 +16,7 @@ custom:
 
 provider:
   name: aws
-  region: us-gov-east-1
-  endpointType: PRIVATE
+  region: us-east-1
   runtime: nodejs16.x
   timeout: 30
   stage: ${opt:stage, 'dev'}
@@ -27,11 +26,6 @@ provider:
     binaryMediaTypes:
       - 'image/*'
       - 'font/*'
-    resourcePolicy:
-      - Effect: Allow
-        Principal: '*'
-        Action: 'execute-api:Invoke'
-        Resource: 'execute-api:/${self:provider.stage}/*/*'
   logs:
     restApi: true
   deploymentBucket:
