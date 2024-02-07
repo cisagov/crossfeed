@@ -132,5 +132,4 @@ functions:
 
 plugins:
   - serverless-domain-manager
-  - serverless-better-credentials
   - serverless-webpack
