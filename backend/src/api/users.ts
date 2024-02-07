@@ -76,9 +76,13 @@ class UserSearch {
   async getResults(event): Promise<[User[], number]> {
     const pageSize = this.pageSize || 25;
     const sort = this.sort === 'name' ? 'user.fullName' : 'user.' + this.sort;
-    const qs = User.createQueryBuilder('user').orderBy(sort, this.order);
-    const results = await qs.getManyAndCount();
-    return results;
+    const qs = User.createQueryBuilder('user')
+      .leftJoinAndSelect('user.roles', 'roles') // Include the roles relation
+      .leftJoinAndSelect('roles.organization', 'organization') // Include the organization relation
+      .orderBy(sort, this.order);
+    const result = await qs.getMany();
+    const count = await qs.getCount();
+    return [result, count];
   }
 }
 
