@@ -12,7 +12,7 @@ custom:
     basePath: ''
     certificateName: ${file(env.yml):${self:provider.stage}.DOMAIN, ''}
     stage: ${self:provider.stage}
-    createRoute53Record: true
+    createRoute53Record: false
 
 provider:
   name: aws
@@ -132,4 +132,5 @@ functions:
 
 plugins:
   - serverless-domain-manager
+  - serverless-better-credentials
   - serverless-webpack
