@@ -346,12 +346,6 @@ variable "ssm_dnstwist_queue_url" {
   default     = "/crossfeed/staging/DNSTWIST_QUEUE_URL"
 }
 
-variable "cloudfront_name" {
-  description = "cloudfront_name"
-  type        = string
-  default     = "Crossfeed Staging Frontend"
-}
-
 variable "db_group_name" {
   description = "db_group_name"
   type        = string
