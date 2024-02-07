@@ -10,7 +10,6 @@ describe('cpes', () => {
   beforeAll(async () => {
     connection = await connectToDatabase();
     productInfo = ProductInfo.create({
-      id: '00000000-0000-0000-0000-000000000000',
       last_seen: new Date(),
       cpe_product_name: 'Test Product',
       version_number: '1.0.0',
@@ -18,7 +17,6 @@ describe('cpes', () => {
     });
     await productInfo.save();
     organization = Organization.create({
-      id: '00000000-0000-0000-0000-000000000000',
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
@@ -45,6 +43,9 @@ describe('cpes', () => {
         .send({})
         .expect(200);
       expect(response.body.id).toEqual(productInfo.id);
+      expect(response.body.cpe_product_name).toEqual(
+        productInfo.cpe_product_name
+      );
     });
   });
 });

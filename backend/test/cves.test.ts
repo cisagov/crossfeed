@@ -11,12 +11,10 @@ describe('cves', () => {
   beforeAll(async () => {
     connection = await connectToDatabase();
     cve = Cve.create({
-      cve_uid: '00000000-0000-0000-0000-000000000000',
       cve_name: 'CVE-0001-0001'
     });
     await cve.save();
     organization = Organization.create({
-      id: '00000000-0000-0000-0000-000000000000',
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
       ipBlocks: [],
@@ -31,6 +29,22 @@ describe('cves', () => {
     await connection.close();
   });
   describe('CVE API', () => {
+    it('should return a single CVE by cve_name', async () => {
+      const response = await request(app)
+        .get(`/cves/name/${cve.cve_name}`)
+        .set(
+          'Authorization',
+          createUserToken({
+            roles: [{ org: organization.id, role: 'user' }]
+          })
+        )
+        .send({})
+        .expect(200);
+      expect(response.body.cve_uid).toEqual(cve.cve_uid);
+      expect(response.body.cve_name).toEqual(cve.cve_name);
+    });
+  });
+  describe('CVE API', () => {
     it('should return a single CVE by cve_uid', async () => {
       const response = await request(app)
         .get(`/cves/${cve.cve_uid}`)
@@ -43,20 +57,6 @@ describe('cves', () => {
         .send({})
         .expect(200);
       expect(response.body.cve_uid).toEqual(cve.cve_uid);
-    });
-  });
-  describe('CVE API', () => {
-    it('should return a single CVE by cve_name', async () => {
-      const response = await request(app)
-        .get(`/cves/name/${cve.cve_name}`)
-        .set(
-          'Authorization',
-          createUserToken({
-            roles: [{ org: organization.id, role: 'user' }]
-          })
-        )
-        .send({})
-        .expect(200);
       expect(response.body.cve_name).toEqual(cve.cve_name);
     });
   });
