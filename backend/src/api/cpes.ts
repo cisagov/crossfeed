@@ -1,7 +1,7 @@
 import { ProductInfo, connectToDatabase } from '../models';
 import { wrapHandler, NotFound } from './helpers';
 
-// TODO: Join cves to get method
+// TODO: Join cves to cpe get method
 // TODO: Create CpeFilters and CpeSearch classes to handle filtering and pagination of additional fields
 
 /**
@@ -15,15 +15,6 @@ import { wrapHandler, NotFound } from './helpers';
  *         required: true
  *         schema:
  *           type: string
- *     responses:
- *       200:
- *         description: A CPE object
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ProductInfo'
- *       404:
- *         description: CPE not found
  */
 export const get = wrapHandler(async (event) => {
   const connection = await connectToDatabase();
