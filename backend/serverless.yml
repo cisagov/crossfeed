@@ -46,6 +46,7 @@ provider:
             - lambda:InvokeFunction
             - cognito-idp:AdminDisableUser
             - cognito-idp:ListUsers
+            - cognito-idp:AdminSetUserPassword
           Resource: '*'
         - Effect: Allow
           Action:
