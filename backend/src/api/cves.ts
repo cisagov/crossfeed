@@ -6,18 +6,17 @@ import { wrapHandler } from './helpers';
 
 /**
  * @swagger
- *
  * /cves/{cve_uid}:
- *  get:
- *    description: Retrieve a single CVE record by its ID.
- *    tags:
- *    - CVE
- *    parameters:
- *    - name: cve_uid
- *      in: path
- *      required: true
- *      schema:
- *        type: string
+ *   get:
+ *     description: Retrieve a CVE by ID.
+ *     tags:
+ *       - CVEs
+ *     parameters:
+ *       - in: path
+ *         name: cve_uid
+ *         required: true
+ *         schema:
+ *           type: string
  */
 export const get = wrapHandler(async (event) => {
   await connectToDatabase();

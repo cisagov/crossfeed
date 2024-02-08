@@ -8,7 +8,9 @@ import { wrapHandler, NotFound } from './helpers';
  * @swagger
  * /cpes/{id}:
  *   get:
- *     summary: Retrieve a CPE by ID
+ *     description: Retrieve a CPE by ID
+ *     tags:
+ *       - CPEs
  *     parameters:
  *       - in: path
  *         name: id
