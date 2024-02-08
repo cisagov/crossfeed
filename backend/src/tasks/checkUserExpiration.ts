@@ -57,15 +57,6 @@ export const handler: Handler = async (event) => {
     }
   });
 
-  // Notify users of inactivity (45 days)
-  for (const user of usersToDeactivate) {
-    const subject = 'Account Deactiveation Notice';
-    const textBody = `Hello ${user.fullName},\n\nYour account has been
-     inactive for over 45 days. If your account reaches 90 days of inactivity,
-      your password will be removed, requiring action to recreate your account.`;
-    await sendEmail(user.email, subject, textBody);
-  }
-
   // Users to remove (90 days of inactivity)
   const usersToRemove = await User.find({
     where: {
@@ -84,20 +75,37 @@ export const handler: Handler = async (event) => {
 
   // Deactivate users (reset password)
   for (const user of usersToDeactivate) {
+    // Prepare email content
+    const subject = 'Account Deactivation Notice';
+    const textBody = `Hello ${user.fullName},\n\nYour account has been inactive for over 45 days. As a result, your password will be reset, and you will need to set a new password the next time you log in. If your account reaches 90 days of inactivity, it will be removed, requiring action to recreate your account.`;
+
+    // Send inactivity notification email
+    try {
+      await sendEmail(user.email, subject, textBody);
+      console.log(`Inactivity notification sent to user ${user.id}.`);
+    } catch (emailError) {
+      console.error(
+        `Error sending inactivity notification to user ${user.id}: ${emailError}`
+      );
+    }
+
+    // Reset the user's password
     try {
       await cognito
         .adminSetUserPassword({
-          Password: 'TemporaryPassword1!', // Set a new temporary password
+          Password: process.env.REACT_APP_RANDOM_PASSWORD as string, // Ensure this is set in your environment
           UserPoolId: userPoolId,
           Username: user.cognitoId,
-          Permanent: false // Requires the user to change their password at next login
+          Permanent: false // This requires the user to change their password at next login
         })
         .promise();
       console.log(
         `Password reset for user ${user.id} due to 45 days of inactivity.`
       );
-    } catch (error) {
-      console.error(`Error resetting password for user ${user.id}: ${error}`);
+    } catch (passwordError) {
+      console.error(
+        `Error resetting password for user ${user.id}: ${passwordError}`
+      );
     }
   }
 
