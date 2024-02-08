@@ -46,8 +46,7 @@ provider:
             - lambda:InvokeFunction
             - cognito-idp:AdminDisableUser
             - cognito-idp:ListUsers
-          Resource:
-            - "arn:aws:cognito-idp:us-east-1:<account-id>:userpool/${env:REACT_APP_USER_POOL_ID}"
+          Resource: '*'
         - Effect: Allow
           Action:
             - ecs:RunTask
