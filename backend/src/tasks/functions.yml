@@ -40,7 +40,7 @@ checkUserExpiration:
         - "cognito-idp:AdminDisableUser"
         - "cognito-idp:ListUsers"
         - "cognito-idp:AdminSetUserPassword"
-      Resource: "arn:aws:cognito-idp:${self:provider.region}:${aws:accountID}:userpool/${env:REACT_APP_USER_POOL_ID}"
+      Resource: "arn:aws:cognito-idp:${self:provider.region}:${aws:accountId}:userpool/${file(env.yml):${self:provider.stage}.REACT_APP_USER_POOL_ID}"
 
 
 scanExecution:
