@@ -108,6 +108,10 @@ class NewOrUpdatedOrganization extends NewOrganizationNonGlobalAdmins {
 
   @IsString()
   @IsOptional()
+  acronym?: string;
+
+  @IsString()
+  @IsOptional()
   state?: string;
 
   @IsString()
@@ -1070,6 +1074,7 @@ export const upsert_org = wrapHandler(async (event) => {
     .orUpdate({
       conflict_target: ['name'],
       overwrite: [
+        'acronym',
         'isPassive',
         'country',
         'state',
