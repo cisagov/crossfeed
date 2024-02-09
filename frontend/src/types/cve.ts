@@ -2,10 +2,10 @@ import { ProductInfo } from './product-info';
 export interface Cve {
   cve_uid: string;
   cve_name: string | null;
-  published_date: Date;
-  last_modified_date: Date;
-  vuln_status: string | null;
   description: string | null;
+  last_modified_date: Date;
+  published_date: Date;
+  vuln_status: string | null;
   cvss_v2_source: string | null;
   cvss_v2_type: string | null;
   cvss_v2_version: string | null;
@@ -30,8 +30,8 @@ export interface Cve {
   cvss_v4_base_severity: string | null;
   cvss_v4_exploitability_score: string | null;
   cvss_v4_impact_score: string | null;
-  weaknesses: string[] | null;
-  reference_urls: string[] | null;
   cpe_list: string[] | null;
+  reference_urls: string[] | null;
+  weaknesses: string[] | null;
   product_info: ProductInfo[];
 }
