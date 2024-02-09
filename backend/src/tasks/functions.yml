@@ -34,13 +34,7 @@ checkUserExpiration:
   handler: src/tasks/checkUserExpiration.handler
   events:
     - schedule: cron(0 0 * * ? *) # Runs every day at midnight
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - "cognito-idp:AdminDisableUser"
-        - "cognito-idp:ListUsers"
-        - "cognito-idp:AdminSetUserPassword"
-      Resource: "*"
+
 
 
 scanExecution:
