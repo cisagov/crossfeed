@@ -47,7 +47,7 @@ provider:
             - cognito-idp:AdminDisableUser
             - cognito-idp:ListUsers
             - cognito-idp:AdminSetUserPassword
-          Resource: '*'
+          Resource: "arn:aws:cognito-idp:${self:provider.region}:${aws:accountID}:userpool/${file(env.yml):${self:provider.stage}.REACT_APP_USER_POOL_ID}"
         - Effect: Allow
           Action:
             - ecs:RunTask
