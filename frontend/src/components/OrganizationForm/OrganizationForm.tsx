@@ -104,7 +104,6 @@ export const OrganizationForm: React.FC<{
           onChange={onTextChange}
           required
           helperText="Enter Organization Name"
-
         />
         <TextField
           margin="dense"
