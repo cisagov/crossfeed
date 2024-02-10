@@ -73,6 +73,9 @@ class NewOrganizationNonGlobalAdmins {
   @IsString()
   name: string;
 
+  @IsString()
+  acronym: string;
+
   @IsBoolean()
   isPassive: boolean;
 }
@@ -105,10 +108,6 @@ class NewOrUpdatedOrganization extends NewOrganizationNonGlobalAdmins {
   @IsUUID()
   @IsOptional()
   parent?: string;
-
-  @IsString()
-  @IsOptional()
-  acronym?: string;
 
   @IsString()
   @IsOptional()
@@ -147,6 +146,11 @@ class UpdateOrganizationMetaV2 {
   @IsOptional()
   name: string;
 
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  acronym: string;
+
   @IsBoolean()
   @IsOptional()
   isPassive: boolean;
@@ -184,10 +188,6 @@ class UpdateOrganizationMetaV2 {
   @IsOptional()
   countyFips: number;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  acronym: string;
 
   @IsString()
   @IsNotEmpty()
@@ -1072,9 +1072,9 @@ export const upsert_org = wrapHandler(async (event) => {
       }
     ])
     .orUpdate({
-      conflict_target: ['name'],
+      conflict_target: ['acronym'],
       overwrite: [
-        'acronym',
+        'name',
         'isPassive',
         'country',
         'state',
