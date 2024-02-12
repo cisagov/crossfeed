@@ -58,3 +58,17 @@
     }
   }
 }
+
+#delete { 
+  cursor: pointer;
+  &:hover {
+    cursor: hand
+  }
+}
+
+#run {
+  cursor: pointer;
+  &:hover {
+    cursor: hand
+  }
+}
