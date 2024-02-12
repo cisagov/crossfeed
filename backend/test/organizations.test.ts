@@ -120,12 +120,14 @@ describe('organizations', () => {
   describe('update', () => {
     it('update by globalAdmin should succeed', async () => {
       const organization = await Organization.create({
+        acronym:  Math.random().toString(36).slice(2, 7),
         name: 'test-' + Math.random(),
         rootDomains: ['test-' + Math.random()],
         ipBlocks: [],
         isPassive: false
       }).save();
       const name = 'test-' + Math.random();
+      const acronym =  Math.random().toString(36).slice(2, 7)
       const rootDomains = ['test-' + Math.random()];
       const ipBlocks = ['1.1.1.1'];
       const isPassive = true;
@@ -140,6 +142,7 @@ describe('organizations', () => {
         )
         .send({
           name,
+          acronym,
           rootDomains,
           ipBlocks,
           isPassive,
