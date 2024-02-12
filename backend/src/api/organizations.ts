@@ -188,7 +188,6 @@ class UpdateOrganizationMetaV2 {
   @IsOptional()
   countyFips: number;
 
-
   @IsString()
   @IsNotEmpty()
   @IsOptional()
