@@ -53,7 +53,7 @@ describe('organizations', () => {
       expect(response.body.name).toEqual(name);
       expect(response.body.tags[0].name).toEqual('test');
     });
-    it("can't add organization with the same name", async () => {
+    it("can't add organization with the same acronym", async () => {
       const user = await User.create({
         firstName: '',
         lastName: '',
@@ -61,6 +61,7 @@ describe('organizations', () => {
         userType: UserType.GLOBAL_ADMIN
       }).save();
       const name = 'test-' + Math.random();
+      const acronym =  = Math.random().toString(36).slice(2, 7);
       await request(app)
         .post('/organizations/')
         .set(
@@ -73,6 +74,7 @@ describe('organizations', () => {
         .send({
           ipBlocks: [],
           name,
+          acronym,
           rootDomains: ['cisa.gov'],
           isPassive: false,
           tags: []
@@ -90,6 +92,7 @@ describe('organizations', () => {
         .send({
           ipBlocks: [],
           name,
+          acronym,
           rootDomains: ['cisa.gov'],
           isPassive: false,
           tags: []
