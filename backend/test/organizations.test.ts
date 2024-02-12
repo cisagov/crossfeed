@@ -155,12 +155,14 @@ describe('organizations', () => {
     it('update by org admin should update everything but rootDomains and ipBlocks', async () => {
       const organization = await Organization.create({
         name: 'test-' + Math.random(),
+        acronym: Math.random().toString(36).slice(2, 7),
         rootDomains: ['test-' + Math.random()],
         pendingDomains: [{ name: 'test-' + Math.random(), token: '1234' }],
         ipBlocks: [],
         isPassive: false
       }).save();
       const name = 'test-' + Math.random();
+      const acronym = Math.random().toString(36).slice(2, 7);
       const rootDomains = ['test-' + Math.random()];
       const ipBlocks = ['1.1.1.1'];
       const isPassive = true;
@@ -175,6 +177,7 @@ describe('organizations', () => {
         )
         .send({
           name,
+          acronym,
           rootDomains,
           ipBlocks,
           isPassive,
