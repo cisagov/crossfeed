@@ -1,4 +1,4 @@
-import { ProductInfo, connectToDatabase } from '../models';
+import { Cpe, connectToDatabase } from '../models';
 import { wrapHandler, NotFound } from './helpers';
 
 // TODO: Join cves to cpe get method
@@ -20,20 +20,18 @@ import { wrapHandler, NotFound } from './helpers';
  */
 export const get = wrapHandler(async (event) => {
   const connection = await connectToDatabase();
-  const repository = connection.getRepository(ProductInfo);
-
   const id = event.pathParameters?.id;
-  if (!id) {
-    return NotFound;
-  }
 
-  const productInfo = await repository.findOne(id);
-  if (!productInfo) {
+  const cpe = await Cpe.createQueryBuilder('cpe')
+    .leftJoinAndSelect('cpe.cves', 'cve', 'cpe.id = :id', { id: id })
+    .getOne();
+
+  if (!cpe) {
     return NotFound;
   }
 
   return {
     statusCode: 200,
-    body: JSON.stringify(productInfo)
+    body: JSON.stringify(cpe)
   };
 });

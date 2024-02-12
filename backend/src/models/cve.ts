@@ -9,114 +9,111 @@ import {
   JoinTable,
   Unique
 } from 'typeorm';
-import { ProductInfo } from './product-info';
+import { Cpe } from './cpe';
 
 //TODO: Refactor column names to camelCase to match the rest of the codebase?
 @Entity()
-@Unique(['cve_name'])
+@Unique(['name'])
 export class Cve extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  cve_uid: string; //TODO: Refactor to id to match other UUIDs?
+  id: string; //TODO: Refactor to id to match other UUIDs?
 
   @Column({ nullable: true })
-  cve_name: string;
+  name: string;
 
   @CreateDateColumn()
-  published_date: Date;
+  publishedAt: Date;
 
   @UpdateDateColumn()
-  last_modified_date: Date;
+  modifiedAt: Date;
 
   @Column({ nullable: true })
-  vuln_status: string;
+  status: string;
 
   @Column({ nullable: true })
   description: string;
 
   @Column({ nullable: true })
-  cvss_v2_source: string;
+  cvssV2Source: string;
 
   @Column({ nullable: true })
-  cvss_v2_type: string;
+  cvssV2Type: string;
 
   @Column({ nullable: true })
-  cvss_v2_version: string;
+  cvssV2Version: string;
 
   @Column({ nullable: true })
-  cvss_v2_vector_string: string;
+  cvssV2VectorString: string;
 
   @Column({ nullable: true })
-  cvss_v2_base_score: string;
+  cvssV2BaseScore: string;
 
   @Column({ nullable: true })
-  cvss_v2_base_severity: string;
+  cvssV2BaseSeverity: string;
 
   @Column({ nullable: true })
-  cvss_v2_exploitability_score: string;
+  cvssV2ExploitabilityScore: string;
 
   @Column({ nullable: true })
-  cvss_v2_impact_score: string;
+  cvssV2ImpactScore: string;
 
   @Column({ nullable: true })
-  cvss_v3_source: string;
+  cvssV3Source: string;
 
   @Column({ nullable: true })
-  cvss_v3_type: string;
+  cvssV3Type: string;
 
   @Column({ nullable: true })
-  cvss_v3_version: string;
+  cvssV3Version: string;
 
   @Column({ nullable: true })
-  cvss_v3_vector_string: string;
+  cvssV3VectorString: string;
 
   @Column({ nullable: true })
-  cvss_v3_base_score: string;
+  cvssV3BaseScore: string;
 
   @Column({ nullable: true })
-  cvss_v3_base_severity: string;
+  cvssV3BaseSeverity: string;
 
   @Column({ nullable: true })
-  cvss_v3_exploitability_score: string;
+  cvssV3ExploitabilityScore: string;
 
   @Column({ nullable: true })
-  cvss_v3_impact_score: string;
+  cvssV3ImpactScore: string;
 
   @Column({ nullable: true })
-  cvss_v4_source: string;
+  cvssV4Source: string;
 
   @Column({ nullable: true })
-  cvss_v4_type: string;
+  cvssV4Type: string;
 
   @Column({ nullable: true })
-  cvss_v4_version: string;
+  cvssV4Version: string;
 
   @Column({ nullable: true })
-  cvss_v4_vector_string: string;
+  cvssV4VectorString: string;
 
   @Column({ nullable: true })
-  cvss_v4_base_score: string;
+  cvssV4BaseScore: string;
 
   @Column({ nullable: true })
-  cvss_v4_base_severity: string;
+  cvssV4BaseSeverity: string;
 
   @Column({ nullable: true })
-  cvss_v4_exploitability_score: string;
+  cvssV4ExploitabilityScore: string;
 
   @Column({ nullable: true })
-  cvss_v4_impact_score: string;
+  cvssV4ImpactScore: string;
 
   @Column('simple-array', { nullable: true })
   weaknesses: string[];
 
   @Column('simple-array', { nullable: true })
-  reference_urls: string[];
+  references: string[];
 
-  @Column('simple-array', { nullable: true })
-  cpe_list: string[];
-
-  @ManyToMany(() => ProductInfo, (product_info) => product_info.cve, {
+  @ManyToMany(() => Cpe, (cpe) => cpe.cves, {
     cascade: true
   })
   @JoinTable()
-  product_info: ProductInfo[];
+  cpes: Cpe[];
 }
