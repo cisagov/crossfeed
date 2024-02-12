@@ -30,6 +30,7 @@ describe('organizations', () => {
         userType: UserType.GLOBAL_ADMIN
       }).save();
       const name = 'test-' + Math.random();
+      const acronym = Math.random().toString(36).slice(2, 7);
       const response = await request(app)
         .post('/organizations/')
         .set(
@@ -41,6 +42,7 @@ describe('organizations', () => {
         )
         .send({
           ipBlocks: [],
+          acronym: acronym,
           name,
           rootDomains: ['cisa.gov'],
           isPassive: false,
