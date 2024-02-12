@@ -28,7 +28,7 @@
     "handlebars": "^4.7.8",
     "helmet": "^4.1.1",
     "http-proxy-middleware": "^2.0.6",
-    "jsdom": "^22.1",
+    "jsdom": "^24.0",
     "jsonwebtoken": "^9.0",
     "jwks-rsa": "^3.0",
     "lodash": "^4.17.21",
