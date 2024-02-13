@@ -48,6 +48,7 @@ const ScansView: React.FC = () => {
       id: 'run',
       Cell: ({ row }: { row: { index: number } }) => (
         <div
+          className={classes.runButton}
           style={{ textAlign: 'center' }}
           onClick={() => {
             runScan(row.index);
@@ -132,6 +133,7 @@ const ScansView: React.FC = () => {
       id: 'delete',
       Cell: ({ row }: { row: { index: number } }) => (
         <span
+          className={classes.deleteButton}
           onClick={() => {
             modalRef.current?.toggleModal(undefined, true);
             setSelectedRow(row.index);

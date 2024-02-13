@@ -59,14 +59,14 @@
   }
 }
 
-#delete { 
+.deleteButton { 
   cursor: pointer;
   &:hover {
     cursor: hand
   }
 }
 
-#run {
+.runButton {
   cursor: pointer;
   &:hover {
     cursor: hand
