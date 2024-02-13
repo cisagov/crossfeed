@@ -12,6 +12,9 @@ port=5432
 [shodan]
 key1=${PE_SHODAN_API_KEYS}
 
+[hibp]
+key=${HIBP_API_KEY}
+
 [pe_api]
 pe_api_key=
 pe_api_url=
@@ -34,7 +37,7 @@ api_key=${INTELX_API_KEY}
 [blocklist]
 [dehashed]
 [dnstwist]
-[hibp]
+
 [API_Client_ID]
 [API_Client_secret]
 [API_WHOIS]
