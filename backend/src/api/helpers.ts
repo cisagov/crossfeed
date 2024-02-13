@@ -152,14 +152,15 @@ export const sendUserRegistrationEmail = async (
   //   SES: new SES({ region: 'us-east-1' })
   // });
   console.log('TemplateFilePath: ', templateFilePath);
-  const htmlTemplate = fs.readFile(templateFilePath, (err, data) => {
+  const fs = require('fs');
+  const htmlTemplate = await fs.promises.readFile(templateFilePath, 'utf8', (err, data) => {
     if (err) {
       console.error('Error reading file data', err);
       return;
     }
     // console.log('Content:', data.toString());
     // console.log('Finished reading file');
-    console.log('')
+    console.log('Finished reading file');
     return data;
   });
   // const htmlTemplate = fs.readFileSync(templateFilePath, 'utf-8');
