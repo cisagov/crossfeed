@@ -61,7 +61,7 @@ describe('organizations', () => {
         userType: UserType.GLOBAL_ADMIN
       }).save();
       const name = 'test-' + Math.random();
-      const acronym =  = Math.random().toString(36).slice(2, 7);
+      const acronym = Math.random().toString(36).slice(2, 7);
       await request(app)
         .post('/organizations/')
         .set(
