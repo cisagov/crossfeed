@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import * as registerFormStyles from './registerFormStyle';
-import { useAuthContext } from 'context';
 import {
+  Button,
   CircularProgress,
-  DialogTitle,
-  DialogContent,
-  TextField,
   DialogActions,
-  Button
+  DialogContent,
+  DialogTitle,
+  MenuItem,
+  Select,
+  TextField,
+  Typography
 } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import { Save } from '@mui/icons-material';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { SelectChangeEvent } from '@mui/material/Select';
 import { User } from 'types';
 
 const StyledDialog = registerFormStyles.StyledDialog;
@@ -105,10 +104,6 @@ export const RegisterForm: React.FC<{
     state: ''
   });
 
-  const { apiPost, setFeedbackMessage } = useAuthContext();
-  console.log('apiPost: ', apiPost);
-  console.log('setFeedbackMessage: ', setFeedbackMessage);
-
   const registerUserPost = async (body: Object) => {
     try {
       const requestOptions: RequestInit = {
@@ -136,25 +131,6 @@ export const RegisterForm: React.FC<{
     'Email entry error. Please try again.'
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // Register User API Post
-  // const registerUserApiPost = async (body: Object) => {
-  //   try {
-  //     const user = await registerUserPost('/users/register', {
-  //       body
-  //     });
-  //     return user;
-  //   } catch (e: any) {
-  //     setFeedbackMessage({
-  //       message:
-  //         e.status === 422
-  //           ? 'Error registering user.'
-  //           : e.message ?? e.toString(),
-  //       type: 'error'
-  //     });
-  //     console.error(e);
-  //   }
-  // };
 
   const onTextChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -208,7 +184,6 @@ export const RegisterForm: React.FC<{
 
   const validateEmail = (email: string) => {
     // email format
-    // const regexEmail = /\S+@\S+\.\S+/;
     const regexEmail =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     let error = false;
@@ -232,7 +207,7 @@ export const RegisterForm: React.FC<{
     <StyledDialog
       open={open}
       onClose={() => onClose}
-      aria-labelledby="form-dialog-title"
+      // aria-labelledby="form-dialog-title"
       maxWidth="xs"
       fullWidth
     >
@@ -241,13 +216,22 @@ export const RegisterForm: React.FC<{
         {errorRequestMessage && (
           <p className="text-error">{errorRequestMessage}</p>
         )}
+        Email
         <TextField
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '&.Mui-focused fieldset': {
+                borderRadius: '0px'
+              }
+            }
+          }}
           error={errorEmailMessage ? true : false}
           margin="dense"
+          size="small"
           id="email"
           inputProps={{ maxLength: 250 }}
           name="email"
-          label="Email"
+          placeholder="Enter your Email Address"
           type="text"
           fullWidth
           value={values.email}
@@ -255,45 +239,67 @@ export const RegisterForm: React.FC<{
           helperText={errorEmailMessage ? errorEmailMessage : null}
           autoFocus
         />
+        First Name
         <TextField
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '&.Mui-focused fieldset': {
+                borderRadius: '0px'
+              }
+            }
+          }}
           margin="dense"
+          size="small"
           id="firstName"
           inputProps={{ maxLength: 250 }}
           name="firstName"
-          label="First Name"
+          placeholder="Enter your First Name"
           type="text"
           fullWidth
           value={values.firstName}
           onChange={onTextChange}
         />
+        Last Name
         <TextField
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '&.Mui-focused fieldset': {
+                borderRadius: '0px'
+              }
+            }
+          }}
           margin="dense"
+          size="small"
           id="lastName"
           inputProps={{ maxLength: 250 }}
           name="lastName"
-          label="Last Name"
+          placeholder="Enter your Last Name"
           type="text"
           fullWidth
           value={values.lastName}
           onChange={onTextChange}
         />
-        <FormControl fullWidth>
-          <InputLabel id="state-select-label">State</InputLabel>
-          <Select
-            labelId="state-select-label"
-            id="state"
-            value={values.state}
-            name="state"
-            label="State"
-            onChange={handleChange}
-          >
-            {STATE_OPTIONS.map((state: string, index: number) => (
-              <MenuItem key={index} value={state}>
-                {state}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <Typography my={1}>State</Typography>
+        <Select
+          displayEmpty
+          size="small"
+          id="state"
+          value={values.state}
+          name="state"
+          onChange={handleChange}
+          fullWidth
+          renderValue={
+            values.state !== ''
+              ? undefined
+              : () => <Typography color="#bdbdbd">Select your State</Typography>
+          }
+        >
+          {STATE_OPTIONS.map((state: string, index: number) => (
+            <MenuItem key={index} value={state}>
+              {state}
+            </MenuItem>
+          ))}
+        </Select>
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={onClose}>

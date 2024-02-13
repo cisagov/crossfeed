@@ -1,0 +1,37 @@
+import { ProductInfo } from './product-info';
+export interface Cve {
+  cve_uid: string;
+  cve_name: string | null;
+  description: string | null;
+  last_modified_date: Date;
+  published_date: Date;
+  vuln_status: string | null;
+  cvss_v2_source: string | null;
+  cvss_v2_type: string | null;
+  cvss_v2_version: string | null;
+  cvss_v2_vector_string: string | null;
+  cvss_v2_base_score: string | null;
+  cvss_v2_base_severity: string | null;
+  cvss_v2_exploitability_score: string | null;
+  cvss_v2_impact_score: string | null;
+  cvss_v3_source: string | null;
+  cvss_v3_type: string | null;
+  cvss_v3_version: string | null;
+  cvss_v3_vector_string: string | null;
+  cvss_v3_base_score: string | null;
+  cvss_v3_base_severity: string | null;
+  cvss_v3_exploitability_score: string | null;
+  cvss_v3_impact_score: string | null;
+  cvss_v4_source: string | null;
+  cvss_v4_type: string | null;
+  cvss_v4_version: string | null;
+  cvss_v4_vector_string: string | null;
+  cvss_v4_base_score: string | null;
+  cvss_v4_base_severity: string | null;
+  cvss_v4_exploitability_score: string | null;
+  cvss_v4_impact_score: string | null;
+  cpe_list: string[] | null;
+  reference_urls: string[] | null;
+  weaknesses: string[] | null;
+  product_info: ProductInfo[];
+}
