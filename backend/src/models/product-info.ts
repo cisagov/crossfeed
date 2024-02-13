@@ -1,21 +1,20 @@
-import { mapping } from 'src/tasks/censys/mapping';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToMany,
   BaseEntity,
   Unique
 } from 'typeorm';
 import { Cve } from './cve';
 
+//TODO: Refactor column names to camelCase to match the rest of the codebase?
+//TODO: Refactor table name to product or cpe for brevity?
 @Entity()
 @Unique(['cpe_product_name', 'version_number', 'vender'])
 export class ProductInfo extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string; //TODO: change this to something else??
+  id: string;
 
   @Column()
   cpe_product_name: string;

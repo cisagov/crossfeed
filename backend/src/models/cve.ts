@@ -11,11 +11,12 @@ import {
 } from 'typeorm';
 import { ProductInfo } from './product-info';
 
+//TODO: Refactor column names to camelCase to match the rest of the codebase?
 @Entity()
 @Unique(['cve_name'])
 export class Cve extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  cve_uid: string;
+  cve_uid: string; //TODO: Refactor to id to match other UUIDs?
 
   @Column({ nullable: true })
   cve_name: string;
