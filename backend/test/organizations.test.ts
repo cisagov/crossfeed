@@ -74,7 +74,7 @@ describe('organizations', () => {
         .send({
           ipBlocks: [],
           name,
-          acronym,
+          acronym: acronym,
           rootDomains: ['cisa.gov'],
           isPassive: false,
           tags: []
@@ -92,7 +92,7 @@ describe('organizations', () => {
         .send({
           ipBlocks: [],
           name,
-          acronym,
+          acronym: acronym,
           rootDomains: ['cisa.gov'],
           isPassive: false,
           tags: []
