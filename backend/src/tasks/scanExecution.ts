@@ -209,7 +209,7 @@ export const handler: Handler = async (event) => {
         clusterName
       );
     } else if (message_body.scriptType === 'dnstwist') {
-      desiredCount = 15;
+      desiredCount = 30;
       await updateServiceAndQueue(
         process.env.DNSTWIST_QUEUE_URL!,
         process.env.DNSTWIST_SERVICE_NAME!,
@@ -218,7 +218,7 @@ export const handler: Handler = async (event) => {
         clusterName
       );
     } else if (message_body.scriptType === 'hibp') {
-      desiredCount = 15;
+      desiredCount = 20;
       await updateServiceAndQueue(
         process.env.HIBP_QUEUE_URL!,
         process.env.HIBP_SERVICE_NAME!,
@@ -227,7 +227,7 @@ export const handler: Handler = async (event) => {
         clusterName
       );
     } else if (message_body.scriptType === 'intelx') {
-      desiredCount = 15;
+      desiredCount = 10;
       await updateServiceAndQueue(
         process.env.INTELX_QUEUE_URL!,
         process.env.INTELX_SERVICE_NAME!,
@@ -236,7 +236,7 @@ export const handler: Handler = async (event) => {
         clusterName
       );
     } else if (message_body.scriptType === 'cybersixgill') {
-      desiredCount = 15;
+      desiredCount = 10;
       await updateServiceAndQueue(
         process.env.CYBERSIXGILL_QUEUE_URL!,
         process.env.CYBERSIXGILL_SERVICE_NAME!,
