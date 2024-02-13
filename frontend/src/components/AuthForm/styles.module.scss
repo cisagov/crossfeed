@@ -36,6 +36,16 @@
       width: 100%;
     }
 
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    input[type='number'] {
+      appearance: textfield;
+    }
+
     @media screen and (min-width: 480px) {
       padding: 3rem 1.5rem;
       max-width: 33rem;

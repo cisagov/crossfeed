@@ -370,12 +370,6 @@ variable "ssm_cybersixgill_queue_url" {
   default     = "/crossfeed/staging/CYBERSIXGILL_QUEUE_URL"
 }
 
-variable "cloudfront_name" {
-  description = "cloudfront_name"
-  type        = string
-  default     = "Crossfeed Staging Frontend"
-}
-
 variable "db_group_name" {
   description = "db_group_name"
   type        = string
