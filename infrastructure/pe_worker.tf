@@ -486,7 +486,7 @@ resource "aws_ecs_task_definition" "pe_hibp_worker" {
 
 
 # HIBP specific ECS service
-resource "aws_ecs_service" "dnstwist_service" {
+resource "aws_ecs_service" "hibp_service" {
   name            = var.pe_hibp_ecs_service_name
   cluster         = aws_ecs_cluster.pe_worker.id
   task_definition = aws_ecs_task_definition.pe_hibp_worker.arn
@@ -640,7 +640,7 @@ resource "aws_ecs_task_definition" "pe_intelx_worker" {
 
 
 # IntelX specific ECS service
-resource "aws_ecs_service" "dnstwist_service" {
+resource "aws_ecs_service" "intelx_service" {
   name            = var.pe_intelx_ecs_service_name
   cluster         = aws_ecs_cluster.pe_worker.id
   task_definition = aws_ecs_task_definition.pe_intelx_worker.arn
@@ -794,7 +794,7 @@ resource "aws_ecs_task_definition" "pe_cybersixgill_worker" {
 
 
 # Cybersixgill specific ECS service
-resource "aws_ecs_service" "dnstwist_service" {
+resource "aws_ecs_service" "cybersixgill_service" {
   name            = var.pe_cybersixgill_ecs_service_name
   cluster         = aws_ecs_cluster.pe_worker.id
   task_definition = aws_ecs_task_definition.pe_cybersixgill_worker.arn
