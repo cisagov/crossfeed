@@ -18,11 +18,16 @@ pe_api_url=
 
 [staging]
 [cyhy_mongo]
+
 [sixgill]
+client_id=${SIXGILL_CLIENT_ID}
+client_secret=${SIXGILL_CLIENT_SECRET}
+
 [whoisxml]
 key=
+
 [intelx]
-api_key=
+api_key=${INTELX_API_KEY}
 
 [dnsmonitor]
 [pe_db_password_key]

@@ -119,6 +119,27 @@ resources:
         VisibilityTimeout: 300
         MaximumMessageSize: 262144 # 256 KB
         MessageRetentionPeriod: 604800 # 7 days
+    HibpQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.stage}-hibp-queue
+        VisibilityTimeout: 300
+        MaximumMessageSize: 262144 # 256 KB
+        MessageRetentionPeriod: 604800 # 7 days
+    IntelxQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.stage}-intelx-queue
+        VisibilityTimeout: 300
+        MaximumMessageSize: 262144 # 256 KB
+        MessageRetentionPeriod: 604800 # 7 days
+    CybersixgillQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.stage}-cybersixgill-queue
+        VisibilityTimeout: 300
+        MaximumMessageSize: 262144 # 256 KB
+        MessageRetentionPeriod: 604800 # 7 days
 
 functions:
   - ${file(./src/tasks/functions.yml)}

@@ -321,6 +321,12 @@ variable "ssm_sixgill_client_secret" {
   default     = "/crossfeed/staging/SIXGILL_CLIENT_SECRET"
 }
 
+variable "ssm_intelx_api_key" {
+  description = "ssm_intelx_api_key"
+  type        = string
+  default     = "/crossfeed/staging/INTELX_API_KEY"
+}
+
 
 variable "ssm_lg_api_key" {
   description = "ssm_lg_api_key"
@@ -344,6 +350,24 @@ variable "ssm_dnstwist_queue_url" {
   description = "ssm_dnstwist_queue_url"
   type        = string
   default     = "/crossfeed/staging/DNSTWIST_QUEUE_URL"
+}
+
+variable "ssm_hibp_queue_url" {
+  description = "ssm_hibp_queue_url"
+  type        = string
+  default     = "/crossfeed/staging/HIBP_QUEUE_URL"
+}
+
+variable "ssm_intelx_queue_url" {
+  description = "ssm_intelx_queue_url"
+  type        = string
+  default     = "/crossfeed/staging/INTELX_QUEUE_URL"
+}
+
+variable "ssm_cybersixgill_queue_url" {
+  description = "ssm_cybersixgill_queue_url"
+  type        = string
+  default     = "/crossfeed/staging/CYBERSIXGILL_QUEUE_URL"
 }
 
 variable "cloudfront_name" {
@@ -625,4 +649,22 @@ variable "pe_dnstwist_ecs_service_name" {
   description = "pe_dnstwist_ecs_service_name"
   type        = string
   default     = "pe-staging-dnstwist"
+}
+
+variable "pe_hibp_ecs_service_name" {
+  description = "pe_hibp_ecs_service_name"
+  type        = string
+  default     = "pe-staging-hibp"
+}
+
+variable "pe_intelx_ecs_service_name" {
+  description = "pe_intelx_ecs_service_name"
+  type        = string
+  default     = "pe-staging-intelx"
+}
+
+variable "pe_cybersixgill_ecs_service_name" {
+  description = "pe_cybersixgill_ecs_service_name"
+  type        = string
+  default     = "pe-staging-cybersixgill"
 }
