@@ -311,7 +311,8 @@ export const Users: React.FC = () => {
               'lastName',
               'email',
               'roles',
-              'userType'
+              'userType',
+              'state'
             ]}
             onImport={async (results) => {
               // TODO: use a batch call here instead.
@@ -329,7 +330,7 @@ export const Users: React.FC = () => {
                 }
                 try {
                   createdUsers.push(
-                    await apiPost('/users/', {
+                    await apiPost('/users', {
                       body
                     })
                   );
