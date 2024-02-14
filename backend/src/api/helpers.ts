@@ -153,16 +153,20 @@ export const sendUserRegistrationEmail = async (
   // });
   console.log('TemplateFilePath: ', templateFilePath);
   const fs = require('fs');
-  const htmlTemplate = await fs.promises.readFile(templateFilePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Error reading file data', err);
-      return;
+  const htmlTemplate = await fs.promises.readFile(
+    templateFilePath,
+    'utf8',
+    (err, data) => {
+      if (err) {
+        console.error('Error reading file data', err);
+        return;
+      }
+      // console.log('Content:', data.toString());
+      // console.log('Finished reading file');
+      console.log('Finished reading file');
+      return data;
     }
-    // console.log('Content:', data.toString());
-    // console.log('Finished reading file');
-    console.log('Finished reading file');
-    return data;
-  });
+  );
   // const htmlTemplate = fs.readFileSync(templateFilePath, 'utf-8');
   const template = handlebars.compile(htmlTemplate);
   const data = {
@@ -178,7 +182,7 @@ export const sendUserRegistrationEmail = async (
     html: htmlToSend,
     replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
   };
-}
+};
 
 export const sendRegistrationDeniedEmail = async (
   recepient: string,
