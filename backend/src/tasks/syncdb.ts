@@ -73,6 +73,7 @@ export const handler: Handler = async (event) => {
     }
     for (let i = 0; i <= NUM_SAMPLE_ORGS; i++) {
       const organization = await Organization.create({
+        acronym: Math.random().toString(36).slice(2, 7),
         name: Sentencer.make('{{ adjective }} {{ entity }}').replace(
           /\b\w/g,
           (l) => l.toUpperCase()

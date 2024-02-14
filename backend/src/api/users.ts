@@ -340,6 +340,10 @@ export const invite = wrapHandler(async (event) => {
 
   body.email = body.email.toLowerCase();
 
+  if (body.state) {
+    body.regionId = REGION_STATE_MAP[body.state];
+  }
+
   // Check if user already exists
   let user = await User.findOne({
     email: body.email
@@ -357,14 +361,17 @@ export const invite = wrapHandler(async (event) => {
       ...body
     });
     await User.save(user);
-    await sendInviteEmail(user.email, organization);
+    if (process.env.IS_LOCAL!) {
+      console.log('Cannot send invite email while running on local.');
+    } else {
+      await sendInviteEmail(user.email, organization);
+    }
   } else if (!user.firstName && !user.lastName) {
     // Only set the user first name and last name the first time the user is invited.
     user.firstName = body.firstName;
     user.lastName = body.lastName;
     await User.save(user);
   }
-
   // Always update the userType, if specified in the request.
   if (body.userType) {
     user.userType = body.userType;
