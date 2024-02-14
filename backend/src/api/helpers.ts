@@ -178,10 +178,6 @@ export const sendUserRegistrationEmail = async (
     html: htmlToSend,
     replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
   };
-
-  console.log('Mail options: ', mailOptions);
-
-  // await transporter.sendMail(mailOptions);
 }
 
 export const sendRegistrationDeniedEmail = async (
@@ -192,10 +188,6 @@ export const sendRegistrationDeniedEmail = async (
   templateFilePath: string
 ) => {
   try {
-    // const transporter = await nodemailer.createTransport({
-    //   SES: new SES({ region: 'us-east-1' })
-    // });
-
     const htmlTemplate = fs.readFileSync(templateFilePath, 'utf-8');
     const template = handlebars.compile(htmlTemplate);
     const data = {
@@ -211,9 +203,6 @@ export const sendRegistrationDeniedEmail = async (
       html: htmlToSend,
       replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
     };
-    console.log('Mail options: ', mailOptions);
-
-    // await transporter.sendMail(mailOptions);
   } catch (errorMessage) {
     console.log('Email error: ', errorMessage);
   }
@@ -246,9 +235,6 @@ export const sendRegistrationApprovedEmail = async (
       html: htmlToSend,
       replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
     };
-    console.log('Mail options: ', mailOptions);
-
-    // await transporter.sendMail(mailOptions);
   } catch (errorMessage) {
     console.log('Email error: ', errorMessage);
   }
