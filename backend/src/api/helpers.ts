@@ -148,9 +148,6 @@ export const sendUserRegistrationEmail = async (
   lastName: string,
   templateFilePath: string
 ) => {
-  // const transporter = await nodemailer.createTransport({
-  //   SES: new SES({ region: 'us-east-1' })
-  // });
   console.log('TemplateFilePath: ', templateFilePath);
   const fs = require('fs');
   const htmlTemplate = await fs.promises.readFile(
@@ -161,13 +158,10 @@ export const sendUserRegistrationEmail = async (
         console.error('Error reading file data', err);
         return;
       }
-      // console.log('Content:', data.toString());
-      // console.log('Finished reading file');
       console.log('Finished reading file');
       return data;
     }
   );
-  // const htmlTemplate = fs.readFileSync(templateFilePath, 'utf-8');
   const template = handlebars.compile(htmlTemplate);
   const data = {
     firstName: firstName,
@@ -220,10 +214,6 @@ export const sendRegistrationApprovedEmail = async (
   templateFilePath: string
 ) => {
   try {
-    // const transporter = await nodemailer.createTransport({
-    //   SES: new SES({ region: 'us-east-1' })
-    // });
-
     const htmlTemplate = fs.readFileSync(templateFilePath, 'utf-8');
     const template = handlebars.compile(htmlTemplate);
     const data = {
