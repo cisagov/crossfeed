@@ -19,7 +19,6 @@ export interface PendingDomain {
 }
 
 @Entity()
-@Index(['name'], { unique: true })
 export class Organization extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -29,6 +28,13 @@ export class Organization extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Index({ unique: true })
+  @Column({
+    nullable: true,
+    unique: true
+  })
+  acronym: string;
 
   @Column()
   name: string;
@@ -146,11 +152,6 @@ export class Organization extends BaseEntity {
     nullable: true
   })
   countyFips: number;
-
-  @Column({
-    nullable: true
-  })
-  acronym: string;
 
   @Column({
     nullable: true
