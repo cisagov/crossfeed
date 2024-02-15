@@ -2,11 +2,13 @@ import { Handler, SQSRecord } from 'aws-lambda';
 import * as AWS from 'aws-sdk';
 import { integer } from 'aws-sdk/clients/cloudfront';
 import { connect } from 'amqplib';
-const Docker = require('dockerode');
 
 const ecs = new AWS.ECS();
 const sqs = new AWS.SQS();
-const docker = new Docker();
+let docker;
+if (process.env.IS_LOCAL) {
+  docker = require('dockerode');
+}
 
 const toSnakeCase = (input) => input.replace(/ /g, '-');
 
@@ -143,6 +145,7 @@ async function startLocalContainers(
           `HIBP_API_KEY=${process.env.HIBP_API_KEY}`,
           `SIXGILL_CLIENT_ID=${process.env.SIXGILL_CLIENT_ID}`,
           `SIXGILL_CLIENT_SECRET=${process.env.SIXGILL_CLIENT_SECRET}`,
+          `INTELX_API_KEY=${process.env.INTELX_API_KEY}`,
           `PE_SHODAN_API_KEYS=${process.env.PE_SHODAN_API_KEYS}`,
           `WORKER_SIGNATURE_PUBLIC_KEY=${process.env.WORKER_SIGNATURE_PUBLIC_KEY}`,
           `WORKER_SIGNATURE_PRIVATE_KEY=${process.env.WORKER_SIGNATURE_PRIVATE_KEY}`,
@@ -206,7 +209,7 @@ export const handler: Handler = async (event) => {
         clusterName
       );
     } else if (message_body.scriptType === 'dnstwist') {
-      desiredCount = 15;
+      desiredCount = 30;
       await updateServiceAndQueue(
         process.env.DNSTWIST_QUEUE_URL!,
         process.env.DNSTWIST_SERVICE_NAME!,
@@ -214,9 +217,36 @@ export const handler: Handler = async (event) => {
         message_body,
         clusterName
       );
+    } else if (message_body.scriptType === 'hibp') {
+      desiredCount = 20;
+      await updateServiceAndQueue(
+        process.env.HIBP_QUEUE_URL!,
+        process.env.HIBP_SERVICE_NAME!,
+        desiredCount,
+        message_body,
+        clusterName
+      );
+    } else if (message_body.scriptType === 'intelx') {
+      desiredCount = 10;
+      await updateServiceAndQueue(
+        process.env.INTELX_QUEUE_URL!,
+        process.env.INTELX_SERVICE_NAME!,
+        desiredCount,
+        message_body,
+        clusterName
+      );
+    } else if (message_body.scriptType === 'cybersixgill') {
+      desiredCount = 10;
+      await updateServiceAndQueue(
+        process.env.CYBERSIXGILL_QUEUE_URL!,
+        process.env.CYBERSIXGILL_SERVICE_NAME!,
+        desiredCount,
+        message_body,
+        clusterName
+      );
     } else {
       console.log(
-        'Shodan and DNSTwist are the only script types available right now.'
+        'Shodan, DNSTwist, HIBP, and Cybersixgill are the only script types available right now.'
       );
     }
   } catch (error) {
