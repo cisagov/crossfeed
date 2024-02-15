@@ -50,7 +50,7 @@ while true; do
   if [ "$IS_LOCAL" = true ]; then
     ORG=$(echo "$MESSAGE" | jq -r '.org')
   else
-    ORG=$(echo "$MESSAGE" | jq -r '.Messages[0].Body | capture("org: \"(?<org>[^\"]+)\"") | .org')
+    ORG=$(echo "$MESSAGE" | jq -r '.Messages[0].Body | fromjson | .org')
   fi
 
   if [[ "$SERVICE_TYPE" = *"shodan"*  ]]; then
