@@ -22,11 +22,12 @@ async function updateServiceAndQueue(
   // Place message in scan specific queue
   if (process.env.IS_LOCAL) {
     // If running locally, use RabbitMQ instead of SQS
-    console.log('publishing to rabbitMQ');
+    console.log('Publishing to rabbitMQ');
     await publishToRabbitMQ(queueUrl, message_body);
-    console.log('done publishing to rabbitMQ');
+    console.log('Done publishing to rabbitMQ');
   } else {
     // Place in AWS SQS queue
+    console.log('Publishing to scan specific queue');
     await placeMessageInQueue(queueUrl, message_body);
   }
 
@@ -37,29 +38,7 @@ async function updateServiceAndQueue(
     desiredCount,
     queueUrl
   );
-
-  // After processing each message, check if the SQS queue is empty
-  if (!process.env.IS_LOCAL) {
-    const sqsAttributes = await sqs
-      .getQueueAttributes({
-        QueueUrl: queueUrl,
-        AttributeNames: ['ApproximateNumberOfMessages']
-      })
-      .promise();
-
-    const approximateNumberOfMessages = parseInt(
-      sqsAttributes.Attributes?.ApproximateNumberOfMessages || '0',
-      10
-    );
-
-    // If the queue is empty, scale down to zero tasks
-    console.log(
-      `Approximate number of messages in specific queue: ${approximateNumberOfMessages}`
-    );
-    if (approximateNumberOfMessages === 0) {
-      await updateServiceDesiredCount(clusterName, serviceName, 0, queueUrl);
-    }
-  }
+  console.log('Done');
 }
 
 export async function updateServiceDesiredCount(
@@ -89,6 +68,7 @@ export async function updateServiceDesiredCount(
 
         // Check if the desired task count is less than # provided
         if (service.desiredCount !== desiredCountNum) {
+          console.log('Setting desired count.');
           const updateServiceParams = {
             cluster: clusterName,
             service: serviceName,
@@ -96,6 +76,8 @@ export async function updateServiceDesiredCount(
           };
 
           await ecs.updateService(updateServiceParams).promise();
+        } else {
+          console.log('Desired count already set.');
         }
       }
     }
