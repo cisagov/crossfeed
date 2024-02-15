@@ -3,7 +3,7 @@ import app from '../src/api/app';
 import { Cve, Organization, connectToDatabase } from '../src/models';
 import { createUserToken } from './util';
 
-// TODO: Add test for joining cpes
+// TODO: Add test for joining cpes and implement data from sample_data/cpes.json
 describe('cves', () => {
   let connection;
   let cve: Cve;

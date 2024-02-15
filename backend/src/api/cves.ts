@@ -23,7 +23,8 @@ export const get = wrapHandler(async (event) => {
   const id = event.pathParameters?.id;
 
   const cve = await Cve.createQueryBuilder('cve')
-    .leftJoinAndSelect('cve.cpes', 'cpe', 'cve.id = :id', { id: id })
+    .leftJoinAndSelect('cve.cpes', 'cpe')
+    .where('cve.id = :id', { id: id })
     .getOne();
 
   if (!cve) {
@@ -58,14 +59,11 @@ export const getByName = wrapHandler(async (event) => {
 
   const cve = await Cve.createQueryBuilder('cve')
     .leftJoinAndSelect('cve.cpes', 'cpe')
-    .where('cve.name = :name', { name })
+    .where('cve.name = :name', { name: name })
     .getOne();
 
   if (!cve) {
-    return {
-      statusCode: 404,
-      body: JSON.stringify(Error)
-    };
+    return NotFound;
   }
 
   return {

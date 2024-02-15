@@ -23,7 +23,8 @@ export const get = wrapHandler(async (event) => {
   const id = event.pathParameters?.id;
 
   const cpe = await Cpe.createQueryBuilder('cpe')
-    .leftJoinAndSelect('cpe.cves', 'cve', 'cpe.id = :id', { id: id })
+    .leftJoinAndSelect('cpe.cves', 'cve')
+    .where('cpe.id = :id', { id: id })
     .getOne();
 
   if (!cpe) {
