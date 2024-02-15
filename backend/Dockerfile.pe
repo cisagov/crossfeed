@@ -28,7 +28,7 @@ RUN ./aws/install
 # Sync the latest from cf-staging branch
 RUN git clone -b AL-staging-SQS https://github.com/cisagov/pe-reports.git && \
     cd pe-reports && \
-    git checkout 602d449de04d94ceabefdc80c0c2810cd90092e5 && \
+    git checkout 6405a2041656152b176b5fc9b3becb5dc11a5f3e && \
     pip install .
 
 RUN python -m spacy download en_core_web_lg

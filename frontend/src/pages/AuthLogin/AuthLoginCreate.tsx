@@ -36,7 +36,7 @@ interface Errors extends Partial<FormData> {
 }
 
 export const AuthLoginCreate: React.FC<{ showSignUp?: boolean }> = ({
-  showSignUp = false
+  showSignUp = true
 }) => {
   const { apiPost, refreshUser } = useAuthContext();
   const [errors, setErrors] = useState<Errors>({});
