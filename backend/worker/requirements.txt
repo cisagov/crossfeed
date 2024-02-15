@@ -23,7 +23,7 @@ pytz-deprecation-shim==0.1.0.post0
 regex==2023.3.23
 requests==2.31.0
 requests-http-signature==0.2.0
-Scrapy==2.9.0
+Scrapy==2.11.1
 git+https://github.com/LeapBeyond/scrubadub.git@d0e12c5d922631af3532d044196b05fb1b7c8c1c
 scikit-learn==1.2.2
 six==1.16.0
