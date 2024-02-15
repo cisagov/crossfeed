@@ -12,24 +12,32 @@ port=5432
 [shodan]
 key1=${PE_SHODAN_API_KEYS}
 
+[hibp]
+key=${HIBP_API_KEY}
+
 [pe_api]
 pe_api_key=
 pe_api_url=
 
 [staging]
 [cyhy_mongo]
+
 [sixgill]
+client_id=${SIXGILL_CLIENT_ID}
+client_secret=${SIXGILL_CLIENT_SECRET}
+
 [whoisxml]
 key=
+
 [intelx]
-api_key=
+api_key=${INTELX_API_KEY}
 
 [dnsmonitor]
 [pe_db_password_key]
 [blocklist]
 [dehashed]
 [dnstwist]
-[hibp]
+
 [API_Client_ID]
 [API_Client_secret]
 [API_WHOIS]
