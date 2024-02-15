@@ -60,6 +60,7 @@ export const Organizations: React.FC = () => {
               name="organizations"
               fieldsToExport={[
                 'name',
+                'acronym',
                 'rootDomains',
                 'ipBlocks',
                 'isPassive',
