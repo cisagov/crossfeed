@@ -102,6 +102,6 @@ es_instance_type                     = "t3.small.elasticsearch"
 es_instance_count                    = 1
 es_instance_volume_size              = 100
 create_db_accessor_instance          = true
-db_accessor_instance_class           = "t3.2xlarge"
+db_accessor_instance_class           = "m5.4xlarge"
 create_elk_instance                  = true
 elk_instance_class                   = "t3.2xlarge"
