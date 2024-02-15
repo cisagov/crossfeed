@@ -85,11 +85,15 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.hibp_api_key.arn}",
           "${data.aws_ssm_parameter.pe_shodan_api_keys.arn}",
           "${data.aws_ssm_parameter.sixgill_client_id.arn}",
+          "${data.aws_ssm_parameter.intelx_api_key.arn}",
           "${data.aws_ssm_parameter.sixgill_client_secret.arn}",
           "${data.aws_ssm_parameter.lg_api_key.arn}",
           "${data.aws_ssm_parameter.lg_workspace_name.arn}",
           "${data.aws_ssm_parameter.shodan_queue_url.arn}",
           "${data.aws_ssm_parameter.dnstwist_queue_url.arn}",
+          "${data.aws_ssm_parameter.hibp_queue_url.arn}",
+          "${data.aws_ssm_parameter.intelx_queue_url.arn}",
+          "${data.aws_ssm_parameter.cybersixgill_queue_url.arn}",
           "${aws_ssm_parameter.es_endpoint.arn}"
         ]
     }
@@ -343,6 +347,8 @@ data "aws_ssm_parameter" "pe_shodan_api_keys" { name = var.ssm_pe_shodan_api_key
 
 data "aws_ssm_parameter" "sixgill_client_id" { name = var.ssm_sixgill_client_id }
 
+data "aws_ssm_parameter" "intelx_api_key" { name = var.ssm_intelx_api_key }
+
 data "aws_ssm_parameter" "sixgill_client_secret" { name = var.ssm_sixgill_client_secret }
 
 data "aws_ssm_parameter" "pe_db_name" { name = var.ssm_pe_db_name }
@@ -362,6 +368,12 @@ data "aws_ssm_parameter" "worker_signature_private_key" { name = var.ssm_worker_
 data "aws_ssm_parameter" "shodan_queue_url" { name = var.ssm_shodan_queue_url }
 
 data "aws_ssm_parameter" "dnstwist_queue_url" { name = var.ssm_dnstwist_queue_url }
+
+data "aws_ssm_parameter" "hibp_queue_url" { name = var.ssm_hibp_queue_url }
+
+data "aws_ssm_parameter" "intelx_queue_url" { name = var.ssm_intelx_queue_url }
+
+data "aws_ssm_parameter" "cybersixgill_queue_url" { name = var.ssm_cybersixgill_queue_url }
 
 resource "aws_s3_bucket" "export_bucket" {
   bucket = var.export_bucket_name
