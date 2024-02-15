@@ -989,6 +989,7 @@ export const REGION_STATE_MAP = {
   'Commonwealth Northern Mariana Islands': '9',
   Connecticut: '1',
   Delaware: '3',
+  'District of Columbia': '3',
   'Federal States of Micronesia': '9',
   Florida: '4',
   Georgia: '4',
