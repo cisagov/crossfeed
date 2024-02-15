@@ -57,6 +57,12 @@ while true; do
     COMMAND="pe-source shodan --soc_med_included --org=$ORG"
   elif [[ "$SERVICE_TYPE" = *"dnstwist"* ]]; then 
     COMMAND="pe-source dnstwist --org=$ORG"
+  elif [[ "$SERVICE_TYPE" = *"hibp"* ]]; then 
+    COMMAND="pe-source hibp --org=$ORG"
+  elif [[ "$SERVICE_TYPE" = *"intelx"* ]]; then 
+    COMMAND="pe-source intelx --org=$ORG --soc_med_included"
+  elif [[ "$SERVICE_TYPE" = *"cybersixgill"* ]]; then 
+    COMMAND="pe-source cybersixgill --org=$ORG --soc_med_included"
   else
     echo "Unsupported SERVICE_TYPE: $SERVICE_TYPE"
     break
