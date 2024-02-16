@@ -54,6 +54,4 @@ pe_reports_path="${pe_reports_path%/pe-reports}/pe_reports"
 # Copy database.ini to the module's installation directory
 cp /app/pe-reports/src/pe_reports/data/database.ini "${pe_reports_path}/data/"
 
-cat /app/pe-reports/src/pe_reports/data/database.ini
-
 exec "$@"
