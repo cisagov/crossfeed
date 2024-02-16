@@ -16,7 +16,7 @@ import { Cpe } from './cpe';
 @Unique(['name'])
 export class Cve extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string; //TODO: Refactor to id to match other UUIDs?
+  id: string;
 
   @Column({ nullable: true })
   name: string;
@@ -24,7 +24,7 @@ export class Cve extends BaseEntity {
   @CreateDateColumn()
   publishedAt: Date;
 
-  @UpdateDateColumn()
+  @Column()
   modifiedAt: Date;
 
   @Column({ nullable: true })
