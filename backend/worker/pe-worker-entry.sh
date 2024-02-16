@@ -50,7 +50,7 @@ while true; do
   if [ "$IS_LOCAL" = true ]; then
     ORG=$(echo "$MESSAGE" | jq -r '.org')
   else
-    ORG=$(echo "$MESSAGE" | jq -r '.Messages[0].Body | capture("org: \"(?<org>[^\"]+)\"") | .org')
+    ORG=$(echo "$MESSAGE" | jq -r '.Messages[0].Body | fromjson | .org')
   fi
 
   if [[ "$SERVICE_TYPE" = *"shodan"*  ]]; then
@@ -77,10 +77,11 @@ while true; do
 
   # Delete the processed message from the queue
   if [ "$IS_LOCAL" = true ]; then
-    echo "Done"
+    echo "Done with $ORG"
 
   else
     RECEIPT_HANDLE=$(echo "$MESSAGE" | jq -r '.Messages[0].ReceiptHandle')
     aws sqs delete-message --queue-url "$SERVICE_QUEUE_URL" --receipt-handle "$RECEIPT_HANDLE"
+    echo "Done with $ORG"
   fi
 done

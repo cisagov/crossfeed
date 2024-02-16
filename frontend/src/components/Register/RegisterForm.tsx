@@ -95,7 +95,8 @@ export interface ApiResponse {
 export const RegisterForm: React.FC<{
   open: boolean;
   onClose: () => void;
-}> = ({ open, onClose }) => {
+  setRegisterSuccess: Function;
+}> = ({ open, onClose, setRegisterSuccess }) => {
   // Set default Values
   const defaultValues = () => ({
     firstName: '',
@@ -173,6 +174,7 @@ export const RegisterForm: React.FC<{
       console.log('User Registered Successfully');
       setIsLoading(false);
       onClose();
+      setRegisterSuccess(true);
     } else {
       console.log('User Register Failed');
       setErrorRequestMessage(
