@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   createTheme,
   ThemeProvider,
@@ -42,12 +42,23 @@ export const CFThemeContext = React.createContext<CFThemeContextType>({
   switchDarkMode: () => {}
 });
 
-export function CFThemeProvider({ children }: CFThemeProviderProps) {
+export function CFThemeContextProvider({ children }: CFThemeProviderProps) {
   const [mode, setMode] = React.useState<'light' | 'dark'>('light');
 
   const switchDarkMode = () => {
     setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
   };
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    ).matches;
+    if (mediaQuery) {
+      setMode('dark');
+    } else {
+      setMode('light');
+    }
+  }, []);
 
   const theme = useMemo(
     () =>
