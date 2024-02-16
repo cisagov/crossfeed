@@ -168,9 +168,8 @@ resource "aws_ecs_task_definition" "pe_dnstwist_worker" {
 
   # CPU and memory values: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
 
-  cpu    = 256 # .25 vCPU
-  memory = 512 # 512 MB
-
+  cpu    = 2048
+  memory = 16384
   tags = {
     Project = var.project
     Stage   = var.stage
@@ -189,6 +188,9 @@ resource "aws_ecs_service" "dnstwist_service" {
     subnets          = [aws_subnet.worker.id]
     security_groups  = [aws_security_group.worker.id]
     assign_public_ip = true
+  }
+  lifecycle {
+    ignore_changes = [desired_count]
   }
 }
 
@@ -322,8 +324,8 @@ resource "aws_ecs_task_definition" "pe_shodan_worker" {
 
   # CPU and memory values: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
 
-  cpu    = 256 # .25 vCPU
-  memory = 512 # 512 MB
+  cpu    = 2048
+  memory = 16384
 
   tags = {
     Project = var.project
@@ -342,6 +344,9 @@ resource "aws_ecs_service" "shodan_service" {
     subnets          = [aws_subnet.worker.id]
     security_groups  = [aws_security_group.worker.id]
     assign_public_ip = true
+  }
+  lifecycle {
+    ignore_changes = [desired_count]
   }
 }
 
@@ -475,8 +480,8 @@ resource "aws_ecs_task_definition" "pe_hibp_worker" {
 
   # CPU and memory values: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
 
-  cpu    = 256 # .25 vCPU
-  memory = 512 # 512 MB
+  cpu    = 2048
+  memory = 16384
 
   tags = {
     Project = var.project
@@ -496,6 +501,9 @@ resource "aws_ecs_service" "hibp_service" {
     subnets          = [aws_subnet.worker.id]
     security_groups  = [aws_security_group.worker.id]
     assign_public_ip = true
+  }
+  lifecycle {
+    ignore_changes = [desired_count]
   }
 }
 
@@ -629,8 +637,8 @@ resource "aws_ecs_task_definition" "pe_intelx_worker" {
 
   # CPU and memory values: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
 
-  cpu    = 256 # .25 vCPU
-  memory = 512 # 512 MB
+  cpu    = 2048
+  memory = 16384
 
   tags = {
     Project = var.project
@@ -650,6 +658,10 @@ resource "aws_ecs_service" "intelx_service" {
     subnets          = [aws_subnet.worker.id]
     security_groups  = [aws_security_group.worker.id]
     assign_public_ip = true
+  }
+
+  lifecycle {
+    ignore_changes = [desired_count]
   }
 }
 
@@ -783,8 +795,8 @@ resource "aws_ecs_task_definition" "pe_cybersixgill_worker" {
 
   # CPU and memory values: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
 
-  cpu    = 256 # .25 vCPU
-  memory = 512 # 512 MB
+  cpu    = 2048
+  memory = 16384
 
   tags = {
     Project = var.project
@@ -804,6 +816,9 @@ resource "aws_ecs_service" "cybersixgill_service" {
     subnets          = [aws_subnet.worker.id]
     security_groups  = [aws_security_group.worker.id]
     assign_public_ip = true
+  }
+  lifecycle {
+    ignore_changes = [desired_count]
   }
 }
 

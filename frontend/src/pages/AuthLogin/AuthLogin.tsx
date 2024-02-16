@@ -2,7 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { AuthForm } from 'components';
 import { useAuthContext } from 'context';
 import { Button } from '@trussworks/react-uswds';
-import { Box, Grid, Link, Typography } from '@mui/material';
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Link,
+  Typography
+} from '@mui/material';
 import { RegisterForm } from 'components/Register/RegisterForm';
 import { CrossfeedWarning } from 'components/WarningBanner';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
@@ -23,6 +31,7 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   const { apiPost, refreshUser } = useAuthContext();
   const [errors, setErrors] = useState<Errors>({});
   const [open, setOpen] = useState<boolean>(false);
+  const [registerSuccess, setRegisterSuccess] = useState<boolean>(false);
   // Once a user signs in, call refreshUser() so that the callback is called and the user gets signed in.
   const { authStatus } = useAuthenticator((context) => [context.isPending]);
   useEffect(() => {
@@ -124,6 +133,19 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
   //     </Alert>
   //   </Grid>
   // );
+  const RegistrationSuccessDialog = (
+    <Dialog
+      open={registerSuccess}
+      onClose={() => setRegisterSuccess(false)}
+      maxWidth="xs"
+    >
+      <DialogTitle textAlign="center">REQUEST SENT</DialogTitle>
+      <DialogContent>
+        Thank you for requesting a Crossfeed account, you will receive
+        notification once this request is approved.
+      </DialogContent>
+    </Dialog>
+  );
   if (process.env.REACT_APP_USE_COGNITO) {
     return (
       <Grid container>
@@ -146,7 +168,14 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
           />
         </Grid>
         <Grid item xs={12}>
-          {open && <RegisterForm open={open} onClose={onClose} />}
+          {open && (
+            <RegisterForm
+              open={open}
+              onClose={onClose}
+              setRegisterSuccess={setRegisterSuccess}
+            />
+          )}
+          {RegistrationSuccessDialog}
           <Box pt={3} display="flex" justifyContent="center">
             <Typography display="inline">New to Crossfeed?&nbsp;</Typography>
             <Link
@@ -174,7 +203,14 @@ export const AuthLogin: React.FC<{ showSignUp?: boolean }> = ({
       <Typography>
         <h5>New to Crossfeed? Register with Login.gov</h5>
       </Typography>
-      {open && <RegisterForm open={open} onClose={onClose} />}
+      {open && (
+        <RegisterForm
+          open={open}
+          onClose={onClose}
+          setRegisterSuccess={setRegisterSuccess}
+        />
+      )}
+      {RegistrationSuccessDialog}
       <Button type="submit" size="big" onClick={() => setOpen(true)}>
         Register
       </Button>
