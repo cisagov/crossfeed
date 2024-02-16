@@ -182,7 +182,8 @@
           "vender": "netapp"
         }
       ]
-    }  },
+    }
+  },
   {
     "cve_uid": "",
     "cve_name": "CVE-2018-15473",

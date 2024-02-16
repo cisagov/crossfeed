@@ -2,8 +2,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToMany,
   BaseEntity,
   JoinTable,
@@ -21,10 +19,10 @@ export class Cve extends BaseEntity {
   @Column({ nullable: true })
   name: string;
 
-  @CreateDateColumn()
+  @Column({ nullable: true })
   publishedAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   modifiedAt: Date;
 
   @Column({ nullable: true })
