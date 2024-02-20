@@ -45,7 +45,7 @@ const sleep = (milliseconds) => {
 };
 
 const fetchPEVulnTask = async (org_name: string) => {
-  console.log('Creating task to fetch CVE data');
+  console.log('Creating task to fetch PE vuln data');
   try {
     console.log(String(process.env.CF_API_KEY));
     const response = await axios({
@@ -56,8 +56,8 @@ const fetchPEVulnTask = async (org_name: string) => {
         access_token: String(process.env.PE_API_KEY),
         'Content-Type': '' //this is needed or else it breaks because axios defaults to application/json
       },
-      data: {
-        org_id: org_name
+      data:{
+        org_name: org_name
       }
     });
     if (response.status >= 200 && response.status < 300) {
@@ -100,7 +100,9 @@ export const handler = async (commandOptions: CommandOptions) => {
     `Scanning PE database for vulnerabilities & services for all orgs`
   );
   try {
+    await connectToDatabase();
     const allOrgs: Organization[] = await Organization.find();
+    console.log(allOrgs)
     for (const org of allOrgs) {
       console.log(
         `Scanning PE database for vulnerabilities & services for ${org.acronym}, ${org.name}`
@@ -132,7 +134,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         const domainId = await saveDomainsReturn([
           plainToClass(Domain, {
             name: item.service_asset,
-            organization: { id: organizationId }, //change this for global scan to get all the organizations
+            organization: { id: org.id }, //change this for global scan to get all the organizations
             fromRootDomain: item.service_asset,
             discoveredBy: { id: commandOptions.scanId }
           })
