@@ -45,6 +45,7 @@ scanExecution:
           Fn::GetAtt:
             - WorkerControlQueue
             - Arn
+  memorySize: 4096
 
 updateScanTaskStatus:
   handler: src/tasks/updateScanTaskStatus.handler
