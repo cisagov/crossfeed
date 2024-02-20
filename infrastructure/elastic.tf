@@ -27,3 +27,39 @@ resource "aws_instance" "elk_stack" {
     ignore_changes = [ami]
   }
 }
+
+data "aws_iam_policy_document" "elk_policy" {
+  statement {
+    effect = "Allow"
+    actions = ["cloudwatch:GetMetricData",
+      "cloudwatch:ListMetrics",
+      "ec2:DescribeInstances",
+      "ec2:DescribeRegions",
+      "logs:DescribeLogGroups",
+      "logs:FilterLogEvents",
+      "rds:DescribeDBInstances",
+      "rds:ListTagsForResource",
+      "sns:ListTopics",
+      "sqs:ChangeMessageVisibility",
+      "sqs:DeleteMessage",
+      "sqs:ListQueues",
+      "sqs:ReceiveMessage",
+      "sts:AssumeRole",
+      "sts:GetCallerIdentity",
+    "tag:GetResources"]
+    resources = ["*"]
+  }
+}
+
+# Define IAM user
+resource "aws_iam_user" "elk_integration_user" {
+  name = "ELKIntegrationUser"
+}
+
+# Attach policy to the IAM user
+resource "aws_iam_user_policy" "lb_ro" {
+  name   = "test"
+  user   = aws_iam_user.elk_integration_user.name
+  policy = data.aws_iam_policy_document.elk_policy.json
+}
+

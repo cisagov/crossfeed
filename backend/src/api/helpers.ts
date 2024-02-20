@@ -9,10 +9,8 @@ import { ClassType } from 'class-transformer/ClassTransformer';
 import { plainToClass } from 'class-transformer';
 import { SES } from 'aws-sdk';
 import * as nodemailer from 'nodemailer';
-import * as fs from 'fs';
+import fs from 'fs';
 import * as handlebars from 'handlebars';
-import * as util from 'util';
-import S3Client from '../tasks/s3-client';
 
 export const validateBody = async <T>(
   obj: ClassType<T>,
@@ -143,36 +141,95 @@ export const sendRegistrationHtmlEmail = async (recipient: string) => {
   });
 };
 
-export const sendUserNotificationEmail = async (
+export const sendUserRegistrationEmail = async (
   recepient: string,
-  p_subject: string,
-  p_firstName: string,
-  p_lastname: string,
-  template_file: string
+  subject: string,
+  firstName: string,
+  lastName: string,
+  templateFilePath: string
 ) => {
-  const transporter = nodemailer.createTransport({
-    SES: new SES({ region: 'us-east-1' })
-  });
+  console.log('TemplateFilePath: ', templateFilePath);
+  const fs = require('fs');
+  const htmlTemplate = await fs.promises.readFile(
+    templateFilePath,
+    'utf8',
+    (err, data) => {
+      if (err) {
+        console.error('Error reading file data', err);
+        return;
+      }
+      console.log('Finished reading file');
+      return data;
+    }
+  );
+  const template = handlebars.compile(htmlTemplate);
+  const data = {
+    firstName: firstName,
+    lastName: lastName
+  };
 
+  const htmlToSend = template(data);
+  const mailOptions = {
+    from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
+    to: recepient,
+    subject: subject,
+    html: htmlToSend,
+    replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
+  };
+};
+
+export const sendRegistrationDeniedEmail = async (
+  recepient: string,
+  subject: string,
+  firstName: string,
+  lastName: string,
+  templateFilePath: string
+) => {
   try {
-    const client = new S3Client();
-    const html = await client.getEmailAsset(template_file);
-    const template = handlebars.compile(html);
+    const htmlTemplate = fs.readFileSync(templateFilePath, 'utf-8');
+    const template = handlebars.compile(htmlTemplate);
     const data = {
-      firstName: p_firstName,
-      lastName: p_lastname
+      firstName: firstName,
+      lastName: lastName
     };
 
     const htmlToSend = template(data);
     const mailOptions = {
       from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
       to: recepient,
-      subject: p_subject,
+      subject: subject,
       html: htmlToSend,
       replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
     };
-    await transporter.sendMail(mailOptions);
-  } catch (e) {
-    console.log(e);
+  } catch (errorMessage) {
+    console.log('Email error: ', errorMessage);
+  }
+};
+
+export const sendRegistrationApprovedEmail = async (
+  recepient: string,
+  subject: string,
+  firstName: string,
+  lastName: string,
+  templateFilePath: string
+) => {
+  try {
+    const htmlTemplate = fs.readFileSync(templateFilePath, 'utf-8');
+    const template = handlebars.compile(htmlTemplate);
+    const data = {
+      firstName: firstName,
+      lastName: lastName
+    };
+
+    const htmlToSend = template(data);
+    const mailOptions = {
+      from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
+      to: recepient,
+      subject: subject,
+      html: htmlToSend,
+      replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
+    };
+  } catch (errorMessage) {
+    console.log('Email error: ', errorMessage);
   }
 };
