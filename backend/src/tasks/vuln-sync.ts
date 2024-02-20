@@ -7,12 +7,12 @@ import {
   Organization
 } from '../models';
 import { plainToClass } from 'class-transformer';
+import * as dns from 'dns';
 import axios from 'axios';
-import pRetry from 'p-retry';
 import saveServicesToDb from './helpers/saveServicesToDb';
 import saveVulnerabilitiesToDb from './helpers/saveVulnerabilitiesToDb';
 import saveDomainsReturn from './helpers/saveDomainsReturn';
-import { IpToDomainsMap, sanitizeStringField } from './censysIpv4';
+import { sanitizeStringField } from './censysIpv4';
 
 interface UniversalCrossfeedVuln {
   title: string;
@@ -34,7 +34,7 @@ interface UniversalCrossfeedVuln {
   service_asset_type: string;
 }
 interface TaskResponse {
-  task_id: string[];
+  tasks_dict: { [key: string]: string };
   status: 'Pending' | 'Completed' | 'Failure';
   result: UniversalCrossfeedVuln[];
   error?: string;
@@ -44,7 +44,7 @@ const sleep = (milliseconds) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
-const fetchPEVulnTask = async (org_name: string) => {
+const fetchPEVulnTask = async (org_acronym: string) => {
   console.log('Creating task to fetch PE vuln data');
   try {
     console.log(String(process.env.CF_API_KEY));
@@ -54,16 +54,16 @@ const fetchPEVulnTask = async (org_name: string) => {
       headers: {
         Authorization: String(process.env.CF_API_KEY),
         access_token: String(process.env.PE_API_KEY),
-        'Content-Type': '' //this is needed or else it breaks because axios defaults to application/json
+        'Content-Type': '' // This is needed or else it breaks because axios defaults to application/json
       },
       data: {
-        org_name: org_name
+        org_acronym: org_acronym
       }
     });
     if (response.status >= 200 && response.status < 300) {
-      console.log('Request was successful');
+      console.log('Task request was successful');
     } else {
-      console.log('Request failed');
+      console.log('Task request failed');
     }
     return response.data as TaskResponse;
   } catch (error) {
@@ -71,15 +71,15 @@ const fetchPEVulnTask = async (org_name: string) => {
   }
 };
 
-const fetchPEVulnData = async (task_id: string) => {
+const fetchPEVulnData = async (scan_name: string, task_id: string) => {
   console.log('Creating task to fetch CVE data');
   try {
     const response = await axios({
-      url: `https://api.staging-cd.crossfeed.cyber.dhs.gov/pe/apiv1/crossfeed_vulns/task/${task_id}`,
+      url: `https://api.staging-cd.crossfeed.cyber.dhs.gov/pe/apiv1/crossfeed_vulns/task/?task_id=${task_id}&scan_name=${scan_name}`,
       headers: {
         Authorization: String(process.env.CF_API_KEY),
         access_token: String(process.env.PE_API_KEY),
-        'Content-Type': '' //this is needed or else it breaks because axios defaults to application/json
+        'Content-Type': '' // This is needed or else it breaks because axios defaults to application/json
       }
     });
     if (response.status >= 200 && response.status < 300) {
@@ -89,13 +89,11 @@ const fetchPEVulnData = async (task_id: string) => {
     }
     return response.data as TaskResponse;
   } catch (error) {
-    console.log(`Error making POST request: ${error}`);
+    console.log(`Error making GET request: ${error}`);
   }
 };
 
 export const handler = async (commandOptions: CommandOptions) => {
-  const { organizationId, organizationName } = commandOptions;
-
   console.log(
     `Scanning PE database for vulnerabilities & services for all orgs`
   );
@@ -103,7 +101,6 @@ export const handler = async (commandOptions: CommandOptions) => {
     // Get all organizations
     await connectToDatabase();
     const allOrgs: Organization[] = await Organization.find();
-    console.log(allOrgs);
 
     // For each organization, fetch vulnerability data
     for (const org of allOrgs) {
@@ -112,24 +109,25 @@ export const handler = async (commandOptions: CommandOptions) => {
       );
       // Start API task
       const data = await fetchPEVulnTask(org.acronym);
-      if (data?.task_id === undefined) {
+      if (data?.tasks_dict === undefined) {
         console.error(
-          `Failed to fetch PE vulns for org: ${org.acronym}, ${org.name}`
+          `Failed to start P&E API task for org: ${org.acronym}, ${org.name}`
         );
         continue;
       }
       let allVulns: UniversalCrossfeedVuln[] = [];
 
       // For each task, call endpoint to get data
-      for (const taskId of data.task_id) {
-        let response = await fetchPEVulnData(taskId);
+      for (const scan_name in data.tasks_dict) {
+        const task_id = data.tasks_dict[scan_name];
+        let response = await fetchPEVulnData(scan_name, task_id);
         while (response && response.status === 'Pending') {
           await sleep(1000);
-          response = await fetchPEVulnData(taskId);
+          response = await fetchPEVulnData(scan_name, task_id);
         }
         if (response && response.status === 'Failure') {
           console.error(
-            `Failed for task id: ${taskId} for org ${org.acronym}, ${org.name}`
+            `Failed fetching data for task id: ${task_id} for org ${org.acronym}, ${org.name}`
           );
           continue; // Go to the next item in the for loop
         }
@@ -137,65 +135,114 @@ export const handler = async (commandOptions: CommandOptions) => {
         await sleep(1000); // Delay between API requests
       }
 
-      // For each vulnaribility, save assets
+      // For each vulnerability, save assets
       for (const vuln of allVulns ?? []) {
-        console.log(vuln);
-        // Save discovered domains to the Domain table
-        const domainId = await saveDomainsReturn([
-          plainToClass(Domain, {
-            name: vuln.service_asset,
-            organization: { id: org.id }, //change this for global scan to get all the organizations
-            fromRootDomain: vuln.service_asset,
-            discoveredBy: { id: commandOptions.scanId }
-          })
-        ]);
-        if (domainId === undefined || domainId.id === null) {
+        // Save discovered domains and ips to the Domain table
+        let domains: string[];
+        let service_domain;
+        let service_ip;
+        let ipOnly = false;
+        try {
+          // Lookup domain based on IP
+          if ((vuln.service_asset_type = 'ip')) {
+            service_ip = vuln.service_asset;
+            try {
+              service_domain = (await dns.promises.reverse(service_ip))[0];
+              console.log(service_domain);
+            } catch {
+              console.log(`Setting domain to IP: ${service_ip}`);
+              service_domain = service_ip;
+              ipOnly = true;
+            }
+            service_ip = vuln.service_asset;
+            // Lookup IP based on domain
+          } else {
+            service_domain = vuln.service_asset;
+            try {
+              service_ip = (await dns.promises.lookup(service_domain)).address;
+            } catch {
+              service_ip = null;
+            }
+          }
+          domains = await saveDomainsReturn([
+            plainToClass(Domain, {
+              name: service_domain,
+              ip: service_ip,
+              organization: { id: org.id },
+              fromRootDomain: ipOnly
+                ? service_domain.split('.').slice(-2).join('.')
+                : null,
+              discoveredBy: { id: commandOptions.scanId },
+              subdomainSource: `P&E - ${vuln.source}`,
+              ipOnly: ipOnly
+            })
+          ]);
+          console.log(`Successfully saved domain with id: ${domains}`);
+        } catch (e) {
           console.error(`Failed to save domain ${vuln.service_asset}`);
+          console.error(e);
+          console.error('Continuing to next vulnerability');
           continue;
         }
 
-        // Save discovered services to the Service table
-        const [serviceId] = await saveServicesToDb([
-          plainToClass(Service, {
-            domain: { id: domainId.id },
-            discoveredBy: { id: commandOptions.scanId },
-            port: vuln.service_port,
-            lastSeen: vuln.lastSeen,
-            banner: sanitizeStringField(vuln.banner),
-            serviceSource: vuln.serviceSource,
-            ...(vuln.source === 'Shodan'
-              ? {
-                  shodanResults: {
-                    product: vuln.product,
-                    version: vuln.version,
-                    cpe: vuln.cpe
+        console.log(domains);
+        console.log(domains);
+        let serviceId;
+        try {
+          // Save discovered services to the Service table
+          [serviceId] = await saveServicesToDb([
+            plainToClass(Service, {
+              domain: { id: domains[0] },
+              discoveredBy: { id: commandOptions.scanId },
+              port: vuln.service_port,
+              lastSeen: vuln.lastSeen,
+              banner: sanitizeStringField(vuln.banner),
+              serviceSource: vuln.source,
+              ...(vuln.source === 'Shodan'
+                ? {
+                    shodanResults: {
+                      product: vuln.product,
+                      version: vuln.version,
+                      cpe: vuln.cpe
+                    }
                   }
-                }
-              : {})
-          })
-        ]);
-        // Save to the Vulnerability table
-        console.log('saved services');
-        const vulns: Vulnerability[] = [];
-        vulns.push(
-          plainToClass(Vulnerability, {
-            domain: vuln.service_asset,
-            lastSeen: vuln.lastSeen,
-            title: vuln.title,
-            cve: vuln.cve,
-            cvss: vuln.cvss,
-            state: vuln.state,
-            source: vuln.source,
-            needsPopulation: vuln.needsPopulation,
-            service: { id: serviceId }
-          })
-        );
-        await saveVulnerabilitiesToDb(vulns, false);
+                : {})
+            })
+          ]);
+          console.log('Saved services.');
+        } catch (e) {
+          console.error(
+            'Could not save services. Continuing to next vulnerability.'
+          );
+          console.error(e);
+          continue;
+        }
+        try {
+          const vulns: Vulnerability[] = [];
+          vulns.push(
+            plainToClass(Vulnerability, {
+              domain: vuln.service_asset,
+              lastSeen: vuln.lastSeen,
+              title: vuln.title,
+              cve: vuln.cve,
+              cvss: vuln.cvss,
+              state: vuln.state,
+              source: vuln.source,
+              needsPopulation: vuln.needsPopulation,
+              service: { id: serviceId }
+            })
+          );
+          await saveVulnerabilitiesToDb(vulns, false);
+        } catch (e) {
+          console.error('Could not save vulnerabilities. Continuing.');
+          console.error(e);
+        }
       }
     }
   } catch (e) {
+    console.error('Unknown failure.');
     console.error(e);
   }
   await sleep(1000); // Do avoid overloading the P&E API
-  console.log(`Finished retriving PE vulns for all orgs`);
+  console.log(`Finished retrieving PE vulns for all orgs`);
 };

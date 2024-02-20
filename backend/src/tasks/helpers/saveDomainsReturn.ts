@@ -3,6 +3,7 @@ import { Domain, connectToDatabase } from '../../models';
 export default async (domains: Domain[]) => {
   await connectToDatabase();
 
+  const ids: string[] = [];
   for (const domain of domains) {
     const updatedValues = Object.keys(domain)
       .map((key) => {
@@ -12,20 +13,23 @@ export default async (domains: Domain[]) => {
         return domain[key] !== null ? key : '';
       })
       .filter((key) => key !== '');
-    const { generatedMaps } = await Domain.createQueryBuilder()
-      .insert()
-      .values(domain)
-      .onConflict(
-        `
+    const { generatedMaps } = (
+      await Domain.createQueryBuilder()
+        .insert()
+        .values(domain)
+        .onConflict(
+          `
             ("name", "organizationId") DO UPDATE
             SET ${updatedValues
               .map((val) => `"${val}" = excluded."${val}",`)
               .join('\n')}
                 "updatedAt" = now()
           `
-      )
-      .returning('id')
-      .execute();
-    return generatedMaps[0] as Domain;
+        )
+        .returning('id')
+        .execute()
+    ).identifiers[0].id;
+    ids.push(generatedMaps);
   }
+  return ids;
 };
