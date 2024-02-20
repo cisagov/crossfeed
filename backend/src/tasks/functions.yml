@@ -34,9 +34,6 @@ checkUserExpiration:
   handler: src/tasks/checkUserExpiration.handler
   events:
     - schedule: cron(0 0 * * ? *) # Runs every day at midnight
-
-
-
 scanExecution:
   handler: src/tasks/scanExecution.handler
   timeout: 300 # 5 minutes
