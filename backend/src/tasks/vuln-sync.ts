@@ -29,6 +29,7 @@ interface UniversalCrossfeedVuln {
   product: string;
   version: string;
   cpe: string;
+  structuredData: { [key: string]: string };
   service_asset: string;
   service_port: string;
   service_asset_type: string;
@@ -138,7 +139,7 @@ export const handler = async (commandOptions: CommandOptions) => {
       // For each vulnerability, save assets
       for (const vuln of allVulns ?? []) {
         // Save discovered domains and ips to the Domain table
-        let domains: string[];
+        let domainId;
         let service_domain;
         let service_ip;
         let ipOnly = false;
@@ -164,7 +165,7 @@ export const handler = async (commandOptions: CommandOptions) => {
               service_ip = null;
             }
           }
-          domains = await saveDomainsReturn([
+          [domainId] = await saveDomainsReturn([
             plainToClass(Domain, {
               name: service_domain,
               ip: service_ip,
@@ -177,7 +178,7 @@ export const handler = async (commandOptions: CommandOptions) => {
               ipOnly: ipOnly
             })
           ]);
-          console.log(`Successfully saved domain with id: ${domains}`);
+          console.log(`Successfully saved domain with id: ${domainId}`);
         } catch (e) {
           console.error(`Failed to save domain ${vuln.service_asset}`);
           console.error(e);
@@ -185,20 +186,18 @@ export const handler = async (commandOptions: CommandOptions) => {
           continue;
         }
 
-        console.log(domains);
-        console.log(domains);
         let serviceId;
         try {
           // Save discovered services to the Service table
           [serviceId] = await saveServicesToDb([
             plainToClass(Service, {
-              domain: { id: domains[0] },
+              domain: { id: domainId },
               discoveredBy: { id: commandOptions.scanId },
-              port: vuln.service_port,
+              port: vuln.port,
               lastSeen: vuln.lastSeen,
-              banner: sanitizeStringField(vuln.banner),
+              // banner: sanitizeStringField(vuln.banner),
               serviceSource: vuln.source,
-              ...(vuln.source === 'Shodan'
+              ...(vuln.source === 'shodan'
                 ? {
                     shodanResults: {
                       product: vuln.product,
@@ -221,7 +220,7 @@ export const handler = async (commandOptions: CommandOptions) => {
           const vulns: Vulnerability[] = [];
           vulns.push(
             plainToClass(Vulnerability, {
-              domain: vuln.service_asset,
+              domain: domainId,
               lastSeen: vuln.lastSeen,
               title: vuln.title,
               cve: vuln.cve,

@@ -13,7 +13,7 @@ export default async (domains: Domain[]) => {
         return domain[key] !== null ? key : '';
       })
       .filter((key) => key !== '');
-    const { generatedMaps } = (
+    const id: string = (
       await Domain.createQueryBuilder()
         .insert()
         .values(domain)
@@ -29,7 +29,7 @@ export default async (domains: Domain[]) => {
         .returning('id')
         .execute()
     ).identifiers[0].id;
-    ids.push(generatedMaps);
+    ids.push(id);
   }
   return ids;
 };
