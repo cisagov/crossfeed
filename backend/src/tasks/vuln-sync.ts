@@ -170,7 +170,7 @@ export const handler = async (commandOptions: CommandOptions) => {
               name: service_domain,
               ip: service_ip,
               organization: { id: org.id },
-              fromRootDomain: ipOnly
+              fromRootDomain: !ipOnly
                 ? service_domain.split('.').slice(-2).join('.')
                 : null,
               discoveredBy: { id: commandOptions.scanId },
