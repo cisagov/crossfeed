@@ -195,7 +195,7 @@ export const handler = async (commandOptions: CommandOptions) => {
               discoveredBy: { id: commandOptions.scanId },
               port: vuln.port,
               lastSeen: vuln.lastSeen,
-              // banner: sanitizeStringField(vuln.banner),
+              banner: sanitizeStringField(vuln.banner),
               serviceSource: vuln.source,
               ...(vuln.source === 'shodan'
                 ? {
