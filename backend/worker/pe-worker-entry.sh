@@ -50,13 +50,19 @@ while true; do
   if [ "$IS_LOCAL" = true ]; then
     ORG=$(echo "$MESSAGE" | jq -r '.org')
   else
-    ORG=$(echo "$MESSAGE" | jq -r '.Messages[0].Body | capture("org: \"(?<org>[^\"]+)\"") | .org')
+    ORG=$(echo "$MESSAGE" | jq -r '.Messages[0].Body | fromjson | .org')
   fi
 
   if [[ "$SERVICE_TYPE" = *"shodan"*  ]]; then
     COMMAND="pe-source shodan --soc_med_included --org=$ORG"
   elif [[ "$SERVICE_TYPE" = *"dnstwist"* ]]; then 
     COMMAND="pe-source dnstwist --org=$ORG"
+  elif [[ "$SERVICE_TYPE" = *"hibp"* ]]; then 
+    COMMAND="pe-source hibp --org=$ORG"
+  elif [[ "$SERVICE_TYPE" = *"intelx"* ]]; then 
+    COMMAND="pe-source intelx --org=$ORG --soc_med_included"
+  elif [[ "$SERVICE_TYPE" = *"cybersixgill"* ]]; then 
+    COMMAND="pe-source cybersixgill --org=$ORG --soc_med_included"
   else
     echo "Unsupported SERVICE_TYPE: $SERVICE_TYPE"
     break
@@ -71,10 +77,11 @@ while true; do
 
   # Delete the processed message from the queue
   if [ "$IS_LOCAL" = true ]; then
-    echo "Done"
+    echo "Done with $ORG"
 
   else
     RECEIPT_HANDLE=$(echo "$MESSAGE" | jq -r '.Messages[0].ReceiptHandle')
     aws sqs delete-message --queue-url "$SERVICE_QUEUE_URL" --receipt-handle "$RECEIPT_HANDLE"
+    echo "Done with $ORG"
   fi
 done

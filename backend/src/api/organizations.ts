@@ -73,6 +73,9 @@ class NewOrganizationNonGlobalAdmins {
   @IsString()
   name: string;
 
+  @IsString()
+  acronym: string;
+
   @IsBoolean()
   isPassive: boolean;
 }
@@ -143,6 +146,11 @@ class UpdateOrganizationMetaV2 {
   @IsOptional()
   name: string;
 
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  acronym: string;
+
   @IsBoolean()
   @IsOptional()
   isPassive: boolean;
@@ -179,11 +187,6 @@ class UpdateOrganizationMetaV2 {
   @IsNumber()
   @IsOptional()
   countyFips: number;
-
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  acronym: string;
 
   @IsString()
   @IsNotEmpty()
@@ -986,6 +989,7 @@ export const REGION_STATE_MAP = {
   'Commonwealth Northern Mariana Islands': '9',
   Connecticut: '1',
   Delaware: '3',
+  'District of Columbia': '3',
   'Federal States of Micronesia': '9',
   Florida: '4',
   Georgia: '4',
@@ -1068,8 +1072,9 @@ export const upsert_org = wrapHandler(async (event) => {
       }
     ])
     .orUpdate({
-      conflict_target: ['name'],
+      conflict_target: ['acronym'],
       overwrite: [
+        'name',
         'isPassive',
         'country',
         'state',

@@ -24,6 +24,8 @@ export interface Organization {
   countyFips?: number;
   acronym: string;
   type: string;
+  userCount?: number;
+  tagNames?: string[];
 }
 
 export interface PendingDomain {

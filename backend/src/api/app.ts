@@ -290,11 +290,8 @@ authenticatedRoute.delete('/api-keys/:keyId', handlerToExpress(apiKeys.del));
 authenticatedRoute.post('/search', handlerToExpress(search.search));
 authenticatedRoute.post('/search/export', handlerToExpress(search.export_));
 authenticatedRoute.get('/cpes/:id', handlerToExpress(cpes.get));
-authenticatedRoute.get('/cves/:cve_uid', handlerToExpress(cves.get));
-authenticatedRoute.get(
-  '/cves/name/:cve_name',
-  handlerToExpress(cves.getByName)
-);
+authenticatedRoute.get('/cves/:id', handlerToExpress(cves.get));
+authenticatedRoute.get('/cves/name/:name', handlerToExpress(cves.getByName));
 authenticatedRoute.post('/domain/search', handlerToExpress(domains.list));
 authenticatedRoute.post('/domain/export', handlerToExpress(domains.export_));
 authenticatedRoute.get('/domain/:domainId', handlerToExpress(domains.get));

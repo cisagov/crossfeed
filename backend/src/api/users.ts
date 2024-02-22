@@ -20,9 +20,9 @@ import {
   NotFound,
   Unauthorized,
   sendEmail,
-  sendUserNotificationEmail,
-  sendRegistrationTextEmail,
-  sendRegistrationHtmlEmail
+  sendUserRegistrationEmail,
+  sendRegistrationApprovedEmail,
+  sendRegistrationDeniedEmail
 } from './helpers';
 import { UserType } from '../models/user';
 import {
@@ -340,6 +340,10 @@ export const invite = wrapHandler(async (event) => {
 
   body.email = body.email.toLowerCase();
 
+  if (body.state) {
+    body.regionId = REGION_STATE_MAP[body.state];
+  }
+
   // Check if user already exists
   let user = await User.findOne({
     email: body.email
@@ -357,14 +361,17 @@ export const invite = wrapHandler(async (event) => {
       ...body
     });
     await User.save(user);
-    await sendInviteEmail(user.email, organization);
+    if (process.env.IS_LOCAL!) {
+      console.log('Cannot send invite email while running on local.');
+    } else {
+      await sendInviteEmail(user.email, organization);
+    }
   } else if (!user.firstName && !user.lastName) {
     // Only set the user first name and last name the first time the user is invited.
     user.firstName = body.firstName;
     user.lastName = body.lastName;
     await User.save(user);
   }
-
   // Always update the userType, if specified in the request.
   if (body.userType) {
     user.userType = body.userType;
@@ -587,7 +594,6 @@ export const register = wrapHandler(async (event) => {
 
   let id = '';
   // Create if user does not exist
-  // if (!user) {
   if (userCheck) {
     console.log('User already exists.');
     return {
@@ -606,12 +612,12 @@ export const register = wrapHandler(async (event) => {
     return NotFound;
   }
   // Send email notification
-  await sendUserNotificationEmail(
+  await sendUserRegistrationEmail(
     savedUser.email,
     'Crossfeed Registration Pending',
     savedUser.firstName,
     savedUser.lastName,
-    'crossfeed_registration_notification.html'
+    '../email_templates/crossfeed_registration_notification.html'
   );
 
   return {
@@ -642,21 +648,6 @@ export const registrationApproval = wrapHandler(async (event) => {
     return NotFound;
   }
 
-  // TODO: add user registration approval logic
-  // Validate the body
-  // const body = await approvalBody(UpdateUser, event.body);
-
-  // TODO: verify permissions
-  // User type permissions check
-  // if (!isRegionalAdmin(event)) return Unauthorized;
-
-  // TODO: finalize validation
-  // // Validate the body
-  // const validatedBody = await validateBody(
-  //   UpdateUser,
-  //   event.body
-  // );
-
   // Connect to the database
   await connectToDatabase();
 
@@ -666,12 +657,12 @@ export const registrationApproval = wrapHandler(async (event) => {
   }
 
   // Send email notification
-  await sendUserNotificationEmail(
+  await sendRegistrationApprovedEmail(
     user.email,
     'Crossfeed Registration Approved',
     user.firstName,
     user.lastName,
-    'crossfeed_registration_notification.html'
+    '../email_templates/crossfeed_approval_notification.html'
   );
 
   // TODO: Handle Response Output
@@ -703,23 +694,21 @@ export const registrationDenial = wrapHandler(async (event) => {
     return NotFound;
   }
 
-  // TODO: add user registration denial logic
-  // Validate the body
-  // const body = await approvalBody(UpdateUser, event.body);
+  // Connect to the database
+  await connectToDatabase();
 
-  // TODO: verify permissions
-  // User type permissions check
-  // if (!isRegionalAdmin(event)) return Unauthorized;
+  const user = await User.findOne(userId);
+  if (!user) {
+    return NotFound;
+  }
 
-  // TODO: finalize validation
-  // // Validate the body
-  // const validatedBody = await validateBody(
-  //   UpdateUser,
-  //   event.body
-  // );
-
-  // TODO: Handle Email notificaitons
-  // Add email notification logic
+  await sendRegistrationDeniedEmail(
+    user.email,
+    'Crossfeed Registration Denied',
+    user.firstName,
+    user.lastName,
+    '../email_templates/crossfeed_denial_notification.html'
+  );
 
   // TODO: Handle Response Output
   return {
