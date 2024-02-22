@@ -5,6 +5,7 @@ import { ImportExport } from 'components';
 import { Organization } from 'types';
 import { useAuthContext } from 'context';
 import { OrganizationList } from 'components/OrganizationList';
+import { Typography } from '@mui/material';
 
 const PREFIX = 'Organizations';
 
@@ -49,10 +50,10 @@ export const Organizations: React.FC = () => {
 
   return (
     <Root>
-      <div className={classes.header}>
-        <h1 className={classes.headerLabel}>Organizations</h1>
-      </div>
       <div className={oldClasses.root}>
+        <Typography variant="h4" mt={5} mb={3} fontWeight="medium">
+          Organizations
+        </Typography>
         <OrganizationList></OrganizationList>
         {user?.userType === 'globalAdmin' && (
           <>
@@ -60,6 +61,7 @@ export const Organizations: React.FC = () => {
               name="organizations"
               fieldsToExport={[
                 'name',
+                'acronym',
                 'rootDomains',
                 'ipBlocks',
                 'isPassive',
