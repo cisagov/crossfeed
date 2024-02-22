@@ -1,21 +1,21 @@
 import * as request from 'supertest';
 import app from '../src/api/app';
-import { Organization, ProductInfo, connectToDatabase } from '../src/models';
+import { Organization, Cpe, connectToDatabase } from '../src/models';
 import { createUserToken } from './util';
 
 describe('cpes', () => {
   let connection;
   let organization: Organization;
-  let productInfo: ProductInfo;
+  let cpe: Cpe;
   beforeAll(async () => {
     connection = await connectToDatabase();
-    productInfo = ProductInfo.create({
-      last_seen: new Date(),
-      cpe_product_name: 'Test Product',
-      version_number: '1.0.0',
-      vender: 'Test Vender'
+    cpe = Cpe.create({
+      lastSeenAt: new Date(),
+      name: 'Test Product',
+      version: '1.0.0',
+      vendor: 'Test Vender'
     });
-    await productInfo.save();
+    await cpe.save();
     organization = Organization.create({
       name: 'test-' + Math.random(),
       rootDomains: ['test-' + Math.random()],
@@ -26,14 +26,14 @@ describe('cpes', () => {
   });
 
   afterAll(async () => {
-    await ProductInfo.delete(productInfo.id);
+    await Cpe.delete(cpe.id);
     await connection.close();
   });
 
   describe('CPE API', () => {
     it('should return a single CPE by id', async () => {
       const response = await request(app)
-        .get(`/cpes/${productInfo.id}`)
+        .get(`/cpes/${cpe.id}`)
         .set(
           'Authorization',
           createUserToken({
@@ -42,10 +42,8 @@ describe('cpes', () => {
         )
         .send({})
         .expect(200);
-      expect(response.body.id).toEqual(productInfo.id);
-      expect(response.body.cpe_product_name).toEqual(
-        productInfo.cpe_product_name
-      );
+      expect(response.body.id).toEqual(cpe.id);
+      expect(response.body.name).toEqual(cpe.name);
     });
   });
 });
