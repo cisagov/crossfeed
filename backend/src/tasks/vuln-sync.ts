@@ -34,7 +34,7 @@ interface UniversalCrossfeedVuln {
   service_asset: string;
   service_port: string;
   service_asset_type: string;
-  structuredData?: { [key: string]: any }; 
+  structuredData?: { [key: string]: any };
 }
 interface TaskResponse {
   tasks_dict: { [key: string]: string };
@@ -197,17 +197,17 @@ export const handler = async (commandOptions: CommandOptions) => {
               discoveredBy: { id: commandOptions.scanId },
               port: vuln.port,
               lastSeen: new Date(vuln.last_seen),
-              banner: (vuln.banner == null ? null : sanitizeStringField(vuln.banner)),
+              banner:
+                vuln.banner == null ? null : sanitizeStringField(vuln.banner),
               serviceSource: vuln.source,
-              shodanResults: (vuln.source === 'shodan'
-                ? 
-                    {
+              shodanResults:
+                vuln.source === 'shodan'
+                  ? {
                       product: vuln.product,
                       version: vuln.version,
                       cpe: vuln.cpe
                     }
-                  
-                : {})
+                  : {}
             })
           ]);
           console.log('Saved services.');
