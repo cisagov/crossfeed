@@ -1,0 +1,1082 @@
+[
+  {
+    "cve_uid": "",
+    "cve_name": "CVE-2017-15906",
+    "published_date": "2017-10-26T08:29:00.220Z",
+    "last_modified_date": "2024-02-14T22:42:27.316Z",
+    "vuln_status": "Modified",
+    "description": "The process_open function in sftp-server.c in OpenSSH before 7.6 does not properly prevent write operations in readonly mode, which allows attackers to create zero-length files.",
+    "cvss_v2_source": "nvd@nist.gov",
+    "cvss_v2_type": "Primary",
+    "cvss_v2_version": "2.0",
+    "cvss_v2_vector_string": "AV:N/AC:L/Au:N/C:N/I:P/A:N",
+    "cvss_v2_base_score": 5,
+    "cvss_v2_base_severity": "MEDIUM",
+    "cvss_v2_exploitability_score": 10,
+    "cvss_v2_impact_score": 2.9,
+    "cvss_v3_source": "nvd@nist.gov",
+    "cvss_v3_type": "Primary",
+    "cvss_v3_version": "3.1",
+    "cvss_v3_vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+    "cvss_v3_base_score": 5.3,
+    "cvss_v3_base_severity": "MEDIUM",
+    "cvss_v3_exploitability_score": 3.9,
+    "cvss_v3_impact_score": 1.4,
+    "cvss_v4_source": null,
+    "cvss_v4_type": null,
+    "cvss_v4_version": null,
+    "cvss_v4_vector_string": null,
+    "cvss_v4_base_score": null,
+    "cvss_v4_base_severity": null,
+    "cvss_v4_exploitability_score": null,
+    "cvss_v4_impact_score": null,
+    "weaknesses": [
+      "CWE-732"
+    ],
+    "reference_urls": [
+      "http://www.securityfocus.com/bid/101552",
+      "https://access.redhat.com/errata/RHSA-2018:0980",
+      "https://cert-portal.siemens.com/productcert/pdf/ssa-412672.pdf",
+      "https://github.com/openbsd/src/commit/a6981567e8e215acc1ef690c8dbb30f2d9b00a19",
+      "https://lists.debian.org/debian-lts-announce/2018/09/msg00010.html",
+      "https://security.gentoo.org/glsa/201801-05",
+      "https://security.netapp.com/advisory/ntap-20180423-0004/",
+      "https://www.openssh.com/txt/release-7.6",
+      "https://www.oracle.com/security-alerts/cpujan2020.html"
+    ],
+    "vender_product": {
+      "company": [
+        {
+          "cpe_product_name": "oncommand_unified_manager_core_package",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "storage_replication_adapter_for_clustered_data_ontap",
+          "version_number": "*",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "solidfire",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_aus",
+          "version_number": "7.6",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_aus",
+          "version_number": "7.7",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_desktop",
+          "version_number": "7.0",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "virtual_storage_console",
+          "version_number": "9.6",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "data_ontap_edge",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_eus",
+          "version_number": "7.7",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_tus",
+          "version_number": "7.6",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "openssh",
+          "version_number": "*",
+          "vender": "openssh"
+        },
+        {
+          "cpe_product_name": "cn1610",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "steelstore_cloud_integrated_storage",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_eus",
+          "version_number": "7.6",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_tus",
+          "version_number": "7.7",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "hci_management_node",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server",
+          "version_number": "7.0",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "cloud_backup",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_workstation",
+          "version_number": "7.0",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "storage_replication_adapter_for_clustered_data_ontap",
+          "version_number": "9.6",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "virtual_storage_console",
+          "version_number": "*",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "sun_zfs_storage_appliance_kit",
+          "version_number": "8.8.6",
+          "vender": "oracle"
+        },
+        {
+          "cpe_product_name": "clustered_data_ontap",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "cn1610_firmware",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "vasa_provider_for_clustered_data_ontap",
+          "version_number": "*",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "debian_linux",
+          "version_number": "8.0",
+          "vender": "debian"
+        },
+        {
+          "cpe_product_name": "active_iq_unified_manager",
+          "version_number": "-",
+          "vender": "netapp"
+        }
+      ]
+    }
+  },
+  {
+    "cve_uid": "",
+    "cve_name": "CVE-2018-15473",
+    "published_date": "2018-08-18T00:29:00.223Z",
+    "last_modified_date": "2024-02-14T22:50:19.257Z",
+    "vuln_status": "Analyzed",
+    "description": "OpenSSH through 7.7 is prone to a user enumeration vulnerability due to not delaying bailout for an invalid authenticating user until after the packet containing the request has been fully parsed, related to auth2-gss.c, auth2-hostbased.c, and auth2-pubkey.c.",
+    "cvss_v2_source": "nvd@nist.gov",
+    "cvss_v2_type": "Primary",
+    "cvss_v2_version": "2.0",
+    "cvss_v2_vector_string": "AV:N/AC:L/Au:N/C:P/I:N/A:N",
+    "cvss_v2_base_score": 5,
+    "cvss_v2_base_severity": "MEDIUM",
+    "cvss_v2_exploitability_score": 10,
+    "cvss_v2_impact_score": 2.9,
+    "cvss_v3_source": "nvd@nist.gov",
+    "cvss_v3_type": "Primary",
+    "cvss_v3_version": "3.1",
+    "cvss_v3_vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+    "cvss_v3_base_score": 5.3,
+    "cvss_v3_base_severity": "MEDIUM",
+    "cvss_v3_exploitability_score": 3.9,
+    "cvss_v3_impact_score": 1.4,
+    "cvss_v4_source": null,
+    "cvss_v4_type": null,
+    "cvss_v4_version": null,
+    "cvss_v4_vector_string": null,
+    "cvss_v4_base_score": null,
+    "cvss_v4_base_severity": null,
+    "cvss_v4_exploitability_score": null,
+    "cvss_v4_impact_score": null,
+    "weaknesses": [
+      "CWE-362"
+    ],
+    "reference_urls": [
+      "http://www.openwall.com/lists/oss-security/2018/08/15/5",
+      "http://www.securityfocus.com/bid/105140",
+      "http://www.securitytracker.com/id/1041487",
+      "https://access.redhat.com/errata/RHSA-2019:0711",
+      "https://access.redhat.com/errata/RHSA-2019:2143",
+      "https://bugs.debian.org/906236",
+      "https://cert-portal.siemens.com/productcert/pdf/ssa-412672.pdf",
+      "https://github.com/openbsd/src/commit/779974d35b4859c07bc3cb8a12c74b43b0a7d1e0",
+      "https://lists.debian.org/debian-lts-announce/2018/08/msg00022.html",
+      "https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2018-0011",
+      "https://security.gentoo.org/glsa/201810-03",
+      "https://security.netapp.com/advisory/ntap-20181101-0001/",
+      "https://usn.ubuntu.com/3809-1/",
+      "https://www.debian.org/security/2018/dsa-4280",
+      "https://www.exploit-db.com/exploits/45210/",
+      "https://www.exploit-db.com/exploits/45233/",
+      "https://www.exploit-db.com/exploits/45939/",
+      "https://www.oracle.com/security-alerts/cpujan2020.html"
+    ],
+   "vender_product": {
+      "company": [
+        {
+          "cpe_product_name": "ubuntu_linux",
+          "version_number": "14.04",
+          "vender": "canonical"
+        },
+        {
+          "cpe_product_name": "ontap_select_deploy",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "vasa_provider",
+          "version_number": "*",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_desktop",
+          "version_number": "7.0",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server",
+          "version_number": "6.0",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_desktop",
+          "version_number": "6.0",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "data_ontap_edge",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "service_processor",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna",
+          "version_number": "-",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "ubuntu_linux",
+          "version_number": "18.04",
+          "vender": "canonical"
+        },
+        {
+          "cpe_product_name": "data_ontap",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "ubuntu_linux",
+          "version_number": "16.04",
+          "vender": "canonical"
+        },
+        {
+          "cpe_product_name": "openssh",
+          "version_number": "*",
+          "vender": "openssh"
+        },
+        {
+          "cpe_product_name": "cn1610",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "steelstore_cloud_integrated_storage",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_workstation",
+          "version_number": "6.0",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "oncommand_unified_manager",
+          "version_number": "*",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "aff_baseboard_management_controller",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "storage_replication_adapter",
+          "version_number": "*",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server",
+          "version_number": "7.0",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "cloud_backup",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_workstation",
+          "version_number": "7.0",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "virtual_storage_console",
+          "version_number": "*",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna_firmware",
+          "version_number": "*",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "sun_zfs_storage_appliance_kit",
+          "version_number": "8.8.6",
+          "vender": "oracle"
+        },
+        {
+          "cpe_product_name": "debian_linux",
+          "version_number": "9.0",
+          "vender": "debian"
+        },
+        {
+          "cpe_product_name": "clustered_data_ontap",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "cn1610_firmware",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "fas_baseboard_management_controller",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "debian_linux",
+          "version_number": "8.0",
+          "vender": "debian"
+        }
+      ]
+    }
+  },
+  {
+    "cve_uid": "",
+    "cve_name": "CVE-2018-15919",
+    "published_date": "2018-08-28T13:29:00.207Z",
+    "last_modified_date": "2024-02-14T22:50:28.245Z",
+    "vuln_status": "Analyzed",
+    "description": "Remotely observable behaviour in auth-gss2.c in OpenSSH through 7.8 could be used by remote attackers to detect existence of users on a target system when GSS2 is in use. NOTE: the discoverer states 'We understand that the OpenSSH developers do not want to treat such a username enumeration (or \"oracle\") as a vulnerability.'",
+    "cvss_v2_source": "nvd@nist.gov",
+    "cvss_v2_type": "Primary",
+    "cvss_v2_version": "2.0",
+    "cvss_v2_vector_string": "AV:N/AC:L/Au:N/C:P/I:N/A:N",
+    "cvss_v2_base_score": 5,
+    "cvss_v2_base_severity": "MEDIUM",
+    "cvss_v2_exploitability_score": 10,
+    "cvss_v2_impact_score": 2.9,
+    "cvss_v3_source": "nvd@nist.gov",
+    "cvss_v3_type": "Primary",
+    "cvss_v3_version": "3.0",
+    "cvss_v3_vector_string": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+    "cvss_v3_base_score": 5.3,
+    "cvss_v3_base_severity": "MEDIUM",
+    "cvss_v3_exploitability_score": 3.9,
+    "cvss_v3_impact_score": 1.4,
+    "cvss_v4_source": null,
+    "cvss_v4_type": null,
+    "cvss_v4_version": null,
+    "cvss_v4_vector_string": null,
+    "cvss_v4_base_score": null,
+    "cvss_v4_base_severity": null,
+    "cvss_v4_exploitability_score": null,
+    "cvss_v4_impact_score": null,
+    "weaknesses": [
+      "CWE-200"
+    ],
+    "reference_urls": [
+      "http://seclists.org/oss-sec/2018/q3/180",
+      "http://www.securityfocus.com/bid/105163",
+      "https://security.netapp.com/advisory/ntap-20181221-0001/"
+    ],
+   "vender_product": {
+      "company": [
+        {
+          "cpe_product_name": "ontap_select_deploy",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "data_ontap_edge",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "openssh",
+          "version_number": "*",
+          "vender": "openssh"
+        },
+        {
+          "cpe_product_name": "cn1610",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "cloud_backup",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "cn1610_firmware",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "steelstore",
+          "version_number": "-",
+          "vender": "netapp"
+        }
+      ]
+    }
+  },
+  {
+    "cve_uid": "",
+    "cve_name": "CVE-2018-20685",
+    "published_date": "2019-01-11T03:29:00.377Z",
+    "last_modified_date": "2024-02-14T22:51:58.019Z",
+    "vuln_status": "Analyzed",
+    "description": "In OpenSSH 7.9, scp.c in the scp client allows remote SSH servers to bypass intended access restrictions via the filename of . or an empty filename. The impact is modifying the permissions of the target directory on the client side.",
+    "cvss_v2_source": "nvd@nist.gov",
+    "cvss_v2_type": "Primary",
+    "cvss_v2_version": "2.0",
+    "cvss_v2_vector_string": "AV:N/AC:H/Au:N/C:N/I:P/A:N",
+    "cvss_v2_base_score": 2.6,
+    "cvss_v2_base_severity": "LOW",
+    "cvss_v2_exploitability_score": 4.9,
+    "cvss_v2_impact_score": 2.9,
+    "cvss_v3_source": "nvd@nist.gov",
+    "cvss_v3_type": "Primary",
+    "cvss_v3_version": "3.1",
+    "cvss_v3_vector_string": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:H/A:N",
+    "cvss_v3_base_score": 5.3,
+    "cvss_v3_base_severity": "MEDIUM",
+    "cvss_v3_exploitability_score": 1.6,
+    "cvss_v3_impact_score": 3.6,
+    "cvss_v4_source": null,
+    "cvss_v4_type": null,
+    "cvss_v4_version": null,
+    "cvss_v4_vector_string": null,
+    "cvss_v4_base_score": null,
+    "cvss_v4_base_severity": null,
+    "cvss_v4_exploitability_score": null,
+    "cvss_v4_impact_score": null,
+    "weaknesses": [
+      "CWE-863"
+    ],
+    "reference_urls": [
+      "http://www.securityfocus.com/bid/106531",
+      "https://access.redhat.com/errata/RHSA-2019:3702",
+      "https://cert-portal.siemens.com/productcert/pdf/ssa-412672.pdf",
+      "https://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/scp.c.diff?r1=1.197&r2=1.198&f=h",
+      "https://github.com/openssh/openssh-portable/commit/6010c0303a422a9c5fa8860c061bf7105eb7f8b2",
+      "https://lists.debian.org/debian-lts-announce/2019/03/msg00030.html",
+      "https://security.gentoo.org/glsa/201903-16",
+      "https://security.gentoo.org/glsa/202007-53",
+      "https://security.netapp.com/advisory/ntap-20190215-0001/",
+      "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
+      "https://usn.ubuntu.com/3885-1/",
+      "https://www.debian.org/security/2019/dsa-4387",
+      "https://www.oracle.com/technetwork/security-advisory/cpuapr2019-5072813.html",
+      "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html"
+    ],
+   "vender_product": {
+      "company": [
+        {
+          "cpe_product_name": "ubuntu_linux",
+          "version_number": "14.04",
+          "vender": "canonical"
+        },
+        {
+          "cpe_product_name": "m10-4s",
+          "version_number": "-",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "ontap_select_deploy",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna_eec",
+          "version_number": "-",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "m12-1_firmware",
+          "version_number": "*",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "m10-4",
+          "version_number": "-",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "m12-2s",
+          "version_number": "-",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_eus",
+          "version_number": "8.6",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "element_software",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "m12-2s_firmware",
+          "version_number": "*",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "enterprise_linux",
+          "version_number": "7.0",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_aus",
+          "version_number": "8.2",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "m12-2",
+          "version_number": "-",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "solaris",
+          "version_number": "10",
+          "vender": "oracle"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_eus",
+          "version_number": "8.1",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna",
+          "version_number": "-",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "ubuntu_linux",
+          "version_number": "18.04",
+          "vender": "canonical"
+        },
+        {
+          "cpe_product_name": "ubuntu_linux",
+          "version_number": "16.04",
+          "vender": "canonical"
+        },
+        {
+          "cpe_product_name": "openssh",
+          "version_number": "*",
+          "vender": "openssh"
+        },
+        {
+          "cpe_product_name": "storage_automation_store",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "m10-1_firmware",
+          "version_number": "*",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "m12-2_firmware",
+          "version_number": "*",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "enterprise_linux",
+          "version_number": "8.0",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "steelstore_cloud_integrated_storage",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_eus",
+          "version_number": "8.2",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_tus",
+          "version_number": "8.2",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_tus",
+          "version_number": "8.4",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "winscp",
+          "version_number": "*",
+          "vender": "winscp"
+        },
+        {
+          "cpe_product_name": "m10-4s_firmware",
+          "version_number": "*",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "cloud_backup",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna_firmware",
+          "version_number": "*",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "m10-4_firmware",
+          "version_number": "*",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "debian_linux",
+          "version_number": "9.0",
+          "vender": "debian"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna_eec_firmware",
+          "version_number": "*",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_eus",
+          "version_number": "8.4",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_tus",
+          "version_number": "8.6",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_aus",
+          "version_number": "8.4",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "ubuntu_linux",
+          "version_number": "18.10",
+          "vender": "canonical"
+        },
+        {
+          "cpe_product_name": "debian_linux",
+          "version_number": "8.0",
+          "vender": "debian"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_aus",
+          "version_number": "8.6",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "m10-1",
+          "version_number": "-",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "m12-1",
+          "version_number": "-",
+          "vender": "fujitsu"
+        }
+      ]
+    }
+  },
+  {
+    "cve_uid": "",
+    "cve_name": "CVE-2019-6109",
+    "published_date": "2019-02-01T00:29:00.710Z",
+    "last_modified_date": "2024-02-14T23:02:10.030Z",
+    "vuln_status": "Modified",
+    "description": "An issue was discovered in OpenSSH 7.9. Due to missing character encoding in the progress display, a malicious server (or Man-in-The-Middle attacker) can employ crafted object names to manipulate the client output, e.g., by using ANSI control codes to hide additional files being transferred. This affects refresh_progress_meter() in progressmeter.c.",
+    "cvss_v2_source": "nvd@nist.gov",
+    "cvss_v2_type": "Primary",
+    "cvss_v2_version": "2.0",
+    "cvss_v2_vector_string": "AV:N/AC:H/Au:N/C:P/I:P/A:N",
+    "cvss_v2_base_score": 4,
+    "cvss_v2_base_severity": "MEDIUM",
+    "cvss_v2_exploitability_score": 4.9,
+    "cvss_v2_impact_score": 4.9,
+    "cvss_v3_source": "nvd@nist.gov",
+    "cvss_v3_type": "Primary",
+    "cvss_v3_version": "3.1",
+    "cvss_v3_vector_string": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:N",
+    "cvss_v3_base_score": 6.8,
+    "cvss_v3_base_severity": "MEDIUM",
+    "cvss_v3_exploitability_score": 1.6,
+    "cvss_v3_impact_score": 5.2,
+    "cvss_v4_source": null,
+    "cvss_v4_type": null,
+    "cvss_v4_version": null,
+    "cvss_v4_vector_string": null,
+    "cvss_v4_base_score": null,
+    "cvss_v4_base_severity": null,
+    "cvss_v4_exploitability_score": null,
+    "cvss_v4_impact_score": null,
+    "weaknesses": [
+      "CWE-116"
+    ],
+    "reference_urls": [
+      "http://lists.opensuse.org/opensuse-security-announce/2019-06/msg00058.html",
+      "https://access.redhat.com/errata/RHSA-2019:3702",
+      "https://cert-portal.siemens.com/productcert/pdf/ssa-412672.pdf",
+      "https://cvsweb.openbsd.org/src/usr.bin/ssh/progressmeter.c",
+      "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
+      "https://lists.debian.org/debian-lts-announce/2019/03/msg00030.html",
+      "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/W3YVQ2BPTOVDCFDVNC2GGF5P5ISFG37G/",
+      "https://security.gentoo.org/glsa/201903-16",
+      "https://security.netapp.com/advisory/ntap-20190213-0001/",
+      "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
+      "https://usn.ubuntu.com/3885-1/",
+      "https://www.debian.org/security/2019/dsa-4387",
+      "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html"
+    ],
+   "vender_product": {
+      "company": [
+        {
+          "cpe_product_name": "ubuntu_linux",
+          "version_number": "14.04",
+          "vender": "canonical"
+        },
+        {
+          "cpe_product_name": "m10-4s",
+          "version_number": "-",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "ontap_select_deploy",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna_eec",
+          "version_number": "-",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "m12-1_firmware",
+          "version_number": "*",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "m10-4",
+          "version_number": "-",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "m12-2s",
+          "version_number": "-",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_eus",
+          "version_number": "8.6",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "element_software",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "m12-2s_firmware",
+          "version_number": "*",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_aus",
+          "version_number": "8.2",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "m12-2",
+          "version_number": "-",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "fedora",
+          "version_number": "30",
+          "vender": "fedoraproject"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_eus",
+          "version_number": "8.1",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna",
+          "version_number": "-",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "ubuntu_linux",
+          "version_number": "18.04",
+          "vender": "canonical"
+        },
+        {
+          "cpe_product_name": "ubuntu_linux",
+          "version_number": "16.04",
+          "vender": "canonical"
+        },
+        {
+          "cpe_product_name": "openssh",
+          "version_number": "*",
+          "vender": "openssh"
+        },
+        {
+          "cpe_product_name": "storage_automation_store",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "m10-1_firmware",
+          "version_number": "*",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "m12-2_firmware",
+          "version_number": "*",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "enterprise_linux",
+          "version_number": "8.0",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_eus",
+          "version_number": "8.2",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_tus",
+          "version_number": "8.2",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_tus",
+          "version_number": "8.4",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "winscp",
+          "version_number": "*",
+          "vender": "winscp"
+        },
+        {
+          "cpe_product_name": "m10-4s_firmware",
+          "version_number": "*",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna_firmware",
+          "version_number": "*",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "m10-4_firmware",
+          "version_number": "*",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "debian_linux",
+          "version_number": "9.0",
+          "vender": "debian"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna_eec_firmware",
+          "version_number": "*",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_eus",
+          "version_number": "8.4",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_tus",
+          "version_number": "8.6",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_aus",
+          "version_number": "8.4",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "ubuntu_linux",
+          "version_number": "18.10",
+          "vender": "canonical"
+        },
+        {
+          "cpe_product_name": "debian_linux",
+          "version_number": "8.0",
+          "vender": "debian"
+        },
+        {
+          "cpe_product_name": "enterprise_linux_server_aus",
+          "version_number": "8.6",
+          "vender": "redhat"
+        },
+        {
+          "cpe_product_name": "m10-1",
+          "version_number": "-",
+          "vender": "fujitsu"
+        },
+        {
+          "cpe_product_name": "m12-1",
+          "version_number": "-",
+          "vender": "fujitsu"
+        }
+      ]
+    }
+  },
+  {
+    "cve_uid": "",
+    "cve_name": "CVE-2019-6110",
+    "published_date": "2019-02-01T00:29:00.807Z",
+    "last_modified_date": "2024-02-14T23:02:10.051Z",
+    "vuln_status": "Analyzed",
+    "description": "In OpenSSH 7.9, due to accepting and displaying arbitrary stderr output from the server, a malicious server (or Man-in-The-Middle attacker) can manipulate the client output, for example to use ANSI control codes to hide additional files being transferred.",
+    "cvss_v2_source": "nvd@nist.gov",
+    "cvss_v2_type": "Primary",
+    "cvss_v2_version": "2.0",
+    "cvss_v2_vector_string": "AV:N/AC:H/Au:N/C:P/I:P/A:N",
+    "cvss_v2_base_score": 4,
+    "cvss_v2_base_severity": "MEDIUM",
+    "cvss_v2_exploitability_score": 4.9,
+    "cvss_v2_impact_score": 4.9,
+    "cvss_v3_source": "nvd@nist.gov",
+    "cvss_v3_type": "Primary",
+    "cvss_v3_version": "3.1",
+    "cvss_v3_vector_string": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:N",
+    "cvss_v3_base_score": 6.8,
+    "cvss_v3_base_severity": "MEDIUM",
+    "cvss_v3_exploitability_score": 1.6,
+    "cvss_v3_impact_score": 5.2,
+    "cvss_v4_source": null,
+    "cvss_v4_type": null,
+    "cvss_v4_version": null,
+    "cvss_v4_vector_string": null,
+    "cvss_v4_base_score": null,
+    "cvss_v4_base_severity": null,
+    "cvss_v4_exploitability_score": null,
+    "cvss_v4_impact_score": null,
+    "weaknesses": [
+      "CWE-838"
+    ],
+    "reference_urls": [
+      "https://cert-portal.siemens.com/productcert/pdf/ssa-412672.pdf",
+      "https://cvsweb.openbsd.org/src/usr.bin/ssh/progressmeter.c",
+      "https://cvsweb.openbsd.org/src/usr.bin/ssh/scp.c",
+      "https://security.gentoo.org/glsa/201903-16",
+      "https://security.netapp.com/advisory/ntap-20190213-0001/",
+      "https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt",
+      "https://www.exploit-db.com/exploits/46193/"
+    ],
+   "vender_product": {
+      "company": [
+        {
+          "cpe_product_name": "ontap_select_deploy",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna_eec",
+          "version_number": "-",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "element_software",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna",
+          "version_number": "-",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "openssh",
+          "version_number": "*",
+          "vender": "openssh"
+        },
+        {
+          "cpe_product_name": "storage_automation_store",
+          "version_number": "-",
+          "vender": "netapp"
+        },
+        {
+          "cpe_product_name": "winscp",
+          "version_number": "*",
+          "vender": "winscp"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna_firmware",
+          "version_number": "*",
+          "vender": "siemens"
+        },
+        {
+          "cpe_product_name": "scalance_x204rna_eec_firmware",
+          "version_number": "*",
+          "vender": "siemens"
+        }
+      ]
+    }
+  }
+]

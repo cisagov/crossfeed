@@ -12,7 +12,7 @@ import {
   ApiKey,
   SavedSearch,
   OrganizationTag,
-  ProductInfo,
+  Cpe,
   Cve
 } from '.';
 
@@ -27,7 +27,7 @@ const connectDb = async (logging?: boolean) => {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     entities: [
-      ProductInfo,
+      Cpe,
       Cve,
       Domain,
       Service,
