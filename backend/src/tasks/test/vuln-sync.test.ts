@@ -1,6 +1,6 @@
 import { connect } from 'http2';
 import * as nock from 'nock';
-import { connectToDatabase, Cve, ProductInfo, Scan } from '../../models';
+import { connectToDatabase, Scan } from '../../models';
 import { handler as vulnSync } from '../vuln-sync';
 
 const taskResponse = {
