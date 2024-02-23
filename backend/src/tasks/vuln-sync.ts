@@ -147,7 +147,7 @@ export const handler = async (commandOptions: CommandOptions) => {
         let ipOnly = false;
         try {
           // Lookup domain based on IP
-          if ((vuln.service_asset_type = 'ip')) {
+          if (vuln.service_asset_type === 'ip') {
             service_ip = vuln.service_asset;
             try {
               service_domain = (await dns.promises.reverse(service_ip))[0];
