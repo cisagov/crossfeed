@@ -17,22 +17,24 @@ import { sanitizeStringField } from './censysIpv4';
 interface UniversalCrossfeedVuln {
   title: string;
   cve: string;
+  cwe: string;
+  description: string;
   cvss: string;
   state: string;
   severity: string;
   source: string;
   needsPopulation: boolean;
   port: number;
-  lastSeen: Date;
+  last_seen: string;
   banner: string;
   serviceSource: string;
   product: string;
   version: string;
   cpe: string;
-  structuredData: { [key: string]: string };
   service_asset: string;
   service_port: string;
   service_asset_type: string;
+  structuredData?: { [key: string]: any }; 
 }
 interface TaskResponse {
   tasks_dict: { [key: string]: string };
@@ -194,17 +196,17 @@ export const handler = async (commandOptions: CommandOptions) => {
               domain: { id: domainId },
               discoveredBy: { id: commandOptions.scanId },
               port: vuln.port,
-              lastSeen: vuln.lastSeen,
-              banner: sanitizeStringField(vuln.banner),
+              lastSeen: new Date(vuln.last_seen),
+              banner: (vuln.banner == null ? null : sanitizeStringField(vuln.banner)),
               serviceSource: vuln.source,
-              ...(vuln.source === 'shodan'
-                ? {
-                    shodanResults: {
+              shodanResults: (vuln.source === 'shodan'
+                ? 
+                    {
                       product: vuln.product,
                       version: vuln.version,
                       cpe: vuln.cpe
                     }
-                  }
+                  
                 : {})
             })
           ]);
@@ -221,11 +223,14 @@ export const handler = async (commandOptions: CommandOptions) => {
           vulns.push(
             plainToClass(Vulnerability, {
               domain: domainId,
-              lastSeen: vuln.lastSeen,
+              lastSeen: vuln.last_seen,
               title: vuln.title,
               cve: vuln.cve,
+              cwe: vuln.cwe,
+              description: vuln.description,
               cvss: vuln.cvss,
               state: vuln.state,
+              structuredData: vuln.structuredData,
               source: vuln.source,
               needsPopulation: vuln.needsPopulation,
               service: { id: serviceId }
