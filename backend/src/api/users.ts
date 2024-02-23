@@ -617,7 +617,7 @@ export const register = wrapHandler(async (event) => {
     'Crossfeed Registration Pending',
     savedUser.firstName,
     savedUser.lastName,
-    '../email_templates/crossfeed_registration_notification.html'
+    'crossfeed_registration_notification.html'
   );
 
   return {
@@ -662,7 +662,7 @@ export const registrationApproval = wrapHandler(async (event) => {
     'Crossfeed Registration Approved',
     user.firstName,
     user.lastName,
-    '../email_templates/crossfeed_approval_notification.html'
+    'crossfeed_approval_notification.html'
   );
 
   // TODO: Handle Response Output
@@ -707,7 +707,7 @@ export const registrationDenial = wrapHandler(async (event) => {
     'Crossfeed Registration Denied',
     user.firstName,
     user.lastName,
-    '../email_templates/crossfeed_denial_notification.html'
+    'crossfeed_denial_notification.html'
   );
 
   // TODO: Handle Response Output
