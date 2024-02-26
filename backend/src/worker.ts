@@ -22,7 +22,6 @@ import { handler as dnstwist } from './tasks/dnstwist';
 import { handler as rootDomainSync } from './tasks/rootDomainSync';
 import { handler as trustymail } from './tasks/trustymail';
 import { handler as cveSync } from './tasks/cve-sync';
-import { handler as vulnSync } from './tasks/vuln-sync';
 import { SCAN_SCHEMA } from './api/scans';
 import { connectToDatabase } from './models';
 import fetchPublicSuffixList from './tasks/helpers/fetchPublicSuffixList';
@@ -61,7 +60,6 @@ async function main() {
     testProxy,
     rootDomainSync,
     trustymail,
-    vulnSync,
     test: async () => {
       await connectToDatabase();
       console.log('test');
