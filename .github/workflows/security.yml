@@ -13,7 +13,7 @@ jobs:
       run:
         working-directory: ./backend
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -34,7 +34,7 @@ jobs:
       run:
         working-directory: ./frontend
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -55,7 +55,7 @@ jobs:
       run:
         working-directory: ./docs
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -76,7 +76,7 @@ jobs:
       run:
         working-directory: ./backend
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python 3.10
         uses: actions/setup-python@v5.0.0
         with:
