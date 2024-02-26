@@ -36,7 +36,6 @@ import {
   RegionUsers
 } from 'pages';
 import { Layout, RouteGuard } from 'components';
-import { CrossfeedFooter } from './components/Footer';
 import './styles.scss';
 import { Authenticator } from '@aws-amplify/ui-react';
 
@@ -210,7 +209,6 @@ const App: React.FC = () => (
                     permissions={['regionalAdmin']}
                   />
                 </Switch>
-                <CrossfeedFooter />
               </Layout>
             </SearchProvider>
           </Authenticator.Provider>
