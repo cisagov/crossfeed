@@ -7,9 +7,9 @@ import {
 import { ValidationOptions, validateOrReject } from 'class-validator';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { plainToClass } from 'class-transformer';
+import S3Client from '../tasks/s3-client';
 import { SES } from 'aws-sdk';
 import * as nodemailer from 'nodemailer';
-import fs from 'fs';
 import * as handlebars from 'handlebars';
 
 export const validateBody = async <T>(
@@ -146,47 +146,11 @@ export const sendUserRegistrationEmail = async (
   subject: string,
   firstName: string,
   lastName: string,
-  templateFilePath: string
-) => {
-  console.log('TemplateFilePath: ', templateFilePath);
-  const fs = require('fs');
-  const htmlTemplate = await fs.promises.readFile(
-    templateFilePath,
-    'utf8',
-    (err, data) => {
-      if (err) {
-        console.error('Error reading file data', err);
-        return;
-      }
-      console.log('Finished reading file');
-      return data;
-    }
-  );
-  const template = handlebars.compile(htmlTemplate);
-  const data = {
-    firstName: firstName,
-    lastName: lastName
-  };
-
-  const htmlToSend = template(data);
-  const mailOptions = {
-    from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
-    to: recepient,
-    subject: subject,
-    html: htmlToSend,
-    replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
-  };
-};
-
-export const sendRegistrationDeniedEmail = async (
-  recepient: string,
-  subject: string,
-  firstName: string,
-  lastName: string,
-  templateFilePath: string
+  templateFileName: string
 ) => {
   try {
-    const htmlTemplate = fs.readFileSync(templateFilePath, 'utf-8');
+    const client = new S3Client();
+    const htmlTemplate = await client.getEmailAsset(templateFileName);
     const template = handlebars.compile(htmlTemplate);
     const data = {
       firstName: firstName,
@@ -201,6 +165,45 @@ export const sendRegistrationDeniedEmail = async (
       html: htmlToSend,
       replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
     };
+
+    const transporter = nodemailer.createTransport({
+      SES: new SES({ region: 'us-east-1' })
+    });
+    await transporter.sendMail(mailOptions);
+  } catch (errorMessage) {
+    console.log('Email error: ', errorMessage);
+  }
+};
+
+export const sendRegistrationDeniedEmail = async (
+  recepient: string,
+  subject: string,
+  firstName: string,
+  lastName: string,
+  templateFileName: string
+) => {
+  try {
+    const client = new S3Client();
+    const htmlTemplate = await client.getEmailAsset(templateFileName);
+    const template = handlebars.compile(htmlTemplate);
+    const data = {
+      firstName: firstName,
+      lastName: lastName
+    };
+
+    const htmlToSend = template(data);
+    const mailOptions = {
+      from: process.env.CROSSFEED_SUPPORT_EMAIL_SENDER!,
+      to: recepient,
+      subject: subject,
+      html: htmlToSend,
+      replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
+    };
+
+    const transporter = nodemailer.createTransport({
+      SES: new SES({ region: 'us-east-1' })
+    });
+    await transporter.sendMail(mailOptions);
   } catch (errorMessage) {
     console.log('Email error: ', errorMessage);
   }
@@ -211,10 +214,11 @@ export const sendRegistrationApprovedEmail = async (
   subject: string,
   firstName: string,
   lastName: string,
-  templateFilePath: string
+  templateFileName: string
 ) => {
   try {
-    const htmlTemplate = fs.readFileSync(templateFilePath, 'utf-8');
+    const client = new S3Client();
+    const htmlTemplate = await client.getEmailAsset(templateFileName);
     const template = handlebars.compile(htmlTemplate);
     const data = {
       firstName: firstName,
@@ -229,6 +233,11 @@ export const sendRegistrationApprovedEmail = async (
       html: htmlToSend,
       replyTo: process.env.CROSSFEED_SUPPORT_EMAIL_REPLYTO!
     };
+
+    const transporter = nodemailer.createTransport({
+      SES: new SES({ region: 'us-east-1' })
+    });
+    await transporter.sendMail(mailOptions);
   } catch (errorMessage) {
     console.log('Email error: ', errorMessage);
   }
