@@ -16,6 +16,8 @@ export const OrganizationList: React.FC<{
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const history = useHistory();
+  const regionId = user?.regionId;
+  const getOrgsURL = `/organizations/regionId/${regionId}`;
 
   const orgCols: GridColDef[] = [
     { field: 'name', headerName: 'Organization', minWidth: 100, flex: 2 },
@@ -61,7 +63,7 @@ export const OrganizationList: React.FC<{
 
   const fetchOrganizations = useCallback(async () => {
     try {
-      const rows = await apiGet<Organization[]>('/organizations/');
+      const rows = await apiGet<Organization[]>(getOrgsURL);
       rows.forEach((obj) => {
         obj.userCount = obj.userRoles.length;
         obj.tagNames = obj.tags.map((tag) => tag.name);
