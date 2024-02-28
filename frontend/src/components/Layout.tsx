@@ -6,6 +6,7 @@ import { Header, GovBanner } from 'components';
 import { useUserActivityTimeout } from 'hooks/useUserActivityTimeout';
 import { useAuthContext } from 'context/AuthContext';
 import UserInactiveModal from './UserInactivityModal/UserInactivityModal';
+import { CrossfeedFooter } from './Footer';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -53,6 +54,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         ) : (
           <div className={classes.content}>{children}</div>
         )}
+        <CrossfeedFooter />
       </div>
     </StyledScopedCssBaseline>
   );

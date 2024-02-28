@@ -369,6 +369,7 @@ export const create = wrapHandler(async (event) => {
 export const list = wrapHandler(async (event) => {
   if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
     return {
+      //TODO: Should we return a 403?
       statusCode: 200,
       body: JSON.stringify([])
     };
