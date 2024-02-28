@@ -5,7 +5,7 @@ export const ALLOW_ORIGIN = [
   'api.staging.crossfeed.cyber.dhs.gov',
   'crossfeed.cyber.dhs.gov',
   'staging.crossfeed.cyber.dhs.gov',
-  'staging-cd.crossfeed.cyber.dhs.gov',git s
+  'staging-cd.crossfeed.cyber.dhs.gov',
   /localhost$/
 ];
 export const ALLOW_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
