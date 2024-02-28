@@ -61,7 +61,12 @@ app.use(express.json({ strict: false }));
 
 app.use(
   cors({
-    origin: [/.*crossfeed\.cyber\.dhs\.gov$/, /localhost$/],
+    origin: [
+      'crossfeed.cyber.dhs.gov',
+      'staging.crossfeed.cyber.dhs.gov',
+      'staging-cd.crossfeed.cyber.dhs.gov',
+      'localhost'
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
   })
 );
