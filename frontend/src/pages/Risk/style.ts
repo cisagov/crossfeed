@@ -108,7 +108,6 @@ export const RiskRoot = styled('div')(({ theme }) => ({
     width: '100%',
     color: '#3D4551',
     paddingLeft: 255,
-    paddingTop: 20,
     display: 'flex',
     alignItems: 'center',
     padding: '1rem 2rem',
