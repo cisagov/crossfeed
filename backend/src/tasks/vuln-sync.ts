@@ -90,7 +90,6 @@ const fetchPEVulnData = async (scan_name: string, task_id: string) => {
     } else {
       console.log('Request failed');
     }
-    console.log(response.data);
     return response.data as TaskResponse;
   } catch (error) {
     console.log(`Error making GET request: ${error}`);
@@ -213,7 +212,6 @@ export const handler = async (commandOptions: CommandOptions) => {
               })
             ]);
             console.log('Saved services.');
-            const service = { id: serviceId };
           } catch (e) {
             console.error(
               'Could not save services. Continuing to next vulnerability.'
