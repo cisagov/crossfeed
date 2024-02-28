@@ -3,19 +3,23 @@ import * as orgFormStyles from './orgFormStyle';
 import { Organization, OrganizationTag } from 'types';
 import {
   Autocomplete,
+  Box,
+  Button,
+  Chip,
+  createFilterOptions,
   DialogTitle,
   DialogContent,
-  TextField,
   DialogActions,
-  Switch,
-  Button,
   FormControlLabel,
-  Box,
-  Chip,
   Grid,
-  createFilterOptions
+  MenuItem,
+  Select,
+  Switch,
+  TextField,
+  Typography
 } from '@mui/material';
-
+import { SelectChangeEvent } from '@mui/material/Select';
+import { STATE_OPTIONS } from '../../constants/constants';
 import { useAuthContext } from 'context';
 
 const classes = orgFormStyles.classes;
@@ -31,6 +35,7 @@ export interface OrganizationFormValues {
   ipBlocks: string;
   isPassive: boolean;
   tags: OrganizationTag[];
+  state?: string | null | undefined;
 }
 
 export const OrganizationForm: React.FC<{
@@ -46,7 +51,8 @@ export const OrganizationForm: React.FC<{
     rootDomains: organization ? organization.rootDomains.join(', ') : '',
     ipBlocks: organization ? organization.ipBlocks.join(', ') : '',
     isPassive: organization ? organization.isPassive : false,
-    tags: []
+    tags: [],
+    state: organization ? organization.state : ''
   });
 
   const { apiGet } = useAuthContext();
@@ -79,7 +85,20 @@ export const OrganizationForm: React.FC<{
       [name]: value
     }));
   };
+  const handleStateChange = (event: SelectChangeEvent<string | null>) => {
+    setValues((values) => ({
+      ...values,
+      [event.target.name]: event.target.value
+    }));
+  };
 
+  const textFieldStyling = {
+    '& .MuiOutlinedInput-root': {
+      '&.Mui-focused fieldset': {
+        borderRadius: '0px'
+      }
+    }
+  };
   return (
     <StyledDialog
       open={open}
@@ -92,37 +111,67 @@ export const OrganizationForm: React.FC<{
         Create new {parent ? 'Team' : 'Organization'}
       </DialogTitle>
       <DialogContent>
+        Organization Name
         <TextField
+          sx={textFieldStyling}
+          placeholder="Enter the Organization's Name"
+          size="small"
           margin="dense"
           id="name"
           inputProps={{ maxLength: 250 }}
           name="name"
-          label="Organization Name"
           type="text"
           fullWidth
           value={values.name}
           onChange={onTextChange}
         />
+        Root Domains
         <TextField
+          sx={textFieldStyling}
+          placeholder="Enter Root Domains"
+          size="small"
           margin="dense"
           id="rootDomains"
           name="rootDomains"
-          label="Root Domains"
           type="text"
           fullWidth
           value={values.rootDomains}
           onChange={onTextChange}
         />
+        IP Blocks
         <TextField
+          sx={textFieldStyling}
+          placeholder="Enter IP Blocks"
+          size="small"
           margin="dense"
           id="ipBlocks"
           name="ipBlocks"
-          label="IP Blocks"
           type="text"
           fullWidth
           value={values.ipBlocks}
           onChange={onTextChange}
         />
+        Organization State
+        <Select
+          displayEmpty
+          size="small"
+          id="state"
+          value={values.state}
+          name="state"
+          onChange={handleStateChange}
+          fullWidth
+          renderValue={
+            values.state !== ''
+              ? undefined
+              : () => <Typography color="#bdbdbd">Select your State</Typography>
+          }
+        >
+          {STATE_OPTIONS.map((state: string, index: number) => (
+            <MenuItem key={index} value={state}>
+              {state}
+            </MenuItem>
+          ))}
+        </Select>
         <div className={classes.headerRow}>
           <label>Tags</label>
         </div>
@@ -256,6 +305,7 @@ export const OrganizationForm: React.FC<{
                   ? []
                   : values.ipBlocks.split(',').map((ip) => ip.trim()),
               name: values.name,
+              state: values.state,
               isPassive: values.isPassive,
               tags: chosenTags,
               parent: parent ? parent.id : undefined
