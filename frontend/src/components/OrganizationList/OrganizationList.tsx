@@ -72,7 +72,7 @@ export const OrganizationList: React.FC<{
     } catch (e) {
       console.error(e);
     }
-  }, [apiGet]);
+  }, [apiGet, getOrgsURL]);
 
   React.useEffect(() => {
     if (!parent) fetchOrganizations();
