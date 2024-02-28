@@ -90,9 +90,9 @@ const fetchPEVulnData = async (scan_name: string, task_id: string) => {
     } else {
       console.log('Request failed');
     }
-    console.log(response.data)
+    console.log(response.data);
     return response.data as TaskResponse;
-  } catch (error) { 
+  } catch (error) {
     console.log(`Error making GET request: ${error}`);
   }
 };
@@ -213,7 +213,7 @@ export const handler = async (commandOptions: CommandOptions) => {
               })
             ]);
             console.log('Saved services.');
-            const service = {id: serviceId}
+            const service = { id: serviceId };
           } catch (e) {
             console.error(
               'Could not save services. Continuing to next vulnerability.'
@@ -222,7 +222,7 @@ export const handler = async (commandOptions: CommandOptions) => {
             continue;
           }
         }
-        
+
         try {
           const vulns: Vulnerability[] = [];
           vulns.push(
@@ -239,7 +239,7 @@ export const handler = async (commandOptions: CommandOptions) => {
               structuredData: vuln.structuredData,
               source: vuln.source,
               needsPopulation: vuln.needsPopulation,
-              service: vuln.port == null ? null :{ id: serviceId } 
+              service: vuln.port == null ? null : { id: serviceId }
             })
           );
           await saveVulnerabilitiesToDb(vulns, false);
