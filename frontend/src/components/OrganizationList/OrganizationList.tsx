@@ -81,6 +81,8 @@ export const OrganizationList: React.FC<{
     }
   }, [fetchOrganizations, parent]);
 
+  console.log(JSON.stringify(organizations));
+
   const addOrgButton = user?.userType === 'globalAdmin' && (
     <Button
       size="small"
