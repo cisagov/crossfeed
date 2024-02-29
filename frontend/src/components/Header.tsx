@@ -215,7 +215,7 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
 
   const fetchOrganizations = useCallback(async () => {
     try {
-      const rows = await apiGet<Organization[]>('/organizations/');
+      const rows = await apiGet<Organization[]>('/v2/organizations/');
       let tags: (OrganizationTag | Organization)[] = [];
       if (userLevel === GLOBAL_ADMIN) {
         tags = await apiGet<OrganizationTag[]>('/organizations/tags');
