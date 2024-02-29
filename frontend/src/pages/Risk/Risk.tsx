@@ -21,7 +21,7 @@ import { scaleLinear } from 'd3-scale';
 import { Vulnerability } from 'types';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
-import { Button as USWDSButton } from '@trussworks/react-uswds';
+// import { Button as USWDSButton } from '@trussworks/react-uswds';
 
 export interface Point {
   id: string;
@@ -219,38 +219,38 @@ const Risk: React.FC = (props) => {
   }
 
   // TODO: Move generatePDF to a separate component
-  const generatePDF = async () => {
-    const dateTimeNow = new Date(); // UTC Date Time
-    const localDate = new Date(dateTimeNow); // Local Date Time
-    setIsLoading(true);
-    await delay(650);
-    const input = document.getElementById('wrapper')!;
-    input.style.width = '1400px';
-    await delay(1);
-    await html2canvas(input, {
-      scrollX: 0,
-      scrollY: 0,
-      ignoreElements: function (element) {
-        return 'mapWrapper' === element.id;
-      }
-    }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const imgWidth = 190;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      const pdf = new jsPDF('p', 'mm');
-      pdf.setFontSize(18);
-      pdf.text('Crossfeed Report', 12, 10);
-      pdf.setFontSize(10);
-      pdf.text(dateTimeNow.toISOString(), 12, 17);
-      pdf.addImage(imgData, 'PNG', 10, 20, imgWidth, imgHeight); // charts
-      pdf.line(3, 290, 207, 290);
-      pdf.setFontSize(8);
-      pdf.text('Prepared by ' + user?.fullName + ', ' + localDate, 3, 293); // print the name of the person who printed the report as well as a human friendly date/time
-      pdf.save('Crossfeed_Report_' + dateTimeNow.toISOString() + '.pdf'); // sets the filename and adds the date and time
-    });
-    input.style.removeProperty('width');
-    setIsLoading(false);
-  };
+  // const generatePDF = async () => {
+  //   const dateTimeNow = new Date(); // UTC Date Time
+  //   const localDate = new Date(dateTimeNow); // Local Date Time
+  //   setIsLoading(true);
+  //   await delay(650);
+  //   const input = document.getElementById('wrapper')!;
+  //   input.style.width = '1400px';
+  //   await delay(1);
+  //   await html2canvas(input, {
+  //     scrollX: 0,
+  //     scrollY: 0,
+  //     ignoreElements: function (element) {
+  //       return 'mapWrapper' === element.id;
+  //     }
+  //   }).then((canvas) => {
+  //     const imgData = canvas.toDataURL('image/png');
+  //     const imgWidth = 190;
+  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  //     const pdf = new jsPDF('p', 'mm');
+  //     pdf.setFontSize(18);
+  //     pdf.text('Crossfeed Report', 12, 10);
+  //     pdf.setFontSize(10);
+  //     pdf.text(dateTimeNow.toISOString(), 12, 17);
+  //     pdf.addImage(imgData, 'PNG', 10, 20, imgWidth, imgHeight); // charts
+  //     pdf.line(3, 290, 207, 290);
+  //     pdf.setFontSize(8);
+  //     pdf.text('Prepared by ' + user?.fullName + ', ' + localDate, 3, 293); // print the name of the person who printed the report as well as a human friendly date/time
+  //     pdf.save('Crossfeed_Report_' + dateTimeNow.toISOString() + '.pdf'); // sets the filename and adds the date and time
+  //   });
+  //   input.style.removeProperty('width');
+  //   setIsLoading(false);
+  // };
 
   return (
     <RiskRoot className={classes.root}>
