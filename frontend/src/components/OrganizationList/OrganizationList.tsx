@@ -99,7 +99,7 @@ export const OrganizationList: React.FC<{
         style={{ margin: '0 auto', marginTop: '1rem', maxWidth: '1000px' }}
       ></Grid>
       <Box sx={{ backgroundColor: 'white' }}>
-        {organizations.length == 0 ? (
+        {organizations.length === 0 ? (
           <Alert severity="warning">No organizations found.</Alert>
         ) : (
           <DataGrid
