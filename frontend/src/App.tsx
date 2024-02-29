@@ -159,7 +159,7 @@ const App: React.FC = () => (
                   <RouteGuard
                     path="/feeds"
                     component={Feeds}
-                    permissions={['standard', 'globalView']}
+                    permissions={['globalView']}
                   />
                   <RouteGuard
                     path="/reports"
@@ -186,7 +186,7 @@ const App: React.FC = () => (
                   <RouteGuard
                     path="/organizations/:organizationId"
                     component={Organization}
-                    permissions={['standard', 'globalView']}
+                    permissions={['globalView']}
                   />
                   <RouteGuard
                     path="/organizations"
@@ -201,7 +201,7 @@ const App: React.FC = () => (
                   <RouteGuard
                     path="/settings"
                     component={Settings}
-                    permissions={['globalView', 'regionalAdmin']}
+                    permissions={['standard', 'globalView', 'regionalAdmin']}
                   />
                   <RouteGuard
                     path="/region-admin-dashboard"
