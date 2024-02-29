@@ -189,35 +189,38 @@ export const handler = async (commandOptions: CommandOptions) => {
         }
 
         let serviceId;
-        try {
-          // Save discovered services to the Service table
-          [serviceId] = await saveServicesToDb([
-            plainToClass(Service, {
-              domain: { id: domainId },
-              discoveredBy: { id: commandOptions.scanId },
-              port: vuln.port,
-              lastSeen: new Date(vuln.last_seen),
-              banner:
-                vuln.banner == null ? null : sanitizeStringField(vuln.banner),
-              serviceSource: vuln.source,
-              shodanResults:
-                vuln.source === 'shodan'
-                  ? {
-                      product: vuln.product,
-                      version: vuln.version,
-                      cpe: vuln.cpe
-                    }
-                  : {}
-            })
-          ]);
-          console.log('Saved services.');
-        } catch (e) {
-          console.error(
-            'Could not save services. Continuing to next vulnerability.'
-          );
-          console.error(e);
-          continue;
+        if (vuln.port != null) {
+          try {
+            // Save discovered services to the Service table
+            [serviceId] = await saveServicesToDb([
+              plainToClass(Service, {
+                domain: { id: domainId },
+                discoveredBy: { id: commandOptions.scanId },
+                port: vuln.port,
+                lastSeen: new Date(vuln.last_seen),
+                banner:
+                  vuln.banner == null ? null : sanitizeStringField(vuln.banner),
+                serviceSource: vuln.source,
+                shodanResults:
+                  vuln.source === 'shodan'
+                    ? {
+                        product: vuln.product,
+                        version: vuln.version,
+                        cpe: vuln.cpe
+                      }
+                    : {}
+              })
+            ]);
+            console.log('Saved services.');
+          } catch (e) {
+            console.error(
+              'Could not save services. Continuing to next vulnerability.'
+            );
+            console.error(e);
+            continue;
+          }
         }
+
         try {
           const vulns: Vulnerability[] = [];
           vulns.push(
@@ -229,11 +232,12 @@ export const handler = async (commandOptions: CommandOptions) => {
               cwe: vuln.cwe,
               description: vuln.description,
               cvss: vuln.cvss,
+              severity: vuln.severity,
               state: vuln.state,
               structuredData: vuln.structuredData,
               source: vuln.source,
               needsPopulation: vuln.needsPopulation,
-              service: { id: serviceId }
+              service: vuln.port == null ? null : { id: serviceId }
             })
           );
           await saveVulnerabilitiesToDb(vulns, false);
