@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import { Organization } from 'types';
-import { Box, Button, IconButton, Grid } from '@mui/material';
+import { Alert, Box, Button, IconButton, Grid } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useHistory } from 'react-router-dom';
 import { Add } from '@mui/icons-material';
@@ -80,8 +80,6 @@ export const OrganizationList: React.FC<{
     }
   }, [fetchOrganizations, parent]);
 
-  console.log(JSON.stringify(organizations));
-
   const addOrgButton = user?.userType === 'globalAdmin' && (
     <Button
       size="small"
@@ -94,21 +92,25 @@ export const OrganizationList: React.FC<{
   );
 
   return (
-    <>
+    <Box mb={3}>
       <Grid
         container
         spacing={2}
         style={{ margin: '0 auto', marginTop: '1rem', maxWidth: '1000px' }}
       ></Grid>
       <Box sx={{ backgroundColor: 'white' }}>
-        <DataGrid
-          rows={organizations}
-          columns={orgCols}
-          slots={{ toolbar: CustomToolbar }}
-          slotProps={{
-            toolbar: { children: addOrgButton }
-          }}
-        />
+        {organizations?.length === 0 ? (
+          <Alert severity="warning">No organizations found.</Alert>
+        ) : (
+          <DataGrid
+            rows={organizations}
+            columns={orgCols}
+            slots={{ toolbar: CustomToolbar }}
+            slotProps={{
+              toolbar: { children: addOrgButton }
+            }}
+          />
+        )}
       </Box>
       <OrganizationForm
         onSubmit={onSubmit}
@@ -117,6 +119,6 @@ export const OrganizationList: React.FC<{
         type="create"
         parent={parent}
       ></OrganizationForm>
-    </>
+    </Box>
   );
 };

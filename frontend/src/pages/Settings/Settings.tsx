@@ -86,19 +86,8 @@ const Settings: React.FC = () => {
     }
   ];
 
-  return (
-    <div className={classes.root}>
-      <h1>My Account</h1>
-      <h2>Name: {user && user.fullName}</h2>
-      <h2>Email: {user && user.email}</h2>
-      <h2>
-        Member of:{' '}
-        {user &&
-          (user.roles || [])
-            .filter((role) => role.approved)
-            .map((role) => role.organization.name)
-            .join(', ')}
-      </h2>
+  const apiKeysJsx = (
+    <>
       <h2>API Keys:</h2>
       <p>
         <a
@@ -134,6 +123,23 @@ const Settings: React.FC = () => {
           </ButtonGroup>
         </ModalFooter>
       </Modal>
+    </>
+  );
+
+  return (
+    <div className={classes.root}>
+      <h1>My Account</h1>
+      <h2>Name: {user && user.fullName}</h2>
+      <h2>Email: {user && user.email}</h2>
+      <h2>
+        Member of:{' '}
+        {user &&
+          (user.roles || [])
+            .filter((role) => role.approved)
+            .map((role) => role.organization.name)
+            .join(', ')}
+      </h2>
+      {user?.userType !== 'standard' && apiKeysJsx}
       {user?.userType === 'globalAdmin' && (
         <>
           <a href={`${process.env.REACT_APP_API_URL}/matomo/index.php`}>

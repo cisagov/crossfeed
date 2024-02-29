@@ -287,12 +287,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
         users: GLOBAL_ADMIN,
         exact: true
       },
-      {
-        title: 'My Organizations',
-        path: '/organizations',
-        users: STANDARD_USER,
-        exact: true
-      },
+      // {
+      //   title: 'My Organizations',
+      //   path: '/organizations',
+      //   users: STANDARD_USER,
+      //   exact: true
+      // },
       {
         title: 'Manage Users',
         path: '/users',
@@ -328,12 +328,12 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
       users: GLOBAL_ADMIN,
       exact: true
     },
-    {
-      title: 'My Organizations',
-      path: '/organizations',
-      users: STANDARD_USER,
-      exact: true
-    },
+    // {
+    //   title: 'My Organizations',
+    //   path: '/organizations',
+    //   users: STANDARD_USER,
+    //   exact: true
+    // },
     {
       title: 'Manage Users',
       path: '/users',

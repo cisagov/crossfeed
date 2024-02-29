@@ -118,6 +118,7 @@ export const Organizations: React.FC = () => {
           </>
         )}
       </div>
+      <br />
     </Root>
   );
 };
