@@ -260,7 +260,7 @@ const Risk: React.FC = (props) => {
           <div></div>
         </div>
       )}
-      <p>
+      {/* <p>
         <USWDSButton
           outline
           type="button"
@@ -270,7 +270,7 @@ const Risk: React.FC = (props) => {
         >
           Generate Report
         </USWDSButton>
-      </p>
+      </p> */}
       <div id="wrapper" className={contentWrapper}>
         {stats && (
           <div className={content}>
