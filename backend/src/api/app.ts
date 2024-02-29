@@ -61,7 +61,7 @@ app.use(express.json({ strict: false }));
 
 app.use(
   cors({
-    origin: ['*'],
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
   })
 );
