@@ -5,7 +5,8 @@ import TopVulnerablePorts from './TopVulnerablePorts';
 import TopVulnerableDomains from './TopVulnerableDomains';
 import VulnerabilityPieChart from './VulnerabilityPieChart';
 import * as RiskStyles from './style';
-import { delay, getSeverityColor, offsets, severities } from './utils';
+// import { delay, getSeverityColor, offsets, severities } from './utils';
+import { getSeverityColor, offsets, severities } from './utils';
 import { useAuthContext } from 'context';
 import { Paper } from '@mui/material';
 import { geoCentroid } from 'd3-geo';
@@ -19,8 +20,8 @@ import {
 } from 'react-simple-maps';
 import { scaleLinear } from 'd3-scale';
 import { Vulnerability } from 'types';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
+// import { jsPDF } from 'jspdf';
+// import html2canvas from 'html2canvas';
 // import { Button as USWDSButton } from '@trussworks/react-uswds';
 
 export interface Point {
@@ -69,7 +70,7 @@ const Risk: React.FC = (props) => {
     useAuthContext();
 
   const [stats, setStats] = useState<Stats | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const RiskRoot = RiskStyles.RiskRoot;
   const { cardRoot, content, contentWrapper, header, panel } =
     RiskStyles.classesRisk;
@@ -254,12 +255,12 @@ const Risk: React.FC = (props) => {
 
   return (
     <RiskRoot className={classes.root}>
-      {isLoading && (
+      {/* {isLoading && (
         <div className="cisa-crossfeed-loading">
           <div></div>
           <div></div>
         </div>
-      )}
+      )} */}
       {/* <p>
         <USWDSButton
           outline
