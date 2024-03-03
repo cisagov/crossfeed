@@ -58,3 +58,17 @@
     }
   }
 }
+
+.deleteButton { 
+  cursor: pointer;
+  &:hover {
+    cursor: hand
+  }
+}
+
+.runButton {
+  cursor: pointer;
+  &:hover {
+    cursor: hand
+  }
+}
