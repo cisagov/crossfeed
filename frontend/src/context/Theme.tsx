@@ -1,11 +1,12 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   createTheme,
   ThemeProvider,
   Theme,
   StyledEngineProvider
 } from '@mui/material/styles';
-
+import CssBaseline from '@mui/material/CssBaseline';
+import { PaletteMode } from '@mui/material';
 declare module '@mui/material/styles' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface DefaultTheme extends Theme {}
@@ -43,55 +44,130 @@ export const CFThemeContext = React.createContext<CFThemeContextType>({
 });
 
 export function CFThemeContextProvider({ children }: CFThemeProviderProps) {
-  const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+  const [mode, setMode] = useState<PaletteMode>('light');
 
   const switchDarkMode = () => {
     setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
   };
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(
+    console.log(window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const prefersDarkMode = window.matchMedia(
       '(prefers-color-scheme: dark)'
     ).matches;
-    if (mediaQuery) {
-      setMode('dark');
-    } else {
-      setMode('light');
-    }
+    setMode(prefersDarkMode ? 'dark' : 'light');
+    console.log('prefersDarkMode', prefersDarkMode);
   }, []);
 
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-          primary: {
-            main: '#07648D'
-          },
-          secondary: {
-            main: '#28A0CB'
-          },
-          background: {
-            default: '#EFF1F5'
+  console.log('mode', mode);
+
+  const getDesignTokens = (mode: PaletteMode) => ({
+    palette: {
+      mode,
+      ...(mode === 'light'
+        ? {
+            primary: {
+              main: '#07648D'
+            },
+            secondary: {
+              main: '#28A0CB'
+            },
+            background: {
+              default: '#EFF1F5'
+            },
+            text: {
+              primary: '#000'
+            }
           }
-        },
-        breakpoints: {
-          values: {
-            xs: 0,
-            sm: 600,
-            md: 960,
-            lg: 1330,
-            xl: 1920
-          }
+        : {
+            primary: {
+              main: '#07648D'
+            },
+            secondary: {
+              main: '#28A0CB'
+            },
+            background: {
+              default: '#1E1E1E'
+            },
+            text: {
+              primary: '#fff'
+            }
+          }),
+      breakpoints: {
+        values: {
+          xs: 0,
+          sm: 600,
+          md: 960,
+          lg: 1330,
+          xl: 1920
         }
-      }),
-    [mode]
-  );
+      }
+    }
+  });
+
+  const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+  //     primary: {
+  //       main: '#07648D'
+  //     },
+  //     secondary: {
+  //       main: '#28A0CB'
+  //     },
+  //     background: {
+  //       default: '#EFF1F5'
+  //     },
+  //     text: {
+  //       primary: mode === 'light' ? '#000' : '#fff'
+  //     }
+  //   },
+  //   breakpoints: {
+  //     values: {
+  //       xs: 0,
+  //       sm: 600,
+  //       md: 960,
+  //       lg: 1330,
+  //       xl: 1920
+  //     }
+  //   }
+  // });
+
+  // const theme = useMemo(
+  //   () =>
+  //     createTheme({
+  //       palette: {
+  //         mode,
+  //         primary: {
+  //           main: '#07648D'
+  //         },
+  //         secondary: {
+  //           main: '#28A0CB'
+  //         },
+  //         background: {
+  //           default: '#EFF1F5'
+  //         },
+  //         text: {
+  //           primary: mode === 'light' ? '#000' : '#fff'
+  //         }
+  //       },
+  //       breakpoints: {
+  //         values: {
+  //           xs: 0,
+  //           sm: 600,
+  //           md: 960,
+  //           lg: 1330,
+  //           xl: 1920
+  //         }
+  //       }
+  //     }),
+  //   [mode]
+  // );
 
   return (
     <StyledEngineProvider injectFirst>
       <CFThemeContext.Provider value={{ switchDarkMode }}>
-        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          {children}
+        </ThemeProvider>
       </CFThemeContext.Provider>
     </StyledEngineProvider>
   );

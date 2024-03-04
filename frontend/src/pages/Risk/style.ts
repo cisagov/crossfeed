@@ -37,6 +37,7 @@ export const RiskRoot = styled('div')(({ theme }) => ({
     boxSizing: 'border-box',
     marginBottom: '1rem',
     border: '2px solid #DCDEE0',
+    borderColor: theme.palette.mode === 'dark' ? '#3D4551' : '#DCDEE0',
     boxShadow: 'none',
     '& em': {
       fontStyle: 'normal',
@@ -94,7 +95,7 @@ export const RiskRoot = styled('div')(({ theme }) => ({
   },
   [`& .${classesRisk.header}`]: {
     height: '60px',
-    backgroundColor: '#F8F9FA',
+    backgroundColor: theme.palette.mode === 'dark' ? 'black' : '#F8F9FA',
     top: 0,
     width: '100%',
     color: '#07648D',
@@ -104,9 +105,9 @@ export const RiskRoot = styled('div')(({ theme }) => ({
   },
   [`& .${classesRisk.footer}`]: {
     height: '60px',
-    backgroundColor: '#F8F9FA',
+    backgroundColor: theme.palette.mode === 'dark' ? 'black' : '#F8F9FA',
     width: '100%',
-    color: '#3D4551',
+    color: theme.palette.mode === 'dark' ? 'white' : 'black',
     paddingLeft: 255,
     display: 'flex',
     alignItems: 'center',
@@ -199,7 +200,7 @@ export const RiskRoot = styled('div')(({ theme }) => ({
     display: 'flex',
     flex: 1,
     justifyContent: 'flex-start',
-    color: '#3D4551'
+    color: theme.palette.mode === 'dark' ? 'white' : 'black'
   },
   [`& .${classesRisk.miniCardCenter}`]: {
     display: 'flex',
