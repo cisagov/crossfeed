@@ -39,5 +39,4 @@ export interface OrganizationTag {
   tags: OrganizationTag[];
   organizations: Organization[];
   scans: Scan[];
-  state: string;
 }
