@@ -339,16 +339,17 @@ export const update = wrapHandler(async (event) => {
  */
 export const create = wrapHandler(async (event) => {
   if (!isGlobalWriteAdmin(event)) return Unauthorized;
-  const body = await validateBody(NewOrganization, event.body);
+  const body = await validateBody(NewOrUpdatedOrganization, event.body);
   await connectToDatabase();
 
   if ('tags' in body) {
     body.tags = await findOrCreateTags(body.tags);
   }
-  const organization = await Organization.create({
+  const organization = Organization.create({
     ...body,
     createdBy: { id: event.requestContext.authorizer!.id },
-    parent: { id: body.parent }
+    parent: { id: body.parent },
+    regionId: REGION_STATE_MAP[body.stateName!] ?? null
   });
   const res = await organization.save();
   return {
