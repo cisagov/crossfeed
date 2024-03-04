@@ -110,7 +110,7 @@ export const OrganizationForm: React.FC<{
       fullWidth
     >
       <DialogTitle id="form-dialog-title">
-        Create new {parent ? 'Team' : 'Organization'}
+        Create New {parent ? 'Team' : 'Organization'}
       </DialogTitle>
       <DialogContent>
         Organization Name
@@ -190,9 +190,10 @@ export const OrganizationForm: React.FC<{
           ))}
         </Select>
         {/* TODO: Fix Tag selection issues. */}
-        <div className={classes.headerRow}>
-          <label>Tags</label>
-        </div>
+        <Typography mt={1}>Tags</Typography>
+        <Typography variant="caption">
+          Select an existing tag or add a new one.
+        </Typography>
         <span>
           {chosenTags &&
             chosenTags.length > 0 &&
@@ -211,7 +212,6 @@ export const OrganizationForm: React.FC<{
               ></Chip>
             ))}
         </span>
-        <Box>Select an existing tag or add a new one.</Box>
         <Grid container>
           <Grid item xs={10}>
             <Autocomplete
@@ -287,8 +287,6 @@ export const OrganizationForm: React.FC<{
             </Button>
           </Grid>
         </Grid>
-        <br></br>
-        <br></br>
         <FormControlLabel
           control={
             <Switch
