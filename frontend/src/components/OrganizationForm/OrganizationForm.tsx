@@ -189,6 +189,7 @@ export const OrganizationForm: React.FC<{
             </MenuItem>
           ))}
         </Select>
+        {/* TODO: Fix Tag selection issues. */}
         <div className={classes.headerRow}>
           <label>Tags</label>
         </div>
