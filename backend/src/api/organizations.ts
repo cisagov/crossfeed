@@ -367,13 +367,18 @@ export const create = wrapHandler(async (event) => {
  *    - Organizations
  */
 export const list = wrapHandler(async (event) => {
+  console.log('list function called with event: ', event);
+
   if (!isGlobalViewAdmin(event) && getOrgMemberships(event).length === 0) {
     return {
+      //TODO: Should we return a 403?
       statusCode: 200,
       body: JSON.stringify([])
     };
   }
   await connectToDatabase();
+  console.log('Database connected');
+
   let where: any = { parent: null };
   if (!isGlobalViewAdmin(event)) {
     where = { id: In(getOrgMemberships(event)), parent: null };
@@ -383,6 +388,8 @@ export const list = wrapHandler(async (event) => {
     relations: ['userRoles', 'tags'],
     order: { name: 'ASC' }
   });
+
+  console.log('Organization.find result: ', result);
 
   return {
     statusCode: 200,

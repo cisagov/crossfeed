@@ -37,7 +37,7 @@ export const Organizations: React.FC = () => {
 
   const fetchOrganizations = useCallback(async () => {
     try {
-      const rows = await apiGet<Organization[]>('/organizations/');
+      const rows = await apiGet<Organization[]>('/v2/organizations/');
       setOrganizations(rows);
     } catch (e) {
       console.error(e);
@@ -118,6 +118,7 @@ export const Organizations: React.FC = () => {
           </>
         )}
       </div>
+      <br />
     </Root>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import { Organization } from 'types';
-import { Box, Button, IconButton, Grid } from '@mui/material';
+import { Alert, Box, Button, IconButton, Grid } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useHistory } from 'react-router-dom';
 import { Add } from '@mui/icons-material';
@@ -16,13 +16,14 @@ export const OrganizationList: React.FC<{
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const history = useHistory();
+  const getOrgsURL = `/v2/organizations/`;
 
   const orgCols: GridColDef[] = [
     { field: 'name', headerName: 'Organization', minWidth: 100, flex: 2 },
-    { field: 'userCount', headerName: 'Members', minWidth: 100, flex: 1 },
+    // { field: 'userCount', headerName: 'Members', minWidth: 100, flex: 1 },
     { field: 'state', headerName: 'State', minWidth: 100, flex: 1 },
     { field: 'regionId', headerName: 'Region', minWidth: 100, flex: 1 },
-    { field: 'tagNames', headerName: 'Tags', minWidth: 100, flex: 1 },
+    // { field: 'tagNames', headerName: 'Tags', minWidth: 100, flex: 1 },
     {
       field: 'view',
       headerName: 'View/Edit',
@@ -61,16 +62,16 @@ export const OrganizationList: React.FC<{
 
   const fetchOrganizations = useCallback(async () => {
     try {
-      const rows = await apiGet<Organization[]>('/organizations/');
-      rows.forEach((obj) => {
-        obj.userCount = obj.userRoles.length;
-        obj.tagNames = obj.tags.map((tag) => tag.name);
-      });
+      const rows = await apiGet<Organization[]>(getOrgsURL);
+      // rows.forEach((obj) => {
+      //   // obj.userCount = obj.userRoles.length;
+      //   obj.tagNames = obj.tags.map((tag) => tag.name);
+      // });
       setOrganizations(rows);
     } catch (e) {
       console.error(e);
     }
-  }, [apiGet]);
+  }, [apiGet, getOrgsURL]);
 
   React.useEffect(() => {
     if (!parent) fetchOrganizations();
@@ -91,21 +92,25 @@ export const OrganizationList: React.FC<{
   );
 
   return (
-    <>
+    <Box mb={3}>
       <Grid
         container
         spacing={2}
         style={{ margin: '0 auto', marginTop: '1rem', maxWidth: '1000px' }}
       ></Grid>
       <Box sx={{ backgroundColor: 'white' }}>
-        <DataGrid
-          rows={organizations}
-          columns={orgCols}
-          slots={{ toolbar: CustomToolbar }}
-          slotProps={{
-            toolbar: { children: addOrgButton }
-          }}
-        />
+        {organizations?.length === 0 ? (
+          <Alert severity="warning">No organizations found.</Alert>
+        ) : (
+          <DataGrid
+            rows={organizations}
+            columns={orgCols}
+            slots={{ toolbar: CustomToolbar }}
+            slotProps={{
+              toolbar: { children: addOrgButton }
+            }}
+          />
+        )}
       </Box>
       <OrganizationForm
         onSubmit={onSubmit}
@@ -114,6 +119,6 @@ export const OrganizationList: React.FC<{
         type="create"
         parent={parent}
       ></OrganizationForm>
-    </>
+    </Box>
   );
 };

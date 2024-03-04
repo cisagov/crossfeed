@@ -33,15 +33,15 @@ export const CrossfeedWarning: React.FC = (props) => {
               Crossfeed is hosted by Department of Homeland Security (DHS)
               Cybersecurity and Infrastructure Security Agency (CISA)
               Cybersecurity Division (CSD) Vulnerability Management (VM) Attack
-              Attack Attack Surface Management (ASM) Automation is computer
-              systems systems may systems may be monitored for all unlawful
-              unlawful purposes, including to ensure their use is authorized,
-              for management of the system, to protection against security
-              procedures, survivability, and operational operational operational
-              operational security. All information, information, including
-              information, placed or sent this system may be monitored.
-              Monitoring includes actives attacks by authorized US Government
-              entities to test or verify the security of this system.
+              Surface Management (ASM) Automation is computer systems systems
+              may systems may be monitored for all unlawful unlawful purposes,
+              including to ensure their use is authorized, for management of the
+              system, to protection against security procedures, survivability,
+              and operational operational operational operational security. All
+              information, information, including information, placed or sent
+              this system may be monitored. Monitoring includes actives attacks
+              by authorized US Government entities to test or verify the
+              security of this system.
               <br />
               <br />
               Use of the computer system, authorized or unauthorized,
