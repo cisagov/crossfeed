@@ -3,7 +3,6 @@ import * as orgFormStyles from './orgFormStyle';
 import { Organization, OrganizationTag } from 'types';
 import {
   Autocomplete,
-  Box,
   Button,
   Chip,
   createFilterOptions,
