@@ -17,6 +17,7 @@ import { TableHead } from './TableHead';
 import { TableBody } from './TableBody';
 import classes from './styles.module.scss';
 import { NoResults } from '../NoResults';
+import useTheme from '@mui/material/styles/useTheme';
 
 interface TableProps<T extends object> {
   columns: Column<T>[];
@@ -88,6 +89,8 @@ export const Table = <T extends object>(props: TableProps<T>) => {
     state: { sortBy, pageIndex, filters }
   } = instance;
 
+  const theme = useTheme();
+
   useEffect(() => {
     fetchData &&
       fetchData({
@@ -99,7 +102,11 @@ export const Table = <T extends object>(props: TableProps<T>) => {
   }, [fetchData, sortBy, filters, pageIndex, pageSize]);
 
   return (
-    <div className={classes.root}>
+    <div
+      className={
+        theme.palette.mode === 'dark' ? classes.darkMode : classes.root
+      }
+    >
       <div className={classes.tableInner}>
         <UsaTable {...instance.getTableProps()} bordered={false}>
           <TableHead<T> {...instance} />
