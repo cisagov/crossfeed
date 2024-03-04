@@ -95,8 +95,8 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.intelx_queue_url.arn}",
           "${data.aws_ssm_parameter.cybersixgill_queue_url.arn}",
           "${aws_ssm_parameter.es_endpoint.arn}",
-          "${aws_ssm_parameter.pe_api_key.arn}",
-          "${aws_ssm_parameter.cf_api_key.arn}"
+          "${data.aws_ssm_parameter.pe_api_key.arn}",
+          "${data.aws_ssm_parameter.cf_api_key.arn}"
         ]
     }
   ]
@@ -309,11 +309,11 @@ resource "aws_ecs_task_definition" "worker" {
       },
       {
         "name": "PE_API_KEY",
-        "valueFrom": "${aws_ssm_parameter.pe_api_key.arn}"
+        "valueFrom": "${data.aws_ssm_parameter.pe_api_key.arn}"
       },
       {
         "name": "CF_API_KEY",
-        "valueFrom": "${aws_ssm_parameter.cf_api_key.arn}"
+        "valueFrom": "${data.aws_ssm_parameter.cf_api_key.arn}"
       }
     ]
   }
