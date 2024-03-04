@@ -35,7 +35,8 @@ export interface OrganizationFormValues {
   ipBlocks: string;
   isPassive: boolean;
   tags: OrganizationTag[];
-  state?: string | null | undefined;
+  stateName?: string | null | undefined;
+  acronym?: string | null;
 }
 
 export const OrganizationForm: React.FC<{
@@ -52,7 +53,8 @@ export const OrganizationForm: React.FC<{
     ipBlocks: organization ? organization.ipBlocks.join(', ') : '',
     isPassive: organization ? organization.isPassive : false,
     tags: [],
-    state: organization ? organization.state : ''
+    stateName: organization ? organization.stateName : '',
+    acronym: organization ? organization.acronym : ''
   });
 
   const { apiGet } = useAuthContext();
@@ -125,6 +127,20 @@ export const OrganizationForm: React.FC<{
           value={values.name}
           onChange={onTextChange}
         />
+        Organization Acronym
+        <TextField
+          sx={textFieldStyling}
+          placeholder="Enter a unique Acronym for the Organization"
+          size="small"
+          margin="dense"
+          id="acronym"
+          inputProps={{ maxLength: 250 }}
+          name="acronym"
+          type="text"
+          fullWidth
+          value={values.acronym}
+          onChange={onTextChange}
+        />
         Root Domains
         <TextField
           sx={textFieldStyling}
@@ -153,22 +169,23 @@ export const OrganizationForm: React.FC<{
         />
         Organization State
         <Select
+          sx={{ mt: 1 }}
           displayEmpty
           size="small"
-          id="state"
-          value={values.state}
-          name="state"
+          id="stateName"
+          value={values.stateName}
+          name="stateName"
           onChange={handleStateChange}
           fullWidth
           renderValue={
-            values.state !== ''
+            values.stateName !== ''
               ? undefined
               : () => <Typography color="#bdbdbd">Select your State</Typography>
           }
         >
-          {STATE_OPTIONS.map((state: string, index: number) => (
-            <MenuItem key={index} value={state}>
-              {state}
+          {STATE_OPTIONS.map((stateName: string, index: number) => (
+            <MenuItem key={index} value={stateName}>
+              {stateName}
             </MenuItem>
           ))}
         </Select>
@@ -305,9 +322,10 @@ export const OrganizationForm: React.FC<{
                   ? []
                   : values.ipBlocks.split(',').map((ip) => ip.trim()),
               name: values.name,
-              state: values.state,
+              stateName: values.stateName,
               isPassive: values.isPassive,
               tags: chosenTags,
+              acronym: values.acronym,
               parent: parent ? parent.id : undefined
             });
             if (!organization) setValues(defaultValues);
