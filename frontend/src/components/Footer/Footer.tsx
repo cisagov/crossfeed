@@ -29,6 +29,7 @@ export const CrossfeedFooter: React.FC = (props) => {
               <Link
                 className={footerClasses.footerNavLink}
                 href="https://docs.crossfeed.cyber.dhs.gov/"
+                target="_blank"
               >
                 Documentation
               </Link>
@@ -39,6 +40,7 @@ export const CrossfeedFooter: React.FC = (props) => {
               <Link
                 className={footerClasses.footerNavLink}
                 href="https://www.cisa.gov"
+                target="_blank"
               >
                 CISA Homepage
               </Link>

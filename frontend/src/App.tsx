@@ -130,7 +130,7 @@ const App: React.FC = () => (
                     exact
                     path="/inventory"
                     component={SearchPage}
-                    permissions={['globalView']}
+                    permissions={['standard', 'globalView']}
                   />
                   <RouteGuard
                     path="/inventory/domain/:domainId"
@@ -142,19 +142,19 @@ const App: React.FC = () => (
                     path="/inventory/vulnerabilities"
                     exact
                     component={Vulnerabilities}
-                    permissions={['globalView']}
+                    permissions={['standard', 'globalView']}
                   />
                   <RouteGuard
                     path="/inventory/vulnerabilities/grouped"
                     component={(props) => (
                       <Vulnerabilities {...props} groupBy="title" />
                     )}
-                    permissions={['globalView']}
+                    permissions={['standard', 'globalView']}
                   />
                   <RouteGuard
                     path="/inventory/vulnerability/:vulnerabilityId"
                     component={Vulnerability}
-                    permissions={['globalView']}
+                    permissions={['standard', 'globalView']}
                   />
                   <RouteGuard
                     path="/feeds"
@@ -170,28 +170,28 @@ const App: React.FC = () => (
                     path="/scans"
                     exact
                     component={Scans}
-                    permissions={['globalView']}
+                    permissions={['standard', 'globalView']}
                   />
                   <RouteGuard
                     path="/scans/history"
                     component={Scans}
                     exact
-                    permissions={['globalView']}
+                    permissions={['standard', 'globalView']}
                   />
                   <RouteGuard
                     path="/scans/:scanId"
                     component={Scan}
-                    permissions={['globalView']}
+                    permissions={['standard', 'globalView']}
                   />
                   <RouteGuard
                     path="/organizations/:organizationId"
                     component={Organization}
-                    permissions={['standard', 'globalView']}
+                    permissions={['globalView']}
                   />
                   <RouteGuard
                     path="/organizations"
                     component={Organizations}
-                    permissions={['globalView', 'regionalAdmin']}
+                    permissions={['standard', 'globalView', 'regionalAdmin']}
                   />
                   <RouteGuard
                     path="/users"
@@ -201,7 +201,7 @@ const App: React.FC = () => (
                   <RouteGuard
                     path="/settings"
                     component={Settings}
-                    permissions={['globalView', 'regionalAdmin']}
+                    permissions={['standard', 'globalView', 'regionalAdmin']}
                   />
                   <RouteGuard
                     path="/region-admin-dashboard"
