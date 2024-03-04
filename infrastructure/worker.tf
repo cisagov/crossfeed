@@ -94,7 +94,9 @@ resource "aws_iam_role_policy" "worker_task_execution_role_policy" {
           "${data.aws_ssm_parameter.hibp_queue_url.arn}",
           "${data.aws_ssm_parameter.intelx_queue_url.arn}",
           "${data.aws_ssm_parameter.cybersixgill_queue_url.arn}",
-          "${aws_ssm_parameter.es_endpoint.arn}"
+          "${aws_ssm_parameter.es_endpoint.arn}",
+          "${aws_ssm_parameter.pe_api_key.arn}",
+          "${aws_ssm_parameter.cf_api_key.arn}"
         ]
     }
   ]
@@ -304,6 +306,14 @@ resource "aws_ecs_task_definition" "worker" {
       {
         "name": "ELASTICSEARCH_ENDPOINT",
         "valueFrom": "${aws_ssm_parameter.es_endpoint.arn}"
+      },
+      {
+        "name": "PE_API_KEY",
+        "valueFrom": "${aws_ssm_parameter.pe_api_key.arn}"
+      },
+      {
+        "name": "CF_API_KEY",
+        "valueFrom": "${aws_ssm_parameter.cf_api_key.arn}"
       }
     ]
   }
@@ -374,6 +384,10 @@ data "aws_ssm_parameter" "hibp_queue_url" { name = var.ssm_hibp_queue_url }
 data "aws_ssm_parameter" "intelx_queue_url" { name = var.ssm_intelx_queue_url }
 
 data "aws_ssm_parameter" "cybersixgill_queue_url" { name = var.ssm_cybersixgill_queue_url }
+
+data "aws_ssm_parameter" "pe_api_key" { name = var.ssm_pe_api_key }
+
+data "aws_ssm_parameter" "cf_api_key" { name = var.ssm_cf_api_key }
 
 resource "aws_s3_bucket" "export_bucket" {
   bucket = var.export_bucket_name
