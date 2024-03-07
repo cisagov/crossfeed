@@ -3,19 +3,22 @@ import * as orgFormStyles from './orgFormStyle';
 import { Organization, OrganizationTag } from 'types';
 import {
   Autocomplete,
+  Button,
+  Chip,
+  createFilterOptions,
   DialogTitle,
   DialogContent,
-  TextField,
   DialogActions,
-  Switch,
-  Button,
   FormControlLabel,
-  Box,
-  Chip,
   Grid,
-  createFilterOptions
+  MenuItem,
+  Select,
+  Switch,
+  TextField,
+  Typography
 } from '@mui/material';
-
+import { SelectChangeEvent } from '@mui/material/Select';
+import { STATE_OPTIONS } from '../../constants/constants';
 import { useAuthContext } from 'context';
 
 const classes = orgFormStyles.classes;
@@ -31,6 +34,8 @@ export interface OrganizationFormValues {
   ipBlocks: string;
   isPassive: boolean;
   tags: OrganizationTag[];
+  stateName?: string | null | undefined;
+  acronym?: string | null;
 }
 
 export const OrganizationForm: React.FC<{
@@ -46,7 +51,9 @@ export const OrganizationForm: React.FC<{
     rootDomains: organization ? organization.rootDomains.join(', ') : '',
     ipBlocks: organization ? organization.ipBlocks.join(', ') : '',
     isPassive: organization ? organization.isPassive : false,
-    tags: []
+    tags: [],
+    stateName: organization ? organization.stateName : '',
+    acronym: organization ? organization.acronym : ''
   });
 
   const { apiGet } = useAuthContext();
@@ -79,7 +86,20 @@ export const OrganizationForm: React.FC<{
       [name]: value
     }));
   };
+  const handleStateChange = (event: SelectChangeEvent<string | null>) => {
+    setValues((values) => ({
+      ...values,
+      [event.target.name]: event.target.value
+    }));
+  };
 
+  const textFieldStyling = {
+    '& .MuiOutlinedInput-root': {
+      '&.Mui-focused fieldset': {
+        borderRadius: '0px'
+      }
+    }
+  };
   return (
     <StyledDialog
       open={open}
@@ -89,15 +109,18 @@ export const OrganizationForm: React.FC<{
       fullWidth
     >
       <DialogTitle id="form-dialog-title">
-        Create new {parent ? 'Team' : 'Organization'}
+        Create New {parent ? 'Team' : 'Organization'}
       </DialogTitle>
       <DialogContent>
+        Organization Name
         <TextField
+          sx={textFieldStyling}
+          placeholder="Enter the Organization's Name"
+          size="small"
           margin="dense"
           id="name"
           inputProps={{ maxLength: 250 }}
           name="name"
-          label="Organization Name"
           type="text"
           fullWidth
           value={values.name}
@@ -105,29 +128,73 @@ export const OrganizationForm: React.FC<{
           required
           helperText="Enter Organization Name"
         />
+        Organization Acronym
         <TextField
+          sx={textFieldStyling}
+          placeholder="Enter a unique Acronym for the Organization"
+          size="small"
+          margin="dense"
+          id="acronym"
+          inputProps={{ maxLength: 250 }}
+          name="acronym"
+          type="text"
+          fullWidth
+          value={values.acronym}
+          onChange={onTextChange}
+        />
+        Root Domains
+        <TextField
+          sx={textFieldStyling}
+          placeholder="Enter Root Domains"
+          size="small"
           margin="dense"
           id="rootDomains"
           name="rootDomains"
-          label="Root Domains"
           type="text"
           fullWidth
           value={values.rootDomains}
           onChange={onTextChange}
         />
+        IP Blocks
         <TextField
+          sx={textFieldStyling}
+          placeholder="Enter IP Blocks"
+          size="small"
           margin="dense"
           id="ipBlocks"
           name="ipBlocks"
-          label="IP Blocks"
           type="text"
           fullWidth
           value={values.ipBlocks}
           onChange={onTextChange}
         />
-        <div className={classes.headerRow}>
-          <label>Tags</label>
-        </div>
+        Organization State
+        <Select
+          sx={{ mt: 1 }}
+          displayEmpty
+          size="small"
+          id="stateName"
+          value={values.stateName}
+          name="stateName"
+          onChange={handleStateChange}
+          fullWidth
+          renderValue={
+            values.stateName !== ''
+              ? undefined
+              : () => <Typography color="#bdbdbd">Select your State</Typography>
+          }
+        >
+          {STATE_OPTIONS.map((stateName: string, index: number) => (
+            <MenuItem key={index} value={stateName}>
+              {stateName}
+            </MenuItem>
+          ))}
+        </Select>
+        {/* TODO: Fix Tag selection issues. */}
+        <Typography mt={1}>Tags</Typography>
+        <Typography variant="caption">
+          Select an existing tag or add a new one.
+        </Typography>
         <span>
           {chosenTags &&
             chosenTags.length > 0 &&
@@ -146,7 +213,6 @@ export const OrganizationForm: React.FC<{
               ></Chip>
             ))}
         </span>
-        <Box>Select an existing tag or add a new one.</Box>
         <Grid container>
           <Grid item xs={10}>
             <Autocomplete
@@ -222,8 +288,6 @@ export const OrganizationForm: React.FC<{
             </Button>
           </Grid>
         </Grid>
-        <br></br>
-        <br></br>
         <FormControlLabel
           control={
             <Switch
@@ -258,8 +322,10 @@ export const OrganizationForm: React.FC<{
                   ? []
                   : values.ipBlocks.split(',').map((ip) => ip.trim()),
               name: values.name,
+              stateName: values.stateName,
               isPassive: values.isPassive,
               tags: chosenTags,
+              acronym: values.acronym,
               parent: parent ? parent.id : undefined
             });
             if (!organization) setValues(defaultValues);

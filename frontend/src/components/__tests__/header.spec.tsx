@@ -88,7 +88,7 @@ describe('Header component', () => {
   });
 
   it('shows correct links for GLOBAL_ADMIN', () => {
-    const { getByText, queryByText } = render(<Header />, {
+    const { getByText } = render(<Header />, {
       authContext: {
         user: { ...testUser, userType: 'globalAdmin', isRegistered: true },
         currentOrganization: { ...testOrganization }
