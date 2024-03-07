@@ -4,12 +4,13 @@ import { Point } from './Risk';
 import { useHistory } from 'react-router-dom';
 import { getSingleColor } from './utils';
 import * as RiskStyles from './style';
-import { Paper } from '@mui/material';
+import { Paper, useTheme } from '@mui/material';
 const TopVulnerablePorts = (props: { data: Point[] }) => {
   const history = useHistory();
   const { data } = props;
   const { cardRoot, cardSmall, header, chartSmall } = RiskStyles.classesRisk;
   const dataVal = data.map((e) => ({ ...e, [['Port'][0]]: e.value })) as any;
+  const theme = useTheme();
   return (
     <Paper elevation={0} className={cardRoot}>
       <div className={cardSmall}>
@@ -25,6 +26,7 @@ const TopVulnerablePorts = (props: { data: Point[] }) => {
             margin={{ top: 30, right: 40, bottom: 75, left: 100 }}
             theme={{
               fontSize: 12,
+              textColor: theme.palette.mode === 'dark' ? 'white' : 'black',
               axis: {
                 legend: {
                   text: {

@@ -2,7 +2,7 @@ import React from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../context/AuthContext';
-import { CFThemeProvider } from 'context';
+import { CFThemeContextProvider } from 'context';
 import { authCtx } from './authCtx';
 
 interface CustomRenderOptions extends RenderOptions {
@@ -15,7 +15,7 @@ const customRender = (ui: any, options: CustomRenderOptions = {}) => {
 
   // Provide any context that the components may be expecting
   const Wrapper: React.FC<React.PropsWithChildren<{}>> = ({ children }) => (
-    <CFThemeProvider>
+    <CFThemeContextProvider>
       <MemoryRouter initialEntries={initialHistory}>
         <AuthContext.Provider
           value={{
@@ -26,7 +26,7 @@ const customRender = (ui: any, options: CustomRenderOptions = {}) => {
           {children}
         </AuthContext.Provider>
       </MemoryRouter>
-    </CFThemeProvider>
+    </CFThemeContextProvider>
   );
   return render(ui, { wrapper: Wrapper, ...rest });
 };

@@ -37,6 +37,7 @@
   }
 }
 
+
 .td {
   background-color: #f9f9f9 !important;
   border-color: white;
@@ -71,4 +72,77 @@
   background-color: #f4f4f4 !important;
   height: 54px;
   padding: 10px !important;
+}
+
+.rootDarkMode {
+  :global .usa-table {
+    color: white !important;
+    width: 100%;
+    margin: 8px 0 0 0;
+    font-family:
+      Source Sans Pro Web,
+      Helvetica Neue,
+      Helvetica,
+      Arial,
+      sans-serif;
+    // font-weight: 500;
+  }
+  .tableInner {
+    overflow-x: auto; ;
+    border: 1px solid #3d4551;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: black;
+    td,
+    th {
+      box-shadow: inset 0px -1px 0px #4a4a4a;
+      border: 0px solid #3d4551;
+    }
+    input,
+    select {
+      border: 1px solid #3d4551;
+      background-color: #252b34;
+      color: white;
+    }
+  }
+
+
+  .td {
+    background-color: #282c34 !important;
+    border-color: white;
+    text-overflow: ellipsis;
+    white-space: normal;
+    color: white;
+  > div {
+    overflow: auto;
+    display: flex;
+    align-content: center;
+    > a { 
+      color: white;
+    }
+  }
+    height: 54px;
+    margin: 0;
+    padding: 0.7rem !important;
+  }
+
+  .th {
+    vertical-align: top;
+    background-color: black !important;
+    color: white;
+    font-size: 16px;
+    height: 50px;
+    padding-left: 15px !important;
+  } 
+
+.thFilter {
+  background-color: black !important;
+  height: 54px;
+  padding: 10px !important;
+}
+
+.subComponentTd {
+  background-color: #252b34;
+  border-color: white;
+}
 }

@@ -132,7 +132,7 @@ export const StyledPaper = styled(Paper)(({ theme }) => ({
 
   [`& .${classes.data}`]: {
     display: 'block',
-    color: '#3D4551'
+    color: theme.palette.mode === 'dark' ? 'white' : '#3D4551'
   },
 
   [`& .${classes.lastSeen}`]: {

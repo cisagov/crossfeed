@@ -7,7 +7,11 @@ import {
   useLocation
 } from 'react-router-dom';
 import { API, Auth } from 'aws-amplify';
-import { AuthContextProvider, CFThemeProvider, SearchProvider } from 'context';
+import {
+  AuthContextProvider,
+  CFThemeContextProvider,
+  SearchProvider
+} from 'context';
 import {
   MatomoProvider,
   createInstance,
@@ -86,7 +90,7 @@ const LinkTracker = () => {
 const App: React.FC = () => (
   <MatomoProvider value={instance}>
     <Router>
-      <CFThemeProvider>
+      <CFThemeContextProvider>
         <AuthContextProvider>
           <Authenticator.Provider>
             <SearchProvider>
@@ -213,7 +217,7 @@ const App: React.FC = () => (
             </SearchProvider>
           </Authenticator.Provider>
         </AuthContextProvider>
-      </CFThemeProvider>
+      </CFThemeContextProvider>
     </Router>
   </MatomoProvider>
 );

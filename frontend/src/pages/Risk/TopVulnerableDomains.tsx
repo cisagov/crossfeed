@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
-import { Chip } from '@mui/material';
+import { Chip, useTheme } from '@mui/material';
 import { Point, VulnSeverities } from './Risk';
 import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
@@ -31,6 +31,7 @@ const TopVulnerableDomains = (props: { data: Point[] }) => {
   const [labels, setLabels] = useState(sevLabels);
   const keys = sevLabels;
   const pageStart = (current - 1) * resultsPerPage;
+  const theme = useTheme();
   // Separate count by severity
   const domainToSevMap: any = {};
   for (const point of data) {
@@ -145,6 +146,7 @@ const TopVulnerableDomains = (props: { data: Point[] }) => {
               }}
               theme={{
                 fontSize: 12,
+                textColor: theme.palette.mode === 'dark' ? 'white' : 'black',
                 axis: {
                   legend: {
                     text: {

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useContext, useMemo } from 'react';
 import { styled } from '@mui/material/styles';
 import { NavLink, Link, useHistory, useLocation } from 'react-router-dom';
 import {
@@ -10,16 +10,18 @@ import {
   List,
   TextField,
   useMediaQuery,
-  useTheme
+  useTheme,
+  Tooltip
 } from '@mui/material';
 import {
   Menu as MenuIcon,
   AccountCircle as UserIcon,
   ArrowDropDown
 } from '@mui/icons-material';
+import Switch from '@mui/material/Switch';
 import { NavItem } from './NavItem';
 import { useRouteMatch } from 'react-router-dom';
-import { useAuthContext } from 'context';
+import { useAuthContext, CFThemeContext } from 'context';
 import logo from '../assets/crossfeed.svg';
 import { withSearch } from '@elastic/react-search-ui';
 import { ContextType } from 'context/SearchProvider';
@@ -202,6 +204,11 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
   >([]);
   const [tags, setTags] = useState<OrganizationTag[]>([]);
   const theme = useTheme();
+  const { switchDarkMode } = useContext(CFThemeContext);
+  const activateDarkMode = useMemo(
+    () => (theme.palette.mode === 'dark' ? 'light' : 'dark'),
+    [theme.palette.mode]
+  );
   const isSmall = useMediaQuery(theme.breakpoints.down('md'));
 
   let userLevel = 0;
@@ -494,6 +501,15 @@ const HeaderNoCtx: React.FC<ContextType> = (props) => {
             >
               <MenuIcon />
             </IconButton>
+            <Tooltip title={`Switch to ${activateDarkMode} mode`}>
+              <span onClick={switchDarkMode} style={{ cursor: 'pointer' }}>
+                <Switch
+                  checked={theme.palette.mode === 'dark'}
+                  color="default"
+                  inputProps={{ 'aria-label': 'toggle darkMode' }}
+                />
+              </span>
+            </Tooltip>
           </Toolbar>
         </div>
       </AppBar>

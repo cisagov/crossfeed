@@ -5,7 +5,6 @@ import classes from './styles.module.scss';
 interface TableBodyProps<T extends object> extends TableInstance<T> {
   renderExpanded?: (row: Row<T>) => JSX.Element;
 }
-
 export const TableBody = <T extends object>({
   rows,
   prepareRow,
