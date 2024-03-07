@@ -81,13 +81,14 @@ export function CFThemeContextProvider({ children }: CFThemeProviderProps) {
           }
         : {
             primary: {
-              main: '#07648D'
+              main: '#000000'
             },
             secondary: {
-              main: '#28A0CB'
+              main: '#121212'
             },
             background: {
-              default: '#1E1E1E'
+              default: '#3d4551',
+              paper: '#282c34'
             },
             text: {
               primary: '#fff'

@@ -53,7 +53,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   },
 
   [`& .${classes.title}`]: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor:
+      theme.palette.mode === 'dark' ? 'black' : theme.palette.primary.main,
     color: '#fff',
     cursor: 'pointer',
     display: 'flex',
@@ -88,7 +89,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   },
 
   [`& .${classes.inner}`]: {
-    padding: '1.5rem'
+    padding: '1.5rem',
+    backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#fff'
   },
 
   [`& .${classes.accordion}`]: {

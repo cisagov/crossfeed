@@ -104,7 +104,7 @@ export const Table = <T extends object>(props: TableProps<T>) => {
   return (
     <div
       className={
-        theme.palette.mode === 'dark' ? classes.darkMode : classes.root
+        theme.palette.mode === 'dark' ? classes.rootDarkMode : classes.root
       }
     >
       <div className={classes.tableInner}>
