@@ -47,7 +47,7 @@ export const OrganizationForm: React.FC<{
   parent?: Organization;
 }> = ({ organization, onSubmit, type, open, setOpen, parent }) => {
   const defaultValues = () => ({
-    name: organization ? organization.name : '',
+    name: organization ? organization.name : null,
     rootDomains: organization ? organization.rootDomains.join(', ') : '',
     ipBlocks: organization ? organization.ipBlocks.join(', ') : '',
     isPassive: organization ? organization.isPassive : false,
@@ -125,6 +125,8 @@ export const OrganizationForm: React.FC<{
           fullWidth
           value={values.name}
           onChange={onTextChange}
+          required
+          helperText="Enter Organization Name"
         />
         Organization Acronym
         <TextField
@@ -329,6 +331,7 @@ export const OrganizationForm: React.FC<{
             if (!organization) setValues(defaultValues);
             setOpen(false);
           }}
+          disabled={!values.name}
         >
           Save
         </Button>
