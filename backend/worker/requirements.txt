@@ -34,4 +34,4 @@ tzdata==2023.3
 tzlocal==4.3
 yarg==0.1.9
 wheel==0.38.1
-setuptools==65.5.1
+setuptools==69.0.3
