@@ -259,7 +259,7 @@ export const update = wrapHandler(async (event) => {
         value: body.comment
       });
     }
-    vuln.save();
+    await vuln.save();
 
     return {
       statusCode: 200,

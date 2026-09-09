@@ -569,7 +569,7 @@ export const checkDomainVerification = wrapHandler(async (event) => {
           organization.pendingDomains = organization.pendingDomains.filter(
             (domain) => domain.name !== pendingDomain.name
           );
-          organization.save();
+          await organization.save();
           return {
             statusCode: 200,
             body: JSON.stringify({ success: true, organization })

@@ -654,7 +654,7 @@ export const checkDomainVerification = wrapHandler(async (event) => {
           organization.pendingDomains = organization.pendingDomains.filter(
             (domain) => domain.name !== pendingDomain.name
           );
-          organization.save();
+          await organization.save();
           return {
             statusCode: 200,
             body: JSON.stringify({ success: true, organization })
@@ -1101,7 +1101,7 @@ export const upsert_org = wrapHandler(async (event) => {
 
   current_org.tags = body.tags;
 
-  current_org.save();
+  await current_org.save();
 
   return {
     statusCode: 200,
