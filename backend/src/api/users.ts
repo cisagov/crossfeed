@@ -926,8 +926,16 @@ export const updateV2 = wrapHandler(async (event) => {
     return NotFound;
   }
 
+  // Only the user themselves or a global admin may update a user (mirrors v1 update).
+  if (!canAccessUser(event, userId)) return Unauthorized;
+
   // Validate the body
   const body = await validateBody(UpdateUser, event.body);
+
+  // Non-global admins can't escalate userType (mirrors v1 update).
+  if (!isGlobalWriteAdmin(event) && body.userType) {
+    return Unauthorized;
+  }
 
   // Connect to the database
   await connectToDatabase();
